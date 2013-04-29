@@ -71,8 +71,9 @@
 						<activiti:string>
 			            //<![CDATA[
 			            	var personList = approvalParallel.getPersonListByEmployeeList(lecmPar_employeesAssoc);
-			            	execution.setVariableLocal("assigneesList", personList);
 			            	var approvalListRef = approvalParallel.createApprovalList(bpm_package);
+			            	approvalParallel.grantReviewerPermissions(bpm_package, lecmPar_employeesAssoc);
+			            	execution.setVariableLocal("assigneesList", personList);
 			            	execution.setVariable("approvalListRef", approvalListRef);
 			            //]]>
 						</activiti:string>

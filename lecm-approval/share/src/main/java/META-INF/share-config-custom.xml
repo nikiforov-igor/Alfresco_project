@@ -81,6 +81,9 @@
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 						</control>
 					</field>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -90,11 +93,15 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="bpm:dueDate" />
 					<show id="lecmSeq:approveTaskResult" />
 					<show id="bpm:comment" />
 					<show id="lecmSeq:approveTaskCommentAssoc" />
 				</field-visibility>
 				<appearance>
+					<field id="bpm:dueDate" label-id="workflow.field.due">
+						<control template="/org/alfresco/components/form/controls/info.ftl" />
+					</field>
 					<field id="lecmSeq:approveTaskResult">
 						<control template="/org/alfresco/components/form/controls/workflow/activiti-transitions.ftl" />
 					</field>

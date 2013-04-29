@@ -10,6 +10,10 @@ public class ApprovalListServiceParallel extends ApprovalListServiceAbstract {
 
 	@Override
 	protected NodeRef getOrCreateApprovalFolder(NodeRef parentRef) {
-		return getOrCreateParallelApprovalFolder(parentRef);
+		NodeRef parallelApprovalRef = getFolder(parentRef, "Параллельное согласование");
+		if (parallelApprovalRef == null) {
+			parallelApprovalRef = createFolder(parentRef, "Параллельное согласование");
+		}
+		return parallelApprovalRef;
 	}
 }

@@ -54,8 +54,9 @@
 		<property name="transactionService" ref="transactionService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="documentMembersService" ref="documentMembersService"/>
 	</bean>
-	
+
 	<bean id="lecm.approval.service.parallel" class="ru.it.lecm.approval.ApprovalListServiceParallel" parent="lecm.approval.service.abstract"/>
 	<bean id="lecm.approval.service.sequential" class="ru.it.lecm.approval.ApprovalListServiceSequential" parent="lecm.approval.service.abstract"/>
 

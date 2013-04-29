@@ -28,6 +28,7 @@ import ru.it.lecm.approval.api.ApprovalListService;
 import static ru.it.lecm.approval.api.ApprovalListService.PROP_APPROVAL_LIST_APPROVE_DATE;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -42,6 +43,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	private final static String APPROVAL_LIST_NAME = "Лист согласования версия %s";
 	private OrgstructureBean orgstructureService;
 	private DocumentAttachmentsService documentAttachmentsService;
+    private DocumentMembersService documentMembersService;
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -54,6 +56,10 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
 		this.documentAttachmentsService = documentAttachmentsService;
+	}
+
+	public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+		this.documentMembersService = documentMembersService;
 	}
 
 	/**
@@ -121,35 +127,6 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			approvalRef = createFolder(parentRef, "Согласование");
 		}
 		return approvalRef;
-	}
-
-	/**
-	 * Создание папки "Согласование/Параллельное согласование" внутри документа
-	 *
-	 * @param parentRef
-	 * @return
-	 */
-	protected NodeRef getOrCreateParallelApprovalFolder(NodeRef parentRef) {
-		NodeRef parallelApprovalRef = getFolder(parentRef, "Параллельное согласование");
-		if (parallelApprovalRef == null) {
-			parallelApprovalRef = createFolder(parentRef, "Параллельное согласование");
-		}
-		return parallelApprovalRef;
-	}
-
-	/**
-	 * Создание папки "Согласование/Последовательное согласование" внутри
-	 * документа
-	 *
-	 * @param parentRef
-	 * @return
-	 */
-	protected NodeRef getOrCreateSequentialApprovalFolder(NodeRef parentRef) {
-		NodeRef parallelApprovalRef = getFolder(parentRef, "Последовательное согласование");
-		if (parallelApprovalRef == null) {
-			parallelApprovalRef = createFolder(parentRef, "Последовательное согласование");
-		}
-		return parallelApprovalRef;
 	}
 
 	/**
@@ -257,35 +234,45 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		return approvalListRef;
 	}
 
+	/**
+	 * получение ссылки на документ через переменную регламента bpm_package
+	 * @param bpmPackage
+	 * @return
+	 */
+	protected NodeRef getDocumentFromBpmPackage(final NodeRef bpmPackage) {
+		NodeRef documentRef = null;
+//		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage, TYPE_CONTRACT_FAKE_DOCUMENT, RegexQNamePattern.MATCH_ALL);
+		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage);
+		if (children != null) {
+			for (ChildAssociationRef assocRef : children) {
+				NodeRef candidateRef = assocRef.getChildRef();
+				if (TYPE_CONTRACT_DOCUMENT.isMatch(nodeService.getType(candidateRef))) {
+					documentRef = candidateRef;
+					break;
+				} else if (TYPE_CONTRACT_FAKE_DOCUMENT.isMatch(nodeService.getType(candidateRef))) {
+					documentRef = candidateRef;
+					break;
+				}
+			}
+		} else {
+			logger.error("List of bpm:package children is null");
+		}
+		return documentRef;
+	}
+
 	@Override
 	public NodeRef createApprovalList(final NodeRef bpmPackage) {
 		//через bpmPackage получить ссылку на документ
 		NodeRef approvalListRef = null;
-//		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage, TYPE_CONTRACT_FAKE_DOCUMENT, RegexQNamePattern.MATCH_ALL);
-		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage);
-		if (children != null) {
-			NodeRef contractDocumentRef = null;
-			for (ChildAssociationRef assocRef : children) {
-				NodeRef candidateRef = assocRef.getChildRef();
-				if (TYPE_CONTRACT_DOCUMENT.isMatch(nodeService.getType(candidateRef))) {
-					contractDocumentRef = candidateRef;
-					break;
-				} else if (TYPE_CONTRACT_FAKE_DOCUMENT.isMatch(nodeService.getType(candidateRef))) {
-					contractDocumentRef = candidateRef;
-					break;
-				}
-			}
-			if (contractDocumentRef != null) {
-				//внутри этого документа получить или создать папку "Согласование/<Какое-то> согласование"
-				NodeRef approvalRef = getOrCreateRootApprovalFolder(contractDocumentRef);
-				NodeRef parallelApprovalRef = getOrCreateApprovalFolder(approvalRef);
-				//создаем внутри указанной папки объект "Лист согласования"
-				approvalListRef = createApprovalList(parallelApprovalRef, contractDocumentRef, bpmPackage);
-			} else {
-				logger.error("Attention: bpm:package containing lecm-contract:document is empty");
-			}
+		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
+		if (documentRef != null) {
+			//внутри этого документа получить или создать папку "Согласование/<Какое-то> согласование"
+			NodeRef approvalRef = getOrCreateRootApprovalFolder(documentRef);
+			NodeRef parallelApprovalRef = getOrCreateApprovalFolder(approvalRef);
+			//создаем внутри указанной папки объект "Лист согласования"
+			approvalListRef = createApprovalList(parallelApprovalRef, documentRef, bpmPackage);
 		} else {
-			logger.error("Attention: bpm:package containing lecm-contract:document is null");
+			logger.error("There is no any lecm-contract:document  in bpm:package");
 		}
 		return approvalListRef;
 	}
@@ -350,5 +337,24 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		}
 		properties.put(PROP_APPROVAL_LIST_APPROVE_DATE, new Date());
 		nodeService.setProperties(approvalListRef, properties);
+	}
+
+	@Override
+	public void grantReviewerPermissions(List<NodeRef> employees, NodeRef bpmPackage) {
+		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
+		if (documentRef != null) {
+			Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+			properties.put(DocumentMembersService.PROP_MEMBER_GROUP, "LECM_BASIC_PG_Reviewer");
+			for (NodeRef employee : employees) {
+				NodeRef member = documentMembersService.addMember(documentRef, employee, properties);
+				if(logger.isTraceEnabled()) {
+					String employeeName = (String) nodeService.getProperty(employee, ContentModel.PROP_NAME);
+					String docName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_NAME);
+					logger.trace("Employee {} has been invited to the document {} with LECM_BASIC_PG_Reviewer permission. MemberRef is {}", new Object[]{employeeName, docName, member});
+				}
+			}
+		} else {
+			logger.error("There is no any lecm-contract:document in bpm:package. Permissions won't be granted");
+		}
 	}
 }

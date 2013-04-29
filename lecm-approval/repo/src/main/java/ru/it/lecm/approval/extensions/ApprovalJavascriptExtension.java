@@ -1,6 +1,7 @@
 package ru.it.lecm.approval.extensions;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
@@ -143,5 +144,10 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 
 	public void logFinalDecision(final ActivitiScriptNode approvalListRef, final Map<String, String> decisionMap) {
 		approvalListService.logFinalDecision(approvalListRef.getNodeRef(), decisionMap);
+	}
+
+	public void grantReviewerPermissions(final ActivitiScriptNode bpmPackage, ActivitiScriptNodeList employeeList) {
+		List<NodeRef> employees = employeeList.getNodeReferences();
+		approvalListService.grantReviewerPermissions(employees, bpmPackage.getNodeRef());
 	}
 }

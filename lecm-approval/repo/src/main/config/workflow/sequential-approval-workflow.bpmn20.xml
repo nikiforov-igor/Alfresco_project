@@ -73,8 +73,9 @@
 						<activiti:string>
 							//<![CDATA[
 			            	var personList = approvalSequential.getPersonListByEmployeeList(lecmSeq_employeesAssoc);
-			            	execution.setVariableLocal("assigneesList", personList);
 			            	var approvalListRef = approvalSequential.createApprovalList(bpm_package);
+			            	approvalSequential.grantReviewerPermissions(bpm_package, lecmSeq_employeesAssoc);
+			            	execution.setVariableLocal("assigneesList", personList);
 			            	execution.setVariable("approvalListRef", approvalListRef);
 							
 			            //]]>

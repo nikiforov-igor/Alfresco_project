@@ -10,6 +10,10 @@ public class ApprovalListServiceSequential extends ApprovalListServiceAbstract {
 
 	@Override
 	protected NodeRef getOrCreateApprovalFolder(NodeRef parentRef) {
-		return getOrCreateSequentialApprovalFolder(parentRef);
+		NodeRef parallelApprovalRef = getFolder(parentRef, "Последовательное согласование");
+		if (parallelApprovalRef == null) {
+			parallelApprovalRef = createFolder(parentRef, "Последовательное согласование");
+		}
+		return parallelApprovalRef;
 	}
 }
