@@ -23,5 +23,10 @@
             <region-id>forbidden</region-id>
             <url>/lecm/base/forbidden</url>
         </component>
+		<!-- Reports List -->
+		<component>
+            <region-id>reports-list</region-id>
+            <url>/lecm/contracts/reports/list</url>
+        </component>
     </components>
 </template-instance>

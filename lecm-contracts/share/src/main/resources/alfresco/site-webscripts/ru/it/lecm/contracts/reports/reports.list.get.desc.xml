@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Reports list</shortname>
+	<description>Contracts: reports list</description>
+	<format default="html"/>
+	<url>/lecm/contracts/reports/list</url>
+	<authentication>user</authentication>
+</webscript>

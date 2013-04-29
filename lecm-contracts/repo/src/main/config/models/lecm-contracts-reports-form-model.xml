@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Модель данных для отрисовки форм отчетов -->
+<model name="lecm-contract-reports:reports-forms" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Contracts reports forms model</description>
+	<author>vlevin</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<!-- Импорт модели данных оргструктуры -->
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+		<import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
+		<import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/contract/re1.0" prefix="lecm-contract-reports"/>
+	</namespaces>
+
+	<types>
+		<type name="lecm-contract-reports:contracts-list-report">
+			<title>Contracts list report</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-contract-reports:contracts-list-start">
+					<type>d:date</type>
+				</property>
+				<property name="lecm-contract-reports:contracts-list-end">
+					<type>d:date</type>
+				</property>
+				<property name="lecm-contract-reports:contracts-list-actual-only">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
+				<property name="lecm-contract-reports:contracts-list-sum">
+					<type>d:text</type>
+					<default>0</default>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-contract-reports:contracts-list-contractor">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-contractor:contractor-type</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<!-- вид договора -->
+				<association name="lecm-contract-reports:contracts-list-contract-type">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-contract-dic:contract-type</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<!-- тематика договора -->
+				<association name="lecm-contract-reports:contracts-list-contract-subject">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-contract-dic:contract-subjects</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+
+		<type name="lecm-contract-reports:approval-discipline-report">
+			<title>Approval discipline report</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-contract-reports:approval-discipline-start">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-contract-reports:approval-discipline-end">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+	</types>
+</model>
