@@ -162,7 +162,7 @@ public final class Types {
 			if (this == SG_BR)
 				return new SGBusinessRole(objId, displayName);
 			if (this == SG_SPEC)
-				return new SGSpecialOrGeneric(objId, displayName);
+				return new SGSpecialCustom(objId, displayName);
 
 			// if (this == SG_BRME) return new SGPrivateBusinessRole(objId, moreId);
 			throw new RuntimeException( String.format("Cannot create simple locate descriptor for sg-enum %s", this));
@@ -471,7 +471,7 @@ public final class Types {
 	 * и включить в этй группу нужных Сотрудников (IOrgStructureNotifiers.sgInclude):
 	 *
 	 *  // создаём "спецификаторы" объектов безопасности
-	 *  SGSpecialOrGeneric posGrp = new SGSpecialOrGeneric("TASK_"+ taskID); // спецификатор некоторой группы
+	 *  SGSpecialCustom posGrp = new SGSpecialCustom("TASK_"+ taskID); // спецификатор некоторой группы
 	 *  SGPrivateMeOfUser posUsr1 = SGKind.SG_ME.getSGMeOfUser( userId1, login1); // личная ME-группа пользователя userId1
 	 *  SGPrivateMeOfUser posUsr2 = SGKind.SG_ME.getSGMeOfUser( userId2, login2); // -//- userId2
 	 *
@@ -484,13 +484,13 @@ public final class Types {
 	 *  LecmPermissionGroup perms = lecmPermissionServiceBean.findPermissionGroup("LECM_BASIC_PG_ResponsibleEmployee");
 	 *  lecmPermissionServiceBean.grantAccessByPosition( perms, node, posGrp);
 	 */
-	public static class SGSpecialOrGeneric extends SGPosition {
+	public static class SGSpecialCustom extends SGPosition {
 
-		public SGSpecialOrGeneric(String id) {
+		public SGSpecialCustom(String id) {
 			this( id, null);
 		}
 
-		public SGSpecialOrGeneric(String id, String displayInfo) {
+		public SGSpecialCustom(String id, String displayInfo) {
 			super( SGKind.SG_SPEC, id, displayInfo);
 		}
 	}
