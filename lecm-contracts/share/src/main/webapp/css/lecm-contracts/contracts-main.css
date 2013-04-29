@@ -4,6 +4,9 @@
     margin-bottom: 10px;
     padding-bottom: 0;
 }
+#yui-main #doc-bd div.datalist-toolbar {
+    margin: 0 -10px;
+}
 
 .yui-gc div.first {
     width: 100%;
