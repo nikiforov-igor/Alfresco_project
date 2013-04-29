@@ -1111,10 +1111,12 @@
                 <field-visibility>
                     <show id="lecm-stmeditor:condition" force="true"/>
                     <show id="lecm-stmeditor:conditionErrorMessage" force="true"/>
+                    <show id="lecm-stmeditor:hideAction" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-stmeditor:condition" />
                     <field id="lecm-stmeditor:conditionErrorMessage" />
+                    <field id="lecm-stmeditor:hideAction" />
                 </appearance>
             </form>
         </forms>
