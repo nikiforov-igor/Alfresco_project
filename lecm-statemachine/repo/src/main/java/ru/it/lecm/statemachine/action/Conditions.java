@@ -26,10 +26,10 @@ public class Conditions {
             for (Element condition : conditions) {
                 String expression = condition.element("expression").getText();
                 String errorMessage = condition.element("errorMessage").getText();
-                String hideActionValue = condition.element("hideAction").getText();
+                Element hideActionValue = condition.element("hideAction");
                 Boolean hideAction;
                 if (hideActionValue != null) {
-                    hideAction = Boolean.valueOf(hideActionValue);
+                    hideAction = Boolean.valueOf(hideActionValue.getText());
                 } else {
                     hideAction = false;
                 }
