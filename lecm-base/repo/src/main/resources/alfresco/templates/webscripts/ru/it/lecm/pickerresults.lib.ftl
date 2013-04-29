@@ -40,16 +40,15 @@
 				<#if row.item.properties.modifier??>"modifier": "${row.item.properties.modifier}",</#if>
 				<#if row.item.siteShortName??>"site": "${row.item.siteShortName}",</#if>
 				"displayPath": "${row.item.displayPath!""}",
-				"nodeRef": "${row.item.nodeRef}"<#if row.selectable?exists>,
-
-				<#if additionalProperties??>
-					<#list additionalProperties as prop>
-						"${prop}": "${row.item.properties[prop]?string}",
-					</#list>
-				</#if>
-
-				"selectable" : ${row.selectable?string}</#if>
-			}<#if row_has_next>,</#if>
+				"nodeRef": "${row.item.nodeRef}"
+                <#if additionalProperties??>,
+                    <#list additionalProperties as prop>
+                        "${prop?replace(":", "_")}": "${row.item.properties[prop]!""}",
+                    </#list>
+                </#if>
+                <#if row.selectable?exists>,
+                    "selectable" : ${row.selectable?string}</#if>
+                }<#if row_has_next>,</#if>
 		</#list>
 		]
 	}

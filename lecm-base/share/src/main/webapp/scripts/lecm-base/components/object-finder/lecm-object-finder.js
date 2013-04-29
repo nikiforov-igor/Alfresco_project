@@ -511,7 +511,11 @@ LogicECM.module = LogicECM.module || {};
 	       * @property
 	       * @type string
 	       */
-	      docType: null
+	      docType: null,
+
+          showActions: true,
+
+          additionalProperties: null
       },
 
       /**
@@ -1579,7 +1583,7 @@ LogicECM.module = LogicECM.module || {};
 
          var onSuccess = function ObjectFinder__loadSelectedItems_onSuccess(response)
          {
-            var items = response.json.data.items,
+            var items = eval("("+ response.serverResponse.responseText + ")").data.items,
                item;
             this.selectedItems = {};
             //this.singleSelectedItem = null; 
@@ -1614,7 +1618,8 @@ LogicECM.module = LogicECM.module || {};
                   itemNameSubstituteString: this.options.nameSubstituteString,
                   substituteParent: this.options.substituteParent != "" ? this.options.substituteParent : "none",
                   itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
-                  itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol
+                  itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol,
+                  additionalProperties:this.options.additionalProperties
                },
                successCallback:
                {
@@ -2423,7 +2428,9 @@ LogicECM.module = LogicECM.module || {};
 	       * @property
 	       * @type string
 	       */
-	      docType: null
+	      docType: null,
+
+          additionalProperties: null
       },
 
       /**
@@ -2522,12 +2529,18 @@ LogicECM.module = LogicECM.module || {};
       renderItem: function ObjectRenderer_renderItem(item, iconSize, template)
       {
          var me = this;
-         
+
          var renderHelper = function ObjectRenderer_renderItem_renderHelper(p_key, p_value, p_metadata)
          {
             if (p_key.toLowerCase() == "icon")
             {
-               return '<img src="' + me.getIconURL(item, iconSize) + '" width="' + iconSize + '" alt="' + $html(item.description) + '" title="' + $html(me._deactivateLinks(item.name)) + '" />';
+                var src = '';
+                if (item.type) {
+                     src = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + item.type.replace(":", "_") + ".png";
+                } else {
+                    src = me.getIconURL(item, iconSize);
+                }
+                return '<img src="' + src + '" width="' + iconSize + '" alt="' + $html(item.description) + '" title="' + $html(me._deactivateLinks(item.name)) + '" />';
             }
             return $html(me._deactivateLinks(p_value));
          };

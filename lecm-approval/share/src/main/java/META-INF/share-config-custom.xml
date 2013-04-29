@@ -110,4 +110,20 @@
 		</forms>
 	</config>
 
+    <config evaluator="task-type" condition="lecmPar:parallelApproval">
+        <forms>
+            <form id="workflow-details">
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/package-items-control.ftl">
+                            <control-param name="nameSubstituteString">{lecm-document:present-string}</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

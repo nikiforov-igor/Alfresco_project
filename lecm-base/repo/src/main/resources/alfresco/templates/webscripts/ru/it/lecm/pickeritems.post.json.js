@@ -21,8 +21,12 @@ function main()
       substituteParent = "none",
       selectedItemsNameSubstituteString = "{cm:name}",
       numItems = jsonItems.length(),
+      additionalProperties = json.has('additionalProperties') ? json.get('additionalProperties') : null,
       item, result;
-   
+
+    if (additionalProperties != null) {
+        additionalProperties = additionalProperties.split(',');
+    }
    if (json.has("itemValueType")) {
       var jsonValueTypes = json.get("itemValueType").split(";");
       itemValueType = jsonValueTypes[0];
@@ -81,6 +85,7 @@ function main()
        logger.log("#items = " + count + ", #results = " + results.length);
 
    model.results = results;
+   model.additionalProperties = additionalProperties;
 }
 
 main();

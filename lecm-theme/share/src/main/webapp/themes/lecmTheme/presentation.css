@@ -1868,6 +1868,11 @@ div.current-values,
 .yui-skin-lecmTheme div.form-field div.yui-ac .autocomplete-input {
     float: left;
 }
+#lecm-package-items-span div.current-values
+{
+    float: none;
+    width: 100%;
+}
 
 div.currentValueDisplay {
     width: 100%;
