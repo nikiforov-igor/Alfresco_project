@@ -22,6 +22,7 @@ import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.dictionary.AspectDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -646,12 +647,36 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     public void logEndWorkflowEvent(NodeRef document, String executionId) {
-        businessJournalService.log(document, StateMachineEventCategory.END_WORKFLOW, "Завершен бизнес-процесс #object1 на документе #mainobject", Collections.singletonList(executionId));
+	    if (!isServiceWorkflow(executionId)) {
+	        businessJournalService.log(document, StateMachineEventCategory.END_WORKFLOW, "Завершен бизнес-процесс #object1 на документе #mainobject", Collections.singletonList(executionId));
+	    }
     }
 
     public void logStartWorkflowEvent(NodeRef document, String executionId) {
-        businessJournalService.log(document, StateMachineEventCategory.START_WORKFLOW, "Запущен бизнес-процесс #object1 на документе #mainobject", Collections.singletonList(executionId));
+	    if (!isServiceWorkflow(executionId)) {
+	        businessJournalService.log(document, StateMachineEventCategory.START_WORKFLOW, "Запущен бизнес-процесс #object1 на документе #mainobject", Collections.singletonList(executionId));
+	    }
     }
+
+	public boolean isServiceWorkflow(String executionId) {
+		WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(executionId);
+		if (workflow != null) {
+			return isServiceWorkflow(workflow);
+		}
+		return false;
+	}
+
+	public boolean isServiceWorkflow(WorkflowInstance workflow) {
+		List<AspectDefinition> aspects = workflow.getDefinition().getStartTaskDefinition().getMetadata().getDefaultAspects();
+		if (aspects != null) {
+			for (AspectDefinition aspect: aspects) {
+				if (aspect.getName().equals(StatemachineModel.ASPECT_IS_SYSTEM_WORKFLOW)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
     public String parseExecutionId(String persistedResponse) {
         if (persistedResponse == null || "null".equals(persistedResponse)) {
@@ -843,7 +868,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
         NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
         for (WorkflowInstance instance : workflows) {
-            if (!workflowSysUser.equals(instance.getInitiator())) {
+            if (!workflowSysUser.equals(instance.getInitiator()) && !isServiceWorkflow(instance)) {
                 result.add(instance);
             }
         }

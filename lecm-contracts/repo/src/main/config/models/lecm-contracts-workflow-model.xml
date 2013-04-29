@@ -9,6 +9,7 @@
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
 		<import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
+		<import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
 	</imports>
 
 	<namespaces>
@@ -31,6 +32,9 @@
 					</target>
 				</association>
 			</associations>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
 		</type>
 
         <type name="lecmContractWf:deleteReasonTask">
@@ -48,6 +52,9 @@
                     </target>
                 </association>
             </associations>
+	        <mandatory-aspects>
+		        <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+	        </mandatory-aspects>
         </type>
 
         <type name="lecmContractWf:contractTimeTask">
@@ -66,6 +73,9 @@
                     <mandatory>true</mandatory>
                 </property>
             </properties>
+	        <mandatory-aspects>
+		        <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+	        </mandatory-aspects>
         </type>
 
 		<type name="lecmContractWf:contractTerminationTask">
@@ -76,6 +86,9 @@
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
 		</type>
     </types>
 </model>

@@ -10,6 +10,7 @@ import org.alfresco.service.namespace.QName;
 public class StatemachineModel {
 
 	public final static String STATEMACHINE_URI = "http://www.it.ru/logicECM/statemachine/1.0";
+	public final static String STATEMACHINE_ASPECTS_URI = "http://www.it.ru/logicECM/statemachine/aspects/1.0";
 
     public final static QName TYPE_TIMER = QName.createQName(STATEMACHINE_URI, "timer");
     public final static QName PROP_EXECUTION_ID = QName.createQName(STATEMACHINE_URI, "executionId");
@@ -26,5 +27,6 @@ public class StatemachineModel {
 	public final static QName ASPECT_STATEMACHINE = QName.createQName(STATEMACHINE_URI, "statemachineAspect");
 	public final static QName PROP_STATEMACHINE_ID = QName.createQName(STATEMACHINE_URI, "statemachineId");
 
+	public final static QName ASPECT_IS_SYSTEM_WORKFLOW = QName.createQName(STATEMACHINE_ASPECTS_URI, "is-service-workflow");
 
 }

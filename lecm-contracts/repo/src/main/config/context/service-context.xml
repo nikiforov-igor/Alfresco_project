@@ -150,7 +150,7 @@
         </property>
     </bean>
 
-	<bean id="contractsWorkflowBootstrap" parent="workflowDeployer" depends-on="contracts.LogicEcmContractsDictionariesBootstrap">
+	<bean id="contractsWorkflowBootstrap" parent="workflowDeployer" depends-on="contracts.LogicEcmContractsDictionariesBootstrap, statemachine.aspects.LogicEcmModelsBootstrap">
 		<property name="workflowDefinitions">
 			<list>
 				<props>
