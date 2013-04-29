@@ -24,7 +24,7 @@ function main()
       additionalProperties = json.has('additionalProperties') ? json.get('additionalProperties') : null,
       item, result;
 
-    if (additionalProperties != null) {
+    if (additionalProperties != null && additionalProperties != "none") {
         additionalProperties = additionalProperties.split(',');
     }
    if (json.has("itemValueType")) {

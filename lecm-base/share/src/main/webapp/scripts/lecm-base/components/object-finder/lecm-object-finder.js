@@ -1619,7 +1619,7 @@ LogicECM.module = LogicECM.module || {};
                   substituteParent: this.options.substituteParent != "" ? this.options.substituteParent : "none",
                   itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
                   itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol,
-                  additionalProperties:this.options.additionalProperties
+                  additionalProperties:this.options.additionalProperties ? this.options.additionalProperties : "none"
                },
                successCallback:
                {
