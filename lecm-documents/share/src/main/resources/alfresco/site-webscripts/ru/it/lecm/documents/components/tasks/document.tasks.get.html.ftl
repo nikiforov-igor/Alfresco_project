@@ -6,17 +6,14 @@
 <div class="document-metadata-header document-components-panel">
 
     <h2 id="${el}-heading" class="thin dark">
-        <div style="float: left;margin-top: 5px;">${msg("heading")}</div>
-
-        <div class="total-tasks-count-right" <#if data.myTasksTotalCount == 0> style="display: none;" </#if>>${data.myTasksTotalCount}</div>
-        <div style="padding-top: 4px;">
-            <span class="alfresco-twister-actions">
-                <a id="${el}-action-expand" href="javascript:void(0);" class="expand" title="${msg("label.expand")}">&nbsp</a>
-            </span>
-        </div>
-
-        <div style="clear: both;" />
+        ${msg("heading")}
+        <span class="alfresco-twister-actions">
+            <a id="${el}-action-expand" href="javascript:void(0);" class="expand" title="${msg("label.expand")}">&nbsp;</a>
+        </span>
     </h2>
+    <div style="position: relative;">
+        <div class="total-tasks-count-right" <#if data.myTasksTotalCount == 0> style="display: none;" </#if>>${data.myTasksTotalCount}</div>
+    </div>
 
     <div id="${el}-formContainer">
         <div class="right-tasks-container">
@@ -54,7 +51,9 @@
     </script>
     <script type="text/javascript">//<![CDATA[
     (function () {
-        Alfresco.util.createTwister("${el}-heading", "DocumentTasks");
+        Alfresco.util.createTwister("${el}-heading", "DocumentTasks", {
+            panel: "${el}-formContainer"
+        });
 
         function init() {
             documentTasksComponent = new LogicECM.DocumentTasks("${el}").setOptions(

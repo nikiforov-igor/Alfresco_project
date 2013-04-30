@@ -141,18 +141,22 @@
     color: #666666;
 }
 .total-tasks-count-right {
-    float: right;
-    margin-right: 20px;
-    margin-top: 1px;
-    background-image: url('/share/res/images/lecm-documents/active-tasks-background.png');
-    height: 24px;
     width: 24px;
+    height: 24px;
+    line-height: 24px;
+    background: #ff7504;
+    position: absolute;
+    right: 20px;
+    top: -22px;
     text-align: center;
-    padding-top: 5px;
-    padding-left: 1px;
-    color: #FFFFFF;
+    vertical-align: middle;
+    color: #fff;
     font-weight: bold;
     font-size: 13px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
 }
 .right-task {
     margin-top: 12px;
