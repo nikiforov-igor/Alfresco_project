@@ -1852,6 +1852,12 @@ div.autocompleteCurrentValueDisplayInvisible,
     overflow-y: auto;
     font-size: 99%;
 }
+
+.yui-skin-lecmTheme div.yui-panel div.form-field > div.object-finder.inlineable:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+    float: left;
+    margin: 0;
+}
+
 .yui-skin-lecmTheme .yui-ac-content {
     max-width: 28em;
 }
