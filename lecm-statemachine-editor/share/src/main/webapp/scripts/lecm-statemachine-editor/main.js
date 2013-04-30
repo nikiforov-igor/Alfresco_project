@@ -83,7 +83,7 @@ LogicECM.module = LogicECM.module || {};
 				argument:{
 					parent: this
 				},
-				timeout: 20000
+				timeout: 60000
 			};
 			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 		},
@@ -311,7 +311,7 @@ LogicECM.module = LogicECM.module || {};
 				argument:{
 					parent: this
 				},
-				timeout: 20000
+                timeout: 60000
 			};
 			YAHOO.util.Connect.asyncRequest('DELETE', sUrl, callback);
 		},
@@ -344,7 +344,7 @@ LogicECM.module = LogicECM.module || {};
                                 argument:{
                                     parent: me
                                 },
-                                timeout: 20000
+                                timeout: 60000
                             };
                             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);                            }
                     },
@@ -388,7 +388,7 @@ LogicECM.module = LogicECM.module || {};
                                 argument:{
                                     parent: me
                                 },
-                                timeout: 20000
+                                timeout: 60000
                             };
                             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);                            }
                     },
@@ -432,7 +432,7 @@ LogicECM.module = LogicECM.module || {};
                                 argument:{
                                     parent: me
                                 },
-                                timeout: 20000
+                                timeout: 60000
                             };
                             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);                            }
                     },

@@ -147,7 +147,7 @@ LogicECM.module = LogicECM.module || {};
 				argument:{
 					contractsObject:this
 				},
-				timeout:7000
+				timeout: 60000
 			};
 			YAHOO.util.Connect.asyncRequest('GET', url, callback);
 		},
