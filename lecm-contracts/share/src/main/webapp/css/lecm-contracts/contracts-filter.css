@@ -5,7 +5,7 @@ h2.thin {
 
 .contracts-filter-panel {
     background-color: #F2F2F2;
-    border:1px solid;
+    border: 1px solid #cbcbcb;
     margin-right: -10px;
 }
 
@@ -22,9 +22,7 @@ h2.thin {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
     white-space: nowrap;
-    -moz-binding: url('/examples/text-overflow.xml#ellipsis');
 }
 
 .contracts-filter-panel .filterBlock{
