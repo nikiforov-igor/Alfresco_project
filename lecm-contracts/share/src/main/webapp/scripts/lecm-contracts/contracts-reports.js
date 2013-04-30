@@ -18,12 +18,7 @@
 		"contracts-list-reports-link-printReportForm_assoc_lecm-contract-reports_contracts-list-contractor-cntrl-selectedItems": ""
 	};
 
-	YAHOO.util.Event.onDOMReady(function() {
-		YAHOO.util.Event.addListener("contracts-list-reports-link", "click", LogicECM.module.Contracts.reports.reportLinkClicked, {"reportType": "contracts-list"});
-		YAHOO.util.Event.addListener("approval-discipline-reports-link", "click", LogicECM.module.Contracts.reports.reportLinkClicked, {"reportType": "approval-discipline"});
-	});
-
-	LogicECM.module.Contracts.reports.reportLinkClicked = function(event, param) {
+	LogicECM.module.Contracts.reports.reportLinkClicked = function(element, param) {
 		var reportType = param.reportType;
 
 		var doBeforeDialogShow = function ContractReports_doBeforeDialogShow(p_form, p_dialog) {
