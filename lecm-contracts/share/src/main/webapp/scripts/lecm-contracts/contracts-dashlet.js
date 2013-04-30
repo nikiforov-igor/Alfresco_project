@@ -96,7 +96,7 @@
                                     }
                                 }
 
-                                var filterPreference = Alfresco.util.findValueByDotNotation(p_oResponse.json, this.buildPreferences(PREF_FILTER), "all");
+                                var filterPreference = Alfresco.util.findValueByDotNotation(p_oResponse.json, this.buildPreferences(PREF_FILTER), "my");
                                 if (filterPreference !== null)
                                 {
                                     this.widgets.user.value = filterPreference;

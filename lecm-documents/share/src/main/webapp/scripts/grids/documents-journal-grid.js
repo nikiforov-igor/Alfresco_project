@@ -116,7 +116,7 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
                             {
                                 key: this.dataResponseFields[i],
                                 label: column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
-                                sortable: sortable,
+                                sortable: false,
                                 sortOptions: {
                                     field: column.formsName,
                                     sortFunction: this.getSortFunction()
