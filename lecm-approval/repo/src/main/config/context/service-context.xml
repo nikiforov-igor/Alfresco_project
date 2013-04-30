@@ -55,6 +55,8 @@
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="documentMembersService" ref="documentMembersService"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
 	<bean id="lecm.approval.service.parallel" class="ru.it.lecm.approval.ApprovalListServiceParallel" parent="lecm.approval.service.abstract"/>

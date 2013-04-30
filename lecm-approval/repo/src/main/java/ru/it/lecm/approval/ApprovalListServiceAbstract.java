@@ -1,6 +1,8 @@
 package ru.it.lecm.approval;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +31,8 @@ import static ru.it.lecm.approval.api.ApprovalListService.PROP_APPROVAL_LIST_APP
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.notifications.beans.Notification;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -38,12 +42,22 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 public abstract class ApprovalListServiceAbstract extends BaseBean implements ApprovalListService {
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceAbstract.class);
-	private final static QName TYPE_CONTRACT_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/contract/1.0", "document");
-	private final static QName TYPE_CONTRACT_FAKE_DOCUMENT = QName.createQName("http://www.it.ru/logicECM/contract/fake/1.0", "document");
+	private final static String CONTRACT_NAMESPACE = "http://www.it.ru/logicECM/contract/1.0";
+	private final static String CONTRACT_FAKE_NAMESPACE = "http://www.it.ru/logicECM/contract/fake/1.0";
+	private final static String CONTRACTORS_NAMESPACE = "http://www.it.ru/lecm/contractors/model/contractor/1.0";
+	private final static QName TYPE_CONTRACT_DOCUMENT = QName.createQName(CONTRACT_NAMESPACE, "document");
+	private final static QName TYPE_CONTRACT_FAKE_DOCUMENT = QName.createQName(CONTRACT_FAKE_NAMESPACE, "document");
+	private final static QName TYPE_CONTRACTOR = QName.createQName(CONTRACTORS_NAMESPACE, "contractor-type");
+	private final static QName ASSOC_CONTRACT_PARTNER = QName.createQName(CONTRACT_NAMESPACE, "partner-assoc");
+	private final static QName PROP_CONTRACTOR_FULLNAME = QName.createQName(CONTRACTORS_NAMESPACE, "fullname");
+	private final static QName PROP_CONTRACTOR_SHORTNAME = QName.createQName(CONTRACTORS_NAMESPACE, "shortname");
 	private final static String APPROVAL_LIST_NAME = "Лист согласования версия %s";
+	private final static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+
 	private OrgstructureBean orgstructureService;
 	private DocumentAttachmentsService documentAttachmentsService;
     private DocumentMembersService documentMembersService;
+	private NotificationsService notificationsService;
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -60,6 +74,10 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 	public void setDocumentMembersService(DocumentMembersService documentMembersService) {
 		this.documentMembersService = documentMembersService;
+	}
+
+	public void setNotificationsService(NotificationsService notificationsService) {
+		this.notificationsService = notificationsService;
 	}
 
 	/**
@@ -356,5 +374,57 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		} else {
 			logger.error("There is no any lecm-contract:document in bpm:package. Permissions won't be granted");
 		}
+	}
+
+
+	/*
+	        // уведомление
+	        Notification notification = new Notification();
+	        ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
+	        employeeList.add(employee);
+	        notification.setRecipientEmployeeRefs(employeeList);
+	        notification.setAutor(authService.getCurrentUserName());
+	        notification.setDescription("Вы приглашены как новый участник в документ " +
+			        wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
+	        notification.setObjectRef(docRef);
+	        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+	        notificationService.sendNotification(this.notificationChannels, notification);
+
+	 */
+	@Override
+	public void notifyApprovalStarted(NodeRef employeeRef, Date dueDate, NodeRef bpmPackage) {
+		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
+		String documentLink = "";
+		if (documentRef != null) {
+			documentLink = wrapperLink(documentRef, "документ", DOCUMENT_LINK_URL);
+		} else {
+			logger.warn("Can't wrap document as link, because there is no any document in bpm:package.");
+		}
+
+		String partner = "";
+		if (documentRef != null) {
+			NodeRef partnerRef = findNodeByAssociationRef(documentRef, ASSOC_CONTRACT_PARTNER, TYPE_CONTRACTOR, ASSOCIATION_TYPE.TARGET);
+			if (partnerRef != null) {
+				partner = (String)nodeService.getProperty(partnerRef, PROP_CONTRACTOR_FULLNAME);
+			} else {
+				logger.warn("The is no partner for document {}", documentRef);
+			}
+		} else {
+			logger.warn("Can't get partner for document, because there is no any document in bpm:package");
+		}
+
+		String date = DATE_FORMAT.format(dueDate);
+
+		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
+		recipients.add(employeeRef);
+
+		String description = String.format("Вам необходимо согласовать %s по договору с %s, срок согласования: %s", documentLink, partner, date);
+
+		Notification notification = new Notification();
+		notification.setAutor(AuthenticationUtil.getSystemUserName());
+		notification.setDescription(description);
+        notification.setObjectRef(documentRef);
+		notification.setRecipientEmployeeRefs(recipients);
+		notificationsService.sendNotification(notificationChannels, notification);
 	}
 }

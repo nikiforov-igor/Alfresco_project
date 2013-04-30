@@ -1,5 +1,6 @@
 package ru.it.lecm.approval.api;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -47,4 +48,6 @@ public interface ApprovalListService {
 	 * @param bpmPackage
 	 */
 	void grantReviewerPermissions(List<NodeRef> employees, NodeRef bpmPackage);
+
+	void notifyApprovalStarted(final NodeRef employeeRef, final Date dueDate, final NodeRef bpmPackage);
 }

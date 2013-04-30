@@ -1,5 +1,6 @@
 package ru.it.lecm.approval.extensions;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,5 +150,16 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	public void grantReviewerPermissions(final ActivitiScriptNode bpmPackage, ActivitiScriptNodeList employeeList) {
 		List<NodeRef> employees = employeeList.getNodeReferences();
 		approvalListService.grantReviewerPermissions(employees, bpmPackage.getNodeRef());
+	}
+
+	/**
+	 * прислать сотруднику уведомление о том, что начато согласование по документу
+	 * @param person cm:person согласующий по документу
+	 * @param dueDate индивидуальный срок согласования
+	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех item-ов workflow
+	 */
+	public void notifyApprovalStarted(final ActivitiScriptNode person, final Date dueDate, final ActivitiScriptNode bpmPackage) {
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(person.getNodeRef());
+		approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
 	}
 }

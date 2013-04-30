@@ -1,60 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn"
-             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
-             targetNamespace="http://www.it.ru/logicECM/workflow/approval/parallel">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.it.ru/logicECM/workflow/approval/parallel">
 	<process id="lecmParallelApproval" name="Logic ECM Parallel Approval" isExecutable="true">
-		<startEvent id="start-parallel-approvement" name="Start parallel approvement" activiti:formKey="lecmPar:parallelApproval" ></startEvent>
+		<startEvent id="start-parallel-approvement" name="Start parallel approvement" activiti:formKey="lecmPar:parallelApproval"></startEvent>
 		<userTask id="parallel-approvement-task" name="Parallel approvement task" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmPar:approveTask">
 			<extensionElements>
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
-						<activiti:string>
-			            //<![CDATA[
-			            	var userName = assignee.properties.userName;
-			            	var dueDate = bpm_workflowDueDate;
-			            	logger.log(userName  + " must complete his task before worflow dueDate expired " + dueDate);
-			            	task.setDueDate(dueDate);
-			            //]]>
-						</activiti:string>
+						<activiti:string>//<![CDATA[
+							var dueDate = bpm_workflowDueDate;
+							task.setDueDate(dueDate);
+							approvalParallel.notifyApprovalStarted(assignee, dueDate, bpm_package);
+							var userName = assignee.properties.userName;
+							logger.log(userName	+ " must complete his task before worflow dueDate expired " + dueDate);
+						//]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
-						<!--
-						1) наполнение коллекции решений для всех assignee
-						2) добавление записи в лист согласования
-						-->
-						<activiti:string>
-			            //<![CDATA[
-			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+						<activiti:string>//<![CDATA[
+							var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 
-			            	var userName = assignee.properties.userName;
-			            	var decision = task.getVariableLocal("lecmPar_approveTaskResult");
-			            	var completionDate = task.getVariableLocal("bpm_completionDate");
-			            	var comment = task.getVariableLocal("bpm_comment");
-			            	var commentRef = task.getVariableLocal("lecmPar_approveTaskCommentAssoc");
-			            	logger.log("userName = " + userName);
-			            	logger.log("decision = " + decision);
-			            	logger.log("completionDate = " + completionDate);
-			            	logger.log("comment = " + comment);
-			            	logger.log("commentRef = " + commentRef);
-			            	var taskDecision = {
-			            		"userName": userName,
-			            		"decision": decision,
-			            		"completionDate": completionDate,
-			            		"comment": comment,
-			            		"commentRef": commentRef
-			            	};
-			            	var decisionsMap = execution.getVariable("decisionsMap");
-			            	if (!decisionsMap) {
-			            		logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
-			            	}
-			            	decisionsMap = approvalParallel.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
-			            	execution.setVariable("decisionsMap", decisionsMap);
-			            	var approvalListRef = execution.getVariable("approvalListRef");
-			            	approvalParallel.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
-			            //]]>
-						</activiti:string>
+							var userName = assignee.properties.userName;
+							var decision = task.getVariableLocal("lecmPar_approveTaskResult");
+							var completionDate = task.getVariableLocal("bpm_completionDate");
+							var comment = task.getVariableLocal("bpm_comment");
+							var commentRef = task.getVariableLocal("lecmPar_approveTaskCommentAssoc");
+							logger.log("userName = " + userName);
+							logger.log("decision = " + decision);
+							logger.log("completionDate = " + completionDate);
+							logger.log("comment = " + comment);
+							logger.log("commentRef = " + commentRef);
+							var taskDecision = {
+								"userName": userName,
+								"decision": decision,
+								"completionDate": completionDate,
+								"comment": comment,
+								"commentRef": commentRef
+							};
+							var decisionsMap = execution.getVariable("decisionsMap");
+							if (!decisionsMap) {
+								logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
+							}
+							decisionsMap = approvalParallel.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+							execution.setVariable("decisionsMap", decisionsMap);
+							var approvalListRef = execution.getVariable("approvalListRef");
+							approvalParallel.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+						//]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 			</extensionElements>
@@ -64,19 +55,13 @@
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<!--
-						1) формирование списка assignee
-						2) создание и наполнение листа согласования
-						 -->
-						<activiti:string>
-			            //<![CDATA[
-			            	var personList = approvalParallel.getPersonListByEmployeeList(lecmPar_employeesAssoc);
-			            	var approvalListRef = approvalParallel.createApprovalList(bpm_package);
-			            	approvalParallel.grantReviewerPermissions(bpm_package, lecmPar_employeesAssoc);
-			            	execution.setVariableLocal("assigneesList", personList);
-			            	execution.setVariable("approvalListRef", approvalListRef);
-			            //]]>
-						</activiti:string>
+						<activiti:string>//<![CDATA[
+							var personList = approvalParallel.getPersonListByEmployeeList(lecmPar_employeesAssoc);
+							var approvalListRef = approvalParallel.createApprovalList(bpm_package);
+							approvalParallel.grantReviewerPermissions(bpm_package, lecmPar_employeesAssoc);
+							execution.setVariableLocal("assigneesList", personList);
+							execution.setVariable("approvalListRef", approvalListRef);
+						//]]></activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>
@@ -86,26 +71,71 @@
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<!--
-						1) анализ результатов согласования
-						2) формирование  "итого" для листа согласования
-						3) положить в какую-нибудь переменную регламента результат согласования
-						 -->
-						<activiti:string>
-			            //<![CDATA[
-			            	var decisionsMap = execution.getVariable("decisionsMap");
-			            	var approvalListRef = execution.getVariable("approvalListRef");
-			            	if (!decisionsMap) {
-			            		logger.log("Attention: decisionsMap is null!");
-			            	}
+						<activiti:string>//<![CDATA[
+							var decisionsMap = execution.getVariable("decisionsMap");
+							var approvalListRef = execution.getVariable("approvalListRef");
+							if (!decisionsMap) {
+								logger.log("Attention: decisionsMap is null!");
+							}
 							approvalParallel.logFinalDecision(approvalListRef, decisionsMap);
 							var isApproved = approvalParallel.isApproved(decisionsMap);
 							execution.setVariable("isApproved", isApproved);
-			            //]]>
-						</activiti:string>
+						//]]></activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>
 		</sequenceFlow>
+		<boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="parallel-approvement-task" cancelActivity="false">
+			<timerEventDefinition>
+				<timeCycle>0 0/2 * * * ?</timeCycle>
+			</timerEventDefinition>
+		</boundaryEvent>
+		<serviceTask id="alfrescoScripttask1" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+			<extensionElements>
+				<activiti:field name="script">
+					<activiti:string>//<![CDATA[
+						logger.log("Hello from Timer1");
+					//]]></activiti:string>
+				</activiti:field>
+			</extensionElements>
+		</serviceTask>
+		<sequenceFlow id="flow1" sourceRef="boundarytimer1" targetRef="alfrescoScripttask1"></sequenceFlow>
 	</process>
+	<bpmndi:BPMNDiagram id="BPMNDiagram_lecmParallelApproval">
+		<bpmndi:BPMNPlane bpmnElement="lecmParallelApproval" id="BPMNPlane_lecmParallelApproval">
+			<bpmndi:BPMNShape bpmnElement="start-parallel-approvement" id="BPMNShape_start-parallel-approvement">
+				<omgdc:Bounds height="35.0" width="35.0" x="130.0" y="360.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="parallel-approvement-task" id="BPMNShape_parallel-approvement-task">
+				<omgdc:Bounds height="60.0" width="100.0" x="440.0" y="348.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="end-parallel-approvement" id="BPMNShape_end-parallel-approvement">
+				<omgdc:Bounds height="35.0" width="35.0" x="860.0" y="360.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="boundarytimer1" id="BPMNShape_boundarytimer1">
+				<omgdc:Bounds height="30.0" width="30.0" x="475.0" y="400.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="alfrescoScripttask1" id="BPMNShape_alfrescoScripttask1">
+				<omgdc:Bounds height="55.0" width="105.0" x="437.0" y="490.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNEdge bpmnElement="from-parallel-approvement-task-to-end" id="BPMNEdge_from-parallel-approvement-task-to-end">
+				<omgdi:waypoint x="540.0" y="378.0"></omgdi:waypoint>
+				<omgdi:waypoint x="860.0" y="377.0"></omgdi:waypoint>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="42.0" width="100.0" x="-30.0" y="-47.0"></omgdc:Bounds>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="from-start-to-parallel-approvement-task" id="BPMNEdge_from-start-to-parallel-approvement-task">
+				<omgdi:waypoint x="165.0" y="377.0"></omgdi:waypoint>
+				<omgdi:waypoint x="440.0" y="378.0"></omgdi:waypoint>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="42.0" width="100.0" x="-62.0" y="-47.0"></omgdc:Bounds>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+				<omgdi:waypoint x="490.0" y="430.0"></omgdi:waypoint>
+				<omgdi:waypoint x="489.0" y="490.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+		</bpmndi:BPMNPlane>
+	</bpmndi:BPMNDiagram>
 </definitions>
