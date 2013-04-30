@@ -133,18 +133,24 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		approvalListService.logDecision(approvalListRef.getNodeRef(), task);
 	}
 
-	public boolean isApproved(final Map<String, String> decisionMap) {
-		boolean isApproved = false;
+	public String getFinalDecision(final Map<String, String> decisionMap) {
+		String finalDecision = "NO_DECISION";
 		if (decisionMap.containsValue("REJECTED")) {
-			isApproved = false;
-		} else if (decisionMap.containsValue("APPROVED_WITH_REMARK") || decisionMap.containsValue("APPROVED")) {
-			isApproved = true;
+			finalDecision = "REJECTED";
+		} else if (decisionMap.containsValue("APPROVED_WITH_REMARK")) {
+			finalDecision = "APPROVED_WITH_REMARK";
+		} else if (decisionMap.containsValue("APPROVED")) {
+			finalDecision = "APPROVED";
 		}
-		return isApproved;
+		return finalDecision;
 	}
 
-	public void logFinalDecision(final ActivitiScriptNode approvalListRef, final Map<String, String> decisionMap) {
-		approvalListService.logFinalDecision(approvalListRef.getNodeRef(), decisionMap);
+	public boolean isApproved(final String finalDecision) {
+		return "APPROVED_WITH_REMARK".equals(finalDecision) || "APPROVED".equals(finalDecision);
+	}
+
+	public void logFinalDecision(final ActivitiScriptNode approvalListRef, final String finalDecision) {
+		approvalListService.logFinalDecision(approvalListRef.getNodeRef(), finalDecision);
 	}
 
 	public void grantReviewerPermissions(final ActivitiScriptNode bpmPackage, ActivitiScriptNodeList employeeList) {
@@ -161,5 +167,9 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	public void notifyApprovalStarted(final ActivitiScriptNode person, final Date dueDate, final ActivitiScriptNode bpmPackage) {
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(person.getNodeRef());
 		approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
+	}
+
+	public void notifyFinalDecision(final String decision, final ActivitiScriptNode bpmPackage) {
+		approvalListService.notifyFinalDecision(decision, bpmPackage.getNodeRef());
 	}
 }

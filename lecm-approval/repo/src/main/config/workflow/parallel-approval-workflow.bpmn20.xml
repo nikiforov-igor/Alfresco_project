@@ -77,9 +77,10 @@
 							if (!decisionsMap) {
 								logger.log("Attention: decisionsMap is null!");
 							}
-							approvalParallel.logFinalDecision(approvalListRef, decisionsMap);
-							var isApproved = approvalParallel.isApproved(decisionsMap);
-							execution.setVariable("isApproved", isApproved);
+							var finalDecision = approvalParallel.getFinalDecision(decisionsMap);
+							approvalParallel.logFinalDecision(approvalListRef, finalDecision);
+							approvalParallel.notifyFinalDecision(finalDecision, bpm_package)
+							execution.setVariable("isApproved", approvalParallel.isApproved(finalDecision));
 						//]]></activiti:string>
 					</activiti:field>
 				</activiti:executionListener>

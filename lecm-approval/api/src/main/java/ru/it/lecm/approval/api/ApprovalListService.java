@@ -2,7 +2,6 @@ package ru.it.lecm.approval.api;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONObject;
@@ -40,7 +39,7 @@ public interface ApprovalListService {
 	 */
 	void logDecision(final NodeRef approvalListRef, final JSONObject taskDecision);
 
-	void logFinalDecision(final NodeRef approvalListRef, Map<String, String> decisionMap);
+	void logFinalDecision(final NodeRef approvalListRef, final String finalDecision);
 
 	/**
 	 * раздать всем участникам процесса согласования права LECM_BASIC_PG_Reviewer
@@ -50,4 +49,11 @@ public interface ApprovalListService {
 	void grantReviewerPermissions(List<NodeRef> employees, NodeRef bpmPackage);
 
 	void notifyApprovalStarted(final NodeRef employeeRef, final Date dueDate, final NodeRef bpmPackage);
+
+	/**
+	 * уведомить инициатора о том что решение о согласовании принято
+	 * @param decision решение
+	 * @param bpmPackage
+	 */
+	void notifyFinalDecision(final String decision, final NodeRef bpmPackage);
 }

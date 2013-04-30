@@ -344,15 +344,9 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	}
 
 	@Override
-	public void logFinalDecision(final NodeRef approvalListRef, final Map<String, String> decisionMap) {
+	public void logFinalDecision(final NodeRef approvalListRef, final String finalDecision) {
 		Map<QName, Serializable> properties = nodeService.getProperties(approvalListRef);
-		if (decisionMap.containsValue("REJECTED")) {
-			properties.put(PROP_APPROVAL_LIST_DECISION, "REJECTED");
-		} else if (decisionMap.containsValue("APPROVED_WITH_REMARK")) {
-			properties.put(PROP_APPROVAL_LIST_DECISION, "APPROVED_WITH_REMARK");
-		} else if (decisionMap.containsValue("APPROVED")) {
-			properties.put(PROP_APPROVAL_LIST_DECISION, "APPROVED");
-		}
+		properties.put(PROP_APPROVAL_LIST_DECISION, finalDecision);
 		properties.put(PROP_APPROVAL_LIST_APPROVE_DATE, new Date());
 		nodeService.setProperties(approvalListRef, properties);
 	}
@@ -376,39 +370,35 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		}
 	}
 
+	private String getDocumentPartnerName(final NodeRef documentRef) {
+		String partner = "<контрагент отсутствует>";
+		NodeRef partnerRef = findNodeByAssociationRef(documentRef, ASSOC_CONTRACT_PARTNER, TYPE_CONTRACTOR, ASSOCIATION_TYPE.TARGET);
+		if (partnerRef != null) {
+			partner = (String)nodeService.getProperty(partnerRef, PROP_CONTRACTOR_FULLNAME);
+		} else {
+			logger.warn("The is no partner for document {}", documentRef);
+		}
+		return partner;
+	}
 
-	/*
-	        // уведомление
-	        Notification notification = new Notification();
-	        ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
-	        employeeList.add(employee);
-	        notification.setRecipientEmployeeRefs(employeeList);
-	        notification.setAutor(authService.getCurrentUserName());
-	        notification.setDescription("Вы приглашены как новый участник в документ " +
-			        wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
-	        notification.setObjectRef(docRef);
-	        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-	        notificationService.sendNotification(this.notificationChannels, notification);
+	private NodeRef getDocumentInitiator(final NodeRef documentRef) {
+		String creator = (String)nodeService.getProperty(documentRef, ContentModel.PROP_CREATOR);
+		return orgstructureService.getEmployeeByPerson(creator);
+	}
 
-	 */
 	@Override
 	public void notifyApprovalStarted(NodeRef employeeRef, Date dueDate, NodeRef bpmPackage) {
 		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
-		String documentLink = "";
+		String documentLink = "<a href=\"javascript:void(0);\">документ</a>";
 		if (documentRef != null) {
 			documentLink = wrapperLink(documentRef, "документ", DOCUMENT_LINK_URL);
 		} else {
 			logger.warn("Can't wrap document as link, because there is no any document in bpm:package.");
 		}
 
-		String partner = "";
+		String partner = "<контрагент отсутствует>";
 		if (documentRef != null) {
-			NodeRef partnerRef = findNodeByAssociationRef(documentRef, ASSOC_CONTRACT_PARTNER, TYPE_CONTRACTOR, ASSOCIATION_TYPE.TARGET);
-			if (partnerRef != null) {
-				partner = (String)nodeService.getProperty(partnerRef, PROP_CONTRACTOR_FULLNAME);
-			} else {
-				logger.warn("The is no partner for document {}", documentRef);
-			}
+			partner = getDocumentPartnerName(documentRef);
 		} else {
 			logger.warn("Can't get partner for document, because there is no any document in bpm:package");
 		}
@@ -427,4 +417,58 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		notification.setRecipientEmployeeRefs(recipients);
 		notificationsService.sendNotification(notificationChannels, notification);
 	}
+
+	@Override
+	public void notifyFinalDecision(final String decisionCode, final NodeRef bpmPackage) {
+		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
+		String documentLink = "<a href=\"javascript:void(0);\">документе</a>";
+		if (documentRef != null) {
+			documentLink = wrapperLink(documentRef, "документе", DOCUMENT_LINK_URL);
+		} else {
+			logger.warn("Can't wrap document as link, because there is no any document in bpm:package.");
+		}
+
+		String partner = "<контрагент отсутствует>";
+		if (documentRef != null) {
+			partner = getDocumentPartnerName(documentRef);
+		} else {
+			logger.warn("Can't get partner for document, because there is no any document in bpm:package");
+		}
+
+		NodeRef initiator = null;
+		if (documentRef != null) {
+			initiator = getDocumentInitiator(documentRef);
+		}
+
+		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
+		recipients.add(initiator);
+
+		String decision;
+		if("APPROVED".equals(decisionCode)) {
+			decision = "согласовано";
+		} else if ("APPROVED_WITH_REMARK".equals(decisionCode)) {
+			decision = "согласовано с замечаниями";
+		} else if ("REJECTED".equals(decisionCode)) {
+			decision = "отклонено";
+		} else if ("APPROVED_FORCE".equals(decisionCode)) {
+			decision = "принудительно завершено";
+		} else if ("REJECTED_FORCE".equals(decisionCode)) {
+			decision = "отозвано с согласования";
+		} else if ("NO_DECISION".equals(decisionCode)) {
+			decision = "решение не принято";
+		} else  {
+			decision = "";
+		}
+
+		//«Принято решение о документе,  по договору с <Наименование контрагента>:  <Результат согласования по документу>»
+		String description = String.format("Принято решение о %s, по договору с %s: \"%s\"", documentLink, partner, decision);
+
+		Notification notification = new Notification();
+		notification.setAutor(AuthenticationUtil.getSystemUserName());
+		notification.setDescription(description);
+        notification.setObjectRef(documentRef);
+		notification.setRecipientEmployeeRefs(recipients);
+		notificationsService.sendNotification(notificationChannels, notification);
+	}
 }
+
