@@ -41,7 +41,7 @@
 				<#if row.item.siteShortName??>"site": "${row.item.siteShortName}",</#if>
 				"displayPath": "${row.item.displayPath!""}",
 				"nodeRef": "${row.item.nodeRef}"
-                <#if additionalProperties??>,
+                <#if additionalProperties?? && additionalProperties?is_sequence>,
                     <#list additionalProperties as prop>
                         "${prop?replace(":", "_")}": "${row.item.properties[prop]!""}",
                     </#list>
