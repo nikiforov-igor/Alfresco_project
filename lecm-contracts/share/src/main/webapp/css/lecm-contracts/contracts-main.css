@@ -7,6 +7,9 @@
 #yui-main #doc-bd div.datalist-toolbar {
     margin: 0 -10px;
 }
+#yui-main #doc-bd div.datalist-toolbar div.header-bar {
+    padding: 0 5px;
+}
 
 .yui-gc div.first {
     width: 100%;
