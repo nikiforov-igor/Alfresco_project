@@ -1,4 +1,23 @@
 (function() {
+	var formToReportProperties = {
+		"assoc_lecm-contract-reports_contracts-list-contract-subject": "contractSubject",
+		"assoc_lecm-contract-reports_contracts-list-contract-type": "contractType",
+		"assoc_lecm-contract-reports_contracts-list-contractor": "contractContractor",
+		"prop_lecm-contract-reports_contracts-list-actual-only": "contractActualOnly",
+		"prop_lecm-contract-reports_contracts-list-end": "end",
+		"prop_lecm-contract-reports_contracts-list-start": "start",
+		"prop_lecm-contract-reports_contracts-list-sum": "contractSum",
+		"prop_lecm-contract-reports_approval-discipline-end": "end",
+		"prop_lecm-contract-reports_approval-discipline-start": "start",
+		"assoc_lecm-contract-reports_contracts-list-contract-subject_added": "",
+		"assoc_lecm-contract-reports_contracts-list-contract-subject_removed": "",
+		"assoc_lecm-contract-reports_contracts-list-contract-type_added": "",
+		"assoc_lecm-contract-reports_contracts-list-contract-type_removed": "",
+		"assoc_lecm-contract-reports_contracts-list-contractor_added": "",
+		"assoc_lecm-contract-reports_contracts-list-contractor_removed": "",
+		"contracts-list-reports-link-printReportForm_assoc_lecm-contract-reports_contracts-list-contractor-cntrl-selectedItems": ""
+	};
+
 	YAHOO.util.Event.onDOMReady(function() {
 		YAHOO.util.Event.addListener("contracts-list-reports-link", "click", LogicECM.module.Contracts.reports.reportLinkClicked, {"reportType": "contracts-list"});
 		YAHOO.util.Event.addListener("approval-discipline-reports-link", "click", LogicECM.module.Contracts.reports.reportLinkClicked, {"reportType": "approval-discipline"});
@@ -34,7 +53,7 @@
 		var printReportForm = new Alfresco.module.SimpleDialog(this.id + "-printReportForm");
 
 		printReportForm.setOptions({
-			actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contracts/reports",
+			actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/report/" + reportType,
 			width: "50em",
 			templateUrl: templateUrl,
 			destroyOnHide: true,
@@ -42,12 +61,28 @@
 				fn: doBeforeDialogShow,
 				scope: this
 			},
-//			doBeforeFormSubmit: {
-//				fn: function ContractsReports_doBeforeSubmit() {
-//
-//				},
-//				scope: this
-//			},
+			ajaxSubmitMethod: "GET",
+			doBeforeAjaxRequest: {
+				fn: function ContractsReports_doBeforeAjaxRequest(form, formToReportProperties) {
+					Object.prototype.renameProperty = function(oldName, newName) {
+						// Check for the old property name to avoid a ReferenceError in strict mode.
+						if (this.hasOwnProperty(oldName)) {
+							if (newName.length > 0) {
+								this[newName] = this[oldName];
+							}
+							delete this[oldName];
+						}
+						return this;
+					};
+					for (var property in formToReportProperties) {
+						form.dataObj.renameProperty(property, formToReportProperties[property]);
+					}
+					form.method = "GET";
+					return true;
+				},
+				obj: formToReportProperties
+
+			},
 			onSuccess: {
 				fn: function ContractReports_onSuccess(response) {
 					Alfresco.util.PopupManager.displayMessage({

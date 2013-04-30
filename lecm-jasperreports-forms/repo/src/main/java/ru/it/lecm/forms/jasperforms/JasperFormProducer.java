@@ -23,7 +23,7 @@ import java.util.Map;
  * Time: 16:25
  *
  * Веб скрипт для формирования печатных форм
- * точка входа - /lecm/jforms/form/{report}/{nodeRef} см. /alfresco/templates/webscripts/ru/it/lecm/forms/jasper/form.get.desc.xml
+ * точка входа - /lecm/report/{report} см. /alfresco/templates/webscripts/ru/it/lecm/forms/jasper/form.get.desc.xml
  * Параметры:
  * <code>report</code> - путь к файлу отчета относительно <code>classes/reportdefinitions</code> без расширения <code>.jasper</code>
  * в файле отчета должно быть задано свойство <code><property name="dataSource" value="ru.it.lecm.forms.jasperforms.AbstractDataSourceProvider"/></code>
