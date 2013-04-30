@@ -153,4 +153,10 @@
         <property name="cannedQueryDAO" ref="cannedQueryDAO"/>
         <property name="methodSecurity" ref="FileFolderService_security_list"/>
     </bean>
+
+	<bean id="webscript.ru.it.lecm.workflow.task-subordinates-instances.get"
+	      class="ru.it.lecm.base.scripts.LecmTaskSubordinatesInstancesGet"
+	      parent="abstractWorkflowWebScript" depends-on="serviceOrgstructure">
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+	</bean>
 </beans>
