@@ -1323,21 +1323,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 	/**
-	 * проверяет могут ли доверенность или параметры делегирования передавать права руководителя
-	 * @param nodeRef ссылка на lecm-d8n:procuracy или lecm-d8n:delegation-opts
-	 * @return true ели передавать права руководителя можно
-	 */
-	private boolean canTransferRights (final NodeRef nodeRef) {
-		boolean canTransferRights = false;
-		if (isProperType (nodeRef, IDelegation.TYPE_PROCURACY)) {
-			canTransferRights = Boolean.TRUE.equals (nodeService.getProperty (nodeRef, IDelegation.PROP_PROCURACY_CAN_TRANSFER_RIGHTS));
-		} else if (isProperType (nodeRef, IDelegation.TYPE_DELEGATION_OPTS)) {
-			canTransferRights = Boolean.TRUE.equals (nodeService.getProperty (nodeRef, IDelegation.PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS));
-		}
-		return canTransferRights;
-	}
-
-	/**
 	 * проверяет делегировали ли сотруднику указанную бизнес роль
 	 * @param procuracyRef ссылка на доверенность
 	 * @param businessRoleRef ссылка на бизнес роль
@@ -1361,22 +1346,31 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	 * @return ссылку на настоящего босса, который делегировал
 	 */
 	private List<NodeRef> getBosses (final NodeRef employeeRef) {
-		List<NodeRef> bossRefs = new ArrayList<NodeRef> ();
-		if (isEmployee (employeeRef)) {
-			List<NodeRef> procuracies = getActiveProcuracies (employeeRef);
-			for (NodeRef procuracy : procuracies) {
-				boolean canProcuracyTransferRights = canTransferRights (procuracy);
-				List<ChildAssociationRef> parents = nodeService.getParentAssocs (procuracy, IDelegation.ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
-				boolean canDelegationTransferRights = (parents != null) && (!parents.isEmpty ()) && canTransferRights (parents.get (0).getParentRef ());
-				if ((canProcuracyTransferRights || canDelegationTransferRights) && (parents != null) && (!parents.isEmpty ())) {
-					bossRefs.add (parents.get (0).getParentRef ());
-				}
-			}
-		}
+
+        List<NodeRef> bossRefs = new ArrayList<NodeRef> ();
+        List<NodeRef> delegationOptsList = findNodesByAssociationRef(employeeRef, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+        for (NodeRef delegationOpts : delegationOptsList) {
+            if(isActiveDelegationOpts(delegationOpts))
+            {
+                NodeRef owner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+                if (isBoss(owner, false)){
+                    bossRefs.add(owner);
+                }
+            }
+        }
+
 		return bossRefs;
 	}
 
-	@Override
+    private boolean isActiveDelegationOpts(NodeRef delegationOpts) {
+        if (isProperType(delegationOpts, IDelegation.TYPE_DELEGATION_OPTS)){
+            return (Boolean) nodeService.getProperty (delegationOpts, IS_ACTIVE);
+        }
+
+        return false;
+    }
+
+    @Override
 	public boolean isBoss (final NodeRef nodeRef) {
 		return isBoss (nodeRef, false);
 	}
@@ -1420,19 +1414,53 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public boolean isEmployeeHasBusinessRole (NodeRef employeeRef, String businessRoleIdentifier, boolean withDelegation) {
 		boolean isEmployeeHasBusinessRole = isEmployeeHasBusinessRoleInternal (employeeRef, businessRoleIdentifier);
+        if (isEmployeeHasBusinessRole){
+            return true;
+        }
+
 		if (withDelegation) {
 			boolean hasBusinessRole = false;
 			List<NodeRef> procuracies = getActiveProcuracies (employeeRef);
+            final NodeRef businessRoleRef = new NodeRef(businessRoleIdentifier);
 			for (NodeRef procuracy : procuracies) {
-				if (hasTrustedBusinessRole (procuracy, new NodeRef (businessRoleIdentifier))) {
+                if (hasTrustedBusinessRole (procuracy, businessRoleRef)) {
 					hasBusinessRole = true;
 					break;
 				}
 			}
+
+            if (!hasBusinessRole){
+                hasBusinessRole = checkBusinessRoleUsingDelegationsOpts(employeeRef, businessRoleRef);
+            }
+
 			isEmployeeHasBusinessRole = isEmployeeHasBusinessRole || hasBusinessRole;
 		}
 		return isEmployeeHasBusinessRole;
 	}
+
+    private boolean checkBusinessRoleUsingDelegationsOpts(NodeRef employeeRef, NodeRef businessRoleNodeRef) {
+
+        // Получаем список сотрудников обладающих запрашиваемой бизнес ролью
+        List<NodeRef> employeeNodeRefs = getEmployeesByBusinessRole (businessRoleNodeRef);
+
+        // Получаем все Delegation Opt, которые ссылаются (SOURCE) на нашего чувака ассоциацией ASSOC_DELEGATION_OPTS_TRUSTEE
+        List<NodeRef> delegationOptsList = findNodesByAssociationRef(employeeRef, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+
+        // Ищем того, кто мог бы нам делегировать указанную бизнес-роль
+        for (NodeRef delegationOpts : delegationOptsList) {
+            if(isActiveDelegationOpts(delegationOpts))
+            {
+                // Получаем хозяина настроек делегировая, который доверил нешему чуваку что-либо
+                NodeRef owner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+                if (employeeNodeRefs.contains(owner)){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
+    }
 
     @Override
     public List<NodeRef> getNodeRefEmployees(NodeRef nodeRef) {

@@ -1,14 +1,5 @@
 package ru.it.lecm.delegation.beans;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
@@ -33,6 +24,9 @@ import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.IDelegationDescriptor;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class DelegationBean extends BaseBean implements IDelegation, AuthenticationUtil.RunAsWork<NodeRef>, IDelegationDescriptor {
 
@@ -323,37 +317,19 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 	@Override
 	public String saveDelegationOpts (final NodeRef delegationOptsNodeRef, final JSONObject options) {
-		//делегировать все функции
-		String propCanDelegate = PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL.getLocalName ();
-		Boolean canDelegate = findInOptions (options, propCanDelegate, "Boolean");
-		if (canDelegate != null) {
-			nodeService.setProperty (delegationOptsNodeRef, PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL, canDelegate);
-		}
-		//ссылка на доверенное лицо
-		if (canDelegate != null && canDelegate) {
-			//передавать права на документы подчиненных
-			String propCanTransfer = PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS.getLocalName ();
-			Boolean canTransfer = findInOptions (options, propCanTransfer, "Boolean");
-			if (canTransfer != null) {
-				nodeService.setProperty (delegationOptsNodeRef, PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS, canTransfer);
-			}
-			//получаем ссылку на доверенное лицо из options
-			String propTrustee = ASSOC_DELEGATION_OPTS_TRUSTEE.getLocalName ();
-			String trusteeRef = findInOptions (options, propTrustee + "_added", "String");
-			if (trusteeRef != null) {
-				//переназначем ассоциацию на доверенное лицо
-				List<NodeRef> trusteeRefs = NodeRef.getNodeRefs (trusteeRef);
-				nodeService.setAssociations (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_TRUSTEE, trusteeRefs);
-				//получить список доверенностей таких что бизнес роли у них active = true
-				List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
-				if (childAssocs != null) {
-					for (ChildAssociationRef childAssoc : childAssocs) {
-						NodeRef procuracyNodeRef = childAssoc.getChildRef ();
-						nodeService.setAssociations (procuracyNodeRef, ASSOC_PROCURACY_TRUSTEE, trusteeRefs);
-					}
-				}
-			}
-		} else { //если галка "делегировать все функции" снята то удаляем ассоциацию
+
+        //получаем ссылку на доверенное лицо из options
+        //String propTrustee = ASSOC_DELEGATION_OPTS_TRUSTEE.getLocalName ();
+        //String propTrustee = "assoc_lecm-d8n_delegation-opts-trustee-assoc";
+        String propTrustee = "delegation-opts-part1_assoc_lecm-d8n_delegation-opts-trustee-assoc-cntrl-selectedItems";
+        String trusteeRef = findInOptions (options, propTrustee, "String");
+        //String trusteeRef = findInOptions (options, propTrustee + "_added", "String");
+        if (trusteeRef != null) {
+            //переназначем ассоциацию на доверенное лицо
+            List<NodeRef> trusteeRefs = NodeRef.getNodeRefs (trusteeRef);
+            nodeService.setAssociations (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_TRUSTEE, trusteeRefs);
+
+        } else { //если поле доверенное лицо пустое
 			//по ассоциации получаем ссылку на доверенное лицо, если она есть
 			List<AssociationRef> targetAssocs = nodeService.getTargetAssocs (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_TRUSTEE);
 			//если по ассоциациям кто-то есть, берем его и удаляем.
@@ -361,22 +337,6 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 				for (AssociationRef targetAssoc : targetAssocs) {
 					NodeRef trusteeNodeRef = targetAssoc.getTargetRef ();
 					nodeService.removeAssociation (delegationOptsNodeRef, trusteeNodeRef, ASSOC_DELEGATION_OPTS_TRUSTEE);
-					//все доверенности которые участвуют с этим доверенным лицом переводим в статус active = false
-					//ассоциацию с доверенным лицом также разрываем
-					List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
-					if (childAssocs != null) {
-						for (ChildAssociationRef childAssoc : childAssocs) {
-							NodeRef procuracyNodeRef = childAssoc.getChildRef ();
-							List<AssociationRef> procuracyTargetRefs = nodeService.getTargetAssocs (procuracyNodeRef, ASSOC_PROCURACY_TRUSTEE);
-							if (procuracyTargetRefs != null) {
-								for (AssociationRef targetRef : procuracyTargetRefs) {
-									if (trusteeNodeRef.equals (targetRef.getTargetRef ())) {
-										nodeService.removeAssociation (procuracyNodeRef, trusteeNodeRef, ASSOC_PROCURACY_TRUSTEE);
-									}
-								}
-							}
-						}
-					}
 				}
 			}
 		}
@@ -404,7 +364,6 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 				logger.error (ex.getMessage (), ex);
 			}
 			if (nodeRef != null && nodeService.exists(nodeRef)) {
-				nodeService.setProperty(nodeRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS, false);
 				nodeService.setProperty(nodeRef, IS_ACTIVE, false);
 				List<AssociationRef> associationRefs = nodeService.getTargetAssocs (nodeRef, ASSOC_PROCURACY_TRUSTEE);
 				if (associationRefs != null) {
@@ -418,37 +377,37 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 	private void logStartDelegation (final NodeRef delegationOptsRef) {
 		final NodeRef initiator = null; //инициатор события это система
-		Boolean canDelegateAll = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL);
+
 		NodeRef mainObject = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-		if (canDelegateAll) {
-			NodeRef trusteeRef = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-			if (trusteeRef != null) {
-				List<String> objects = new ArrayList<String> ();
-				objects.add ((String) nodeService.getProperty (trusteeRef, ContentModel.PROP_NAME));
-				String template = "Сотруднику #object1 делегированы все полномочия сотрудника #mainobject";
-				businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE_ALL, template, objects);
-				//а логгировать ли что были переданы права руководителя???
-			} else {
-				logger.warn ("There is no trustee");
-			}
+
+		NodeRef optsTrusteeRef = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		if (optsTrusteeRef != null) {
+			List<String> objects = new ArrayList<String> ();
+			objects.add ((String) nodeService.getProperty (optsTrusteeRef, ContentModel.PROP_NAME));
+			String template = "Сотруднику #object1 делегированы все полномочия сотрудника #mainobject";
+			businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE_ALL, template, objects);
+			//а логгировать ли что были переданы права руководителя???
 		} else {
-			String template  = "Сотруднику #object1 делегированы полномочия сотрудника #mainobject в рамках бизнес роли #object2";
-			//получить список активных доверенностей и для каждой залоггировать
-			List<NodeRef> procuracyRefs = getProcuracies (delegationOptsRef, true);
-			for (NodeRef procuracyRef : procuracyRefs) {
-				List<String> objects = new ArrayList<String> ();
-				NodeRef trusteeRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-				NodeRef businessRoleRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
-				if (trusteeRef != null) {
-					objects.add ((String) nodeService.getProperty (trusteeRef, ContentModel.PROP_NAME));
-					objects.add ((String) nodeService.getProperty (businessRoleRef, ContentModel.PROP_NAME));
-					businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE, template, objects);
-					//а логгировать ли что были переданы права руководителя?
-				} else {
-					logger.warn ("There is no trustee for business role {}", nodeService.getProperty (businessRoleRef, ContentModel.PROP_NAME));
-				}
+			logger.warn ("There is no trustee");
+           }
+
+		String template  = "Сотруднику #object1 делегированы полномочия сотрудника #mainobject в рамках бизнес роли #object2";
+		//получить список активных доверенностей и для каждой залоггировать
+		List<NodeRef> procuracyRefs = getProcuracies (delegationOptsRef, true);
+		for (NodeRef procuracyRef : procuracyRefs) {
+			List<String> objects = new ArrayList<String> ();
+			NodeRef procTrusteeRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			NodeRef businessRoleRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+			if (procTrusteeRef != null) {
+				objects.add ((String) nodeService.getProperty (procTrusteeRef, ContentModel.PROP_NAME));
+				objects.add ((String) nodeService.getProperty (businessRoleRef, ContentModel.PROP_NAME));
+				businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE, template, objects);
+				//а логгировать ли что были переданы права руководителя?
+			} else {
+				logger.warn ("There is no trustee for business role {}", nodeService.getProperty (businessRoleRef, ContentModel.PROP_NAME));
 			}
 		}
+
 	}
 
 	private void logStopDelegation (final NodeRef delegationOptsRef) {
@@ -474,14 +433,9 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	 */
 	private void delegate (final NodeRef delegationOptsRef, final boolean created) {
 		List<NodeRef> procuracies = getProcuracies (delegationOptsRef, true);
-		//пробегаемся по активным доверенностям и нарезаем права
-		//находим галку "передавать права руководителя" и запоминаем этого чувака
 
 		NodeRef sourceEmployee = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		String sourceEmployeeName = (String) nodeService.getProperty(sourceEmployee, ContentModel.PROP_NAME);
-		NodeRef bossAssistant = null; //заместитель
-		Boolean canDelegateAll = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL);
-		Boolean canTransferAllRights = (Boolean) nodeService.getProperty (delegationOptsRef, PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS);
 		for (NodeRef procuracyRef : procuracies) {
 			NodeRef brole = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
 			String broleId = (String) nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
@@ -489,10 +443,6 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			//на всякий случай проверим, что делегирующий все еще имеет эту бизнес роль
 			//пока проверим без учета делегирования
 			if (orgstructureService.isEmployeeHasBusinessRole(sourceEmployee, broleId, false)) {
-				Boolean canTransferRights = (Boolean) nodeService.getProperty (procuracyRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS);
-				if (canTransferRights) {
-					bossAssistant = destEmployee;
-				}
 				if (destEmployee != null) {
 					sgNotifierService.notifyBRDelegationChanged (brole, sourceEmployee, destEmployee, created);
 				} else {
@@ -502,12 +452,18 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 				logger.warn ("source employee {} does not have specified role with id {}", sourceEmployeeName, broleId);
 			}
 		}
-		if (canDelegateAll && canTransferAllRights) {
-			bossAssistant = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-		}
+
+        //заместитель
+        NodeRef bossAssistant = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+
 		if (bossAssistant != null) {
-			sgNotifierService.notifyBossDelegationChanged (sourceEmployee, bossAssistant, created);
-		} else {
+			// устанавливаем
+            sgNotifierService.notifyBossDelegationChanged (sourceEmployee, bossAssistant, created);
+            final List<NodeRef> businessRolesBySourceEmployee = this.getUniqueBusinessRolesByEmployee(sourceEmployee, true);
+            for (NodeRef sourceEmployeeBusinessRole : businessRolesBySourceEmployee){
+                sgNotifierService.notifyBRDelegationChanged (sourceEmployeeBusinessRole, sourceEmployee, bossAssistant, created);
+            }
+        } else {
 			logger.warn ("boss assistant is null, no security groups changed");
 		}
 	}
@@ -606,21 +562,5 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getDelegationFolder();
-	}
-
-	@Override
-	public boolean transferRights(final NodeRef procuracyRef, final NodeRef delegationOptsRef) {
-		boolean result = false;
-		if (nodeService.exists(procuracyRef) && nodeService.exists(delegationOptsRef) && isProcuracy(procuracyRef) && isDelegationOpts(delegationOptsRef)) {
-			List<NodeRef> procuracies = getProcuracies(delegationOptsRef, false);
-			//флаг "передавать права руководителя" сбрасываем всем
-			for (NodeRef candidateRef : procuracies) {
-				nodeService.setProperty(candidateRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS, false);
-			}
-			//флаг "передавать права руководителя" устанавливаем указанной доверенности
-			nodeService.setProperty(procuracyRef, PROP_PROCURACY_CAN_TRANSFER_RIGHTS, true);
-			result = true;
-		}
-		return result;
 	}
 }

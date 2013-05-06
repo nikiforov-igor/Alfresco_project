@@ -1,10 +1,11 @@
 package ru.it.lecm.delegation;
 
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Интерфейс для поддержки делегирований.
@@ -35,17 +36,17 @@ public interface IDelegation {
 	/**
 	 * &lt;property name="lecm-d8n:procuracy-can-transfer-rights"&gt;
 	 */
-	QName PROP_PROCURACY_CAN_TRANSFER_RIGHTS = QName.createQName (DELEGATION_NAMESPACE, "procuracy-can-transfer-rights");
+//	QName PROP_PROCURACY_CAN_TRANSFER_RIGHTS = QName.createQName (DELEGATION_NAMESPACE, "procuracy-can-transfer-rights");
 
 	/**
 	 * &lt;property name="lecm-d8n:delegation-opts-can-transfer-rights"&gt;
 	 */
-	QName PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-transfer-rights");
+//	QName PROP_DELEGATION_OPTS_CAN_TRANSFER_RIGHTS = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-transfer-rights");
 
 	/**
 	 * &lt;property name="lecm-d8n:delegation-opts-can-delegate-all"&gt;
 	 */
-	QName PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-delegate-all");
+//	QName PROP_DELEGATION_OPTS_CAN_DELEGATE_ALL = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-can-delegate-all");
 
 	/**
 	 * &lt;child-association name="lecm-d8n:container-delegation-opts-assoc"&gt;
@@ -149,7 +150,7 @@ public interface IDelegation {
 
 	/**
 	 * сохранение настроенных параметров делегирования
-	 * @param delegationOptsRef идентификатор параметров делегирования которые мы сохраняем
+	 * @param delegationOptsNodeRef идентификатор параметров делегирования которые мы сохраняем
 	 * @param options JSON-объект с параметрами которые подлежат сохранению. Эти параметры приходят с формы
 	 */
 	String saveDelegationOpts (final NodeRef delegationOptsNodeRef, final JSONObject options);
@@ -225,14 +226,4 @@ public interface IDelegation {
 	 * @return NodeRef идентификатор сотрудника или null если ничего не нашел.
 	 */
 	NodeRef getEmployee (final NodeRef nodeRef);
-
-	/**
-	 * установка флага "передавать права руководителя" для указанной доверенности в рамках параметров делегирования
-	 * для всех остальных доверенностей этот флаг будет сброшен
-	 * если nodeRef-ы не существуют, или не являются доверенностью и делегированием, то ничего не делать
-	 * @param procuracyRef
-	 * @param delegationOptsRef
-	 * @return true если удалось установить флаг, false - неудалось
-	 */
-	boolean transferRights(final NodeRef procuracyRef, final NodeRef delegationOptsRef);
 }

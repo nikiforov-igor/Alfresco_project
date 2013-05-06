@@ -6,7 +6,6 @@
 				<field-visibility>
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
 					<show id="lecm-dic:active"/>
-					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
 				</field-visibility>
 			</form>
 			<form id="search">
@@ -31,8 +30,6 @@
 			<form id="view-node-form">
 				<field-visibility>
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
-					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
-					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
 				</field-visibility>
 			</form>
 			<form id="delegation-opts-part1">
@@ -63,9 +60,7 @@
 				<field-visibility>
 					<show id="lecm-dic:active"/>
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
-					<show id="lecm-d8n:delegation-opts-can-delegate-all"/>
 					<show id="lecm-d8n:delegation-opts-trustee-assoc"/>
-					<show id="lecm-d8n:delegation-opts-can-transfer-rights"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -76,7 +71,6 @@
 				<field-visibility>
 					<show id="lecm-d8n:procuracy-business-role-assoc"/>
 					<show id="lecm-d8n:procuracy-trustee-assoc"/>
-					<show id="lecm-d8n:procuracy-can-transfer-rights"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -104,7 +98,6 @@
 				<field-visibility>
 					<show id="lecm-d8n:procuracy-business-role-assoc"/>
 					<show id="lecm-d8n:procuracy-trustee-assoc"/>
-					<show id="lecm-d8n:procuracy-can-transfer-rights"/>
 				</field-visibility>
 			</form>
 		</forms>

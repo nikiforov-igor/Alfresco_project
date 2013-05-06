@@ -221,20 +221,4 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 		}
 		return result;
 	}
-
-	/**
-	 * установка флага "передавать права руководителя" для указанной доверенности в рамках параметров делегирования
-	 * для всех остальных доверенностей этот флаг будет сброшен
-	 * если входные параметры не являются nodeRef-ами то ничего сделано не будет
-	 * @param procuracyRef
-	 * @param delegationOptsRef
-	 * @return true если удалось установить флаг, false - неудалось
-	 */
-	public boolean transferRights(final String procuracyRef, final String delegationOptsRef) {
-		boolean result = false;
-		if (NodeRef.isNodeRef(procuracyRef) && NodeRef.isNodeRef(delegationOptsRef)) {
-			result = delegationService.transferRights(new NodeRef(procuracyRef), new NodeRef(delegationOptsRef));
-		}
-		return result;
-	}
 }

@@ -54,7 +54,7 @@ LogicECM.module.Delegation.Procuracy = LogicECM.module.Delegation.Procuracy || {
 			});
 
 			// Using Forms Service, so always create new instance
-			var procuracyCanTransferRights = false;
+			//var procuracyCanTransferRights = false;
 			var procuracyRef = item.nodeRef;
 			var delegationOptsRef = this.datagridMeta.nodeRef;
 			var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
@@ -69,44 +69,44 @@ LogicECM.module.Delegation.Procuracy = LogicECM.module.Delegation.Procuracy || {
 				},
 				doBeforeFormSubmit: {
 					fn: function () {
-						procuracyCanTransferRights = YAHOO.util.Dom.get(editDetails.id + "_prop_lecm-d8n_procuracy-can-transfer-rights").checked;
+						//procuracyCanTransferRights = YAHOO.util.Dom.get(editDetails.id + "_prop_lecm-d8n_procuracy-can-transfer-rights").checked;
 					},
 					scope: this
 				},
 				onSuccess: {
 					fn: function DataGrid_onActionEdit_success(response) {
-						if (procuracyCanTransferRights) {
-							Alfresco.util.Ajax.request({
-								method: "POST",
-								url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/procuracy/transfer/rights",
-								dataObj: {
-									"procuracyRef": procuracyRef,
-									"delegationOptsRef": delegationOptsRef
-								},
-								requestContentType: "application/json",
-								responseContentType: "application/json",
-								successCallback: {
-									fn: function (response) {
-										YAHOO.Bubbling.fire("datagridRefresh", {
-											bubblingLabel: me.options.bubblingLabel
-										});
-									},
-									scope: this
-								},
-								failureCallback: {
-									fn: function () {
-										Alfresco.util.PopupManager.displayMessage({
-											text: 'не удалось установить флаг "передавать права руководителя"'
-										});
-									}
-								}
-							});
-						} else {
+//						if (procuracyCanTransferRights) {
+//							Alfresco.util.Ajax.request({
+//								method: "POST",
+//								url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/procuracy/transfer/rights",
+//								dataObj: {
+//									"procuracyRef": procuracyRef,
+//									"delegationOptsRef": delegationOptsRef
+//								},
+//								requestContentType: "application/json",
+//								responseContentType: "application/json",
+//								successCallback: {
+//									fn: function (response) {
+//										YAHOO.Bubbling.fire("datagridRefresh", {
+//											bubblingLabel: me.options.bubblingLabel
+//										});
+//									},
+//									scope: this
+//								},
+//								failureCallback: {
+//									fn: function () {
+//										Alfresco.util.PopupManager.displayMessage({
+//											text: 'не удалось установить флаг "передавать права руководителя"'
+//										});
+//									}
+//								}
+//							});
+//						} else {
 							// Reload the node's metadata
 							YAHOO.Bubbling.fire("datagridRefresh", {
 								bubblingLabel:me.options.bubblingLabel
 							});
-						}
+						//}
 
 						Alfresco.util.PopupManager.displayMessage({
 							text:this.msg("message.details.success")
@@ -126,35 +126,35 @@ LogicECM.module.Delegation.Procuracy = LogicECM.module.Delegation.Procuracy || {
 			}).show();
 		},
 
-		onActionTransferRights: function (p_items, owner, actionsConfig, fnDeleteComplete, fnPrompt) {
-			var dataObj = {
-				"procuracyRef": p_items.nodeRef,
-				"delegationOptsRef": this.datagridMeta.nodeRef
-			};
-			var scope = this;
-			Alfresco.util.Ajax.request({
-				method: "POST",
-				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/procuracy/transfer/rights",
-				dataObj: dataObj,
-				requestContentType: "application/json",
-				responseContentType: "application/json",
-				successCallback: {
-					fn: function (response) {
-						YAHOO.Bubbling.fire("datagridRefresh", {
-							bubblingLabel: scope.options.bubblingLabel
-						});
-					},
-					scope: this
-				},
-				failureCallback: {
-					fn: function () {
-						Alfresco.util.PopupManager.displayMessage({
-							text: 'не удалось установить флаг "передавать права руководителя"'
-						});
-					}
-				}
-			});
-		},
+//		onActionTransferRights: function (p_items, owner, actionsConfig, fnDeleteComplete, fnPrompt) {
+//			var dataObj = {
+//				"procuracyRef": p_items.nodeRef,
+//				"delegationOptsRef": this.datagridMeta.nodeRef
+//			};
+//			var scope = this;
+//			Alfresco.util.Ajax.request({
+//				method: "POST",
+//				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/procuracy/transfer/rights",
+//				dataObj: dataObj,
+//				requestContentType: "application/json",
+//				responseContentType: "application/json",
+//				successCallback: {
+//					fn: function (response) {
+//						YAHOO.Bubbling.fire("datagridRefresh", {
+//							bubblingLabel: scope.options.bubblingLabel
+//						});
+//					},
+//					scope: this
+//				},
+//				failureCallback: {
+//					fn: function () {
+//						Alfresco.util.PopupManager.displayMessage({
+//							text: 'не удалось установить флаг "передавать права руководителя"'
+//						});
+//					}
+//				}
+//			});
+//		},
 
 		onDelete: function (p_items, owner, actionsConfig, fnDeleteComplete, fnPrompt) {
 			var items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];

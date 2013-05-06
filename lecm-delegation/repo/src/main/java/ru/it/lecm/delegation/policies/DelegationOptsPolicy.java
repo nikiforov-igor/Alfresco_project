@@ -1,14 +1,18 @@
 package ru.it.lecm.delegation.policies;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies.OnUpdateNodePolicy;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.io.Serializable;
 
 /**
  * Policy которая обеспечивает автоматическое создание параметров делегирования для сотрудников
@@ -23,6 +27,11 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
 
 	private PolicyComponent policyComponent;
 	private IDelegation delegationService;
+    private NodeService nodeService;
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
 
 	public final void init () {
 		PropertyCheck.mandatory (this, "policyComponent", policyComponent);
@@ -40,7 +49,21 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
 
 	@Override
 	public void onUpdateNode (final NodeRef nodeRef) {
-		delegationService.getOrCreateDelegationOpts (nodeRef);
-		logger.info ("employee with nodeRef '{}' sucessfully updated", nodeRef);
+		// nodeRef это employeeRef
+
+        Serializable employeeName = nodeService.getProperty (nodeRef, ContentModel.PROP_NAME);
+        Serializable employeeFirstName = nodeService.getProperty (nodeRef, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
+
+        if (employeeName == null || employeeFirstName == null || employeeName.toString().length() == 0 || employeeFirstName.toString().length() == 0 ){
+            return;
+        }
+
+        if (employeeName.toString().indexOf( employeeFirstName.toString() ) >= 0){
+            delegationService.getOrCreateDelegationOpts (nodeRef);
+		    logger.info ("employee with nodeRef '{}' sucessfully updated", nodeRef);
+        }else
+        {
+            logger.info ("employee with name '{}'  and fisrt name '{}' not updated", employeeName.toString(), employeeFirstName.toString() );
+        }
 	}
 }
