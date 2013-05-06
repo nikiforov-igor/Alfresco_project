@@ -44,23 +44,11 @@
             <option value="${filter.type?html}">${msg("filter." + filter.type)}</option>
          </#list>
          </select>
-         <span class="align-right yui-button-align">
-            <span class="first-child">
-               <a href="${page.url.context}/page/start-workflow?referrer=tasks" class="theme-color-1">
-                  <img src="${url.context}/res/components/images/workflow-16.png" style="vertical-align: text-bottom" width="16" />
-                  ${msg("link.startWorkflow")}</a>
-            </span>
-         </span>
          <div class="clear"></div>
       </div>
    </div>
    <div class="toolbar flat-button">
       <div class="align-left" id="${id}-paginator">&nbsp;</div>
-      <span class="align-right yui-button-align">
-         <span class="first-child">
-            <a href="${page.url.context}/page/my-tasks" class="theme-color-1">${msg("link.allTasks")}</a>
-         </span>
-      </span>
       <div class="clear"></div>
    </div>
    <div class="body scrollableList" <#if args.height??>style="height: ${args.height}px;"</#if>>

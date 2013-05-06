@@ -13,7 +13,6 @@
       <filter type="allTasks"              parameters=""/>
       <filter type="highPriorityTasks"     parameters="priority=1"/>
       <filter type="tasksDueToday"         parameters="dueAfter={-1d}&amp;dueBefore={0d}"/>
-      <filter type="tasksAssignedToMe"     parameters="pooledTasks=false"/>
       <filter type="unassignedPooledTasks" parameters="pooledTasks=true" />
       <filter type="overdueTasks"          parameters="dueBefore={-1d}"/>
    </filter-menu>
