@@ -40,7 +40,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
    /**
     * Preferences
     */
-   var PREFERENCES_TASKS_DASHLET_FILTER = "org.alfresco.share.tasks.dashlet.filter";
+   var PREFERENCES_TASKS_DASHLET_FILTER = "ru.it.lecm.share.tasks-subordinates.dashlet.filter";
 
    /**
     * Dashboard TasksSubordinates constructor.
