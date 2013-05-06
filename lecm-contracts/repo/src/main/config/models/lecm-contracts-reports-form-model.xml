@@ -85,11 +85,9 @@
 			<properties>
 				<property name="lecm-contract-reports:approval-discipline-start">
 					<type>d:date</type>
-					<mandatory>true</mandatory>
 				</property>
 				<property name="lecm-contract-reports:approval-discipline-end">
 					<type>d:date</type>
-					<mandatory>true</mandatory>
 				</property>
 			</properties>
 		</type>

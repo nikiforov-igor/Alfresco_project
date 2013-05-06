@@ -80,6 +80,7 @@
 			},
 			onSuccess: {
 				fn: function ContractReports_onSuccess(response) {
+					window.open(response.serverResponse.responseText, "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
 					Alfresco.util.PopupManager.displayMessage({
 						text: Alfresco.component.Base.prototype.msg("contracts.report.success")
 					});
