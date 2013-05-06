@@ -4,20 +4,20 @@
 		<startEvent id="start-parallel-approvement" name="Start parallel approvement" activiti:formKey="lecmPar:parallelApproval"></startEvent>
 		<userTask id="parallel-approvement-task" name="Parallel approvement task" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmPar:approveTask">
 			<extensionElements>
-				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
-						<activiti:string>//<![CDATA[
+						<activiti:string><![CDATA[
 							var dueDate = bpm_workflowDueDate;
 							task.setDueDate(dueDate);
 							approvalParallel.notifyApprovalStarted(assignee, dueDate, bpm_package);
 							var userName = assignee.properties.userName;
 							logger.log(userName	+ " must complete his task before worflow dueDate expired " + dueDate);
-						//]]></activiti:string>
+						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
-						<activiti:string>//<![CDATA[
+						<activiti:string><![CDATA[
 							var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 
 							var userName = assignee.properties.userName;
@@ -45,33 +45,19 @@
 							execution.setVariable("decisionsMap", decisionsMap);
 							var approvalListRef = execution.getVariable("approvalListRef");
 							approvalParallel.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
-						//]]></activiti:string>
+						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 			</extensionElements>
 			<multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${assigneesList}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
 		</userTask>
-		<sequenceFlow id="from-start-to-parallel-approvement-task" name="From start to parallel approvement task" sourceRef="start-parallel-approvement" targetRef="parallel-approvement-task">
-			<extensionElements>
-				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
-					<activiti:field name="script">
-						<activiti:string>//<![CDATA[
-							var personList = approvalParallel.getPersonListByEmployeeList(lecmPar_employeesAssoc);
-							var approvalListRef = approvalParallel.createApprovalList(bpm_package);
-							approvalParallel.grantReviewerPermissions(bpm_package, lecmPar_employeesAssoc);
-							execution.setVariableLocal("assigneesList", personList);
-							execution.setVariable("approvalListRef", approvalListRef);
-						//]]></activiti:string>
-					</activiti:field>
-				</activiti:executionListener>
-			</extensionElements>
-		</sequenceFlow>
+		<sequenceFlow id="from-start-to-parallel-approvement-task" name="From start to parallel approvement task" sourceRef="start-parallel-approvement" targetRef="alfrescoScripttask2"></sequenceFlow>
 		<endEvent id="end-parallel-approvement" name="End parallel approvement"></endEvent>
 		<sequenceFlow id="from-parallel-approvement-task-to-end" name="From parallel approvement task to end" sourceRef="parallel-approvement-task" targetRef="end-parallel-approvement">
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<activiti:string>//<![CDATA[
+						<activiti:string><![CDATA[
 							var decisionsMap = execution.getVariable("decisionsMap");
 							var approvalListRef = execution.getVariable("approvalListRef");
 							if (!decisionsMap) {
@@ -81,7 +67,7 @@
 							approvalParallel.logFinalDecision(approvalListRef, finalDecision);
 							approvalParallel.notifyFinalDecision(finalDecision, bpm_package)
 							execution.setVariable("isApproved", approvalParallel.isApproved(finalDecision));
-						//]]></activiti:string>
+						]]></activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>
@@ -94,18 +80,32 @@
 		<serviceTask id="alfrescoScripttask1" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
 			<extensionElements>
 				<activiti:field name="script">
-					<activiti:string>//<![CDATA[
+					<activiti:string><![CDATA[
 						logger.log("Hello from Timer1");
-					//]]></activiti:string>
+					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>
 		</serviceTask>
 		<sequenceFlow id="flow1" sourceRef="boundarytimer1" targetRef="alfrescoScripttask1"></sequenceFlow>
+		<serviceTask id="alfrescoScripttask2" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+			<extensionElements>
+				<activiti:field name="script">
+					<activiti:string><![CDATA[
+							var personList = approvalParallel.getPersonListByEmployeeList(lecmPar_employeesAssoc);
+							var approvalListRef = approvalParallel.createApprovalList(bpm_package);
+							approvalParallel.grantReviewerPermissions(bpm_package, lecmPar_employeesAssoc);
+							execution.setVariableLocal("assigneesList", personList);
+							execution.setVariable("approvalListRef", approvalListRef);
+						]]></activiti:string>
+				</activiti:field>
+			</extensionElements>
+		</serviceTask>
+		<sequenceFlow id="flow2" sourceRef="alfrescoScripttask2" targetRef="parallel-approvement-task"></sequenceFlow>
 	</process>
 	<bpmndi:BPMNDiagram id="BPMNDiagram_lecmParallelApproval">
 		<bpmndi:BPMNPlane bpmnElement="lecmParallelApproval" id="BPMNPlane_lecmParallelApproval">
 			<bpmndi:BPMNShape bpmnElement="start-parallel-approvement" id="BPMNShape_start-parallel-approvement">
-				<omgdc:Bounds height="35.0" width="35.0" x="130.0" y="360.0"></omgdc:Bounds>
+				<omgdc:Bounds height="35.0" width="35.0" x="80.0" y="360.0"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="parallel-approvement-task" id="BPMNShape_parallel-approvement-task">
 				<omgdc:Bounds height="60.0" width="100.0" x="440.0" y="348.0"></omgdc:Bounds>
@@ -119,6 +119,9 @@
 			<bpmndi:BPMNShape bpmnElement="alfrescoScripttask1" id="BPMNShape_alfrescoScripttask1">
 				<omgdc:Bounds height="55.0" width="105.0" x="437.0" y="490.0"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="alfrescoScripttask2" id="BPMNShape_alfrescoScripttask2">
+				<omgdc:Bounds height="55.0" width="105.0" x="260.0" y="350.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
 			<bpmndi:BPMNEdge bpmnElement="from-parallel-approvement-task-to-end" id="BPMNEdge_from-parallel-approvement-task-to-end">
 				<omgdi:waypoint x="540.0" y="378.0"></omgdi:waypoint>
 				<omgdi:waypoint x="860.0" y="377.0"></omgdi:waypoint>
@@ -127,8 +130,8 @@
 				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="from-start-to-parallel-approvement-task" id="BPMNEdge_from-start-to-parallel-approvement-task">
-				<omgdi:waypoint x="165.0" y="377.0"></omgdi:waypoint>
-				<omgdi:waypoint x="440.0" y="378.0"></omgdi:waypoint>
+				<omgdi:waypoint x="115.0" y="377.0"></omgdi:waypoint>
+				<omgdi:waypoint x="260.0" y="377.0"></omgdi:waypoint>
 				<bpmndi:BPMNLabel>
 					<omgdc:Bounds height="42.0" width="100.0" x="-62.0" y="-47.0"></omgdc:Bounds>
 				</bpmndi:BPMNLabel>
@@ -136,6 +139,10 @@
 			<bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
 				<omgdi:waypoint x="490.0" y="430.0"></omgdi:waypoint>
 				<omgdi:waypoint x="489.0" y="490.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+				<omgdi:waypoint x="365.0" y="377.0"></omgdi:waypoint>
+				<omgdi:waypoint x="440.0" y="378.0"></omgdi:waypoint>
 			</bpmndi:BPMNEdge>
 		</bpmndi:BPMNPlane>
 	</bpmndi:BPMNDiagram>
