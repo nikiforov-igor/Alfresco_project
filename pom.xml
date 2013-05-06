@@ -36,11 +36,11 @@
     <repositories>
         <repository>
             <id>alfresco-public</id>
-            <url>http://maven.alfresco.com/nexus/content/groups/public</url>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
         </repository>
         <repository>
             <id>alfresco-activiti</id>
-            <url>https://maven.alfresco.com/nexus/content/repositories/activiti-releases/</url>
+            <url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
         </repository>
 		<repository>
 			<id>maven2-repository.dev.java.net</id>
@@ -52,7 +52,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>alfresco-public</id>
-            <url>http://maven.alfresco.com/nexus/content/groups/public</url>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
         </pluginRepository>
     </pluginRepositories>
     <properties>
