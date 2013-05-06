@@ -7,6 +7,7 @@ import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.repository.AssociationExistsException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -15,6 +16,8 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.GUID;
 import org.alfresco.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmObjectsService;
 import ru.it.lecm.security.LecmPermissionService;
@@ -36,6 +39,9 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     private LecmObjectsService lecmObjectsService;
     private LecmPermissionService lecmPermissionService;
     private NamespaceService namespaceService;
+
+    final public String DEFAULT_ACCESS = LecmPermissionService.LecmPermissionGroup.PGROLE_Reader;
+    final protected Logger logger = LoggerFactory.getLogger(DocumentMembersServiceImpl.class);
 
     private NodeRef ROOT;
     private DictionaryService dictionaryService;
@@ -76,6 +82,14 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
                             QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()), TYPE_DOC_MEMBER, properties);
                     NodeRef newMemberRef = associationRef.getChildRef();
                     nodeService.createAssociation(newMemberRef, employeeRef, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
+
+                    LecmPermissionService.LecmPermissionGroup pgGranting = getLecmPermissionGroup(newMemberRef);
+                    lecmPermissionService.grantAccess(pgGranting, document, employeeRef.getId());
+                    nodeService.setProperty(newMemberRef,DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
+
+                    // Добавляем нового участника в ноду со списком всех участников для данного типа документа
+                    addMemberToUnit(employeeRef, document);
+
                     return newMemberRef;
                 }
             });
@@ -215,5 +229,26 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
             return AuthenticationUtil.runAsSystem(raw);
         }
         return unitRef;
+    }
+
+    private LecmPermissionService.LecmPermissionGroup getLecmPermissionGroup(NodeRef memberRef) {
+        LecmPermissionService.LecmPermissionGroup pgGranting = null;
+        String permGroup = (String) nodeService.getProperty(memberRef, DocumentMembersService.PROP_MEMBER_GROUP);
+        if (permGroup != null && !permGroup.isEmpty()) {
+            pgGranting = lecmPermissionService.findPermissionGroup(permGroup);
+        }
+        if (pgGranting == null) {
+            pgGranting = lecmPermissionService.findPermissionGroup(DEFAULT_ACCESS);
+        }
+        return pgGranting;
+    }
+
+    private synchronized void addMemberToUnit(NodeRef employeeRef, NodeRef document) {
+        NodeRef memberUnit = getMembersUnit(nodeService.getType(document));
+        try {
+            nodeService.createAssociation(memberUnit, employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);
+        } catch (AssociationExistsException ex) {
+            logger.debug("Сотрудник уже сохранен в участниках документооборота для данного типа документов:" + nodeService.getType(document), ex);
+        }
     }
 }

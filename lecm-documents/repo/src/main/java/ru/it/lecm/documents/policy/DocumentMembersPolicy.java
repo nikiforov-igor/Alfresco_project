@@ -167,8 +167,6 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             LecmPermissionGroup pgGranting = getLecmPermissionGroup(member);
             lecmPermissionService.grantAccess(pgGranting, docRef, employee.getId());
             nodeService.setProperty(nodeAssocRef.getSourceRef(),DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
-            // Добавляем нового участника в ноду со списком всех участников для данного типа документа
-            addMemberToUnit(employee, docRef);
 
 	        // уведомление
 	        Notification notification = new Notification();
