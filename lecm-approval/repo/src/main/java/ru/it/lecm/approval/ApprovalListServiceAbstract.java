@@ -352,18 +352,16 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	}
 
 	@Override
-	public void grantReviewerPermissions(List<NodeRef> employees, NodeRef bpmPackage) {
+	public void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage) {
 		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
 		if (documentRef != null) {
 			Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 			properties.put(DocumentMembersService.PROP_MEMBER_GROUP, "LECM_BASIC_PG_Reviewer");
-			for (NodeRef employee : employees) {
-				NodeRef member = documentMembersService.addMember(documentRef, employee, properties);
-				if(logger.isTraceEnabled()) {
-					String employeeName = (String) nodeService.getProperty(employee, ContentModel.PROP_NAME);
-					String docName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_NAME);
-					logger.trace("Employee {} has been invited to the document {} with LECM_BASIC_PG_Reviewer permission. MemberRef is {}", new Object[]{employeeName, docName, member});
-				}
+			NodeRef member = documentMembersService.addMember(documentRef, employeeRef, properties);
+			if(logger.isTraceEnabled()) {
+				String employeeName = (String) nodeService.getProperty(employeeRef, ContentModel.PROP_NAME);
+				String docName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_NAME);
+				logger.trace("Employee {} has been invited to the document {} with LECM_BASIC_PG_Reviewer permission. MemberRef is {}", new Object[]{employeeName, docName, member});
 			}
 		} else {
 			logger.error("There is no any lecm-contract:document in bpm:package. Permissions won't be granted");

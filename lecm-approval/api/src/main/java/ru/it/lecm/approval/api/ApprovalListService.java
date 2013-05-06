@@ -46,7 +46,7 @@ public interface ApprovalListService {
 	 * @param employees
 	 * @param bpmPackage
 	 */
-	void grantReviewerPermissions(List<NodeRef> employees, NodeRef bpmPackage);
+	void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
 
 	void notifyApprovalStarted(final NodeRef employeeRef, final Date dueDate, final NodeRef bpmPackage);
 

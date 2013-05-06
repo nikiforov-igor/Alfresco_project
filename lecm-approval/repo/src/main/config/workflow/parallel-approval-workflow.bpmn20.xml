@@ -9,6 +9,7 @@
 						<activiti:string><![CDATA[
 							var dueDate = bpm_workflowDueDate;
 							task.setDueDate(dueDate);
+							approvalParallel.grantReviewerPermissions(assignee, bpm_package);
 							approvalParallel.notifyApprovalStarted(assignee, dueDate, bpm_package);
 							var userName = assignee.properties.userName;
 							logger.log(userName	+ " must complete his task before worflow dueDate expired " + dueDate);
@@ -93,7 +94,6 @@
 					<activiti:string><![CDATA[
 							var personList = approvalParallel.getPersonListByEmployeeList(lecmPar_employeesAssoc);
 							var approvalListRef = approvalParallel.createApprovalList(bpm_package);
-							approvalParallel.grantReviewerPermissions(bpm_package, lecmPar_employeesAssoc);
 							execution.setVariableLocal("assigneesList", personList);
 							execution.setVariable("approvalListRef", approvalListRef);
 						]]></activiti:string>

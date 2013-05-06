@@ -153,9 +153,9 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		approvalListService.logFinalDecision(approvalListRef.getNodeRef(), finalDecision);
 	}
 
-	public void grantReviewerPermissions(final ActivitiScriptNode bpmPackage, ActivitiScriptNodeList employeeList) {
-		List<NodeRef> employees = employeeList.getNodeReferences();
-		approvalListService.grantReviewerPermissions(employees, bpmPackage.getNodeRef());
+	public void grantReviewerPermissions(final ActivitiScriptNode assigneeRef, final ActivitiScriptNode bpmPackage) {
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(assigneeRef.getNodeRef());
+		approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
 	}
 
 	/**
