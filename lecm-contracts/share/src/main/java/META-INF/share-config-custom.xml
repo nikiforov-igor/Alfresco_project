@@ -742,6 +742,7 @@
             <dependencies>
                 <js src="/scripts/lecm-contracts/contracts-const.js" />
                 <js src="/scripts/lecm-contracts/contracts-based-on-document.js" />
+                <js src="/scripts/lecm-contracts/lecm-package-items-finder.js" />
             </dependencies>
         </forms>
     </config>

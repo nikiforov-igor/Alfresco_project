@@ -12,48 +12,35 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
  * LogicECM top-level module namespace.
  *
  * @namespace LogicECM
- * @class LogicECM.module
+ * @class LogicECM..module
  */
 LogicECM.module = LogicECM.module || {};
 
-/**
- * ObjectFinder component.
- *
- * @namespace Alfresco
- * @class Alfresco.ObjectFinder
- */
 (function()
 {
     /**
      * YUI Library aliases
      */
-    var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event,
-        KeyListener = YAHOO.util.KeyListener;
+    var Dom = YAHOO.util.Dom;
 
     /**
      * Alfresco Slingshot aliases
      */
     var $html = Alfresco.util.encodeHTML,
-        $hasEventInterest = Alfresco.util.hasEventInterest,
-        $combine = Alfresco.util.combinePaths;
+        $hasEventInterest = Alfresco.util.hasEventInterest;
 
-    /**
-     * ObjectFinder constructor.
-     *
-     * @param {String} htmlId The HTML id of the parent element
-     * @param {String} currentValueHtmlId The HTML id of the parent element
-     * @return {Alfresco.ObjectFinder} The new ObjectFinder instance
-     * @constructor
-     */
-    LogicECM.module.PackageItemsFinder = function Alfresco_ObjectFinder(htmlId, currentValueHtmlId)
+    LogicECM.module.PackageItemsFinder = function LECM_PackageItemsFinder(htmlId, currentValueHtmlId)
     {
         LogicECM.module.PackageItemsFinder.superclass.constructor.call(this, htmlId, currentValueHtmlId);
+        this.approvalLists = {};
         return this;
     };
 
     YAHOO.extend(LogicECM.module.PackageItemsFinder, LogicECM.module.ObjectFinder,
         {
+
+            approvalLists: null,
+
             _createSelectedItemsControls: function ObjectFinder__createSelectedItemsControls()
             {
                 var doBeforeParseDataFunction = function ObjectFinder__createSelectedItemsControls_doBeforeParseData(oRequest, oFullResponse)
@@ -262,6 +249,184 @@ LogicECM.module = LogicECM.module || {};
                     template += '<div class="viewmode-label">' + scope.msg("form.control.object-picker.modified-on") + ': ' + (modifiedOn ? modifiedOn : scope.msg("label.none")) + '</div>';
                     elCell.innerHTML = template;
                 };
+            },
+            _loadSelectedItems: function ObjectFinder__loadSelectedItems(useOptions)
+            {
+                var arrItems = "";
+                if (this.options.selectedValue)
+                {
+                    arrItems = this.options.selectedValue;
+                }
+                else
+                {
+                    arrItems = this.options.currentValue;
+                }
+
+                var onSuccess = function ObjectFinder__loadSelectedItems_onSuccess(response)
+                {
+                    var items = eval("("+ response.serverResponse.responseText + ")").data.items,
+                        item;
+                    this.selectedItems = {};
+                    this.approvalLists = {};
+                    //this.singleSelectedItem = null;
+
+                    for (var i = 0, il = items.length; i < il; i++)
+                    {
+                        item = items[i];
+                        if (item.type != "lecm-al:approval-list")  {
+                            this.selectedItems[item.nodeRef] = item;
+                        } else {
+                            this.approvalLists[item.nodeRef] = item;
+                        }
+                    }
+
+                    YAHOO.Bubbling.fire("renderCurrentValue",
+                        {
+                            eventGroup: this
+                        });
+                };
+
+                var onFailure = function ObjectFinder__loadSelectedItems_onFailure(response)
+                {
+                    this.selectedItems = null;
+                    this.approvalLists = null;
+                };
+
+                if (arrItems !== "")
+                {
+                    Alfresco.util.Ajax.jsonRequest(
+                        {
+                            url: Alfresco.constants.PROXY_URI + "lecm/forms/picker/items",
+                            method: "POST",
+                            dataObj:
+                            {
+                                items: arrItems.split(","),
+                                itemValueType: this.options.valueType,
+                                itemNameSubstituteString: this.options.nameSubstituteString,
+                                substituteParent: this.options.substituteParent != "" ? this.options.substituteParent : "none",
+                                itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
+                                itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol,
+                                additionalProperties:this.options.additionalProperties ? this.options.additionalProperties : "none"
+                            },
+                            successCallback:
+                            {
+                                fn: onSuccess,
+                                scope: this
+                            },
+                            failureCallback:
+                            {
+                                fn: onFailure,
+                                scope: this
+                            }
+                        });
+                }
+                else
+                {
+                    // if disabled show the (None) message
+                    if (this.options.disabled && this.options.displayMode == "items")
+                    {
+                        Dom.get(this.id + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
+                    }
+
+                    this._enableActions();
+                }
+            },
+
+            onRenderCurrentValue: function ObjectFinder_onRenderCurrentValue(layer, args) {
+                // Check the event is directed towards this instance
+                if ($hasEventInterest(this, args)) {
+                    var items = this.selectedItems,
+                        lists = this.approvalLists,
+                        displayValue = "";
+
+                    var item, link;
+                    if (this.options.displayMode == "list") {
+                        var l = this.widgets.currentValuesDataTable.getRecordSet().getLength();
+                        if (l > 0) {
+                            this.widgets.currentValuesDataTable.deleteRows(0, l);
+                        }
+                    }
+
+                    for (var key in items) {
+                        if (items.hasOwnProperty(key)) {
+                            item = items[key];
+
+                            // Special case for tags, which we want to render differently to categories
+                            if (item.type == "cm:category" && item.displayPath.indexOf("/categories/Tags") !== -1) {
+                                item.type = "tag";
+                            }
+
+                            if (this.options.showLinkToTarget && this.options.targetLinkTemplate !== null) {
+                                if (this.options.displayMode == "items") {
+                                    link = null;
+                                    if (YAHOO.lang.isFunction(this.options.targetLinkTemplate)) {
+                                        link = this.options.targetLinkTemplate.call(this, item);
+                                    }
+                                    else {
+                                        //Discard template, build link from scratch
+                                        var linkTemplate = (item.site) ? Alfresco.constants.URL_PAGECONTEXT + "site/{site}/" + this.options.linkToTarget : Alfresco.constants.URL_PAGECONTEXT + this.options.linkToTarget;
+                                        link = YAHOO.lang.substitute(linkTemplate,
+                                            {
+                                                nodeRef: item.nodeRef,
+                                                site: item.site
+                                            });
+                                    }
+                                    if (!this.options.viewOnLinkClick) {
+                                        displayValue += this.options.objectRenderer.renderItem(item, 16,
+                                            "<div>{icon} <a href='" + link + "'>{name}</a></div>");
+                                    } else {
+                                        displayValue += this.options.objectRenderer.renderItem(item, 16,
+                                            "<div>{icon} <a href='javascript:void(0)'; onclick=\"_viewLinkAttributes(\'" + this.id + "-link\',\'" + item.nodeRef + "\')\">" + "{name}</a></div>");
+                                    }
+                                }
+                                else if (this.options.displayMode == "list") {
+                                    this.widgets.currentValuesDataTable.addRow(item);
+                                }
+                            }
+                            else {
+                                if (this.options.displayMode == "items") {
+                                    if (item.type === "tag") {
+                                        displayValue += this.options.objectRenderer.renderItem(item, null, "<div class='itemtype-tag'>{name}</div>");
+                                    }
+                                    else {
+                                        displayValue += this.options.objectRenderer.renderItem(item, 16, "<div class='itemtype-" + $html(item.type) + "'>{icon} {name}</div>");
+                                    }
+                                }
+                                else if (this.options.displayMode == "list") {
+                                    this.widgets.currentValuesDataTable.addRow(item);
+                                }
+                            }
+                        }
+                    }
+                    if (this.options.displayMode == "items") {
+                        Dom.get(this.id + "-currentValueDisplay").innerHTML = displayValue;
+                    }
+
+                    for (var key in lists) {
+                        if (lists.hasOwnProperty(key)) {
+                            item = lists[key];
+                            Alfresco.util.Ajax.request(
+                                {
+                                    url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                                    dataObj:{
+                                        htmlid:"Approval-List-" + item.nodeRef,
+                                        itemKind:"node",
+                                        itemId:item.nodeRef,
+                                        mode:"view"
+                                    },
+                                    successCallback:{
+                                        fn:function(response) {
+                                            var formEl = Dom.get(this.id +"-currentListValueDisplay");
+                                            formEl.innerHTML += response.serverResponse.responseText;
+                                        },
+                                        scope:this
+                                    },
+                                    failureMessage:"message.failure",
+                                    execScripts:true
+                                });
+                        }
+                    }
+                }
             }
         });
 })();

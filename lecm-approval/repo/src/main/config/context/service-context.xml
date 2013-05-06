@@ -45,6 +45,7 @@
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-parallel-approval-workflow-model</value>
 				<value>alfresco/module/${artifactId}/messages/lecm-sequential-approval-workflow-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-approval-list</value>
             </list>
         </property>
 	</bean>

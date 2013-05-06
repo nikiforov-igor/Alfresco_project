@@ -1,6 +1,6 @@
 <#include "lecm-package-items.picker.inc.ftl" />
 <#assign controlId = fieldHtmlId + "-cntrl">
-<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
+
 <script type="text/javascript">//<![CDATA[
 (function()
 {
@@ -8,8 +8,8 @@
 <@renderPickerJS field "picker" />
     picker.setOptions(
             {
-            showActions:false,
-            additionalProperties:"lecm-document:list-present-string",
+                showActions:false,
+                additionalProperties:"lecm-document:list-present-string",
             <#if field.control.params.showTargetLink??>
                 showLinkToTarget: ${field.control.params.showTargetLink},
                 <#if page?? && page.url.templateArgs.site??>
@@ -46,46 +46,18 @@
 //]]></script>
 
 <div class="form-field">
-<@view.viewForm formId="${controlId}-view-assoc-form"/>
-<#if form.mode == "view">
     <div id="${controlId}" class="viewmode-field">
-        <#if (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
-        <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
-        </#if>
-        <span class="viewmode-label">${field.label?html}:</span>
+        <span class="viewmode-label">Вложенные файлы:</span>
         <div id="lecm-package-items-span" style="width:100%;">
-            <span id="${controlId}-currentValueDisplay" class="viewmode-value current-values" ></span>
+            <span id="${controlId}-currentValueDisplay" class="viewmode-value current-values"></span>
         </div>
     </div>
-    <div id="${controlId}-link" class="yui-panel" style="display: none">
-        <div id="${controlId}-link-head" class="hd">${msg("logicecm.view")}</div>
-        <div id="${controlId}-link-body" class="bd">
-            <div id="${controlId}-link-content"></div>
-            <div class="bdft">
-                <span id="${controlId}-link-cancel" class="yui-button yui-push-button">
-                    <span class="first-child">
-                        <button type="button" tabindex="0" onclick="_hideLinkAttributes()">${msg("button.close")}</button>
-                    </span>
-                </span>
-            </div>
+    <div id="${controlId}-list" class="viewmode-field">
+        <span class="viewmode-label">Список согласования:</span>
+        <div id="lecm-approval-list-span" style="width:100%;">
+            <span id="${controlId}-currentListValueDisplay" class="viewmode-value"></span>
         </div>
     </div>
-<#else>
-    <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-    <div id="${controlId}" class="object-finder">
-
-        <div id="${controlId}-currentValueDisplay" class="current-values" style="width:80%; float:none"></div>
-
-        <#if field.disabled == false>
-            <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
-            <input type="hidden" id="${controlId}-added" name="${field.name}_added" />
-            <input type="hidden" id="${controlId}-removed" name="${field.name}_removed" />
-            <div id="${controlId}-itemGroupActions" class="show-picker"></div>
-
-            <@renderPickerHTML controlId />
-        </#if>
-    </div>
-</#if>
 </div>
 
 <#macro setPackageItemOptions field>
