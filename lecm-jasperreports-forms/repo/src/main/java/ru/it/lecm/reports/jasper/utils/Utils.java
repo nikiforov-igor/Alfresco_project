@@ -23,6 +23,11 @@ public class Utils {
 		return (s == null) || (s.length() == 0);
 	}
 
+	final public static char QUOTE = '\"';
+	static String quoted( final String s) {
+		return QUOTE + s+ QUOTE;
+	}
+
 	/**
 	 * Get value, replacing empty one it by default value.
 	 * @param obj

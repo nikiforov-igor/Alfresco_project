@@ -2,6 +2,7 @@ package ru.it.lecm.forms.jasperforms;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -84,8 +85,17 @@ public class JasperFormProducer extends AbstractWebScript {
 		return result;
 	}
 
+	final static String PARAM_EXEC = "exec";
+
 	@Override
 	public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
+
+		// проверка надо ли выполнять запрос или только сформировать в ответ URL ... 
+		if (!"1".equals(webScriptRequest.getParameter(PARAM_EXEC))) {
+			prepareExecURL( webScriptRequest, webScriptResponse);
+			return;
+		}
+
 		final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
 		final String reportName = templateParams.get("report");
 		final Map<String, String[]> requestParameters = getRequestParameters(webScriptRequest, String.format("Processing report '%s' with args: \n", reportName));
@@ -143,6 +153,25 @@ public class JasperFormProducer extends AbstractWebScript {
 				outputStream.close();
 			}
 		}
+	}
+
+	/**
+	 * Отправить в ответе текст с URL, по-которому будет формироваться отчёт. 
+	 * @param webScriptRequest
+	 * @param webScriptResponse
+	 * @throws IOException 
+	 */
+	private void prepareExecURL(WebScriptRequest request, WebScriptResponse response)
+			throws IOException
+	{
+		// добавление аргумента "exec=1"
+		final String answerURL = request.getServerPath() + request.getURL() 
+				+ String.format( "&%s=1", PARAM_EXEC); 
+
+		response.setContentType("text/html;charset=UTF-8");
+		// response.setContentEncoding();
+		final Writer out = response.getWriter();
+		out.write(answerURL);
 	}
 
 	private void generateReport(OutputStream outputStream, JasperReport report

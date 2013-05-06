@@ -40,7 +40,7 @@
 	</query>
 
 	<fields.jasper>
-		<field queryFldName="lecm-document:regnum"
+		<field queryFldName="lecm-contract:regNumProject"
 				jrFldName="col_Regnum"
 				displayName="Регистрационный номер договора" javaValueClass="String"/>
 
@@ -49,15 +49,15 @@
 		<!-- Данные по контрагенту (с типом "lecm-contractor:contractor-type") 
 			в виде "а-ля форматной" строки
 		  -->
-		<field jrFldName="col_Contragent.name" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:shortname}" displayName="Контрагент"/>
-		<field jrFldName="col_Contagent.phone" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:phone}" displayName="Тел Контрагента" />
+		<field jrFldName="col_Contragent.name"  queryFldName="{lecm-contract:partner-assoc/lecm-contractor:shortname}" displayName="Контрагент"/>
+		<field jrFldName="col_Contragent.phone" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:phone}" displayName="Тел Контрагента" />
 
 		<!-- Данные по "Виду договора" (с типом "lecm-contract-dic:contract-type") -->
 		<field jrFldName="col_DocKind" queryFldName="{lecm-contract:typeContract-assoc/cm:name}" displayName="Вид договора" />
 
 		<!-- Данные по "Тематика договора" (с типом "lecm-contract-dic:contract-subjects") -->
-		<field jrFldName="col_Theme.code" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code}" displayName="Тематика договора.Код" />
-		<field jrFldName="col_Theme.desc" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-description}" displayName="Тематика договора.Описание" />
+		<field jrFldName="col_Theme.code" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code}" displayName="Тематика.Код" />
+		<field jrFldName="col_Theme.desc" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-description}" displayName="Тематика.Описание" />
 
 		<!-- Статус -->
 		<field jrFldName="col_Status" queryFldName="lecm-statemachine:status" displayName="Статус" />

@@ -43,12 +43,17 @@ public class AlfrescoJRDataSource implements JRDataSource
 {
 	private static final Logger logger = LoggerFactory.getLogger(AlfrescoJRDataSource.class);
 
+	private ServiceRegistry serviceRegistry;
+	private SubstitudeBean substitudeService;
+	private AssocDataFilter filter; // может быть NULL
+	private Map<String, JRXField> metaFields;
+
 	// список текущих Альфреско атрибутов активной строки данных набора
 	// ключ = QName.toString() с короткими именами типов (т.е. вида "cm:folder" или "lecm-contract:document")
-	private Map<String, Serializable> curProps;
-	private NodeRef curNodeRef;
-	private Iterator<ResultSetRow> rsIter;
-	private ResultSetRow rsRow;
+	protected Map<String, Serializable> curProps;
+	protected NodeRef curNodeRef;
+	protected Iterator<ResultSetRow> rsIter;
+	protected ResultSetRow rsRow;
 
 	/**
 	 * список gname Альфреско-атрибутов, которые только и нужны для отчёта
@@ -57,10 +62,6 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 */
 	private Set<String> visibleProps;
 
-	private Map<String, JRXField> metaFields;
-	private ServiceRegistry serviceRegistry;
-	private SubstitudeBean substitudeService;
-	private AssocDataFilter filter; // может быть NULL
 
 	/**
 	 * Проверить является ли указанное поле вычисляемым (в понимании SubstitudeBean):
@@ -68,7 +69,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 * @param fldName
 	 * @return
 	 */
-	static boolean isCalcField(final String fldName) {
+	public static boolean isCalcField(final String fldName) {
 		return (fldName != null) && fldName.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL);
 	}
 
@@ -125,7 +126,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 	}
 
 
-	private boolean isPropVisible(final String propNameWithPrefix) {
+	protected boolean isPropVisible(final String propNameWithPrefix) {
 		return (visibleProps == null) // видно всё
 				|| visibleProps.contains(propNameWithPrefix); // или название имеется в списке того, что отрисовывается в Jasper
 	}
@@ -159,9 +160,13 @@ public class AlfrescoJRDataSource implements JRDataSource
 		// (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
 		if (isCalcField(fldAlfName)) {
 			if (substitudeService != null) {
-				return substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
+				final Object value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
+				if (logger.isDebugEnabled()) {
+					logger.debug(String.format( "\nData: {%s}\nFound as: '%s'", fldAlfName, value));
+				}
+				return value;
 			}
-			logger.warn("(!) substitudeService is NULL -> fld values using");
+			logger.warn("(!) substitudeService is NULL -> fld values cannot be loaded");
 		}
 
 		return (String.class.equals(jrf.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
@@ -172,7 +177,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 * @param id
 	 * @return true, если фильтра нет или строка удовлетворяет фильтру
 	 */
-	private boolean loadAlfNodeProps(NodeRef id) {
+	protected boolean loadAlfNodeProps(NodeRef id) {
 		final NodeService nodeSrv = serviceRegistry.getNodeService();
 
 		// дополнительно фильтруем по критериям, если они есть ...
@@ -191,7 +196,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 		 * чтобы curProps содержал всё, что задано в фильтре
 		 */
 
-		makeDSRowProps();
+		this.curProps = makeDSRowProps();
 
 		if (alfProps != null) { 
 			logAlfData( alfProps, String.format("Loaded properties of %s\n\t Filtering fldNames for jasper-report by list: %s", id, visibleProps));
@@ -206,7 +211,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 		return true;
 	}
 
-	private void logAlfData(Map<QName, Serializable> props, String info) {
+	protected void logAlfData(Map<QName, Serializable> props, String info) {
 		if (logger.isDebugEnabled()) {
 			final StringBuilder dump = Utils.dumpAlfData(props, info);
 			logger.debug(dump.toString());
@@ -218,8 +223,8 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 * объекта (например, может не быть пустых значений) гарантируем, 
 	 * чтобы curProps содержал всё, что задано в фильтре visibleProps
 	 */
-	private void makeDSRowProps() {
-		curProps = new HashMap<String, Serializable>();
+	protected HashMap<String, Serializable> makeDSRowProps() {
+		final HashMap<String, Serializable> result = new HashMap<String, Serializable>();
 		final StringBuilder sb = new StringBuilder("Filtering alfresco properties by names: \n"); 
 		if (this.visibleProps != null){
 			// все свойства включаем в набор с пустыми значениями
@@ -227,15 +232,16 @@ public class AlfrescoJRDataSource implements JRDataSource
 			for (String fldName: this.visibleProps) {
 				i++;
 				if (!isCalcField(fldName)) { // обычное поле
-					curProps.put( fldName, null);
+					result.put( fldName, null);
 					sb.append( String.format( "\t[%d]\t field '%s'\n", i, fldName));
 				} else
-					// Если есть "пути" в именах -> атрибут косвенный -> в curProps не включаем
+					// Если есть "пути" в именах -> атрибут косвенный -> в result не включаем
 					sb.append( String.format( "\t[%d]\t referenced field '%s' detected -> using evaluator for it \n", i, fldName));
 			}
 		}
 		if (logger.isDebugEnabled()) 
 			logger.debug(sb.toString());
+		return result;
 	}
 
 }
