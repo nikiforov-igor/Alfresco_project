@@ -1,7 +1,10 @@
 package ru.it.lecm.integrotest.utils;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -164,4 +167,74 @@ public class Utils {
 		}
 		return dump;
 	}
+
+
+	/**
+	 * Make string enumeration of the items as list with delimiters.  
+	 * @param col
+	 * @param delimiter
+	 * @param quoteOpen открывающая кавычка.
+	 * @param quoteClose закрывающая кавычка.
+	 * @return
+	 */
+	public static String getAsString( final Collection<?> col, 
+			final String delimiter, String quoteOpen, String quoteClose)
+	{
+		if (col == null)
+			return null;
+		if (quoteOpen == null) quoteOpen = "";
+		if (quoteClose == null) quoteClose = "";
+		final StringBuffer result = new StringBuffer(5);
+		final Iterator<?> itr = col.iterator();
+		// final String fmtStr = (isStringEmpty(quote)) ? "{1}" : "{0}{1}{2}";
+		while (itr.hasNext()) {
+			final Object item = itr.next();
+
+			final String strItem = (item != null) 
+					? quoteOpen + item.toString() + quoteClose
+					: "NULL" ;
+
+			result.append(strItem);
+			if (delimiter != null && itr.hasNext()) {
+				result.append(delimiter);
+			}
+		}
+		return result.toString();
+	}
+
+	/**
+	 * Make string enumeration of the items as list with delimiters.  
+	 * @param col
+	 * @param delimiter
+	 * @param quote ограничители-кавычки отдельных элементов.
+	 * @return
+	 */
+	public static String getAsString( final Collection<?> col, 
+			final String delimiter, final String quote) {
+		return getAsString( col, delimiter, quote, quote);
+	}
+
+	/**
+	 * Вернуть список с разделителем без ограничителей-кавычек.
+	 * @param coll
+	 * @param delimiter
+	 * @return
+	 */
+	public static String getAsString(Collection<?> col, String delimiter) {
+		return getAsString( col, delimiter, null);
+	}
+
+	/**
+	 * Вернуть список с разделителем запятая.
+	 * @param coll
+	 * @return
+	 */
+	public static String getAsString(Collection<?> col) {
+		return getAsString( col, ", ");
+	}
+
+	public static String getAsString(Object[] args) {
+		return (args == null) ? "NULL" : getAsString( Arrays.asList(args), ", ");
+	}
+	
 }

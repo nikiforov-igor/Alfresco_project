@@ -1,20 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 <beans>
-    <!-- Registration of pentaho forms models -->
-    <bean id="${groupId}.${artifactId}.modelBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/jasperreports-forms-model.xml</value>
-            </list>
-        </property>
-    </bean>
+	<!-- Registration of pentaho forms models -->
+	<bean id="${groupId}.${artifactId}.modelBootstrap" parent="dictionaryModelBootstrap"
+		depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/jasperreports-forms-model.xml</value>
+			</list>
+		</property>
+	</bean>
 
-    <bean id="webscript.ru.it.lecm.forms.jasper.form.get"
-          class="ru.it.lecm.forms.jasperforms.JasperFormProducer"
-          parent="webscript">
-        <property name="serviceRegistry" ref="ServiceRegistry" />
-    </bean>
+	<bean id="webscript.ru.it.lecm.forms.jasper.form.get" class="ru.it.lecm.forms.jasperforms.JasperFormProducer"
+		parent="webscript">
+		<property name="serviceRegistry" ref="ServiceRegistry" />
+		<property name="substitudeService" ref="substitudeService" />
+	</bean>
 
 </beans>

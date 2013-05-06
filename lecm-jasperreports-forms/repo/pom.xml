@@ -13,12 +13,16 @@
 	<packaging>amp</packaging>
 	<name>Logic ECM Jasperforms Module Repo</name>
 	<description>jasperforms forms repo</description>
+
 	<properties>
 		<module.log.level>debug</module.log.level>
+		<dependency.opencmis.version>0.7.0</dependency.opencmis.version>
+		<xalan.version>2.5.1</xalan.version>
 	</properties>
-    <!--
-       need to list these as a provided so that Maven doesn't download them
-       and include them in the AMP, they are provided by Alfresco
+
+	<!--
+	  need to list these as a provided so that Maven doesn't download them
+	  and include them in the AMP, they are provided by Alfresco
 	  -->
 	<dependencies>
 		<dependency>
@@ -56,6 +60,31 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>xalan</groupId>
+			<artifactId>xalan</artifactId>
+			<version>${xalan.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.chemistry.opencmis</groupId>
+			<artifactId>chemistry-opencmis-client-impl</artifactId>
+			<version>${dependency.opencmis.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>ru.it.lecm.base</groupId>
+			<artifactId>base-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
@@ -95,10 +124,10 @@
 					<exclude>**README-*</exclude>
 				</excludes>
 			</resource>
-            <!--
-             Copies and filters AMP config in the proper package
-             'alfresco/module/${project.artifactId}' so to enforce full module
-             naming single sourcing from POM properties
+			<!--
+				Copies and filters AMP config in the proper package
+				'alfresco/module/${project.artifactId}' so to enforce full module
+				naming single sourcing from POM properties
 			  -->
 			<resource>
 				<filtering>true</filtering>
