@@ -268,6 +268,30 @@ public class ContractsWebScriptBean extends BaseWebScript {
 	 	this.contractService.registrationContractDocumentProject(document.getNodeRef());
 	}
 
+	/**
+	 * Передача договора на подписание
+	 * @param contract договор
+	 */
+	public void sendingToSign(ScriptNode contract) {
+		this.contractService.sendingToSign(contract.getNodeRef());
+	}
+
+	/**
+	 * Передача договора на подписание контрагентом
+	 * @param contract договор
+	 */
+	public void sendingToContragentSign(ScriptNode contract) {
+		this.contractService.sendingToContragentSign(contract.getNodeRef());
+	}
+
+	/**
+	 * Подписание договора
+	 * @param contract договор
+	 */
+	public void signing(ScriptNode contract) {
+		this.contractService.signing(contract.getNodeRef());
+	}
+
     public Scriptable getAdditionalDocsByType(String typeFilter){
         String[] types = typeFilter != null && typeFilter.length() > 0 ? typeFilter.split("\\s*,\\s"): new String[0];
         String filter = "";

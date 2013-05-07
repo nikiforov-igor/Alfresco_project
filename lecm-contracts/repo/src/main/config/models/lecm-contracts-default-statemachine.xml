@@ -370,12 +370,12 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Не задана валюта!</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -5737,7 +5737,36 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>21dbdded-f84b-4b9f-a9b5-1343d36e5238</name>
+														<nodeRef>
+															workspace://SpacesStore/11f78888-82dd-4d68-b345-32677801d79e
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>
+																	contracts.sendingToSign(bpm_package.children[0]);
+																</value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>sendingToSign</value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>FinishStateWithTransition</type>
@@ -5865,12 +5894,12 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>true</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Подписан у контрагента</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>true</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -5930,12 +5959,12 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>true</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Не подписан у контрагента</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>true</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6701,7 +6730,35 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>390c73b7-d43c-46c9-8cf4-eb30fa0fc744</name>
+														<nodeRef>
+															workspace://SpacesStore/e84049aa-5b7e-4d4b-b139-565a85964673
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>contracts.signing(bpm_package.children[0]);
+																</value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>signing</value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>FinishStateWithTransition</type>
@@ -11030,7 +11087,36 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>73321ef8-499e-4acb-9837-0c8522cf5a79</name>
+														<nodeRef>
+															workspace://SpacesStore/d24087ae-c40a-4dc2-9249-09b6bf736e09
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>
+																	contracts.sendingToContragentSign(bpm_package.children[0]);
+																</value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>sendingToContragentSign</value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>FinishStateWithTransition</type>

@@ -66,6 +66,9 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final String ADDITIONAL_DOCUMENT_PROJECT_REGNUM_TEMPLATE_CODE = "CONTRACT_DOCUMENT_PROJECT_REGNUM";
 
 	public static final String BUSINESS_ROLE_CONTRACT_CURATOR_ID = "CONTRACT_CURATOR";
+	public static final String BUSINESS_ROLE_CONTRACT_SIGNER_ID = "CONTRACT_SIGNER";
+	public static final String BUSINESS_ROLE_CONTRACT_RECORDER_ID = "CONTRACT_RECORDER";
+	public static final String BUSINESS_ROLE_CONTRACT_EXECUTOR_ID = "CONTRACT_EXECUTOR";
 
     private SearchService searchService;
 	private DictionaryBean dictionaryService;
@@ -363,6 +366,71 @@ public class ContractsBeanImpl extends BaseBean {
 				notificationService.sendNotification(this.notificationChannels, notification);
 			}
 		}
+	}
+
+	public void sendingToSign(NodeRef contractRef) {
+		List<NodeRef> signers = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_SIGNER_ID);
+		StringBuilder notificationText = new StringBuilder();
+		notificationText.append("Вам поступил проект договора ");
+		notificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
+		notificationText.append(", исполнитель ");
+		NodeRef executor = getContractExecutor(contractRef);
+		String executorName = nodeService.getProperty(executor, ContentModel.PROP_NAME).toString();
+		notificationText.append(wrapperLink(executor, executorName, LINK_URL));
+		notificationText.append(" на подписание");
+
+		Notification notification = new Notification();
+		notification.setRecipientEmployeeRefs(signers);
+		notification.setAutor(authService.getCurrentUserName());
+		notification.setDescription(notificationText.toString());
+		notification.setObjectRef(contractRef);
+		notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+		notificationService.sendNotification(this.notificationChannels, notification);
+	}
+
+	public void sendingToContragentSign(NodeRef contractRef) {
+		List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID);
+		StringBuilder notificationText = new StringBuilder();
+		notificationText.append("Проект договор номер ");
+		notificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
+		notificationText.append(" подписан. Подтвердите подписание Контрагентом");
+
+		Notification notification = new Notification();
+		notification.setRecipientEmployeeRefs(executors);
+		notification.setAutor(authService.getCurrentUserName());
+		notification.setDescription(notificationText.toString());
+		notification.setObjectRef(contractRef);
+		notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+		notificationService.sendNotification(this.notificationChannels, notification);
+	}
+
+	public void signing(NodeRef contractRef) {
+		List<NodeRef> recorders = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_RECORDER_ID);
+		StringBuilder recordersNotificationText = new StringBuilder();
+		recordersNotificationText.append("Поступил новый договор на регистрации, номер проекта: ");
+		recordersNotificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
+
+		Notification recordersNotification = new Notification();
+		recordersNotification.setRecipientEmployeeRefs(recorders);
+		recordersNotification.setAutor(authService.getCurrentUserName());
+		recordersNotification.setDescription(recordersNotificationText.toString());
+		recordersNotification.setObjectRef(contractRef);
+		recordersNotification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+		notificationService.sendNotification(this.notificationChannels, recordersNotification);
+
+		List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID);
+		StringBuilder executorsNotificationText = new StringBuilder();
+		executorsNotificationText.append("Проект договор номер ");
+		executorsNotificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
+		executorsNotificationText.append(" направлен на регистрацию");
+
+		Notification executorsNotification = new Notification();
+		executorsNotification.setRecipientEmployeeRefs(executors);
+		executorsNotification.setAutor(authService.getCurrentUserName());
+		executorsNotification.setDescription(executorsNotificationText.toString());
+		executorsNotification.setObjectRef(contractRef);
+		executorsNotification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+		notificationService.sendNotification(this.notificationChannels, executorsNotification);
 	}
 
 	public String getContractType(NodeRef contractRef) {
