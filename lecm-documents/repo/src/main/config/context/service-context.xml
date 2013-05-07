@@ -265,8 +265,6 @@
             <ref bean="serviceOrgstructure"/>
         </property>
         <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="namespaceService" ref="namespaceService"/>
-        <property name="grantDynaRoleCode" value="BR_MEMBER"/>
         <property name="grantAccessTag" value="LECM_BASIC_PG_Reader"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
         <property name="transactionService" ref="transactionService"/>

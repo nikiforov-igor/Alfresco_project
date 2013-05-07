@@ -8,7 +8,6 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationExistsException;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
@@ -72,9 +71,18 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         return addMemberWithoutCheckPermission(document, employeeRef, properties);
     }
 
+    @Override
+    public NodeRef addMember(NodeRef document, NodeRef employee, String permissionGroup) {
+        lecmPermissionService.checkPermission(LecmPermissionService.PERM_MEMBERS_ADD, document);
+        Map<QName,Serializable> props = new HashMap<QName, Serializable>();
+        props.put(DocumentMembersService.PROP_MEMBER_GROUP, permissionGroup);
+        return addMemberWithoutCheckPermission(document, employee, props);
+    }
+
+    @Override
     public NodeRef addMemberWithoutCheckPermission(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties) {
         final NodeRef documentMembersFolder = getMembersFolderRef(document);
-        if (employeeRef != null && !isDocumentMember(document, employeeRef)) {
+        if (employeeRef != null && !isDocumentMember(employeeRef, document)) {
             return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                 @Override
                 public NodeRef execute() throws Throwable {
@@ -82,12 +90,14 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
                             QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()), TYPE_DOC_MEMBER, properties);
                     NodeRef newMemberRef = associationRef.getChildRef();
                     nodeService.createAssociation(newMemberRef, employeeRef, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
-
-                    LecmPermissionService.LecmPermissionGroup pgGranting = getLecmPermissionGroup(newMemberRef);
-                    lecmPermissionService.grantAccess(pgGranting, document, employeeRef.getId());
-                    nodeService.setProperty(newMemberRef,DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
-
-                    // Добавляем нового участника в ноду со списком всех участников для данного типа документа
+                    try {
+                        // Выдача прав новому участнику
+                        LecmPermissionService.LecmPermissionGroup pgGranting = getLecmPermissionGroup(newMemberRef);
+                        lecmPermissionService.grantAccess(pgGranting, document, employeeRef.getId());
+                        nodeService.setProperty(newMemberRef, DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
+                    } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
+                        logger.error("Не удалось выдать права новому участнику!", ex);
+                    }
                     addMemberToUnit(employeeRef, document);
 
                     return newMemberRef;
@@ -95,19 +105,6 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
             });
         }
         return null;
-    }
-
-    private String generateMemberName(NodeRef memberRef) {
-        Object propGroup = nodeService.getProperty(memberRef, PROP_MEMBER_GROUP);
-        String groupName = propGroup != null ? (String) propGroup : "";
-        List<AssociationRef> employeeList = nodeService.getTargetAssocs(memberRef, ASSOC_MEMBER_EMPLOYEE);
-        NodeRef employee = null;
-        if (employeeList.size() > 0) {
-            employee = employeeList.get(0).getTargetRef();
-        }
-        String propName = employee != null ? (String) nodeService.getProperty(employee, ContentModel.PROP_NAME) : "unnamed";
-
-        return (propName + " " + groupName).trim();
     }
 
     @Override
@@ -166,13 +163,8 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     }
 
     @Override
-    public boolean isDocumentMember(NodeRef document, NodeRef employee) {
+    public boolean isDocumentMember(NodeRef employee, NodeRef document) {
         return getDocumentMember(document, employee) != null;
-    }
-
-    @Override
-    public String generateMemberNodeName(NodeRef member) {
-        return generateMemberName(member);
     }
 
     @Override
@@ -190,9 +182,8 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     }
 
     private NodeRef getDocumentMember(NodeRef document, NodeRef employee) {
-        List<AssociationRef> empMembers = nodeService.getTargetAssocs(document, DocumentMembersService.ASSOC_DOC_MEMBERS);
-        for (AssociationRef empMember : empMembers) {
-            NodeRef member = empMember.getTargetRef();
+        List<NodeRef> empMembers = findNodesByAssociationRef(document,DocumentMembersService.ASSOC_DOC_MEMBERS,null,ASSOCIATION_TYPE.TARGET);
+        for (NodeRef member : empMembers) {
             NodeRef employeeRef = nodeService.getTargetAssocs(member, ASSOC_MEMBER_EMPLOYEE).get(0).getTargetRef();
             if (employeeRef.equals(employee)) {
                 return member;
@@ -206,6 +197,11 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 		return ROOT;
 	}
 
+    /**
+     * Получение(или создание, если нет) ноды со списком участников документооборота
+     * @param docType тип документов (краткое представление с заменой ":" на "_" )
+     * @return ссылка на ноду
+     */
     private synchronized NodeRef getOrCreateDocMembersUnit(final String docType) {
         NodeRef unitRef = nodeService.getChildByName(getRoot(), ContentModel.ASSOC_CONTAINS, docType);
         if (unitRef == null) {
@@ -231,6 +227,11 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         return unitRef;
     }
 
+    /**
+     * Добавление нового участника в ноду со списком всех участников для данного типа документа
+     * @param memberRef ссылка на ноду участника
+     * @return LecmPermissionService.LecmPermissionGroup группу привелегий, название которой сохранено в свойствах участника, либо DEFAULT_ACCESS
+     */
     private LecmPermissionService.LecmPermissionGroup getLecmPermissionGroup(NodeRef memberRef) {
         LecmPermissionService.LecmPermissionGroup pgGranting = null;
         String permGroup = (String) nodeService.getProperty(memberRef, DocumentMembersService.PROP_MEMBER_GROUP);
@@ -243,6 +244,11 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         return pgGranting;
     }
 
+    /**
+     * Добавление нового участника в ноду со списком всех участников для данного типа документа
+     * @param employeeRef ссылка на сотрудника
+     * @param document ссылка на документ (для извлечения типа)
+     */
     private synchronized void addMemberToUnit(NodeRef employeeRef, NodeRef document) {
         NodeRef memberUnit = getMembersUnit(nodeService.getType(document));
         try {

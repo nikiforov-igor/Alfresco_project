@@ -27,21 +27,75 @@ public interface DocumentMembersService {
     QName TYPE_DOC_MEMBERS_UNIT = QName.createQName(DOC_MEMBERS_NAMESPACE_URI, "unit");
     QName ASSOC_UNIT_EMPLOYEE = QName.createQName(DOC_MEMBERS_NAMESPACE_URI, "unit-employee-assoc");
 
-    NodeRef addMember(NodeRef document, NodeRef employeeRef, Map<QName, Serializable> properties);
+    /**
+     * Добавление нового участника с проверкой прав доступа
+     * @param document - ссылка на документ
+     * @param employee - ссылка на сотрудника
+     * @param properties - карта свойств
+     * @return ссылка на созданную ноду участника
+     */
+    NodeRef addMember(NodeRef document, NodeRef employee, Map<QName, Serializable> properties);
 
-    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employeeRef, Map<QName, Serializable> properties);
+    /**
+     * Добавление нового участника  с проверкой прав доступа
+     * @param document - ссылка на документ
+     * @param employee - ссылка на сотрудника
+     * @param permissionGroup - Группа привилегий
+     * @return ссылка на созданную ноду участника
+     */
+    NodeRef addMember(NodeRef document, NodeRef employee, String permissionGroup);
 
+    /**
+     * Добавление нового участника без проверки прав доступа
+     * @param document - ссылка на документ
+     * @param employee - ссылка на сотрудника
+     * @param properties - карта свойств
+     * @return ссылка на созданную ноду участника
+     */
+
+    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, Map<QName, Serializable> properties);
+
+    /**
+     * Возвращает директорию Участники для конкретного документа
+     * @param document - ссылка на документ
+     * @return ссылка на ноду
+     */
     NodeRef getMembersFolderRef(NodeRef document);
 
+    /**
+     * Возвращает список участников данного документа
+     * @param document - ссылка на документ
+     * @return список ссылок на участников
+     */
     List<NodeRef> getDocumentMembers(NodeRef document);
 
+    /**
+     * Возвращает список участников данного документа
+     * @param document - ссылка на документ
+     * @param skipCount - сколько результатов надо пропустить
+     * @param maxItems - максимальное число результатов
+     * @return список ссылок на участников
+     */
     List<NodeRef> getDocumentMembers(NodeRef document, int skipCount, int maxItems);
 
-    boolean isDocumentMember (NodeRef document, NodeRef employee);
+    /**
+     * Является ли данный пользователь, участником в данном документе
+     * @param employee - ссылка на сотрудника
+     * @param document - ссылка на документ
+     * @return ссылка на ноду
+     */
+    boolean isDocumentMember(NodeRef employee, NodeRef document);
 
-    String generateMemberNodeName(NodeRef member);
-
+    /**
+     * Получение корня сервиса (папки LECM/Участники документооборота)
+     * @return ссылка на ноду
+     */
     NodeRef getRoot();
 
+    /**
+     * Получение ссылки на ноду со списком всех участников для конкретного типа документов
+     * @param docType тип документов
+     * @return ссылка на ноду
+     */
     NodeRef getMembersUnit(QName docType);
 }

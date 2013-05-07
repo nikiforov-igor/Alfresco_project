@@ -7,14 +7,11 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.AssociationExistsException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,13 +49,11 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	private NotificationsService notificationService;
 	private AuthenticationService authService;
 	private OrgstructureBean orgstructureService;
-    private NamespaceService namespaceService;
     private StateMachineServiceBean stateMachineBean;
 
 	final public String DEFAULT_ACCESS = LecmPermissionGroup.PGROLE_Reader;
 	private String grantAccess = DEFAULT_ACCESS; // must have legal corresponding LecmPermissionGroup
 
-	private String grantDynaRoleCode = "BR_MEMBER";
 	private LecmPermissionService lecmPermissionService;
 
     final private QName[] AFFECTED_NOT_ADD_MEMBER_PROPERTIES = {ForumModel.PROP_COMMENT_COUNT, DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT};
@@ -95,14 +90,6 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		this.serviceRegistry = serviceRegistry;
 	}
 
-	public String getGrantDynaRoleCode() {
-		return grantDynaRoleCode;
-	}
-
-	public void setGrantDynaRoleCode(String grantDynaRoleCode) {
-		this.grantDynaRoleCode = grantDynaRoleCode;
-	}
-
 	public String getGrantAccess() {
 		return grantAccess;
 	}
@@ -115,8 +102,8 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		this.grantAccess = (value != null) ? value : DEFAULT_ACCESS;
 	}
 
-    public void setNamespaceService(NamespaceService namespaceService) {
-        this.namespaceService = namespaceService;
+    public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
+        this.stateMachineBean = stateMachineBean;
     }
 
 	public final void init() {
@@ -152,41 +139,28 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	}
 
 	@Override
-	public void onCreateAssociation(AssociationRef nodeAssocRef) {
-		NodeRef docRef = null;
-        try {
-            NodeRef member = nodeAssocRef.getSourceRef();
-            NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
-            docRef = nodeService.getPrimaryParent(folder).getParentRef();
-            NodeRef employee = nodeAssocRef.getTargetRef();
-            if (this.getGrantDynaRoleCode() == null) {
-                logger.warn("Dynamic role configured as NULL -> nothing performed (document {" + docRef + "})");
-                return;
-            }
+    public void onCreateAssociation(AssociationRef nodeAssocRef) {
+        NodeRef member = nodeAssocRef.getSourceRef();
+        NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
+        NodeRef docRef = nodeService.getPrimaryParent(folder).getParentRef();
+        NodeRef employee = nodeAssocRef.getTargetRef();
 
-            LecmPermissionGroup pgGranting = getLecmPermissionGroup(member);
-            lecmPermissionService.grantAccess(pgGranting, docRef, employee.getId());
-            nodeService.setProperty(nodeAssocRef.getSourceRef(),DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
-
-	        // уведомление
-	        Notification notification = new Notification();
-	        ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
-	        employeeList.add(employee);
-	        notification.setRecipientEmployeeRefs(employeeList);
-	        notification.setAutor(authService.getCurrentUserName());
-	        notification.setDescription("Вы приглашены как новый участник в документ " +
-			        wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
-	        notification.setObjectRef(docRef);
-	        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-	        notificationService.sendNotification(this.notificationChannels, notification);
-        } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
-            logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
-        }
+        // уведомление
+        Notification notification = new Notification();
+        ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
+        employeeList.add(employee);
+        notification.setRecipientEmployeeRefs(employeeList);
+        notification.setAutor(authService.getCurrentUserName());
+        notification.setDescription("Вы приглашены как новый участник в документ " +
+                wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
+        notification.setObjectRef(docRef);
+        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+        notificationService.sendNotification(this.notificationChannels, notification);
 
         // Обновляем имя ноды
-        String newName = documentMembersService.generateMemberNodeName(nodeAssocRef.getSourceRef());
+        String newName = generateMemberNodeName(nodeAssocRef.getSourceRef());
         nodeService.setProperty(nodeAssocRef.getSourceRef(), ContentModel.PROP_NAME, newName);
-	}
+    }
 
     @Override
     public void onDeleteAssociation(AssociationRef nodeAssocRef) {
@@ -197,7 +171,14 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             docRef = nodeService.getPrimaryParent(folder).getParentRef();
             NodeRef employee = nodeAssocRef.getTargetRef();
 
-            LecmPermissionGroup pgRevoking = getLecmPermissionGroup(docRef);
+            LecmPermissionGroup pgRevoking = null;
+            String permGroup = (String) nodeService.getProperty(member, DocumentMembersService.PROP_MEMBER_GROUP);
+            if (permGroup != null && !permGroup.isEmpty()) {
+                pgRevoking = lecmPermissionService.findPermissionGroup(permGroup);
+            }
+            if (pgRevoking == null) {
+                pgRevoking = lecmPermissionService.findPermissionGroup(this.getGrantAccess());
+            }
             lecmPermissionService.revokeAccess(pgRevoking, docRef, employee.getId());
         } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
             logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
@@ -210,7 +191,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		Object curGroup = after.get(DocumentMembersService.PROP_MEMBER_GROUP);
 		if (before.size() == after.size() && curGroup != prevGroup) {
 			// изменили группу привилегий - меняем имя ноды
-			String newName = documentMembersService.generateMemberNodeName(nodeRef);
+			String newName = generateMemberNodeName(nodeRef);
 			nodeService.setProperty(nodeRef, ContentModel.PROP_NAME, newName);
 		}
 	}
@@ -260,35 +241,10 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         }
     }
 
-    private LecmPermissionGroup getLecmPermissionGroup(NodeRef memberRef) {
-        LecmPermissionGroup pgGranting = null;
-        String permGroup = (String) nodeService.getProperty(memberRef, DocumentMembersService.PROP_MEMBER_GROUP);
-        if (permGroup != null && !permGroup.isEmpty()) {
-            pgGranting = lecmPermissionService.findPermissionGroup(permGroup);
-        }
-        if (pgGranting == null) {
-            pgGranting = lecmPermissionService.findPermissionGroup(this.getGrantAccess());
-        }
-        return pgGranting;
-    }
-
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
 	}
-
-    private synchronized void addMemberToUnit(NodeRef employeeRef, NodeRef document) {
-        NodeRef memberUnit = documentMembersService.getMembersUnit(nodeService.getType(document));
-        try {
-            nodeService.createAssociation(memberUnit, employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);
-        } catch (AssociationExistsException ex) {
-            logger.debug("Сотрудник уже сохранен в участниках документооборота для данного типа документов:" + nodeService.getType(document), ex);
-        }
-    }
-
-    public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
-        this.stateMachineBean = stateMachineBean;
-    }
 
     private boolean hasDoNotAddMemberUpdatedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
         for (QName affected : AFFECTED_NOT_ADD_MEMBER_PROPERTIES) {
@@ -299,5 +255,15 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             }
         }
         return false;
+    }
+
+    private String generateMemberNodeName(NodeRef member) {
+        Object propGroup = nodeService.getProperty(member, DocumentMembersService.PROP_MEMBER_GROUP);
+        String groupName = propGroup != null ? (String) propGroup : "";
+
+        NodeRef employee = findNodeByAssociationRef(member,DocumentMembersService.ASSOC_MEMBER_EMPLOYEE,null,ASSOCIATION_TYPE.TARGET);
+        String propName = employee != null ? (String) nodeService.getProperty(employee, ContentModel.PROP_NAME) : "unnamed";
+
+        return (propName + " " + groupName).trim();
     }
 }

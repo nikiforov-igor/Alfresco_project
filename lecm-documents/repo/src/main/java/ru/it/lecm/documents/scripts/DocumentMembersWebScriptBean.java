@@ -3,16 +3,12 @@ package ru.it.lecm.documents.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: dbashmakov
@@ -36,12 +32,7 @@ public class DocumentMembersWebScriptBean extends BaseWebScript {
         ParameterCheck.mandatory("documentRef", documentRef);
         ParameterCheck.mandatory("employeeRef", employeeRef);
 
-        Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-        if (permGroup != null && !permGroup.isEmpty()) {
-            props.put(DocumentMembersService.PROP_MEMBER_GROUP, permGroup);
-        }
-
-        NodeRef member = documentMembersService.addMember(new NodeRef(documentRef), new NodeRef(employeeRef), props);
+        NodeRef member = documentMembersService.addMember(new NodeRef(documentRef), new NodeRef(employeeRef), permGroup);
         return member != null ? new ScriptNode(member, serviceRegistry, getScope()) : null;
     }
 
@@ -49,6 +40,7 @@ public class DocumentMembersWebScriptBean extends BaseWebScript {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
         ParameterCheck.mandatory("skipItemsCount", skipItemsCount);
         ParameterCheck.mandatory("loadItemsCount", loadItemsCount);
+
         NodeRef documentRef = new NodeRef(documentNodeRef);
         if (this.nodeService.exists(documentRef)) {
             List<NodeRef> members = this.documentMembersService.getDocumentMembers(documentRef, Integer.parseInt(skipItemsCount), Integer.parseInt(loadItemsCount));

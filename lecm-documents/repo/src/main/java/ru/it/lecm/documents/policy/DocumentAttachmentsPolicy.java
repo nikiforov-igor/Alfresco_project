@@ -2,6 +2,7 @@ package ru.it.lecm.documents.policy;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -130,7 +131,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				        return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 					        @Override
 					        public NodeRef execute() throws Throwable {
-						        return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
+						        return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), new HashMap<QName, Serializable>());
 					        }
 				        });
 			        }
@@ -167,7 +168,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 			        return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 				        @Override
 				        public NodeRef execute() throws Throwable {
-					        return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), null);
+					        return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), new HashMap<QName, Serializable>());
 				        }
 			        });
 		        }

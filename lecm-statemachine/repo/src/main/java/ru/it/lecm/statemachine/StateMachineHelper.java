@@ -169,7 +169,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                     return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                         @Override
                         public NodeRef execute() throws Throwable {
-                            return documentMembersService.addMember(packageDocument, assigneeRef, null);
+                            return documentMembersService.addMember(packageDocument, assigneeRef, new HashMap<QName, Serializable>());
                         }
                     });
                 }
@@ -985,7 +985,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                                 return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                                     @Override
                                     public NodeRef execute() throws Throwable {
-                                        return documentMembersService.addMember(document, assignee, null);
+                                        return documentMembersService.addMember(document, assignee, new HashMap<QName, Serializable>());
                                     }
                                 });
                             }
@@ -1057,7 +1057,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                             return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                                 @Override
                                 public NodeRef execute() throws Throwable {
-                                    return documentMembersService.addMember(document, assignee, null);
+                                    return documentMembersService.addMember(document, assignee, new HashMap<QName, Serializable>());
                                 }
                             });
                         }
