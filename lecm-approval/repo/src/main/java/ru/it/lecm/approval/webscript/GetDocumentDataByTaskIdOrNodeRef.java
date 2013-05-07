@@ -20,7 +20,7 @@ import ru.it.lecm.documents.beans.DocumentService;
  *
  * @author vlevin
  */
-public class GetDocumentDataByTaskId extends DeclarativeWebScript {
+public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 
 	private final static String CONTRACT_NAMESPACE = "http://www.it.ru/logicECM/contract/1.0";
 	private final static String CONTRACT_FAKE_NAMESPACE = "http://www.it.ru/logicECM/contract/fake/1.0";
@@ -44,23 +44,30 @@ public class GetDocumentDataByTaskId extends DeclarativeWebScript {
 		Map<String, Object> result = new HashMap<String, Object>();
 		HttpServletRequest request = WebScriptServletRuntime.getHttpServletRequest(req);
 		String taskID = request.getParameter("taskID");
-		if (taskID == null || taskID.isEmpty()) {
-			throw new WebScriptException("Task ID must be supplied");
-		}
+		String nodeRefStr = request.getParameter("nodeRef");
+		if ((nodeRefStr == null || nodeRefStr.isEmpty()) && (taskID != null && !taskID.isEmpty())) {
+			List<NodeRef> packageContents = workflowService.getPackageContents(taskID);
+			for (NodeRef node : packageContents) {
+				QName nodeType = nodeService.getType(node);
+				if (TYPE_CONTRACT_DOCUMENT.isMatch(nodeType)) {
+					documentRef = node;
 
-		List<NodeRef> packageContents = workflowService.getPackageContents(taskID);
-		for (NodeRef node : packageContents) {
-			QName nodeType = nodeService.getType(node);
-			if (TYPE_CONTRACT_DOCUMENT.isMatch(nodeType)) {
-				documentRef = node;
+					break;
+				} else if (TYPE_CONTRACT_FAKE_DOCUMENT.isMatch(nodeType)) {
+					documentRef = node;
 
-				break;
-			} else if (TYPE_CONTRACT_FAKE_DOCUMENT.isMatch(nodeType)) {
-				documentRef = node;
-
-				break;
+					break;
+				}
 			}
+		} else if ((taskID == null || taskID.isEmpty()) && (nodeRefStr != null && !nodeRefStr.isEmpty())) {
+			if (NodeRef.isNodeRef(nodeRefStr)) {
+				documentRef = new NodeRef(nodeRefStr);
+			}
+		} else {
+			throw new WebScriptException("Task ID or NodeRef must be supplied");
 		}
+
+
 		if (documentRef == null) {
 			throw new WebScriptException("No document attached");
 		}

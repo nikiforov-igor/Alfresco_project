@@ -3,7 +3,7 @@
 	<config>
 		<forms>
 			<dependencies>
-				  <js src="/scripts/lecm-approval/activiti-transitions-radiobuttons.js"/>
+				<js src="/scripts/lecm-approval/activiti-transitions-radiobuttons.js"/>
 			</dependencies>
 		</forms>
 	</config>
@@ -13,15 +13,13 @@
 			<form>
 				<field-visibility>
 					<show id="bpm:workflowDueDate"/>
-					<show id="bpm:workflowDescription" />
 					<show id="lecmPar:employeesAssoc"/>
 					<show id="packageItems"/>
+					<show id="bpm:workflowDescription" />
 				</field-visibility>
 				<appearance>
 					<field id="bpm:workflowDescription" labelid="workflow.field.message">
-						<control template="/org/alfresco/components/form/controls/textarea.ftl">
-							<control-param name="style">width: 95%</control-param>
-						</control>
+						<control template="/ru/it/lecm/approval/controls/document-present-string-hidden.ftl"/>
 					</field>
 
 					<field id="bpm:workflowDueDate" mandatory="true"/>
@@ -73,15 +71,13 @@
 			<form>
 				<field-visibility>
 					<show id="bpm:workflowDueDate"/>
-					<show id="bpm:workflowDescription" />
 					<show id="lecmSeq:employeesAssoc"/>
 					<show id="packageItems"/>
+					<show id="bpm:workflowDescription" />
 				</field-visibility>
 				<appearance>
 					<field id="bpm:workflowDescription" labelid="workflow.field.message">
-						<control template="/org/alfresco/components/form/controls/textarea.ftl">
-							<control-param name="style">width: 95%</control-param>
-						</control>
+						<control template="/ru/it/lecm/approval/controls/document-present-string-hidden.ftl"/>
 					</field>
 
 					<field id="bpm:workflowDueDate" mandatory="true"/>
@@ -153,15 +149,15 @@
 					<show id="lecm-al:approval-list-approve-date"/>
 					<show id="lecm-al:approval-list-contains-approval-item"/>
 					<show id="lecm-al:approval-list-decision"/>
-                    <show id="lecm-al:printBtn"/>
+					<show id="lecm-al:printBtn"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-al:approval-list-contains-approval-item">
 						<control template="/ru/it/lecm/approval/controls/approval-list.ftl"/>
 					</field>
-                    <field id="lecm-al:printBtn">
-                        <control template="/ru/it/lecm/approval/controls/printListBtn.ftl"/>
-                    </field>
+					<field id="lecm-al:printBtn">
+						<control template="/ru/it/lecm/approval/controls/printListBtn.ftl"/>
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -194,46 +190,46 @@
 		</forms>
 	</config>
 
-    <config evaluator="string-compare" condition="activiti$approvalTermination">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="warning"/>
-                    <show id="packageItems"/>
-                </field-visibility>
-                <appearance>
-                    <field id="warning">
-                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
-                            <control-param name="msg">ru.it.approval.terminate</control-param>
-                        </control>
-                    </field>
-                    <field id="packageItems">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
+	<config evaluator="string-compare" condition="activiti$approvalTermination">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="warning"/>
+					<show id="packageItems"/>
+				</field-visibility>
+				<appearance>
+					<field id="warning">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">ru.it.approval.terminate</control-param>
+						</control>
+					</field>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 
-    <config evaluator="string-compare" condition="activiti$approvalForce">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="warning"/>
-                    <show id="packageItems"/>
-                </field-visibility>
-                <appearance>
-                    <field id="warning">
-                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
-                            <control-param name="msg">ru.it.approval.force</control-param>
-                        </control>
-                    </field>
-                    <field id="packageItems">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
+	<config evaluator="string-compare" condition="activiti$approvalForce">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="warning"/>
+					<show id="packageItems"/>
+				</field-visibility>
+				<appearance>
+					<field id="warning">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">ru.it.approval.force</control-param>
+						</control>
+					</field>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 
 </alfresco-config>
