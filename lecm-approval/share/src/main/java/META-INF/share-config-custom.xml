@@ -193,4 +193,47 @@
 			</dependencies>
 		</forms>
 	</config>
+
+    <config evaluator="string-compare" condition="activiti$approvalTermination">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="warning"/>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="warning">
+                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+                            <control-param name="msg">ru.it.approval.terminate</control-param>
+                        </control>
+                    </field>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$approvalForce">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="warning"/>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="warning">
+                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+                            <control-param name="msg">ru.it.approval.force</control-param>
+                        </control>
+                    </field>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
 </alfresco-config>

@@ -81,4 +81,7 @@ public interface StateMachineServiceBean {
     public boolean isFinal(NodeRef document);
 
     List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser);
+
+    public void terminateWorkflowsByDefinitionId(NodeRef document, List<String> definitionIds, String variable, Object value);
+
 }

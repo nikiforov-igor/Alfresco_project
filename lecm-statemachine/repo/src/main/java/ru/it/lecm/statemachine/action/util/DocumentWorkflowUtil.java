@@ -37,6 +37,7 @@ public class DocumentWorkflowUtil {
 			}
 			JSONObject descriptorJSON = new JSONObject();
 			descriptorJSON.put("statemachineExecutionId", descriptor.getStatemachineExecutionId());
+			descriptorJSON.put("workflowId", descriptor.getWorkflowId());
 			descriptorJSON.put("startTaskId", descriptor.getStartTaskId());
 			descriptorJSON.put("actionName", descriptor.getActionName());
 			descriptorJSON.put("actionId", descriptor.getActionId());
@@ -59,6 +60,7 @@ public class DocumentWorkflowUtil {
 			WorkflowDescriptor descriptor = new WorkflowDescriptor(
                     executionId,
 					workflow.getString("statemachineExecutionId"),
+					workflow.getString("workflowId"),
 					workflow.getString("startTaskId"),
 					workflow.getString("actionName"),
 					workflow.getString("actionId"),

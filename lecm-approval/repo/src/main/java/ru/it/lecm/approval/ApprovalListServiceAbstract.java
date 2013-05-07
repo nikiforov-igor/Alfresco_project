@@ -1,14 +1,5 @@
 package ru.it.lecm.approval;
 
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
@@ -27,13 +18,17 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.approval.api.ApprovalListService;
-import static ru.it.lecm.approval.api.ApprovalListService.PROP_APPROVAL_LIST_APPROVE_DATE;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -257,7 +252,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	 * @param bpmPackage
 	 * @return
 	 */
-	protected NodeRef getDocumentFromBpmPackage(final NodeRef bpmPackage) {
+	public NodeRef getDocumentFromBpmPackage(final NodeRef bpmPackage) {
 		NodeRef documentRef = null;
 //		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage, TYPE_CONTRACT_FAKE_DOCUMENT, RegexQNamePattern.MATCH_ALL);
 		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage);

@@ -1,9 +1,5 @@
 package ru.it.lecm.approval.extensions;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
@@ -20,6 +16,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension {
 
@@ -30,6 +32,12 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	private ServiceRegistry serviceRegistry;
 	private OrgstructureBean orgstructureService;
 	private ApprovalListService approvalListService;
+	private StateMachineServiceBean stateMachineHelper;
+
+
+    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
+    }
 
 	public void setAuthenticationService(AuthenticationService authenticationService) {
 		this.authenticationService = authenticationService;
@@ -172,4 +180,13 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	public void notifyFinalDecision(final String decision, final ActivitiScriptNode bpmPackage) {
 		approvalListService.notifyFinalDecision(decision, bpmPackage.getNodeRef());
 	}
+
+    public void terminateApproval(ActivitiScriptNode bpmPackage, String variable, Object value) {
+        NodeRef document = approvalListService.getDocumentFromBpmPackage(bpmPackage.getNodeRef());
+        ArrayList<String> definitions = new ArrayList<String>();
+        definitions.add("lecmParallelApproval");
+        definitions.add("lecmSequentialApproval");
+        stateMachineHelper.terminateWorkflowsByDefinitionId(document, definitions, variable, value);
+    }
+
 }

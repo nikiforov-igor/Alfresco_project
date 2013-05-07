@@ -4,14 +4,16 @@ public class WorkflowDescriptor {
 
 	private String executionId;
 	private String statemachineExecutionId;
+	private String workflowId;
 	private String startTaskId;
 	private String actionName;
 	private String actionId;
 	private String eventName;
 
-	public WorkflowDescriptor(String executionId, String statemachineExecutionId, String startTaskId, String actionName, String actionId, String eventName) {
+	public WorkflowDescriptor(String executionId, String statemachineExecutionId, String workflowId, String startTaskId, String actionName, String actionId, String eventName) {
         this.executionId = executionId;
         this.statemachineExecutionId = statemachineExecutionId;
+        this.workflowId = workflowId;
 		this.startTaskId = startTaskId;
 		this.actionName = actionName;
 		this.actionId = actionId;
@@ -26,7 +28,11 @@ public class WorkflowDescriptor {
 		return statemachineExecutionId;
 	}
 
-	public String getStartTaskId() {
+    public String getWorkflowId() {
+        return workflowId;
+    }
+
+    public String getStartTaskId() {
 		return startTaskId;
 	}
 

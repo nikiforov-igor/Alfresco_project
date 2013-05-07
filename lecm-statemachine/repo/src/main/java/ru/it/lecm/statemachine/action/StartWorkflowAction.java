@@ -77,7 +77,7 @@ public class StartWorkflowAction extends StateMachineAction {
 						String executionId = helper.startUserWorkflowProcessing(currentTaskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee);
 						helper.setInputVariables(stateMachineExecutionId, executionId, localVariables.getInput());
 						//Обозначить запуск процесса в документе
-						WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, stateMachineExecutionId, currentTaskId, actionName, id, eventName);
+						WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, stateMachineExecutionId, workflowId, currentTaskId, actionName, id, eventName);
 						new DocumentWorkflowUtil().addWorkflow(document, executionId, descriptor);
 
                         helper.logStartWorkflowEvent(document, executionId);

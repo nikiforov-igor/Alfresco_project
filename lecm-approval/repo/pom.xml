@@ -67,6 +67,12 @@
 			<version>0.1.0</version>
 			<scope>provided</scope>
 		</dependency>
+        <dependency>
+            <groupId>ru.it.lecm.statemachine</groupId>
+            <artifactId>statemachine-api</artifactId>
+            <version>0.1.0</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 	<!--
 		The scm is required for the buildnumber-maven-plugin which is required

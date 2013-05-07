@@ -6,10 +6,12 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.bpmn.behavior.NoneEndEventActivityBehavior;
 import org.activiti.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.runtime.AtomicOperation;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -434,7 +436,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
         TaskQuery taskQuery = taskService.createTaskQuery();
         Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
-        return task.getExecutionId();
+        return task == null ? null : task.getExecutionId();
     }
 
     public void setInputVariables(String stateMachineExecutionId, String workflowExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
@@ -760,6 +762,59 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     @Override
+    public void terminateWorkflowsByDefinitionId(NodeRef document, List<String> definitionIds, String variable, Object value) {
+        if (definitionIds == null || definitionIds.size() == 0) return;
+        DocumentWorkflowUtil utils = new DocumentWorkflowUtil();
+        List<WorkflowDescriptor> descriptors = utils.getWorkflowDescriptors(document);
+        for (String definitionId : definitionIds) {
+            definitionId = ACTIVITI_PREFIX + definitionId.replace(ACTIVITI_PREFIX, "");
+            for (WorkflowDescriptor descriptor : descriptors) {
+                if (definitionId.equals(descriptor.getWorkflowId())) {
+                    WorkflowInstance instance = serviceRegistry.getWorkflowService().getWorkflowById(descriptor.getExecutionId());
+                    if (instance != null && instance.isActive()) {
+                        ExecutionEntity execution = (ExecutionEntity) activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(descriptor.getExecutionId().replace(ACTIVITI_PREFIX, "")).singleResult();
+                        //Изменяем переменную в процессе
+                        if (variable != null && value != null) {
+                            activitiProcessEngineConfiguration.getRuntimeService().setVariable(execution.getId(), variable, value);
+                        }
+
+                        //Завершаем все активные задачи
+                        String processId = execution.getProcessInstanceId();
+                        List<Execution> executionEntities = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().processInstanceId(processId).list();
+                        for (Execution executionEntity : executionEntities) {
+                            ExecutionEntity ee = (ExecutionEntity) executionEntity;
+                            if (ee.isActive()) {
+                                ee.performOperation(AtomicOperation.DELETE_CASCADE);
+                            }
+                        }
+
+                        //Завершаем процесс
+                        ExecutionEntity process = (ExecutionEntity) activitiProcessEngineConfiguration.getRuntimeService().createProcessInstanceQuery().processInstanceId(processId).singleResult();
+                        ProcessDefinitionEntity definition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(process.getProcessDefinitionId());
+                        List<ActivityImpl> activities = definition.getActivities();
+                        ActivityImpl endActivity = null;
+                        for (ActivityImpl activity : activities) {
+                            if (activity.getActivityBehavior() instanceof NoneEndEventActivityBehavior) {
+                                endActivity = activity;
+                            }
+                        }
+                        if (endActivity != null) {
+                            process.setProcessDefinition(definition);
+                            process.setActivity(endActivity);
+                            try {
+                                process.end();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser) {
         List<WorkflowTask> assignedTasks = serviceRegistry.getWorkflowService().getAssignedTasks(fullyAuthenticatedUser,
                 WorkflowTaskState.IN_PROGRESS);
@@ -916,7 +971,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
                 String dependencyExecution = parseExecutionId(persistedResponse);
                 if (dependencyExecution != null) {
-                    WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
+                    WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, nextState.getWorkflowId(), taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
                     new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
                     setInputVariables(statemachineId, dependencyExecution, nextState.getVariables().getInput());
 
@@ -987,7 +1042,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 String dependencyExecution = parseExecutionId(persistedResponse);
 
                 //TODO: check dependencyExecution!!!
-                WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, taskId, StateMachineActions.getActionName(UserWorkflow.class), actionId, ExecutionListener.EVENTNAME_TAKE);
+                WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, workflow.getWorkflowId(), taskId, StateMachineActions.getActionName(UserWorkflow.class), actionId, ExecutionListener.EVENTNAME_TAKE);
                 new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
 
                 helper.setInputVariables(statemachineId, dependencyExecution, workflow.getVariables().getInput());

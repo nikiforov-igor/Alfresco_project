@@ -33,12 +33,25 @@
 					<prop key="#{MIMETYPE}">text/xml</prop>
 					<prop key="#{REDEPLOY}">true</prop>
 				</props>
+                <props>
+                    <prop key="#{ENGINE_ID}">activiti</prop>
+                    <prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/approval-termination.bpmn20.xml</prop>
+                    <prop key="#{MIMETYPE}">text/xml</prop>
+                    <prop key="#{REDEPLOY}">true</prop>
+                </props>
+                <props>
+                    <prop key="#{ENGINE_ID}">activiti</prop>
+                    <prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/approval-force.bpmn20.xml</prop>
+                    <prop key="#{MIMETYPE}">text/xml</prop>
+                    <prop key="#{REDEPLOY}">true</prop>
+                </props>
 			</list>
 		</property>
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-parallel-approval-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-sequential-approval-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-terminate-approval-model.xml</value>
 			</list>
 		</property>
         <property name="labels">
@@ -75,6 +88,7 @@
 		  parent="lecm.approval.javascriptExtension.abstract">
 		<property name="extensionName" value="approvalParallel"/>
 		<property name="approvalListService" ref="lecm.approval.service.parallel"/>
+        <property name="stateMachineHelper" ref="stateMachineHelper"/>
 	</bean>
 
 	<bean id="lecm.approval.javascriptExtension.sequential" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension"

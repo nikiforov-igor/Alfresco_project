@@ -1,10 +1,10 @@
 package ru.it.lecm.approval.api;
 
-import java.util.Date;
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONObject;
+
+import java.util.Date;
 
 /**
  *
@@ -56,4 +56,12 @@ public interface ApprovalListService {
 	 * @param bpmPackage
 	 */
 	void notifyFinalDecision(final String decision, final NodeRef bpmPackage);
+
+    /**
+     * получение ссылки на документ через переменную регламента bpm_package
+     * @param bpmPackage
+     * @return
+     */
+    public NodeRef getDocumentFromBpmPackage(final NodeRef bpmPackage);
+
 }
