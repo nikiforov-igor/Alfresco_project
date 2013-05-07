@@ -17,9 +17,9 @@ import ru.it.lecm.approval.api.ApprovalListService;
  *
  * @author vlevin
  */
-public class ApprovalListApprovalItemPolicy implements NodeServicePolicies.OnCreateNodePolicy {
+public class ApprovalListItemPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 
-	private final static Logger logger = LoggerFactory.getLogger(ApprovalListApprovalItemPolicy.class);
+	private final static Logger logger = LoggerFactory.getLogger(ApprovalListItemPolicy.class);
 
 	private PolicyComponent policyComponent;
 	private NodeService nodeService;

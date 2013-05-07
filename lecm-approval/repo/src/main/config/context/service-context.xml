@@ -83,7 +83,7 @@
 		<property name="approvalListService" ref="lecm.approval.service.sequential"/>
 	</bean>
 
-	<bean id="lecm.approval.ApprovalListApprovalItemPolicy" class="ru.it.lecm.approval.policies.ApprovalListApprovalItemPolicy" init-method="init"
+	<bean id="lecm.approval.ApprovalListItemPolicy" class="ru.it.lecm.approval.policies.ApprovalListItemPolicy" init-method="init"
 		  depends-on="lecm.approval.modelBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
