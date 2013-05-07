@@ -3133,7 +3133,59 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>67877909-a364-4b78-84f5-e35482dbb381</name>
+														<nodeRef>
+															workspace://SpacesStore/83ab4013-0b43-45a5-a8e9-2698829fbdfb
+														</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value>activiti$approvalTermination</value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value>Отозвать с согласования</value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>361c5be8-5e8e-4b00-9d55-39da2b4b7339</name>
+														<nodeRef>
+															workspace://SpacesStore/c1e8b08a-13f5-43cb-bbeb-435a90172a90
+														</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value>activiti$approvalForce</value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value>Принудительно завершить согласования</value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>StartWorkflow</type>
