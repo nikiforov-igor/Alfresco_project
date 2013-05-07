@@ -28,13 +28,44 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.alfresco.repo.workflow.WorkflowModel;
+import org.alfresco.service.cmr.workflow.WorkflowInstance;
+import org.alfresco.service.cmr.workflow.WorkflowService;
+import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
+import org.alfresco.service.cmr.workflow.WorkflowTaskState;
+import org.apache.commons.lang.time.DateUtils;
 
 /**
  *
  * @author vlevin
  */
 public abstract class ApprovalListServiceAbstract extends BaseBean implements ApprovalListService {
+
+	private final static class Assignee {
+		private final NodeRef employee;
+		private final Date dueDate;
+
+		Assignee(final NodeRef employee, final Date dueDate) {
+			this.employee = employee;
+			this.dueDate = dueDate;
+		}
+
+		NodeRef getEmployee() {
+			return employee;
+		}
+
+		Date getDueDate() {
+			return dueDate;
+		}
+	}
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceAbstract.class);
 	private final static String CONTRACT_NAMESPACE = "http://www.it.ru/logicECM/contract/1.0";
@@ -53,6 +84,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	private DocumentAttachmentsService documentAttachmentsService;
     private DocumentMembersService documentMembersService;
 	private NotificationsService notificationsService;
+	private WorkflowService workflowService;
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -73,6 +105,10 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
+	}
+
+	public void setWorkflowService(WorkflowService workflowService) {
+		this.workflowService = workflowService;
 	}
 
 	/**
@@ -237,7 +273,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		properties.put(ContentModel.PROP_NAME, localName);
 		properties.put(ContentModel.PROP_TITLE, localName);
-		properties.put(PROP_APPROVAL_LIST_APPROVE_START, new Date()); //TODO: брать дату начала согласования из регламента
+		properties.put(PROP_APPROVAL_LIST_APPROVE_START, DateUtils.truncate(new Date(), Calendar.DATE));
 		properties.put(PROP_APPROVAL_LIST_DOCUMENT_VERSION, contractDocumentVersion);
 		QName assocQName = QName.createQName(APPROVAL_LIST_NAMESPACE, localName);
 		NodeRef approvalListRef = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_APPROVAL_LIST, properties).getChildRef();
@@ -252,6 +288,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	 * @param bpmPackage
 	 * @return
 	 */
+	@Override
 	public NodeRef getDocumentFromBpmPackage(final NodeRef bpmPackage) {
 		NodeRef documentRef = null;
 //		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage, TYPE_CONTRACT_FAKE_DOCUMENT, RegexQNamePattern.MATCH_ALL);
@@ -292,6 +329,8 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 	@Override
 	public void logDecision(final NodeRef approvalListRef, final JSONObject taskDecision) {
+		Date startDate = null;
+		Date dueDate= null;
 		Date completionDate = null;
 		String comment = null;
 		String decision = null;
@@ -301,8 +340,9 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		NodeRef commentRef = null;
 
 		try {
-//			completionDate = taskDecision.get
-			completionDate = new Date();
+			startDate =  DateUtils.truncate(new Date(taskDecision.getLong("startDate")), Calendar.DATE);
+			dueDate = DateUtils.truncate(new Date(taskDecision.getLong("dueDate")), Calendar.DATE);
+			completionDate = DateUtils.truncate(new Date(), Calendar.DATE);
 			comment = taskDecision.getString("comment");
 			decision = taskDecision.getString("decision");
 
@@ -320,6 +360,8 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		String itemName = "Согласующий " + username;
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		properties.put(ContentModel.PROP_NAME, itemName);
+		properties.put(PROP_APPROVAL_ITEM_START_DATE, startDate);
+		properties.put(PROP_APPROVAL_ITEM_DUE_DATE, dueDate);
 		properties.put(PROP_APPROVAL_ITEM_APPROVE_DATE, completionDate);
 		properties.put(PROP_APPROVAL_ITEM_COMMENT, comment);
 		properties.put(PROP_APPROVAL_ITEM_DECISION, decision);
@@ -460,6 +502,39 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
         notification.setObjectRef(documentRef);
 		notification.setRecipientEmployeeRefs(recipients);
 		notificationsService.sendNotification(notificationChannels, notification);
+	}
+
+	private List<Assignee> getAssigneesFromIncompleteTasks(final String processInstanceId) {
+		WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
+		taskQuery.setProcessId(processInstanceId);
+		taskQuery.setTaskState(WorkflowTaskState.IN_PROGRESS);
+		List<WorkflowTask> tasks = workflowService.queryTasks(taskQuery);
+		List<Assignee> assignees = new ArrayList<Assignee>(tasks.size());
+		for (WorkflowTask task : tasks) {
+			logger.trace(task.toString());
+			Date dueDate = DateUtils.truncate((Date)task.getProperties().get(WorkflowModel.PROP_DUE_DATE), Calendar.DATE);
+			String owner = (String)task.getProperties().get(ContentModel.PROP_OWNER);
+			NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
+			assignees.add(new Assignee(employee, dueDate));
+		}
+		return assignees;
+	}
+
+	private void notifyComingSoonAssignee(Assignee assignee) {
+	}
+
+	@Override
+	public void notifyComingSoonAssignees(final String processInstanceId) {
+		WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
+		List<Assignee> assignees = getAssigneesFromIncompleteTasks(processInstanceId);
+		for (Assignee assignee : assignees) {
+			notifyComingSoonAssignee(assignee);
+		}
+	}
+
+	@Override
+	public void notifyComingSoonInitiator(final String processInstanceId) {
+		WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
 	}
 }
 

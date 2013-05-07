@@ -16,6 +16,8 @@ public interface ApprovalListService {
 	QName TYPE_APPROVAL_ITEM = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item");
 	QName TYPE_APPROVAL_LIST = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-list");
 	QName PROP_APPROVAL_ITEM_DECISION = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-decision");
+	QName PROP_APPROVAL_ITEM_START_DATE = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-start-date");
+	QName PROP_APPROVAL_ITEM_DUE_DATE = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-due-date");
 	QName PROP_APPROVAL_ITEM_APPROVE_DATE = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-approve-date");
 	QName PROP_APPROVAL_ITEM_COMMENT = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-comment");
 	QName PROP_APPROVAL_LIST_DECISION = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-list-decision");
@@ -62,6 +64,9 @@ public interface ApprovalListService {
      * @param bpmPackage
      * @return
      */
-    public NodeRef getDocumentFromBpmPackage(final NodeRef bpmPackage);
+    NodeRef getDocumentFromBpmPackage(final NodeRef bpmPackage);
 
+	void notifyComingSoonAssignees(final String processInstanceId);
+
+	void notifyComingSoonInitiator(final String processInstanceId);
 }

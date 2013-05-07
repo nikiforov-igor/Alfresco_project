@@ -49,6 +49,26 @@
 						</constraint>
 					</constraints>
 				</property>
+				<!-- дата начала согласования -->
+				<property name="lecm-al:approval-item-start-date">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- срок согласования сотрудником -->
+				<property name="lecm-al:approval-item-due-date">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 				<!-- дата согласования сотрудником -->
 				<property name="lecm-al:approval-item-approve-date">
 					<type>d:date</type>

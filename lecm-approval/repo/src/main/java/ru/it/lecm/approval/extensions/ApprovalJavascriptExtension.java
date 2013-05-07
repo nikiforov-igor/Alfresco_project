@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	private OrgstructureBean orgstructureService;
 	private ApprovalListService approvalListService;
 	private StateMachineServiceBean stateMachineHelper;
+	private WorkflowService workflowService;
 
 
     public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
@@ -61,6 +63,10 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 
 	public void setApprovalListService(ApprovalListService approvalListService) {
 		this.approvalListService = approvalListService;
+	}
+
+	public void setWorkflowService(WorkflowService workflowService) {
+		this.workflowService = workflowService;
 	}
 
 	public ActivitiScriptNode getCurrentAuthenticatedPerson() {
@@ -188,5 +194,23 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
         definitions.add("lecmSequentialApproval");
         stateMachineHelper.terminateWorkflowsByDefinitionId(document, definitions, variable, value);
     }
+
+	/**
+	 * если до наступления срока согласования остались сутки или меньше,
+	 * то уведомить исполнителей и инициатора согласования о том,
+	 * что необходимо принять решение
+	 * @param processInstanceId ИД работающего процесса согласования
+	 */
+	public void notifyComingSoonTasks(final String processInstanceId) {
+	}
+
+	/**
+	 * если срок согласования наступил, а решение не было принято,
+	 * то уведомить исполнителей, инициатора и куратора согласования о том,
+	 * что документ не был согласован в срок
+	 * @param processInstanceId ИД работающего процесса согласования
+	 */
+	public void notifyOverdueTasks(final String processInstanceId) {
+	}
 
 }

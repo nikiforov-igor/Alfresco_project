@@ -23,18 +23,21 @@
 
 							var userName = assignee.properties.userName;
 							var decision = task.getVariableLocal("lecmPar_approveTaskResult");
-							var completionDate = task.getVariableLocal("bpm_completionDate");
+							var startDate = task.getCreateTime().getTime();
+							var dueDate = task.getDueDate().getTime();
 							var comment = task.getVariableLocal("bpm_comment");
 							var commentRef = task.getVariableLocal("lecmPar_approveTaskCommentAssoc");
 							logger.log("userName = " + userName);
 							logger.log("decision = " + decision);
-							logger.log("completionDate = " + completionDate);
+							logger.log("startDate = " + startDate);
+							logger.log("dueDate = " + dueDate);
 							logger.log("comment = " + comment);
 							logger.log("commentRef = " + commentRef);
 							var taskDecision = {
 								"userName": userName,
 								"decision": decision,
-								"completionDate": completionDate,
+								"startDate": startDate,
+								"dueDate": dueDate,
 								"comment": comment,
 								"commentRef": commentRef
 							};
@@ -82,7 +85,9 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-						logger.log("Hello from Timer1");
+						var workflowId = "activiti$" + execution.getProcessInstanceId();
+						approvalParallel.notifyComingSoonTasks(workflowId);
+						approvalParallel.notifyOverdueTasks(workflowId);
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>
