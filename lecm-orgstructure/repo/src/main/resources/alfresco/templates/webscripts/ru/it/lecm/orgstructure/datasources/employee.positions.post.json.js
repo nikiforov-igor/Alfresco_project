@@ -4,7 +4,7 @@
 const DEFAULT_MAX_RESULTS = 3000;
 function main() {
     var params = {};
-    var staffs = [];
+    var positionList = [];
     var fields;
     var nameSubstituteStrings;
     var maxResults;
@@ -16,10 +16,10 @@ function main() {
         maxResults = (pars.get("maxResults") !== null) ? parseInt(pars.get("maxResults"), 10) : DEFAULT_MAX_RESULTS;
 
         var employeeRef = (pars.get("parent").length() > 0)  ? pars.get("parent") : null;
-        staffs = orgstructure.getEmployeeStaffs(employeeRef);
+        positionList = orgstructure.getPositionList(employeeRef);
     }
 
-    model.data = processResults(staffs, fields, nameSubstituteStrings, 0, staffs.length); // call method from search.lib.js
+    model.data = processResults(positionList, fields, nameSubstituteStrings, 0, positionList.length); // call method from search.lib.js
 }
 
 main();

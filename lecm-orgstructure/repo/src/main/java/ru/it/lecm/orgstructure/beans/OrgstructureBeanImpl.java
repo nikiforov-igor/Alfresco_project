@@ -1492,4 +1492,50 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	public NodeRef getServiceRootFolder() {
 		return getFolder(ORGANIZATION_ROOT_ID);
 	}
+
+    public NodeRef getPrimaryOrgUnit(NodeRef employeeRef){
+        NodeRef unit = null;
+        if (nodeService.exists(employeeRef)) {
+            if (isEmployee(employeeRef)) {
+                // получаем основную должностную позицию
+                NodeRef primaryStaff = getEmployeePrimaryStaff(employeeRef);
+                if (primaryStaff != null) {
+                    // получаем подразделение
+                    unit = getUnitByStaff(primaryStaff);
+                }
+            }
+        }
+        return unit;
+    }
+
+    public boolean isBossOf(NodeRef bossRef, NodeRef subordinateRef, boolean checkPrimary) {
+        NodeRef unit = null;
+        Set<NodeRef> employees = new HashSet<NodeRef> ();
+
+        if (checkPrimary) {
+            if (nodeService.exists(bossRef)) {
+                if (isEmployee(bossRef)) {
+                    //проверка является ли боссом по основной должностной позиции
+                    if (isBoss(bossRef)){
+                        // получаем подразделение где сотрудник числится на основной должностной позиции
+                        unit = getPrimaryOrgUnit(bossRef);
+                        if (unit != null) {
+                            //берем сотрудников из непосредственно этого подразделения
+                            employees.addAll (getOrganizationElementEmployees(unit));
+                            //берем все дочерние подразделения и собираем сотрудников уже из них
+                            List<NodeRef> subUnits = getSubUnits (unit, true, true);
+                            for (NodeRef subUnitRef : subUnits) {
+                                employees.addAll (getOrganizationElementEmployees (subUnitRef));
+                            }
+                            //начальника выгоняем из множества сотрудников
+                            employees.remove(bossRef);
+                        }
+                    }
+                }
+            }
+            return employees.contains(subordinateRef);
+        } else {
+            return hasSubordinate(bossRef, subordinateRef);
+        }
+    }
 }

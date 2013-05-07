@@ -4,6 +4,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeJavaObject;
+import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -93,4 +96,57 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 		}
 		return service.sendNotification(notf);
 	}
+
+    /**
+     * Отправка уведомлений
+     * @param employee Список ссылок на получателей (пользователей).
+     * @param description текст сообщения
+     * @param channels перечень каналов
+     * @param objectRef
+     * @return true - при успешной отправке иначе false
+     */
+    public boolean sendNotification(Scriptable employee, String description, Scriptable channels, String objectRef) {
+        Notification notification = new Notification();
+
+        ArrayList<String> recipientsArray = getArraysList(Context.getCurrentContext().getElements(employee));
+        ArrayList<String> channelsArray = getArraysList(Context.getCurrentContext().getElements(channels));
+
+        notification.setAutor("WebScript");
+
+        if (recipientsArray != null) {
+            List<NodeRef> recipientRefsList = new ArrayList<NodeRef>();
+
+            for (int i = 0; i < recipientsArray.size(); ++i) {
+                NodeRef nodeRef = new NodeRef(recipientsArray.get(i));
+                if (nodeRef != null && serviceRegistry.getNodeService().exists(nodeRef) && service.getOrgstructureService().isEmployee(nodeRef)) {
+                    recipientRefsList.add(nodeRef);
+                }
+            }
+            notification.setRecipientEmployeeRefs(recipientRefsList);
+        }
+
+        if (objectRef != null) {
+            NodeRef nodeRef =  new NodeRef (objectRef);
+            if (nodeRef != null && serviceRegistry.getNodeService().exists(nodeRef)) {
+                notification.setObjectRef(nodeRef);
+            }
+        }
+
+        notification.setDescription(description);
+
+        return service.sendNotification(channelsArray,notification);
+    }
+
+    private ArrayList<String> getArraysList(Object[] object){
+        ArrayList<String> arrayList = new ArrayList<String>();
+        for (Object obj : object) {
+            if (obj instanceof NativeJavaObject) {
+                NativeJavaObject element = (NativeJavaObject) obj;
+                arrayList.add((String) element.unwrap());
+            } else if (obj instanceof String){
+                arrayList.add(obj.toString());
+            }
+        }
+        return arrayList;
+    }
 }

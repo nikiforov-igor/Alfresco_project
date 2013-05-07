@@ -601,4 +601,20 @@ public interface OrgstructureBean {
      * @return
      */
     List<NodeRef> getNodeRefEmployees(NodeRef nodeRef);
+
+    /**
+     * Получение подразделения, где сотрудник числится на основной должностной позиции
+     * @param employeeRef ссылка на сотрудника
+     * @return unit
+     */
+    NodeRef getPrimaryOrgUnit(NodeRef employeeRef);
+
+    /**
+     * имеет ли текущий пользователь у себя в подчинении другого пользователя
+     * @param bossRef руководитель
+     * @param subordinateRef сотрудник
+     * @param checkPrimary если true - учитывается только руководство по основной должностной позиции
+     * @return true, если сотрудник  bossRef является руководителем сотрудника subordinateRef.
+     */
+    boolean isBossOf(NodeRef bossRef, NodeRef subordinateRef, boolean checkPrimary);
 }

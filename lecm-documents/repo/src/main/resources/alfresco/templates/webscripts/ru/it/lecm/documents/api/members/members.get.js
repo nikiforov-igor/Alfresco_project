@@ -8,8 +8,8 @@ try {
     for (var index in members) {
         var member = members[index];
         var employee = member.assocs["lecm-doc-members:employee-assoc"][0];
-        var mainJob = orgstructure.getMainJob(employee.nodeRef);
-        member.properties["employeePosition"] = mainJob != null ? mainJob.assocs["lecm-orgstr:element-member-position-assoc"][0].getName() : "";
+        var primaryPosition = orgstructure.getPrimaryPosition(employee.nodeRef);
+        member.properties["employeePosition"] = primaryPosition != null ? primaryPosition.assocs["lecm-orgstr:element-member-position-assoc"][0].getName() : "";
         member.properties["employeeFIO"] = employee.properties["lecm-orgstr:employee-last-name"] + " " + employee.properties["lecm-orgstr:employee-first-name"] + " " + employee.properties["lecm-orgstr:employee-middle-name"];
         member.properties["employeeRef"] = employee.nodeRef.toString();
         membersArray.push({

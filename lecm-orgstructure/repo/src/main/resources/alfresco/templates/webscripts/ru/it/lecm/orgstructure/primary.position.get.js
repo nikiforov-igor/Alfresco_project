@@ -1,0 +1,1 @@
+model.position = orgstructure.getPrimaryPosition(args["nodeRef"]);

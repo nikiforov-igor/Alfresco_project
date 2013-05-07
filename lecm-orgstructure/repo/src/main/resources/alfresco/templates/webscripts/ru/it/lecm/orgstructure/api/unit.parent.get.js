@@ -1,1 +1,1 @@
-model.unit = orgstructure.getParent(args["nodeRef"]);
+model.unit = orgstructure.getParentUnit(args["nodeRef"],false);

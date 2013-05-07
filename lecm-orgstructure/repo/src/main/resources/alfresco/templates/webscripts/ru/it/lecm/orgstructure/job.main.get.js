@@ -1,1 +1,0 @@
-model.mainjob = orgstructure.getMainJob(args["nodeRef"]);

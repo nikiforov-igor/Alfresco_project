@@ -261,12 +261,17 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 
 	/**
 	 * Получение вышестоящего подразделения
-	 */
-	public ScriptNode getParent(String nodeRef) {
+     * @param nodeRef подразделение
+     * @param returnSelf возвращать ссылку на самого себя, если подразделение является корнем
+     * @return
+     */
+	public ScriptNode getParentUnit(String nodeRef, boolean returnSelf) {
 		NodeRef parent = orgstructureService.getParentUnit(new NodeRef(nodeRef));
 		if (parent != null) {
 			return new ScriptNode(parent, serviceRegistry, getScope());
-		}
+		} else if (returnSelf) {
+            return new ScriptNode(new NodeRef(nodeRef), serviceRegistry, getScope());
+        }
 		return null;
 	}
 
@@ -481,7 +486,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	/**
 	 * Получение должностных позиций, занимаемых сотрудником
 	 */
-	public Scriptable getEmployeeStaffs(String employeeRef) {
+	public Scriptable getPositionList(String employeeRef) {
 		ParameterCheck.mandatory("employeeRef", employeeRef);
 		NodeRef ref = new NodeRef(employeeRef);
 		List<NodeRef> staffs = orgstructureService.getEmployeeStaffs(ref);
@@ -547,7 +552,10 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		}
 	}
 
-	public ScriptNode getMainJob(String employee) {
+    /**
+     * Получить основную должностную позицию сотрудника
+     */
+	public ScriptNode getPrimaryPosition(String employee) {
 		NodeRef employeeRef = new NodeRef(employee);
 		NodeRef mainJob = orgstructureService.getEmployeePrimaryStaff(employeeRef);
 		if (mainJob != null) {
@@ -635,10 +643,10 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 * @param unitRef ссылка на подразделение
 	 * @return список сотрудников в подразделении или пустой список
 	 */
-//	public Scriptable getEmployeesInUnit (final String unitRef) {
-//		ParameterCheck.mandatory ("unitRef", unitRef);
-//		return createScriptable (orgstructureService.getEmployeesInUnit (new NodeRef (unitRef)));
-//	}
+	public Scriptable getEmployeesInUnit(final String unitRef) {
+		ParameterCheck.mandatory("unitRef", unitRef);
+		return createScriptable(orgstructureService.getOrganizationElementEmployees(new NodeRef(unitRef)));
+	}
 
 	/**
 	 * получение списка подчиненных для указанного сотрудника
@@ -675,7 +683,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
-/**
+    /**
 	 * Проверка, имеет ли сотрудник роль "Технолог календарей".
 	 *
 	 * @return true если сотрудник имеет роль "Технолог календарей".
@@ -787,30 +795,6 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     {
         NodeRef nodeRef = new NodeRef(nodeRefStr);
 
-
-
-        //через структурные единицы (подразделения и рабочие группы)
-//        List<NodeRef> elementsByBusinessRole = getOrganizationElementsByBusinessRole(businessRoleRef);
-//        for (NodeRef orgElement : elementsByBusinessRole) {
-//            List<NodeRef> organizationElementEmployees = getOrganizationElementEmployees(orgElement);
-//            results.addAll(organizationElementEmployees);
-//        }
-//        //через позиции (должности и роли в рабочих группах)
-//        Set<NodeRef> results1 = new HashSet<NodeRef>();
-//        if (isBusinessRole(businessRoleRef)) { // если бизнес роль
-//            // получаем организационные элементы (подразделения и рабочие группы)
-//            List<AssociationRef> orgElementMembers = nodeService.getTargetAssocs(businessRoleRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
-//            for (AssociationRef orgElementChildRef : orgElementMembers) {
-//                if (!isArchive(orgElementChildRef.getTargetRef())){
-//                    NodeRef employeeByPosition = getEmployeeByPosition(orgElementChildRef.getTargetRef());
-//                    if (!isArchive(employeeByPosition)) {
-//                        results1.add(employeeByPosition);
-//                    }
-//                }
-//            }
-//        }
-
-
         final List<NodeRef> nodeRefEmployees = orgstructureService.getNodeRefEmployees(nodeRef);
         List<NodeRef> absences = new ArrayList<NodeRef>();
         for(NodeRef employee : nodeRefEmployees){
@@ -823,5 +807,51 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 
     }
 
+    /**
+     * Получение подразделения, где сотрудник числится на основной должностной позиции
+     */
+    public ScriptNode getPrimaryOrgUnit(String nodeRef) {
+        ParameterCheck.mandatory("nodeRef", nodeRef);
+        NodeRef ref = new NodeRef(nodeRef);
+        NodeRef unit = orgstructureService.getPrimaryOrgUnit(ref);
+        if (unit != null) {
+            return new ScriptNode(unit, serviceRegistry, getScope());
+        }
+        return null;
+    }
+
+    /**
+     * Проверяет наличие бизнес-роли у сотрудника
+     * @param employeeRef ссылка на сотрудника
+     * @param businessRole бизнес роль
+     * @return true если у сотрудника есть бизнесс-роль
+     */
+    public boolean hasBusinessRole(String employeeRef, String businessRole) {
+        return orgstructureService.isEmployeeHasBusinessRole(new NodeRef(employeeRef), businessRole);
+    }
+
+    /**
+     * Входит ли сотрудник в данную рабочую группу
+     * @param employeeRef ссылка на сотрудника
+     * @param workGroupRef ссылка на рабочую группу
+     * @return
+     */
+    public Boolean isInWorkGroup(String employeeRef, String workGroupRef) {
+        ParameterCheck.mandatory("workGroupRef", workGroupRef);
+        NodeRef ref = new NodeRef(workGroupRef);
+        List<NodeRef> employees = orgstructureService.getWorkGroupEmployees(ref);
+        return employees.contains(new NodeRef(employeeRef));
+    }
+
+    /**
+     * Имеет ли текущий пользователь у себя в подчинении другого пользователя
+     * @param bossRef
+     * @param subordinateRef
+     * @param checkPrimary
+     * @return
+     */
+    public boolean isBossOf(final String bossRef, final String subordinateRef, boolean checkPrimary) {
+        return orgstructureService.isBossOf(new NodeRef (bossRef), new NodeRef (subordinateRef), checkPrimary);
+    }
 
 }

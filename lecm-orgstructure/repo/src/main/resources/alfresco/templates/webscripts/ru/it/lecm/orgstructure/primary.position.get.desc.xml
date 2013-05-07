@@ -1,7 +1,7 @@
 <webscript>
     <shortname>Main job</shortname>
-    <description>Returns main job position</description>
-    <url>/lecm/orgstructure/mainjob</url>
+    <description>Returns primary position</description>
+    <url>/lecm/orgstructure/getPrimaryPosition</url>
     <format default="json">extension</format>
     <authentication>user</authentication>
 </webscript>
