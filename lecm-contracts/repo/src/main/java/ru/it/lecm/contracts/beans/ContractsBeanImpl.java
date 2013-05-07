@@ -433,6 +433,57 @@ public class ContractsBeanImpl extends BaseBean {
 		notificationService.sendNotification(this.notificationChannels, executorsNotification);
 	}
 
+	public void additionalDocumentSendingToSign(NodeRef documentRef) {
+		NodeRef contract = findNodeByAssociationRef(documentRef, ASSOC_DOCUMENT, null, ASSOCIATION_TYPE.TARGET);
+		if (contract != null) {
+			List<NodeRef> signers = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_SIGNER_ID);
+
+			StringBuilder notificationText = new StringBuilder();
+			notificationText.append("Вам поступил на подписание ");
+			notificationText.append(wrapperLink(documentRef, "документ", DOCUMENT_LINK_URL));
+			NodeRef documentTypeRef = findNodeByAssociationRef(documentRef, ASSOC_ADDITIONAL_DOCUMENT_TYPE, null, ASSOCIATION_TYPE.TARGET);
+			notificationText.append(" ");
+			notificationText.append(nodeService.getProperty(documentTypeRef, ContentModel.PROP_NAME).toString());
+			notificationText.append(" к договору номер ");
+			notificationText.append(wrapperLink(contract, nodeService.getProperty(contract, PROP_REGNUM_SYSTEM).toString(), DOCUMENT_LINK_URL));
+			notificationText.append(", исполнитель ");
+			NodeRef executor = getContractExecutor(contract);
+			String executorName = nodeService.getProperty(executor, ContentModel.PROP_NAME).toString();
+			notificationText.append(wrapperLink(executor, executorName, LINK_URL));
+
+			Notification notification = new Notification();
+			notification.setRecipientEmployeeRefs(signers);
+			notification.setAutor(authService.getCurrentUserName());
+			notification.setDescription(notificationText.toString());
+			notification.setObjectRef(documentRef);
+			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+			notificationService.sendNotification(this.notificationChannels, notification);
+		}
+	}
+
+	public void additionalDocumentSigning(NodeRef documentRef) {
+		NodeRef contract = findNodeByAssociationRef(documentRef, ASSOC_DOCUMENT, null, ASSOCIATION_TYPE.TARGET);
+		if (contract != null) {
+			List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID);
+
+			StringBuilder notificationText = new StringBuilder();
+			notificationText.append("Документ ");
+			NodeRef documentTypeRef = findNodeByAssociationRef(documentRef, ASSOC_ADDITIONAL_DOCUMENT_TYPE, null, ASSOCIATION_TYPE.TARGET);
+			notificationText.append(wrapperLink(documentRef, nodeService.getProperty(documentTypeRef, ContentModel.PROP_NAME).toString(), DOCUMENT_LINK_URL));
+			notificationText.append(" к договору номер ");
+			notificationText.append(wrapperLink(contract, nodeService.getProperty(contract, PROP_REGNUM_SYSTEM).toString(), DOCUMENT_LINK_URL));
+			notificationText.append(" подписан");
+
+			Notification notification = new Notification();
+			notification.setRecipientEmployeeRefs(executors);
+			notification.setAutor(authService.getCurrentUserName());
+			notification.setDescription(notificationText.toString());
+			notification.setObjectRef(documentRef);
+			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+			notificationService.sendNotification(this.notificationChannels, notification);
+		}
+	}
+
 	public String getContractType(NodeRef contractRef) {
 		NodeRef type = findNodeByAssociationRef(contractRef, ASSOC_CONTRACT_TYPE, null, ASSOCIATION_TYPE.TARGET);
 		if (type != null) {

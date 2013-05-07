@@ -6541,7 +6541,36 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>4f612823-5930-4def-a850-7f495d13db2c</name>
+														<nodeRef>
+															workspace://SpacesStore/5e0dcffd-112c-4736-8302-81f3a2739628
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>
+																	contracts.additionalDocumentSendingToSign(bpm_package.children[0]);
+																</value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>additionalDocumentSendingToSign</value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>FinishStateWithTransition</type>
@@ -6669,12 +6698,12 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>true</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Подписан у контрагента</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>true</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6734,12 +6763,12 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>true</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Не подписан у контрагента</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>true</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -7636,7 +7665,36 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>90b58348-c49e-4aa6-9960-118ab6942143</name>
+														<nodeRef>
+															workspace://SpacesStore/42675d1b-384b-4161-a817-fc478573c8c1
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>
+																	contracts.additionalDocumentSigning(bpm_package.children[0]);
+																</value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>additionalDocumentSigning</value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>FinishStateWithTransition</type>
