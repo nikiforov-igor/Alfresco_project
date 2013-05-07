@@ -70,8 +70,12 @@
 			<form id="datagrid">
 				<field-visibility>
 					<show id="lecm-d8n:procuracy-business-role-assoc"/>
-					<show id="lecm-d8n:procuracy-trustee-assoc"/>
+                    <show id="lecm-d8n:procuracy-business-role-assoc-description" force="true"/>
+                    <show id="lecm-d8n:procuracy-trustee-assoc"/>
 				</field-visibility>
+                <appearance>
+                    <field id="lecm-d8n:procuracy-business-role-assoc-description" substituteString="{lecm-d8n:procuracy-business-role-assoc/lecm-orgstr:business-role-description}"></field>
+                </appearance>
 			</form>
 		</forms>
 	</config>
