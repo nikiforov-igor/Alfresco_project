@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <webscript>
-	<shortname>Absence cancel show dailog</shortname>
-	<description>Checks, if we should show dialog to calsel active absence</description>
+	<shortname>Absence cancel show dialog</shortname>
+	<description>Checks, if we should show dialog to cancel active absence</description>
 	<url>/lecm/wcalendar/absence/get/AbsenceCancelShowDialog</url>
 	<authentication>user</authentication>
 	<format default="json"/>

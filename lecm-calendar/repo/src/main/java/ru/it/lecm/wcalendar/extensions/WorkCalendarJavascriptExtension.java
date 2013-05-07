@@ -513,4 +513,72 @@ public class WorkCalendarJavascriptExtension extends BaseScopableProcessorExtens
 
 		return workCalendarService.getNextWorkingDate(start, workingDaysNumber);
 	}
+
+	public Date getEmployeeNextWorkingDay(final ScriptNode node, final Object jsInitialDate, int offset) {
+		Date initialDate = (Date) Context.jsToJava(jsInitialDate, Date.class);
+		return workCalendarService.getEmployeeNextWorkingDay(node.getNodeRef(), initialDate, offset);
+	}
+
+	public Date getEmployeeNextWorkingDay(final String nodeStr, final Object jsInitialDate, int offset) {
+		Date initialDate = (Date) Context.jsToJava(jsInitialDate, Date.class);
+		return workCalendarService.getEmployeeNextWorkingDay(new NodeRef(nodeStr), initialDate, offset);
+	}
+
+	public Date getEmployeeNextWorkingDay(final ScriptNode node, final String initialDateStr, int offset) {
+		Date initialDate;
+
+		try {
+			initialDate = dateParser.parse(initialDateStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + initialDateStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return workCalendarService.getEmployeeNextWorkingDay(node.getNodeRef(), initialDate, offset);
+	}
+
+	public Date getEmployeeNextWorkingDay(final String nodeStr, final String initialDateStr, int offset) {
+		Date initialDate;
+
+		try {
+			initialDate = dateParser.parse(initialDateStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + initialDateStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return workCalendarService.getEmployeeNextWorkingDay(new NodeRef(nodeStr), initialDate, offset);
+	}
+
+	public Date getEmployeePreviousWorkingDay(final ScriptNode node, final Object jsInitialDate, int offset) {
+		Date initialDate = (Date) Context.jsToJava(jsInitialDate, Date.class);
+		return workCalendarService.getEmployeePreviousWorkingDay(node.getNodeRef(), initialDate, offset);
+	}
+
+	public Date getEmployeePreviousWorkingDay(final String nodeStr, final Object jsInitialDate, int offset) {
+		Date initialDate = (Date) Context.jsToJava(jsInitialDate, Date.class);
+		return workCalendarService.getEmployeePreviousWorkingDay(new NodeRef(nodeStr), initialDate, offset);
+	}
+
+	public Date getEmployeePreviousWorkingDay(final ScriptNode node, final String initialDateStr, int offset) {
+		Date initialDate;
+
+		try {
+			initialDate = dateParser.parse(initialDateStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + initialDateStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return workCalendarService.getEmployeePreviousWorkingDay(node.getNodeRef(), initialDate, offset);
+	}
+
+	public Date getEmployeePreviousWorkingDay(final String nodeStr, final String initialDateStr, int offset) {
+		Date initialDate;
+
+		try {
+			initialDate = dateParser.parse(initialDateStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + initialDateStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return workCalendarService.getEmployeePreviousWorkingDay(new NodeRef(nodeStr), initialDate, offset);
+	}
 }

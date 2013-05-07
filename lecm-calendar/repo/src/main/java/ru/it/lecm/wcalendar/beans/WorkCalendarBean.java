@@ -36,7 +36,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 
 	}
 
-	public void setOrgstructureService (OrgstructureBean orgstructureService) {
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
 	}
 
@@ -264,7 +264,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public Date getNextWorkingDate(Date start, int workingDaysNumber) {
 		int i = 0;
@@ -281,7 +281,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 			} else if (isWorkingDay) {
 				i++;
 			}
-			
+
 		}
 		return curDay;
 	}
@@ -318,6 +318,13 @@ public class WorkCalendarBean implements IWorkCalendar {
 		return c.getTime();
 	}
 
+	private Date substractDayFromDate(Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.DAY_OF_MONTH, -1);
+		return c.getTime();
+	}
+
 	private Boolean isEmployeePresent(Date day, NodeRef node) {
 		Boolean result;
 		Boolean isWorking = WCalendarService.isWorkingDay(day);
@@ -350,5 +357,32 @@ public class WorkCalendarBean implements IWorkCalendar {
 		cal.set(Calendar.MILLISECOND, 0);
 		resetDay.setTime(cal.getTimeInMillis());
 		return resetDay;
+	}
+
+	@Override
+	public Date getEmployeeNextWorkingDay(NodeRef node, Date initialDate, int offset) {
+		return getEmployeeWorkingDayOffset(node, initialDate, offset, true);
+	}
+
+	@Override
+	public Date getEmployeePreviousWorkingDay(NodeRef node, Date initialDate, int offset) {
+		return getEmployeeWorkingDayOffset(node, initialDate, offset, false);
+	}
+
+	private Date getEmployeeWorkingDayOffset(NodeRef node, Date initialDate, int offset, boolean shiftToFuture) {
+		Date result;
+		Date curDate = initialDate;
+		int absOffset = Math.abs(offset);
+
+		for (int i = 0; i < absOffset; i++) {
+			curDate = offset > 0 ? addDayToDate(curDate) : substractDayFromDate(curDate);
+		}
+
+		while (!getEmployeeAvailability(node, curDate)) {
+			curDate = shiftToFuture ? addDayToDate(curDate) : substractDayFromDate(curDate);
+		}
+		result = curDate;
+
+		return result;
 	}
 }
