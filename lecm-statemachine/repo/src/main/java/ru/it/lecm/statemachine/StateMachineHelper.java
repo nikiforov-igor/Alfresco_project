@@ -11,7 +11,6 @@ import org.activiti.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.impl.pvm.runtime.AtomicOperation;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -612,7 +611,9 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     @Override
     public TransitionResponse executeUserAction(NodeRef document, String actionId) {
-        return executeUserAction(document, actionId, FinishStateWithTransitionAction.class, null);
+        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String currentTask = getCurrentTaskId(statemachineId);
+        return executeUserAction(document, currentTask, actionId, FinishStateWithTransitionAction.class, null);
     }
 
     public TransitionResponse executeActionByName(NodeRef document, String actionName) {
@@ -636,14 +637,13 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
 
-        public TransitionResponse executeUserAction(NodeRef document, String actionId, Class<? extends StateMachineAction> actionType, String persistedResponse) {
+    public TransitionResponse executeUserAction(NodeRef document, String taskId, String actionId, Class<? extends StateMachineAction> actionType, String persistedResponse) {
         String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
-        String currentTask = getCurrentTaskId(statemachineId);
         TransitionResponse response = new TransitionResponse();
         if (FinishStateWithTransitionAction.class.equals(actionType)) {
-            response = executeTransitionAction(document, statemachineId, currentTask, actionId, persistedResponse);
+            response = executeTransitionAction(document, statemachineId, taskId, actionId, persistedResponse);
         } else if (UserWorkflow.class.equals(actionType)) {
-            response = executeUserWorkflowAction(document, statemachineId, currentTask, actionId, persistedResponse);
+            response = executeUserWorkflowAction(document, statemachineId, taskId, actionId, persistedResponse);
         }
         return response;
     }
@@ -778,18 +778,9 @@ public class StateMachineHelper implements StateMachineServiceBean {
                             activitiProcessEngineConfiguration.getRuntimeService().setVariable(execution.getId(), variable, value);
                         }
 
-                        //Завершаем все активные задачи
                         String processId = execution.getProcessInstanceId();
-                        List<Execution> executionEntities = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().processInstanceId(processId).list();
-                        for (Execution executionEntity : executionEntities) {
-                            ExecutionEntity ee = (ExecutionEntity) executionEntity;
-                            if (ee.isActive()) {
-                                ee.performOperation(AtomicOperation.DELETE_CASCADE);
-                            }
-                        }
-
-                        //Завершаем процесс
                         ExecutionEntity process = (ExecutionEntity) activitiProcessEngineConfiguration.getRuntimeService().createProcessInstanceQuery().processInstanceId(processId).singleResult();
+                        //Завершаем процесс
                         ProcessDefinitionEntity definition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(process.getProcessDefinitionId());
                         List<ActivityImpl> activities = definition.getActivities();
                         ActivityImpl endActivity = null;
@@ -808,6 +799,16 @@ public class StateMachineHelper implements StateMachineServiceBean {
                             }
 
                         }
+
+                        //Завершаем все активные задачи
+                        activitiProcessEngineConfiguration.getRuntimeService().deleteProcessInstance(processId, "cancelled");
+                        /*List<Execution> executionEntities = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().processInstanceId(processId).list();
+                        for (Execution executionEntity : executionEntities) {
+                            ExecutionEntity ee = (ExecutionEntity) executionEntity;
+                            if (ee.isActive()) {
+                                ee.performOperation(AtomicOperation.DELETE_CASCADE);
+                            }
+                        }*/
                     }
                 }
             }
@@ -1016,6 +1017,9 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<String> errors = new ArrayList<String>();
         StateMachineHelper helper = new StateMachineHelper();
         List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
+        if (actions.size() == 0) {
+            actions = getHistoricalTaskActionsByName(taskId, StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
+        }
         UserWorkflow.UserWorkflowEntity workflow = null;
         for (StateMachineAction action : actions) {
             UserWorkflow userWorkflow = (UserWorkflow) action;

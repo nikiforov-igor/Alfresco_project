@@ -54,7 +54,7 @@ public class StartWorkflowScript extends DeclarativeWebScript {
             StateMachineHelper helper = new StateMachineHelper();
             String executionId = helper.getCurrentExecutionId(taskId);
             NodeRef document = helper.getStatemachineDocument(executionId);
-            TransitionResponse transitionResponse = helper.executeUserAction(document, actionId, FinishStateWithTransitionAction.class, persistedResponse);
+            TransitionResponse transitionResponse = helper.executeUserAction(document, taskId, actionId, FinishStateWithTransitionAction.class, persistedResponse);
             //если небыло ошибок, то действие логируем
             if (transitionResponse.getErrors().size() == 0) {
                 updateActionCount(document, actionId);
@@ -66,19 +66,17 @@ public class StartWorkflowScript extends DeclarativeWebScript {
             }
 		} else if ("user".equals(actionType)){
             StateMachineHelper helper = new StateMachineHelper();
-            String executionId = helper.getCurrentExecutionId(taskId);
+            String executionId = helper.parseExecutionId(persistedResponse);
 
-            if (executionId != null) {
-                NodeRef document = helper.getStatemachineDocument(executionId);
-                TransitionResponse transitionResponse = helper.executeUserAction(document, actionId, UserWorkflow.class, persistedResponse);
-                //если небыло ошибок, то действие логируем
-                if (transitionResponse.getErrors().size() == 0) {
-                    updateActionCount(document, actionId);
-                    String newWorkflowId = helper.parseExecutionId(persistedResponse);
-                    helper.logStartWorkflowEvent(document, newWorkflowId);
-                    if (transitionResponse.getRedirect() != null) {
-                        result.put("redirect", transitionResponse.getRedirect());
-                    }
+            NodeRef document = helper.getStatemachineDocument(executionId);
+            TransitionResponse transitionResponse = helper.executeUserAction(document, taskId, actionId, UserWorkflow.class, persistedResponse);
+            //если небыло ошибок, то действие логируем
+            if (transitionResponse.getErrors().size() == 0) {
+                updateActionCount(document, actionId);
+                String newWorkflowId = helper.parseExecutionId(persistedResponse);
+                helper.logStartWorkflowEvent(document, newWorkflowId);
+                if (transitionResponse.getRedirect() != null) {
+                    result.put("redirect", transitionResponse.getRedirect());
                 }
             }
         }
