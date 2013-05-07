@@ -249,7 +249,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
      * @param employeeRef ссылка на сотрудника
      * @param document ссылка на документ (для извлечения типа)
      */
-    private synchronized void addMemberToUnit(NodeRef employeeRef, NodeRef document) {
+    public synchronized void addMemberToUnit(NodeRef employeeRef, NodeRef document) {
         NodeRef memberUnit = getMembersUnit(nodeService.getType(document));
         try {
             nodeService.createAssociation(memberUnit, employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);

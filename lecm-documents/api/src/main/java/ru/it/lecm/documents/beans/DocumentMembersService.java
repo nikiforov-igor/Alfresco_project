@@ -98,4 +98,11 @@ public interface DocumentMembersService {
      * @return ссылка на ноду
      */
     NodeRef getMembersUnit(QName docType);
+
+    /**
+     * Добавление нового участника в ноду со списком всех участников для данного типа документа
+     * @param employeeRef ссылка на сотрудника
+     * @param document ссылка на документ (для извлечения типа)
+     */
+    public void addMemberToUnit(NodeRef employeeRef, NodeRef document);
 }
