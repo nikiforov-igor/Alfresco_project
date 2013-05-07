@@ -88,4 +88,9 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
+
+	<bean id="webscript.ru.it.lecm.approval.GetDocumentDataByTaskId.get" class="ru.it.lecm.approval.webscript.GetDocumentDataByTaskId" parent="webscript">
+		<property name="workflowService" ref="WorkflowService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
 </beans>

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Get document data by Activiti task ID</shortname>
+	<description>Get document data by Activiti task ID</description>
+	<url>/lecm/approval/GetDocumentDataByTaskId</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>none</transaction>
+</webscript>

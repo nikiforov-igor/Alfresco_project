@@ -19,16 +19,16 @@
 		<type name="lecmPar:parallelApproval">
 			<title>Workflow model for parallel approvement</title>
 			<parent>bpm:startTask</parent>
-			
+
 			<associations>
 				<association name="lecmPar:employeesAssoc">
 					<source>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>true</many>
 					</source>
 					<target>
 						<class>lecm-orgstr:employee</class>
-						<mandatory>false</mandatory>
+						<mandatory>true</mandatory>
 						<many>true</many>
 					</target>
 				</association>
@@ -40,7 +40,7 @@
 			<properties>
 				<property name="lecmPar:approveTaskResult">
 					<type>d:text</type>
-					<default>Reject</default>
+					<default>REJECTED</default>
 					<constraints>
 						<constraint name="lecmPar:approveTaskResultConstraint" type="LIST">
 							<parameter name="allowedValues">

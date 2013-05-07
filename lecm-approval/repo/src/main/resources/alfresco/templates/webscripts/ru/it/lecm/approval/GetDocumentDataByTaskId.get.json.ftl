@@ -1,0 +1,3 @@
+{
+	"presentString": "${presentString}"
+}
