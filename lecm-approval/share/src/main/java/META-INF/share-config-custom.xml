@@ -4,6 +4,7 @@
 		<forms>
 			<dependencies>
 				<js src="/scripts/lecm-approval/activiti-transitions-radiobuttons.js"/>
+				<js src="/scripts/lecm-approval/approval-validators.js"/>
 			</dependencies>
 		</forms>
 	</config>
@@ -22,7 +23,12 @@
 						<control template="/ru/it/lecm/approval/controls/document-present-string-hidden.ftl"/>
 					</field>
 
-					<field id="bpm:workflowDueDate" mandatory="true"/>
+					<field id="bpm:workflowDueDate" mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.noPastDates" event="blur"/>
+						</constraint-handlers>
+						<control template="/org/alfresco/components/form/controls/date.ftl"/>
+					</field>
 
 					<field id="lecmPar:employeesAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
@@ -80,7 +86,12 @@
 						<control template="/ru/it/lecm/approval/controls/document-present-string-hidden.ftl"/>
 					</field>
 
-					<field id="bpm:workflowDueDate" mandatory="true"/>
+					<field id="bpm:workflowDueDate" mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.noPastDates" event="blur"/>
+						</constraint-handlers>
+						<control template="/org/alfresco/components/form/controls/date.ftl"/>
+					</field>
 
 					<field id="lecmSeq:employeesAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
