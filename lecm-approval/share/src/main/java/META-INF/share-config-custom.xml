@@ -153,11 +153,15 @@
 					<show id="lecm-al:approval-list-approve-date"/>
 					<show id="lecm-al:approval-list-contains-approval-item"/>
 					<show id="lecm-al:approval-list-decision"/>
+                    <show id="lecm-al:printBtn"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-al:approval-list-contains-approval-item">
 						<control template="/ru/it/lecm/approval/controls/approval-list.ftl"/>
 					</field>
+                    <field id="lecm-al:printBtn">
+                        <control template="/ru/it/lecm/approval/controls/printListBtn.ftl"/>
+                    </field>
 				</appearance>
 			</form>
 		</forms>

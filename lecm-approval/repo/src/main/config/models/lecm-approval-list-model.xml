@@ -129,7 +129,6 @@
 				<!-- дата согласования по документу -->
 				<property name="lecm-al:approval-list-approve-date">
 					<type>d:date</type>
-					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
