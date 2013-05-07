@@ -12,6 +12,7 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import org.alfresco.service.ServiceRegistry;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  * User: AZinovin
@@ -26,6 +27,7 @@ public abstract class AbstractDataSourceProvider
 {
 	protected ServiceRegistry serviceRegistry;
 	protected SubstitudeBean substitudeService;
+	protected OrgstructureBean orgstructureService;
 
 	private List<JRField> fieldsList;
 
@@ -58,6 +60,14 @@ public abstract class AbstractDataSourceProvider
 
 	public void setSubstitudeService(SubstitudeBean substitudeService) {
 		this.substitudeService = substitudeService;
+	}
+
+	public OrgstructureBean getOrgstructureService() {
+		return orgstructureService;
+	}
+
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
 	}
 
 	/**

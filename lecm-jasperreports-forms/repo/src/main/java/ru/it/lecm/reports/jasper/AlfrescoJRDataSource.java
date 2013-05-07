@@ -31,7 +31,8 @@ import ru.it.lecm.reports.jasper.utils.Utils;
  *    1) основной поисковый запрос выдаёт только id отобранных объектов
  *    2) далее LocalJRDataSource "догружает" в методе next() значения 
  * атрибутов Альфреско, которые прописаны в config (или грузит все атрибуты,
- * т.к. ссылки на них всё равно будут обеспечены по именам) 
+ * т.к. ссылки на них всё равно будут обеспечены по именам)
+ *    3) имеется возможность иметь вычисляемые поля (кодируется в имени - обрамление символами '{}').  
 
  * Значения метаописаний fields из config, могут использоваться в дальнейшем 
  * для вычитывания части атрибутов данных, вместо выборки целиком всех.
@@ -46,21 +47,21 @@ public class AlfrescoJRDataSource implements JRDataSource
 	private ServiceRegistry serviceRegistry;
 	private SubstitudeBean substitudeService;
 	private AssocDataFilter filter; // может быть NULL
-	private Map<String, JRXField> metaFields;
+	private Map<String, JRXField> metaFields; // ключ = имя колонки данных в jasper
 
 	// список текущих Альфреско атрибутов активной строки данных набора
 	// ключ = QName.toString() с короткими именами типов (т.е. вида "cm:folder" или "lecm-contract:document")
-	protected Map<String, Serializable> curProps;
+	protected Map<String, Serializable> curProps; // ключ = нативное Альфреско-имя
 	protected NodeRef curNodeRef;
 	protected Iterator<ResultSetRow> rsIter;
 	protected ResultSetRow rsRow;
 
 	/**
-	 * список gname Альфреско-атрибутов, которые только и нужны для отчёта
-	 * (с короткими префиксами)
+	 * список простых gname Альфреско-атрибутов, которые только упоминаются в 
+	 * самом JR-отчёте (причём имена - с короткими префиксами)
 	 * null означает, что ограничений нет.
 	 */
-	private Set<String> visibleProps;
+	private Set<String> jrSimpleProps;
 
 
 	/**
@@ -84,15 +85,23 @@ public class AlfrescoJRDataSource implements JRDataSource
 		rsIter = null;
 	}
 
-
-	public Set<String> getVisibleProps() {
-		return visibleProps;
+	/**
+	 * Простые (не вычисляемые) свойства ищ jr-отчёта.
+	 * null означает что видны могут быть люые свойства.
+	 * @return
+	 */
+	public Set<String> getJRSimpleProps() {
+		return jrSimpleProps;
 	}
 
-	public void setVisibleProps(Set<String> visibleProps) {
-		this.visibleProps = visibleProps;
+	public void setJrSimpleProps(Set<String> jrVisibleProps) {
+		this.jrSimpleProps = jrVisibleProps;
 	}
 
+	/**
+	 * Мета описание полей данных
+	 * @return
+	 */
 	public Map<String, JRXField> getMetaFields() {
 		return metaFields;
 	}
@@ -117,6 +126,10 @@ public class AlfrescoJRDataSource implements JRDataSource
 		this.substitudeService = substitudeService;
 	}
 
+	/**
+	 * Фильтр данных. Если NULL, то не используется.
+	 * @return
+	 */
 	public AssocDataFilter getFilter() {
 		return filter;
 	}
@@ -125,10 +138,13 @@ public class AlfrescoJRDataSource implements JRDataSource
 		this.filter = value;
 	}
 
-
-	protected boolean isPropVisible(final String propNameWithPrefix) {
-		return (visibleProps == null) // видно всё
-				|| visibleProps.contains(propNameWithPrefix); // или название имеется в списке того, что отрисовывается в Jasper
+	/**
+	 * @param propNameWithPrefix название свойства
+	 * @return true, если свойствоо
+	 */
+	protected boolean isPropVisibleInReport(final String propNameWithPrefix) {
+		return (jrSimpleProps == null) // если нет фильтра -> видно всё
+				|| jrSimpleProps.contains(propNameWithPrefix); // или название имеется в списке того, что отрисовывается в Jasper
 	}
 
 	@Override
@@ -136,7 +152,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 		while (rsIter != null && rsIter.hasNext()) {
 			rsRow = rsIter.next();
 			curNodeRef = rsRow.getNodeRef();
-			if (loadAlfNodeProps(curNodeRef))
+			if (loadAlfNodeProps(curNodeRef)) // загрузка данных по строке 
 				return true; // FOUND ONE MORE
 		} // while
 		// NOT FOUND MORE - DONE
@@ -177,16 +193,12 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 * @param id
 	 * @return true, если фильтра нет или строка удовлетворяет фильтру
 	 */
-	protected boolean loadAlfNodeProps(NodeRef id) {
-		final NodeService nodeSrv = serviceRegistry.getNodeService();
-
+	private boolean loadAlfNodeProps(NodeRef id) {
 		// дополнительно фильтруем по критериям, если они есть ...
 		if (this.filter != null && !filter.isOk(id)) {
 			logger.debug( String.format("Filtered out node %s", id));
 			return false;
 		}
-
-		final Map<QName, Serializable> alfProps = nodeSrv.getProperties(id);
 
 		// далее формируем список полей, т.к. фильтр пройден положительно
 
@@ -195,15 +207,17 @@ public class AlfrescoJRDataSource implements JRDataSource
 		 * объекта (например, может не быть пустых значений) гарантируем 
 		 * чтобы curProps содержал всё, что задано в фильтре
 		 */
+		this.curProps = ensureJRProps();
 
-		this.curProps = makeDSRowProps();
-
-		if (alfProps != null) { 
-			logAlfData( alfProps, String.format("Loaded properties of %s\n\t Filtering fldNames for jasper-report by list: %s", id, visibleProps));
-			for (Map.Entry<QName, Serializable> e: alfProps.entrySet()) {
+		final NodeService nodeSrv = serviceRegistry.getNodeService();
+		final Map<QName, Serializable> realProps = nodeSrv.getProperties(id);
+		logAlfData( realProps, String.format("Loaded properties of %s\n\t Filtering fldNames for jasper-report by list: %s", id, jrSimpleProps));
+		if (realProps != null) { 
+			for (Map.Entry<QName, Serializable> e: realProps.entrySet()) {
+				// переводим название свойства в краткую форму
 				final String key = e.getKey().toPrefixString(serviceRegistry.getNamespaceService());
-				// если есть мета-описания - оставим только то, что там упоминается
-				if (isPropVisible(key))
+				// если есть мета-описания - добавим всё, что там упоминается
+				if (isPropVisibleInReport(key))
 					curProps.put(key, e.getValue());
 			}
 		}
@@ -218,27 +232,30 @@ public class AlfrescoJRDataSource implements JRDataSource
 		}
 	}
 
-	/*
-	 * на случай, если в alfProps будет НЕ полной набор всех свойств 
-	 * объекта (например, может не быть пустых значений) гарантируем, 
-	 * чтобы curProps содержал всё, что задано в фильтре visibleProps
+	/**
+	 * Сформировать список обычных (не вычисляемых и не косвенных) свойств, 
+	 * перечисленных в visibleProps. 
+	 * Удобно для случая, когда загружаемые данные по объекту содержат НЕ полный 
+	 * набор всех свойств объекта (например, может не быть пустых значений), 
+	 * добавлением мы гарантируем, чтобы curProps содержал всё, что надо для jr.
 	 */
-	protected HashMap<String, Serializable> makeDSRowProps() {
+	private HashMap<String, Serializable> ensureJRProps() {
 		final HashMap<String, Serializable> result = new HashMap<String, Serializable>();
 		final StringBuilder sb = new StringBuilder("Filtering alfresco properties by names: \n"); 
-		if (this.visibleProps != null){
+		if (this.jrSimpleProps != null){
 			// все свойства включаем в набор с пустыми значениями
 			int i = 0;
-			for (String fldName: this.visibleProps) {
+			for (String fldName: this.jrSimpleProps) {
 				i++;
 				if (!isCalcField(fldName)) { // обычное поле
 					result.put( fldName, null);
 					sb.append( String.format( "\t[%d]\t field '%s'\n", i, fldName));
 				} else
-					// Если есть "пути" в именах -> атрибут косвенный -> в result не включаем
+					// Если есть "пути" в именах -> атрибут косвенный -> в result здесь не включаем
 					sb.append( String.format( "\t[%d]\t referenced field '%s' detected -> using evaluator for it \n", i, fldName));
 			}
-		}
+		} else
+			sb.append("\t all fields will be Sincluded");
 		if (logger.isDebugEnabled()) 
 			logger.debug(sb.toString());
 		return result;

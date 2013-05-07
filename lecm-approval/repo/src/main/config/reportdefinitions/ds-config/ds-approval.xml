@@ -57,7 +57,7 @@
 		<!-- Кол-во просроченных согласований (!) вычисляемое -->
 		<field queryFldName="{Employee.MissedApproves{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
 				jrFldName="col_Employee.MissedApproves"
-				displayName="Кол-во просроченных согласований" javaValueClass="float"/>
+				displayName="Кол-во просроченных согласований" javaValueClass="int"/>
 
 		<!-- Средний срок согласований, дней (!) вычисляемое -->
 		<field queryFldName="{Employee.AvgApproved{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
@@ -68,21 +68,6 @@
 		<field queryFldName="{Employee.AvgMissed{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
 				jrFldName="col_Employee.AvgMissed"
 				displayName="Средний срок просрочки, дней" javaValueClass="float"/>
-
-		<!-- Дата согласования Сотрудником -->
-		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-approve-date}"
-				jrFldName="col_ApproveEnd"
-				displayName="Дата согласования Сотрудником" javaValueClass="date"/>
-
-		<!-- Дата начала согласования всего Списка Согласования-->
-		<field queryFldName="lecm-al:approval-list-approve-start"
-				jrFldName="col_ApproveStart"
-				displayName="Дата начала согласования по списку" javaValueClass="date"/>
-
-		<!-- Дата согласования по документу -->
-		<field queryFldName="lecm-al:approval-list-approve-date"
-				jrFldName="col_ApproveStartByDoc"
-				displayName="Дата начала согласования по документу" javaValueClass="date"/>
 
 	</fields.jasper>
 </cmis-ds.config>

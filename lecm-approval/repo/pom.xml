@@ -41,6 +41,11 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-engine</artifactId>
 		</dependency>
@@ -50,6 +55,7 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>ru.it.lecm.documents</groupId>
 			<artifactId>documents-repo-api</artifactId>
@@ -109,6 +115,10 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jasperreports-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>maven-amp-plugin</artifactId>
 			</plugin>
@@ -117,6 +127,9 @@
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**README-*</exclude>
+				</excludes>
 			</resource>
 			<!--
 				Copies and filters AMP config in the proper package
@@ -127,6 +140,9 @@
 				<filtering>true</filtering>
 				<directory>src/main/config</directory>
 				<targetPath>alfresco/module/${project.artifactId}</targetPath>
+				<excludes>
+					<exclude>**README-*</exclude>
+				</excludes>
 			</resource>
 		</resources>
 	</build>

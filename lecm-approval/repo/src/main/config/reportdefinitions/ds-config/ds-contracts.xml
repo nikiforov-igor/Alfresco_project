@@ -57,6 +57,7 @@
 
 		<!-- Данные по "Тематика договора" (с типом "lecm-contract-dic:contract-subjects") -->
 		<field jrFldName="col_Theme.code" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code}" displayName="Тематика.Код" />
+		<field jrFldName="col_Theme.tname" queryFldName="{lecm-contract:subjectContract-assoc/cm:name}" displayName="Тематика.Название" />
 		<field jrFldName="col_Theme.desc" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-description}" displayName="Тематика.Описание" />
 
 		<!-- Статус -->
@@ -72,13 +73,16 @@
 		<field jrFldName="col_DateEnd" queryFldName="lecm-contract:endDate" displayName="Дата окончания действия договора"
 				javaValueClass="java.util.Date"/>
 
+		<!-- Создатель договора -->
+		<field jrFldName="col_Creator" queryFldName="cm:creator" displayName="Создатель договора" />
+
 		<!--Представители (типа "lecm-representative:representative-type")
 			Фамилия Имя Отчество и Должность
 		  -->
-		<field jrFldName="col_Family" queryFldName="{lecm-contract:representative-assoc/lecm-representative:surname}" displayName="Исполнитель.Фамилия" />
-		<field jrFldName="col_Name" queryFldName="{lecm-contract:representative-assoc/lecm-representative:firstname}" displayName="Исполнитель.Имя" />
-		<field jrFldName="col_Otchestvo" queryFldName="{lecm-contract:representative-assoc/lecm-representative:middlename}" displayName="Исполнитель.Отчество" />
-		<field jrFldName="col_Executor" queryFldName="{lecm-contract:representative-assoc/lecm-representative:rank}" displayName="Исполнитель.Должность" />
+		<field jrFldName="col_Executor_Family" queryFldName="{lecm-contract:representative-assoc/lecm-representative:surname}" displayName="Исполнитель.Фамилия" />
+		<field jrFldName="col_Executor_Name" queryFldName="{lecm-contract:representative-assoc/lecm-representative:firstname}" displayName="Исполнитель.Имя" />
+		<field jrFldName="col_Executor_Otchestvo" queryFldName="{lecm-contract:representative-assoc/lecm-representative:middlename}" displayName="Исполнитель.Отчество" />
+		<field jrFldName="col_Executor_Staff" queryFldName="{lecm-contract:representative-assoc/lecm-representative:rank}" displayName="Исполнитель.Должность" />
 
 		<!-- 
 		<field queryFldName="lecm-contract:summaryContent" displayName="Краткое содержание договора" />

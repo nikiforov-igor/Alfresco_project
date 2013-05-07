@@ -15,6 +15,7 @@
 		parent="webscript">
 		<property name="serviceRegistry" ref="ServiceRegistry" />
 		<property name="substitudeService" ref="substitudeService" />
+		<property name="orgstructureService" ref="serviceOrgstructure" />
 	</bean>
 
 </beans>

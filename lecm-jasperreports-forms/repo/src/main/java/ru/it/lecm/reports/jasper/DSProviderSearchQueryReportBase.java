@@ -42,13 +42,14 @@ public abstract class DSProviderSearchQueryReportBase extends AbstractDataSource
 	 */
 	protected ResultSet alfrescoResult;
 	protected SearchParameters search;
-	protected int foundCount;
+	// protected int foundCount;
 
 	/**
-	 * список gname Альфреско-атрибутов, которые только и нужны для отчёта (с короткими префиксами)
+	 * Список простых Альфреско-атрибутов, которые нужны для отчёта.
+	 * Имена - с короткими префиксами.
 	 * null означает, что ограничений нет.
 	 */
-	protected Set<String> alfVisibleProps;
+	protected Set<String> jrSimpleProps;
 
 	public DSProviderSearchQueryReportBase() {
 		logger.debug( "created "+ this.getClass().getSimpleName());
@@ -89,16 +90,17 @@ public abstract class DSProviderSearchQueryReportBase extends AbstractDataSource
 			conf.setArgsByJRParams(params); // + conf.loadConfig() inside
 		}
 
-		execQuery();
+		if (alfrescoResult == null) {
+			execQuery();
+			if (alfrescoResult == null)
+				return null;
+		}
 
-		if (alfrescoResult == null)
-			return null;
-
-		// Create a new CMIS data source
+		// Create a new data source
 		final AlfrescoJRDataSource dataSource = newJRDataSource(alfrescoResult.iterator());
 		dataSource.setSubstitudeService(substitudeService);
 		dataSource.setRegistryService(serviceRegistry);
-		dataSource.setVisibleProps(alfVisibleProps);
+		dataSource.setJrSimpleProps(jrSimpleProps);
 		if (conf != null)
 			dataSource.setMetaFields(conf.getMetaFields());
 
@@ -117,7 +119,7 @@ public abstract class DSProviderSearchQueryReportBase extends AbstractDataSource
 
 	protected void clearSearch() {
 		alfrescoResult = null;
-		foundCount = -1;
+		// foundCount = -1;
 		search = null;
 	}
 
@@ -151,22 +153,23 @@ public abstract class DSProviderSearchQueryReportBase extends AbstractDataSource
 	protected abstract String buildQueryText();
 
 	/**
-	 * На основе конфигурации conf формирует список (alfVisibleProps) отбираемых 
-	 * для Jasper-полей (null = все поля)
+	 * На основе конфигурации conf.metaFields формируется список jrSimpleProps
+	 * с именами простых полей (т.е. отбрасываются вычисляемые). 
+	 * Список == null означает включение всех полей.
 	 */
-	protected void prepareFilteredAlfrescoFieldsSet() {
-		alfVisibleProps = null; // no filter
+	protected void scanSimpleFieldsInMetaConf() {
+		jrSimpleProps = null; // no filter = all fields
 		if (conf != null) { // вносим только поля Альфреско (которые отличаются от jr-полей)
 			final Map<String, JRXField> meta = conf.getMetaFields(); //
 			if (meta != null && !meta.isEmpty()) {
-				alfVisibleProps = new HashSet<String>();
+				jrSimpleProps = new HashSet<String>();
 				final NamespaceService ns = serviceRegistry.getNamespaceService();
 				for (JRXField fld: meta.values()) {
 					if (AlfrescoJRDataSource.isCalcField(fld.getValueLink())) { // пропускаем вычисляемые значения ... 
 						continue;
 					}
 					final QName qname = QName.createQName( fld.getValueLink(), ns);
-					alfVisibleProps.add( qname.toPrefixString(ns)); // регим короткое название
+					jrSimpleProps.add( qname.toPrefixString(ns)); // (!) регим короткое название
 				}
 			}
 		}
@@ -176,7 +179,7 @@ public abstract class DSProviderSearchQueryReportBase extends AbstractDataSource
 		final DurationLogger d = new DurationLogger();
 
 		clearSearch();
-		prepareFilteredAlfrescoFieldsSet();
+		scanSimpleFieldsInMetaConf(); // scan in conf.getMetaFields()
 
 		final String queryText = buildQueryText();
 		if (logger.isDebugEnabled()) {
@@ -197,8 +200,8 @@ public abstract class DSProviderSearchQueryReportBase extends AbstractDataSource
 			search.setMaxItems(maxItems);
 
 		alfrescoResult = serviceRegistry.getSearchService().query(search);
-		this.foundCount = (alfrescoResult != null && alfrescoResult.hasMore()) ? alfrescoResult.length() : -1;
 
+		final int foundCount = (alfrescoResult != null && alfrescoResult.hasMore()) ? alfrescoResult.length() : -1;
 		d.logCtrlDuration(logger, String.format( 
 				"\nQuery in {t} msec: found %d rows, limit %d, offset %d" +
 				"\n>>>%s\n<<<"

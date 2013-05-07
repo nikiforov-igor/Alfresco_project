@@ -28,6 +28,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
 /**
@@ -48,6 +49,7 @@ public class JasperFormProducer extends AbstractWebScript {
 
 	private ServiceRegistry serviceRegistry;
 	private SubstitudeBean substitudeService;
+	private OrgstructureBean orgstructureService;
 
 	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
@@ -63,6 +65,14 @@ public class JasperFormProducer extends AbstractWebScript {
 
 	public void setSubstitudeService(SubstitudeBean substitudeService) {
 		this.substitudeService = substitudeService;
+	}
+
+	public OrgstructureBean getOrgstructureService() {
+		return this.orgstructureService;
+	}
+
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
 	}
 
 	static Map<String, String[]> getRequestParameters( WebScriptRequest webScriptRequest
@@ -128,6 +138,7 @@ public class JasperFormProducer extends AbstractWebScript {
 					final AbstractDataSourceProvider adsp = (AbstractDataSourceProvider) dsProvider;
 					adsp.setServiceRegistry( this.getServiceRegistry());
 					adsp.setSubstitudeService( this.getSubstitudeService());
+					adsp.setOrgstructureService(this.getOrgstructureService());
 				}
 
 				BeanUtils.populate(dsProvider, requestParameters);

@@ -47,7 +47,7 @@
 	<field name="col_Employee.Unit" class="java.lang.String">
 		<fieldDescription><![CDATA[Отдел Сотрудника]]></fieldDescription>
 	</field>
-	<field name="col_Employee.MissedApproves" class="java.lang.Float">
+	<field name="col_Employee.MissedApproves" class="java.lang.Integer">
 		<fieldDescription><![CDATA[Кол-во просроченных согласований]]></fieldDescription>
 	</field>
 	<field name="col_Employee.AvgApproved" class="java.lang.Float">
@@ -55,15 +55,6 @@
 	</field>
 	<field name="col_Employee.AvgMissed" class="java.lang.Float">
 		<fieldDescription><![CDATA[Средний срок просрочки, дней]]></fieldDescription>
-	</field>
-	<field name="col_ApproveEnd" class="java.util.Date">
-		<fieldDescription><![CDATA[Дата согласования Сотрудником]]></fieldDescription>
-	</field>
-	<field name="col_ApproveStart" class="java.util.Date">
-		<fieldDescription><![CDATA[Дата начала согласования по списку]]></fieldDescription>
-	</field>
-	<field name="col_ApproveStartByDoc" class="java.util.Date">
-		<fieldDescription><![CDATA[Дата начала согласования по документу]]></fieldDescription>
 	</field>
 	<variable name="PERIOD_START" class="java.util.Date"/>
 	<variable name="PERIOD_END" class="java.util.Date"/>
@@ -216,6 +207,7 @@
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="18c1ff17-fd8f-495d-84a4-88e5e3b52b5d" x="634" y="2" width="80" height="20"/>
 					<textElement textAlignment="Center">
+						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_Employee.AvgApproved}]]></textFieldExpression>

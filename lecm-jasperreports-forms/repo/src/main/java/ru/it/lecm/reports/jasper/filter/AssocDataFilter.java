@@ -19,10 +19,12 @@ public interface AssocDataFilter {
 
 	/**
 	 * Добавить условие для дочерней ассоциации 
-	 * @param type тип связи-ассоциации
-	 * @param id дочерний узел
+	 * @param type тип на другом конце
+	 * @param assocType тип связи-ассоциации или Null
+	 * @param id связанный узел
+	 * @param kind
 	 */
-	void addChildAssoc( QName type, NodeRef id);
+	void addAssoc( QName type, QName assocType, NodeRef id, AssocKind kind);
 
 
 	// TODO: void addParentAssoc( QName type, NodeRef id);
@@ -37,27 +39,39 @@ public interface AssocDataFilter {
 	 * Описатель связи
 	 */
 	public class AssocDesc {
-		public final QName type;
+		public final QName type, assoctype;
 		public final NodeRef id;
-		public final boolean isChild; // true = child association descriptor, false = parent
+		public final AssocKind kind; // true = child association descriptor, false = parent
 
-		public AssocDesc(QName type, NodeRef id, boolean isChild) {
+//		public AssocDesc(QName type, NodeRef id, AssocKind kind) {
+//			this(type, null, id, kind);
+//		}
+
+		public AssocDesc(QName type, QName assoctype, NodeRef id, AssocKind kind) {
 			super();
 			this.type = type;
+			this.assoctype = assoctype;
 			this.id = id;
-			this.isChild = isChild;
+			this.kind = kind;
 		}
 
 		@Override
 		public String toString() {
 			StringBuilder builder = new StringBuilder();
 			builder.append("AssocDesc [ ");
-			builder.append( isChild ? "child" : "parent");
+			builder.append( kind);
 			builder.append(", type=").append(type);
+			builder.append(", assoc=").append(assoctype);
 			builder.append(", id=").append(id);
 			builder.append("]");
 			return builder.toString();
 		}
 	}
 
+	/**
+	 * Типы ассоциации
+	 */
+	public enum AssocKind {
+		child, parent, source, target
+	}
 }

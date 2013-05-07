@@ -50,6 +50,9 @@
 	<field name="col_Theme.code" class="java.lang.String">
 		<fieldDescription><![CDATA[Тематика договора.Код]]></fieldDescription>
 	</field>
+	<field name="col_Theme.tname" class="java.lang.String">
+		<fieldDescription><![CDATA[Тематика договора.Название]]></fieldDescription>
+	</field>
 	<field name="col_Theme.desc" class="java.lang.String">
 		<fieldDescription><![CDATA[Тематика договора.Описание]]></fieldDescription>
 	</field>
@@ -65,16 +68,19 @@
 	<field name="col_DateEnd" class="java.util.Date">
 		<fieldDescription><![CDATA[Дата окончания действия договора]]></fieldDescription>
 	</field>
-	<field name="col_Family" class="java.lang.String">
+	<field name="col_Creator" class="java.lang.String">
+		<fieldDescription><![CDATA[Создатель договора]]></fieldDescription>
+	</field>
+	<field name="col_Executor_Family" class="java.lang.String">
 		<fieldDescription><![CDATA[Исполнитель.Фамилия]]></fieldDescription>
 	</field>
-	<field name="col_Name" class="java.lang.String">
+	<field name="col_Executor_Name" class="java.lang.String">
 		<fieldDescription><![CDATA[Исполнитель.Имя]]></fieldDescription>
 	</field>
-	<field name="col_Otchestvo" class="java.lang.String">
+	<field name="col_Executor_Otchestvo" class="java.lang.String">
 		<fieldDescription><![CDATA[Исполнитель.Отчество]]></fieldDescription>
 	</field>
-	<field name="col_Executor" class="java.lang.String">
+	<field name="col_Executor_Staff" class="java.lang.String">
 		<fieldDescription><![CDATA[Исполнитель.Должность]]></fieldDescription>
 	</field>
 	<background>
@@ -177,13 +183,13 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="28" splitType="Stretch">
+		<band height="31" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{REPORT_COUNT} <= 200]]></printWhenExpression>
 			<rectangle>
-				<reportElement uuid="da1236f3-eb64-4274-9271-7c548fed2ae6" x="0" y="0" width="800" height="26"/>
+				<reportElement uuid="da1236f3-eb64-4274-9271-7c548fed2ae6" x="1" y="1" width="800" height="28"/>
 			</rectangle>
 			<frame>
-				<reportElement uuid="1e092e56-8305-48da-8ce3-c4deba187eda" style="styleOdd" x="2" y="2" width="800" height="23"/>
+				<reportElement uuid="1e092e56-8305-48da-8ce3-c4deba187eda" style="styleOdd" x="1" y="2" width="797" height="24"/>
 				<textField pattern="" isBlankWhenNull="true">
 					<reportElement uuid="0540390a-1d4a-425e-94fd-cba55ad840b5" x="177" y="2" width="130" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
@@ -215,14 +221,15 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_Regnum}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="true">
+				<textField pattern="" isBlankWhenNull="false">
 					<reportElement uuid="18c1ff17-fd8f-495d-84a4-88e5e3b52b5d" x="309" y="2" width="148" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
+						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Theme.code}+ " " + $F{col_Theme.desc}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[( ($F{col_Theme.tname} != null) ? $F{col_Theme.tname} : "Code "+ $F{col_Theme.code} )]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="true">
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement uuid="16d04a8b-5f73-4f50-b514-aa24b6a8f501" x="459" y="2" width="68" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
@@ -230,7 +237,7 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_DateStart}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="true">
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement uuid="7fe3fbca-e8e2-431c-b0d1-35a9f6eba3e9" x="529" y="2" width="68" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
@@ -241,13 +248,15 @@
 				<textField pattern="" isBlankWhenNull="true">
 					<reportElement uuid="22eefe53-6554-492a-bcd3-2459eca02fce" x="599" y="2" width="88" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
+						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Family}+ " " + $F{col_Name}+ " " + $F{col_Otchestvo}+ " " + $F{col_Executor}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Creator}]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="true">
 					<reportElement uuid="b8fc6c50-c272-4fda-86c8-c18a502c3205" x="690" y="2" width="107" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
+						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_Status}]]></textFieldExpression>

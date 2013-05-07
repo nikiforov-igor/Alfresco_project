@@ -11,6 +11,7 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru.it.lecm.reports.jasper.filter.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
@@ -70,18 +71,21 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 			final NamespaceService ns = serviceRegistry.getNamespaceService();
 
 			if (hasSubject) {
-				final QName qnCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns); // Тематика договора
-				result.addChildAssoc( qnCSubject, contractSubject);
+				final QName qnCSubject = QName.createQName( "lecm-contract-dic:contract-subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
+				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
+				result.addAssoc( qnCSubject, qnAssocCSubject, contractSubject, AssocKind.target);
 			}
 
 			if (hasType) {
-				final QName qnCType = QName.createQName( "lecm-contract:typeContract-assoc", ns); // Вид договора
-				result.addChildAssoc( qnCType, contractType);
+				final QName qnCType = QName.createQName( "lecm-contract-dic:contract-type", ns); // Вид договора 
+				final QName qnAssocCType = QName.createQName( "lecm-contract:typeContract-assoc", ns);
+				result.addAssoc( qnCType, qnAssocCType, contractType, AssocKind.target);
 			}
 
 			if (hasCAgent) {
-				final QName qnCAgent = QName.createQName( "lecm-contract:partner-assoc", ns); // Контрагенты
-				result.addChildAssoc( qnCAgent, contragent);
+				final QName qnCAgent = QName.createQName( "lecm-contractor:contractor-type", ns); // Контрагенты, "lecm-contract:partner-assoc"
+				final QName qnAssocCAgent = QName.createQName( "lecm-contract:partner-assoc", ns);
+				result.addAssoc( qnCAgent, qnAssocCAgent, contragent, AssocKind.target);
 			}
 
 			return result;
