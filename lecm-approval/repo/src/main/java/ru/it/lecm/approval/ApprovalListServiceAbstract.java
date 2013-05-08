@@ -42,30 +42,13 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
 import org.alfresco.service.cmr.workflow.WorkflowTaskState;
 import org.apache.commons.lang.time.DateUtils;
+import ru.it.lecm.wcalendar.IWorkCalendar;
 
 /**
  *
  * @author vlevin
  */
 public abstract class ApprovalListServiceAbstract extends BaseBean implements ApprovalListService {
-
-	private final static class Assignee {
-		private final NodeRef employee;
-		private final Date dueDate;
-
-		Assignee(final NodeRef employee, final Date dueDate) {
-			this.employee = employee;
-			this.dueDate = dueDate;
-		}
-
-		NodeRef getEmployee() {
-			return employee;
-		}
-
-		Date getDueDate() {
-			return dueDate;
-		}
-	}
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceAbstract.class);
 	private final static String CONTRACT_NAMESPACE = "http://www.it.ru/logicECM/contract/1.0";
@@ -77,6 +60,8 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	private final static QName ASSOC_CONTRACT_PARTNER = QName.createQName(CONTRACT_NAMESPACE, "partner-assoc");
 	private final static QName PROP_CONTRACTOR_FULLNAME = QName.createQName(CONTRACTORS_NAMESPACE, "fullname");
 	private final static QName PROP_CONTRACTOR_SHORTNAME = QName.createQName(CONTRACTORS_NAMESPACE, "shortname");
+	private final static QName FAKE_PROP_COMINGSOON = QName.createQName(NamespaceService.ALFRESCO_URI, "comingSoonNotified");
+	private final static QName FAKE_PROP_OVERDUE = QName.createQName(NamespaceService.ALFRESCO_URI, "overdueNotified");
 	private final static String APPROVAL_LIST_NAME = "Лист согласования версия %s";
 	private final static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -85,6 +70,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
     private DocumentMembersService documentMembersService;
 	private NotificationsService notificationsService;
 	private WorkflowService workflowService;
+	private IWorkCalendar workCalendar;
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -109,6 +95,10 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 	public void setWorkflowService(WorkflowService workflowService) {
 		this.workflowService = workflowService;
+	}
+
+	public void setWorkCalendar(IWorkCalendar workCalendar) {
+		this.workCalendar = workCalendar;
 	}
 
 	/**
@@ -436,12 +426,10 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			logger.warn("Can't get partner for document, because there is no any document in bpm:package");
 		}
 
-		String date = DATE_FORMAT.format(dueDate);
-
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(employeeRef);
 
-		String description = String.format("Вам необходимо согласовать %s по договору с %s, срок согласования: %s", documentLink, partner, date);
+		String description = String.format("Вам необходимо согласовать %s по договору с %s, срок согласования: %s", documentLink, partner, DATE_FORMAT.format(dueDate));
 
 		Notification notification = new Notification();
 		notification.setAutor(AuthenticationUtil.getSystemUserName());
@@ -504,36 +492,81 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		notificationsService.sendNotification(notificationChannels, notification);
 	}
 
-	private List<Assignee> getAssigneesFromIncompleteTasks(final String processInstanceId) {
+	private void notifyAssigneeDeadline(WorkflowTask userTask, final NodeRef documentRef, final String documentLink, final String partner) {
+		Map<QName, Serializable> props = userTask.getProperties();
+		Date dueDate = (Date)props.get(WorkflowModel.PROP_DUE_DATE);
+		String owner = (String)props.get(ContentModel.PROP_OWNER);
+		NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
+		List<NodeRef> recipients = new ArrayList<NodeRef>();
+		recipients.add(employee);
+		Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(employee, dueDate, -1);
+		Date currentDate = new Date();
+		int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
+		int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
+		Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
+		if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
+			fakeProps.put(FAKE_PROP_COMINGSOON, "");
+			//послать уведомление о приближении срока
+			Notification notification = new Notification();
+			notification.setAutor(AuthenticationUtil.getSystemUserName());
+			//«Напоминание: вам необходимо согласовать проект документа по договору с <Наименование контрагента>, срок согласования: <Индивидуальный срок согласования по документу>»
+			String description = String.format("Напоминание: Вам необходимо согласовать проект %s по договору с %s, срок согласования: %s", documentLink, partner, DATE_FORMAT.format(dueDate));
+			notification.setDescription(description);
+			notification.setObjectRef(documentRef);
+			notification.setRecipientEmployeeRefs(recipients);
+			notificationsService.sendNotification(notificationChannels, notification);
+		}
+		if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
+			fakeProps.put(FAKE_PROP_OVERDUE, "");
+			//послать уведомление об истечении срока
+			Notification notification = new Notification();
+			notification.setAutor(AuthenticationUtil.getSystemUserName());
+			//«Внимание: вы не согласовали документ: проект документа по договору с <Наименование контрагента>, срок согласования: <Индивидуальный срок согласования по документу>»
+			String description = String.format("Внимание: Вы не согласовали документ: проект %s по договору с %s, срок согласования: %s", documentLink, partner, DATE_FORMAT.format(dueDate));
+			notification.setDescription(description);
+			notification.setObjectRef(documentRef);
+			notification.setRecipientEmployeeRefs(recipients);
+			notificationsService.sendNotification(notificationChannels, notification);
+		}
+		if (!fakeProps.isEmpty()) {
+			workflowService.updateTask(userTask.getId(), fakeProps, null, null);
+		}
+	}
+
+	@Override
+	public void notifyAssigneesDeadline(final String processInstanceId, final NodeRef bpmPackage) {
+		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
+		String documentLink = "<a href=\"javascript:void(0);\">документа</a>";
+		if (documentRef != null) {
+			documentLink = wrapperLink(documentRef, "документа", DOCUMENT_LINK_URL);
+		} else {
+			logger.warn("Can't wrap document as link, because there is no any document in bpm:package.");
+		}
+
+		String partner = "<контрагент отсутствует>";
+		if (documentRef != null) {
+			partner = getDocumentPartnerName(documentRef);
+		} else {
+			logger.warn("Can't get partner for document, because there is no any document in bpm:package");
+		}
+
 		WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
 		taskQuery.setProcessId(processInstanceId);
 		taskQuery.setTaskState(WorkflowTaskState.IN_PROGRESS);
 		List<WorkflowTask> tasks = workflowService.queryTasks(taskQuery);
-		List<Assignee> assignees = new ArrayList<Assignee>(tasks.size());
 		for (WorkflowTask task : tasks) {
 			logger.trace(task.toString());
-			Date dueDate = DateUtils.truncate((Date)task.getProperties().get(WorkflowModel.PROP_DUE_DATE), Calendar.DATE);
-			String owner = (String)task.getProperties().get(ContentModel.PROP_OWNER);
-			NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
-			assignees.add(new Assignee(employee, dueDate));
+			notifyAssigneeDeadline(task, documentRef, documentLink, partner);
 		}
-		return assignees;
-	}
-
-	private void notifyComingSoonAssignee(Assignee assignee) {
 	}
 
 	@Override
-	public void notifyComingSoonAssignees(final String processInstanceId) {
+	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage) {
 		WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
-		List<Assignee> assignees = getAssigneesFromIncompleteTasks(processInstanceId);
-		for (Assignee assignee : assignees) {
-			notifyComingSoonAssignee(assignee);
-		}
 	}
 
 	@Override
-	public void notifyComingSoonInitiator(final String processInstanceId) {
+	public void notifyCuratorsDeadline(String processInstanceId, final NodeRef bpmPackage) {
 		WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
 	}
 }

@@ -66,7 +66,23 @@ public interface ApprovalListService {
      */
     NodeRef getDocumentFromBpmPackage(final NodeRef bpmPackage);
 
-	void notifyComingSoonAssignees(final String processInstanceId);
+	/**
+	 * уведомить согласующих о том что подходит срок согласования
+	 * или о том что согласование просрочено
+	 * @param processInstanceId
+	 */
+	void notifyAssigneesDeadline(final String processInstanceId, final NodeRef bpmPackage);
 
-	void notifyComingSoonInitiator(final String processInstanceId);
+	/**
+	 * уведомить исполнителя договора о том что подходит срок согласования
+	 * или о том что согласование просрочено
+	 * @param processInstanceId
+	 */
+	void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage);
+
+	/**
+	 * уведомить кураторов договорной деятельности о том, что согласование просрочено
+	 * @param processInstanceId
+	 */
+	void notifyCuratorsDeadline(final String processInstanceId, final NodeRef bpmPackage);
 }
