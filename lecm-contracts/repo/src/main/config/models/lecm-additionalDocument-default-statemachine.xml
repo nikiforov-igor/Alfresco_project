@@ -10434,7 +10434,43 @@
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>ccd31f38-1d60-4c60-a34f-903bfa6d5953
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/f7bef7a9-26aa-4f8a-9678-33e74c36eea3
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>Поле "Подписан контрагентом" не
+                                                                                    заполнено
+                                                                                </value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value>false</value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    doc.attr("lecm-contract:signedCounterparty")
+                                                                                </value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                     <node>
                                                         <type>transitionWorkflow</type>
