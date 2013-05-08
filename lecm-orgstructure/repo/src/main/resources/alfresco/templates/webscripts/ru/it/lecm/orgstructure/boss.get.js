@@ -1,1 +1,1 @@
-model.boss = orgstructure.getBossExists(args["nodeRef"]);
+model.boss = orgstructure.getBossStaff(args["nodeRef"]);

@@ -261,16 +261,17 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 
 	/**
 	 * Получение вышестоящего подразделения
-     * @param nodeRef подразделение
+     * @param unitRef подразделение
      * @param returnSelf возвращать ссылку на самого себя, если подразделение является корнем
-     * @return
+     * @return ссылка на вышестоящее подразделение
      */
-	public ScriptNode getParentUnit(String nodeRef, boolean returnSelf) {
-		NodeRef parent = orgstructureService.getParentUnit(new NodeRef(nodeRef));
+	public ScriptNode getParentUnit(String unitRef, boolean returnSelf) {
+        ParameterCheck.mandatory("unitRef", unitRef);
+		NodeRef parent = orgstructureService.getParentUnit(new NodeRef(unitRef));
 		if (parent != null) {
 			return new ScriptNode(parent, serviceRegistry, getScope());
 		} else if (returnSelf) {
-            return new ScriptNode(new NodeRef(nodeRef), serviceRegistry, getScope());
+            return new ScriptNode(new NodeRef(unitRef), serviceRegistry, getScope());
         }
 		return null;
 	}
@@ -278,9 +279,9 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	/**
 	 * Получение значений атрибутов подразделения
 	 */
-	public ScriptNode getUnit(String nodeRef) {
-		ParameterCheck.mandatory("nodeRef", nodeRef);
-		NodeRef ref = new NodeRef(nodeRef);
+	public ScriptNode getUnit(String unitRef) {
+		ParameterCheck.mandatory("unitRef", unitRef);
+		NodeRef ref = new NodeRef(unitRef);
 		if (this.serviceRegistry.getNodeService().exists(ref)) {
 			if (orgstructureService.isUnit(ref)) {
 				return new ScriptNode(ref, this.serviceRegistry, getScope());
@@ -292,12 +293,12 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	/**
 	 * Получение информации о руководителе подразделения
 	 */
-	public ScriptNode findUnitBoss(String nodeRef) {
-		ParameterCheck.mandatory("nodeRef", nodeRef);
-		NodeRef ref = new NodeRef(nodeRef);
-		if (serviceRegistry.getNodeService().exists(ref)) {
-			if (orgstructureService.isUnit(ref)) {
-				NodeRef bossRef = orgstructureService.getUnitBoss(ref);
+	public ScriptNode findUnitBoss(String unitRef) {
+		ParameterCheck.mandatory("unitRef", unitRef);
+		NodeRef unit = new NodeRef(unitRef);
+		if (serviceRegistry.getNodeService().exists(unit)) {
+			if (orgstructureService.isUnit(unit)) {
+				NodeRef bossRef = orgstructureService.getUnitBoss(unit);
 				if (bossRef != null) {
 					return new ScriptNode(bossRef, serviceRegistry, getScope());
 				}
@@ -309,8 +310,8 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	/**
 	 * Получение перечня должностей подразделения
 	 */
-	public Scriptable getAllStaffLists(String unit) {
-		return getStaffLists(unit, false);
+	public Scriptable getAllStaffLists(String unitRef) {
+		return getStaffLists(unitRef, false);
 	}
 
 	private Scriptable getStaffLists(String unit, boolean onlyVacant) {
@@ -334,8 +335,8 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	/**
 	 * Получение перечня вакантных должностей в подразделении
 	 */
-	public Scriptable getVacantStaffLists(String unit) {
-		return getStaffLists(unit, true);
+	public Scriptable getVacantStaffLists(String unitRef) {
+		return getStaffLists(unitRef, true);
 	}
 
 	/**
@@ -398,7 +399,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 * Получение информации о сотруднике по ссылке
 	 */
 	public ScriptNode getEmployeeByLink(String employeeLinkNodeRef) {
-		ParameterCheck.mandatory("nodeRef", employeeLinkNodeRef);
+		ParameterCheck.mandatory("employeeLinkNodeRef", employeeLinkNodeRef);
 		NodeRef ref = new NodeRef(employeeLinkNodeRef);
 		if (serviceRegistry.getNodeService().exists(ref)) {
 			NodeRef employeeRef = orgstructureService.getEmployeeByLink(ref);
@@ -441,9 +442,9 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	/**
 	 * Получение информации о руководителе сотрудника
 	 */
-	public ScriptNode findEmployeeBoss(String nodeRef) {
-		ParameterCheck.mandatory("nodeRef", nodeRef);
-		NodeRef ref = new NodeRef(nodeRef);
+	public ScriptNode findEmployeeBoss(String employeeRef) {
+		ParameterCheck.mandatory("employeeRef", employeeRef);
+		NodeRef ref = new NodeRef(employeeRef);
 		NodeRef bossRef = orgstructureService.findEmployeeBoss(ref);
 		if (bossRef != null) {
 			return new ScriptNode(bossRef, serviceRegistry, getScope());
@@ -506,10 +507,20 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		return createScriptable(employees);
 	}
 
+    /**
+     * Получение ссылки на сотрудника для объектов "Штатное Расписание и "Участник Рабочей группы"
+     * @param positionRef ссылка на должностную позицию
+     * @return ссылка на сотрудника
+     */
     public ScriptNode getEmployeeByPosition(ScriptNode positionRef) {
         return new ScriptNode(orgstructureService.getEmployeeByPosition(positionRef.getNodeRef()), serviceRegistry, getScope());
     }
 
+    /**
+     * Получение ссылки на сотрудника для объектов "Штатное Расписание и "Участник Рабочей группы"
+     * @param positionRef должностная позиция
+     * @return ссылка на сотрудника
+     */
     public ScriptNode getEmployeeByPosition(NodeRef positionRef) {
         NodeRef nodeRef = orgstructureService.getEmployeeByPosition(positionRef);
         if (nodeRef != null) {
@@ -542,22 +553,28 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		}
 	}
 
-	public ScriptNode getBossExists(String subUnit) {
-		NodeRef sunUnitRef = new NodeRef(subUnit);
-		NodeRef bossExists = orgstructureService.getBossStaff(sunUnitRef);
+    /**
+     * Получение руководящей позиции в выбранном подразделении
+     * @param unitRef ссылка на подразделение
+     * @return руководящая позиция
+     */
+	public ScriptNode getBossStaff(String unitRef) {
+        ParameterCheck.mandatory("unitRef", unitRef);
+		NodeRef unit = new NodeRef(unitRef);
+		NodeRef bossExists = orgstructureService.getBossStaff(unit);
 		if (bossExists != null) {
 			return new ScriptNode(bossExists, serviceRegistry, getScope());
 		} else {
-		return null;
+		    return null;
 		}
 	}
 
     /**
      * Получить основную должностную позицию сотрудника
      */
-	public ScriptNode getPrimaryPosition(String employee) {
-		NodeRef employeeRef = new NodeRef(employee);
-		NodeRef mainJob = orgstructureService.getEmployeePrimaryStaff(employeeRef);
+	public ScriptNode getPrimaryPosition(String employeeRef) {
+        ParameterCheck.mandatory("employeeRef", employeeRef);
+		NodeRef mainJob = orgstructureService.getEmployeePrimaryStaff(new NodeRef(employeeRef));
 		if (mainJob != null) {
 			return new ScriptNode(mainJob, serviceRegistry, getScope());
 		} else {
@@ -629,7 +646,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	/**
 	 * получить список подразделений в которые входит сотрудник согласно штатному расписанию
 	 * этот список будет содержать или все подразделения или только те, где сотрудник является боссом
-	 * @param employeeRef ссылка на фотрудника
+	 * @param employeeRef ссылка на сотрудника
 	 * @param bossUnitsOnly флаг показывающий что нас интересуют только те подразделения где сотрудник - босс
 	 * @return список подразделений или пустой список
 	 */
@@ -650,23 +667,23 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 
 	/**
 	 * получение списка подчиненных для указанного сотрудника
-	 * @param employeeRef сотрудник который является боссом
+	 * @param bossRef сотрудник который является руководителем
 	 * @return список подчиненных сотрудника по всем подразделениям.
-	 *         Если сотрудник не является боссом, то список пустой
+	 *         Если сотрудник не является руководителем, то список пустой
 	 */
-	public Scriptable getBossSubordinate (final String employeeRef) {
-		ParameterCheck.mandatory ("employeeRef", employeeRef);
-		return createScriptable (orgstructureService.getBossSubordinate (new NodeRef (employeeRef)));
+	public Scriptable getBossSubordinate(final String bossRef) {
+		ParameterCheck.mandatory("bossRef", bossRef);
+		return createScriptable(orgstructureService.getBossSubordinate(new NodeRef(bossRef)));
 	}
 
 	/**
 	 * получить бизнес роль "Технолог" из общего справочника бизнес ролей
 	 * @return ScriptNode на бизнес роль "Технолог" или null если таковой бизнес роли нет
 	 */
-	public ScriptNode getBusinessRoleDelegationEngineer () {
-		NodeRef engineerRef = orgstructureService.getBusinessRoleDelegationEngineer ();
+	public ScriptNode getBusinessRoleDelegationEngineer() {
+		NodeRef engineerRef = orgstructureService.getBusinessRoleDelegationEngineer();
 		if (engineerRef != null) {
-			return new ScriptNode (engineerRef, serviceRegistry, getScope ());
+			return new ScriptNode(engineerRef, serviceRegistry, getScope());
 		}
 		return null;
 	}
@@ -675,10 +692,10 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 * получить бизнес роль "Технолог календарей" из общего справочника бизнес ролей
 	 * @return ScriptNode на бизнес роль "Технолог календарей" или null если таковой бизнес роли нет
 	 */
-	public ScriptNode getBusinessRoleCalendarEngineer () {
-		NodeRef engineerRef = orgstructureService.getBusinessRoleCalendarEngineer ();
+	public ScriptNode getBusinessRoleCalendarEngineer() {
+		NodeRef engineerRef = orgstructureService.getBusinessRoleCalendarEngineer();
 		if (engineerRef != null) {
-			return new ScriptNode(engineerRef, serviceRegistry, getScope ());
+			return new ScriptNode(engineerRef, serviceRegistry, getScope());
 		}
 		return null;
 	}
@@ -701,6 +718,11 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		return orgstructureService.isBoss(new NodeRef(employeeRef));
 	}
 
+    /**
+     * является ли указанный пользователь Технологом делегирования
+     * @param employeeRef ссылка на сотрудника
+     * @return true/false
+     */
 	public boolean isDelegationEngineer (final String employeeRef) {
 		return orgstructureService.isDelegationEngineer (new NodeRef (employeeRef));
 	}
@@ -710,7 +732,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	}
 
 	/**
-	 * Получение информации о ролях текущего сотруднике
+	 * Получение информации о ролях текущего сотрудника
 	 */
 	public Scriptable getCurrentEmployeeRoles() {
 		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
@@ -718,6 +740,11 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		return createScriptable(employeeRoles);
 	}
 
+    /**
+     * Получение корневой папки из оргструктуры по ее типу
+     * @param rootType тип папки (ROOT Map<String, Integer>)
+     * @return
+     */
     public String getRoot(String rootType) {
         Integer key = ROOTS.get(rootType);
         JSONObject settings = new JSONObject();
@@ -810,9 +837,9 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     /**
      * Получение подразделения, где сотрудник числится на основной должностной позиции
      */
-    public ScriptNode getPrimaryOrgUnit(String nodeRef) {
-        ParameterCheck.mandatory("nodeRef", nodeRef);
-        NodeRef ref = new NodeRef(nodeRef);
+    public ScriptNode getPrimaryOrgUnit(String employeeRef) {
+        ParameterCheck.mandatory("employeeRef", employeeRef);
+        NodeRef ref = new NodeRef(employeeRef);
         NodeRef unit = orgstructureService.getPrimaryOrgUnit(ref);
         if (unit != null) {
             return new ScriptNode(unit, serviceRegistry, getScope());
@@ -834,9 +861,9 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
      * Входит ли сотрудник в данную рабочую группу
      * @param employeeRef ссылка на сотрудника
      * @param workGroupRef ссылка на рабочую группу
-     * @return
+     * @return true/false
      */
-    public Boolean isInWorkGroup(String employeeRef, String workGroupRef) {
+    public boolean isInWorkGroup(String employeeRef, String workGroupRef) {
         ParameterCheck.mandatory("workGroupRef", workGroupRef);
         NodeRef ref = new NodeRef(workGroupRef);
         List<NodeRef> employees = orgstructureService.getWorkGroupEmployees(ref);
@@ -845,10 +872,10 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 
     /**
      * Имеет ли текущий пользователь у себя в подчинении другого пользователя
-     * @param bossRef
-     * @param subordinateRef
-     * @param checkPrimary
-     * @return
+     * @param bossRef - руководитель
+     * @param subordinateRef - подчиненный
+     * @param checkPrimary - учитывать только руководство по основной должностной позиции
+     * @return true если в имеет в подчинении иначе false
      */
     public boolean isBossOf(final String bossRef, final String subordinateRef, boolean checkPrimary) {
         return orgstructureService.isBossOf(new NodeRef (bossRef), new NodeRef (subordinateRef), checkPrimary);
