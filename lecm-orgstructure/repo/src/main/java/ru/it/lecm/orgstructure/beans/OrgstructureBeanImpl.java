@@ -1428,7 +1428,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		if (withDelegation) {
 			boolean hasBusinessRole = false;
 			List<NodeRef> procuracies = getActiveProcuracies (employeeRef);
-            final NodeRef businessRoleRef = new NodeRef(businessRoleIdentifier);
+            final NodeRef businessRoleRef = getBusinessRoleByIdentifier(businessRoleIdentifier);
 			for (NodeRef procuracy : procuracies) {
                 if (hasTrustedBusinessRole (procuracy, businessRoleRef)) {
 					hasBusinessRole = true;
