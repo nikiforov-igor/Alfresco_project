@@ -5,6 +5,7 @@ import org.alfresco.service.namespace.QName;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  *
@@ -78,11 +79,5 @@ public interface ApprovalListService {
 	 * или о том что согласование просрочено
 	 * @param processInstanceId
 	 */
-	void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage);
-
-	/**
-	 * уведомить кураторов договорной деятельности о том, что согласование просрочено
-	 * @param processInstanceId
-	 */
-	void notifyCuratorsDeadline(final String processInstanceId, final NodeRef bpmPackage);
+	void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final Map<String, Object> variablesLocal);
 }

@@ -195,9 +195,8 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * что необходимо принять решение
 	 * @param processInstanceId ИД работающего процесса согласования
 	 */
-	public void notifyDeadlineTasks(final String processInstanceId, final ActivitiScriptNode bpmPackage) {
+	public void notifyDeadlineTasks(final String processInstanceId, final ActivitiScriptNode bpmPackage, final Map<String, Object> variablesLocal) {
 		approvalListService.notifyAssigneesDeadline(processInstanceId, bpmPackage.getNodeRef());
-		approvalListService.notifyInitiatorDeadline(processInstanceId, bpmPackage.getNodeRef());
-		approvalListService.notifyCuratorsDeadline(processInstanceId, bpmPackage.getNodeRef());
+		approvalListService.notifyInitiatorDeadline(processInstanceId, bpmPackage.getNodeRef(), variablesLocal);
 	}
 }

@@ -103,7 +103,7 @@
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
 						var workflowId = "activiti$" + execution.getProcessInstanceId();
-						approvalParallel.notifyDeadlineTasks(workflowId, bpm_package);
+						approvalParallel.notifyDeadlineTasks(workflowId, bpm_package, execution.getVariablesLocal());
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>

@@ -50,6 +50,54 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
  */
 public abstract class ApprovalListServiceAbstract extends BaseBean implements ApprovalListService {
 
+	private final class DocumentInfo {
+		private final NodeRef documentRef;
+		private final NodeRef initiatorRef;
+		private String documentLink;
+		private String partner;
+
+		DocumentInfo(final NodeRef bpmPackage, final String hrefName) {
+			documentRef = getDocumentFromBpmPackage(bpmPackage);
+			documentLink = String.format("<a href=\"javascript:void(0);\">%s</a>", hrefName);
+			if (documentRef != null) {
+				documentLink = wrapperLink(documentRef, hrefName, DOCUMENT_LINK_URL);
+			} else {
+				logger.warn("Can't wrap document as link, because there is no any document in bpm:package.");
+			}
+
+			partner = "<контрагент отсутствует>";
+			if (documentRef != null) {
+				NodeRef partnerRef = findNodeByAssociationRef(documentRef, ASSOC_CONTRACT_PARTNER, TYPE_CONTRACTOR, ASSOCIATION_TYPE.TARGET);
+				if (partnerRef != null) {
+					partner = (String)nodeService.getProperty(partnerRef, PROP_CONTRACTOR_FULLNAME);
+				} else {
+					logger.warn("The is no partner for document {}", documentRef);
+				}
+			} else {
+				logger.warn("Can't get partner for document, because there is no any document in bpm:package");
+			}
+
+			String creator = (String)nodeService.getProperty(documentRef, ContentModel.PROP_CREATOR);
+			initiatorRef = orgstructureService.getEmployeeByPerson(creator);
+		}
+
+		NodeRef getDocumentRef() {
+			return documentRef;
+		}
+
+		String getDocumentLink() {
+			return documentLink;
+		}
+
+		String getPartner() {
+			return partner;
+		}
+
+		NodeRef getInitiatorRef() {
+			return initiatorRef;
+		}
+	}
+
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceAbstract.class);
 	private final static String CONTRACT_NAMESPACE = "http://www.it.ru/logicECM/contract/1.0";
 	private final static String CONTRACT_FAKE_NAMESPACE = "http://www.it.ru/logicECM/contract/fake/1.0";
@@ -64,6 +112,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	private final static QName FAKE_PROP_OVERDUE = QName.createQName(NamespaceService.ALFRESCO_URI, "overdueNotified");
 	private final static String APPROVAL_LIST_NAME = "Лист согласования версия %s";
 	private final static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+	private final static String BUSINESS_ROLE_CONTRACT_CURATOR_ID = "CONTRACT_CURATOR";
 
 	private OrgstructureBean orgstructureService;
 	private DocumentAttachmentsService documentAttachmentsService;
@@ -393,76 +442,29 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		}
 	}
 
-	private String getDocumentPartnerName(final NodeRef documentRef) {
-		String partner = "<контрагент отсутствует>";
-		NodeRef partnerRef = findNodeByAssociationRef(documentRef, ASSOC_CONTRACT_PARTNER, TYPE_CONTRACTOR, ASSOCIATION_TYPE.TARGET);
-		if (partnerRef != null) {
-			partner = (String)nodeService.getProperty(partnerRef, PROP_CONTRACTOR_FULLNAME);
-		} else {
-			logger.warn("The is no partner for document {}", documentRef);
-		}
-		return partner;
-	}
-
-	private NodeRef getDocumentInitiator(final NodeRef documentRef) {
-		String creator = (String)nodeService.getProperty(documentRef, ContentModel.PROP_CREATOR);
-		return orgstructureService.getEmployeeByPerson(creator);
-	}
-
 	@Override
 	public void notifyApprovalStarted(NodeRef employeeRef, Date dueDate, NodeRef bpmPackage) {
-		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
-		String documentLink = "<a href=\"javascript:void(0);\">документ</a>";
-		if (documentRef != null) {
-			documentLink = wrapperLink(documentRef, "документ", DOCUMENT_LINK_URL);
-		} else {
-			logger.warn("Can't wrap document as link, because there is no any document in bpm:package.");
-		}
-
-		String partner = "<контрагент отсутствует>";
-		if (documentRef != null) {
-			partner = getDocumentPartnerName(documentRef);
-		} else {
-			logger.warn("Can't get partner for document, because there is no any document in bpm:package");
-		}
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage, "документ");
 
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(employeeRef);
 
-		String description = String.format("Вам необходимо согласовать %s по договору с %s, срок согласования: %s", documentLink, partner, DATE_FORMAT.format(dueDate));
+		String description = String.format("Вам необходимо согласовать %s по договору с %s, срок согласования: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate));
 
 		Notification notification = new Notification();
 		notification.setAutor(AuthenticationUtil.getSystemUserName());
 		notification.setDescription(description);
-        notification.setObjectRef(documentRef);
+        notification.setObjectRef(docInfo.getDocumentRef());
 		notification.setRecipientEmployeeRefs(recipients);
 		notificationsService.sendNotification(notificationChannels, notification);
 	}
 
 	@Override
 	public void notifyFinalDecision(final String decisionCode, final NodeRef bpmPackage) {
-		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
-		String documentLink = "<a href=\"javascript:void(0);\">документе</a>";
-		if (documentRef != null) {
-			documentLink = wrapperLink(documentRef, "документе", DOCUMENT_LINK_URL);
-		} else {
-			logger.warn("Can't wrap document as link, because there is no any document in bpm:package.");
-		}
-
-		String partner = "<контрагент отсутствует>";
-		if (documentRef != null) {
-			partner = getDocumentPartnerName(documentRef);
-		} else {
-			logger.warn("Can't get partner for document, because there is no any document in bpm:package");
-		}
-
-		NodeRef initiator = null;
-		if (documentRef != null) {
-			initiator = getDocumentInitiator(documentRef);
-		}
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage, "документе");
 
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
-		recipients.add(initiator);
+		recipients.add(docInfo.getInitiatorRef());
 
 		String decision;
 		if("APPROVED".equals(decisionCode)) {
@@ -482,17 +484,17 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		}
 
 		//«Принято решение о документе,  по договору с <Наименование контрагента>:  <Результат согласования по документу>»
-		String description = String.format("Принято решение о %s, по договору с %s: \"%s\"", documentLink, partner, decision);
+		String description = String.format("Принято решение о %s, по договору с %s: \"%s\"", docInfo.getDocumentLink(), docInfo.getPartner(), decision);
 
 		Notification notification = new Notification();
 		notification.setAutor(AuthenticationUtil.getSystemUserName());
 		notification.setDescription(description);
-        notification.setObjectRef(documentRef);
+        notification.setObjectRef(docInfo.getDocumentRef());
 		notification.setRecipientEmployeeRefs(recipients);
 		notificationsService.sendNotification(notificationChannels, notification);
 	}
 
-	private void notifyAssigneeDeadline(WorkflowTask userTask, final NodeRef documentRef, final String documentLink, final String partner) {
+	private void notifyAssigneeDeadline(WorkflowTask userTask, final DocumentInfo docInfo) {
 		Map<QName, Serializable> props = userTask.getProperties();
 		Date dueDate = (Date)props.get(WorkflowModel.PROP_DUE_DATE);
 		String owner = (String)props.get(ContentModel.PROP_OWNER);
@@ -506,25 +508,23 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
 		if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
 			fakeProps.put(FAKE_PROP_COMINGSOON, "");
-			//послать уведомление о приближении срока
 			Notification notification = new Notification();
 			notification.setAutor(AuthenticationUtil.getSystemUserName());
 			//«Напоминание: вам необходимо согласовать проект документа по договору с <Наименование контрагента>, срок согласования: <Индивидуальный срок согласования по документу>»
-			String description = String.format("Напоминание: Вам необходимо согласовать проект %s по договору с %s, срок согласования: %s", documentLink, partner, DATE_FORMAT.format(dueDate));
+			String description = String.format("Напоминание: Вам необходимо согласовать проект %s по договору с %s, срок согласования: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate));
 			notification.setDescription(description);
-			notification.setObjectRef(documentRef);
+			notification.setObjectRef(docInfo.getDocumentRef());
 			notification.setRecipientEmployeeRefs(recipients);
 			notificationsService.sendNotification(notificationChannels, notification);
 		}
 		if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
 			fakeProps.put(FAKE_PROP_OVERDUE, "");
-			//послать уведомление об истечении срока
 			Notification notification = new Notification();
 			notification.setAutor(AuthenticationUtil.getSystemUserName());
 			//«Внимание: вы не согласовали документ: проект документа по договору с <Наименование контрагента>, срок согласования: <Индивидуальный срок согласования по документу>»
-			String description = String.format("Внимание: Вы не согласовали документ: проект %s по договору с %s, срок согласования: %s", documentLink, partner, DATE_FORMAT.format(dueDate));
+			String description = String.format("Внимание: Вы не согласовали документ: проект %s по договору с %s, срок согласования: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate));
 			notification.setDescription(description);
-			notification.setObjectRef(documentRef);
+			notification.setObjectRef(docInfo.getDocumentRef());
 			notification.setRecipientEmployeeRefs(recipients);
 			notificationsService.sendNotification(notificationChannels, notification);
 		}
@@ -535,39 +535,87 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 	@Override
 	public void notifyAssigneesDeadline(final String processInstanceId, final NodeRef bpmPackage) {
-		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
-		String documentLink = "<a href=\"javascript:void(0);\">документа</a>";
-		if (documentRef != null) {
-			documentLink = wrapperLink(documentRef, "документа", DOCUMENT_LINK_URL);
-		} else {
-			logger.warn("Can't wrap document as link, because there is no any document in bpm:package.");
-		}
+		try {
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, "документа");
 
-		String partner = "<контрагент отсутствует>";
-		if (documentRef != null) {
-			partner = getDocumentPartnerName(documentRef);
-		} else {
-			logger.warn("Can't get partner for document, because there is no any document in bpm:package");
+			WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
+			taskQuery.setProcessId(processInstanceId);
+			taskQuery.setTaskState(WorkflowTaskState.IN_PROGRESS);
+			List<WorkflowTask> tasks = workflowService.queryTasks(taskQuery);
+			for (WorkflowTask task : tasks) {
+				logger.trace(task.toString());
+				notifyAssigneeDeadline(task, docInfo);
+			}
+		} catch (Exception ex) {
+			logger.error("Internal error while notifying Assignees", ex);
 		}
+	}
 
+	private String getIncompleteAssignees(final String processInstanceId) {
 		WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
 		taskQuery.setProcessId(processInstanceId);
 		taskQuery.setTaskState(WorkflowTaskState.IN_PROGRESS);
 		List<WorkflowTask> tasks = workflowService.queryTasks(taskQuery);
+		StringBuilder builder = new StringBuilder();
 		for (WorkflowTask task : tasks) {
-			logger.trace(task.toString());
-			notifyAssigneeDeadline(task, documentRef, documentLink, partner);
+			String owner = (String)task.getProperties().get(ContentModel.PROP_OWNER);
+			NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
+			String name = (String)nodeService.getProperty(employee, ContentModel.PROP_NAME);
+			builder.append(name).append(", ");
 		}
+		int length = builder.length();
+		if (length > 0) {
+			builder.delete(length-2, length); //удалить последний ", "
+		}
+		return builder.toString();
+	}
+
+	private List<NodeRef> getCurators() {
+		List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID);
+		return curators != null ? curators : new ArrayList<NodeRef>();
 	}
 
 	@Override
-	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage) {
-		WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
-	}
-
-	@Override
-	public void notifyCuratorsDeadline(String processInstanceId, final NodeRef bpmPackage) {
-		WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
+	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final Map<String, Object> variablesLocal) {
+		try {
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, "документа");
+			List<NodeRef> recipients = new ArrayList<NodeRef>();
+			recipients.add(docInfo.getInitiatorRef());
+			WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
+			Date dueDate = workflowInstance.getDueDate();
+			Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(docInfo.getInitiatorRef(), dueDate, -1);
+			Date currentDate = new Date();
+			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
+			int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
+			if(!variablesLocal.containsKey("initiatorComingSoon") && comingSoon >= 0) {
+				variablesLocal.put("initiatorComingSoon", "");
+				Notification notification = new Notification();
+				notification.setAutor(AuthenticationUtil.getSystemUserName());
+				//«Напоминание: вы направили на согласование проект документа по договору с <Наименование контрагента>, срок согласования: <Общий срок согласования по документу>»
+				String description = String.format("Напоминание: Вы направили на согласование проект %s по договору с %s, срок согласования: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate));
+				notification.setDescription(description);
+				notification.setObjectRef(docInfo.getDocumentRef());
+				notification.setRecipientEmployeeRefs(recipients);
+				notificationsService.sendNotification(notificationChannels, notification);
+			}
+			if(!variablesLocal.containsKey("initiatorOverdue") && overdue > 0) {
+				variablesLocal.put("initiatorOverdue", "");
+				Notification notification = new Notification();
+				notification.setAutor(AuthenticationUtil.getSystemUserName());
+				//«Внимание: проект документа по договору с <Наименование контрагента>  не согласован в срок: <Общий срок согласования по документу>.
+				//Следующие сотрудники не приняли решение: <перечень ФИО сотрудников, не принявших решение по проекту>»
+				String people = getIncompleteAssignees(processInstanceId);
+				String description = String.format("Внимание: проект %s по договору с %s не согласован в срок: %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate), people);
+				//получить список кураторов и добавить его в recipients
+				recipients.addAll(getCurators());
+				notification.setDescription(description);
+				notification.setObjectRef(docInfo.getDocumentRef());
+				notification.setRecipientEmployeeRefs(recipients);
+				notificationsService.sendNotification(notificationChannels, notification);
+			}
+		} catch(Exception ex) {
+			logger.error("Internal error while notifying initiator and curators", ex);
+		}
 	}
 }
 
