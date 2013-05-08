@@ -119,17 +119,19 @@ public class BPMNDiagramScript extends AbstractWebScript {
             is.close();
             lecmWorkflowDeployer.redeploy();
 		} else if (statemachineNodeRef != null && "diagram".equals(type)) {
-			res.setContentEncoding("UTF-8");
 			res.setContentType("image/png");
 			// Create an XML stream writer
 			OutputStream output = res.getOutputStream();
 			InputStream bpmn = new BPMNGenerator(statemachineNodeRef, nodeService).generate();
 			InputStream is = new BPMNGraphGenerator().generate(bpmn);
-			byte[] buf = new byte[1 << 8];
+			byte[] buf = new byte[8 * 1024];
 			int c;
+            int len = 0;
 			while ((c = is.read(buf)) != -1) {
 				output.write(buf, 0, c);
+                len += c;
 			}
+            res.setHeader("Content-length", "" + len);
 			output.flush();
 			output.close();
 			is.close();
