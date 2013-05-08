@@ -24,7 +24,7 @@ function Approval_getPresentString() {
 			fn: function (response) {
 				var result = response.json;
 				if (result != null) {
-					outputNode.innerHTML =  "<h2>" + result.presentString + "</h2>";
+					outputNode.innerHTML =  "<h2>" + result.presentStringWithLink + "</h2>";
 				}
 			},
 			scope: this

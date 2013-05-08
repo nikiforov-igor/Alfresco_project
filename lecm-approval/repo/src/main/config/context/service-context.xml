@@ -108,9 +108,11 @@
 	<bean id="webscript.ru.it.lecm.approval.GetDocumentDataByTaskId.get" class="ru.it.lecm.approval.webscript.GetDocumentDataByTaskIdOrNodeRef" parent="webscript">
 		<property name="workflowService" ref="WorkflowService"/>
 		<property name="nodeService" ref="nodeService"/>
+		<property name="approvalListService" ref="lecm.approval.service.parallel"/>
 	</bean>
 	<bean id="webscript.ru.it.lecm.approval.GetDocumentDataByNodeRef.get" class="ru.it.lecm.approval.webscript.GetDocumentDataByTaskIdOrNodeRef" parent="webscript">
 		<property name="workflowService" ref="WorkflowService"/>
 		<property name="nodeService" ref="nodeService"/>
+		<property name="approvalListService" ref="lecm.approval.service.parallel"/>
 	</bean>
 </beans>

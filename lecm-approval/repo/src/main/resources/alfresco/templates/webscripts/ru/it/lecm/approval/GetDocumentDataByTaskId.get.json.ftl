@@ -1,3 +1,6 @@
+<#escape x as jsonUtils.encodeJSONString(x)>
 {
-	"presentString": "${presentString}"
+	"presentString": "${presentString}",
+	"presentStringWithLink": "${presentStringWithLink}"
 }
+</#escape>

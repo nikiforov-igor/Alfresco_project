@@ -14,6 +14,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletRuntime;
+import ru.it.lecm.approval.ApprovalListServiceAbstract;
 import ru.it.lecm.documents.beans.DocumentService;
 
 /**
@@ -29,6 +30,7 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 	private final static QName ASSOC_CONTRACT_TYPE = QName.createQName(CONTRACT_NAMESPACE, "typeContract-assoc");
 	private WorkflowService workflowService;
 	private NodeService nodeService;
+	private ApprovalListServiceAbstract approvalListService;
 
 	public void setWorkflowService(WorkflowService workflowService) {
 		this.workflowService = workflowService;
@@ -36,6 +38,10 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
+	}
+
+	public void setApprovalListService(ApprovalListServiceAbstract approvalListService) {
+		this.approvalListService = approvalListService;
 	}
 
 	@Override
@@ -75,6 +81,7 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 		String presentString = (String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING);
 
 		result.put("presentString", presentString);
+		result.put("presentStringWithLink", approvalListService.wrapperLink(documentRef, presentString, approvalListService.DOCUMENT_LINK_URL));
 
 		return result;
 	}
