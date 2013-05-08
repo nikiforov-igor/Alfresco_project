@@ -154,7 +154,7 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	}
 
 	public boolean isApproved(final String finalDecision) {
-		return "APPROVED_WITH_REMARK".equals(finalDecision) || "APPROVED".equals(finalDecision);
+		return "APPROVED_WITH_REMARK".equals(finalDecision) || "APPROVED".equals(finalDecision) || "APPROVED_FORCE".equals(finalDecision);
 	}
 
 	public void logFinalDecision(final ActivitiScriptNode approvalListRef, final String finalDecision) {

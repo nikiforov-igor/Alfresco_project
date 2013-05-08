@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.it.ru/logicECM/workflow/approval/parallel">
-	<process id="lecmParallelApproval" name="Logic ECM Parallel Approval" isExecutable="true">
+	<process id="lecmParallelApproval" name="Процесс параллельного согласования" isExecutable="true">
+		<extensionElements>
+			<activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+				<activiti:field name="script">
+					<activiti:string><![CDATA[
+						var finalDecision = execution.getVariable("finalDecision");
+						var isApproved = execution.getVariable("isApproved");
+						if (!finalDecision && isApproved != null) {
+							var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);
+							finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";
+							var approvalListRef = execution.getVariable("approvalListRef");
+							approvalParallel.logFinalDecision(approvalListRef, finalDecision);
+						}
+					]]></activiti:string>
+				</activiti:field>
+			</activiti:executionListener>
+		</extensionElements>
 		<startEvent id="start-parallel-approvement" name="Start parallel approvement" activiti:formKey="lecmPar:parallelApproval"/>
-		<userTask id="parallel-approvement-task" name="Parallel approvement task" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmPar:approveTask">
+		<userTask id="parallel-approvement-task" name="Задача параллельного согласования" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmPar:approveTask">
 			<extensionElements>
 				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
@@ -68,6 +84,7 @@
 								logger.log("Attention: decisionsMap is null!");
 							}
 							var finalDecision = approvalParallel.getFinalDecision(decisionsMap);
+							execution.setVariable("finalDecision", finalDecision);
 							approvalParallel.logFinalDecision(approvalListRef, finalDecision);
 							approvalParallel.notifyFinalDecision(finalDecision, bpm_package)
 							execution.setVariable("isApproved", approvalParallel.isApproved(finalDecision));
