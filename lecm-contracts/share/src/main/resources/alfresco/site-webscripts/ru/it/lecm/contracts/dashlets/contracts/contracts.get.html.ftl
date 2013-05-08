@@ -26,9 +26,11 @@
 
 <div class="dashlet contracts">
     <div class="title">${msg("header")}
-        <span class="lecm-dashlet-actions">
+        <#if isStarter?? && isStarter>
+            <span class="lecm-dashlet-actions">
             <a id="${id}-action-add" href="javascript:void(0);" onclick="contracts.onAddContractClick()" class="add" title="${msg("dashlet.add.tooltip")}">${msg("dashlet.add.contract")}</a>
          </span>
+        </#if>
     </div>
     <div class="toolbar flat-button">
         <div class="hidden">

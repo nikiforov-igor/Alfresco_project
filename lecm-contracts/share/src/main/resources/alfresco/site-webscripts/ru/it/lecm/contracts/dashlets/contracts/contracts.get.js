@@ -15,8 +15,19 @@ function getFilters(filterType)
    return filters;
 }
 
+function isStarter() {
+    var url = '/lecm/contracts/employeeIsStarter';
+    var result = remote.connect("alfresco").get(url);
+    if (result.status != 200) {
+        return false;
+    }
+    var perm = eval('(' + result + ')');
+    return (("" + perm) == "true");
+}
+
 model.filterRanges = getFilters("filter-range");
 model.filterTypes = getFilters("filter-type");
+model.isStarter = isStarter();
 
 var settingsStr = remote.connect("alfresco").get("/lecm/contracts/draft-root");
 if (settingsStr.status == 200) {
