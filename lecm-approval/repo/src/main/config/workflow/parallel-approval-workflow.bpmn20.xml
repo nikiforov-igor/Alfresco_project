@@ -95,7 +95,7 @@
 		</sequenceFlow>
 		<boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="parallel-approvement-task" cancelActivity="false">
 			<timerEventDefinition>
-				<timeCycle>0 0/2 * * * ?</timeCycle>
+				<timeCycle>0 0 0/4 * * ?</timeCycle>
 			</timerEventDefinition>
 		</boundaryEvent>
 		<serviceTask id="alfrescoScripttask1" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
