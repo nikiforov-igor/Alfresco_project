@@ -2,32 +2,13 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 
 <script type="text/javascript">//<![CDATA[
-(function()
-{
-
+(function () {
 <@renderPickerJS field "picker" />
     picker.setOptions(
             {
-                showActions:false,
-                additionalProperties:"lecm-document:list-present-string",
-            <#if field.control.params.showTargetLink??>
-                showLinkToTarget: ${field.control.params.showTargetLink},
-                <#if page?? && page.url.templateArgs.site??>
-                    targetLinkTemplate: "${url.context}/page/site/${page.url.templateArgs.site!""}/document-details?nodeRef={nodeRef}",
-                <#else>
-                    targetLinkTemplate: "${url.context}/page/document-details?nodeRef={nodeRef}",
-                </#if>
-                <#if field.control.params.viewOnLinkClick?? && form.mode == "view">
-                    viewOnLinkClick: ${field.control.params.viewOnLinkClick},
-                </#if>
-            </#if>
-            <#if field.control.params.targetLink??>
-                linkToTarget: "${field.control.params.targetLink}",
-            </#if>
-            <#if field.control.params.allowNavigationToContentChildren??>
-                allowNavigationToContentChildren: ${field.control.params.allowNavigationToContentChildren},
-            </#if>
-                itemType: "${field.endpointType}",
+                showActions: false,
+                additionalProperties: "lecm-document:list-present-string",
+                itemType: "cm:content",
                 multipleSelectMode: ${field.endpointMany?string},
                 parentNodeRef: "alfresco://company/home",
             <#if field.control.params.rootNode??>
@@ -38,22 +19,22 @@
                 nameSubstituteString: "${field.control.params.nameSubstituteString}",
             </#if>
             <#if field.control.params.substituteParent?? && field.control.params.substituteParent == "true">
-                substituteParent:"${form.arguments.itemId!""}",
+                substituteParent: "${form.arguments.itemId!""}",
             </#if>
-                displayMode: "${field.control.params.displayMode!"list"}"
+                displayMode: "list"
             });
 })();
 //]]></script>
 
 <div class="form-field">
     <div id="${controlId}" class="viewmode-field">
-        <span class="viewmode-label">Вложенные файлы:</span>
+        <span class="viewmode-label">${msg("label.attachments")}:</span>
         <div id="lecm-package-items-span" style="width:100%;">
             <span id="${controlId}-currentValueDisplay" class="viewmode-value current-values"></span>
         </div>
     </div>
     <div id="${controlId}-list" class="viewmode-field">
-        <span class="viewmode-label">Список согласования:</span>
+        <span class="viewmode-label">${msg("label.approvalList")}:</span>
         <div id="lecm-approval-list-span" style="width:100%;">
             <span id="${controlId}-currentListValueDisplay" class="viewmode-value"></span>
         </div>
@@ -103,30 +84,7 @@
     picker.setOptions(
             {
                 showLinkToTarget: true,
-                targetLinkTemplate: ${documentLinkResolver},
-                <#if form.mode == "create" && form.destination?? && form.destination?length &gt; 0>
-                    startLocation: "${form.destination?js_string}",
-                <#elseif field.control.params.startLocation??>
-                    startLocation: "${field.control.params.startLocation?js_string}",
-                </#if>
-                itemType: "cm:content",
-                displayMode: "${field.control.params.displayMode!"list"}",
-                listItemActions: [
-                    <#list actions as action>
-                        {
-                            name: "${action.name}",
-                            <#if action.link??>
-                                link: ${action.link},
-                            <#elseif action.event>
-                                event: "${action.event}",
-                            </#if>
-                            label: "${action.label}"
-                        }<#if action_has_next>,</#if>
-                    </#list>],
-                allowRemoveAction: ${allowRemoveAction?string},
-                allowRemoveAllAction: ${allowRemoveAllAction?string},
-                allowSelectAction: ${allowAddAction?string},
-                selectActionLabel: "${field.control.params.selectActionLabel!msg("button.add")}"
+                targetLinkTemplate: ${documentLinkResolver}
             });
 })();
 //]]></script>
