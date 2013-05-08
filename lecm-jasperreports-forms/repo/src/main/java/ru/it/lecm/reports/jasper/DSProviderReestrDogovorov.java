@@ -179,7 +179,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 
 		// Контракт актуален: если ещё не истёк срок 
 		if ( Boolean.TRUE.equals(filter.contractActualOnly)) {
-			bquery.append( " AND @lecm\\-contract\\:endDate:[NOW TO MAX]"); // "истекает позже чем сейчас"
+			bquery.append( " AND (@lecm\\-contract\\:unlimited:true OR @lecm\\-contract\\:endDate:[NOW TO MAX])"); // неограниченый или "истекает позже чем сейчас"
 		}
 
 		return bquery.toString();

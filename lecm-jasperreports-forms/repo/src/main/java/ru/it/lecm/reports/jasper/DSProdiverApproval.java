@@ -407,7 +407,7 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 							}
 							statistic.put(emplyeeId, userInfo);
 						}
-						userInfo.registerDuration( norm_duration, fact_duration);
+						userInfo.registerDuration( norm_duration, fact_duration); // X,Y регистрируется
 					}
 				} // while
 				this.data.addAll(statistic.values()); // перенос в основной блок

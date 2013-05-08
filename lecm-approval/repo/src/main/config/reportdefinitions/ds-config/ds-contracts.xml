@@ -40,7 +40,7 @@
 	</query>
 
 	<fields.jasper>
-		<field queryFldName="lecm-contract:regNumProject"
+		<field queryFldName="lecm-contract:regNumSystem"
 				jrFldName="col_Regnum"
 				displayName="Регистрационный номер договора" javaValueClass="String"/>
 

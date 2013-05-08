@@ -125,21 +125,21 @@
 				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8514e4c9-574d-4cbd-87f1-2afb80a884a2" isPrintRepeatedValues="false" x="38" y="3" width="50" height="26" isPrintInFirstWholeBand="true"/>
+				<reportElement uuid="8514e4c9-574d-4cbd-87f1-2afb80a884a2" isPrintRepeatedValues="false" x="38" y="3" width="70" height="26" isPrintInFirstWholeBand="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Номер договора"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="ad617c43-79fd-4734-84d2-1e37958cfa8c" isPrintRepeatedValues="false" x="89" y="3" width="88" height="26" isPrintInFirstWholeBand="true"/>
+				<reportElement uuid="ad617c43-79fd-4734-84d2-1e37958cfa8c" isPrintRepeatedValues="false" x="109" y="3" width="88" height="26" isPrintInFirstWholeBand="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Контрагент"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8ad34c1a-0436-4c27-9c1b-a84c2d955145" isPrintRepeatedValues="false" x="180" y="3" width="130" height="26"/>
+				<reportElement uuid="8ad34c1a-0436-4c27-9c1b-a84c2d955145" isPrintRepeatedValues="false" x="200" y="3" width="110" height="26"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
@@ -191,7 +191,7 @@
 			<frame>
 				<reportElement uuid="1e092e56-8305-48da-8ce3-c4deba187eda" style="styleOdd" x="1" y="2" width="797" height="24"/>
 				<textField pattern="" isBlankWhenNull="true">
-					<reportElement uuid="0540390a-1d4a-425e-94fd-cba55ad840b5" x="177" y="2" width="130" height="20" isPrintWhenDetailOverflows="true"/>
+					<reportElement uuid="0540390a-1d4a-425e-94fd-cba55ad840b5" x="197" y="2" width="110" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
@@ -199,7 +199,7 @@
 					<textFieldExpression><![CDATA[$F{col_DocKind}]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="true">
-					<reportElement uuid="5db5527c-1abb-4aad-a2d8-e699a7cede33" x="86" y="2" width="88" height="20" isPrintWhenDetailOverflows="true"/>
+					<reportElement uuid="5db5527c-1abb-4aad-a2d8-e699a7cede33" x="106" y="2" width="88" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
@@ -214,12 +214,12 @@
 					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="true">
-					<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" x="35" y="2" width="50" height="20" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
-					<textElement textAlignment="Center">
+					<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" x="35" y="2" width="70" height="20" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+					<textElement textAlignment="Right" markup="none">
 						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Regnum}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[( ($F{col_Regnum} != null && !"Не присвоено".equals($F{col_Regnum}) )? $F{col_Regnum} : "нет")]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="false">
 					<reportElement uuid="18c1ff17-fd8f-495d-84a4-88e5e3b52b5d" x="309" y="2" width="148" height="20" isPrintWhenDetailOverflows="true"/>

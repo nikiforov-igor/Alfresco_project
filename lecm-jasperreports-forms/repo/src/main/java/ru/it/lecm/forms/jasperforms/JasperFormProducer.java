@@ -175,9 +175,9 @@ public class JasperFormProducer extends AbstractWebScript {
 	private void prepareExecURL(WebScriptRequest request, WebScriptResponse response)
 			throws IOException
 	{
-		// добавление аргумента "exec=1"
-		final String answerURL = request.getServerPath() + request.getURL() 
-				+ String.format( "&%s=1", PARAM_EXEC); 
+		// добавление аргумента "exec=1" 
+		// request.getServerPath() always "http://localhost:8080" 
+		final String answerURL = request.getURL() + String.format( "&%s=1", PARAM_EXEC); 
 
 		response.setContentType("text/html;charset=UTF-8");
 		// response.setContentEncoding();
