@@ -11593,7 +11593,7 @@
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
-                                                <value>false</value>
+                                                <value>true</value>
                                             </property>
                                         </properties>
                                         <aspects/>
