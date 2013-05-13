@@ -15,11 +15,6 @@
 
 <cmis-ds.config>
 
-	<url>http://localhost:8080/alfresco/service/cmis</url>
-	<username>admin</username>
-	<password>111</password>
-	<allVersions>true</allVersions>
-
 	<query_offset>0</query_offset>
 	<query_limit>-1</query_limit>
 	<query_pgsize>-1</query_pgsize>
@@ -70,4 +65,10 @@
 				displayName="Средний срок просрочки, дней" javaValueClass="float"/>
 
 	</fields.jasper>
+
+	<url>http://localhost:8080/alfresco/service/cmis</url>
+	<username>admin</username>
+	<password>111</password>
+	<allVersions>true</allVersions>
+
 </cmis-ds.config>

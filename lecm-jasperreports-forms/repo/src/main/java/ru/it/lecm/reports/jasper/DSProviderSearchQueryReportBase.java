@@ -197,7 +197,9 @@ public abstract class DSProviderSearchQueryReportBase extends AbstractDataSource
 		if (maxItems != UNLIMITED)
 			search.setMaxItems(maxItems);
 
-		alfrescoResult = serviceRegistry.getSearchService().query(search);
+		if (queryText != null && queryText.length() > 0) { // (!) момент истины ЗАПРОСА
+			alfrescoResult = serviceRegistry.getSearchService().query(search);
+		}
 
 		final int foundCount = (alfrescoResult != null && alfrescoResult.hasMore()) ? alfrescoResult.length() : -1;
 		d.logCtrlDuration(logger, String.format( 
@@ -205,5 +207,4 @@ public abstract class DSProviderSearchQueryReportBase extends AbstractDataSource
 				"\n>>>%s\n<<<"
 				, foundCount, maxItems,  skipCount, queryText));
 	}
-
 }

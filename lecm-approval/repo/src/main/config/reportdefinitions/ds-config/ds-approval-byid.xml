@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspace://SpacesStore/30d84120-f216-4050-9d10-f4ca94755e72&exec=1
+
+"Лист согласования" по указанному Id списка согласования:
+Входные параметры:
+	•	Id списка Согласования для формирования отчёта (с типом "lecm-al:approval-list")
+
+Выходные данные отчета:
+	•	№ проекта договора
+	•	№ версии документа
+	•	Дата начала согасования
+
+	(!) Вложенная таблица Согласующих подгружается как основная часть
+
+	Сами отдельные согласования:
+			<child-association name="lecm-al:approval-list-contains-approval-item">
+				<target><class>lecm-al:approval-item</class></target>
+			</child-association>
+
+	•	Результат согласования сотрудником
+	•	Замечания
+	•	Дата согласования
+
+	•	Для Сотрудника-Исполнителя: ФИО, Должность, Подразделение
+			через "lecm-al:approval-item" ассоциацию 
+			== ссылка на элемент справочника "Сотрудники" ==
+			<association name="lecm-al:approval-item-employee-assoc">
+				<target><class>lecm-orgstr:employee</class>
+				</target>
+			</association>
+
+В конце:
+	•	Результат Согласования
+	•	Дата согласования по документу
+
+	Обозначение ссылок на поля:
+
+	== лист согласования ==
+		col_AproveList.XXX
+				<type name="lecm-al:approval-list">
+				"текущий объект"
+
+	== Договор-контракт ==
+		col_Doc.XXX
+				<type name="lecm-contract:document">
+				ссылка на документ из "текущего объекта" 
+				вверх по 
+				== Ссылка на документ, приложенный согласующим сотрудником ==
+						из <Согласующий сотрудник> of <type name="lecm-al:approval-item">
+				by	<association name="lecm-al:approval-item-comment-assoc">
+						<target><class>cm:content</class></target>
+					</association>
+
+	== Заполненое Согласование Сотрудника ==
+		col_Item.XXX
+				<type name="lecm-al:approval-item">
+				ссылка из "текущего объекта"
+				вниз по <child-association name="lecm-al:approval-list-contains-approval-item">
+				на <target>
+
+	== Согласующий сотрудник ==
+	== ссылка на элемент справочника "Сотрудники" ==
+		col_ItemEmployee.XXX
+				<type name="lecm-orgstr:employee">
+				ссылка из col_Item
+				вниз по <association name="lecm-al:approval-item-employee-assoc">
+				на <target>
+  -->
+<cmis-ds.config>
+
+	<query_offset>0</query_offset>
+	<query_limit>-1</query_limit>
+	<query_pgsize>-1</query_pgsize>
+
+	<query>
+		<![CDATA[
+			select * from lecm-al:approval-list as approvals
+		]]>
+	</query>
+
+	<fields.jasper>
+
+		<!-- "lecm-contract:document": Регистрационный номер проекта договора-->
+		<field queryFldName="{lecm-contract:regNumProject}"
+				jrFldName="col_Doc.ProjectNum"
+				displayName="Номер проекта договора"/>
+
+		<!-- approval-list: номер версии документа, по которой проводилось согласование -->
+		<field queryFldName="lecm-al:approval-list-document-version"
+				jrFldName="col_AproveList.Version"
+				displayName="Номер версии документа"/>
+
+		<!-- approval-list: результат согласования документа -->
+		<field queryFldName="lecm-al:approval-list-decision"
+				jrFldName="col_AproveList.ApproveResult"
+				displayName="Результат Согласования"/>
+
+		<!-- approval-list: дата начала согласования -->
+		<field queryFldName="lecm-al:approval-list-approve-start"
+				jrFldName="col_AproveList.ApproveStart"
+				displayName="Дата начала согасования по документу" javaValueClass="date"/>
+
+		<!-- approval-list: дата согласования по документу -->
+		<field queryFldName="lecm-al:approval-list-approve-date"
+				jrFldName="col_AproveList.ApproveEnd"
+				displayName="Дата согласования по документу" javaValueClass="date"/>
+
+		<!-- Для Сотрудника-Исполнителя: ФИО -->
+		<field queryFldName="{ExecEmployee{lecm-orgstr:employee-first-name}}"
+				jrFldName="col_ExecEmployee.FirstName"
+				displayName="Имя Исполнителя" />
+		<field queryFldName="{ExecEmployee{lecm-orgstr:employee-last-name}}"
+				jrFldName="col_ExecEmployee.LastName"
+				displayName="Фамилия Исполнителя" />
+		<field queryFldName="{ExecEmployee{lecm-orgstr:employee-middle-name}}"
+				jrFldName="col_ExecEmployee.MiddleName"
+				displayName="Отчество Исполнителя" />
+
+		<!-- Для Сотрудника-Исполнителя: Должность (!) вычисляемое -->
+		<field queryFldName="{ExecEmployee.StaffPosition{sys:node-uuid}}"
+				jrFldName="col_ExecEmployee.StaffPosition.Id"
+				displayName="Должность Исполнителя.id" javaValueClass="String"/>
+		<field queryFldName="{ExecEmployee.StaffPosition{cm:name}}"
+				jrFldName="col_ExecEmployee.StaffPosition.Name"
+				displayName="Должность Исполнителя.Название"/>
+
+		<!-- Для Сотрудника-Исполнителя: Подразделение (!) вычисляемое -->
+		<field queryFldName="{ExecEmployee.Unit{sys:node-uuid}}"
+				jrFldName="col_ExecEmployee.Unit.Id"
+				displayName="Отдел Исполнителя.id" javaValueClass="String"/>
+		<field queryFldName="{Employee.Unit{cm:name}}"
+				jrFldName="col_ExecEmployee.Unit.Name"
+				displayName="Наименование отдела Исполнителя"/>
+
+		<!-- === 
+				отдельные согласования: lecm-al:approval-item 
+			 ===
+		  -->
+
+		 <!-- "lecm-al:approval-item": Результат согласования сотрудником -->
+		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-decision}"
+				jrFldName="col_Item.ApproveResult"
+				displayName="Результат Согласования Сотрудником"/>
+
+		<!-- "lecm-al:approval-item": замечания сотрудника -->
+		<field queryFldName="lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-comment"
+				jrFldName="col_Item.ApproveNotes"
+				displayName="Замечания от Сотрудника"/>
+
+		<!-- "lecm-al:approval-item": Дата согласования сотрудника -->
+		<field queryFldName="lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-approve-date"
+				jrFldName="col_Item.ApproveDate"
+				displayName="Дата согласования Сотрудником" javaValueClass="date"/>
+
+		<!-- Для Сотрудника-Согласующего: ФИО -->
+		<field queryFldName="{{ApproveEmployee} is {lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-first-name}}"
+				jrFldName="col_Item.Employee.FirstName"
+				displayName="Имя Согласующего" />
+		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-last-name}"
+				jrFldName="col_Item.Employee.LastName"
+				displayName="Фамилия Согласующего" />
+		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-middle-name}"
+				jrFldName="col_Item.Employee.MiddleName"
+				displayName="Отчество Согласующего" />
+
+		<!-- Для Сотрудника-Согласующего: Должность (!) вычисляемое -->
+		<field queryFldName="{ApproveEmployee.StaffPosition{sys:node-uuid}}"
+				jrFldName="col_Item.Employee.StaffPosition.Id"
+				displayName="Должность Сотрудника" javaValueClass="String"/>
+		<field queryFldName="{ApproveEmployee.StaffPosition{cm:name}}"
+				jrFldName="col_Item.Employee.StaffPosition.Name"
+				displayName="Должность название" />
+
+		<!-- Для Сотрудника-Согласующего: Подразделение (!) вычисляемое -->
+		<field queryFldName="{ApproveEmployee.Unit{sys:node-uuid}}"
+				jrFldName="col_Item.Employee.Unit.Id"
+				displayName="Отдел Согласующего.id" javaValueClass="String"/>
+		<field queryFldName="{ApproveEmployee.Unit{cm:name}}"
+				jrFldName="col_Item.Employee.Unit.Name"
+				displayName="Отдел Согласующего.Наименование" />
+
+	</fields.jasper>
+
+	<url>http://localhost:8080/alfresco/service/cmis</url>
+	<username>admin</username>
+	<password>qwe123</password>
+	<allVersions>true</allVersions>
+
+</cmis-ds.config>

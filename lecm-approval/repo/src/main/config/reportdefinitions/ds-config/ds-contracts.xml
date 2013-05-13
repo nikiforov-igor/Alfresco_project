@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
+	Договорная деятельность.
+
 Фильтры отчета:
 •	Период 
 •	Контрагент
@@ -7,6 +9,7 @@
 •	Сумма
 •	Вид договора
 •	Тематика договора
+
 Выходные данные отчета:
 •	Номер договора
 •	(A) Контрагент
@@ -17,14 +20,10 @@
 •	Дата начала действия договора
 •	Дата завершения действия договора
 •	(!) Исполнитель
+
   -->
 
 <cmis-ds.config>
-
-	<url>http://localhost:8080/alfresco/service/cmis</url>
-	<username>admin</username>
-	<password>111</password>
-	<allVersions>false</allVersions>
 
 	<query_offset>0</query_offset>
 	<query_limit>-1</query_limit>
@@ -84,16 +83,14 @@
 		<field jrFldName="col_Executor_Otchestvo" queryFldName="{lecm-contract:representative-assoc/lecm-representative:middlename}" displayName="Исполнитель.Отчество" />
 		<field jrFldName="col_Executor_Staff" queryFldName="{lecm-contract:representative-assoc/lecm-representative:rank}" displayName="Исполнитель.Должность" />
 
-		<!-- 
-		<field queryFldName="lecm-contract:summaryContent" displayName="Краткое содержание договора" />
-		  -->
-
 		<!--
 			<field queryFldName="fmydata" dislayName="" javaValueClass="my.check.type"/>
-			Вид договора
-					<association name="lecm-contract:typeContract-assoc">
-			Тематика договора
-					<association name="lecm-contract:subjectContract-assoc">
 		  -->
 	</fields.jasper>
+
+	<url>http://localhost:8080/alfresco/service/cmis</url>
+	<username>admin</username>
+	<password>111</password>
+	<allVersions>false</allVersions>
+
 </cmis-ds.config>

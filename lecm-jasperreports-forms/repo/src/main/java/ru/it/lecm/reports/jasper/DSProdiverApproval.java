@@ -15,7 +15,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperReport;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -27,8 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 
+/**
+ * Отчёт "10.5.2 Исполнительская дисциплина по согласованиям за период." 
+ * @author rabdullin
+ *
+ */
 public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 
 	private static final Logger logger = LoggerFactory.getLogger(DSProdiverApproval.class);
@@ -51,10 +55,26 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 		return periodEnd;
 	}
 
-	final static String TYPE_APPROVAL_ITEM = "lecm-al:approval-item";
-	final static String TYPE_APPROVAL_LIST = "lecm-al:approval-list";
-	final static String FLDStatus = "lecm-al:approval-list-decision"; // <!-- результат согласования документа -->
 	final static String VALUE_STATUS_NOTREADY = "NO_DECISION";
+
+	final static String TYPE_APPROVAL_LIST = "lecm-al:approval-list";
+	final static String TYPE_APPROVAL_ITEM = "lecm-al:approval-item";
+	final static String ASSOC_EMPLOYEE_OF_APPROVE = "lecm-al:approval-item-employee-assoc";
+
+	final static String FLD_Status = "lecm-al:approval-list-decision"; // <!-- результат согласования документа -->
+	final static String FLD_StartApprove = "lecm-al:approval-list-approve-start"; // <!-- дата начала согласования --> у Списка Согласования
+	final static String FLD_EndApprove = "lecm-al:approval-list-approve-date"; // 	<!-- дата согласования по документу -->
+
+	final static String FLD_UserStartApprove = "lecm-al:approval-item-start-date"; // <!-- дата начала согласования Сотрудником -->
+	final static String FLD_UserEndApprove = "lecm-al:approval-item-approve-date"; // <!-- Дата Cогласования Сотрудником (фактического выполнения) -->
+	final static String FLD_UserDueDate = "lecm-al:approval-item-due-date"; // <!-- допустимый срок согласования сотрудником -->
+
+	final static String FLD_UserResult = "lecm-al:approval-item-decision"; // <!-- Результат согласования сотрудником -->
+	final static String FLD_UserCommet = "lecm-al:approval-item-comment"; // <!-- замечания сотрудника -->
+
+	final static String FLD_APPROVE_RESULT = "lecm-al:approval-list-decision"; // <!-- результат согласования документа --> 
+	final static String FLD_APPROVE_DOCVER = "lecm-al:approval-list-document-version"; // <!-- номер версии документа, по которой проводилось согласование -->
+	final static String FLD_DOC_PROJECTNUM = "lecm-contract:regNumProject"; // <!-- Регистрационный номер проекта договора--> 
 
 	@Override
 	protected String buildQueryText() {
@@ -92,6 +112,7 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 
 	final static String VARNAME_START = "PERIOD_START";
 	final static String VARNAME_END = "PERIOD_END";
+
 	private void setPeriodDates(JRVariable[] variables) {
 		if (variables == null || variables.length == 0)
 			return;
@@ -114,7 +135,7 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 	/**
 	 * Структура для накопления и хранения средних значений некоторой величины
 	 */
-	class AvgValue {
+	protected class AvgValue {
 		int count; // кол-во
 		float avg; // текущее среднее
 
@@ -140,15 +161,7 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 	/**
 	 * Структура для хранения данных о статистике по Сотруднику
 	 */
-	private class EmployeeInfo {
-		final NodeRef employeeId;
-
-		// ФИО
-		String firstName, middleName, lastName;
-
-		// Название основной должности и соот-го подразделения
-		String staffName, unitName;
-
+	protected class EmployeeInfo extends BasicEmployeeInfo {
 		 // просроченные Согласования
 		final AvgValue missedApproves = new AvgValue();
 
@@ -156,8 +169,7 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 		final AvgValue normalApproves = new AvgValue();
 
 		public EmployeeInfo(NodeRef employeeId) {
-			super();
-			this.employeeId = employeeId;
+			super(employeeId);
 		}
 
 		/**
@@ -190,31 +202,105 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 	final static String JRName_AVG_MISSED_DAYS = "col_Employee.AvgMissed"; // Средний срок просрочки, дней
 
 	// final String JRName_ = "";
-/*
-	<field name="col_ApproveEnd" class="java.util.Date">
-		<fieldDescription><![CDATA[Дата согласования Сотрудником]]></fieldDescription>
-	</field>
-	<field name="col_ApproveStart" class="java.util.Date">
-		<fieldDescription><![CDATA[Дата начала согласования по списку]]></fieldDescription>
-	</field>
-	<field name="col_ApproveStartByDoc" class="java.util.Date">
-		<fieldDescription><![CDATA[Дата начала согласования по документу]]></fieldDescription>
-	</field>
- * */
-	// название Должностной Позиции
-	// "lecm-orgstr:staffPosition"::"lecm-orgstr:staffPosition-code"
-	static final QName PROP_DP_INFO = ContentModel.PROP_NAME; // QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-code");
+ 	/**
+ 	 * Очень вспомогательный класс для именования объектов, касающихся согласований
+ 	 */
+ 	static class ApproveQNameHelper {
 
-	// "lecm-orgstr:organization-element"::"element-short-name"
-	static final QName PROP_ORGUNIT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
+ 		final NamespaceService ns;
 
-	// "lecm-orgstr:organization-unit"::"unit-code"
-	static final QName PROP_ORGUNIT_CODE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "unit-code");
+		final QName QFLD_CREATOR;
 
-	// <!-- Сотрудник организации -->
- 	static final QName PROP_EMPLOYEE_NAME1 = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-first-name");
- 	static final QName PROP_EMPLOYEE_NAME2 = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-middle-name");
- 	static final QName PROP_EMPLOYEE_NAME3 = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-last-name");
+		// ссылки на отдельные Согласования из списка 
+		// final QName ASSOC_APPROVEITEM = QName.createQName("lecm-al:approval-list-contains-approval-item", ns);
+		final QName QTYPE_APPROVE_ITEM;
+		final Set<QName> childApproveSet;
+
+		// <!-- ссылка на элемент справочника "Сотрудники" --> у Списка Согл
+		// final QName ASSOC_EMPLOYEE = QName.createQName("lecm-al:approval-item-employee-assoc", ns);
+		// final QName TYPE_EMPLOYEE = QName.createQName("lecm-orgstr:employee", ns);
+		final Set<QName> childEmployeeSet;
+
+		// <!-- дата начала согласования --> у Списка Согласования
+		final QName QFLD_STARTAPPROVE;
+
+		// 	<!-- дата согласования по документу -->
+		final QName QFLD_ENDAPPROVE;
+
+	 	final QName QASSOC_APPROVAL_ITEM_TO_EMPLOYEE;
+
+		// <!-- Результат согласования сотрудником -->
+		final QName QFLD_USER_RESULT;
+
+		// <!-- замечания сотрудника -->
+		final QName QFLD_USER_COMMENT;
+		
+		// <!-- дата начала согласования -->
+		// DONE: заменить на модельную дату получения задачи
+		// TODO: см также ApprovalListService QName consts
+		final QName QFLD_USER_APPROVE_START;
+
+		// <!-- Дата Cогласования Сотрудником (фактического выполнения) -->
+		final QName QFLD_USER_APPROVED;
+
+		// <!-- допустимый срок согласования сотрудником -->
+		final QName QFLD_USER_DUE_DATE;
+
+		// <!-- результат согласования документа --> 
+		final QName QFLD_APPROVE_RESULT;
+
+		// "lecm-al:approval-list-document-version"; // <!-- номер версии документа, по которой проводилось согласование -->
+		final QName QFLD_APPROVE_DOCVER;
+
+		// "lecm-contract:regNumProject"; // <!-- Регистрационный номер проекта договора-->
+		final QName QFLD_DOC_PROJECTNUM;
+
+
+		public ApproveQNameHelper(NamespaceService ns) {
+			this.ns = ns;
+
+			this.QFLD_CREATOR = QName.createQName("cm:creator", ns);
+
+			this.QTYPE_APPROVE_ITEM = QName.createQName(TYPE_APPROVAL_ITEM, ns);
+			this.childApproveSet = new HashSet<QName>(Arrays.asList(QTYPE_APPROVE_ITEM));
+			this.childEmployeeSet = new HashSet<QName>(Arrays.asList(OrgstructureBean.TYPE_EMPLOYEE));
+
+			this.QFLD_STARTAPPROVE = QName.createQName(FLD_StartApprove, ns); // <!-- дата согласования по документу -->
+			this.QFLD_ENDAPPROVE = QName.createQName(FLD_EndApprove, ns); // <!-- дата согласования по документу -->
+
+			this.QFLD_APPROVE_RESULT = QName.createQName(FLD_APPROVE_RESULT, ns); // <!-- результат согласования документа -->
+			this.QFLD_APPROVE_DOCVER = QName.createQName(FLD_APPROVE_DOCVER, ns); // <!-- номер версии документа, по которой проводилось согласование -->
+			this.QFLD_DOC_PROJECTNUM = QName.createQName(FLD_DOC_PROJECTNUM, ns);  // <!-- Регистрационный номер проекта договора-->
+
+			this.QASSOC_APPROVAL_ITEM_TO_EMPLOYEE = QName.createQName(ASSOC_EMPLOYEE_OF_APPROVE, ns);
+
+			this.QFLD_USER_RESULT = QName.createQName(FLD_UserResult, ns);
+			this.QFLD_USER_COMMENT = QName.createQName(FLD_UserCommet, ns);
+
+			this.QFLD_USER_APPROVE_START = QName.createQName(FLD_UserStartApprove, ns); // "cm:created"
+			this.QFLD_USER_APPROVED = QName.createQName(FLD_UserEndApprove, ns);
+
+			this.QFLD_USER_DUE_DATE = QName.createQName(FLD_UserDueDate, ns);
+		}
+
+		/**
+		 * Получить главный документ исходя из списка Согласования.
+		 * Главный документ типа "lecm-contract:document" находится на три (!) 
+		 * уровня выше чем "lecm-al:approval-list"
+		 * @param approveListId
+		 * @param nodeSrv
+		 * @return
+		 */
+		static public NodeRef getMainDocByApproveListId(NodeRef approveListId, NodeService nodeSrv) {
+			// approveListId: тип "lecm-al:approval-list", название "cm:title"="Лист согласования версия 0.0" 
+
+			final NodeRef parent1 = nodeSrv.getPrimaryParent(approveListId).getParentRef(); // папка типа "cm:folder", cm:name="Параллельное согласование"
+			final NodeRef parent2 = nodeSrv.getPrimaryParent(parent1).getParentRef(); // папка типа "cm:folder", cm:name="Согласование"
+			final NodeRef parent3 = nodeSrv.getPrimaryParent(parent2).getParentRef(); // папка типа "lecm-contract:document"
+
+			return parent3; // о как
+		}
+ 	}
 
 	/**
 	 * 10.5.2	Исполнительская дисциплина по согласованиям за период.
@@ -229,7 +315,7 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 	 * •	Средний срок согласования
 	 * •	Средний срок просрочки
 	 */
-	private class ApprovalDS extends AlfrescoJRDataSource {
+	protected class ApprovalDS extends AlfrescoJRDataSource {
 
 		private List<EmployeeInfo> data;
 		private Iterator<EmployeeInfo> iterData;
@@ -307,31 +393,7 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 				final NodeService nodeSrv = serviceRegistry.getNodeService();
 				final NamespaceService ns = serviceRegistry.getNamespaceService();
 
-				// ссылки на отдельные Согласования из списка 
-				// final QName ASSOC_APPROVEITEM = QName.createQName("lecm-al:approval-list-contains-approval-item", ns);
-				final QName QTYPE_APPROVE_ITEM = QName.createQName(TYPE_APPROVAL_ITEM, ns);
-				final Set<QName> childApproveSet = new HashSet<QName>(Arrays.asList(QTYPE_APPROVE_ITEM));
-
-				// <!-- ссылка на элемент справочника "Сотрудники" --> у Списка Согл
-				// final QName ASSOC_EMPLOYEE = QName.createQName("lecm-al:approval-item-employee-assoc", ns);
-				// final QName TYPE_EMPLOYEE = QName.createQName("lecm-orgstr:employee", ns);
-				final Set<QName> childEmployeeSet = new HashSet<QName>(Arrays.asList(OrgstructureBean.TYPE_EMPLOYEE));
-
-				// <!-- дата начала согласования --> у Списка Согласования 
-				final QName FLD_STARTAPPROVE = QName.createQName("lecm-al:approval-list-approve-start", ns);
-
-				final QName ASSOC_APPROVAL_ITEM_TO_EMPLOYEE = QName.createQName("lecm-al:approval-item-employee-assoc", ns);
-
-				// <!-- дата начала согласования -->
-				// DONE: заменить на модельную дату получения задачи
-				// TODO: см также ApprovalListService QName consts
-				final QName FLD_USER_APPROVE_START = QName.createQName("lecm-al:approval-item-start-date", ns); // "cm:created"
-
-				// <!-- Дата Cогласования Сотрудником (фактического выполнения) -->
-				final QName FLD_USER_APPROVED = QName.createQName("lecm-al:approval-item-approve-date", ns);
-
-				// <!-- допустимый срок согласования сотрудником -->
-				final QName FLD_USER_DUE_DATE = QName.createQName("lecm-al:approval-item-due-date", ns);
+				final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
 				while(rsIter.hasNext()) {
 					final ResultSetRow rs = rsIter.next();
@@ -341,9 +403,9 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 					final Map<QName, Serializable> realProps = nodeSrv.getProperties(approveListId); // получение отдельных Согласований внутри списка ... 
 
 					// <!-- дата начала согласования --> у Списка Согласования 
-					final Date startApprov = (Date) realProps.get(FLD_STARTAPPROVE);
+					final Date startApprov = (Date) realProps.get(approveQNames.QFLD_STARTAPPROVE);
 
-					final List<ChildAssociationRef> childItems = nodeSrv.getChildAssocs(approveListId, childApproveSet);
+					final List<ChildAssociationRef> childItems = nodeSrv.getChildAssocs(approveListId, approveQNames.childApproveSet);
 					if (childItems == null || childItems.isEmpty())
 						continue;
 
@@ -353,23 +415,23 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 						final Map<QName, Serializable> childProps = nodeSrv.getProperties(childId); // свойства "Согласующего Сотрудника"
 						if (childProps == null || childProps.isEmpty()) continue;
 						// nodeSrv.getChildAssocs(childId, childEmployeeSet); 
-						final List<AssociationRef> employees = nodeSrv.getTargetAssocs(childId,  ASSOC_APPROVAL_ITEM_TO_EMPLOYEE);
+						final List<AssociationRef> employees = nodeSrv.getTargetAssocs(childId, approveQNames.QASSOC_APPROVAL_ITEM_TO_EMPLOYEE);
 						if (employees == null || employees.isEmpty() ) // (!?) с Согласованием не связан никакой сотрудник ...
 						{
-							logger.warn( String.format( "No eployee found approve item %s", childId));
+							logger.warn( String.format( "No eployee found for approve item %s", childId));
 							continue;
 						}
 						final NodeRef emplyeeId = employees.get(0).getTargetRef();
 
 						// <!-- Дата получения задачи на Согласование -->
 						// DONE: заменить на модельную дату получения задачи
-						final Date userApprovStartAt = (Date) childProps.get(FLD_USER_APPROVE_START);
+						final Date userApprovStartAt = (Date) childProps.get(approveQNames.QFLD_USER_APPROVE_START);
 
 						// <!-- дата фактического Согласования Сотрудником -->
-						final Date userApprovedAt = (Date) childProps.get(FLD_USER_APPROVED);
+						final Date userApprovedAt = (Date) childProps.get(approveQNames.QFLD_USER_APPROVED);
 
 						// Плановая дата завершения задачи
-						final Date userDueAt = (Date) childProps.get(FLD_USER_DUE_DATE);
+						final Date userDueAt = (Date) childProps.get(approveQNames.QFLD_USER_DUE_DATE);
 
 						/*
 						 * из доки "Договорная деятельность ТЗ.docx"
@@ -389,22 +451,7 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 							userInfo = statistic.get(emplyeeId);
 						} else { // создание стр-ры о Пользователе и наполнение всякой инфой (как зовут, где и кем работает, ...)
 							userInfo = new EmployeeInfo(emplyeeId);
-							userInfo.firstName = Utils.coalesce( nodeSrv.getProperty( emplyeeId, PROP_EMPLOYEE_NAME1), "");
-							userInfo.middleName = Utils.coalesce( nodeSrv.getProperty( emplyeeId, PROP_EMPLOYEE_NAME2), "");
-							userInfo.lastName = Utils.coalesce( nodeSrv.getProperty( emplyeeId, PROP_EMPLOYEE_NAME3), "");
-
-							final List<NodeRef> staffList = getOrgstructureService().getEmployeeStaffs(emplyeeId);
-							if (staffList != null) {
-								final NodeRef staffId = staffList.get(0); // занимаемая Должность
-
-								// название Подразделения ...
-								final NodeRef unitId = getOrgstructureService().getUnitByStaff(staffId);
-								userInfo.unitName = (unitId == null) ? "" : Utils.coalesce( nodeSrv.getProperty( unitId, PROP_ORGUNIT_NAME), "");
-
-								// получить словарное значение Должности по штатной позиции 
-								final NodeRef dpId = orgstructureService.getPositionByStaff(staffId);
-								userInfo.staffName = (dpId == null) ? "" : Utils.coalesce( nodeSrv.getProperty( dpId, PROP_DP_INFO), "");
-							}
+							userInfo.loadProps(nodeSrv, getOrgstructureService());
 							statistic.put(emplyeeId, userInfo);
 						}
 						userInfo.registerDuration( norm_duration, fact_duration); // X,Y регистрируется

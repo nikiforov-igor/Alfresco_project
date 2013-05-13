@@ -110,7 +110,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 		this.metaFields = metaFields;
 	}
 
-	public ServiceRegistry getserviceRegistry() {
+	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
 	}
 
