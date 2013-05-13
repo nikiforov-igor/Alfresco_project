@@ -16,7 +16,9 @@ import ru.it.lecm.notifications.beans.NotificationsServiceImpl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: AIvkin
@@ -28,7 +30,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 
 	NotificationsServiceImpl service;
 
-	public void setService(NotificationsServiceImpl service) {
+    public void setService(NotificationsServiceImpl service) {
 		this.service = service;
 	}
 
@@ -114,20 +116,30 @@ public class NotificationsWebScriptBean extends BaseWebScript {
         notification.setAutor("WebScript");
 
         if (recipientsArray != null) {
-            List<NodeRef> recipientRefsList = new ArrayList<NodeRef>();
+            Set<NodeRef> recipientRefsList = new HashSet<NodeRef>();
 
-            for (int i = 0; i < recipientsArray.size(); ++i) {
-                NodeRef nodeRef = new NodeRef(recipientsArray.get(i));
-                if (nodeRef != null && serviceRegistry.getNodeService().exists(nodeRef) && service.getOrgstructureService().isEmployee(nodeRef)) {
+            for (String aRecipientsArray : recipientsArray) {
+                NodeRef nodeRef = null;
+                if (NodeRef.isNodeRef(aRecipientsArray)) {
+                    nodeRef = new NodeRef(aRecipientsArray);
+                    if (serviceRegistry.getNodeService().exists(nodeRef)) {
+                        if (!service.getOrgstructureService().isEmployee(nodeRef)) {
+                            nodeRef = service.getOrgstructureService().getEmployeeByPerson(nodeRef);
+                        }
+                    }
+                } else if (service.getOrgstructureService().isEmployee(service.getOrgstructureService().getEmployeeByPerson(aRecipientsArray))) {
+                    nodeRef = service.getOrgstructureService().getEmployeeByPerson(aRecipientsArray);
+                }
+                if (nodeRef != null) {
                     recipientRefsList.add(nodeRef);
                 }
             }
-            notification.setRecipientEmployeeRefs(recipientRefsList);
+            notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipientRefsList));
         }
 
         if (objectRef != null) {
             NodeRef nodeRef =  new NodeRef (objectRef);
-            if (nodeRef != null && serviceRegistry.getNodeService().exists(nodeRef)) {
+            if (serviceRegistry.getNodeService().exists(nodeRef)) {
                 notification.setObjectRef(nodeRef);
             }
         }

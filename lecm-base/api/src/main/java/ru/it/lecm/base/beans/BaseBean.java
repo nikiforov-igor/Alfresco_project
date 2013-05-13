@@ -19,8 +19,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * User: AIvkin
@@ -309,17 +307,6 @@ public abstract class BaseBean implements InitializingBean {
         };
         return AuthenticationUtil.runAsSystem(raw);
     }
-
-	/**
-	 * Проверка строки на то, что она является ссылкой
-	 * @param ref
-	 * @return true - если является ссылкой
-	 */
-	public boolean isNodeRef(String ref){
-		Pattern pattern = Pattern.compile("^[^\\:^ ]+\\:\\/\\/[^\\:^ ]+\\/[^ ]+$");
-		Matcher matcher = pattern.matcher(ref);
-		return matcher.find();
-	}
 
 	/**
 	 * Папки создаются относительно папки Home

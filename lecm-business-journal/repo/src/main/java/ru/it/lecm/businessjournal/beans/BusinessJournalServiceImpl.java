@@ -227,7 +227,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				if (objects != null && objects.size() > 0) {
 					for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
                         String str = objects.get(i);
-                        String description = isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
+                        String description = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
 						properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i+1)),description);
 					}
 				}
@@ -253,7 +253,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 				if (objects != null && objects.size() > 0) {
 					for (int j = 0; j < objects.size() && j < MAX_SECONDARY_OBJECTS_COUNT; j++) {
-						if (isNodeRef(objects.get(j))) {
+						if (NodeRef.isNodeRef(objects.get(j))) {
 							nodeService.createAssociation(result, new NodeRef(objects.get(j)), QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j+1)));
 						}
 					}
@@ -280,7 +280,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 			for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
                 if (objects.get(i) != null) {
                     String str = objects.get(i);
-                    String description = isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
+                    String description = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
                     holders.put(OBJECT_HOLDER + (i + 1), description);
                 }
 			}
