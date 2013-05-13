@@ -78,7 +78,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
     }
 
     public String getArchiveFolderPath() {
-        return archiveFolderPath;
+        return archiveFolderPath.startsWith("/") ? archiveFolderPath : "/" + archiveFolderPath;
     }
 
     private NodeRef createArchivePath(NodeRef node) {
