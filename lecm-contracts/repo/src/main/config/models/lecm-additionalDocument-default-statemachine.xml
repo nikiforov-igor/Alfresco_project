@@ -592,7 +592,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/a65b2d69-03c3-4491-85ce-9e9b4a402c36</nodeRef>
 										<properties>
 											<property>
@@ -1183,7 +1183,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/7a076e16-0707-4e9b-bbc9-331ed5086917</nodeRef>
 										<properties>
 											<property>
@@ -1723,7 +1723,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/c6f19cb4-13aa-4b57-9e49-ea9d0922938b</nodeRef>
 										<properties>
 											<property>
@@ -2776,7 +2776,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/6d554571-fed9-4ab3-9172-02c01c76d8c5</nodeRef>
 										<properties>
 											<property>
@@ -3902,7 +3902,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/88f57790-3db8-4157-95e3-8b4c8d79136f</nodeRef>
 										<properties>
 											<property>
@@ -4896,7 +4896,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/147e4b1d-c36d-4d25-94cc-c00933dc44a2</nodeRef>
 										<properties>
 											<property>
@@ -5935,7 +5935,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/ed2cc996-e777-493f-be8a-d0221c4d0c7c</nodeRef>
 										<properties>
 											<property>
@@ -7059,7 +7059,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/6a805c2b-38ca-4a8f-88fa-b178945c6eec</nodeRef>
 										<properties>
 											<property>
@@ -8019,7 +8019,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/b9a3ad7c-ad99-499c-834b-347e07678caf</nodeRef>
 										<properties>
 											<property>
@@ -8977,7 +8977,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/b5d2ca5f-fdcf-45d1-a987-fd3fd2d8a4aa</nodeRef>
 										<properties>
 											<property>
@@ -9568,7 +9568,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/947113b1-9a85-4d78-8df3-7e58d99cbae8</nodeRef>
 										<properties>
 											<property>
@@ -10520,7 +10520,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalSum</name>
+										<name>lecm-contract_totalAmount</name>
 										<nodeRef>workspace://SpacesStore/11ddeadb-014e-4bfb-b6fb-3c16b0f1fa56</nodeRef>
 										<properties>
 											<property>

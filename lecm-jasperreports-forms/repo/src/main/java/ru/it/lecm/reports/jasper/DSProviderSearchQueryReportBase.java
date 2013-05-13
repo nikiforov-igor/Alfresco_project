@@ -1,15 +1,9 @@
 package ru.it.lecm.reports.jasper;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperReport;
-
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -19,12 +13,16 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.forms.jasperforms.AbstractDataSourceProvider;
-import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.config.JRDSConfigBaseImpl.JRXField;
+import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider 
 {
@@ -146,7 +144,7 @@ public abstract class DSProviderSearchQueryReportBase extends AbstractDataSource
 	/**
 	 * Построить запрос к Альфреско (Lucene и пр) по данным соот-го фильтра отчёта.
 	 * Example: 
-	 *    TYPE:"{http://www.it.ru/logicECM/contract/1.0}document" AND  @lecm\-contract\:totalSum:(0 TO 23450000)   AND @lecm\-contract\:endDate:[ NOW/DAY TO *]
+	 *    TYPE:"{http://www.it.ru/logicECM/contract/1.0}document" AND  @lecm\-contract\:totalAmount:(0 TO 23450000)   AND @lecm\-contract\:endDate:[ NOW/DAY TO *]
 	 * @return
 	 */
 	// TODO: функцией экранировать символы в названиях атрибутов

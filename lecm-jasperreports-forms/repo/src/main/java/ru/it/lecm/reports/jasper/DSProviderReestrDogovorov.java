@@ -1,19 +1,17 @@
 package ru.it.lecm.reports.jasper;
 
-import java.util.Date;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
-
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.reports.jasper.filter.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.jasper.utils.Utils;
+
+import java.util.Date;
 
 /**
  * Отчёт по реестру договоров
@@ -174,7 +172,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 
 		// Сумма договора (указан минимум)
 		if (filter.contractSum != null && filter.contractSum.doubleValue() != 0) { // "X to *"
-			bquery.append( " AND @lecm\\-contract\\:totalSum:(" + filter.contractSum.toString() + " TO *)");
+			bquery.append( " AND @lecm\\-contract\\:totalAmount:(" + filter.contractSum.toString() + " TO *)");
 		}
 
 		// Контракт актуален: если ещё не истёк срок 
