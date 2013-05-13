@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 public class ArchiveDocumentAction extends StateMachineAction {
 
     private String archiveFolderPath = "/Archive";
+    private String archiveFolderPathAdditional = "";
     private String status = "UNKNOWN";
 
     private static Log logger = LogFactory.getLog(ArchiveDocumentAction.class);
@@ -68,17 +69,24 @@ public class ArchiveDocumentAction extends StateMachineAction {
             String value = attribute.attribute("value");
             if ("archiveFolder".equalsIgnoreCase(name)) {
                 archiveFolderPath = value;
+            } else if ("archiveFolderAdditional".equalsIgnoreCase(name)) {
+                archiveFolderPathAdditional = value;
             } else if ("status".equalsIgnoreCase(name)) {
                 status = value;
             }
         }
     }
 
+    public String getArchiveFolderPath() {
+        return archiveFolderPath;
+    }
+
     private NodeRef createArchivePath(NodeRef node) {
         //Проверяем структуру
         Pattern pattern = Pattern.compile("\\{(.*?):(.*?)\\}");
-        Matcher matcher = pattern.matcher(archiveFolderPath);
-        String path = archiveFolderPath;
+        String rootFolder = archiveFolderPath.endsWith("/") ? archiveFolderPath : archiveFolderPath + "/";
+        String path = rootFolder + archiveFolderPathAdditional;
+        Matcher matcher = pattern.matcher(path);
         while (matcher.find()) {
             String prefix = matcher.group(1);
             String attributeName = matcher.group(2);

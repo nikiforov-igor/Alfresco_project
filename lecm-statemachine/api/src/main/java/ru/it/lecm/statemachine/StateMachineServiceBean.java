@@ -5,6 +5,7 @@ import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 
 import java.util.List;
+import java.util.Set;
 
 public interface StateMachineServiceBean {
 
@@ -83,5 +84,12 @@ public interface StateMachineServiceBean {
     List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser);
 
     public void terminateWorkflowsByDefinitionId(NodeRef document, List<String> definitionIds, String variable, Object value);
+
+    /**
+     * Возвращает список архивных папок для типа документа
+     * @param documentType - тип документа
+     * @return
+     */
+    public Set<String> getArchiveFolders(String documentType);
 
 }

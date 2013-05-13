@@ -50,6 +50,7 @@ public class StatemachineEditorModel {
 	public final static QName PROP_ACTION_SCRIPT = QName.createQName(STATEMACHINE_EDITOR_URI, "actionScript");
 	public final static QName PROP_WORKFLOW_LABEL = QName.createQName(STATEMACHINE_EDITOR_URI, "workflowLabel");
 	public final static QName PROP_ARCHIVE_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "archiveFolder");
+	public final static QName PROP_ARCHIVE_FOLDER_ADDITIONAL = QName.createQName(STATEMACHINE_EDITOR_URI, "archiveFolderAdditional");
 	public final static QName PROP_CREATION_DOCUMENT = QName.createQName(STATEMACHINE_EDITOR_URI, "creationDocument");
 	public final static QName PROP_PERMISSION_TYPE_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "permissionTypeValue");
 	public final static QName PROP_EDITABLE_FIELD = QName.createQName(STATEMACHINE_EDITOR_URI, "editableField");

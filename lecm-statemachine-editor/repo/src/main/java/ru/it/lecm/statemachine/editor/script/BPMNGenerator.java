@@ -458,7 +458,13 @@ public class BPMNGenerator {
 		attribute.setAttribute("value", archiveFolder);
 		archiveDocumentAction.appendChild(attribute);
 
-		attribute = doc.createElement("lecm:attribute");
+        attribute = doc.createElement("lecm:attribute");
+        attribute.setAttribute("name", "archiveFolderAdditional");
+        String archiveFolderAdditional = (String) nodeService.getProperty(stateMachine, StatemachineEditorModel.PROP_ARCHIVE_FOLDER_ADDITIONAL);
+        attribute.setAttribute("value", archiveFolderAdditional);
+        archiveDocumentAction.appendChild(attribute);
+
+        attribute = doc.createElement("lecm:attribute");
 		attribute.setAttribute("name", "status");
 		attribute.setAttribute("value", statusName);
 		archiveDocumentAction.appendChild(attribute);

@@ -199,6 +199,11 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return statuses.toArray(new String[statuses.size()]);
     }
 
+    public String[] getArchiveFolders(String documentType) {
+        Set<String> folders = stateMachineHelper.getArchiveFolders(documentType);
+        return folders.toArray(new String[folders.size()]);
+    }
+
     private Collection<String> convertToJavaCollection(Object privileges) {
         HashSet<String> result = new HashSet<String>();
         if (privileges instanceof String) {
