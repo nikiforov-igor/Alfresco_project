@@ -35,3 +35,12 @@
 .dashlet .scrollableList {
     padding: 0;
 }
+
+.contracts .datagrid thead{
+    display:none;
+}
+
+.contracts .toolbar {
+    border-bottom: none;
+}
+
