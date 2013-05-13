@@ -268,6 +268,13 @@ public class StateMachineHelper implements StateMachineServiceBean {
                                         statuses.add(statusAction.getStatus());
                                     }
                                 }
+                                result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("end");
+                                for (StateMachineAction action : result) {
+                                    if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(ArchiveDocumentAction.class))) {
+                                        ArchiveDocumentAction archiveDocumentAction = (ArchiveDocumentAction) action;
+                                        statuses.add(archiveDocumentAction.getStatusName());
+                                    }
+                                }
                             }
                         }
                     }

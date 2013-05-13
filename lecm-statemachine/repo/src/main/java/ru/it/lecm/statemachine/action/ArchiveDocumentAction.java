@@ -81,6 +81,10 @@ public class ArchiveDocumentAction extends StateMachineAction {
         return archiveFolderPath.startsWith("/") ? archiveFolderPath : "/" + archiveFolderPath;
     }
 
+    public String getStatusName() {
+        return status;
+    }
+
     private NodeRef createArchivePath(NodeRef node) {
         //Проверяем структуру
         Pattern pattern = Pattern.compile("\\{(.*?):(.*?)\\}");
