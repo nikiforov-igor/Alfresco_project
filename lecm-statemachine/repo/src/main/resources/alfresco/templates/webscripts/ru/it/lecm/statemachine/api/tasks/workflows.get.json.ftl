@@ -1,3 +1,4 @@
+<#escape x as x?js_string>
 {
     "activeWorkflowsTotalCount": ${data.activeWorkflowsTotalCount},
     "activeWorkflowsDisplayedCount": ${data.activeWorkflowsDisplayedCount},
@@ -38,3 +39,4 @@
 		</#list>
 	]
 }
+</#escape>

@@ -1,3 +1,4 @@
+<#escape x as x?js_string>
 [
     <#list data.myTasks as task>
     {
@@ -24,3 +25,4 @@
     }<#if task_has_next>,</#if>
     </#list>
 ]
+</#escape>

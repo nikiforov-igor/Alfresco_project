@@ -1,3 +1,4 @@
+<#escape x as x?js_string>
 {
     "showSubordinateTasks": "${data.showSubordinateTasks}",
     "myTasksTotalCount": ${data.myTasksTotalCount},
@@ -55,3 +56,4 @@
 		</#list>
 	]
 }
+</#escape>
