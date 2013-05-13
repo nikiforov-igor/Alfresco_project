@@ -90,7 +90,7 @@
                     <type>d:text</type>
                 </property>
                 <!-- Общая сумма по договору -->
-                <property name="lecm-contract:totalSum">
+                <property name="lecm-contract:totalAmount">
                     <type>d:float</type>
                     <default>0.00</default>
                 </property>
