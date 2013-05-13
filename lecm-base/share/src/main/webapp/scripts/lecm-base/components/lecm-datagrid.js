@@ -1067,23 +1067,25 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             _setupDataTable: function (columnDefinitions, me) {
 
-                var generateRequest = function (oState, oSelf) {
-                    var sort, sortField;
+            var generateRequest = function (oState, oSelf) {
+                var sort = me.datagridMeta.sort,
+                    sortField;
+                if (me.currentSort) {
                     if (me.currentSort.oColumn.field.indexOf("assoc_") != 0) {
                         sortField = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":");
                     } else {
                         sortField = me.currentSort.oColumn.field.replace("assoc_", "").replace("_", ":") + "-text-content";
                     }
                     sort = sortField + "|" + (me.currentSort.sSortDir == YAHOO.widget.DataTable.CLASS_ASC ? "true" : "false");
+                }
 
-                    var params = me.search.buildSearchParams(me.datagridMeta.nodeRef,
-                        me.datagridMeta.itemType, sort, me.datagridMeta.searchConfig, me.dataRequestFields.join(","),
-                        me.dataRequestNameSubstituteStrings.join(","), me.options.searchShowInactive, oState.pagination.recordOffset);
-                    return YAHOO.lang.JSON.stringify(params);
-                };
+                var params = me.search.buildSearchParams(me.datagridMeta.nodeRef,
+                    me.datagridMeta.itemType, sort, me.datagridMeta.searchConfig, me.dataRequestFields.join(","),
+                    me.dataRequestNameSubstituteStrings.join(","), me.options.searchShowInactive, oState.pagination.recordOffset);
+                return YAHOO.lang.JSON.stringify(params);
+            };
 
-
-                var dTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
+            var dTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
                     {
                         generateRequest: generateRequest,
                         initialLoad: false,
