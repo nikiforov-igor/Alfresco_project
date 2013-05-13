@@ -12,6 +12,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
@@ -79,6 +81,7 @@ public class ContractsBeanImpl extends BaseBean {
     private OrgstructureBean orgstructureService;
 	private RegNumbersService regNumbersService;
 	private NotificationsService notificationService;
+	private BusinessJournalService businessJournalService;
 
     public static final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
@@ -117,6 +120,10 @@ public class ContractsBeanImpl extends BaseBean {
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
+	}
 
 	@Override
     public NodeRef getServiceRootFolder() {
@@ -327,8 +334,11 @@ public class ContractsBeanImpl extends BaseBean {
 	public void registrationContract(NodeRef contractRef) throws TemplateParseException, TemplateRunException {
 		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, CONTRACT_REGNUM_TEMPLATE_CODE);
 		if (templateDictionary != null) {
-			regNumbersService.setDocumentNumber(contractRef, PROP_REGNUM_SYSTEM, templateDictionary);
+			String regNumber = regNumbersService.getNumber(contractRef, templateDictionary);
+			nodeService.setProperty(contractRef, PROP_REGNUM_SYSTEM, regNumber);
 			nodeService.setProperty(contractRef, PROP_DATE_REG_CONTRACT, new Date());
+
+			businessJournalService.log(contractRef, EventCategory.EDIT, "Договор зарегистрирован, присвоен регистрационный номер: " + regNumber);
 		}
 	}
 

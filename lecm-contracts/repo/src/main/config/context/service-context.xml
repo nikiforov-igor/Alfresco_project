@@ -68,6 +68,7 @@
 	    <property name="serviceRegistry" ref="ServiceRegistry"/>
 	    <property name="authService" ref="authenticationService"/>
         <property name="namespaceService" ref="namespaceService"/>
+	    <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 
 	<bean id="contractPolicy" class="ru.it.lecm.contracts.policies.ContractsPolicy"
