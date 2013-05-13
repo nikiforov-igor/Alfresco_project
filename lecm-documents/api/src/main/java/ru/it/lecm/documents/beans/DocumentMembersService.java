@@ -56,6 +56,14 @@ public interface DocumentMembersService {
     NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, Map<QName, Serializable> properties);
 
     /**
+     * Добавление нового участника без проверки прав доступа
+     * @param document - ссылка на документ
+     * @param employee - ссылка на сотрудника
+     * @param permissionGroup - Группа привилегий
+     * @return ссылка на созданную ноду участника
+     */
+    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, String permissionGroup);
+    /**
      * Возвращает директорию Участники для конкретного документа
      * @param document - ссылка на документ
      * @return ссылка на ноду

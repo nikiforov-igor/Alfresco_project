@@ -79,6 +79,13 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         return addMemberWithoutCheckPermission(document, employee, props);
     }
 
+	@Override
+	public NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, String permissionGroup) {
+        Map<QName,Serializable> props = new HashMap<QName, Serializable>();
+        props.put(DocumentMembersService.PROP_MEMBER_GROUP, permissionGroup);
+        return addMemberWithoutCheckPermission(document, employee, props);
+	}
+
     @Override
     public NodeRef addMemberWithoutCheckPermission(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties) {
         final NodeRef documentMembersFolder = getMembersFolderRef(document);

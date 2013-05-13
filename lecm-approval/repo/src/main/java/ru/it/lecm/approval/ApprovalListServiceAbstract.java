@@ -434,7 +434,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	public void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage) {
 		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
 		if (documentRef != null) {
-			NodeRef member = documentMembersService.addMember(documentRef, employeeRef, "LECM_BASIC_PG_Reviewer");
+			NodeRef member = documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, "LECM_BASIC_PG_Reviewer");
 			if(logger.isTraceEnabled()) {
 				String employeeName = (String) nodeService.getProperty(employeeRef, ContentModel.PROP_NAME);
 				String docName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_NAME);
