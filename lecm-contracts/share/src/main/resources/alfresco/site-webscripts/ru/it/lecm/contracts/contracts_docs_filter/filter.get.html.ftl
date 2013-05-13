@@ -7,8 +7,8 @@
         <#if filters??>
             <#list filters as filter>
                 <div class="text-cropped">
-                    <a href="${url.context}/page/contracts-documents?query=${filter.value}"  style="margin:5px;"
-                       class="status-button" title="<#if filter.value == "*">${msg("filter.type.ALL")}<#else>${filter.value}</#if>">${msg("filter.type." + filter.type)}</a>
+                    <a href="${url.context}/page/contracts-documents?query=${filter.value}" class="status-button"
+                       title="<#if filter.value == "*">${msg("filter.type.ALL")}<#else>${filter.value}</#if>">${msg("filter.type." + filter.type)}</a>
                     <span class="total-tasks-count-right">${filter.count}</span><br/>
                 </div>
             </#list>

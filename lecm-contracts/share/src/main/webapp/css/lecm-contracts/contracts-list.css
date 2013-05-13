@@ -1,11 +1,12 @@
-.yui-gc .columnSize2 .column1 {
+.yui-gc .yui-u .columnSize2.grid {
+    margin: 10px 5px;
+}
+.yui-gc .yui-u .columnSize2 .column1 {
     width: 20%;
 }
-
-.yui-u .columnSize2 .column2 {
+.yui-gc .yui-u .columnSize2 .column2 {
     width: 78%;
 }
-
 .yui-gc div.first {
     width: 100%;
 }
