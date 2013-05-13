@@ -31,7 +31,7 @@
 			            	var decision = task.getVariableLocal("lecmSeq_approveTaskResult");
 			            	var completionDate = task.getVariableLocal("bpm_completionDate");
 			            	var comment = task.getVariableLocal("bpm_comment");
-			            	var commentRef = task.getVariableLocal("lecmSeq_approveTaskCommentAssoc");
+			            	var commentRef = task.getVariableLocal("lecmSeq_approveTaskCommentAssoc").nodeRef;
 			            	logger.log("userName = " + userName);
 			            	logger.log("decision = " + decision);
 			            	logger.log("completionDate = " + completionDate);
