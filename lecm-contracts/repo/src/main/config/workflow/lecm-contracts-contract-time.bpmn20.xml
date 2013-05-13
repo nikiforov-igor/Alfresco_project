@@ -10,7 +10,7 @@
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<activiti:string>contracts.setContractTime(bpm_package.children[0], lecmContractWf_contractTimeFromDate,lecmContractWf_contractTimeToDate, lecmContractWf_contractTimeBaseOnDocument);</activiti:string>
+						<activiti:string>contracts.setContractTime(bpm_package.children[0], lecmContractWf_contractTimeFromDate,lecmContractWf_contractTimeToDate, lecmContractWf_contractTimeUnlimited, lecmContractWf_contractTimeBaseOnDocument);</activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>

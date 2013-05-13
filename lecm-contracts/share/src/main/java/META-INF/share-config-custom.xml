@@ -674,16 +674,20 @@
                     <show id="packageItems" />
                     <show id="lecmContractWf:contractTimeFromDate" />
                     <show id="lecmContractWf:contractTimeToDate" />
+                    <show id="lecmContractWf:contractTimeUnlimited" />
                     <show id="lecmContractWf:contractTimeBaseOnDocument" />
                     <show id="lecmContractWf:fillProperties" />
                 </field-visibility>
                 <appearance>
+                    <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+                    <set id="documents" appearance=""/>
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
-                    <field id="lecmContractWf:contractTimeFromDate" label-id="contract.contractTime.fromTime" />
-                    <field id="lecmContractWf:contractTimeToDate" label-id="contract.contractTime.toTime" />
-                    <field id="lecmContractWf:contractTimeBaseOnDocument" label-id="contract.contractTime.baseOnDocument">
+                    <field id="lecmContractWf:contractTimeFromDate" set="dates" label-id="contract.daterange"/>
+                    <field id="lecmContractWf:contractTimeToDate" set="dates" label=""/>
+                    <field id="lecmContractWf:contractTimeUnlimited" set="dates" label-id="contract.contractTime.unlimited"/>
+                    <field id="lecmContractWf:contractTimeBaseOnDocument" label-id="contract.contractTime.baseOnDocument" set="documents">
                         <control template="/ru/it/lecm/contracts/component/contracts-based-on-document.ftl"/>
                     </field>
                     <field id="lecmContractWf:fillProperties">

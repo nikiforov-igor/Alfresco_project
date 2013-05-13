@@ -91,6 +91,9 @@ LogicECM.module = LogicECM.module || {};
 							Alfresco.util.populateHTML(
 								[ p_dialog.id + "-form-container_h", dialogName]
 							);
+
+                            Dom.addClass(p_dialog.id + "-form", "form-metadata-edit");
+
 						}
 					},
 					onSuccess:{

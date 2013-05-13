@@ -206,9 +206,10 @@ public class ContractsWebScriptBean extends BaseWebScript {
      * @param toDate - дата завершения действия договора
      * @param reasonDocumentRef - стороковая ссылка на документ основание
      */
-    public void setContractTime(ScriptNode document, Date fromDate, Date toDate, String reasonDocumentRef) {
+    public void setContractTime(ScriptNode document, Date fromDate, Date toDate, boolean unlimited, String reasonDocumentRef) {
         nodeService.setProperty(document.getNodeRef(), ContractsBeanImpl.PROP_START_DATE, fromDate);
         nodeService.setProperty(document.getNodeRef(), ContractsBeanImpl.PROP_END_DATE, toDate);
+        nodeService.setProperty(document.getNodeRef(), ContractsBeanImpl.PROP_UNLIMITED, unlimited);
 
         List<String> objects = new ArrayList<String>();
         objects.add(reasonDocumentRef);

@@ -14,14 +14,19 @@ var resultAttachments = [];
 var categories = documentAttachments.getCategories(nodeRef);
 if (categories != null) {
     for (var i = 0; i < categories.length; i++) {
+        var categoryAttachments = [];
         var attachments = categories[i].getChildren();
         if (attachments != null && attachments.length > 0) {
             for (var j = 0; j < attachments.length; j++) {
-                resultAttachments.push({
+                categoryAttachments.push({
                     label: attachments[j].properties["cm:name"],
                     nodeRef: attachments[j].nodeRef.toString()
                 });
             }
+            resultAttachments.push({
+                name: categories[i].properties["cm:name"],
+                items: categoryAttachments
+            })
         }
     }
 }

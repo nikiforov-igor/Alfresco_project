@@ -67,3 +67,23 @@
 .yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.set > div.form-field > input.formsCheckBox {
     margin-left: 200px;
 }
+
+.yui-skin-lecmTheme .yui-panel .form-metadata-edit div.form-field {
+    position: relative;
+}
+
+.yui-skin-lecmTheme .yui-panel .form-metadata-edit div.form-field > input.date-entry {
+    width: 140px;
+    margin-bottom: 16px;
+}
+.yui-skin-lecmTheme .yui-panel .form-metadata-edit div.form-field > input.date-entry + a {
+    float: left;
+}
+.yui-skin-lecmTheme .yui-panel .form-metadata-edit div.form-field > input.date-entry ~ div.format-info {
+    height: 16px;
+    line-height: 16px;
+    position: absolute;
+    top: 30px;
+    margin-left: 160px;
+}
+

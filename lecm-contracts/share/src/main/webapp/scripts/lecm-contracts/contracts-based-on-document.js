@@ -86,7 +86,7 @@
 
                     YAHOO.util.Event.addListener(tr, "click", function() {
                         button2.checked = true;
-                        this._drawData(data.attachments);
+                        this._drawAttachments(data.attachments);
                     }.bind(this));
 
                     tr.appendChild(td);
@@ -114,6 +114,28 @@
                     option.value = items[i].nodeRef;
                     option.innerHTML = items[i].label;
                     select.appendChild(option);
+                }
+                YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+            },
+
+            _drawAttachments: function _drawAttachments_Function(items) {
+                var select = document.getElementById(this.id);
+                select.onclick = function () {
+                    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+                }.bind(this);
+                select.innerHTML = "";
+                select.value = "";
+                for (var j = 0; j < items.length; j++) {
+                    var category = items[j];
+                    var optGroup = document.createElement("optgroup");
+                    optGroup.label = category.name;
+                    for (var i = 0; i < category.items.length; i++) {
+                        var option = document.createElement("option");
+                        option.value = category.items[i].nodeRef;
+                        option.innerHTML = category.items[i].label;
+                        optGroup.appendChild(option);
+                    }
+                    select.appendChild(optGroup);
                 }
                 YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
             },
