@@ -42,7 +42,8 @@
 							var startDate = task.getCreateTime().getTime();
 							var dueDate = task.getDueDate().getTime();
 							var comment = task.getVariableLocal("bpm_comment");
-							var commentRef = task.getVariableLocal("lecmPar_approveTaskCommentAssoc").nodeRef;
+							var taskCommentAssoc = task.getVariableLocal("lecmPar_approveTaskCommentAssoc");
+							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
 							logger.log("userName = " + userName);
 							logger.log("decision = " + decision);
 							logger.log("startDate = " + startDate);
