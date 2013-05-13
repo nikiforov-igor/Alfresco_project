@@ -33,8 +33,11 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowService;
@@ -576,10 +579,10 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	}
 
 	@Override
-	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final Map<String, Object> variablesLocal) {
+	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final VariableScope variableScope) {
 		try {
 			DocumentInfo docInfo = new DocumentInfo(bpmPackage, "документа");
-			List<NodeRef> recipients = new ArrayList<NodeRef>();
+			Set<NodeRef> recipients = new HashSet<NodeRef>();
 			recipients.add(docInfo.getInitiatorRef());
 			WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
 			Date dueDate = workflowInstance.getDueDate();
@@ -587,19 +590,19 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			Date currentDate = new Date();
 			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
 			int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
-			if(!variablesLocal.containsKey("initiatorComingSoon") && comingSoon >= 0) {
-				variablesLocal.put("initiatorComingSoon", "");
+			if(!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
+				variableScope.setVariable("initiatorComingSoon", "");
 				Notification notification = new Notification();
 				notification.setAutor(AuthenticationUtil.getSystemUserName());
 				//«Напоминание: вы направили на согласование проект документа по договору с <Наименование контрагента>, срок согласования: <Общий срок согласования по документу>»
 				String description = String.format("Напоминание: Вы направили на согласование проект %s по договору с %s, срок согласования: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate));
 				notification.setDescription(description);
 				notification.setObjectRef(docInfo.getDocumentRef());
-				notification.setRecipientEmployeeRefs(recipients);
+				notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
 				notificationsService.sendNotification(notificationChannels, notification);
 			}
-			if(!variablesLocal.containsKey("initiatorOverdue") && overdue > 0) {
-				variablesLocal.put("initiatorOverdue", "");
+			if(!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
+				variableScope.setVariable("initiatorOverdue", "");
 				Notification notification = new Notification();
 				notification.setAutor(AuthenticationUtil.getSystemUserName());
 				//«Внимание: проект документа по договору с <Наименование контрагента>  не согласован в срок: <Общий срок согласования по документу>.
@@ -610,7 +613,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 				recipients.addAll(getCurators());
 				notification.setDescription(description);
 				notification.setObjectRef(docInfo.getDocumentRef());
-				notification.setRecipientEmployeeRefs(recipients);
+				notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
 				notificationsService.sendNotification(notificationChannels, notification);
 			}
 		} catch(Exception ex) {

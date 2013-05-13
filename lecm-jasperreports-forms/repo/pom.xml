@@ -61,6 +61,12 @@
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 		</dependency>
+		<!-- we can use any version of jasperfonts cause it has only resources data -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-fonts</artifactId>
+			<version>4.0.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>xalan</groupId>

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.activiti.engine.delegate.VariableScope;
 
 public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension {
 
@@ -195,8 +196,8 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * что необходимо принять решение
 	 * @param processInstanceId ИД работающего процесса согласования
 	 */
-	public void notifyDeadlineTasks(final String processInstanceId, final ActivitiScriptNode bpmPackage, final Map<String, Object> variablesLocal) {
+	public void notifyDeadlineTasks(final String processInstanceId, final ActivitiScriptNode bpmPackage, final VariableScope variableScope) {
 		approvalListService.notifyAssigneesDeadline(processInstanceId, bpmPackage.getNodeRef());
-		approvalListService.notifyInitiatorDeadline(processInstanceId, bpmPackage.getNodeRef(), variablesLocal);
+		approvalListService.notifyInitiatorDeadline(processInstanceId, bpmPackage.getNodeRef(), variableScope);
 	}
 }

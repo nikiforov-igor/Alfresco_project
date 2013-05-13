@@ -20,12 +20,6 @@
 		and include them in the AMP, they are provided by Alfresco
 	-->
 	<dependencies>
-		<!-- we can use any version of jasperfonts cause it has only resources data -->
-		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports-fonts</artifactId>
-			<version>4.0.0</version>
-		</dependency>
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-core</artifactId>
@@ -49,6 +43,7 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -71,18 +66,18 @@
 		<dependency>
 			<groupId>ru.it.lecm.approval</groupId>
 			<artifactId>approval-repo-api</artifactId>
-			<version>0.1.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.notifications</groupId>
 			<artifactId>notifications-repo-api</artifactId>
-			<version>0.1.0</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
         <dependency>
             <groupId>ru.it.lecm.statemachine</groupId>
             <artifactId>statemachine-api</artifactId>
-            <version>0.1.0</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
 		<dependency>
@@ -94,7 +89,7 @@
 		<dependency>
 			<groupId>ru.it.lecm.calendar</groupId>
 			<artifactId>lecm-calendar-repo-api</artifactId>
-			<version>0.1.0</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
