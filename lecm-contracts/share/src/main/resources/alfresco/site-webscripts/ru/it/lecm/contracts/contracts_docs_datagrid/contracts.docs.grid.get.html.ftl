@@ -36,6 +36,7 @@
                 }).setMessages(${messages});
 
                 var filter = generateFilterStr(LogicECM.module.Contracts.FILTER);
+                var archiveFolders = generateArchiveFoldersStr(LogicECM.module.Contracts.SETTINGS.archivePath);
 
                 YAHOO.util.Event.onContentReady ('${id}', function () {
                     YAHOO.Bubbling.fire ("activeGridChanged", {
@@ -48,8 +49,9 @@
                             sort:"cm:modified|false",
                             searchConfig: {
                                 filter: (filter.length > 0 ? " (" + filter + " ) AND " : "")
-                                        + '(+PATH:"' + LogicECM.module.Contracts.SETTINGS.draftPath + '//*"'
-                                        + ' OR +PATH:"' + LogicECM.module.Contracts.SETTINGS.documentPath + '//*")'
+                                        + '(PATH:"' + LogicECM.module.Contracts.SETTINGS.draftPath + '//*"'
+                                        + ' OR PATH:"' + LogicECM.module.Contracts.SETTINGS.documentPath + '//*"'
+                                        + (archiveFolders.length > 0 ? " OR " + archiveFolders +"" : "") + ')'
 
                             }
                         },
@@ -76,6 +78,21 @@
                         resultFilter += "+lecm\\-additional\\-document:additionalDocumentType\\-text\\-content:\'" + types[i] + "\'";
                     }
                     return resultFilter;
+                }
+                return "";
+            }
+
+            function generateArchiveFoldersStr(paths) {
+                if (paths) {
+                    var archPaths = paths.split(",");
+                    var result = "";
+                    for (var i = 0; i < archPaths.length; i++) {
+                        if (result.length > 0) {
+                            result += " OR ";
+                        }
+                        result += 'PATH:"' + archPaths[i] + '//*"' ;
+                    }
+                    return result;
                 }
                 return "";
             }

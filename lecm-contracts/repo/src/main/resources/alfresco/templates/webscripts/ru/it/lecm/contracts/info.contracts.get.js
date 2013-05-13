@@ -2,7 +2,17 @@ var type = "lecm-contract:document";
 
 var draftPath = contracts.getDraftPath();
 var documentPath = documentScript.getDocumentsPath();
+
 var paths = [draftPath, documentPath];
+
+var archDirectories = statemachine.getArchiveFolders("lecm-contract:document");
+for (var index in archDirectories) {
+    var archName = archDirectories[index];
+    var archFolder = companyhome.childByNamePath(archName);
+    if (archFolder != null) {
+        paths.push(archFolder.getQnamePath());
+    }
+}
 
 var map = documentScript.getFilters(type);
 var list = [];

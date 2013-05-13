@@ -1,5 +1,6 @@
 {
     nodeRef: "${nodeRef}",
     draftPath: "${draftPath}",
-    documentPath: "${documentPath}"
+    documentPath: "${documentPath}",
+    archivePath: "${archivePath}"
 }
