@@ -535,7 +535,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public Scriptable getEmployeeWorkGroups(String employeeRef) {
 		ParameterCheck.mandatory("employeeRef", employeeRef);
 		NodeRef ref = new NodeRef(employeeRef);
-		List<NodeRef> groups = orgstructureService.getEmployeeWorkForces(ref);
+		List<NodeRef> groups = orgstructureService.getEmployeeWorkGroups(ref);
 		return createScriptable(groups);
 	}
 
