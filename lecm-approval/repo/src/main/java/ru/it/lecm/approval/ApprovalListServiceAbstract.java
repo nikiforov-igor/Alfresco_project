@@ -40,12 +40,14 @@ import java.util.Map;
 import java.util.Set;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.repo.workflow.WorkflowModel;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
 import org.alfresco.service.cmr.workflow.WorkflowTaskState;
 import org.apache.commons.lang.time.DateUtils;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 /**
@@ -104,10 +106,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceAbstract.class);
 	private final static String CONTRACT_NAMESPACE = "http://www.it.ru/logicECM/contract/1.0";
-	private final static String CONTRACT_FAKE_NAMESPACE = "http://www.it.ru/logicECM/contract/fake/1.0";
 	private final static String CONTRACTORS_NAMESPACE = "http://www.it.ru/lecm/contractors/model/contractor/1.0";
-	private final static QName TYPE_CONTRACT_DOCUMENT = QName.createQName(CONTRACT_NAMESPACE, "document");
-	private final static QName TYPE_CONTRACT_FAKE_DOCUMENT = QName.createQName(CONTRACT_FAKE_NAMESPACE, "document");
 	private final static QName TYPE_CONTRACTOR = QName.createQName(CONTRACTORS_NAMESPACE, "contractor-type");
 	private final static QName ASSOC_CONTRACT_PARTNER = QName.createQName(CONTRACT_NAMESPACE, "partner-assoc");
 	private final static QName PROP_CONTRACTOR_FULLNAME = QName.createQName(CONTRACTORS_NAMESPACE, "fullname");
@@ -124,6 +123,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	private NotificationsService notificationsService;
 	private WorkflowService workflowService;
 	private IWorkCalendar workCalendar;
+	private DictionaryService dictionaryService;
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -152,6 +152,10 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 	public void setWorkCalendar(IWorkCalendar workCalendar) {
 		this.workCalendar = workCalendar;
+	}
+
+	public void setDictionaryService(DictionaryService dictionaryService) {
+		this.dictionaryService = dictionaryService;
 	}
 
 	/**
@@ -339,10 +343,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		if (children != null) {
 			for (ChildAssociationRef assocRef : children) {
 				NodeRef candidateRef = assocRef.getChildRef();
-				if (TYPE_CONTRACT_DOCUMENT.isMatch(nodeService.getType(candidateRef))) {
-					documentRef = candidateRef;
-					break;
-				} else if (TYPE_CONTRACT_FAKE_DOCUMENT.isMatch(nodeService.getType(candidateRef))) {
+				if(dictionaryService.isSubClass(nodeService.getType(candidateRef), DocumentService.TYPE_BASE_DOCUMENT)) {
 					documentRef = candidateRef;
 					break;
 				}
@@ -434,13 +435,11 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 				commentFileName.append(nodeService.getProperty(documentRef, QName.createQName(documentProjectNumber, serviceRegistry.getNamespaceService())));
 				commentFileName.append(", ");
 
-				DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-				commentFileName.append(dateFormat.format(new Date())).append(" + ");
+				commentFileName.append(DATE_FORMAT.format(new Date())).append(" + ");
 				commentFileName.append("Согласование сотрудником ");
 
-				NodeRef employee = orgstructureService.getEmployeeByPerson(username);
-				if (employee != null) {
-					commentFileName.append(nodeService.getProperty(employee, ContentModel.PROP_NAME));
+				if (employeeRef != null) {
+					commentFileName.append(nodeService.getProperty(employeeRef, ContentModel.PROP_NAME));
 				}
 
 				String commentFileNameStr = FileNameValidator.getValidFileName(commentFileName.toString());
