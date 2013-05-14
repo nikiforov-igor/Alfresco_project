@@ -5,7 +5,7 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean id="lecm.approval.modelBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+	<bean id="lecm.approval.modelBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, statemachine.aspects.LogicEcmModelsBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-approval-list-model.xml</value>
