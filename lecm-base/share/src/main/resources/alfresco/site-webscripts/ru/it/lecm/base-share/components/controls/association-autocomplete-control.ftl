@@ -4,6 +4,9 @@
 <#assign fieldValue=field.value!"">
 <#assign controlId = fieldHtmlId + "-cntrl">
 
+<#assign autoCompleteJsName = field.control.params.autoCompleteJsName ! "${args.htmlid}-${fieldHtmlId}-auto-complete">
+<#assign treeViewJsName = field.control.params.treeViewJsName ! "${args.htmlid}-${fieldHtmlId}-tree-view">
+
 <#if fieldValue?string == "" && field.control.params.defaultValueContextProperty??>
     <#if context.properties[field.control.params.defaultValueContextProperty]??>
         <#assign fieldValue = context.properties[field.control.params.defaultValueContextProperty]>
@@ -33,76 +36,77 @@
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <script type="text/javascript">//<![CDATA[
-(function()
-{
-    var control = new LogicECM.module.AssociationAutoComplete("${fieldHtmlId}").setMessages(${messages});
-    control.setOptions(
-            {
-                <#if disabled>
-                    disabled: true,
-                </#if>
-                <#if field.control.params.parentNodeRef??>
-                    parentNodeRef: "${field.control.params.parentNodeRef}",
-                </#if>
-                <#if field.control.params.startLocation??>
-                    startLocation: "${field.control.params.startLocation}",
-                </#if>
-	            <#if field.mandatory??>
-		            mandatory: ${field.mandatory?string},
-	            <#elseif field.endpointMandatory??>
-		            mandatory: ${field.endpointMandatory?string},
-	            </#if>
-                <#if args.ignoreNodes??>
-                    ignoreNodes: "${args.ignoreNodes}".split(","),
-                </#if>
-                multipleSelectMode: ${field.endpointMany?string},
-                itemType: "${field.endpointType}",
-                currentValue: "${field.value!''}",
-                itemFamily: "node",
-                maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
-                selectedValueNodeRef: "${fieldValue}",
-	            <#if field.control.params.selectedItemsNameSubstituteString??>
-		            selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
-	            </#if>
-                nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
-                additionalFilter: "${field.control.params.additionalFilter!''}"
-            });
+(function() {
+    LogicECM.CurrentModules = {};
 
+    LogicECM.CurrentModules["${autoCompleteJsName}"] = new LogicECM.module.AssociationAutoComplete("${fieldHtmlId}");
+    LogicECM.CurrentModules["${autoCompleteJsName}"].setMessages(${messages});
+    LogicECM.CurrentModules["${autoCompleteJsName}"].setOptions({
+    <#if disabled>
+        disabled: true,
+    </#if>
+    <#if field.control.params.parentNodeRef??>
+        parentNodeRef: "${field.control.params.parentNodeRef}",
+    </#if>
+    <#if field.control.params.startLocation??>
+        startLocation: "${field.control.params.startLocation}",
+    </#if>
+    <#if field.mandatory??>
+        mandatory: ${field.mandatory?string},
+    <#elseif field.endpointMandatory??>
+        mandatory: ${field.endpointMandatory?string},
+    </#if>
+    <#if args.ignoreNodes??>
+        ignoreNodes: "${args.ignoreNodes}".split(","),
+    </#if>
+        multipleSelectMode: ${field.endpointMany?string},
+        itemType: "${field.endpointType}",
+        currentValue: "${field.value!''}",
+        itemFamily: "node",
+        maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
+        selectedValueNodeRef: "${fieldValue}",
+    <#if field.control.params.selectedItemsNameSubstituteString??>
+        selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
+    </#if>
+        nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
+        additionalFilter: "${field.control.params.additionalFilter!''}"
+    });
 
-    new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
-            <#if form.mode == "view" || field.disabled>
-                disabled: true,
-            </#if>
-            <#if field.control.params.startLocation??>
-                rootLocation: "${field.control.params.startLocation}",
-            </#if>
-            <#if field.mandatory??>
-                mandatory: ${field.mandatory?string},
-            <#elseif field.endpointMandatory??>
-                mandatory: ${field.endpointMandatory?string},
-            </#if>
-                multipleSelectMode: ${field.endpointMany?string},
+    LogicECM.CurrentModules["${treeViewJsName}"] = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" );
+    LogicECM.CurrentModules["${treeViewJsName}"].setOptions({
+    <#if form.mode == "view" || field.disabled>
+        disabled: true,
+    </#if>
+    <#if field.control.params.startLocation??>
+        rootLocation: "${field.control.params.startLocation}",
+    </#if>
+    <#if field.mandatory??>
+        mandatory: ${field.mandatory?string},
+    <#elseif field.endpointMandatory??>
+        mandatory: ${field.endpointMandatory?string},
+    </#if>
+        multipleSelectMode: ${field.endpointMany?string},
 
-            <#if field.control.params.nameSubstituteString??>
-                nameSubstituteString: "${field.control.params.nameSubstituteString}",
-            </#if>
-		    <#if field.control.params.selectedItemsNameSubstituteString??>
-			    selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
-		    </#if>
-            <#if field.control.params.parentNodeRef??>
-                rootNodeRef: "${field.control.params.parentNodeRef}",
-            </#if>
-            <#if args.ignoreNodes??>
-                ignoreNodes: "${args.ignoreNodes}".split(","),
-            </#if>
-            showCreateNewLink: ${showCreateNewLink?string},
-	        showSearch: ${showSearch?string},
-            changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
-            plane: true,
-            currentValue: "${field.value!''}",
-            itemType: "${field.endpointType}",
-            additionalFilter: "${field.control.params.additionalFilter!''}"
-        }).setMessages( ${messages} );
+    <#if field.control.params.nameSubstituteString??>
+        nameSubstituteString: "${field.control.params.nameSubstituteString}",
+    </#if>
+    <#if field.control.params.selectedItemsNameSubstituteString??>
+        selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
+    </#if>
+    <#if field.control.params.parentNodeRef??>
+        rootNodeRef: "${field.control.params.parentNodeRef}",
+    </#if>
+    <#if args.ignoreNodes??>
+        ignoreNodes: "${args.ignoreNodes}".split(","),
+    </#if>
+        showCreateNewLink: ${showCreateNewLink?string},
+        showSearch: ${showSearch?string},
+        changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
+        plane: true,
+        currentValue: "${field.value!''}",
+        itemType: "${field.endpointType}",
+        additionalFilter: "${field.control.params.additionalFilter!''}"
+    }).setMessages( ${messages} );
 })();
 //]]></script>
 

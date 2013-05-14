@@ -9,9 +9,48 @@
 		</forms>
 	</config>
 
-	<config evaluator="string-compare" condition="activiti$lecmParallelApproval">
+    <config evaluator="model-type" condition="lecm-al:assignees-list">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>                                                                                <!-- Название списка согласующих -->
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <!-- Элемент списка согласования -->
+    <config evaluator="model-type" condition="lecm-al:assignees-item">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-al:assignees-item-order"/>                                                           <!-- Порядковый номер элемента -->
+                    <show id="lecm-al:assignees-item-due-date"/>                                                        <!-- Срок согласования -->
+                    <show id="lecm-al:assignees-item-employee-assoc"/>                                                  <!-- Ссылка на "Сотрудника" -->
+                </field-visibility>
+                <!--<appearance>-->
+                    <!--<field id="lecm-al:assignees-item-employee-assoc" substituteString="{lecm-al:assignees-item-employee-assoc/lecm-orgstr:employee-first-name} {lecm-al:assignees-item-employee-assoc/lecm-orgstr:employee-last-name}"></field>-->
+                <!--</appearance>-->
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-al:assignees-item-order"/>                                                           <!-- Порядковый номер элемента -->
+                    <show id="lecm-al:assignees-item-due-date"/>                                                        <!-- Срок согласования -->
+                    <show id="lecm-al:assignees-item-employee-assoc"/>                                                  <!-- Ссылка на "Сотрудника" -->
+                </field-visibility>
+            </form>
+            <form id="assignees-list-name">
+                <field-visibility>
+                    <show id="lecm-al:fake-assignees-list-name" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$lecmParallelApproval">
 		<forms>
 			<form>
+                <create-form template="/ru/it/lecm/approval/form/approval-parallel-list-form.ftl" />
 				<field-visibility>
 					<show id="bpm:workflowDueDate"/>
 					<show id="lecmPar:employeesAssoc"/>
@@ -36,6 +75,8 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="autoCompleteJsName">employeesAssocAutoComplete</control-param>
+                            <control-param name="treeViewJsName">employeesAssocTreeView</control-param>
 						</control>
 					</field>
 
@@ -104,6 +145,8 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="autoCompleteJsName">employeesAssocAutoComplete</control-param>
+                            <control-param name="treeViewJsName">employeesAssocTreeView</control-param>
 						</control>
 					</field>
 					<field id="packageItems">
