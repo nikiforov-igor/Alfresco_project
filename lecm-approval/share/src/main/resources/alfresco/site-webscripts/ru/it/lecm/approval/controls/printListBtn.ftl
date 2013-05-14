@@ -9,7 +9,7 @@
 </#escape>
     <script type="text/javascript">
         function printNode(nodeRef) {
-            document.location.href = Alfresco.constants.PROXY_URI + "/lecm/report/ApprovalList?nodeRef=" + encodeURI(nodeRef);
+            document.location.href = Alfresco.constants.PROXY_URI + "/lecm/report/approval-list?nodeRef=" + encodeURI(nodeRef)+ "&exec=1";
         }
     </script>
 </div>
