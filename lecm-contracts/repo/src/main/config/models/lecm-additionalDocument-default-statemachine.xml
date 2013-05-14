@@ -2539,13 +2539,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																			<property>
 																				<name>inputFromValue</name>
 																				<value>lecm-additional-document:number
 																				</value>
-																			</property>
-																			<property>
-																				<name>inputToValue</name>
-																				<value>documentProjectNumber</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2570,13 +2570,44 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Согласование</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					commentFileAttachmentCategoryName
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>c5129270-8a08-4cac-8951-d6c23bf6496b
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/96c2b8eb-c1ad-4d88-af5e-fd80498d4aa5
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>Для совершения этого действия
+																					необходимо добавить вложение в
+																					категорию "Документ".
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					doc.hasCategoryAttachment("Документ")
 																				</value>
 																			</property>
 																		</properties>
@@ -2654,7 +2685,44 @@
 															</association>
 														</associations>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>b13534ed-c5d8-4cb2-816d-c697bef81709
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/417cd5c1-b46e-42d9-8896-52256f484f98
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>Для совершения этого действия
+																					необходимо добавить вложение в
+																					категорию "Документ".
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					doc.hasCategoryAttachment("Документ")
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 													<node>
 														<type>transitionWorkflow</type>
@@ -2711,14 +2779,14 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Согласование</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					commentFileAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2743,13 +2811,44 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																			<property>
 																				<name>inputFromValue</name>
 																				<value>lecm-additional-document:number
 																				</value>
 																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>f8ad8b53-2876-4237-8f2e-2be67febfa43
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/cfb64b6c-1648-40c5-ae9c-44855f69a893
+																		</nodeRef>
+																		<properties>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>documentProjectNumber</value>
+																				<name>conditionErrorMessage</name>
+																				<value>Для совершения этого действия
+																					необходимо добавить вложение в
+																					категорию "Документ".
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					doc.hasCategoryAttachment("Документ")
+																				</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -3836,6 +3935,37 @@
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>7017bff2-7b38-4cbc-bf59-d9aa4f89d5ce
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/ab3d93b3-8552-4471-99fb-7cbf11b1fc4b
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>Для совершения этого действия
+																					необходимо добавить вложение в
+																					категорию "Документ".
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					doc.hasCategoryAttachment("Документ")
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -4879,7 +5009,44 @@
 															</association>
 														</associations>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>e35aa88d-2a54-48ae-bb0c-dd0ccd7f7093
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/b80f1603-1a42-40a2-9b59-7f251fbe73de
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>Для совершения этого действия
+																					необходимо добавить вложение в
+																					категорию "Документ".
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					doc.hasCategoryAttachment("Документ")
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 												</nodes>
 											</subFolder>
@@ -5836,14 +6003,14 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Согласование</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					commentFileAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5868,13 +6035,44 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																			<property>
 																				<name>inputFromValue</name>
 																				<value>lecm-additional-document:number
 																				</value>
 																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>ecad87f8-794f-41ce-bda2-32349451bf65
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/6c92b0ba-215d-4698-8998-c5c4c0be69f2
+																		</nodeRef>
+																		<properties>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>documentProjectNumber</value>
+																				<name>conditionErrorMessage</name>
+																				<value>Для совершения этого действия
+																					необходимо добавить вложение в
+																					категорию "Документ".
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					doc.hasCategoryAttachment("Документ")
+																				</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5951,7 +6149,44 @@
 															</association>
 														</associations>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>74cdc7df-b2bd-409a-8494-847c8314bf18
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/45c89957-c627-460a-9465-50c24dc883bd
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>Для совершения этого действия
+																					необходимо добавить вложение в
+																					категорию "Документ".
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					doc.hasCategoryAttachment("Документ")
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 													<node>
 														<type>transitionWorkflow</type>
@@ -6008,13 +6243,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																			<property>
 																				<name>inputFromValue</name>
 																				<value>lecm-additional-document:number
 																				</value>
-																			</property>
-																			<property>
-																				<name>inputToValue</name>
-																				<value>documentProjectNumber</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -6039,13 +6274,44 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Согласование</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					commentFileAttachmentCategoryName
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>cff60d8c-a6c5-42ca-8f1c-eca555a918f5
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/6b00fefc-b264-4ca8-b7fc-1817e9329c70
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>Для совершения этого действия
+																					необходимо добавить вложение в
+																					категорию "Документ".
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					doc.hasCategoryAttachment("Документ")
 																				</value>
 																			</property>
 																		</properties>
