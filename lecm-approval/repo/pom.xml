@@ -122,10 +122,6 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jasperreports-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>maven-amp-plugin</artifactId>
 			</plugin>
@@ -150,11 +146,6 @@
 				<excludes>
 					<exclude>**README-*</exclude>
 				</excludes>
-			</resource>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/config/reportdefinitions</directory>
-				<targetPath>reportdefinitions</targetPath>
 			</resource>
 		</resources>
 	</build>

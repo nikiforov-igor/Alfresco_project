@@ -10,6 +10,17 @@ import org.alfresco.service.namespace.QName;
  */
 public interface AssocDataFilter {
 
+
+	/**
+	 * Типы ассоциации
+	 */
+	public enum AssocKind {
+		child			// "на дочку"
+		, parent		// "на родителя"
+		, source		// "связь на исходный объект"
+		, target		// "связь на целевой объект"
+	}
+
 	/**
 	 * Проверить, выполняются ли для указанного узла условия фильтра по ассоциациям
 	 * @param id
@@ -18,19 +29,17 @@ public interface AssocDataFilter {
 	boolean isOk(NodeRef id); 
 
 	/**
-	 * Добавить условие для дочерней ассоциации 
-	 * @param type тип на другом конце
+	 * Добавить условие для ассоциации 
+	 * @param type тип на другом конце связи
 	 * @param assocType тип связи-ассоциации или Null
 	 * @param id связанный узел
-	 * @param kind
+	 * @param kind вид самой связи
 	 */
 	void addAssoc( QName type, QName assocType, NodeRef id, AssocKind kind);
 
 
-	// TODO: void addParentAssoc( QName type, NodeRef id);
-
 	/**
-	 * Получить текущий набор фильтруемых связей (сформированный addChildAssoc)
+	 * Получить текущий набор фильтруемых связей (сформированный addAssoc)
 	 * @return
 	 */
 	List<AssocDesc> getAssocList();
@@ -42,10 +51,6 @@ public interface AssocDataFilter {
 		public final QName type, assoctype;
 		public final NodeRef id;
 		public final AssocKind kind; // true = child association descriptor, false = parent
-
-//		public AssocDesc(QName type, NodeRef id, AssocKind kind) {
-//			this(type, null, id, kind);
-//		}
 
 		public AssocDesc(QName type, QName assoctype, NodeRef id, AssocKind kind) {
 			super();
@@ -66,12 +71,5 @@ public interface AssocDataFilter {
 			builder.append("]");
 			return builder.toString();
 		}
-	}
-
-	/**
-	 * Типы ассоциации
-	 */
-	public enum AssocKind {
-		child, parent, source, target
 	}
 }

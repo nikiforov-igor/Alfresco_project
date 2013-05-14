@@ -107,11 +107,13 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 			throws JRException {
 		// задаём период выборки в переменные отчёта ...
 		setPeriodDates(report.getVariables());
+		// report.setProperty("start", this.getStart());
+		// report.setProperty("end", this.getEnd());
 		return super.createDS(report);
 	}
 
-	final static String VARNAME_START = "PERIOD_START";
-	final static String VARNAME_END = "PERIOD_END";
+//	final static String VARNAME_START = "PERIOD_START";
+//	final static String VARNAME_END = "PERIOD_END";
 
 	private void setPeriodDates(JRVariable[] variables) {
 		if (variables == null || variables.length == 0)
@@ -201,8 +203,13 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 	final static String JRName_AVG_APPROVE_DAYS = "col_Employee.AvgApproved"; // Средний срок согласований, дней
 	final static String JRName_AVG_MISSED_DAYS = "col_Employee.AvgMissed"; // Средний срок просрочки, дней
 
+	final static String JRName_PERIOD_START = "col_Period.Start";
+	final static String JRName_PERIOD_END = "col_Period.End";
+
+
 	// final String JRName_ = "";
- 	/**
+
+	/**
  	 * Очень вспомогательный класс для именования объектов, касающихся согласований
  	 */
  	static class ApproveQNameHelper {
@@ -360,6 +367,10 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 			result.put( getAlfAttrNameByJRKey(JRName_MISSED_APPROVES_COUNT), (int) item.missedApproves.count);
 			result.put( getAlfAttrNameByJRKey(JRName_AVG_MISSED_DAYS), (float) roundToHumanRead(item.missedApproves.avg) );
 			result.put( getAlfAttrNameByJRKey(JRName_AVG_APPROVE_DAYS), (float) roundToHumanRead(item.normalApproves.avg) );
+
+			final Date now = new Date();
+			result.put( getAlfAttrNameByJRKey(JRName_PERIOD_START), (periodStart != null) ? periodStart : null);
+			result.put( getAlfAttrNameByJRKey(JRName_PERIOD_END), (periodEnd != null) ? periodEnd : now);
 
 			return result;
 		}

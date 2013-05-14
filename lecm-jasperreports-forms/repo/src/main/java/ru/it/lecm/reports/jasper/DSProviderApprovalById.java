@@ -266,7 +266,8 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 						docInfo.docEndApprove = (Date) realProps.get(approveQNames.QFLD_ENDAPPROVE);
 
 						// результат согласования
-						docInfo.docApproveResult = Utils.coalesce( realProps.get(approveQNames.QFLD_APPROVE_RESULT), null);
+						docInfo.docApproveResult = makeL12_ApproveResult(
+								Utils.coalesce( realProps.get(approveQNames.QFLD_APPROVE_RESULT), null));
 
 						// версия и номер проекта договора
 						docInfo.docVersion =  Utils.coalesce( realProps.get(approveQNames.QFLD_APPROVE_DOCVER), null);
@@ -319,7 +320,8 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 							apprInfo.approvedAt = (Date) childProps.get(approveQNames.QFLD_USER_APPROVED);
 
 							// результат согласования
-							apprInfo.approveResult = Utils.coalesce( childProps.get(approveQNames.QFLD_USER_RESULT), null);
+							apprInfo.approveResult = makeL12_ApproveResult(
+									Utils.coalesce( childProps.get(approveQNames.QFLD_USER_RESULT), null));
 
 							// замечания 
 							apprInfo.approveNotes = Utils.coalesce( childProps.get(approveQNames.QFLD_USER_COMMENT), null);
@@ -333,4 +335,30 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 			}
 
 		} // ApprovalItemDS
+
+		// TODO: сделать работу через файл L18
+		/**
+		 * Локализация для "<!-- результат согласования документа -->" и "<!-- Результат согласования сотрудником -->"
+		 * @param listValue см lecm-approval-list-model.xml::"lecm-al:approval-item-decision" и "lecm-al:approval-list-decision"
+		 * @return
+		 */
+		static String makeL12_ApproveResult(String listValue) {
+			final String l18 = getL18ApproveResultMap().get(listValue);
+			return (l18 != null) ? l18 : listValue;
+		}
+
+		static Map<String, String> l18ResultApproveMap;
+		static Map<String, String> getL18ApproveResultMap() {
+			if (l18ResultApproveMap == null) {
+				l18ResultApproveMap = new HashMap<String, String>();
+				l18ResultApproveMap.put("NO_DECISION", "решение пока не принято");
+				l18ResultApproveMap.put("APPROVED", "согласован");
+				l18ResultApproveMap.put("REJECTED", "отклонен");
+				l18ResultApproveMap.put("APPROVED_WITH_REMARK", "согласован с замечанием");
+				l18ResultApproveMap.put("REJECTED_FORCE", "отозван с согласования");
+				l18ResultApproveMap.put("APPROVED_FORCE", "согласование принудительно завершено");
+			}
+			return l18ResultApproveMap;
+		}
+
 }

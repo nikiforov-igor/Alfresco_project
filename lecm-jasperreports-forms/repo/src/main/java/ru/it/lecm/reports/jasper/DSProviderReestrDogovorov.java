@@ -1,17 +1,23 @@
 package ru.it.lecm.reports.jasper;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperReport;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
 import java.util.Date;
+import java.util.Iterator;
 
 /**
  * Отчёт по реестру договоров
@@ -130,18 +136,76 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 		}
 	}
 
+	final static String JRFLD_Executor_Family = "col_Executor_Family";
+	final static String JRFLD_Executor_Name= "col_Executor_Name";
+	final static String JRFLD_Executor_Otchestvo = "col_Executor_Otchestvo";
+	final static String JRFLD_Executor_Staff = "col_Executor_Staff";
+
 
 	@Override
-	public AlfrescoJRDataSource createDS(JasperReport report) throws JRException {
-		final AlfrescoJRDataSource dataSource = super.createDS(report);
+	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
 
-		if (dataSource != null) {
-			if (filter != null)
-				dataSource.setFilter(filter.makeAssocFilter());
-		}
+		final QName QFLD_CREATOR = QName.createQName("cm:creator", getServiceRegistry().getNamespaceService());
 
+		final AlfrescoJRDataSource dataSource = new AlfrescoJRDataSource(iterator)  {
+
+			/**
+			 * Получить название поля (в списке атрибутов curProps объекта), 
+			 * соот-щее jasper-названию колонки  
+			 * @param jrFldName название колонки для Jasper (оно упрощено относительно "полного" названия в curProps)
+			 * @return
+			 */
+			private String getAlfAttrNameByJRKey(String jrFldName) {
+				return (!getMetaFields().containsKey(jrFldName)) ? jrFldName : getMetaFields().get(jrFldName).getValueLink();
+			}
+
+			@Override
+			protected boolean loadAlfNodeProps(NodeRef id) {
+				final boolean flag = super.loadAlfNodeProps(id);
+				if (flag) {
+					// подгрузим Исполнителя по его login-у
+					final NodeService nodeSrv = serviceRegistry.getNodeService();
+					final String loginCreator = Utils.coalesce( nodeSrv.getProperty(id, QFLD_CREATOR), null);
+					if (loginCreator != null) { // получение Исполнителя по его login
+						final NodeRef person = getServiceRegistry().getPersonService().getPerson(loginCreator);
+						if (person != null) {
+							final NodeRef executorEmplId = getOrgstructureService().getEmployeeByPerson(person);
+							final BasicEmployeeInfo docExecutor = new BasicEmployeeInfo(executorEmplId);
+							docExecutor.loadProps(nodeSrv, getOrgstructureService());
+							// сохраним ФИО ...
+							curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Name), docExecutor.firstName);
+							curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Otchestvo), docExecutor.middleName);
+							curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Family), docExecutor.lastName);
+
+							// curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Staff_ID), (docExecutor.staffId != null) ? docExecutor.staffId.getId() : "" );
+							curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Staff), docExecutor.staffName);
+
+							// curProps.put( getAlfAttrNameByJRKey(JRName_Executor_OU_ID), (docExecutor.unitId != null) ? docExecutor.unitId.getId() : "" );
+							// curProps.put( getAlfAttrNameByJRKey(JRName_ExecutorC_OU_Name), docExecutor.unitName);
+						}
+					}
+				} 
+				return flag;
+			}
+
+			@Override
+			public Object getFieldValue(JRField jrf) throws JRException {
+				// при запросе Исполнителя выполняем подгрузку Сотрудника
+				// вместо login
+				final Object result = super.getFieldValue(jrf);
+				if (result != null && jrf.getName().startsWith("col_Employee")) {
+					// Исполнитель
+				}
+				return result;
+			}
+	};
+
+
+		if (filter != null)
+			dataSource.setFilter(filter.makeAssocFilter());
 		return dataSource;
 	}
+
 
 	final static String TYPE_CONRACT = "lecm-contract:document";
 
@@ -183,4 +247,5 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 		return bquery.toString();
 	}
 
+	
 }

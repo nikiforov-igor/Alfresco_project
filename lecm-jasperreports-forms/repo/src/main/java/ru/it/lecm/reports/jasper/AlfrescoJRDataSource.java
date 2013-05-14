@@ -167,7 +167,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 
 		// получаем нативное название данных
 		final JRXField fld = metaFields.get( jrf.getName());
-		final String fldAlfName = (fld != null) ? fld.getValueLink() : jrf.getName();
+		final String fldAlfName = (fld != null && fld.getValueLink() != null) ? fld.getValueLink() : jrf.getName();
 		if (curProps != null) {
 			if (curProps.containsKey(fldAlfName))
 				return curProps.get(fldAlfName);
@@ -193,7 +193,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 * @param id
 	 * @return true, если фильтра нет или строка удовлетворяет фильтру
 	 */
-	private boolean loadAlfNodeProps(NodeRef id) {
+	protected boolean loadAlfNodeProps(NodeRef id) {
 		// дополнительно фильтруем по критериям, если они есть ...
 		if (this.filter != null && !filter.isOk(id)) {
 			logger.debug( String.format("Filtered out node %s", id));
@@ -255,7 +255,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 					sb.append( String.format( "\t[%d]\t referenced field '%s' detected -> using evaluator for it \n", i, fldName));
 			}
 		} else
-			sb.append("\t all fields will be Sincluded");
+			sb.append("\t all fields will be included");
 		if (logger.isDebugEnabled()) 
 			logger.debug(sb.toString());
 		return result;

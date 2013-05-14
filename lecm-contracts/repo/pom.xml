@@ -54,7 +54,10 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-		
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
@@ -114,6 +117,13 @@
 		    <artifactId>notifications-repo-api</artifactId>
 		    <version>${project.version}</version>
 	    </dependency>
+		<!--
+		<dependency>
+			<groupId>ru.it.lecm.forms.jasperforms</groupId>
+			<artifactId>jasperforms-repo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		  -->
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required
@@ -144,6 +154,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
             <plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jasperreports-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
                 <groupId>org.alfresco.maven.plugin</groupId>
                 <artifactId>maven-amp-plugin</artifactId>
             </plugin>
@@ -169,6 +183,11 @@
                     <exclude>**README-*</exclude>
                 </excludes>
             </resource>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/config/reportdefinitions</directory>
+				<targetPath>reportdefinitions</targetPath>
+			</resource>
         </resources>
     </build>
 </project>

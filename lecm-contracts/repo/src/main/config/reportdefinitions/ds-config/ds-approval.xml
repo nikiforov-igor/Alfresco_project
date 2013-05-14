@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Фильтры отчета по 10.5.2 "Исполнительская дисциплина по согласованиям за период":
 Входные параметры:
@@ -26,6 +26,10 @@
 	</query>
 
 	<fields.jasper>
+		<!-- Период - начало и конец -->
+		<field queryFldName="{period.start}" jrFldName="col_Period.Start" displayName="Начало периода" javaValueClass="Date"/>
+		<field queryFldName="{period.end}" jrFldName="col_Period.End" displayName="Конец периода" javaValueClass="Date"/>
+
 		<!-- Фамилия Имя Отчество Сотрудника-->
 		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-first-name}"
 				jrFldName="col_Employee.FirstName"
