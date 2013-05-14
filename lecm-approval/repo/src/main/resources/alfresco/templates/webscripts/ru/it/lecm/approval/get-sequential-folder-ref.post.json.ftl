@@ -1,0 +1,3 @@
+{
+    "defaultListFolderRef": "${defaultListFolderRef}"
+}

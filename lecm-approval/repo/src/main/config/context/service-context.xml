@@ -79,25 +79,39 @@
 		<property name="personService" ref="personService"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="stateMachineHelper" ref="stateMachineHelper"/>
 	</bean>
 
 	<bean id="lecm.approval.javascriptExtension.parallel" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension" parent="lecm.approval.javascriptExtension.abstract">
 		<property name="extensionName" value="approvalParallel"/>
 		<property name="approvalListService" ref="lecm.approval.service.parallel"/>
+		<property name="stateMachineHelper" ref="stateMachineHelper"/>
 	</bean>
 
 	<bean id="lecm.approval.javascriptExtension.sequential" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension" parent="lecm.approval.javascriptExtension.abstract">
 		<property name="extensionName" value="approvalSequential"/>
 		<property name="approvalListService" ref="lecm.approval.service.sequential"/>
+		<property name="stateMachineHelper" ref="stateMachineHelper"/>
 	</bean>
+
+    <bean id="lecm.approval.javascriptExtension.service" class="ru.it.lecm.approval.extensions.ApprovalServiceJavascriptExtension"
+          parent="lecm.approval.javascriptExtension.abstract">
+        <property name="extensionName" value="approvalService"/>
+        <property name="repository" ref="repositoryHelper"/>
+        <property name="authenticationService" ref="authenticationService"/>
+    </bean>
 
 	<bean id="lecm.approval.ApprovalListItemPolicy" class="ru.it.lecm.approval.policies.ApprovalListItemPolicy" init-method="init" depends-on="lecm.approval.modelBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
-	<bean id="webscript.ru.it.lecm.approval.GetDocumentDataByTaskId.get" class="ru.it.lecm.approval.webscript.GetDocumentDataByTaskIdOrNodeRef" parent="webscript">
+    <bean id="lecm.approval.AssigneesListItemPolicy" class="ru.it.lecm.approval.policies.AssigneesListItemPolicy" init-method="init"
+          depends-on="lecm.approval.modelBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.approval.GetDocumentDataByTaskId.get" class="ru.it.lecm.approval.webscript.GetDocumentDataByTaskIdOrNodeRef" parent="webscript">
 		<property name="workflowService" ref="WorkflowService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="approvalListService" ref="lecm.approval.service.parallel"/>

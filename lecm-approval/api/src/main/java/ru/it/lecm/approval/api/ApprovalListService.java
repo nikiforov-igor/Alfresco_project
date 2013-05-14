@@ -16,6 +16,8 @@ public interface ApprovalListService {
 	String APPROVAL_LIST_PREFIX = "lecm-al";
 	QName TYPE_APPROVAL_ITEM = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item");
 	QName TYPE_APPROVAL_LIST = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-list");
+    QName TYPE_ASSIGNEES_ITEM = QName.createQName(APPROVAL_LIST_NAMESPACE, "assignees-item");
+    QName TYPE_ASSIGNEES_LIST = QName.createQName(APPROVAL_LIST_NAMESPACE, "assignees-list");
 	QName PROP_APPROVAL_ITEM_DECISION = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-decision");
 	QName PROP_APPROVAL_ITEM_START_DATE = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-start-date");
 	QName PROP_APPROVAL_ITEM_DUE_DATE = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-due-date");
@@ -25,9 +27,18 @@ public interface ApprovalListService {
 	QName PROP_APPROVAL_LIST_APPROVE_DATE = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-list-approve-date");
 	QName PROP_APPROVAL_LIST_APPROVE_START = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-list-approve-start");
 	QName PROP_APPROVAL_LIST_DOCUMENT_VERSION = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-list-document-version");
+    QName PROP_ASSIGNEES_ITEM_ORDER = QName.createQName(APPROVAL_LIST_NAMESPACE, "assignees-item-order");
+	QName PROP_ASSIGNEES_ITEM_DUE_DATE = QName.createQName(APPROVAL_LIST_NAMESPACE, "assignees-item-due-date");
 	QName ASSOC_APPROVAL_ITEM_EMPLOYEE = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-employee-assoc");
 	QName ASSOC_APPROVAL_ITEM_COMMENT = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-comment-assoc");
 	QName ASSOC_APPROVAL_LIST_CONTAINS_APPROVAL_ITEM = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-list-contains-approval-item");
+    QName ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM = QName.createQName(APPROVAL_LIST_NAMESPACE, "assignees-list-contains-assignees-item");
+	QName ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC = QName.createQName(APPROVAL_LIST_NAMESPACE, "assignees-item-employee-assoc");
+
+    String ASSIGNEES_LISTS_FOLDER_NAME = "Списки согласования";
+    String ASSIGNEES_DEFAULT_LIST_FOLDER_NAME = "Список по умолчанию";
+	String ASSIGNEES_LISTS_PARALLEL_FOLDER_NAME = "Параллельное согласование";
+	String ASSIGNEES_LISTS_SEQUENTIAL_FOLDER_NAME = "Последовательное согласование";
 
 	/**
 	 * формирование нового листа согласования, для текущей версии регламента
