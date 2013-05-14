@@ -34,7 +34,7 @@
         </div>
     </div>
     <div id="${controlId}-list" class="viewmode-field">
-        <span class="viewmode-label">${msg("label.approvalList")}:</span>
+        <span class="viewmode-label approval-list-label">${msg("label.approvalList")}:</span>
         <div id="lecm-approval-list-span" style="width:100%;">
             <span id="${controlId}-currentListValueDisplay" class="viewmode-value"></span>
         </div>

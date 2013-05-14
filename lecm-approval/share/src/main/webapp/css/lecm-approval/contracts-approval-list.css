@@ -3,3 +3,7 @@
     width:96%;
 }
 
+.approval-list-label, #lecm-approval-list-span .viewmode-field .viewmode-value {
+    font-weight: bold;
+}
+
