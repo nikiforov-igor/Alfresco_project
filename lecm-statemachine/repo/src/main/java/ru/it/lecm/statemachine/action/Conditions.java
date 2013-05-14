@@ -65,7 +65,7 @@ public class Conditions {
         }
 
         public String getErrorMessage() {
-            return errorMessage;
+            return errorMessage.replace("\\r", "").replace("\\n", "");
         }
 
         public Set<String> getFields() {
