@@ -61,6 +61,9 @@
 #yui-main #lecm-content-ft {
     background: #f2f2f2;
 }
+#yui-main #doc-bd div.datalist-toolbar div.header-bar div.new-row span.first-child {
+    background-image: url("/share/res/images/lecm-contracts/add_16_green.png");
+}
 #yui-main #doc-bd div.datalist-toolbar div.header-bar div.new-row button {
     color: #669fc5;
 }
