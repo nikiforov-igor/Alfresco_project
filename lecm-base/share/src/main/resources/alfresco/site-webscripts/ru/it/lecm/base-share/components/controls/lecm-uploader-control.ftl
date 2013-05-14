@@ -48,7 +48,7 @@
 
 			<div id="${controlId}-itemGroupActions" class="show-picker">
                 <span class="file-upload-button">
-                    <input type="button" id="${controlId}-file-upload-button" name="-" value="upload"/>
+                    <input type="button" id="${controlId}-file-upload-button" name="-" value="${msg("lecm.form.upload")}"/>
                 </span>
 			</div>
 			<div class="clear"></div>

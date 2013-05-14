@@ -156,6 +156,11 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
         return AuthenticationUtil.runAsSystem(raw);
     }
 
+	public NodeRef getCategory(final String category, final NodeRef documentRef) {
+		NodeRef attachmentRootRef = getRootFolder(documentRef);
+		return nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
+	}
+
 	public NodeRef getDocumentByAttachment(ChildAssociationRef attachRef) {
 		NodeRef attachCategoryDir = attachRef.getParentRef();
 		NodeRef attachRootDir = nodeService.getPrimaryParent(attachCategoryDir).getParentRef();

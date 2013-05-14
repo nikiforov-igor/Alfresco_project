@@ -11,6 +11,7 @@ import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.ParameterCheck;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -380,6 +381,9 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		String username = "";
 		NodeRef employeeRef = null;
 		NodeRef commentRef = null;
+		NodeRef documentRef = null;
+		String commentFileAttachmentCategoryName = null;
+		String documentProjectNumber = null;
 
 		try {
 			startDate =  DateUtils.truncate(new Date(taskDecision.getLong("startDate")), Calendar.DATE);
@@ -395,6 +399,14 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			if (NodeRef.isNodeRef(commentStrRef)) {
 				commentRef = new NodeRef(commentStrRef);
 			}
+
+			String documentStrRef = taskDecision.getString("documentRef");
+			if (NodeRef.isNodeRef(documentStrRef)) {
+				documentRef = new NodeRef(documentStrRef);
+			}
+
+			commentFileAttachmentCategoryName = taskDecision.getString("commentFileAttachmentCategoryName");
+			documentProjectNumber = taskDecision.getString("documentProjectNumber");
 		} catch (JSONException ex) {
 			logger.error(ex.getMessage(), ex);
 		}
@@ -415,7 +427,30 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			targetRefs.add(employeeRef);
 			nodeService.setAssociations(approvalListItemRef, ASSOC_APPROVAL_ITEM_EMPLOYEE, targetRefs);
 		}
-		if (commentRef != null) {
+		if (commentRef != null && documentRef != null && commentFileAttachmentCategoryName != null && documentProjectNumber != null) {
+			NodeRef attachmentCategoryRef = documentAttachmentsService.getCategory(commentFileAttachmentCategoryName, documentRef);
+			if (attachmentCategoryRef != null) {
+				StringBuilder commentFileName = new StringBuilder();
+				commentFileName.append(nodeService.getProperty(documentRef, QName.createQName(documentProjectNumber, serviceRegistry.getNamespaceService())));
+				commentFileName.append(", ");
+
+				DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+				commentFileName.append(dateFormat.format(new Date())).append(" + ");
+				commentFileName.append("Согласование сотрудником ");
+
+				NodeRef employee = orgstructureService.getEmployeeByPerson(username);
+				if (employee != null) {
+					commentFileName.append(nodeService.getProperty(employee, ContentModel.PROP_NAME));
+				}
+
+				String commentFileNameStr = FileNameValidator.getValidFileName(commentFileName.toString());
+
+				nodeService.setProperty(commentRef, ContentModel.PROP_NAME, commentFileNameStr);
+
+				QName commentAssocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, commentFileNameStr);
+				nodeService.moveNode(commentRef, attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentAssocQName);
+			}
+
 			List<NodeRef> targetRefs = new ArrayList<NodeRef>();
 			targetRefs.add(commentRef);
 			nodeService.setAssociations(approvalListItemRef, ASSOC_APPROVAL_ITEM_COMMENT, targetRefs);

@@ -44,19 +44,26 @@
 							var comment = task.getVariableLocal("bpm_comment");
 							var taskCommentAssoc = task.getVariableLocal("lecmPar_approveTaskCommentAssoc");
 							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
+							var documentRef = bpm_package.children[0].nodeRef;
 							logger.log("userName = " + userName);
 							logger.log("decision = " + decision);
 							logger.log("startDate = " + startDate);
 							logger.log("dueDate = " + dueDate);
 							logger.log("comment = " + comment);
 							logger.log("commentRef = " + commentRef);
+							logger.log("documentRef = " + documentRef);
+							logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);
+							logger.log("documentProjectNumber = " + documentProjectNumber);
 							var taskDecision = {
 								"userName": userName,
 								"decision": decision,
 								"startDate": startDate,
 								"dueDate": dueDate,
 								"comment": comment,
-								"commentRef": commentRef
+								"commentRef": commentRef,
+								"documentRef": documentRef,
+								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
+								"documentProjectNumber": documentProjectNumber
 							};
 							var decisionsMap = execution.getVariable("decisionsMap");
 							if (!decisionsMap) {

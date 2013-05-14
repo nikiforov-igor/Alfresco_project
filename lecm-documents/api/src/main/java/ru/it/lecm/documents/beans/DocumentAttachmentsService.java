@@ -40,6 +40,14 @@ public interface DocumentAttachmentsService {
     public List<String> getCategories(final QName documentTypeQName);
 
 	/**
+	 * Получение папки для категории вложений.
+	 * @param category Имя категории
+	 * @param documentRef Ссылка на документ
+	 * @return
+	 */
+	public NodeRef getCategory(final String category, final NodeRef documentRef);
+
+	/**
 	 * Удаление вложения
 	 * @param nodeRef Ссылка на вложение
 	 */
