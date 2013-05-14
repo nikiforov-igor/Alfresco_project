@@ -213,7 +213,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
 
         List<String> objects = new ArrayList<String>();
         objects.add(reasonDocumentRef);
-        businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator изменил(а) срок действия договора #mainobject. Основанием изменения является данный документ #object1.", objects);
+        businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator изменил(а) срок действия договора #mainobject. Основанием изменения является документ #object1.", objects);
     }
 
 	/**
