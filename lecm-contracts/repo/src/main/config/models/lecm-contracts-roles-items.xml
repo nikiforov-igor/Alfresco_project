@@ -30,6 +30,13 @@
 			<property name="lecm-orgstr:business-role-identifier">CONTRACT_USER</property>
 			<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 			<property name="lecm-orgstr:business-role-description">Пользователь</property>
+            <property name="lecm-dic:active">false</property>
 		</item>
+        <item name="Договор. Читатель">
+            <property name="cm:name">Договор. Читатель</property>
+            <property name="lecm-orgstr:business-role-identifier">CONTRACT_READER</property>
+            <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+            <property name="lecm-orgstr:business-role-description">Читатель договора</property>
+        </item>
 	</items>
 </dictionary>

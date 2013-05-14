@@ -387,28 +387,34 @@ public class XMLImporter {
     }
 
     private void importRoles(NodeRef rolesNodeRef, List<XMLNode> roles) {
-        List<NodeRef> addedBusinessRoles = new ArrayList<NodeRef>();
+        // получаем список всех ролей для статуса
+        List<AssociationRef> existingRoles = new ArrayList<AssociationRef>();
         List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(rolesNodeRef);
         for (ChildAssociationRef childAssoc : childAssocs) {
             List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(childAssoc.getChildRef(), StatemachineEditorModel.ASSOC_ROLE);
             for (AssociationRef targetAssoc : targetAssocs) {
-                addedBusinessRoles.add(targetAssoc.getTargetRef());
+                existingRoles.add(targetAssoc);
             }
         }
 
         for (XMLNode role : roles) {
-            NodeRef notAdded = getNotAddedBusinessRole(addedBusinessRoles, role);
-            if (notAdded != null) {
+            NodeRef businessRoleRef = getExistingBusinessRoleRef(role);
+            if (businessRoleRef != null) { // роль существует в системе
+                for (AssociationRef existingRole : existingRoles) {
+                    if (existingRole.getTargetRef().equals(businessRoleRef)) {
+                        nodeService.deleteNode(existingRole.getSourceRef()); // удаляем имеющуюся ноду
+                    }
+                }
                 NodeRef roleNodeRef = recreateNode(rolesNodeRef, role);
-                nodeService.createAssociation(roleNodeRef, notAdded, StatemachineEditorModel.ASSOC_ROLE);
+                nodeService.createAssociation(roleNodeRef, businessRoleRef, StatemachineEditorModel.ASSOC_ROLE);
             }
         }
     }
 
-    private NodeRef getNotAddedBusinessRole(List<NodeRef> existing, XMLNode role) {
+    private NodeRef getExistingBusinessRoleRef(XMLNode role) {
         for (XMLRoleAssociation roleAssociation : role.getRoleAssociations()) {
             NodeRef businessRoleNodeRef = getBusinessRoleNodeRef(roleAssociation.getBusinessRoleName());
-            if (businessRoleNodeRef != null && !existing.contains(businessRoleNodeRef)) {
+            if (businessRoleNodeRef != null) {
                 return businessRoleNodeRef;
             }
         }
