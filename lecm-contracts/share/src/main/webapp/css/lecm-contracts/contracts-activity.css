@@ -10,6 +10,19 @@
 .dashlet.contracts-activity .body .row:first-of-type {
     padding-top: 10px;
 }
+.dashlet.contracts-activity .body .row div.avatar {
+    width: 32px;
+    margin: 0;
+    text-align: center;
+}
+.dashlet.contracts-activity .body .row div.avatar img {
+    max-width: 32px;
+    max-height: 50px;
+}
+.dashlet.contracts-activity .body .row div.content {
+    float: none;
+    margin: 0 0 0 40px;
+}
 
 .dashlet.contracts-activity.yui-resize .yui-resize-handle {
     z-index: 0;

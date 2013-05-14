@@ -31,14 +31,28 @@
                 if (records.length > 0) {
                     for (var i = 0; i < records.length; i++) { // [].forEach() не работает в IE
                         var item = records[i];
-                        var div = createRow();
+                        var row = createRow();
+                        var avatar = document.createElement('div');
+                        var img = document.createElement('img');
+                        var content = document.createElement('div');
                         var detail = document.createElement('span');
 
-                        detail.innerHTML = item.record;
+                        img.setAttribute('alt', item.initiator);
+                        if (item.initiatorRef && item.initiatorRef != "") {
+                            img.setAttribute('src', Alfresco.constants.PROXY_URI + 'lecm/profile/employee-photo?nodeRef=' + item.initiatorRef);
+                        } else {
+                            img.setAttribute('src', Alfresco.constants.URL_RESCONTEXT + 'components/images/no-user-photo-64.png');
+                        }
+                        avatar.setAttribute('class', 'avatar');
+                        avatar.appendChild(img);
                         detail.setAttribute('class', 'detail');
-                        div.appendChild(detail);
-                        div.innerHTML = div.innerHTML + '<br />' + Alfresco.util.relativeTime(new Date(item.date));
-                        container.appendChild(div);
+                        detail.innerHTML = item.record;
+                        content.setAttribute('class', 'content');
+                        content.appendChild(detail);
+                        content.innerHTML = content.innerHTML + '<br />' + Alfresco.util.relativeTime(new Date(item.date));
+                        row.appendChild(avatar);
+                        row.appendChild(content);
+                        container.appendChild(row);
                     }
                 } else {
                     container.appendChild(createRow('${msg("label.no.records")}'));
