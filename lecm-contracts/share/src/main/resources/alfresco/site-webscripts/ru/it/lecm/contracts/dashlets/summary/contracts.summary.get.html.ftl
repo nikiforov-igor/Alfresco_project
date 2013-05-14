@@ -74,13 +74,12 @@
                                                 var members = response.json.members;
                                                 var innerHtml;
                                                 for (var index in list) {
-                                                    innerHtml = "<div class='column first'>" + this.message[list[index].key] + "</div>"+
+                                                    innerHtml = "<div class='column first" + (index == 0 ? " bold" : "") + "'>" + this.message[list[index].key] + "</div>"+
                                                             "<div class='column second'><a class=\"status-button text-cropped\" href=\"/share/page/contracts-list?query=" +
                                                             list[index].filter +"\">" +list[index].amountContracts + "</a></div>";
                                                     this.createRow(innerHtml);
                                                 }
-                                                this.createRow('&nbsp');
-                                                innerHtml = "<div class='column first'>" + this.message[members.key] +"</div>"+
+                                                innerHtml = "<div class='column first bold'>" + this.message[members.key] +"</div>"+
                                                         "<div class='column second'><a class=\"status-button text-cropped\" onclick=\"info.showDialog();\">" +members.amountMembers + "</a></div>";
                                                 this.createRow(innerHtml);
                                             }
@@ -146,7 +145,7 @@ var info = new LogicECM.module.Contracts.dashlet.Summary("${id}").setOptions(
 //]]>
 </script>
 
-<div class="dashlet contracts bordered">
+<div class="dashlet contracts-summary bordered">
     <div class="title dashlet-title">
         <span>${msg("label.title")}</span>
     </div>

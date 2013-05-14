@@ -1,12 +1,16 @@
-.dashlet.contracts a,
-.dashlet.contracts a:hover,
-.dashlet.contracts a:visited {
-    color: #0600cc;
+.yui-u .dashlet.contracts-activity .body.dashlet-body {
+    padding: 0;
 }
-.dashlet.contracts.yui-resize .yui-resize-handle {
-    z-index: 0;
-}
-.dashlet.contracts .body .row {
+.dashlet.contracts-activity .body .row {
     line-height: 16px;
-    margin: 10px 0;
+    margin: 0;
+    padding: 5px 1em;
+    border-bottom: 1px solid #d7d7d7;
+}
+.dashlet.contracts-activity .body .row:first-of-type {
+    padding-top: 10px;
+}
+
+.dashlet.contracts-activity.yui-resize .yui-resize-handle {
+    z-index: 0;
 }

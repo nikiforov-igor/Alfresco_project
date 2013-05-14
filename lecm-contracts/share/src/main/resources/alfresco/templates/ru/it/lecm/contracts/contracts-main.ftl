@@ -11,7 +11,7 @@
             function init() {
                 setTimeout(function () {
                     LogicECM.module.Base.Util.setHeight();
-                    LogicECM.module.Base.Util.setDashletsHeight("main-region", 2);
+                    LogicECM.module.Base.Util.setDashletsHeight("main-region");
                 }, 10);
             }
 

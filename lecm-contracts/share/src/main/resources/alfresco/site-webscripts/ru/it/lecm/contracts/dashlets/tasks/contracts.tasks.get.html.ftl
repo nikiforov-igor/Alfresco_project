@@ -2,7 +2,7 @@
 <#assign containerId = id + "-container">
 <#if myTasks??>
 
-    <div class="dashlet contracts bordered">
+    <div class="dashlet contracts-tasks bordered">
         <div class="title dashlet-title">
             <span>${msg("label.title")}</span>
         </div>

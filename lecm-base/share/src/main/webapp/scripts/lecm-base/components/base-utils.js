@@ -40,7 +40,7 @@ LogicECM.module.Base.Util = {
         var bd = Dom.get('bd');
         var block = Dom.get('lecm-page');
         var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
-        var minHeight = parseInt(Dom.getStyle(block, 'min-height'));
+
         Bubbling.fire("HeightSetting");
         Dom.setStyle(block, 'height', 'auto');
 
@@ -51,24 +51,31 @@ LogicECM.module.Base.Util = {
         Bubbling.fire("HeightSetted");
     },
 
-    setDashletsHeight: function(dashletsBlockId, numberDashlets) {
+    setDashletsHeight: function(dashletsBlockId) {
         var Dom = YAHOO.util.Dom;
-
-        var bd = Dom.get('doc-bd');
+        var page = Dom.get('lecm-page');
         var dashletsBlock = Dom.get(dashletsBlockId);
+        var pageHeight = parseInt(Dom.getStyle(page, 'height')) || parseInt(Dom.getStyle(page, 'min-height'));
 
-        var bdHeight = parseInt(Dom.getStyle(bd, 'height'));
+        pageHeight = pageHeight - parseInt(Dom.getElementsByClassName('header-bar', 'div', page)[0].offsetHeight)
+            - parseInt(Dom.get('lecm-content-ft').offsetHeight);
         Dom.setStyle(dashletsBlock, 'height', 'auto');
-        Dom.setStyle(dashletsBlock, 'min-height', bdHeight + 'px');
+        Dom.setStyle(dashletsBlock, 'min-height', pageHeight + 'px');
 
-        var dashlets = Dom.getElementsByClassName('dashlet', 'div');
-        var dashletsMarginTop = parseInt(Dom.getStyle(dashlets, 'margin-top'));
-        var dashletsMarginBottom = parseInt(Dom.getStyle(dashlets, 'margin-bottom'));
+        var dashlets = Dom.getElementsByClassName('dashlet', 'div', dashletsBlock);
+        var dashletsCount = Math.round(dashlets.length / 2);
+        var dashlet = dashlets[0];
+        var dashletHeader = Dom.getElementsByClassName('dashlet-title', 'div', dashlet);
+        var dashletMarginTop = parseInt(Dom.getStyle(dashlet, 'margin-top'));
+        var dashletMarginBottom = parseInt(Dom.getStyle(dashlet, 'margin-bottom'));
 
-        var h = (bdHeight - dashletsMarginTop - dashletsMarginBottom - (numberDashlets - 1) * Math.max(dashletsMarginTop, dashletsMarginBottom))/numberDashlets;
+        var h = (pageHeight - dashletMarginTop - dashletMarginBottom - (dashletsCount - 1) * Math.max(dashletMarginTop, dashletMarginBottom))/dashletsCount;
+        h = h - parseInt(parseInt(dashletHeader[0].offsetHeight));
 
-        Dom.setStyle(dashlets, 'height', 'auto');
-        Dom.setStyle(dashlets, 'min-height', h + 'px');
+        for (var i = 0; i < dashlets.length; i++) {
+            dashlet = dashlets[i];
+            Dom.setStyle(Dom.getElementsByClassName('dashlet-body', 'div', dashlet), 'height', Math.floor(h) + 'px');
+        }
     },
 
     /**

@@ -1,52 +1,30 @@
-.dashlet.contracts .body .row.summary {
+.yui-u .dashlet.contracts-summary .body.dashlet-body {
+    padding: 0;
+}
+.dashlet.contracts-summary .body .row.summary {
     line-height: 16px;
-    margin: 10px 0;
-    clear: both;
+    margin: 0;
+    padding: 10px 1em;
+    border-bottom: 1px solid #d7d7d7;
+    overflow: hidden;
 }
-.dashlet.contracts .body .row .column.first {
-    position: relative;
+.dashlet.contracts-summary .body .row .column {
+    margin: 0;
+}
+.dashlet.contracts-summary .body .row .column.first {
     width: auto;
+    margin-left: 10px;
 }
-.dashlet.contracts .body .row .column.second {
-    float: right;
-    overflow: auto;
-}
-
-/***********Workflow tasks dashlet *************/
-
-.WORKFLOWTASKTYPE_NA {
-    display: none;
-}
-.WORKFLOWTASKTYPE_OVERDUE {
-    color: #FF0000;
-}
-.WORKFLOWTASKTYPE_SOON {
-    color: #CC6600;
-}
-
-.workflow-date {
-    font-size: 12px;
+.dashlet.contracts-summary .body .row .column.first.bold {
     font-weight: bold;
-    color: #666666;
+    margin-left: 0;
 }
-
-.workflow-task-main-text {
-    padding-top: 5px;
+.dashlet.contracts-summary .body .row .column.second {
+    margin: 0 0 0 10px;
 }
-
-.workflow-task-title {
+.grid .dashlet.contracts-summary .body .row .column.second a,
+.grid .dashlet.contracts-summary .body .row .column.second a:hover,
+.grid .dashlet.contracts-summary .body .row .column.second a:visited {
+    color: #009fe1;
     font-weight: bold;
 }
-
-.dashlet .my-task {
-    padding-right: 40px;
-    padding-bottom: 5px;
-    padding-top: 6px;
-    padding-left: 15px;
-}
-
-.dashlet .workflow-task-main-text {
-    padding-left: 9px;
-}
-
-/***********end Workflow tasks dashlet *************/

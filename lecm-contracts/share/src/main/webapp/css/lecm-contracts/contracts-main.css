@@ -6,6 +6,7 @@
 }
 #yui-main #doc-bd div.datalist-toolbar {
     margin: 0 -10px;
+    border: 0;
 }
 #yui-main #doc-bd div.datalist-toolbar div.header-bar {
     padding: 0 5px;
@@ -31,21 +32,18 @@
 }
 
 .yui-u .dashlet .dashlet-title {
-    background-color: #515151;
+    background-color: #bbe6f5;
     border-radius: 4px 4px 0 0;
+    padding: 5px 1em;
 }
 
-.dashlet .title span {
-    color: #FFFFFF;
-    font-family: Arial;
-    font-size: 16px;
-    font-style: normal;
+.yui-u .dashlet .dashlet-title.title span {
+    color: #0a678e;
+    font: 14px Arial;
     font-weight: bold;
-    text-decoration: none;
 }
 
 .yui-u .dashlet .dashlet-body {
-    height: 265px;
     padding: 0 1em;
 }
 
@@ -57,3 +55,13 @@
     margin-left: 0;
     width: 20%;
 }
+
+/* New design for the main page */
+#yui-main #doc-bd div.datalist-toolbar div.header-bar,
+#yui-main #lecm-content-ft {
+    background: #f2f2f2;
+}
+#yui-main #doc-bd div.datalist-toolbar div.header-bar div.new-row button {
+    color: #669fc5;
+}
+

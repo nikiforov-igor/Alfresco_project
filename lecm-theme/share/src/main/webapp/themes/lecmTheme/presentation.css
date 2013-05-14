@@ -370,29 +370,24 @@ h4 .lighter
 
 /* DASHLETS */
 
-.dashlet
-{
-   border: 1px solid #dddddd;
-   background-color: #fff;
+.dashlet {
+   border: 1px solid #ddd;
+   background: #fff;
 }
 
-.dashlet .title
-{
-   background-color: #eff3fa;
-   background-repeat: repeat-x;
-   color: #333;
+.dashlet .title {
+    background: #eff3fa;
+    color: #333;
 }
 
-.dashlet .feed
-{
+.dashlet .feed {
    background-image: url(images/feed-icon-16.png);
    background-repeat: no-repeat;
 }
 
-.dashlet .toolbar
-{
+.dashlet .toolbar {
    background-color: #fff;
-   border-bottom: 1px solid #dddddd;
+   border-bottom: 1px solid #ddd;
 }
 
 /* user and site welcome dashlet */

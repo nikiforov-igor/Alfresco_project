@@ -1,7 +1,7 @@
 <#assign id = args.htmlid>
 <#assign containerId = id + "-container">
 
-<div class="dashlet contracts bordered">
+<div class="dashlet contracts-activity bordered">
     <div class="title dashlet-title">
         <span>${msg("label.title")}</span>
     </div>
