@@ -725,6 +725,8 @@
 			<workflow name="activiti$contractsDeleteReason"/>
 			<workflow name="activiti$contractsContractTime"/>
 			<workflow name="activiti$contractsTermination"/>
+			<workflow name="activiti$approvalForce"/>
+			<workflow name="activiti$approvalTermination"/>
 			<workflow name="activiti$default_statemachine"/>
 			<workflow name="activiti$lecm-contract-fake_document"/>
 			<workflow name="activiti$lecm-additional-document_additionalDocument"/>
