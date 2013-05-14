@@ -26,6 +26,11 @@ public interface DocumentService {
     public static final QName PROP_RATED_PERSONS_COUNT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "rated-persons-count");
 
     public static final QName PROP_STATUS_CHANGED_DATE = QName.createQName(DOCUMENT_NAMESPACE_URI, "status-changed-date");
+    public static final QName PROP_DOCUMENT_CREATOR = QName.createQName(DOCUMENT_NAMESPACE_URI, "creator");
+    public static final QName PROP_DOCUMENT_CREATOR_REF = QName.createQName(DOCUMENT_NAMESPACE_URI, "creator-ref");
+    public static final QName PROP_DOCUMENT_MODIFIER = QName.createQName(DOCUMENT_NAMESPACE_URI, "modifier");
+    public static final QName PROP_DOCUMENT_MODIFIER_REF = QName.createQName(DOCUMENT_NAMESPACE_URI, "modifier-ref");
+
 
     /**
      * Метод для получения рейтинга документа

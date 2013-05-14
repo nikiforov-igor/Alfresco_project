@@ -372,6 +372,8 @@
         <property name="substituteService">
             <ref bean="substitudeService"/>
         </property>
+        <property name="authenticationService" ref="authenticationService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 
     <bean id="documentStatusesFilter" class="ru.it.lecm.documents.beans.DocumentStatusesFilterBean" abstract="true"/>

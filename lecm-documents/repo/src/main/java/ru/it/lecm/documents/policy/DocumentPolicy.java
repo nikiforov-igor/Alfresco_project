@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.constraints.PresentStringConstraint;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
@@ -42,6 +44,8 @@ public class DocumentPolicy extends BaseBean
     private BusinessJournalService businessJournalService;
     private DictionaryService dictionaryService;
     private SubstitudeBean substituteService;
+    private AuthenticationService authenticationService;
+    private OrgstructureBean orgstructureService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -59,9 +63,21 @@ public class DocumentPolicy extends BaseBean
         this.substituteService = substituteService;
     }
 
+
+    public void setAuthenticationService(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
     final public void init() {
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
         PropertyCheck.mandatory(this, "nodeService", nodeService);
+        PropertyCheck.mandatory(this, "authenticationService", authenticationService);
+        PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
+
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -70,9 +86,13 @@ public class DocumentPolicy extends BaseBean
     }
 
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+        if (employeeRef != null) {
+            nodeService.setProperty(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER, substituteService.getObjectDescription(employeeRef));
+            nodeService.setProperty(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF, employeeRef.toString());
+        }
         if (!changeIgnoredProperties(before, after)) {
             if (before.size() == after.size()) { // только при изменении свойств (учитываем добавление/удаление комментариев, не учитываем создание документа + добавление рейтингов и прочего
-                updatePresentString(nodeRef);
                 if (after.get(ForumModel.PROP_COMMENT_COUNT) != null) {
                     if ((Integer)after.get(ForumModel.PROP_COMMENT_COUNT) < (Integer)before.get(ForumModel.PROP_COMMENT_COUNT)){
                         businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator удалил(а) комментарий в документе \"#mainobject\"");
@@ -90,9 +110,9 @@ public class DocumentPolicy extends BaseBean
         }
 
         if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
-            updatePresentString(nodeRef);
             nodeService.setProperty(nodeRef,DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
         }
+        updatePresentString(nodeRef);
     }
 
     private void updatePresentString(NodeRef nodeRef) {
@@ -117,6 +137,7 @@ public class DocumentPolicy extends BaseBean
         if (listPresentStringValue != null) {
             nodeService.setProperty(nodeRef, DocumentService.PROP_LIST_PRESENT_STRING, listPresentStringValue);
         }
+
     }
 
     private boolean changeIgnoredProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
@@ -135,6 +156,9 @@ public class DocumentPolicy extends BaseBean
     @Override
     public void onCreateNode(ChildAssociationRef childAssocRef) {
         updatePresentString(childAssocRef.getChildRef()); // при создании onUpdateproperties ещё не срабатывает - заполняем поле с представлением явно
+        final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+        nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
+        nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
         List<String> objects = new ArrayList<String>(1);
         String status = (String) nodeService.getProperty(childAssocRef.getChildRef(), StatemachineModel.PROP_STATUS);
         if (status != null) {
