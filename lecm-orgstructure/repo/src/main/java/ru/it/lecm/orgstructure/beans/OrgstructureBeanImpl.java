@@ -922,22 +922,41 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public List<NodeRef> getBossSubordinate (final NodeRef employeeRef) {
-		//получаем список подразделений где этот сотрудник является боссом
-		Collection<NodeRef> units = getEmployeeUnits (employeeRef, true);
-		Set<NodeRef> employees = new HashSet<NodeRef> ();
-		for (NodeRef unitRef : units) {
-			//берем сотрудников из непосредственно этого подразделения
-			employees.addAll (getOrganizationElementEmployees (unitRef));
-			//берем все дочерние подразделения и собираем сотрудников уже из них
-			List<NodeRef> subUnits = getSubUnits (unitRef, true, true);
-			for (NodeRef subUnitRef : subUnits) {
-				employees.addAll (getOrganizationElementEmployees (subUnitRef));
-			}
-		}
-		//начальника выгоняем из множества сотрудников
-		employees.remove (employeeRef);
-		return new ArrayList<NodeRef> (employees);
+		return getBossSubordinate(employeeRef, false);
 	}
+
+    @Override
+    public List<NodeRef> getBossSubordinate (final NodeRef employeeRef, final boolean withDelegation) {
+        Set<NodeRef> employees = new HashSet<NodeRef> ();
+        employees.addAll(getBossSubordinateInternal(employeeRef));
+        if (withDelegation){
+            final List<NodeRef> bosses = getBosses(employeeRef);
+            for (NodeRef boss : bosses){
+                final List<NodeRef> bossSubordinateInternal = getBossSubordinateInternal(boss);
+                employees.addAll(bossSubordinateInternal);
+            }
+        }
+
+        return new ArrayList<NodeRef> (employees);
+    }
+
+    private List<NodeRef> getBossSubordinateInternal (final NodeRef employeeRef) {
+        //получаем список подразделений где этот сотрудник является боссом
+        Collection<NodeRef> units = getEmployeeUnits (employeeRef, true);
+        Set<NodeRef> employees = new HashSet<NodeRef> ();
+        for (NodeRef unitRef : units) {
+            //берем сотрудников из непосредственно этого подразделения
+            employees.addAll (getOrganizationElementEmployees (unitRef));
+            //берем все дочерние подразделения и собираем сотрудников уже из них
+            List<NodeRef> subUnits = getSubUnits (unitRef, true, true);
+            for (NodeRef subUnitRef : subUnits) {
+                employees.addAll (getOrganizationElementEmployees (subUnitRef));
+            }
+        }
+        //начальника выгоняем из множества сотрудников
+        employees.remove (employeeRef);
+        return new ArrayList<NodeRef> (employees);
+    }
 
 	/**
 	 * найти или создать связь между бизнес ролью и NodeRef-ой указанного типа
@@ -1214,6 +1233,11 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		if (employeeRef != null) {
 			NodeRef businessRoleByIdentifier = getBusinessRoleByIdentifier(businessRoleIdentifier);
 			if (businessRoleByIdentifier != null) {
+				// Если это динамическая бизнес роль, то сразу ОК!
+				if ((Boolean) nodeService.getProperty(businessRoleByIdentifier, OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC)){
+					return true;
+				}
+				
 				List<NodeRef> employeesByBusinessRole = getEmployeesByBusinessRole(businessRoleByIdentifier);
 				return employeesByBusinessRole.contains(employeeRef);
 			}
@@ -1347,10 +1371,10 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 	/**
-	 * определяет является ли сотрудник руководителем сам,
-	 * или же ему делегировали права руководителя
+	 * получает список босов, которые делегировали указанному employeeRef
+	 * свои права руководителя (активые делегирования)
 	 * @param employeeRef
-	 * @return ссылку на настоящего босса, который делегировал
+	 * @return список босов, которые делегировали
 	 */
 	private List<NodeRef> getBosses (final NodeRef employeeRef) {
 

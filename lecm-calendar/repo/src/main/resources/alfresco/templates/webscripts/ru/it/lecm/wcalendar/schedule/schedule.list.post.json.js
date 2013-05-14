@@ -10,7 +10,7 @@ if (!currentEmployee) {
 	destroyData();
 } else {
 	var isEngineer = orgstructure.isCalendarEngineer(currentEmployee.nodeRef.toString());
-	var isBoss = orgstructure.isBoss(currentEmployee.nodeRef.toString());
+	var isBoss = orgstructure.isBoss(currentEmployee.nodeRef.toString(), true);
 
 	var items = model.data.items;
 
@@ -20,7 +20,7 @@ if (!currentEmployee) {
 		if (!currentEmployee.nodeRef) {
 			logger.log("ERROR: there is no nodeRef for currentEmployee");
 		}
-		var employees = orgstructure.getBossSubordinate(currentEmployee.nodeRef);
+		var employees = orgstructure.getBossSubordinate(currentEmployee.nodeRef, true);
 		// получаем расписания по сотрудникам
 		var schedules = [];
 		for (var i = 0; i < employees.length; i++) {

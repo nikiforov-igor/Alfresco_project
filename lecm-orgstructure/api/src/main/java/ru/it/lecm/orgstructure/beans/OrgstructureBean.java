@@ -396,6 +396,16 @@ public interface OrgstructureBean {
 	 */
 	List<NodeRef> getBossSubordinate (final NodeRef employeeRef);
 
+
+    /**
+     * получение списка подчиненных для указанного сотрудника c учётом делегирования
+     * @param employeeRef сотрудник который является боссом
+     * @param withDelegation учитывать ли делегирование?
+     * @return список подчиненных сотрудника по всем подразделениям.
+     *         Если сотрудник не является боссом и не имеет делегирований, то список пустой
+     */
+    List<NodeRef> getBossSubordinate (final NodeRef employeeRef, final boolean withDelegation);
+
 	/**
 	 * включить сотрудника в бизнес роль
 	 * @param businesssRoleRef ссылка на бизнес роль

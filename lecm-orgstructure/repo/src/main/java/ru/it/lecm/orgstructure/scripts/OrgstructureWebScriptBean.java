@@ -676,6 +676,11 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		return createScriptable(orgstructureService.getBossSubordinate(new NodeRef(bossRef)));
 	}
 
+    public Scriptable getBossSubordinate(final String bossRef, final boolean withDelegation) {
+		ParameterCheck.mandatory("bossRef", bossRef);
+		return createScriptable(orgstructureService.getBossSubordinate(new NodeRef(bossRef), withDelegation));
+	}
+
 	/**
 	 * получить бизнес роль "Технолог" из общего справочника бизнес ролей
 	 * @return ScriptNode на бизнес роль "Технолог" или null если таковой бизнес роли нет
@@ -716,6 +721,15 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 */
 	public boolean isBoss(final String employeeRef) {
 		return orgstructureService.isBoss(new NodeRef(employeeRef));
+	}
+
+    /**
+	 * Проверка, занимает ли сотрудник руководящую позицию c учётом делегирования
+	 *
+	 * @return true если сотрудник занимает где-либо руководящую позицию.
+	 */
+	public boolean isBoss(final String employeeRef, final boolean withDelegation) {
+		return orgstructureService.isBoss(new NodeRef(employeeRef), withDelegation);
 	}
 
     /**

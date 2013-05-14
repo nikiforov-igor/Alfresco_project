@@ -35,7 +35,7 @@ if (!currentEmployee) {
 
 	} else if (pageContext.toString() == "admin") {
 		var isEngineer = orgstructure.isCalendarEngineer(currentEmployee.nodeRef.toString());
-		var isBoss = orgstructure.isBoss(currentEmployee.nodeRef.toString());
+		var isBoss = orgstructure.isBoss(currentEmployee.nodeRef.toString(), true);
 
 		if (!isEngineer && isBoss) {
 			// если чувак не технолог, то получаем список его подчиненных.
@@ -43,7 +43,7 @@ if (!currentEmployee) {
 			if (!currentEmployee.nodeRef) {
 				logger.log("ERROR: there is no nodeRef for currentEmployee");
 			}
-			var employees = orgstructure.getBossSubordinate(currentEmployee.nodeRef);
+			var employees = orgstructure.getBossSubordinate(currentEmployee.nodeRef, true);
 			// получаем nodeRef сотрудников
 			var emplyeeRefs = [];
 			for (i = 0; i < employees.length; ++i) {

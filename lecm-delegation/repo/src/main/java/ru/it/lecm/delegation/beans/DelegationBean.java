@@ -22,6 +22,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.delegation.DelegationEventCategory;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.IDelegationDescriptor;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
 
@@ -38,6 +39,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	private PersonService personService;
 	private BusinessJournalService businessJournalService;
 	private OrgstructureSGNotifierBean sgNotifierService;
+    private DictionaryBean dictionaryService;
 
 	public void setOrgstructureService (OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -54,6 +56,10 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	public void setSgNotifierService (OrgstructureSGNotifierBean sgNotifierService) {
 		this.sgNotifierService = sgNotifierService;
 	}
+
+    public void setDictionaryService(DictionaryBean dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
 
 	public final void init () {
 		PropertyCheck.mandatory (this, "nodeService", nodeService);
@@ -201,7 +207,21 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			}
 			result.addAll (uniqueBusinessRoleNodeRefs);
 		}
-		return result;
+
+        // Запрашиваем динамические безнес роли
+        //NodeRef businessRolesRoot = dictionaryService.getDictionaryByName (OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME);
+        //Set<QName> roles = new HashSet<QName>();
+        //roles.add(OrgstructureBean.TYPE_BUSINESS_ROLE);
+
+        //List<ChildAssociationRef> dynamicBusinessRoles = nodeService.getChildAssocs(businessRolesRoot, roles);
+        final List<NodeRef> dynamicBusinessRoles = dictionaryService.getRecordsByParamValue(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME, OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC, true);
+        for (NodeRef businessRole : dynamicBusinessRoles) {
+            if (!isArchive(businessRole)) {
+                result.add(businessRole);
+            }
+        }
+
+        return result;
 	}
 
 	@Override
@@ -457,8 +477,9 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
         NodeRef bossAssistant = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 
 		if (bossAssistant != null) {
-			// устанавливаем
-            sgNotifierService.notifyBossDelegationChanged (sourceEmployee, bossAssistant, created);
+            if (orgstructureService.isBoss(sourceEmployee, false)) { // Если делегирующий Начальник, то включаем делегируемого в SV
+                sgNotifierService.notifyBossDelegationChanged (sourceEmployee, bossAssistant, created);
+            }
             final List<NodeRef> businessRolesBySourceEmployee = this.getUniqueBusinessRolesByEmployee(sourceEmployee, true);
             for (NodeRef sourceEmployeeBusinessRole : businessRolesBySourceEmployee){
                 sgNotifierService.notifyBRDelegationChanged (sourceEmployeeBusinessRole, sourceEmployee, bossAssistant, created);
@@ -563,4 +584,6 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	public NodeRef getServiceRootFolder() {
 		return getDelegationFolder();
 	}
+
+
 }

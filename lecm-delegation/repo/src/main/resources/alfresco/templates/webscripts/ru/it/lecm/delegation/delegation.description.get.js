@@ -10,7 +10,7 @@ function getDescriptionList () {
 	var isBoss = false;
 	if (currentEmployee != null) {
 		isEngineer = orgstructure.isDelegationEngineer (currentEmployee.nodeRef.toString ());
-		isBoss = orgstructure.isBoss (currentEmployee.nodeRef.toString ());
+		isBoss = orgstructure.isBoss (currentEmployee.nodeRef.toString (), true);
 	} else {
 		logger.log ("ERROR: there is no employee for user " + person.name);
 	}
@@ -38,7 +38,7 @@ function getDescriptionOpts () {
 	var isBoss = false;
 	if (currentEmployee != null) {
 		isEngineer = orgstructure.isDelegationEngineer (currentEmployee.nodeRef.toString ());
-		isBoss = orgstructure.isBoss (currentEmployee.nodeRef.toString ());
+		isBoss = orgstructure.isBoss (currentEmployee.nodeRef.toString (), true);
 	} else {
 		logger.log ("ERROR: there is no employee for user " + person.name);
 	}
