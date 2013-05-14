@@ -592,7 +592,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/a65b2d69-03c3-4491-85ce-9e9b4a402c36</nodeRef>
 										<properties>
 											<property>
@@ -1183,7 +1183,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/7a076e16-0707-4e9b-bbc9-331ed5086917</nodeRef>
 										<properties>
 											<property>
@@ -1723,7 +1723,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/c6f19cb4-13aa-4b57-9e49-ea9d0922938b</nodeRef>
 										<properties>
 											<property>
@@ -2522,6 +2522,69 @@
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>7b59bd5a-d3be-402e-9f17-644b94e0fce5
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/8f433b8c-cc78-4acf-885d-7f993699df49
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>VALUE</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>VARIABLE</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>lecm-additional-document:number
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>9a038451-7f48-4848-b92c-16757cd9d2a8
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/56a9d95f-cfb9-4d9c-ba19-5d27c72ebbcb
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>VALUE</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>VARIABLE</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					commentFileAttachmentCategoryName
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -2627,7 +2690,76 @@
 															</association>
 														</associations>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>92a3e067-467b-443e-a906-103a626fff00
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/2379563c-49c3-4662-882d-361f7a688de4
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>VALUE</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>VARIABLE</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					commentFileAttachmentCategoryName
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>9ed9a276-bd58-4057-8832-cbdca34a9284
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/4d617c7f-0857-46b2-b05c-2f4faa7edafb
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>VALUE</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>VARIABLE</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>lecm-additional-document:number
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 												</nodes>
 											</subFolder>
@@ -2776,7 +2908,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/6d554571-fed9-4ab3-9172-02c01c76d8c5</nodeRef>
 										<properties>
 											<property>
@@ -3624,14 +3756,14 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Данное действие доступно только
 																					куратору договорной деятельности
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -3683,14 +3815,14 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Данное действие доступно только
 																					куратору договорной деятельности
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -3902,7 +4034,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/88f57790-3db8-4157-95e3-8b4c8d79136f</nodeRef>
 										<properties>
 											<property>
@@ -4896,7 +5028,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/147e4b1d-c36d-4d25-94cc-c00933dc44a2</nodeRef>
 										<properties>
 											<property>
@@ -5666,7 +5798,7 @@
 															</property>
 															<property>
 																<name>workflowId</name>
-																<value>activiti$activitiReview</value>
+																<value>activiti$lecmParallelApproval</value>
 															</property>
 														</properties>
 														<aspects>
@@ -5683,7 +5815,76 @@
 															</association>
 														</associations>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>8a4cb38d-98c5-4cf6-ae2f-271e397f592f
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/44a6c01f-9117-4b01-8209-b144904ec103
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>VALUE</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>VARIABLE</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					commentFileAttachmentCategoryName
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>3da7a43c-d559-4af0-86af-7fa614028289
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/f94de8ff-1d33-45e7-97f2-3da3101a3df3
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>VALUE</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>VARIABLE</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>lecm-additional-document:number
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 													<node>
 														<type>transitionWorkflow</type>
@@ -5786,7 +5987,76 @@
 															</association>
 														</associations>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>9116dffa-dda2-4ff6-840e-de4b704859e1
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/49729be5-5ed5-4dbd-8532-ec0181a34ce0
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>VALUE</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>VARIABLE</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>lecm-additional-document:number
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>17670ed3-1896-4214-9f8b-9b4a0420cd49
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/0562c0cc-a7d2-4baf-83a2-e9688a123348
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>VALUE</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>VARIABLE</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					commentFileAttachmentCategoryName
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 												</nodes>
 											</subFolder>
@@ -5935,7 +6205,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/ed2cc996-e777-493f-be8a-d0221c4d0c7c</nodeRef>
 										<properties>
 											<property>
@@ -6822,12 +7092,12 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>true</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Подписан у контрагента</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>true</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6887,12 +7157,12 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>true</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Не подписан у контрагента</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>true</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -7059,7 +7329,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/6a805c2b-38ca-4a8f-88fa-b178945c6eec</nodeRef>
 										<properties>
 											<property>
@@ -8019,7 +8289,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/b9a3ad7c-ad99-499c-834b-347e07678caf</nodeRef>
 										<properties>
 											<property>
@@ -8977,7 +9247,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/b5d2ca5f-fdcf-45d1-a987-fd3fd2d8a4aa</nodeRef>
 										<properties>
 											<property>
@@ -9568,7 +9838,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/947113b1-9a85-4d78-8df3-7e58d99cbae8</nodeRef>
 										<properties>
 											<property>
@@ -10312,14 +10582,14 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Поле "Подписан контрагентом" не
 																					заполнено
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -10520,7 +10790,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-contract_totalAmount</name>
+										<name>lecm-contract_totalSum</name>
 										<nodeRef>workspace://SpacesStore/11ddeadb-014e-4bfb-b6fb-3c16b0f1fa56</nodeRef>
 										<properties>
 											<property>
