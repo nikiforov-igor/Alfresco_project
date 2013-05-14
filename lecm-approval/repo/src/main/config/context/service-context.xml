@@ -5,11 +5,20 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean id="lecm.approval.modelBootstrap" parent="dictionaryModelBootstrap"
-		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+	<bean id="lecm.approval.modelBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-approval-list-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-parallel-approval-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-sequential-approval-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-terminate-approval-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-approval-list</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-parallel-approval-workflow-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-sequential-approval-workflow-model</value>
 			</list>
 		</property>
 	</bean>
@@ -33,37 +42,23 @@
 					<prop key="#{MIMETYPE}">text/xml</prop>
 					<prop key="#{REDEPLOY}">true</prop>
 				</props>
-                <props>
-                    <prop key="#{ENGINE_ID}">activiti</prop>
-                    <prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/approval-termination.bpmn20.xml</prop>
-                    <prop key="#{MIMETYPE}">text/xml</prop>
-                    <prop key="#{REDEPLOY}">true</prop>
-                </props>
-                <props>
-                    <prop key="#{ENGINE_ID}">activiti</prop>
-                    <prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/approval-force.bpmn20.xml</prop>
-                    <prop key="#{MIMETYPE}">text/xml</prop>
-                    <prop key="#{REDEPLOY}">true</prop>
-                </props>
+				<props>
+					<prop key="#{ENGINE_ID}">activiti</prop>
+					<prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/approval-termination.bpmn20.xml</prop>
+					<prop key="#{MIMETYPE}">text/xml</prop>
+					<prop key="#{REDEPLOY}">true</prop>
+				</props>
+				<props>
+					<prop key="#{ENGINE_ID}">activiti</prop>
+					<prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/approval-force.bpmn20.xml</prop>
+					<prop key="#{MIMETYPE}">text/xml</prop>
+					<prop key="#{REDEPLOY}">true</prop>
+				</props>
 			</list>
 		</property>
-		<property name="models">
-			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-parallel-approval-model.xml</value>
-				<value>alfresco/module/${artifactId}/models/lecm-sequential-approval-model.xml</value>
-				<value>alfresco/module/${artifactId}/models/lecm-terminate-approval-model.xml</value>
-			</list>
-		</property>
-        <property name="labels">
-            <list>
-                <value>alfresco/module/${artifactId}/messages/lecm-parallel-approval-workflow-model</value>
-				<value>alfresco/module/${artifactId}/messages/lecm-sequential-approval-workflow-model</value>
-                <value>alfresco/module/${artifactId}/messages/lecm-approval-list</value>
-            </list>
-        </property>
 	</bean>
 
-	<bean id="lecm.approval.service.abstract" class="ru.it.lecm.approval.ApprovalListServiceAbstract" parent="baseBean" depends-on="lecm.approval.modelBootstrap" abstract="true">
+	<bean id="lecm.approval.service.abstract" class="ru.it.lecm.approval.ApprovalListServiceAbstract" parent="baseBean" depends-on="lecm.approval.workflowBootstrap" abstract="true">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
@@ -84,23 +79,20 @@
 		<property name="personService" ref="personService"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="stateMachineHelper" ref="stateMachineHelper"/>
 	</bean>
 
-	<bean id="lecm.approval.javascriptExtension.parallel" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension"
-		  parent="lecm.approval.javascriptExtension.abstract">
+	<bean id="lecm.approval.javascriptExtension.parallel" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension" parent="lecm.approval.javascriptExtension.abstract">
 		<property name="extensionName" value="approvalParallel"/>
 		<property name="approvalListService" ref="lecm.approval.service.parallel"/>
-        <property name="stateMachineHelper" ref="stateMachineHelper"/>
 	</bean>
 
-	<bean id="lecm.approval.javascriptExtension.sequential" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension"
-		  parent="lecm.approval.javascriptExtension.abstract">
+	<bean id="lecm.approval.javascriptExtension.sequential" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension" parent="lecm.approval.javascriptExtension.abstract">
 		<property name="extensionName" value="approvalSequential"/>
 		<property name="approvalListService" ref="lecm.approval.service.sequential"/>
 	</bean>
 
-	<bean id="lecm.approval.ApprovalListItemPolicy" class="ru.it.lecm.approval.policies.ApprovalListItemPolicy" init-method="init"
-		  depends-on="lecm.approval.modelBootstrap">
+	<bean id="lecm.approval.ApprovalListItemPolicy" class="ru.it.lecm.approval.policies.ApprovalListItemPolicy" init-method="init" depends-on="lecm.approval.modelBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
