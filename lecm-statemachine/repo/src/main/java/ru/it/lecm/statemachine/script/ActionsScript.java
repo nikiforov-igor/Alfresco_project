@@ -10,6 +10,7 @@ import org.alfresco.service.cmr.workflow.WorkflowPath;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
+import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
@@ -22,7 +23,6 @@ import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
-import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 import ru.it.lecm.statemachine.expression.Expression;
 
@@ -50,95 +50,141 @@ public class ActionsScript extends DeclarativeWebScript {
 
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
-        Map<String, Object> result = new HashMap<String, Object>();
 
-        if (req.getParameter("documentNodeRef") == null) return result;
+        if (req.getParameter("documentNodeRef") == null) {
+            JSONObject jsonResponse = new JSONObject();
+            HashMap<String, Object> response = new HashMap<String, Object>();
+            response.put("result", jsonResponse.toString());
+            return response;
+        }
 
         NodeRef nodeRef = new NodeRef(req.getParameter("documentNodeRef"));
         NodeService nodeService = serviceRegistry.getNodeService();
         String statemachineId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATEMACHINE_ID);
         if (statemachineId != null) {
-            WorkflowService workflowService = serviceRegistry.getWorkflowService();
-            List<WorkflowPath> paths = workflowService.getWorkflowPaths(statemachineId);
-            for (WorkflowPath path : paths) {
-                List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
-                for (WorkflowTask task : tasks) {
-                    Map<QName, Serializable> properties = task.getProperties();
-                    NodeRef packageRef = (NodeRef) properties.get(WorkflowModel.ASSOC_PACKAGE);
-                    List<ChildAssociationRef> children = nodeService.getChildAssocs(packageRef);
-                    for (ChildAssociationRef child : children) {
-                        NodeRef documentRef = child.getChildRef();
-                        if (nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS) != null) {
-                            result.put("taskId", task.getId());
+            if (req.getParameter("actionId") != null) {
+                String actionId = req.getParameter("actionId");
+                HashMap<String, Object> result = getActions(nodeRef, statemachineId);
+                ArrayList<HashMap<String, Object>> actions = (ArrayList<HashMap<String, Object>>) result.get("actions");
+                HashMap<String, Object> action = null;
+                for (HashMap<String, Object> a : actions) {
+                    if (a.get("actionId").equals(actionId)) {
+                        action = a;
+                        break;
+                    }
+                }
+                if (action != null) {
+                    HashMap<String, Object> actionResult = new HashMap<String, Object>();
+                    actionResult.put("errors", action.get("errors"));
+                    actionResult.put("fields", action.get("fields"));
+                    JSONObject jsonResponse = new JSONObject(actionResult);
+                    HashMap<String, Object> response = new HashMap<String, Object>();
+                    response.put("result", jsonResponse.toString());
+                    return response;
+                } else {
+                    JSONObject jsonResponse = new JSONObject();
+                    HashMap<String, Object> response = new HashMap<String, Object>();
+                    response.put("result", jsonResponse.toString());
+                    return response;
+                }
+            } else {
+                HashMap<String, Object> result = getActions(nodeRef, statemachineId);
+                JSONObject jsonResponse = new JSONObject(result);
+                HashMap<String, Object> response = new HashMap<String, Object>();
+                response.put("result", jsonResponse.toString());
+                return response;
+            }
+        } else {
+            JSONObject jsonResponse = new JSONObject();
+            HashMap<String, Object> response = new HashMap<String, Object>();
+            response.put("result", jsonResponse.toString());
+            return response;
+        }
+    }
 
-                            Expression expression = new Expression(documentRef, serviceRegistry, orgstructureService);
+    private HashMap<String, Object> getActions(NodeRef nodeRef, String statemachineId) {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        ArrayList<HashMap<String, Object>> actionsList = new ArrayList<HashMap<String, Object>>();
+        NodeService nodeService = serviceRegistry.getNodeService();
+        WorkflowService workflowService = serviceRegistry.getWorkflowService();
+        List<WorkflowPath> paths = workflowService.getWorkflowPaths(statemachineId);
+        for (WorkflowPath path : paths) {
+            List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
+            for (WorkflowTask task : tasks) {
+                Map<QName, Serializable> properties = task.getProperties();
+                NodeRef packageRef = (NodeRef) properties.get(WorkflowModel.ASSOC_PACKAGE);
+                List<ChildAssociationRef> children = nodeService.getChildAssocs(packageRef);
+                for (ChildAssociationRef child : children) {
+                    NodeRef documentRef = child.getChildRef();
+                    if (nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS) != null) {
+                        result.put("taskId", task.getId());
 
-                            ArrayList<HashMap<String, Object>> resultStates = new ArrayList<HashMap<String, Object>>();
-                            List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
-                            for (StateMachineAction action : actions) {
-                                FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
-                                List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
-                                for (FinishStateWithTransitionAction.NextState state : states) {
-                                    ArrayList<String> messages = new ArrayList<String>();
-                                    HashSet<String> fields = new HashSet<String>();
-                                    boolean hideAction = false;
-                                    for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
-                                        if (!expression.execute(condition.getExpression())) {
-                                            messages.add(condition.getErrorMessage());
-                                            fields.addAll(condition.getFields());
-                                            hideAction = hideAction || condition.isHideAction();
-                                        }
-                                    }
+                        Expression expression = new Expression(documentRef, serviceRegistry, orgstructureService);
 
-                                    long count = getActionCount(nodeRef, state.getActionId());
-
-                                    if (!hideAction) {
-                                        HashMap<String, Object> resultState = new HashMap<String, Object>();
-                                        resultState.put("actionId", state.getActionId());
-                                        resultState.put("label", state.getLabel());
-                                        resultState.put("workflowId", state.getWorkflowId());
-                                        resultState.put("errors", messages);
-                                        resultState.put("fields", fields);
-                                        resultState.put("count", count);
-                                        resultStates.add(resultState);
+                        ArrayList<HashMap<String, Object>> resultStates = new ArrayList<HashMap<String, Object>>();
+                        List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
+                        for (StateMachineAction action : actions) {
+                            FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
+                            List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
+                            for (FinishStateWithTransitionAction.NextState state : states) {
+                                ArrayList<String> messages = new ArrayList<String>();
+                                HashSet<String> fields = new HashSet<String>();
+                                boolean hideAction = false;
+                                for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
+                                    if (!expression.execute(condition.getExpression())) {
+                                        messages.add(condition.getErrorMessage());
+                                        fields.addAll(condition.getFields());
+                                        hideAction = hideAction || condition.isHideAction();
                                     }
                                 }
-                            }
-                            sort(resultStates);
-                            result.put("states", resultStates);
 
-                            ArrayList<HashMap<String, Object>> workflows = new ArrayList<HashMap<String, Object>>();
-                            actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
-                            for (StateMachineAction action : actions) {
-                                UserWorkflow userWorkflow = (UserWorkflow) action;
-                                List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
-                                AssignExecution assignExecution = new AssignExecution();
-                                for (UserWorkflow.UserWorkflowEntity entity : entities) {
-                                    ArrayList<String> messages = new ArrayList<String>();
-                                    HashSet<String> fields = new HashSet<String>();
-                                    for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
-                                        if (!expression.execute(condition.getExpression())) {
-                                            messages.add(condition.getErrorMessage());
-                                            fields.addAll(condition.getFields());
-                                        }
-                                    }
+                                long count = getActionCount(nodeRef, state.getActionId());
 
-                                    long count = getActionCount(nodeRef, entity.getId());
-
-                                    HashMap<String, Object> workflow = new HashMap<String, Object>();
-                                    workflow.put("id", entity.getId());
-                                    workflow.put("label", entity.getLabel());
-                                    workflow.put("workflowId", entity.getWorkflowId());
-                                    workflow.put("errors", messages);
-                                    workflow.put("fields", fields);
-                                    workflow.put("count",count);
-                                    workflows.add(workflow);
+                                if (!hideAction) {
+                                    HashMap<String, Object> resultState = new HashMap<String, Object>();
+                                    resultState.put("type", "trans");
+                                    resultState.put("actionId", state.getActionId());
+                                    resultState.put("label", state.getLabel());
+                                    resultState.put("workflowId", state.getWorkflowId());
+                                    resultState.put("errors", messages);
+                                    resultState.put("fields", fields);
+                                    resultState.put("count", count);
+                                    actionsList.add(resultState);
                                 }
                             }
-                            sort(workflows);
-                            result.put("workflows", workflows);
+                        }
+
+                        actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
+                        for (StateMachineAction action : actions) {
+                            UserWorkflow userWorkflow = (UserWorkflow) action;
+                            List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
+                            for (UserWorkflow.UserWorkflowEntity entity : entities) {
+                                ArrayList<String> messages = new ArrayList<String>();
+                                HashSet<String> fields = new HashSet<String>();
+                                for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
+                                    if (!expression.execute(condition.getExpression())) {
+                                        messages.add(condition.getErrorMessage());
+                                        fields.addAll(condition.getFields());
+                                    }
+                                }
+
+                                long count = getActionCount(nodeRef, entity.getId());
+
+                                HashMap<String, Object> workflow = new HashMap<String, Object>();
+                                workflow.put("type", "user");
+                                workflow.put("actionId", entity.getId());
+                                workflow.put("label", entity.getLabel());
+                                workflow.put("workflowId", entity.getWorkflowId());
+                                workflow.put("errors", messages);
+                                workflow.put("fields", fields);
+                                workflow.put("count",count);
+                                actionsList.add(workflow);
+                            }
                         }
                     }
+
+                    sort(actionsList);
+                    result.put("actions", actionsList);
                 }
             }
         }

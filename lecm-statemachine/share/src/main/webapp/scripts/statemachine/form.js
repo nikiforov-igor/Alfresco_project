@@ -35,21 +35,52 @@ LogicECM.module = LogicECM.module || {};
 		YAHOO.Bubbling.on("objectFinderReady", module.onObjectFinderReady, module);
 		YAHOO.Bubbling.on("hiddenAssociationFormReady", module.onHiddenAssociationFormReady, module);
 		YAHOO.Bubbling.on("formContentReady", module.onStartWorkflowFormContentReady, module);
-
 		return module;
 	};
 
 	YAHOO.extend(LogicECM.module.StartWorkflow, Alfresco.component.Base, {
-		selectedItem:null,
-		taskId:null,
-        assignee: null,
+		taskId: null,
+        options: {
+            nodeRef: null
+        },
+
+        draw: function draw_function() {
+            var url = Alfresco.constants.PROXY_URI + "/lecm/statemachine/actions?documentNodeRef=" + this.options.nodeRef;
+            callback = {
+                success:function (oResponse) {
+                    var oResults = eval("(" + oResponse.responseText + ")");
+                    var parent = oResponse.argument.parent
+
+                    if (oResults.actions != null && oResults.actions.length > 0) {
+                        parent.taskId = oResults.taskId;
+                        var container = document.getElementById(parent.id + "-formContainer");
+                        oResults.actions.forEach(function(action) {
+                            var div = document.createElement("div");
+                            div.className = "widget-button-grey text-cropped";
+                            div.innerHTML = action.label;
+                            div.onclick = function() {
+                                parent.show(action);
+                            }
+                            container.appendChild(div);
+                        });
+                    } else {
+                        var container = document.getElementById(parent.id);
+                        container.outerHTML = "";
+                    }
+                },
+                argument:{
+                    parent:this
+                },
+                timeout: 60000
+            };
+            YAHOO.util.Connect.asyncRequest('GET', url, callback);
+        },
+
 		onObjectFinderReady:function StartWorkflow_onObjectFinderReady(layer, args) {
 			var objectFinder = args[1].eventGroup;
 			if (objectFinder.options.field == "assoc_packageItems") {
-				objectFinder.selectItems(this.selectedItem);
-			} else if (this.assignee != null && (objectFinder.options.field == "assoc_bpm_assignee" || objectFinder.options.field == "assoc_bpm_groupAssignee")) {
-                objectFinder.selectItems(this.assignee);
-            }
+				objectFinder.selectItems(this.options.nodeRef);
+			}
 		},
 
 		onHiddenAssociationFormReady:function StartWorkflow_onObjectFinderReady(layer, args) {
@@ -57,78 +88,97 @@ LogicECM.module = LogicECM.module || {};
 				Dom.get(args[1].fieldId + "-added").value = this.selectedItem;
                 YAHOO.Bubbling.fire("afterSetItems",
                     {
-                        items: this.selectedItem
+                        items: this.options.nodeRef
                     });
 			}
 		},
 
-		show:function showWorkflowForm(type, nodeRef, workflowId, taskId, actionId, assignee, errors, fields, label) {
-            this.assignee = assignee;
-            if (errors.length > 0) {
-                viewDialog = new LogicECM.module.EditFieldsConfirm("confirm-edit-fields");
-                viewDialog.show(nodeRef, label, errors, fields);
-                return;
-            }
-			if (workflowId != null && workflowId != 'null') {
-				this.selectedItem = nodeRef;
-				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
-				templateUrl = YAHOO.lang.substitute(templateUrl, {
-					itemKind:"workflow",
-					itemId:workflowId,
-					mode:"create",
-					submitType:"json",
-					formId:"workflow-form"
-				});
+		show: function showWorkflowForm(action) {
+            var url = Alfresco.constants.PROXY_URI + "/lecm/statemachine/actions?documentNodeRef=" + this.options.nodeRef + "&actionId=" + action.actionId;
+            callback = {
+                success:function (oResponse) {
+                    var oResults = eval("(" + oResponse.responseText + ")");
+                    var parent = oResponse.argument.parent
+                    if (oResults.errors != null && oResults.errors.length > 0) {
+                        viewDialog = new LogicECM.module.EditFieldsConfirm("confirm-edit-fields");
+                        viewDialog.show(parent.options.nodeRef, action.label, oResults.errors, oResults.fields);
+                        return;
+                    }
+                    if (action.workflowId != null && action.workflowId != 'null') {
+                        parent.showForm(action);
+                    } else {
+                        parent.showPromt(action);
+                    }
+                },
+                argument:{
+                    parent:this
+                },
+                timeout: 60000
+            };
+            YAHOO.util.Connect.asyncRequest('GET', url, callback);
+		},
 
-				new Alfresco.module.SimpleDialog("workflow-form").setOptions({
-					width:"60em",
-					templateUrl:templateUrl,
-					actionUrl:null,
-					destroyOnHide:true,
-					doBeforeDialogShow:{
-						fn:function (p_form, p_dialog) {
-							var dialogName = this.msg("logicecm.workflow.runAction.label", label);
-							Alfresco.util.populateHTML(
-								[ p_dialog.id + "-form-container_h", dialogName]
-							);
+        showForm: function showForm_action(action) {
+            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+            templateUrl = YAHOO.lang.substitute(templateUrl, {
+                itemKind:"workflow",
+                itemId:action.workflowId,
+                mode:"create",
+                submitType:"json",
+                formId:"workflow-form"
+            });
 
-                            Dom.addClass(p_dialog.id + "-form", "form-metadata-edit");
+            var me = this;
+            new Alfresco.module.SimpleDialog("workflow-form").setOptions({
+                width:"60em",
+                templateUrl:templateUrl,
+                actionUrl:null,
+                destroyOnHide:true,
+                doBeforeDialogShow:{
+                    fn:function (p_form, p_dialog) {
+                        var dialogName = this.msg("logicecm.workflow.runAction.label", action.label);
+                        Alfresco.util.populateHTML(
+                            [ p_dialog.id + "-form-container_h", dialogName]
+                        );
 
-						}
-					},
-					onSuccess:{
-						fn:function (response) {
-							this._chooseState(type, taskId, response.json.persistedObject, actionId);
-						},
-						scope:this
-					}
-				}).show();
-			} else {
-                var me = this;
-                Alfresco.util.PopupManager.displayPrompt(
-                    {
-                        title: "Выполнение действия",
-                        text: "Подтвердите выполнение для этого документа действия \"" + label + "\"",
-                        buttons: [
+                        Dom.addClass(p_dialog.id + "-form", "form-metadata-edit");
+
+                    }
+                },
+                onSuccess:{
+                    fn:function (response) {
+                        this._chooseState(action.type, me.taskId, response.json.persistedObject, action.actionId);
+                    },
+                    scope:this
+                }
+            }).show();
+        },
+
+        showPromt: function showPromt_action(action) {
+            var me = this;
+            Alfresco.util.PopupManager.displayPrompt(
+                {
+                    title: "Выполнение действия",
+                    text: "Подтвердите выполнение для этого документа действия \"" + action.label + "\"",
+                    buttons: [
+                        {
+                            text: "Ок",
+                            handler: function dlA_onAction_action()
                             {
-                                text: "Ок",
-                                handler: function dlA_onAction_action()
-                                {
-                                    this.destroy();
-                                    me._chooseState("trans", taskId, null, actionId);
-                                }
+                                this.destroy();
+                                me._chooseState("trans", me.taskId, null, action.actionId);
+                            }
+                        },
+                        {
+                            text: "Отмена",
+                            handler: function dlA_onActionDelete_cancel()
+                            {
+                                this.destroy();
                             },
-                            {
-                                text: "Отмена",
-                                handler: function dlA_onActionDelete_cancel()
-                                {
-                                    this.destroy();
-                                },
-                                isDefault: true
-                            }]
-                    });
-			}
-		},
+                            isDefault: true
+                        }]
+                });
+        },
 
 		_chooseState:function (type, taskId, formResponse, actionId) {
 			var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/choosestate?actionType={actionType}&taskId={taskId}&formResponse={formResponse}&actionId={actionId}";
