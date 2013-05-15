@@ -149,37 +149,6 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	public List<NodeRef> getNotifications(int skipCount, int maxItems) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 
-//		NodeRef employeeDirectoryRef = getCurrentEmployeeFolder(this.rootRef);
-//		if (employeeDirectoryRef != null) {
-//			String path = nodeService.getPath(employeeDirectoryRef).toPrefixString(namespaceService);
-//			String type = TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
-//
-//			SearchParameters parameters = new SearchParameters();
-//			parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
-//			parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-//			parameters.addSort("@" + PROP_IS_READ, true);
-//			parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
-//			parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"");
-//			parameters.setSkipCount(skipCount);
-//			parameters.setMaxItems(maxItems);
-//			ResultSet resultSet = null;
-//			try {
-//				resultSet = searchService.query(parameters);
-//				for (ResultSetRow row : resultSet) {
-//					NodeRef node = row.getNodeRef();
-//					result.add(node);
-//				}
-//			} catch (LuceneQueryParserException e) {
-//				logger.error("Error while getting notifications records", e);
-//			} catch (Exception e) {
-//				logger.error("Error while getting notifications records", e);
-//			} finally {
-//				if (resultSet != null) {
-//					resultSet.close();
-//				}
-//			}
-//		}
-
 		NodeRef currentEmloyeeNodeRef = orgstructureService.getCurrentEmployee();
 		if (currentEmloyeeNodeRef != null) {
 			List<AssociationRef> lRefs = nodeService.getSourceAssocs(currentEmloyeeNodeRef, NotificationsService.ASSOC_RECIPIENT);
