@@ -70,6 +70,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 	}
 
 	private enum ApprovementType {
+
 		PARALLEL,
 		SEQUENTIAL
 	}
@@ -310,9 +311,15 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(parentFolder);
 		// бежим по листам
 		for (ChildAssociationRef childAssoc : childAssocs) {
-			JSONObject jsonItem = new JSONObject();
 			NodeRef assigneesListRef = childAssoc.getChildRef();
 			String assigneesListName = (String) nodeService.getProperty(assigneesListRef, ContentModel.PROP_NAME);
+
+			if (ApprovalListService.ASSIGNEES_DEFAULT_LIST_FOLDER_NAME.equals(assigneesListName)) {
+				continue;
+			}
+
+			JSONObject jsonItem = new JSONObject();
+
 			try {
 				// для каждого строим JSON-объект
 				jsonItem.put("listName", assigneesListName);
@@ -414,5 +421,93 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		}
 		NodeRef listNode = new NodeRef(nodeRefStr);
 		nodeService.deleteNode(listNode);
+	}
+
+	/**
+	 * Увеличить или уменьшить порядок элемента списка согласующих.
+	 *
+	 * @param json {
+	 * "assigneeItemNodeRef": "NodeRef элемента списка согласующих",
+	 * "moveDirection": "up" || "down"
+	 * }
+	 * @return true - перемещение элемента по списку произошло. false - элемент
+	 * первый или последний в списке и больше не двигается в указанном
+	 * направлении
+	 */
+	public boolean changeOrder(final JSONObject json) {
+		String listItemNodeRefStr, direction;
+		int currentItemOrder, newItemOrder = 0;
+		boolean stopReordering = false;
+
+		try {
+			listItemNodeRefStr = json.getString("assigneeItemNodeRef");
+			direction = json.getString("moveDirection");
+		} catch (JSONException ex) {
+			throw new WebScriptException("Insufficient params in JSON", ex);
+		}
+		NodeRef listItemNodeRef = new NodeRef(listItemNodeRefStr);
+		currentItemOrder = (Integer) nodeService.getProperty(listItemNodeRef, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER);
+		List<AssociationRef> assigneesListAssocs = nodeService.getSourceAssocs(listItemNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
+		NodeRef assigeesListNodeRef = assigneesListAssocs.get(0).getSourceRef();
+		List<AssociationRef> listItemsTargetAssocs = nodeService.getTargetAssocs(assigeesListNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
+
+		if ("up".equals(direction)) {
+			if (currentItemOrder == 1) {
+				stopReordering = true;
+			} else {
+				newItemOrder = currentItemOrder - 1;
+			}
+		} else if ("down".equals(direction)) {
+			if (currentItemOrder == listItemsTargetAssocs.size()) {
+				stopReordering = true;
+			} else {
+				newItemOrder = currentItemOrder + 1;
+			}
+		} else {
+			throw new WebScriptException("Unknown moveDirection: " + direction);
+		}
+
+		if (stopReordering) {
+			return false;
+		}
+
+		for (AssociationRef targetAssoc : listItemsTargetAssocs) {
+			NodeRef item = targetAssoc.getTargetRef();
+			if (item.equals(listItemNodeRef)) {
+				continue;
+			}
+			int itemOrder = (Integer) nodeService.getProperty(item, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER);
+			if (itemOrder == newItemOrder) {
+				nodeService.setProperty(item, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER, currentItemOrder);
+				break;
+			}
+
+		}
+
+		nodeService.setProperty(listItemNodeRef, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER, newItemOrder);
+
+		return true;
+	}
+
+	/**
+	 * Удалить все assignees-item из списка согласующих.
+	 *
+	 * @param json { "assigneeListNodeRef": "NodeRef списка согласующих" }
+	 */
+	public void clearAssigneesList(JSONObject json) {
+		String assigneesListNodeRefStr;
+
+		try {
+			assigneesListNodeRefStr = json.getString("assigneesListNodeRef");
+		} catch (JSONException ex) {
+			throw new WebScriptException("Insufficient params in JSON", ex);
+		}
+
+		NodeRef assigneesListNodeRef = new NodeRef(assigneesListNodeRefStr);
+		List<AssociationRef> listItemsAssocs = nodeService.getTargetAssocs(assigneesListNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
+		for (AssociationRef listItemAssoc : listItemsAssocs) {
+			NodeRef listItemNodeRef = listItemAssoc.getTargetRef();
+			nodeService.deleteNode(listItemNodeRef);
+		}
 	}
 }

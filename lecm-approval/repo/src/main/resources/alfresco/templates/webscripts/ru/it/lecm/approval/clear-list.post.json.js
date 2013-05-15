@@ -1,0 +1,1 @@
+approvalService.clearAssigneesList(json);
