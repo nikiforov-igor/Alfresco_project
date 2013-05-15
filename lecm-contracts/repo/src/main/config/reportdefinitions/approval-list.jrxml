@@ -32,7 +32,6 @@
 	<queryString>
 		<![CDATA[select * from cm:documents]]>
 	</queryString>
-	
 	<field name="col_Doc.ProjectNum" class="java.lang.String">
 		<fieldDescription><![CDATA[Номер проекта договора]]></fieldDescription>
 	</field>

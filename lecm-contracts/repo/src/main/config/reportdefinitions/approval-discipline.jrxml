@@ -193,7 +193,7 @@
 						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Employee.FirstName}+ " "+ ($F{col_Employee.MiddleName}+ " ").substring( 0, 1 )+ "."+ ($F{col_Employee.LastName}+ " ").substring(0,1)]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Employee.LastName}+ " "+ ($F{col_Employee.MiddleName}+ " ").substring( 0, 1 )+ "."+ ($F{col_Employee.FirstName}+ " ").substring(0,1) + "."]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="0540390a-1d4a-425e-94fd-cba55ad840b5" x="550" y="2" width="80" height="20"/>
