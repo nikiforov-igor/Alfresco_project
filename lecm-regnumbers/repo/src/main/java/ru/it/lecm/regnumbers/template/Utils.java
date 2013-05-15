@@ -89,15 +89,19 @@ public final class Utils implements ApplicationContextAware {
 
 	/**
 	 * Получить код подразделения, в котором занимает основную должность
-	 * указанный сотрудник. Если код не указан, то пустая строка. Если сотрудник
-	 * не занимает должностей, то генерируется исключение.
+	 * указанный сотрудник. Если код не указан или сотрудник
+	 * не занимает должностей, то результатом будет "NA".
 	 */
 	@RegnumTemplateFunction
 	public static String employeeOrgUnitCode(NodeRef employeeNode) {
+		String result = "";
 		OrgstructureBean orgstructureService = applicationContext.getBean("serviceOrgstructure", OrgstructureBean.class);
 		NodeService nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		NodeRef employeeUnit = orgstructureService.getUnitByStaff(orgstructureService.getEmployeePrimaryStaff(employeeNode));
-		return (String) nodeService.getProperty(employeeUnit, OrgstructureBean.PROP_UNIT_CODE);
+		if (employeeUnit != null) {
+			result = (String) nodeService.getProperty(employeeUnit, OrgstructureBean.PROP_UNIT_CODE);
+		}
+		return result.isEmpty() ? "NA" : result;
 	}
 
 	/**
@@ -115,13 +119,13 @@ public final class Utils implements ApplicationContextAware {
 
 	/**
 	 * Получить табельный номер указанного сотрудника. Если номер не указан, то
-	 * пустая строка.
+	 * строка "NA".
 	 */
 	@RegnumTemplateFunction
 	public static String employeeNumber(NodeRef employeeNode) {
 		NodeService nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		Long employeeCode = (Long) nodeService.getProperty(employeeNode, OrgstructureBean.PROP_EMPLOYEE_NUMBER);
-		return employeeCode != null ? String.valueOf(employeeCode) : "";
+		return employeeCode != null ? String.valueOf(employeeCode) : "NA";
 	}
 
 	private Utils() {
