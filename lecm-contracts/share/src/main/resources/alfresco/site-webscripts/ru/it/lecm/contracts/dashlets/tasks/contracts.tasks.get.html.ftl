@@ -8,13 +8,13 @@
         </div>
         <div class="body scrollableList dashlet-body" id="${id}_results">
             <#if myTasks?size == 0>
-                <div style="padding-top: 10px;">
-                    <div style="float: left;width: 52px;height: 100px;">
-                        <img src="${url.context}/res/components/images/help-task-bw-32.png" />
+                <div class="no-tasks">
+                    <div class="img">
+                        <img src="/share/res/images/lecm-contracts/alf_dashlet-32_tasks.png" />
                     </div>
                     <div>
-                        <h3 style="font-weight: bold;padding-bottom: 10px;">${msg("empty.title")}</h3>
-                    ${msg("empty.description")}
+                        <h3>${msg("empty.title")}</h3>
+                        ${msg("empty.description")}
                     </div>
                 </div>
             <#else>

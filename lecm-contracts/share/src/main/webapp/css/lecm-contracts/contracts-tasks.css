@@ -8,8 +8,18 @@
     color: #cc6600;
 }
 
-.dashlet.contracts-tasks .my-task {
+.dashlet.contracts-tasks .my-task,
+.dashlet.contracts-tasks .no-tasks {
     padding: 10px 0;
+}
+.dashlet.contracts-tasks .no-tasks .img {
+    width: 50px;
+    height: 100px;
+    float: left;
+}
+.dashlet.contracts-tasks h3 {
+    font-weight: bold;
+    padding-bottom: 10px;
 }
 .dashlet.contracts-tasks .my-task .workflow-date {
     font-size: 12px;

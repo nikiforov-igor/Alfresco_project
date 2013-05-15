@@ -4,10 +4,10 @@
 
     <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
     <@comp.baseMenu>
-        <@comp.baseMenuButton "main" msg('lecm.contracts.main.btn') selected/>
-        <@comp.baseMenuButton "list" msg('lecm.contracts.list.btn') selected/>
-        <@comp.baseMenuButton "documents" msg('lecm.contracts.documents.btn') selected/>
-        <@comp.baseMenuButton "reports" msg('lecm.contracts.reports.btn') selected/>
+        <@comp.baseMenuButton "main" msg('lecm.contracts.main.btn') selected true />
+        <@comp.baseMenuButton "list" msg('lecm.contracts.list.btn') selected true />
+        <@comp.baseMenuButton "documents" msg('lecm.contracts.documents.btn') selected true />
+        <@comp.baseMenuButton "reports" msg('lecm.contracts.reports.btn') selected true />
     </@comp.baseMenu>
 
 <script type="text/javascript">//<![CDATA[

@@ -62,15 +62,27 @@ a:hover {
     margin-top: -12px;
 }
 #bd #lecm-menu {
-    width: 50px;
+    width: 56px;
     float: left;
-    margin: 10px 5px;
+    margin: 10px 2px;
 }
 #bd #lecm-menu #menu-buttons > span:not(:last-of-type) {
     margin-bottom: 10px;
 }
+#bd #lecm-menu #menu-buttons span.menu-button {
+    margin-right: 0;
+    margin-left: 0;
+    text-align: center;
+}
+#bd #lecm-menu #menu-buttons span.menu-button span.first-child {
+    max-width: 56px;
+    font-size: 11px;
+    word-break: break-all;
+    letter-spacing: -1px;
+    background-position: 12px 4px;
+}
 #bd #lecm-menu button {
-    width: 40px;
+    width: 56px;
     height: 40px;
     overflow: hidden;
 }
