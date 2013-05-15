@@ -14,8 +14,9 @@
 
 <@formLib.renderFormContainer formId = formId>
     <@formLib.renderField field = form.fields["prop_bpm_workflowDueDate"] />
-    <@formLib.renderField field = form.fields["prop_bpm_workflowDescription"] /><!-- Hidden! -->
     <@formLib.renderField field = form.fields["assoc_lecmPar_employeesAssoc"] />
+    <@formLib.renderField field = form.fields["assoc_packageItems"] />
+    <@formLib.renderField field = form.fields["prop_bpm_workflowDescription"] /><!-- Hidden! -->
 
     <div class="form-field">
         <label for="${selectId}">Загрузить из списка:</label>
@@ -49,6 +50,8 @@
 
                 var selectedItems = LogicECM.CurrentModules.employeesAssocTreeView.selectedItems,
 
+                    selectedItemsArray = Object.keys( selectedItems ), // Chrome, FF 4+, IE 9+, Safari 5+
+
                     enterAssigneesListNameDialog = new Alfresco.module.SimpleDialog( "${enterAssigneesListNameDialogId}" ),
 
                     url = "lecm/components/form" +
@@ -65,6 +68,14 @@
                         submitType: "json",
                         showCancelButton: "true"
                     });
+
+                if( selectedItemsArray.length === 0 ) {
+                    Alfresco.util.PopupManager.displayMessage({
+                        text: "Нельзя сохранить пустой список. Пожалуйста, добавьте хотя бы одного согласующего и попробуйте ещё раз."
+                    });
+
+                    return;
+                }
 
                 enterAssigneesListNameDialog.setOptions({
                     ajaxSubmit: false,
@@ -107,7 +118,6 @@
                                 successCallback: {
                                     fn: function () {
 
-                                        actions().clearAssigneesList();
                                         actions().fillDropDownList();
 
                                         Alfresco.util.PopupManager.displayMessage({
@@ -270,8 +280,10 @@
 
                     property;
 
-                for (property in currentSelectedItems) {
-                    delete currentSelectedItems[ property ];
+                for ( property in currentSelectedItems ) {
+                    if( currentSelectedItems.hasOwnProperty( property ) ) {
+                        delete currentSelectedItems[ property ];
+                    }
                 }
 
                 employeesAssocAutoComplete.updateSelectedItems();
