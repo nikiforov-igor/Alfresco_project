@@ -220,12 +220,12 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	 * @param contractDocumentRef ссылка на документ "Договор"
 	 * @return последняя версия вложенного файла из категории "Договор"
 	 */
-	protected String getContractDocumentVersion(final NodeRef contractDocumentRef) {
+	protected String getContractDocumentVersion(final NodeRef contractDocumentRef, final String documentAttachmentCategoryName) {
 		NodeRef contractCategory = null;
 		List<NodeRef> contractCategories = documentAttachmentsService.getCategories(contractDocumentRef);
 		for (NodeRef categoryRef : contractCategories) {
 			String categoryName = (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);
-			if ("Договор".equals(categoryName)) {
+			if (documentAttachmentCategoryName.equals(categoryName)) {
 				contractCategory = categoryRef;
 				break;
 			}
@@ -291,8 +291,8 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		}
 	}
 
-	protected NodeRef createApprovalList(final NodeRef parentRef, final NodeRef contractDocumentRef, final NodeRef bpmPackage) {
-		String contractDocumentVersion = getContractDocumentVersion(contractDocumentRef);
+	protected NodeRef createApprovalList(final NodeRef parentRef, final NodeRef contractDocumentRef, final NodeRef bpmPackage, final String documentAttachmentCategoryName) {
+		String contractDocumentVersion = getContractDocumentVersion(contractDocumentRef, documentAttachmentCategoryName);
 		String approvalListVersion = getApprovalListVersion(contractDocumentVersion, parentRef);
 		String localName = String.format(APPROVAL_LIST_NAME, approvalListVersion);
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
@@ -332,7 +332,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	}
 
 	@Override
-	public NodeRef createApprovalList(final NodeRef bpmPackage) {
+	public NodeRef createApprovalList(final NodeRef bpmPackage, final String documentAttachmentCategoryName) {
 		//через bpmPackage получить ссылку на документ
 		NodeRef approvalListRef = null;
 		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
@@ -341,7 +341,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			NodeRef approvalRef = getOrCreateRootApprovalFolder(documentRef);
 			NodeRef parallelApprovalRef = getOrCreateApprovalFolder(approvalRef);
 			//создаем внутри указанной папки объект "Лист согласования"
-			approvalListRef = createApprovalList(parallelApprovalRef, documentRef, bpmPackage);
+			approvalListRef = createApprovalList(parallelApprovalRef, documentRef, bpmPackage, documentAttachmentCategoryName);
 		} else {
 			logger.error("There is no any lecm-contract:document  in bpm:package");
 		}

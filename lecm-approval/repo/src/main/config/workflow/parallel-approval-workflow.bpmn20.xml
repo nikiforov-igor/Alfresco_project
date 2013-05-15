@@ -79,9 +79,9 @@
 			</extensionElements>
 			<multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${assigneesList}" activiti:elementVariable="assignee"/>
 		</userTask>
-		<sequenceFlow id="from-start-to-parallel-approvement-task" name="From start to parallel approvement task" sourceRef="start-parallel-approvement" targetRef="alfrescoScripttask2"/>
+		<sequenceFlow id="from-start-to-parallel-approvement-task" sourceRef="start-parallel-approvement" targetRef="scripttask1"/>
 		<endEvent id="end-parallel-approvement" name="End parallel approvement"/>
-		<sequenceFlow id="from-parallel-approvement-task-to-end" name="From parallel approvement task to end" sourceRef="parallel-approvement-task" targetRef="end-parallel-approvement">
+		<sequenceFlow id="from-parallel-approvement-task-to-end" sourceRef="parallel-approvement-task" targetRef="end-parallel-approvement">
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
@@ -121,15 +121,26 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-							var personList = approvalParallel.getPersonListByEmployeeList(lecmPar_employeesAssoc);
-							var approvalListRef = approvalParallel.createApprovalList(bpm_package);
-							execution.setVariableLocal("assigneesList", personList);
-							execution.setVariable("approvalListRef", approvalListRef);
-						]]></activiti:string>
+						var personList = approvalParallel.getPersonListByEmployeeList(lecmPar_employeesAssoc);
+						var approvalListRef = approvalParallel.createApprovalList(bpm_package, documentAttachmentCategoryName);
+						execution.setVariableLocal("assigneesList", personList);
+						execution.setVariable("approvalListRef", approvalListRef);
+					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>
 		</serviceTask>
 		<sequenceFlow id="flow2" sourceRef="alfrescoScripttask2" targetRef="parallel-approvement-task"/>
+		<serviceTask id="scripttask1" name="Service Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+			<extensionElements>
+				<activiti:field name="script">
+					<activiti:string><![CDATA[
+					]]></activiti:string>
+				</activiti:field>
+			</extensionElements>
+		</serviceTask>
+		<receiveTask id="receivetask1" name="Receive Task"/>
+		<sequenceFlow id="flow3" sourceRef="scripttask1" targetRef="receivetask1"/>
+		<sequenceFlow id="flow4" sourceRef="receivetask1" targetRef="alfrescoScripttask2"/>
 	</process>
 	<bpmndi:BPMNDiagram id="BPMNDiagram_lecmParallelApproval">
 		<bpmndi:BPMNPlane bpmnElement="lecmParallelApproval" id="BPMNPlane_lecmParallelApproval">
@@ -137,41 +148,49 @@
 				<omgdc:Bounds height="35.0" width="35.0" x="80.0" y="360.0"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="parallel-approvement-task" id="BPMNShape_parallel-approvement-task">
-				<omgdc:Bounds height="60.0" width="100.0" x="440.0" y="348.0"></omgdc:Bounds>
+				<omgdc:Bounds height="60.0" width="100.0" x="600.0" y="348.0"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="end-parallel-approvement" id="BPMNShape_end-parallel-approvement">
-				<omgdc:Bounds height="35.0" width="35.0" x="860.0" y="360.0"></omgdc:Bounds>
+				<omgdc:Bounds height="35.0" width="35.0" x="768.0" y="360.0"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="boundarytimer1" id="BPMNShape_boundarytimer1">
-				<omgdc:Bounds height="30.0" width="30.0" x="475.0" y="400.0"></omgdc:Bounds>
+				<omgdc:Bounds height="30.0" width="30.0" x="635.0" y="400.0"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="alfrescoScripttask1" id="BPMNShape_alfrescoScripttask1">
-				<omgdc:Bounds height="55.0" width="105.0" x="437.0" y="490.0"></omgdc:Bounds>
+				<omgdc:Bounds height="55.0" width="105.0" x="597.0" y="490.0"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="alfrescoScripttask2" id="BPMNShape_alfrescoScripttask2">
-				<omgdc:Bounds height="55.0" width="105.0" x="260.0" y="350.0"></omgdc:Bounds>
+				<omgdc:Bounds height="55.0" width="105.0" x="440.0" y="350.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
+				<omgdc:Bounds height="55.0" width="105.0" x="164.0" y="350.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="receivetask1" id="BPMNShape_receivetask1">
+				<omgdc:Bounds height="55.0" width="105.0" x="300.0" y="350.0"></omgdc:Bounds>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNEdge bpmnElement="from-parallel-approvement-task-to-end" id="BPMNEdge_from-parallel-approvement-task-to-end">
-				<omgdi:waypoint x="540.0" y="378.0"></omgdi:waypoint>
-				<omgdi:waypoint x="860.0" y="377.0"></omgdi:waypoint>
-				<bpmndi:BPMNLabel>
-					<omgdc:Bounds height="42.0" width="100.0" x="-30.0" y="-47.0"></omgdc:Bounds>
-				</bpmndi:BPMNLabel>
+				<omgdi:waypoint x="700.0" y="378.0"></omgdi:waypoint>
+				<omgdi:waypoint x="768.0" y="377.0"></omgdi:waypoint>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="from-start-to-parallel-approvement-task" id="BPMNEdge_from-start-to-parallel-approvement-task">
 				<omgdi:waypoint x="115.0" y="377.0"></omgdi:waypoint>
-				<omgdi:waypoint x="260.0" y="377.0"></omgdi:waypoint>
-				<bpmndi:BPMNLabel>
-					<omgdc:Bounds height="42.0" width="100.0" x="-62.0" y="-47.0"></omgdc:Bounds>
-				</bpmndi:BPMNLabel>
+				<omgdi:waypoint x="164.0" y="377.0"></omgdi:waypoint>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
-				<omgdi:waypoint x="490.0" y="430.0"></omgdi:waypoint>
-				<omgdi:waypoint x="489.0" y="490.0"></omgdi:waypoint>
+				<omgdi:waypoint x="650.0" y="430.0"></omgdi:waypoint>
+				<omgdi:waypoint x="649.0" y="490.0"></omgdi:waypoint>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
-				<omgdi:waypoint x="365.0" y="377.0"></omgdi:waypoint>
-				<omgdi:waypoint x="440.0" y="378.0"></omgdi:waypoint>
+				<omgdi:waypoint x="545.0" y="377.0"></omgdi:waypoint>
+				<omgdi:waypoint x="600.0" y="378.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+				<omgdi:waypoint x="269.0" y="377.0"></omgdi:waypoint>
+				<omgdi:waypoint x="300.0" y="377.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+				<omgdi:waypoint x="405.0" y="377.0"></omgdi:waypoint>
+				<omgdi:waypoint x="440.0" y="377.0"></omgdi:waypoint>
 			</bpmndi:BPMNEdge>
 		</bpmndi:BPMNPlane>
 	</bpmndi:BPMNDiagram>

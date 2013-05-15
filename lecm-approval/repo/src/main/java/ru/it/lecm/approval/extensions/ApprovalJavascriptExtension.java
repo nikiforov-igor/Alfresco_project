@@ -95,10 +95,11 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * формирование нового листа согласования, для текущей версии регламента
 	 * @param employeeList список сотрудников, ака согласущие лица
 	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех item-ов workflow
+	 * @param documentAttachmentCategoryName  название категории вложений, в которой хранится файл документа
 	 * @return ссылку на новый лист согласования
 	 */
-	public ActivitiScriptNode createApprovalList(final ActivitiScriptNode bpmPackage) {
-		NodeRef approvalListRef = approvalListService.createApprovalList(bpmPackage.getNodeRef());
+	public ActivitiScriptNode createApprovalList(final ActivitiScriptNode bpmPackage, final String documentAttachmentCategoryName) {
+		NodeRef approvalListRef = approvalListService.createApprovalList(bpmPackage.getNodeRef(), documentAttachmentCategoryName);
 		return new ActivitiScriptNode(approvalListRef, serviceRegistry);
 	}
 
