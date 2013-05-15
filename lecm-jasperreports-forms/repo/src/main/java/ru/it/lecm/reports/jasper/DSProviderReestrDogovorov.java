@@ -1,8 +1,11 @@
 package ru.it.lecm.reports.jasper;
 
+import java.util.Date;
+import java.util.Iterator;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JasperReport;
+
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -15,9 +18,6 @@ import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.jasper.utils.Utils;
-
-import java.util.Date;
-import java.util.Iterator;
 
 /**
  * Отчёт по реестру договоров

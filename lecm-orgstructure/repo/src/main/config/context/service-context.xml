@@ -119,7 +119,7 @@
 	</bean>
 
 	<bean id="orgstucturePersonEmployeeRelationsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePersonEmployeeRelationsPolicy"
-		  init-method="init">
+		  init-method="init" depends-on="serviceOrgstructure">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
@@ -206,7 +206,8 @@
         <property name="personService" ref="personService" />
     </bean>
 
-    <bean id="brOrgstructureEngineerInitiazer" class="ru.it.lecm.orgstructure.beans.BROrgstructureEngineerInitializerBean" parent="businessRolesInitiazer" init-method="init">
+    <bean id="brOrgstructureEngineerInitiazer" class="ru.it.lecm.orgstructure.beans.BROrgstructureEngineerInitializerBean"
+    		parent="businessRolesInitiazer" init-method="init" depends-on="serviceOrgstructure">
         <property name="businessRoles">
             <list>
                 <value>#{ORGANIZATION_ENGINEER}</value>
@@ -215,7 +216,7 @@
     </bean>
 
     <bean id="staffListOnCreateAssocsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffListCreateOrUpdatePolicy"
-          init-method="init">
+          init-method="init" depends-on="serviceOrgstructure">
         <property name="policyComponent">
             <ref bean="policyComponent"/>
         </property>

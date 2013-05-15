@@ -37,22 +37,38 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 
 	private static final Logger logger = LoggerFactory.getLogger(DSProdiverApproval.class);
 
-	private Date periodStart, periodEnd;
+	private Date periodStartDate, periodEndDate;
 
-	public Date getStart() {
-		return periodStart;
+	public Date getPeriodStartDate() {
+		return periodStartDate;
 	}
 
-	public void setStart( final String value) {
-		periodStart = ArgsHelper.makeDate(value, "periodStart");
+	public void setPeriodStartDate( final Date value) {
+		periodStartDate = value;
 	}
 
-	public void setEnd( final String value) {
-		periodEnd = ArgsHelper.makeDate(value, "periodEnd");
+	public String getPeriodStart() {
+		return (periodStartDate != null) ? ArgsHelper.dateToStr( periodStartDate, "periodStart") : null;
 	}
 
-	public Date getEnd() {
-		return periodEnd;
+	public void setPeriodStart( final String value) {
+		periodStartDate = ArgsHelper.makeDate(value, "periodStart");
+	}
+
+	public Date getPeriodEndDate() {
+		return periodEndDate;
+	}
+
+	public void setPeriodEndDate( final Date value) {
+		periodEndDate = value;
+	}
+
+	public String getPeriodEnd() {
+		return (periodEndDate != null) ? ArgsHelper.dateToStr( periodEndDate, "periodEnd") : null;
+	}
+
+	public void setPeriodEnd( final String value) {
+		periodEndDate = ArgsHelper.makeDate(value, "periodEnd");
 	}
 
 	final static String VALUE_STATUS_NOTREADY = "NO_DECISION";
@@ -87,14 +103,14 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 		bquery.append( " AND NOT @lecm\\-al\\:approval\\-list\\-decision:"+ VALUE_STATUS_NOTREADY+ " ");
 
 		// начало == <!-- дата начала согласования -->
-		if (getStart() != null) { // "X to MAX"
-			final String stMIN = ArgsHelper.dateToStr( getStart(), "MIN");
+		if (getPeriodStartDate() != null) { // "X to MAX"
+			final String stMIN = ArgsHelper.dateToStr( getPeriodStartDate(), "MIN");
 			bquery.append( " AND @lecm\\-al\\:approval\\-list\\-approve\\-start:[" + stMIN + " TO MAX]");
 		}
 
 		// окончание == <!-- дата начала согласования -->
-		if (getEnd() != null) { // "MIN to X"
-			final String stMAX = ArgsHelper.dateToStr( getEnd(), "MAX");
+		if (getPeriodEndDate() != null) { // "MIN to X"
+			final String stMAX = ArgsHelper.dateToStr( getPeriodEndDate(), "MAX");
 			// bquery.append( " AND( (@lecm\\-contract\\:unlimited:true) OR (...) )");
 			bquery.append( " AND @lecm\\-al\\:approval\\-list\\-approve\\-start:[ MIN TO " + stMAX + "]");
 		}
@@ -368,9 +384,10 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 			result.put( getAlfAttrNameByJRKey(JRName_AVG_MISSED_DAYS), (float) roundToHumanRead(item.missedApproves.avg) );
 			result.put( getAlfAttrNameByJRKey(JRName_AVG_APPROVE_DAYS), (float) roundToHumanRead(item.normalApproves.avg) );
 
+			// период согласования включаем как данные
 			final Date now = new Date();
-			result.put( getAlfAttrNameByJRKey(JRName_PERIOD_START), (periodStart != null) ? periodStart : null);
-			result.put( getAlfAttrNameByJRKey(JRName_PERIOD_END), (periodEnd != null) ? periodEnd : now);
+			result.put( getAlfAttrNameByJRKey(JRName_PERIOD_START), (periodStartDate != null) ? periodStartDate : null);
+			result.put( getAlfAttrNameByJRKey(JRName_PERIOD_END), (periodEndDate != null) ? periodEndDate : now);
 
 			return result;
 		}
