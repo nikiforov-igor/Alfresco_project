@@ -18,7 +18,7 @@
 			</activiti:executionListener>
 		</extensionElements>
 		<startEvent id="start-sequential-approvement" name="Start sequential approvement" activiti:formKey="lecmSeq:sequentialApproval"/>
-		<userTask id="sequential-approvement-task" name="Задача последовательного согласования" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmSeq:approveTask">
+		<userTask id="sequential-approvement-task" name="Согласовать документ" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmSeq:approveTask">
 			<extensionElements>
 				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">

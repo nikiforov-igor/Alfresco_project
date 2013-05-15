@@ -18,7 +18,7 @@
 			</activiti:executionListener>
 		</extensionElements>
 		<startEvent id="start-parallel-approvement" name="Start parallel approvement" activiti:formKey="lecmPar:parallelApproval"/>
-		<userTask id="parallel-approvement-task" name="Задача параллельного согласования" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmPar:approveTask">
+		<userTask id="parallel-approvement-task" name="Согласовать документ" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmPar:approveTask">
 			<extensionElements>
 				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
