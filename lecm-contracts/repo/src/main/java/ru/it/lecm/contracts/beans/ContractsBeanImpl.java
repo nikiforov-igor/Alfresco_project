@@ -53,6 +53,7 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final QName ASSOC_DELETE_REASON = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "reasonDelete-assoc");
 	public static final QName ASSOC_CONTRACT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "typeContract-assoc");
 	public static final QName ASSOC_CONTRACT_SUBJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "subjectContract-assoc");
+	public static final QName ASSOC_CONTRACT_PARTNER = QName.createQName(CONTRACTS_NAMESPACE_URI, "partner-assoc");
 
 	public static final QName ASPECT_CONTRACT_DELETED = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "deleted");
 	public static final QName ASPECT_PRIMARY_DOCUMENT_DELETE = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentDeletedAspect");
@@ -313,14 +314,21 @@ public class ContractsBeanImpl extends BaseBean {
 			// уведомление
 			List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID);
 			StringBuilder notificationText = new StringBuilder();
-			notificationText.append("Зарегистрирован проект договора номер ");
-			notificationText.append(wrapperLink(contractRef, documentNumber, DOCUMENT_LINK_URL));
+			notificationText.append("Зарегистрирован проект договора c ");
+
+			NodeRef partner = findNodeByAssociationRef(contractRef, ASSOC_CONTRACT_PARTNER, null, ASSOCIATION_TYPE.TARGET);
+			if (partner != null) {
+				notificationText.append(wrapperLink(partner, nodeService.getProperty(partner, ContentModel.PROP_NAME).toString(), LINK_URL));
+			}
+
 			notificationText.append(", вид договора ").append(getContractType(contractRef));
 			notificationText.append(", тематика ").append(getContractSubject(contractRef));
 			notificationText.append(", исполнитель ");
 			NodeRef executor = getContractExecutor(contractRef);
 			String executorName = nodeService.getProperty(executor, ContentModel.PROP_NAME).toString();
 			notificationText.append(wrapperLink(executor, executorName, LINK_URL));
+			notificationText.append(", номер проекта ");
+			notificationText.append(wrapperLink(contractRef, documentNumber, DOCUMENT_LINK_URL));
 
 			Notification notification = new Notification();
 			notification.setRecipientEmployeeRefs(curators);
