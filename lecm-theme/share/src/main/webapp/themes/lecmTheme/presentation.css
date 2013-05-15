@@ -80,6 +80,7 @@ a:hover {
     word-break: break-all;
     letter-spacing: -1px;
     background-position: 12px 4px;
+    cursor: pointer;
 }
 #bd #lecm-menu button {
     width: 56px;
