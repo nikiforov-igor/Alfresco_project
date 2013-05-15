@@ -82,26 +82,6 @@
 								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
 								<!--"documentProjectNumber": documentProjectNumber-->
 							};
-							<!---->
-							<!--var decision = task.getVariableLocal("lecmCustom_approveTaskResult");-->
-							<!--var startDate = task.getCreateTime().getTime();-->
-							<!--var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;-->
-							<!--var comment = task.getVariableLocal("bpm_comment");-->
-							<!--var commentRef = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");-->
-							<!--logger.log("userName = " + userName);-->
-							<!--logger.log("decision = " + decision);-->
-							<!--logger.log("startDate = " + startDate);-->
-							<!--logger.log("dueDate = " + dueDate);-->
-							<!--logger.log("comment = " + comment);-->
-							<!--logger.log("commentRef = " + commentRef);-->
-							<!--var taskDecision = {-->
-								<!--"userName": userName,-->
-								<!--"decision": decision,-->
-								<!--"startDate": startDate,-->
-								<!--"dueDate": dueDate,-->
-								<!--"comment": comment,-->
-								<!--"commentRef": commentRef-->
-							<!--};-->
 
 			            	execution.setVariable("executorBossDecision", decision);
 
@@ -166,27 +146,6 @@
 								<!--"documentProjectNumber": documentProjectNumber-->
 							};
 
-                            <!---->
-							<!--var decision = task.getVariableLocal("lecmCustom_approveTaskResult");-->
-							<!--var startDate = task.getCreateTime().getTime();-->
-							<!--var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;-->
-							<!--var comment = task.getVariableLocal("bpm_comment");-->
-							<!--var commentRef = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");-->
-							<!--logger.log("userName = " + userName);-->
-							<!--logger.log("decision = " + decision);-->
-							<!--logger.log("startDate = " + startDate);-->
-							<!--logger.log("dueDate = " + dueDate);-->
-							<!--logger.log("comment = " + comment);-->
-							<!--logger.log("commentRef = " + commentRef);-->
-							<!--var taskDecision = {-->
-								<!--"userName": userName,-->
-								<!--"decision": decision,-->
-								<!--"startDate": startDate,-->
-								<!--"dueDate": dueDate,-->
-								<!--"comment": comment,-->
-								<!--"commentRef": commentRef-->
-							<!--};-->
-
                             var divisionBossDecisions = execution.getVariable("divisionBossDecisions");
                             if (!divisionBossDecisions) {
                                 logger.log("Attention: divisionBossDecisions is null, it will be created in approvalCustom.addDecision method");
@@ -230,8 +189,7 @@
 
 			            	var userName = task.getAssignee();
 
-
-			            								var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+                            var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
 							var startDate = task.getCreateTime().getTime();
 							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
 							var comment = task.getVariableLocal("bpm_comment");
@@ -258,26 +216,6 @@
 								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
 								<!--"documentProjectNumber": documentProjectNumber-->
 							};
-
-                            <!--var decision = task.getVariableLocal("lecmCustom_approveTaskResult");-->
-							<!--var startDate = task.getCreateTime().getTime();-->
-							<!--var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;-->
-							<!--var comment = task.getVariableLocal("bpm_comment");-->
-							<!--var commentRef = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");-->
-							<!--logger.log("userName = " + userName);-->
-							<!--logger.log("decision = " + decision);-->
-							<!--logger.log("startDate = " + startDate);-->
-							<!--logger.log("dueDate = " + dueDate);-->
-							<!--logger.log("comment = " + comment);-->
-							<!--logger.log("commentRef = " + commentRef);-->
-							<!--var taskDecision = {-->
-								<!--"userName": userName,-->
-								<!--"decision": decision,-->
-								<!--"startDate": startDate,-->
-								<!--"dueDate": dueDate,-->
-								<!--"comment": comment,-->
-								<!--"commentRef": commentRef-->
-							<!--};-->
 
 			            	execution.setVariable("departmentBossDecision", decision);
 
@@ -345,27 +283,6 @@
 								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
 								<!--"documentProjectNumber": documentProjectNumber-->
 							};
-
-                            <!---->
-                            <!--var decision = task.getVariableLocal("lecmCustom_approveTaskResult");-->
-							<!--var startDate = task.getCreateTime().getTime();-->
-							<!--var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;-->
-							<!--var comment = task.getVariableLocal("bpm_comment");-->
-							<!--var commentRef = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");-->
-							<!--logger.log("userName = " + userName);-->
-							<!--logger.log("decision = " + decision);-->
-							<!--logger.log("startDate = " + startDate);-->
-							<!--logger.log("dueDate = " + dueDate);-->
-							<!--logger.log("comment = " + comment);-->
-							<!--logger.log("commentRef = " + commentRef);-->
-							<!--var taskDecision = {-->
-								<!--"userName": userName,-->
-								<!--"decision": decision,-->
-								<!--"startDate": startDate,-->
-								<!--"dueDate": dueDate,-->
-								<!--"comment": comment,-->
-								<!--"commentRef": commentRef-->
-							<!--};-->
 
                             execution.setVariable("isApproved", approvalCustom.isApproved(decision));
 
