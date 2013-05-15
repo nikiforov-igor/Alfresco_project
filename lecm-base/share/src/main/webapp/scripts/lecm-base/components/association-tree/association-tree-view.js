@@ -169,7 +169,7 @@ LogicECM.module = LogicECM.module || {};
             var templateUrl = this.generateCreateNewUrl(this.options.rootNodeRef, this.options.itemType);
 
             new Alfresco.module.SimpleDialog("create-new-form-dialog-" + this.eventGroup).setOptions({
-                width:"40em",
+                width:"50em",
                 templateUrl:templateUrl,
                 actionUrl:null,
                 destroyOnHide:true,
@@ -850,7 +850,8 @@ LogicECM.module = LogicECM.module || {};
         },
 
         setCreateNewFormDialogTitle: function (p_form, p_dialog) {
-            var fileSpan = '<span class="light">Create new</span>';
+	        var message = this.msg("dialog.createNew.title");
+            var fileSpan = '<span class="light">' + message + '</span>';
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
