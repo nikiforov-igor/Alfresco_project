@@ -60,27 +60,15 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		private final NodeRef documentRef;
 		private final NodeRef initiatorRef;
 		private String documentLink;
-		private String partner;
 
-		DocumentInfo(final NodeRef bpmPackage, final String hrefName) {
+		DocumentInfo(final NodeRef bpmPackage) {
 			documentRef = getDocumentFromBpmPackage(bpmPackage);
-			documentLink = String.format("<a href=\"javascript:void(0);\">%s</a>", hrefName);
+			documentLink = "<a href=\"javascript:void(0);\"></a>";
 			if (documentRef != null) {
-				documentLink = wrapperLink(documentRef, hrefName, DOCUMENT_LINK_URL);
+				String presentString = (String)nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING);
+				documentLink = wrapperLink(documentRef, presentString, DOCUMENT_LINK_URL);
 			} else {
 				logger.warn("Can't wrap document as link, because there is no any document in bpm:package.");
-			}
-
-			partner = "<контрагент отсутствует>";
-			if (documentRef != null) {
-				NodeRef partnerRef = findNodeByAssociationRef(documentRef, ASSOC_CONTRACT_PARTNER, TYPE_CONTRACTOR, ASSOCIATION_TYPE.TARGET);
-				if (partnerRef != null) {
-					partner = (String)nodeService.getProperty(partnerRef, PROP_CONTRACTOR_FULLNAME);
-				} else {
-					logger.warn("The is no partner for document {}", documentRef);
-				}
-			} else {
-				logger.warn("Can't get partner for document, because there is no any document in bpm:package");
 			}
 
 			String creator = (String)nodeService.getProperty(documentRef, ContentModel.PROP_CREATOR);
@@ -95,22 +83,12 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			return documentLink;
 		}
 
-		String getPartner() {
-			return partner;
-		}
-
 		NodeRef getInitiatorRef() {
 			return initiatorRef;
 		}
 	}
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceAbstract.class);
-	private final static String CONTRACT_NAMESPACE = "http://www.it.ru/logicECM/contract/1.0";
-	private final static String CONTRACTORS_NAMESPACE = "http://www.it.ru/lecm/contractors/model/contractor/1.0";
-	private final static QName TYPE_CONTRACTOR = QName.createQName(CONTRACTORS_NAMESPACE, "contractor-type");
-	private final static QName ASSOC_CONTRACT_PARTNER = QName.createQName(CONTRACT_NAMESPACE, "partner-assoc");
-	private final static QName PROP_CONTRACTOR_FULLNAME = QName.createQName(CONTRACTORS_NAMESPACE, "fullname");
-	private final static QName PROP_CONTRACTOR_SHORTNAME = QName.createQName(CONTRACTORS_NAMESPACE, "shortname");
 	private final static QName FAKE_PROP_COMINGSOON = QName.createQName(NamespaceService.ALFRESCO_URI, "comingSoonNotified");
 	private final static QName FAKE_PROP_OVERDUE = QName.createQName(NamespaceService.ALFRESCO_URI, "overdueNotified");
 	private final static String APPROVAL_LIST_NAME = "Лист согласования версия %s";
@@ -338,7 +316,6 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	@Override
 	public NodeRef getDocumentFromBpmPackage(final NodeRef bpmPackage) {
 		NodeRef documentRef = null;
-//		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage, TYPE_CONTRACT_FAKE_DOCUMENT, RegexQNamePattern.MATCH_ALL);
 		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage);
 		if (children != null) {
 			for (ChildAssociationRef assocRef : children) {
@@ -481,12 +458,12 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 	@Override
 	public void notifyApprovalStarted(NodeRef employeeRef, Date dueDate, NodeRef bpmPackage) {
-		DocumentInfo docInfo = new DocumentInfo(bpmPackage, "документ");
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage);
 
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(employeeRef);
 
-		String description = String.format("Вам необходимо согласовать %s по договору с %s, срок согласования: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate));
+		String description = String.format("Вам необходимо согласовать документ %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
 
 		Notification notification = new Notification();
 		notification.setAutor(AuthenticationUtil.getSystemUserName());
@@ -498,7 +475,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 	@Override
 	public void notifyFinalDecision(final String decisionCode, final NodeRef bpmPackage) {
-		DocumentInfo docInfo = new DocumentInfo(bpmPackage, "документе");
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage);
 
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(docInfo.getInitiatorRef());
@@ -520,8 +497,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			decision = "";
 		}
 
-		//«Принято решение о документе,  по договору с <Наименование контрагента>:  <Результат согласования по документу>»
-		String description = String.format("Принято решение о %s, по договору с %s: \"%s\"", docInfo.getDocumentLink(), docInfo.getPartner(), decision);
+		String description = String.format("Принято решение о документе %s: \"%s\"", docInfo.getDocumentLink(), decision);
 
 		Notification notification = new Notification();
 		notification.setAutor(AuthenticationUtil.getSystemUserName());
@@ -547,8 +523,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			fakeProps.put(FAKE_PROP_COMINGSOON, "");
 			Notification notification = new Notification();
 			notification.setAutor(AuthenticationUtil.getSystemUserName());
-			//«Напоминание: вам необходимо согласовать проект документа по договору с <Наименование контрагента>, срок согласования: <Индивидуальный срок согласования по документу>»
-			String description = String.format("Напоминание: Вам необходимо согласовать проект %s по договору с %s, срок согласования: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate));
+			String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
 			notification.setDescription(description);
 			notification.setObjectRef(docInfo.getDocumentRef());
 			notification.setRecipientEmployeeRefs(recipients);
@@ -558,8 +533,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			fakeProps.put(FAKE_PROP_OVERDUE, "");
 			Notification notification = new Notification();
 			notification.setAutor(AuthenticationUtil.getSystemUserName());
-			//«Внимание: вы не согласовали документ: проект документа по договору с <Наименование контрагента>, срок согласования: <Индивидуальный срок согласования по документу>»
-			String description = String.format("Внимание: Вы не согласовали документ: проект %s по договору с %s, срок согласования: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate));
+			String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
 			notification.setDescription(description);
 			notification.setObjectRef(docInfo.getDocumentRef());
 			notification.setRecipientEmployeeRefs(recipients);
@@ -573,7 +547,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	@Override
 	public void notifyAssigneesDeadline(final String processInstanceId, final NodeRef bpmPackage) {
 		try {
-			DocumentInfo docInfo = new DocumentInfo(bpmPackage, "документа");
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage);
 
 			WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
 			taskQuery.setProcessId(processInstanceId);
@@ -615,7 +589,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	@Override
 	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final VariableScope variableScope) {
 		try {
-			DocumentInfo docInfo = new DocumentInfo(bpmPackage, "документа");
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage);
 			Set<NodeRef> recipients = new HashSet<NodeRef>();
 			recipients.add(docInfo.getInitiatorRef());
 			WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
@@ -628,8 +602,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 				variableScope.setVariable("initiatorComingSoon", "");
 				Notification notification = new Notification();
 				notification.setAutor(AuthenticationUtil.getSystemUserName());
-				//«Напоминание: вы направили на согласование проект документа по договору с <Наименование контрагента>, срок согласования: <Общий срок согласования по документу>»
-				String description = String.format("Напоминание: Вы направили на согласование проект %s по договору с %s, срок согласования: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate));
+				String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
 				notification.setDescription(description);
 				notification.setObjectRef(docInfo.getDocumentRef());
 				notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
@@ -639,10 +612,8 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 				variableScope.setVariable("initiatorOverdue", "");
 				Notification notification = new Notification();
 				notification.setAutor(AuthenticationUtil.getSystemUserName());
-				//«Внимание: проект документа по договору с <Наименование контрагента>  не согласован в срок: <Общий срок согласования по документу>.
-				//Следующие сотрудники не приняли решение: <перечень ФИО сотрудников, не принявших решение по проекту>»
 				String people = getIncompleteAssignees(processInstanceId);
-				String description = String.format("Внимание: проект %s по договору с %s не согласован в срок: %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), docInfo.getPartner(), DATE_FORMAT.format(dueDate), people);
+				String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate), people);
 				//получить список кураторов и добавить его в recipients
 				recipients.addAll(getCurators());
 				notification.setDescription(description);
