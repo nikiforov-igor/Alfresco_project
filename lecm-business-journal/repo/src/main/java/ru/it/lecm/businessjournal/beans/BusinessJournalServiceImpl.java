@@ -51,6 +51,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
     private DictionaryService dicService;
     private LecmPermissionService lecmPermissionService;
 
+    private ThreadLocal<IgnoredCounter> threadSettings = new ThreadLocal<IgnoredCounter>();
+    private static final String KEY_IGNORE_NEXT_RECORD = "BG_IGNORE_NEXT_RECORD";
+
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
     }
@@ -115,6 +118,15 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
             logger.warn("Main Object not set!");
             return null;
         }
+        IgnoredCounter counter = threadSettings.get();
+        if (counter != null) {
+            if (counter.isIgnored()) {
+                counter.execute();
+                return null;
+            } else {
+                counter.execute();
+            }
+        }
         final AuthenticationUtil.RunAsWork<NodeRef> runner = new AuthenticationUtil.RunAsWork<NodeRef>() {
             @Override
             public NodeRef doWork() throws Exception {
@@ -168,9 +180,15 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-	public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects){
+	public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
 		return log(new Date(), mainObject, eventCategory, defaultDescription, objects);
 	}
+
+    public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects, boolean ignoreNext) {
+        IgnoredCounter counter = new IgnoredCounter(1);
+        threadSettings.set(counter);
+        return log(mainObject, eventCategory, defaultDescription, objects);
+    }
 
 	@Override
 	public NodeRef log(Date date, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
@@ -784,5 +802,28 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
         String description = getWorkflowDescription(executionId);
         return "<a href=\"" + serverUrl + WORKFLOW_LINK_URL + "?workflowId=" + executionId.replace("$", "\\$") + "\">" + description + "</a>";
+    }
+
+    class IgnoredCounter {
+
+        private int executed = 0;
+        private int ignored = 0;
+
+        IgnoredCounter(int ignored) {
+            this.ignored = ignored;
+        }
+
+        void execute() {
+            executed++;
+            if (executed > ignored) {
+                executed = 0;
+                ignored = 0;
+            }
+        }
+
+        boolean isIgnored() {
+            return ignored != 0 && executed >= ignored;
+        }
+
     }
 }

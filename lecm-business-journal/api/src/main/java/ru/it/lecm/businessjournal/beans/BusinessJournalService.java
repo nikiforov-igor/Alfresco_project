@@ -157,7 +157,19 @@ public interface BusinessJournalService {
 	 */
 	public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
 
-	/**
+    /**
+     * Метод для создания записи бизнеса-журнала с текущей датой и игнорированием записи следующего события
+     *
+     * @param mainObject - основной объект
+     * @param  eventCategory  - категория события
+     * @param  defaultDescription  - описание события
+     * @param objects    - список дополнительных объектов
+     * @param ignoreNext    - Игнорировать следующую запись
+     * @return ссылка на ноду записи в бизнес журнале
+     */
+    public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects, boolean ignoreNext);
+
+    /**
 	 * Метод для создания записи бизнеса-журнала
 	 *
 	 *
