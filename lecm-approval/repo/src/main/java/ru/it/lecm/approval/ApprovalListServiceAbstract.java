@@ -365,7 +365,9 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 
 		try {
 			startDate =  DateUtils.truncate(new Date(taskDecision.getLong("startDate")), Calendar.DATE);
-			dueDate = DateUtils.truncate(new Date(taskDecision.getLong("dueDate")), Calendar.DATE);
+            if (dueDate != null) {
+			    dueDate = DateUtils.truncate(new Date(taskDecision.getLong("dueDate")), Calendar.DATE);
+            }
 			completionDate = DateUtils.truncate(new Date(), Calendar.DATE);
 			comment = taskDecision.getString("comment");
 			decision = taskDecision.getString("decision");
@@ -383,8 +385,13 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 				documentRef = new NodeRef(documentStrRef);
 			}
 
-			commentFileAttachmentCategoryName = taskDecision.getString("commentFileAttachmentCategoryName");
-			documentProjectNumber = taskDecision.getString("documentProjectNumber");
+            if (taskDecision.has("commentFileAttachmentCategoryName")) {
+			    commentFileAttachmentCategoryName = taskDecision.getString("commentFileAttachmentCategoryName");
+            }
+
+            if (taskDecision.has("documentProjectNumber")) {
+                documentProjectNumber = taskDecision.getString("documentProjectNumber");
+            }
 		} catch (JSONException ex) {
 			logger.error(ex.getMessage(), ex);
 		}
@@ -463,7 +470,8 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(employeeRef);
 
-		String description = String.format("Вам необходимо согласовать документ %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
+        String dueDatemessage = dueDate == null ? "(нет)" : DATE_FORMAT.format(dueDate);
+        String description = String.format("Вам необходимо согласовать документ %s, срок согласования %s", docInfo.getDocumentLink(), dueDatemessage);
 
 		Notification notification = new Notification();
 		notification.setAutor(AuthenticationUtil.getSystemUserName());
@@ -581,7 +589,8 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		return builder.toString();
 	}
 
-	private List<NodeRef> getCurators() {
+    @Override
+    public List<NodeRef> getCurators() {
 		List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID);
 		return curators != null ? curators : new ArrayList<NodeRef>();
 	}
@@ -625,5 +634,17 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			logger.error("Internal error while notifying initiator and curators", ex);
 		}
 	}
+
+    /**
+     * return boss login or self employee login if boss is null
+     * @param executorPersonName
+     * @return
+     */
+    @Override
+    public String getExecutorBoss(String executorPersonName) {
+        NodeRef executorEmployee = orgstructureService.getEmployeeByPerson(executorPersonName);
+        NodeRef boss = orgstructureService.findEmployeeBoss(executorEmployee);
+        return boss == null ? executorPersonName : orgstructureService.getEmployeeLogin(boss);
+    }
 }
 

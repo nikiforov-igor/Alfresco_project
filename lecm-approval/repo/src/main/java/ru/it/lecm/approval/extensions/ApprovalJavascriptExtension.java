@@ -18,10 +18,7 @@ import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import org.activiti.engine.delegate.VariableScope;
 
 public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension {
@@ -168,6 +165,26 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
 	}
 
+	public void grantPermissionsForReviewer(String userName, ActivitiScriptNode bpmPackage) {
+        if (userName == null || bpmPackage == null) {
+            return;
+        }
+
+        NodeRef personRef = personService.getPerson(userName);
+        NodeRef employeeRef = orgstructureService.getEmployeeByPerson(personRef);
+        approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
+    }
+
+	public void grantPermissionsForReviewers(Collection<String> candidateUsers, ActivitiScriptNode bpmPackage) {
+        if (candidateUsers == null) {
+            return;
+        }
+
+        for (String candidateUser : candidateUsers) {
+            grantPermissionsForReviewer(candidateUser, bpmPackage);
+        }
+    }
+
 	/**
 	 * прислать сотруднику уведомление о том, что начато согласование по документу
 	 * @param person cm:person согласующий по документу
@@ -178,6 +195,26 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(person.getNodeRef());
 		approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
 	}
+
+	public void notifyCustomApprovalStarted(String userName, Date dueDate, final ActivitiScriptNode bpmPackage) {
+        if (userName == null || bpmPackage == null) {
+            return;
+        }
+
+        NodeRef personRef = personService.getPerson(userName);
+        NodeRef employeeRef = orgstructureService.getEmployeeByPerson(personRef);
+        approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
+	}
+
+	public void notifyCustomApprovalStarted(Collection<String> userNames, Date dueDate, final ActivitiScriptNode bpmPackage) {
+        if (userNames == null || bpmPackage == null) {
+            return;
+        }
+
+        for (String userName : userNames) {
+            notifyCustomApprovalStarted(userName, dueDate, bpmPackage);
+        }
+    }
 
 	public void notifyFinalDecision(final String decision, final ActivitiScriptNode bpmPackage) {
 		approvalListService.notifyFinalDecision(decision, bpmPackage.getNodeRef());
@@ -201,4 +238,40 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		approvalListService.notifyAssigneesDeadline(processInstanceId, bpmPackage.getNodeRef());
 		approvalListService.notifyInitiatorDeadline(processInstanceId, bpmPackage.getNodeRef(), variableScope);
 	}
+    public String getExecutorBoss(String executorPersonName) {
+        return approvalListService.getExecutorBoss(executorPersonName);
+    }
+
+    public String getUnitBoss(String unitCode) {
+        NodeRef unitBossRef = orgstructureService.getUnitBoss(unitCode);
+        return orgstructureService.getEmployeeLogin(unitBossRef);
+    }
+
+    public Collection<String> getCurators() {
+        Collection<String> result = new ArrayList<String>();
+
+        List<NodeRef> curators = approvalListService.getCurators();
+        for (NodeRef curatorEmployee : curators) {
+            String login = orgstructureService.getEmployeeLogin(curatorEmployee);
+            result.add(login);
+        }
+
+        return result;
+    }
+
+    public Collection<String> getDivisionBosses(String divisionCodesStr) {
+        if (divisionCodesStr == null) {
+            return null;
+        }
+
+        String[] divisionCodes = divisionCodesStr.split(",");
+        Collection<String> result = new ArrayList<String>();
+        for (String divisionCode : divisionCodes) {
+            String divisionBoss = getUnitBoss(divisionCode);
+            result.add(divisionBoss);
+        }
+
+        return result;
+    }
+
 }

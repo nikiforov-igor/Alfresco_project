@@ -607,7 +607,33 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return unitRef;
 	}
 
-	@Override
+    @Override
+    public NodeRef getUnitByCode(String code) {
+        if (code == null) {
+            return null;
+        }
+
+        Set<QName> unitType = new HashSet<QName>();
+        unitType.add(TYPE_ORGANIZATION_UNIT);
+        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(getStructureDirectory(), unitType);
+        for (ChildAssociationRef childAssoc : childAssocs) {
+            NodeRef unitRef = childAssoc.getChildRef();
+            String unitCode = (String) nodeService.getProperty(unitRef, PROP_UNIT_CODE);
+            if (code.equals(unitCode)) {
+                return unitRef;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public NodeRef getUnitBoss(String unitCode) {
+        NodeRef unitRef = getUnitByCode(unitCode);
+        return getUnitBoss(unitRef);
+    }
+
+    @Override
 	public NodeRef getEmployeePhoto(NodeRef employeeRef) {
 		NodeRef photoRef = null;
 		if (isEmployee(employeeRef)) {

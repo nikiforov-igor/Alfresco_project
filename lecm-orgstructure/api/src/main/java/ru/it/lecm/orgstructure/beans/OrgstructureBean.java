@@ -627,4 +627,8 @@ public interface OrgstructureBean {
      * @return true, если сотрудник  bossRef является руководителем сотрудника subordinateRef.
      */
     boolean isBossOf(NodeRef bossRef, NodeRef subordinateRef, boolean checkPrimary);
+
+    NodeRef getUnitByCode(String code);
+
+    NodeRef getUnitBoss(String unitCode);
 }

@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/workflow/approval/custom">
+    <process id="lecmCustomApproval" name="Согласование (кастомное)" isExecutable="true">
+
+        <extensionElements>
+            <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                <activiti:field name="script">
+                    <activiti:string>//<![CDATA[
+                        execution.setVariable("isApproved", false);
+                    //]]></activiti:string>
+                </activiti:field>
+            </activiti:executionListener>
+
+            <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+                            var isApproved = execution.getVariable("isApproved");
+                            if (isApproved != null) {
+                                var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);
+                                finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";
+                                var approvalListRef = execution.getVariable("approvalListRef");
+                                approvalCustom.logFinalDecision(approvalListRef, finalDecision);
+                                approvalCustom.notifyFinalDecision(finalDecision, bpm_package);
+                            }
+                        ]]></activiti:string>
+                </activiti:field>
+            </activiti:executionListener>
+
+        </extensionElements>
+
+        <startEvent id="start-custom-approval" name="Start custom approval" activiti:formKey="lecmCustom:customApproval" ></startEvent>
+
+        <userTask id="executor-boss-approval-task" name="Задача согласования (начальник исполнителя)" activiti:formKey="lecmCustom:approveTask">
+            <extensionElements>
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            var executorBoss = approvalCustom.getExecutorBoss(person.properties.userName);
+                            task.setAssignee(executorBoss);
+
+                            approvalCustom.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
+                            approvalCustom.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            //<![CDATA[
+			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+
+							var userName = task.getAssignee();
+
+							var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+							var startDate = task.getCreateTime().getTime();
+							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
+							var comment = task.getVariableLocal("bpm_comment");
+							var taskCommentAssoc = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
+							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
+							var documentRef = bpm_package.children[0].nodeRef;
+							logger.log("userName = " + userName);
+							logger.log("decision = " + decision);
+							logger.log("startDate = " + startDate);
+							logger.log("dueDate = " + dueDate);
+							logger.log("comment = " + comment);
+							logger.log("commentRef = " + commentRef);
+							logger.log("documentRef = " + documentRef);
+							<!--logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);-->
+							<!--logger.log("documentProjectNumber = " + documentProjectNumber);-->
+							var taskDecision = {
+								"userName": userName,
+								"decision": decision,
+								"startDate": startDate,
+								"dueDate": dueDate,
+								"comment": comment,
+								"commentRef": commentRef,
+								"documentRef": documentRef
+								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
+								<!--"documentProjectNumber": documentProjectNumber-->
+							};
+							<!---->
+							<!--var decision = task.getVariableLocal("lecmCustom_approveTaskResult");-->
+							<!--var startDate = task.getCreateTime().getTime();-->
+							<!--var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;-->
+							<!--var comment = task.getVariableLocal("bpm_comment");-->
+							<!--var commentRef = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");-->
+							<!--logger.log("userName = " + userName);-->
+							<!--logger.log("decision = " + decision);-->
+							<!--logger.log("startDate = " + startDate);-->
+							<!--logger.log("dueDate = " + dueDate);-->
+							<!--logger.log("comment = " + comment);-->
+							<!--logger.log("commentRef = " + commentRef);-->
+							<!--var taskDecision = {-->
+								<!--"userName": userName,-->
+								<!--"decision": decision,-->
+								<!--"startDate": startDate,-->
+								<!--"dueDate": dueDate,-->
+								<!--"comment": comment,-->
+								<!--"commentRef": commentRef-->
+							<!--};-->
+
+			            	execution.setVariable("executorBossDecision", decision);
+
+			            	var approvalListRef = execution.getVariable("approvalListRef");
+			            	approvalCustom.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+			            //]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+        </userTask>
+
+        <userTask id="division-boss-approval-task" name="Задача согласования (Начальник отдела)" activiti:assignee="${assignee}" activiti:formKey="lecmCustom:approveTask">
+            <extensionElements>
+
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+						    var dueDate = new Date();
+                            dueDate.setDate(dueDate.getDate() + 2);
+							task.setDueDate(dueDate);
+
+                            approvalCustom.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
+                            approvalCustom.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+						]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            //<![CDATA[
+                            var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+
+                            var userName = assignee;
+
+                            							var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+							var startDate = task.getCreateTime().getTime();
+							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
+							var comment = task.getVariableLocal("bpm_comment");
+							var taskCommentAssoc = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
+							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
+							var documentRef = bpm_package.children[0].nodeRef;
+							logger.log("userName = " + userName);
+							logger.log("decision = " + decision);
+							logger.log("startDate = " + startDate);
+							logger.log("dueDate = " + dueDate);
+							logger.log("comment = " + comment);
+							logger.log("commentRef = " + commentRef);
+							logger.log("documentRef = " + documentRef);
+							<!--logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);-->
+							<!--logger.log("documentProjectNumber = " + documentProjectNumber);-->
+							var taskDecision = {
+								"userName": userName,
+								"decision": decision,
+								"startDate": startDate,
+								"dueDate": dueDate,
+								"comment": comment,
+								"commentRef": commentRef,
+								"documentRef": documentRef
+								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
+								<!--"documentProjectNumber": documentProjectNumber-->
+							};
+
+                            <!---->
+							<!--var decision = task.getVariableLocal("lecmCustom_approveTaskResult");-->
+							<!--var startDate = task.getCreateTime().getTime();-->
+							<!--var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;-->
+							<!--var comment = task.getVariableLocal("bpm_comment");-->
+							<!--var commentRef = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");-->
+							<!--logger.log("userName = " + userName);-->
+							<!--logger.log("decision = " + decision);-->
+							<!--logger.log("startDate = " + startDate);-->
+							<!--logger.log("dueDate = " + dueDate);-->
+							<!--logger.log("comment = " + comment);-->
+							<!--logger.log("commentRef = " + commentRef);-->
+							<!--var taskDecision = {-->
+								<!--"userName": userName,-->
+								<!--"decision": decision,-->
+								<!--"startDate": startDate,-->
+								<!--"dueDate": dueDate,-->
+								<!--"comment": comment,-->
+								<!--"commentRef": commentRef-->
+							<!--};-->
+
+                            var divisionBossDecisions = execution.getVariable("divisionBossDecisions");
+                            if (!divisionBossDecisions) {
+                                logger.log("Attention: divisionBossDecisions is null, it will be created in approvalCustom.addDecision method");
+                            }
+                            divisionBossDecisions = approvalCustom.addDecision(divisionBossDecisions, jsonUtils.toJSONString(taskDecision));
+                            execution.setVariable("divisionBossDecisions", divisionBossDecisions);
+
+                            var approvalListRef = execution.getVariable("approvalListRef");
+                            approvalCustom.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+                            //]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+            <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${divisionBosses}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+        </userTask>
+
+        <userTask id="department-boss-approval-task" name="Задача согласования (Начальник департамента)" activiti:formKey="lecmCustom:approveTask">
+            <extensionElements>
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            var departmentBoss = approvalCustom.getUnitBoss("department");
+                            task.setAssignee(departmentBoss);
+
+                            var dueDate = new Date();
+                            dueDate.setDate(dueDate.getDate() + 3);
+                            task.setDueDate(dueDate);
+
+                            approvalCustom.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
+                            approvalCustom.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            //<![CDATA[
+			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+
+			            	var userName = task.getAssignee();
+
+
+			            								var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+							var startDate = task.getCreateTime().getTime();
+							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
+							var comment = task.getVariableLocal("bpm_comment");
+							var taskCommentAssoc = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
+							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
+							var documentRef = bpm_package.children[0].nodeRef;
+							logger.log("userName = " + userName);
+							logger.log("decision = " + decision);
+							logger.log("startDate = " + startDate);
+							logger.log("dueDate = " + dueDate);
+							logger.log("comment = " + comment);
+							logger.log("commentRef = " + commentRef);
+							logger.log("documentRef = " + documentRef);
+							<!--logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);-->
+							<!--logger.log("documentProjectNumber = " + documentProjectNumber);-->
+							var taskDecision = {
+								"userName": userName,
+								"decision": decision,
+								"startDate": startDate,
+								"dueDate": dueDate,
+								"comment": comment,
+								"commentRef": commentRef,
+								"documentRef": documentRef
+								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
+								<!--"documentProjectNumber": documentProjectNumber-->
+							};
+
+                            <!--var decision = task.getVariableLocal("lecmCustom_approveTaskResult");-->
+							<!--var startDate = task.getCreateTime().getTime();-->
+							<!--var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;-->
+							<!--var comment = task.getVariableLocal("bpm_comment");-->
+							<!--var commentRef = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");-->
+							<!--logger.log("userName = " + userName);-->
+							<!--logger.log("decision = " + decision);-->
+							<!--logger.log("startDate = " + startDate);-->
+							<!--logger.log("dueDate = " + dueDate);-->
+							<!--logger.log("comment = " + comment);-->
+							<!--logger.log("commentRef = " + commentRef);-->
+							<!--var taskDecision = {-->
+								<!--"userName": userName,-->
+								<!--"decision": decision,-->
+								<!--"startDate": startDate,-->
+								<!--"dueDate": dueDate,-->
+								<!--"comment": comment,-->
+								<!--"commentRef": commentRef-->
+							<!--};-->
+
+			            	execution.setVariable("departmentBossDecision", decision);
+
+			            	var approvalListRef = execution.getVariable("approvalListRef");
+			            	approvalCustom.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+			            //]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+        </userTask>
+
+        <userTask id="curator-approval-task" name="Задача согласования (Куратор)" activiti:formKey="lecmCustom:approveTask">
+            <extensionElements>
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            var curators = approvalCustom.getCurators();
+                            task.addCandidateUsers(curators);
+
+                            var dueDate = new Date();
+                            dueDate.setDate(dueDate.getDate() + 2);
+                            task.setDueDate(dueDate);
+
+                            approvalCustom.grantPermissionsForReviewers(curators, bpm_package);
+                            approvalCustom.notifyCustomApprovalStarted(curators, task.getDueDate(), bpm_package);
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            //<![CDATA[
+			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+
+			            	var userName = person.properties.userName;
+                            task.setAssignee(userName);
+
+
+                            var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+							var startDate = task.getCreateTime().getTime();
+							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
+							var comment = task.getVariableLocal("bpm_comment");
+							var taskCommentAssoc = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
+							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
+							var documentRef = bpm_package.children[0].nodeRef;
+							logger.log("userName = " + userName);
+							logger.log("decision = " + decision);
+							logger.log("startDate = " + startDate);
+							logger.log("dueDate = " + dueDate);
+							logger.log("comment = " + comment);
+							logger.log("commentRef = " + commentRef);
+							logger.log("documentRef = " + documentRef);
+							<!--logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);-->
+							<!--logger.log("documentProjectNumber = " + documentProjectNumber);-->
+							var taskDecision = {
+								"userName": userName,
+								"decision": decision,
+								"startDate": startDate,
+								"dueDate": dueDate,
+								"comment": comment,
+								"commentRef": commentRef,
+								"documentRef": documentRef
+								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
+								<!--"documentProjectNumber": documentProjectNumber-->
+							};
+
+                            <!---->
+                            <!--var decision = task.getVariableLocal("lecmCustom_approveTaskResult");-->
+							<!--var startDate = task.getCreateTime().getTime();-->
+							<!--var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;-->
+							<!--var comment = task.getVariableLocal("bpm_comment");-->
+							<!--var commentRef = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");-->
+							<!--logger.log("userName = " + userName);-->
+							<!--logger.log("decision = " + decision);-->
+							<!--logger.log("startDate = " + startDate);-->
+							<!--logger.log("dueDate = " + dueDate);-->
+							<!--logger.log("comment = " + comment);-->
+							<!--logger.log("commentRef = " + commentRef);-->
+							<!--var taskDecision = {-->
+								<!--"userName": userName,-->
+								<!--"decision": decision,-->
+								<!--"startDate": startDate,-->
+								<!--"dueDate": dueDate,-->
+								<!--"comment": comment,-->
+								<!--"commentRef": commentRef-->
+							<!--};-->
+
+                            execution.setVariable("isApproved", approvalCustom.isApproved(decision));
+
+			            	var approvalListRef = execution.getVariable("approvalListRef");
+			            	approvalCustom.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+			            //]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+        </userTask>
+
+        <endEvent id="end-custom-approval" name="End custom approval"></endEvent>
+
+        <sequenceFlow id="start-to-executor-boss" name="From start to executor boss" sourceRef="start-custom-approval" targetRef="executor-boss-approval-task">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            //<![CDATA[
+			            	var approvalListRef = approvalCustom.createApprovalList(bpm_package);
+			            	execution.setVariable("approvalListRef", approvalListRef);
+			            //]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+        </sequenceFlow>
+
+        <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+        <sequenceFlow id="executor-boss-to-gateway" name="From executor boss approval task" sourceRef="executor-boss-approval-task" targetRef="exclusivegateway1"></sequenceFlow>
+        <sequenceFlow id="executor-to-division" name="Executor Boss task approved" sourceRef="exclusivegateway1" targetRef="division-boss-approval-task">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            //<![CDATA[
+                                var divisionBosses = approvalCustom.getDivisionBosses("otdel1,otdel2");
+			            	    execution.setVariable("divisionBosses", divisionBosses);
+			                //]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${executorBossDecision == 'APPROVED'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="executor-to-end" name="Executor Boss task rejected" sourceRef="exclusivegateway1" targetRef="end-custom-approval">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${executorBossDecision == 'REJECTED'}]]></conditionExpression>
+        </sequenceFlow>
+
+        <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+        <sequenceFlow id="division-boss-to-gateway" name="From division boss approval task" sourceRef="division-boss-approval-task" targetRef="exclusivegateway2">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            //<![CDATA[
+                                 var divisionBossDecisions = execution.getVariable("divisionBossDecisions");
+                                 if (!divisionBossDecisions) {
+                                    logger.log("Attention: divisionBossDecisions is null!");
+                                 }
+                                 var divisionBossFinalDecision = approvalCustom.getFinalDecision(divisionBossDecisions);
+                                 execution.setVariable("divisionBossFinalDecision", approvalCustom.isApproved(divisionBossFinalDecision));
+			                //]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="division-to-department" name="Division Boss task approved" sourceRef="exclusivegateway2" targetRef="department-boss-approval-task">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${divisionBossFinalDecision}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="division-to-end" name="Division Boss task rejected" sourceRef="exclusivegateway2" targetRef="end-custom-approval">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!divisionBossFinalDecision}]]></conditionExpression>
+        </sequenceFlow>
+
+        <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
+        <sequenceFlow id="department-boss-to-gateway" name="From department boss approval task" sourceRef="department-boss-approval-task" targetRef="exclusivegateway3"></sequenceFlow>
+        <sequenceFlow id="department-to-curator" name="Department Boss task approved" sourceRef="exclusivegateway3" targetRef="curator-approval-task">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departmentBossDecision == 'APPROVED'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="department-to-end" name="Department Boss task rejected" sourceRef="exclusivegateway3" targetRef="end-custom-approval">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departmentBossDecision == 'REJECTED'}]]></conditionExpression>
+        </sequenceFlow>
+
+        <sequenceFlow id="curator-to-end" name="From curator approval task to end" sourceRef="curator-approval-task" targetRef="end-custom-approval"></sequenceFlow>
+
+    </process>
+</definitions>

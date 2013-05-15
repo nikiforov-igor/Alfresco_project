@@ -5,6 +5,8 @@ import org.alfresco.service.namespace.QName;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.List;
+
 import org.activiti.engine.delegate.VariableScope;
 
 /**
@@ -91,4 +93,8 @@ public interface ApprovalListService {
 	 * @param processInstanceId
 	 */
 	void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final VariableScope variableScope);
+
+    String getExecutorBoss(String executorPersonName);
+
+    List<NodeRef> getCurators();
 }

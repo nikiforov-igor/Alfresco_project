@@ -12,6 +12,7 @@
 				<value>alfresco/module/${artifactId}/models/lecm-parallel-approval-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-sequential-approval-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-terminate-approval-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-custom-approval-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
@@ -19,6 +20,7 @@
 				<value>alfresco/module/${artifactId}/messages/lecm-approval-list</value>
 				<value>alfresco/module/${artifactId}/messages/lecm-parallel-approval-workflow-model</value>
 				<value>alfresco/module/${artifactId}/messages/lecm-sequential-approval-workflow-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-custom-approval-workflow-model</value>
 			</list>
 		</property>
 	</bean>
@@ -54,7 +56,13 @@
 					<prop key="#{MIMETYPE}">text/xml</prop>
 					<prop key="#{REDEPLOY}">true</prop>
 				</props>
-			</list>
+                <props>
+                    <prop key="#{ENGINE_ID}">activiti</prop>
+                    <prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/custom-approval-workflow.bpmn20.xml</prop>
+                    <prop key="#{MIMETYPE}">text/xml</prop>
+                    <prop key="#{REDEPLOY}">true</prop>
+                </props>
+            </list>
 		</property>
 	</bean>
 
@@ -73,6 +81,7 @@
 
 	<bean id="lecm.approval.service.parallel" class="ru.it.lecm.approval.ApprovalListServiceParallel" parent="lecm.approval.service.abstract"/>
 	<bean id="lecm.approval.service.sequential" class="ru.it.lecm.approval.ApprovalListServiceSequential" parent="lecm.approval.service.abstract"/>
+    <bean id="lecm.approval.service.custom" class="ru.it.lecm.approval.ApprovalListServiceCustom" parent="lecm.approval.service.abstract"/>
 
 	<bean id="lecm.approval.javascriptExtension.abstract" abstract="true" parent="baseJavaScriptExtension">
 		<property name="authenticationService" ref="authenticationService"/>
@@ -101,7 +110,13 @@
         <property name="authenticationService" ref="authenticationService"/>
     </bean>
 
-	<bean id="lecm.approval.ApprovalListItemPolicy" class="ru.it.lecm.approval.policies.ApprovalListItemPolicy" init-method="init" depends-on="lecm.approval.modelBootstrap">
+    <bean id="lecm.approval.javascriptExtension.custom" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension"
+          parent="lecm.approval.javascriptExtension.abstract">
+        <property name="extensionName" value="approvalCustom"/>
+        <property name="approvalListService" ref="lecm.approval.service.custom"/>
+    </bean>
+
+    <bean id="lecm.approval.ApprovalListItemPolicy" class="ru.it.lecm.approval.policies.ApprovalListItemPolicy" init-method="init" depends-on="lecm.approval.modelBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
