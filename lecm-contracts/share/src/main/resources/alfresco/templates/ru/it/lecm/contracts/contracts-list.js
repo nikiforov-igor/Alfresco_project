@@ -3,7 +3,8 @@ var rolesStr = remote.connect ("alfresco").get ("/lecm/orgstructure/api/getCurre
 var rolesList = eval("(" + rolesStr + ")");
 var hasRole = false;
 for (var i = 0; i < rolesList.length; i++) {
-    if (rolesList[i].id == "CONTRACT_READER") {
+    var roleStr = rolesList[i].id;
+    if (roleStr.indexOf("CONTRACT_") == 0) {
         hasRole = true;
         break;
     }
