@@ -55,6 +55,10 @@ LogicECM.module.Base.Util = {
         var Dom = YAHOO.util.Dom;
         var page = Dom.get('lecm-page');
         var dashletsBlock = Dom.get(dashletsBlockId);
+
+        if (!dashletsBlock) {
+             return;
+        }
         var pageHeight = parseInt(Dom.getStyle(page, 'height')) || parseInt(Dom.getStyle(page, 'min-height'));
 
         pageHeight = pageHeight - parseInt(Dom.getElementsByClassName('header-bar', 'div', page)[0].offsetHeight)
