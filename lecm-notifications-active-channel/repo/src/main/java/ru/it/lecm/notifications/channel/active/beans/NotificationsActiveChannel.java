@@ -156,10 +156,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 			int endIndex = (skipCount + maxItems) < filteredNotifications.size() ? (skipCount + maxItems) : filteredNotifications.size();
 
 			for (int i = skipCount; i < endIndex; i++) {
-				NodeRef notificationRef = filteredNotifications.get(i);
-				if (isActiveChannelNotification(notificationRef) && !isArchive(notificationRef)) {
-					result.add(notificationRef);
-				}
+				result.add(filteredNotifications.get(i));
 			}
 		}
 

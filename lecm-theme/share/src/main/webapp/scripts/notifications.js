@@ -234,7 +234,6 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 					var oResults = eval("(" + oResponse.responseText + ")");
 					if (oResults && oResults.items) {
 						var items = oResults.items;
-						me.skipItemsCount += items.length;
 						var readNotifications = [];
                         var container = Dom.get(me.notificationsWindowId + "-content");
 
@@ -261,7 +260,10 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 						if (readNotifications.length > 0) {
 							me.setReadNotifications(readNotifications);
 						}
-						container.scrollTop = container.scrollHeight;
+						if (me.skipItemsCount > 0) {
+							container.scrollTop = container.scrollHeight;
+						}
+						me.skipItemsCount += items.length;
 						me.showNotificationsWindow();
 					} else {
 						YAHOO.log("Failed to process XHR transaction.", "info", "example");
