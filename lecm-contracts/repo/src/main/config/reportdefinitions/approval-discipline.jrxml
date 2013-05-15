@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Simple" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ApproveDiscipline" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -84,8 +84,8 @@
 			<property name="cmis.binding_type" value="atompub"/>
 			<property name="cmis.user" value="admin"/>
 			<property name="cmis.password" value="111"/>
-			<textField>
-				<reportElement uuid="8232ed19-763a-4354-a29f-c9f649b31df8" x="0" y="0" width="800" height="25"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="8232ed19-763a-4354-a29f-c9f649b31df8" stretchType="RelativeToTallestObject" x="0" y="0" width="800" height="25"/>
 				<textElement textAlignment="Left">
 					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfEncoding="Cp1251"/>
 				</textElement>
@@ -97,7 +97,7 @@
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" x="0" y="1" width="800" height="29" backcolor="#DCDCDC"/>
+				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" stretchType="RelativeToBandHeight" x="1" y="1" width="800" height="29" backcolor="#DCDCDC"/>
 			</rectangle>
 			<textField>
 				<reportElement uuid="52e19f23-e656-451b-84d6-f210e47da030" isPrintRepeatedValues="false" x="3" y="3" width="30" height="26"/>
@@ -155,22 +155,22 @@
 				<textFieldExpression><![CDATA["Средний срок просрочки"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement uuid="79d5ce15-304b-4e9c-8a1d-4ee40a6149f0" x="32" y="0" width="1" height="30"/>
+				<reportElement uuid="79d5ce15-304b-4e9c-8a1d-4ee40a6149f0" stretchType="RelativeToBandHeight" x="32" y="0" width="1" height="30"/>
 			</line>
 			<line>
-				<reportElement uuid="8087242f-4262-4e21-98af-02b1ef7a94fc" x="186" y="0" width="1" height="30"/>
+				<reportElement uuid="8087242f-4262-4e21-98af-02b1ef7a94fc" stretchType="RelativeToBandHeight" x="186" y="0" width="1" height="30"/>
 			</line>
 			<line>
-				<reportElement uuid="ea48cfa0-cc95-47c9-8438-307fa1919802" x="369" y="0" width="1" height="30"/>
+				<reportElement uuid="ea48cfa0-cc95-47c9-8438-307fa1919802" stretchType="RelativeToBandHeight" x="369" y="0" width="1" height="30"/>
 			</line>
 			<line>
-				<reportElement uuid="e3e63aef-94a4-43b8-9410-926c23d71e88" x="551" y="0" width="1" height="30"/>
+				<reportElement uuid="e3e63aef-94a4-43b8-9410-926c23d71e88" stretchType="RelativeToBandHeight" x="551" y="0" width="1" height="30"/>
 			</line>
 			<line>
-				<reportElement uuid="e72408b8-37d5-486a-880e-923a7a541df7" x="633" y="0" width="1" height="30"/>
+				<reportElement uuid="e72408b8-37d5-486a-880e-923a7a541df7" stretchType="RelativeToBandHeight" x="633" y="0" width="1" height="30"/>
 			</line>
 			<line>
-				<reportElement uuid="f8516707-1933-4cea-93f7-1e2ec38aa5fb" x="717" y="0" width="1" height="30"/>
+				<reportElement uuid="f8516707-1933-4cea-93f7-1e2ec38aa5fb" stretchType="RelativeToBandHeight" x="717" y="0" width="1" height="30"/>
 			</line>
 		</band>
 	</columnHeader>
@@ -178,7 +178,7 @@
 		<band height="25" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{REPORT_COUNT} <= 200]]></printWhenExpression>
 			<frame>
-				<reportElement uuid="1e092e56-8305-48da-8ce3-c4deba187eda" style="styleOdd" x="2" y="2" width="798" height="23" backcolor="#FFFFFF"/>
+				<reportElement uuid="1e092e56-8305-48da-8ce3-c4deba187eda" style="styleOdd" stretchType="RelativeToBandHeight" x="2" y="2" width="798" height="23" backcolor="#FFFFFF"/>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a" x="1" y="2" width="30" height="20"/>
 					<textElement textAlignment="Center">
@@ -187,8 +187,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="d2014534-2ee4-43cb-82d6-fd1d4e4ed21d" x="33" y="2" width="150" height="20"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="d2014534-2ee4-43cb-82d6-fd1d4e4ed21d" stretchType="RelativeToTallestObject" x="33" y="2" width="150" height="20"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
@@ -203,16 +203,16 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_Employee.MissedApproves}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="5db5527c-1abb-4aad-a2d8-e699a7cede33" x="368" y="2" width="180" height="20"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="5db5527c-1abb-4aad-a2d8-e699a7cede33" stretchType="RelativeToTallestObject" x="368" y="2" width="180" height="20"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_Employee.Unit}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" x="186" y="2" width="180" height="20" isPrintInFirstWholeBand="true"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" stretchType="RelativeToTallestObject" x="186" y="2" width="180" height="20" isPrintInFirstWholeBand="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
@@ -237,31 +237,31 @@
 				</textField>
 			</frame>
 			<line>
-				<reportElement uuid="f9fbe77a-e5b8-4167-9458-648467082c84" x="0" y="0" width="1" height="24"/>
+				<reportElement uuid="f9fbe77a-e5b8-4167-9458-648467082c84" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="f3cc4f7f-22dd-4f88-a785-1e9d8ab9afd8" x="32" y="0" width="1" height="24"/>
+				<reportElement uuid="f3cc4f7f-22dd-4f88-a785-1e9d8ab9afd8" stretchType="RelativeToBandHeight" x="32" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="b6872550-6d62-4e5c-9bc8-08b210c84078" x="186" y="0" width="1" height="24"/>
+				<reportElement uuid="b6872550-6d62-4e5c-9bc8-08b210c84078" stretchType="RelativeToBandHeight" x="186" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="886032f3-bc71-4d1e-88f7-fc997fdd0cf7" x="369" y="0" width="1" height="24"/>
+				<reportElement uuid="886032f3-bc71-4d1e-88f7-fc997fdd0cf7" stretchType="RelativeToBandHeight" x="369" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="b3ab7f42-4a14-4de5-98f8-6851f199cd4e" x="551" y="0" width="1" height="24"/>
+				<reportElement uuid="b3ab7f42-4a14-4de5-98f8-6851f199cd4e" stretchType="RelativeToBandHeight" x="551" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="3529cac3-3798-45a1-82a4-99acb3c68063" x="633" y="0" width="1" height="24"/>
+				<reportElement uuid="3529cac3-3798-45a1-82a4-99acb3c68063" stretchType="RelativeToBandHeight" x="633" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="769a3c9b-3924-4a9f-83dd-ff1554fec788" x="717" y="0" width="1" height="24"/>
+				<reportElement uuid="769a3c9b-3924-4a9f-83dd-ff1554fec788" stretchType="RelativeToBandHeight" x="717" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="3d329db8-9e15-4dcd-8eb7-e8e11b8942bf" x="800" y="0" width="1" height="24"/>
+				<reportElement uuid="3d329db8-9e15-4dcd-8eb7-e8e11b8942bf" stretchType="RelativeToBandHeight" x="800" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="2ec4bbbe-9901-4c10-9de5-fdee51acd4f7" x="0" y="24" width="800" height="1"/>
+				<reportElement uuid="2ec4bbbe-9901-4c10-9de5-fdee51acd4f7" positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" x="0" y="24" width="800" height="1"/>
 			</line>
 		</band>
 	</detail>

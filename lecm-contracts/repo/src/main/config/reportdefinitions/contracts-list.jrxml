@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Simple" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ContractsSummaryList" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -115,7 +115,7 @@
 	<columnHeader>
 		<band height="32" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" x="1" y="1" width="799" height="30" backcolor="#DCDCDC"/>
+				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" stretchType="RelativeToBandHeight" x="1" y="1" width="799" height="30" backcolor="#DCDCDC"/>
 			</rectangle>
 			<textField>
 				<reportElement uuid="52e19f23-e656-451b-84d6-f210e47da030" isPrintRepeatedValues="false" x="5" y="3" width="30" height="26"/>
@@ -210,20 +210,20 @@
 		<band height="25" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{REPORT_COUNT} <= 200]]></printWhenExpression>
 			<frame>
-				<reportElement uuid="1e092e56-8305-48da-8ce3-c4deba187eda" style="styleOdd" x="1" y="1" width="797" height="24" backcolor="#FFFFFF"/>
-				<textField pattern="" isBlankWhenNull="true">
-					<reportElement uuid="0540390a-1d4a-425e-94fd-cba55ad840b5" x="197" y="2" width="110" height="20" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="1e092e56-8305-48da-8ce3-c4deba187eda" style="styleOdd" stretchType="RelativeToBandHeight" x="1" y="1" width="797" height="24" backcolor="#FFFFFF"/>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement uuid="0540390a-1d4a-425e-94fd-cba55ad840b5" positionType="Float" stretchType="RelativeToTallestObject" x="197" y="2" width="110" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
+						<paragraph lineSpacing="AtLeast" spacingBefore="5" spacingAfter="5" tabStopWidth="20"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_DocKind}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="true">
-					<reportElement uuid="5db5527c-1abb-4aad-a2d8-e699a7cede33" x="106" y="2" width="88" height="20" isPrintWhenDetailOverflows="true"/>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement uuid="5db5527c-1abb-4aad-a2d8-e699a7cede33" positionType="Float" stretchType="RelativeToTallestObject" x="106" y="2" width="88" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
+						<paragraph lineSpacing="AtLeast" spacingBefore="5" spacingAfter="5" tabStopWidth="20"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_numContragent}+ " "+ $F{col_Contragent.name}+ " "+ $F{col_Contragent.phone}]]></textFieldExpression>
 				</textField>
@@ -234,87 +234,87 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="true">
-					<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" x="35" y="2" width="70" height="20" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" positionType="Float" stretchType="RelativeToTallestObject" x="35" y="2" width="70" height="20" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Right" markup="none">
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
+						<paragraph lineSpacing="AtLeast" spacingBefore="5" spacingAfter="5" tabStopWidth="20"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_Regnum} != null && !"Не присвоено".equals($F{col_Regnum}) )? $F{col_Regnum} : "нет")]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement uuid="18c1ff17-fd8f-495d-84a4-88e5e3b52b5d" x="309" y="2" width="148" height="20" isPrintWhenDetailOverflows="true"/>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+					<reportElement uuid="18c1ff17-fd8f-495d-84a4-88e5e3b52b5d" positionType="Float" stretchType="RelativeToTallestObject" x="309" y="2" width="148" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
+						<paragraph lineSpacing="AtLeast" spacingBefore="5" spacingAfter="5" tabStopWidth="20"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_Theme.tname} != null) ? $F{col_Theme.tname} : "Code "+ $F{col_Theme.code} )]]></textFieldExpression>
 				</textField>
-				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement uuid="16d04a8b-5f73-4f50-b514-aa24b6a8f501" x="459" y="2" width="68" height="20" isPrintWhenDetailOverflows="true"/>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement uuid="16d04a8b-5f73-4f50-b514-aa24b6a8f501" stretchType="RelativeToTallestObject" x="459" y="2" width="68" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_DateStart}]]></textFieldExpression>
 				</textField>
-				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement uuid="7fe3fbca-e8e2-431c-b0d1-35a9f6eba3e9" x="529" y="2" width="68" height="20" isPrintWhenDetailOverflows="true"/>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement uuid="7fe3fbca-e8e2-431c-b0d1-35a9f6eba3e9" stretchType="RelativeToTallestObject" x="529" y="2" width="68" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_DateEnd}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="true">
-					<reportElement uuid="22eefe53-6554-492a-bcd3-2459eca02fce" x="599" y="2" width="88" height="20" isPrintWhenDetailOverflows="true"/>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement uuid="22eefe53-6554-492a-bcd3-2459eca02fce" positionType="Float" stretchType="RelativeToTallestObject" x="599" y="2" width="88" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
+						<paragraph lineSpacing="AtLeast" spacingBefore="5" spacingAfter="5" tabStopWidth="20"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_Executor_Family}+ " "+ ($F{col_Executor_Name}+ " ").substring( 0, 1 )+ "."+ ($F{col_Executor_Otchestvo}+ " ").substring(0,1)]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="true">
-					<reportElement uuid="b8fc6c50-c272-4fda-86c8-c18a502c3205" x="690" y="2" width="107" height="20" isPrintWhenDetailOverflows="true"/>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement uuid="b8fc6c50-c272-4fda-86c8-c18a502c3205" positionType="Float" stretchType="RelativeToTallestObject" x="690" y="2" width="107" height="20" isPrintWhenDetailOverflows="true"/>
 					<textElement textAlignment="Center">
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-						<paragraph lineSpacing="AtLeast" tabStopWidth="20"/>
+						<paragraph lineSpacing="AtLeast" spacingBefore="5" spacingAfter="5" tabStopWidth="20"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_Status}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<line>
-				<reportElement uuid="d905283e-8430-40da-a9e5-2d1ce6418c36" x="1" y="0" width="1" height="24"/>
+				<reportElement uuid="d905283e-8430-40da-a9e5-2d1ce6418c36" stretchType="RelativeToBandHeight" x="1" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="f8491e6d-c03d-466d-a8b0-058a93d6ba80" x="34" y="0" width="1" height="24"/>
+				<reportElement uuid="f8491e6d-c03d-466d-a8b0-058a93d6ba80" stretchType="RelativeToBandHeight" x="34" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="ef71b15b-efe5-4926-b096-8c9786654474" x="106" y="0" width="1" height="24"/>
+				<reportElement uuid="ef71b15b-efe5-4926-b096-8c9786654474" stretchType="RelativeToBandHeight" x="106" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="1bdd1785-4dc7-4a2a-b77e-71a909f87646" x="198" y="0" width="1" height="24"/>
+				<reportElement uuid="1bdd1785-4dc7-4a2a-b77e-71a909f87646" stretchType="RelativeToBandHeight" x="198" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="0d3d2469-117b-41ab-9e12-0b3c484ce915" x="308" y="0" width="1" height="24"/>
+				<reportElement uuid="0d3d2469-117b-41ab-9e12-0b3c484ce915" stretchType="RelativeToBandHeight" x="308" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="450f5a30-0014-4ef3-8baf-1dbd28f4bb20" x="458" y="0" width="1" height="24"/>
+				<reportElement uuid="450f5a30-0014-4ef3-8baf-1dbd28f4bb20" stretchType="RelativeToBandHeight" x="458" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="b19bf739-48c4-4cee-9307-3017c62db8b4" x="528" y="0" width="1" height="24"/>
+				<reportElement uuid="b19bf739-48c4-4cee-9307-3017c62db8b4" stretchType="RelativeToBandHeight" x="528" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="7d4e555d-fe40-4b37-81ff-00630410ab6e" x="598" y="0" width="1" height="24"/>
+				<reportElement uuid="7d4e555d-fe40-4b37-81ff-00630410ab6e" stretchType="RelativeToBandHeight" x="598" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="6d1be23d-a96f-4baa-ba18-8b7bdcd85602" x="800" y="0" width="1" height="24"/>
+				<reportElement uuid="6d1be23d-a96f-4baa-ba18-8b7bdcd85602" stretchType="RelativeToBandHeight" x="800" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="917c373a-1df3-463a-beeb-90f1ef2be3e5" x="689" y="0" width="1" height="24"/>
+				<reportElement uuid="917c373a-1df3-463a-beeb-90f1ef2be3e5" stretchType="RelativeToBandHeight" x="689" y="0" width="1" height="24"/>
 			</line>
 			<line>
-				<reportElement uuid="bc08800b-04f4-43ff-8c4a-42f678381a74" x="0" y="24" width="800" height="1"/>
+				<reportElement uuid="bc08800b-04f4-43ff-8c4a-42f678381a74" positionType="FixRelativeToBottom" x="1" y="24" width="799" height="1"/>
 			</line>
 		</band>
 	</detail>
