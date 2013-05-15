@@ -91,6 +91,10 @@
                                             break;
                                     }
 
+                                    if (datalistColumn.name == "lecm-document:creator") {
+                                        columnContent = "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'view-metadata?nodeRef=' + oRecord.getData("itemData")["prop_lecm-document_creator-ref"].value + "\'\">" + columnContent + "</a>";
+                                    }
+
                                     if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
                                         html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                                     } else {

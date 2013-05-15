@@ -275,7 +275,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * @type boolean
                  * @default false
                  */
-                forceSubscribing: false
+                forceSubscribing: false,
+
+                /**
+                 * Колонки которые не следует показывать
+                 */
+                excludeColumns: null
             },
 
             /**
@@ -983,6 +988,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                     column = this.datagridColumns[i];
                     sortable = column.sortable;
+                    if (!(this.options.excludeColumns != null && this.options.excludeColumns[column.name])) {
                     columnDefinitions.push(
                         {
                             key:this.dataResponseFields[i],
@@ -995,6 +1001,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             formatter:this.getCellFormatter(column.dataType),
                             className: (column.dataType == 'boolean') ? 'centered' : ''
                         });
+                    }
                 }
                 if (this.options.showActionColumn){
                     // Add actions as last column

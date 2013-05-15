@@ -32,7 +32,10 @@
                     showActionColumn: true,
                     showCheckboxColumn: false,
                     bubblingLabel: "${bubblingLabel!"contracts"}",
-                    attributeForShow:"lecm-contract:regNumProject"
+                    attributeForShow:"lecm-contract:regNumProject",
+                    excludeColumns: {
+                        "lecm-document:creator-ref":"lecm-document:creator-ref"
+                    }
                 }).setMessages(${messages});
 
                 var filter = generateFilterStr(LogicECM.module.Contracts.FILTER);
