@@ -27,15 +27,16 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
+import ru.it.lecm.reports.jasper.utils.Utils;
 
 /**
  * Отчёт "10.5.2 Исполнительская дисциплина по согласованиям за период." 
  * @author rabdullin
  *
  */
-public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
+public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryReportBase {
 
-	private static final Logger logger = LoggerFactory.getLogger(DSProdiverApproval.class);
+	private static final Logger logger = LoggerFactory.getLogger(DSProdiverApprovalSummaryByPeriod.class);
 
 	private Date periodStartDate, periodEndDate;
 
@@ -102,17 +103,11 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 		// выполненные Согласования -> вне статуса 'NO_DECISION'
 		bquery.append( " AND NOT @lecm\\-al\\:approval\\-list\\-decision:"+ VALUE_STATUS_NOTREADY+ " ");
 
-		// начало == <!-- дата начала согласования -->
-		if (getPeriodStartDate() != null) { // "X to MAX"
-			final String stMIN = ArgsHelper.dateToStr( getPeriodStartDate(), "MIN");
-			bquery.append( " AND @lecm\\-al\\:approval\\-list\\-approve\\-start:[" + stMIN + " TO MAX]");
-		}
-
-		// окончание == <!-- дата начала согласования -->
-		if (getPeriodEndDate() != null) { // "MIN to X"
-			final String stMAX = ArgsHelper.dateToStr( getPeriodEndDate(), "MAX");
+		// [начало..окончание] для <!-- дата начала согласования -->
+		final String cond = Utils.emmitDateIntervalCheck("lecm\\-al\\:approval\\-list\\-approve\\-start", getPeriodStartDate(), getPeriodEndDate());
+		if (cond != null) { // "AND X TO Y" ...
 			// bquery.append( " AND( (@lecm\\-contract\\:unlimited:true) OR (...) )");
-			bquery.append( " AND @lecm\\-al\\:approval\\-list\\-approve\\-start:[ MIN TO " + stMAX + "]");
+			bquery.append( " AND "+ cond);
 		}
 
 		return bquery.toString();
@@ -505,6 +500,6 @@ public class DSProdiverApproval extends DSProviderSearchQueryReportBase {
 			return defaultValue;
 		final double duration_ms = (endAt.getTime() - startAt.getTime());
 		return (float) (duration_ms / MILLIS_PER_DAY);
-	} 
+	}
 
 }

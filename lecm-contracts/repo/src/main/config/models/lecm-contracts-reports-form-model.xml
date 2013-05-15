@@ -25,12 +25,11 @@
 			<title>Contracts list report</title>
 			<parent>cm:cmobject</parent>
 			<properties>
-				<property name="lecm-contract-reports:contracts-list-start">
-					<type>d:date</type>
-				</property>
-				<property name="lecm-contract-reports:contracts-list-end">
-					<type>d:date</type>
-				</property>
+				<property name="lecm-contract-reports:contracts-list-start-after" ><type>d:date</type></property>
+				<property name="lecm-contract-reports:contracts-list-start-before" ><type>d:date</type></property>
+				<property name="lecm-contract-reports:contracts-list-end-after"><type>d:date</type></property>
+				<property name="lecm-contract-reports:contracts-list-end-before"><type>d:date</type></property>
+
 				<property name="lecm-contract-reports:contracts-list-actual-only">
 					<type>d:boolean</type>
 					<default>true</default>

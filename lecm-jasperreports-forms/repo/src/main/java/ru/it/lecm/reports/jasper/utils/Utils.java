@@ -3,10 +3,13 @@ package ru.it.lecm.reports.jasper.utils;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.alfresco.service.namespace.QName;
+
+import ru.it.lecm.reports.jasper.ArgsHelper;
 
 public class Utils {
 
@@ -154,4 +157,24 @@ public class Utils {
 	public static String getAsString(Object[] args) {
 		return (args == null) ? "NULL" : getAsString( Arrays.asList(args), ", ");
 	}
+
+	/**
+	 * Сформировать lucene-style проверку попадания поля даты в указанный интервал.
+	 * Формируется условие вида " @fld:[ x TO y]"
+	 * Если обе даты пустые - ничего не формируется
+	 * @param fldName экранированное (!) имя поля
+	 * @param from дата начала
+	 * @param upto дата конца
+	 * @return условие проверки вхождения даты в диапазон или NULL, если обе даты NULL
+	 */
+	public static String emmitDateIntervalCheck( String fldName, Date from, Date upto) {
+		final boolean needEmmition = (from != null || upto !=  null);
+		if (!needEmmition)
+			return null;
+		// add " ... [X TO Y]"
+		final String stMIN = ArgsHelper.dateToStr( from, "MIN");
+		final String stMAX = ArgsHelper.dateToStr( upto, "MAX");
+		return " @"+ fldName+ ":[" + stMIN + " TO "+ stMAX+ "]";
 	}
+
+}

@@ -20,7 +20,7 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.it.lecm.reports.jasper.DSProdiverApproval.ApproveQNameHelper;
+import ru.it.lecm.reports.jasper.DSProdiverApprovalSummaryByPeriod.ApproveQNameHelper;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
@@ -57,7 +57,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 				logger.debug( String.format("Quering approve list by ref: %s\n", this.approveListNodeId));
 			}
 			final StringBuilder bquery = new StringBuilder();
-			final QName qTYPE = QName.createQName(DSProdiverApproval.TYPE_APPROVAL_LIST, this.serviceRegistry.getNamespaceService());
+			final QName qTYPE = QName.createQName(DSProdiverApprovalSummaryByPeriod.TYPE_APPROVAL_LIST, this.serviceRegistry.getNamespaceService());
 			bquery.append( "TYPE:"+ quoted(qTYPE.toString()));
 			bquery.append( " AND ID:"+ quoted(Utils.coalesce( this.approveListNodeId, "-1")) );
 

@@ -3,9 +3,6 @@ package ru.it.lecm.reports.jasper;
 import java.util.Date;
 import java.util.Iterator;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
-
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -44,18 +41,19 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	 * "contractActualOnly" - только актуальные
 	 * "contractSum" - сумма
 	 * 
-	 * "end" - стартовая дата, fmt like "2013-04-30T00:00:00.000+06:00"
-	 * "start" - конечна дата, fmt the same
+	 * "startAfter" и "startBefore"- интервл времени для стартовой даты
+	 * fmt like "2013-04-30T00:00:00.000+06:00"
+	 * "endAfter" .. "endBefore" - интервл времени для конечной даты, fmt the same
 	 */
 	private class SearchFilter  {
 
-		Date dateStart, dateEnd;
+		Date dateStartAfter, dateStartBefore, dateEndAfter, dateEndBefore;
 		Double contractSum;
 		Boolean contractActualOnly;
 		NodeRef contractSubject, contractType, contragent;
 
 		public void clear() {
-			dateStart = dateEnd = null;
+			dateStartAfter = dateStartBefore = dateEndAfter = dateEndBefore = null;
 			contractSum = null;
 			contractSubject = contractType = contragent = null;
 			contractActualOnly = null;
@@ -99,12 +97,20 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 
 	private final SearchFilter filter = new SearchFilter();
 
-	public void setStart( final String value) {
-		filter.dateStart = ArgsHelper.makeDate(value, "dateStart");
+	public void setStartAfter( final String value) {
+		filter.dateStartAfter = ArgsHelper.makeDate(value, "dateStartAfter");
 	}
 
-	public void setEnd( final String value) {
-		filter.dateEnd = ArgsHelper.makeDate(value, "dateEnd");
+	public void setStartBefore( final String value) {
+		filter.dateStartBefore = ArgsHelper.makeDate(value, "dateStartBefore");
+	}
+
+	public void setEndAfter( final String value) {
+		filter.dateEndAfter = ArgsHelper.makeDate(value, "dateEndAfter");
+	}
+
+	public void setEndBefore( final String value) {
+		filter.dateEndBefore = ArgsHelper.makeDate(value, "dateEndBefore");
 	}
 
 	public void setContractSubject(String value) {
@@ -188,16 +194,6 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 				return flag;
 			}
 
-			@Override
-			public Object getFieldValue(JRField jrf) throws JRException {
-				// при запросе Исполнителя выполняем подгрузку Сотрудника
-				// вместо login
-				final Object result = super.getFieldValue(jrf);
-				if (result != null && jrf.getName().startsWith("col_Employee")) {
-					// Исполнитель
-				}
-				return result;
-			}
 	};
 
 
@@ -222,17 +218,34 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 		final QName qTYPE = QName.createQName(TYPE_CONRACT, this.serviceRegistry.getNamespaceService());
 		bquery.append( "TYPE:"+ quoted(qTYPE.toString()));
 
+		/*
 		// начало
 		if (filter.dateStart != null) { // "X to MAX"
 			final String stMIN = ArgsHelper.dateToStr( filter.dateStart, "MIN");
 			bquery.append( " AND @lecm\\-contract\\:startDate:[" + stMIN + " TO MAX]");
 		}
-
 		// окончание
 		if (filter.dateEnd != null) { // "MIN to X"
 			final String stMAX = ArgsHelper.dateToStr( filter.dateEnd, "MAX");
 			bquery.append( " AND( (@lecm\\-contract\\:unlimited:true) OR (@lecm\\-contract\\:endDate:[ MIN TO " + stMAX + "]) )");
 		}
+		*/
+		// начало .. конец
+		// начало == <!-- дата начала согласования -->
+		{
+			final String cond = Utils.emmitDateIntervalCheck("lecm\\-contract\\:startDate", filter.dateStartAfter, filter.dateStartBefore);
+			if (cond != null)
+				bquery.append( " AND "+ cond);
+		}
+
+		// окончание == <!-- дата согласования по документу -->
+		{
+			final String cond = Utils.emmitDateIntervalCheck("lecm\\-contract\\:endDate", filter.dateEndAfter, filter.dateEndBefore);
+			if (cond != null)
+				// bquery.append( " AND( (@lecm\\-contract\\:unlimited:true) OR (...) )");
+				bquery.append( " AND( (@lecm\\-contract\\:unlimited:true) OR ("+ cond+ ") )");
+		}
+
 
 		// Сумма договора (указан минимум)
 		if (filter.contractSum != null && filter.contractSum.doubleValue() != 0) { // "X to *"

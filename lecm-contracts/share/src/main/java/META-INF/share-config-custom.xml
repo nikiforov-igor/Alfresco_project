@@ -563,8 +563,10 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-contract-reports:contracts-list-start"/>
-					<show id="lecm-contract-reports:contracts-list-end"/>
+					<show id="lecm-contract-reports:contracts-list-start-after"/>
+					<show id="lecm-contract-reports:contracts-list-start-before"/>
+					<show id="lecm-contract-reports:contracts-list-end-after"/>
+					<show id="lecm-contract-reports:contracts-list-end-before"/>
 					<show id="lecm-contract-reports:contracts-list-contractor"/>
 					<show id="lecm-contract-reports:contracts-list-sum"/>
 					<show id="lecm-contract-reports:contracts-list-contract-type"/>
@@ -572,8 +574,10 @@
 					<show id="lecm-contract-reports:contracts-list-actual-only"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-contract-reports:contracts-list-start"/>
-					<field id="lecm-contract-reports:contracts-list-end"/>
+					<field id="lecm-contract-reports:contracts-list-start-after"/>
+					<field id="lecm-contract-reports:contracts-list-start-before"/>
+					<field id="lecm-contract-reports:contracts-list-end-after"/>
+					<field id="lecm-contract-reports:contracts-list-end-before"/>
 					<field id="lecm-contract-reports:contracts-list-sum"/>
 					<field id="lecm-contract-reports:contracts-list-actual-only"/>
 					<field id="lecm-contract-reports:contracts-list-contract-type">
