@@ -37,12 +37,6 @@
 <input type="hidden" id="${controlId}" name="${field.name}" value="${field.value?html}"/>
 
 <script>//<![CDATA[
-    if (typeof LogicECM === "undefined" || !LogicECM) {
-        var LogicECM = {};
-    }
-
-    LogicECM.module = LogicECM.module || {};
-
     (function () {
         "use strict";
 
