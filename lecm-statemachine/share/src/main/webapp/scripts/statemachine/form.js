@@ -191,10 +191,26 @@ LogicECM.module = LogicECM.module || {};
 			callback = {
 				success:function (oResponse) {
                     var oResults = eval("(" + oResponse.responseText + ")");
-                    if (oResults.redirect != null && oResults.redirect != "null") {
-                        document.location.href = Alfresco.constants.URL_PAGECONTEXT + oResults.redirect;
+                    if (oResults.error == "") {
+                        if (oResults.redirect != null && oResults.redirect != "null") {
+                            document.location.href = Alfresco.constants.URL_PAGECONTEXT + oResults.redirect;
+                        } else {
+                            document.location.reload();
+                        }
                     } else {
-                        document.location.reload();
+                        Alfresco.util.PopupManager.displayPrompt(
+                            {
+                                title: "Ошибка выполнения действия",
+                                text: "При выполнении действия произошла ошибка. Попробуйте обновить страницу и выполнить действие еще раз",
+                                buttons: [
+                                    {
+                                        text: "Ок",
+                                        handler: function dlA_onAction_action()
+                                        {
+                                            this.destroy();
+                                        }
+                                    }]
+                            });
                     }
 				},
 				argument:{

@@ -49,11 +49,16 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 		String actionId = req.getParameter("actionId");
 		String actionType = req.getParameter("actionType");
 
-		//Если есть actionId обрабатываем transitionAction
+        StateMachineHelper helper = new StateMachineHelper();
+        String executionId = helper.getCurrentExecutionId(taskId);
+        if (executionId == null) {
+            result.put("error", "true");
+            return result;
+        }
+        NodeRef document = helper.getStatemachineDocument(executionId);
+
+        //Если есть actionId обрабатываем transitionAction
 		if ("trans".equals(actionType)) {
-            StateMachineHelper helper = new StateMachineHelper();
-            String executionId = helper.getCurrentExecutionId(taskId);
-            NodeRef document = helper.getStatemachineDocument(executionId);
             TransitionResponse transitionResponse = helper.executeUserAction(document, taskId, actionId, FinishStateWithTransitionAction.class, persistedResponse);
             //если небыло ошибок, то действие логируем
             if (transitionResponse.getErrors().size() == 0) {
@@ -65,10 +70,6 @@ public class StartWorkflowScript extends DeclarativeWebScript {
                 }
             }
 		} else if ("user".equals(actionType)){
-            StateMachineHelper helper = new StateMachineHelper();
-            String executionId = helper.parseExecutionId(persistedResponse);
-
-            NodeRef document = helper.getStatemachineDocument(executionId);
             TransitionResponse transitionResponse = helper.executeUserAction(document, taskId, actionId, UserWorkflow.class, persistedResponse);
             //если небыло ошибок, то действие логируем
             if (transitionResponse.getErrors().size() == 0) {

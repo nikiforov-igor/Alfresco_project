@@ -1,3 +1,4 @@
 {
-    redirect: "${redirect!"null"}"
+    redirect: "${redirect!"null"}",
+    error: "${error!""}"
 }
