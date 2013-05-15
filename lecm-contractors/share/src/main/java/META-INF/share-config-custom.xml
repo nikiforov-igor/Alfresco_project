@@ -59,7 +59,7 @@
                         <field id="lecm-contractor:contractor-to-legalform-association" set="contacts">                 <!-- FK ОПФ -->
                             <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                                 <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы</control-param>
-                                <control-param name="showCreateNewLink">true</control-param>
+                                <control-param name="showCreateNewLink">false</control-param>
                                 <control-param name="showCreateNewButton">false</control-param>
                                 <control-param name="nameSubstituteString">{lecm-legalform:short-title}, {lecm-legalform:full-title}</control-param>
                             </control>
@@ -171,7 +171,7 @@
                         <field id="lecm-contractor:contractor-to-legalform-association" set="contacts">                 <!-- ОПФ -->
                             <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                                 <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы</control-param>
-                                <control-param name="showCreateNewLink">true</control-param>
+                                <control-param name="showCreateNewLink">false</control-param>
                                 <control-param name="showCreateNewButton">false</control-param>
                                 <control-param name="nameSubstituteString">{lecm-legalform:short-title}, {lecm-legalform:full-title}</control-param>
                             </control>
