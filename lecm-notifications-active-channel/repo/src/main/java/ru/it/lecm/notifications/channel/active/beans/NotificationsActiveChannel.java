@@ -149,37 +149,79 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	public List<NodeRef> getNotifications(int skipCount, int maxItems) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 
-		NodeRef employeeDirectoryRef = getCurrentEmployeeFolder(this.rootRef);
-		if (employeeDirectoryRef != null) {
-			String path = nodeService.getPath(employeeDirectoryRef).toPrefixString(namespaceService);
-			String type = TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
+//		NodeRef employeeDirectoryRef = getCurrentEmployeeFolder(this.rootRef);
+//		if (employeeDirectoryRef != null) {
+//			String path = nodeService.getPath(employeeDirectoryRef).toPrefixString(namespaceService);
+//			String type = TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
+//
+//			SearchParameters parameters = new SearchParameters();
+//			parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
+//			parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+//			parameters.addSort("@" + PROP_IS_READ, true);
+//			parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
+//			parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"");
+//			parameters.setSkipCount(skipCount);
+//			parameters.setMaxItems(maxItems);
+//			ResultSet resultSet = null;
+//			try {
+//				resultSet = searchService.query(parameters);
+//				for (ResultSetRow row : resultSet) {
+//					NodeRef node = row.getNodeRef();
+//					result.add(node);
+//				}
+//			} catch (LuceneQueryParserException e) {
+//				logger.error("Error while getting notifications records", e);
+//			} catch (Exception e) {
+//				logger.error("Error while getting notifications records", e);
+//			} finally {
+//				if (resultSet != null) {
+//					resultSet.close();
+//				}
+//			}
+//		}
 
-			SearchParameters parameters = new SearchParameters();
-			parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
-			parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-			parameters.addSort("@" + PROP_IS_READ, true);
-			parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
-			parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"");
-			parameters.setSkipCount(skipCount);
-			parameters.setMaxItems(maxItems);
-			ResultSet resultSet = null;
-			try {
-				resultSet = searchService.query(parameters);
-				for (ResultSetRow row : resultSet) {
-					NodeRef node = row.getNodeRef();
-					result.add(node);
-				}
-			} catch (LuceneQueryParserException e) {
-				logger.error("Error while getting notifications records", e);
-			} catch (Exception e) {
-				logger.error("Error while getting notifications records", e);
-			} finally {
-				if (resultSet != null) {
-					resultSet.close();
+		NodeRef currentEmloyeeNodeRef = orgstructureService.getCurrentEmployee();
+		if (currentEmloyeeNodeRef != null) {
+			List<AssociationRef> lRefs = nodeService.getSourceAssocs(currentEmloyeeNodeRef, NotificationsService.ASSOC_RECIPIENT);
+			List<NodeRef> filteredNotifications = filterNotifications(lRefs);
+			int endIndex = (skipCount + maxItems) < filteredNotifications.size() ? (skipCount + maxItems) : filteredNotifications.size();
+
+			for (int i = skipCount; i < endIndex; i++) {
+				NodeRef notificationRef = filteredNotifications.get(i);
+				if (isActiveChannelNotification(notificationRef) && !isArchive(notificationRef)) {
+					result.add(notificationRef);
 				}
 			}
 		}
 
+		return result;
+	}
+
+	private List<NodeRef> filterNotifications(List<AssociationRef> notifications) {
+		ArrayList<NodeRef> result = new ArrayList<NodeRef>();
+		if (notifications != null) {
+			for (AssociationRef ref: notifications) {
+				NodeRef notificationRef = ref.getSourceRef();
+				if (isActiveChannelNotification(notificationRef) && !isArchive(notificationRef)) {
+					result.add(notificationRef);
+				}
+			}
+		}
+		Collections.sort(result, new Comparator<NodeRef>() {
+			public int compare(NodeRef o1, NodeRef o2) {
+				Boolean isRead1 = (Boolean) nodeService.getProperty(o1, PROP_IS_READ);
+				Boolean isRead2 = (Boolean) nodeService.getProperty(o2, PROP_IS_READ);
+
+				int result = isRead1.compareTo(isRead2);
+				if (result == 0) {
+					Date formingDate1 = (Date) nodeService.getProperty(o1, NotificationsService.PROP_FORMING_DATE);
+					Date formingDate2 = (Date) nodeService.getProperty(o2, NotificationsService.PROP_FORMING_DATE);
+
+					return -formingDate1.compareTo(formingDate2);
+				}
+				return result;
+			}
+		});
 		return result;
 	}
 
