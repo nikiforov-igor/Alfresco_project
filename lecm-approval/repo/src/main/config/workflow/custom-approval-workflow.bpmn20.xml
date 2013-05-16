@@ -297,20 +297,32 @@
 
         <endEvent id="end-custom-approval" name="End custom approval"></endEvent>
 
-        <sequenceFlow id="start-to-executor-boss" name="From start to executor boss" sourceRef="start-custom-approval" targetRef="executor-boss-approval-task">
+        <serviceTask id="alfrescoScripttask2" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
             <extensionElements>
-                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
-                    <activiti:field name="script">
-                        <activiti:string>
-                            //<![CDATA[
-			            	var approvalListRef = approvalCustom.createApprovalList(bpm_package);
-			            	execution.setVariable("approvalListRef", approvalListRef);
-			            //]]>
-                        </activiti:string>
-                    </activiti:field>
-                </activiti:executionListener>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+						var approvalListRef = approvalSequential.createApprovalList(bpm_package, documentAttachmentCategoryName)
+						execution.setVariable("approvalListRef", approvalListRef);
+					]]></activiti:string>
+                </activiti:field>
             </extensionElements>
-        </sequenceFlow>
+        </serviceTask>
+
+        <serviceTask id="scripttask1" name="Service Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+                            ]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+
+        <receiveTask id="receivetask1" name="Receive Task"/>
+
+        <sequenceFlow id="start-to-executor-boss" sourceRef="start-custom-approval" targetRef="scripttask1"/>
+        <sequenceFlow id="flow333" sourceRef="scripttask1" targetRef="receivetask1"/>
+        <sequenceFlow id="flow444" sourceRef="receivetask1" targetRef="alfrescoScripttask2"/>
+        <sequenceFlow id="flow555" sourceRef="alfrescoScripttask2" targetRef="executor-boss-approval-task"/>
 
         <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
         <sequenceFlow id="executor-boss-to-gateway" name="From executor boss approval task" sourceRef="executor-boss-approval-task" targetRef="exclusivegateway1"></sequenceFlow>
