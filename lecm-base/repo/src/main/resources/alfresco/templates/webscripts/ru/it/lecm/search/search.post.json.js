@@ -1,6 +1,8 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/evaluator.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/search.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/filter.lib.js">
+
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_INDEX = 0;
 
@@ -18,7 +20,8 @@ function main() {
 			showInactive: pars.get("showInactive") == true,
             parent: (pars.get("parent").length() > 0)  ? pars.get("parent") : null,
             itemType:(pars.get("itemType").length() > 0)  ? pars.get("itemType") : null,
-            startIndex: pars.has("startIndex") ? parseInt(pars.get("startIndex"), 10) : DEFAULT_INDEX
+            startIndex: pars.has("startIndex") ? parseInt(pars.get("startIndex"), 10) : DEFAULT_INDEX,
+            filter: pars.has("filter")  ? pars.get("filter") : null
         };
     }
 

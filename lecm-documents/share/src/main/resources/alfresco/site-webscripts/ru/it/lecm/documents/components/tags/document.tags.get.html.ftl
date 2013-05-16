@@ -30,7 +30,7 @@
             for (var i = 0; i < tagsList.length; i++) {
                 var tag = tagsList[i].name || tagsList[i];
 
-                tagEditor.innerHTML += '<span class="tag"><a href="' + Alfresco.constants.URL_PAGECONTEXT + 'repository#filter=tag|' + encodeURIComponent(tag) + '&page=1" class="tag-link">' + tag + '</a></span>';
+                tagEditor.innerHTML += '<span class="tag"><a href="' + Alfresco.constants.URL_PAGECONTEXT + 'documents-journal#filter=tag|' + encodeURIComponent(tag) + '" class="tag-link">' + tag + '</a></span>';
             }
         } else {
             tagEditor.innerHTML = '<span class="faded">${msg("label.none")}</span>';

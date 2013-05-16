@@ -145,7 +145,8 @@ function getSearchResults(params) {
         itemType = params.itemType,
         startIndex = params.startIndex,
         pageSize = params.maxResults,
-        sort = params.sort;
+        sort = params.sort,
+        filterStr = params.filter;
 
     var total = 0;
 
@@ -164,6 +165,12 @@ function getSearchResults(params) {
         }
         sortField.column = sort;
         sortField.ascending = asc;
+    }
+
+    var filterObj = null;
+    if (filterStr != null && ("" + filterStr).length > 0) {
+        var additionalFilter = jsonUtils.toObject(filterStr);
+        filterObj = Filters.getFilterParams(additionalFilter);
     }
 
     // Advanced search form data search.
@@ -304,6 +311,7 @@ function getSearchResults(params) {
             ftsQuery = (formJson.datatype != null && formJson.datatype.length > 0 ? 'TYPE:"' + formJson.datatype + '"' : '') +
                 (formQuery.length !== 0 ? ' AND (' + formQuery + ')' : '') +
                 (filter != null && filter.length > 0 ? ' AND (' + filter + ')' : '') +
+                ((filterObj != null && filterObj.query != null)? ' AND (' + filterObj.query + ')' : '') +
                 (ftsQuery.length !== 0 ? ' AND (' + ftsQuery + ')' : '') +
                 (fullTextSearchQuery.length !== 0 ? ' AND (' + fullTextSearchQuery + ')' : '');
         }

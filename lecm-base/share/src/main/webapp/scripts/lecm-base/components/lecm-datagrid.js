@@ -280,7 +280,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 /**
                  * Колонки которые не следует показывать
                  */
-                excludeColumns: null
+                excludeColumns: null,
+
+                filter : {}
             },
 
             /**
@@ -1843,6 +1845,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     timerShowLoadingMessage = null,
                     me = this;
 
+                var filter = p_obj.filter !== undefined ? p_obj.filter : this.options.filter;
+
                 // Clear the current document list if the data webscript is taking too long
                 var fnShowLoadingMessage = function DataGrid_fnShowLoadingMessage()
                 {
@@ -1962,7 +1966,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     offset = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
                 }
 
-                var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, sort, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, offset);
+                var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, sort, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, offset, filter);
                 this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
                     {
                         success:successHandler,
@@ -2480,6 +2484,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         {
                             bubblingLabel:this.options.bubblingLabel
                         });
+                }
+
+                if (obj && obj.filterId) {
+                    obj.filterOwner = obj.filterOwner || Alfresco.util.FilterManager.getOwner(obj.filterId);
+
+                    // Should be a filterId in the arguments
+                    this.options.filter = Alfresco.util.cleanBubblingObject(obj);
+                    Alfresco.logger.debug("DL_onFilterChanged: ", this.currentFilter);
                 }
             }
         }, true);

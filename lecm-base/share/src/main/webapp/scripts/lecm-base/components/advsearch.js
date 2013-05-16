@@ -218,6 +218,28 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     parent = args.parent,
                     itemType = args.itemType,
                     sort = args.sort;
+                // дополнительный фильтр из адресной строки
+                var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                bookmarkedFilter = bookmarkedFilter || "path|/";
+                try {
+                    while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+                    }
+                }
+                catch (e) {
+                    // Catch "malformed URI sequence" exception
+                }
+
+                var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
+                    var filters = strFilter.split("|"),
+                        filterObj =
+                        {
+                            filterId: window.unescape(filters[0] || ""),
+                            filterData: window.unescape(filters[1] || "")
+                        };
+                    return filterObj;
+                };
+
+                var successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
 
                 // вернуть следующие поля для элемента(строки)
                 var reqFields = [];
@@ -297,6 +319,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         rowsPerPage: me.dataGrid.options.pageSize,
                         recordOffset: oResponse.meta.startIndex
                     };
+
+                    YAHOO.Bubbling.fire("filterChanged", successFilter);
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oResponse.meta);
 
                     //выводим предупреждающее сообщение, если достигли лимита
@@ -334,7 +358,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this.buildSearchParams(parent, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive);
+                var searchParams = this.buildSearchParams(parent, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, -1, successFilter);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
@@ -353,7 +377,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset) {
+            buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset, additionalFilter) {
                 // ВСЕГДА должно существовать значение по умолчанию. Для объектов и строк - это должна быть пустая строка
                 if (searchConfig && searchConfig.formData && typeof searchConfig.formData == "object") {
                     searchConfig.formData = YAHOO.lang.JSON.stringify(searchConfig.formData);
@@ -365,6 +389,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (offset >= 0 && this.dataGrid.options.useDynamicPagination) {
                     startIndex = offset;
                 }
+
+                var filter = null;
+                if (additionalFilter && additionalFilter.filterId && additionalFilter.filterData) {
+                    filter = YAHOO.lang.JSON.stringify(additionalFilter);
+                }
                 return {
                     params:{
                         parent:parent != null ? parent : "",
@@ -375,7 +404,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	                    nameSubstituteStrings:dataRequestNameSubstituteStrings,
                         showInactive:searchShowInactive != null ? searchShowInactive : "false",
                         startIndex: startIndex,
-                        sort:sort != null ? sort : ""
+                        sort:sort != null ? sort : "",
+                        filter:filter ? filter : ""
                     }
                 };
             },
