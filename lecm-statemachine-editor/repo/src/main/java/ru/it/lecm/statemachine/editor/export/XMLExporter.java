@@ -1,5 +1,6 @@
 package ru.it.lecm.statemachine.editor.export;
 
+import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -34,7 +35,7 @@ public class XMLExporter {
     }
 
     public XMLExporter(OutputStream resOutputStream, NodeService nodeService) throws XMLStreamException {
-        this.xmlw = XMLOutputFactory.newInstance().createXMLStreamWriter(resOutputStream);
+        this.xmlw = new IndentingXMLStreamWriter(XMLOutputFactory.newInstance().createXMLStreamWriter(resOutputStream));
         this.nodeService = nodeService;
     }
 
