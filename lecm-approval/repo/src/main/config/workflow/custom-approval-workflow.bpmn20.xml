@@ -168,7 +168,7 @@
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string>
-                            var departmentBoss = approvalCustom.getUnitBoss("department");
+                            var departmentBoss = approvalCustom.getUnitBoss("департамент");
                             task.setAssignee(departmentBoss);
 
                             var dueDate = new Date();
@@ -332,7 +332,7 @@
                     <activiti:field name="script">
                         <activiti:string>
                             //<![CDATA[
-                                var divisionBosses = approvalCustom.getDivisionBosses("otdel1,otdel2");
+                                var divisionBosses = approvalCustom.getDivisionBosses("отдел1,отдел2");
 			            	    execution.setVariable("divisionBosses", divisionBosses);
 			                //]]>
                         </activiti:string>
