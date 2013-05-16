@@ -51,6 +51,9 @@ public class ActionsScript extends DeclarativeWebScript {
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 
+        String documentRef = req.getParameter("documentNodeRef");
+        String taskId = req.getParameter("taskId");
+
         if (req.getParameter("documentNodeRef") == null) {
             JSONObject jsonResponse = new JSONObject();
             HashMap<String, Object> response = new HashMap<String, Object>();
@@ -58,7 +61,21 @@ public class ActionsScript extends DeclarativeWebScript {
             return response;
         }
 
-        NodeRef nodeRef = new NodeRef(req.getParameter("documentNodeRef"));
+        StateMachineHelper helper = new StateMachineHelper();
+
+        if (taskId != null && helper.getCurrentExecutionId(taskId) == null) {
+            HashMap<String, Object> actionResult = new HashMap<String, Object>();
+            ArrayList<String> errors = new ArrayList<String>();
+            errors.add("Статус документа изменился! Обновите страницу документа для получения списка доступных действий.");
+            actionResult.put("errors", errors);
+            actionResult.put("fields", new ArrayList<String>());
+            JSONObject jsonResponse = new JSONObject(actionResult);
+            HashMap<String, Object> response = new HashMap<String, Object>();
+            response.put("result", jsonResponse.toString());
+            return response;
+        }
+
+        NodeRef nodeRef = new NodeRef(documentRef);
         NodeService nodeService = serviceRegistry.getNodeService();
         String statemachineId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATEMACHINE_ID);
         if (statemachineId != null) {

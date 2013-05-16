@@ -94,7 +94,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		show: function showWorkflowForm(action) {
-            var url = Alfresco.constants.PROXY_URI + "/lecm/statemachine/actions?documentNodeRef=" + this.options.nodeRef + "&actionId=" + action.actionId;
+            var url = Alfresco.constants.PROXY_URI + "/lecm/statemachine/actions?documentNodeRef=" + this.options.nodeRef + "&actionId=" + action.actionId + "&taskId=" + this.taskId;
             callback = {
                 success:function (oResponse) {
                     var oResults = eval("(" + oResponse.responseText + ")");
