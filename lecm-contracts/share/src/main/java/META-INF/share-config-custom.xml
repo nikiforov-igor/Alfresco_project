@@ -574,10 +574,22 @@
 					<show id="lecm-contract-reports:contracts-list-actual-only"/>
 				</field-visibility>
 				<appearance>
+					<!-- 
+					<set id="set-start" template="/org/alfresco/components/form/3-column-set.ftl" appearance="fieldset" label_id="set-date-start-label" />
+					<set id="set-end" template="/org/alfresco/components/form/3-column-set.ftl" appearance="fieldset" label_id="set-date-end-label" />
+					  -->
+					<!-- 
+					<set id="set-common" appearance="fieldset" label="" />
+					<set id="datestart" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+					<set id="dateend" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+					  -->
+
 					<field id="lecm-contract-reports:contracts-list-start-after"/>
 					<field id="lecm-contract-reports:contracts-list-start-before"/>
+
 					<field id="lecm-contract-reports:contracts-list-end-after"/>
 					<field id="lecm-contract-reports:contracts-list-end-before"/>
+
 					<field id="lecm-contract-reports:contracts-list-sum"/>
 					<field id="lecm-contract-reports:contracts-list-actual-only"/>
 					<field id="lecm-contract-reports:contracts-list-contract-type">
