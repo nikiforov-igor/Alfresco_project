@@ -12222,7 +12222,45 @@
 															</association>
 														</associations>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>b1da19ba-0abd-4fb6-80b9-1a322c485b38
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/6c225f4d-0d85-4af9-9ca3-75d17447539a
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>Данное действие доступно только
+																					исполнителю и куратору
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					user.currentUser().hasBusinessRole("CONTRACT_EXECUTOR")
+																					or
+																					user.currentUser().hasBusinessRole("CONTRACT_CURATOR")
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 												</nodes>
 											</subFolder>
