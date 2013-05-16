@@ -14,7 +14,6 @@
                             if (response.json.currency) {
                                 var id = Dom.get("${htmlId}");
                                 id.innerHTML = "${field.value} " + response.json.currency;
-                                id.removeAttribute('id');
                             }
                         }
                     },
