@@ -152,6 +152,7 @@ public class PresencePlugin implements Plugin,SessionListener {
 		if (resourcesPresence != null) {
             for (Presence x : resourcesPresence.values()) {
                 result = result | x.getType() == Type.available;
+                result = result | x.getType() == Type.unsubscribed;
             }
 		}
 		return result;
@@ -194,8 +195,10 @@ public class PresencePlugin implements Plugin,SessionListener {
 				{
 					resourcesPresence = new HashMap<String, Presence>();
 					this.presencesMapByBareJid.put(from.toStringBare(), resourcesPresence);
+                    Log.log("New resource map for: " + from.toStringBare());
 				}
 				resourcesPresence.put(resource, presence);
+                Log.log("Presence: " + from.toString() + " is  " + presence.getType());
 	
 				boolean availableNow = isAvailableByBareJid(from.toStringBare());
 	
