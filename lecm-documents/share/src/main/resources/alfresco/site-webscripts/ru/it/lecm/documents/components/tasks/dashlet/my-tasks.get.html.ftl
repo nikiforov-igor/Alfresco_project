@@ -50,7 +50,7 @@
                     <div class="workflow-task-main-text">
                         <span class="workflow-task-title">
                             <a href="${url.context}/page/task-edit?taskId=${task.id}">${task.title}:</a>
-                        </span>&nbsp;${description}
+                        </span>&nbsp;${task.documentPresentStrings.document!""}
                     </div>
                 </div>
             </#list>

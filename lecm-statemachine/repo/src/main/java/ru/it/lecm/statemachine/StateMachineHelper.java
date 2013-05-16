@@ -750,11 +750,15 @@ public class StateMachineHelper implements StateMachineServiceBean {
             }
         }
 
-        PersonService personService = serviceRegistry.getPersonService();
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         for (WorkflowTask task : tasks) {
             String owner = (String) task.getProperties().get(ContentModel.PROP_OWNER);
-            NodeRef ownerPerson = personService.getPerson(owner);
+            if (owner == null) {
+                result.add(task);
+                continue;
+            }
+
+            NodeRef ownerPerson = serviceRegistry.getPersonService().getPerson(owner);
             if (persons.contains(ownerPerson)) {
                 result.add(task);
             }
@@ -865,9 +869,16 @@ public class StateMachineHelper implements StateMachineServiceBean {
     public List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser) {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
 
+        List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
+
         List<WorkflowTask> assignedTasks = serviceRegistry.getWorkflowService().getAssignedTasks(fullyAuthenticatedUser,
                 WorkflowTaskState.IN_PROGRESS);
-        for (WorkflowTask task : assignedTasks) {
+        tasks.addAll(assignedTasks);
+
+        List<WorkflowTask> pooledTasks = serviceRegistry.getWorkflowService().getPooledTasks(fullyAuthenticatedUser);
+        tasks.addAll(pooledTasks);
+
+        for (WorkflowTask task : tasks) {
             if (hasDocuments(task, documentTypes)) {
                 result.add(task);
             }
@@ -876,16 +887,24 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
-    public Map<String, String> getTaskDocumentsPresentStrings(WorkflowTask task, List<String> documentTypes) {
+    public Map<String, String> getTaskDocumentPresentStrings(WorkflowTask task, List<String> documentTypes) {
         Map<String, String> result = new HashMap<String, String>();
-        NodeService nodeService = serviceRegistry.getNodeService();
 
         List<NodeRef> taskDocuments = getTaskDocuments(task, documentTypes);
         for (NodeRef document : taskDocuments) {
-            QName type = nodeService.getType(document);
-            String presentString = (String) nodeService.getProperty(document, QName.createQName("http://www.it.ru/logicECM/document/1.0", "present-string"));
-            result.put(type.getLocalName(), presentString);
+            Map<String, String> presentString = getDocumentPresentString(document);
+            result.putAll(presentString);
         }
+
+        return result;
+    }
+
+    public Map<String,String> getDocumentPresentString(NodeRef document) {
+        Map<String, String> result = new HashMap<String, String>();
+
+        QName type = getDocumentType(document);
+        String presentString = (String) serviceRegistry.getNodeService().getProperty(document, QName.createQName("http://www.it.ru/logicECM/document/1.0", "present-string"));
+        result.put(type.getLocalName(), presentString);
 
         return result;
     }
@@ -1098,7 +1117,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
             if (access) {
                 String dependencyExecution = parseExecutionId(persistedResponse);
 
-                //TODO: check dependencyExecution!!!
                 WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, workflow.getWorkflowId(), taskId, StateMachineActions.getActionName(UserWorkflow.class), actionId, ExecutionListener.EVENTNAME_TAKE);
                 new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
 
@@ -1185,12 +1203,16 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(wfPackage);
         for (ChildAssociationRef childAssoc : childAssocs) {
             NodeRef document = childAssoc.getChildRef();
-            String type = nodeService.getType(document).getLocalName();
+            String type = getDocumentType(document).getLocalName();
             if (documentTypes.contains(type)) {
                 result.add(document);
             }
         }
 
         return result;
+    }
+
+    private QName getDocumentType(NodeRef document) {
+        return serviceRegistry.getNodeService().getType(document);
     }
 }

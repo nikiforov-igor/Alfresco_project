@@ -10,7 +10,12 @@
 			"name": "${task.name}",
 			"description": "${task.description}",
 			"title": "${task.title}",
-			"statusMessage": "${task.statusMessage}",
+            "documentPresentStrings": {
+                <#list task.documentPresentStrings?keys as key>
+                "${key}" : "${task.documentPresentStrings[key]}"<#if key_has_next>,</#if>
+                </#list>
+            },
+            "statusMessage": "${task.statusMessage}",
 			"type": "${task.type}",
 			"typeMessage": "${task.typeMessage}",
 			"priority": "${task.priority}",
@@ -36,6 +41,11 @@
             "name": "${task.name}",
             "description": "${task.description}",
             "title": "${task.title}",
+            "documentPresentStrings": {
+                <#list task.documentPresentStrings?keys as key>
+                "${key}" : "${task.documentPresentStrings[key]}"<#if key_has_next>,</#if>
+                </#list>
+            },
             "statusMessage": "${task.statusMessage}",
             "type": "${task.type}",
             "typeMessage": "${task.typeMessage}",

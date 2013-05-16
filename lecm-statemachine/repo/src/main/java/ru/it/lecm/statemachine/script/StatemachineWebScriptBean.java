@@ -77,10 +77,20 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         List<WorkflowTask> myTasks = stateMachineHelper.filterTasksByAssignees(tasks, Collections.singletonList(currentEmployee));
         result.setMyTasks(myTasks, myTasksLimit);
 
+        for (WorkflowTaskBean task : result.getMyTasks()) {
+            Map<String, String> presentStrings = stateMachineHelper.getDocumentPresentString(nodeRef);
+            task.setDocumentPresentStrings(presentStrings);
+        }
+
         if (addSubordinatesTask) {
             List<NodeRef> subordinateEmployees = orgstructureService.getBossSubordinate(currentEmployee);
             List<WorkflowTask> subordinatesTasks = stateMachineHelper.filterTasksByAssignees(tasks, subordinateEmployees);
             result.setSubordinatesTasks(subordinatesTasks);
+
+            for (WorkflowTaskBean task : result.getSubordinateTasks()) {
+                Map<String, String> presentStrings = stateMachineHelper.getDocumentPresentString(nodeRef);
+                task.setDocumentPresentStrings(presentStrings);
+            }
         }
 
         return result;
@@ -136,7 +146,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         result.setMyTasks(myTasks);
 
         for (WorkflowTaskBean task : result.getMyTasks()) {
-            Map<String, String> documentPresentStrings = stateMachineHelper.getTaskDocumentsPresentStrings(task.getWorkflowTask(), documentTypes);
+            Map<String, String> documentPresentStrings = stateMachineHelper.getTaskDocumentPresentStrings(task.getWorkflowTask(), documentTypes);
             task.setDocumentPresentStrings(documentPresentStrings);
         }
 
