@@ -7,6 +7,8 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AccessPermission;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
@@ -15,6 +17,7 @@ import ru.it.lecm.businessjournal.beans.EventCategory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +46,15 @@ public class ArchiveDocumentAction extends StateMachineAction {
                 nodeService.setProperty(document.getChildRef(), QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "status"), status);
                 NodeRef folder = createArchivePath(document.getChildRef());
                 nodeService.moveNode(document.getChildRef(), folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
+
+                Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(document.getChildRef());
+                for (AccessPermission permission : permissions) {
+                    if (permission.getPosition() == 0) {
+                        getServiceRegistry().getPermissionService().deletePermission(document.getChildRef(), permission.getAuthority(), permission.getPermission());
+                        getServiceRegistry().getPermissionService().setPermission(document.getChildRef(), permission.getAuthority(), PermissionService.CONSUMER, true);
+                    }
+                }
+
                 try {
                     String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
                     List<String> objects = new ArrayList<String>(1);

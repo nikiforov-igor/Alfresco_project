@@ -2,6 +2,7 @@ package ru.it.lecm.statemachine.policy;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -20,15 +21,10 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: PMelnikov
@@ -85,7 +81,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 			return;
 		}
 		for (QName typeName: list) {
-			policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, typeName, new JavaBehaviour(this, "onCreateNode"));
+			policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, typeName, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 			logger.info( String.format("Policy installed for node type {%s}", typeName));
 		}
 	}
@@ -117,7 +113,11 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 			//append status aspect to new document
 			HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
 			aspectProps.put(StatemachineModel.PROP_STATUS, "NEW");
-			nodeService.addAspect( docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
+			nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
+
+            HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
+            properties.put(ContentModel.PROP_OWNER, "system");
+            nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
 
 			PersonService personService = serviceRegistry.getPersonService();
 			NodeRef assigneeNodeRef = personService.getPerson("workflow");
