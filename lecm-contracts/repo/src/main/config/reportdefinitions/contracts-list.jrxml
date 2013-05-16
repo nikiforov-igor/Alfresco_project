@@ -207,7 +207,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="25" splitType="Stretch">
+		<band height="34" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{REPORT_COUNT} <= 200]]></printWhenExpression>
 			<frame>
 				<reportElement uuid="1e092e56-8305-48da-8ce3-c4deba187eda" style="styleOdd" stretchType="RelativeToBandHeight" x="1" y="1" width="797" height="24" backcolor="#FFFFFF"/>
