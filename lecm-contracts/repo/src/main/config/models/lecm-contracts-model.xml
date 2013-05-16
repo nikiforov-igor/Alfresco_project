@@ -20,7 +20,7 @@
     <constraints>
         <constraint name="lecm-contract:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value><![CDATA[Договор {lecm-contract:typeContract-assoc/cm:name} <i>№ проекта {lecm-contract:regNumProject}</i>, с {lecm-contract:partner-assoc/lecm-contractor:contractor-to-legalform-association/cm:name} {lecm-contract:partner-assoc/lecm-contractor:shortname}]]></value>
+                <value><![CDATA[Договор {lecm-contract:typeContract-assoc/cm:name} <i>№ проекта {lecm-contract:regNumProject}</i>, с {lecm-contract:partner-assoc/lecm-contractor:contractor-to-legalform-association/lecm-legalform:short-title} {lecm-contract:partner-assoc/lecm-contractor:shortname}]]></value>
             </parameter>
         </constraint>
         <constraint name="lecm-contract:attachment-categories" type="LIST">
