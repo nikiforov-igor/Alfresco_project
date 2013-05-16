@@ -627,6 +627,12 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return statemachineId != null;
     }
 
+    public boolean hasActiveStatemachine(NodeRef document) {
+        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        Execution execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        return execution != null;
+    }
+
     @Override
     public String getDocumentStatus(NodeRef document) {
         Serializable status = serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATUS);

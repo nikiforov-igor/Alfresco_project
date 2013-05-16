@@ -34,6 +34,8 @@ public interface StateMachineServiceBean {
      */
     public boolean hasStatemachine(NodeRef document);
 
+    public boolean hasActiveStatemachine(NodeRef document);
+
     public void checkReadOnlyCategory(NodeRef document, String category);
 
     String nextTransition(String taskId);
