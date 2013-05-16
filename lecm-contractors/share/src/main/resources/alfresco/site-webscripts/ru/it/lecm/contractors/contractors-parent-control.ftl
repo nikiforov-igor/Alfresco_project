@@ -22,8 +22,6 @@
             successCallback: {
                 fn: function (response) {
 
-                    debugger;
-
                     var url = "components/form" +
                             "?itemKind={itemKind}" +
                             "&itemId={itemId}" +

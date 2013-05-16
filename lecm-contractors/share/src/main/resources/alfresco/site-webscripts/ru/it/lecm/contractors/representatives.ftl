@@ -24,8 +24,6 @@
         "use strict";
 
         function RepresentativesGrid(containerId) {
-            debugger;
-
             return RepresentativesGrid.superclass.constructor.call(this, containerId);
         }
 
@@ -34,8 +32,6 @@
         YAHOO.lang.augmentObject(RepresentativesGrid.prototype, {
 
             onPrimaryChange: function(p_items, owner, actionsConfig, fnDeleteComplete, fnPrompt) {
-
-                debugger;
 
                 var currentNodeRef = p_items.nodeRef, // {String}
                            dataObj = { "representativeToAssignAsPrimary": currentNodeRef };
@@ -115,8 +111,6 @@
 
         var _showAddRepresentativeForm = function() {
 
-            debugger;
-
             var url = "lecm/components/form" +
                     "?itemKind={itemKind}" +
                     "&itemId={itemId}" +
@@ -149,8 +143,6 @@
                 destroyOnHide: true,
                 doBeforeFormSubmit: {
                     fn: function() {
-                        debugger;
-
                         isPrimaryCheckboxChecked = YAHOO.util.Dom.get("${fieldHtmlId}-add-representative-form_prop_lecm-contractor_link-to-representative-association-is-primary-entry").checked;
                     },
                     scope: this
@@ -209,8 +201,6 @@
 
         var _initializeAddRepresentativeButton = function() {
 
-            debugger;
-
             var putButtonIn = YAHOO.util.Dom.get("${fieldHtmlId}");
 
             if(putButtonIn !== null) { // А если не нашли, то мы во view-режиме.
@@ -224,8 +214,6 @@
 
         return {
             initializePage: function() {
-
-                debugger;
 
                 _initializeDatagrid();
                 _initializeAddRepresentativeButton();

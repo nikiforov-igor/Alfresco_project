@@ -43,8 +43,6 @@
         // Спасаем "тонущие" всплывающие сообщения.
         Alfresco.util.PopupManager.zIndex = 9000;
 
-        debugger;
-
         function handlers() {
             function saveAssigneesList() {
 
@@ -84,8 +82,6 @@
                     destroyOnHide: true,
                     doBeforeFormSubmit: {
                         fn: function() {
-
-                            debugger;
 
                             var selectedItem,
                                 dataObjArrayItem,
@@ -141,7 +137,6 @@
 
                 enterAssigneesListNameDialog.show();
 
-                debugger;
             }
 
             function deleteAssigneesList() {
@@ -180,8 +175,6 @@
             }
 
             function fillDropDownListFromResponse( response ) {
-
-                debugger;
 
                 var i;
 
