@@ -27,7 +27,6 @@ import org.alfresco.service.cmr.dictionary.AspectDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
@@ -869,15 +868,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     public List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser) {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
 
-        List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
-
-        List<WorkflowTask> assignedTasks = serviceRegistry.getWorkflowService().getAssignedTasks(fullyAuthenticatedUser,
-                WorkflowTaskState.IN_PROGRESS);
-        tasks.addAll(assignedTasks);
-
-        List<WorkflowTask> pooledTasks = serviceRegistry.getWorkflowService().getPooledTasks(fullyAuthenticatedUser);
-        tasks.addAll(pooledTasks);
-
+        List<WorkflowTask> tasks = getAssignedAndPooledCurrentUserTasks();
         for (WorkflowTask task : tasks) {
             if (hasDocuments(task, documentTypes)) {
                 result.add(task);
@@ -931,7 +922,18 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(nodeRef, true);
         for (WorkflowInstance workflow : activeWorkflows) {
             List<WorkflowTask> tasks = getWorkflowTasks(workflow, activeTasks);
-            result.addAll(tasks);
+            if (activeTasks) {
+                List<WorkflowTask> userTasks = getAssignedAndPooledCurrentUserTasks();
+                for (WorkflowTask task : tasks) {
+                    for (WorkflowTask userTask : userTasks) {
+                        if (task.getId().equals(userTask.getId())) {
+                            result.add(task);
+                        }
+                    }
+                }
+            } else {
+                result.addAll(tasks);
+            }
         }
 
         if (!activeTasks) {
@@ -941,6 +943,20 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 result.addAll(tasks);
             }
         }
+
+        return result;
+    }
+
+    private List<WorkflowTask> getAssignedAndPooledCurrentUserTasks() {
+        String fullyAuthenticatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
+        List<WorkflowTask> result = new ArrayList<WorkflowTask>();
+
+        List<WorkflowTask> assignedTasks = serviceRegistry.getWorkflowService().getAssignedTasks(fullyAuthenticatedUser,
+                WorkflowTaskState.IN_PROGRESS);
+        result.addAll(assignedTasks);
+
+        List<WorkflowTask> pooledTasks = serviceRegistry.getWorkflowService().getPooledTasks(fullyAuthenticatedUser);
+        result.addAll(pooledTasks);
 
         return result;
     }
