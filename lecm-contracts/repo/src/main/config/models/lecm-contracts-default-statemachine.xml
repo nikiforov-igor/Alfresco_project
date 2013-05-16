@@ -7637,7 +7637,7 @@
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value>LECM_BASIC_PG_Reader</value>
+												<value>LECM_BASIC_PG_Employee</value>
 											</property>
 										</properties>
 										<aspects>
@@ -7822,6 +7822,10 @@
 														</nodeRef>
 														<properties>
 															<property>
+																<name>stopSubWorkflows</name>
+																<value>false</value>
+															</property>
+															<property>
 																<name>transitionLabel</name>
 																<value>Зарегистрировать</value>
 															</property>
@@ -7839,7 +7843,43 @@
 															</association>
 														</associations>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>ade01a97-3d7d-4d92-a2da-d292bbf329c8
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/10f12630-a9f2-42ec-ba25-ae91069a9a92
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>Данное действие доступно только
+																					регистратору
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					user.currentUser().hasBusinessRole("CONTRACT_RECORDER")
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 												</nodes>
 											</subFolder>
