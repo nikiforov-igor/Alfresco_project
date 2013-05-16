@@ -18,15 +18,7 @@
                     </div>
                 </div>
             <#else>
-                <#assign maxMainTextLength = 58>
                 <#list myTasks as task>
-                    <#assign mainTextLength = task.title?length + task.description?length + 2>
-                    <#if mainTextLength < maxMainTextLength>
-                        <#assign description = task.description>
-                    <#else>
-                        <#assign descriptionLength = maxMainTextLength - task.title?length - 5>
-                        <#assign description = task.description?substring(0, descriptionLength)?right_pad(descriptionLength + 3, ".")>
-                    </#if>
                     <div class="my-task">
                         <div class="workflow-date">${task.startDate}</div>
                         <div class="workflow-task-status ${task.type}">${task.typeMessage}</div>
@@ -34,7 +26,7 @@
                         <div class="workflow-task-main-text">
                             <span class="workflow-task-title">
                                 <a href="${url.context}/page/task-edit?taskId=${task.id}">${task.title}:</a>
-                            </span>&nbsp;${description}
+                            </span>&nbsp;${task.documentPresentStrings.document!""}
                         </div>
                     </div>
                 </#list>

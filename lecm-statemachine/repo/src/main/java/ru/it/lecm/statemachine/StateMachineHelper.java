@@ -863,21 +863,28 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     @Override
     public List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser) {
+        List<WorkflowTask> result = new ArrayList<WorkflowTask>();
+
         List<WorkflowTask> assignedTasks = serviceRegistry.getWorkflowService().getAssignedTasks(fullyAuthenticatedUser,
                 WorkflowTaskState.IN_PROGRESS);
-
-        NodeService nodeService = serviceRegistry.getNodeService();
-        List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         for (WorkflowTask task : assignedTasks) {
-            NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
-            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(wfPackage);
-            for (ChildAssociationRef childAssoc : childAssocs) {
-                NodeRef document = childAssoc.getChildRef();
-                String type = nodeService.getType(document).getLocalName();
-                if (documentTypes.contains(type)) {
-                    result.add(task);
-                }
+            if (hasDocuments(task, documentTypes)) {
+                result.add(task);
             }
+        }
+
+        return result;
+    }
+
+    public Map<String, String> getTaskDocumentsPresentStrings(WorkflowTask task, List<String> documentTypes) {
+        Map<String, String> result = new HashMap<String, String>();
+        NodeService nodeService = serviceRegistry.getNodeService();
+
+        List<NodeRef> taskDocuments = getTaskDocuments(task, documentTypes);
+        for (NodeRef document : taskDocuments) {
+            QName type = nodeService.getType(document);
+            String presentString = (String) nodeService.getProperty(document, QName.createQName("http://www.it.ru/logicECM/document/1.0", "present-string"));
+            result.put(type.getLocalName(), presentString);
         }
 
         return result;
@@ -1166,4 +1173,24 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
     }
 
+    private boolean hasDocuments(WorkflowTask task, List<String> documentTypes) {
+        return getTaskDocuments(task, documentTypes).size() > 0;
+    }
+
+    private List<NodeRef> getTaskDocuments(WorkflowTask task, List<String> documentTypes) {
+        List<NodeRef> result = new ArrayList<NodeRef>();
+
+        NodeService nodeService = serviceRegistry.getNodeService();
+        NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
+        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(wfPackage);
+        for (ChildAssociationRef childAssoc : childAssocs) {
+            NodeRef document = childAssoc.getChildRef();
+            String type = nodeService.getType(document).getLocalName();
+            if (documentTypes.contains(type)) {
+                result.add(document);
+            }
+        }
+
+        return result;
+    }
 }

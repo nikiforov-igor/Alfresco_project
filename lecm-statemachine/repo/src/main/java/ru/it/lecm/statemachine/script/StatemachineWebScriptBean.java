@@ -12,6 +12,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.TransitionResponse;
 import ru.it.lecm.statemachine.bean.WorkflowListBean;
+import ru.it.lecm.statemachine.bean.WorkflowTaskBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskListBean;
 
 import java.util.*;
@@ -133,6 +134,11 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 
         WorkflowTaskListBean result = new WorkflowTaskListBean();
         result.setMyTasks(myTasks);
+
+        for (WorkflowTaskBean task : result.getMyTasks()) {
+            Map<String, String> documentPresentStrings = stateMachineHelper.getTaskDocumentsPresentStrings(task.getWorkflowTask(), documentTypes);
+            task.setDocumentPresentStrings(documentPresentStrings);
+        }
 
         return result;
     }

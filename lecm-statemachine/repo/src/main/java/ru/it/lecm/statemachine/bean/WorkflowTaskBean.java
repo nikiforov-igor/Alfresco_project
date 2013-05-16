@@ -7,9 +7,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.springframework.extensions.surf.util.I18NUtil;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,6 +45,7 @@ public class WorkflowTaskBean {
     private WorkflowTask workflowTask;
     private WorkflowTaskType type = WorkflowTaskType.WORKFLOWTASKTYPE_NA;
     private int priority;
+    private Map<String, String> documentPresentStrings = new HashMap<String, String>();
 
     public WorkflowTaskBean(WorkflowTask workflowTask) {
         if (workflowTask == null) {
@@ -77,6 +76,18 @@ public class WorkflowTaskBean {
 
     public String getDescription() {
         return workflowTask.getDescription();
+    }
+
+    public Map getDocumentPresentStrings() {
+        return documentPresentStrings;
+    }
+
+    public void setDocumentPresentStrings(Map<String, String> documentPresentStrings) {
+        if (documentPresentStrings == null) {
+            return;
+        }
+
+        this.documentPresentStrings = documentPresentStrings;
     }
 
     public Date getStartDate() {
@@ -118,6 +129,10 @@ public class WorkflowTaskBean {
     public String getPriorityMessage() {
         WorkflowTaskPriority workflowTaskPriority = WorkflowTaskPriority.getValue(priority);
         return workflowTaskPriority != null ? getMessage(workflowTaskPriority.toString()) : "";
+    }
+
+    public WorkflowTask getWorkflowTask() {
+        return workflowTask;
     }
 
     private String getMessage(String key) {
