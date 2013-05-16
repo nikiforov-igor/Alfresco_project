@@ -374,12 +374,12 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Не задана валюта!</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2196,13 +2196,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																			<property>
 																				<name>inputFromValue</name>
 																				<value>lecm-contract:regNumProject
 																				</value>
-																			</property>
-																			<property>
-																				<name>inputToValue</name>
-																				<value>documentProjectNumber</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2227,14 +2227,14 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Согласование</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					commentFileAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2251,16 +2251,16 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Для совершения этого действия
 																					необходимо добавить вложение в одну
 																					из категорий: "Договор",
 																					"Приложения", "Спецификации".
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2295,13 +2295,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Договор</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>documentAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Договор</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2391,16 +2391,16 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Для совершения этого действия
 																					необходимо добавить вложение в одну
 																					из категорий: "Договор",
 																					"Приложения", "Спецификации".
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2477,13 +2477,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																			<property>
 																				<name>inputFromValue</name>
 																				<value>lecm-contract:regNumProject
 																				</value>
-																			</property>
-																			<property>
-																				<name>inputToValue</name>
-																				<value>documentProjectNumber</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2508,14 +2508,14 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Согласование</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					commentFileAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2532,16 +2532,16 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Для совершения этого действия
 																					необходимо добавить вложение в одну
 																					из категорий: "Договор",
 																					"Приложения", "Спецификации".
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2576,13 +2576,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Договор</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>documentAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Договор</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2671,16 +2671,16 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Для совершения этого действия
 																					необходимо добавить вложение в одну
 																					из категорий: "Договор",
 																					"Приложения", "Спецификации".
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2715,13 +2715,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																			<property>
 																				<name>inputFromValue</name>
 																				<value>lecm-contract:regNumProject
 																				</value>
-																			</property>
-																			<property>
-																				<name>inputToValue</name>
-																				<value>documentProjectNumber</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2746,14 +2746,14 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Согласование</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					commentFileAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2778,13 +2778,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Договор</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>documentAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Договор</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -3669,14 +3669,14 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Данное действие доступно только
 																					куратору договорной деятельности
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -3728,14 +3728,14 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Данное действие доступно только
 																					куратору договорной деятельности
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -3758,16 +3758,16 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Для совершения этого действия
 																					необходимо добавить вложение в одну
 																					из категорий: "Договор",
 																					"Приложения", "Спецификации".
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -4248,7 +4248,7 @@
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value>LECM_BASIC_PG_Employee</value>
+												<value>LECM_BASIC_PG_ActionPerformer</value>
 											</property>
 										</properties>
 										<aspects>
@@ -4416,7 +4416,7 @@
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value>LECM_BASIC_PG_Employee</value>
+												<value>LECM_BASIC_PG_ActionPerformer</value>
 											</property>
 										</properties>
 										<aspects>
@@ -4689,16 +4689,16 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Для совершения этого действия
 																					необходимо добавить вложение в одну
 																					из категорий: "Договор",
 																					"Приложения", "Спецификации".
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -5553,13 +5553,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																			<property>
 																				<name>inputFromValue</name>
 																				<value>lecm-contract:regNumProject
 																				</value>
-																			</property>
-																			<property>
-																				<name>inputToValue</name>
-																				<value>documentProjectNumber</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5584,14 +5584,14 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Согласование</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					commentFileAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5608,16 +5608,16 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Для совершения этого действия
 																					необходимо добавить вложение в одну
 																					из категорий: "Договор",
 																					"Приложения", "Спецификации".
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -5652,13 +5652,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Договор</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>documentAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Договор</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5748,16 +5748,16 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Для совершения этого действия
 																					необходимо добавить вложение в одну
 																					из категорий: "Договор",
 																					"Приложения", "Спецификации".
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -5834,14 +5834,14 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Согласование</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					commentFileAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Согласование</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5866,13 +5866,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
+																				<name>inputToValue</name>
+																				<value>documentProjectNumber</value>
+																			</property>
+																			<property>
 																				<name>inputFromValue</name>
 																				<value>lecm-contract:regNumProject
 																				</value>
-																			</property>
-																			<property>
-																				<name>inputToValue</name>
-																				<value>documentProjectNumber</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5889,16 +5889,16 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Для совершения этого действия
 																					необходимо добавить вложение в одну
 																					из категорий: "Договор",
 																					"Приложения", "Спецификации".
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -5933,13 +5933,13 @@
 																				<value>VARIABLE</value>
 																			</property>
 																			<property>
-																				<name>inputFromValue</name>
-																				<value>Договор</value>
-																			</property>
-																			<property>
 																				<name>inputToValue</name>
 																				<value>documentAttachmentCategoryName
 																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>Договор</value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -6863,12 +6863,12 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>true</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Подписан у контрагента</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>true</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6891,14 +6891,14 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Данное действие доступно только
 																					подписанту
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6958,12 +6958,12 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>true</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Не подписан у контрагента</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>true</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6986,14 +6986,14 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Данное действие доступно только
 																					подписанту
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -7829,14 +7829,14 @@
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>false</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>Данное действие доступно только
 																					регистратору
 																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>false</value>
 																			</property>
 																			<property>
 																				<name>condition</name>
