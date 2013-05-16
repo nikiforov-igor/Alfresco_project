@@ -34,5 +34,12 @@
                 </property>
             </properties>
         </aspect>
+        <aspect name="lecm-contract-aspect:primaryDocumentExecutedAspect">
+            <properties>
+                <property name="lecm-contract-aspect:primaryDocumentExecuted">
+                    <type>d:boolean</type>
+                </property>
+            </properties>
+        </aspect>
 	</aspects>
 </model>

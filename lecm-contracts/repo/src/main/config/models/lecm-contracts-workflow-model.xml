@@ -93,6 +93,13 @@
 			</mandatory-aspects>
 		</type>
 
+        <type name="lecmContractWf:contractExecuted">
+            <parent>bpm:startTask</parent>
+            <mandatory-aspects>
+                <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+            </mandatory-aspects>
+        </type>
+
         <type name="lecmContractWf:signContractorTask">
             <parent>bpm:startTask</parent>
             <properties>
