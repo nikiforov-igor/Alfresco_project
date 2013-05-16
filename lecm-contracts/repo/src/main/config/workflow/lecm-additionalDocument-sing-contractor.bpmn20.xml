@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/contract/workflow/createOnBasis/1.0">
+    <process id="addDocSignContractor" name="Подписание контрагентом (документ к договору)">
+        <startEvent id="startSignContractor" name="Start" activiti:formKey="lecmContractWf:signAddDocContractorTask"></startEvent>
+        <sequenceFlow id="flow1" sourceRef="startSignContractor" targetRef="signContractorTask"></sequenceFlow>
+        <scriptTask id="signContractorTask" name="Create Sing Contractor" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            var document = bpm_package.children[0];
+                            if (document){
+                                document.properties["lecm-additional-document:signedCounterparty"] = true;
+                                document.save();
+                            } else {
+                            logger.log("Не удалось подписать контрагентом! Нет документа в пакете!!! Пакет:" + bpm_package);
+                            }
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <sequenceFlow id="flow2" sourceRef="signContractorTask" targetRef="receivetask"></sequenceFlow>
+        <receiveTask id="receivetask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow3" sourceRef="receivetask" targetRef="endSignContractor"></sequenceFlow>
+        <endEvent id="endSignContractor" name="End"></endEvent>
+    </process>
+</definitions>

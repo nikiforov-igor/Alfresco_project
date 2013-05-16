@@ -741,6 +741,8 @@
 			<workflow name="activiti$lecm-contract-fake_document"/>
 			<workflow name="activiti$lecm-additional-document_additionalDocument"/>
 			<workflow name="activiti$lecm-contract_document"/>
+            <workflow name="activiti$contractsSignContractor"/>
+            <workflow name="activiti$addDocSignContractor"/>
 		</hidden-workflows>
 	</config>
 
@@ -752,6 +754,44 @@
 			<workflow name="activiti$lecm-contract_document"/>
 		</hidden-workflows>
 	</config>
+
+    <config evaluator="string-compare" condition="activiti$contractsSignContractor">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems" />
+                    <show id="lecmContractWf:contractorSigner" />
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmContractWf:contractorSigner"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$addDocSignContractor">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="warning"/>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="warning">
+                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+                            <control-param name="msg">ru.it.contracts.signContractor</control-param>
+                        </control>
+                    </field>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 
     <config>
         <forms>
