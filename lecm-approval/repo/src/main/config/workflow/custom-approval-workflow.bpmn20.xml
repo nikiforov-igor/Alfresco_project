@@ -69,8 +69,8 @@
 							logger.log("comment = " + comment);
 							logger.log("commentRef = " + commentRef);
 							logger.log("documentRef = " + documentRef);
-							<!--logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);-->
-							<!--logger.log("documentProjectNumber = " + documentProjectNumber);-->
+							logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);
+							logger.log("documentProjectNumber = " + documentProjectNumber);
 							var taskDecision = {
 								"userName": userName,
 								"decision": decision,
@@ -78,9 +78,9 @@
 								"dueDate": dueDate,
 								"comment": comment,
 								"commentRef": commentRef,
-								"documentRef": documentRef
-								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
-								<!--"documentProjectNumber": documentProjectNumber-->
+								"documentRef": documentRef,
+								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
+								"documentProjectNumber": documentProjectNumber
 							};
 
 			            	execution.setVariable("executorBossDecision", decision);
@@ -118,7 +118,7 @@
 
                             var userName = assignee;
 
-                            							var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+                            var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
 							var startDate = task.getCreateTime().getTime();
 							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
 							var comment = task.getVariableLocal("bpm_comment");
@@ -132,8 +132,8 @@
 							logger.log("comment = " + comment);
 							logger.log("commentRef = " + commentRef);
 							logger.log("documentRef = " + documentRef);
-							<!--logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);-->
-							<!--logger.log("documentProjectNumber = " + documentProjectNumber);-->
+							logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);
+							logger.log("documentProjectNumber = " + documentProjectNumber);
 							var taskDecision = {
 								"userName": userName,
 								"decision": decision,
@@ -141,9 +141,9 @@
 								"dueDate": dueDate,
 								"comment": comment,
 								"commentRef": commentRef,
-								"documentRef": documentRef
-								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
-								<!--"documentProjectNumber": documentProjectNumber-->
+								"documentRef": documentRef,
+								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
+								"documentProjectNumber": documentProjectNumber
 							};
 
                             var divisionBossDecisions = execution.getVariable("divisionBossDecisions");
@@ -203,8 +203,8 @@
 							logger.log("comment = " + comment);
 							logger.log("commentRef = " + commentRef);
 							logger.log("documentRef = " + documentRef);
-							<!--logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);-->
-							<!--logger.log("documentProjectNumber = " + documentProjectNumber);-->
+							logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);
+							logger.log("documentProjectNumber = " + documentProjectNumber);
 							var taskDecision = {
 								"userName": userName,
 								"decision": decision,
@@ -212,9 +212,9 @@
 								"dueDate": dueDate,
 								"comment": comment,
 								"commentRef": commentRef,
-								"documentRef": documentRef
-								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
-								<!--"documentProjectNumber": documentProjectNumber-->
+								"documentRef": documentRef,
+								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
+								"documentProjectNumber": documentProjectNumber
 							};
 
 			            	execution.setVariable("departmentBossDecision", decision);
@@ -270,8 +270,8 @@
 							logger.log("comment = " + comment);
 							logger.log("commentRef = " + commentRef);
 							logger.log("documentRef = " + documentRef);
-							<!--logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);-->
-							<!--logger.log("documentProjectNumber = " + documentProjectNumber);-->
+							logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);
+							logger.log("documentProjectNumber = " + documentProjectNumber);
 							var taskDecision = {
 								"userName": userName,
 								"decision": decision,
@@ -279,9 +279,9 @@
 								"dueDate": dueDate,
 								"comment": comment,
 								"commentRef": commentRef,
-								"documentRef": documentRef
-								<!--"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,-->
-								<!--"documentProjectNumber": documentProjectNumber-->
+								"documentRef": documentRef,
+								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
+								"documentProjectNumber": documentProjectNumber
 							};
 
                             execution.setVariable("isApproved", approvalCustom.isApproved(decision));
