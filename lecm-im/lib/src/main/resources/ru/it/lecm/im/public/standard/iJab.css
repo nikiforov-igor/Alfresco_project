@@ -99,6 +99,11 @@ ul, li {
     background-color:#bbe6f3;
 }
 
+/* Статусное сообщение в списке контактов */
+.ijab-contactview-item > .names > span:nth-child(3){
+    display: block;
+}
+
 /*!* ijab UI v2.0.0pre * http://www.ijab.im/ * * Copyright(c) 2009 Hidden * * Date:* Revision:*/
 .ijab-Reference-standard {
     height: 5px;
