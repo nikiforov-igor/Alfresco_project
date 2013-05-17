@@ -39,7 +39,7 @@
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string>
-                            var executorBoss = approvalCustom.getExecutorBoss(person.properties.userName);
+                            var executorBoss = approvalCustom.getExecutorBoss(documentExecutor);
                             task.setAssignee(executorBoss);
 
                             approvalCustom.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
@@ -328,6 +328,9 @@
                     <activiti:string><![CDATA[
 						var approvalListRef = approvalSequential.createApprovalList(bpm_package, documentAttachmentCategoryName)
 						execution.setVariable("approvalListRef", approvalListRef);
+
+						var documentExecutor = bpm_package.children[0].properties["cm:creator"];
+						execution.setVariable("documentExecutor", documentExecutor);
 					]]></activiti:string>
                 </activiti:field>
             </extensionElements>
