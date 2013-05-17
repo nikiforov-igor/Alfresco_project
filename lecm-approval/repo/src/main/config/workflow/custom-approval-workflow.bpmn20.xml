@@ -3,13 +3,14 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/workflow/approval/custom">
-    <process id="lecmCustomApproval" name="Согласование (кастомное)" isExecutable="true">
+    <process id="lecmCustomApproval" name="Специальное согласование" isExecutable="true">
 
         <extensionElements>
             <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                 <activiti:field name="script">
                     <activiti:string>//<![CDATA[
                         execution.setVariable("isApproved", false);
+                        execution.setVariable("finalDecision", "REJECTED");
                     //]]></activiti:string>
                 </activiti:field>
             </activiti:executionListener>
@@ -17,14 +18,14 @@
             <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-                            <!--var isApproved = execution.getVariable("isApproved");-->
-                            <!--if (isApproved != null) {-->
-                                <!--var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);-->
-                                <!--finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";-->
-                                <!--var approvalListRef = execution.getVariable("approvalListRef");-->
-                                <!--approvalCustom.logFinalDecision(approvalListRef, finalDecision);-->
-                                <!--approvalCustom.notifyFinalDecision(finalDecision, bpm_package);-->
-                            <!--}-->
+                        var finalDecision = execution.getVariable("finalDecision");
+						var isApproved = execution.getVariable("isApproved");
+						if (!finalDecision && isApproved != null) {
+							var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);
+							finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";
+							var approvalListRef = execution.getVariable("approvalListRef");
+							approvalParallel.logFinalDecision(approvalListRef, finalDecision);
+						}
                         ]]></activiti:string>
                 </activiti:field>
             </activiti:executionListener>
@@ -256,6 +257,7 @@
                         <activiti:string>
                             var curators = approvalCustom.getCurators();
                             task.addCandidateUsers(curators);
+                            task.setAssignee("admin");
 
                             var dueDate = new Date();
                             dueDate.setDate(dueDate.getDate() + 2);
