@@ -364,7 +364,7 @@
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
-            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${executorBossDecision == 'APPROVED'}]]></conditionExpression>
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${executorBossDecision == 'APPROVED' || executorBossDecision == 'APPROVED_WITH_REMARK'}]]></conditionExpression>
         </sequenceFlow>
         <sequenceFlow id="executor-to-end" name="Executor Boss task rejected" sourceRef="exclusivegateway1" targetRef="end-custom-approval">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${executorBossDecision == 'REJECTED'}]]></conditionExpression>
@@ -399,7 +399,7 @@
         <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
         <sequenceFlow id="department-boss-to-gateway" name="From department boss approval task" sourceRef="department-boss-approval-task" targetRef="exclusivegateway3"></sequenceFlow>
         <sequenceFlow id="department-to-curator" name="Department Boss task approved" sourceRef="exclusivegateway3" targetRef="curator-approval-task">
-            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departmentBossDecision == 'APPROVED'}]]></conditionExpression>
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departmentBossDecision == 'APPROVED' || executorBossDecision == 'APPROVED_WITH_REMARK'}]]></conditionExpression>
         </sequenceFlow>
         <sequenceFlow id="department-to-end" name="Department Boss task rejected" sourceRef="exclusivegateway3" targetRef="end-custom-approval">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departmentBossDecision == 'REJECTED'}]]></conditionExpression>
