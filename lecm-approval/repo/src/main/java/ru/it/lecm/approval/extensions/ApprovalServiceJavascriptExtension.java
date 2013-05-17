@@ -21,11 +21,14 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.apache.commons.lang.time.DateUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -369,11 +372,10 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 			throw new WebScriptException("Can not form JSONObject", ex);
 		}
 
-		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(listNode, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
+		List<NodeRef> listItemsNodes = getAssigneesListItems(listNode);
 
 		// бежим по элементам листа согласующих
-		for (AssociationRef targetAssoc : targetAssocs) {
-			NodeRef listItem = targetAssoc.getTargetRef();
+		for (NodeRef listItem : listItemsNodes) {
 			int order = (Integer) nodeService.getProperty(listItem, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER);
 			Date dueDate = (Date) nodeService.getProperty(listItem, ApprovalListService.PROP_ASSIGNEES_ITEM_DUE_DATE);
 			List<AssociationRef> employeeAssocList = nodeService.getTargetAssocs(listItem, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC);
@@ -514,11 +516,60 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 	 * @param assigneesListNodeRef NodeRef списка согласующих
 	 */
 	private void clearAssigneesList(NodeRef assigneesListNodeRef) {
-		List<AssociationRef> listItemsAssocs = nodeService.getTargetAssocs(assigneesListNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
-		for (AssociationRef listItemAssoc : listItemsAssocs) {
-			NodeRef listItemNodeRef = listItemAssoc.getTargetRef();
+		List<NodeRef> listItemsItems = getAssigneesListItems(assigneesListNodeRef);
+		for (NodeRef listItemNodeRef : listItemsItems) {
 			nodeService.removeAssociation(assigneesListNodeRef, listItemNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
 			nodeService.deleteNode(listItemNodeRef);
 		}
+	}
+
+	public void calculateApprovalDueDate(JSONObject json) {
+		String assigneesListNodeRefStr, dueDateStr;
+		NodeRef assigneesListNodeRef;
+		Date dueDate;
+
+		try {
+			assigneesListNodeRefStr = json.getString("assigneesListNodeRef");
+			dueDateStr = json.getString("dueDate");
+		} catch (JSONException ex) {
+			throw new WebScriptException("Insufficient params in JSON", ex);
+		}
+		try {
+			dueDate = dateParser.parse(dueDateStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Invalid date format", ex);
+		}
+
+		assigneesListNodeRef = new NodeRef(assigneesListNodeRefStr);
+		List<NodeRef> assigneesListItems = getAssigneesListItems(assigneesListNodeRef);
+
+		if (assigneesListItems.isEmpty()) {
+			return;
+		}
+
+		dueDate = DateUtils.truncate(dueDate, Calendar.DATE);
+		Date today = DateUtils.truncate(new Date(), Calendar.DATE);
+
+		long diffDays = (dueDate.getTime() - today.getTime()) / 86400000;
+		int period = Math.round(diffDays / assigneesListItems.size());
+
+		Date previousDate;
+		Date currentDate;
+
+		nodeService.setProperty(assigneesListItems.get(0), ApprovalListService.PROP_ASSIGNEES_ITEM_DUE_DATE, DateUtils.addDays(today, period));
+		for (int i = 1; i < assigneesListItems.size(); i++) {
+			previousDate = (Date) nodeService.getProperty(assigneesListItems.get(i - 1), ApprovalListService.PROP_ASSIGNEES_ITEM_DUE_DATE);
+			currentDate = DateUtils.addDays(previousDate, period);
+			nodeService.setProperty(assigneesListItems.get(i), ApprovalListService.PROP_ASSIGNEES_ITEM_DUE_DATE, currentDate);
+		}
+	}
+
+	private List<NodeRef> getAssigneesListItems(NodeRef assigneesListNodeRef) {
+		List<NodeRef> result = new ArrayList<NodeRef>();
+		List<AssociationRef> listItemsAssocs = nodeService.getTargetAssocs(assigneesListNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
+		for (AssociationRef listItemAssoc : listItemsAssocs) {
+			result.add(listItemAssoc.getTargetRef());
+		}
+		return result;
 	}
 }
