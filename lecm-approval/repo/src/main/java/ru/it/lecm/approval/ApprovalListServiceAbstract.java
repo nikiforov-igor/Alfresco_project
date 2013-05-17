@@ -403,16 +403,16 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 			logger.error(ex.getMessage(), ex);
 		}
 
-		String itemName = "Согласующий " + username;
+		String itemTitle = "Согласующий " + username;
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-		properties.put(ContentModel.PROP_NAME, itemName);
+		properties.put(ContentModel.PROP_TITLE, itemTitle);
 		properties.put(PROP_APPROVAL_ITEM_START_DATE, startDate);
 		properties.put(PROP_APPROVAL_ITEM_DUE_DATE, dueDate);
 		properties.put(PROP_APPROVAL_ITEM_APPROVE_DATE, completionDate);
 		properties.put(PROP_APPROVAL_ITEM_COMMENT, comment);
 		properties.put(PROP_APPROVAL_ITEM_DECISION, decision);
 
-		QName assocQName = QName.createQName(APPROVAL_LIST_NAMESPACE, itemName);
+		QName assocQName = QName.createQName(APPROVAL_LIST_NAMESPACE, itemTitle);
 		NodeRef approvalListItemRef = nodeService.createNode(approvalListRef, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_APPROVAL_ITEM, properties).getChildRef();
 		if (employeeRef != null) {
 			List<NodeRef> targetRefs = new ArrayList<NodeRef>();
