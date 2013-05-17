@@ -77,6 +77,7 @@
 		<property name="workflowService" ref="workflowServiceImpl"/>
 		<property name="workCalendar" ref="WorkCalendarService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 	</bean>
 
 	<bean id="lecm.approval.service.parallel" class="ru.it.lecm.approval.ApprovalListServiceParallel" parent="lecm.approval.service.abstract"/>

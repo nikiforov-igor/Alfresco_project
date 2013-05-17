@@ -48,6 +48,7 @@ import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
 import org.alfresco.service.cmr.workflow.WorkflowTaskState;
 import org.apache.commons.lang.time.DateUtils;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 /**
@@ -103,7 +104,13 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	private IWorkCalendar workCalendar;
 	private DictionaryService dictionaryService;
 
-	@Override
+    private LecmPermissionService lecmPermissionService;
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
+    }
+
+    @Override
 	public NodeRef getServiceRootFolder() {
 		return null;
 	}
@@ -453,10 +460,14 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
 		if (documentRef != null) {
 			NodeRef member = documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, "LECM_BASIC_PG_Reviewer");
+            if (member == null) { // сотрудник уже добавлен как участник - значит просто раздаем доп права
+                LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Reviewer");
+                lecmPermissionService.grantAccess(pgGranting, documentRef, employeeRef.getId());
+            }
 			if(logger.isTraceEnabled()) {
 				String employeeName = (String) nodeService.getProperty(employeeRef, ContentModel.PROP_NAME);
 				String docName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_NAME);
-				logger.trace("Employee {} has been invited to the document {} with LECM_BASIC_PG_Reviewer permission. MemberRef is {}", new Object[]{employeeName, docName, member});
+				logger.trace("Employee {} has been invited to the document {} with LECM_BASIC_PG_Reviewer permission. ", new Object[]{employeeName, docName});
 			}
 		} else {
 			logger.error("There is no any lecm-contract:document in bpm:package. Permissions won't be granted");
