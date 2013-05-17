@@ -62,7 +62,16 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 
         List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
         if (state == BPMState.ACTIVE || state == BPMState.ALL) {
-            tasks.addAll(stateMachineHelper.getActiveTasks(nodeRef));
+            List<WorkflowTask> activeTasks = stateMachineHelper.getActiveTasks(nodeRef);
+
+            List<WorkflowTask> userTasks = stateMachineHelper.getAssignedAndPooledTasks(AuthenticationUtil.getFullyAuthenticatedUser());
+            for (WorkflowTask activeTask : activeTasks) {
+                for (WorkflowTask userTask : userTasks) {
+                    if (activeTask.getId().equals(userTask.getId())) {
+                        tasks.add(activeTask);
+                    }
+                }
+            }
         }
 
         if (state == BPMState.COMPLETED || state == BPMState.ALL) {

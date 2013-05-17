@@ -17,14 +17,14 @@
             <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-                            var isApproved = execution.getVariable("isApproved");
-                            if (isApproved != null) {
-                                var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);
-                                finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";
-                                var approvalListRef = execution.getVariable("approvalListRef");
-                                approvalCustom.logFinalDecision(approvalListRef, finalDecision);
-                                approvalCustom.notifyFinalDecision(finalDecision, bpm_package);
-                            }
+                            <!--var isApproved = execution.getVariable("isApproved");-->
+                            <!--if (isApproved != null) {-->
+                                <!--var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);-->
+                                <!--finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";-->
+                                <!--var approvalListRef = execution.getVariable("approvalListRef");-->
+                                <!--approvalCustom.logFinalDecision(approvalListRef, finalDecision);-->
+                                <!--approvalCustom.notifyFinalDecision(finalDecision, bpm_package);-->
+                            <!--}-->
                         ]]></activiti:string>
                 </activiti:field>
             </activiti:executionListener>
@@ -82,6 +82,13 @@
 								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
 								"documentProjectNumber": documentProjectNumber
 							};
+
+							var decisionsMap = execution.getVariable("decisionsMap");
+							if (!decisionsMap) {
+								logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
+							}
+                            decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+                            execution.setVariable("decisionsMap", decisionsMap);
 
 			            	execution.setVariable("executorBossDecision", decision);
 
@@ -145,6 +152,13 @@
 								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
 								"documentProjectNumber": documentProjectNumber
 							};
+
+							var decisionsMap = execution.getVariable("decisionsMap");
+							if (!decisionsMap) {
+								logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
+							}
+                            decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+                            execution.setVariable("decisionsMap", decisionsMap);
 
                             var divisionBossDecisions = execution.getVariable("divisionBossDecisions");
                             if (!divisionBossDecisions) {
@@ -217,6 +231,13 @@
 								"documentProjectNumber": documentProjectNumber
 							};
 
+							var decisionsMap = execution.getVariable("decisionsMap");
+							if (!decisionsMap) {
+								logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
+							}
+                            decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+                            execution.setVariable("decisionsMap", decisionsMap);
+
 			            	execution.setVariable("departmentBossDecision", decision);
 
 			            	var approvalListRef = execution.getVariable("approvalListRef");
@@ -284,7 +305,14 @@
 								"documentProjectNumber": documentProjectNumber
 							};
 
-                            execution.setVariable("isApproved", approvalCustom.isApproved(decision));
+							var decisionsMap = execution.getVariable("decisionsMap");
+							if (!decisionsMap) {
+								logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
+							}
+                            decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+                            execution.setVariable("decisionsMap", decisionsMap);
+
+                            <!--execution.setVariable("isApproved", approvalCustom.isApproved(decision));-->
 
 			            	var approvalListRef = execution.getVariable("approvalListRef");
 			            	approvalCustom.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
@@ -380,7 +408,26 @@
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departmentBossDecision == 'REJECTED'}]]></conditionExpression>
         </sequenceFlow>
 
-        <sequenceFlow id="curator-to-end" name="From curator approval task to end" sourceRef="curator-approval-task" targetRef="end-custom-approval"></sequenceFlow>
+        <sequenceFlow id="curator-to-end" name="From curator approval task to end" sourceRef="curator-approval-task" targetRef="end-custom-approval">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+     					    var decisionsMap = execution.getVariable("decisionsMap");
+							if (!decisionsMap) {
+								logger.log("Attention: decisionsMap is null!");
+							}
+							var approvalListRef = execution.getVariable("approvalListRef");
+							var finalDecision = approvalCustom.getFinalDecision(decisionsMap);
+							execution.setVariable("finalDecision", finalDecision);
+							approvalCustom.logFinalDecision(approvalListRef, finalDecision);
+							approvalCustom.notifyFinalDecision(finalDecision, bpm_package)
+							execution.setVariable("isApproved", approvalCustom.isApproved(finalDecision));
+						]]></activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+        </sequenceFlow>
 
     </process>
 </definitions>

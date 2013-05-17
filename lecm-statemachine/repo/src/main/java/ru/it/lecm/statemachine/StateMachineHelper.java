@@ -871,7 +871,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     public List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser) {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
 
-        List<WorkflowTask> tasks = getAssignedAndPooledCurrentUserTasks();
+        List<WorkflowTask> tasks = getAssignedAndPooledTasks(fullyAuthenticatedUser);
         for (WorkflowTask task : tasks) {
             if (hasDocuments(task, documentTypes)) {
                 result.add(task);
@@ -913,8 +913,8 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return filterWorkflows(activeWorkflows);
     }
 
-    private List<WorkflowTask> getDocumentTasks(NodeRef nodeRef, boolean activeTasks) {
-        boolean hasPermission = lecmPermissionService.hasPermission(LecmPermissionService.PERM_WF_TASK_LIST, nodeRef);
+    private List<WorkflowTask> getDocumentTasks(NodeRef documentRef, boolean activeTasks) {
+        boolean hasPermission = lecmPermissionService.hasPermission(LecmPermissionService.PERM_WF_TASK_LIST, documentRef);
         if (!hasPermission) {
             return new ArrayList<WorkflowTask>();
         }
@@ -922,25 +922,14 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
-        List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(nodeRef, true);
+        List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(documentRef, true);
         for (WorkflowInstance workflow : activeWorkflows) {
             List<WorkflowTask> tasks = getWorkflowTasks(workflow, activeTasks);
-            if (activeTasks) {
-                List<WorkflowTask> userTasks = getAssignedAndPooledCurrentUserTasks();
-                for (WorkflowTask task : tasks) {
-                    for (WorkflowTask userTask : userTasks) {
-                        if (task.getId().equals(userTask.getId())) {
-                            result.add(task);
-                        }
-                    }
-                }
-            } else {
-                result.addAll(tasks);
-            }
+            result.addAll(tasks);
         }
 
         if (!activeTasks) {
-            List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(nodeRef, false);
+            List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(documentRef, false);
             for (WorkflowInstance workflow : completedWorkflows) {
                 List<WorkflowTask> tasks = getWorkflowTasks(workflow, false);
                 result.addAll(tasks);
@@ -950,15 +939,14 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
-    private List<WorkflowTask> getAssignedAndPooledCurrentUserTasks() {
-        String fullyAuthenticatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
+    public List<WorkflowTask> getAssignedAndPooledTasks(String fullyAuthenticatedUser) {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
+        WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
-        List<WorkflowTask> assignedTasks = serviceRegistry.getWorkflowService().getAssignedTasks(fullyAuthenticatedUser,
-                WorkflowTaskState.IN_PROGRESS);
+        List<WorkflowTask> assignedTasks = workflowService.getAssignedTasks(fullyAuthenticatedUser, WorkflowTaskState.IN_PROGRESS);
         result.addAll(assignedTasks);
 
-        List<WorkflowTask> pooledTasks = serviceRegistry.getWorkflowService().getPooledTasks(fullyAuthenticatedUser);
+        List<WorkflowTask> pooledTasks = workflowService.getPooledTasks(fullyAuthenticatedUser);
         result.addAll(pooledTasks);
 
         return result;
