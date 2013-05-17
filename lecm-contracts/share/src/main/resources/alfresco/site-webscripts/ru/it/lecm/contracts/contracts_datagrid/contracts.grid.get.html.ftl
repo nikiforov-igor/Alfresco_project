@@ -52,7 +52,7 @@
                                 filter: (filter.length > 0 ? " (" + filter + " ) AND " : "")
                                         + '(PATH:"' + LogicECM.module.Contracts.SETTINGS.draftPath + '//*"'
                                         + ' OR PATH:"' + LogicECM.module.Contracts.SETTINGS.documentPath + '//*"'
-                                        + ((archiveFolders.length > 0 && filter.length > 0)? (" OR " + archiveFolders + "") : "") + ')'
+                                        + ((archiveFolders.length > 0)? (" OR " + archiveFolders + "") : "") + ')'
 
                             }
                         },
@@ -66,7 +66,7 @@
 			}
 
             function generateFilterStr(filter) {
-                if (filter && filter != "*") {
+                if (filter) {
                     var re = /\s*,\s*/;
                     var statuses = filter.split(re);
 
