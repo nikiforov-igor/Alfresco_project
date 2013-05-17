@@ -257,7 +257,6 @@
                         <activiti:string>
                             var curators = approvalCustom.getCurators();
                             task.addCandidateUsers(curators);
-                            task.setAssignee("admin");
 
                             var dueDate = new Date();
                             dueDate.setDate(dueDate.getDate() + 2);
