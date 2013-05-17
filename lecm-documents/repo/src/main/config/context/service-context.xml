@@ -374,6 +374,7 @@
         </property>
         <property name="authenticationService" ref="authenticationService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="stateMachineHelper" ref="stateMachineHelper"/>
     </bean>
 
     <bean id="documentStatusesFilter" class="ru.it.lecm.documents.beans.DocumentStatusesFilterBean" abstract="true"/>

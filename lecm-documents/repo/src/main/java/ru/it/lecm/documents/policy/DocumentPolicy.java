@@ -21,6 +21,7 @@ import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.constraints.PresentStringConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
@@ -46,6 +47,7 @@ public class DocumentPolicy extends BaseBean
     private SubstitudeBean substituteService;
     private AuthenticationService authenticationService;
     private OrgstructureBean orgstructureService;
+    private StateMachineServiceBean stateMachineHelper;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -70,6 +72,10 @@ public class DocumentPolicy extends BaseBean
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
+    }
+
+    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
     }
 
     final public void init() {
@@ -111,8 +117,8 @@ public class DocumentPolicy extends BaseBean
 
         if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
             nodeService.setProperty(nodeRef,DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
-            String status = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS);
-            if (status.equals("Черновик")) {
+            if (stateMachineHelper.isDraft(nodeRef)) {
+                String status = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS);
                 List<String> objects = new ArrayList<String>(1);
                 if (status != null) {
                     objects.add(status);
