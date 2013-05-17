@@ -7,11 +7,7 @@ var paths = [draftPath, documentPath];
 
 var archDirectories = statemachine.getArchiveFolders("lecm-contract:document");
 for (var index in archDirectories) {
-    var archName = archDirectories[index];
-    var archFolder = companyhome.childByNamePath(archName);
-    if (archFolder != null) {
-        paths.push(archFolder.getQnamePath());
-    }
+    paths.push(archDirectories[index]);
 }
 
 var map = documentScript.getFilters(type);
@@ -27,7 +23,7 @@ for (var key in map) {
 }
 var amountMembers = contracts.getAmountMembers();
 members.push({
-    key:"participants",
+    key:"Участники",
     amountMembers:amountMembers
 });
 model.members=members;

@@ -280,7 +280,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 /**
                  * Колонки которые не следует показывать
                  */
-                excludeColumns: null,
+                excludeColumns: [],
 
                 filter : {}
             },
@@ -986,11 +986,18 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 					});
 				}
 
+                var inArray = function(value, array) {
+                    for (var i = 0; i < array.length; i++) {
+                        if (array[i] == value) return true;
+                    }
+                    return false;
+                }
+
                 var column, sortable;
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                     column = this.datagridColumns[i];
                     sortable = column.sortable;
-                    if (!(this.options.excludeColumns != null && this.options.excludeColumns[column.name])) {
+                    if (!(this.options.excludeColumns.length > 0 && inArray(column.name, this.options.excludeColumns))) {
                     columnDefinitions.push(
                         {
                             key:this.dataResponseFields[i],

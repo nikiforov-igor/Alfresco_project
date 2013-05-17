@@ -33,9 +33,7 @@
                     showCheckboxColumn: false,
                     bubblingLabel: "${bubblingLabel!"contracts-documents"}",
                     attributeForShow:"lecm-additional-document:number",
-                    excludeColumns: {
-                        "lecm-document:creator-ref":"lecm-document:creator-ref"
-                    }
+                    excludeColumns: ["lecm-document:creator-ref"]
                 }).setMessages(${messages});
 
                 var filter = generateFilterStr(LogicECM.module.Contracts.FILTER);

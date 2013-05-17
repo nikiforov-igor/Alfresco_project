@@ -41,10 +41,10 @@
                 setMessage: function Set_Message(){
                     this.message = {
                         "Все": this.msg("label.info.allContracts"),
-                        "В разработке": this.msg("label.info.contractsToDevelop"),
-                        "Активные": this.msg("label.info.activeContracts"),
-                        "Неактивные": this.msg("label.info.inactiveContracts"),
-                        "participants": this.msg("label.info.participants")
+                        "Проекты": this.msg("label.info.contractsToDevelop"),
+                        "Подписанные": this.msg("label.info.activeContracts"),
+                        "Завершенные": this.msg("label.info.inactiveContracts"),
+                        "Участники": this.msg("label.info.participants")
                     }
                 },
 
@@ -60,13 +60,12 @@
                     }
                 },
 
-                drawForm: function Draw_form()
-                {
+                drawForm: function Draw_form() {
                     Alfresco.util.Ajax.jsonGet(
                             {
-                                url:Alfresco.constants.PROXY_URI + "lecm/contracts/summary",
-                                successCallback:{
-                                    fn:function(response){
+                                url: Alfresco.constants.PROXY_URI + "lecm/contracts/summary",
+                                successCallback: {
+                                    fn: function (response) {
                                         if (this.container != null) {
                                             this.container.innerHTML = '';
                                             if (response.json != null) {
@@ -74,20 +73,22 @@
                                                 var members = response.json.members;
                                                 var innerHtml;
                                                 for (var index in list) {
-                                                    innerHtml = "<div class='column first" + (index == 0 ? " bold" : "") + "'>" + this.message[list[index].key] + "</div>"+
-                                                            "<div class='column second'><a class=\"status-button text-cropped\" href=\"/share/page/contracts-list?query=" +
-                                                            list[index].filter +"\">" +list[index].amountContracts + "</a></div>";
-                                                    this.createRow(innerHtml);
+                                                    if (list[index].key != "Корзина"){
+                                                        innerHtml = "<div class='column first" + (index == 0 ? " bold" : "") + "'>" + this.message[list[index].key] + ":" + "</div>" +
+                                                                "<div class='column second'><a class=\"status-button text-cropped\" href=\"/share/page/contracts-list?query=" +
+                                                                list[index].filter + "\">" + list[index].amountContracts + "</a></div>";
+                                                        this.createRow(innerHtml);
+                                                    }
                                                 }
-                                                innerHtml = "<div class='column first bold'>" + this.message[members.key] +"</div>"+
-                                                        "<div class='column second'><a class=\"status-button text-cropped\" onclick=\"info.showDialog();\">" +members.amountMembers + "</a></div>";
+                                                innerHtml = "<div class='column first bold'>" + this.message[members.key] + ":" + "</div>" +
+                                                "<div class='column second'><a class=\"status-button text-cropped\" onclick=\"info.showDialog();\">" + members.amountMembers + "</a></div>";
                                                 this.createRow(innerHtml);
                                             }
                                         }
                                     },
                                     scope: this
                                 },
-                                failureMessage:"message.failure"
+                                failureMessage: "message.failure"
                             });
                 },
 
