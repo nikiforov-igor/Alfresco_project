@@ -1,5 +1,6 @@
 package ru.it.lecm.statemachine.action.util;
 
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
@@ -43,8 +44,15 @@ public class DocumentWorkflowUtil {
 			descriptorJSON.put("actionId", descriptor.getActionId());
 			descriptorJSON.put("eventName", descriptor.getEventName());
 			workflows.put(executionId, descriptorJSON);
-			String result = workflows.toString();
-			serviceRegistry.getNodeService().setProperty(document, PROP_WORKFLOWS, result);
+			final String result = workflows.toString();
+            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                @Override
+                public Object doWork() throws Exception {
+                    serviceRegistry.getNodeService().setProperty(document, PROP_WORKFLOWS, result);
+                    return null;
+                }
+            });
+
 		} catch (JSONException e) {
 			throw new IllegalStateException(e);
 		}
