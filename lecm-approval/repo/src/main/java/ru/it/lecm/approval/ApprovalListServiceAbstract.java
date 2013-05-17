@@ -655,7 +655,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
     public String getExecutorBoss(String executorPersonName) {
         NodeRef executorEmployee = orgstructureService.getEmployeeByPerson(executorPersonName);
         NodeRef boss = orgstructureService.findEmployeeBoss(executorEmployee);
-        return boss == null ? executorPersonName : orgstructureService.getEmployeeLogin(boss);
+        return boss != null ? orgstructureService.getEmployeeLogin(boss) : null;
     }
 }
 

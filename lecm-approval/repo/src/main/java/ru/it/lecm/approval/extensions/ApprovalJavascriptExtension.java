@@ -227,9 +227,12 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
         return orgstructureService.getEmployeeLogin(unitBossRef);
     }
 
-    //TODO: if no curator?
     public String getFirstCurator() {
         List<NodeRef> curators = approvalListService.getCurators();
+        if (curators == null || curators.size() == 0) {
+            return null;
+        }
+
         NodeRef firstCuratorEmployee = curators.get(0);
         return orgstructureService.getEmployeeLogin(firstCuratorEmployee);
     }

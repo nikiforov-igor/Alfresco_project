@@ -40,7 +40,11 @@
                     <activiti:field name="script">
                         <activiti:string>
                             var executorBoss = approvalCustom.getExecutorBoss(documentExecutor);
-                            task.setAssignee(executorBoss);
+                            if (executorBoss != null) {
+                                task.setAssignee(executorBoss);
+                            } else {
+                                task.setAssignee(documentExecutor);
+                            }
 
                             approvalCustom.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
                             approvalCustom.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
@@ -108,6 +112,10 @@
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
+                            if (assignee == null) {
+                                task.setAssignee(documentExecutor);
+                            }
+
 						    var dueDate = new Date();
                             dueDate.setDate(dueDate.getDate() + 2);
 							task.setDueDate(dueDate);
@@ -184,7 +192,11 @@
                     <activiti:field name="script">
                         <activiti:string>
                             var departmentBoss = approvalCustom.getUnitBoss("департамент");
-                            task.setAssignee(departmentBoss);
+                            if (departmentBoss != null) {
+                                task.setAssignee(departmentBoss);
+                            } else {
+                                task.setAssignee(documentExecutor);
+                            }
 
                             var dueDate = new Date();
                             dueDate.setDate(dueDate.getDate() + 3);
@@ -256,7 +268,11 @@
                     <activiti:field name="script">
                         <activiti:string>
                             var curator = approvalCustom.getFirstCurator();
-                            task.setAssignee(curator);
+                            if (curator != null) {
+                                task.setAssignee(curator);
+                            } else {
+                                task.setAssignee(documentExecutor);
+                            }
 
                             var dueDate = new Date();
                             dueDate.setDate(dueDate.getDate() + 2);
