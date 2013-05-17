@@ -1,5 +1,6 @@
 package ru.it.lecm.statemachine.expression;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -53,4 +54,13 @@ public class ExpressionUser {
         }
     }
 
+	/**
+	 * Проверяет, что текущий пользователь является автором документа
+	 * @return
+	 */
+	public boolean isAutor() {
+		String login = AuthenticationUtil.getFullyAuthenticatedUser();
+		String creator = (String) this.serviceRegistry.getNodeService().getProperty(this.document, ContentModel.PROP_CREATOR);
+		return login.equals(creator);
+	}
 }
