@@ -3,6 +3,7 @@ package ru.it.lecm.statemachine.action;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -32,6 +33,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
     private String archiveFolderPath = "/Archive";
     private String archiveFolderPathAdditional = "";
     private String status = "UNKNOWN";
+    private String qnameArchivePath = null;
 
     private static Log logger = LogFactory.getLog(ArchiveDocumentAction.class);
 
@@ -51,7 +53,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
                 for (AccessPermission permission : permissions) {
                     if (permission.getPosition() == 0) {
                         getServiceRegistry().getPermissionService().deletePermission(document.getChildRef(), permission.getAuthority(), permission.getPermission());
-                        getServiceRegistry().getPermissionService().setPermission(document.getChildRef(), permission.getAuthority(), PermissionService.CONSUMER, true);
+                        getServiceRegistry().getPermissionService().setPermission(document.getChildRef(), permission.getAuthority(), "LECM_BASIC_PG_Reader", true);
                     }
                 }
 
@@ -90,7 +92,30 @@ public class ArchiveDocumentAction extends StateMachineAction {
     }
 
     public String getArchiveFolderPath() {
-        return archiveFolderPath.startsWith("/") ? archiveFolderPath : "/" + archiveFolderPath;
+        if (qnameArchivePath == null) {
+            qnameArchivePath = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<String>() {
+                @Override
+                public String doWork() throws Exception {
+                    String result = null;
+                    try {
+                        NodeService nodeService = getServiceRegistry().getNodeService();
+                        NodeRef folderRef = getRepositoryStructureHelper().getCompanyHomeRef();
+                        StringTokenizer tokenizer = new StringTokenizer(archiveFolderPath, "/");
+                        while (tokenizer.hasMoreTokens()) {
+                            String folderName = tokenizer.nextToken();
+                            if (!"".equals(folderName)) {
+                                folderRef = nodeService.getChildByName(folderRef, ContentModel.ASSOC_CONTAINS, folderName);
+                            }
+                        }
+                        result = nodeService.getPath(folderRef).toPrefixString(getServiceRegistry().getNamespaceService());
+                    } catch (Exception e) {
+                        logger.error("Archive folder \"" + archiveFolderPath + "\" removed or access denied");
+                    }
+                    return result;
+                }
+            });
+        }
+        return qnameArchivePath;
     }
 
     public String getStatusName() {
@@ -100,8 +125,9 @@ public class ArchiveDocumentAction extends StateMachineAction {
     private NodeRef createArchivePath(NodeRef node) {
         //Проверяем структуру
         Pattern pattern = Pattern.compile("\\{(.*?):(.*?)\\}");
-        String rootFolder = archiveFolderPath.endsWith("/") ? archiveFolderPath : archiveFolderPath + "/";
-        String path = rootFolder + archiveFolderPathAdditional;
+        String rootFolder = archiveFolderPath;
+
+        String path = archiveFolderPathAdditional;
         Matcher matcher = pattern.matcher(path);
         while (matcher.find()) {
             String prefix = matcher.group(1);
@@ -113,6 +139,34 @@ public class ArchiveDocumentAction extends StateMachineAction {
 
         NodeService nodeService = getServiceRegistry().getNodeService();
         NodeRef archiveFolder = getRepositoryStructureHelper().getCompanyHomeRef();
+        //Создаем основной путь до папки
+        boolean isCreated = false;
+        try {
+            StringTokenizer tokenizer = new StringTokenizer(rootFolder, "/");
+            while (tokenizer.hasMoreTokens()) {
+                String folderName = tokenizer.nextToken();
+                if (!"".equals(folderName)) {
+                    NodeRef folder = nodeService.getChildByName(archiveFolder, ContentModel.ASSOC_CONTAINS, folderName);
+                    if (folder == null) {
+                        folder = createFolder(archiveFolder, folderName);
+                        isCreated = true;
+                    }
+                    archiveFolder = folder;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error while create archive folder", e);  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        //Если была создана новая архивная папка сбрасываем ей права доступа и добавляем системные
+        if (isCreated && !archiveFolderPath.equals("/")) {
+            getServiceRegistry().getPermissionService().setInheritParentPermissions(archiveFolder, false);
+            Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(archiveFolder);
+            for (AccessPermission permission : permissions) {
+                getServiceRegistry().getPermissionService().deletePermission(archiveFolder, permission.getAuthority(), permission.getPermission());
+            }
+            getServiceRegistry().getPermissionService().setPermission(archiveFolder, AuthenticationUtil.SYSTEM_USER_NAME, PermissionService.READ, true);
+        }
         try {
             StringTokenizer tokenizer = new StringTokenizer(path, "/");
             while (tokenizer.hasMoreTokens()) {
@@ -126,7 +180,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error while create archive folder", e);  //To change body of catch statement use File | Settings | File Templates.
+            logger.error("Error while create archive folder", e);
         }
         return archiveFolder;
     }

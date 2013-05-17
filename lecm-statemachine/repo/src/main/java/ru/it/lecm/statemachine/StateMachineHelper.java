@@ -305,7 +305,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
                                     for (StateMachineAction action : result) {
                                         if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(ArchiveDocumentAction.class))) {
                                             ArchiveDocumentAction archiveDocumentAction = (ArchiveDocumentAction) action;
-                                            folders.add(archiveDocumentAction.getArchiveFolderPath());
+                                            String folder = archiveDocumentAction.getArchiveFolderPath();
+                                            if (folder != null) {
+                                                folders.add(archiveDocumentAction.getArchiveFolderPath());
+                                            }
                                         }
                                     }
                                 }
