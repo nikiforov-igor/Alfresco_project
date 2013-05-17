@@ -31,6 +31,7 @@ public interface ApprovalListService {
 	QName PROP_APPROVAL_LIST_DOCUMENT_VERSION = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-list-document-version");
     QName PROP_ASSIGNEES_ITEM_ORDER = QName.createQName(APPROVAL_LIST_NAMESPACE, "assignees-item-order");
 	QName PROP_ASSIGNEES_ITEM_DUE_DATE = QName.createQName(APPROVAL_LIST_NAMESPACE, "assignees-item-due-date");
+	QName PROP_ASSIGNEES_ITEM_USERNAME = QName.createQName(APPROVAL_LIST_NAMESPACE, "userName");
 	QName ASSOC_APPROVAL_ITEM_EMPLOYEE = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-employee-assoc");
 	QName ASSOC_APPROVAL_ITEM_COMMENT = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-item-comment-assoc");
 	QName ASSOC_APPROVAL_LIST_CONTAINS_APPROVAL_ITEM = QName.createQName(APPROVAL_LIST_NAMESPACE, "approval-list-contains-approval-item");
@@ -97,4 +98,6 @@ public interface ApprovalListService {
     String getExecutorBoss(String executorPersonName);
 
     List<NodeRef> getCurators();
+
+	NodeRef getEmployeeForAssignee(final NodeRef assigneeRef);
 }

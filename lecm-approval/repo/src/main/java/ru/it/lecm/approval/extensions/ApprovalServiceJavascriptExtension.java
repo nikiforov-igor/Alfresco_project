@@ -208,7 +208,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 	 * } ]
 	 * }
 	 */
-	public void save(final JSONObject json) {
+	public String save(final JSONObject json) {
 		String approvalType, listName;
 		JSONArray listItems;
 		NodeRef parentFolder;
@@ -244,6 +244,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 				properties).getChildRef();
 
 		// бежим по json-массиву "listItems"
+        StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < listItems.length(); i++) {
 			String employeeNodeRefStr, dueDateStr;
 			int order;
@@ -288,7 +289,11 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 
 			// создать ассоциацию с сотрудником
 			nodeService.createAssociation(itemNodeRef, employeeNodeRef, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC);
+
+            builder.append(itemNodeRef.toString()).append(",");
 		}
+        builder.delete(builder.length() - 1, builder.length());
+        return builder.toString();
 	}
 
 	/**
@@ -318,10 +323,6 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		for (ChildAssociationRef childAssoc : childAssocs) {
 			NodeRef assigneesListRef = childAssoc.getChildRef();
 			String assigneesListName = (String) nodeService.getProperty(assigneesListRef, ContentModel.PROP_NAME);
-
-			if (ApprovalListService.ASSIGNEES_DEFAULT_LIST_FOLDER_NAME.equals(assigneesListName)) {
-				continue;
-			}
 
 			JSONObject jsonItem = new JSONObject();
 

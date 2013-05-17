@@ -98,7 +98,7 @@
                             for( selectedItem in selectedItems ) {
                                 dataObjArrayItem = {};
 
-                                dataObjArrayItem.order = "";
+                                dataObjArrayItem.order = "0";
                                 dataObjArrayItem.dueDate = "";
                                 dataObjArrayItem.nodeRef = selectedItem;
 
@@ -158,7 +158,7 @@
                     successCallback: {
                         fn: function() {
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Список успешно удалён."
+                                text: "Список удалён"
                             });
 
                             actions().fillDropDownList();
@@ -167,7 +167,7 @@
                     failureCallback: {
                         fn: function () {
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось удалить список согласующих."
+                                text: "Не удалось удалить список, попробуйте ещё раз"
                             });
                         }
                     }

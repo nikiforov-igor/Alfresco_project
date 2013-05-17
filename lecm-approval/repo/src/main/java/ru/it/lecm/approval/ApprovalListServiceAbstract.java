@@ -644,6 +644,11 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		} catch(Exception ex) {
 			logger.error("Internal error while notifying initiator and curators", ex);
 		}
+    }
+
+	@Override
+	public NodeRef getEmployeeForAssignee(final NodeRef assigneeRef) {
+		return findNodeByAssociationRef(assigneeRef, ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 	}
 
     /**

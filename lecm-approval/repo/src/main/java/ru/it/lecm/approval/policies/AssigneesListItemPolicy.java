@@ -3,7 +3,7 @@ package ru.it.lecm.approval.policies;
 import java.io.Serializable;
 import java.util.List;
 import org.alfresco.repo.node.NodeServicePolicies;
-import org.alfresco.repo.policy.Behaviour;
+import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -11,9 +11,11 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.approval.api.ApprovalListService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  *
@@ -26,6 +28,7 @@ public class AssigneesListItemPolicy implements NodeServicePolicies.OnCreateAsso
 	private final static Logger logger = LoggerFactory.getLogger(AssigneesListItemPolicy.class);
 	private PolicyComponent policyComponent;
 	private NodeService nodeService;
+	private OrgstructureBean orgstructureBean;
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -35,9 +38,14 @@ public class AssigneesListItemPolicy implements NodeServicePolicies.OnCreateAsso
 		this.nodeService = nodeService;
 	}
 
+	public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+		this.orgstructureBean = orgstructureBean;
+	}
+
 	public final void init() {
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
+		PropertyCheck.mandatory(this, "orgstructureBean", orgstructureBean);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				ApprovalListService.TYPE_ASSIGNEES_ITEM,
@@ -45,10 +53,14 @@ public class AssigneesListItemPolicy implements NodeServicePolicies.OnCreateAsso
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				ApprovalListService.TYPE_ASSIGNEES_LIST, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM,
-				new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				new JavaBehaviour(this, "onCreateAssociation", NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
 				ApprovalListService.TYPE_ASSIGNEES_ITEM, new JavaBehaviour(this, "beforeDeleteNode"));
+
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+			ApprovalListService.TYPE_ASSIGNEES_ITEM, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC,
+			new JavaBehaviour(this, "onCreateEmployeeAssociation", NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
@@ -83,6 +95,15 @@ public class AssigneesListItemPolicy implements NodeServicePolicies.OnCreateAsso
 				order = itemOrder > order ? itemOrder : order;
 			}
 			nodeService.setProperty(assigneesItem, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER, order + 1);
+		}
+	}
+
+	public void onCreateEmployeeAssociation(AssociationRef associationRef) {
+		NodeRef assigneeItemRef = associationRef.getSourceRef();
+		NodeRef employeeRef = associationRef.getTargetRef();
+		String userName = orgstructureBean.getEmployeeLogin(employeeRef);
+		if (StringUtils.isNotEmpty(userName)) {
+			nodeService.setProperty(assigneeItemRef, ApprovalListService.PROP_ASSIGNEES_ITEM_USERNAME, userName);
 		}
 	}
 

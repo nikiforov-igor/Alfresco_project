@@ -18,17 +18,17 @@
 			</activiti:executionListener>
 		</extensionElements>
 		<startEvent id="start-sequential-approvement" name="Start sequential approvement" activiti:formKey="lecmSeq:sequentialApproval"/>
-		<userTask id="sequential-approvement-task" name="Согласовать документ" activiti:assignee="${assignee.properties.userName}" activiti:formKey="lecmSeq:approveTask">
+		<userTask id="sequential-approvement-task" name="Согласовать документ" activiti:assignee='${assignee.properties["{http://www.it.ru/logicECM/model/approval-list/1.0}userName"]}' activiti:formKey="lecmSeq:approveTask">
 			<extensionElements>
 				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
-							var dueDate = bpm_workflowDueDate;
+							var dueDate = assignee.properties["{http://www.it.ru/logicECM/model/approval-list/1.0}assignees-item-due-date"];
 							task.setDueDate(dueDate);
 							approvalSequential.grantReviewerPermissions(assignee, bpm_package);
 							approvalSequential.notifyApprovalStarted(assignee, dueDate, bpm_package);
-							var userName = assignee.properties.userName;
-							logger.log(userName	+ " must complete his task before worflow dueDate expired " + dueDate);
+							var userName = assignee.properties["{http://www.it.ru/logicECM/model/approval-list/1.0}userName"];
+							logger.log(userName	+ " must complete his task before workflow dueDate expired " + dueDate);
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
@@ -37,7 +37,7 @@
 						<activiti:string><![CDATA[
 							var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 
-							var userName = assignee.properties.userName;
+							var userName = assignee.properties["{http://www.it.ru/logicECM/model/approval-list/1.0}userName"];
 							var decision = task.getVariableLocal("lecmSeq_approveTaskResult");
 							var startDate = task.getCreateTime().getTime();
 							var dueDate = task.getDueDate().getTime();
@@ -114,7 +114,7 @@
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
 						var workflowId = "activiti$" + execution.getProcessInstanceId();
-						approvalSequential.notifyDeadlineTasks(workflowId, bpm_package, execution.getVariablesLocal());
+						approvalSequential.notifyDeadlineTasks(workflowId, bpm_package, execution);
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>
@@ -124,9 +124,8 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-						var personList = approvalSequential.getPersonListByEmployeeList(lecmSeq_employeesAssoc);
-						var approvalListRef = approvalSequential.createApprovalList(bpm_package, documentAttachmentCategoryName)
-						execution.setVariableLocal("assigneesList", personList);
+						execution.setVariableLocal("assigneesList", lecmSeq_assigneeAssoc);
+						var approvalListRef = approvalSequential.createApprovalList(bpm_package, documentAttachmentCategoryName);
 						execution.setVariable("approvalListRef", approvalListRef);
 					]]></activiti:string>
 				</activiti:field>

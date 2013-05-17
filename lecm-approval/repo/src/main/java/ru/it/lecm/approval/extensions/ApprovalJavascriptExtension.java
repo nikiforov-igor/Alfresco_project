@@ -1,5 +1,11 @@
 package ru.it.lecm.approval.extensions;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
@@ -18,8 +24,8 @@ import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
-import java.util.*;
 import org.activiti.engine.delegate.VariableScope;
+import org.alfresco.service.namespace.QName;
 
 public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension {
 
@@ -161,8 +167,15 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	}
 
 	public void grantReviewerPermissions(final ActivitiScriptNode assigneeRef, final ActivitiScriptNode bpmPackage) {
-		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(assigneeRef.getNodeRef());
-		approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
+		NodeRef candidate = assigneeRef.getNodeRef();
+		QName candidateType = nodeService.getType(candidate);
+		if (ContentModel.TYPE_PERSON.isMatch(candidateType)) {
+			NodeRef employeeRef = orgstructureService.getEmployeeByPerson(candidate);
+			approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
+		} else if (ApprovalListService.TYPE_ASSIGNEES_ITEM.isMatch(candidateType)){
+			NodeRef employeeRef = approvalListService.getEmployeeForAssignee(candidate);
+			approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
+		}
 	}
 
 	public void grantPermissionsForReviewer(String userName, ActivitiScriptNode bpmPackage) {
@@ -177,13 +190,20 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 
 	/**
 	 * прислать сотруднику уведомление о том, что начато согласование по документу
-	 * @param person cm:person согласующий по документу
+	 * @param assigneeRef cm:person согласующий по документу
 	 * @param dueDate индивидуальный срок согласования
 	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех item-ов workflow
 	 */
-	public void notifyApprovalStarted(final ActivitiScriptNode person, final Date dueDate, final ActivitiScriptNode bpmPackage) {
-		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(person.getNodeRef());
-		approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
+	public void notifyApprovalStarted(final ActivitiScriptNode assigneeRef, final Date dueDate, final ActivitiScriptNode bpmPackage) {
+		NodeRef candidate = assigneeRef.getNodeRef();
+		QName candidateType = nodeService.getType(candidate);
+		if (ContentModel.TYPE_PERSON.isMatch(candidateType)) {
+			NodeRef employeeRef = orgstructureService.getEmployeeByPerson(candidate);
+			approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
+		} else if (ApprovalListService.TYPE_ASSIGNEES_ITEM.isMatch(candidateType)){
+			NodeRef employeeRef = approvalListService.getEmployeeForAssignee(candidate);
+			approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
+		}
 	}
 
 	public void notifyCustomApprovalStarted(String userName, Date dueDate, final ActivitiScriptNode bpmPackage) {

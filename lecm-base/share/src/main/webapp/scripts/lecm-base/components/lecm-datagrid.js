@@ -865,6 +865,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 				// Show grid
 				Dom.setStyle(this.id + "-body", "visibility", "visible");
+
+                Bubbling.fire("datagridVisible");
             },
 
             _setupPaginatior: function DataGrid_setupPaginatior() {

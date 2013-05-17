@@ -1,1 +1,1 @@
-approvalService.save(json);
+model.items = approvalService.save(json);

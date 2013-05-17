@@ -126,6 +126,7 @@
           depends-on="lecm.approval.modelBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
     </bean>
 
     <bean id="webscript.ru.it.lecm.approval.GetDocumentDataByTaskId.get" class="ru.it.lecm.approval.webscript.GetDocumentDataByTaskIdOrNodeRef" parent="webscript">

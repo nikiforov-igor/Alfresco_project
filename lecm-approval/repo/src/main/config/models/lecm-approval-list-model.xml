@@ -54,6 +54,11 @@
                 <!-- Срок согласования -->
                 <property name="lecm-al:assignees-item-due-date">
                     <type>d:date</type>
+                </property>
+
+				<!-- Имя пользователя согласующего -->
+				<property name="lecm-al:userName">
+					<type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
             </properties>
