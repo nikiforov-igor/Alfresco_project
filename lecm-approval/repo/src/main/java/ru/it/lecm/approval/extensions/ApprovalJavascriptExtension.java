@@ -175,16 +175,6 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
         approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
     }
 
-	public void grantPermissionsForReviewers(Collection<String> candidateUsers, ActivitiScriptNode bpmPackage) {
-        if (candidateUsers == null) {
-            return;
-        }
-
-        for (String candidateUser : candidateUsers) {
-            grantPermissionsForReviewer(candidateUser, bpmPackage);
-        }
-    }
-
 	/**
 	 * прислать сотруднику уведомление о том, что начато согласование по документу
 	 * @param person cm:person согласующий по документу
@@ -205,16 +195,6 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
         NodeRef employeeRef = orgstructureService.getEmployeeByPerson(personRef);
         approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
 	}
-
-	public void notifyCustomApprovalStarted(Collection<String> userNames, Date dueDate, final ActivitiScriptNode bpmPackage) {
-        if (userNames == null || bpmPackage == null) {
-            return;
-        }
-
-        for (String userName : userNames) {
-            notifyCustomApprovalStarted(userName, dueDate, bpmPackage);
-        }
-    }
 
 	public void notifyFinalDecision(final String decision, final ActivitiScriptNode bpmPackage) {
 		approvalListService.notifyFinalDecision(decision, bpmPackage.getNodeRef());
@@ -247,16 +227,11 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
         return orgstructureService.getEmployeeLogin(unitBossRef);
     }
 
-    public Collection<String> getCurators() {
-        Collection<String> result = new ArrayList<String>();
-
+    //TODO: if no curator?
+    public String getFirstCurator() {
         List<NodeRef> curators = approvalListService.getCurators();
-        for (NodeRef curatorEmployee : curators) {
-            String login = orgstructureService.getEmployeeLogin(curatorEmployee);
-            result.add(login);
-        }
-
-        return result;
+        NodeRef firstCuratorEmployee = curators.get(0);
+        return orgstructureService.getEmployeeLogin(firstCuratorEmployee);
     }
 
     public Collection<String> getDivisionBosses(String divisionCodesStr) {

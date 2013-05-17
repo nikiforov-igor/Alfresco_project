@@ -255,15 +255,15 @@
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string>
-                            var curators = approvalCustom.getCurators();
-                            task.addCandidateUsers(curators);
+                            var curator = approvalCustom.getFirstCurator();
+                            task.setAssignee(curator);
 
                             var dueDate = new Date();
                             dueDate.setDate(dueDate.getDate() + 2);
                             task.setDueDate(dueDate);
 
-                            approvalCustom.grantPermissionsForReviewers(curators, bpm_package);
-                            approvalCustom.notifyCustomApprovalStarted(curators, task.getDueDate(), bpm_package);
+                            approvalCustom.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
+                            approvalCustom.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -274,9 +274,7 @@
                             //<![CDATA[
 			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 
-			            	var userName = person.properties.userName;
-                            task.setAssignee(userName);
-
+                            var userName = task.getAssignee();
 
                             var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
 							var startDate = task.getCreateTime().getTime();
@@ -312,8 +310,6 @@
 							}
                             decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
                             execution.setVariable("decisionsMap", decisionsMap);
-
-                            <!--execution.setVariable("isApproved", approvalCustom.isApproved(decision));-->
 
 			            	var approvalListRef = execution.getVariable("approvalListRef");
 			            	approvalCustom.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
