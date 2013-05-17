@@ -136,7 +136,7 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 						ChildAssociationRef childAssoc = nodeService.createNode (parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
 						return childAssoc.getChildRef ();
 					}
-				});
+				}, false, true);
 			}
 		});
 		logger.trace ("NodeRef {} was sucessfully created for {} folder", folderRef, folder);

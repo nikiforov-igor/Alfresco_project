@@ -2,6 +2,7 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -241,20 +242,25 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         return repositoryStructureHelper.getDraftsRef(person);
     }
 
-    public NodeRef getDraftRoot(String rootName) {
-        NodeRef draftRef = getDraftRoot();
+    public NodeRef getDraftRoot(final String rootName) {
+        final NodeRef draftRef = getDraftRoot();
         NodeRef nodeRef = nodeService.getChildByName(draftRef, ContentModel.ASSOC_CONTAINS, rootName);
 
         if (nodeRef == null) {
-            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
-            QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+	        RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+	        return transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+		        @Override
+		        public NodeRef execute () throws Throwable {
+			        QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+			        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
+			        QName nodeTypeQName = ContentModel.TYPE_FOLDER;
 
-            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-            properties.put(ContentModel.PROP_NAME, rootName);
-            ChildAssociationRef associationRef = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-
-            return associationRef.getChildRef();
+			        Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+			        properties.put(ContentModel.PROP_NAME, rootName);
+			        ChildAssociationRef childAssoc = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+			        return childAssoc.getChildRef ();
+		        }
+	        }, false, true);
         }
         return nodeRef;
     }
