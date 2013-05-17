@@ -17,7 +17,7 @@
                     text: "Все",
                     onclick: {
                         fn: function () {
-                            this.doChangeFilter("TYPE:\"lecm-contract:document\"");
+                            this.doChangeFilter("");
 
                         },
                         scope: this
