@@ -185,6 +185,8 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 					ApprovalListService.ASSIGNEES_DEFAULT_LIST_FOLDER_NAME),
 					ApprovalListService.TYPE_ASSIGNEES_LIST,
 					properties).getChildRef();
+		} else {
+			clearAssigneesList(defaultAssigneesListFolderRef);
 		}
 
 		return defaultAssigneesListFolderRef;
@@ -503,10 +505,19 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 			throw new WebScriptException("Insufficient params in JSON", ex);
 		}
 
-		NodeRef assigneesListNodeRef = new NodeRef(assigneesListNodeRefStr);
+		clearAssigneesList(new NodeRef(assigneesListNodeRefStr));
+	}
+
+	/**
+	 * Удалить все assignees-item из списка согласующих.
+	 *
+	 * @param assigneesListNodeRef NodeRef списка согласующих
+	 */
+	private void clearAssigneesList(NodeRef assigneesListNodeRef) {
 		List<AssociationRef> listItemsAssocs = nodeService.getTargetAssocs(assigneesListNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
 		for (AssociationRef listItemAssoc : listItemsAssocs) {
 			NodeRef listItemNodeRef = listItemAssoc.getTargetRef();
+			nodeService.removeAssociation(assigneesListNodeRef, listItemNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
 			nodeService.deleteNode(listItemNodeRef);
 		}
 	}
