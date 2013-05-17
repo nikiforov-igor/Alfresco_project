@@ -111,6 +111,14 @@ public class DocumentPolicy extends BaseBean
 
         if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
             nodeService.setProperty(nodeRef,DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
+            String status = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS);
+            if (status.equals("Черновик")) {
+                List<String> objects = new ArrayList<String>(1);
+                if (status != null) {
+                    objects.add(status);
+                }
+                businessJournalService.log(nodeRef, EventCategory.ADD, "Создан новый документ \"#mainobject\" в статусе \"#object1\"", objects);
+            }
         }
         updatePresentString(nodeRef);
     }
@@ -159,12 +167,6 @@ public class DocumentPolicy extends BaseBean
         final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
-        List<String> objects = new ArrayList<String>(1);
-        String status = (String) nodeService.getProperty(childAssocRef.getChildRef(), StatemachineModel.PROP_STATUS);
-        if (status != null) {
-            objects.add(status);
-        }
-        businessJournalService.log(childAssocRef.getChildRef(), EventCategory.ADD, "Создан новый документ \"#mainobject\" в статусе \"#object1\"", objects);
     }
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
