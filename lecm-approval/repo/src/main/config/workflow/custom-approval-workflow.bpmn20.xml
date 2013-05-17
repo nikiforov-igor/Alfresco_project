@@ -344,10 +344,31 @@
 
         <receiveTask id="receivetask1" name="Receive Task"/>
 
+        <serviceTask id="beforeComplete" name="Service Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+                        var decisionsMap = execution.getVariable("decisionsMap");
+                        if (!decisionsMap) {
+                            logger.log("Attention: decisionsMap is null!");
+                        }
+                        var approvalListRef = execution.getVariable("approvalListRef");
+                        var finalDecision = approvalCustom.getFinalDecision(decisionsMap);
+                        execution.setVariable("finalDecision", finalDecision);
+                        approvalCustom.logFinalDecision(approvalListRef, finalDecision);
+                        approvalCustom.notifyFinalDecision(finalDecision, bpm_package)
+                        execution.setVariable("isApproved", approvalCustom.isApproved(finalDecision));
+                            ]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+
         <sequenceFlow id="start-to-executor-boss" sourceRef="start-custom-approval" targetRef="scripttask1"/>
-        <sequenceFlow id="flow333" sourceRef="scripttask1" targetRef="receivetask1"/>
-        <sequenceFlow id="flow444" sourceRef="receivetask1" targetRef="alfrescoScripttask2"/>
-        <sequenceFlow id="flow555" sourceRef="alfrescoScripttask2" targetRef="executor-boss-approval-task"/>
+        <sequenceFlow id="flow3" sourceRef="scripttask1" targetRef="receivetask1"/>
+        <sequenceFlow id="flow4" sourceRef="receivetask1" targetRef="alfrescoScripttask2"/>
+        <sequenceFlow id="flow5" sourceRef="alfrescoScripttask2" targetRef="executor-boss-approval-task"/>
+
+        <sequenceFlow id="flow6" sourceRef="beforeComplete" targetRef="end-custom-approval"/>
 
         <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
         <sequenceFlow id="executor-boss-to-gateway" name="From executor boss approval task" sourceRef="executor-boss-approval-task" targetRef="exclusivegateway1"></sequenceFlow>
@@ -366,7 +387,7 @@
             </extensionElements>
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${executorBossDecision == 'APPROVED' || executorBossDecision == 'APPROVED_WITH_REMARK'}]]></conditionExpression>
         </sequenceFlow>
-        <sequenceFlow id="executor-to-end" name="Executor Boss task rejected" sourceRef="exclusivegateway1" targetRef="end-custom-approval">
+        <sequenceFlow id="executor-to-end" name="Executor Boss task rejected" sourceRef="exclusivegateway1" targetRef="beforeComplete">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${executorBossDecision == 'REJECTED'}]]></conditionExpression>
         </sequenceFlow>
 
@@ -392,7 +413,7 @@
         <sequenceFlow id="division-to-department" name="Division Boss task approved" sourceRef="exclusivegateway2" targetRef="department-boss-approval-task">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${divisionBossFinalDecision}]]></conditionExpression>
         </sequenceFlow>
-        <sequenceFlow id="division-to-end" name="Division Boss task rejected" sourceRef="exclusivegateway2" targetRef="end-custom-approval">
+        <sequenceFlow id="division-to-end" name="Division Boss task rejected" sourceRef="exclusivegateway2" targetRef="beforeComplete">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!divisionBossFinalDecision}]]></conditionExpression>
         </sequenceFlow>
 
@@ -401,30 +422,11 @@
         <sequenceFlow id="department-to-curator" name="Department Boss task approved" sourceRef="exclusivegateway3" targetRef="curator-approval-task">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departmentBossDecision == 'APPROVED' || executorBossDecision == 'APPROVED_WITH_REMARK'}]]></conditionExpression>
         </sequenceFlow>
-        <sequenceFlow id="department-to-end" name="Department Boss task rejected" sourceRef="exclusivegateway3" targetRef="end-custom-approval">
+        <sequenceFlow id="department-to-end" name="Department Boss task rejected" sourceRef="exclusivegateway3" targetRef="beforeComplete">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departmentBossDecision == 'REJECTED'}]]></conditionExpression>
         </sequenceFlow>
 
-        <sequenceFlow id="curator-to-end" name="From curator approval task to end" sourceRef="curator-approval-task" targetRef="end-custom-approval">
-            <extensionElements>
-                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
-                    <activiti:field name="script">
-                        <activiti:string><![CDATA[
-     					    var decisionsMap = execution.getVariable("decisionsMap");
-							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null!");
-							}
-							var approvalListRef = execution.getVariable("approvalListRef");
-							var finalDecision = approvalCustom.getFinalDecision(decisionsMap);
-							execution.setVariable("finalDecision", finalDecision);
-							approvalCustom.logFinalDecision(approvalListRef, finalDecision);
-							approvalCustom.notifyFinalDecision(finalDecision, bpm_package)
-							execution.setVariable("isApproved", approvalCustom.isApproved(finalDecision));
-						]]></activiti:string>
-                    </activiti:field>
-                </activiti:executionListener>
-            </extensionElements>
-        </sequenceFlow>
+        <sequenceFlow id="curator-to-end" name="From curator approval task to end" sourceRef="curator-approval-task" targetRef="beforeComplete"></sequenceFlow>
 
     </process>
 </definitions>
