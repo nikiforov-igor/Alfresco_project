@@ -304,17 +304,18 @@ LogicECM.module = LogicECM.module || {};
                     formId: "",
                     fields: JSON.stringify(fields)
                 });
-                new Alfresco.module.SimpleDialog("statemachine-editor-new-status").setOptions({
-                    width:"60em",
+                new Alfresco.module.SimpleDialog("action-edit-form").setOptions({
+                    width:"70em",
                     templateUrl:templateUrl,
                     actionUrl:null,
                     destroyOnHide:true,
                     doBeforeDialogShow:{
                         fn: function(p_form, p_dialog) {
-                            var fileSpan = '<span class="light">Заголовок</span>';
+                            var fileSpan = '<span class="light">' + this.msg("document.main.form.edit") + '</span>';
                             Alfresco.util.populateHTML(
                                 [ p_dialog.id + "-form-container_h", fileSpan]
                             );
+                            Dom.addClass(p_dialog.id + "-form", "dashlet-metadata-edit");
                         },
                         scope: this
                     },

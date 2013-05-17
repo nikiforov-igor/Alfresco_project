@@ -58,7 +58,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contract:totalAmount" set="price"/>
+                    <field id="lecm-contract:totalAmount" set="price" help=""/>
                     <field id="lecm-contract:currency-assoc" set="price">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
@@ -185,7 +185,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contract:totalAmount" set="price"/>
+                    <field id="lecm-contract:totalAmount" set="price" help=""/>
                     <field id="lecm-contract:currency-assoc" set="price">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>

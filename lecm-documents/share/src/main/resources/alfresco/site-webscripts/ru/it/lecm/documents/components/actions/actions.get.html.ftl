@@ -4,7 +4,8 @@
     <#include "/org/alfresco/components/component.head.inc">
     <#assign el=args.htmlid/>
 
-<@script type="text/javascript" src="${page.url.context}/scripts/statemachine/form.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/scripts/statemachine/form.js"></@script>
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata-form-edit.css" />
 <!-- Markup -->
 <div class="widget-panel-white" id="${el}">
 <div class="widget-panel-grey">

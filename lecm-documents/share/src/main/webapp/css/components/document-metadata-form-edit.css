@@ -16,12 +16,13 @@
     margin: 0;
 }
 .yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field div.viewmode-field span.viewmode-value {
+    max-width: 200px;
     padding-left: 0;
 }
 .yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field input[type=text],
 .yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field div.selectone-control select,
 .yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
-    width: 230px;
+    width: 225px;
     overflow: hidden;
 }
 .yui-skin-lecmTheme .yui-panel .dashlet-metadata-edit div.form-field > input.date-entry {
