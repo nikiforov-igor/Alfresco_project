@@ -71,30 +71,6 @@
 	    <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 
-	<bean id="contractPolicy" class="ru.it.lecm.contracts.policies.ContractsPolicy"
-			init-method="init"
-			depends-on="lecmSecurityGroupsBean,contracts.LogicEcmContractsBootstrap">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
-
-		<property name="authenticationService" ref="authenticationService"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="sgNotifier" ref="lecmSecurityGroupsBean" />
-		<property name="businessJournalService" ref="businessJournalService"/>
-
-		<property name="grantDynaRoleCode" value="BR_INITIATOR"/>
-
-		<!--
-		<property name="grantAccessTag" value="LECM_BASIC_PG_Reader"/>
-		  -->
-		<property name="grantAccessTag" value="LECM_BASIC_PG_Initiator"/>
-
-		<!-- 
-		<property name="businessJournalService" ref="businessJournalService"/>
-		  -->
-	</bean>
-
     <bean id="contractsScript" parent="baseScript" class="ru.it.lecm.contracts.script.ContractsWebScriptBean"
           depends-on="nodeService, contractService">
         <property name="extensionName">

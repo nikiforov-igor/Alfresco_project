@@ -21,6 +21,7 @@ import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.constraints.PresentStringConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
@@ -38,6 +39,8 @@ import java.util.Map;
 public class DocumentPolicy extends BaseBean
         implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.OnUpdatePropertiesPolicy {
 
+	private static final String GRAND_DYNAMIC_ROLE_CODE_INITIATOR = "BR_INITIATOR";
+
     final static protected Logger logger = LoggerFactory.getLogger(DocumentPolicy.class);
     final private QName[] IGNORED_PROPERTIES = {DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT, StatemachineModel.PROP_STATUS};
 
@@ -48,6 +51,7 @@ public class DocumentPolicy extends BaseBean
     private AuthenticationService authenticationService;
     private OrgstructureBean orgstructureService;
     private StateMachineServiceBean stateMachineHelper;
+	private LecmPermissionService lecmPermissionService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -78,7 +82,11 @@ public class DocumentPolicy extends BaseBean
         this.stateMachineHelper = stateMachineHelper;
     }
 
-    final public void init() {
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
+
+	final public void init() {
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
         PropertyCheck.mandatory(this, "nodeService", nodeService);
         PropertyCheck.mandatory(this, "authenticationService", authenticationService);
@@ -173,6 +181,12 @@ public class DocumentPolicy extends BaseBean
         final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
+
+	    // Добавление прав инициатора
+	    NodeRef docRef = childAssocRef.getChildRef();
+	    String authorLogin = authenticationService.getCurrentUserName();
+	    NodeRef employee = orgstructureService.getEmployeeByPerson(authorLogin);
+	    lecmPermissionService.grantDynamicRole(GRAND_DYNAMIC_ROLE_CODE_INITIATOR, docRef, employee.getId(), lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Initiator) );
     }
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
