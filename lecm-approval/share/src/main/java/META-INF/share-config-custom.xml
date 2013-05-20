@@ -176,6 +176,11 @@
 					<field id="lecmSeq:approveTaskResult">
 						<control template="/ru/it/lecm/approval/controls/activiti-transitions-radiobuttons.ftl" />
 					</field>
+					<field id="lecmSeq:approveTaskCommentAssoc">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
+							<control-param name="uploadDirectoryPath">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
