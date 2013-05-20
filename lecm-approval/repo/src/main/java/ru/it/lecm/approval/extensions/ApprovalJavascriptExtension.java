@@ -1,11 +1,6 @@
 package ru.it.lecm.approval.extensions;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
@@ -15,6 +10,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -24,8 +20,7 @@ import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
-import org.activiti.engine.delegate.VariableScope;
-import org.alfresco.service.namespace.QName;
+import java.util.*;
 
 public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension {
 
@@ -225,6 +220,7 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
         ArrayList<String> definitions = new ArrayList<String>();
         definitions.add("lecmParallelApproval");
         definitions.add("lecmSequentialApproval");
+        definitions.add("lecmCustomApproval");
         stateMachineHelper.terminateWorkflowsByDefinitionId(document, definitions, variable, value);
     }
 
