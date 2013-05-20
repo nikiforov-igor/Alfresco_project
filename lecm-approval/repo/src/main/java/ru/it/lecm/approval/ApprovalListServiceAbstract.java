@@ -434,9 +434,17 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 					commentFileName.append(nodeService.getProperty(employeeRef, ContentModel.PROP_NAME));
 				}
 
-				String commentFileNameStr = FileNameValidator.getValidFileName(commentFileName.toString());
+				final String commentFileNameStr = FileNameValidator.getValidFileName(commentFileName.toString());
 
-				nodeService.setProperty(commentRef, ContentModel.PROP_NAME, commentFileNameStr);
+				final NodeRef commentRefFinal = commentRef;
+				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+				transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+					@Override
+					public Object execute () throws Throwable {
+						nodeService.setProperty(commentRefFinal, ContentModel.PROP_NAME, commentFileNameStr);
+						return null;
+					}
+				}, false, true);
 
 				QName commentAssocQName = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, commentFileNameStr);
 				nodeService.moveNode(commentRef, attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentAssocQName);

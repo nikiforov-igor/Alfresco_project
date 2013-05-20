@@ -94,6 +94,8 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeUpdateNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnMoveNodePolicy.QNAME,
+                ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onMoveNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
@@ -145,6 +147,15 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	        }
         }
     }
+
+	public void onMoveNode(ChildAssociationRef childAssociationRef, ChildAssociationRef childAssociationRef2) {
+		final NodeRef newDocument = this.documentAttachmentsService.getDocumentByAttachment(childAssociationRef2.getChildRef());
+		if (newDocument != null) {
+			List<String> objects = new ArrayList<String>(1);
+			objects.add(childAssociationRef2.getChildRef().toString());
+			businessJournalService.log(newDocument, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator добавил(а) вложение #object1 к документу #mainobject", objects);
+		}
+	}
 
     public void beforeDeleteNode(NodeRef nodeRef) {
         final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
@@ -200,7 +211,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 			    List<String> objects = new ArrayList<String>(1);
 			    objects.add(nodeRef.toString());
 			    businessJournalService.log(document, EventCategory.COMMENT_DOCUMENT_ATTACHMENT, "#initiator прокомментировал(а) вложение #object1 в документе #mainobject", objects);
-		    } else if (before.size() == after.size()) {
+		    } else if (before.size() == after.size() && hasChange(before, after)) {
 			    List<String> objects = new ArrayList<String>(1);
 			    objects.add(nodeRef.toString());
 		        businessJournalService.log(document, EventCategory.EDIT_DOCUMENT_ATTACHMENT_PROPERTIES, "#initiator изменил(а) свойства вложения #object1 в документе #mainobject", objects);
@@ -219,6 +230,21 @@ public class DocumentAttachmentsPolicy extends BaseBean {
         }
         return result;
     }
+
+	private boolean hasChange(Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		if (before.size() != after.size()) {
+			return true;
+		} else {
+			for (QName affected : before.keySet()) {
+				Object prev = before.get(affected);
+				Object cur = after.get(affected);
+				if (cur != null && !cur.equals(prev)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
     public void setSubstituteService(SubstitudeBean substitudeService) {
         this.substituteService = substitudeService;
