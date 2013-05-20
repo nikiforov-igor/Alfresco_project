@@ -34,3 +34,15 @@
 	background-image: url('/share/res/components/images/delete-16.png');
 	cursor: pointer;
 }
+
+.title h3 {
+    font-weight: bold;
+    margin: 5px 0;
+}
+.diagram-cont > div:not(.yui-resize-handle) {
+    height: 150px;
+    overflow: auto;
+    border: solid 1px #d3d3d3;
+    padding: 0 10px;
+    margin-bottom: 10px;
+}
