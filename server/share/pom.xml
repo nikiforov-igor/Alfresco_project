@@ -73,13 +73,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.experts</groupId>
-			<artifactId>experts-share</artifactId>
-			<version>${platform.version}</version>
-			<type>amp</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.forms.jasperforms</groupId>
 			<artifactId>jasperforms-share</artifactId>
 			<version>${platform.version}</version>

@@ -129,13 +129,6 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.experts</groupId>
-			<artifactId>experts-repo</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.forms.jasperforms</groupId>
 			<artifactId>jasperforms-repo</artifactId>
 			<version>${platform.version}</version>
