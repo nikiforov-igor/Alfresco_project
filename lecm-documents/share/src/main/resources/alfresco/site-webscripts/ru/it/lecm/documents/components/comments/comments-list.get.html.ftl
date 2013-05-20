@@ -21,8 +21,8 @@ new LogicECM.CommentsList("${el}").setOptions(
                 language: "${locale?substring(0, 2)?js_string}"
             },
             permissions: {
-                edit: <#if hasDeleteCommentPerm!false>true<#else>false</#if>,
-                delete: <#if hasDeleteCommentPerm!false>true<#else>false</#if>
+                "edit": <#if hasDeleteCommentPerm!false>true<#else>false</#if>,
+                "delete": <#if hasDeleteCommentPerm!false>true<#else>false</#if>
             }
         }).setMessages(
         ${messages}
