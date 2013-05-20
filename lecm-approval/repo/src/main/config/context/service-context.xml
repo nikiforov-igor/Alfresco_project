@@ -66,6 +66,7 @@
 		</property>
 	</bean>
 
+	<util:constant id="approvalFolder" static-field="ru.it.lecm.approval.ApprovalListServiceAbstract.APPROVAL_FOLDER"/>
 	<bean id="lecm.approval.service.abstract" class="ru.it.lecm.approval.ApprovalListServiceAbstract" parent="baseBean" depends-on="lecm.approval.workflowBootstrap" abstract="true">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
@@ -78,6 +79,11 @@
 		<property name="workCalendar" ref="WorkCalendarService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+		<property name="folders">
+			<map>
+				<entry key="#{approvalFolder}" value="Сервис Согласование документов"/>
+			</map>
+		</property>
 	</bean>
 
 	<bean id="lecm.approval.service.parallel" class="ru.it.lecm.approval.ApprovalListServiceParallel" parent="lecm.approval.service.abstract"/>
@@ -107,8 +113,8 @@
     <bean id="lecm.approval.javascriptExtension.service" class="ru.it.lecm.approval.extensions.ApprovalServiceJavascriptExtension"
           parent="lecm.approval.javascriptExtension.abstract">
         <property name="extensionName" value="approvalService"/>
-        <property name="repository" ref="repositoryHelper"/>
         <property name="authenticationService" ref="authenticationService"/>
+		<property name="approvalListService" ref="lecm.approval.service.parallel"/>
     </bean>
 
     <bean id="lecm.approval.javascriptExtension.custom" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension"

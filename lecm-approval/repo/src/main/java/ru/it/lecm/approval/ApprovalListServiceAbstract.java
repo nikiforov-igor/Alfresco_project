@@ -89,6 +89,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 		}
 	}
 
+	public final static String APPROVAL_FOLDER = "APPROVAL_FOLDER";
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceAbstract.class);
 	private final static QName FAKE_PROP_COMINGSOON = QName.createQName(NamespaceService.ALFRESCO_URI, "comingSoonNotified");
 	private final static QName FAKE_PROP_OVERDUE = QName.createQName(NamespaceService.ALFRESCO_URI, "overdueNotified");
@@ -662,5 +663,10 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
         NodeRef boss = orgstructureService.findEmployeeBoss(executorEmployee);
         return boss != null ? orgstructureService.getEmployeeLogin(boss) : null;
     }
+
+	@Override
+	public NodeRef getApprovalFolder() {
+		return getFolder(APPROVAL_FOLDER);
+	}
 }
 

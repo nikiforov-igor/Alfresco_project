@@ -2,7 +2,6 @@ package ru.it.lecm.approval.extensions;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -12,8 +11,6 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -38,21 +35,17 @@ import org.springframework.extensions.webscripts.WebScriptException;
 
 public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExtension {
 
-	private final static Logger logger = LoggerFactory.getLogger(ApprovalServiceJavascriptExtension.class);
 	private final static DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 	private AuthenticationService authenticationService;
-	private PersonService personService;
 	private NodeService nodeService;
-	private ServiceRegistry serviceRegistry;
-	private OrgstructureBean orgstructureService;
-	private Repository repository;
+	private ApprovalListService approvalListService;
 
 	public void setAuthenticationService(AuthenticationService authenticationService) {
 		this.authenticationService = authenticationService;
 	}
 
 	public void setPersonService(PersonService personService) {
-		this.personService = personService;
+		//nop
 	}
 
 	public void setNodeService(NodeService nodeService) {
@@ -60,16 +53,15 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 	}
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
+		//nop
 	}
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		this.orgstructureService = orgstructureService;
+		//nop
 	}
 
-	public void setRepository(Repository repository) {
-		this.repository = repository;
-		repository.init();
+	public void setApprovalListService(ApprovalListService approvalListService) {
+		this.approvalListService = approvalListService;
 	}
 
 	private enum ApprovementType {
@@ -105,22 +97,18 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		final Map<String, NodeRef> assigneesListsFolders = new HashMap<String, NodeRef>();
 
 		String currentUserName = authenticationService.getCurrentUserName();
-		NodeRef personRef = personService.getPerson(currentUserName, false);
-		NodeRef userHomeRef = repository.getUserHome(personRef);
+		NodeRef approvalHomeRef = approvalListService.getApprovalFolder();
 
-		// Попробуем найти папку "Списки согласования".
-		NodeRef assigneesListsFolderRef = null;
-		List<ChildAssociationRef> homeFolderChildAssocs = nodeService.getChildAssocs(userHomeRef);
-		for (ChildAssociationRef homeFolderChildAssoc : homeFolderChildAssocs) {
-
-			NodeRef currentChildRef = homeFolderChildAssoc.getChildRef();
-			String childName = (String) nodeService.getProperty(currentChildRef, ContentModel.PROP_NAME);
-
-			if (childName.equalsIgnoreCase(ApprovalListService.ASSIGNEES_LISTS_FOLDER_NAME)) {
-				assigneesListsFolderRef = currentChildRef;
-				break;
-			}
+		//ищем папку с пользователем
+		NodeRef userHomeRef = nodeService.getChildByName(approvalHomeRef, ContentModel.ASSOC_CONTAINS, currentUserName);
+		if (userHomeRef == null) {
+			QName currentUserQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, currentUserName);
+			Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+			props.put(ContentModel.PROP_NAME, currentUserName);
+			userHomeRef = nodeService.createNode(approvalHomeRef, ContentModel.ASSOC_CONTAINS, currentUserQName, ContentModel.TYPE_FOLDER, props).getChildRef();
 		}
+		// Попробуем найти папку "Списки согласования".
+		NodeRef assigneesListsFolderRef = nodeService.getChildByName(userHomeRef, ContentModel.ASSOC_CONTAINS, ApprovalListService.ASSIGNEES_LISTS_FOLDER_NAME);
 
 		// Если найти не удалось...
 		if (assigneesListsFolderRef == null) {
@@ -130,8 +118,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 			properties.put(ContentModel.PROP_NAME, ApprovalListService.ASSIGNEES_LISTS_FOLDER_NAME);
 			NodeRef assigneesLists = nodeService.createNode(userHomeRef,
 					ContentModel.ASSOC_CONTAINS,
-					QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
-					ApprovalListService.ASSIGNEES_LISTS_FOLDER_NAME),
+					QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ApprovalListService.ASSIGNEES_LISTS_FOLDER_NAME),
 					ContentModel.TYPE_FOLDER,
 					properties).getChildRef();
 
@@ -140,8 +127,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 				properties.put(ContentModel.PROP_NAME, assigneesListFolder);
 				NodeRef assigneesListsParallel = nodeService.createNode(assigneesLists,
 						ContentModel.ASSOC_CONTAINS,
-						QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
-						assigneesListFolder),
+						QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, assigneesListFolder),
 						ContentModel.TYPE_FOLDER,
 						properties).getChildRef();
 				assigneesListsFolders.put(assigneesListFolder, assigneesListsParallel);
@@ -150,7 +136,6 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		} else { // Если нашли...
 			for (String assigneesListFolder : ASSIGNEES_LISTS_FOLDERS) {
 				NodeRef assigneesListFolderRef = nodeService.getChildByName(assigneesListsFolderRef, ContentModel.ASSOC_CONTAINS, assigneesListFolder);
-
 				assigneesListsFolders.put(assigneesListFolder, assigneesListFolderRef);
 			}
 		}

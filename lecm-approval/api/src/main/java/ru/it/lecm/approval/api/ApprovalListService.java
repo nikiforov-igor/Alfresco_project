@@ -100,4 +100,6 @@ public interface ApprovalListService {
     List<NodeRef> getCurators();
 
 	NodeRef getEmployeeForAssignee(final NodeRef assigneeRef);
+
+	NodeRef getApprovalFolder();
 }
