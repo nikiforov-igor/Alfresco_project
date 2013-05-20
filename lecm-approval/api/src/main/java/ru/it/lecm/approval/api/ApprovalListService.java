@@ -39,7 +39,7 @@ public interface ApprovalListService {
 	QName ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC = QName.createQName(APPROVAL_LIST_NAMESPACE, "assignees-item-employee-assoc");
 
     String ASSIGNEES_LISTS_FOLDER_NAME = "Списки согласования";
-    String ASSIGNEES_DEFAULT_LIST_FOLDER_NAME = "Список по умолчанию";
+    String ASSIGNEES_DEFAULT_LIST_FOLDER_NAME = "Без списка (список не выбран)";
 	String ASSIGNEES_LISTS_PARALLEL_FOLDER_NAME = "Параллельное согласование";
 	String ASSIGNEES_LISTS_SEQUENTIAL_FOLDER_NAME = "Последовательное согласование";
 

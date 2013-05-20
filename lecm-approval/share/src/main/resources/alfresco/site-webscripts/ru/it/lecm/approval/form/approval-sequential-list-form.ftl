@@ -224,23 +224,25 @@
             });
         }
 
-        function clearDates() {
-//            debugger;
-//
-//            var i,
-//                currentRecordSet = objects.assigneesDatagrid.widgets.dataTable.getRecordSet(),
-//                currentRecords = currentRecordSet.getRecords();
-//
-//            for( i = 0; i < currentRecords.length; ++i ) {
-//                currentRecords[ i ].getData( "itemData" )[ "prop_lecm-al_assignees-item-due-date" ].value = "";
-//                currentRecords[ i ].getData( "itemData" )[ "prop_lecm-al_assignees-item-due-date" ].displayValue = "";
-//            }
-        }
-
         function initSelectElement() {
             objects.selectElement = YAHOO.util.Dom.get( "${selectId}" )
             YAHOO.util.Event.on( objects.selectElement, "change", function( event /*, that*/ ) {
 
+
+                Alfresco.util.Ajax.request({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/clearList",
+                    dataObj: { "assigneesListNodeRef": variables.defaultDestination },
+                    requestContentType: "application/json",
+                    responseContentType: "application/json",
+                    failureCallback: {
+                        fn: function () {
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: "Не удалось очистить список по умолчанию"
+                            });
+                        }
+                    }
+                });
 
                 if( this.value === "" ) {
 
@@ -400,8 +402,7 @@
             hookDatagridRecordSet: hookDatagridRecordSet,
             updateFormFields: updateFormFields,
             fillDropDownList: fillDropDownList,
-            refreshDatagrid: refreshDatagrid,
-            clearDates: clearDates
+            refreshDatagrid: refreshDatagrid
         }
     }
 
@@ -512,7 +513,7 @@
                             text: "Список удалён"
                         });
 
-                        actions().fillDropDownList();
+                        actions().fillDropDownList( "Без списка (список не выбран)" );
                     }
                 },
                 failureCallback: {
@@ -573,6 +574,21 @@
                                 text: "Список успешно сохранён"
                             });
                         }
+
+                        Alfresco.util.Ajax.request({
+                            method: "POST",
+                            url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/clearList",
+                            dataObj: { "assigneesListNodeRef": variables.defaultDestination },
+                            requestContentType: "application/json",
+                            responseContentType: "application/json",
+                            failureCallback: {
+                                fn: function () {
+                                    Alfresco.util.PopupManager.displayMessage({
+                                        text: "Не удалось очистить список по умолчанию"
+                                    });
+                                }
+                            }
+                        });
                     },
                     scope: this
                 },
@@ -630,32 +646,12 @@
             enterAssigneesListNameDialog.show();
         }
 
-        function fillAssigneesListFromResponse( response ) {
-
-            var i, j,
-
-                assigneeAssocAutoComplete = LogicECM.CurrentModules.assigneeAssocAutoComplete,
-
-                responseItemsArray = response.json.listItems,
-                dataArray = assigneeAssocAutoComplete.dataArray,
-                selectedItems = assigneeAssocAutoComplete.selectedItems;
-
-            actions().clearAssigneesList();
-
-            for( i = 0; i < responseItemsArray.length; ++i ) {
-                for( j = 0; j < dataArray.length; ++j ) {
-                    if( responseItemsArray[ i ].nodeRef === dataArray[ j ].nodeRef ) {
-                        selectedItems[ dataArray[j].nodeRef ] = dataArray[ j ];
-                    }
-                }
-            }
-
-            actions().updateFormFields();
-        }
-
         function fillDropDownListFromResponse( response, params ) {
 
-            var i, mustBeSelected,
+            debugger;
+
+            var i,
+                mustBeSelected,
                 selectElement = YAHOO.util.Dom.get( "${selectId}" );
 
             selectElement.options.length = 0;
@@ -716,9 +712,6 @@
 
                     daysDiff = ( utcDueDate - utcToday ) / 86400000;
                     period = Math.round( daysDiff / currentRecords.length );
-
-                    console.log( "daysDiff: " + daysDiff );
-                    console.log( "period: " + period );
 
                     today.setDate( today.getDate() + period );
 
@@ -860,7 +853,6 @@
             onCalculateDueDatesButtonClick: onCalculateDueDatesButtonClick,
 
             fillDropDownListFromResponse: fillDropDownListFromResponse,
-            fillAssigneesListFromResponse: fillAssigneesListFromResponse,
 
             dummy: dummy
         }
