@@ -588,10 +588,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	            if (!isArchive(rowNodeRef)){
                     if (checkMainObject != null && checkMainObject) {
                         // проверить доступность основного объекта
-                        List<AssociationRef> sourceAssocs = nodeService.getTargetAssocs(rowNodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
-                        if (sourceAssocs != null) {
-                            for (AssociationRef sourceAssoc : sourceAssocs) {
-                                NodeRef nodeRef = sourceAssoc.getSourceRef();
+                        List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(rowNodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
+                        if (targetAssocs != null) {
+                            for (AssociationRef sourceAssoc : targetAssocs) {
+                                NodeRef nodeRef = sourceAssoc.getTargetRef();
 
                                 if (lecmPermissionService.hasReadAccess(nodeRef)) {
                                     records.add(rowNodeRef);
