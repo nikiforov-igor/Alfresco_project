@@ -62,12 +62,12 @@
 
                 this.toolbarButtons.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
                     {
-                        disabled: true
+                        disabled: false
                     });
 
                 this.toolbarButtons.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
                     {
-                        disabled: true
+                        disabled: false
                     });
 
                 var me = this;
