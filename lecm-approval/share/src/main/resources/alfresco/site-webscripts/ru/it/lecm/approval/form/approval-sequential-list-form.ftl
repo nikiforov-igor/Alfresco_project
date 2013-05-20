@@ -8,7 +8,7 @@
 <#assign deleteAssigneesListButtonId = formId + "-delete-assignees-list-button">
 <#assign calculateDueDatesButtonId = formId + "-calculate-due-dates-button">
 
-<#assign formWrapperId = formId + "-wrapper">
+<#assign formWrapperId = formId + "-container">
 <#assign datagridId = formId + "-datagrid">
 
 <#assign showActions = true>
