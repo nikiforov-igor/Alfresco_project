@@ -18,13 +18,13 @@
             <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-                        var finalDecision = execution.getVariable("finalDecision");
+						var approvalCompleted = execution.getVariable("approvalCompleted");
 						var isApproved = execution.getVariable("isApproved");
-						if (!finalDecision && isApproved != null) {
+						if (approvalCompleted == null) {
 							var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);
-							finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";
+							var finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";
 							var approvalListRef = execution.getVariable("approvalListRef");
-							approvalParallel.logFinalDecision(approvalListRef, finalDecision);
+							approvalCustom.logFinalDecision(approvalListRef, finalDecision);
 						}
                         ]]></activiti:string>
                 </activiti:field>
@@ -371,12 +371,15 @@
                         if (!decisionsMap) {
                             logger.log("Attention: decisionsMap is null!");
                         }
-                        var approvalListRef = execution.getVariable("approvalListRef");
                         var finalDecision = approvalCustom.getFinalDecision(decisionsMap);
                         execution.setVariable("finalDecision", finalDecision);
+                        execution.setVariable("isApproved", approvalCustom.isApproved(finalDecision));
+
+                        var approvalListRef = execution.getVariable("approvalListRef");
                         approvalCustom.logFinalDecision(approvalListRef, finalDecision);
                         approvalCustom.notifyFinalDecision(finalDecision, bpm_package)
-                        execution.setVariable("isApproved", approvalCustom.isApproved(finalDecision));
+
+                        execution.setVariable("approvalCompleted", "approvalCompleted");
                             ]]></activiti:string>
                 </activiti:field>
             </extensionElements>
