@@ -42,7 +42,7 @@
 							var startDate = task.getCreateTime().getTime();
 							var dueDate = task.getDueDate().getTime();
 							var comment = task.getVariableLocal("bpm_comment");
-							var taskCommentAssoc = task.getVariableLocal("lecmPar_approveTaskCommentAssoc");
+							var taskCommentAssoc = task.getVariableLocal("lecmSeq_approveTaskCommentAssoc");
 							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
 							var documentRef = bpm_package.children[0].nodeRef;
 							logger.log("userName = " + userName);
