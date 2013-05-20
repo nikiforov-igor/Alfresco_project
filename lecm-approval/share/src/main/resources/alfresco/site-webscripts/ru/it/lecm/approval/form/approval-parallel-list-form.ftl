@@ -1,7 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid />
 
 <#assign selectId = formId + "-list-select">
-<#assign formWrapperId = formId + "-wrapper">
+<#assign formWrapperId = formId + "-container">
 <#assign enterAssigneesListNameDialogId = formId + "-enter-assignees-list-name-dialog">
 <#assign saveAssigneesListButtonId = formId + "-save-assignees-list-button">
 <#assign deleteAssigneesListButtonId = formId + "-delete-assignees-list-button">
