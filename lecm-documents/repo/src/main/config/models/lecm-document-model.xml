@@ -42,6 +42,11 @@
                     <title>LECM Creator</title>
                     <type>d:text</type>
                     <protected>true</protected>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-document:modifier">
                     <title>LECM Modifier</title>
