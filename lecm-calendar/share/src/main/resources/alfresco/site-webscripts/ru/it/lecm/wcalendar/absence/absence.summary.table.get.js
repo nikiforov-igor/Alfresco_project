@@ -6,7 +6,7 @@
 	var monthNames = {
 		m0 : "Январь",
 		m1 : "Февраль",
-		m2 :  "Март",
+		m2 : "Март",
 		m3 : "Апрель",
 		m4 : "Май",
 		m5 : "Июнь",
@@ -85,12 +85,12 @@
 			var employeeHasAbsence = false;
 
 			if (!result[employee]) {
-				result[employee] = []
+				result[employee] = [];
 			}
 			today = new Date();
 
 			for (i = 0; i < daysAmount; i++) {
-				var currentDay = new Date(today)
+				var currentDay = new Date(today);
 				var color = "";
 				for (var j = 0; j < employeesAbsences[employee].length; j++) {
 					if (checkDayAbsence(currentDay, employeesAbsences[employee][j].begin, employeesAbsences[employee][j].end)) {
@@ -113,7 +113,6 @@
 		model.calendarHeader = calendarHeader;
 		model.reasons = reasons;
 		model.result = result;
-		model.debug = "clientTimeOffset = " + clientTimeOffset + " serverTimeOffset = " + serverTimeOffset + " timeOffset = " + timeOffset;
 	} else {
 		model.result = {};
 	}

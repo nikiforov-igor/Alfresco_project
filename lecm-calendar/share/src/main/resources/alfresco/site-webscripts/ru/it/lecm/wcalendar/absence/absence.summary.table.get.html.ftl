@@ -2,7 +2,7 @@
 
 <#if (employees?size > 0)>
 
-	<#assign month = calendarHeader?keys>
+	<#assign month = calendarHeader?keys?sort>
 	<#assign curMonth = curMonthConst>
 	<#assign reasonsNames = reasons?keys>
 
