@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
@@ -52,28 +53,10 @@ public class AbsenceStartPolicy implements NodeServicePolicies.OnCreateAssociati
 			final Date today = new Date();
 			final Date absenceStart = absenceService.getAbsenceStartDate(nodeRef);
 			absenceService.addBusinessJournalRecord(nodeRef, EventCategory.ADD);
-			if (resetTime(today).equals(resetTime(absenceStart))) {
+			if (DateUtils.isSameDay(today, absenceStart)) {
 				absenceService.startAbsence(nodeRef);
 				logger.debug(String.format("Policy AbsenceStartPolicy invoked on %s for employee %s", nodeRef.toString(), nodeAssocRef.getTargetRef().toString()));
 			}
 		}
-	}
-
-	/**
-	 * Устанавливает часы, минуты, секунды и миллисекунды в 00:00:00.000
-	 *
-	 * @param day Дата, у которой надо сбросить поля времени.
-	 * @return Дата с обнуленными полями времени.
-	 */
-	private Date resetTime(final Date day) {
-		Date resetDay = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(day);
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		resetDay.setTime(cal.getTimeInMillis());
-		return resetDay;
 	}
 }

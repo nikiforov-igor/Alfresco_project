@@ -253,7 +253,6 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						var endDate;
 						var htmlNodeBegin = document.getElementsByName("prop_lecm-absence_begin")[0];
 						var beginDate = new Date();
-						beginDate.setHours(0, 0, 0, 0);
 						htmlNodeBegin.value = Alfresco.util.toISO8601(beginDate);
 						if (htmlNodeUnlimited.checked) {
 							endDate = new Date(beginDate);
