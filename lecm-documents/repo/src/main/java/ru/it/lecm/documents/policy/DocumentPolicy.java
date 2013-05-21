@@ -5,6 +5,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -137,7 +138,7 @@ public class DocumentPolicy extends BaseBean
         updatePresentString(nodeRef);
     }
 
-    private void updatePresentString(NodeRef nodeRef) {
+    private void updatePresentString(final NodeRef nodeRef) {
         String presentString = "{cm:name}";
 
         QName type = nodeService.getType(nodeRef);
@@ -149,7 +150,16 @@ public class DocumentPolicy extends BaseBean
             }
         }
 
-        String presentStringValue = substituteService.formatNodeTitle(nodeRef, presentString);
+        final String finalPresentString = presentString;
+        final AuthenticationUtil.RunAsWork<String> stringValue = new AuthenticationUtil.RunAsWork<String>() {
+            @Override
+            public String doWork() throws Exception {
+                String record = substituteService.formatNodeTitle(nodeRef, finalPresentString);
+                return record;
+            }
+        };
+
+        String presentStringValue = AuthenticationUtil.runAsSystem(stringValue);
         if (presentStringValue != null) {
             nodeService.setProperty(nodeRef, DocumentService.PROP_PRESENT_STRING, presentStringValue);
         }
