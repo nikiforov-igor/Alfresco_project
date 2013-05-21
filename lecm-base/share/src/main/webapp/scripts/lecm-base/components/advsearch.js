@@ -218,28 +218,31 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     parent = args.parent,
                     itemType = args.itemType,
                     sort = args.sort;
-                // дополнительный фильтр из адресной строки
-                var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
-                bookmarkedFilter = bookmarkedFilter || "path|/";
-                try {
-                    while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+                // дополнительный фильтр из адресной строки (или параметров)
+                var successFilter = args.filter;
+                if (!successFilter) {
+                    var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                    bookmarkedFilter = bookmarkedFilter || "none|/";
+                    try {
+                        while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+                        }
                     }
-                }
-                catch (e) {
-                    // Catch "malformed URI sequence" exception
-                }
+                    catch (e) {
+                        // Catch "malformed URI sequence" exception
+                    }
 
-                var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
-                    var filters = strFilter.split("|"),
-                        filterObj =
-                        {
-                            filterId: window.unescape(filters[0] || ""),
-                            filterData: window.unescape(filters[1] || "")
-                        };
-                    return filterObj;
-                };
+                    var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
+                        var filters = strFilter.split("|"),
+                            filterObj =
+                            {
+                                filterId: window.unescape(filters[0] || ""),
+                                filterData: window.unescape(filters[1] || "")
+                            };
+                        return filterObj;
+                    };
 
-                var successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                    successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                }
 
                 // вернуть следующие поля для элемента(строки)
                 var reqFields = [];
@@ -391,21 +394,21 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 var filter = null;
-                if (additionalFilter && additionalFilter.filterId && additionalFilter.filterData) {
+                if (additionalFilter && additionalFilter.filterId) {
                     filter = YAHOO.lang.JSON.stringify(additionalFilter);
                 }
                 return {
-                    params:{
-                        parent:parent != null ? parent : "",
-                        itemType:itemType != null ? itemType : "",
+                    params: {
+                        parent: parent != null ? parent : "",
+                        itemType: itemType != null ? itemType : "",
                         searchConfig: searchConfig != null ? YAHOO.lang.JSON.stringify(searchConfig) : "",
                         maxResults: this.dataGrid.options.useDynamicPagination ? this.dataGrid.options.pageSize : this.dataGrid.options.maxResults,
-                        fields:searchFields != null ? searchFields : "",
-	                    nameSubstituteStrings:dataRequestNameSubstituteStrings,
-                        showInactive:searchShowInactive != null ? searchShowInactive : "false",
+                        fields: searchFields != null ? searchFields : "",
+                        nameSubstituteStrings: dataRequestNameSubstituteStrings,
+                        showInactive: searchShowInactive != null ? searchShowInactive : "false",
                         startIndex: startIndex,
-                        sort:sort != null ? sort : "",
-                        filter:filter ? filter : ""
+                        sort: sort != null ? sort : "",
+                        filter: filter ? filter : ""
                     }
                 };
             },

@@ -88,7 +88,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         this.afterDataGridUpdate = [];
         this.search = null;
         this.initialSearchConfig = null;
-        this.currentFilter = null;
+        this.currentFilter = {
+            filterId: "none",
+            filterData: ""
+        };
 
         /**
          * Decoupled event listeners
@@ -280,10 +283,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 /**
                  * Колонки которые не следует показывать
                  */
-                excludeColumns: [],
-
-                filter : {}
+                excludeColumns: []
             },
+
+            currentFilter: null,
 
             /**
              * Total number of records (documents + folders) in the currentPath.
@@ -1714,7 +1717,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }
                     this._updateDataGrid.call(this,
                         {
-                            page: page
+                            page: page,
+                            filter: obj.filter ? obj.filter : null
                         });
                     Bubbling.fire("itemsListChanged");
                 }
@@ -1854,7 +1858,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     timerShowLoadingMessage = null,
                     me = this;
 
-                var filter = p_obj.filter !== undefined ? p_obj.filter : this.options.filter;
+                var successFilter = YAHOO.lang.merge({}, p_obj.filter !== undefined ? p_obj.filter : this.currentFilter);
 
                 // Clear the current document list if the data webscript is taking too long
                 var fnShowLoadingMessage = function DataGrid_fnShowLoadingMessage()
@@ -1922,6 +1926,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var successHandler = function DataGrid__uDG_successHandler(sRequest, oResponse, oPayload)
                 {
                     destroyLoaderMessage();
+                    this.currentFilter = successFilter;
                     // Updating the DotaGrid may change the item selection
                     var fnAfterUpdate = function DataGrid__uDG_sH_fnAfterUpdate()
                     {
@@ -1975,7 +1980,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     offset = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
                 }
 
-                var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, sort, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, offset, filter);
+                var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, sort, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, offset, successFilter);
                 this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
                     {
                         success:successHandler,
@@ -2474,33 +2479,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             onFilterChanged: function DataGrid_onFilterChanged(layer, args) {
                 var obj = args[1];
-                if (obj && this._hasEventInterest(obj.bubblingLabel)) {
-                    var filter = (obj.filter != null && obj.filter != "") ? (" AND (" + obj.filter) + ")": "";
-                    //сбрасываем на значение по умолчанию + FILTER
-                    if (this.initialSearchConfig != null) {
-                        var existFilter = this.initialSearchConfig.filter;
-                        filter = (existFilter != null ? "(" + existFilter + ")" : "") + filter;
-                        this.datagridMeta.searchConfig = YAHOO.lang.merge(this.initialSearchConfig, {filter: filter});
-                    } else {
-                        this.datagridMeta.searchConfig = {
-                            filter: filter
-                        };
-                    }
-                    this.currentFilter = filter != null ? filter : this.currentFilter;
-
-                    // Reload the node's metadata
-                    Bubbling.fire("datagridRefresh",
-                        {
-                            bubblingLabel:this.options.bubblingLabel
-                        });
-                }
-
                 if (obj && obj.filterId) {
                     obj.filterOwner = obj.filterOwner || Alfresco.util.FilterManager.getOwner(obj.filterId);
-
                     // Should be a filterId in the arguments
-                    this.options.filter = Alfresco.util.cleanBubblingObject(obj);
-                    Alfresco.logger.debug("DL_onFilterChanged: ", this.currentFilter);
+                    this.currentFilter = Alfresco.util.cleanBubblingObject(obj);
                 }
             }
         }, true);

@@ -51,76 +51,8 @@ var Filters =
 
         switch (String(filter.filterId))
         {
-            case "recentlyAdded":
-            case "recentlyModified":
-            case "recentlyCreatedByMe":
-            case "recentlyModifiedByMe":
-                var onlySelf = (filter.filterId.indexOf("ByMe")) > 0 ? true : false,
-                    dateField = (filter.filterId.indexOf("Modified") > 0) ? "modified" : "created",
-                    ownerField = (dateField == "created") ? "creator" : "modifier";
-
-                // Default to 7 days - can be overridden using "days" argument
-                var dayCount = 7,
-                    argDays = args.days;
-                if ((argDays !== null) && !isNaN(argDays))
-                {
-                    dayCount = argDays;
-                }
-
-                // Default limit to 50 documents - can be overridden using "max" argument
-                if (filterParams.limitResults === null)
-                {
-                    filterParams.limitResults = 50;
-                }
-
-                var date = new Date();
-                var toQuery = date.getFullYear() + "\\-" + (date.getMonth() + 1) + "\\-" + date.getDate();
-                date.setDate(date.getDate() - dayCount);
-                var fromQuery = date.getFullYear() + "\\-" + (date.getMonth() + 1) + "\\-" + date.getDate();
-
-                filterQuery = "+PARENT:\"" + parsedArgs.nodeRef;
-                if (parsedArgs.nodeRef == "alfresco://sites/home")
-                {
-                    // Special case for "Sites home" pseudo-nodeRef
-                    filterQuery += "/*/cm:dataLists";
-                }
-                filterQuery += "\"";
-                filterQuery += " +@cm\\:" + dateField + ":[" + fromQuery + "T00\\:00\\:00.000 TO " + toQuery + "T23\\:59\\:59.999]";
-                if (onlySelf)
-                {
-                    filterQuery += " +@cm\\:" + ownerField + ":\"" + person.properties.userName + '"';
-                }
-                filterQuery += " -TYPE:\"folder\"";
-
-                filterParams.sort = [
-                    {
-                        column: "@cm:" + dateField,
-                        ascending: false
-                    }];
-                filterParams.query = filterQuery + filterQueryDefaults;
-                break;
-
-            case "createdByMe":
-                // Default limit to 50 documents - can be overridden using "max" argument
-                if (filterParams.limitResults === null)
-                {
-                    filterParams.limitResults = 50;
-                }
-
-                filterQuery = "+PARENT:\"" + parsedArgs.nodeRef;
-                if (parsedArgs.nodeRef == "alfresco://sites/home")
-                {
-                    // Special case for "Sites home" pseudo-nodeRef
-                    filterQuery += "/*/cm:dataLists";
-                }
-                filterQuery += "\"";
-                filterQuery += " +@cm\\:creator:\"" + person.properties.userName + '"';
-                filterQuery += " -TYPE:\"folder\"";
-                filterParams.query = filterQuery + filterQueryDefaults;
-                break;
-
-            case "node":
-                filterParams.query = "+ID:\"" + parsedArgs.nodeRef + "\"";
+            case "my":
+                filterParams.query  = " +@cm\\:creator:\"" + person.properties.userName + '"';
                 break;
 
             case "tag":
@@ -133,7 +65,7 @@ var Filters =
                 break;
 
             default:
-                filterParams.query = filterQuery + filterQueryDefaults;
+                filterParams.query = filterQuery;
                 break;
         }
 

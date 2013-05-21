@@ -218,7 +218,7 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
             this.datagridColumns = response.json.columns;
             // Set-up YUI History Managers and Paginator
             this._setupPaginatior();
-            this._setupFilter();
+            /*this._setupFilter();*/
             // DataSource set-up and event registration
             this.setupDataSource();
             // DataTable set-up and event registration
@@ -233,7 +233,7 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
 
             // Show grid
             Dom.setStyle(this.id + "-body", "visibility", "visible");
-        },
+        }/*,
 
         _setupFilter: function DL_setupFilter() {
             var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
@@ -260,6 +260,6 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
             };
 
             this.options.filter = fnDecodeBookmarkedFilter(bookmarkedFilter);
-        }
+        }*/
     }, true);
 })();

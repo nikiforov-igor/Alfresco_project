@@ -44,12 +44,12 @@
             onReady: function DataListToolbar_onReady() {
                 this.toolbarButtons.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
                     {
-                        disabled: true
+                        disabled: false
                     });
 
                 this.toolbarButtons.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
                     {
-                        disabled: true
+                        disabled: false
                     });
 
                 var me = this;
@@ -106,9 +106,6 @@
                     datagridMeta.searchConfig.formData = {
                         datatype: datagridMeta.itemType
                     };
-                    if (dataGrid.currentFilter) {
-                        datagridMeta.searchConfig.filter = dataGrid.currentFilter;
-                    }
 
                     dataGrid.search.performSearch({
                         searchConfig: datagridMeta.searchConfig,
@@ -118,9 +115,6 @@
                     YAHOO.Bubbling.fire("showFilteredLabel");
                 } else {
                     datagridMeta.searchConfig = dataGrid.initialSearchConfig;
-                    if (dataGrid.currentFilter != null) {
-                        datagridMeta.searchConfig = YAHOO.lang.merge(datagridMeta.searchConfig, {filter: dataGrid.currentFilter});
-                    }
                     if (datagridMeta.searchConfig.fullTextSearch) {
                         datagridMeta.searchConfig.fullTextSearch = null;
                     }
@@ -173,9 +167,6 @@
                     var datagridMeta = dataGrid.datagridMeta;
 
                     datagridMeta.searchConfig = dataGrid.initialSearchConfig;
-                    if (dataGrid.currentFilter != null) {
-                        datagridMeta.searchConfig = YAHOO.lang.merge(datagridMeta.searchConfig, {filter: dataGrid.currentFilter});
-                    }
                     if (datagridMeta.searchConfig.fullTextSearch) {
                         datagridMeta.searchConfig.fullTextSearch = null;
                     }
