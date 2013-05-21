@@ -90,7 +90,7 @@
 
 							var decisionsMap = execution.getVariable("decisionsMap");
 							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
+								logger.log("Attention: decisionsMap is null, it will be created in approvalCustom.addDecision method");
 							}
                             decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
                             execution.setVariable("decisionsMap", decisionsMap);
@@ -164,7 +164,7 @@
 
 							var decisionsMap = execution.getVariable("decisionsMap");
 							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
+								logger.log("Attention: decisionsMap is null, it will be created in approvalCustom.addDecision method");
 							}
                             decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
                             execution.setVariable("decisionsMap", decisionsMap);
@@ -246,7 +246,7 @@
 
 							var decisionsMap = execution.getVariable("decisionsMap");
 							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
+								logger.log("Attention: decisionsMap is null, it will be created in approvalCustom.addDecision method");
 							}
                             decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
                             execution.setVariable("decisionsMap", decisionsMap);
@@ -322,7 +322,7 @@
 
 							var decisionsMap = execution.getVariable("decisionsMap");
 							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approvalParallel.addDecision method");
+								logger.log("Attention: decisionsMap is null, it will be created in approvalCustom.addDecision method");
 							}
                             decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
                             execution.setVariable("decisionsMap", decisionsMap);
@@ -342,7 +342,7 @@
             <extensionElements>
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-						var approvalListRef = approvalSequential.createApprovalList(bpm_package, documentAttachmentCategoryName)
+						var approvalListRef = approvalCustom.createApprovalList(bpm_package, documentAttachmentCategoryName)
 						execution.setVariable("approvalListRef", approvalListRef);
 
 						var documentExecutor = bpm_package.children[0].properties["cm:creator"];

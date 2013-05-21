@@ -4,7 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 
 public class ApprovalListServiceCustom extends ApprovalListServiceAbstract {
 
-    private static final String CUSTOM_APPROVAL = "Кастомное согласование";
+    private static final String CUSTOM_APPROVAL = "Специальное согласование";
 
     @Override
 	protected NodeRef getOrCreateApprovalFolder(NodeRef parentRef) {
