@@ -242,8 +242,8 @@ public class ContractsWebScriptBean extends BaseWebScript {
         List<NodeRef> additionalDocuments = this.contractService.getAllContractDocuments(document.getNodeRef());
         for (NodeRef additionalDocument : additionalDocuments) {
             HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-            nodeService.addAspect(additionalDocument, ContractsBeanImpl.ASPECT_PRIMARY_DOCUMENT_DELETE, aspectProps);
-            nodeService.setProperty(additionalDocument, ContractsBeanImpl.PROP_PRIMARY_DOCUMENT_DELETE, true);
+            nodeService.addAspect(additionalDocument, ContractsBeanImpl.ASPECT_PRIMARY_DOCUMENT_EXECUTED, aspectProps);
+            nodeService.setProperty(additionalDocument, ContractsBeanImpl.PROP_PRIMARY_DOCUMENT_EXECUTED, true);
         }
 
         businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator зафиксировал(а) факт исполнения договора #mainobject.");
