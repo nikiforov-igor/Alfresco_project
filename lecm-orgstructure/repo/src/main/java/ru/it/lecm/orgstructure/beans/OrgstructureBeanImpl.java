@@ -6,6 +6,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.NoSuchPersonException;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -880,8 +881,13 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public NodeRef getEmployeeByPerson(String personName) {
 		if (personName != null) {
-			NodeRef personNodeRef = personService.getPerson(personName, false);
-			if (personNodeRef != null) {
+            NodeRef personNodeRef = null;
+            try {
+                personNodeRef = personService.getPerson(personName, false);
+            } catch (NoSuchPersonException e) {
+                return null;
+            }
+            if (personNodeRef != null) {
 				return getEmployeeByPerson(personNodeRef);
 			}
 		}
