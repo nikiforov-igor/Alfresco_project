@@ -131,7 +131,7 @@ public class DocumentPolicy extends BaseBean
                 if (status != null) {
                     objects.add(status);
                 }
-                businessJournalService.log(nodeRef, EventCategory.ADD, "Создан новый документ \"#mainobject\" в статусе \"#object1\"", objects);
+                businessJournalService.log(nodeRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
             }
         }
         updatePresentString(nodeRef);
