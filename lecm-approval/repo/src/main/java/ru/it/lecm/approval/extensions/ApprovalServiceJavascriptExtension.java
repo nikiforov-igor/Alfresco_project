@@ -215,6 +215,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 
 		// и удаляем, если нашли
 		if (listNodeRef != null) {
+			nodeService.addAspect(listNodeRef, ContentModel.ASPECT_TEMPORARY, null);
 			nodeService.deleteNode(listNodeRef);
 		}
 
@@ -410,6 +411,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 			throw new WebScriptException("Insufficient params in JSON", ex);
 		}
 		NodeRef listNode = new NodeRef(nodeRefStr);
+		nodeService.addAspect(listNode, ContentModel.ASPECT_TEMPORARY, null);
 		nodeService.deleteNode(listNode);
 	}
 
@@ -505,6 +507,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		List<NodeRef> listItemsItems = getAssigneesListItems(assigneesListNodeRef);
 		for (NodeRef listItemNodeRef : listItemsItems) {
 			nodeService.removeAssociation(assigneesListNodeRef, listItemNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
+			nodeService.addAspect(listItemNodeRef, ContentModel.ASPECT_TEMPORARY, null);
 			nodeService.deleteNode(listItemNodeRef);
 		}
 	}
