@@ -340,12 +340,16 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecmCustom:presentString"/>
                     <show id="bpm:dueDate" />
                     <show id="lecmCustom:approveTaskResult" />
                     <show id="bpm:comment" />
                     <show id="lecmCustom:approveTaskCommentAssoc" />
                 </field-visibility>
                 <appearance>
+                    <field id="lecmCustom:presentString">
+                        <control template="/ru/it/lecm/approval/controls/document-present-string.ftl" />
+                    </field>
                     <field id="bpm:dueDate" label-id="workflow.field.due">
                         <control template="/org/alfresco/components/form/controls/info.ftl" />
                     </field>
