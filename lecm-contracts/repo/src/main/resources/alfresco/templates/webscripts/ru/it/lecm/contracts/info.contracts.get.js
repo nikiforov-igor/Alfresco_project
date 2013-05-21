@@ -17,6 +17,7 @@ for (var key in map) {
     var amountContracts = contracts.getAmountContracts(paths, map[key].split(","));
     list.push({
         key: key,
+        skip: args["skippedStatuses"] != null && args["skippedStatuses"].indexOf(key) >= 0,
         amountContracts: amountContracts,
         filter: map[key]
     });

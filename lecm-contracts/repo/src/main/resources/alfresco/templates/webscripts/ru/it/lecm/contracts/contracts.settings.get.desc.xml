@@ -1,7 +1,7 @@
 <webscript>
     <shortname>Contracts Module Root Node</shortname>
     <description>Contracts Module Root Node</description>
-    <url>/lecm/contracts/draft-root</url>
+    <url>/lecm/contracts/settings</url>
     <format default="json">extension</format>
     <authentication>user</authentication>
 </webscript>

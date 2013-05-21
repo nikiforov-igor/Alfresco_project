@@ -5,12 +5,13 @@
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-contracts/contracts-list.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata-form-edit.css" />
     <#assign filter = ""/>
-    <#if page.url.args.query?? && page.url.args.query != "-" && page.url.args.query != "">
+    <#if page.url.args.query?? && page.url.args.query != "*" && page.url.args.query != "">
         <#assign filter = page.url.args.query/>
     </#if>
     <script type="text/javascript">//<![CDATA[
         LogicECM.module.Contracts.SETTINGS = <#if settings?? >${settings}<#else>{}</#if>;
-        LogicECM.module.Contracts.FILTER = "${filter}";
+        var defaultFilter = LogicECM.module.Contracts.SETTINGS.defaultFilter;
+        LogicECM.module.Contracts.FILTER = <#if filter != "">"${filter}"<#else>defaultFilter</#if>;
     //]]></script>
 </@>
 

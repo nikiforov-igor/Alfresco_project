@@ -8,3 +8,5 @@ model.nodeRef = node;
 model.draftPath = draftPath;
 model.documentPath = documentPath;
 model.archivePath = archDirectories.join(",");
+
+model.defaultFilter = documentScript.getDefaultFilter("lecm-contract:document");

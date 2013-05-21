@@ -5,6 +5,7 @@
         <#list list as item>
         {
         "key" : "${item.key}",
+        "skip": "${item.skip?string}",
         "amountContracts" : "${item.amountContracts}",
         "filter" : "${item.filter}"
         }

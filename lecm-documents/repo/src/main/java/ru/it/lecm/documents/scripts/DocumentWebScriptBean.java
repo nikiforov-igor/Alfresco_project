@@ -29,6 +29,8 @@ import ru.it.lecm.security.LecmPermissionService;
 public class DocumentWebScriptBean extends BaseWebScript {
     private static final Logger logger = LoggerFactory.getLogger(DocumentWebScriptBean.class);
 
+    public static final String DEFAULT_FILTER = "Все";
+
     private DocumentService documentService;
 	private NodeService nodeService;
     private LecmPermissionService lecmPermissionService;
@@ -160,5 +162,10 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     public Map<String, String> getFilters(String type){
         return DocumentStatusesFilterBean.getFilterForType(type);
+    }
+
+    public String getDefaultFilter(String type) {
+        Map<String, String> filters = getFilters(type);
+        return filters != null ? filters.get(DEFAULT_FILTER) : "";
     }
 }

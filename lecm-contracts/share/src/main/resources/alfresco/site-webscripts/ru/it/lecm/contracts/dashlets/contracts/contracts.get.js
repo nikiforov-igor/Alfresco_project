@@ -29,7 +29,7 @@ model.filterRanges = getFilters("filter-range");
 model.filterTypes = getFilters("filter-type");
 model.isStarter = isStarter();
 
-var settingsStr = remote.connect("alfresco").get("/lecm/contracts/draft-root");
+var settingsStr = remote.connect("alfresco").get("/lecm/contracts/settings");
 if (settingsStr.status == 200) {
     model.settings = eval ("(" + settingsStr + ")");
 }
