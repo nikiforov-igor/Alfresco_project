@@ -648,8 +648,6 @@
 
         function fillDropDownListFromResponse( response, params ) {
 
-            debugger;
-
             var i,
                 mustBeSelected,
                 selectElement = YAHOO.util.Dom.get( "${selectId}" );
@@ -769,9 +767,6 @@
                         data: YAHOO.lang.JSON.stringify( dataObj ), // jQuery странно кодирует данные. пусть YUI эаймеся преобразованием в JSON
                         processData: false, // данные не трогать, не кодировать вообще
                         success: function ( result, textStatus, jqXHR ) {
-
-                            debugger;
-
                             form.dataObj[ "assoc_lecmSeq_assigneeAssoc_added" ] = result.items;
                         },
                         error: function( jqXHR, textStatus, errorThrown ) {
