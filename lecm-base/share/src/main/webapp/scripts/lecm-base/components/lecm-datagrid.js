@@ -1257,8 +1257,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     };
                     //при первом поиске сохраняем настройки
                     if (this.initialSearchConfig == null){
-                        this.initialSearchConfig = {};
-                        this.initialSearchConfig = YAHOO.lang.merge(this.initialSearchConfig, searchConfig);
+                        this.initialSearchConfig = {fullTextSearch:null};
+                        this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
                     }
 
                     this.search.performSearch({
