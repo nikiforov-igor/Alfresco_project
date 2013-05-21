@@ -66,6 +66,8 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
         highLighterIntervalID : null,
 
+        readNotifications: null,
+
 		// функция вызываемая при окончании инициализации базового модуля
 		onReady: function () {
 			this.createNotifyer();
@@ -226,54 +228,62 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
 		loadNotifications: function() {
 			var me = this;
-			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/notifications/active-channel/api/records?skipItemsCount=" +
-				this.skipItemsCount + "&loadItemsCount=" + this.loadItemsCount;
+			Alfresco.util.Ajax.jsonPost(
+				{
+					url:Alfresco.constants.PROXY_URI + "lecm/notifications/active-channel/api/records",
+					dataObj: {
+						skipItemsCount: me.skipItemsCount,
+						loadItemsCount: me.loadItemsCount,
+						ignoreNotifications: me.readNotifications
+					},
+					successCallback:{
+						fn:function DataGrid_onDataItemCreated_refreshSuccess(response) {
+							var items = response.json.items;
+							var readNewNotifications = [];
+							var container = Dom.get(me.notificationsWindowId + "-content");
 
-			var callback = {
-				success:function (oResponse) {
-					var oResults = eval("(" + oResponse.responseText + ")");
-					if (oResults && oResults.items) {
-						var items = oResults.items;
-						var readNotifications = [];
-                        var container = Dom.get(me.notificationsWindowId + "-content");
+							for (var i = 0; i < items.length; i++) {
+								var item = items[i];
+								me.readNotifications.push(item.nodeRef);
 
-                        for (var i = 0; i < items.length; i++) {
-                            var item = items[i];
-                            var div = document.createElement('div');
-                            var detail = document.createElement('span');
+								var div = document.createElement('div');
+								var detail = document.createElement('span');
 
-                            div.setAttribute('class', 'notification-row');
-                            if (item.isRead == "false") {
-                                readNotifications.push(item);
-                                Dom.addClass(div, 'bold');
-                            }
+								div.setAttribute('class', 'notification-row');
+								if (item.isRead == "false") {
+									readNewNotifications.push(item);
+									Dom.addClass(div, 'bold');
+								}
 
-                            detail.innerHTML = item.description;
-                            detail.setAttribute('class', 'detail');
-                            div.appendChild(detail);
-                            div.innerHTML += '<br />' + Alfresco.util.relativeTime(new Date(item.formingDate));
-                            container.appendChild(div);
-						}
+								detail.innerHTML = item.description;
+								detail.setAttribute('class', 'detail');
+								div.appendChild(detail);
+								div.innerHTML += '<br />' + Alfresco.util.relativeTime(new Date(item.formingDate));
+								container.appendChild(div);
+							}
 
-                        Dom.setStyle(me.notificationsWindowId + "-next-link", "display",
-                            oResults.hasNext == "true" ? "block" : "none");
-						if (readNotifications.length > 0) {
-							me.setReadNotifications(readNotifications);
-						}
-						if (me.skipItemsCount > 0) {
-							container.scrollTop = container.scrollHeight;
-						}
-						me.skipItemsCount += items.length;
-						me.showNotificationsWindow();
-					} else {
-						YAHOO.log("Failed to process XHR transaction.", "info", "example");
+							Dom.setStyle(me.notificationsWindowId + "-next-link", "display",
+								response.json.hasNext == "true" ? "block" : "none");
+							if (readNewNotifications.length > 0) {
+								me.setReadNotifications(readNewNotifications);
+							}
+							if (me.readNotifications.length > me.loadItemsCount) {
+								container.scrollTop = container.scrollHeight;
+							}
+							me.showNotificationsWindow();
+						},
+						scope:this
+					},
+					failureCallback:{
+						fn:function (response) {
+							Alfresco.util.PopupManager.displayMessage(
+								{
+									text:this.msg("message.notifications.load.failure")
+								});
+						},
+						scope:this
 					}
-				},
-				failure:function (oResponse) {
-					YAHOO.log("Failed to process XHR transaction.", "info", "example");
-				}
-			};
-			Connect.asyncRequest('GET', sUrl, callback);
+				});
 		},
 
 		// Инициализатор счетчика-обманки
@@ -299,6 +309,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 			var container = Dom.get(this.notificationsWindowId + "-content");
 			container.innerHTML = "";
 			this.skipItemsCount = 0;
+			this.readNotifications = [];
 			this.loadNotifications();
 		}
 	});

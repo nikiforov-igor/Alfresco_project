@@ -146,13 +146,13 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	 * @param maxItems  максимальное количество возвращаемых элементов
 	 * @return          список ссылок на уведомления
 	 */
-	public List<NodeRef> getNotifications(int skipCount, int maxItems) {
+	public List<NodeRef> getNotifications(int skipCount, int maxItems, List<String> ignoreNotifications) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 
 		NodeRef currentEmloyeeNodeRef = orgstructureService.getCurrentEmployee();
 		if (currentEmloyeeNodeRef != null) {
 			List<AssociationRef> lRefs = nodeService.getSourceAssocs(currentEmloyeeNodeRef, NotificationsService.ASSOC_RECIPIENT);
-			List<NodeRef> filteredNotifications = filterNotifications(lRefs);
+			List<NodeRef> filteredNotifications = filterNotifications(lRefs, ignoreNotifications);
 			int endIndex = (skipCount + maxItems) < filteredNotifications.size() ? (skipCount + maxItems) : filteredNotifications.size();
 
 			for (int i = skipCount; i < endIndex; i++) {
@@ -163,12 +163,12 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 		return result;
 	}
 
-	private List<NodeRef> filterNotifications(List<AssociationRef> notifications) {
+	private List<NodeRef> filterNotifications(List<AssociationRef> notifications, List<String> ignoreNotifications) {
 		ArrayList<NodeRef> result = new ArrayList<NodeRef>();
 		if (notifications != null) {
 			for (AssociationRef ref: notifications) {
 				NodeRef notificationRef = ref.getSourceRef();
-				if (isActiveChannelNotification(notificationRef) && !isArchive(notificationRef)) {
+				if (isActiveChannelNotification(notificationRef) && !isArchive(notificationRef) && !ignoreNotifications.contains(notificationRef.toString())) {
 					result.add(notificationRef);
 				}
 			}

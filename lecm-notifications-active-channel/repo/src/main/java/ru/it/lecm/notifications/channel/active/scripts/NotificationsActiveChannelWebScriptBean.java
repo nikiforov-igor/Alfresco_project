@@ -13,6 +13,7 @@ import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.notifications.channel.active.beans.NotificationsActiveChannel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,10 +57,11 @@ public class NotificationsActiveChannelWebScriptBean extends BaseWebScript {
 	 * @param loadItemsCount максимальное количество возвращаемых элементов
 	 * @return               список уведомлений
 	 */
-	public Scriptable getNotifications(String skipItemsCount, String loadItemsCount) {
+	public Scriptable getNotifications(String skipItemsCount, String loadItemsCount, String[] ignoreNotifications) {
 		ParameterCheck.mandatory("skipItemsCount", skipItemsCount);
 		ParameterCheck.mandatory("loadItemsCount", loadItemsCount);
-		List<NodeRef> notfs = this.service.getNotifications(Integer.parseInt(skipItemsCount), Integer.parseInt(loadItemsCount));
+		List<String> ignoreNotificationsList = ignoreNotifications != null ? Arrays.asList(ignoreNotifications) : new ArrayList<String>();
+		List<NodeRef> notfs = this.service.getNotifications(Integer.parseInt(skipItemsCount), Integer.parseInt(loadItemsCount), ignoreNotificationsList);
 		return createScriptable(notfs);
 	}
 
