@@ -36,8 +36,8 @@
                     excludeColumns: ["lecm-document:creator-ref"]
                 }).setMessages(${messages});
 
-                var filter = generateFilterStr(LogicECM.module.Contracts.FILTER);
-                var archiveFolders = generateArchiveFoldersStr(LogicECM.module.Contracts.SETTINGS.archivePath);
+                var filter = _generateFilterStr(LogicECM.module.Contracts.FILTER);
+                var archiveFolders = _generateArchiveFoldersStr(LogicECM.module.Contracts.SETTINGS.archivePath);
 
                 YAHOO.util.Event.onContentReady ('${id}', function () {
                     YAHOO.Bubbling.fire ("activeGridChanged", {
@@ -49,7 +49,7 @@
                             },
                             sort:"cm:modified|false",
                             searchConfig: {
-                                filter: (filter.length > 0 ? " (" + filter + " ) AND " : "")
+                                filter: (filter.length > 0 ?  filter + " AND " : "")
                                         + '(PATH:"' + LogicECM.module.Contracts.SETTINGS.draftPath + '//*"'
                                         + ' OR PATH:"' + LogicECM.module.Contracts.SETTINGS.documentPath + '//*"'
                                         + ((archiveFolders.length > 0)? (" OR " + archiveFolders + "") : "") + ')'
@@ -65,25 +65,34 @@
 				createDatagrid();
 			}
 
-            function generateFilterStr(filter) {
+            function _generateFilterStr(filter) {
                 if (filter) {
                     var re = /\s*,\s*/;
                     var statuses = filter.split(re);
 
                     var resultFilter = "";
-
+                    var notFilter = "";
                     for (var i = 0; i < statuses.length; i++) {
-                        if (resultFilter.length > 0) {
-                            resultFilter += " OR ";
+                       /* if (resultFilter.length > 0) {
+                            resultFilter += " AND ";
+                        }*/
+                        var status = statuses[i];
+                        if (status.indexOf("!") != 0) {
+                            resultFilter += "@lecm\\-statemachine:status:\'" + status + "\' ";
+                        } else {
+                            status = status.replace("!","");
+                            notFilter += "@lecm\\-statemachine:status:\'" + status + "\' ";
                         }
-                        resultFilter += "+lecm\\-statemachine:status:\'" + statuses[i] + "\'";
+
                     }
-                    return resultFilter;
+                    return (resultFilter.length > 0 ? "(" + resultFilter + ")" : "")
+                            + (resultFilter.length > 0 && notFilter.length > 0 ? " AND " : "")
+                            + (notFilter.length > 0 ? "NOT (" + notFilter + ")" : "");
                 }
                 return "";
             }
 
-            function generateArchiveFoldersStr(paths) {
+            function _generateArchiveFoldersStr(paths) {
                 if (paths) {
                     var archPaths = paths.split(",");
                     var result = "";

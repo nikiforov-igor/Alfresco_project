@@ -253,13 +253,17 @@ public class ContractsBeanImpl extends BaseBean {
 
         // фильтр по статусам
         if (statuses != null && !statuses.isEmpty()) {
-            boolean addOR = false;
             String statusesFilter = "";
+            String statusesNotFilter = "";
             for (String status : statuses) {
-                statusesFilter += (addOR ? " OR " : "") + "@lecm\\-statemachine\\:status:\"" + status.trim() + "\"";
-                addOR = true;
+                if (!status.trim().startsWith("!")) {
+                    statusesFilter += " @lecm\\-statemachine\\:status:\"" + status.replace("!", "").trim() + "\"";
+                } else {
+                    statusesNotFilter += " @lecm\\-statemachine\\:status:\"" + status.replace("!", "").trim() + "\"";
+                }
             }
-            query += " AND (" + statusesFilter + ")";
+            query += (!statusesFilter.isEmpty() ? (" AND (" + statusesFilter + ")") : "")  +
+                    (!statusesNotFilter.isEmpty() ? (" AND NOT (" + statusesNotFilter  + ")") : "");
         }
 
         // фильтр по сотрудниками-создателям
