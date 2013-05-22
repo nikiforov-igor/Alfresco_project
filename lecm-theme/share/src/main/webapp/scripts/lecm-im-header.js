@@ -113,7 +113,7 @@ LogicECM.module.LecmIM = LogicECM.module.LecmIM || {};
 
         initHighLighter : function () {
             var msgCounter = Dom.get('msgCounter');
-            this.buttonDomElement = msgCounter.parentElement.previousSibling.previousSibling;
+            this.buttonDomElement = Dom.getPreviousSibling(msgCounter.parentElement);
             this.originalBackgroundImage = this.buttonDomElement.style.backgroundImage;
         },
 

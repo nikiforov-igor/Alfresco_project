@@ -79,7 +79,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
         initHighLighter : function () {
             var msgCounter = Dom.get(this.notificationsCounterId);
-            this.buttonDomElement = msgCounter.parentElement.previousSibling.previousSibling;
+            this.buttonDomElement = Dom.getPreviousSibling(msgCounter.parentElement);
             this.originalBackgroundImage = this.buttonDomElement.style.backgroundImage;
         },
 
