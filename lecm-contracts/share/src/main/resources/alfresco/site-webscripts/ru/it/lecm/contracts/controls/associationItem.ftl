@@ -5,7 +5,7 @@
     function getCurrency() {
         Alfresco.util.Ajax.request(
                 {
-                    url: Alfresco.constants.PROXY_URI + "lecm/contracts/item",
+                    url: Alfresco.constants.PROXY_URI + "lecm/contracts/substituteString",
                     dataObj: {
                         nodeRef: "${field.value}",
                         <#if field.control.params.nameSubstituteString??>
@@ -14,9 +14,10 @@
                     },
                     successCallback: {
                         fn: function (response) {
-                            if (response.json.visibleName) {
+                            console.log(response);
+                            if (response.json.substituteString) {
                                 var id = Dom.get("${htmlId}");
-                                id.innerHTML = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=${field.value}" + "'>" + response.json.visibleName + "</a>";
+                                id.innerHTML = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=${field.value}" + "'>" + response.json.substituteString + "</a>";
                             }
                         }
                     },

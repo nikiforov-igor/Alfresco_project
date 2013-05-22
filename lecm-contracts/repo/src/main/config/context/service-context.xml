@@ -290,4 +290,8 @@
             <ref bean="dictionaryService"/>
         </property>
     </bean>
+
+    <bean id="webscript.ru.it.lecm.contracts.substitute.string.get" class="ru.it.lecm.contracts.AssociationSubstituteString" parent="webscript">
+        <property name="substituteService" ref="substitudeService"/>
+    </bean>
 </beans>

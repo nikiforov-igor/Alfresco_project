@@ -1,0 +1,8 @@
+<webscript>
+  <shortname>Substitute String</shortname>
+  <description>Возвращает строку по форматной строке</description>
+  <url>/lecm/contracts/substituteString</url>
+  <format default="json">extension</format>
+  <authentication>user</authentication>
+  <transaction allow="readonly">required</transaction>
+</webscript>
