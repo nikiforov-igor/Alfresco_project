@@ -1,6 +1,5 @@
 package ru.it.lecm.reports.jasper.config;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;

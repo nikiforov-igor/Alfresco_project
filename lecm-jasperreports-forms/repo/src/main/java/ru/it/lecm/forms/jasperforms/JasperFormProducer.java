@@ -6,17 +6,23 @@ import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRAbstractExporter;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JRRtfExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.alfresco.service.ServiceRegistry;
@@ -29,6 +35,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.reports.jasper.ArgsHelper;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
 /**
@@ -96,6 +103,66 @@ public class JasperFormProducer extends AbstractWebScript {
 	}
 
 	final static String PARAM_EXEC = "exec";
+	final static String ContentTypeHtml = "text/html;charset=UTF-8";
+	// final static String ContentTypePdf = "application/pdf;charset=UTF-8";
+	// final static String ContentTypeRtf = "application/rtf;charset=UTF-8";
+
+	/**
+	 * Целевой формат отчёта по-умолчанию 
+	 */
+	private static final TargetFileType DEFAULT_TARGET = TargetFileType.PDF;
+
+	/**
+	 * Целевой тип файла
+	 */
+	enum TargetFileType {
+		PDF( "application/pdf", ".pdf")
+		, RTF( "application/rtf", ".rtf")
+		, DOCX( "application/msword", ".docx")
+		, XML( "text/xml", ".xml")
+		;
+
+		final private String mimeType, extension;
+
+		private TargetFileType(String mimeType, String extension) {
+			this.mimeType = mimeType;
+			this.extension = extension;
+		}
+
+		public String getMimeType() {
+			return mimeType;
+		}
+
+		public String getExtension() {
+			return extension;
+		}
+
+		@Override
+		public String toString() {
+			return super.name()
+					+ "["
+						+ "mimeType=" + mimeType
+						+ ", extension=" + extension
+					+ "]";
+		}
+
+		/**
+		 * Получить по названию константу перечисления. Регистр символов и незначащие пробелы игнорируются.
+		 * @param aname название для преобразования
+		 * @param forDefault значение по-умолчанию
+		 * @return константу перечисление, если подходящая имеется, или forDefault иначе (в том числе, когда aname = null)
+		 */
+		static public TargetFileType findByName(String aname, TargetFileType forDefault) {
+			if (aname != null) {
+				aname = aname.trim();
+				for(TargetFileType v: values()) {
+					if ( aname.equalsIgnoreCase(v.name()) )
+						return v;
+				}
+			}
+			return forDefault; // using default value
+		}
+	}
 
 	@Override
 	public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
@@ -116,10 +183,15 @@ public class JasperFormProducer extends AbstractWebScript {
 		if (reportDefinitionURL == null)
 			throw new IOException( String.format("Report is missed - file not found at '%s'", reportFileName));
 
+		// TODO: параметризовать выходной формат
+		final TargetFileType target = findTargetArg(requestParameters);
+
 		OutputStream outputStream = null;
 		try {
 			final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportDefinitionURL);// catch message NUllPoiterException for ...
+			webScriptResponse.setContentType( String.format("%s;charset=UTF-8;filename=%s", target.getMimeType(), generateFileName( reportName, target.getExtension()) ));
 			outputStream = webScriptResponse.getOutputStream();
+
 			final String dataSourceClass = jasperReport.getProperty("dataSource");
 			// AbstractDataSourceProvider dsProvider = null;
 			JRDataSourceProvider dsProvider = null;
@@ -154,7 +226,10 @@ public class JasperFormProducer extends AbstractWebScript {
 			} catch (IllegalAccessException e) {
 				throw new IOException("Can not instantiate DataSourceProvider of class <" + dataSourceClass + ">", e);
 			}
-			generateReport(outputStream, jasperReport, dsProvider, requestParameters);
+
+			/* построение отчёта */ 
+			generateReport(target, outputStream, jasperReport, dsProvider, requestParameters);
+
 		} catch (JRException e) {
 			log.error( "Fail to execute report at path "+ reportDefinitionURL , e);
 			throw new IOException("Can not fill report", e);
@@ -164,6 +239,27 @@ public class JasperFormProducer extends AbstractWebScript {
 				outputStream.close();
 			}
 		}
+	}
+
+	private TargetFileType findTargetArg( final Map<String, String[]> requestParameters) 
+	{
+		final String argname = "targetFormat";
+		final String value = ArgsHelper.findArg(requestParameters, argname, null);
+		log.info( String.format( "argument %s is %s", argname, Utils.coalesce(value, "default: "+ Utils.coalesce( DEFAULT_TARGET, "empty"))));
+		return TargetFileType.findByName( value, DEFAULT_TARGET);
+	}
+
+	static final String DEFAULT_FILENAME_DATE_SUFFIX = "dd-MM-yy-HH-mm-ss";
+
+
+	/**
+	 * Сгенерировать имя файла.
+	 * @param name имя файла (без расширения и пути): "contracts"
+	 * @param extension расширения файла (с точкой): ".rtf"
+	 * @return уникальной имя файла (добавляется дата и время)
+	 */
+	static Object generateFileName(String name, String extension) {
+		return String.format( "%s-%s%s", name, new SimpleDateFormat(DEFAULT_FILENAME_DATE_SUFFIX).format(new Date()), extension);
 	}
 
 	/**
@@ -179,29 +275,63 @@ public class JasperFormProducer extends AbstractWebScript {
 		// request.getServerPath() always "http://localhost:8080" 
 		final String answerURL = request.getURL() + String.format( "&%s=1", PARAM_EXEC); 
 
-		response.setContentType("text/html;charset=UTF-8");
+		response.setContentType(ContentTypeHtml);
 		// response.setContentEncoding();
 		final Writer out = response.getWriter();
 		out.write(answerURL);
 	}
 
-	private void generateReport(OutputStream outputStream, JasperReport report
+	private void generateReport(TargetFileType target, OutputStream outputStream, JasperReport report
 			, JRDataSourceProvider dataSourceProvider
 			, Map<String, String[]> requestParameters)
 			throws IllegalArgumentException, JRException 
 	{
+		log.info("Generating report " + report.getName() + " ...");
+
 		if (outputStream == null) {
 			throw new IllegalArgumentException("The output stream was not specified");
 		}
 
-		JRDataSource dataSource = dataSourceProvider.create(report);
+		final JRDataSource dataSource = dataSourceProvider.create(report);
 
-		JasperFillManager fillManager = JasperFillManager.getInstance(DefaultJasperReportsContext.getInstance());
+		final JasperFillManager fillManager = JasperFillManager.getInstance(DefaultJasperReportsContext.getInstance());
 
 		final Map<String, Object> reportParameters = new HashMap<String, Object>();
 		reportParameters.putAll(requestParameters);
 
-		JasperPrint jPrint = fillManager.fill(report, reportParameters, dataSource);
-		JasperExportManager.exportReportToPdfStream(jPrint, outputStream);
+		final JasperPrint jPrint = fillManager.fill(report, reportParameters, dataSource);
+
+		/* формирование результата в нужном формате */
+		log.info("Exporting report " + report.getName() + " ...");
+		switch (target) {
+		case PDF:
+			JasperExportManager.exportReportToPdfStream(jPrint, outputStream);
+			break;
+		case XML:
+			JasperExportManager.exportReportToXmlStream(jPrint, outputStream);
+			break;
+		case RTF:
+			exportReportToStream(new JRRtfExporter(), jPrint, outputStream);
+			break;
+		case DOCX:
+			exportReportToStream(new JRDocxExporter(), jPrint, outputStream);
+			break;
+		default:
+			final String msg = String.format( "Unknown report target '%s'", target);
+			log.error( msg);
+			throw new RuntimeException(msg);
+		}
+
+		log.info("Report " + report.getName() + " generated succefully");
+	}
+
+	private void exportReportToStream( final JRAbstractExporter exporter 
+			, final JasperPrint jPrint, OutputStream outputStream)
+			throws JRException 
+	{
+		exporter.setParameter( JRExporterParameter.JASPER_PRINT, jPrint);
+		// exporter.setParameter( JRExporterParameter.OUTPUT_FILE_NAME, REPORT_DIRECTORY + "/" + reportName + ".rtf");
+		exporter.setParameter( JRExporterParameter.OUTPUT_STREAM, outputStream);
+		exporter.exportReport();
 	}
 }

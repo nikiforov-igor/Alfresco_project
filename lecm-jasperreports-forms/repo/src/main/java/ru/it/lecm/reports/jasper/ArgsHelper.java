@@ -3,6 +3,7 @@ package ru.it.lecm.reports.jasper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
@@ -62,4 +63,37 @@ public class ArgsHelper {
 		return result;
 	}
 
+	/**
+	 * Найти в списке аргументов (обычно для request-запроса) указанное значение,
+	 * а если его нет или он пустой, то использовать значение по-умолчанию.
+	 * @param args карта аргументов
+	 * @param argName название искомого аргумента
+	 * @param ifDefault значение по-умолчанию
+	 * @return
+	 */
+	static public String[] findArgs( final Map<String, String[]> args, String argName
+			, String[] ifDefault) 
+	{
+		if (args.containsKey(argName)) {
+			final String[] values = args.get(argName);
+			if (values != null && values.length > 0)
+				return values; // ret found
+		}
+		return ifDefault; // use default
+	}
+
+	/**
+	 * Найти в списке аргументов (обычно для request-запроса) указанное значение,
+	 * а если его нет или он пустой, то использовать значение по-умолчанию.
+	 * @param args карта аргументов
+	 * @param argName название искомого аргумента
+	 * @param ifDefault значение по-умолчанию
+	 * @return
+	 */
+	static public String findArg( final Map<String, String[]> args, String argName
+			, String ifDefault) 
+	{
+		final String[] values = findArgs(args, argName, null);
+		return (values != null) ? values[0] : ifDefault;
+	}
 }

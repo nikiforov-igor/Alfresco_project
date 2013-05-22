@@ -3,6 +3,9 @@ package ru.it.lecm.delegation.beans;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.stream.XMLStreamReader;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -14,8 +17,8 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.delegation.ITestSearch;
 
+import ru.it.lecm.delegation.ITestSearch;
 import ru.it.lecm.delegation.IWebScriptDelegation;
 
 /**

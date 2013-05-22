@@ -254,7 +254,6 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 
 						final Map<QName, Serializable> realProps = nodeSrv.getProperties(approveListId); // получение отдельных Согласований внутри списка ... 
 
-
 						final DocInfo docInfo = new DocInfo();
 
 						/* получение данных списка */
