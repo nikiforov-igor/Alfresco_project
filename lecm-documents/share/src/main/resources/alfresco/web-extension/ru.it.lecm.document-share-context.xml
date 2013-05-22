@@ -14,4 +14,14 @@
         <property name="configService" ref="web.config" />
         <property name="scriptRemote" ref="webscripts.script.remote" />
     </bean>
+
+
+    <bean id="evaluator.ru.it.lecm.documents.isBase" parent="evaluator.doclib.action.nodeType">
+        <property name="types">
+            <list>
+                <value>lecm-document:base</value>
+            </list>
+        </property>
+        <property name="allowSubtypes" value="true"/>
+    </bean>
 </beans>

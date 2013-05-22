@@ -380,4 +380,34 @@
 
     <bean id="documentStatusesFilter" class="ru.it.lecm.documents.beans.DocumentStatusesFilterBean" abstract="true"/>
 
+    <bean id="customDocNameProperty" class="ru.it.lecm.documents.beans.CustomBaseDocNameProperty">
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+    </bean>
+
+    <bean id="employeeNamePropertyDecorator" class="ru.it.lecm.documents.beans.EmployeeNamePropertyDecorator">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+    </bean>
+
+
+    <bean id="customDocNameScriptUtils" parent="applicationScriptUtils">
+        <property name="decoratedProperties">
+            <map merge="true">
+                <entry key="cm:name">
+                    <ref bean="customDocNameProperty"/>
+                </entry>
+                <entry key="cm:creator">
+                    <ref bean="employeeNamePropertyDecorator"/>
+                </entry>
+                <entry key="cm:modifier">
+                    <ref bean="employeeNamePropertyDecorator"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>

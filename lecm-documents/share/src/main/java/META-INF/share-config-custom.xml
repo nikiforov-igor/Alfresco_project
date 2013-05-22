@@ -212,4 +212,22 @@
             </form>
         </forms>
     </config>
+
+    <config evaluator="string-compare" condition="DocumentLibrary">
+        <metadata-templates>
+            <template id="baseDocument">
+                <evaluator>evaluator.ru.it.lecm.documents.isBase</evaluator>
+                <line index="10" id="list-present" view="detailed">{list-present}</line>
+                <line index="20" id="date">{date}</line>
+                <line index="30" id="tags" view="detailed">{tags}</line>
+            </template>
+        </metadata-templates>
+    </config>
+
+    <config evaluator="string-compare" condition="DocLibCustom">
+        <dependencies>
+            <js src="/scripts/lecm-documents/contracts-renderers-register.js"/>
+            <js src="/scripts/lecm-documents/lecm-doc-list-overrride.js"/>
+        </dependencies>
+    </config>
 </alfresco-config>
