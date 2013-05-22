@@ -26,6 +26,7 @@ public class SpecialScheduleRawBean implements ISpecialScheduleRaw {
 	private DateFormat timeParser = new SimpleDateFormat("HH:mm");
 	private DateFormat dateParser1 = new SimpleDateFormat("yyyy-MM-dd"); // 2013-12-30
 	private DateFormat dateParser2 = new SimpleDateFormat("d/M/yyyy"); // 30/9/2013
+	private DateFormat dateParser3 = new SimpleDateFormat("dd.MM.yyyy"); // 30.09.2013
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(SpecialScheduleRawBean.class);
 
 	public void SpecialScheduleRaw() {
@@ -47,11 +48,15 @@ public class SpecialScheduleRawBean implements ISpecialScheduleRaw {
 	public void setTimeLimitStart(String timeLimitStart) {
 		try {
 			setTimeLimitStart(dateParser1.parse(timeLimitStart));
-		} catch (ParseException x) {
+		} catch (ParseException ex1) {
 			try {
 				setTimeLimitStart(dateParser2.parse(timeLimitStart));
-			} catch (ParseException ex) {
-				throw new WebScriptException("Can not parse " + timeLimitStart + " as Date! " + ex.getMessage(), ex);
+			} catch (ParseException ex2) {
+				try {
+					setTimeLimitStart(dateParser3.parse(timeLimitStart));
+				} catch (ParseException ex3) {
+					throw new WebScriptException("Can not parse " + timeLimitStart + " as Date! " + ex3.getMessage(), ex3);
+				}
 			}
 		}
 	}
@@ -70,11 +75,15 @@ public class SpecialScheduleRawBean implements ISpecialScheduleRaw {
 	public void setTimeLimitEnd(String timeLimitEnd) {
 		try {
 			setTimeLimitEnd(dateParser1.parse(timeLimitEnd));
-		} catch (ParseException x) {
+		} catch (ParseException ex1) {
 			try {
 				setTimeLimitEnd(dateParser2.parse(timeLimitEnd));
-			} catch (ParseException ex) {
-				throw new WebScriptException("Can not parse " + timeLimitEnd + " as Date! " + ex.getMessage(), ex);
+			} catch (ParseException ex2) {
+				try {
+					setTimeLimitEnd(dateParser3.parse(timeLimitEnd));
+				} catch (ParseException ex3) {
+					throw new WebScriptException("Can not parse " + timeLimitEnd + " as Date! " + ex3.getMessage(), ex3);
+				}
 			}
 		}
 	}

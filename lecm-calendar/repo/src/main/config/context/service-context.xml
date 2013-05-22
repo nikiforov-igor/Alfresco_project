@@ -120,7 +120,7 @@
 			<ref bean="AbsenceService"/>
 		</property>
 	</bean>
-	<bean id="absenceStartSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceStartSchedule">
+	<bean id="absenceStartSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceStartSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
 		</property>
@@ -160,7 +160,7 @@
 			<ref bean="AbsenceService"/>
 		</property>
 	</bean>
-	<bean id="absenceEndSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceEndSchedule">
+	<bean id="absenceEndSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceEndSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
 		</property>
@@ -200,7 +200,7 @@
 			<ref bean="AbsenceService"/>
 		</property>
 	</bean>
-	<bean id="absenceProlongationSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceProlongationSchedule">
+	<bean id="absenceProlongationSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceProlongationSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
 		</property>
