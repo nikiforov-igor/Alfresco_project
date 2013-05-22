@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.alfresco.util.ISO8601DateFormat;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.wcalendar.schedule.ISpecialScheduleRaw;
@@ -24,9 +25,6 @@ public class SpecialScheduleRawBean implements ISpecialScheduleRaw {
 	private int workingDaysAmount;
 	private int workingDaysInterval;
 	private DateFormat timeParser = new SimpleDateFormat("HH:mm");
-	private DateFormat dateParser1 = new SimpleDateFormat("yyyy-MM-dd"); // 2013-12-30
-	private DateFormat dateParser2 = new SimpleDateFormat("d/M/yyyy"); // 30/9/2013
-	private DateFormat dateParser3 = new SimpleDateFormat("dd.MM.yyyy"); // 30.09.2013
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(SpecialScheduleRawBean.class);
 
 	public void SpecialScheduleRaw() {
@@ -46,19 +44,7 @@ public class SpecialScheduleRawBean implements ISpecialScheduleRaw {
 
 	@Override
 	public void setTimeLimitStart(String timeLimitStart) {
-		try {
-			setTimeLimitStart(dateParser1.parse(timeLimitStart));
-		} catch (ParseException ex1) {
-			try {
-				setTimeLimitStart(dateParser2.parse(timeLimitStart));
-			} catch (ParseException ex2) {
-				try {
-					setTimeLimitStart(dateParser3.parse(timeLimitStart));
-				} catch (ParseException ex3) {
-					throw new WebScriptException("Can not parse " + timeLimitStart + " as Date! " + ex3.getMessage(), ex3);
-				}
-			}
-		}
+		setTimeLimitStart(ISO8601DateFormat.parse(timeLimitStart));
 	}
 
 	@Override
@@ -73,19 +59,7 @@ public class SpecialScheduleRawBean implements ISpecialScheduleRaw {
 
 	@Override
 	public void setTimeLimitEnd(String timeLimitEnd) {
-		try {
-			setTimeLimitEnd(dateParser1.parse(timeLimitEnd));
-		} catch (ParseException ex1) {
-			try {
-				setTimeLimitEnd(dateParser2.parse(timeLimitEnd));
-			} catch (ParseException ex2) {
-				try {
-					setTimeLimitEnd(dateParser3.parse(timeLimitEnd));
-				} catch (ParseException ex3) {
-					throw new WebScriptException("Can not parse " + timeLimitEnd + " as Date! " + ex3.getMessage(), ex3);
-				}
-			}
-		}
+		setTimeLimitEnd(ISO8601DateFormat.parse(timeLimitEnd));
 	}
 
 	@Override

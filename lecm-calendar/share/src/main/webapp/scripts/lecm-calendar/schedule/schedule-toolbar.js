@@ -131,19 +131,6 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 						fn: doBeforeDialogShow,
 						scope: this
 					},
-					doBeforeFormSubmit: {
-						fn: function() {
-							htmlNodeStart = YAHOO.util.Dom.get(scope.id + "-specialScheduleForm_prop_lecm-sched_time-limit-start-cntrl-date");
-							if (htmlNodeStart) {
-								htmlNodeStart.name = "prop_lecm-sched_time-limit-start";
-							}
-							htmlNodeEnd = YAHOO.util.Dom.get(scope.id + "-specialScheduleForm_prop_lecm-sched_time-limit-end-cntrl-date");
-							if (htmlNodeStart) {
-								htmlNodeEnd.name = "prop_lecm-sched_time-limit-end";
-							}
-						},
-						scope: this
-					},
 					onSuccess: {
 						fn: function DataListToolbar_onNewRow_success(response) {
 							YAHOO.Bubbling.fire("dataItemCreated", {
