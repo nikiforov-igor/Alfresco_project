@@ -25,7 +25,7 @@ public class SubstitudeWebScriptBean extends BaseWebScript {
     }
 
     public String formatNodeTitle(String nodeRef, String title) {
-        return service.formatNodeTitle(new NodeRef(nodeRef), title);
+        return service.formatNodeTitle(nodeRef, title);
     }
 
     public Scriptable getObjectsByTitle(ScriptNode node, String title) {

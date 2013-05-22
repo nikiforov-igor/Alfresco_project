@@ -1,11 +1,8 @@
 package ru.it.lecm.base.beans;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -16,6 +13,10 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -52,6 +53,22 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 		}
 		return result;
 	}
+
+    @Override
+    public String formatNodeTitle(final String nodeRef, final String formatString) {
+        final AuthenticationUtil.RunAsWork<String> substitudeString = new AuthenticationUtil.RunAsWork<String>() {
+            @Override
+            public String doWork() throws Exception {
+                if (nodeRef.equals("")) {
+                    return "";
+                }
+                NodeRef node = new NodeRef(nodeRef);
+                return formatNodeTitle(node, formatString);
+            }
+        };
+
+        return AuthenticationUtil.runAsSystem(substitudeString);
+    }
 
     @Override
     public String getObjectDescription(NodeRef object) {

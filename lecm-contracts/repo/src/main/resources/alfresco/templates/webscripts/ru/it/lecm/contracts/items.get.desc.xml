@@ -1,0 +1,8 @@
+<webscript>
+  <shortname>Item</shortname>
+  <description>Service to return SubstituteString.</description>
+  <url>/lecm/contracts/item</url>
+    <format default="json">extension</format>
+  <authentication>user</authentication>
+  <transaction allow="readonly">required</transaction>
+</webscript>
