@@ -86,6 +86,17 @@
 		</property>
 	</bean>
 
+	<!-- Настройки прав доступа на каталоги в рамках сервиса -->
+	<bean id="${groupId}.${artifactId}.ServiceOrgstructure" parent="ServiceFolderPermissionHelper"
+		  depends-on="${groupId}.${artifactId}.orgBootstrap" >
+		<property name="serviceBean" ref="serviceOrgstructure"/>
+		<property name="permissionsList">
+			<list>
+				<value>alfresco/module/${artifactId}/permissions/directories-permissions.xml</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="orgstructureSGNotifierBean" class="ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBeanImpl" init-method="init">
 		<property name="authService" ref="authenticationService"/>
 		<property name="nodeService" ref="nodeService"/>
