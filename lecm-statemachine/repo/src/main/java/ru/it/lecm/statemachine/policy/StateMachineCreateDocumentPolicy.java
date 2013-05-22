@@ -2,7 +2,6 @@ package ru.it.lecm.statemachine.policy;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
-import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -16,7 +15,6 @@ import org.alfresco.service.cmr.workflow.WorkflowDefinition;
 import org.alfresco.service.cmr.workflow.WorkflowPath;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -24,7 +22,9 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -36,9 +36,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 	private ServiceRegistry serviceRegistry;
 	private PolicyComponent policyComponent;
 
-	private String[] supportNodeTypes;
-	private NamespaceService nsService;
-
 	final static Logger logger = LoggerFactory.getLogger(StateMachineCreateDocumentPolicy.class);
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
@@ -49,55 +46,13 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 		this.policyComponent = policyComponent;
 	}
 
-	public String[] getSupportNodeTypes() {
-		return supportNodeTypes;
-	}
-
-	public void setSupportNodeTypes(String[] supportNodeTypes) {
-		this.supportNodeTypes = supportNodeTypes;
-	}
-
-	public NamespaceService getNsService() {
-		return nsService;
-	}
-
-	public void setNsService(NamespaceService nameService) {
-		this.nsService = nameService;
-	}
-
 	public final void init() {
 		logger.debug( "Installing Policy ...");
 
 		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 
-		PropertyCheck.mandatory(this, "nsService", nsService);
-		PropertyCheck.mandatory(this, "supportNodeTypes", supportNodeTypes);
-
-		// policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, StatemachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
-		final Collection<QName> list = makeTypesList();
-		if (list == null || list.isEmpty()) {
-			logger.warn( "no 'supportNodeTypes' configured -> policy disabled");
-			return;
-		}
-		for (QName typeName: list) {
-			policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, typeName, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-			logger.info( String.format("Policy installed for node type {%s}", typeName));
-		}
-	}
-
-	/**
-	 * Построить список типов как QName вместо строковых ссылок...
-	 * @return
-	 */
-	private List<QName> makeTypesList() {
-		if (supportNodeTypes == null || supportNodeTypes.length < 1)
-			return null;
-
-		final List<QName> result = new ArrayList<QName>();
-		for(String qname: this.supportNodeTypes)
-			result.add(QName.createQName(qname, this.nsService));
-		return result;
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, StatemachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
 	}
 
 	@Override
@@ -121,10 +76,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 
 			PersonService personService = serviceRegistry.getPersonService();
 			NodeRef assigneeNodeRef = personService.getPerson("workflow");
-
-			if (assigneeNodeRef == null) {
-				throw new IllegalStateException("no system user 'workflow' found -> use admin console and add this user");
-			}
 
 			Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
 
@@ -150,7 +101,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 			WorkflowPath path = null; 
 			try {
 				path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
-				logger.info( String.format( "workflow {%s} started for document {%s}", path, docRef));
             } catch (Exception e) {
                 logger.error("Error while start statemachine", e);
 			} finally {

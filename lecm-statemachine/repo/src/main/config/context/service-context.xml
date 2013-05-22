@@ -139,11 +139,6 @@
 		  class="ru.it.lecm.statemachine.policy.StateMachineCreateDocumentPolicy" init-method="init">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="policyComponent" ref="policyComponent"/>
-		<property name="nsService" ref="namespaceService"/>
-		<!-- 
-		<property name="supportNodeTypes" value="lecm-contract:document, lecm-document:base"/>
-		  -->
-		<property name="supportNodeTypes" value="lecm-document:base" />
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.changestate.get"
