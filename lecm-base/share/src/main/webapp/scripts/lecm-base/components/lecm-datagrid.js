@@ -1858,7 +1858,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     timerShowLoadingMessage = null,
                     me = this;
 
-                var successFilter = YAHOO.lang.merge({}, p_obj.filter !== undefined ? p_obj.filter : this.currentFilter);
+                var successFilter = YAHOO.lang.merge({}, p_obj.filter ? p_obj.filter : this.currentFilter);
 
                 // Clear the current document list if the data webscript is taking too long
                 var fnShowLoadingMessage = function DataGrid_fnShowLoadingMessage()
