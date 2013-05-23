@@ -25,7 +25,7 @@ function main()
         if (argsXPath != null)
         {
             // resolve the provided XPath to a NodeRef
-            var nodes = search.xpathSearch(argsXPath);
+            var nodes = companyhome.childrenByXPath(argsXPath);
             if (nodes.length > 0)
             {
                 nodeRef = String(nodes[0].nodeRef);
