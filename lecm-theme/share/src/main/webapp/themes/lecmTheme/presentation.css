@@ -482,6 +482,9 @@ h4 .lighter
 .yui-skin-lecmTheme .yui-panel div.form-fields div {
     text-align: left;
 }
+.yui-skin-lecmTheme .yui-panel div.form-fields div.set {
+    clear: both;
+}
 .yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker,
 .yui-skin-lecmTheme .yui-panel div.form-fields div.datepicker div,
 .yui-skin-lecmTheme .datagrid div.paginator,
@@ -539,6 +542,9 @@ h4 .lighter
     white-space: nowrap;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+.yui-skin-lecmTheme .yui-panel div.form-field > div.help-text:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+    clear: both;
 }
 
 .yui-skin-lecmTheme .yui-panel div.form-field input[type='text'],
