@@ -41,6 +41,12 @@ LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 				scope._reloadPage("wcalendar-absence");
 			};
 		},
+		_wcalendarWorkingDaysSummaryBtnClick: function() {
+			var scope = this;
+			return function(event, obj) {
+				scope._reloadPage("wcalendar-working-days-summary");
+			};
+		},
 		_onMenuReady: function() {
 			var canUseCalendar = LogicECM.module.WCalendar.Const.ROLES.isEngineer;
 			var canUseScheduleAbsence = LogicECM.module.WCalendar.Const.ROLES.isEngineer || LogicECM.module.WCalendar.Const.ROLES.isBoss;
@@ -54,6 +60,9 @@ LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 			});
 
 			Alfresco.util.createYUIButton(this, "wcalendarAbsenceBtn", this._wcalendarAbsenceBtnClick(), {
+				disabled: !canUseScheduleAbsence
+			});
+			Alfresco.util.createYUIButton(this, "wcalendarWorkingDaysSummaryBtn", this._wcalendarWorkingDaysSummaryBtnClick(), {
 				disabled: !canUseScheduleAbsence
 			});
 
@@ -71,6 +80,11 @@ LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 				case "wcalendar-absence":
 					if (canUseScheduleAbsence) {
 						YAHOO.util.Dom.addClass("menu-buttons-wcalendarAbsenceBtn", "selected");
+					}
+					break;
+				case "wcalendar-working-days-summary":
+					if (canUseScheduleAbsence) {
+						YAHOO.util.Dom.addClass("menu-buttons-wcalendarWorkingDaysSummaryBtn", "selected");
 					}
 					break;
 			}

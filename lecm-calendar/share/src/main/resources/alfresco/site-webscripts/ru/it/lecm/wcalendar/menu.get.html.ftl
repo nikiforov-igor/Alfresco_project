@@ -17,5 +17,6 @@
 	<@comp.baseMenuButton "wcalendarCalendar"  msg('label.wcalendar.menu.calendar.btn') />
 	<@comp.baseMenuButton "wcalendarSchedule" msg('label.wcalendar.menu.schedule.btn') />
     <@comp.baseMenuButton "wcalendarAbsence" msg('label.wcalendar.menu.absence.btn') />
+	<@comp.baseMenuButton "wcalendarWorkingDaysSummary" msg('label.wcalendar.menu.working-days-summary.btn') />
 </@comp.baseMenu>
 
