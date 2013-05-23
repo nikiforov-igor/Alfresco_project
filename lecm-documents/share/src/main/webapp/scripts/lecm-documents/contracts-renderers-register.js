@@ -13,7 +13,7 @@ YAHOO.util.Event.onContentReady("alf-hd", function () {
                         html = '<span id="' + id + '" class="faded">' + label + this.msg("details.description.none") + '</span>';
 
                     if (properties["lecm-document:list-present-string"] && properties["lecm-document:list-present-string"] !== "") {
-                        html = '<span id="' + id + '" class="item">' + label + $links(properties["lecm-document:list-present-string"]) + '</span>';
+                        html = '<span id="' + id + '" class="item">' + properties["lecm-document:list-present-string"] + '</span>';
                     }
 
                     return html;
