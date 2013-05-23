@@ -112,7 +112,7 @@
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
-                            if (assignee == null) {
+                            if (task.getAssignee() == null) {
                                 task.setAssignee(documentExecutor);
                             }
 
@@ -132,8 +132,7 @@
                             //<![CDATA[
                             var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 
-                            var userName = assignee;
-
+                            var userName = task.getAssignee();
                             var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
 							var startDate = task.getCreateTime().getTime();
 							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
