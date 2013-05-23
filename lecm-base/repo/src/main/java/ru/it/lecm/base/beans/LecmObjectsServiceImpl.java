@@ -64,7 +64,19 @@ public class LecmObjectsServiceImpl extends BaseBean implements LecmObjectsServi
 		return getPagingResults(pagingRequest, results);
 	}
 
-	private Set<QName> buildLecmObjectTypes() {
+    @Override
+    public PagingResults<NodeRef> list(NodeRef contextNodeRef, boolean files, boolean folders, Set<QName> ignoreQNameTypes, List<Pair<QName, Boolean>> sortProps, PagingRequest pagingRequest) {
+        ParameterCheck.mandatory("contextNodeRef", contextNodeRef);
+        ParameterCheck.mandatory("pagingRequest", pagingRequest);
+
+        Set<QName> searchTypeQNames = buildTypes(files, folders, ignoreQNameTypes);
+
+        // execute query
+        final CannedQueryResults<NodeRef> results = listImpl(contextNodeRef, searchTypeQNames, null, sortProps, pagingRequest);
+        return getPagingResults(pagingRequest, results);
+    }
+
+    public Set<QName> buildLecmObjectTypes() {
 		Set<QName> lecmObjectQNames = new HashSet<QName>(50);
 		Collection<QName> qnames = dictionaryService.getSubTypes(ContentModel.TYPE_CMOBJECT, true);
 		for (QName qname : qnames) {
@@ -144,4 +156,49 @@ public class LecmObjectsServiceImpl extends BaseBean implements LecmObjectsServi
 	public NodeRef getServiceRootFolder() {
 		return null;
 	}
+
+    private Set<QName> buildTypes(boolean files, boolean folders, Set<QName> ignoreQNameTypes) {
+        Set<QName> searchTypeQNames = new HashSet<QName>(100);
+        // Build a list of file and folder types
+        if (folders) {
+            searchTypeQNames.addAll(buildFolderTypes());
+        }
+        if (files) {
+            searchTypeQNames.addAll(buildFileTypes());
+        }
+        if (ignoreQNameTypes != null) {
+            searchTypeQNames.removeAll(ignoreQNameTypes);
+        }
+        return searchTypeQNames;
+    }
+
+    private Set<QName> buildFolderTypes() {
+        Set<QName> folderTypeQNames = new HashSet<QName>(50);
+
+        // Build a list of folder types
+        Collection<QName> qnames = dictionaryService.getSubTypes(ContentModel.TYPE_FOLDER, true);
+        folderTypeQNames.addAll(qnames);
+        folderTypeQNames.add(ContentModel.TYPE_FOLDER);
+
+        // Remove 'system' folders
+        qnames = dictionaryService.getSubTypes(ContentModel.TYPE_SYSTEM_FOLDER, true);
+        folderTypeQNames.removeAll(qnames);
+        folderTypeQNames.remove(ContentModel.TYPE_SYSTEM_FOLDER);
+
+        return folderTypeQNames;
+    }
+
+    private Set<QName> buildFileTypes() {
+        Set<QName> fileTypeQNames = new HashSet<QName>(50);
+
+        // Build a list of file types
+        Collection<QName> qnames = dictionaryService.getSubTypes(ContentModel.TYPE_CONTENT, true);
+        fileTypeQNames.addAll(qnames);
+        fileTypeQNames.add(ContentModel.TYPE_CONTENT);
+        qnames = dictionaryService.getSubTypes(ContentModel.TYPE_LINK, true);
+        fileTypeQNames.addAll(qnames);
+        fileTypeQNames.add(ContentModel.TYPE_LINK);
+
+        return fileTypeQNames;
+    }
 }

@@ -17,7 +17,9 @@ import ru.it.lecm.base.beans.LecmObjectsService;
 import ru.it.lecm.base.beans.getchildren.FilterPropLECM;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author dbashmakov
@@ -91,4 +93,65 @@ public class BaseWebScriptBean extends BaseWebScript {
 
 		return new ScriptPagingNodes(Context.getCurrentContext().newArray(getScope(), results), pageOfNodeInfos.hasMoreItems(), totalResultCountLower, totalResultCountUpper);
 	}
+
+
+    public ScriptPagingNodes getNotLecmChilds(ScriptNode node,
+                                              boolean files,
+                                              boolean folders,
+                                              String ignoreTypes,
+                                              int maxItems,
+                                              int skipCount,
+                                              String sortProp,
+                                              Boolean sortAsc,
+                                              String queryExecutionId) {
+        Object[] results;
+
+        Set<QName> ignoreTypeQNames = new HashSet<QName>(5);
+        if (ignoreTypes != null && !ignoreTypes.isEmpty()) {
+            String[] ignored = ignoreTypes.split(",");
+            for (String ig : ignored) {
+                if (!ig.isEmpty()) {
+                    ignoreTypeQNames.add(QName.createQName(ig, namespaceService));
+                }
+            }
+        }
+
+        ignoreTypeQNames.addAll(lecmObjectsService.buildLecmObjectTypes());
+
+        List<Pair<QName, Boolean>> sortProps = null; // note: null sortProps => get all in default sort order
+        if (sortProp != null) {
+            sortProps = new ArrayList<Pair<QName, Boolean>>(1);
+            sortProps.add(new Pair<QName, Boolean>(QName.createQName(sortProp, namespaceService), sortAsc));
+        }
+
+        PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, queryExecutionId);
+        pageRequest.setRequestTotalCountMax(REQUEST_MAX);
+
+        PagingResults<NodeRef> pageOfNodeInfos = null;
+        FileFilterMode.setClient(FileFilterMode.Client.script);
+        try {
+            pageOfNodeInfos = lecmObjectsService.list(node.getNodeRef(), files, folders, ignoreTypeQNames, sortProps, pageRequest);
+        } finally {
+            FileFilterMode.clearClient();
+        }
+
+        List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
+        int size = nodeInfos.size();
+        results = new Object[size];
+        for (int i = 0; i < size; i++) {
+            NodeRef ref = nodeInfos.get(i);
+            results[i] = new ScriptNode(ref, serviceRegistry, getScope());
+        }
+
+        int totalResultCountLower = -1;
+        int totalResultCountUpper = -1;
+
+        Pair<Integer, Integer> totalResultCount = pageOfNodeInfos.getTotalResultCount();
+        if (totalResultCount != null) {
+            totalResultCountLower = (totalResultCount.getFirst() != null ? totalResultCount.getFirst() : -1);
+            totalResultCountUpper = (totalResultCount.getSecond() != null ? totalResultCount.getSecond() : -1);
+        }
+
+        return new ScriptPagingNodes(Context.getCurrentContext().newArray(getScope(), results), pageOfNodeInfos.hasMoreItems(), totalResultCountLower, totalResultCountUpper);
+    }
 }

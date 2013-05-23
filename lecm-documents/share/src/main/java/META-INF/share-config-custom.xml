@@ -228,6 +228,7 @@
         <dependencies>
             <js src="/scripts/lecm-documents/contracts-renderers-register.js"/>
             <js src="/scripts/lecm-documents/lecm-doc-list-overrride.js"/>
+            <js src="/scripts/lecm-documents/lecm-doc-tree-overrride.js"/>
         </dependencies>
     </config>
 </alfresco-config>
