@@ -317,21 +317,18 @@ LogicECM.module = LogicECM.module || {};
 	            if (this.options.selectedValueNodeRef != null && this.options.selectedValueNodeRef.length > 0) {
 	                Alfresco.util.Ajax.jsonGet(
 	                    {
-	                        url: Alfresco.constants.PROXY_URI + "slingshot/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
+	                        url: Alfresco.constants.PROXY_URI + "slingshot/doclib2/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
 	                        successCallback:
 	                        {
 	                            fn: function (response) {
-	                                var properties = response.json.properties;
+	                                var properties = response.json.item.node.properties;
 	                                var name = this.options.nameSubstituteString;
-	                                for (var i = 0; i < properties.length; i++) {
-	                                    var prop = properties[i];
-	                                    if (prop.name && prop.values[0]) {
-	                                        var propSubstName = this.options.openSubstituteSymbol + prop.name.prefixedName + this.options.closeSubstituteSymbol;
-	                                        if (name.indexOf(propSubstName) != -1) {
-	                                            name = name.replace(propSubstName, prop.values[0].value);
-	                                        }
-	                                    }
-	                                }
+                                    for (var prop in properties) {
+                                        var propSubstName = this.options.openSubstituteSymbol + prop + this.options.closeSubstituteSymbol;
+                                        if (name.indexOf(propSubstName) != -1) {
+                                            name = properties[prop];
+                                        }
+                                    }
 	                                this.currentDisplayValueElement.innerHTML = name;
 	                            },
 	                            scope: this

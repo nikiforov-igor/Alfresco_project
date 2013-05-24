@@ -51,25 +51,22 @@
 
                 if (currentInputEl !== null && currentInputEl.value.length > 0) {
                     Alfresco.util.Ajax.jsonGet({
-                        url: Alfresco.constants.PROXY_URI + "slingshot/node/" + currentInputEl.value.replace("://", "/"),
+                        url: Alfresco.constants.PROXY_URI + "slingshot/doclib2/node/" + currentInputEl.value.replace("://", "/"),
                         successCallback:
                         {
                             fn: function (response) {
-                                var currentDisplayValueElement = YAHOO.util.Dom.get( "${controlId}-currentValueDisplay" ),
-                                        properties = response.json.properties,
-                                        name = this.options.nameSubstituteString,
-                                        i, prop, propSubstName;
+                                var currentDisplayValueElement = YAHOO.util.Dom.get( "${controlId}-currentValueDisplay");
+                                var properties = response.json.item.node.properties;
+                                name = this.options.nameSubstituteString;
 
-                                for( i = 0; i < properties.length; i++ ) {
-                                    prop = properties[i];
-                                    if (prop.name && prop.values[0]) {
-                                        propSubstName = this.options.openSubstituteSymbol + prop.name.prefixedName + this.options.closeSubstituteSymbol;
-                                        if (name.indexOf(propSubstName) != -1) {
-                                            name = name.replace(propSubstName, prop.values[0].value);
-                                        }
+                                for (var prop in properties) {
+                                    var propSubstName = this.options.openSubstituteSymbol + prop + this.options.closeSubstituteSymbol;
+                                    if (name.indexOf(propSubstName) != -1) {
+                                        name = properties[prop];
                                     }
-                                    currentDisplayValueElement.innerHTML = name;
                                 }
+
+                                currentDisplayValueElement.innerHTML = name;
                             },
                             scope: this
                         },
