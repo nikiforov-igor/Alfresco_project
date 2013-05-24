@@ -23,12 +23,28 @@ LogicECM.module.OrgStructure.Absence.noderefsHasNoAbsenceValidation =
             htmlNode = YAHOO.util.Dom.get(field.id + "error-message-container");
         }
 
-        if (!field.value)
+        var fieldAdded = YAHOO.util.Dom.get(field.id + "-cntrl-added");
+        var fieldRemoved = YAHOO.util.Dom.get(field.id + "-cntrl-removed");
+
+        if (!fieldAdded.value && !fieldRemoved.value)
         {
             return true;
         }
 
+        var nodeRefs = [];
+
+        if (fieldAdded.value){
+            nodeRefs.push( fieldAdded.value.split(","));
+        }
+
+        if (fieldRemoved.value){
+            nodeRefs.push( fieldRemoved.value.split(",") );
+        }
+
+
         var valid = false;
+
+        var nodeRefsJoined = nodeRefs.join(",");
 
         // Yahoo UI не умеет синхронный (блокирующий) AJAX. Придется использовать jQuery
         jQuery.ajax({
@@ -38,7 +54,7 @@ LogicECM.module.OrgStructure.Absence.noderefsHasNoAbsenceValidation =
             async: false, // ничего не делаем, пока не отработал запром
             dataType: "json",
             contentType: "application/json",
-            data: YAHOO.lang.JSON.stringify({ nodeRef: field.value }), // jQuery странно кодирует данные. пусть YUI эаймеся преобразованием в JSON
+            data: YAHOO.lang.JSON.stringify({ nodeRef: nodeRefsJoined  }), // jQuery странно кодирует данные. пусть YUI эаймеся преобразованием в JSON
             processData: false, // данные не трогать, не кодировать вообще
             success: function (result, textStatus, jqXHR) {
                 if (result && result.hasNoActiveAbsences) {
