@@ -56,9 +56,3 @@
 	</#if>
 	<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
 </div>
-
-<div id="${controlId}-file-uploaders">
-	<div id="${controlId}-html-uploader"></div>
-	<div id="${controlId}-flash-uploader"></div>
-	<div id="${controlId}-file-uploader"></div>
-</div>

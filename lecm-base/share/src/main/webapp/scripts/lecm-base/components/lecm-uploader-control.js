@@ -55,28 +55,33 @@ LogicECM.control = LogicECM.control || {};
 		},
 
 		setUploaders: function() {
-			this.setUploader("components/upload/html-upload", this.options.controlId + "-html-uploader", false);
-			this.setUploader("components/upload/flash-upload", this.options.controlId + "-flash-uploader", true);
-			this.setUploader("components/upload/file-upload", this.options.controlId + "-file-uploader", false);
+			var uploadersContainer = Dom.get("lecm-controls-file-uploaders");
+			if (uploadersContainer == null) {
+				uploadersContainer = document.createElement("div");
+				uploadersContainer.id = "lecm-controls-file-uploaders";
+				document.body.appendChild(uploadersContainer);
+
+				this.setUploader("components/upload/html-upload", "lecm-controls-html-uploader", uploadersContainer);
+				this.setUploader("components/upload/flash-upload", "lecm-controls-flash-uploader", uploadersContainer);
+				this.setUploader("components/upload/file-upload", "lecm-controls-file-uploader", uploadersContainer);
+			}
 		},
 
-		setUploader: function(url, containerId, createWrap) {
-			var htmlId = this.id + Alfresco.util.generateDomId();
-
+		setUploader: function(url, containerId, uploadersContainer) {
+			if (Dom.get(containerId) == null) {
+				var container = document.createElement("div");
+				container.id = containerId;
+				uploadersContainer.appendChild(container);
+			}
 			Alfresco.util.Ajax.request(
 				{
 					url: Alfresco.constants.URL_SERVICECONTEXT + url,
 					dataObj: {
-						htmlid: htmlId
+						htmlid: containerId
 					},
 					successCallback: {
 						fn:function(response){
-							var text = response.serverResponse.responseText;
-							if (createWrap) {
-								Dom.get(containerId).innerHTML =  "<div id='" + htmlId + "'>" + text + "</div>";
-							} else {
-								Dom.get(containerId).innerHTML =  text;
-							}
+							Dom.get(containerId).innerHTML = response.serverResponse.responseText;
 						},
 						scope: this
 					},
