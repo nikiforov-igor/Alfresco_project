@@ -326,7 +326,7 @@ LogicECM.module = LogicECM.module || {};
                                     for (var prop in properties) {
                                         var propSubstName = this.options.openSubstituteSymbol + prop + this.options.closeSubstituteSymbol;
                                         if (name.indexOf(propSubstName) != -1) {
-                                            name = properties[prop];
+                                            name = name.replace(propSubstName, properties[prop]);
                                         }
                                     }
 	                                this.currentDisplayValueElement.innerHTML = name;
