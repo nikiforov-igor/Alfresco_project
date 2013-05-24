@@ -49,10 +49,9 @@ YAHOO.util.Event.onContentReady("alf-hd", function () {
             return '<a href="' + html + '">';
         };
 
-        Alfresco.DocumentList.prototype.fnRenderCellThumbnail = function DL_fnRenderCellThumbnail() {
+        Alfresco.DocumentList.prototype.fnRenderCellThumbnail = function () {
             var scope = this;
-
-            return function DL_fnRenderCellThumbnail(elCell, oRecord, oColumn, oData) {
+            return function (elCell, oRecord, oColumn, oData) {
                 var record = oRecord.getData(),
                     node = record.jsNode,
                     properties = node.properties,
@@ -112,9 +111,9 @@ YAHOO.util.Event.onContentReady("alf-hd", function () {
             };
         };
 
-        Alfresco.DocumentList.prototype.fnRenderCellActions = function DL_fnRenderCellActions() {
+        Alfresco.DocumentList.prototype.fnRenderCellActions = function () {
             var scope = this;
-            return function DL_renderCellActions(elCell, oRecord, oColumn, oData) {
+            return function (elCell, oRecord, oColumn, oData) {
                 var record = oRecord.getData(),
                     node = record.jsNode,
                     type = node.type;
@@ -136,5 +135,13 @@ YAHOO.util.Event.onContentReady("alf-hd", function () {
                 }
             };
         };
+
+        // Reference to Data Grid component
+        var list = Alfresco.util.ComponentManager.findFirst("Alfresco.DocumentList");
+        if (list != null) {
+            list._setupDataSource();
+            // DataTable set-up and event registration
+            list._setupDataTable();
+        }
     }
 });
