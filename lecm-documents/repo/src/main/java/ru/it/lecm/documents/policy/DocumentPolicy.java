@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.policy;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.model.ForumModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
@@ -12,6 +13,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,6 +164,7 @@ public class DocumentPolicy extends BaseBean
         String presentStringValue = AuthenticationUtil.runAsSystem(stringValue);
         if (presentStringValue != null) {
             nodeService.setProperty(nodeRef, DocumentService.PROP_PRESENT_STRING, presentStringValue);
+            nodeService.setProperty(nodeRef, ContentModel.PROP_NAME, FileNameValidator.getValidFileName(presentStringValue + " " + nodeRef.getId()));
         }
         String listPresentString = substituteService.getTemplateStringForObject(nodeRef, true);
 
