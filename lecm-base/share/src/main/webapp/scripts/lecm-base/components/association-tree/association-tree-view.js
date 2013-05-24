@@ -1131,7 +1131,6 @@ LogicECM.module = LogicECM.module || {};
         {
             // Just element
             var el;
-
             el = Dom.get(this.options.controlId + "-currentValueDisplay");
             el.innerHTML = '';
             var num = 0;
@@ -1198,12 +1197,6 @@ LogicECM.module = LogicECM.module || {};
 
 	            Dom.get(this.eventGroup).value = selectedItems.toString();
 
-                if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
-                    YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
-                        selectedItems: this.selectedItems
-                    });
-                }
-
 	            if (this.options.mandatory) {
 		            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 	            }
@@ -1216,6 +1209,11 @@ LogicECM.module = LogicECM.module || {};
 			            selectedItems:selectedItems,
 			            selectedItemsMetaData:Alfresco.util.deepCopy(this.selectedItems)
 		            });
+            }
+            if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
+                YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
+                    selectedItems: this.selectedItems
+                });
             }
         },
 
