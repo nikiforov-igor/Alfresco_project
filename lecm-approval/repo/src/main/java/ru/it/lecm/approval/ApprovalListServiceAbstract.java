@@ -94,7 +94,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	private final static QName FAKE_PROP_COMINGSOON = QName.createQName(NamespaceService.ALFRESCO_URI, "comingSoonNotified");
 	private final static QName FAKE_PROP_OVERDUE = QName.createQName(NamespaceService.ALFRESCO_URI, "overdueNotified");
 	private final static String APPROVAL_LIST_NAME = "Лист согласования версия %s";
-	private final static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+	private final static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 	private final static String BUSINESS_ROLE_CONTRACT_CURATOR_ID = "CONTRACT_CURATOR";
 
 	private OrgstructureBean orgstructureService;
@@ -427,7 +427,7 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 				commentFileName.append(nodeService.getProperty(documentRef, QName.createQName(documentProjectNumber, serviceRegistry.getNamespaceService())));
 				commentFileName.append(", ");
 
-				commentFileName.append(DATE_FORMAT.format(new Date())).append(" + ");
+				commentFileName.append(new SimpleDateFormat("dd.MM.yyyy hh-mm").format(new Date())).append(" + ");
 				commentFileName.append("Согласование сотрудником ");
 
 				if (employeeRef != null) {
