@@ -276,7 +276,7 @@ function getSearchResults(params) {
             logger.log("parentNodeRef = " + parentNodeRef);
             if (parentNodeRef != null && parentNodeRef.length > 0) {
                 var parentNode = search.findNode(parentNodeRef);
-                if (parentNode != null && searchConfig.filter != null && searchConfig.filter.indexOf('PATH') == -1) {
+                if (parentNode != null && (!searchConfig.filter || searchConfig.filter && searchConfig.filter.indexOf('PATH') == -1)) {
                     var xpath = parentNode.getQnamePath();
                     fullTextSearchQuery += " +PATH:\"" + xpath + "//*\"";
                 }
