@@ -111,7 +111,7 @@ YAHOO.util.Event.onContentReady("alf-hd", function () {
             };
         };
 
-        Alfresco.DocumentList.prototype.fnRenderCellActions = function () {
+        /*Alfresco.DocumentList.prototype.fnRenderCellActions = function () {
             var scope = this;
             return function (elCell, oRecord, oColumn, oData) {
                 var record = oRecord.getData(),
@@ -134,7 +134,7 @@ YAHOO.util.Event.onContentReady("alf-hd", function () {
                     elCell.innerHTML = '<div id="' + scope.id + '-actions-hidden-' + oRecord.getId() + '" class="hidden"></div>';
                 }
             };
-        };
+        };*/
 
         // Reference to Data Grid component
         var list = Alfresco.util.ComponentManager.findFirst("Alfresco.DocumentList");
