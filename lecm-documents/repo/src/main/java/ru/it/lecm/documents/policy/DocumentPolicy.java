@@ -126,6 +126,7 @@ public class DocumentPolicy extends BaseBean
             }
         }
 
+        updatePresentString(nodeRef);
         if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
             nodeService.setProperty(nodeRef,DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
             if (stateMachineHelper.isDraft(nodeRef)) {
@@ -137,7 +138,6 @@ public class DocumentPolicy extends BaseBean
                 businessJournalService.log(nodeRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
             }
         }
-        updatePresentString(nodeRef);
     }
 
     private void updatePresentString(final NodeRef nodeRef) {
