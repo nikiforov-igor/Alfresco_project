@@ -427,21 +427,30 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 				commentFileName.append(nodeService.getProperty(documentRef, QName.createQName(documentProjectNumber, serviceRegistry.getNamespaceService())));
 				commentFileName.append(", ");
 
-				commentFileName.append(new SimpleDateFormat("dd.MM.yyyy hh-mm").format(new Date())).append(" + ");
+				commentFileName.append(new SimpleDateFormat("dd.MM.yyyy").format(new Date())).append(" + ");
 				commentFileName.append("Согласование сотрудником ");
 
 				if (employeeRef != null) {
 					commentFileName.append(nodeService.getProperty(employeeRef, ContentModel.PROP_NAME));
 				}
 
-				final String commentFileNameStr = FileNameValidator.getValidFileName(commentFileName.toString());
+				String commentFileNameStr = FileNameValidator.getValidFileName(commentFileName.toString());
+
+				if (nodeService.getChildByName(attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentFileNameStr) != null) {
+					int i = 0;
+					do{
+						i++;
+					} while (nodeService.getChildByName(attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentFileNameStr + " " + i) != null);
+					commentFileNameStr += " " + i;
+				}
 
 				final NodeRef commentRefFinal = commentRef;
+				final String commentFileNameFinal = commentFileNameStr;
 				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
 				transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 					@Override
 					public Object execute () throws Throwable {
-						nodeService.setProperty(commentRefFinal, ContentModel.PROP_NAME, commentFileNameStr);
+						nodeService.setProperty(commentRefFinal, ContentModel.PROP_NAME, commentFileNameFinal);
 						return null;
 					}
 				}, false, true);
