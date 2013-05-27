@@ -755,6 +755,15 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	}
 
     /**
+     * Получение информации о роляx сотрудника
+     */
+    public Scriptable getEmployeeBusinessRoles(String employeeRef) {
+        NodeRef employee = new NodeRef(employeeRef);
+        List<NodeRef> employeeRoles = orgstructureService.getEmployeeRoles(employee);
+        return createScriptable(employeeRoles);
+    }
+
+    /**
      * Получение корневой папки из оргструктуры по ее типу
      * @param rootType тип папки (ROOT Map<String, Integer>)
      * @return
