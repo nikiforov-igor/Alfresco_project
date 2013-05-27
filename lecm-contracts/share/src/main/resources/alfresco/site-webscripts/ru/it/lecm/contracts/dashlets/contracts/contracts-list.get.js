@@ -7,14 +7,20 @@ function main() {
     if (docs.status == 200) {
         var filter = "";
         var oResults = eval("(" + docs + ")");
+	    var contractsWithMyActiveTasks = [];
         for each (var ref in oResults){
-            var ref = ref.nodeRef;
-            filter = filter + " ID:" + ref.replace(":", "\\\\:");
+            var nodeRef = ref.nodeRef;
+            filter = filter + " ID:" + nodeRef.replace(":", "\\\\:");
+
+		    if (ref.hasMyActiveTasks == "true") {
+			    contractsWithMyActiveTasks.push(nodeRef);
+		    }
         }
         if (filter == "") {
             filter += "ID:NOT_REF";
         }
         model.filter = filter;
+        model.contractsWithMyActiveTasks = contractsWithMyActiveTasks;
     }
 }
 

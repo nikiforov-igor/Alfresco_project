@@ -86,6 +86,20 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
                             if (i < ii - 1) {
                                 html += "<br />";
                             }
+
+	                        if (grid.options.contractsWithMyActiveTasks != null) {
+		                        var bold = false;
+		                        var nodeRef = oRecord.getData("nodeRef");
+		                        for (var j = 0; j < grid.options.contractsWithMyActiveTasks.length; j++) {
+			                        if (grid.options.contractsWithMyActiveTasks[j] == nodeRef) {
+				                        bold = true;
+				                        break;
+			                        }
+		                        }
+		                        if (bold) {
+			                        html = "<b>" + html + "</b>";
+		                        }
+	                        }
                         }
                     }
                 }

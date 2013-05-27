@@ -28,7 +28,12 @@
                     searchConfig: {
                         filter: ("${FILTER}".length > 0 ? "${FILTER}" : "")
                     }
-                }
+                },
+	            contractsWithMyActiveTasks: [
+		            <#list contractsWithMyActiveTasks as contractNodeRef>
+                        "${contractNodeRef}"<#if contractNodeRef_has_next>,</#if>
+                    </#list>
+	            ]
             }).setMessages(${messages});
 
             dGrid.draw();
