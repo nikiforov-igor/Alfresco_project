@@ -1,0 +1,7 @@
+.alfresco-share {
+    background: url("/share/res/images/lecm-contracts/alf_contracts_texture_back.png") repeat;
+}
+.alfresco-share .sticky-wrapper,
+#alf-hd .page-title {
+    background: transparent;
+}

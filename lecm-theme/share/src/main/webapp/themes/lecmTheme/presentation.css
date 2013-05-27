@@ -40,18 +40,30 @@ a:hover {
     top: -25px;
 }
 
-#alf-hd .header .app-items > span > span > a {
-    position: relative;
-    top: 17px;
+#alf-hd .header .app-items > span.yui-button {
+    width: 100px;
+    text-align: center;
 }
 
+#alf-hd .header .app-items span.yui-button span.first-child button {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline;
+}
+#alf-hd .header .app-items span.yui-button.yui-menu-button span.first-child button {
+    padding-right: 10px;
+    background-position: 120% 73%;
+}
+
+#alf-hd .header .app-items > span > span > a,
 #alf-hd .header .app-items > span > span > button {
     position: relative;
     top: 17px;
 }
 
 #bd {
-    background: rgba(204,204,204,.4);
+    background: #f2f2f2;
     border: 1px solid #ccc;
     border-radius: 3px;
     padding-bottom: 0;
@@ -62,9 +74,9 @@ a:hover {
     margin-top: -12px;
 }
 #bd #lecm-menu {
-    width: 56px;
+    width: 66px;
     float: left;
-    margin: 10px 2px;
+    margin: 5px 2px;
 }
 #bd #lecm-menu #menu-buttons > span:not(:last-of-type) {
     margin-bottom: 10px;
@@ -75,15 +87,28 @@ a:hover {
     text-align: center;
 }
 #bd #lecm-menu #menu-buttons span.menu-button span.first-child {
-    max-width: 56px;
+    max-width: 66px;
+    height: 48px;
     font-size: 11px;
-    word-break: break-all;
-    letter-spacing: -1px;
-    background-position: 12px 4px;
+    white-space: normal;
+    background-position: 17px 8px;
     cursor: pointer;
 }
+#bd #lecm-menu #menu-buttons span.menu-button span.first-child > span {
+    display: block;
+    margin-top: 6px;
+}
+#bd #lecm-menu #menu-buttons.contracts-menu-buttons span.menu-button span.first-child {
+    height: 68px;
+}
+#bd #lecm-menu #menu-buttons span.menu-button.long-text span.first-child {  /* long-text - Надпись под кнопкой в две строки */
+    background-position: 17px 4px;
+}
+#bd #lecm-menu #menu-buttons span.menu-button.long-text span.first-child > span {  /* long-text - Надпись под кнопкой в две строки */
+    margin-top: 0;
+}
 #bd #lecm-menu button {
-    width: 56px;
+    width: 66px;
     height: 40px;
     overflow: hidden;
 }
@@ -92,7 +117,7 @@ a:hover {
     background: #fff;
     border: 1px solid #acacac;
     border-radius: 3px;
-    margin: 5px 5px 5px 60px;
+    margin: 5px 5px 5px 70px;
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;

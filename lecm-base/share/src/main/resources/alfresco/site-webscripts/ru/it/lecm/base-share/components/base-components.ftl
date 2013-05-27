@@ -10,13 +10,17 @@ id (обязательный) - идентификатор раздела
 title (необязательный) - всплывающая подсказка кнопки
 selectedEl (необязательный) - идентификатор раздела, выбранного в модуле в данный момент
 hasText (необязательный) - добавлять ли подпись к кнопке
+longText (необязательный) - подпись к кнопке - длинная, занимает две строки
 -->
-<#macro baseMenuButton id title='' selectedEl='' hasText=false>
-    <span id="menu-buttons-${id}Btn" class="yui-button yui-push-button menu-button <#if selectedEl == id>selected</#if>">
+<#macro baseMenuButton id title='' selectedEl='' hasText=false longText=false>
+    <span id="menu-buttons-${id}Btn" class="yui-button yui-push-button menu-button <#if selectedEl == id>selected</#if>
+        <#if longText> long-text</#if>">
         <span class="first-child">
             <button type="button" title="${title}">&nbsp;</button>
             <#if hasText>
-                ${title}
+                <span>
+                    ${title}
+                </span>
             </#if>
         </span>
     </span>
