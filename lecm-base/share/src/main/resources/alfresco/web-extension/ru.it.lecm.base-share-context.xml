@@ -2,10 +2,11 @@
 <!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 
 <beans>
-    <bean id="baseResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+    <bean id="baseResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent" depends-on="webscripts.resources">
         <property name="resourceBundles">
             <list>
 				<value>ru.it.lecm.base-share.base-share</value>
+				<value>ru.it.lecm.base-share.slingshot</value>
             </list>
         </property>
     </bean>
