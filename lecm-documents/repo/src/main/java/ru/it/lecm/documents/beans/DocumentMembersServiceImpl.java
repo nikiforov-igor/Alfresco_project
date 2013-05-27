@@ -97,16 +97,6 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
                             QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()), TYPE_DOC_MEMBER, properties);
                     NodeRef newMemberRef = associationRef.getChildRef();
                     nodeService.createAssociation(newMemberRef, employeeRef, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
-                    try {
-                        // Выдача прав новому участнику
-                        LecmPermissionService.LecmPermissionGroup pgGranting = getLecmPermissionGroup(newMemberRef);
-                        lecmPermissionService.grantAccess(pgGranting, document, employeeRef.getId());
-                        nodeService.setProperty(newMemberRef, DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
-                    } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
-                        logger.error("Не удалось выдать права новому участнику!", ex);
-                    }
-                    addMemberToUnit(employeeRef, document);
-
                     return newMemberRef;
                 }
             });
