@@ -4,5 +4,6 @@
       <filter type="AGREEMENTS" value="Дополнительное соглашение, Соглашение" />
       <filter type="CHANGES" value="Изменения к договору, Изменение к доп. Соглашению" />
       <filter type="TERMINATIONS" value="Соглашение о расторжении" />
+      <filter type="CONTROVERSY" value="Протокол разногласий, Протокол согласования разногласий" />
    </filters>
 </config>

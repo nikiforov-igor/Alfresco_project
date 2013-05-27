@@ -27,5 +27,13 @@
 			<property name="cm:name">Изменение к доп. Соглашению</property>
 			<property name="lecm-contract-dic:contract-documents-type-code">changesToAdditionalAgreement</property>
 		</item>
+        <item name="Протокол разногласий">
+			<property name="cm:name">Протокол разногласий</property>
+			<property name="lecm-contract-dic:contract-documents-type-code">protocolDifferences</property>
+		</item>
+        <item name="Протокол согласования разногласий">
+			<property name="cm:name">Протокол согласования разногласий</property>
+			<property name="lecm-contract-dic:contract-documents-type-code">negotiationProtocolDifferences</property>
+		</item>
 	</items>
 </dictionary>
