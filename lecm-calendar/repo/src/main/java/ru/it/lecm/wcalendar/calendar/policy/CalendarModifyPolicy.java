@@ -1,7 +1,6 @@
 package ru.it.lecm.wcalendar.calendar.policy;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Map;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -49,8 +48,8 @@ public class CalendarModifyPolicy implements NodeServicePolicies.OnUpdatePropert
 		final Boolean prevActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
 		final Boolean curActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
 		// для рабочих и выходных дней
-		final Date prevDay = (Date) before.get(ICalendar.PROP_SPECIAL_DAY_DAY);
-		final Date curDay = (Date) after.get(ICalendar.PROP_SPECIAL_DAY_DAY);
+		final String prevDay = (String) before.get(ICalendar.PROP_SPECIAL_DAY_DAY);
+		final String curDay = (String) after.get(ICalendar.PROP_SPECIAL_DAY_DAY);
 		final String prevReason = (String) before.get(ICalendar.PROP_SPECIAL_DAY_REASON);
 		final String curReason = (String) after.get(ICalendar.PROP_SPECIAL_DAY_REASON);
 		// для календарей на год

@@ -1,7 +1,6 @@
 package ru.it.lecm.wcalendar.calendar.beans;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
@@ -37,6 +37,7 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 
 	private int yearsNumberToCreate = 0;
 	private SimpleDateFormat yearParser = new SimpleDateFormat("yyyy");
+	private SimpleDateFormat specialDateParser = new SimpleDateFormat("MMdd");
 	// Получить логгер, чтобы писать, что с нами происходит.
 	private Logger logger = LoggerFactory.getLogger(CalendarBean.class);
 
@@ -106,8 +107,7 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 	 * @return Количество созданных календарей. -1 если ошибка.
 	 */
 	private int generateYearsList(int amount) {
-		String yearToAddStr, yearNodeName;
-		DateFormat dateParser;
+		String yearNodeName;
 		int currentYear, yearsCreated = 0;
 
 
@@ -115,29 +115,18 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 		QName assocTypeQName = ContentModel.ASSOC_CONTAINS; //the type of the association to create. This is used for verification against the data dictionary.
 		QName nodeTypeQName = TYPE_CALENDAR; //a reference to the node type
 
-		dateParser = new SimpleDateFormat("yyyy-mm-dd");
-
 		currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
 		for (int i = 0; i < amount; i++) {
 			int yearToAdd;
-			Date yearToAddFormatted;
 
 			yearToAdd = currentYear + i;
 			if (!isCalendarExists(yearToAdd)) {
-				yearToAddStr = String.valueOf(yearToAdd);
 				yearNodeName = String.format("Calendar %d", yearToAdd);
-				try {
-					//костыль, чтобы избежать возможных проблем в другом часовом поясе
-					yearToAddFormatted = dateParser.parse(yearToAddStr.concat("-01-15"));
-				} catch (ParseException e) {
-					logger.error(e.getMessage(), e);
-					return -1;
-				}
 				QName assocQName = QName.createQName(WCAL_NAMESPACE, yearNodeName);
 				Map<QName, Serializable> properties = new HashMap<QName, Serializable>(); //optional map of properties to keyed by their qualified names
 				properties.put(ContentModel.PROP_NAME, yearNodeName);
-				properties.put(PROP_CALENDAR_YEAR, yearToAddFormatted);
+				properties.put(PROP_CALENDAR_YEAR, yearToAdd);
 				try {
 					nodeService.createNode(parentNodeRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 				} catch (InvalidNodeRefException e) {
@@ -188,7 +177,6 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 		boolean result;
 		List<NodeRef> daysList;
 
-		Date dayNoTime = resetTime(day);
 		int year = Integer.valueOf(yearParser.format(day));
 
 		Calendar cal = Calendar.getInstance();
@@ -205,8 +193,8 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 
 		if (daysList != null) {
 			for (NodeRef specialDay : daysList) {
-				Date specialDayDate = resetTime(getSpecialDayDate(specialDay));
-				if (dayNoTime.equals(specialDayDate)) {
+				Date specialDayDate = getSpecialDayDate(specialDay);
+				if (DateUtils.isSameDay(day, specialDayDate)) {
 					result = !result;
 					break;
 				}
@@ -238,8 +226,7 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 
 	@Override
 	public int getCalendarYear(NodeRef node) {
-		Date yearDate = (Date) nodeService.getProperty(node, PROP_CALENDAR_YEAR);
-		return Integer.valueOf(yearParser.format(yearDate));
+		return (Integer) nodeService.getProperty(node, PROP_CALENDAR_YEAR);
 	}
 
 	@Override
@@ -282,6 +269,18 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 
 	@Override
 	public Date getSpecialDayDate(NodeRef node) {
-		return (Date) nodeService.getProperty(node, PROP_SPECIAL_DAY_DAY);
+		Date specialDayDate;
+
+		NodeRef calendarNode = nodeService.getParentAssocs(node).get(0).getParentRef();
+		int year = getCalendarYear(calendarNode);
+		String dateStr = (String) nodeService.getProperty(node, PROP_SPECIAL_DAY_DAY);
+		try {
+			specialDayDate = specialDateParser.parse(dateStr);
+		} catch (ParseException ex) {
+			logger.error("Invalid special day date", ex);
+			return null;
+		}
+
+		return DateUtils.setYears(specialDayDate, year);
 	}
 }

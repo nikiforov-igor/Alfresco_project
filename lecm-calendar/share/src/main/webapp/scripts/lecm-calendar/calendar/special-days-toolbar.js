@@ -59,15 +59,33 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 					submitType: "json" //The "enctype" to use for the form submission, valid values are "multipart", "json" and "urlencoded", the default is "multipart".
 				});
 
+				var specialDayFormID = "specialDayForm";
 				// Using Forms Service, so always create new instance
-				var workingDayForm = new Alfresco.module.SimpleDialog(scope.id + "-workingDayForm");
+				var specialDayForm = new Alfresco.module.SimpleDialog(scope.id + "-" + specialDayFormID);
 
-				workingDayForm.setOptions({
+				specialDayForm.setOptions({
 					width: "50em",
 					templateUrl: templateUrl,
 					destroyOnHide: true,
 					doBeforeDialogShow: {
 						fn: doBeforeDialogShow,
+						scope: this
+					},
+					doBeforeFormSubmit: {
+						fn: function() {
+							var htmlNodeDate = YAHOO.util.Dom.get(scope.id + "-" + specialDayFormID + "_prop_lecm-cal_day");
+							var dayDate = Alfresco.util.fromISO8601(htmlNodeDate.value);
+							var dayStr = pad((dayDate.getMonth() + 1), 2) + pad(dayDate.getDate(), 2);
+
+							htmlNodeDate.value = dayStr;
+
+							function pad(num, size) {
+								var s = num + "";
+								while (s.length < size)
+									s = "0" + s;
+								return s;
+							}
+						},
 						scope: this
 					},
 					onSuccess: {
@@ -92,7 +110,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 						scope: scope
 					}
 				});
-				workingDayForm.show();
+				specialDayForm.show();
 			};
 		},
 		_onToolbarReady: function() {

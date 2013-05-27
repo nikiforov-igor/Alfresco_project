@@ -17,6 +17,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -381,7 +382,7 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 	public Boolean isWorkingDay(NodeRef node, Date day) {
 		Boolean result = false;
 		if (SCHEDULE_TYPE_SPECIAL.equals(getScheduleType(node))) {
-			Date dayReset = resetTime(day);
+			Date dayReset = DateUtils.truncate(day, Calendar.DATE);
 			List<NodeRef> scheduleElements = getScheduleElements(node);
 			if (scheduleElements != null && !scheduleElements.isEmpty()) {
 				for (NodeRef scheduleElement : scheduleElements) {

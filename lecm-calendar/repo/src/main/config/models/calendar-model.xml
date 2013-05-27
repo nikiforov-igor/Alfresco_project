@@ -23,7 +23,7 @@
 			<parent>cm:folder</parent>
 			<properties>
 				<property name="lecm-cal:year">
-					<type>d:date</type>
+					<type>d:int</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
@@ -48,7 +48,7 @@
 			<properties>
 				<!-- День, который несправедливо является рабочим или нерабочим -->
 				<property name="lecm-cal:day">
-					<type>d:date</type>
+					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>

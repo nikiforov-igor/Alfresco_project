@@ -17,8 +17,8 @@ LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation = function
 	var htmlNode = YAHOO.util.Dom.get(form.errorContainer);
 	htmlNode.innerHTML = "";
 
-	// Привести даты к одному простому формату
-	var shortDateInField = Alfresco.util.formatDate(Alfresco.util.fromISO8601(field.value), "d/m");
+	var dayDate = Alfresco.util.fromISO8601(field.value);
+	var dayStr = pad((dayDate.getMonth() + 1), 2) + pad(dayDate.getDate(), 2);
 
 	// Подгрузить два датагрида
 	dataGrids.push(LogicECM.module.Base.Util.findComponentByBubblingLabel("LogicECM.module.Base.DataGrid", LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL));
@@ -31,8 +31,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation = function
 		for (var j = 0; j < tableRows.length; j++) {
 			var tableRow = tableRows[j].getData("itemData");
 			var value = tableRow["prop_lecm-cal_day"].value;
-			var shortDateInValue = Alfresco.util.formatDate(Alfresco.util.fromISO8601(value), "d/m");
-			if (shortDateInField == shortDateInValue) {
+			if (dayStr == value) {
 				valid = false;
 				break;
 			}
@@ -47,3 +46,10 @@ LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation = function
 
 	return valid;
 };
+
+function pad(num, size) {
+	var s = num + "";
+	while (s.length < size)
+		s = "0" + s;
+	return s;
+}

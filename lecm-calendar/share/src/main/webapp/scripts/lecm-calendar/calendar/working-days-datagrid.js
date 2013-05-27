@@ -57,8 +57,17 @@ LogicECM.module.WCalendar.Calendar.WorkingDays = LogicECM.module.WCalendar.Calen
 										break;
 
 									case "text":
-										content = Alfresco.util.encodeHTML(data.displayValue);
-										html += Alfresco.util.activateLinks(content);
+										if (datalistColumn.name == "lecm-cal:day") {
+											var dateInt = parseInt(data.value);
+											var day = dateInt % 100;
+											var month = (dateInt - dateInt % 100) / 100;
+											var date = new Date(2013, month - 1, day);
+											content = Alfresco.util.formatDate(date, scope.msg("date-format.longDateNoYear"));
+											html += content;
+										} else {
+											content = Alfresco.util.encodeHTML(data.displayValue);
+											html += Alfresco.util.activateLinks(content);
+										}
 
 										break;
 
