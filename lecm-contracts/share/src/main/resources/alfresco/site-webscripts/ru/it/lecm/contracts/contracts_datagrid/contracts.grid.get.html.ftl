@@ -45,7 +45,8 @@
                             itemType: "lecm-contract:document",
                             nodeRef: LogicECM.module.Contracts.SETTINGS.nodeRef,
                             actionsConfig:{
-                                fullDelete:true
+                                fullDelete:true,
+                                trash: false
                             },
                             sort:"cm:modified|false",
                             searchConfig: {

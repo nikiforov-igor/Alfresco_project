@@ -43,6 +43,7 @@ function runAction(p_params) {
     }
 
     var full = args["full"] != null ? args["full"] : false;
+    var trash = args["trash"] != null ? args["trash"] : true;
     var target = args["target"] != null ? args["target"] : false;
     // фикс, чтобы всегда работали со строками
     full = "" + full;
@@ -84,6 +85,9 @@ function runAction(p_params) {
                                 itemNode.removeAssociation(targetA, key);
                             }
                         }
+                    }
+                    if (trash == "false") {
+                        itemNode.addAspect("sys:temporary");
                     }
                     result.success = itemNode.remove();
                 }
