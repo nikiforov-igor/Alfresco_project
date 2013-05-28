@@ -119,6 +119,8 @@
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 
                 <field-visibility>
+                    <show id="lecm-contractor:computed-parent"/>                                                        <!-- Наименование материнской компании -->
+
                     <show id="lecm-contractor:fullname"/>                                                               <!-- Полное наименование -->
                     <show id="lecm-contractor:shortname"/>                                                              <!-- Сокращенное наименование -->
                     <show id="lecm-contractor:comment"/>                                                                <!-- Комментарий -->
@@ -149,6 +151,9 @@
                 <appearance>
                     <!-- Вкладка: Контактные данные -->
                     <set id="contacts" label-id="tabs.contractor.contacts" appearance="" />
+                        <field id="lecm-contractor:computed-parent" set="contacts">                                     <!-- Наименование материнской компании -->
+                            <control template="/ru/it/lecm/contractors/contractors-parent-control.ftl" />
+                        </field>
                         <field id="lecm-contractor:fullname" set="contacts"/>                                           <!-- Полное наименование -->
                         <field id="lecm-contractor:shortname" set="contacts"/>                                          <!-- Сокращенное наименование -->
                         <field id="lecm-contractor:comment" set="contacts"/>                                            <!-- Комментарий -->

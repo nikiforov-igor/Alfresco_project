@@ -1,1 +1,1 @@
-model.parentContractor = contractorsRootObject.getParentContractor(json);
+model.result = contractorsRootObject.getParentContractor(json);

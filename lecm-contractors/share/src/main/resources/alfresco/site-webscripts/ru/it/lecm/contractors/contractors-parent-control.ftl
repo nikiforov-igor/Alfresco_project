@@ -1,71 +1,59 @@
-<#assign currentContractorRef = args.itemId/>
+<#import "/ru/it/lecm/base-share/components/view2.lib.ftl" as view />
 
-<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as viewContractorParentForm/>
-<#assign viewFormId = "view-contractor-parent"/>
-<@viewContractorParentForm.viewForm formId = viewFormId/>
+<#assign formId = args.htmlid + "-form" />
 
-<div class="form-field">
+<#-- Будет уникальным на основе 'args.itemId' -->
+<#assign viewParentFormId = args.itemId + "-view-parent-form" />
+<#assign currentContractorRef = args.itemId />
+
+<@view.viewForm formId = viewParentFormId useDefaultForms = true />
+
+<div id="${formId}-view-parent-field" class="form-field" style="display: none;">
     <div class="viewmode-field">
         <span class="viewmode-label">Материнская компания:</span>
-        <span id="zxcv-view-button" class="viewmode-value"><button onclick="testViewParentForm();">Попробовать</button></span>
+        <span class="viewmode-value"><a id="${formId}-view-parent-link" href="javascript:void(0);"/></a></span>
     </div>
 </div>
 
 <script type="text/javascript">//<![CDATA[
-    function testViewParentForm() {
+    YAHOO.util.Event.onContentReady( "${formId}-view-parent-field", function() {
+
+        // Спасаем "тонущие" всплывающие сообщения.
+        Alfresco.util.PopupManager.zIndex = 9000;
+
         Alfresco.util.Ajax.request({
+
             method: "POST",
-            url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/getparent",
-            dataObj: { "childContractor": "${currentContractorRef}" },
             requestContentType: "application/json",
             responseContentType: "application/json",
-            successCallback: {
-                fn: function (response) {
 
-                    var url = "components/form" +
-                            "?itemKind={itemKind}" +
-                            "&itemId={itemId}" +
-                            "&mode={mode}" +
-                            "&setId={setId}" +
-                            "&showCancelButton=true";
+            url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/getparent",
 
-                    console.log("The [response.parentContractor] value was: " + response.json.parentContractor);
-
-                    if(response.json.parentContractor.length > 0) {
-//                        var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
-//                            itemKind: "node",
-//                            itemId: encodeURIComponent(response.json.parentContractor),
-//                            mode: "view",
-//                            setId: "common"
-//                        });
-//
-//                        //var putFormIn = YAHOO.util.Dom.get("view-contractor-parent-form");
-//                        var viewParentContractorForm = new Alfresco.module.SimpleDialog("view-contractor-parent");
-//
-//                        viewParentContractorForm.setOptions({
-//                            width: "500px",
-//                            templateUrl: templateUrl,
-//                            modal: true,
-//                            destroyOnHide: true
-//                        });
-//
-//                        viewParentContractorForm.show();
-
-                        viewAttributes(response.json.parentContractor);
-
-                    } else {
-                        window.alert("[response.json.parentContractor.length] === 0");
-                    }
-                },
-                scope: window.document
+            dataObj: {
+                "childContractor": "${currentContractorRef}"
             },
-            failureCallback: {
-                fn: function (response) {
 
-                },
-                scope: this
-            }
+            successCallback:{
+                fn: function( response ) {
+
+                    var linkElem;
+
+                    if( response.json.status === "success" ) {
+
+                        linkElem = YAHOO.util.Dom.get( "${formId}-view-parent-link" );
+                        linkElem.innerHTML = response.json.parentContractorName;
+
+                        YAHOO.util.Event.addListener( linkElem, "click", function() {
+                            LogicECM.CurrentModules.ViewFormModule[ "${viewParentFormId}" ].view( response.json.parentContractor, "contacts", "Простмотр материнской компании для " + response.json.childContractorName );
+                        });
+
+                        YAHOO.util.Dom.setStyle( "${formId}-view-parent-field", "display", "block" );
+                    }
+                }
+            },
+
+            execScripts: true
         });
-    }
+    });
 //]]>
 </script>

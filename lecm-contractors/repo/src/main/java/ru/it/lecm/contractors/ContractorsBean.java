@@ -53,21 +53,24 @@ public class ContractorsBean extends BaseBean implements Contractors {
     }
 
     @Override
-    public String getParentContractor(NodeRef childContractor) {
+    public Map<String, String> getParentContractor(NodeRef childContractor) {
+
+        Map<String, String> result = new HashMap<String, String>();
 
         NodeRef parentContractor = nodeService.getPrimaryParent(childContractor).getParentRef();
 
-        if (parentContractor == null) {
-            return null;
-        }
-
         QName TYPE_CONTRACTOR = QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "contractor-type");
+        if(parentContractor != null && TYPE_CONTRACTOR.equals(nodeService.getType(parentContractor))) {
+            result.put("parentContractor", parentContractor.toString());
 
-        if(TYPE_CONTRACTOR.equals(nodeService.getType(parentContractor))) {
-            return parentContractor.toString();
+            String parentContractorName = nodeService.getProperty(parentContractor, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "shortname")).toString();
+            result.put("parentContractorName", parentContractorName);
+
+            String childContractorName = nodeService.getProperty(childContractor, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "shortname")).toString();
+            result.put("childContractorName", childContractorName);
         }
 
-        return "";
+        return result;
     }
 
     @Override

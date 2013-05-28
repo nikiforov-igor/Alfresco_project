@@ -9,6 +9,7 @@ import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.contractors.api.Contractors;
 
 import java.util.List;
+import java.util.Map;
 
 public class ContractorsJavascriptExtension extends BaseScopableProcessorExtension {
 
@@ -34,7 +35,7 @@ public class ContractorsJavascriptExtension extends BaseScopableProcessorExtensi
         return "Check It! I'm done!";
     }
 
-    public String getParentContractor(final JSONObject json) {
+    public JSONObject getParentContractor(final JSONObject json) {
         NodeRef childContractor;
 
         try {
@@ -44,7 +45,15 @@ public class ContractorsJavascriptExtension extends BaseScopableProcessorExtensi
             throw new WebScriptException(ex.getMessage(), ex);
         }
 
-        return contractors.getParentContractor(childContractor);
+        Map<String, String> result = contractors.getParentContractor(childContractor);
+
+        if( result.isEmpty() ) {
+            result.put("status", "failure");
+        } else {
+            result.put("status", "success");
+        }
+
+        return new JSONObject(result);
     }
 
     public List<Object> getRepresentatives(final JSONObject json) {

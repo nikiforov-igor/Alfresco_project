@@ -37,7 +37,7 @@
 
 <script type="text/javascript">//<![CDATA[
 (function() {
-    LogicECM.CurrentModules = {};
+    LogicECM.CurrentModules = LogicECM.CurrentModules || {};
 
     LogicECM.CurrentModules["${autoCompleteJsName}"] = new LogicECM.module.AssociationAutoComplete("${fieldHtmlId}");
     LogicECM.CurrentModules["${autoCompleteJsName}"].setMessages(${messages});

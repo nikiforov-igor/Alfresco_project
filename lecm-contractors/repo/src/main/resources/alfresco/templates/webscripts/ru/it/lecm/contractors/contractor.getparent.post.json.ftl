@@ -1,3 +1,1 @@
-{
-    "parentContractor": "${parentContractor}"
-}
+${result.toString()}
