@@ -26,7 +26,13 @@
                             id: "onActionDelete",
                             permission: "delete",
                             label: "${msg("actions.delete-row")}"
-                        }
+                        },
+	                    {
+		                    type:"datagrid-action-link-${bubblingLabel!'contracts'}",
+		                    id:"onActionDuplicate",
+		                    permission:"create",
+		                    label:"${msg("actions.duplicate-row")}"
+	                    }
                     ],
                     allowCreate: false,
                     showActionColumn: true,

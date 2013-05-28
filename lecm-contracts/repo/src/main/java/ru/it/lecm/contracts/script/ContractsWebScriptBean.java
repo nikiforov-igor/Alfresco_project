@@ -8,6 +8,7 @@ import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
+import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
@@ -336,4 +337,16 @@ public class ContractsWebScriptBean extends BaseWebScript {
         List<NodeRef> additionalDocuments = this.contractService.getAdditionalDocs(filter.length() > 0 ? filter : null);
         return createScriptable(additionalDocuments);
     }
+
+	public ScriptNode dublicateContract(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		NodeRef ref = new NodeRef(nodeRef);
+		if (nodeService.exists(ref)) {
+			NodeRef createdNode = this.contractService.dublicateContract(ref);
+			if (createdNode != null) {
+				return new ScriptNode(createdNode, serviceRegistry, getScope());
+			}
+		}
+		return null;
+	}
 }

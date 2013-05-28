@@ -54,6 +54,8 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final QName ASSOC_CONTRACT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "typeContract-assoc");
 	public static final QName ASSOC_CONTRACT_SUBJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "subjectContract-assoc");
 	public static final QName ASSOC_CONTRACT_PARTNER = QName.createQName(CONTRACTS_NAMESPACE_URI, "partner-assoc");
+	public static final QName ASSOC_CONTRACT_REPRESENTATIVE = QName.createQName(CONTRACTS_NAMESPACE_URI, "representative-assoc");
+	public static final QName ASSOC_CONTRACT_CURRENCY = QName.createQName(CONTRACTS_NAMESPACE_URI, "currency-assoc");
 
 	public static final QName ASPECT_CONTRACT_DELETED = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "deleted");
 	public static final QName ASPECT_PRIMARY_DOCUMENT_DELETE = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentDeletedAspect");
@@ -66,6 +68,8 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final QName PROP_ADDITIONAL_DOCUMENT_NUMBER = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "number");
 	public static final QName PROP_DATE_REG_CONTRACT = QName.createQName(CONTRACTS_NAMESPACE_URI, "dateRegContracts");
 	public static final QName PROP_DATE_REG_CONTRACT_PROJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "dateRegProjectContracts");
+	public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
+	public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
 
 	public static final String CONTRACT_REGNUM_TEMPLATE_CODE = "CONTRACT_REGNUM";
 	public static final String CONTRACT_PROJECT_REGNUM_TEMPLATE_CODE = "CONTRACT_PROJECT_REGNUM";
@@ -560,4 +564,39 @@ public class ContractsBeanImpl extends BaseBean {
         }
         return records;
     }
+
+	public boolean isContract(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_CONTRACTS_DOCUMENT);
+		return isProperType(ref, types);
+	}
+
+	public NodeRef dublicateContract(NodeRef nodeRef) {
+		if (isContract(nodeRef)) {
+			Map<QName, Serializable> properties = new HashMap<QName, Serializable> ();
+			properties.put (PROP_SUMMARY_CONTENT, nodeService.getProperty(nodeRef, PROP_SUMMARY_CONTENT));
+			properties.put (PROP_SIGNATORY_COUNTERPARTY, nodeService.getProperty(nodeRef, PROP_SIGNATORY_COUNTERPARTY));
+
+			ChildAssociationRef createdNodeAssoc = nodeService.createNode(getDraftRoot(),
+					ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
+					GUID.generate()), TYPE_CONTRACTS_DOCUMENT, properties);
+
+			if (createdNodeAssoc != null && createdNodeAssoc.getChildRef() != null) {
+				NodeRef createdNode = createdNodeAssoc.getChildRef();
+				nodeService.createAssociation(createdNode, findNodeByAssociationRef(nodeRef, ASSOC_CONTRACT_TYPE, null, ASSOCIATION_TYPE.TARGET), ASSOC_CONTRACT_TYPE);
+				nodeService.createAssociation(createdNode, findNodeByAssociationRef(nodeRef, ASSOC_CONTRACT_PARTNER, null, ASSOCIATION_TYPE.TARGET), ASSOC_CONTRACT_PARTNER);
+				nodeService.createAssociation(createdNode, findNodeByAssociationRef(nodeRef, ASSOC_CONTRACT_SUBJECT, null, ASSOCIATION_TYPE.TARGET), ASSOC_CONTRACT_SUBJECT);
+				NodeRef contractRepresentative = findNodeByAssociationRef(nodeRef, ASSOC_CONTRACT_REPRESENTATIVE, null, ASSOCIATION_TYPE.TARGET);
+				if (contractRepresentative != null) {
+					nodeService.createAssociation(createdNode, contractRepresentative, ASSOC_CONTRACT_REPRESENTATIVE);
+				}
+				NodeRef currency = findNodeByAssociationRef(nodeRef, ASSOC_CONTRACT_CURRENCY, null, ASSOCIATION_TYPE.TARGET);
+				if (currency != null) {
+					nodeService.createAssociation(createdNode, currency, ASSOC_CONTRACT_CURRENCY);
+				}
+				return createdNode;
+			}
+		}
+		return null;
+	}
 }

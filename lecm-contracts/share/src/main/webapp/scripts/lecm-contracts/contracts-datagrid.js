@@ -1,3 +1,5 @@
+var $siteURL = Alfresco.util.siteURL;
+
 (function () {
 
     LogicECM.module.Contracts.DataGrid = function (containerId) {
@@ -123,6 +125,45 @@
         onActionEdit: function DataGrid_onActionEdit(item) {
             window.location.href = window.location.protocol + "//" + window.location.host +
                 Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + item.nodeRef;
-        }
+        },
+	    onActionDuplicate:function DataGrid_onActionDuplicate(p_items) {
+		    var me = this;
+		    var items = YAHOO.lang.isArray(p_items) ? p_items : [p_items],
+			    destinationNodeRef = new Alfresco.util.NodeRef(this.modules.dataGrid.datagridMeta.nodeRef),
+			    nodeRefs = [];
+
+		    for (var i = 0, ii = items.length; i < ii; i++) {
+			    nodeRefs.push(items[i].nodeRef);
+		    }
+
+		    this.modules.actions.genericAction(
+			    {
+				    success:{
+					    callback:
+					    {
+						    fn: function (data)
+						    {
+							    if (data != null && data.json != null && data.json.results != null && data.json.results.length == 1) {
+								    window.location = $siteURL("document?nodeRef=" + data.json.results[0].nodeRef);
+							    }
+						    }
+					    }
+				    },
+				    failure:{
+					    message:this.msg("message.duplicate.failure")
+				    },
+				    webscript:{
+					    method: Alfresco.util.Ajax.POST,
+					    stem: Alfresco.constants.PROXY_URI + "lecm/contracts/",
+					    name:"duplicate/node/" + destinationNodeRef.uri
+				    },
+				    config:{
+					    requestContentType:Alfresco.util.Ajax.JSON,
+					    dataObj:{
+						    nodeRefs:nodeRefs
+					    }
+				    }
+			    });
+	    }
     }, true);
 })();
