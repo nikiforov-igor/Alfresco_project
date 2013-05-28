@@ -55,24 +55,22 @@
                         successCallback:
                         {
                             fn: function (response) {
-                                var currentDisplayValueElement = YAHOO.util.Dom.get( "${controlId}-currentValueDisplay");
-                                var properties = response.json.item.node.properties;
-                                name = this.options.nameSubstituteString;
+                                var currentDisplayValueElement = YAHOO.util.Dom.get( "${controlId}-currentValueDisplay" ),
+                                    properties = response.json.item.node.properties,
+                                    name = this.options.nameSubstituteString,
 
-                                for (var prop in properties) {
-                                    var propSubstName = this.options.openSubstituteSymbol + prop + this.options.closeSubstituteSymbol;
-                                    if (name.indexOf(propSubstName) != -1) {
-                                        name = name.replace(propSubstName, properties[prop]);
+                                    propSubstName,
+                                    prop;
+
+                                for ( prop in properties ) {
+                                    propSubstName = this.options.openSubstituteSymbol + prop + this.options.closeSubstituteSymbol;
+
+                                    if ( name.indexOf( propSubstName ) != -1 ) {
+                                        name = name.replace( propSubstName, properties[ prop ] );
                                     }
                                 }
 
                                 currentDisplayValueElement.innerHTML = name;
-                            },
-                            scope: this
-                        },
-                        failureCallback:
-                        {
-                            fn: function (response) {
                             },
                             scope: this
                         }
