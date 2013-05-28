@@ -117,6 +117,11 @@
     </bean>
 
     <bean id="contractsStatusesFilter" parent="documentStatusesFilter">
+        <property name="defaultFilters">
+            <map>
+                <entry key="lecm-contract:document" value="Все"/>
+            </map>
+        </property>
         <property name="filters">
             <map>
                 <entry key="lecm-contract:document">

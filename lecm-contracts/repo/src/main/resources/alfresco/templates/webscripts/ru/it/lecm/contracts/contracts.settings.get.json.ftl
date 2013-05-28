@@ -4,6 +4,7 @@
     draftPath: "${draftPath}",
     documentPath: "${documentPath}",
     archivePath: "${archivePath}",
-    defaultFilter: "${defaultFilter}"
+    defaultFilter: "${defaultFilter}",
+    defaultKey: "${defaultKey}"
 }
 </#escape>

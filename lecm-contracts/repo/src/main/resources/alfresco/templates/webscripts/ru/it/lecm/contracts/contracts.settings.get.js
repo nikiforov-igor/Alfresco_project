@@ -8,5 +8,8 @@ model.nodeRef = node;
 model.draftPath = draftPath;
 model.documentPath = documentPath;
 model.archivePath = archDirectories.join(",");
-
-model.defaultFilter = documentScript.getDefaultFilter("lecm-contract:document");
+var filterObj = documentScript.getDefaultFilter("lecm-contract:document");
+for (key in filterObj) {
+    model.defaultKey = key;
+    model.defaultFilter = filterObj[key];
+}
