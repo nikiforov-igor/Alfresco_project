@@ -265,6 +265,7 @@
                     <show id="lecm-orgstr:org-phone"/>
                     <show id="lecm-orgstr:org-fax"/>
                     <show id="lecm-orgstr:org-email"/>
+                    <show id="lecm-orgstr:organization-boss"/>
                     <show id="lecm-orgstr:org-logo-assoc"/>
                     <show id="lecm-orgstr:org-tin"/>
                     <show id="lecm-orgstr:org-ownership-type"/>
@@ -282,6 +283,9 @@
                     <field id="lecm-orgstr:org-phone" set="main"/>
                     <field id="lecm-orgstr:org-fax" set="main"/>
                     <field id="lecm-orgstr:org-email" set="main"/>
+                    <field id="lecm-orgstr:organization-boss" set="other" label-id="lecm-orgstr_organization-boss">
+                        <control template="/ru/it/lecm/orgstructure/controls/organization.boss.readonly.ftl"/>
+                    </field>
                     <field id="lecm-orgstr:org-logo-assoc" set="other">
                         <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl">
                             <!-- Настройка для bubbling. type1:nameAction1,nameAction2|type2:nameAction1,nameAction2-->
