@@ -27,10 +27,9 @@
                 <appearance>
                     <set id="common" appearance="" label-id="info.common-info" />
                     <set id="personal" appearance="" label-id="info.personal-info" />
-                    <set id="positions" appearance="" label-id="info.personal-positions" />
-                    <set id="groups" appearance="" label-id="info.personal-groups" />
-	                <set id="busjournalHistory" appearance="" label-id="info.business-journal-history"/>
-	                <set id="businessRoles" appearance="" label-id="info.business-roles"/>
+                    <set id="positionsAndGroups" appearance="" label-id="info.personal-positions-and-groups" />
+                    <set id="businessRoles" appearance="" label-id="info.business-roles"/>
+                    <set id="busjournalHistory" appearance="" label-id="info.business-journal-history"/>
 
 	                <field id="lecm-orgstr:employee-first-name" set="common"/>
                     <field id="lecm-orgstr:employee-middle-name" set="common"/>
@@ -57,7 +56,7 @@
                     <field id="lecm-orgstr:employee-person-data-assoc" set="personal">
                         <control template="/ru/it/lecm/orgstructure/controls/view.personal.data.ftl"/>
                     </field>
-                    <field id="lecm-orgstr:employee-positions" set="positions">
+                    <field id="lecm-orgstr:employee-positions" set="positionsAndGroups">
                         <control template="/ru/it/lecm/orgstructure/controls/employee.positions.ctrl.ftl">
                             <control-param name="itemType">lecm-orgstr:staff-list</control-param>
                             <control-param name="allowCreate">false</control-param>
@@ -66,7 +65,7 @@
                             <control-param name="ds">lecm/orgstructure/ds/employee-positions</control-param>
                         </control>
                     </field>
-                    <field id="lecm-orgstr:employee-roles" set="groups">
+                    <field id="lecm-orgstr:employee-roles" set="positionsAndGroups">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-orgstr:workforce</control-param>
                             <control-param name="allowCreate">false</control-param>
@@ -75,10 +74,7 @@
                             <control-param name="ds">lecm/orgstructure/ds/employee-roles</control-param>
                         </control>
                     </field>
-	                <field id="lecm-busjournal-aspects:history-list" set="busjournalHistory">
-		                <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl"/>
-	                </field>
-                    <field id="lecm-orgstr:employee-business-roles" set="businessRoles" label-id="lecm-orgstr_employee-business-roles">
+	                <field id="lecm-orgstr:employee-business-roles" set="businessRoles" label-id="lecm-orgstr_employee-business-roles">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-orgstr:business-role</control-param>
                             <control-param name="allowCreate">false</control-param>
@@ -87,6 +83,9 @@
                             <control-param name="ds">lecm/orgstructure/ds/getEmployeeBusinessRoles</control-param>
                             <control-param name="ds">lecm/orgstructure/ds/getEmployeeBusinessRoles</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-busjournal-aspects:history-list" set="busjournalHistory">
+                        <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl"/>
                     </field>
                 </appearance>
             </form>

@@ -4511,7 +4511,7 @@ position: static;
     border: solid #a3a3a3;
     border-width: 1px 0 0;
     cursor: hand;
-    padding: 0.25em .75em;
+    padding: 0.25em .6em;
     left: 0;
     right: 0;
     bottom: 0;
@@ -4529,7 +4529,7 @@ position: static;
     outline: 0;
 }
 .yui-skin-lecmTheme .yui-navset .yui-nav .selected a em {
-    padding: 0.35em 0.75em;
+    padding: 0.35em 0.6em;
 }
 .yui-skin-lecmTheme .yui-navset .yui-nav .selected a,
 .yui-skin-lecmTheme .yui-navset .yui-nav .selected a em {
