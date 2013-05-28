@@ -178,24 +178,28 @@ public class ActionsScript extends DeclarativeWebScript {
                             for (UserWorkflow.UserWorkflowEntity entity : entities) {
                                 ArrayList<String> messages = new ArrayList<String>();
                                 HashSet<String> fields = new HashSet<String>();
+                                boolean hideAction = false;
                                 for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
                                     if (!expression.execute(condition.getExpression())) {
                                         messages.add(condition.getErrorMessage());
                                         fields.addAll(condition.getFields());
+                                        hideAction = hideAction || condition.isHideAction();
                                     }
                                 }
 
                                 long count = getActionCount(nodeRef, entity.getId());
 
-                                HashMap<String, Object> workflow = new HashMap<String, Object>();
-                                workflow.put("type", "user");
-                                workflow.put("actionId", entity.getId());
-                                workflow.put("label", entity.getLabel());
-                                workflow.put("workflowId", entity.getWorkflowId());
-                                workflow.put("errors", messages);
-                                workflow.put("fields", fields);
-                                workflow.put("count",count);
-                                actionsList.add(workflow);
+                                if (!hideAction) {
+                                    HashMap<String, Object> workflow = new HashMap<String, Object>();
+                                    workflow.put("type", "user");
+                                    workflow.put("actionId", entity.getId());
+                                    workflow.put("label", entity.getLabel());
+                                    workflow.put("workflowId", entity.getWorkflowId());
+                                    workflow.put("errors", messages);
+                                    workflow.put("fields", fields);
+                                    workflow.put("count",count);
+                                    actionsList.add(workflow);
+                                }
                             }
                         }
                     }
