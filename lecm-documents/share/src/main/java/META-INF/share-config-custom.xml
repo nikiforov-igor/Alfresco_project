@@ -532,7 +532,8 @@
                 <field-visibility>
                     <show id="lecm-connect-types:primary-document-type"/>
                     <show id="lecm-connect-types:connected-document-type"/>
-                    <show id="lecm-connect-types:available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:not-available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:recommended-connection-types-assoc"/>
                     <show id="lecm-connect-types:default-connection-type-assoc"/>
                 </field-visibility>
             </form>
@@ -545,7 +546,8 @@
                 <field-visibility>
                     <show id="lecm-connect-types:primary-document-type"/>
                     <show id="lecm-connect-types:connected-document-type"/>
-                    <show id="lecm-connect-types:available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:not-available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:recommended-connection-types-assoc"/>
                     <show id="lecm-connect-types:default-connection-type-assoc"/>
                 </field-visibility>
             </form>
@@ -554,7 +556,8 @@
                 <field-visibility>
                     <show id="lecm-connect-types:primary-document-type"/>
                     <show id="lecm-connect-types:connected-document-type"/>
-                    <show id="lecm-connect-types:available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:not-available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:recommended-connection-types-assoc"/>
                     <show id="lecm-connect-types:default-connection-type-assoc"/>
                 </field-visibility>
             </form>

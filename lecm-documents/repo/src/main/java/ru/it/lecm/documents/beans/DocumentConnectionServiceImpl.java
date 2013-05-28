@@ -99,16 +99,16 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return null;
 	}
 
-	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+	public List<NodeRef> getRecommendedConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 
 		List<NodeRef> results = null;
 		NodeRef dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
 		if (dictionary != null) {
 			results = new ArrayList<NodeRef>();
-			List<AssociationRef> availableTypesAssoc = nodeService.getTargetAssocs(dictionary, ASSOC_AVAILABLE_CONNECTION_TYPES);
-			if (availableTypesAssoc != null) {
-				for (AssociationRef assocRef : availableTypesAssoc) {
+			List<AssociationRef> recommendedTypesAssoc = nodeService.getTargetAssocs(dictionary, ASSOC_RECOMMENDED_CONNECTION_TYPES);
+			if (recommendedTypesAssoc != null) {
+				for (AssociationRef assocRef : recommendedTypesAssoc) {
 					results.add(assocRef.getTargetRef());
 				}
 			}
@@ -119,6 +119,38 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 			}
 		}
 		return results;
+	}
+
+	public List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
+
+		List<NodeRef> results = null;
+		NodeRef dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
+		if (dictionary != null) {
+			results = new ArrayList<NodeRef>();
+			List<AssociationRef> notAvailableTypesAssoc = nodeService.getTargetAssocs(dictionary, ASSOC_NOT_AVAILABLE_CONNECTION_TYPES);
+			if (notAvailableTypesAssoc != null) {
+				for (AssociationRef assocRef : notAvailableTypesAssoc) {
+					results.add(assocRef.getTargetRef());
+				}
+			}
+
+			NodeRef defaultType = getDefaultConnectionType(primaryDocumentRef, connectedDocumentRef, dictionary);
+			if (defaultType != null && !results.contains(defaultType)) {
+				results.add(defaultType);
+			}
+		}
+		return results;
+	}
+
+	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
+		List<NodeRef> result = getAllConnectionTypes();
+		List<NodeRef> notAvailableTypes = getNotAvailableConnectionTypes(primaryDocumentRef, connectedDocumentRef);
+		if (notAvailableTypes != null) {
+			result.removeAll(notAvailableTypes);
+		}
+		return result;
 	}
 
 	public NodeRef getAvailableTypeDictionary(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
@@ -209,9 +241,9 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 			resultSet = searchService.query(parameters);
 			return resultSet.getNodeRefs();
 		} catch (LuceneQueryParserException e) {
-			logger.error("Error while getting dictionary available connection types", e);
+			logger.error("Error while getting connection types", e);
 		} catch (Exception e) {
-			logger.error("Error while getting dictionary available connection types", e);
+			logger.error("Error while getting connection types", e);
 		} finally {
 			if (resultSet != null) {
 				resultSet.close();

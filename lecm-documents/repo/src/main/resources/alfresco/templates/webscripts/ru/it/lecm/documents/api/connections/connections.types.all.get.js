@@ -1,1 +1,0 @@
-model.connectionTypes = documentConnection.getAllConnectionTypes();

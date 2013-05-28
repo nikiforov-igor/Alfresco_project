@@ -62,18 +62,17 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 			currentDisplayValueId: null,
 			selectItem: null,
 			currentDisplayValueElement: null,
-			allConnectionTypes: null,
 			primaryDocumentNodeRef: null,
 			connectedDocumentNodeRef: null,
 			defaultSelectedValue: null,
-			typeSelectElements: null,
+			recommendedTypes: null,
+			availableTypes: null,
 			existConnectionTypes: null,
 
 			onReady: function()
 			{
 				this.selectItem = Dom.get(this.selectItemId);
 				Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
-				this.loadAllConnectionTypes();
 			},
 
 			onSelectChange: function () {
@@ -110,31 +109,29 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 			},
 
 			populateSelect: function() {
-				var recommendedItems = this.typeSelectElements;
-
 				var notRecommendedItems = [];
-				if (this.allConnectionTypes != null) {
-					if (recommendedItems != null) {
-						for (var i = 0; i < this.allConnectionTypes.length; i++) {
+				if (this.availableTypes != null) {
+					if (this.recommendedTypes != null) {
+						for (var i = 0; i < this.availableTypes.length; i++) {
 							var exist = false;
-							for (var j = 0; j < recommendedItems.length; j++) {
-								if (this.allConnectionTypes[i].nodeRef == recommendedItems[j].nodeRef) {
+							for (var j = 0; j < this.recommendedTypes.length; j++) {
+								if (this.availableTypes[i].nodeRef ==this.recommendedTypes[j].nodeRef) {
 									exist = true;
 								}
 							}
 							if (!exist) {
-								notRecommendedItems.push(this.allConnectionTypes[i]);
+								notRecommendedItems.push(this.availableTypes[i]);
 							}
 						}
 					} else {
-						notRecommendedItems = this.allConnectionTypes;
+						notRecommendedItems = this.availableTypes;
 					}
 				}
 
 				this.clearSelect();
 
-				this.insertSelectItems(recommendedItems);
-				if (recommendedItems != null && recommendedItems.length > 0 &&
+				this.insertSelectItems(this.recommendedTypes);
+				if (this.recommendedTypes != null && this.recommendedTypes.length > 0 &&
 						notRecommendedItems != null && notRecommendedItems.length > 0) {
 
 					var optSplit = document.createElement('option');
@@ -196,11 +193,8 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 							if (oResults != null && me.selectItem != null) {
 								me.defaultSelectedValue = oResults.defaultConnectionType;
 								me.existConnectionTypes = oResults.existConnectionTypes;
-								me.typeSelectElements = oResults.availableConnectionTypes;
-
-								if (me.typeSelectElements == null) {
-									me.typeSelectElements = me.allConnectionTypes;
-								}
+								me.recommendedTypes = oResults.recommendedConnectionTypes;
+								me.availableTypes = oResults.availableConnectionTypes;
 								me.populateSelect();
 							}
 						},
@@ -214,27 +208,6 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 					};
 					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 				}
-			},
-
-			loadAllConnectionTypes: function() {
-				var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/connections/api/types/all";
-				var me = this;
-				var callback = {
-					success:function (oResponse) {
-						var oResults = eval("(" + oResponse.responseText + ")");
-						if (oResults != null && oResults.connectionTypes != null) {
-							me.allConnectionTypes = oResults.connectionTypes;
-						}
-					},
-					failure:function (oResponse) {
-						YAHOO.log("Failed to process XHR transaction.", "info", "example");
-					},
-					argument:{
-						context:this
-					},
-					timeout:10000
-				};
-				YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 			}
 		});
 })();

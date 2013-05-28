@@ -3,6 +3,18 @@
 	<#if defaultConnectionType??>
 		"defaultConnectionType": "${defaultConnectionType.nodeRef!""}",
 	</#if>
+	<#if recommendedConnectionTypes??>
+		"recommendedConnectionTypes":
+		[
+			<#list recommendedConnectionTypes as connectionType>
+				{
+					"nodeRef": "${connectionType.nodeRef}",
+					"name": "${connectionType.properties.name}"
+				}
+				<#if connectionType_has_next>,</#if>
+			</#list>
+		],
+	</#if>
 	<#if availableConnectionTypes??>
 		"availableConnectionTypes":
 		[

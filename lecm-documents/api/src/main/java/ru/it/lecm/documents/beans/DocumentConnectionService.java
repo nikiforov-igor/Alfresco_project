@@ -35,7 +35,8 @@ public interface DocumentConnectionService {
 	public static final QName PROP_CONNECTED_DOCUMENT_TYPE = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "connected-document-type");
 
 	public static final QName ASSOC_DEFAULT_CONNECTION_TYPE = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "default-connection-type-assoc");
-	public static final QName ASSOC_AVAILABLE_CONNECTION_TYPES = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "available-connection-types-assoc");
+	public static final QName ASSOC_NOT_AVAILABLE_CONNECTION_TYPES = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "not-available-connection-types-assoc");
+	public static final QName ASSOC_RECOMMENDED_CONNECTION_TYPES = QName.createQName(DICTIONARY_CONNECTION_TYPES_NAMESPACE_URI, "recommended-connection-types-assoc");
 
 	public static final QName ASPECT_HAS_CONNECTED_DOCUMENTS = QName.createQName(DOCUMENT_CONNECTIONS_ASPECT_NAMESPACE_URI, "has-connected-documents");
 
@@ -56,6 +57,14 @@ public interface DocumentConnectionService {
 	 * @return ссылка на элемент справочника "Типы связи"
 	 */
 	public NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
+
+	/**
+	 * Получение рекоммендуемых типов связи для документов. Берётся из справочника "Доступные типы связи"
+	 * @param primaryDocumentRef Ссылка на исходный объект
+	 * @param connectedDocumentRef Ссылка на связанный объект
+	 * @return список ссылок на элементы справочника "Типы связи"
+	 */
+	public List<NodeRef> getRecommendedConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
 
 	/**
 	 * Получение доступный типов связи для документов. Берётся из справочника "Доступные типы связи"

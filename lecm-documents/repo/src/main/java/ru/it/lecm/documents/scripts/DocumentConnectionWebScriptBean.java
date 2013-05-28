@@ -64,6 +64,22 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	public Scriptable getRecommendedConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
+		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
+		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
+
+		NodeRef primaryDocumentRef = new NodeRef(primaryDocumentNodeRef);
+		NodeRef connectedDocumentRef = new NodeRef(connectedDocumentNodeRef);
+
+		if (this.nodeService.exists(primaryDocumentRef) && this.nodeService.exists(connectedDocumentRef)) {
+			List<NodeRef> recommendedConnectionType = this.documentConnectionService.getRecommendedConnectionTypes(primaryDocumentRef, connectedDocumentRef);
+			if (recommendedConnectionType != null) {
+				return createScriptable(recommendedConnectionType);
+			}
+		}
+		return null;
+	}
+
 	public Scriptable getAvailableConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
 		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
@@ -92,14 +108,6 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 			if (existConnectionType != null) {
 				return createScriptable(existConnectionType);
 			}
-		}
-		return null;
-	}
-
-	public Scriptable getAllConnectionTypes() {
-		List<NodeRef> allConnectionType = this.documentConnectionService.getAllConnectionTypes();
-		if (allConnectionType != null) {
-			return createScriptable(allConnectionType);
 		}
 		return null;
 	}
