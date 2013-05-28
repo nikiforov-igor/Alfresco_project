@@ -14,7 +14,6 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.namespace.QName;
@@ -26,6 +25,7 @@ import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
@@ -47,9 +47,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private SubstitudeBean substituteService;
 	private DictionaryBean dictionaryService;
 	private PersonService personService;
-	private AuthenticationService authService;
     private DictionaryService dicService;
     private LecmPermissionService lecmPermissionService;
+    private StateMachineServiceBean stateMachineService;
 
     private ThreadLocal<IgnoredCounter> threadSettings = new ThreadLocal<IgnoredCounter>();
     private static final String KEY_IGNORE_NEXT_RECORD = "BG_IGNORE_NEXT_RECORD";
@@ -74,10 +74,6 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		this.personService = personService;
 	}
 
-	public void setAuthService(AuthenticationService authService) {
-		this.authService = authService;
-	}
-
     public void setDicService(DictionaryService dicService) {
         this.dicService = dicService;
     }
@@ -86,7 +82,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         this.lecmPermissionService = lecmPermissionService;
     }
 
-	@Override
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
+    }
+
+    @Override
 	public NodeRef getServiceRootFolder() {
 		return bjRootRef;
 	}
@@ -593,7 +593,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
                             for (AssociationRef sourceAssoc : targetAssocs) {
                                 NodeRef nodeRef = sourceAssoc.getTargetRef();
 
-                                if (lecmPermissionService.hasReadAccess(nodeRef)) {
+                                if (lecmPermissionService.hasReadAccess(nodeRef)
+                                        && (!stateMachineService.isDraft(nodeRef) || isAuthorNode(nodeRef))) {
                                     records.add(rowNodeRef);
                                 }
                             }

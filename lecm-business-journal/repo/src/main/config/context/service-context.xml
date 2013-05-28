@@ -80,9 +80,10 @@
         <property name="dictionaryService" ref="serviceDictionary"/>
         <property name="searchService" ref="searchService"/>
         <property name="personService" ref="personService"/>
-        <property name="authService" ref="authenticationService"/>
         <property name="dicService" ref="dictionaryService"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+        <property name="authService" ref="authenticationService"/>
+        <property name="stateMachineService"  ref="stateMachineHelper"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
