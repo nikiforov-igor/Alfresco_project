@@ -1,3 +1,5 @@
+<#assign formId=args.htmlid?js_string + "-form">
+
 <#assign isTrue=false>
 <#if field.value??>
 	<#if field.value?is_boolean>
@@ -20,6 +22,9 @@ function Absence_CheckboxChanged(skipFiring) {
 
 	var myID = "${fieldHtmlId}";
 
+	var formContainer = YAHOO.util.Dom.get("${formId}-container");
+	formContainer.style.width = "45em";
+
 	var unlimitedCheckbox = YAHOO.util.Dom.get(myID);
 	unlimitedCheckbox.value = unlimitedCheckbox.checked;
 
@@ -30,6 +35,9 @@ function Absence_CheckboxChanged(skipFiring) {
 	var endInputDate = YAHOO.util.Dom.get(commonID + "_end-cntrl-date");
 	var endInputIcon = YAHOO.util.Dom.get(commonID + "_end-cntrl-icon");
 	var endInputHidden = YAHOO.util.Dom.get(commonID + "_end");
+
+	var formatInfo = YAHOO.util.Dom.getElementsByClassName('format-info', 'div')[0];
+	formatInfo.style.display = "none";
 
 	if (unlimitedCheckbox.checked) {
 		var today = new Date();
@@ -66,7 +74,7 @@ function Absence_CheckboxChanged(skipFiring) {
 </#if>
 //]]></script>
 
-<div class="form-field">
+<div class="form-field" style="text-align: right; margin-bottom: 0px;">
    <#if form.mode == "view">
       <div class="viewmode-field">
          <span class="viewmode-label">${field.label?html}:</span>

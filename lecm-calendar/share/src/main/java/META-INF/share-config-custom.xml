@@ -368,9 +368,9 @@
 			<form id="createNewInstantAbsenceForm">
 				<field-visibility>
 					<show id="lecm-absence:abscent-employee-assoc"/>
+					<show id="lecm-absence:unlimited"/>
 					<show id="lecm-absence:begin"/>
 					<show id="lecm-absence:end"/>
-					<show id="lecm-absence:unlimited"/>
 					<show id="lecm-absence:abscence-reason-assoc"/>
 					<show id="lecm-absence:comment"/>
 				</field-visibility>
@@ -409,7 +409,12 @@
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.instantAbsenceReasonValidation" event="blur"/>
 						</constraint-handlers>
 					</field>
-					<field id="lecm-absence:comment"/>
+					<field id="lecm-absence:comment">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="rows">3</control-param>
+							<control-param name="style">padding-left: 2px;</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
