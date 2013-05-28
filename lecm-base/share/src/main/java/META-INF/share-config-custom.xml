@@ -119,6 +119,7 @@
 	            <js src="/components/upload/flash-upload.js" />
 	            <css src="/components/upload/flash-upload.css" />
 	            <css src="/components/upload/html-upload.css" />
+                <js src="/jquery/jquery-1.6.2.js"/>
             </dependencies>
 
             <constraint-handlers>

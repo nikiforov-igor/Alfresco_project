@@ -21,8 +21,7 @@
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/schedule-limit-validation.js" />
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/reiteration-rules-validation.js" />
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/time-validation.js" />
-<#-- jQuery нужен для работы контрола выбора времени -->
-<@script type="text/javascript" src="${page.url.context}/res/jquery/jquery-1.6.2.js"/>
+
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/jquery-ui-1.10.3.custom.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/jquery-ui-timepicker-addon.js"/>
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/jquery-ui-sliderAccess.js"/>

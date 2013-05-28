@@ -1,5 +1,13 @@
 <alfresco-config>
-	<config evaluator="model-type" condition="lecm-regnum:template">
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-regnumbers/template-validator.js"/>
+            </dependencies>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-regnum:template">
 		<forms>
 			<form>
 				<field-visibility>

@@ -15,8 +15,6 @@
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-user-profile/menu.js"/>
 <#-- Валидаторы -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/absence/date-interval-validation.js"/>
-<#-- jQuery нужен для синхронных запросов в date-interval-validation.js -->
-<@script type="text/javascript" src="${page.url.context}/res/jquery/jquery-1.6.2.js"/>
 
 <script type="text/javascript">//<![CDATA[
 
