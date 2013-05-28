@@ -9,10 +9,16 @@
     <#if page.url.args.query?? && page.url.args.query != "*" && page.url.args.query != "">
         <#assign filter = page.url.args.query/>
     </#if>
+    <#assign formId = ""/>
+    <#if page.url.args.formId?? && page.url.args.formId != "">
+        <#assign formId = page.url.args.formId/>
+    </#if>
     <script type="text/javascript">//<![CDATA[
         LogicECM.module.Contracts.SETTINGS = <#if settings?? >${settings}<#else>{}</#if>;
         var defaultFilter = LogicECM.module.Contracts.SETTINGS.defaultFilter;
         LogicECM.module.Contracts.FILTER = <#if filter != "">"${filter}"<#else>defaultFilter</#if>;
+        var defaultKey = LogicECM.module.Contracts.SETTINGS.defaultKey;
+        LogicECM.module.Contracts.FORM_ID = <#if formId != "">"${formId}"<#else>defaultKey</#if>;
     //]]></script>
 </@>
 

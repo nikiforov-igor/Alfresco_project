@@ -44,11 +44,13 @@
 
                 var filter = _generateFilterStr(LogicECM.module.Contracts.FILTER);
                 var archiveFolders = _generateArchiveFoldersStr(LogicECM.module.Contracts.SETTINGS.archivePath);
-
+                var formId = (LogicECM.module.Contracts.FORM_ID == "") ? "" : "_"+LogicECM.module.Contracts.FORM_ID.split(" ").join("_");
+                var datagridFormId = "datagrid" + formId;
                 YAHOO.util.Event.onContentReady ('${id}', function () {
                     YAHOO.Bubbling.fire ("activeGridChanged", {
                         datagridMeta: {
                             itemType: "lecm-contract:document",
+                            datagridFormId: datagridFormId,
                             nodeRef: LogicECM.module.Contracts.SETTINGS.nodeRef,
                             actionsConfig:{
                                 fullDelete:true,

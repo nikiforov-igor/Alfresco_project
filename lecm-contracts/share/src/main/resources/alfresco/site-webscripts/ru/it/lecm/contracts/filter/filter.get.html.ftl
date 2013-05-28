@@ -7,7 +7,7 @@
         <#if statusesGroups??>
             <#list statusesGroups as group>
                 <div class="text-cropped">
-                    <a href="${url.context}/page/contracts-list?query=${group.value}" class="status-button"
+                    <a href="${url.context}/page/contracts-list?query=${group.value}&formId=${group.name}" class="status-button"
                        title="<#if group.value == "*">Все<#else>${group.value}</#if>">${group.name}</a>
                     <span class="total-tasks-count-right">${group.count}</span><br/>
                 </div>
@@ -26,7 +26,7 @@
                     <#assign count = 0/>
                     <#list statusesList as status>
                         <div class="text-cropped">
-                            <a href="${url.context}/page/contracts-list?query=${status}"
+                            <a href="${url.context}/page/contracts-list?query=${status}&formId=${status}"
                                class="status-button text-broken">${status}</a>
                         </div>
                         <#assign count = count +1 />

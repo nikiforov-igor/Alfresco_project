@@ -72,8 +72,12 @@ function getFormConfig(itemId, formId)
 			// drop back to default form if formId config missing
 			if (formConfig === null)
 			{
-				// look up the default form
-				formConfig = formsConfig.defaultForm;
+                formConfig = formsConfig.getForm("datagrid");
+
+                if (formConfig === null){
+				    // look up the default form
+				    formConfig = formsConfig.defaultForm;
+                }
 			}
 		}
 	}
