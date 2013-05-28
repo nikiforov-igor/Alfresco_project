@@ -116,14 +116,18 @@
 				<appearance>
 					<set id="time" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.schedule.form.set.work-time" />
 					<field id="lecm-sched:std-begin" mandatory="true" set="time">
-						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<control template="/ru/it/lecm/wcalendar/controls/time-picker.ftl">
+							<control-param name="style">position: relative;</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Schedule.timeValidation"
 										event="keyup" message-id="message.time-format.error" />
 						</constraint-handlers>
 					</field>
 					<field id="lecm-sched:std-end" mandatory="true" set="time">
-						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<control template="/ru/it/lecm/wcalendar/controls/time-picker.ftl">
+							<control-param name="style">position: relative;</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Schedule.timeValidation"
 										event="keyup" message-id="message.time-format.error" />
@@ -183,14 +187,18 @@
 						</control>
 					</field>
 					<field id="lecm-sched:std-begin" mandatory="true" set="time">
-						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<control template="/ru/it/lecm/wcalendar/controls/time-picker.ftl">
+							<control-param name="style">position: relative;</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Schedule.timeValidation"
 										event="keyup" message-id="message.time-format.error" />
 						</constraint-handlers>
 					</field>
 					<field id="lecm-sched:std-end" mandatory="true" set="time">
-						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<control template="/ru/it/lecm/wcalendar/controls/time-picker.ftl">
+							<control-param name="style">position: relative;</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Schedule.timeValidation"
 										event="keyup" message-id="message.time-format.error" />

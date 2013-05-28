@@ -1,13 +1,4 @@
 <alfresco-config>
-	<config>
-		<forms>
-			<dependencies>
-				<js src="/scripts/lecm-regnumbers/template-validator.js"/>
-				<js src="/jquery/jquery-1.6.2.js"/>
-			</dependencies>
-		</forms>
-	</config>
-
 	<config evaluator="model-type" condition="lecm-regnum:template">
 		<forms>
 			<form>

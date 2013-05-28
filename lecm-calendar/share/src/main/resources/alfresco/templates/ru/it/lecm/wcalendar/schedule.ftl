@@ -10,6 +10,8 @@
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/wcalendar-menu.css"/>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/reiteration-control.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/jquery-ui-1.10.3.custom.css"/>
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-calendar/jquery-ui-timepicker-addon.css"/>
 
 <#-- Скрипты меню, тулбара и датагрида -->
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/schedule-datagrid.js"/>
@@ -19,6 +21,11 @@
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/schedule-limit-validation.js" />
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/reiteration-rules-validation.js" />
 <@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/time-validation.js" />
+<#-- jQuery нужен для работы контрола выбора времени -->
+<@script type="text/javascript" src="${page.url.context}/res/jquery/jquery-1.6.2.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/jquery-ui-1.10.3.custom.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/jquery-ui-timepicker-addon.js"/>
+<@script type="text/javascript" src="${page.url.context}/res/scripts/lecm-calendar/schedule/jquery-ui-sliderAccess.js"/>
 
 <script type="text/javascript">//<![CDATA[
 

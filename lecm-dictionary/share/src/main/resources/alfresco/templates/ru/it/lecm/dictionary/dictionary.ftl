@@ -25,6 +25,10 @@
 
 	<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-dictionary/dictionary.js"></@script>
+	<#-- jQuery нужен для синхронных запросов в template-validator.js -->
+	<@script type="text/javascript" src="${page.url.context}/res/jquery/jquery-1.6.2.js"/>
+	<#-- Валидатор для справочника шаблонов регистрационных номеров -->
+	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-regnumbers/template-validator.js"/>
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
