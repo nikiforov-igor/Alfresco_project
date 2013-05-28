@@ -26,7 +26,7 @@
             <properties>
                 <showSearchBlock>false</showSearchBlock>
                 <showExSearchBtn>false</showExSearchBtn>
-                <typeButton>newRowButtonStaff</typeButton>
+                <newRowButton>activeOnParentTableClick</newRowButton>
                 <bubblingLabel>workForce</bubblingLabel>
 	            <newRowLabel>button.new-work-force</newRowLabel>
             </properties>

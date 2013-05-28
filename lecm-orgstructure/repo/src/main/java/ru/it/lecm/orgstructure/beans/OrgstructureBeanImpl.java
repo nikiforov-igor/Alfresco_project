@@ -120,10 +120,16 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		NodeRef bossRef = null;
 		NodeRef organization = getOrganizationRootRef();
 		if (organization != null) {
-			List<AssociationRef> boss = nodeService.getTargetAssocs(organization, ASSOC_ORG_BOSS);
-			if (boss != null && boss.size() > 0) {
-				bossRef = boss.get(0).getTargetRef();
-			}
+            NodeRef structure = getStructureDirectory();
+			List<ChildAssociationRef> units = nodeService.getChildAssocs(structure);
+            for (ChildAssociationRef unit : units) {
+                if (!isArchive(unit.getChildRef())){
+                    bossRef = getUnitBoss(unit.getChildRef());
+                    if (bossRef != null) {
+                        break;
+                    }
+                }
+            }
 		}
 		return bossRef;
 	}
@@ -342,11 +348,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 				NodeRef parent = getParentUnit(unitRef);
 				if (parent != null) {
 					bossLink = getUnitBoss(parent);
-				} else {
-					// дошли до директории Структура, пробуем получить руководителя Организации
-					bossLink = getOrganizationBoss();
 				}
-
 			}
 		}
 		return bossLink;

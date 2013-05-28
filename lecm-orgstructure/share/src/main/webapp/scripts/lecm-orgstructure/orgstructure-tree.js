@@ -37,6 +37,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     var Bubbling = YAHOO.Bubbling;
     var Event = YAHOO.util.Event;
 
+    var BUTTONS_FLAGS = {
+        "defaultActive": "defaultActive",
+        "activeOnTreeNodeClick": "activeOnTreeNodeClick",
+        "activeOnUnitClick": "activeOnUnitClick",
+        "activeOnParentTableClick":"activeOnParentTableClick"
+    };
+
     LogicECM.module.OrgStructure.Tree = function (htmlId) {
         LogicECM.module.OrgStructure.Tree.superclass.constructor.call(
             this,
@@ -54,23 +61,22 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     YAHOO.extend(LogicECM.module.OrgStructure.Tree, Alfresco.component.Base, {
         tree:null,
         selectedNode:null,
-        options:{
+        options: {
             itemType: null,
             nodeType: null,
             nodePattern: "cm_name",
             itemPattern: "cm_name",
             drawEditors: true,
             fullDelete: false,
-            insituEditors:null
+            insituEditors: null,
+            maxNodesOnTopLevel: -1,
+            markOnCreateAsParent: false
         },
 
         onReady:function OT_onReady () {
             var orgStructure = Dom.get(this.id);
             //Добавляем дерево структуры предприятия
             this._createTree(orgStructure);
-
-            // Reference to Data Grid component
-            this.modules.dataGrid = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Base.DataGrid");
         },
 
         _createTree:function (parent) {
@@ -96,6 +102,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 this.onExpandComplete(null);
             }
         },
+
         onExpandComplete:function OT_onExpandComplete(oNode) {
             for (var i in this.options.insituEditors) {
                     Alfresco.util.createInsituEditor(
@@ -126,6 +133,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 });
             }
         },
+
         _loadTree:function loadNodeData(node, fnLoadComplete) {
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/branch";
             if (node.data.nodeRef != null) {
@@ -169,14 +177,28 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             }
                         }
                     }
+                    if (otree.selectedNode != null) {
+                        if (otree.selectedNode.data.type == "lecm-orgstr:structure"
+                            && otree.options.maxNodesOnTopLevel > -1
+                            && otree.selectedNode.children.length >= otree.options.maxNodesOnTopLevel) {
+                            YAHOO.Bubbling.fire("refreshButtonState", {
+                                buttons: {
+                                    "newRowButton": "disabled"
+                                }
+                            });
+                        }
+                    }
 
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
                     } else {
-                        if (curElement.data.type == "lecm-orgstr:structure") {
-                            curElement.expanded = true;
-                            otree._treeNodeSelected(curElement);
+                        if (curElement) {
+                            if (curElement.data.type == "lecm-orgstr:structure") {
+                                curElement.expanded = true;
+                                otree._treeNodeSelected(curElement);
+                            }
                         }
+
                         otree.tree.render();
                         if (otree.options.drawEditors){
                             otree.onExpandComplete(null);
@@ -197,12 +219,10 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
+
         _treeNodeSelected:function (node) {
             this.selectedNode = node;
             this.tree.onEventToggleHighlight(node);
-            if (this.tree.currentFocus) {
-                this.tree.currentFocus._removeFocus(); // for correct highlight
-            }
             var me = this;
             // Отрисовка датагрида если указан ItemType
             if(this.options.itemType) {
@@ -217,14 +237,41 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         }
                     });
             };
+
             if (node.data.type == "lecm-orgstr:organization-unit") {
                 if (LogicECM.module.OrgStructure.IS_ENGINEER) {
-                    YAHOO.Bubbling.fire("initActiveButton",{disable: false});
+                    YAHOO.Bubbling.fire("refreshButtonState",{
+                        enabledButtons: [
+                            BUTTONS_FLAGS['activeOnUnitClick'],
+                            BUTTONS_FLAGS['defaultActive'],
+                            BUTTONS_FLAGS['activeOnTreeNodeClick']
+                        ]
+                    });
                 }
             } else {
-                YAHOO.Bubbling.fire("initActiveButton",{disable: true});
+                // узел Структура
+                var disabledButtons = null;
+                if (this.options.maxNodesOnTopLevel > -1
+                    && this.selectedNode.children.length >= this.options.maxNodesOnTopLevel) {
+                    disabledButtons = {
+                        "newRowButton": "disabled"
+                    };
+                }
+                YAHOO.Bubbling.fire("refreshButtonState",{
+                    enabledButtons: [
+                        BUTTONS_FLAGS['activeOnTreeNodeClick'],
+                        BUTTONS_FLAGS['defaultActive']
+                    ],
+                    disabledButtons: [
+                        BUTTONS_FLAGS['activeOnUnitClick']
+                    ],
+                    buttons: disabledButtons
+                });
             }
+            // блокируем/разблокируем панель поиска в зависимости от состояния кнопок
+            YAHOO.Bubbling.fire("changeSearchState",{});
         },
+
         _editNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);
             new Alfresco.module.SimpleDialog("editNode-dialog").setOptions({
@@ -247,6 +294,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }
             }).show();
         },
+
         _addNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, this.options.nodeType);
             var pattern = this.options.nodePattern;
@@ -269,6 +317,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }
             }).show();
         },
+
         _deleteNode:function editNodeByEvent(event) {
             if(this.modules.dataGrid) {
                 var selectedNode = this.selectedNode.data;
@@ -288,6 +337,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 });
             }
         },
+
         _setFormDialogTitle:function (p_form, p_dialog) {
             // Dialog title
             var message = this.msg("dialog.edit.title");
@@ -296,13 +346,16 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
         },
+
         onNewNodeCreated:function Tree_onNewUnitCreated(layer, args) {
             var obj = args[1];
             var otree = this;
             if ((obj !== null) && (obj.nodeRef !== null)) {
                 var sNode = otree.selectedNode;
                 otree._loadTree(sNode);
-                sNode.isLeaf = false;
+                if(this.options.markOnCreateAsParent) {
+                    sNode.isLeaf = false;
+                }
                 sNode.expanded = true;
                 otree.tree.render();
                 otree.onExpandComplete(null);
@@ -318,10 +371,12 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 }
             }
         },
+
         onInitDataGrid: function OrgstructureTree_onInitDataGrid(layer, args) {
             var datagrid = args[1].datagrid;
             this.modules.dataGrid = datagrid;
         },
+
         onNodeDeleted:function Tree_onNodeDeleted(layer, args) {
             var context = this;
             context._loadTree(context.selectedNode, function () {
@@ -333,9 +388,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 if (context.options.drawEditors){
                     this.onExpandComplete(null);
                 }
+                this.tree.onEventToggleHighlight(this.selectedNode);
                 this._treeNodeSelected(this.selectedNode);
             }.bind(context));
         },
+
         onNodeUpdated:function Tree_onNodeUpdated(layer, args) {
             this._loadTree(this.selectedNode, function () {
                 this.tree.render();

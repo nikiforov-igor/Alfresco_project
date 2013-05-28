@@ -12,13 +12,15 @@
 <#if showExSearchBtn??>
 	<#assign exSearch = showExSearchBtn/>
 </#if>
-<#assign initButtons = "newRowButton"/>
-<#if typeButton??>
-	<#assign initButtons = typeButton/>
+
+<#assign newRowBtnType = "defaultActive"/>
+<#if newRowButton??>
+	<#assign newRowBtnType = newRowButton/>
 </#if>
-<#assign searchActive = true/>
-<#if active??>
-	<#assign searchActive = active/>
+
+<#assign searchButtonsType = "defaultActive"/>
+<#if searchButtons??>
+	<#assign searchButtonsType = searchButtons/>
 </#if>
 
 <#assign newRowButtonLabel = "button.new-row"/>
@@ -27,17 +29,15 @@
 </#if>
 
 <#assign newUnitSpanId = "${id}-newRowButton"/>
-<#if initButtons??>
-	<#assign newUnitSpanId = "${id}-${initButtons}"/>
-</#if>
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <script type="text/javascript">//<![CDATA[
 function init() {
 	new LogicECM.module.OrgStructure.Toolbar("${id}").setMessages(${messages}).setOptions({
-		searchActive: "${searchActive?string}",
-		bubblingLabel:"${bubblingLabel!''}"
+        searchButtonsType: "${searchButtonsType?string}",
+		bubblingLabel:"${bubblingLabel!''}",
+        newRowButtonType: "${newRowBtnType?string}"
 	});
 }
 YAHOO.util.Event.onDOMReady(init);

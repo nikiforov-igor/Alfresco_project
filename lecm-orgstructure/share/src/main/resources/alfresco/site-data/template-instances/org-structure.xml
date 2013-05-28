@@ -18,9 +18,7 @@
             <properties>
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
-                <typeButton>newUnitButton</typeButton>
                 <bubblingLabel>orgstructure</bubblingLabel>
-                <active>false</active>
 	            <newRowLabel>button.new-unit</newRowLabel>
             </properties>
         </component>

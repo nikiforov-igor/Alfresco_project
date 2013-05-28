@@ -47,12 +47,17 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
      */
     LogicECM.module.OrgStructure.Toolbar = function (htmlId) {
         LogicECM.module.OrgStructure.Toolbar.superclass.constructor.call(this, "LogicECM.module.OrgStructure.Toolbar", htmlId, ["button", "container"]);
-        this.treeSelectActions = {};
-        this.toolbarButtons ={};
+        this.toolbarButtons = {
+            "defaultActive": [],
+            "activeOnTreeNodeClick": [],
+            "activeOnUnitClick": [],
+            "activeOnParentTableClick": []
+        };
         // Decoupled event listeners
-        YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
+        /*YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);*/
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-        YAHOO.Bubbling.on("initActiveButton", this.onInitButton, this);
+        YAHOO.Bubbling.on("refreshButtonState", this.onRefreshButtonState, this);
+        YAHOO.Bubbling.on("changeSearchState", this.onChangeSearchState, this);
         return this;
     };
 
@@ -74,54 +79,45 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
              */
             options:{
                 bubblingLabel: null,
-                searchActive: null
+                searchButtonsType: 'defaultActive',
+                newRowButtonType: 'defaultActive'
             },
-            /**
-             * Дополнительные кнопки, активируемы при выборе элемента в дереве
-             */
-            treeSelectActions: null,
 
-            /**
-             * Кнопки Tollbara, активируются при выборе элемента в дереве
-             * @constructor
-             */
-            toolbarButtons: null,
+            toolbarButtons: {
+                "defaultActive": [],
+                "activeOnTreeNodeClick": [],
+                "activeOnUnitClick": [],
+                "activeOnParentTableClick": []
+            },
 
             /**
              * Fired by YUI when parent element is available for scripting.
              *
              * @method onReady
              */
-            onReady:function DataListToolbar_onReady() {
-                var disable = false;
-                if (this.options.searchActive == "false"){
-                    disable = true;
-                }
-                this.widgets.newRowButton = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow,
-                    {
-                        disabled:true,
-                        value:"create"
-                    });
-                this.toolbarButtons.newUnitButton = Alfresco.util.createYUIButton(this, "newUnitButton", this.onNewUnit,
-                    {
-                        disabled:disable,
-                        value:"create"
-                    });
+            onReady: function DataListToolbar_onReady() {
 
-                this.toolbarButtons.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
-                    {
-                        disabled: disable
-                    });
+                this.toolbarButtons[this.options.newRowButtonType].push(
+                    Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow,
+                        {
+                            disabled: this.options.newRowButtonType != 'defaultActive',
+                            value: "create"
+                        })
+                );
 
-                this.toolbarButtons.exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
-                    {
-                        disabled: disable
-                    });
-                this.treeSelectActions.newRowButtonStaff = Alfresco.util.createYUIButton(this, "newRowButtonStaff", this.onNewRow,
-                    {
-                        disabled:true,
-                        value:"create"
-                    });
+                this.toolbarButtons[this.options.searchButtonsType].push(
+                    Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
+                        {
+                            disabled: this.options.searchButtonsType != 'defaultActive'
+                        })
+                );
+
+                this.toolbarButtons[this.options.searchButtonsType].push(
+                    Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
+                        {
+                            disabled: this.options.searchButtonsType != 'defaultActive'
+                        })
+                );
 
                 var me = this;
 
@@ -140,10 +136,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         scope: this,
                         correctScope: true
                     }, "keydown").enable();
-                if (this.options.searchActive != null && this.options.searchActive == "false") {
-                    Dom.setStyle(Dom.get(this.id+"-searchInput"), 'background','#eeeeee');
+
+                if (this.options.searchButtonsType != 'defaultActive') {
+                    Dom.setStyle(Dom.get(this.id + "-searchInput"), 'background', '#eeeeee');
                     Dom.get(this.id + "-full-text-search").setAttribute('disabled', true);
-                    Dom.setStyle(Dom.get(this.id+"-full-text-search"), 'background','#eeeeee');
+                    Dom.setStyle(Dom.get(this.id + "-full-text-search"), 'background', '#eeeeee');
                 }
 
                 // Finally show the component body here to prevent UI artifacts on YUI button decoration
@@ -153,83 +150,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             /**
              * New Row button click handler
              */
-            onNewRow:function OrgstructureToolbar_onNewRow(e, p_obj) {
-                var orgMetadata = this.modules.dataGrid.datagridMeta,
-                    destination = orgMetadata.nodeRef,
-                    itemType = orgMetadata.itemType;
-                this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, null);
-            },
-
-            /**
-             * Создание нового подразделения
-             */
-            onNewUnit:function OrgstructureToolbar_onNewUnit(e, p_obj) {
-                var meta = this.modules.dataGrid.datagridMeta;
+            onNewRow: function OrgstructureToolbar_onNewRow(e, p_obj) {
+                var orgMetadata = this.modules.dataGrid.datagridMeta;
                 var toolbar = this;
-                if (meta != null && meta.nodeRef.indexOf(":") > 0) {
-                    var destination = meta.nodeRef;
-                    var itemType = meta.itemType;
-                    var callBack = function(ref) {
-                        YAHOO.Bubbling.fire("nodeCreated",
-                            {
-                                nodeRef:ref,
-                                bubblingLabel:toolbar.options.bubblingLabel
-                            });
-                    };
-
-                    this.modules.dataGrid.showCreateDialog({itemType:itemType, nodeRef: destination}, callBack);
-                } else {
-                    Alfresco.util.PopupManager.displayMessage(
-                        {
-                            text:this.msg("message.select-unit.info")
-                        });
-                }
-            },
-            // разблокировать кнопки согласно правам
-            onUserAccess:function OrgstructureToolbar_onUserAccess(layer, args) {
-                var obj = args[1];
-                var searchActive = this.options.searchActive;
-                if (obj && obj.userAccess) {
-                    var widget, widgetPermissions, index, orPermissions, orMatch;
-                    for (index in this.widgets) {
-                        // если задан параметр searchActive = false то кнопки поиска разблокируем.
-                            if (this.widgets.hasOwnProperty(index)) {
-                                widget = this.widgets[index];
-                                if (widget != null) {
-                                    // Skip if this action specifies "no-access-check"
-                                    if (widget.get("srcelement").className != "no-access-check") {
-                                        // Default to disabled: must be enabled via permission
-                                        widget.set("disabled", LogicECM.module.OrgStructure.IS_ENGINEER ? false : true);
-                                        if (typeof widget.get("value") == "string") {
-                                            // Comma-separation indicates "AND"
-                                            widgetPermissions = widget.get("value").split(",");
-                                            for (var i = 0, ii = widgetPermissions.length; i < ii; i++) {
-                                                // Pipe-separation is a special case and indicates an "OR" match. The matched permission is stored in "activePermission" on the widget.
-                                                if (widgetPermissions[i].indexOf("|") !== -1) {
-                                                    orMatch = false;
-                                                    orPermissions = widgetPermissions[i].split("|");
-                                                    for (var j = 0, jj = orPermissions.length; j < jj; j++) {
-                                                        if (obj.userAccess[orPermissions[j]]) {
-                                                            orMatch = true;
-                                                            widget.set("activePermission", orPermissions[j], true);
-                                                            break;
-                                                        }
-                                                    }
-                                                    if (!orMatch) {
-                                                        widget.set("disabled", true);
-                                                        break;
-                                                    }
-                                                }
-                                                else if (!obj.userAccess[widgetPermissions[i]]) {
-                                                    widget.set("disabled", true);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                    }
+                if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
+                    var destination = orgMetadata.nodeRef;
+                    var itemType = orgMetadata.itemType;
+                    this.modules.dataGrid.showCreateDialog({itemType: itemType, nodeRef: destination});
                 }
             },
 
@@ -298,43 +225,111 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 advSearch.showDialog(grid.datagridMeta);
             },
 
-            onInitButton: function Tree_onSelectedItems(layer, args)
-            {
+
+            onRefreshButtonState: function Tree_onRefreshButtonsState(layer, args) {
                 var obj = args[1];
                 var label = obj.bubblingLabel;
-                if(this._hasEventInterest(label)){
-                    if (this.treeSelectActions != null) {
-                        for (var index in this.treeSelectActions)
-                        {
-                            if (this.treeSelectActions.hasOwnProperty(index))
-                            {
-                                var action = this.treeSelectActions[index];
-                                if (action != null) {
-                                    action.set("disabled", args[1].disable);
+                var flag, buttons, button;
+                if (this._hasEventInterest(label)) {
+                    if (obj.enabledButtons) {
+                        for (var enIndex in obj.enabledButtons) {
+                            if (obj.enabledButtons.hasOwnProperty(enIndex)) {
+                                flag = obj.enabledButtons[enIndex];
+                                if (this.toolbarButtons.hasOwnProperty(flag)) {
+                                    buttons = this.toolbarButtons[flag];
+                                    for (var btnIndx in buttons) {
+                                        if (buttons.hasOwnProperty(btnIndx)) {
+                                            button = buttons[btnIndx];
+                                            if (button != null) {
+                                                button.set("disabled", LogicECM.module.OrgStructure.IS_ENGINEER ? false : true);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (obj.disabledButtons) {
+                        for (var disIndex in obj.disabledButtons) {
+                            if (obj.disabledButtons.hasOwnProperty(disIndex)) {
+                                flag = obj.disabledButtons[disIndex];
+                                if (this.toolbarButtons.hasOwnProperty(flag)) {
+                                    buttons = this.toolbarButtons[flag];
+                                    for (var btnIndx in buttons) {
+                                        button = buttons[btnIndx];
+                                        if (button != null) {
+                                            button.set("disabled", true);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (obj.buttons) {
+                        for (var index in obj.buttons) {
+                            if (obj.buttons.hasOwnProperty(index)) {
+                                button = this._findToolbarButton(index);
+                                if (button != null) {
+                                    button.set("disabled", obj.buttons[index] == "disabled");
                                 }
                             }
                         }
                     }
                 }
-                if (this.options.searchActive == "false"){
-                    if (this.toolbarButtons != null) {
-                        for (var index in this.toolbarButtons)
-                        {
-                            if (this.toolbarButtons.hasOwnProperty(index))
-                            {
-                                var action = this.toolbarButtons[index];
-                                if (action != null) {
-                                    action.set("disabled", LogicECM.module.OrgStructure.IS_ENGINEER ? false : true);
+            },
+
+            onChangeSearchState: function Tree_ononChangeSearchState(layer, args) {
+                var obj = args[1];
+                var label = obj.bubblingLabel;
+                if (this._hasEventInterest(label)) {
+                    var searchButton = this._findToolbarButton("searchButton",this.options.searchButtonsType);
+                    if (searchButton) {
+                        if (searchButton.get("disabled")) {
+                            Dom.setStyle(Dom.get(this.id + "-searchInput"), 'background', '#eeeeee');
+                            Dom.get(this.id + "-full-text-search").setAttribute('disabled', true);
+                            Dom.setStyle(Dom.get(this.id + "-full-text-search"), 'background', '#eeeeee');
+                        } else {
+                            Dom.setStyle(Dom.get(this.id + "-searchInput"), 'background', '');
+                            Dom.get(this.id + "-full-text-search").removeAttribute('disabled', true);
+                            Dom.setStyle(Dom.get(this.id + "-full-text-search"), 'background', '');
+                        }
+                    }
+                }
+            },
+
+            _findToolbarButton: function (id, key) {
+                var button,buttons;
+                if (key && this.toolbarButtons.hasOwnProperty(key)) {
+                    buttons = this.toolbarButtons[key];
+                    for (var btnIndx in buttons) {
+                        if (buttons.hasOwnProperty(btnIndx)){
+                            button = buttons[btnIndx];
+                            if (button != null) {
+                                if (button.get("id") == this.id + "-" + id) {
+                                    return button;
                                 }
                             }
                         }
+                    }
+                } else {
+                    for (var index in this.toolbarButtons) {
+                        if (this.toolbarButtons.hasOwnProperty(index)){
+                            buttons = this.toolbarButtons[index];
+                            for (var btnIndx in buttons) {
+                                if (buttons.hasOwnProperty(btnIndx)){
+                                    button = buttons[btnIndx];
+                                    if (button != null) {
+                                        if (button.get("id") == this.id + "-" + id) {
+                                            return button;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                }
-                Dom.setStyle(Dom.get(this.id+"-searchInput"), 'background','');
-                Dom.get(this.id + "-full-text-search").removeAttribute('disabled',true);
-                Dom.setStyle(Dom.get(this.id+"-full-text-search"), 'background','');
-
-
+                return button;
             },
 
             _hasEventInterest: function DataGrid_hasEventInterest(bubbleLabel){

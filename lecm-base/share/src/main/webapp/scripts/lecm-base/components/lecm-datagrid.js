@@ -2379,14 +2379,19 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 if (callback) {// вызов дополнительного события
                                     callback.call(this, response.json.persistedObject);
                                 } else { // вызов события по умолчанию
+                                    YAHOO.Bubbling.fire("nodeCreated",
+                                        {
+                                            nodeRef: response.json.persistedObject,
+                                            bubblingLabel: this.options.bubblingLabel
+                                        });
                                     YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
                                         {
-                                            nodeRef:response.json.persistedObject,
-                                            bubblingLabel:this.options.bubblingLabel
+                                            nodeRef: response.json.persistedObject,
+                                            bubblingLabel: this.options.bubblingLabel
                                         });
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text:this.msg(successMessage ? successMessage : "message.save.success")
+                                            text: this.msg(successMessage ? successMessage : "message.save.success")
                                         });
                                 }
                             },

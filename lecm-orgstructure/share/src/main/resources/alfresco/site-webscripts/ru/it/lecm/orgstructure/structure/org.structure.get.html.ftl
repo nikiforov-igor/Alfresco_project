@@ -15,33 +15,57 @@
 			(function () {
 				function createDatagrid() {
 					// Переопределяем метод onActionDelete. Добавляем проверки
-					LogicECM.module.Base.DataGrid.prototype.onActionDelete = function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
+					LogicECM.module.Base.DataGrid.prototype.onActionDelete =
+                            function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
 						var me = this,
 								items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
 						var deletedUnit = items[0]; // для Оргструктуры одновременно удалить можно ТОЛЬКО ОДНО подразделение
-						// Проверим есть ли у подразделения штатные расписания
-						var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitStaffPositions?nodeRef=" + deletedUnit.nodeRef;
+                        // Проверим не является ли подразделение корневым (тогда его нельщзя удалять!)
+                        var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitParent?nodeRef=" + deletedUnit.nodeRef;
 						var callback = {
 							success:function (oResponse) {
 								var oResults = eval("(" + oResponse.responseText + ")");
-								if (oResults && oResults.length > 0) { // нельзя удалять - есть назначенные должности
+								if (oResults && !oResults.nodeRef) {
 									Alfresco.util.PopupManager.displayMessage(
 											{
-												text:me.msg("message.delete.unit.failure.has.composition")
+												text:me.msg("message.delete.unit.failure.root.unit")
 											});
 								} else {
-									// проверим нет ли дочерних АКТИВНЫХ подразделений
-									var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitChildren?nodeRef=" + deletedUnit.nodeRef + "&onlyActive=true";
+                                    // Проверим есть ли у подразделения штатные расписания
+                                    var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getUnitStaffPositions?nodeRef=" + deletedUnit.nodeRef;
 									var callback = {
 										success:function (oResponse) {
 											var oResults = eval("(" + oResponse.responseText + ")");
-											if (oResults && oResults.length > 0) { // нельзя удалять - есть дочерние подразделения
+											if (oResults && oResults.length > 0) {
 												Alfresco.util.PopupManager.displayMessage(
 														{
-															text:me.msg("message.delete.unit.failure.has.children")
+															text:me.msg("message.delete.unit.failure.has.composition")
 														});
-											} else { // удаляем! вызов метода из грида
-												me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
+											} else {
+                                                // проверим нет ли дочерних АКТИВНЫХ подразделений
+                                                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getUnitChildren?nodeRef=" + deletedUnit.nodeRef + "&onlyActive=true";
+                                                var callback = {
+                                                    success:function (oResponse) {
+                                                        var oResults = eval("(" + oResponse.responseText + ")");
+                                                        if (oResults && oResults.length > 0) { // нельзя удалять - есть дочерние подразделения
+                                                            Alfresco.util.PopupManager.displayMessage(
+                                                                    {
+                                                                        text:me.msg("message.delete.unit.failure.has.children")
+                                                                    });
+                                                        } else { // удаляем! вызов метода из грида
+                                                            me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
+                                                        }
+                                                    },
+                                                    failure:function (oResponse) {
+                                                        Alfresco.util.PopupManager.displayMessage(
+                                                                {
+                                                                    text:me.msg("message.delete.unit.error")
+                                                                });
+                                                    },
+                                                    argument:{
+                                                    }
+                                                };
+                                                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 											}
 										},
 										failure:function (oResponse) {
@@ -118,7 +142,7 @@
 	<div id="alf-filters" class="tree">
 		<@orgTree.tree nodeType="lecm-orgstr:organization-unit" itemType="lecm-orgstr:organization-unit"
 						nodePattern="lecm-orgstr_element-full-name" itemPattern="lecm-orgstr_element-full-name"
-						drawEditors=false fullDelete=realDelete>
+						drawEditors=false fullDelete=realDelete maxNodesOnTopLevel=1 markOnCreateAsParent=true>
 		</@orgTree.tree>
 	</div>
 </div>

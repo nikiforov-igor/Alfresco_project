@@ -18,9 +18,9 @@
             <properties>
                 <showSearchBlock>true</showSearchBlock>
                 <showExSearchBtn>true</showExSearchBtn>
-                <typeButton>newRowButtonStaff</typeButton>
+                <newRowButton>activeOnUnitClick</newRowButton>
                 <bubblingLabel>staff-list</bubblingLabel>
-                <active>false</active>
+                <searchButtons>activeOnTreeNodeClick</searchButtons>
 	            <newRowLabel>button.new-row-staff</newRowLabel>
             </properties>
         </component>

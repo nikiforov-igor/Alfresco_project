@@ -19,7 +19,6 @@ LogicECM.module.Delegation.List = LogicECM.module.Delegation.List || {};
 			["button", "container"]);
         YAHOO.Bubbling.on("userAccess", this.onUserAccess, this);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-        YAHOO.Bubbling.on("initActiveButton", this.onInitButton, this);
 		return this;
 	};
 
@@ -181,45 +180,6 @@ LogicECM.module.Delegation.List = LogicECM.module.Delegation.List || {};
 				YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get(this.id+"-full-text-search"), 'background','#eeeeee');
 			}
 		},
-
-            onInitButton: function Tree_onSelectedItems(layer, args)
-            {
-                var obj = args[1];
-                var label = obj.bubblingLabel;
-                if(this._hasEventInterest(label)){
-                    if (this.treeSelectActions != null) {
-                        for (var index in this.treeSelectActions)
-                        {
-                            if (this.treeSelectActions.hasOwnProperty(index))
-                            {
-                                var action = this.treeSelectActions[index];
-                                if (action != null) {
-                                    action.set("disabled", args[1].disable);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (this.options.searchActive == "false"){
-                    if (this.toolbarButtons != null) {
-                        for (var index in this.toolbarButtons)
-                        {
-                            if (this.toolbarButtons.hasOwnProperty(index))
-                            {
-                                var action = this.toolbarButtons[index];
-                                if (action != null) {
-                                    action.set("disabled", false);
-                                }
-                            }
-                        }
-                }
-                }
-                YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get(this.id+"-searchInput"), 'background','');
-                YAHOO.util.Dom.get(this.id + "-full-text-search").removeAttribute('disabled',true);
-                YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get(this.id+"-full-text-search"), 'background','');
-
-
-            },
 
             _hasEventInterest: function DataGrid_hasEventInterest(bubbleLabel){
                 if (!this.options.bubblingLabel || !bubbleLabel) {

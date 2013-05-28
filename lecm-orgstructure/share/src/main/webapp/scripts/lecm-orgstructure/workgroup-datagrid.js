@@ -155,10 +155,18 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                             },
                             bubblingLabel: "workForce"
                         });
-                    // Дективируем кнопку "Новый элемент" в правом TollBar-е
-                    YAHOO.Bubbling.fire("initActiveButton", {
-                        bubblingLabel: "workForce",
-                        disable: buttonToolbarDisable});
+                    if (buttonToolbarDisable) {
+                        // Дективируем кнопку "Новый элемент" в правом TollBar-е
+                        YAHOO.Bubbling.fire("refreshButtonState",{
+                            bubblingLabel: "workForce",
+                            disabledButtons: ["activeOnParentTableClick"]
+                        });
+                    } else {
+                        YAHOO.Bubbling.fire("refreshButtonState",{
+                            bubblingLabel: "workForce",
+                            enabledButtons: ["activeOnParentTableClick"]
+                        });
+                    }
                 }
                 // Deferred functions specified?
                 for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++) {
@@ -186,11 +194,10 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                 this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
                 this.widgets.dataTable.subscribe("beforeRenderEvent", function () {
                         me.beforeRenderFunction();
-                        //if (me._hasEventInterest("workGroup")) {
-                        YAHOO.Bubbling.fire("initActiveButton", {
+                        YAHOO.Bubbling.fire("refreshButtonState",{
                             bubblingLabel: "workForce",
-                            disable: true});
-                        //}
+                            disabledButtons: ["activeOnParentTableClick"]
+                        });
                     },
                     me.widgets.dataTable, true);
                 if (this._hasEventInterest("workGroup")) {
@@ -250,9 +257,10 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                 });
             if (LogicECM.module.OrgStructure.IS_ENGINEER) {
                 // Активируем кнопку "Новый элемент" в правом TollBar-е
-                YAHOO.Bubbling.fire("initActiveButton", {
+                YAHOO.Bubbling.fire("refreshButtonState",{
                     bubblingLabel: "workForce",
-                    disable: false});
+                    enabledButtons: ["activeOnParentTableClick"]
+                });
             }
         }
     }, true);
