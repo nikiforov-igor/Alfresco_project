@@ -36,11 +36,9 @@ public class OrgstructureUnit {
 
     public String getHtml() {
 
-        String result = "<html>";
+        String result = "<html><div width=\"246px\">";
         result += "<font size=+1>" + title + "</font>";
-        if (boss != null || employees.size() > 0) {
-            result += "<hr>";
-        }
+        result += "<hr>";
         if (boss != null) {
             result += "<b>"+ boss +"</b>";
         }
@@ -55,39 +53,12 @@ public class OrgstructureUnit {
                 result += "<br>";
             }
         }
-        result += "</html>";
+        result += "</div></html>";
         return result;
     }
 
-    public ArrayList<String> getEmployees() {
-        return employees;
-    }
-
     public double getWidth() {
-        BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-        Font font = FONT;
-        Font fontInc = new Font(font.getFamily(), font.getStyle(), font.getSize() + 6);
-        Font fontBoss = new Font(font.getFamily(), Font.BOLD, font.getSize());
-        FontMetrics fm = bi.getGraphics().getFontMetrics(fontInc);
-        int width = calculateWidth(title, MAX_WIDTH, fm);
-
-        fm = bi.getGraphics().getFontMetrics(fontBoss);
-        if (boss != null) {
-            int bossWidth = calculateWidth(boss, MAX_WIDTH, fm);
-            if (bossWidth > width) {
-                width = bossWidth;
-            }
-        }
-
-        fm = bi.getGraphics().getFontMetrics(font);
-        for (String employee : employees) {
-            int employeeWidth = calculateWidth(employee, MAX_WIDTH, fm);
-            if (employeeWidth > width) {
-                width = employeeWidth;
-            }
-        }
-
-        return width < MAX_WIDTH ? width + 12 : MAX_WIDTH + 12;
+        return MAX_WIDTH + 12;
     }
 
     public double getHeight() {
@@ -99,10 +70,8 @@ public class OrgstructureUnit {
         FontMetrics fm = bi.getGraphics().getFontMetrics(fontInc);
         int result = calculateHeight(title, MAX_WIDTH, fm);
 
-        if (boss != null || employees.size() > 0) {
-            fm = bi.getGraphics().getFontMetrics(font);
-            result += calculateHeight("a", MAX_WIDTH, fm) / 2;
-        }
+        fm = bi.getGraphics().getFontMetrics(font);
+        result += calculateHeight("a", MAX_WIDTH, fm) / 2;
 
         if (boss != null) {
             fm = bi.getGraphics().getFontMetrics(fontBoss);
@@ -130,25 +99,6 @@ public class OrgstructureUnit {
             if (width > maxWidth) {
                 result += lineHeight;
                 width = metrics.stringWidth(token);
-            }
-        }
-
-        return result;
-    }
-
-    private int calculateWidth(String word, int maxWidth, FontMetrics metrics) {
-        int lineHeight = metrics.getHeight();
-        int result = 0;
-        StringTokenizer st = new StringTokenizer(word, " -", true);
-        int width = 0;
-        while (st.hasMoreTokens()) {
-            String token = st.nextToken();
-            width += metrics.stringWidth(token);
-            if (width > maxWidth) {
-                result += lineHeight;
-                width = metrics.stringWidth(token);
-            } else if (width > result) {
-                result = width;
             }
         }
 

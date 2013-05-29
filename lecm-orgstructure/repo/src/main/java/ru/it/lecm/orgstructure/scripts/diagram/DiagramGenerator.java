@@ -72,8 +72,11 @@ public class DiagramGenerator{
         try {
 
             NodeRef organization = service.getOrganization();
-            String orgName = nodeService.getProperty(organization, ContentModel.PROP_NAME).toString();
-            Object orgObject = graph.insertVertex(parent, null, new OrgstructureUnit(orgName), 10, 10, 10, 10);
+            Object orgName = nodeService.getProperty(organization, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
+            if (orgName == null) {
+                orgName = nodeService.getProperty(organization, ContentModel.PROP_NAME);
+            }
+            Object orgObject = graph.insertVertex(parent, null, new OrgstructureUnit(orgName.toString()), 10, 10, 10, 10);
 
             List<NodeRef> children = service.getSubUnits(service.getStructureDirectory(), true);
             for(NodeRef child : children) {
