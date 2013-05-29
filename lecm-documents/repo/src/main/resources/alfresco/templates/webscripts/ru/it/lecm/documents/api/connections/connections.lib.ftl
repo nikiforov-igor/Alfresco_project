@@ -5,6 +5,7 @@
 				{
 					"nodeRef": "${item.nodeRef}",
 					"name": "${item.properties["cm:name"]}",
+					"isSystem": ${item.properties["lecm-connect:is-system"]?string},
 					"primaryDocument": {
 						<#if item.assocs["lecm-connect:primary-document-assoc"]??>
 							"nodeRef": "${item.assocs["lecm-connect:primary-document-assoc"][0].nodeRef}",

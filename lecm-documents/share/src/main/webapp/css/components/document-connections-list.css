@@ -99,3 +99,7 @@ div.list-action-set .onActionDelete a {
 .connections-list .space {
 	padding-top: 2em;
 }
+
+.connections-list .system-connection {
+	color: red;
+}

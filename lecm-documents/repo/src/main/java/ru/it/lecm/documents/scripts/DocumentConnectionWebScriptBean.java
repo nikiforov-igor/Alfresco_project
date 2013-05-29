@@ -134,7 +134,7 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 				this.nodeService.exists(connectedDocumentRef) && this.documentService.isDocument(connectedDocumentRef) &&
 				this.nodeService.exists(typeRef) && this.documentConnectionService.isConnectionType(typeRef)) {
 
-			NodeRef connectionsRef = this.documentConnectionService.createConnection(primaryDocumentRef, connectedDocumentRef, typeRef);
+			NodeRef connectionsRef = this.documentConnectionService.createConnection(primaryDocumentRef, connectedDocumentRef, typeRef, false);
 			return new ScriptNode(connectionsRef, this.serviceRegistry, getScope());
 		}
 		return null;

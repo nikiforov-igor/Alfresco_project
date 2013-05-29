@@ -35,7 +35,7 @@
 							</#if>
 						</td>
 						<td class="connection">
-							<div class="connection-type">
+							<div class="connection-type <#if item.isSystem>system-connection</#if>">
 								<#if item.type??>
 									${item.type.name!""}
 								</#if>
@@ -55,7 +55,7 @@
 						</td>
 						<td class="list-actions-td">
 							<div class="list-action-set">
-								<#if hasDeletePerm>
+								<#if hasDeletePerm && !item.isSystem>
 									<div class="onActionDelete" data-noderef="${item.nodeRef!""}" <#if item.connectedDocument??>data-name="${item.connectedDocument.presentString!""}"</#if>>
 										<a title="${msg("action.delete-connection.title")}" class="list-action-link" href="#">
 											<span>
@@ -96,10 +96,10 @@
 						</#if>
 					</td>
 					<td class="connection">
-						<div class="connection-type">
+						<div class="connection-type <#if item.isSystem>system-connection</#if>">
 							<#if item.type??>
-									${item.type.reverseName!""}
-								</#if>
+								${item.type.reverseName!""}
+							</#if>
 						</div>
 						<div class="connection-name">
 							<#if item.primaryDocument??>

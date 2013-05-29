@@ -24,6 +24,12 @@
 			<title>Connection</title>
 			<parent>cm:content</parent>
 			<properties>
+				<property name="lecm-connect:is-system">
+					<title>Is system connection</title>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<default>false</default>
+				</property>
 				<property name="lecm-connect:primary-document-assoc-ref">
 					<title>Primary Document Ref</title>
 					<type>d:text</type>

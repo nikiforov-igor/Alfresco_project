@@ -26,6 +26,7 @@ public interface DocumentConnectionService {
 	public static final QName ASSOC_CONNECTED_DOCUMENT = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "connected-document-assoc");
 	public static final QName ASSOC_CONNECTION_TYPE = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "connection-type-assoc");
 
+	public static final QName PROP_IS_SYSTEM = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "is-system");
 	public static final QName PROP_PRIMARY_DOCUMENT_REF = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "primary-document-assoc-ref");
 	public static final QName PROP_CONNECTED_DOCUMENT_REF = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "connected-document-assoc-ref");
 
@@ -102,7 +103,7 @@ public interface DocumentConnectionService {
 	 * @param typeNodeRef Ссылка на тип связи
 	 * @return Ссылка на созданную связь
 	 */
-	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef);
+	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef, boolean isSystem);
 
 	/**
 	 * Удаление связи

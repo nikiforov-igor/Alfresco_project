@@ -208,7 +208,7 @@ public class ContractsBeanImpl extends BaseBean {
 					DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE);
 
 			if (connectionType != null) {
-				documentConnectionService.createConnection(documentRef, additionalDocumentRef, connectionType);
+				documentConnectionService.createConnection(documentRef, additionalDocumentRef, connectionType, true);
 			}
             return additionalDocumentRef.toString();
 		}
