@@ -291,7 +291,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         String type = documentType.replace(":", "_");
         List<WorkflowDefinition> definitions = serviceRegistry.getWorkflowService().getAllDefinitionsByName(ACTIVITI_PREFIX + type);
         for (WorkflowDefinition definition : definitions) {
-            List<WorkflowInstance> instances = serviceRegistry.getWorkflowService().getActiveWorkflows(definition.getId());
+            List<WorkflowInstance> instances = serviceRegistry.getWorkflowService().getWorkflows(definition.getId());
             if (instances.size() > 0) {
                 ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(definition.getId().replace(ACTIVITI_PREFIX, ""));
                 List<ActivityImpl> activities = processDefinitionEntity.getActivities();
