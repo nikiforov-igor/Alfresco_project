@@ -24,4 +24,13 @@
         </property>
         <property name="allowSubtypes" value="true"/>
     </bean>
+
+	<bean id="evaluator.ru.it.lecm.documents.isBaseAndNotFinalStatemachineStatus" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.ru.it.lecm.documents.isBase" />
+				<ref bean="evaluator.ru.it.lecm.statemachine.isNotFinalStateMachineStatus" />
+			</list>
+		</property>
+	</bean>
 </beans>

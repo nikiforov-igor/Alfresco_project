@@ -9,4 +9,12 @@
             </list>
         </property>
     </bean>
+
+	<bean id="evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatus" class="ru.it.lecm.statemachine.evaluators.FinalStateMachineStatusEvaluator">
+		<property name="scriptRemote" ref="webscripts.script.remote" />
+	</bean>
+
+	<bean id="evaluator.ru.it.lecm.statemachine.isNotFinalStateMachineStatus" parent="evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatus">
+		<property name="negateOutput" value="true" />
+	</bean>
 </beans>

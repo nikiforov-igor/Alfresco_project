@@ -1,0 +1,3 @@
+{
+	"isFinal": ${isFinal?string}
+}

@@ -185,7 +185,7 @@
             <action id="document-copy-to" type="javascript" label="actions.document.copy-to">
                 <param name="function">onActionCopyTo</param>
                 <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBaseAndNotFinalStatemachineStatus</evaluator>
             </action>
 
             <!-- Move to -->
@@ -195,7 +195,7 @@
                     <permission allow="true">Delete</permission>
                 </permissions>
                 <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBaseAndNotFinalStatemachineStatus</evaluator>
             </action>
 
             <!-- Delete -->
@@ -213,6 +213,13 @@
                 <param name="function">onActionAssignWorkflow</param>
                 <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
             </action>
+
+	        <!-- Assign workflow -->
+	        <action id="lecm-document-assign-workflow" type="javascript" label="actions.document.assign-workflow">
+		        <param name="function">onActionAssignWorkflow</param>
+		        <evaluator>evaluator.ru.it.lecm.documents.isBase</evaluator>
+		        <evaluator>evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatus</evaluator>
+	        </action>
 
             <!-- Manage permissions (site roles) -->
             <action id="document-manage-site-permissions" type="javascript" icon="document-manage-permissions" label="actions.document.manage-permissions">
@@ -428,6 +435,7 @@
                 <action index="200" id="document-manage-repo-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" />
                 <action index="210" id="document-manage-aspects" label="actions.folder.manage-aspects" />
                 <action index="220" id="document-view-in-source-repository" label="actions.folder.view-source-repository" />
+	            <action index="230" id="lecm-document-assign-workflow" icon="document-assign-workflow" label="actions.document.assign-workflow"/>
             </actionGroup>
 
             <actionGroup id="folder-details">
@@ -444,6 +452,7 @@
                 <action index="200" id="document-change-type" label="actions.folder.change-type" />
                 <action index="210" id="view-in-explorer" />
                 <action index="220" id="document-view-in-source-repository" label="actions.folder.view-source-repository" />
+	            <action index="230" id="lecm-document-assign-workflow" />
             </actionGroup>
 
             <actionGroup id="document-link-browse">

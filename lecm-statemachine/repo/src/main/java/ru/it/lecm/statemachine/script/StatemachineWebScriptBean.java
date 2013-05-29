@@ -245,4 +245,12 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return result;
     }
 
+	/**
+	 * Возвращает находится ли документ в финальном статусе
+	 * @param nodeRef
+	 * @return
+	 */
+	public boolean isFinal(String nodeRef) {
+		return stateMachineHelper.isFinal(new NodeRef(nodeRef));
+	}
 }

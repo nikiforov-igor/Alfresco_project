@@ -1,0 +1,1 @@
+model.isFinal = statemachine.isFinal(args["nodeRef"]);
