@@ -70,7 +70,7 @@ public class OrgstructureUnit {
 
         fm = bi.getGraphics().getFontMetrics(fontBoss);
         if (boss != null && fm.stringWidth(boss) > width) {
-            width = (int) (fm.stringWidth(boss));
+            width = fm.stringWidth(boss);
         }
 
         fm = bi.getGraphics().getFontMetrics(font);

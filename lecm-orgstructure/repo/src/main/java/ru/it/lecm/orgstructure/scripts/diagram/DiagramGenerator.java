@@ -5,7 +5,6 @@ import com.mxgraph.canvas.mxImageCanvas;
 import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxIGraphModel;
-import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.view.mxInteractiveCanvas;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.view.mxCellState;
@@ -111,17 +110,8 @@ public class DiagramGenerator{
             graph.getModel().endUpdate();
         }
 
-        mxGraphComponent graphComponent = new mxGraphComponent(graph) {
-            private static final long serialVersionUID = 4683716829748931448L;
-
-            public mxInteractiveCanvas createCanvas() {
-                return new OrgstructureSwingCanvas(this);
-            }
-
-        };
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BufferedImage image = mxCellRenderer.createBufferedImage(graph, null, 1, Color.WHITE, true, null, new OrgstructureSwingCanvas(graphComponent));
+        BufferedImage image = mxCellRenderer.createBufferedImage(graph, null, 1, Color.WHITE, true, null, new OrgstructureSwingCanvas());
         try {
             ImageIO.write(image, "png", baos);
         } catch (IOException e) {
@@ -191,11 +181,9 @@ public class DiagramGenerator{
 
         protected JLabel vertexRenderer = new JLabel();
 
-        protected mxGraphComponent graphComponent;
+        protected JScrollPane graphComponent = new JScrollPane();
 
-        public OrgstructureSwingCanvas(mxGraphComponent graphComponent) {
-            this.graphComponent = graphComponent;
-
+        public OrgstructureSwingCanvas() {
             vertexRenderer.setBorder(BorderFactory
                     .createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
             vertexRenderer.setHorizontalAlignment(JLabel.LEFT);
