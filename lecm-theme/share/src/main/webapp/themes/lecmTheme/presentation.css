@@ -2121,26 +2121,32 @@ span.person a h3 {
     color:red;
 }
 
-/* date-range control */
-/* контрол альфресковский, в нем нигде не прописан класс, поэтому приходится обращаться по части ид-шника:
-div[id$=date-cntrl] - селектор для всех div с id, заканчивающимися на "date-cntrl" */
-.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field div[id$=date-cntrl] div.yui-u,
-.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field div[id$=date-cntrl] div.yui-u.first {
+/* range controls */
+/* см. daterange.ftl, numberrange.ftl */
+/* контрол альфресковский, в нем нигде не прописан класс,*/
+/*поэтому приходится обращаться к div'у через предыдущий input с именем, заканчивающимся на "-range"*/
+/*input[name$=-range] - селектор для всех input с name, заканчивающимися на "-range"*/
+/*input ~ div - следующий за инпутом div */
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field input[name$=-range] ~ div div.yui-u,
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field input[name$=-range] ~ div div.yui-u.first {
     padding: 0;
     text-align: left;
 }
-.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field div[id$=date-cntrl] div.yui-u > div {
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field input[name$=-range] ~ div div.yui-u > div {
     position: relative;
 }
-.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field div[id$=date-cntrl] div.yui-u > div > input {
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field input[name$=-range] ~ div div.yui-u > div > input {
     float: none;
 }
-.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field div[id$=date-cntrl] div.yui-u > div > a {
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field input[name$=-range] ~ div div.yui-u > div > a {
     position: absolute;
     right: 0;
-    top: 2px;
+    top: 0;
 }
-.yui-skin-lecmTheme.alfresco-share .yui-panel .search .form-field div[id$=date-cntrl] {
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field input[name$=-range] ~ div div.yui-u > div > a > img {
+    margin: 0.4em 0.4em;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel .search .form-field input[name$=-range] ~ div {
     width: 460px !important;
 }
 

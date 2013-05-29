@@ -7,6 +7,9 @@ function main() {
     if (args["showSearch"]) {
         model.showSearch = (args["showSearch"] == 'true');
     }
+    if (args["showExSearchBtn"]) {
+        model.showExSearchBtn = (args["showExSearchBtn"] == 'true');
+    }
 }
 
 function isStarter() {

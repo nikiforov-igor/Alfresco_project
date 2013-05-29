@@ -23,6 +23,17 @@
 	<#assign notSelectedOptionShow = false>
 </#if>
 
+<#assign isFieldMandatory = false>
+<#if field.control.params.mandatory??>
+    <#if field.control.params.mandatory == "true">
+        <#assign isFieldMandatory = true>
+    </#if>
+<#elseif field.mandatory??>
+    <#assign isFieldMandatory = field.mandatory>
+<#elseif field.endpointMandatory??>
+    <#assign isFieldMandatory = field.endpointMandatory>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <script type="text/javascript">//<![CDATA[
@@ -40,12 +51,7 @@
                 <#if field.control.params.startLocation??>
                     startLocation: "${field.control.params.startLocation}",
                 </#if>
-	            <#if field.mandatory??>
-		            mandatory: ${field.mandatory?string},
-	            <#elseif field.endpointMandatory??>
-		            mandatory: ${field.endpointMandatory?string},
-	            </#if>
-
+                mandatory: ${isFieldMandatory?string},
                 itemType: "${field.endpointType!''}",
                 itemFamily: "node",
                 maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
@@ -67,14 +73,14 @@
         <div class="viewmode-field">
 	        <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value}" />
 
-            <#if field.mandatory && !(fieldValue?is_number) && fieldValue?string == "">
+            <#if isFieldMandatory && !(fieldValue?is_number) && fieldValue?string == "">
             <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
             </#if>
             <span class="viewmode-label">${field.label?html}:</span>
             <span id="${fieldHtmlId}-currentValueDisplay" class="viewmode-value"></span>
         </div>
     <#else>
-        <label for="${fieldHtmlId}-added">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+        <label for="${fieldHtmlId}-added">${field.label?html}:<#if isFieldMandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 	    <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
         <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
         <div id="${fieldHtmlId}-controls" class="selectone-control">

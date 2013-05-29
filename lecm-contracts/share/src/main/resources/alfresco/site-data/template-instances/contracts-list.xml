@@ -18,6 +18,7 @@
             <properties>
                 <showCreateBtn>true</showCreateBtn>
                 <bubblingLabel>contracts</bubblingLabel>
+                <showExSearchBtn>true</showExSearchBtn>
             </properties>
         </component>
         <!-- Menu -->

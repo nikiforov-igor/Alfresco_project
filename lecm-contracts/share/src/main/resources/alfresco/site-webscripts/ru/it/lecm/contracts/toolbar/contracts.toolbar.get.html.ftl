@@ -10,6 +10,11 @@
     <#assign showSearchControl = showSearch/>
 </#if>
 
+<#assign exSearch = false/>
+<#if showExSearchBtn??>
+    <#assign exSearch = showExSearchBtn/>
+</#if>
+
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <script type="text/javascript">//<![CDATA[
@@ -22,7 +27,7 @@ function init() {
 }
 YAHOO.util.Event.onDOMReady(init);
 //]]></script>
-<@comp.baseToolbar id true showSearchControl false>
+<@comp.baseToolbar id true showSearchControl exSearch>
 <#if showCreateButton>
 <div class="new-row">
         <span id="${id}-newContractButton" class="yui-button yui-push-button">
