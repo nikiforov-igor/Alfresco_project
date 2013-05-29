@@ -4,7 +4,6 @@ import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.view.mxGraph;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -40,17 +39,6 @@ public class BPMNGraphGenerator {
 			Document doc = docBuilder.parse(bpmnInputStream);
 			Node root = doc.getFirstChild();
 			Node process = root.getFirstChild();
-
-			String processId = process.getAttributes().getNamedItem("id").getNodeValue();
-
-			Element diagram = doc.createElement("bpmndi:BPMNDiagram");
-			diagram.setAttribute("id", "BPMNDiagram_" + processId);
-			root.appendChild(diagram);
-
-			Element plane = doc.createElement("bpmndi:BPMNPlane");
-			plane.setAttribute("bpmnElement", processId);
-			plane.setAttribute("id", "BPMNPlane_" + processId);
-			diagram.appendChild(plane);
 
 			mxGraph graph = new mxGraph();
 			Object parent = graph.getDefaultParent();

@@ -244,4 +244,11 @@
             <ref bean="substitudeService"/>
         </property>
     </bean>
+
+    <bean id="webscript.ru.it.lecm.orgstructure.diagram.get"
+          class="ru.it.lecm.orgstructure.scripts.diagram.DiagramScript"
+          parent="webscript">
+        <property name="orgstructureBean" ref="serviceOrgstructure" />
+        <property name="nodeService" ref="nodeService" />
+    </bean>
 </beans>

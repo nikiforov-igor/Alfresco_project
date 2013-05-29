@@ -118,8 +118,12 @@
             <version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.tinyjee.jgraphx</groupId>
+            <artifactId>jgraphx</artifactId>
+        </dependency>
 
-		<!-- Don't add here amp dependencies as it will break amp packaging -->
+        <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required
