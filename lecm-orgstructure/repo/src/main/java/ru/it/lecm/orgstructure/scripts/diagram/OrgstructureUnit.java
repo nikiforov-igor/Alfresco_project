@@ -69,17 +69,21 @@ public class OrgstructureUnit {
         Font fontInc = new Font(font.getFamily(), font.getStyle(), font.getSize() + 6);
         Font fontBoss = new Font(font.getFamily(), Font.BOLD, font.getSize());
         FontMetrics fm = bi.getGraphics().getFontMetrics(fontInc);
-        int width = fm.stringWidth(title);
+        int width = calculateWidth(title, MAX_WIDTH, fm);
 
         fm = bi.getGraphics().getFontMetrics(fontBoss);
-        if (boss != null && fm.stringWidth(boss) > width) {
-            width = fm.stringWidth(boss);
+        if (boss != null) {
+            int bossWidth = calculateWidth(boss, MAX_WIDTH, fm);
+            if (bossWidth > width) {
+                width = bossWidth;
+            }
         }
 
         fm = bi.getGraphics().getFontMetrics(font);
         for (String employee : employees) {
-            if (fm.stringWidth(employee) > width) {
-                width = fm.stringWidth(employee);
+            int employeeWidth = calculateWidth(employee, MAX_WIDTH, fm);
+            if (employeeWidth > width) {
+                width = employeeWidth;
             }
         }
 
@@ -131,4 +135,24 @@ public class OrgstructureUnit {
 
         return result;
     }
+
+    private int calculateWidth(String word, int maxWidth, FontMetrics metrics) {
+        int lineHeight = metrics.getHeight();
+        int result = 0;
+        StringTokenizer st = new StringTokenizer(word, " -", true);
+        int width = 0;
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken();
+            width += metrics.stringWidth(token);
+            if (width > maxWidth) {
+                result += lineHeight;
+                width = metrics.stringWidth(token);
+            } else if (width > result) {
+                result = width;
+            }
+        }
+
+        return result;
+    }
+
 }
