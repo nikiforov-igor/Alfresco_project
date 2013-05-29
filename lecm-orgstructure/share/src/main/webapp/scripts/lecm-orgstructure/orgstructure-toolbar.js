@@ -119,6 +119,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                         })
                 );
 
+                this.toolbarButtons["defaultActive"].push(
+                    Alfresco.util.createYUIButton(this, "structure", this.onStructureClick)
+                );
+
+
                 var me = this;
 
 
@@ -225,6 +230,10 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 advSearch.showDialog(grid.datagridMeta);
             },
 
+            onStructureClick:function OrgstructureToolbar_onStructureClick() {
+
+                window.open(Alfresco.constants.PROXY_URI + "/lecm/orgstructure/diagram", "Структура организации", "top=0,left=0,height=768,width=1024");
+            },
 
             onRefreshButtonState: function Tree_onRefreshButtonsState(layer, args) {
                 var obj = args[1];

@@ -20,6 +20,8 @@
                 <showExSearchBtn>true</showExSearchBtn>
                 <bubblingLabel>orgstructure</bubblingLabel>
 	            <newRowLabel>button.new-unit</newRowLabel>
+                <showStructure>true</showStructure>
+                <showStructureLabel>button.show_structure</showStructureLabel>
             </properties>
         </component>
         <!-- Title -->

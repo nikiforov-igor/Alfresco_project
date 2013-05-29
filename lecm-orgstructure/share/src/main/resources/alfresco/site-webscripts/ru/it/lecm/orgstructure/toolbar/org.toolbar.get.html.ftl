@@ -8,6 +8,12 @@
 <#if showSearchBlock??>
 	<#assign searchBlock = showSearchBlock/>
 </#if>
+
+<#assign showStructureBlock = false/>
+<#if showStructure??>
+    <#assign showStructureBlock = showStructure/>
+</#if>
+
 <#assign exSearch = false/>
 <#if showExSearchBtn??>
 	<#assign exSearch = showExSearchBtn/>
@@ -29,6 +35,7 @@
 </#if>
 
 <#assign newUnitSpanId = "${id}-newRowButton"/>
+<#assign structureId = "${id}-structure"/>
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
@@ -50,4 +57,13 @@ YAHOO.util.Event.onDOMReady(init);
            </span>
         </span>
 	</div>
+    <#if showStructureBlock >
+        <div class="print">
+            <span id="${structureId}" class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button">${msg(showStructureLabel)}</button>
+               </span>
+            </span>
+        </div>
+    </#if>
 </@comp.baseToolbar>

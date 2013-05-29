@@ -110,8 +110,13 @@ public class DiagramGenerator{
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BufferedImage image = mxCellRenderer.createBufferedImage(graph, null, 1, Color.WHITE, true, null, new OrgstructureSwingCanvas());
+        BufferedImage result = new BufferedImage(image.getWidth() + 10, image.getHeight() + 10, BufferedImage.TYPE_INT_RGB);
+        Graphics g = result.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, result.getWidth(), result.getHeight());
+        g.drawImage(image, 5, 5, null);
         try {
-            ImageIO.write(image, "png", baos);
+            ImageIO.write(result, "png", baos);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -159,6 +164,7 @@ public class DiagramGenerator{
         protected JScrollPane graphComponent = new JScrollPane();
 
         public OrgstructureSwingCanvas() {
+            graphComponent.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             vertexRenderer.setBorder(BorderFactory
                     .createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
             vertexRenderer.setHorizontalAlignment(JLabel.LEFT);

@@ -17,6 +17,8 @@
             <url>/lecm/orgstructure/toolbar</url>
             <properties>
                 <showSearchBlock>true</showSearchBlock>
+                <showStructure>true</showStructure>
+                <showStructureLabel>button.show_structure</showStructureLabel>
                 <showExSearchBtn>true</showExSearchBtn>
                 <newRowButton>activeOnUnitClick</newRowButton>
                 <bubblingLabel>staff-list</bubblingLabel>
