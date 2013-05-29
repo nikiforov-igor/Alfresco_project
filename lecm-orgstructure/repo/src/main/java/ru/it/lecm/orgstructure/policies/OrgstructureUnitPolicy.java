@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -59,12 +60,17 @@ public class OrgstructureUnitPolicy
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
-		NodeRef unit = childAssocRef.getChildRef();
-		NodeRef parent = orgstructureService.getParentUnit(unit);
-
-		// оповещение securityService по Департаменту ...
-		notifyChangedOU( unit, parent);
-	}
+        NodeRef unit = childAssocRef.getChildRef();
+        NodeRef parent = orgstructureService.getParentUnit(unit);
+        if (parent == null) {
+            NodeRef root = orgstructureService.getRootUnit();
+            if (root != null) {
+                throw new  AlfrescoRuntimeException("Нельзя создать два корневых подразделения!");
+            }
+        }
+        // оповещение securityService по Департаменту ...
+        notifyChangedOU(unit, parent);
+    }
 
 	public void onUpdateUnitLog(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		final Boolean prevActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
@@ -110,7 +116,7 @@ public class OrgstructureUnitPolicy
 		if (parent != null) {
 			objects.add(parent.toString());
 		} else { // корневое подразделение - берем Организацию
-			objects.add(orgstructureService.getOrganizationRootRef().toString());
+			objects.add(orgstructureService.getOrganization().toString());
 		}
 
 		final String initiator = authService.getCurrentUserName();

@@ -86,7 +86,7 @@ public interface OrgstructureBean {
 	 * Получение директории Организация.
 	 * Если такой узел отсутствует - он НЕ создаётся.
 	 */
-	NodeRef getOrganizationRootRef();
+	NodeRef getOrganization();
 
 	/**
 	 * Получение руководителя Организации
@@ -630,4 +630,6 @@ public interface OrgstructureBean {
     NodeRef getUnitByCode(String code);
 
     NodeRef getUnitBoss(String unitCode);
+
+    NodeRef getRootUnit();
 }

@@ -52,6 +52,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public static final String PAGE_ORG_STRUCTURE= "org-structure";
 
 	private static final QName DEFAULT_NAME = ContentModel.PROP_NAME;
+    private static final String DEFAULT_EMPTY_TEXT = "<Не указано>";
 	private static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
     public static final String TYPE_UNIT = "organization-unit";
@@ -97,7 +98,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 * @return  ноду Организация
 	 */
 	public ScriptNode getOrganization() {
-		NodeRef organization = orgstructureService.getOrganizationRootRef();
+		NodeRef organization = orgstructureService.getOrganization();
 		return new ScriptNode(organization, serviceRegistry, getScope());
 	}
 
@@ -112,43 +113,39 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		if (ref != null) {
 			final NodeRef currentRef = new NodeRef(ref);
 			if (type.equalsIgnoreCase(TYPE_UNIT)) {// построить дерево подразделений
-				Set<QName> units = new HashSet<QName>();
-				units.add(OrgstructureBean.TYPE_ORGANIZATION_UNIT);
 				// получаем список только Подразделений (внутри могут находиться другие объекты (Рабочие группы))
-				List<ChildAssociationRef> childs = nodeService.getChildAssocs(currentRef, units);
-				for (ChildAssociationRef child : childs) {
-					Boolean isActive = (Boolean) nodeService.getProperty(child.getChildRef(), IS_ACTIVE);
-					isActive = isActive != null ? isActive : Boolean.TRUE; // if property not filled -> active = true default
-					if (isActive) { // выводим только активные подразделения
+				List<NodeRef> childs = orgstructureService.getSubUnits(currentRef, true);
+				for (NodeRef child : childs) {
 						JSONObject unit = new JSONObject();
 						try {
-							unit.put(NODE_REF, child.getChildRef().toString());
-							unit.put(ITEM_TYPE, OrgstructureBean.TYPE_ORGANIZATION_UNIT.toPrefixString(serviceRegistry.getNamespaceService()));
+							unit.put(NODE_REF, child.toString());
+							unit.put(ITEM_TYPE,
+                                    OrgstructureBean.TYPE_ORGANIZATION_UNIT.toPrefixString(serviceRegistry.getNamespaceService()));
 							unit.put(LABEL, getElementName(
-									nodeService, child.getChildRef(), ELEMENT_SHORT_NAME));
+                                    child, ELEMENT_SHORT_NAME));
 							unit.put(TITLE, getElementName(
-									nodeService, child.getChildRef(), ELEMENT_FULL_NAME));
-							unit.put(IS_LEAF, !orgstructureService.hasChild(child.getChildRef(), true));
+                                    child, ELEMENT_FULL_NAME));
+							unit.put(IS_LEAF, !orgstructureService.hasChild(child, true));
 							nodes.add(unit);
 						} catch (JSONException e) {
 							logger.error(e.getMessage (), e);
 						}
-					}
 				}
 				sort(nodes,LABEL,true);
 			} else if (type.equalsIgnoreCase(OrgstructureBean.TYPE_ORGANIZATION.toPrefixString())) { //Вывести директорию "Структура"
-				NodeRef structure = nodeService.getChildByName(currentRef, ContentModel.ASSOC_CONTAINS, OrgstructureBean.STRUCTURE_ROOT_NAME);
-				if (structure != null) {
+				NodeRef structure = orgstructureService.getStructureDirectory();
+                NodeRef organization = orgstructureService.getOrganization();
+				if (structure != null & organization != null) {
 					JSONObject root = new JSONObject();
 					try {
 						root.put(NODE_REF, structure.toString());
 						root.put(ITEM_TYPE, OrgstructureBean.TYPE_STRUCTURE.toPrefixString(serviceRegistry.getNamespaceService()));
 						root.put(LABEL, getElementName(
-								nodeService, structure, ELEMENT_FULL_NAME));
+                                organization, ELEMENT_SHORT_NAME, null, DEFAULT_EMPTY_TEXT));
 						root.put(TITLE, getElementName(
-								nodeService, structure, ELEMENT_FULL_NAME));
-						root.put(IS_LEAF, nodeService.getChildAssocs(
-								structure, RegexQNamePattern.MATCH_ALL, RegexQNamePattern.MATCH_ALL, false).isEmpty());
+                                organization, ELEMENT_FULL_NAME, null, DEFAULT_EMPTY_TEXT));
+
+						root.put(IS_LEAF, orgstructureService.getSubUnits(structure,true).isEmpty());
 						nodes.add(root);
 					} catch (JSONException e) {
 						logger.error(e.getMessage (), e);
@@ -191,17 +188,21 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		});
 	}
 
-	private String getElementName(final NodeService service, final NodeRef ref, QName property, QName defaultProperty) {
-		String value = null;
-		if (property != null) {
-			value = (String) service.getProperty(ref, property);
-		}
-		return value != null ? value : (String) service.getProperty(ref, defaultProperty);
-	}
+    private String getElementName(final NodeRef ref, QName property, QName defaultProperty, String defaultText) {
+        NodeService service = serviceRegistry.getNodeService();
+        String value = null;
+        if (property != null) {
+            value = (String) service.getProperty(ref, property);
+            if (value == null && defaultProperty != null) {
+                value = (String) service.getProperty(ref, defaultProperty);
+            }
+        }
+        return value != null ? value : defaultText;
+    }
 
-	private String getElementName(final NodeService service, final NodeRef ref, QName property) {
-		return getElementName(service, ref, property, DEFAULT_NAME);
-	}
+    private String getElementName(final NodeRef ref, QName property) {
+        return getElementName(ref, property, DEFAULT_NAME, DEFAULT_EMPTY_TEXT);
+    }
 
 	/**
 	 * Возвращает ноду руководителя Организации
@@ -773,7 +774,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
         JSONObject settings = new JSONObject();
 
         NodeService nodeService = serviceRegistry.getNodeService();
-        NodeRef organizationRef = orgstructureService.getOrganizationRootRef();
+        NodeRef organizationRef = orgstructureService.getOrganization();
         List<ChildAssociationRef> childs = nodeService.getChildAssocs(organizationRef);
         try {
             switch (key) {

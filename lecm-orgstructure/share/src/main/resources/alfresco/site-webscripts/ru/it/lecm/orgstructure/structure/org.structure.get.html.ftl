@@ -25,7 +25,7 @@
 						var callback = {
 							success:function (oResponse) {
 								var oResults = eval("(" + oResponse.responseText + ")");
-								if (oResults && !oResults.nodeRef) {
+								if (oResults && !oResults.nodeRef && this.totalRecords == 1) {
 									Alfresco.util.PopupManager.displayMessage(
 											{
 												text:me.msg("message.delete.unit.failure.root.unit")

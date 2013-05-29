@@ -71,7 +71,7 @@ public class DiagramGenerator{
         graph.getModel().beginUpdate();
         try {
 
-            NodeRef organization = service.getOrganizationRootRef();
+            NodeRef organization = service.getOrganization();
             String orgName = nodeService.getProperty(organization, ContentModel.PROP_NAME).toString();
             Object orgObject = graph.insertVertex(parent, null, new OrgstructureUnit(orgName), 10, 10, 10, 10);
 

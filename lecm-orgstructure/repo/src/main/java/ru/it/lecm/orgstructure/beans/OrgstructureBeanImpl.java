@@ -111,14 +111,14 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 	@Override
-	public NodeRef getOrganizationRootRef() {
+	public NodeRef getOrganization() {
 		return organizationRootRef;
 	}
 
 	@Override
 	public NodeRef getOrganizationBoss() {
 		NodeRef bossRef = null;
-		NodeRef organization = getOrganizationRootRef();
+		NodeRef organization = getOrganization();
 		if (organization != null) {
             NodeRef structure = getStructureDirectory();
 			List<ChildAssociationRef> units = nodeService.getChildAssocs(structure);
@@ -137,7 +137,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public NodeRef getOrganizationLogo() {
 		NodeRef logoRef = null;
-		NodeRef organization = getOrganizationRootRef();
+		NodeRef organization = getOrganization();
 		if (organization != null) {
 			List<AssociationRef> logo = nodeService.getTargetAssocs(organization, ASSOC_ORG_LOGO);
 			if (logo != null && logo.size() > 0) {
@@ -150,7 +150,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public NodeRef getStructureDirectory() {
 		NodeRef structure = null;
-		NodeRef organization = getOrganizationRootRef();
+		NodeRef organization = getOrganization();
 		if (organization != null) {
 			structure = nodeService.getChildByName(organization, ContentModel.ASSOC_CONTAINS, STRUCTURE_ROOT_NAME);
 		}
@@ -160,7 +160,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public NodeRef getEmployeesDirectory() {
 		NodeRef emp = null;
-		NodeRef organization = getOrganizationRootRef();
+		NodeRef organization = getOrganization();
 		if (organization != null) {
 			emp = nodeService.getChildByName(organization, ContentModel.ASSOC_CONTAINS, EMPLOYEES_ROOT_NAME);
 		}
@@ -170,7 +170,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public NodeRef getPersonalDataDirectory() {
 		NodeRef pd = null;
-		NodeRef organization = getOrganizationRootRef();
+		NodeRef organization = getOrganization();
 		if (organization != null) {
 			pd = nodeService.getChildByName(organization, ContentModel.ASSOC_CONTAINS, PERSONAL_DATA_ROOT_NAME);
 		}
@@ -615,9 +615,6 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         if (code == null) {
             return null;
         }
-
-        Set<QName> unitType = new HashSet<QName>();
-        unitType.add(TYPE_ORGANIZATION_UNIT);
         List<NodeRef> childAssocs = getSubUnits(getStructureDirectory(), true, true);
         for (NodeRef unitRef : childAssocs) {
             String unitCode = (String) nodeService.getProperty(unitRef, PROP_UNIT_CODE);
@@ -633,6 +630,15 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
     public NodeRef getUnitBoss(String unitCode) {
         NodeRef unitRef = getUnitByCode(unitCode);
         return getUnitBoss(unitRef);
+    }
+
+    @Override
+    public NodeRef getRootUnit() {
+        List<NodeRef> units = getSubUnits(getStructureDirectory(), true);
+        if (units.size() > 0) {
+            return units.get(0);
+        }
+        return null;
     }
 
     @Override
