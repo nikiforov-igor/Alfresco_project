@@ -133,8 +133,10 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 			var content  = '<div style="visibility: hidden" id="' + this.notificationsWindowId + '" class="yui-panel">';
 				content += '    <div id="' + this.notificationsWindowId + '-head" class="hd">' + this.msg("notifications") + '</div>';
 				content += '    <div id="' + this.notificationsWindowId + '-body" class="bd">';
-				content += '        <div id="' + this.notificationsWindowId + '-content"></div>';
-				content += '        <div id="' + this.notificationsWindowId + '-next"></div>';
+				content += '        <div class="main-part">';
+				content += '            <div id="' + this.notificationsWindowId + '-content"></div>';
+				content += '            <div id="' + this.notificationsWindowId + '-next"></div>';
+				content += '        </div>';
 				content += '        <div class="bdft">';
 				content += '            <span id="' + this.notificationsWindowId + '-cancel" class="yui-button yui-push-button">';
 				content += '                <span class="first-child">';
@@ -262,7 +264,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 								container.appendChild(div);
 							}
 
-							Dom.setStyle(me.notificationsWindowId + "-next-link", "display",
+							Dom.setStyle(me.notificationsWindowId + "-next", "display",
 								response.json.hasNext == "true" ? "block" : "none");
 							if (readNewNotifications.length > 0) {
 								me.setReadNotifications(readNewNotifications);
