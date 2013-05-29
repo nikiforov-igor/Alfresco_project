@@ -29,3 +29,8 @@
 .yui-skin-lecmTheme div.dashlet-metadata div.set div.lecm-daterange-control div.datarange-unlimited div.form-field span.viewmode-value {
 	width: 78px;
 }
+
+.yui-skin-lecmTheme div.lecm-daterange-control .datarange-start-date div.form-field a img.datepicker-icon,
+.yui-skin-lecmTheme div.lecm-daterange-control .datarange-end-date div.form-field a img.datepicker-icon {
+     margin: 0.4em 0.4em;
+}
