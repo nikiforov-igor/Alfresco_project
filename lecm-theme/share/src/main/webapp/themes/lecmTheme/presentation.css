@@ -2146,6 +2146,9 @@ span.person a h3 {
 .yui-skin-lecmTheme.alfresco-share .yui-panel .form-field input[name$=-range] ~ div div.yui-u > div > a > img {
     margin: 0.4em 0.4em;
 }
+.yui-skin-lecmTheme.alfresco-share .yui-panel .form-field input[name$=-range] ~ div div.yui-u span {
+    display: block;
+}
 .yui-skin-lecmTheme.alfresco-share .yui-panel .search .form-field input[name$=-range] ~ div {
     width: 460px !important;
 }
