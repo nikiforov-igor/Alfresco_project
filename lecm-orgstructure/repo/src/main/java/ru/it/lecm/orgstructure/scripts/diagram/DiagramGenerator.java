@@ -10,10 +10,8 @@ import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import javax.imageio.ImageIO;
@@ -24,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -78,11 +75,9 @@ public class DiagramGenerator{
             String orgName = nodeService.getProperty(organization, ContentModel.PROP_NAME).toString();
             Object orgObject = graph.insertVertex(parent, null, new OrgstructureUnit(orgName), 10, 10, 10, 10);
 
-            HashSet<QName> qnames = new HashSet<QName>();
-            qnames.add(OrgstructureBean.TYPE_ORGANIZATION_UNIT);
-            List<ChildAssociationRef> children = nodeService.getChildAssocs(service.getStructureDirectory(), qnames);
-            for(ChildAssociationRef child : children) {
-                createStructure(graph, orgObject, child.getChildRef());
+            List<NodeRef> children = service.getSubUnits(service.getStructureDirectory(), true);
+            for(NodeRef child : children) {
+                createStructure(graph, orgObject, child);
             }
 
         } finally {
@@ -145,35 +140,12 @@ public class DiagramGenerator{
         Object unitObject = graph.insertVertex(graph.getDefaultParent(), null, unit, 0, 0, 0, 0);
         graph.insertEdge(graph.getDefaultParent(), null, "", parent, unitObject);
 
-        HashSet<QName> qnames = new HashSet<QName>();
-        qnames.add(OrgstructureBean.TYPE_ORGANIZATION_UNIT);
-        List<ChildAssociationRef> children = nodeService.getChildAssocs(structure, qnames);
+        List<NodeRef> children = service.getSubUnits(structure, true);
         if (children.size() > 0) {
-            for (ChildAssociationRef child : children) {
-                createStructure(graph, unitObject, child.getChildRef());
+            for (NodeRef child : children) {
+                createStructure(graph, unitObject, child);
             }
         }
-/*
-        OrgstructureUnit unit1 = new OrgstructureUnit("Департамент истребления насекомых");
-        unit1.setBoss("Жабин И.А., директор");
-        unit1.addEmployee("Иванов И.И., осенизатор");
-        unit1.addEmployee("Петров П.П., химик");
-        unit1.addEmployee("Васечкин И.И., стрелок");
-        unit1.addEmployee("Никифоров В.В, ассистент");
-
-        Object v2 = graph.insertVertex(parent, null, unit1, 240, 150,
-                80, 30);
-        Object v3 = graph.insertVertex(parent, null, new OrgstructureUnit("Департамент истребления насекомых"), 240, 150,
-                80, 30);
-        Object v4 = graph.insertVertex(parent, null, new OrgstructureUnit("Департамент истребления насекомых"), 240, 150,
-                80, 30);
-        Object v5 = graph.insertVertex(parent, null, new OrgstructureUnit("О4"), 240, 150,
-                80, 30);
-        graph.insertEdge(parent, null, "", v1, v3);
-        graph.insertEdge(parent, null, "", v1, v4);
-        graph.insertEdge(parent, null, "", v4, v5);
-*/
-
     }
 
     public class OrgstructureSwingCanvas extends mxInteractiveCanvas {
@@ -187,6 +159,7 @@ public class DiagramGenerator{
             vertexRenderer.setBorder(BorderFactory
                     .createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
             vertexRenderer.setHorizontalAlignment(JLabel.LEFT);
+            vertexRenderer.setVerticalAlignment(JLabel.TOP);
             vertexRenderer.setBackground(graphComponent.getBackground()
                     .brighter());
             vertexRenderer.setOpaque(true);

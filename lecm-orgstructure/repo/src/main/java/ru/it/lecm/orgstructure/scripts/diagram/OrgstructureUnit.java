@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 /**
  * User: pmelnikov
@@ -17,6 +18,8 @@ public class OrgstructureUnit {
     private String title = null;
     private String boss = null;
     private ArrayList<String> employees = new ArrayList<String>();
+
+    private static final int MAX_WIDTH = 320;
 
     public OrgstructureUnit(String title) {
         this.title = title;
@@ -63,7 +66,7 @@ public class OrgstructureUnit {
     public double getWidth() {
         BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
         Font font = FONT;
-        Font fontInc = new Font(font.getFamily(), font.getStyle(), font.getSize() + 7);
+        Font fontInc = new Font(font.getFamily(), font.getStyle(), font.getSize() + 6);
         Font fontBoss = new Font(font.getFamily(), Font.BOLD, font.getSize());
         FontMetrics fm = bi.getGraphics().getFontMetrics(fontInc);
         int width = fm.stringWidth(title);
@@ -80,28 +83,52 @@ public class OrgstructureUnit {
             }
         }
 
-        return width + 12;
+        return width < MAX_WIDTH ? width + 12 : MAX_WIDTH + 12;
     }
 
     public double getHeight() {
         Font font = FONT;
-        Font fontInc = new Font(font.getFamily(), font.getStyle(), font.getSize() + 7);
+        Font fontInc = new Font(font.getFamily(), font.getStyle(), font.getSize() + 6);
+        Font fontBoss = new Font(font.getFamily(), Font.BOLD, font.getSize());
         BufferedImage bi = new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB);
 
         FontMetrics fm = bi.getGraphics().getFontMetrics(fontInc);
-        int heightInc = fm.getHeight();
+        int result = calculateHeight(title, MAX_WIDTH, fm);
 
-        fm = bi.getGraphics().getFontMetrics(font);
-        int height = fm.getHeight();
-
-        int result = heightInc;
-
-        if (boss != null) {
-            result += height;
+        if (boss != null || employees.size() > 0) {
+            fm = bi.getGraphics().getFontMetrics(font);
+            result += calculateHeight("a", MAX_WIDTH, fm) / 2;
         }
 
-        result += employees.size() * height;
+        if (boss != null) {
+            fm = bi.getGraphics().getFontMetrics(fontBoss);
+            result += calculateHeight(boss, MAX_WIDTH, fm);
+        }
+
+        if (employees.size() > 0) {
+            fm = bi.getGraphics().getFontMetrics(font);
+            for (String employee : employees) {
+                result += calculateHeight(employee, MAX_WIDTH, fm);
+            }
+        }
 
         return result + 12;
+    }
+
+    private int calculateHeight(String word, int maxWidth, FontMetrics metrics) {
+        int lineHeight = metrics.getHeight();
+        int result = lineHeight;
+        StringTokenizer st = new StringTokenizer(word, " -", true);
+        int width = 0;
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken();
+            width += metrics.stringWidth(token);
+            if (width > maxWidth) {
+                result += lineHeight;
+                width = metrics.stringWidth(token);
+            }
+        }
+
+        return result;
     }
 }
