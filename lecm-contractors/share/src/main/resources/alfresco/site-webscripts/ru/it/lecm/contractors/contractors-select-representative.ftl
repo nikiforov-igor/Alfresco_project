@@ -27,8 +27,13 @@
 <#else>
 <div id="${fieldId}" class="form-field">
     <label for="${selectId}">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-    <select id="${selectId}" name="${field.name}" style="width: 28em;">
-    </select>
+
+    <div>
+        <select id="${selectId}" name="${field.name}"></select>
+        <span class="create-new-button">
+            <input type="button" id="${controlId}-add-new-representative-button"/>
+        </span>
+    </div>
 
     <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
     <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
@@ -39,6 +44,8 @@
 <script>//<![CDATA[
     (function () {
         "use strict";
+
+        var globCurrentContractor = null; // Глобальная переменная модуля для сохранения выбранного контрагента.
 
         LogicECM.module.SelectRepresentativeForContractor = function LogicECM_module_SelectRepresentativeForContractor( fieldHtmlId ) {
 
@@ -83,10 +90,110 @@
 
             YAHOO.Bubbling.on("${field.control.params.updateOnAction}", this.onUpdateRepresentativesList, this);
 
+            this._showAddRepresentativeForm = function() {
+
+                if( globCurrentContractor === null ) {
+                    window.alert( "Необходимо выбрать контрагента" );
+                    return false;
+                }
+
+                var url = "lecm/components/form" +
+                        "?itemKind={itemKind}" +
+                        "&itemId={itemId}" +
+                        "&destination={destination}" +
+                        "&mode={mode}" +
+                        "&submitType={submitType}" +
+                        "&showCancelButton={showCancelButton}",
+
+                    templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
+                        itemKind: "type",
+                        itemId: "lecm-contractor:link-representative-and-contractor",
+                        destination: globCurrentContractor,
+                        mode: "create",
+                        submitType: "json",
+                        showCancelButton: "true"
+                    });
+
+                // Спасаем "тонущие" всплывающие сообщения.
+                Alfresco.util.PopupManager.zIndex = 9000;
+
+                // Создание формы добавления представителя.
+                var addRepresentativeForm = new Alfresco.module.SimpleDialog("${fieldHtmlId}-add-representative-form");
+
+                var isPrimaryCheckboxChecked;
+
+                addRepresentativeForm.setOptions({
+                    width: "50em",
+                    templateUrl: templateUrl,
+                    destroyOnHide: true,
+                    doBeforeFormSubmit: {
+                        fn: function() {
+                            isPrimaryCheckboxChecked = YAHOO.util.Dom.get( "${fieldHtmlId}-add-representative-form_prop_lecm-contractor_link-to-representative-association-is-primary-entry" ).checked;
+                        },
+                        scope: this
+                    },
+                    onSuccess: {
+                        fn: function( response ) {
+
+                            var fakeObject = {};
+                            fakeObject[ globCurrentContractor ] = null;
+                            YAHOO.util.Dom.get( "${controlId}" ).value = "";
+
+                            if( isPrimaryCheckboxChecked ) {
+                                Alfresco.util.Ajax.request({
+                                    method: "POST",
+                                    url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/representatives/reassign",
+                                    dataObj: { "representativeToAssignAsPrimary": response.json.persistedObject },
+                                    requestContentType: "application/json",
+                                    responseContentType: "application/json",
+                                    successCallback: {
+                                        fn: function() {
+                                            this.onUpdateRepresentativesList( null, [ null, { selectedItems: fakeObject } ], /* force */ true );
+                                        },
+                                        scope: this
+                                    },
+                                    failureCallback: {
+                                        fn: function() {
+                                            Alfresco.util.PopupManager.displayMessage({
+                                                text: Alfresco.component.Base.prototype.msg("message.reassign-representative.failure")
+                                            });
+                                        }
+                                    }
+                                });
+                            } else {
+                                this.onUpdateRepresentativesList( null, [ null, { selectedItems: fakeObject } ], /* force */ true );
+                            }
+
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: Alfresco.component.Base.prototype.msg("message.add-representative.success")
+                            });
+                        },
+                        scope: this
+                    },
+                    onFailure: {
+                        fn: function() {
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: Alfresco.component.Base.prototype.msg("message.add-representative.failure")
+                            });
+                        },
+                        scope: this
+                    }
+                });
+
+                addRepresentativeForm.show();
+
+                return true;
+            };
+
             this.previousSelected = null;
             this._firstSelected = null;
 
             this.onFormFieldReady = function( that ) {
+
+                var addRepresentativeButton = new YAHOO.widget.Button( "${controlId}-add-new-representative-button", { onclick: { fn: that._showAddRepresentativeForm, scope: that } } );
+                    window.arb = addRepresentativeButton;
+
+                addRepresentativeButton.setStyle("margin-left", "9px");
 
                 // Собираем Input-элементы.
                 var currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),
@@ -127,7 +234,7 @@
             previousSelected: null,
             _firstSelected: null,
 
-            onUpdateRepresentativesList: function( type, args ) {
+            onUpdateRepresentativesList: function( type, args, force ) {
 
                 var selectElement = YAHOO.util.Dom.get( "${selectId}" ),
                     currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),
@@ -152,19 +259,22 @@
                     removedInputEl.value = removedInputEl.value || currentInputEl.value;
                     addedInputEl.value = ""; // Кроме того, если мы что-то добавляли, то теперь отменяем добавление.
                     currentInputEl.value = "";
+                    globCurrentContractor = null;
 
                     return;
                 }
 
                 selectElement.disabled = false;
-                selectedContractor = selectedContractors[0];
+                selectedContractor = globCurrentContractor = selectedContractors[0];
 
                 // Событие на которое мы подписываем этот обработчик вызывается 3+ раз за один "выбор" контрагента, а
                 // заполнять список представителей необходимо только один раз.
                 //
                 // FUTURE: Если YAHOO.util.Dom.get не умеет кэшировать, кэшировать самому (Input-элементы).
                 if( this.previousSelected === selectedContractor ) {
-                    return;
+                    if( !force ) {
+                        return;
+                    }
                 } else {
                     this.previousSelected = selectedContractor;
                 }
