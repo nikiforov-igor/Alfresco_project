@@ -333,6 +333,9 @@
 
             </properties>
 
+            <mandatory-aspects>
+                <aspect>cm:versionable</aspect>
+            </mandatory-aspects>
         </type>
 
         <type name="lecm-legalform:legalform-type">
@@ -366,6 +369,9 @@
 
             </properties>
 
+            <mandatory-aspects>
+                <aspect>cm:versionable</aspect>
+            </mandatory-aspects>
         </type>
 
     </types>
