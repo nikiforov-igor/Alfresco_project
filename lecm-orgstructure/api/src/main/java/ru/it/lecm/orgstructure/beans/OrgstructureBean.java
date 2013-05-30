@@ -63,6 +63,7 @@ public interface OrgstructureBean {
 	QName PROP_EMPLOYEE_FIRST_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-first-name");
 	QName PROP_EMPLOYEE_MIDDLE_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-middle-name");
 	QName PROP_EMPLOYEE_LAST_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-last-name");
+	QName PROP_EMPLOYEE_SHORT_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-short-name");
 	QName PROP_ORG_ELEMENT_SHORT_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
     QName PROP_ORG_ELEMENT_FULL_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "element-full-name");
 

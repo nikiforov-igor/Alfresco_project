@@ -381,7 +381,7 @@
                     <show id="lecm-orgstr:unit-code"/>
                 </field-visibility>
 	            <appearance>
-		            <field id="lecm-orgstr:boss" substituteString="{cm:contains(lecm-orgstr:staff-list-is-boss=true)/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/cm:name}"/>
+		            <field id="lecm-orgstr:boss" substituteString="{cm:contains(lecm-orgstr:staff-list-is-boss=true)/lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-employee-assoc/lecm-orgstr:employee-short-name}"/>
 	            </appearance>
             </form>
             <form id="search">
@@ -572,7 +572,7 @@
                     <show id="lecm-orgstr:element-member-position-assoc"/>
                 </field-visibility>
 	            <appearance>
-		            <field id="lecm-orgstr:element-member-employee-assoc" substituteString="{lecm-orgstr:employee-link-employee-assoc/cm:name}"/>
+		            <field id="lecm-orgstr:element-member-employee-assoc" substituteString="{lecm-orgstr:employee-link-employee-assoc/lecm-orgstr:employee-short-name}"/>
 	            </appearance>
             </form>
             <form id="employee-groups">
@@ -650,7 +650,7 @@
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position"/>
-		            <field id="lecm-orgstr:element-member-employee-assoc" substituteString="{lecm-orgstr:employee-link-employee-assoc/cm:name}"/>
+		            <field id="lecm-orgstr:element-member-employee-assoc" substituteString="{lecm-orgstr:employee-link-employee-assoc/lecm-orgstr:employee-short-name}"/>
 	            </appearance>
             </form>
             <form id="employee-positions">

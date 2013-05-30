@@ -7,6 +7,7 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -67,6 +68,10 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
             break;
             case 3: {
                 newNodeName = generateEmployeeName(parent, object);
+                nodeService.setProperty(object, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME, newNodeName);
+
+                newNodeName = StringUtils.stripEnd(newNodeName, ".");
+                newNodeName = getUniqueNodeName(parent, newNodeName);
             }
         }
         if (newNodeName != null && !newNodeName.isEmpty()) {
@@ -79,13 +84,13 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
         String firstName = (String) nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME);
         String middleName = (String) nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME);
         String lastName = (String) nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
-		String newName;
+		String newName = "";
 		final boolean hasFirstName = firstName != null && firstName.length() > 0;
 
 		if (lastName != null && lastName.length() > 0) {
 			newName = lastName;
 			if (hasFirstName) {
-				newName += " " + firstName.charAt(0);
+				newName += " " + firstName.charAt(0) + ".";
 			}
 
 		} else if (hasFirstName)  {
@@ -95,15 +100,13 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
 		}
 
 		if (middleName != null && middleName.length() > 0) {
-			if (hasFirstName) {
-				newName += ".";
-			} else {
+			if (!hasFirstName) {
 				newName += " ";
 			}
-			newName += middleName.charAt(0);
+			newName += middleName.charAt(0) + ".";
 		}
 
-		return getUniqueNodeName(parent, newName);
+		return newName;
 	}
 
     private String generateOrgElementName(NodeRef parent, NodeRef element) {

@@ -11,7 +11,7 @@
                             if (response.json.boss) {
                                 var bossField = Dom.get("${htmlId}");
                                 if (bossField != null) {
-                                    bossField.innerHTML = response.json.boss;
+                                    bossField.innerHTML = response.json.bossShortName;
                                 }
                             }
                         }
