@@ -35,6 +35,9 @@
                     <show id="lecm-al:assignees-item-due-date"/>                                                        <!-- Срок согласования -->
                     <show id="lecm-al:assignees-item-employee-assoc"/>                                                  <!-- Ссылка на "Сотрудника" -->
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-al:assignees-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
+                </appearance>
             </form>
             <form id="assignees-list-name">
                 <field-visibility>
