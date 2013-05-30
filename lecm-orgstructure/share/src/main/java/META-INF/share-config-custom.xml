@@ -37,7 +37,9 @@
                     <field id="lecm-orgstr:employee-sex" set="common"/>
                     <field id="lecm-orgstr:employee-email" set="common"/>
                     <field id="lecm-orgstr:employee-photo-assoc" set="common">
-                        <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
+							<control-param name="uploadDirectoryPath">/app:company_home/app:user_homes</control-param>
+						</control>
                     </field>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
                     <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-number-uniqueness-help-id">
