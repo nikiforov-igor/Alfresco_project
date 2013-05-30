@@ -203,7 +203,10 @@
 					<show id="lecm-subscr:event-category-assoc"/>
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
-			</form>
+                <appearance>
+                    <field id="lecm-subscr:destination-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
+                </appearance>
+            </form>
 		</forms>
 	</config>
 
@@ -248,6 +251,9 @@
 					<show id="lecm-subscr:subscription-object-assoc"/>
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
+                <appearance>
+                    <field id="lecm-subscr:destination-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
+                </appearance>
 			</form>
 			<form id="search">
 				<field-visibility>
