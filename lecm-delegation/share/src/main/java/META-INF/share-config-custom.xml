@@ -7,7 +7,10 @@
 					<show id="lecm-d8n:delegation-opts-owner-assoc"/>
 					<show id="lecm-dic:active"/>
 				</field-visibility>
-			</form>
+                <appearance>
+                    <field id="lecm-d8n:delegation-opts-owner-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
+                </appearance>
+            </form>
 			<form id="search">
 				<appearance>
 					<field id="lecm-d8n:delegation-opts-owner-assoc">
@@ -75,6 +78,7 @@
 				</field-visibility>
                 <appearance>
                     <field id="lecm-d8n:procuracy-business-role-assoc-description" substituteString="{lecm-d8n:procuracy-business-role-assoc/lecm-orgstr:business-role-description}"></field>
+                    <field id="lecm-d8n:procuracy-trustee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
                 </appearance>
 			</form>
 		</forms>
