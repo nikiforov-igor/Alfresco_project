@@ -26,6 +26,8 @@
 <div id="doc-bd">
     <@region id="document-header" scope="template"/>
     <#if hasPermission>
+	    <@region id="actions-common" scope="template"/>
+	    <@region id="actions" scope="template"/>
         <div class="yui-gc">
             <div id="main-region" class="yui-u first">
                 <div class="yui-gd grid columnSize2">
@@ -35,7 +37,7 @@
                     </div>
                     <div class="yui-u column2">
                         <@region id="attachments" scope="template"/>
-                    <@region id="tasks" scope="template"/>
+                        <@region id="tasks" scope="template"/>
                     </div>
                 </div>
                 <@region id="rating" scope="template"/>
@@ -43,6 +45,7 @@
             </div>
             <div id="custom-region" class="yui-u first" style="display:none"></div>
             <div class="yui-u bordered-panel doc-right-part">
+	            <@region id="document-final-actions" scope="template"/>
                 <@region id="document-actions" scope="template"/>
                 <@region id="document-metadata" scope="template"/>
                 <@region id="document-attachments" scope="template"/>

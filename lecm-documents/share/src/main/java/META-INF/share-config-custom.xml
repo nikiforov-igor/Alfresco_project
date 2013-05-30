@@ -452,7 +452,7 @@
                 <action index="200" id="document-change-type" label="actions.folder.change-type" />
                 <action index="210" id="view-in-explorer" />
                 <action index="220" id="document-view-in-source-repository" label="actions.folder.view-source-repository" />
-	            <action index="230" id="lecm-document-assign-workflow" />
+	            <action index="230" id="lecm-document-assign-workflow"  icon="document-assign-workflow" label="actions.document.assign-workflow"/>
             </actionGroup>
 
             <actionGroup id="document-link-browse">

@@ -132,15 +132,6 @@
           </sub-components>
       </component>
 
-      <!-- Действия-->
-      <!--<component>-->
-         <!--<region-id>document-actions</region-id>-->
-         <!--<url>/components/document-details/document-actions</url>-->
-         <!--<properties>-->
-            <!--<nodeRef>{nodeRef}</nodeRef>-->
-         <!--</properties>-->
-      <!--</component>-->
-
        <!-- Действия -->
        <component>
            <region-id>document-actions</region-id>
@@ -157,6 +148,22 @@
                </sub-component>
            </sub-components>
        </component>
+
+	   <!-- Действия на финальном статусе-->
+	   <component>
+		   <region-id>document-final-actions</region-id>
+		   <url>/lecm/components/dashlets/document-final-status-actions</url>
+		   <properties>
+			   <nodeRef>{nodeRef}</nodeRef>
+		   </properties>
+	   </component>
+	   <component>
+		   <region-id>actions-common</region-id>
+		   <url>/components/documentlibrary/actions-common</url>
+		   <properties>
+			   <nodeRef>{nodeRef}</nodeRef>
+		   </properties>
+	   </component>
 
        <!-- Основные сведения -->
        <component>
