@@ -135,7 +135,9 @@
                     onSuccess: {
                         fn: function( response ) {
 
-                            var fakeObject = {};
+                            var addedLinkRef = response.json.persistedObject, // persistedObject это [link-representative-and-contractor], НЕ [representative-type]
+                                fakeObject = {};
+
                             fakeObject[ globCurrentContractor ] = null;
                             YAHOO.util.Dom.get( "${controlId}" ).value = "";
 
@@ -143,12 +145,12 @@
                                 Alfresco.util.Ajax.request({
                                     method: "POST",
                                     url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/representatives/reassign",
-                                    dataObj: { "representativeToAssignAsPrimary": response.json.persistedObject },
+                                    dataObj: { "representativeToAssignAsPrimary": addedLinkRef },
                                     requestContentType: "application/json",
                                     responseContentType: "application/json",
                                     successCallback: {
                                         fn: function() {
-                                            this.onUpdateRepresentativesList( null, [ null, { selectedItems: fakeObject } ], /* force */ true );
+                                            this.onUpdateRepresentativesList( null, [ null, { selectedItems: fakeObject } ], /* force */ true, addedLinkRef );
                                         },
                                         scope: this
                                     },
@@ -161,7 +163,7 @@
                                     }
                                 });
                             } else {
-                                this.onUpdateRepresentativesList( null, [ null, { selectedItems: fakeObject } ], /* force */ true );
+                                this.onUpdateRepresentativesList( null, [ null, { selectedItems: fakeObject } ], /* force */ true, addedLinkRef );
                             }
 
                             Alfresco.util.PopupManager.displayMessage({
@@ -234,7 +236,7 @@
             previousSelected: null,
             _firstSelected: null,
 
-            onUpdateRepresentativesList: function( type, args, force ) {
+            onUpdateRepresentativesList: function( type, args, force, representativeToSelect ) {
 
                 var selectElement = YAHOO.util.Dom.get( "${selectId}" ),
                     currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),
@@ -299,7 +301,11 @@
 
                                 // Выбираем основного представителя.
                                 mustBeSelected = false;
-                                if( currentInputEl.value === "" ) { // Если c сервера ничего не пришло или мы выбрали "Без представителя".
+
+                                if( representativeToSelect ) {
+                                    // representativeToSelect это [link-representative-and-contractor], НЕ [representative-type]
+                                    mustBeSelected = response.json.representatives[ i ].linkRef === representativeToSelect;
+                                } else if( currentInputEl.value === "" ) { // Если c сервера ничего не пришло или мы выбрали "Без представителя".
                                     // То выбираем основного представителя (согласно требованиям).
                                     mustBeSelected = response.json.representatives[ i ].isPrimary;
                                 } else { // Если c сервера что-то пришло, то мы в Edit-режиме, тогда...
