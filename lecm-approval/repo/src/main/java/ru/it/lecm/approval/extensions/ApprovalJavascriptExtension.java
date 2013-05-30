@@ -1,5 +1,11 @@
 package ru.it.lecm.approval.extensions;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
@@ -8,7 +14,6 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
@@ -20,12 +25,9 @@ import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
-import java.util.*;
-
 public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension {
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalJavascriptExtension.class);
-	private AuthenticationService authenticationService;
 	private PersonService personService;
 	private NodeService nodeService;
 	private ServiceRegistry serviceRegistry;
@@ -37,10 +39,6 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
     public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
-
-	public void setAuthenticationService(AuthenticationService authenticationService) {
-		this.authenticationService = authenticationService;
-	}
 
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
@@ -60,20 +58,6 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 
 	public void setApprovalListService(ApprovalListService approvalListService) {
 		this.approvalListService = approvalListService;
-	}
-
-	public ActivitiScriptNode getCurrentAuthenticatedPerson() {
-		String currentUserName = authenticationService.getCurrentUserName();
-		NodeRef nodeRef = personService.getPerson(currentUserName, false);
-		ActivitiScriptNode scriptNode = null;
-		if (nodeRef != null && nodeService.exists(nodeRef)) {
-			scriptNode = new ActivitiScriptNode(nodeRef, serviceRegistry);
-			String username = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_USERNAME);
-			String firstname = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_FIRSTNAME);
-			String lastname = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_LASTNAME);
-			logger.info("Current authenticated user is [{}] {} {}", new Object[]{username, firstname, lastname});
-		}
-		return scriptNode;
 	}
 
 	public ActivitiScriptNodeList getPersonListByEmployeeList(ActivitiScriptNodeList employeeList) {

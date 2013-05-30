@@ -91,7 +91,6 @@
     <bean id="lecm.approval.service.custom" class="ru.it.lecm.approval.ApprovalListServiceCustom" parent="lecm.approval.service.abstract"/>
 
 	<bean id="lecm.approval.javascriptExtension.abstract" abstract="true" parent="baseJavaScriptExtension">
-		<property name="authenticationService" ref="authenticationService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="personService" ref="personService"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
