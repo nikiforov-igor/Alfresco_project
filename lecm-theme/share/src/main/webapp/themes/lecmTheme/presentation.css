@@ -78,15 +78,18 @@ a:hover {
     float: left;
     margin: 5px 2px;
 }
-#bd #lecm-menu #menu-buttons > span:not(:last-of-type) {
+#bd #lecm-menu #menu-buttons > span:not(:last-of-type),
+#bd #lecm-menu #menu-buttons div.statemachine-menu:not(:last-of-type) {
     margin-bottom: 10px;
 }
-#bd #lecm-menu #menu-buttons span.menu-button {
+#bd #lecm-menu #menu-buttons span.menu-button,
+#bd #lecm-menu #menu-buttons div.statemachine-menu span.yui-button {
     margin-right: 0;
     margin-left: 0;
     text-align: center;
 }
-#bd #lecm-menu #menu-buttons span.menu-button span.first-child {
+#bd #lecm-menu #menu-buttons span.menu-button span.first-child,
+#bd #lecm-menu #menu-buttons div.statemachine-menu span.yui-button span.first-child {
     max-width: 66px;
     height: 48px;
     font-size: 11px;

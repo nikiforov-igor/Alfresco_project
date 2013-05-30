@@ -41,7 +41,7 @@
 	    </span>
 </div>
 
-<div>
+<div class="statemachine-menu">
     <form method="post" id="${menuId}-import-xml-form" enctype="multipart/form-data"
           action="${url.context}/proxy/alfresco/lecm/statemachine/editor/import">
         <div id="${menuId}-import-xml" class="import-xml" title="${msg('button.import-xml')}">

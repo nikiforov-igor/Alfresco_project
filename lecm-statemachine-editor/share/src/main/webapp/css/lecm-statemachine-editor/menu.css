@@ -20,12 +20,14 @@
 }
 
 .import-xml button {
-    background: url("../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png") no-repeat 4px 4px;
+    background: url("../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png") no-repeat 17px 8px;
     cursor: pointer;
 }
 .import-xml {
     position: relative;
     overflow: hidden;
+    padding: 0 1px;
+    margin: 0 -1px;
 }
 .import-xml input {
     position: absolute;
@@ -33,6 +35,6 @@
     top: 0;
     opacity: 0;
     cursor: pointer;
-    font-size: 30px;
+    font-size: 35px !important;
 }
 
