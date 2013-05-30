@@ -234,8 +234,8 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 								var name = form['prop_cm_name'];
 								if (name != null) {
 									var subscriptionName = this.options.objectDescription.split(":").join("-");
-									if (this.currentEmployee != null && this.currentEmployee.name != null) {
-										subscriptionName += " " + this.currentEmployee.name;
+									if (this.currentEmployee != null && this.currentEmployee.shortName != null) {
+										subscriptionName += " " + this.currentEmployee.shortName;
 									}
 									var date = new Date();
 									subscriptionName += " " + Alfresco.util.formatDate(date, "dd.mm.yyyy HH-MM-ss");
