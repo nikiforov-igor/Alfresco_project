@@ -39,6 +39,7 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
         String username = value.toString();
         String firstName;
         String lastName;
+        String ref = "";
         Map<String, Serializable> map = new LinkedHashMap<String, Serializable>(4);
         map.put("userName", username);
 
@@ -48,11 +49,13 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
                 Map<QName, Serializable> properties = this.nodeService.getProperties(employeeRef);
                 firstName = (String) properties.get(OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME);
                 lastName = (String) properties.get(OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
+                ref = employeeRef.toString();
             } else {
                 NodeRef personRef = this.personService.getPerson(username);
                 Map<QName, Serializable> properties = this.nodeService.getProperties(personRef);
                 firstName = (String) properties.get(ContentModel.PROP_FIRSTNAME);
                 lastName = (String) properties.get(ContentModel.PROP_LASTNAME);
+                ref = personRef.toString();
             }
         } else if (username.equals("System") || username.startsWith("System@")) {
             firstName = "System";
@@ -64,6 +67,7 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
 
         map.put("firstName", firstName);
         map.put("lastName", lastName);
+        map.put("nodeRef", ref);
         map.put("displayName", (firstName != null ? firstName + " " : "" + (lastName != null ? lastName : "")).replaceAll("^\\s+|\\s+$", ""));
         return (Serializable) map;
     }

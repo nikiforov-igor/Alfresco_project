@@ -2,6 +2,28 @@ YAHOO.util.Event.onContentReady("alf-hd", function () {
     var $html = Alfresco.util.encodeHTML,
         $links = Alfresco.util.activateLinks,
         $isValueSet = Alfresco.util.isValueSet;
+        $lecmUserProfile = function (oUser, fullName, linkAttr, disableLink) {
+            var userName = oUser ? oUser.userName : "";
+            if (!YAHOO.lang.isString(userName) || userName.length === 0) {
+                return "";
+            }
+
+            var html = Alfresco.util.encodeHTML(YAHOO.lang.isString(fullName) && fullName.length > 0 ? fullName : userName),
+                template = "view-metadata?nodeRef={nodeRef}";
+
+            // If the "userprofilepage" template doesn't exist or is empty, or we're in portlet mode we'll just return the user's fullName || userName
+            if (disableLink || Alfresco.constants.PORTLET || oUser.nodeRef.length == 0) {
+                return '<span>' + html + '</span>';
+            }
+
+            // Generate the link
+            var url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
+                {
+                    nodeRef: oUser.nodeRef
+                });
+
+            return '<a href="' + url + '" ' + (linkAttr || "") + '>' + html + '</a>';
+        };
 
     if (Alfresco.DocumentList) {
 
@@ -135,6 +157,13 @@ YAHOO.util.Event.onContentReady("alf-hd", function () {
                 }
             };
         };*/
+
+        Alfresco.DocumentList.generateUserLink = function DL_generateUserLink(scope, oUser) {
+            if (oUser.isDeleted === true) {
+                return '<span>' + scope.msg("details.user.deleted", $html(oUser.userName)) + '</span>';
+            }
+            return $lecmUserProfile(oUser, YAHOO.lang.trim(oUser.firstName + " " + oUser.lastName));
+        };
 
         // Reference to Data Grid component
         var list = Alfresco.util.ComponentManager.findFirst("Alfresco.DocumentList");
