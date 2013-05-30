@@ -25,11 +25,24 @@
         <property name="allowSubtypes" value="true"/>
     </bean>
 
-	<bean id="evaluator.ru.it.lecm.documents.isBaseAndNotFinalStatemachineStatus" parent="evaluator.doclib.action.chainedMatchAll">
+	<bean id="evaluator.ru.it.lecm.documents.isNotBase" parent="evaluator.ru.it.lecm.documents.isBase">
+		<property name="negateOutput" value="true" />
+	</bean>
+
+	<bean id="evaluator.ru.it.lecm.documents.isNotBaseOrFinalStatemachineStatus" parent="evaluator.doclib.action.chainedMatchOne">
 		<property name="evaluators">
 			<list>
-				<ref bean="evaluator.ru.it.lecm.documents.isBase" />
-				<ref bean="evaluator.ru.it.lecm.statemachine.isNotFinalStateMachineStatus" />
+				<ref bean="evaluator.ru.it.lecm.documents.isNotBase" />
+				<ref bean="evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatus" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="evaluator.ru.it.lecm.documents.isNotBaseOrFinalStatemachineStatusAndAdmin" parent="evaluator.doclib.action.chainedMatchOne">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.ru.it.lecm.documents.isNotBase" />
+				<ref bean="evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatusAndAdmin" />
 			</list>
 		</property>
 	</bean>

@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>currentUserIsAdmin</shortname>
+	<description>Current user is admin</description>
+	<url>/lecm/security/api/isAdmin?login={login}</url>
+	<format default="json">extension</format>
+	<authentication runas="admin">none</authentication>
+</webscript>

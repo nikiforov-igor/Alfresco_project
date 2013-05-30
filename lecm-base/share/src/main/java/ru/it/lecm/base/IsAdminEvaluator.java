@@ -1,4 +1,4 @@
-package ru.it.lecm.statemachine.evaluators;
+package ru.it.lecm.base;
 
 import org.alfresco.web.evaluator.BaseEvaluator;
 import org.apache.commons.logging.Log;
@@ -11,11 +11,11 @@ import org.springframework.extensions.webscripts.connector.ResponseStatus;
 
 /**
  * User: AIvkin
- * Date: 29.05.13
- * Time: 14:41
+ * Date: 30.05.13
+ * Time: 10:03
  */
-public class FinalStateMachineStatusEvaluator extends BaseEvaluator {
-	private final static Log logger = LogFactory.getLog(FinalStateMachineStatusEvaluator.class);
+public class IsAdminEvaluator extends BaseEvaluator {
+	private final static Log logger = LogFactory.getLog(IsAdminEvaluator.class);
 	private ScriptRemote scriptRemote;
 
 	public void setScriptRemote(ScriptRemote scriptRemote) {
@@ -24,20 +24,19 @@ public class FinalStateMachineStatusEvaluator extends BaseEvaluator {
 
 	@Override
 	public boolean evaluate(JSONObject jsonObject) {
-		String nodeRef = (String) jsonObject.get("nodeRef");
-
-		String url = "/lecm/statemachine/isFinal?nodeRef=" + nodeRef;
+		String login = getUserId();
+		String url = "/lecm/security/api/isAdmin?login=" + login;
 		Response response = scriptRemote.connect("alfresco").get(url);
 		try {
 			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
 				org.json.JSONObject resultJson = new org.json.JSONObject(response.getResponse());
-				return resultJson.getBoolean("isFinal");
+				return resultJson.getBoolean("isAdmin");
 			} else {
-				logger.warn("Cannot get isFinal document from server");
+				logger.warn("Cannot get isAdmin from server");
 			}
 		} catch (JSONException e) {
-			logger.warn("Cannot get isFinal document from server", e);
+			logger.warn("Cannot get isAdmin from server", e);
 		}
-		return true;
+		return false;
 	}
 }

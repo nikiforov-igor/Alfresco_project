@@ -862,4 +862,7 @@ public class LecmPermissionServiceImpl
 		return sb;
 	}
 
+	public boolean isAdmin(String login) {
+		return authorityService.isAdminAuthority(login);
+	}
 }

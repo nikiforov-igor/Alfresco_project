@@ -117,6 +117,13 @@ public interface LecmPermissionService {
 	boolean hasPermission(String permission, NodeRef node);
 
 	/**
+	 * Проверяет, что пользователь является админом
+	 * @param login логин пользователя
+	 * @return
+	 */
+	boolean isAdmin(String login);
+
+	/**
 	 * Проверяет элемент на доступность
 	 * @param nodeRef Ссылка на элемент
 	 * @return true, если есть права на чтение элемента

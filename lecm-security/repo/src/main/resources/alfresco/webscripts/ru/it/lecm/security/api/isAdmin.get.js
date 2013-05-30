@@ -1,0 +1,1 @@
+model.isAdmin = lecmPermission.isAdmin(args['login']);

@@ -14,7 +14,12 @@
 		<property name="scriptRemote" ref="webscripts.script.remote" />
 	</bean>
 
-	<bean id="evaluator.ru.it.lecm.statemachine.isNotFinalStateMachineStatus" parent="evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatus">
-		<property name="negateOutput" value="true" />
+	<bean id="evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatusAndAdmin" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatus" />
+				<ref bean="evaluator.ru.it.lecm.base.isAdmin" />
+			</list>
+		</property>
 	</bean>
 </beans>
