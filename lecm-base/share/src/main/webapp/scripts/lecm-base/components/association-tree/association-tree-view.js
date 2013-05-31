@@ -109,6 +109,8 @@ LogicECM.module = LogicECM.module || {};
             nameSubstituteString: "{cm:name}",
 
 			selectedItemsNameSubstituteString: null,
+			// при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ
+			employeeAbsenceMarker: false,
 
             // fire bubling методы выполняемые по нажатию определенной кнопки в диалоговом окне
             fireAction:
@@ -750,6 +752,10 @@ LogicECM.module = LogicECM.module || {};
                         items = tempItems;
                     }
 
+					if (me.options.employeeAbsenceMarker) {
+						me.getEmployeesAbsenceInformation(items);
+					}
+
                     // we need to wrap the array inside a JSON object so the DataTable is happy
                     updatedResponse =
                     {
@@ -790,10 +796,11 @@ LogicECM.module = LogicECM.module || {};
                     record = me.widgets.dataTable.getRecord(rowId);
                     if (record)
                     {
+						var recordData = record.getData();
                         YAHOO.Bubbling.fire("selectedItemAdded",
                             {
                                 eventGroup: me,
-                                item: record.getData(),
+                                item: recordData,
                                 highlight: true
                             });
                         if (me.options.fireAction.addItem != null) {
@@ -801,10 +808,13 @@ LogicECM.module = LogicECM.module || {};
                             for (var i in fireName){
                                 YAHOO.Bubbling.fire(fireName[i],
                                     {
-                                        nodeRef: record.getData().nodeRef
+                                        nodeRef: recordData.nodeRef
                                     });
                             }
                         }
+						if (me.options.employeeAbsenceMarker && recordData.type === "lecm-orgstr:employee") {
+							me.showEmployeeAutoAnswerPromt(recordData);
+						}
                     }
                 }
                 return true;
@@ -1087,7 +1097,8 @@ LogicECM.module = LogicECM.module || {};
 
 	            if (this.options.itemType == "lecm-orgstr:employee") {
 		            Dom.get(fieldId).innerHTML
-			            += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, displayName) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+			            += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, displayName) +
+						(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(items[i].nodeRef) : ' ') + this.getRemoveButtonHTML(items[i]) + '</div>';
 	            } else {
 		            Dom.get(fieldId).innerHTML
 			            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
@@ -1157,7 +1168,8 @@ LogicECM.module = LogicECM.module || {};
 	            } else {
 		            if (this.options.itemType == "lecm-orgstr:employee") {
 			            el.innerHTML
-				            += '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+				            += '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + 
+							(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(this.selectedItems[i].nodeRef) : ' ') + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 		            } else {
 			            el.innerHTML
 				            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
@@ -1305,6 +1317,91 @@ LogicECM.module = LogicECM.module || {};
 						scope: this
 					}
 				});
+		},
+		getEmployeeAbsenceMarkerHTML: function AssociationTreeViewer_getEmployeeAbsenceMarkerHTML(nodeRef) {
+			var result = '';
+			if (this.employeesAvailabilityInformation) {
+				var employeeData = this.employeesAvailabilityInformation[nodeRef];
+				if (employeeData) {
+					if (employeeData.isEmployeeAbsent) {
+						var absenceEnd = Alfresco.util.fromISO8601(employeeData.currentAbsenceEnd);
+						result += ' <span class="employee-unavailable" title="Будет доступен с ' + leadingZero(absenceEnd.getDate()) + "." + leadingZero(absenceEnd.getMonth() + 1) + "." + absenceEnd.getFullYear() + '"';
+					} else {
+						result += ' <span class="employee-available"';
+						var nextAbsenceStr = employeeData.nextAbsenceStart;
+						if (nextAbsenceStr) {
+							nextAbsenceDate = Alfresco.util.fromISO8601(nextAbsenceStr);
+							result += 'title="Будет недоступен с ' + leadingZero(nextAbsenceDate.getDate()) + "." + leadingZero(nextAbsenceDate.getMonth() + 1) + "." + nextAbsenceDate.getFullYear() + '"';
+						}
+					}
+					result += ">&nbsp;</span>"
+				}
+			}
+			return result;
+
+			function leadingZero(value) {
+				var valueStr = value + "";
+				if (valueStr.length == 1) {
+					return '0' + valueStr;
+				} else {
+					return valueStr;
+				}
+			}
+
+		},
+		getEmployeesAbsenceInformation: function AssociationTreeViewer_getEmployeesAbsenceInformation(items) {
+			var requestObj = [];
+			for (var i = 0; i < items.length; i++) {
+				var item = items[i];
+				if (item.type === "lecm-orgstr:employee") {
+					requestObj.push({"nodeRef": item.nodeRef});
+				}
+			}
+
+			if (requestObj.length > 0) {
+				Alfresco.util.Ajax.request({
+					method: "POST",
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/getEmployeesAvailabilityInformation",
+					requestContentType: "application/json",
+					responseContentType: "application/json",
+					dataObj: requestObj,
+					successCallback: {
+						fn: function(response) {
+							var result = response.json;
+							this.employeesAvailabilityInformation = result;
+						},
+						scope: this
+					}
+				});
+			}
+		},
+		showEmployeeAutoAnswerPromt: function AssociationTreeView_showEmployeeAutoAnswer(item) {
+			var me = this;
+			var nodeRef = item.nodeRef;
+			var autoAnswerText = this.employeesAvailabilityInformation[nodeRef].autoAnswerText;
+			if (autoAnswerText) {
+				Alfresco.util.PopupManager.displayPrompt({
+					title: this.msg("title.absence.auto-answer.title"),
+					text: autoAnswerText,
+					close: false,
+					modal: true,
+					buttons: [{
+							text: this.msg("button.cancel"),
+							handler: function AssociationTreeView_showEmployeeAutoAnswer_denySelection() {
+								this.destroy();
+								me.removeNode(null, item);
+							}
+						},
+						{
+							text: this.msg("button.ok"),
+							handler: function AssociationTreeView_showEmployeeAutoAnswer_acceptSelection() {
+								this.destroy();
+							},
+							isDefault: true
+						}
+					]
+				});
+			}
 		}
-  	});
+	});
 })();

@@ -77,7 +77,7 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 				absences.add(absence);
 			}
 		}
-		return absences.isEmpty() ? null : absences;
+		return absences;
 	}
 
 	@Override
@@ -259,5 +259,81 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 	@Override
 	public boolean getAbsenceUnlimited(NodeRef node) {
 		return (Boolean) nodeService.getProperty(node, PROP_ABSENCE_UNLIMITED);
+	}
+
+	@Override
+	public NodeRef getNextEmployeeAbsence(NodeRef employee, Date date) {
+		NodeRef result = null;
+
+		Date minDate = null;
+		List<NodeRef> absenceByEmployee = getAbsenceByEmployee(employee);
+		for (NodeRef absence : absenceByEmployee) {
+			Date absenceStartDate = getAbsenceStartDate(absence);
+			if (!absenceStartDate.before(date)) {
+				if (minDate == null) {
+					minDate = absenceStartDate;
+					result = absence;
+				} else {
+					if (absenceStartDate.before(minDate)) {
+						minDate = absenceStartDate;
+						result = absence;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public NodeRef getNextEmployeeAbsence(NodeRef employee) {
+		return getNextEmployeeAbsence(employee, new Date());
+	}
+
+	@Override
+	public boolean isAutoAnswerUsed(NodeRef absenceNode) {
+		return (Boolean) nodeService.getProperty(absenceNode, PROP_ABSENCE_AUTO_ANSWER_ACTIVATED);
+	}
+
+	@Override
+	public String getAutoAnswerText(NodeRef absenceNode) {
+		String autoAnswerText = (String) nodeService.getProperty(absenceNode, PROP_ABSENCE_AUTO_ANSWER_TEXT);
+		if (autoAnswerText == null) {
+			return "";
+		} else {
+			return autoAnswerText;
+		}
+	}
+
+	@Override
+	public NodeRef getLastEmployeeAbsence(NodeRef employee) {
+		return getLastEmployeeAbsence(employee, new Date());
+	}
+
+	@Override
+	public NodeRef getLastEmployeeAbsence(NodeRef employee, Date date) {
+		NodeRef result = null;
+
+		Date maxDate = null;
+		List<NodeRef> absenceByEmployee = getAbsenceByEmployee(employee);
+		for (NodeRef absence : absenceByEmployee) {
+			Date absenceStartDate = getAbsenceStartDate(absence);
+			if (!absenceStartDate.after(date)) {
+				if (maxDate == null) {
+					maxDate = absenceStartDate;
+					result = absence;
+				} else {
+					if (absenceStartDate.after(maxDate)) {
+						maxDate = absenceStartDate;
+						result = absence;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public NodeRef getLastCurrentEmployeeAbsence() {
+		return getLastEmployeeAbsence(orgstructureService.getCurrentEmployee());
 	}
 }

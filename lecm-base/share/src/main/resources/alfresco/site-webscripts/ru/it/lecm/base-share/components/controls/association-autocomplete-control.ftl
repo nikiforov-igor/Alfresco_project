@@ -96,6 +96,10 @@
     <#if field.control.params.parentNodeRef??>
         rootNodeRef: "${field.control.params.parentNodeRef}",
     </#if>
+	<#-- при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ -->
+	<#if field.control.params.employeeAbsenceMarker??>
+        employeeAbsenceMarker: "${field.control.params.employeeAbsenceMarker}",
+    </#if>
     <#if args.ignoreNodes??>
         ignoreNodes: "${args.ignoreNodes}".split(","),
     </#if>

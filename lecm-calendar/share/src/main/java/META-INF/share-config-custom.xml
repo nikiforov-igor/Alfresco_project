@@ -373,6 +373,8 @@
 					<show id="lecm-absence:end"/>
 					<show id="lecm-absence:abscence-reason-assoc"/>
 					<show id="lecm-absence:comment"/>
+					<show id="lecm-absence:auto-answer-enabled"/>
+					<show id="lecm-absence:auto-answer-text"/>
 				</field-visibility>
 				<appearance>
 					<!--"fieldset", "panel", "bordered-panel", "title" and "whitespace"-->
@@ -414,6 +416,9 @@
 							<control-param name="rows">3</control-param>
 							<control-param name="style">padding-left: 2px;</control-param>
 						</control>
+					</field>
+					<field id="lecm-absence:auto-answer-text">
+						<control template="/ru/it/lecm/wcalendar/controls/instant-absence-autoanswer.ftl"/>
 					</field>
 				</appearance>
 			</form>

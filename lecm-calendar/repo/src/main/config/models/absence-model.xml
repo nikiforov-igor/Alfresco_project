@@ -66,6 +66,15 @@
 					<mandatory>true</mandatory>
 					<default>false</default>
 				</property>
+				<property name="lecm-absence:auto-answer-enabled">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<default>false</default>
+				</property>
+				<property name="lecm-absence:auto-answer-text">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 			<associations>
 				<!-- Отсутствующий сотрудник -->

@@ -4,9 +4,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.util.ISO8601DateFormat;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Context;
@@ -62,7 +66,7 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 	 * @param node NodeRef на объект типа employee в виде JSONObject ({"nodeRef"
 	 * : "NodeRef_на_employee"})
 	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
-	 * привязаны отсутствия, возвращает null
+	 * привязаны отсутствия, возвращает пустой список
 	 */
 	public Scriptable getAbsenceByEmployee(final JSONObject node) {
 		try {
@@ -461,5 +465,66 @@ public class AbsenceJavascriptExtension extends CommonWCalendarJavascriptExtensi
 
 	private void setAbsenceEnd(final NodeRef node) {
 		absenceService.setAbsenceEnd(node);
+	}
+
+	public JSONObject getEmployeeAvailabilityInformation(JSONObject json) {
+		String employeeNodeStr;
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			employeeNodeStr = json.getString("nodeRef");
+		} catch (JSONException ex) {
+			throw new WebScriptException("Insifficient JSON params", ex);
+		}
+		NodeRef employeeNode = new NodeRef(employeeNodeStr);
+		NodeRef currentAbsence = absenceService.getActiveAbsence(employeeNode);
+		if (currentAbsence == null) {
+			result.put("isEmployeeAbsent", false);
+			NodeRef nextEmployeeAbsence = absenceService.getNextEmployeeAbsence(employeeNode);
+			if (nextEmployeeAbsence != null) {
+				Date nextAbsenceStart = absenceService.getAbsenceStartDate(nextEmployeeAbsence);
+				result.put("nextAbsenceStart", ISO8601DateFormat.format(nextAbsenceStart));
+			}
+		} else {
+			result.put("isEmployeeAbsent", true);
+			if (absenceService.isAutoAnswerUsed(currentAbsence)) {
+				String currentAutoAnswer = absenceService.getAutoAnswerText(currentAbsence);
+				result.put("autoAnswerText", currentAutoAnswer);
+			}
+			Date currentAbsenceEnd = absenceService.getAbsenceEndDate(currentAbsence);
+			result.put("currentAbsenceEnd", ISO8601DateFormat.format(currentAbsenceEnd));
+		}
+		return new JSONObject(result);
+	}
+
+	public JSONObject getEmployeesAvailabilityInformation(JSONArray json) {
+		JSONObject result = new JSONObject();
+		for (int i = 0; i < json.length(); i++) {
+			try {
+				JSONObject employee = (JSONObject) json.get(i);
+				String employeeNodeStr = employee.getString("nodeRef");
+				result.put(employeeNodeStr, getEmployeeAvailabilityInformation(employee));
+			} catch (JSONException ex) {
+				throw new WebScriptException("Error processing JSON", ex);
+			}
+		}
+		return result;
+	}
+
+	public String getEmployeeLastAbsenceAutoAnswer(String employeeNodeStr) {
+		String result = "";
+		NodeRef lastAbsence = absenceService.getLastEmployeeAbsence(new NodeRef(employeeNodeStr));
+		if (lastAbsence != null) {
+			result = absenceService.getAutoAnswerText(lastAbsence);
+		}
+		return result;
+	}
+
+	public String getCurrentEmployeeLastAbsenceAutoAnswer() {
+		String result = "";
+		NodeRef lastAbsence = absenceService.getLastCurrentEmployeeAbsence();
+		if (lastAbsence != null) {
+			result = absenceService.getAutoAnswerText(lastAbsence);
+		}
+		return result;
 	}
 }

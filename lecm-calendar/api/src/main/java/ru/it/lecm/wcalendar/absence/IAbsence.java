@@ -39,6 +39,15 @@ public interface IAbsence extends ICommonWCalendar {
 	 */
 	QName PROP_ABSENCE_ACTIVATED = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "activated");
 	/**
+	 * Флаг, обозначающий, что в отсутствии используется автоответ,
+	 * lecm-absence:auto-answer-enabled
+	 */
+	QName PROP_ABSENCE_AUTO_ANSWER_ACTIVATED = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "auto-answer-enabled");
+	/**
+	 * Текст автоответа, lecm-absence:auto-answer-text
+	 */
+	QName PROP_ABSENCE_AUTO_ANSWER_TEXT = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "auto-answer-text");
+	/**
 	 * Тип объекта для Отсутствий, lecm-absence:absence
 	 */
 	QName TYPE_ABSENCE = QName.createQName(ICommonWCalendar.ABSENCE_NAMESPACE, "absence");
@@ -52,7 +61,7 @@ public interface IAbsence extends ICommonWCalendar {
 	 *
 	 * @param node NodeRef на объект типа employee
 	 * @return список NodeRef-ов на объекты типа absence. Если к сотруднику не
-	 * привязаны отсутствия, возвращает null
+	 * привязаны отсутствия, возвращает пустую Map
 	 */
 	List<NodeRef> getAbsenceByEmployee(NodeRef node);
 
@@ -224,4 +233,69 @@ public interface IAbsence extends ICommonWCalendar {
 	 * @return значение параметра "активировано" у отсутствия.
 	 */
 	boolean getAbsenceActivated(NodeRef node);
+
+	/**
+	 * Получить будущее отсутствие сотрудника, ближайшее к указаной дате.
+	 *
+	 * @param employee NodeRef сотрудника
+	 * @param date дата, за которой должно следовать отсутствие
+	 * @return NodeRef на объект типа absence. Если у сотрудника не
+	 * запланированы отсутствия, то null
+	 */
+	NodeRef getNextEmployeeAbsence(NodeRef employee, Date date);
+
+	/**
+	 * Получить будущее отсутствие сотрудника, ближайшее к текущей дате.
+	 *
+	 * @param employee NodeRef сотрудника
+	 * @return NodeRef на объект типа absence. Если у сотрудника не
+	 * запланированы отсутствия, то null
+	 */
+	NodeRef getNextEmployeeAbsence(NodeRef employee);
+
+	/**
+	 * Используется ли автоответ в данном отсутствии
+	 *
+	 * @param absenceNode экземпляр отсутствия
+	 * @return используется ли автоответ
+	 */
+	boolean isAutoAnswerUsed(NodeRef absenceNode);
+
+	/**
+	 * Получить текст автоответа для данного отсутствия.
+	 *
+	 * @param absenceNode экземпляр отсутствия
+	 * @return текст автоответа. Если не задан, то пкстая строка.
+	 */
+	String getAutoAnswerText(NodeRef absenceNode);
+
+	/**
+	 * Получить прошедшее или еще активное отсутствие сотрудника, ближайшее к
+	 * указанной дате.
+	 *
+	 * @param employee NodeRef сотрудника
+	 * @param date дата, перед которой должно быть искомое отсутствие.
+	 * @return NodeRef на объект типа absence. Если у сотрудника не
+	 * было отсутствий, то null
+	 */
+	NodeRef getLastEmployeeAbsence(NodeRef employee, Date date);
+
+	/**
+	 * Получить прошедшее или еще активное отсутствие сотрудника, ближайшее к
+	 * текущей дате.
+	 *
+	 * @param employee NodeRef сотрудника
+	 * @return NodeRef на объект типа absence. Если у сотрудника не
+	 * было отсутствий, то null
+	 */
+	NodeRef getLastEmployeeAbsence(NodeRef employee);
+
+	/**
+	 * Получить прошедшее или еще активное отсутствие текущего сотрудника,
+	 * ближайшее к текущей дате.
+	 *
+	 * @return NodeRef на объект типа absence. Если у сотрудника не
+	 * было отсутствий, то null
+	 */
+	NodeRef getLastCurrentEmployeeAbsence();
 }
