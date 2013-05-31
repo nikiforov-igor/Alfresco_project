@@ -134,13 +134,7 @@
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
     </bean>
 
-    <bean id="webscript.ru.it.lecm.approval.GetDocumentDataByTaskId.get" class="ru.it.lecm.approval.webscript.GetDocumentDataByTaskIdOrNodeRef" parent="webscript">
-		<property name="workflowService" ref="WorkflowService"/>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="approvalListService" ref="lecm.approval.service.parallel"/>
-		<property name="dictionaryService" ref="dictionaryService"/>
-	</bean>
-	<bean id="webscript.ru.it.lecm.approval.GetDocumentDataByNodeRef.get" class="ru.it.lecm.approval.webscript.GetDocumentDataByTaskIdOrNodeRef" parent="webscript">
+    <bean id="webscript.ru.it.lecm.approval.GetDocumentDataByTaskIdOrNodeRef.get" class="ru.it.lecm.approval.webscript.GetDocumentDataByTaskIdOrNodeRef" parent="webscript">
 		<property name="workflowService" ref="WorkflowService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="approvalListService" ref="lecm.approval.service.parallel"/>
