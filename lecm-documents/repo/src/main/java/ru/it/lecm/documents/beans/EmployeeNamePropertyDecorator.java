@@ -38,6 +38,7 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
     public Serializable decorate(NodeRef nodeRef, String propertyName, Serializable value) {
         String username = value.toString();
         String firstName;
+        String middleName;
         String lastName;
         String ref = "";
         Map<String, Serializable> map = new LinkedHashMap<String, Serializable>(4);
@@ -49,17 +50,20 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
                 Map<QName, Serializable> properties = this.nodeService.getProperties(employeeRef);
                 firstName = (String) properties.get(OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME);
                 lastName = (String) properties.get(OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
+                middleName = (String) properties.get(OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME);
                 ref = employeeRef.toString();
             } else {
                 NodeRef personRef = this.personService.getPerson(username);
                 Map<QName, Serializable> properties = this.nodeService.getProperties(personRef);
                 firstName = (String) properties.get(ContentModel.PROP_FIRSTNAME);
                 lastName = (String) properties.get(ContentModel.PROP_LASTNAME);
+                middleName = "";
                 ref = personRef.toString();
             }
         } else if (username.equals("System") || username.startsWith("System@")) {
             firstName = "System";
             lastName = "User";
+            middleName = "";
         } else {
             map.put("isDeleted", true);
             return (Serializable) map;
@@ -67,8 +71,9 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
 
         map.put("firstName", firstName);
         map.put("lastName", lastName);
+        map.put("middleName", middleName);
         map.put("nodeRef", ref);
-        map.put("displayName", (firstName != null ? firstName + " " : "" + (lastName != null ? lastName : "")).replaceAll("^\\s+|\\s+$", ""));
+        map.put("displayName", ((lastName != null ? lastName + " " : "") + (firstName != null ? firstName : "") + (middleName != null ? middleName + " " : "")).replaceAll("^\\s+|\\s+$", ""));
         return (Serializable) map;
     }
 }

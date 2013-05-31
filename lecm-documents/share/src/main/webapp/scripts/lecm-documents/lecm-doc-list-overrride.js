@@ -162,7 +162,7 @@ YAHOO.util.Event.onContentReady("alf-hd", function () {
             if (oUser.isDeleted === true) {
                 return '<span>' + scope.msg("details.user.deleted", $html(oUser.userName)) + '</span>';
             }
-            return $lecmUserProfile(oUser, YAHOO.lang.trim(oUser.firstName + " " + oUser.lastName));
+            return $lecmUserProfile(oUser, YAHOO.lang.trim(oUser.displayName));
         };
 
         // Reference to Data Grid component
