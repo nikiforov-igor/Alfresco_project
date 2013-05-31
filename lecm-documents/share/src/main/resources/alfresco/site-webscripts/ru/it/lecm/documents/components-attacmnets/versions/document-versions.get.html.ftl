@@ -18,8 +18,8 @@
 
    <div class="widget-bordered-panel last-panel">
        <div id="${el}-body" class="document-versions document-components-panel">
-           <h2 id="${el}-heading" class="thin dark">
-           ${msg("header.versionHistory")}
+           <h2 id="${el}-heading" class="dark">
+               ${msg("header.versionHistory")}
                <#if allowNewVersionUpload>
                    <span class="alfresco-twister-actions">
                        <a href="#" name=".onUploadNewVersionClick" class="${el} edit" title="${msg("label.newVersion")}"> &nbsp;</a>

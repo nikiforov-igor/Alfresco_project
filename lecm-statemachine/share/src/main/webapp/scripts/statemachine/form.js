@@ -316,7 +316,7 @@ LogicECM.module = LogicECM.module || {};
                             Alfresco.util.populateHTML(
                                 [ p_dialog.id + "-form-container_h", fileSpan]
                             );
-                            Dom.addClass(p_dialog.id + "-form", "dashlet-metadata-edit");
+                            Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
                         },
                         scope: this
                     },

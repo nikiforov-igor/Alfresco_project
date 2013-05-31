@@ -4,8 +4,8 @@
 <!-- Markup -->
 <div class="widget-bordered-panel">
 <div class="document-metadata-header document-components-panel">
-    <h2 id="${el}-heading" class="thin dark">
-    ${msg("heading")}
+    <h2 id="${el}-heading" class="dark">
+        ${msg("heading")}
         <span class="alfresco-twister-actions">
             <a id="${el}-action-expand" href="javascript:void(0);" onclick="" class="expand" title="${msg("label.expand")}">&nbsp</a>
         </span>
@@ -15,7 +15,6 @@
         <div id="${el}-form" style="display:none"></div>
         <ul id="${el}-connection-set" class="document-connection-set document-right-set">
             <#if connections?? && connections.items??>
-                <hr>
                 <#list connections.items as item>
                     <li class="text-broken">
                     ${item.type.name}
@@ -28,7 +27,6 @@
                         <a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef}" class="text-cropped" title="${docname}">
                            ${docname}
                         </a>
-                        <hr>
                     </li>
                 </#list>
                 <#if connections.hasNext == "true">

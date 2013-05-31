@@ -48,7 +48,7 @@
     //]]>
 </script>
 
-<div class="dashlet document bordered">
+<div class="dashlet-metadata dashlet document bordered">
     <div class="title dashlet-title">
         <span>${msg("label.title")}</span>
         <span class="lecm-dashlet-actions">

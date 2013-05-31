@@ -1,6 +1,13 @@
-.dashlet-metadata .form-container .form-fields
-{
-    border-bottom: medium none;
-    padding: 1em;
-    margin: 1em;
+.dashlet-metadata .form-container .form-fields {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.dashlet-metadata .form-fields .form-field {
+    padding: 10px 1em;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+}
+.dashlet-metadata .form-fields .form-field .viewmode-field {
+    margin: 0;
 }

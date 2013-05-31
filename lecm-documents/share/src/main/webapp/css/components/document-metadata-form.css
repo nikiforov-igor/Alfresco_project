@@ -1,21 +1,21 @@
 /* Договор - основные сведения */
-.dashlet-metadata .set {
+.metadata-form .set {
     overflow: hidden;
 }
-.dashlet-metadata .set .yui-g {
+.metadata-form .set .yui-g {
     width: 100%;
     margin-left: 0;
 }
-.dashlet-metadata .set .viewmode-field .viewmode-value > .association-auto-complete-selected-item  {
+.metadata-form .set .viewmode-field .viewmode-value > .association-auto-complete-selected-item  {
     display: inline;
 }
 
-.yui-skin-lecmTheme div.dashlet-metadata div.form-fields,
-.yui-skin-lecmTheme div.dashlet-metadata div.form-fields > div.set {
+.yui-skin-lecmTheme div.metadata-form div.form-fields,
+.yui-skin-lecmTheme div.metadata-form div.form-fields > div.set {
     width: 70em;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.form-field div.viewmode-field span.viewmode-label,
-.yui-skin-lecmTheme div.dashlet-metadata div.form-field div.viewmode-field span.viewmode-value {
+.yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-label,
+.yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-value {
     height: 28px;
     line-height: 22px;
     display: block;
@@ -24,26 +24,26 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.form-field div.viewmode-field span.viewmode-label {
+.yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-label {
     width: 200px;
     padding: 2px 10px 2px 0;
     text-align: right;
     margin: 0;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.form-field div.viewmode-field span.viewmode-value {
+.yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-value {
     font-weight: bold;
     padding: 2px;
     border: 1px solid #ccc;
     border-radius: 3px;
     overflow: hidden;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.yui-g div.form-field div.viewmode-field span.viewmode-value,
-.yui-skin-lecmTheme div.dashlet-metadata div.set div div.form-field div.viewmode-field span.viewmode-value {
+.yui-skin-lecmTheme div.metadata-form div.yui-g div.form-field div.viewmode-field span.viewmode-value,
+.yui-skin-lecmTheme div.metadata-form div.set div div.form-field div.viewmode-field span.viewmode-value {
     width: 230px;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.form-fields > div.set > div.form-field div.viewmode-field span.viewmode-value {
+.yui-skin-lecmTheme div.metadata-form div.form-fields > div.set > div.form-field div.viewmode-field span.viewmode-value {
     width: 695px;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.form-field {
+.yui-skin-lecmTheme div.metadata-form div.form-field {
     float: left;
 }

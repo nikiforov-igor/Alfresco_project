@@ -42,7 +42,7 @@
     //]]>
 </script>
 
-<div class="dashlet-metadata" id="${id}_metadata">
+<div class="metadata-form" id="${id}_metadata">
     <#if mayAdd!false>
     <div class="lecm-dashlet-actions">
         <a id="${id}-action-edit" onclick="documentMetadataComponent.onEdit('${id}_container')"

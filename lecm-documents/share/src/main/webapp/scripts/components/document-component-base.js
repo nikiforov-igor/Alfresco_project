@@ -40,6 +40,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             MAIN_REGION: "main-region",
             CUSTOM_REGION: "custom-region",
+            TITLE: "document-title",
 
             /**
              * Object container for initialization options
@@ -81,6 +82,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     Dom.setStyle(this.MAIN_REGION, "display", "none");
                     // отображаем дашлет
                     Dom.setStyle(this.CUSTOM_REGION, "display", "block");
+                    // добавляем в header ссылку на главную страницу документа
+                    Dom.setStyle(this.TITLE + "-span", "display", "none");
+                    Dom.setStyle(this.TITLE, "display", "inline");
                 }
             },
 
@@ -96,6 +100,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 Dom.setStyle(this.CUSTOM_REGION, "display", "none");
                 // отображаем main region
                 Dom.setStyle(this.MAIN_REGION, "display", "block");
+                // убираем из header'а ссылку на главную страницу документа
+                Dom.setStyle(this.TITLE, "display", "none");
+                Dom.setStyle(this.TITLE + "-span", "display", "inline");
             },
 
             /**

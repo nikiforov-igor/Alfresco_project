@@ -5,7 +5,7 @@
 
 .attachment-list .category-title {
 	width: 100%;
-    padding: 0.4em;
+    padding: 0 .4em .4em;
 }
 
 .attachment-list .category-title .category-name {
@@ -33,23 +33,6 @@
 	margin: 0 4px;
 	padding: 2px 0;
 	vertical-align: bottom;
-}
-
-/* Forms */
-
-.form-container .form-fields
-{
-	border-bottom: medium none;
-	padding: 1em 1em 0em 1em;
-}
-
-/* Details Form */
-
-.form-container .edit-metadata a,
-.form-container .edit-metadata a:visited
-{
-	background: transparent url(/share/res/components/documentlibrary/actions/document-edit-metadata-16.png) no-repeat 12px 4px;
-	padding-left: 32px;
 }
 
 /* Data Table */

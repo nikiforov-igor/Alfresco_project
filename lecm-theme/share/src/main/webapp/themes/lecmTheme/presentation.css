@@ -300,9 +300,11 @@ a:hover {
    font-size: 123.1%;
 }
 
-h2.thin
-{
+h2.thin {
    font-weight: normal;
+}
+h2.grey {
+   color: #9a9a9a;
 }
 
 h1 .light,
@@ -2247,8 +2249,10 @@ span.person a h3 {
     border-bottom: none;
 }
 
+.dark .title {
+    color: #333;
+}
 .dark a.title {
-    color: #333333;
     text-decoration: underline;
 }
 

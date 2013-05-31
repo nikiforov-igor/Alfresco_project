@@ -2,13 +2,12 @@
     <#assign el=args.htmlid/>
 
 <!-- Markup -->
-<div class="widget-panel-white" id="${el}">
+<div id="${el}">
 <div class="widget-panel-grey">
-    <h2 id="${el}-heading" class="thin dark">
-    ${msg("label.title")}
+    <h2 id="${el}-heading" class="dark">
+        ${msg("label.title")}
     </h2>
-    <div id="${el}-formContainer">
-    </div>
+    <div id="${el}-formContainer"></div>
     <script type="text/javascript">//<![CDATA[
     YAHOO.util.Event.onDOMReady(function (){
         var workflowForm = new LogicECM.module.StartWorkflow("${el}").setOptions({

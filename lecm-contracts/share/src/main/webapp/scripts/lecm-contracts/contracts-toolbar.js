@@ -211,7 +211,7 @@
                         [ p_dialog.id + "-form-container_h", addMsg ? addMsg : this.msg("label.create-row.title") ]
                     );
 
-                    Dom.addClass(p_dialog.id + "-form", "dashlet-metadata-edit");
+                    Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",

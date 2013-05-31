@@ -15,9 +15,9 @@
       );
    //]]></script>
 
-   <div class="widget-panel-white" id="${el}">
+   <div id="${el}">
    <div id="${el}-body" class="widget-panel-grey document-final-actions document-details-panel">
-      <h2 id="${el}-heading" class="thin dark">
+      <h2 id="${el}-heading" class="dark">
          ${msg("heading")}
       </h2>
       <div class="doclist">

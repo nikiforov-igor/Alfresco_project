@@ -13,7 +13,7 @@
 </#if>
 
 <div class="list-container">
-    <div>
+    <div class="tasks-list-filter">
         <span>${msg("tasklist.label.display")}</span>
         <select id="${id}-tasks-states" style="margin-left: 13px;">
             <option selected value="all">${msg("tasklist.option.all")}</option>

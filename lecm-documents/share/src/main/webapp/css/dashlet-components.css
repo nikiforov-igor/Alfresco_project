@@ -14,19 +14,35 @@
 	margin: 10px;
 }
 
-.dashlet .titleBarActions .expand {
-    background-image: url("/share/res/images/lecm-documents/expand-10.png");
+.dashlet .lecm-dashlet-actions {
+    margin-left: 5px;
+}
+.dashlet .lecm-dashlet-actions a {
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    padding: 0.3em;
+    text-decoration: none;
 }
 
-.lecm-dashlet-actions {
-    margin-left: 1em;
-}
-
+.dashlet .titleBarActions .expand,
 .dashlet .lecm-dashlet-actions .expand {
-    background-image: url("/share/res/images/lecm-documents/expand-10.png");
+    width: 16px;
+    height: 16px;
+    background-image: url("/share/res/images/lecm-documents/expand-16.png");
+    padding: 0;
+    display: inline-block;
+    opacity: .5;
+}
+.dashlet .titleBarActions .expand:hover,
+.dashlet .lecm-dashlet-actions .expand:hover {
+    opacity: .8;
+}
+.dashlet .titleBarActions .expand:active,
+.dashlet .lecm-dashlet-actions .expand:active {
+    opacity: 1;
 }
 
-.dashlet-metadata .lecm-dashlet-actions .edit {
+.metadata-form .lecm-dashlet-actions .edit {
     background-image: url("/share/res/components/profile/images/edit.png");
     background-repeat: no-repeat;
     padding-right: 15px;
@@ -55,7 +71,7 @@
     width: 12em;
 }
 
-.dashlet-metadata .lecm-dashlet-actions {
+.metadata-form .lecm-dashlet-actions {
     cursor: pointer;
     float: right;
     height: 16px;
@@ -64,41 +80,40 @@
     padding-right: 15px;
 }
 
-.dashlet .lecm-dashlet-actions a {
-    background-position: 0 center;
-    background-repeat: no-repeat;
-    padding: 0.3em;
-    text-decoration: none;
-}
-
 .yui-u .dashlet .dashlet-title {
     background-color: #515151;
-    border-radius: 4px 4px 0px 0px;
+    border-radius: 4px 4px 0 0;
 }
 
 .yui-u .dashlet .dashlet-body {
-    padding: 0em 1em 0em 1em;
+    padding: 0;
     height: 165px;
 }
 
 .yui-u .dashlet .dashlet-body .datagrid {
-    padding: 0.5em 0em 0.5em 0em;
+    padding: 0;
 }
-
-.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt .yui-dt-data td{
-    border-bottom: 0;
-}
-.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt th {
-    border-bottom: 0;
-}
-
 .yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt table {
     border: 0;
 }
+.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt tr {
+    height: 30px;
+}
+.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt th {
+    border-bottom: 0;
+    vertical-align: middle;
+}
+.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt .yui-dt-liner {
+    padding-left: 1em;
+}
+.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt .yui-dt-data td {
+    border-bottom: 1px solid #ccc;
+    color: #686868;
+}
 
 .dashlet .title span {
-    color: #FFFFFF;
-    font-family: Arial;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: bold;
@@ -124,10 +139,7 @@
 }
 
 .dashlet .my-task {
-    padding-right: 40px;
-    padding-bottom: 5px;
-    padding-top: 6px;
-    padding-left: 15px;
+    padding: 6px 40px 5px 15px;
 }
 
 .dashlet .workflow-date {
@@ -141,12 +153,14 @@
 .dashlet .total-tasks-count {
     font-size: 13px;
     font-weight: normal;
-    float:right;
+    float: right;
+    font-style: italic;
 }
 
-.dashlet .title .total-tasks-count span {
+.yui-u .dashlet .dashlet-title.title .total-tasks-count span {
     font-size: 13px;
-    text-decoration: underline;
+    font-style: italic;
+    font-weight: bold;
 }
 
 /******************************************/

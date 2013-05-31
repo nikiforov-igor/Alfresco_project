@@ -4,7 +4,7 @@
 <!-- Markup -->
 <div class="widget-bordered-panel">
 <div class="document-metadata-header document-components-panel document-tags">
-    <h2 id="${el}-heading" class="thin dark">
+    <h2 id="${el}-heading" class="dark">
         ${msg("document.tags")}
     </h2>
 

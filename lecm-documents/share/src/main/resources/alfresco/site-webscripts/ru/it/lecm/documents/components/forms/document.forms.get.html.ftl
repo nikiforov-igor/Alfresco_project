@@ -4,7 +4,7 @@
 
 <div class="widget-bordered-panel">
     <div class="document-forms-panel">
-        <h2 id="${el}-heading" class="thin dark">
+        <h2 id="${el}-heading" class="grey">
             ${msg("heading")}
         </h2>
 

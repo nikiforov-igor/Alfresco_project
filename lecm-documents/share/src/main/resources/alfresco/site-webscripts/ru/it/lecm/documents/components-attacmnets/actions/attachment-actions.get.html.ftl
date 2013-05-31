@@ -18,7 +18,7 @@
 
    <div class="widget-bordered-panel">
        <div id="${el}-body" class="document-actions document-components-panel">
-           <h2 id="${el}-heading" class="thin dark">
+           <h2 id="${el}-heading" class="dark">
                ${msg("heading")}
            </h2>
            <div class="doclist">

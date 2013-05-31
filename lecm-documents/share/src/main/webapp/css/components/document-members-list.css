@@ -1,10 +1,10 @@
 .members-list .members-title {
     width: 100%;
-    padding: 0.4em;
+    padding: 0 .4em .4em;
 }
 .members-list .members-title .members-name {
     color: #666666;
-    font-family: Arial;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: bold;

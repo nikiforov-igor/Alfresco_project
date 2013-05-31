@@ -5,7 +5,7 @@
 <div class="widget-bordered-panel">
 <div class="document-metadata-header document-components-panel">
 
-    <h2 id="${el}-heading" class="thin dark">
+    <h2 id="${el}-heading" class="dark">
         ${msg("heading")}
         <span class="alfresco-twister-actions">
             <a id="${el}-action-expand" href="javascript:void(0);" class="expand" title="${msg("label.expand")}">&nbsp;</a>

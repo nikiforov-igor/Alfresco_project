@@ -24,7 +24,7 @@
     </div>
     <div class="body scrollableList dashlet-body" id="${id}_results">
         <#if data.myTasks?size == 0>
-            <div style="padding-top: 10px;">
+            <div style="padding: 10px;">
                 <div style="float: left;width: 52px;height: 100px;">
                     <img src="${url.context}/res/components/images/help-task-bw-32.png" />
                 </div>

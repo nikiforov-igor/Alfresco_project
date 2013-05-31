@@ -6,7 +6,7 @@
     <!-- Markup -->
 <div class="widget-bordered-panel">
     <div class="document-metadata-header document-components-panel">
-        <h2 id="${el}-heading" class="thin dark">
+        <h2 id="${el}-heading" class="dark">
             ${msg("heading")}
             <#if allowMetaDataUpdate!false>
                 <span class="alfresco-twister-actions">

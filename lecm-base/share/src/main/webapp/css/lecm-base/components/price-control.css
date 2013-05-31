@@ -1,26 +1,26 @@
-.yui-skin-lecmTheme div.dashlet-metadata div.set div.price-control div.price-sum,
-.yui-skin-lecmTheme form.dashlet-metadata-edit div.set div.price-control div.price-sum {
+.yui-skin-lecmTheme div.metadata-form div.set div.price-control div.price-sum,
+.yui-skin-lecmTheme form.metadata-form-edit div.set div.price-control div.price-sum {
     float: left;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.set div.yui-g div.price-control div.price-sum span.viewmode-value,
-.yui-skin-lecmTheme form.dashlet-metadata-edit div.set div.price-control div.price-sum input[type=text] {
+.yui-skin-lecmTheme div.metadata-form div.set div.yui-g div.price-control div.price-sum span.viewmode-value,
+.yui-skin-lecmTheme form.metadata-form-edit div.set div.price-control div.price-sum input[type=text] {
     width: 140px;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.set div.price-control div.price-currency,
-.yui-skin-lecmTheme form.dashlet-metadata-edit div.set div.price-control div.price-currency {
+.yui-skin-lecmTheme div.metadata-form div.set div.price-control div.price-currency,
+.yui-skin-lecmTheme form.metadata-form-edit div.set div.price-control div.price-currency {
     width: 80px;
     float: left;
     margin-left: 5px;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.yui-g div.price-control div.price-currency div.form-field span.viewmode-value {
+.yui-skin-lecmTheme div.metadata-form div.yui-g div.price-control div.price-currency div.form-field span.viewmode-value {
     width: 80px;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.set div.price-control div.price-currency span.viewmode-label,
-.yui-skin-lecmTheme form.dashlet-metadata-edit div.set div.price-control div.price-currency span.viewmode-label,
-.yui-skin-lecmTheme form.dashlet-metadata-edit div.set div.price-control div.price-currency label {
+.yui-skin-lecmTheme div.metadata-form div.set div.price-control div.price-currency span.viewmode-label,
+.yui-skin-lecmTheme form.metadata-form-edit div.set div.price-control div.price-currency span.viewmode-label,
+.yui-skin-lecmTheme form.metadata-form-edit div.set div.price-control div.price-currency label {
     display: none;
 }
-.yui-skin-lecmTheme div.dashlet-metadata div.set div.price-control div.price-currency div.selectone-control,
-.yui-skin-lecmTheme form.dashlet-metadata-edit div.set div.price-control div.price-currency div.selectone-control {
+.yui-skin-lecmTheme div.metadata-form div.set div.price-control div.price-currency div.selectone-control,
+.yui-skin-lecmTheme form.metadata-form-edit div.set div.price-control div.price-currency div.selectone-control {
     margin-left: 0;
 }

@@ -6,8 +6,12 @@
     padding-bottom: 0;
 }
 
+#custom-region {
+    padding-top: 20px;
+}
+
 .yui-gc .yui-u {
-    margin-left: 0%;
+    margin-left: 0;
     width: 20%;
 }
 
@@ -17,7 +21,7 @@
 
 .bordered {
     border: 1px solid #6C6C6C;
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0 0;
 }
 
 .bordered-panel {
@@ -25,12 +29,24 @@
     border-right: 0;
 }
 
+.yui-u .dashlet .dashlet-title {
+    height: 17px;
+    background-color: #bbe6f3;
+    border-radius: 4px 4px 0 0;
+    padding: 7px 1em 6px;
+}
+.yui-u .dashlet .dashlet-title.title span {
+    color: #0a678e;
+    font: 14px Arial;
+    font-weight: bold;
+}
+
 .yui-gc div.first {
-    width: 79.5%;
+    width: 79.8%;
 }
 
 .yui-gc .yui-u .columnSize2{
-    margin-left: 1.99%;
+    margin: 0;
 }
 
 .yui-gd .yui-u .column2 {
@@ -60,11 +76,15 @@
 }
 
 .document-components-panel .alfresco-twister-actions .expand {
-    background-image: url("/share/res/images/lecm-documents/expand-10.png");
+    background-image: url("/share/res/images/lecm-documents/expand-16.png");
     display: none;
+    opacity: .8;
 }
-.document-components-panel:hover .alfresco-twister-actions .expand {
+.document-components-panel .alfresco-twister:hover .alfresco-twister-actions .expand {
     display: inline;
+}
+.document-components-panel .alfresco-twister-actions .expand:active {
+    opacity: 1;
 }
 
 .alfresco-twister-closed .alfresco-twister-actions {
@@ -114,6 +134,22 @@
     margin-left:3.99%;
     width: 93%;
 }
+
+/* Forms */
+
+.form-container .form-fields {
+    border-bottom: medium none;
+    padding: 0 1em;
+}
+
+/* Details Form */
+
+.form-container .edit-metadata a,
+.form-container .edit-metadata a:visited {
+    background: transparent url(/share/res/components/documentlibrary/actions/document-edit-metadata-16.png) no-repeat 12px 4px;
+    padding-left: 32px;
+}
+
 
 /**************** Workflow Tasks *******************************/
 
@@ -196,10 +232,6 @@
 }
 .list-container {
     padding-left: 40px;
-    padding-top: 10px;
-}
-.list-category {
-    padding-top: 12px;
 }
 .list-category-title {
     font-size:20px;
@@ -248,4 +280,7 @@
 /* Document right part */
 .doc-right-part {
     word-wrap: break-word;
+    border-radius: 5px 0 0 5px;
+    margin-top: 20px;
+    background: #f2f2f2;
 }

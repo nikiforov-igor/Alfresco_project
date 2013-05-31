@@ -3,7 +3,7 @@
 }
 .connections-list .connections-title {
 	width: 100%;
-	padding: 0.4em;
+	padding: 0 .4em .4em;
 }
 .connections-list .connections-table {
 	width: 100%;

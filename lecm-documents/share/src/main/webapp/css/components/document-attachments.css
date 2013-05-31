@@ -4,9 +4,10 @@
 }
 
 .attachments-set .attachment-category .category-title {
-	padding-top: 0.5em;
-	text-decoration: none;
-	color: #333;
-	border-bottom: 1px solid #ccc;
+	padding: 10px 0 5px;
+	color: #666;
+}
+.attachments-set .attachment-category ul.attachment li {
+	padding: 5px 0;
 }
 
