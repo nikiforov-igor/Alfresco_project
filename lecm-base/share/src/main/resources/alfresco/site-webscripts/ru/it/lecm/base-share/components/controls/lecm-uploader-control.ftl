@@ -32,7 +32,7 @@
 <div class="form-field">
 	<#if disabled>
 		<div class="viewmode-field">
-			<#if showViewIncompleteWarning && field.mandatory && !(fieldValue?is_number) && fieldValue?string == "">
+			<#if showViewIncompleteWarning?? && showViewIncompleteWarning && field.mandatory && !(fieldValue?is_number) && fieldValue?string == "">
 			<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
 			</#if>
 			<span class="viewmode-label">${field.label?html}:</span>
