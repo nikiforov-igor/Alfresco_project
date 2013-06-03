@@ -73,7 +73,7 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
         map.put("lastName", lastName);
         map.put("middleName", middleName);
         map.put("nodeRef", ref);
-        map.put("displayName", ((lastName != null ? lastName + " " : "") + (firstName != null ? firstName : "") + (middleName != null ? middleName + " " : "")).replaceAll("^\\s+|\\s+$", ""));
+        map.put("displayName", ((lastName != null ? lastName + " " : "") + (firstName != null ? firstName + " " : "") + (middleName != null ? middleName + " " : "")).replaceAll("^\\s+|\\s+$", ""));
         return (Serializable) map;
     }
 }
