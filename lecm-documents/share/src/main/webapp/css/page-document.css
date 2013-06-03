@@ -34,6 +34,7 @@
     background-color: #bbe6f3;
     border-radius: 4px 4px 0 0;
     padding: 7px 1em 6px;
+    overflow: hidden;
 }
 .yui-u .dashlet .dashlet-title.title span {
     color: #0a678e;
