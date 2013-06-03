@@ -63,20 +63,20 @@
     padding: 0.5em;
 }
 
-.document-header .document-action .subscribe span.first-child {
+.document-header .document-action .subscribe-header span.first-child {
     background: url('../../images/lecm-subscriptions/alf_subscribe_16.png') no-repeat 5px 5px;
     padding-left: 7px;
     border: 1px solid;
 }
 
-.document-header .document-action .unsubscribe span.first-child {
+.document-header .document-action .unsubscribe-header span.first-child {
     background: url('../../images/lecm-subscriptions/alf_unsubscribe_16.png') no-repeat 5px 5px;
     padding-left: 7px;
     border: 1px solid;
 }
 
 .document-header .document-action .transfer-right span.first-child {
-    background: url('../../images/lecm-subscriptions/alf_subscriptions_to_object_32.png') no-repeat 5px 5px;
+    background: url('../../images/lecm-documents/alf_transmit_document_16.png') no-repeat 5px 5px;
     padding-left: 7px;
     border: 1px solid;
 }
@@ -87,3 +87,12 @@
 	padding: 0.1em 0.5em 0.1em 0;
 }
 
+.transfer-right {
+    float: right;
+}
+.subscribe-header {
+    float: right;
+}
+.unsubscribe-header {
+    float: right;
+}

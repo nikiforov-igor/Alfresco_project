@@ -24,14 +24,14 @@
                 })();
                 //]]></script>
 
-                <div class="subscribe">
+                <div class="subscribe-header">
                     <span id="${controlId}-subscribe-button" class="yui-button yui-push-button" style="display: none">
                        <span class="first-child">
                           <button type="button" title="${msg("button.subscribe")}"></button>
                        </span>
                     </span>
                 </div>
-                <div class="unsubscribe">
+                <div class="unsubscribe-header">
                     <span id="${controlId}-unsubscribe-button" class="yui-button yui-push-button" style="display: none">
                        <span class="first-child">
                           <button type="button" title="${msg("button.unsubscribe")}"></button>
