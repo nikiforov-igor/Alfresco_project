@@ -4,7 +4,7 @@
 <!-- Markup -->
 <div class="widget-bordered-panel">
 <div class="document-components-panel">
-    <h2 id="${el}-heading" class="grey">
+    <h2 id="${el}-heading" class="dark alfresco-twister">
         ${msg("heading")}
         <span class="alfresco-twister-actions">
             <a id="${el}-action-expand" href="javascript:void(0);" onclick="" class="expand" title="${msg("label.expand")}">&nbsp</a>
