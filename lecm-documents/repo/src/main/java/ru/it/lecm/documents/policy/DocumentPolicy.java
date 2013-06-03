@@ -159,6 +159,9 @@ public class DocumentPolicy extends BaseBean
 
         // добавляем в участники документа нового сотрудника
         documentMembersService.addMember(documentRef, afterAuthor, new HashMap<QName, Serializable>());
+        // передаем задачи по документу
+        stateMachineHelper.transferRightTask(orgstructureService.getEmployeeLogin(beforeAuthor), orgstructureService.getEmployeeLogin(afterAuthor));
+
 
         // Проверяем выбран ли пункт лишать прав автора документа, если нет то добавляем бывшего автора в читатели документа и осталяем в участниках
         if (after.get(DocumentService.PROP_DOCUMENT_DEPRIVE_RIGHT).toString().equals("true")) {
@@ -179,12 +182,14 @@ public class DocumentPolicy extends BaseBean
                 if (nodeService.getProperty(link.getChildRef(), DocumentConnectionService.PROP_IS_SYSTEM) != null) {
                     List<AssociationRef> addDoc = nodeService.getTargetAssocs(link.getChildRef(),DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT);
                     if (addDoc.size() > 0) {
-                        documentTransmit(addDoc.get(0).getTargetRef(), before, after);
+                        // присваиваем значения property документу к договору, чтобы инициализировать policy уже для
+                        // документа к договору при это устанавливаем значения как и основном документе
+                        nodeService.setProperty(addDoc.get(0).getTargetRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, afterAuthor.toString());
+                        nodeService.setProperty(addDoc.get(0).getTargetRef(), DocumentService.PROP_DOCUMENT_IS_TRANSMIT, after.get(DocumentService.PROP_DOCUMENT_IS_TRANSMIT).toString());
+                        nodeService.setProperty(addDoc.get(0).getTargetRef(), DocumentService.PROP_DOCUMENT_DEPRIVE_RIGHT, after.get(DocumentService.PROP_DOCUMENT_DEPRIVE_RIGHT).toString());
                     }
                 }
             }
-            // передаем задачи по документу
-            stateMachineHelper.transferRightTask(orgstructureService.getEmployeeLogin(beforeAuthor), orgstructureService.getEmployeeLogin(afterAuthor));
         }
 
     }
