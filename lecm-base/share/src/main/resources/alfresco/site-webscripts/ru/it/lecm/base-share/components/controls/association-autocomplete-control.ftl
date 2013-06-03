@@ -108,7 +108,7 @@
         changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
         plane: true,
         currentValue: "${field.value!''}",
-        itemType: "${field.endpointType}",
+        itemType:"${field.control.params.itemType!field.endpointType}",
         additionalFilter: "${field.control.params.additionalFilter!''}"
     }).setMessages( ${messages} );
 })();

@@ -39,6 +39,26 @@
                     </span>
                 </div>
             </#if>
+            <#if isAdmin>
+                <script type="text/javascript">//<![CDATA[
+                (function()
+                {
+                    var transfer = new LogicECM.module.Transfer.TransferRight("${id}").setMessages(${messages});
+                    transfer.setOptions({
+                        documentRef: "${nodeRef}",
+                        bublingLabel: "transferRight"
+                    });
+                })();
+                //]]></script>
+
+                <div class="transfer-right">
+                    <span id="${controlId}-transfer-right-button" class="yui-button yui-push-button">
+                       <span class="first-child">
+                          <button type="button" title="${msg("button.transfer.right")}"></button>
+                       </span>
+                    </span>
+                </div>
+            </#if>
         </div>
 
         <div class="clear"></div>

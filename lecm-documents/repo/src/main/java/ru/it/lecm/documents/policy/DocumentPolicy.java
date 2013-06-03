@@ -9,9 +9,13 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
@@ -21,18 +25,19 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentConnectionServiceImpl;
+import ru.it.lecm.documents.beans.DocumentMembersServiceImpl;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.constraints.PresentStringConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.Types;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -55,6 +60,10 @@ public class DocumentPolicy extends BaseBean
     private OrgstructureBean orgstructureService;
     private StateMachineServiceBean stateMachineHelper;
 	private LecmPermissionService lecmPermissionService;
+    private PermissionService permissionService;
+    private AuthorityService authorityService;
+    private DocumentConnectionServiceImpl documentConnectionService;
+    private DocumentMembersServiceImpl documentMembersService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -89,6 +98,23 @@ public class DocumentPolicy extends BaseBean
 		this.lecmPermissionService = lecmPermissionService;
 	}
 
+
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
+
+    public void setAuthorityService(AuthorityService authorityService) {
+        this.authorityService = authorityService;
+    }
+
+    public void setDocumentConnectionService(DocumentConnectionServiceImpl documentConnectionService) {
+        this.documentConnectionService = documentConnectionService;
+    }
+
+    public void setDocumentMembersService(DocumentMembersServiceImpl documentMembersService) {
+        this.documentMembersService = documentMembersService;
+    }
+
 	final public void init() {
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
         PropertyCheck.mandatory(this, "nodeService", nodeService);
@@ -102,11 +128,78 @@ public class DocumentPolicy extends BaseBean
                 DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
 
+    /**
+     * Метод переназначает документ новому сотруднику и выделяем ему соответствующие права
+     */
+    public void documentTransmit(NodeRef documentRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        NodeRef beforeAuthor = new NodeRef(before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).toString());
+        NodeRef afterAuthor = new NodeRef(after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).toString());
+        Set<AccessPermission> permissionsDoc = permissionService.getAllSetPermissions(documentRef);
+        Set<String> permissionsEmployee = authorityService.getAuthoritiesForUser(orgstructureService.getEmployeeLogin(beforeAuthor));
+
+        nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(afterAuthor));
+        nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_CREATOR_REF, afterAuthor.toString());
+
+        for (AccessPermission permission : permissionsDoc) {
+            if (permissionsEmployee.contains(permission.getAuthority()) && !PermissionService.ALL_AUTHORITIES.equals(permission.getAuthority())) {
+                if (permission.getAuthority().indexOf(Types.SFX_BRME) != -1) {
+                    // удаляем динамическую роль
+//                    lecmPermissionService.revokeDynamicRole(permission.getPermission(), documentRef, beforeAuthor.getId());
+                    permissionService.clearPermission(documentRef, permission.getAuthority());
+                    // назначаем динамическую роль другому сотруднику
+                    lecmPermissionService.grantDynamicRole(permission.getPermission(), documentRef, afterAuthor.getId(), lecmPermissionService.findPermissionGroup(permission.getPermission()));
+                } else {
+                    // удаляем статическую роль
+                    lecmPermissionService.revokeAccess(lecmPermissionService.findPermissionGroup(permission.getPermission()), documentRef, beforeAuthor.getId());
+                    // назначаем статическую роль другому сотруднику
+                    lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(permission.getPermission()), documentRef, afterAuthor.getId());
+                }
+            }
+        }
+
+        // добавляем в участники документа нового сотрудника
+        documentMembersService.addMember(documentRef, afterAuthor, new HashMap<QName, Serializable>());
+
+        // Проверяем выбран ли пункт лишать прав автора документа, если нет то добавляем бывшего автора в читатели документа и осталяем в участниках
+        if (after.get(DocumentService.PROP_DOCUMENT_DEPRIVE_RIGHT).toString().equals("true")) {
+            // удаляем из участников документа
+            documentMembersService.deleteMember(documentRef, beforeAuthor);
+        } else {
+            lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), documentRef, beforeAuthor.getId());
+        }
+        // Нужно ли передовать права на документы введенные на основании
+        if (after.get(DocumentService.PROP_DOCUMENT_IS_TRANSMIT).toString().equals("true")) {
+            // переопределяем права на документы к договору.
+            // для этого получаем список документов из папочки Связи и берем только документы с "Системной" связью
+            NodeRef rootLinks = documentConnectionService.getRootFolder(documentRef);
+            List<ChildAssociationRef> links = nodeService.getChildAssocs(rootLinks);
+
+//            List<NodeRef> additionalDocuments = documentConnectionService.getConnectionsWithDocument(documentRef);
+            for (ChildAssociationRef link : links) {
+                if (nodeService.getProperty(link.getChildRef(), DocumentConnectionService.PROP_IS_SYSTEM) != null) {
+                    List<AssociationRef> addDoc = nodeService.getTargetAssocs(link.getChildRef(),DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT);
+                    if (addDoc.size() > 0) {
+                        documentTransmit(addDoc.get(0).getTargetRef(), before, after);
+                    }
+                }
+            }
+            // передаем задачи по документу
+            stateMachineHelper.transferRightTask(orgstructureService.getEmployeeLogin(beforeAuthor), orgstructureService.getEmployeeLogin(afterAuthor));
+        }
+
+    }
+
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
         if (employeeRef != null) {
             nodeService.setProperty(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER, substituteService.getObjectDescription(employeeRef));
             nodeService.setProperty(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF, employeeRef.toString());
+        }
+        if (before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF) != null && !before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals("") &&
+                !after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals("")) {
+            if (!before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals(after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF))) {
+                documentTransmit(nodeRef, before, after);
+            }
         }
         if (!changeIgnoredProperties(before, after)) {
             if (before.size() == after.size()) { // только при изменении свойств (учитываем добавление/удаление комментариев, не учитываем создание документа + добавление рейтингов и прочего
@@ -156,8 +249,7 @@ public class DocumentPolicy extends BaseBean
         final AuthenticationUtil.RunAsWork<String> stringValue = new AuthenticationUtil.RunAsWork<String>() {
             @Override
             public String doWork() throws Exception {
-                String record = substituteService.formatNodeTitle(nodeRef, finalPresentString);
-                return record;
+                return substituteService.formatNodeTitle(nodeRef, finalPresentString);
             }
         };
 

@@ -74,6 +74,18 @@
                     <type>d:datetime</type>
                     <protected>true</protected>
                 </property>
+                <!-- Выполнение передачи прав при передаче документа-->
+                <property name="lecm-document:istransmit">
+                    <title>Is transmit right</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <!-- Лишить текущего владельца прав на передоваемые документы-->
+                <property name="lecm-document:deprive-right">
+                    <title>Deprived of the right to documents</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
 			</properties>
             <associations>
             <association name="lecm-document:doc-members-assoc">

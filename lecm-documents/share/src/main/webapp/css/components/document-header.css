@@ -75,6 +75,12 @@
     border: 1px solid;
 }
 
+.document-header .document-action .transfer-right span.first-child {
+    background: url('../../images/lecm-subscriptions/alf_subscriptions_to_object_32.png') no-repeat 5px 5px;
+    padding-left: 7px;
+    border: 1px solid;
+}
+
 .document-header .attachment-thumbnail
 {
 	float: left;

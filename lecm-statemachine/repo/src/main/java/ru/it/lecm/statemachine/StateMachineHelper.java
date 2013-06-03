@@ -216,6 +216,18 @@ public class StateMachineHelper implements StateMachineServiceBean {
         nextTransition(ACTIVITI_PREFIX + taskId);
     }
 
+    public boolean transferRightTask(String beforeAuthority, String afterAuthority) {
+        boolean isTransfer = false;
+        TaskQuery query = activitiProcessEngineConfiguration.getTaskService().createTaskQuery();
+        List<Task> tasks = query.taskAssignee(beforeAuthority).list();
+        for (Task task : tasks) {
+            task.setAssignee(afterAuthority);
+            activitiProcessEngineConfiguration.getTaskService().saveTask(task);
+            isTransfer = true;
+        }
+        return isTransfer;
+    }
+
     public List<StateMachineAction> getTaskActions(String taskId, String onFire) {
         List<StateMachineAction> result = new ArrayList<StateMachineAction>();
         TaskService taskService = activitiProcessEngineConfiguration.getTaskService();

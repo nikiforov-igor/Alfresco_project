@@ -63,6 +63,15 @@ public interface DocumentMembersService {
      * @return ссылка на созданную ноду участника
      */
     NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, String permissionGroup);
+
+    /**
+     * Удаление участника из данного документа
+     * @param document - ссылка на документ
+     * @param employee - ссылка на сотрудника
+     * @return true - удален, false - не удален
+     */
+    boolean deleteMember(NodeRef document, NodeRef employee);
+
     /**
      * Возвращает директорию Участники для конкретного документа
      * @param document - ссылка на документ

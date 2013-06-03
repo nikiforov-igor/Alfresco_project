@@ -30,6 +30,8 @@ public interface DocumentService {
     public static final QName PROP_DOCUMENT_CREATOR_REF = QName.createQName(DOCUMENT_NAMESPACE_URI, "creator-ref");
     public static final QName PROP_DOCUMENT_MODIFIER = QName.createQName(DOCUMENT_NAMESPACE_URI, "modifier");
     public static final QName PROP_DOCUMENT_MODIFIER_REF = QName.createQName(DOCUMENT_NAMESPACE_URI, "modifier-ref");
+    public static final QName PROP_DOCUMENT_IS_TRANSMIT = QName.createQName(DOCUMENT_NAMESPACE_URI, "istransmit");
+    public static final QName PROP_DOCUMENT_DEPRIVE_RIGHT = QName.createQName(DOCUMENT_NAMESPACE_URI, "deprive-right");
 
 
     /**

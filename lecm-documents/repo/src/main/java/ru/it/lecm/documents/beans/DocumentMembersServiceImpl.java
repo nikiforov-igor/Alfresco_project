@@ -105,6 +105,16 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     }
 
     @Override
+    public boolean deleteMember(NodeRef document, NodeRef employeeRef) {
+        final NodeRef memberRef = getDocumentMember(document,employeeRef);
+        if (memberRef != null) {
+            nodeService.deleteNode(memberRef);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public synchronized NodeRef getMembersFolderRef(final NodeRef document) {
         NodeRef membersFolder = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, DOCUMENT_MEMBERS_ROOT_NAME);
         if (membersFolder == null) {

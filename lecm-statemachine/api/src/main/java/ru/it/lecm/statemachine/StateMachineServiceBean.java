@@ -60,6 +60,11 @@ public interface StateMachineServiceBean {
     public TransitionResponse executeUserAction(NodeRef document, String actionId);
 
     /**
+     * Передает текущие задачи пользователя другому пользователю
+     */
+    public  boolean transferRightTask(String beforeAuthority, String afterAuthority);
+
+    /**
      * Возвращает может ли текущий сотрудник создавать документ определенного типа
      * @param type - тип документа
      * @return
