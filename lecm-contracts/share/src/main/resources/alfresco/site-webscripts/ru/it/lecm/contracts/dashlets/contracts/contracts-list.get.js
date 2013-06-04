@@ -4,10 +4,10 @@ function main() {
     var userFilter = args.userFilter;
 
     var docs = remote.connect("alfresco").get("/lecm/contracts/getContractsByFilters?dateFilter=" + dateFilter + "&userFilter=" + userFilter);
+    var contractsWithMyActiveTasks = [];
     if (docs.status == 200) {
         var filter = "";
         var oResults = eval("(" + docs + ")");
-	    var contractsWithMyActiveTasks = [];
         for each (var ref in oResults){
             var nodeRef = ref.nodeRef;
             filter = filter + " ID:" + nodeRef.replace(":", "\\\\:");
@@ -20,8 +20,8 @@ function main() {
             filter += "ID:NOT_REF";
         }
         model.filter = filter;
-        model.contractsWithMyActiveTasks = contractsWithMyActiveTasks;
     }
+    model.contractsWithMyActiveTasks = contractsWithMyActiveTasks;
 }
 
 main();
