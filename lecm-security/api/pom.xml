@@ -18,7 +18,7 @@
 
 	<properties>
 		<module.log.level>info</module.log.level>
-		<alfproject.version>4.0.c</alfproject.version>
+		<alfproject.version>4.0</alfproject.version>
 	</properties>
 	<!--
 		need to list these as a provided so that Maven doesn't download them

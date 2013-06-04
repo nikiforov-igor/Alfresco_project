@@ -10,6 +10,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 
+import ru.it.lecm.reports.api.AssocDataFilter;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
 public class AssocDataFilterImpl implements AssocDataFilter {

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.design.JRDesignField;
+import ru.it.lecm.reports.api.JRXField;
 import ru.it.lecm.reports.jasper.utils.MacrosHelper;
 
 /**
@@ -22,41 +22,6 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 
 	// мапер имя поля в jrxml -> описание поля
 	private Map<String, JRXField> metaFields;
-
-	/**
-	 * Описание поля будет иметь дополнительные поля:
-	 *   1) ссылка ля получения значения сквозь ассоциации (a/b/.../fld)
-	 *   2) что-то ещё (формат?)
-	 * @author Ruslan
-	 * TODO: сделать опции (представление NULL и пр) либо поотдельности, либо Map-списком (хуже, т.к. опции станут неявными) 
-	 */
-	public class JRXField extends JRDesignField {
-
-		private static final long serialVersionUID = 1L;
-
-		private String valueLink;
-
-		private JRXField() {
-			super();
-		}
-
-		/**
-		 * Строка для получения значения через ассоциации или просто qname-название поля
-		 * @return
-		 */
-		public String getValueLink() {
-			return valueLink;
-		}
-
-		public void setValueLink(String valueLink) {
-			this.valueLink = valueLink;
-		}
-
-		@Override
-		public String toString() {
-			return String.format("%s(link: %s, '%s')", super.getName(), valueLink, super.getDescription());
-		}
-	}
 
 	/**
 	 * Добавить поле с именем из jr-report файла

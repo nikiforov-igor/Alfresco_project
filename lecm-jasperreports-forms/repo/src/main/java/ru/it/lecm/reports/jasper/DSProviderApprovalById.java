@@ -36,15 +36,9 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 
 		private static final Logger logger = LoggerFactory.getLogger(DSProviderApprovalById.class);
 
-		private NodeRef approveListNodeId;
-
-		public String getNodeRef() {
-			return (approveListNodeId == null) ? "" : approveListNodeId.toString(); 
-		}
-
-		public void setNodeRef(String noderef) {
-			this.approveListNodeId = (noderef == null || noderef.trim().length() == 0)
-					? null : new NodeRef(noderef);
+		public DSProviderApprovalById() {
+			super();
+			setPreferedType(DSProdiverApprovalSummaryByPeriod.TYPE_APPROVAL_LIST);
 		}
 
 		@Override
@@ -53,25 +47,21 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 		 * TYPE:"lecm-al:approval-list" AND ID:"workspace://SpacesStore/11a08758-6eb7-450f-9f17-3f168d981629"
 		 */
 		protected String buildQueryText() {
-			if (logger.isDebugEnabled()) {
-				logger.debug( String.format("Quering approve list by ref: %s\n", this.approveListNodeId));
-			}
-			final StringBuilder bquery = new StringBuilder();
-			final QName qTYPE = QName.createQName(DSProdiverApprovalSummaryByPeriod.TYPE_APPROVAL_LIST, this.serviceRegistry.getNamespaceService());
-			bquery.append( "TYPE:"+ quoted(qTYPE.toString()));
-			bquery.append( " AND ID:"+ quoted(Utils.coalesce( this.approveListNodeId, "-1")) );
+			// выполнить проверку заполнения Id узла
+			if (getNodeRef() == null)
+				throw new RuntimeException( "NodeRef not specified" );
 
-			return bquery.toString();
+			return super.buildQueryText();
 		}
 
 		@Override
 		protected AlfrescoJRDataSource newJRDataSource( Iterator<ResultSetRow> iterator) {
 			final ApprovalItemsDS result = new ApprovalItemsDS(iterator);
-			result.setSubstitudeService(substitudeService);
-			result.setRegistryService(serviceRegistry);
-			result.setJrSimpleProps(jrSimpleProps);
+			result.context.setSubstitudeService(substitudeService);
+			result.context.setRegistryService(serviceRegistry);
+			result.context.setJrSimpleProps(jrSimpleProps);
 			if (conf != null)
-				result.setMetaFields(conf.getMetaFields());
+				result.context.setMetaFields(conf.getMetaFields());
 			result.buildData();
 			return result;
 		}
@@ -131,11 +121,11 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 			public boolean next() throws JRException {
 				while (iterData != null && iterData.hasNext()) {
 					final ApprovalInfo item = iterData.next();
-					curProps = makeCurProps( item);
+					context.setCurNodeProps( makeCurProps( item));
 					return true;
 				} // while
 				// NOT FOUND MORE - DONE
-				curProps = null;
+				context.setCurNodeProps(null);
 				return false;
 			}
 
@@ -232,7 +222,9 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 			 * @return
 			 */
 			private String getAlfAttrNameByJRKey(String jrFldName) {
-				return (!getMetaFields().containsKey(jrFldName)) ? jrFldName : getMetaFields().get(jrFldName).getValueLink();
+				return (!context.getMetaFields().containsKey(jrFldName))
+							? jrFldName 
+							: context.getMetaFields().get(jrFldName).getValueLink();
 			}
 
 			/**
@@ -240,15 +232,15 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 			 */
 			void buildData() {
 				this.data = new ArrayList<ApprovalInfo>();
-				if (rsIter != null) {
+				if (context.getRsIter() != null) {
 
 					final NodeService nodeSrv = serviceRegistry.getNodeService();
 					final NamespaceService ns = serviceRegistry.getNamespaceService();
 
 					final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
-					while(rsIter.hasNext()) { // тут только одна запись будет
-						final ResultSetRow rs = rsIter.next();
+					while(context.getRsIter().hasNext()) { // тут только одна запись будет
+						final ResultSetRow rs = context.getRsIter().next();
 
 						final NodeRef approveListId = rs.getNodeRef(); // id Списка Согласований 
 

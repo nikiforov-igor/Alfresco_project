@@ -1,6 +1,8 @@
 package ru.it.lecm.reports.jasper;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -28,6 +30,15 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.jasper.utils.Utils;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.comp.helper.Bootstrap;
+import com.sun.star.comp.helper.BootstrapException;
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
 /**
  * Отчёт "10.5.2 Исполнительская дисциплина по согласованиям за период." 
@@ -109,6 +120,9 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 			// bquery.append( " AND( (@lecm\\-contract\\:unlimited:true) OR (...) )");
 			bquery.append( " AND "+ cond);
 		}
+
+		// TODO: temporary
+		openOfficeExecute();
 
 		return bquery.toString();
 	}
@@ -353,11 +367,11 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 		public boolean next() throws JRException {
 			while (iterData != null && iterData.hasNext()) {
 				final EmployeeInfo item = iterData.next();
-				curProps = makeCurProps( item);
+				context.setCurNodeProps( makeCurProps( item));
 				return true;
 			} // while
 			// NOT FOUND MORE - DONE
-			curProps = null;
+			context.setCurNodeProps(null);
 			return false;
 		}
 
@@ -398,7 +412,8 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 		}
 
 		private String getAlfAttrNameByJRKey(String jrFldName) {
-			return (!getMetaFields().containsKey(jrFldName)) ? jrFldName : getMetaFields().get(jrFldName).getValueLink();
+			return (!context.getMetaFields().containsKey(jrFldName)) 
+							? jrFldName : context.getMetaFields().get(jrFldName).getValueLink();
 		}
 
 		// TODO: заменить потом на модельное значение
@@ -409,7 +424,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 		 */
 		private void buildData() {
 			this.data = new ArrayList<EmployeeInfo>();
-			if (rsIter != null) {
+			if (context.getRsIter() != null) {
 
 				final Map<NodeRef, EmployeeInfo> statistic = new HashMap<NodeRef, EmployeeInfo>(); // накопленная статистика по Позователю
 
@@ -418,15 +433,15 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 
 				final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
-				while(rsIter.hasNext()) {
-					final ResultSetRow rs = rsIter.next();
+				while(context.getRsIter().hasNext()) {
+					final ResultSetRow rs = context.getRsIter().next();
 
 					final NodeRef approveListId = rs.getNodeRef(); // id Списка Согласований 
 
-					final Map<QName, Serializable> realProps = nodeSrv.getProperties(approveListId); // получение отдельных Согласований внутри списка ... 
+					// final Map<QName, Serializable> realProps = nodeSrv.getProperties(approveListId); // получение отдельных Согласований внутри списка ... 
 
 					// <!-- дата начала согласования --> у Списка Согласования 
-					final Date startApprov = (Date) realProps.get(approveQNames.QFLD_STARTAPPROVE);
+					// final Date startApprov = (Date) realProps.get(approveQNames.QFLD_STARTAPPROVE);
 
 					final List<ChildAssociationRef> childItems = nodeSrv.getChildAssocs(approveListId, approveQNames.childApproveSet);
 					if (childItems == null || childItems.isEmpty())
@@ -467,7 +482,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 						 */
 						final float fact_duration = calcDuration( userApprovStartAt, userApprovedAt, 0); // X
 						final float norm_duration = calcDuration( userApprovStartAt, userDueAt, NORMAL_APPROVE_DURATION); // Y
-						final boolean isOutOfTime = fact_duration > norm_duration;
+						// final boolean isOutOfTime = fact_duration > norm_duration;
 
 						final EmployeeInfo userInfo;
 						if (statistic.containsKey(emplyeeId)) {
@@ -502,4 +517,103 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 		return (float) (duration_ms / MILLIS_PER_DAY);
 	}
 
+	private void openOfficeExecute() {
+		final String ooFileNameTemplate = "/reportdefinitions/oo-templates/ExampleArgsOfTheDoc.odt";
+		final String ooFileNameResult = "/reportdefinitions/oo-templates/generated.odt";
+		try {
+			ooConvert( ooFileNameTemplate, ooFileNameResult);
+		} catch(Throwable tx) {
+			logger.error(String.format( "Error generating ooffice new file\n\t '{%s}'\n\t from '{%s}'\n\t error %s", ooFileNameResult, ooFileNameTemplate, tx.getMessage()), tx);
+		}
+	}
+
+	private static void ooConvert(String namein, String nameout)
+			throws BootstrapException, com.sun.star.io.IOException, Exception, MalformedURLException
+	{
+
+		// final File sourceFile = new java.io.File(args[1]);
+		// String sSaveUrl = "file:///"+ sourceFile.getCanonicalPath().replace('\\', '/');
+
+		final String sLoadUrl = "file:///"+ namein.replace('\\', '/');
+		final String sSaveUrl = "file:///"+ nameout.replace('\\', '/');
+
+		// ensureOfficeLocally();
+
+		// Get the remote office component context
+		XComponentContext xContext = Bootstrap.bootstrap();
+		logger.info("Connected to a running office ...");
+
+		// Get the remote office service manager
+		XMultiComponentFactory xMCF = xContext.getServiceManager();
+
+		// Get the root frame (i.e. desktop) of openoffice framework.
+		Object oDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext);
+
+		// Desktop has 3 interfaces. The XComponentLoader interface provides ability to load components.
+		XComponentLoader xCLoader =  ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
+
+		XComponent document =  null;
+		{ // OPEN FILE
+			final PropertyValue[] props = new PropertyValue[4];
+			props[0] = newPropertyValue("МоёПолеТекст", "абвгдеёжзик");
+			props[1] = newPropertyValue("МояДата", (new SimpleDateFormat("yyyy/MM/dd")).parse("2012/03/22") );
+			props[2] = newPropertyValue("МyFieldText", "abcdefghijk");
+			props[3] = newPropertyValue("MyFieldNumber", 123);
+
+			// Create a document
+			document = xCLoader.loadComponentFromURL(sLoadUrl, "_blank", 0, props);
+			// Object oDocToStore = xCLoader.loadComponentFromURL( sLoadUrl.toString(), "_blank", 0, propertyValue );
+			logger.info("\nDocument \"" + sLoadUrl + "\" saved under \"" + sSaveUrl + "\"\n");
+		}
+
+
+		// Saving a document
+		com.sun.star.frame.XStorable xStorable = null;
+		if (document != null) {
+			xStorable = (com.sun.star.frame.XStorable)
+					UnoRuntime.queryInterface(com.sun.star.frame.XStorable.class, document );
+
+			/*
+			storeProps = new com.sun.star.beans.PropertyValue[ 2 ];
+			storeProps[0] = new com.sun.star.beans.PropertyValue();
+			storeProps[0].Name = "Overwrite";
+			storeProps[0].Value = new Boolean(true);
+			storeProps[1] = new com.sun.star.beans.PropertyValue();
+			storePropse[1].Name = "FilterName";
+			storeProps[1].Value = "StarOffice XML (Writer)";
+			*/
+			final PropertyValue[] storeProps = new PropertyValue[0];
+			storeProps[0].Name = "FilterName";
+			storeProps[0].Value = "Rich Text Format";
+			xStorable.storeAsURL( sSaveUrl.toString(), storeProps);
+			logger.info("\nDocument \"" + sLoadUrl + "\" saved under \"" +sSaveUrl + "\"\n");
+		}
+
+		// Get the textdocument
+		// XTextDocument aTextDocument = ( XTextDocument )UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class, document);
+
+		{
+			// Closing the converted document. Use XCloseable.close if the
+			// interface is supported, otherwise use XComponent.dispose
+			com.sun.star.util.XCloseable xCloseable =
+					(com.sun.star.util.XCloseable)UnoRuntime.queryInterface(
+							com.sun.star.util.XCloseable.class, xStorable);
+
+			if ( xCloseable != null ) {
+				xCloseable.close(false);
+			} else {
+				com.sun.star.lang.XComponent xComp =
+						(com.sun.star.lang.XComponent)UnoRuntime.queryInterface(
+								com.sun.star.lang.XComponent.class, xStorable);
+				xComp.dispose();
+			}
+		}
+	}
+
+	static PropertyValue newPropertyValue(String propName, Object propVal) {
+		final PropertyValue result = new PropertyValue();
+		result.Name = propName;
+		result.Value = propVal;
+		return result;
+	}
 }

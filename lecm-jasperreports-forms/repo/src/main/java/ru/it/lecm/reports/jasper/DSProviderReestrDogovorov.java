@@ -11,8 +11,8 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
-import ru.it.lecm.reports.jasper.filter.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
@@ -45,7 +45,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	 * fmt like "2013-04-30T00:00:00.000+06:00"
 	 * "endAfter" .. "endBefore" - интервл времени для конечной даты, fmt the same
 	 */
-	private class SearchFilter  {
+	class SearchFilter  {
 
 		Date dateStartAfter, dateStartBefore, dateEndAfter, dateEndBefore;
 		Double contractSum;
@@ -162,7 +162,9 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 			 * @return
 			 */
 			private String getAlfAttrNameByJRKey(String jrFldName) {
-				return (!getMetaFields().containsKey(jrFldName)) ? jrFldName : getMetaFields().get(jrFldName).getValueLink();
+				return (!context.getMetaFields().containsKey(jrFldName))
+								? jrFldName
+								: context.getMetaFields().get(jrFldName).getValueLink();
 			}
 
 			@Override
@@ -179,12 +181,12 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 							final BasicEmployeeInfo docExecutor = new BasicEmployeeInfo(executorEmplId);
 							docExecutor.loadProps(nodeSrv, getOrgstructureService());
 							// сохраним ФИО ...
-							curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Name), docExecutor.firstName);
-							curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Otchestvo), docExecutor.middleName);
-							curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Family), docExecutor.lastName);
+							context.getCurNodeProps().put( getAlfAttrNameByJRKey(JRFLD_Executor_Name), docExecutor.firstName);
+							context.getCurNodeProps().put( getAlfAttrNameByJRKey(JRFLD_Executor_Otchestvo), docExecutor.middleName);
+							context.getCurNodeProps().put( getAlfAttrNameByJRKey(JRFLD_Executor_Family), docExecutor.lastName);
 
 							// curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Staff_ID), (docExecutor.staffId != null) ? docExecutor.staffId.getId() : "" );
-							curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Staff), docExecutor.staffName);
+							context.getCurNodeProps().put( getAlfAttrNameByJRKey(JRFLD_Executor_Staff), docExecutor.staffName);
 
 							// curProps.put( getAlfAttrNameByJRKey(JRName_Executor_OU_ID), (docExecutor.unitId != null) ? docExecutor.unitId.getId() : "" );
 							// curProps.put( getAlfAttrNameByJRKey(JRName_ExecutorC_OU_Name), docExecutor.unitName);
@@ -198,7 +200,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 
 
 		if (filter != null)
-			dataSource.setFilter(filter.makeAssocFilter());
+			dataSource.context.setFilter(filter.makeAssocFilter());
 		return dataSource;
 	}
 
@@ -249,7 +251,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 
 		// Сумма договора (указан минимум)
 		if (filter.contractSum != null && filter.contractSum.doubleValue() != 0) { // "X to *"
-			bquery.append( " AND @lecm\\-contract\\:totalAmount:(" + filter.contractSum.toString() + " TO *)");
+			bquery.append( " AND @lecm\\-contract\\:00:(" + filter.contractSum.toString() + " TO *)");
 		}
 
 		// Контракт актуален: если ещё не истёк срок 

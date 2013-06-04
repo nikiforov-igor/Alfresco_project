@@ -1,13 +1,14 @@
 package ru.it.lecm.reports.jasper.containers;
 
+import java.util.List;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.jasper.utils.Utils;
-
-import java.util.List;
 
 /**
  * Контейнер для типизирования данных по Сотрудникам

@@ -19,6 +19,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import ru.it.lecm.reports.api.JRXField;
 import ru.it.lecm.reports.jasper.utils.MacrosHelper;
 import ru.it.lecm.reports.jasper.utils.XmlHelper;
 
@@ -322,6 +323,11 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 
 			knownTypes.put("integer", Integer.class);
 			knownTypes.put("int", Integer.class);
+
+			knownTypes.put("bool", Boolean.class);
+			knownTypes.put("boolean", Boolean.class);
+			// knownTypes.put("yesno", Boolean.class);
+			// knownTypes.put("logical", Boolean.class);
 
 			knownTypes.put("long", Long.class);
 			knownTypes.put("longint", Long.class);
