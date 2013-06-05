@@ -7,20 +7,24 @@
 
 <script type="text/javascript">
     //    <![CDATA[
-    var viewStatusDialog;
+    var     Dom = YAHOO.util.Dom,
+            Event = YAHOO.util.Event,
+            Bubbling = YAHOO.Bubbling;
+    var viewStatusDialog,
+        showStatusDialog;
     function showViewStatusDialog() {
-        var formEl = Dom.get("${formId}-content");
         var id = Alfresco.util.generateDomId();
-        Alfresco.util.Ajax.request(
-                {
+        var htmlid = "${formId}-" + id;
+        Alfresco.util.Ajax.request({
                     url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/history-datagrid",
                     dataObj: {
                         nodeRef: "${form.arguments.itemId}",
-                        htmlid: "${formId}-"+id,
+                        htmlid: htmlid,
                         dataSource: "lecm/business-journal/ds/getStatusHistory"
                     },
                     successCallback: {
                         fn: function (response) {
+                            showStatusDialog = true;
                             var text = response.serverResponse.responseText;
                             var formEl = Dom.get("${formId}-content");
                             formEl.innerHTML = text;
@@ -33,17 +37,22 @@
                     scope: this,
                     execScripts: true
                 });
-        if (viewStatusDialog != null) {
-            Dom.setStyle("${formId}", "display", "block");
-            viewStatusDialog.show();
-        }
     }
     function createStatusDialog() {
         viewStatusDialog = Alfresco.util.createYUIPanel("${formId}",
                 {
                     width: "50em"
                 });
-        YAHOO.Bubbling.on("hidePanel", hideViewStatusDialog);
+        Dom.setStyle("${formId}", "display", "none");
+    }
+    function onSearchSuccess() {
+        if (showStatusDialog) {
+            showStatusDialog = false;
+            if (viewStatusDialog != null) {
+                Dom.setStyle("${formId}", "display", "block");
+                viewStatusDialog.show();
+            }
+        }
     }
     function hideViewStatusDialog() {
         if (viewStatusDialog != null) {
@@ -51,7 +60,13 @@
             Dom.setStyle("${formId}", "display", "none");
         }
     }
-    YAHOO.util.Event.onContentReady("${formId}", createStatusDialog);
+    function init() {
+        createStatusDialog();
+        Bubbling.on("onSearchSuccess", onSearchSuccess, this);
+        Bubbling.on("hidePanel", hideViewStatusDialog);
+    }
+
+    Event.onContentReady("${formId}", init);
     //]]>
 </script>
 
@@ -59,9 +74,11 @@
     <div class="viewmode-field">
         <span class="viewmode-label">${field.label?html}:</span>
         <span class="viewmode-value">
-        <#if field.value == "">${msg("form.control.novalue")}<#else>
-            <a onclick="showViewStatusDialog()" href="javascript:void(0);" id="${fieldHtmlId}">${field.value}</a>
-        </#if>
+            <#if field.value == "">
+                ${msg("form.control.novalue")}
+            <#else>
+                <a onclick="showViewStatusDialog();" href="javascript:void(0);" id="${fieldHtmlId}">${field.value}</a>
+            </#if>
         </span>
     </div>
     <div id="${formId}" class="yui-panel">

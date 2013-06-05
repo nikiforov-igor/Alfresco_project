@@ -325,6 +325,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                     YAHOO.Bubbling.fire("filterChanged", successFilter);
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oResponse.meta);
+                    YAHOO.Bubbling.fire("onSearchSuccess", successFilter);
 
                     //выводим предупреждающее сообщение, если достигли лимита
                     if (oResponse.results && oResponse.results.length  >= me.options.maxSearchResults) {
