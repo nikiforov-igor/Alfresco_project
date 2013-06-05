@@ -5,7 +5,7 @@
     <bean id="statemachineResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
         <property name="resourceBundles">
             <list>
-				<value>ru.it.lecm.statemachine.statemachine</value>
+				<value>alfresco.web-extension.ru.it.lecm.statemachine.statemachine</value>
             </list>
         </property>
     </bean>
