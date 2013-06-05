@@ -16,7 +16,7 @@ function getFilters(filterType)
 }
 
 function isStarter() {
-    var url = '/lecm/contracts/employeeIsStarter';
+    var url = '/lecm/documents/employeeIsStarter?docType=lecm-contract:document';
     var result = remote.connect("alfresco").get(url);
     if (result.status != 200) {
         return false;

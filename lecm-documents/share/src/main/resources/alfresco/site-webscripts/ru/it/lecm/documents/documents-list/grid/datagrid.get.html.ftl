@@ -1,0 +1,122 @@
+<#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
+
+<#assign id = args.htmlid>
+
+<div class="yui-t1" id="contracts-grid">
+	<div id="yui-main-2">
+		<div class="yui-b" id="alf-content" style="margin-left: 0;">
+		<@grid.datagrid id=id showViewForm=true>
+			<script type="text/javascript">//<![CDATA[
+			function createDatagrid() {
+
+                new LogicECM.module.Documents.DataGrid('${id}').setOptions({
+                    usePagination: true,
+                    useDynamicPagination:true,
+                    pageSize: 20,
+                    showExtendSearchBlock: true,
+                    actions: [
+                        {
+                            type: "datagrid-action-link-${bubblingLabel!'documents'}",
+                            id: "onActionEdit",
+                            permission: "edit",
+                            label: "${msg("actions.edit")}"
+                        },
+                        {
+                            type: "datagrid-action-link-${bubblingLabel!'documents'}",
+                            id: "onActionDelete",
+                            permission: "delete",
+                            label: "${msg("actions.delete-row")}"
+                        },
+	                    {
+		                    type:"datagrid-action-link-${bubblingLabel!'documents'}",
+		                    id:"onActionDuplicate",
+		                    permission:"create",
+		                    label:"${msg("actions.duplicate-row")}"
+	                    }
+                    ],
+                    allowCreate: false,
+                    showActionColumn: true,
+                    showCheckboxColumn: false,
+                    bubblingLabel: "${bubblingLabel!"documents"}",
+                    attributeForShow:"${attributeForShow!"cm:name"}",
+                    excludeColumns: <#if excludedColumns?? && (excludedColumns?length > 0)>"${excludedColumns}".split(",")<#else>[]</#if>
+                }).setMessages(${messages});
+
+                var filter = _generateFilterStr(LogicECM.module.Documents.FILTER, "${filterProperty}");
+                var archiveFolders = _generateArchiveFoldersStr(LogicECM.module.Documents.SETTINGS.archivePath);
+
+                var formId = (LogicECM.module.Documents.FORM_ID && LogicECM.module.Documents.FORM_ID != "") ? ("_" + LogicECM.module.Documents.FORM_ID.split(" ").join("_")) : "";
+
+                YAHOO.util.Event.onContentReady ('${id}', function () {
+                    YAHOO.Bubbling.fire ("activeGridChanged", {
+                        datagridMeta: {
+                            itemType: "${itemType!'lecm-document:base'}",
+                            datagridFormId: "datagrid" + formId,
+                            nodeRef: LogicECM.module.Documents.SETTINGS.nodeRef,
+                            actionsConfig:{
+                                fullDelete:true,
+                                trash: false
+                            },
+                            sort:"cm:modified|false",
+                            searchConfig: {
+                                filter: (filter.length > 0 ?  filter + " AND " : "")
+                                        + '(PATH:"' + LogicECM.module.Documents.SETTINGS.draftPath + '//*"'
+                                        + ' OR PATH:"' + LogicECM.module.Documents.SETTINGS.documentPath + '//*"'
+                                        + ((archiveFolders.length > 0)? (" OR " + archiveFolders + "") : "") + ')'
+
+                            }
+                        },
+                        bubblingLabel: "${bubblingLabel!"documents"}"
+                    });
+                });
+			}
+
+			function init() {
+				createDatagrid();
+			}
+
+            function _generateFilterStr(filter, property) {
+                if (filter && property) {
+                    var re = /\s*,\s*/;
+                    var values = filter.split(re);
+                    var shieldProp = property.split("-").join("\\-");
+                    var resultFilter = "";
+                    var notFilter = "";
+                    for (var i = 0; i < values.length; i++) {
+                        var value = values[i];
+                        if (value.indexOf("!") != 0) {
+                            resultFilter += "@" + shieldProp + ":\'" + value + "\' ";
+                        } else {
+                            value = value.replace("!","");
+                            notFilter += "@" + shieldProp + ":\'" + value + "\' ";
+                        }
+
+                    }
+                    return (resultFilter.length > 0 ? "(" + resultFilter + ")" : "")
+                            + (resultFilter.length > 0 && notFilter.length > 0 ? " AND " : "")
+                            + (notFilter.length > 0 ? "NOT (" + notFilter + ")" : "");
+                }
+                return "";
+            }
+
+            function _generateArchiveFoldersStr(paths) {
+                if (paths) {
+                    var archPaths = paths.split(",");
+                    var result = "";
+                    for (var i = 0; i < archPaths.length; i++) {
+                        if (result.length > 0) {
+                            result += " OR ";
+                        }
+                        result += 'PATH:"' + archPaths[i] + '//*"' ;
+                    }
+                    return result;
+                }
+                return "";
+            }
+
+			YAHOO.util.Event.onDOMReady(init);
+			//]]></script>
+		</@grid.datagrid>
+		</div>
+	</div>
+</div>

@@ -88,6 +88,8 @@
         <property name="dictionaryService" ref="dictionaryService"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
+        <property name="documentMembersService" ref="documentMembersService"/>
+        <property name="searchService" ref="searchService"/>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"
@@ -298,6 +300,8 @@
         </property>
         <property name="documentService" ref="documentService"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
     </bean>
 
     <bean id="documentCommentsService" class="ru.it.lecm.documents.beans.DocumentCommentsServiceImpl"

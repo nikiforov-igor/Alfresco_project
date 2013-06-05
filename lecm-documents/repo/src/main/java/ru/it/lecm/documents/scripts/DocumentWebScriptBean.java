@@ -1,18 +1,22 @@
 package ru.it.lecm.documents.scripts;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ParameterCheck;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +36,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
     private DocumentService documentService;
 	private NodeService nodeService;
     private LecmPermissionService lecmPermissionService;
+    private NamespaceService namespaceService;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -47,6 +52,10 @@ public class DocumentWebScriptBean extends BaseWebScript {
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
 	}
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
 
     public String getRating(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
@@ -140,10 +149,10 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return new ScriptNode(documentService.getDraftRoot(rootName), serviceRegistry, getScope());
     }
 
-    public ScriptNode getDraftPath(String rootName) {
+    public String getDraftPath(String rootName) {
         ParameterCheck.mandatory("rootName", rootName);
         NodeRef draftRef = documentService.getDraftRoot(rootName);
-        return new ScriptNode(draftRef, serviceRegistry, getScope());
+        return nodeService.getPath(draftRef).toPrefixString(namespaceService);
     }
 
     private Map<String, String> takeProperties(Object[] object){
@@ -168,5 +177,42 @@ public class DocumentWebScriptBean extends BaseWebScript {
         String defaultKey = DocumentStatusesFilterBean.getDefaultFilter(type);
         defaultFilter.put(defaultKey, filters.get(defaultKey));
         return defaultFilter;
+    }
+
+    /**
+     * Получить количество участников для данного типа документа
+     * @return
+     */
+    public Integer getAmountMembers(String type) {
+        QName qNameType = QName.createQName(type, namespaceService);
+        return documentService.getMembers(qNameType).size();
+    }
+
+    /**
+     * Получить количество документов
+     * @param path список путей поиска
+     * @param statuses список значений для фильтрации
+     * @return количество
+     */
+    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses) {
+        List<String> docTypes = getElements(Context.getCurrentContext().getElements(types));
+        List<QName> qNameTypes = new ArrayList<QName>();
+        for (String docType : docTypes) {
+            qNameTypes.add(QName.createQName(docType, namespaceService));
+        }
+        return documentService.getDocuments(qNameTypes, getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses))).size();
+    }
+
+    private ArrayList<String> getElements(Object[] object){
+        ArrayList<String> arrayList = new ArrayList<String>();
+        for (Object obj : object) {
+            if (obj instanceof NativeJavaObject) {
+                NativeJavaObject element = (NativeJavaObject) obj;
+                arrayList.add((String) element.unwrap());
+            } else if (obj instanceof String){
+                arrayList.add(obj.toString());
+            }
+        }
+        return arrayList;
     }
 }

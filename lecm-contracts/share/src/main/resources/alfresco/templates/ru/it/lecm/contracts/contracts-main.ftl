@@ -7,7 +7,7 @@
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata-form-edit.css" />
 
     <script type="text/javascript">//<![CDATA[
-        LogicECM.module.Contracts.SETTINGS = <#if settings?? >${settings}<#else>{}</#if>;
+        LogicECM.module.Documents.SETTINGS = <#if settings?? >${settings}<#else>{}</#if>;
         (function () {
             function init() {
                 setTimeout(function () {

@@ -1,7 +1,7 @@
 <webscript>
     <shortname>Список статусов для договоров</shortname>
     <description>Получение списка всех статусов для машины состояний "Договора"</description>
-    <url>/lecm/contracts/getStatuses?docType={docType}</url>
+    <url>/lecm/statemachine/getStatuses?docType={docType}</url>
     <format default="json">extension</format>
     <authentication>user</authentication>
 </webscript>

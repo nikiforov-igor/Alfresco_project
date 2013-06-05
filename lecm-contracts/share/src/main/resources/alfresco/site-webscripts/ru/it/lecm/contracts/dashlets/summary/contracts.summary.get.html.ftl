@@ -63,7 +63,7 @@
                 drawForm: function Draw_form() {
                     Alfresco.util.Ajax.jsonGet(
                             {
-                                url: Alfresco.constants.PROXY_URI + encodeURI("lecm/contracts/summary?skippedStatuses=Корзина"),
+                                url: Alfresco.constants.PROXY_URI + encodeURI("lecm/documents/summary?docType=lecm-contract:document&draftRoot=Contracts&skippedStatuses=Корзина"),
                                 successCallback: {
                                     fn: function (response) {
                                         if (this.container != null) {
@@ -76,7 +76,7 @@
                                                     if (!(list[index].skip == "true")){
                                                         innerHtml = "<div class='column first" + (index == 0 ? " bold" : "") + "'>" + this.message[list[index].key] + ":" + "</div>" +
                                                                 "<div class='column second'><a class=\"status-button text-cropped\" href=\"/share/page/contracts-list?query=" +
-                                                                list[index].filter + "\">" + list[index].amountContracts + "</a></div>";
+                                                                list[index].filter + "\">" + list[index].amount + "</a></div>";
                                                         this.createRow(innerHtml);
                                                     }
                                                 }

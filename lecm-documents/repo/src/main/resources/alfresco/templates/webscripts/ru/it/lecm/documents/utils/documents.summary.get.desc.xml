@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Сводная информация</shortname>
+    <description>Получение сводной информации о количестве документов по стутусам</description>
+    <url>/lecm/documents/summary?docType={docType}&amp;draftRoot={draftRoot}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/contracts/contracts-documents</template-type>
+    <template-type>ru/it/lecm/documents/documents-list</template-type>
+    <properties>
+        <rolesPrefix>CONTRACT</rolesPrefix>
+        <settingsScript>/lecm/contracts/settings</settingsScript>
+    </properties>
     <components>
         <!-- Title -->
         <component>
@@ -14,10 +18,12 @@
         <!-- Toolbar -->
         <component>
             <region-id>toolbar</region-id>
-            <url>/lecm/contracts/toolbar</url>
+            <url>/lecm/documents/documents-list-toolbar</url>
             <properties>
-                <showCreateBtn>false</showCreateBtn>
+                <itemType>lecm-additional-document:additionalDocument</itemType>
                 <bubblingLabel>contracts-documents</bubblingLabel>
+                <showExSearchBtn>true</showExSearchBtn>
+                <showCreateBtn>false</showCreateBtn>
             </properties>
         </component>
         <!-- Menu -->
@@ -30,17 +36,20 @@
         </component>
         <!-- Datagrid -->
         <component>
-            <region-id>contracts-documents-grid</region-id>
-            <url>/lecm/contracts/contracts-docs-datagrid</url>
+            <region-id>documents-grid</region-id>
+            <url>/lecm/documents/documents-list-grid</url>
             <properties>
-                <pagination>true</pagination>
+                <itemType>lecm-additional-document:additionalDocument</itemType>
                 <bubblingLabel>contracts-documents</bubblingLabel>
                 <advSearchFormId>contracts-documents-search</advSearchFormId>
+                <attributeForShow>lecm-additional-document:number</attributeForShow>
+                <excludedColumns>lecm-document:creator-ref</excludedColumns>
+                <filterProperty>lecm-additional-document:additionalDocumentType-text-content</filterProperty>
             </properties>
         </component>
         <!-- Filter -->
         <component>
-            <region-id>contracts-documents-filter</region-id>
+            <region-id>documents-filter</region-id>
             <url>/lecm/contracts/contracts-docs-filter</url>
         </component>
         <!-- Forbidden -->

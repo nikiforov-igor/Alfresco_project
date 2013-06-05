@@ -4,6 +4,11 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +38,7 @@ public interface DocumentService {
     public static final QName PROP_DOCUMENT_IS_TRANSMIT = QName.createQName(DOCUMENT_NAMESPACE_URI, "istransmit");
     public static final QName PROP_DOCUMENT_DEPRIVE_RIGHT = QName.createQName(DOCUMENT_NAMESPACE_URI, "deprive-right");
 
+    public static final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
     /**
      * Метод для получения рейтинга документа
@@ -106,4 +112,10 @@ public interface DocumentService {
 	 * @return Ссылка на документ
 	 */
 	public NodeRef getDocumentFromPackageItems(NodeRef packageRef);
+
+    public List<NodeRef> getMembers(QName docType);
+
+    public List<NodeRef> getDocuments(List<QName> docTypes, List<String> paths, ArrayList<String> statuses);
+
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> inititatorsList, List<NodeRef> docsList);
 }

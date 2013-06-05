@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>toolbar</shortname>
-    <description>Contracts: Toolbar</description>
-    <url>/lecm/contracts/toolbar</url>
-    <authentication>user</authentication>
-</webscript>

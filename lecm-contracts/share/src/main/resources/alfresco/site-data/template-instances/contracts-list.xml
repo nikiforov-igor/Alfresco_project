@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/contracts/contracts-list</template-type>
+    <template-type>ru/it/lecm/documents/documents-list</template-type>
+    <properties>
+        <rolesPrefix>CONTRACT</rolesPrefix>
+        <settingsScript>/lecm/contracts/settings</settingsScript>
+    </properties>
     <components>
         <!-- Title -->
         <component>
@@ -14,11 +18,14 @@
         <!-- Toolbar -->
         <component>
             <region-id>toolbar</region-id>
-            <url>/lecm/contracts/toolbar</url>
+            <url>/lecm/documents/documents-list-toolbar</url>
             <properties>
+                <itemType>lecm-contract:document</itemType>
                 <showCreateBtn>true</showCreateBtn>
                 <bubblingLabel>contracts</bubblingLabel>
                 <showExSearchBtn>true</showExSearchBtn>
+                <newRowLabel>button.new-contract</newRowLabel>
+                <newRowDialogTitle>button.new-contract</newRowDialogTitle>
             </properties>
         </component>
         <!-- Menu -->
@@ -31,18 +38,27 @@
         </component>
         <!-- Datagrid -->
         <component>
-            <region-id>contracts-grid</region-id>
-            <url>/lecm/contracts/contracts-datagrid</url>
+            <region-id>documents-grid</region-id>
+            <url>/lecm/documents/documents-list-grid</url>
             <properties>
-                <pagination>true</pagination>
+                <itemType>lecm-contract:document</itemType>
                 <bubblingLabel>contracts</bubblingLabel>
                 <advSearchFormId>contracts-search</advSearchFormId>
+                <attributeForShow>lecm-contract:regNumProject</attributeForShow>
+                <excludedColumns>lecm-document:creator-ref,lecm-contract:currency-assoc</excludedColumns>
+                <filterProperty>lecm-statemachine:status</filterProperty>
             </properties>
         </component>
         <!-- Filter -->
         <component>
-            <region-id>contracts-filter</region-id>
-            <url>/lecm/contracts/contracts-filter</url>
+            <region-id>documents-filter</region-id>
+            <url>/lecm/documents/documents-list-filter</url>
+            <properties>
+                <itemType>lecm-contract:document</itemType>
+                <filterLabel>label.contracts</filterLabel>
+                <linkPage>contracts-list</linkPage>
+                <draftRoot>Contracts</draftRoot>
+            </properties>
         </component>
         <!-- Forbidden -->
         <component>

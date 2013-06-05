@@ -484,6 +484,7 @@
     <config>
         <forms>
             <dependencies>
+                <js src="/scripts/lecm-documents/documents-const.js"/>
                 <js src="/scripts/components/document-component-base.js"/>
                 <js src="/scripts/documents/connections/type-select.js"/>
                 <js src="/scripts/documents/members/lecm-document-members.js"/>

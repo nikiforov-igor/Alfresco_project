@@ -13,11 +13,14 @@
         <!-- Toolbar -->
         <component>
             <region-id>toolbar</region-id>
-            <url>/lecm/contracts/toolbar</url>
+            <url>/lecm/documents/documents-list-toolbar</url>
             <properties>
-                <showCreateBtn>true</showCreateBtn>
+                <itemType>lecm-contract:document</itemType>
                 <bubblingLabel>contracts</bubblingLabel>
+                <showCreateBtn>true</showCreateBtn>
                 <showSearch>false</showSearch>
+                <newRowLabel>button.new-contract</newRowLabel>
+                <newRowDialogTitle>button.new-contract</newRowDialogTitle>
             </properties>
         </component>
         <!-- Menu -->

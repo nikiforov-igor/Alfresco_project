@@ -6,7 +6,11 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.ResultSetRow;
+import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
@@ -29,20 +33,17 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     public void init() {
     }
 
-    private NodeService nodeService;
     private OrgstructureBean orgstructureService;
     private BusinessJournalService businessJournalService;
     private Repository repositoryHelper;
     private NamespaceService namespaceService;
 	private DictionaryService dictionaryService;
     private LecmPermissionService lecmPermissionService;
+    private DocumentMembersService documentMembersService;
+    private SearchService searchService;
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
         this.lecmPermissionService = lecmPermissionService;
-    }
-
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
     }
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
@@ -63,6 +64,14 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
 	}
+
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
+    }
+
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
 
     @Override
     public String getRating(NodeRef documentNodeRef) {
@@ -287,4 +296,113 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 		}
 		return null;
 	}
+
+    @Override
+    public List<NodeRef> getMembers(QName docType) {
+        NodeRef membersUnit = documentMembersService.getMembersUnit(docType);
+        return findNodesByAssociationRef(membersUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
+    }
+
+    /**
+     * Поиск документов
+     * @param path путь где следует искать
+     * @param statuses статусы
+     * @return List<NodeRef>
+     */
+    public List<NodeRef> getDocuments(List<QName> docTypes, List<String> paths, ArrayList<String> statuses) {
+        return getDocumentsByFilter(docTypes, null, null, null, paths, statuses, null, null);
+    }
+
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> inititatorsList, List<NodeRef> docsList) {
+        List<NodeRef> records = new ArrayList<NodeRef>();
+        SearchParameters sp = new SearchParameters();
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+
+        String query = "";
+        if (docTypes != null && !docTypes.isEmpty()) {
+            boolean addOR = false;
+            String typesFilter = "";
+            for (QName type : docTypes) {
+                typesFilter += (addOR ? " OR " : "") + " TYPE:\"" + type + "\"";
+                addOR = true;
+            }
+            query += "(" + typesFilter + ")";
+        }
+
+        // пути
+        if (paths != null && !paths.isEmpty()) {
+            boolean addOR = false;
+            String pathsFilter = "";
+            for (String path : paths) {
+                pathsFilter += (addOR ? " OR " : "") + "PATH:\"" + path + "//*\"";
+                addOR = true;
+            }
+            query += " AND (" + pathsFilter + ")";
+        }
+
+        // Фильтр по датам
+        if (dateProperty != null) {
+            final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
+            final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
+
+            String property = dateProperty.toPrefixString(namespaceService);
+            property = property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+            query += " AND @" + property + ":[" + MIN + " TO " + MAX + "]";
+        }
+
+        // фильтр по статусам
+        if (statuses != null && !statuses.isEmpty()) {
+            String statusesFilter = "";
+            String statusesNotFilter = "";
+            for (String status : statuses) {
+                if (!status.trim().startsWith("!")) {
+                    statusesFilter += " @lecm\\-statemachine\\:status:\"" + status.replace("!", "").trim() + "\"";
+                } else {
+                    statusesNotFilter += " @lecm\\-statemachine\\:status:\"" + status.replace("!", "").trim() + "\"";
+                }
+            }
+            query += (!statusesFilter.isEmpty() ? (" AND (" + statusesFilter + ")") : "")  +
+                    (!statusesNotFilter.isEmpty() ? (" AND NOT (" + statusesNotFilter  + ")") : "");
+        }
+
+        // фильтр по сотрудниками-создателям
+        if (inititatorsList != null && !inititatorsList.isEmpty()) {
+            boolean addOR = false;
+            String employeesFilter = "";
+            for (NodeRef employeeRef : inititatorsList) {
+                String personName = orgstructureService.getEmployeeLogin(employeeRef);
+                if (personName != null && !personName.isEmpty()) {
+                    employeesFilter += (addOR ? " OR " : "") + "@cm\\:creator:" + personName + "";
+                    addOR = true;
+                }
+            }
+            query += " AND (" + employeesFilter + ")";
+        }
+
+        // фильтр по конкретным документам (например, тем в которых данный сотрудник - участник)
+        if (docsList != null && !docsList.isEmpty()) {
+            boolean addOR = false;
+            String docsFilter = "";
+            for (NodeRef docRef : docsList) {
+                docsFilter += (addOR ? " OR " : "") + "ID:" + docRef.toString().replace(":", "\\:");
+                addOR = true;
+            }
+            query += " AND (" + docsFilter + ")";
+        }
+
+        ResultSet results = null;
+        sp.setQuery(query);
+        try {
+            results = searchService.query(sp);
+            for (ResultSetRow row : results) {
+                records.add(row.getNodeRef());
+            }
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+        }
+        return records;
+    }
 }
