@@ -2,10 +2,19 @@
 <!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 
 <beans>
+	<bean id="delegation.custom.config" class="org.springframework.extensions.config.ConfigBootstrap" init-method="register">
+		<property name="configService" ref="web.config" />
+		<property name="configs">
+			<list>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/delegation/delegation-share-config-custom.xml</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="delegationeResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
 		<property name="resourceBundles">
 			<list>
-				<value>ru.it.lecm.delegation.form.form</value>
+				<value>alfresco.web-extension.ru.it.lecm.delegation.form</value>
 			</list>
 		</property>
 	</bean>
