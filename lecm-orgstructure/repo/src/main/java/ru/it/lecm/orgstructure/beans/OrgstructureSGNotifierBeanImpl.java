@@ -573,6 +573,14 @@ public class OrgstructureSGNotifierBeanImpl
 		}
 
 		final Types.SGPosition brolePos = PolicyUtils.makeBRPos(brole, nodeService);
+		if (brolePos == null) {
+			logger.error( String.format( "\n(!) NO BUSINESS ROLE CODE detected, args are:\n\t created %s\n\t Business Role{%s} of type {%s}\n\t Dest {%s} of type {%s}"
+					, created
+					, brole, nodeService.getType(brole)
+					, destObj, nodeService.getType(destObj)
+			));
+			return;
+		}
 
 		/*
 		 * Теперь разделение по типу связи:
