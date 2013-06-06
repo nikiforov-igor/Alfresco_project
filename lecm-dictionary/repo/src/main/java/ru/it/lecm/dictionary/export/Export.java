@@ -8,12 +8,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import ru.it.lecm.dictionary.ExportSettings;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * User: mShafeev
@@ -25,6 +24,7 @@ public class Export extends AbstractWebScript {
 	private static final Log log = LogFactory.getLog(Export.class);
 	private NodeService nodeService;
 	private NamespaceService namespaceService;
+	private ExportSettings exportSettings;
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -34,12 +34,15 @@ public class Export extends AbstractWebScript {
 		this.namespaceService = namespaceService;
 	}
 
-	@Override
+    public void setExportSettings(ExportSettings exportSettings) {
+        this.exportSettings = exportSettings;
+    }
+
+    @Override
 	public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 
 		OutputStream resOutputStream = null;
 		try {
-			List<String> fields = Arrays.asList(req.getParameterValues("field"));
 			String nodeRefStr = req.getParameter("nodeRef");
 			NodeRef nodeRef = new NodeRef(nodeRefStr);
 
@@ -49,8 +52,8 @@ public class Export extends AbstractWebScript {
 			// Create an XML stream writer
 			resOutputStream = res.getOutputStream();
 
-			XmlDictionaryExporter xmlDictionaryExporter = new XmlDictionaryExporter(resOutputStream, fields, nodeService, namespaceService);
-			xmlDictionaryExporter.writeDictionary(nodeRef);
+			XmlDictionaryExporter xmlDictionaryExporter = new XmlDictionaryExporter(resOutputStream, exportSettings, nodeService, namespaceService);
+			xmlDictionaryExporter.writeItems(nodeRef);
 			xmlDictionaryExporter.close();
 			resOutputStream.flush();
 		} catch (XMLStreamException e) {

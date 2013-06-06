@@ -1,7 +1,9 @@
 package ru.it.lecm.dictionary.bootstrap;
 
+import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.slf4j.Logger;
@@ -27,7 +29,9 @@ public class LecmDictionaryBootstrap extends BaseBean {
 	private List<String> dictionaries;
 	private List<String> createOrUpdateDictionaries;
 	private NamespaceService namespaceService;
-	private DictionaryBean dictionaryService;
+    private DictionaryService dictionaryService;
+    private DictionaryBean dictionaryBean;
+    private Repository repositoryHelper;
 
 	@SuppressWarnings("UnusedDeclaration")
 	public void setDictionaries(List<String> dictionaries) {
@@ -43,11 +47,19 @@ public class LecmDictionaryBootstrap extends BaseBean {
 		this.namespaceService = namespaceService;
 	}
 
-	public void setDictionaryService(DictionaryBean dictionaryService) {
-		this.dictionaryService = dictionaryService;
-	}
+    public void setDictionaryBean(DictionaryBean dictionaryBean) {
+        this.dictionaryBean = dictionaryBean;
+    }
 
-	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
+
+    public void setRepositoryHelper(Repository repositoryHelper) {
+        this.repositoryHelper = repositoryHelper;
+    }
+
+    // в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
@@ -58,7 +70,7 @@ public class LecmDictionaryBootstrap extends BaseBean {
 		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
 			@Override
 			public Object doWork() throws Exception {
-				final NodeRef rootDir = dictionaryService.getDictionariesRoot();
+				final NodeRef rootDir = dictionaryBean.getDictionariesRoot();
 				if (dictionaries != null) {
 					for (final String dictionary : dictionaries) {
                         logger.info("Importing dictionary: {}", dictionary);
@@ -67,7 +79,7 @@ public class LecmDictionaryBootstrap extends BaseBean {
 							public Object execute() throws Throwable {
 								InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
 								try {
-									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, rootDir);
+									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, dictionaryService, repositoryHelper, rootDir);
 									importer.readDictionary(true);
 								} catch (Exception e) {
 									logger.error("Can not create dictionary: " + dictionary, e);
@@ -93,7 +105,7 @@ public class LecmDictionaryBootstrap extends BaseBean {
 							public Object execute() throws Throwable {
 								InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
 								try {
-									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, rootDir);
+									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, dictionaryService, repositoryHelper, rootDir);
 									importer.readDictionary(false);
 								} catch (Exception e) {
 									logger.error("Can not create dictionary: " + dictionary);

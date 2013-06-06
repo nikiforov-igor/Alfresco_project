@@ -33,7 +33,9 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="transactionService" ref="transactionService"/>
 	    <property name="namespaceService" ref="namespaceService"/>
-		<property name="dictionaryService" ref="serviceDictionary"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="dictionaryBean" ref="serviceDictionary"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
     </bean>
 
 
@@ -42,6 +44,7 @@
           parent="webscript">
         <property name="nodeService" ref="nodeService"/>
 	    <property name="namespaceService" ref="namespaceService"/>
+        <property name="exportSettings" ref="dictionary.exportSettings"/>
     </bean>
 
     <bean id="webscript.ru.it.lecm.dictionary.export-csv.get"
@@ -57,7 +60,9 @@
           parent="webscript">
         <property name="nodeService" ref="nodeService"/>
 	    <property name="namespaceService" ref="namespaceService"/>
-		<property name="dictionaryService" ref="serviceDictionary"/>
+	    <property name="dictionaryService" ref="dictionaryService"/>
+		<property name="dictionaryBean" ref="serviceDictionary"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
     </bean>
 
 	<bean id="webscript.ru.it.lecm.dictionary.api.export.get"
@@ -65,6 +70,7 @@
 	      parent="webscript">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="namespaceService" ref="namespaceService"/>
+        <property name="exportSettings" ref="dictionary.exportSettings"/>
 	</bean>
 
 	<util:constant id="DICTIONARIES_ROOT_ID" static-field="ru.it.lecm.dictionary.beans.DictionaryBean.DICTIONARIES_ROOT_ID"/>
@@ -113,4 +119,34 @@
 			</list>
 		</property>
 	</bean>
+
+    <bean id="dictionary.exportSettings" class="ru.it.lecm.dictionary.beans.ExportSettingsHolder"/>
+
+    <bean id="dictionary.exportSettingsInitializer" abstract="true" class="ru.it.lecm.dictionary.ExportSettingsInitializer" init-method="init">
+        <property name="exportSettings" ref="dictionary.exportSettings"/>
+    </bean>
+
+    <bean id="dictionary.exportSettingsInitializer.model" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-dic:dictionary">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-dic:attributeForShow</value>
+                        <value>lecm-dic:type</value>
+                        <value>lecm-dic:show_control_in_separate_window</value>
+                        <value>lecm-dic:plane</value>
+                        <value>lecm-dic:description</value>
+                    </list>
+                </entry>
+                <entry key="lecm-currency:currency">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-currency:digital-code</value>
+                        <value>lecm-currency:alphabetic-code</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>

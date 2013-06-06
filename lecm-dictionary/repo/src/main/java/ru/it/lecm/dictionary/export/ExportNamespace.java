@@ -11,12 +11,16 @@ import org.alfresco.service.namespace.QName;
  */
 public interface ExportNamespace {
 	public static final String ATTR_NAME = "name";
-	String DICTIONARY_NAMESPACE_URI = "http://www.it.ru/lecm/dictionary/1.0";
-	QName DICTIONARY = QName.createQName(DICTIONARY_NAMESPACE_URI, "dictionary");
-	QName PROP_TYPE = QName.createQName(DICTIONARY_NAMESPACE_URI, "type");
-	String DICTIONARIES_ROOT_NAME = "Dictionary";
-	String TAG_PROPERTY = "property";
-	String TAG_DICTIONARY = "dictionary";
-	String TAG_ITEMS = "items";
-	String TAG_ITEM = "item";
+    String ATTR_TYPE = "type";
+    String ATTR_PATH = "path";
+    String DICTIONARY_NAMESPACE_URI = "http://www.it.ru/lecm/dictionary/1.0";
+    QName DICTIONARY = QName.createQName(DICTIONARY_NAMESPACE_URI, "dictionary");
+    QName PROP_TYPE = QName.createQName(DICTIONARY_NAMESPACE_URI, "type");
+    String DICTIONARIES_ROOT_NAME = "Dictionary";
+    String TAG_PROPERTY = "property";
+    String TAG_DICTIONARY = "dictionary";
+    String TAG_ITEMS = "items";
+    String TAG_ITEM = "item";
+    String TAG_ASSOCS = "assocs";
+    String TAG_ASSOC = "assoc";
 }
