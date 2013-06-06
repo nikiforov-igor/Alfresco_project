@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.jasper.config;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,8 @@ import ru.it.lecm.reports.jasper.utils.MacrosHelper;
 public class JRDSConfigBaseImpl implements JRDSConfig {
 
 	// мапер простых конфигурационных параметров
-	private Map<String, String> args;
+	private Map<String, Object> args;
+	// private Map<String, Object> defaults;
 
 	// мапер имя поля в jrxml -> описание поля
 	private Map<String, JRXField> metaFields;
@@ -51,7 +53,7 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 	}
 
 	@Override
-	public Map<String, String> getArgs() {
+	public Map<String, Object> getArgs() {
 		/* 
 		 * такая констуркция сработает даже при вызове виртуальных методов в 
 		 * конструкторах в отличии от: 
@@ -60,18 +62,19 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 		 * базового коструктора.
 		 */
 		if (args == null)
-			args = new HashMap<String, String>();
+			args = new HashMap<String, Object>();
 		return args;
 	}
 
 	/**
-	 * Здесь ожидается наполнение поддерживаемыми именами args (в принципе и metaFields тоже).
+	 * Здесь ожидается наполнение поддерживаемыми именами списка defaults (в принципе и metaFields тоже).
 	 * Предоставляем дефолтную рпустую реализацию, чтобы можно было использовать
 	 * класс напрямую. 
+	 * @param defaults список для задания умолчаний
 	 */
-	protected void setDefaults() {
-		// getArgs().put("MY_DATA_NAME", "MyValue");
-		// getArgs().put("USERNAME", "Guest");
+	protected void setDefaults(Map<String, Object> defaults) {
+		// defaults.put("MY_DATA_NAME", "MyValue");
+		// defaults.put("USERNAME", "Guest");
 	}
 
 	/**
@@ -98,6 +101,27 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 	}
 
 	/**
+	 * Получить указанный аргумент в виде строки
+	 * @param argName
+	 * @param defaultInt значение по-умолчанию, когда нет аргумента argName или 
+	 * он типа список/коллекция
+	 * @return
+	 */
+	public String getstr(final String argName, final String defaultStr) {
+		if (getArgs().containsKey(argName)) {
+			final Object value = getArgs().get(argName);
+			if (!(value instanceof Collection)) {
+				return value == null ? null : value.toString();
+			}
+		}
+		return defaultStr;
+	}
+
+	public String getstr(final String argName) {
+		return getstr(argName, null);
+	}
+
+	/**
 	 * Получить указанный аргумент в виде целого
 	 * @param argName
 	 * @param defaultInt значение по-умолчанию, когда нет аргумента argName
@@ -105,12 +129,58 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 	 */
 	public int getint(final String argName, final int defaultInt) {
 		if (getArgs().containsKey(argName)) {
-			final String value = getArgs().get(argName);
-			if (value != null && value.length() > 0) {
-				return Integer.parseInt(value);
+			final Object value = getArgs().get(argName);
+			if (value != null && (value instanceof String) && ((String)value).length() > 0) {
+				return Integer.parseInt( (String) value);
 			}
 		}
 		return defaultInt;
+	}
+
+	/**
+	 * Получить указанный аргумент в виде списка
+	 * @param argName
+	 * @param defaultList значение по-умолчанию, когда нет аргумента argName
+	 * @return список или defaultList, если нет такого или он другого типа
+	 */
+	@SuppressWarnings({ "rawtypes" })
+	public List<?> getList(final String argName, final List<?> defaultList) {
+		if (getArgs().containsKey(argName)) {
+			final Object value = getArgs().get(argName);
+			// if (value instanceof List)
+			return (List) value;
+		}
+		return defaultList;
+	}
+
+	/**
+	 * Получить указанный аргумент в виде списка
+	 * @param argName
+	 * @return список или Null, если нет такого или он другого типа
+	 */
+	@SuppressWarnings("rawtypes")
+	public List getList(final String argName) {
+		return getList(argName, null);
+	}
+
+	/**
+	 * Получить указанный аргумент в виде мапы
+	 * @param argName
+	 * @param defaultMap значение по-умолчанию, когда нет аргумента argName
+	 * @return список или defaultMap, если нет такого или он другого типа
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Map<String, Object> getMap(final String argName, final Map<String, Object> defaultMap) {
+		if (getArgs().containsKey(argName)) {
+			final Object value = getArgs().get(argName);
+			// if (value instanceof Map)
+			return (Map) value;
+		}
+		return defaultMap;
+	}
+
+	public Map<String, Object> getMap(final String argName) {
+		return getMap( argName, null);
 	}
 }
 

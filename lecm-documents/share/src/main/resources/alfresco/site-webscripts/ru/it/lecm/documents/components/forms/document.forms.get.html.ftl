@@ -13,7 +13,10 @@
 
             <#escape x as x?js_string>
                 <div id="experts" class="yui-skin-sam">
-                    <a href="javascript:void(0);" onclick="printNode('${nodeRef}')" class="text-cropped" title="${msg("form.simple")}">${msg("form.simple")}</a>
+                    <a href="javascript:void(0);" onclick="printNode('${nodeRef}', 'Simple')" class="text-cropped" title="${msg("form.simple")}">${msg("form.simple")}</a>
+                </div>
+                <div id="experts" class="yui-skin-sam">
+                    <a href="javascript:void(0);" onclick="printNode('${nodeRef}', 'contract-dossier')" class="text-cropped" title="${msg("form.simple")}">${msg("form.dossier")}</a>
                 </div>
             </#escape>
 
@@ -24,8 +27,8 @@
             var Dom = YAHOO.util.Dom,
                 Event = YAHOO.util.Event;
 
-            function printNode(nodeRef) {
-                document.location.href = Alfresco.constants.PROXY_URI + "lecm/report/Simple?nodeRef=" + encodeURI(nodeRef);
+            function printNode(nodeRef, reportName) {
+                document.location.href = Alfresco.constants.PROXY_URI + "lecm/report/"+ reportName+ "?nodeRef=" + encodeURI(nodeRef)+ "&exec=1";
             }
 
             function init() {

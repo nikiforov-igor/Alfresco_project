@@ -28,6 +28,16 @@ import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
+/**
+ * Реализация провайдера с поддержкой lucene-поиска по критериям:
+ *    1) явно задаваемому nodeRef
+ *    2) типу узлов
+ * (задвать их можно независимо или совместно)
+ * Также имеется возможность обеспечить страничный поиск (limit+offset)
+ *
+ * @author rabdullin
+ *
+ */
 public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider 
 {
 	private static final Logger logger = LoggerFactory.getLogger(DSProviderSearchQueryReportBase.class);
@@ -61,7 +71,7 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 	}
 
 	public String getNodeRef() {
-		return (nodeRef == null) ? "" : nodeRef.toString(); 
+		return (nodeRef == null) ? null : nodeRef.toString(); 
 	}
 
 	public void setNodeRef(String value) {
@@ -80,16 +90,40 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 	/**
 	 * XML-конфигурация
 	 */
-	protected JRDSConfigXML conf = new JRDSConfigXML() {
-		@Override
-		protected void setDefaults() {
-			super.setDefaults();
-			getArgs().put( XML_OFFSET, null);
-			getArgs().put( XML_LIMIT, null);
-			// getArgs().put( XML_PGSIZE, null);
-		}
-	};
+	private JRDSConfigXML xmlConfig = createXmlConfig();
 
+	/**
+	 * XML-конфигурация
+	 */
+	public JRDSConfigXML conf() {
+		if (xmlConfig == null) 
+			xmlConfig = createXmlConfig();
+		return xmlConfig;
+	}
+
+	/**
+	 * Вернуть объект конфигуратор
+	 * @return
+	 */
+	protected JRDSConfigXML createXmlConfig() {
+		return new JRDSConfigXML() {
+			@Override
+			protected void setDefaults(Map<String, Object> defaults) {
+				super.setDefaults(defaults);
+				setXMLDefaults( defaults);
+			}
+		};	
+	}
+
+	/**
+	 * Дополнить конфигурацию значениями по-умолчанию
+	 * @param defaults
+	 */
+	protected void setXMLDefaults(Map<String, Object> defaults) {
+		defaults.put( XML_OFFSET, null);
+		defaults.put( XML_LIMIT, null);
+		// defaults.put( XML_PGSIZE, null);
+	}
 
 	@Override
 	public void dispose(JRDataSource ds) throws JRException {
@@ -109,7 +143,7 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 		if (report != null) {
 			// get the data source parameters from the report
 			final Map<String, JRParameter> params = JRUtils.buildParamMap(report.getParameters());
-			conf.setArgsByJRParams(params); // + conf.loadConfig() inside
+			conf().setArgsByJRParams(params); // + conf.loadConfig() inside
 		}
 
 		if (alfrescoResult == null) {
@@ -123,15 +157,14 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 		dataSource.context.setSubstitudeService(substitudeService);
 		dataSource.context.setRegistryService(serviceRegistry);
 		dataSource.context.setJrSimpleProps(jrSimpleProps);
-		if (conf != null)
-			dataSource.context.setMetaFields(conf.getMetaFields());
+		dataSource.context.setMetaFields(conf().getMetaFields());
 
 		return dataSource;
 	}
 
 
 	/**
-	 * Внутренни метод для создания нужного набора данных
+	 * Внутренний метод для создания нужного набора данных
 	 * @param iterator
 	 * @return
 	 */
@@ -147,11 +180,11 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 
 	
 	public int getArgQueryOffset() {
-		return (conf != null) ? conf.getint(XML_OFFSET, 0) : 0;
+		return (conf() != null) ? conf().getint(XML_OFFSET, 0) : 0;
 	}
 
 	public int getArgQueryLimit() {
-		return (conf != null) ? conf.getint(XML_LIMIT, UNLIMITED) : UNLIMITED;
+		return (conf() != null) ? conf().getint(XML_LIMIT, UNLIMITED) : UNLIMITED;
 	}
 
 	/*
@@ -209,8 +242,8 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 	 */
 	protected void scanSimpleFieldsInMetaConf() {
 		jrSimpleProps = null; // no filter = all fields
-		if (conf != null) { // вносим только поля Альфреско (которые отличаются от jr-полей)
-			final Map<String, JRXField> meta = conf.getMetaFields(); //
+		if (conf() != null) { // вносим только поля Альфреско (которые отличаются от jr-полей)
+			final Map<String, JRXField> meta = conf().getMetaFields(); //
 			if (meta != null && !meta.isEmpty()) {
 				jrSimpleProps = new HashSet<String>();
 				final NamespaceService ns = serviceRegistry.getNamespaceService();
@@ -225,6 +258,11 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 		}
 	}
 
+	
+	/**
+	 * Формирует alfrescoResult согласно запросу полученному от buildQueryText и
+	 * параметрам limit/offset.
+	 */
 	protected void execQuery() {
 		final DurationLogger d = new DurationLogger();
 
@@ -241,10 +279,12 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 		search.setLanguage(SearchService.LANGUAGE_LUCENE);
 		search.setQuery(queryText);
 
-		final int skipCount = getArgQueryOffset();
-		if (skipCount > 0)
-			search.setSkipCount(skipCount);
+		// set offset ...
+		final int skipCountOffset = getArgQueryOffset();
+		if (skipCountOffset > 0)
+			search.setSkipCount(skipCountOffset);
 
+		// set limit ...
 		final int maxItems = getArgQueryLimit();
 		if (maxItems != UNLIMITED)
 			search.setMaxItems(maxItems);
@@ -257,6 +297,6 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 		d.logCtrlDuration(logger, String.format( 
 				"\nQuery in {t} msec: found %d rows, limit %d, offset %d" +
 				"\n>>>%s\n<<<"
-				, foundCount, maxItems,  skipCount, queryText));
+				, foundCount, maxItems,  skipCountOffset, queryText));
 	}
 }

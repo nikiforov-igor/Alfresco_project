@@ -57,8 +57,20 @@ public class XmlHelper {
 	}
 
 
+	/**
+	 * Получить текстовый контент узла (из вложенного CDATA, или простого текста).
+	 * Для атрибутов возвращается их value.
+	 * @param tag
+	 * @return
+	 */
 	public static String getTagContent(Node tag)
 	{
+		if (tag == null)
+			return null;
+
+		if (tag instanceof org.w3c.dom.Attr)
+			return ((org.w3c.dom.Attr) tag).getValue();
+
 		final XPathEvaluator xpath = new XPathEvaluatorImpl();
 		final XPathResult result = (XPathResult) xpath.evaluate("text()",
 				tag, null, XPathResult.STRING_TYPE, null);

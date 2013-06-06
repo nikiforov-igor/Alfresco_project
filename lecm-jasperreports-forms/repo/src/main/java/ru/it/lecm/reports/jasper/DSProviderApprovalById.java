@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRException;
-
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -60,9 +58,9 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 			result.context.setSubstitudeService(substitudeService);
 			result.context.setRegistryService(serviceRegistry);
 			result.context.setJrSimpleProps(jrSimpleProps);
-			if (conf != null)
-				result.context.setMetaFields(conf.getMetaFields());
-			result.buildData();
+			if (conf() != null)
+				result.context.setMetaFields(conf().getMetaFields());
+			result.buildJoin();
 			return result;
 		}
 
@@ -103,30 +101,14 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 		 * набор Согласующих
 		 * 
 		 * Выходные данные - развёрнутый список Согласующих:
-		 * •	данные по документу (номер проекта договора, номер версии документа, дата начала согласования, дата согласования, результат согласования)
-		 * •	данные сотрудника-исполнителя (ФИО, должность, подразделение)
-		 * •	данные по согласующему (ФИО, должность сотрудника, Отдел, Результат согласования, Замечения, Дата согласования) 
+		 *   • данные по документу (номер проекта договора, номер версии документа, дата начала согласования, дата согласования, результат согласования)
+		 *   • данные сотрудника-исполнителя (ФИО, должность, подразделение)
+		 *   • данные по согласующему (ФИО, должность сотрудника, Отдел, Результат согласования, Замечения, Дата согласования) 
 		 */
-		protected class ApprovalItemsDS extends AlfrescoJRDataSource {
-
-			private List<ApprovalInfo> data;
-			private Iterator<ApprovalInfo> iterData;
+		protected class ApprovalItemsDS extends TypedJoinDS<ApprovalInfo> {
 
 			public ApprovalItemsDS( Iterator<ResultSetRow> iterator) {
 				super(iterator);
-				// buildData();
-			}
-
-			@Override
-			public boolean next() throws JRException {
-				while (iterData != null && iterData.hasNext()) {
-					final ApprovalInfo item = iterData.next();
-					context.setCurNodeProps( makeCurProps( item));
-					return true;
-				} // while
-				// NOT FOUND MORE - DONE
-				context.setCurNodeProps(null);
-				return false;
 			}
 
 			/* Названия полей для JR-jrxml */
@@ -161,77 +143,67 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 			final static String JRName_ITEM_OU_ID = "col_Item.Employee.Unit.Id";
 			final static String JRName_ITEM_OU_NAME = "col_Item.Employee.Unit.Name";
 
-/*
+			/*
 			final static String JRName_ = "";
- */
+			 */
+
 			/**
 			 * Сформировать контйнер с данными для jr
 			 * @param item
 			 */
-			private Map<String, Serializable> makeCurProps(ApprovalInfo item) {
-				final Map<String, Serializable> result = new HashMap<String, Serializable>();
+			@Override
+			protected Map<String, Serializable> getReportContextProps(ApprovalInfo item) {
 
+				final Map<String, Serializable> result = new HashMap<String, Serializable>();
 
 				// исполнитель
 				if (item.docInfo != null) {
-					result.put( getAlfAttrNameByJRKey(JRName_DOC_PROJECTNUM), item.docInfo.docProjectNumber);
-					result.put( getAlfAttrNameByJRKey(JRName_DOC_VERSION), item.docInfo.docVersion);
-					result.put( getAlfAttrNameByJRKey(JRName_DOC_APPROVE_RESULT), item.docInfo.docApproveResult);
+					result.put( JRName_DOC_PROJECTNUM, item.docInfo.docProjectNumber);
+					result.put( JRName_DOC_VERSION, item.docInfo.docVersion);
+					result.put( JRName_DOC_APPROVE_RESULT, item.docInfo.docApproveResult);
 
-					result.put( getAlfAttrNameByJRKey(JRName_DOC_APPROVE_START), item.docInfo.docStartApprove);
-					result.put( getAlfAttrNameByJRKey(JRName_DOC_APPROVE_END), item.docInfo.docEndApprove);
+					result.put( JRName_DOC_APPROVE_START, item.docInfo.docStartApprove);
+					result.put( JRName_DOC_APPROVE_END, item.docInfo.docEndApprove);
 
 					if (item.docInfo.docExecutor != null) {
-						result.put( getAlfAttrNameByJRKey(JRName_EXEC_FIRSTNAME), item.docInfo.docExecutor.firstName);
-						result.put( getAlfAttrNameByJRKey(JRName_EXEC_MIDDLENAME), item.docInfo.docExecutor.middleName);
-						result.put( getAlfAttrNameByJRKey(JRName_EXEC_LASTNAME), item.docInfo.docExecutor.lastName);
+						result.put( JRName_EXEC_FIRSTNAME, item.docInfo.docExecutor.firstName);
+						result.put( JRName_EXEC_MIDDLENAME, item.docInfo.docExecutor.middleName);
+						result.put( JRName_EXEC_LASTNAME, item.docInfo.docExecutor.lastName);
 
-						result.put( getAlfAttrNameByJRKey(JRName_EXEC_STAFF_ID)
+						result.put( JRName_EXEC_STAFF_ID
 								, (item.docInfo.docExecutor.staffId != null) ? item.docInfo.docExecutor.staffId.getId() : "" );
-						result.put( getAlfAttrNameByJRKey(JRName_EXEC_STAFF_NAME), item.docInfo.docExecutor.staffName);
+						result.put( JRName_EXEC_STAFF_NAME, item.docInfo.docExecutor.staffName);
 
-						result.put( getAlfAttrNameByJRKey(JRName_EXEC_OU_ID)
+						result.put( JRName_EXEC_OU_ID
 								, (item.docInfo.docExecutor.unitId != null) ? item.docInfo.docExecutor.unitId.getId() : "" );
-						result.put( getAlfAttrNameByJRKey(JRName_EXEC_OU_NAME), item.docInfo.docExecutor.unitName);
+						result.put( JRName_EXEC_OU_NAME, item.docInfo.docExecutor.unitName);
 					}
 				}
 
-				result.put( getAlfAttrNameByJRKey(JRName_ITEM_FIRSTNAME), item.firstName);
-				result.put( getAlfAttrNameByJRKey(JRName_ITEM_MIDDLENAME), item.middleName);
-				result.put( getAlfAttrNameByJRKey(JRName_ITEM_LASTNAME), item.lastName);
+				result.put( JRName_ITEM_FIRSTNAME, item.firstName);
+				result.put( JRName_ITEM_MIDDLENAME, item.middleName);
+				result.put( JRName_ITEM_LASTNAME, item.lastName);
 
-				result.put( getAlfAttrNameByJRKey(JRName_ITEM_APPROVE_RESULT), item.approveResult);
-				result.put( getAlfAttrNameByJRKey(JRName_ITEM_APPROVE_NOTES), item.approveNotes);
-				result.put( getAlfAttrNameByJRKey(JRName_ITEM_APPROVE_DATE), item.approvedAt);
+				result.put( JRName_ITEM_APPROVE_RESULT, item.approveResult);
+				result.put( JRName_ITEM_APPROVE_NOTES, item.approveNotes);
+				result.put( JRName_ITEM_APPROVE_DATE, item.approvedAt);
 
-				result.put( getAlfAttrNameByJRKey(JRName_ITEM_STAFF_ID)
-						, (item.staffId != null) ? item.staffId.getId() : "" );
-				result.put( getAlfAttrNameByJRKey(JRName_ITEM_STAFF_NAME), item.staffName);
+				result.put( JRName_ITEM_STAFF_ID, (item.staffId != null) ? item.staffId.getId() : "" );
+				result.put( JRName_ITEM_STAFF_NAME, item.staffName);
 
-				result.put( getAlfAttrNameByJRKey(JRName_ITEM_OU_ID)
-						, (item.unitId != null) ? item.unitId.getId() : "" );
-				result.put( getAlfAttrNameByJRKey(JRName_ITEM_OU_NAME), item.unitName);
+				result.put( JRName_ITEM_OU_ID, (item.unitId != null) ? item.unitId.getId() : "" );
+				result.put( JRName_ITEM_OU_NAME, item.unitName);
 
 				return result;
 			}
 
 			/**
-			 * Получить название поля (в списке атрибутов curProps объекта), 
-			 * соот-щее jasper-названию колонки  
-			 * @param jrFldName название колонки для Jasper (оно упрощено относительно "полного" названия в curProps)
-			 * @return
-			 */
-			private String getAlfAttrNameByJRKey(String jrFldName) {
-				return (!context.getMetaFields().containsKey(jrFldName))
-							? jrFldName 
-							: context.getMetaFields().get(jrFldName).getValueLink();
-			}
-
-			/**
 			 * Собираем статистику по всем перечисленным в this.rsIter объектах-согласованиях
 			 */
-			void buildData() {
-				this.data = new ArrayList<ApprovalInfo>();
+			@Override
+			public int buildJoin() {
+				final ArrayList<ApprovalInfo> result = new ArrayList<ApprovalInfo>();
+
 				if (context.getRsIter() != null) {
 
 					final NodeService nodeSrv = serviceRegistry.getNodeService();
@@ -239,7 +211,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 
 					final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
-					while(context.getRsIter().hasNext()) { // тут только одна запись будет
+					while(context.getRsIter().hasNext()) { // тут только одна запись будет по-идее
 						final ResultSetRow rs = context.getRsIter().next();
 
 						final NodeRef approveListId = rs.getNodeRef(); // id Списка Согласований 
@@ -285,7 +257,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 						final List<ChildAssociationRef> childItems = nodeSrv.getChildAssocs(approveListId, approveQNames.childApproveSet);
 						if (childItems == null || childItems.isEmpty()) {
 							// если списка нет - доавим один пустой элемент только ...
-							this.data.add( new ApprovalInfo(null, docInfo));
+							result.add( new ApprovalInfo(null, docInfo));
 							continue;
 						}
 
@@ -317,17 +289,20 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 							// замечания 
 							apprInfo.approveNotes = Utils.coalesce( childProps.get(approveQNames.QFLD_USER_COMMENT), null);
 
-							this.data.add( apprInfo);
+							result.add( apprInfo);
 						}
 					} // while
 				}
 
-				this.iterData = this.data.iterator();
+				setData(result);
+				setIterData( result.iterator());
+
+				return result.size();
 			}
 
 		} // ApprovalItemDS
 
-		// TODO: сделать работу через файл L18
+		// TODO: сделать работу L18 через properties-файл 
 		/**
 		 * Локализация для "<!-- результат согласования документа -->" и "<!-- Результат согласования сотрудником -->"
 		 * @param listValue см lecm-approval-list-model.xml::"lecm-al:approval-item-decision" и "lecm-al:approval-list-decision"

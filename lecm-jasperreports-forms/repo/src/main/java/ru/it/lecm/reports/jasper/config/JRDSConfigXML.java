@@ -2,6 +2,7 @@ package ru.it.lecm.reports.jasper.config;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,13 +19,18 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import ru.it.lecm.reports.api.JRXField;
 import ru.it.lecm.reports.jasper.utils.MacrosHelper;
 import ru.it.lecm.reports.jasper.utils.XmlHelper;
 
 /**
- * Реализация для чтения конфы из XML
+ * Реализация для чтения конфы из XML.
+ * (!) При загрузке XML автоматом читаются:
+ * 		1) Аргументы, перечисленные в getArgs (список задётся в setDefaults или может быть расширен провайдером)
+ * 		2) Список метаописаний "fields.jasper"
+ * 		3) (!) Другие данные их XML игнорируются.
  * @author rabdullin
  */
 public class JRDSConfigXML extends JRDSConfigBaseImpl {
@@ -52,23 +58,22 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		final static String JR_COLNAMEPREFIX = "COL_"; // префикс названий колонок для передачи в jasper
 
 	@Override
-	protected void setDefaults() {
-		super.setDefaults();
-		// final Map<String, >
+	protected void setDefaults(Map<String, Object> defaults) {
+		super.setDefaults(defaults);
 
-		getArgs().put( XMLTAG_URL, null);
-		getArgs().put( XMLTAG_USERNAME, null);
-		getArgs().put( XMLTAG_PSW, null);
+		defaults.put( XMLTAG_QUERY, null);
+		defaults.put( XMLTAG_URL, null);
+		defaults.put( XMLTAG_ALLVER, null);
 
-		getArgs().put( XMLTAG_QUERY, null);
-		getArgs().put( XMLTAG_ALLVER, null);
+		defaults.put( XMLTAG_USERNAME, null);
+		defaults.put( XMLTAG_PSW, null);
 	}
 
 	/**
 	 * @return название текущей конфигурации
 	 */
 	public String getConfigName() {
-		return getArgs().get(JRDSConfigXML.TAG_CONFIGNAME);
+		return getstr(JRDSConfigXML.TAG_CONFIGNAME);
 	}
 
 	/**
@@ -174,7 +179,7 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 
 		// this.clear(); очистит всё, НО (!) здесь не надо сбрасывать название конфигурации
 
-		setDefaults();
+		setDefaults(getArgs());
 
 		if (xml == null)
 			return;
@@ -190,20 +195,13 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 				throw new RuntimeException("Root '" + XMLTAG_ROOT + "' element expected");
 			}
 
-			// чтение запроса... 
-			setArgFromXmlNode(rootElem, XMLTAG_QUERY, XMLTAG_QUERY);
-
-			// чтение URL ... 
-			setArgFromXmlNode(rootElem, XMLTAG_URL, XMLTAG_URL);
-
-			// чтение USER ... 
-			setArgFromXmlNode(rootElem, XMLTAG_USERNAME, XMLTAG_USERNAME);
-
-			// чтение PASSWORD ... 
-			setArgFromXmlNode(rootElem, XMLTAG_PSW, XMLTAG_PSW);
-
-			// чтение ALLVERSIONS ... 
-			setArgFromXmlNode(rootElem, XMLTAG_ALLVER, XMLTAG_ALLVER);
+			// загрузка аргументов зарегеных в args
+			if (getArgs() != null) {
+				final List<String> names = new ArrayList<String>( getArgs().keySet());
+				for(String argname: names) {
+					setArgFromXmlNode(rootElem, argname, argname);
+				}
+			}
 
 			// чтение мета-описаний полей ... 
 			{
@@ -226,22 +224,87 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 
 
 	/**
-	 * Найти вложенный узел по имени и получить занчение для аргумента 
+	 * Найти вложенный узел по имени и получить из него значение для аргумента.
+	 * (!) Списки поддерживаются  - списком будет считаться атрибут, если в нём есть узел "<list>"
+	 * (!) Если узла с таким именем нет - текущее значение аргумента НЕ ИЗМЕНЯЕТСЯ.
+	 * (!) Если узел есть - значение изменяется (даже если оно будет null). 
 	 * @param parentNode родительский узел
-	 * @param childNodeTag название вложенного узла
-	 * @param argName название аргумента
-	 * @return значение аргумента или null, если нет такого вложенного или в нём пустое значение
+	 * @param srcChildNodeTag название вложенного узла
+	 * @param destArgName название аргумента
+	 * @return значение аргумента (строка или список) или null, если нет 
+	 * вложенного childNodeTag или в нём пустое значение.
 	 */
-	private String setArgFromXmlNode( Node parentNode, String childNodeTag, String argName) {
-		String result = null;
-		final Element vNode = (Element) XmlHelper.getTagNode(parentNode, childNodeTag, null, null);
+	private Object setArgFromXmlNode( Node parentNode, String srcChildNodeTag, String destArgName) {
+		Object result = null;
+		final Element vNode = (Element) XmlHelper.getTagNode(parentNode, srcChildNodeTag, null, null);
 		if (vNode != null) {
-			result = XmlHelper.getTagContent(vNode);
-			getArgs().put( argName, (result == null ? null : result.trim()) );
+			result = getXmlNodeValue(vNode);
+			getArgs().put( destArgName, result);
 		}
 		return result;
 	}
 
+	private Object getXmlNodeValue(Node node) {
+		Object result = null;
+		if (node != null) {
+			final Element vListNode = (node.hasChildNodes()) 
+					? (Element) XmlHelper.getTagNode(node, "list", null, null)
+					: null;
+			final Element vMapNode = (node.hasChildNodes()) 
+							? (Element) XmlHelper.getTagNode(node, "map", null, null)
+							: null;
+			if (vListNode != null) { // загружаем список ...
+				result = getXmlList(vListNode);
+			} else if (vMapNode != null) { // загружаем мапу ...
+				result = getXmlMap(vMapNode);
+			} else { // принимаем что узел содержит строку
+				final String data = XmlHelper.getTagContent(node);
+				result = (data == null ? null : data.trim());
+			}
+		}
+		return result;
+	}
+
+	private List<Object> getXmlList(Node listNode) {
+		if (listNode == null)
+			return null;
+		final List<Object> result = new ArrayList<Object>();
+		final NodeList children = listNode.getChildNodes();
+		if (children != null) {
+			for (int i = 0; i < children.getLength(); i++) {
+				final Node childNode = children.item(i); 
+				if (!"item".equalsIgnoreCase(childNode.getNodeName()) ) // skip non-item elements
+					continue;
+				result.add( getXmlNodeValue(childNode));
+			} // for
+		}
+		return result;
+	}
+
+	private Map<String, Object> getXmlMap(Node mapNode) {
+		if (mapNode == null)
+			return null;
+		final Map<String, Object> result = new HashMap<String, Object>();
+		final NodeList children = mapNode.getChildNodes();
+		if (children != null) {
+			for (int i = 0; i < children.getLength(); i++) {
+				final Node childNode = children.item(i);
+				if (!"item".equalsIgnoreCase(childNode.getNodeName()) ) // skip non-item elements
+					continue;
+				final Object value = getXmlNodeValue(childNode);
+
+				final Node keyNode = (childNode.getAttributes() == null) ? null : childNode.getAttributes().getNamedItem("key");
+				if (keyNode == null) {
+					final String info = String.format("XML map-node '%s'::'%s' has no 'key' attribute for item [%s]", mapNode.getNamespaceURI(), mapNode.getNodeName(), i);
+					logger.error(info);
+					throw new RuntimeException( info);
+				}
+
+				result.put( XmlHelper.getTagContent(keyNode), value);
+			} // for
+		}
+		return result;
+	}
 
 	private void xmlGetMetaFields(List<Node> fieldsNodes) {
 		if (fieldsNodes == null || fieldsNodes.isEmpty()) {
@@ -255,18 +318,22 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 			final Element fldNode = (Element) node;
 
 			// FIELD_QUERY_NAME
-			String jrFldname = "COL_"+ i; // default name for any field will be simple
+			String jrFldname = "COL_"+ i; // default name for any field will be simple "col_nn"
 			if (fldNode.hasAttribute(XMLATTR_JR_FIELDNAME)) {
 				final String sname = fldNode.getAttribute(XMLATTR_JR_FIELDNAME);
 				if (sname != null && sname.length() > 0)
 					jrFldname = sname;
 			}
-			// корректировка названия колонки для уникальности имени 
+			// корректировка названия колонки для гарантии уникальности имени 
 			{
 				String nameUnique = jrFldname;
-				for(int unique = 1; this.getArgs().containsKey(nameUnique); unique++) {
-					nameUnique = jrFldname+ "_"+ unique; // название вида "ABC_n" появится только при неуникальности
+				int unique = 0;
+				while(this.getArgs().containsKey(nameUnique)) { // название вида "ABC_n" появится только при неуникальности
+					unique++; // (!) нумерация колонок от единицы
+					nameUnique = jrFldname+ "_"+ unique;
 				}
+				if (unique > 0) 
+					logger.warn( String.format("Unique field name generated as '%s' (for base name '%s')", nameUnique, jrFldname));
 				jrFldname = nameUnique;
 			}
 			// добавление новой jr-колонки

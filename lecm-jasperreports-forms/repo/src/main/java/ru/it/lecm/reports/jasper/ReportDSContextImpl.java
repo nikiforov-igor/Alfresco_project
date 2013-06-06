@@ -2,6 +2,7 @@ package ru.it.lecm.reports.jasper;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 	private static final Logger logger = LoggerFactory.getLogger(ReportDSContextImpl.class);
 
 	private ServiceRegistry serviceRegistry;
-	private SubstitudeBean substitudeService;
+	final private ProxySubstitudeBean substitudeService = new ProxySubstitudeBean();
 
 	private AssocDataFilter filter; // может быть NULL
 	private Map<String, JRXField> metaFields; // ключ = имя колонки данных в jasper
@@ -64,8 +65,8 @@ public class ReportDSContextImpl implements ReportDSContext {
 		return substitudeService;
 	}
 
-	public void setSubstitudeService(SubstitudeBean substitudeService) {
-		this.substitudeService = substitudeService;
+	public void setSubstitudeService(SubstitudeBean substitudeServiceBean) {
+		this.substitudeService.setRealBean( substitudeServiceBean);
 	}
 
 	public Iterator<ResultSetRow> getRsIter() {
@@ -153,6 +154,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 		}
 
 		// (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
+		// (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
 		if (isCalcField(fldAlfName)) {
 			if (substitudeService != null) {
 				final Object value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
@@ -167,4 +169,74 @@ public class ReportDSContextImpl implements ReportDSContext {
 		return (String.class.equals(jrField.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
 	}
 
+	/**
+	 * ProxySubstitudeBean cейчас просто обходит расширеные выражения для 
+	 * функции formatNodeTitle, в дальнейшем можно добавить макросы, встроенные 
+	 * функции и пр. 
+	 * Расширеный синтаксис маркируется строкой, начинающейся с пары "{{", вместо обычной "{"
+	 * 
+	 * @author rabdullin
+	 * 
+	 */
+	private class ProxySubstitudeBean implements SubstitudeBean {
+
+		static final String XSYNTAX_MARKER = "{{";
+
+		SubstitudeBean realBean; // имплементация нативного бина, который организует "хождение" по ссылкам
+
+
+		public ProxySubstitudeBean() {
+			super();
+		}
+
+//		public SubstitudeBean getRealBean() {
+//			return realBean;
+//		}
+
+		public void setRealBean(SubstitudeBean realBean) {
+			this.realBean = realBean;
+		}
+
+		public String getObjectDescription(NodeRef object) {
+			return (realBean == null) ? null : realBean.getObjectDescription(object);
+		}
+
+		public String getTemplateStringForObject(NodeRef object) {
+			return (realBean == null) ? null : realBean.getTemplateStringForObject(object);
+		}
+
+		public String getTemplateStringForObject(NodeRef object, boolean forList) {
+			return (realBean == null) ? null : realBean.getTemplateStringForObject(object, forList);
+		}
+
+		public List<NodeRef> getObjectsByTitle(NodeRef object,
+				String formatTitle) {
+			return (realBean == null) ? null : realBean.getObjectsByTitle(object, formatTitle);
+		}
+
+		public String formatNodeTitle(NodeRef node, String fmt) {
+			if (fmt == null)
+				return null;
+			if (isExtendedSyntax(fmt)) {
+				return extendedFormatNodeTitle(node, fmt);
+			}
+			return (realBean == null) ? null : realBean.formatNodeTitle(node, fmt);
+		}
+
+		protected boolean isExtendedSyntax(String fmt) {
+			return (fmt != null) && fmt.startsWith(XSYNTAX_MARKER);
+		}
+
+		/**
+		 * Фнукция расширения
+		 * @param node
+		 * @param fmt
+		 * @return
+		 */
+		protected String extendedFormatNodeTitle(NodeRef node, String fmt) {
+			// TODO: here new features can be implemented
+			return fmt;
+		}
+
+	}
 }

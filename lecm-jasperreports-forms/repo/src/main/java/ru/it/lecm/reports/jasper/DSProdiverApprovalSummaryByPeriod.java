@@ -411,11 +411,6 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 			return (float) (Math.ceil(avg/0.25) * 0.25);
 		}
 
-		private String getAlfAttrNameByJRKey(String jrFldName) {
-			return (!context.getMetaFields().containsKey(jrFldName)) 
-							? jrFldName : context.getMetaFields().get(jrFldName).getValueLink();
-		}
-
 		// TODO: заменить потом на модельное значение
 		final static float NORMAL_APPROVE_DURATION = 2; // за норму принимаем срок в два дня на задачу (Y)
 

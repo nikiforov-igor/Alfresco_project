@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Опись изменений договора.
+
+	model of the contract/document:
+		.\lecm-contracts\repo\src\main\config\models\lecm-contracts-model.xml
+
+Входные данные:
+•	ID документа-договора
+
+Выходные данные отчета:
+•	несколько полей документа:
+		<Вид договора>
+		№<Рег.номер>
+		<Дата регистрации>
+		<Контрагент (краткое наименование)>
+•	табличка с вложениями:
+	<Тип документа> (изменения к договору, спецификация, протокол согласования разногласий)
+	<Номер>
+	<Дата документа>
+	<Статус>
+
+	-->
+
+<cmis-ds.config>
+
+	<query_offset>0</query_offset>
+	<query_limit>-1</query_limit>
+	<query_pgsize>-1</query_pgsize>
+
+	<fields.jasper>
+		<!-- Данные по "Виду договора" (с типом "lecm-contract-dic:contract-type") -->
+		<field jrFldName="col_DocKind" queryFldName="{lecm-contract:typeContract-assoc/cm:name}" displayName="Вид договора" />
+
+		<!-- Регистрационный номер договора -->
+		<field queryFldName="lecm-contract:regNumSystem"
+				jrFldName="col_Regnum"
+				displayName="Регистрационный номер договора" javaValueClass="String"/>
+
+		<!-- Регистрационный номер контрагента -->
+		<field queryFldName="lecm-contract:regNumContractor"
+				jrFldName="col_RegnumContractor"
+				displayName="Регистрационный номер контрагента" javaValueClass="String"/>
+
+		<!-- Дата регистрации договора -->
+		<field queryFldName="lecm-contract:dateRegContracts"
+				jrFldName="col_Register"
+				displayName="Дата регистрации договора" javaValueClass="date"/>
+
+		<!-- Полное наименование котрагента "lecm-contract:partner-assoc": target "lecm-contractor:contractor-type"
+			и пр атрибуты котрагента
+		  -->
+		<field jrFldName="col_Contragent.name"  queryFldName="{lecm-contract:partner-assoc/lecm-contractor:shortname}" displayName="Контрагент.Короткое"/>
+		<field jrFldName="col_Contragent.fullname"  queryFldName="{lecm-contract:partner-assoc/lecm-contractor:fullname}" displayName="Контрагент.Полное наименование"/>
+		<field jrFldName="col_Contragent.phone" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:phone}" displayName="Контрагент.Тел" />
+
+		<field jrFldName="col_Contragent.YurAddress" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:legal-address}" displayName="Контрагент.Юридический адрес" />
+		<field jrFldName="col_Contragent.PhisAddress" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:physical-address}" displayName="Контрагент.Фактический адрес" />
+
+		<!-- Дата заключения договора -->
+		<field jrFldName="col_ConclusionDate" queryFldName="lecm-contract:dateConclusionContracts" displayName="Дата заключения"
+			javaValueClass="date"/>
+
+		<!-- Статус -->
+		<field jrFldName="col_Status" queryFldName="lecm-statemachine:status" displayName="Статус" />
+		<!-- Дата изменения статуса -->
+		<field jrFldName="col_StatusDate" queryFldName="lecm-document:status-changed-date" displayName="Дата смены статус"
+				javaValueClass="java.util.Date"/>
+
+		<!-- атрибуты для таблицы вложенных файлов -->
+
+		<!-- <Тип документа>
+			(изменения к договору, спецификация, протокол согласования/разногласий)
+
+			Dictionary name="Типы связи">:
+					<property name="lecm-dic:attributeForShow">cm:name</property>
+					<property name="lecm-dic:type">lecm-connect-types:connection-type</property>
+		  -->
+		<field jrFldName="col_Item.Doctype" queryFldName="{{@list/lecm-connect-types:connection-type}}" displayName="Вложение.ТипДокумента" />
+
+		<!-- Данные по "Тематика договора" (с типом "lecm-contract-dic:contract-subjects") -->
+		<field jrFldName="col_Theme.code" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code}" displayName="Тематика.Код" />
+		<field jrFldName="col_Theme.tname" queryFldName="{lecm-contract:subjectContract-assoc/cm:name}" displayName="Тематика.Название" />
+		<field jrFldName="col_Theme.desc" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-description}" displayName="Тематика.Описание" />
+
+		<!-- Статус вложенного -->
+		<field jrFldName="col_Item.Status" queryFldName="{{@list/lecm-statemachine:status}}" displayName="Вложение.Статус" />
+		<!-- Дата изменения статуса вложенного -->
+		<field jrFldName="col_Item.StatusDate" queryFldName="{{@list/lecm-document:status-changed-date}}" displayName="Вложение.Дата смены статус"
+				javaValueClass="java.util.Date"/>
+		<!-- Номер вложенного -->
+		<field  jrFldName="col_Item.Regnum"
+				queryFldName="{{@list/lecm-document:regnum}}"
+				displayName="Регистрационный номер вложенного документа"/>
+
+		<!--
+			<field queryFldName="fmydata" dislayName="" javaValueClass="my.check.type"/>
+		  -->
+	</fields.jasper>
+
+	<url>http://localhost:8080/alfresco/service/cmis</url>
+	<username>admin</username>
+	<password>111</password>
+	<allVersions>false</allVersions>
+
+	<!--
+		select * from lecm:documents
+	  -->
+	<query>
+		<![CDATA[
+			select * from lecm-contract:document as Contract
+		]]>
+	</query>
+
+</cmis-ds.config>

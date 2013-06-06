@@ -16,7 +16,6 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.JRXField;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
@@ -125,6 +124,22 @@ public class AlfrescoJRDataSource implements JRDataSource
 			logger.debug(dump.toString());
 		}
 	}
+
+	/**
+	 * Получить название поля (в списке атрибутов объекта после вызова getReportContextProps), 
+	 * соот-щее jasper-названию колонки  
+	 * @param jrFldName название колонки для Jasper (оно упрощено относительно "полного" названия в curProps)
+	 * @return
+	 */
+	protected String getAlfAttrNameByJRKey(String jrFldName) {
+		final JRXField fld = (context != null) && context.getMetaFields().containsKey(jrFldName) 
+						? context.getMetaFields().get(jrFldName) 
+						: null;
+		return (fld != null) && (fld.getValueLink() != null)
+					? fld.getValueLink() 
+					: jrFldName;
+	}
+
 
 	/**
 	 * Сформировать список обычных (не вычисляемых и не косвенных) свойств, 

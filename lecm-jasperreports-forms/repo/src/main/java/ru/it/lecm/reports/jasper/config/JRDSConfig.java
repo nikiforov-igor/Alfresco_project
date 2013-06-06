@@ -23,5 +23,5 @@ public interface JRDSConfig {
 	/**
 	 * @return простые аргументы имя-значение (имя пользователя, пароль, url и пр)
 	 */
-	Map<String, String> getArgs();
+	Map<String, Object> getArgs();
 }

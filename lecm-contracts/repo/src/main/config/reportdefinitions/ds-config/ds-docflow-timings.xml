@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Отчет «Сроки прохождения маршрута»
+
+	model of the contract/document:
+		.\lecm-contracts\repo\src\main\config\models\lecm-contracts-model.xml
+	provider:
+		ru.it.lecm.reports.jasper.DSProviderDocflowStatusTimings
+
+Фильтры: 
+•	Вид договора
+•	Тематика договора
+•	Контрагент
+•	Дата регистрации проекта (Период)
+
+Измерение (выбрать одно):
+•	Вид договора
+•	Тематика договора
+•	Контрагент
+•	Инициатор
+
+Выходные данные отчета:
+	количество документов в разных статусах в зависимости от Измерения
+
+Заметки: измерение задаёт фактически тип ассоциации для группирования.
+Количество документов в статусах соот-но будет простой суммой в каждой группе.
+	-->
+
+<cmis-ds.config>
+
+	<query_offset>0</query_offset>
+	<query_limit>-1</query_limit>
+	<query_pgsize>-1</query_pgsize>
+
+	<statuses>
+		<list>
+			<item>Черновик</item>
+			<item>Проект зарегистирован</item>
+			<item>На согласовании</item>
+
+			<item>Согласован</item>
+			<item>На доработке</item>
+			<item>На подписании</item>
+
+			<item>Подписан</item>
+			<item>На подписании у контрагента</item>
+			<item>Зарегистрирован</item>
+
+			<item>Действует</item>
+
+			<!--
+			<item>Приостановлен</item>
+			 -->
+		</list>
+	</statuses>
+
+	<!--
+		Описания группировок. Ключи это значения параметра формирования отчёта "reportGroupBy".
+		[CDATA[{lecm-additional-document:additionalDocumentType/cm:name} <i>№{lecm-additional-document:number}</i> от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts} с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}
+		]]
+		[CDATA[
+				{lecm-additional-document:additionalDocumentType/cm:name}
+				<i>№{lecm-additional-document:number}</i>
+				от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts}
+				с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}
+		]]
+	  -->
+	<groupby.formats>
+		<map>
+			<item key="Вид договора">
+				<![CDATA[ Вид договора {lecm-contract:typeContract-assoc/cm:name}]]>
+			</item>
+
+			<item key="Тематика договора">
+				<![CDATA[ Тематика договора {lecm-contract:subjectContract-assoc/cm:name}]]>
+			</item>
+
+			<item key="Контрагент">
+				<![CDATA[Котрагент {lecm-contract:partner-assoc/lecm-contractor:shortname}]]>
+			</item>
+
+			<item key="Инициатор">
+				<![CDATA[ Инициатор {~AUTHOR} ]]>
+			</item>
+		</map>
+	</groupby.formats>
+
+	<fields.jasper>
+
+		<!-- Первый столбец это значение выбранного Измерения, т.е. название вида договоров,
+		тематика, котрагент или инициатор.
+		  -->
+		<field jrFldName="col_RowTag" queryFldName="customTag" displayName="Измерение.Название" />
+
+		<!-- Далее столбцы это кол-во в соот-щих Статусах (см узлы "statuses")-->
+		<field jrFldName="col_Count1" queryFldName="status1.counter" displayName="Статус1.Кол-во" javaValueClass="int" />
+		<field jrFldName="col_Count2" queryFldName="status2.counter" displayName="Статус2.Кол-во" javaValueClass="int" />
+		<field jrFldName="col_Count3" queryFldName="status3.counter" displayName="Статус3.Кол-во" javaValueClass="int" />
+
+		<field jrFldName="col_Count4" queryFldName="status4.counter" displayName="Статус4.Кол-во" javaValueClass="int" />
+		<field jrFldName="col_Count5" queryFldName="status5.counter" displayName="Статус5.Кол-во" javaValueClass="int" />
+		<field jrFldName="col_Count6" queryFldName="status6.counter" displayName="Статус6.Кол-во" javaValueClass="int" />
+
+		<field jrFldName="col_Count7" queryFldName="status7.counter" displayName="Статус7.Кол-во" javaValueClass="int" />
+		<field jrFldName="col_Count8" queryFldName="status8.counter" displayName="Статус8.Кол-во" javaValueClass="int" />
+		<field jrFldName="col_Count9" queryFldName="status9.counter" displayName="Статус9.Кол-во" javaValueClass="int" />
+
+		<field jrFldName="col_Count10" queryFldName="status10.counter" displayName="Статус10.Кол-во" javaValueClass="int" />
+		<field jrFldName="col_Count11" queryFldName="statusOther.counter" displayName="СтатусДругие.Кол-во" javaValueClass="int" />
+
+		<!-- атрибуты для таблицы вложенных файлов -->
+
+		<!--
+			<field queryFldName="fmydata" dislayName="" javaValueClass="my.check.type"/>
+		  -->
+	</fields.jasper>
+
+	<url>http://localhost:8080/alfresco/service/cmis</url>
+	<username>admin</username>
+	<password>111</password>
+	<allVersions>false</allVersions>
+
+	<!--
+		select * from lecm:documents
+	  -->
+	<query>
+		<![CDATA[
+			select * from lecm-contract:document as Contract
+		]]>
+	</query>
+
+</cmis-ds.config>

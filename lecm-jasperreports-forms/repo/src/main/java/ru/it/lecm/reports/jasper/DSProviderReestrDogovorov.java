@@ -142,11 +142,11 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 		}
 	}
 
+
 	final static String JRFLD_Executor_Family = "col_Executor_Family";
 	final static String JRFLD_Executor_Name= "col_Executor_Name";
 	final static String JRFLD_Executor_Otchestvo = "col_Executor_Otchestvo";
 	final static String JRFLD_Executor_Staff = "col_Executor_Staff";
-
 
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
@@ -154,18 +154,6 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 		final QName QFLD_CREATOR = QName.createQName("cm:creator", getServiceRegistry().getNamespaceService());
 
 		final AlfrescoJRDataSource dataSource = new AlfrescoJRDataSource(iterator)  {
-
-			/**
-			 * Получить название поля (в списке атрибутов curProps объекта), 
-			 * соот-щее jasper-названию колонки  
-			 * @param jrFldName название колонки для Jasper (оно упрощено относительно "полного" названия в curProps)
-			 * @return
-			 */
-			private String getAlfAttrNameByJRKey(String jrFldName) {
-				return (!context.getMetaFields().containsKey(jrFldName))
-								? jrFldName
-								: context.getMetaFields().get(jrFldName).getValueLink();
-			}
 
 			@Override
 			protected boolean loadAlfNodeProps(NodeRef id) {
@@ -195,9 +183,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 				} 
 				return flag;
 			}
-
-	};
-
+		};
 
 		if (filter != null)
 			dataSource.context.setFilter(filter.makeAssocFilter());
@@ -220,18 +206,6 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 		final QName qTYPE = QName.createQName(TYPE_CONRACT, this.serviceRegistry.getNamespaceService());
 		bquery.append( "TYPE:"+ quoted(qTYPE.toString()));
 
-		/*
-		// начало
-		if (filter.dateStart != null) { // "X to MAX"
-			final String stMIN = ArgsHelper.dateToStr( filter.dateStart, "MIN");
-			bquery.append( " AND @lecm\\-contract\\:startDate:[" + stMIN + " TO MAX]");
-		}
-		// окончание
-		if (filter.dateEnd != null) { // "MIN to X"
-			final String stMAX = ArgsHelper.dateToStr( filter.dateEnd, "MAX");
-			bquery.append( " AND( (@lecm\\-contract\\:unlimited:true) OR (@lecm\\-contract\\:endDate:[ MIN TO " + stMAX + "]) )");
-		}
-		*/
 		// начало .. конец
 		// начало == <!-- дата начала согласования -->
 		{
@@ -251,7 +225,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 
 		// Сумма договора (указан минимум)
 		if (filter.contractSum != null && filter.contractSum.doubleValue() != 0) { // "X to *"
-			bquery.append( " AND @lecm\\-contract\\:00:(" + filter.contractSum.toString() + " TO *)");
+			bquery.append( " AND @lecm\\-contract\\:totalAmount:(" + filter.contractSum.toString() + " TO *)");
 		}
 
 		// Контракт актуален: если ещё не истёк срок 
@@ -262,5 +236,4 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 		return bquery.toString();
 	}
 
-	
 }
