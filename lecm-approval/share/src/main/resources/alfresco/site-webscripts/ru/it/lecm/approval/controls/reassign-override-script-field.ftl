@@ -4,7 +4,7 @@
 (function() {
 
     var grandPermissionsAndGetPerson = function (form, formToReportProperties){
-        debugger;
+        //debugger;
         var dataObj = {
             taskID : "",
             employeeNodeRef : form.dataObj.assoc_cm_contains
@@ -130,7 +130,7 @@
             destroyOnHide: true,
             doBeforeDialogShow: {
                 fn: function () {
-                    debugger;
+                    //debugger;
                     //editDetails.dialog.form.buttons.cancel.hide();
                     var frm = Alfresco.util.ComponentManager.get(this.dialog.form.id);
                     var btn = frm.buttons.cancel;
