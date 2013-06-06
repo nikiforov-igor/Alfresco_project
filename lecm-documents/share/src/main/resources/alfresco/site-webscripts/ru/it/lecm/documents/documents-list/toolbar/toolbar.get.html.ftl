@@ -29,7 +29,7 @@
     <#assign newRowTitle = args.newRowDialogTitle/>
 <#else>
     <#if args.itemType??>
-        <#assign newRowDialogTitle = ("label.create-" + args.itemType?replace(":","_"))/>
+        <#assign newRowTitle = ("label.create-" + args.itemType?replace(":","_"))/>
     </#if>
 </#if>
 
