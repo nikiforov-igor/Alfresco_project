@@ -1608,4 +1608,18 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
             return hasSubordinate(bossRef, subordinateRef);
         }
     }
+
+    public List<NodeRef> getAllEmployees() {
+        List<NodeRef> employees = new ArrayList<NodeRef>();
+
+        NodeRef organizationRef = getOrganization();
+        NodeRef employeesRef = nodeService.getChildByName(organizationRef, ContentModel.ASSOC_CONTAINS, EMPLOYEES_ROOT_NAME);
+        if (employeesRef != null){
+            for (ChildAssociationRef child : nodeService.getChildAssocs(employeesRef)) {
+                employees.add(child.getChildRef());
+            }
+        }
+
+        return employees;
+    }
 }

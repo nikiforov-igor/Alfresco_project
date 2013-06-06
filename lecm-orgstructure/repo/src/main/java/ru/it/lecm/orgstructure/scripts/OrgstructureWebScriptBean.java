@@ -6,7 +6,6 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.namespace.RegexQNamePattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Scriptable;
@@ -904,5 +903,15 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     public boolean isBossOf(final String bossRef, final String subordinateRef, boolean checkPrimary) {
         return orgstructureService.isBossOf(new NodeRef (bossRef), new NodeRef (subordinateRef), checkPrimary);
     }
+
+    /**
+     * Возвращает список всех сотрудников
+     * @return
+     */
+    public Scriptable getAllEmployees() {
+        List<NodeRef> employees = orgstructureService.getAllEmployees();
+        return createScriptable(employees);
+    }
+
 
 }

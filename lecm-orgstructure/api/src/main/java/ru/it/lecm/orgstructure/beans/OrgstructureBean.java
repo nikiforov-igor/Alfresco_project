@@ -613,6 +613,11 @@ public interface OrgstructureBean {
     List<NodeRef> getNodeRefEmployees(NodeRef nodeRef);
 
     /**
+     * Возвращает список всех сотрудников
+     * @return
+     */
+    List<NodeRef> getAllEmployees();
+    /**
      * Получение подразделения, где сотрудник числится на основной должностной позиции
      * @param employeeRef ссылка на сотрудника
      * @return unit
