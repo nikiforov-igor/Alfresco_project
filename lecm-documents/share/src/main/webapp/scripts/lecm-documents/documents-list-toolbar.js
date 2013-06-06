@@ -56,7 +56,7 @@
              * @method onReady
              */
             onReady: function () {
-                this.toolbarButtons.newContractButton = Alfresco.util.createYUIButton(this, "newContractButton", this.onNewRow,
+                this.toolbarButtons.newDocumentButton = Alfresco.util.createYUIButton(this, "newDocumentButton", this.onNewRow,
                     {
                         disabled: false,
                         value: "create"

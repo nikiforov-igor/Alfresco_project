@@ -422,4 +422,6 @@
             </map>
         </property>
     </bean>
+
+    <bean id="documentsPermissions" class="ru.it.lecm.documents.beans.DocumentsPermissionsBean" abstract="true"/>
 </beans>

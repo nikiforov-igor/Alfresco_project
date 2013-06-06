@@ -299,4 +299,31 @@
     <bean id="webscript.ru.it.lecm.contracts.substitute.string.get" class="ru.it.lecm.contracts.AssociationSubstituteString" parent="webscript">
         <property name="substituteService" ref="substitudeService"/>
     </bean>
+
+    <bean id="contractsPermissions" parent="documentsPermissions">
+        <property name="permissions">
+            <map>
+                <entry key="lecm-contract:document">
+                    <list>
+                        <value>CONTRACT_EXECUTOR</value>
+                        <value>CONTRACT_CURATOR</value>
+                        <value>CONTRACT_SIGNER</value>
+                        <value>CONTRACT_RECORDER</value>
+                        <value>CONTRACT_USER</value>
+                        <value>CONTRACT_READER</value>
+                    </list>
+                </entry>
+                <entry key="lecm-additional-document:additionalDocument">
+                    <list>
+                        <value>CONTRACT_EXECUTOR</value>
+                        <value>CONTRACT_CURATOR</value>
+                        <value>CONTRACT_SIGNER</value>
+                        <value>CONTRACT_RECORDER</value>
+                        <value>CONTRACT_USER</value>
+                        <value>CONTRACT_READER</value>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>

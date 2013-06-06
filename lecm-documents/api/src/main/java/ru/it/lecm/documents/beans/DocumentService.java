@@ -118,4 +118,6 @@ public interface DocumentService {
     public List<NodeRef> getDocuments(List<QName> docTypes, List<String> paths, ArrayList<String> statuses);
 
     public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> inititatorsList, List<NodeRef> docsList);
+
+    public String getDraftRootLabel(String docType);
 }

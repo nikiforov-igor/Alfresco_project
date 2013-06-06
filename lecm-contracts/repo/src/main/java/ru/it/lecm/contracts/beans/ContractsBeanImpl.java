@@ -34,7 +34,6 @@ import java.util.*;
  * Time: 14:16
  */
 public class ContractsBeanImpl extends BaseBean {
-	public static final String CONTRACTS = "Contracts";
 	public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE = "onBasis";
 	public static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
 	public static final String CONTRACTS_ASPECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/aspects/1.0";
@@ -139,11 +138,11 @@ public class ContractsBeanImpl extends BaseBean {
 	}
 
 	public NodeRef getDraftRoot() {
-		return  documentService.getDraftRoot(CONTRACTS);
+		return  documentService.getDraftRoot(documentService.getDraftRootLabel(TYPE_CONTRACTS_DOCUMENT.toPrefixString(namespaceService)));
 	}
 
 	public String getDraftPath() {
-		return  documentService.getDraftPath(CONTRACTS);
+		return  documentService.getDraftPath(documentService.getDraftRootLabel(TYPE_CONTRACTS_DOCUMENT.toPrefixString(namespaceService)));
 	}
 
     public String getDocumentsFolderPath(){

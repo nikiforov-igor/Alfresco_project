@@ -1,17 +1,10 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
 
 function main() {
-    AlfrescoUtil.param("bubblingLabel");
-    AlfrescoUtil.param("itemType");
-
-    var hasPermission = isStarter(model.itemType);
-
+    var hasPermission = isStarter(args["itemType"]);
     model.showCreateBtn = (args["showCreateBtn"] == 'true') && hasPermission;
     model.showSearch = args["showSearch"] && (args["showSearch"] == 'true');
     model.showExSearchBtn = args["showExSearchBtn"] && (args["showExSearchBtn"] == 'true');
-
-    model.newRowLabel = args["newRowLabel"];
-    model.newRowDialogTitle = args["newRowDialogTitle"];
 }
 
 function isStarter(docType) {

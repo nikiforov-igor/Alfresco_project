@@ -13,6 +13,10 @@
     <#if page.url.args.formId?? && page.url.args.formId != "">
         <#assign formId = page.url.args.formId/>
     </#if>
+    <#assign isDocListPage = false/>
+    <#if page.url.args.doctype?? && page.url.args.doctype != "">
+        <#assign isDocListPage = true/>
+    </#if>
     <script type="text/javascript">//<![CDATA[
         LogicECM.module.Documents.SETTINGS =
             <#if settings?? >
@@ -35,6 +39,17 @@
                 LogicECM.module.Documents.SETTINGS.defaultKey
             </#if>;
     //]]></script>
+    <#if isDocListPage>
+        <style type="text/css">
+            #bd #lecm-menu {
+                width: 0px;
+                margin: 0px;
+            }
+            #bd #lecm-page {
+                margin: 5px 5px 5px 5px;
+            }
+        </style>
+    </#if>
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>

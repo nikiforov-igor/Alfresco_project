@@ -1,17 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
     <template-type>ru/it/lecm/documents/documents-list</template-type>
-    <properties>
-        <docType>lecm-contract:document</docType>
-    </properties>
     <components>
         <!-- Title -->
         <component>
             <region-id>title</region-id>
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
-                <itemType>lecm-additional-document:additionalDocument</itemType>
-                <filteredLabel>page.contracts-documents.filter</filteredLabel>
+                <itemType>{doctype}</itemType>
+                <filteredLabel>page.documents-list.filter</filteredLabel>
             </properties>
         </component>
         <!-- Toolbar -->
@@ -19,18 +16,10 @@
             <region-id>toolbar</region-id>
             <url>/lecm/documents/documents-list-toolbar</url>
             <properties>
-                <itemType>lecm-additional-document:additionalDocument</itemType>
-                <bubblingLabel>contracts-documents</bubblingLabel>
+                <itemType>{doctype}</itemType>
+                <bubblingLabel>documents-list</bubblingLabel>
                 <showExSearchBtn>true</showExSearchBtn>
-                <showCreateBtn>false</showCreateBtn>
-            </properties>
-        </component>
-        <!-- Menu -->
-        <component>
-            <region-id>menu</region-id>
-            <url>/lecm/contracts/menu</url>
-            <properties>
-                <selected>documents</selected>
+                <showCreateBtn>true</showCreateBtn>
             </properties>
         </component>
         <!-- Datagrid -->
@@ -38,12 +27,10 @@
             <region-id>documents-grid</region-id>
             <url>/lecm/documents/documents-list-grid</url>
             <properties>
-                <itemType>lecm-additional-document:additionalDocument</itemType>
-                <bubblingLabel>contracts-documents</bubblingLabel>
-                <advSearchFormId>contracts-documents-search</advSearchFormId>
-                <attributeForShow>lecm-additional-document:number</attributeForShow>
+                <itemType>{doctype}</itemType>
+                <bubblingLabel>documents-list</bubblingLabel>
                 <excludedColumns>lecm-document:creator-ref</excludedColumns>
-                <filterProperty>lecm-additional-document:additionalDocumentType-text-content</filterProperty>
+                <filterProperty>lecm-statemachine:status</filterProperty>
                 <formId>{formId}</formId>
                 <filter>{query}</filter>
             </properties>
@@ -51,7 +38,11 @@
         <!-- Filter -->
         <component>
             <region-id>documents-filter</region-id>
-            <url>/lecm/contracts/contracts-docs-filter</url>
+            <url>/lecm/documents/documents-list-filter</url>
+            <properties>
+                <itemType>{doctype}</itemType>
+                <linkPage>documents-list</linkPage>
+            </properties>
         </component>
         <!-- Forbidden -->
         <component>

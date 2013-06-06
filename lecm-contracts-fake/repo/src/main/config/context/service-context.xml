@@ -83,4 +83,20 @@
         </property>
     </bean>
 
+    <bean id="contractsFakePermissions" parent="documentsPermissions">
+        <property name="permissions">
+            <map>
+                <entry key="lecm-contract-fake:document">
+                    <list>
+                        <value>CONTRACT_EXECUTOR</value>
+                        <value>CONTRACT_CURATOR</value>
+                        <value>CONTRACT_SIGNER</value>
+                        <value>CONTRACT_RECORDER</value>
+                        <value>CONTRACT_USER</value>
+                        <value>CONTRACT_READER</value>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>

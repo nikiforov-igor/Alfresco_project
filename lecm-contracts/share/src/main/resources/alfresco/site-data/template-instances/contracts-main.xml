@@ -19,8 +19,8 @@
                 <bubblingLabel>contracts</bubblingLabel>
                 <showCreateBtn>true</showCreateBtn>
                 <showSearch>false</showSearch>
-                <newRowLabel>button.new-contract</newRowLabel>
-                <newRowDialogTitle>button.new-contract</newRowDialogTitle>
+                <newRowLabel>button.lecm-contract_document.new</newRowLabel>
+                <newRowDialogTitle>label.create-lecm-contract_document</newRowDialogTitle>
             </properties>
         </component>
         <!-- Menu -->

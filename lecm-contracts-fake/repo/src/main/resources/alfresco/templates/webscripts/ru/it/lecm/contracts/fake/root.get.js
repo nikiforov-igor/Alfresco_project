@@ -1,2 +1,2 @@
-var node = companyhome.childByNamePath("Contracts");
+var node = documentScript.getDraftRoot("lecm-contract-fake:document");
 model.catalog = node.nodeRef.toString();

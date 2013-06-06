@@ -1,6 +1,7 @@
 package ru.it.lecm.documents.contracts.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 
@@ -10,8 +11,6 @@ import ru.it.lecm.documents.beans.DocumentService;
  * Time: 10:31
  */
 public class ContractsFakeWebScriptBean extends BaseWebScript {
-
-    public static final String CONTRACTS = "Contracts";
     private DocumentService service;
 
     public void setService(DocumentService service) {
@@ -19,11 +18,12 @@ public class ContractsFakeWebScriptBean extends BaseWebScript {
     }
 
     public ScriptNode getDraftRoot() {
-        return new ScriptNode(service.getDraftRoot(CONTRACTS), serviceRegistry, getScope());
+        String rootName = service.getDraftRootLabel("lecm-contract-fake:document");
+        return new ScriptNode(service.getDraftRoot(rootName), serviceRegistry, getScope());
     }
 
     public String getDraftPath() {
-        return service.getDraftPath(CONTRACTS);
+        return service.getDraftPath(service.getDraftRootLabel("lecm-contract-fake:document"));
     }
 
 }

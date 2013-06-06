@@ -2,8 +2,7 @@
 <template-instance>
     <template-type>ru/it/lecm/documents/documents-list</template-type>
     <properties>
-        <rolesPrefix>CONTRACT</rolesPrefix>
-        <settingsScript>/lecm/contracts/settings</settingsScript>
+        <docType>lecm-contract:document</docType>
     </properties>
     <components>
         <!-- Title -->
@@ -11,7 +10,7 @@
             <region-id>title</region-id>
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
-                <title>page.contracts</title>
+                <itemType>lecm-contract:document</itemType>
                 <filteredLabel>page.contracts.filter</filteredLabel>
             </properties>
         </component>
@@ -24,8 +23,6 @@
                 <showCreateBtn>true</showCreateBtn>
                 <bubblingLabel>contracts</bubblingLabel>
                 <showExSearchBtn>true</showExSearchBtn>
-                <newRowLabel>button.new-contract</newRowLabel>
-                <newRowDialogTitle>button.new-contract</newRowDialogTitle>
             </properties>
         </component>
         <!-- Menu -->
@@ -47,6 +44,8 @@
                 <attributeForShow>lecm-contract:regNumProject</attributeForShow>
                 <excludedColumns>lecm-document:creator-ref,lecm-contract:currency-assoc</excludedColumns>
                 <filterProperty>lecm-statemachine:status</filterProperty>
+                <formId>{formId}</formId>
+                <filter>{query}</filter>
             </properties>
         </component>
         <!-- Filter -->
@@ -55,9 +54,7 @@
             <url>/lecm/documents/documents-list-filter</url>
             <properties>
                 <itemType>lecm-contract:document</itemType>
-                <filterLabel>label.contracts</filterLabel>
                 <linkPage>contracts-list</linkPage>
-                <draftRoot>Contracts</draftRoot>
             </properties>
         </component>
         <!-- Forbidden -->

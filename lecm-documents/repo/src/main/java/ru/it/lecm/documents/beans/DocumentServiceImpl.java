@@ -2,8 +2,10 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -13,6 +15,8 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.surf.util.I18NUtil;
+import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
@@ -305,8 +309,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     /**
      * Поиск документов
-     * @param path путь где следует искать
-     * @param statuses статусы
      * @return List<NodeRef>
      */
     public List<NodeRef> getDocuments(List<QName> docTypes, List<String> paths, ArrayList<String> statuses) {
@@ -404,5 +406,15 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
             }
         }
         return records;
+    }
+
+    public String getDraftRootLabel(String docType) {
+        QName typeQName = QName.createQName(docType, namespaceService);
+        TypeDefinition definition = dictionaryService.getType(typeQName);
+        String key = definition.getModel().getName().toPrefixString(namespaceService);
+        key += ".type." + docType + ".title";
+        key = StringUtils.replace(key, ":", "_");
+
+        return I18NUtil.getMessage(key, I18NUtil.getLocale());
     }
 }

@@ -1,11 +1,5 @@
 package ru.it.lecm.documents.scripts;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -20,11 +14,17 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentStatusesFilterBean;
+import ru.it.lecm.documents.beans.DocumentsPermissionsBean;
 import ru.it.lecm.security.LecmPermissionService;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: orakovskaya
@@ -144,15 +144,25 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return documentService.getDocumentsFolderPath();
     }
 
-    public ScriptNode getDraftRoot(String rootName) {
-        ParameterCheck.mandatory("rootName", rootName);
-        return new ScriptNode(documentService.getDraftRoot(rootName), serviceRegistry, getScope());
+    public ScriptNode getDraftRoot(String rootType) {
+        ParameterCheck.mandatory("rootType", rootType);
+        String rootName = documentService.getDraftRootLabel(rootType);
+        if (rootName != null) {
+            return new ScriptNode(documentService.getDraftRoot(rootName), serviceRegistry, getScope());
+        } else {
+            return null;
+        }
     }
 
-    public String getDraftPath(String rootName) {
-        ParameterCheck.mandatory("rootName", rootName);
-        NodeRef draftRef = documentService.getDraftRoot(rootName);
-        return nodeService.getPath(draftRef).toPrefixString(namespaceService);
+    public String getDraftPath(String rootType) {
+        ParameterCheck.mandatory("rootType", rootType);
+        String rootName = documentService.getDraftRootLabel(rootType);
+        NodeRef draftRoot = documentService.getDraftRoot(rootName);
+        if (draftRoot != null) {
+            return nodeService.getPath(draftRoot).toPrefixString(namespaceService);
+        } else {
+            return null;
+        }
     }
 
     private Map<String, String> takeProperties(Object[] object){
@@ -175,7 +185,9 @@ public class DocumentWebScriptBean extends BaseWebScript {
         Map<String, String> filters = getFilters(type);
         HashMap<String, String> defaultFilter = new HashMap<String, String>();
         String defaultKey = DocumentStatusesFilterBean.getDefaultFilter(type);
-        defaultFilter.put(defaultKey, filters.get(defaultKey));
+        if (defaultKey != null) {
+            defaultFilter.put(defaultKey, filters.get(defaultKey));
+        }
         return defaultFilter;
     }
 
@@ -190,8 +202,6 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     /**
      * Получить количество документов
-     * @param path список путей поиска
-     * @param statuses список значений для фильтрации
      * @return количество
      */
     public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses) {
@@ -206,13 +216,17 @@ public class DocumentWebScriptBean extends BaseWebScript {
     private ArrayList<String> getElements(Object[] object){
         ArrayList<String> arrayList = new ArrayList<String>();
         for (Object obj : object) {
-            if (obj instanceof NativeJavaObject) {
+            if (obj != null && obj instanceof NativeJavaObject) {
                 NativeJavaObject element = (NativeJavaObject) obj;
                 arrayList.add((String) element.unwrap());
-            } else if (obj instanceof String){
+            } else if (obj != null && obj instanceof String){
                 arrayList.add(obj.toString());
             }
         }
         return arrayList;
+    }
+
+    public List<String> getAccessPermissionsList(String type) {
+        return DocumentsPermissionsBean.getPermissionsByType(type);
     }
 }

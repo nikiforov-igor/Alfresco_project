@@ -16,13 +16,21 @@
 </#if>
 
 <#assign newRowButtonLabel = "button.new-row"/>
-<#if newRowLabel??>
-    <#assign newRowButtonLabel = newRowLabel/>
+<#if args.newRowLabel??>
+    <#assign newRowButtonLabel = args.newRowLabel/>
+<#else>
+    <#if args.itemType??>
+        <#assign newRowButtonLabel = ("button." + args.itemType?replace(":","_") + ".new")/>
+    </#if>
 </#if>
 
 <#assign newRowTitle = "label.create-row.title"/>
-<#if newRowDialogTitle??>
-    <#assign newRowTitle = newRowDialogTitle/>
+<#if args.newRowDialogTitle??>
+    <#assign newRowTitle = args.newRowDialogTitle/>
+<#else>
+    <#if args.itemType??>
+        <#assign newRowDialogTitle = ("label.create-" + args.itemType?replace(":","_"))/>
+    </#if>
 </#if>
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
@@ -30,8 +38,8 @@
 <script type="text/javascript">//<![CDATA[
 function init() {
     new LogicECM.module.Documents.Toolbar("${id}").setMessages(${messages}).setOptions({
-	    bubblingLabel: "${bubblingLabel!'documents'}",
-        itemType: "${itemType!'lecm-document:base'}",
+	    bubblingLabel: "${args.bubblingLabel!'documents'}",
+        itemType: "${args.itemType!'lecm-document:base'}",
         destination:LogicECM.module.Documents.SETTINGS.nodeRef,
         newRowDialogTitle:"${newRowTitle}"
     });
@@ -41,7 +49,7 @@ YAHOO.util.Event.onDOMReady(init);
 <@comp.baseToolbar id true showSearchControl exSearch>
 <#if showCreateButton>
 <div class="new-row">
-        <span id="${id}-newContractButton" class="yui-button yui-push-button">
+        <span id="${id}-newDocumentButton" class="yui-button yui-push-button">
            <span class="first-child">
               <button type="button" title="${msg(newRowButtonLabel)}">${msg(newRowButtonLabel)}</button>
            </span>

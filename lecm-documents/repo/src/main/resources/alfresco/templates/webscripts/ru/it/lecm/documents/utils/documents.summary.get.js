@@ -1,6 +1,6 @@
 var type = args["docType"];
 
-var draftPath = documentScript.getDraftPath(args["draftRoot"]);
+var draftPath = documentScript.getDraftPath(type);
 var documentPath = documentScript.getDocumentsPath();
 
 var paths = [draftPath, documentPath];
@@ -27,6 +27,16 @@ for (var key in map) {
         filter: map[key]
     });
 }
+if (list.length == 0) { //ддобавляем пункт Все, если у нас не заданы фильтры
+    var amountDocs = documentScript.getAmountDocuments(types, paths, ["*"]);
+    list.push({
+        key: "Все",
+        skip: false,
+        amount: amountDocs,
+        filter: "*"
+    });
+}
+
 var amountMembers = documentScript.getAmountMembers(type);
 members.push({
     key:"Участники",

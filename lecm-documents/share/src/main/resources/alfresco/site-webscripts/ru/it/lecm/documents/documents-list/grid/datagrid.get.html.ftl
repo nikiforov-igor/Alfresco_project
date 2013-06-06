@@ -42,11 +42,16 @@
                     excludeColumns: <#if excludedColumns?? && (excludedColumns?length > 0)>"${excludedColumns}".split(",")<#else>[]</#if>
                 }).setMessages(${messages});
 
-                var filter = _generateFilterStr(LogicECM.module.Documents.FILTER, "${filterProperty}");
+                var query = <#if query?? && (query?length > 0)>"${query}"<#else>""</#if>;
+
+                var filter = _generateFilterStr(query.length > 0 ? query : LogicECM.module.Documents.FILTER , "${filterProperty}");
                 var archiveFolders = _generateArchiveFoldersStr(LogicECM.module.Documents.SETTINGS.archivePath);
 
-                var formId = (LogicECM.module.Documents.FORM_ID && LogicECM.module.Documents.FORM_ID != "") ? ("_" + LogicECM.module.Documents.FORM_ID.split(" ").join("_")) : "";
-
+                var formId = <#if formId?? && (formId?length > 0)>
+                                (("_" + "${formId}").split(" ").join("_"))
+                            <#else>
+                                ""
+                            </#if>;
                 YAHOO.util.Event.onContentReady ('${id}', function () {
                     YAHOO.Bubbling.fire ("activeGridChanged", {
                         datagridMeta: {
@@ -76,7 +81,7 @@
 			}
 
             function _generateFilterStr(filter, property) {
-                if (filter && property) {
+                if ((filter && filter.length > 0) && (property && property.length > 0)) {
                     var re = /\s*,\s*/;
                     var values = filter.split(re);
                     var shieldProp = property.split("-").join("\\-");

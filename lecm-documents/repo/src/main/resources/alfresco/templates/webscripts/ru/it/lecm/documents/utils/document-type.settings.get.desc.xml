@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Document Type Settings</shortname>
+    <description>Document Type Settings</description>
+    <url>/lecm/document-type/settings</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>
