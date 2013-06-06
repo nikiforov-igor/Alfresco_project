@@ -1107,6 +1107,64 @@
 		</forms>
 	</config>
 
+	<config evaluator="model-type" condition="lecm-contract-reports:docflow-timings-report">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-contract-reports:dft-reg-after"/>
+					<show id="lecm-contract-reports:dft-reg-before"/>
+					<show id="lecm-contract-reports:dft-report-type"/>
+					<show id="lecm-contract-reports:dft-contractor"/>
+					<show id="lecm-contract-reports:dft-contract-type"/>
+					<show id="lecm-contract-reports:dft-contract-subject"/>
+				</field-visibility>
+				<appearance>
+					<!-- 
+					<set id="set-start" template="/org/alfresco/components/form/3-column-set.ftl" appearance="fieldset" label_id="set-date-start-label" />
+					<set id="set-end" template="/org/alfresco/components/form/3-column-set.ftl" appearance="fieldset" label_id="set-date-end-label" />
+					  -->
+					<!-- 
+					<set id="set-common" appearance="fieldset" label="" />
+					<set id="datestart" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+					<set id="dateend" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+					  -->
+
+					<field id="lecm-contract-reports:dft-reg-after"/>
+					<field id="lecm-contract-reports:dft-reg-before"/>
+					<field id="lecm-contract-reports:dft-report-type"/>
+
+					<field id="lecm-contract-reports:dft-contract-type">
+						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-contract-reports:dft-contract-subject">
+						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика_x0020_договора</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-contract-reports:dft-contractor">
+						<control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+							<control-param name="changeItemsFireAction">lecm-contract-representative-assoc</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
 	<config evaluator="string-compare" condition="activiti$createOnBasis">
 		<forms>
 			<form>

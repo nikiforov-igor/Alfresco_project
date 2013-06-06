@@ -20,13 +20,28 @@
 		<namespace uri="http://www.it.ru/logicECM/contract/re1.0" prefix="lecm-contract-reports"/>
 	</namespaces>
 
+	<constraints>
+		<constraint name="lecm-contract-reports:dft-report-kind" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Вид договора</value>
+					<value>Тематика договора</value>
+					<value>Контрагент</value>
+					<value>Инициатор</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
 	<types>
+		<!-- форма параметров для отчёта "Реестр договоров" -->
 		<type name="lecm-contract-reports:contracts-list-report">
 			<title>Contracts list report</title>
 			<parent>cm:cmobject</parent>
 			<properties>
 				<property name="lecm-contract-reports:contracts-list-start-after" ><type>d:date</type></property>
 				<property name="lecm-contract-reports:contracts-list-start-before" ><type>d:date</type></property>
+
 				<property name="lecm-contract-reports:contracts-list-end-after"><type>d:date</type></property>
 				<property name="lecm-contract-reports:contracts-list-end-before"><type>d:date</type></property>
 
@@ -78,6 +93,7 @@
 			</associations>
 		</type>
 
+		<!-- форма параметров для отчёта "Исполнительская дисциплина по согласованиям за период" -->
 		<type name="lecm-contract-reports:approval-discipline-report">
 			<title>Approval discipline report</title>
 			<parent>cm:cmobject</parent>
@@ -90,5 +106,71 @@
 				</property>
 			</properties>
 		</type>
+
+		<!-- форма параметров для отчёта "Сроки прохождения маршрута" -->
+		<type name="lecm-contract-reports:docflow-timings-report">
+			<title>Docflow timigs report</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-contract-reports:dft-reg-after" ><type>d:date</type></property>
+				<property name="lecm-contract-reports:dft-reg-before" ><type>d:date</type></property>
+
+				<!--
+				<property name="lecm-contract-reports:dft-actual-only">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
+				  -->
+				<property name="lecm-contract-reports:dft-report-type">
+					<title>ReportType</title>
+					<type>d:text</type>
+					<default>Контрагент</default>
+					<constraints>
+						<constraint ref="lecm-contract-reports:dft-report-kind" />
+					</constraints>
+				</property>
+			</properties>
+			<associations>
+				<!-- контрагент -->
+				<association name="lecm-contract-reports:dft-contractor">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-contractor:contractor-type</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+				<!-- вид договора -->
+				<association name="lecm-contract-reports:dft-contract-type">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-contract-dic:contract-type</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+				<!-- тематика договора -->
+				<association name="lecm-contract-reports:dft-contract-subject">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-contract-dic:contract-subjects</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+
 	</types>
 </model>

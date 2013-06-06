@@ -170,7 +170,7 @@ public class DSProviderDocflowStatusTimings extends
 
 	private final SearchDoclowFilter filter = new SearchDoclowFilter();
 
-	public void seDateRegAfter( final String value) {
+	public void setDateRegAfter( final String value) {
 		filter.dateRegAfter = ArgsHelper.makeDate(value, "dateRegAfter");
 	}
 
@@ -186,7 +186,7 @@ public class DSProviderDocflowStatusTimings extends
 		filter.contractType = ArgsHelper.makeNodeRef(value, "contractType");
 	}
 
-	public void setContractContractor(String value) {
+	public void setContragent(String value) {
 		filter.contragent = ArgsHelper.makeNodeRef(value, "contragent");
 	}
 
@@ -434,6 +434,9 @@ public class DSProviderDocflowStatusTimings extends
 				iCol++; // (!) нумерация от Единицы
 				// "col_CountNN" = (Integer) счётчик в этом статусе
 				result.put( String.format( COLNAME_COUNTER_FMT, iCol), item.statusCounters.get(colName));
+				// TODO: TEMP DEBUG ONLY
+				// final int iRow = super.getData().indexOf(item);
+				// result.put( String.format( COLNAME_COUNTER_FMT, iCol), iCol + iRow * 100);
 			}
 
 			// последняя колонка будет состоять из всех значений, не вошедших в какие-либо предыдущие ... 
