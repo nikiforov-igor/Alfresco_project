@@ -2265,3 +2265,9 @@ span.person a h3 {
     max-width: 470px;
 }
 
+/* Договора : стили для столбца "сумма по договору" */
+.yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data td[class*="prop_lecm-contract_totalAmountWithCurrency"] {
+    text-align: right;
+    margin-right: 10px;
+}
+

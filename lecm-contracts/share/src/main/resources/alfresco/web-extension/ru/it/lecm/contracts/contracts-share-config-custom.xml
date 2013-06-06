@@ -274,8 +274,7 @@
                     <show id="lecm-statemachine:status" force="true"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
@@ -284,6 +283,7 @@
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
                     <field id="lecm-statemachine:status" label-id="contract.status"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Черновик">
@@ -309,8 +309,7 @@
                     <show id="lecm-contract:subjectContract-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
@@ -318,6 +317,7 @@
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_На_согласовании">
@@ -329,8 +329,7 @@
                     <show id="lecm-contract:subjectContract-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
@@ -338,6 +337,7 @@
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Согласован">
@@ -347,8 +347,7 @@
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-contract:subjectContract-assoc"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
@@ -356,6 +355,7 @@
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_На_доработке">
@@ -367,8 +367,7 @@
                     <show id="lecm-contract:subjectContract-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
@@ -376,6 +375,7 @@
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_На_подписании">
@@ -387,8 +387,7 @@
                     <show id="lecm-contract:subjectContract-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
@@ -396,6 +395,7 @@
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_На_подписании_у_контрагента">
@@ -408,14 +408,14 @@
                     <show id="lecm-contract:signatoryCounterparty"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Зарегистрирован">
@@ -428,8 +428,7 @@
                     <show id="lecm-contract:signatoryCounterparty"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumSystem" label-id="contract.regNumber"/>
@@ -437,6 +436,7 @@
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Действует">
@@ -450,8 +450,7 @@
                     <show id="lecm-contract:endDate"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumSystem" label-id="contract.regNumber"/>
@@ -459,6 +458,7 @@
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Исполнен">
@@ -471,8 +471,7 @@
                     <show id="lecm-contract:startDate"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumSystem" label-id="contract.regNumber"/>
@@ -480,6 +479,7 @@
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Приостановлен">
@@ -491,8 +491,7 @@
                     <show id="lecm-contract:subjectContract-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumSystem" label-id="contract.regNumber"/>
@@ -500,6 +499,7 @@
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Расторгнут">
@@ -512,8 +512,7 @@
                     <show id="lecm-contract:startDate"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumSystem" label-id="contract.regNumber"/>
@@ -521,6 +520,7 @@
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Проекты">
@@ -533,8 +533,7 @@
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-statemachine:status" force="true"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
@@ -543,6 +542,7 @@
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
                     <field id="lecm-statemachine:status" label-id="contract.status"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Подписанные">
@@ -556,8 +556,7 @@
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-statemachine:status" force="true"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
@@ -566,6 +565,7 @@
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
                     <field id="lecm-statemachine:status" label-id="contract.status"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Завершенные">
@@ -579,8 +579,7 @@
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-statemachine:status" force="true"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
@@ -589,6 +588,7 @@
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
                     <field id="lecm-statemachine:status" label-id="contract.status"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="datagrid_Корзина">
@@ -599,14 +599,14 @@
                     <show id="lecm-contract:subjectContract-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
-                    <show id="lecm-contract:totalAmount"/>
-                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:totalAmountWithCurrency"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="document-journal">

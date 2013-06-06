@@ -97,12 +97,6 @@ var $siteURL = Alfresco.util.siteURL;
                                         columnContent = "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'view-metadata?nodeRef=' + oRecord.getData("itemData")["prop_lecm-document_creator-ref"].value + "\'\">" + columnContent + "</a>";
                                     }
 
-                                    if (datalistColumn.name == "lecm-contract:totalAmount") {
-                                        var currency = oRecord.getData("itemData")["assoc_lecm-contract_currency-assoc"];
-
-                                        columnContent = '<div style="text-align: right; margin-right: 10px">' + columnContent + ' ' + (currency ? currency.displayValue : '') + '</div>';
-                                    }
-
                                     if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
                                         html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                                     } else {
