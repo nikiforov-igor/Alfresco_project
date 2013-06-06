@@ -251,4 +251,38 @@
         <property name="orgstructureBean" ref="serviceOrgstructure" />
         <property name="nodeService" ref="nodeService" />
     </bean>
+
+    <bean id="orgstructure.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-orgstr:business-role">
+                    <list>
+                        <value>lecm-orgstr:business-role-identifier</value>
+                        <value>cm:name</value>
+                        <value>lecm-orgstr:business-role-description</value>
+                        <value>lecm-orgstr:business-role-is-dynamic</value>
+                    </list>
+                </entry>
+                <entry key="lecm-orgstr-docType:documentType">
+                    <list>
+                        <value>cm:name</value>
+                    </list>
+                </entry>
+                <entry key="lecm-orgstr:staffPosition">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-orgstr:staffPosition-name-d</value>
+                        <value>lecm-orgstr:staffPosition-code</value>
+                        <value>lecm-orgstr:staffPosition-name-g</value>
+                    </list>
+                </entry>
+                <entry key="lecm-orgstr:workRole">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-orgstr:workRole-description</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>

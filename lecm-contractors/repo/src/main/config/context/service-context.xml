@@ -92,4 +92,75 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
+    <bean id="contractors.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-contractor:link-representative-and-contractor">
+                    <list>
+                        <value>lecm-contractor:link-to-representative-association-is-primary</value>
+                        <value>lecm-contractor:link-to-representative-association</value>
+                    </list>
+                </entry>
+                <entry key="lecm-contractor:contractor-type">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-contractor:contractor-code</value>
+                        <value>lecm-contractor:transactional-account</value>
+                        <value>lecm-contractor:bankname</value>
+                        <value>lecm-contractor:BIK</value>
+                        <value>lecm-contractor:OGRN</value>
+                        <value>lecm-contractor:OKVED</value>
+                        <value>lecm-contractor:physical-address</value>
+                        <value>lecm-contractor:OKOGU</value>
+                        <value>lecm-contractor:comment</value>
+                        <value>lecm-contractor:OKPO</value>
+                        <value>lecm-contractor:fullname</value>
+                        <value>lecm-contractor:bank-location</value>
+                        <value>lecm-contractor:correspondent-account</value>
+                        <value>lecm-contractor:email</value>
+                        <value>lecm-contractor:INN</value>
+                        <value>lecm-contractor:shortname</value>
+                        <value>lecm-contractor:KPP</value>
+                        <value>lecm-contractor:legal-address</value>
+                        <value>lecm-contractor:phone</value>
+                        <value>lecm-contractor:fax</value>
+                        <value>lecm-contractor:contractor-to-link-association</value>
+                        <value>lecm-contractor:contractor-to-specialization-association</value>
+                        <value>lecm-contractor:contractor-to-legalform-association</value>
+                    </list>
+                </entry>
+                <entry key="lecm-legalform:legalform-type">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-legalform:short-title</value>
+                        <value>lecm-legalform:full-title</value>
+                        <value>lecm-legalform:comment</value>
+                    </list>
+                </entry>
+                <entry key="lecm-representative:representative-type">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-representative:commments</value>
+                        <value>lecm-representative:firstname</value>
+                        <value>lecm-representative:surname</value>
+                        <value>lecm-representative:location</value>
+                        <value>lecm-representative:rank</value>
+                        <value>lecm-representative:fax</value>
+                        <value>lecm-representative:email</value>
+                        <value>lecm-representative:work-phone</value>
+                        <value>lecm-representative:mobile-phone</value>
+                        <value>lecm-representative:contacts</value>
+                        <value>lecm-representative:middlename</value>
+                    </list>
+                </entry>
+                <entry key="lecm-specialization:specialization-type">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-specialization:title</value>
+                        <value>lecm-specialization:description</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>

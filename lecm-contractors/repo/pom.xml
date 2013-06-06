@@ -52,13 +52,19 @@
         <dependency>
             <groupId>ru.it.lecm.base</groupId>
             <artifactId>base-repo-api</artifactId>
-            <version>0.1.0</version>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.dictionary</groupId>
+            <artifactId>dictionary-repo-api</artifactId>
+            <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.contractors</groupId>
             <artifactId>lecm-contractors-api</artifactId>
-            <version>0.1.0</version>
+            <version>${platform.version}</version>
         </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>

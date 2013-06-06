@@ -67,4 +67,19 @@
 			<ref bean="notificationsService"/>
 		</property>
 	</bean>
+
+    <bean id="notifications.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-notf-type:notification-type">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-notf-type:code</value>
+                        <value>lecm-notf-type:spring-bean-id</value>
+                        <value>lecm-notf-type:default-select</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>

@@ -229,4 +229,49 @@
             <ref bean="businessJournalService"/>
         </property>
     </bean>
+
+    <bean id="businessJournal.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-busjournal:bjRecord">
+                    <list>
+                        <value>lecm-busjournal:bjRecord-date</value>
+                        <value>lecm-busjournal:bjRecord-objType-assoc-text-content</value>
+                        <value>lecm-busjournal:bjRecord-evCategory-assoc-text-content</value>
+                        <value>lecm-busjournal:bjRecord-description</value>
+                        <value>lecm-busjournal:bjRecord-initiator</value>
+                        <value>lecm-busjournal:bjRecord-mainObject</value>
+                        <value>lecm-busjournal:bjRecord-secondaryObj1</value>
+                        <value>lecm-busjournal:bjRecord-secondaryObj2</value>
+                        <value>lecm-busjournal:bjRecord-secondaryObj3</value>
+                        <value>lecm-busjournal:bjRecord-secondaryObj4</value>
+                        <value>lecm-busjournal:bjRecord-secondaryObj5</value>
+                    </list>
+                </entry>
+                <entry key="lecm-busjournal:eventCategory">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-busjournal:eventCategory-code</value>
+                    </list>
+                </entry>
+                <entry key="lecm-busjournal:objectType">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-busjournal:objectType-code</value>
+                        <value>lecm-busjournal:objectType-template</value>
+                        <value>lecm-busjournal:objectType-class</value>
+                        <value>lecm-busjournal:objectType-list-template</value>
+                    </list>
+                </entry>
+                <entry key="lecm-busjournal:messageTemplate">
+                    <list>
+                        <value>lecm-busjournal:messageTemplate-template</value>
+                        <value>lecm-busjournal:messageTemplate-code</value>
+                        <value>lecm-busjournal:messageTemplate-objType-assoc</value>
+                        <value>lecm-busjournal:messageTemplate-evCategory-assoc</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>

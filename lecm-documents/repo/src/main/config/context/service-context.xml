@@ -424,4 +424,27 @@
     </bean>
 
     <bean id="documentsPermissions" class="ru.it.lecm.documents.beans.DocumentsPermissionsBean" abstract="true"/>
+
+    <bean id="documents.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-connect-types:available-connection-type">
+                    <list>
+                        <value>lecm-connect-types:connected-document-type</value>
+                        <value>lecm-connect-types:primary-document-type</value>
+                        <value>lecm-connect-types:recommended-connection-types-assoc</value>
+                        <value>lecm-connect-types:default-connection-type-assoc</value>
+                        <value>lecm-connect-types:not-available-connection-types-assoc</value>
+                    </list>
+                </entry>
+                <entry key="lecm-connect-types:connection-type">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-connect-types:reverse-name</value>
+                        <value>lecm-connect-types:code</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>

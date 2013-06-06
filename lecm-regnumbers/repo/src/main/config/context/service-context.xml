@@ -67,4 +67,18 @@
 		<property name="regNumbersService" ref="regNumbersService"/>
 	</bean>
 
+    <bean id="regnumbers.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-regnum:template">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-regnum:template-comment</value>
+                        <value>lecm-regnum:template-service-id</value>
+                        <value>lecm-regnum:template-string</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>

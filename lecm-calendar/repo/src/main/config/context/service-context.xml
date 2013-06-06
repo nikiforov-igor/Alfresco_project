@@ -254,4 +254,18 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="scheduleService" ref="ScheduleService"/>
 	</bean>
+
+    <bean id="calendar.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-absence:reason">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-absence:color</value>
+                        <value>lecm-absence:code</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>

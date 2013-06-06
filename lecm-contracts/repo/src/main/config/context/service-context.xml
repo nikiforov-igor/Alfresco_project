@@ -326,4 +326,41 @@
             </map>
         </property>
     </bean>
+
+    <bean id="contracts.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-contract-dic:contract-type">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-contract-dic:contract-type-code</value>
+                    </list>
+                </entry>
+                <entry key="lecm-contract-dic:contract-documents-type">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-contract-dic:contract-documents-type-code</value>
+                    </list>
+                </entry>
+                <entry key="lecm-contract-dic:reference-data">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-contract-dic:reference-data-link</value>
+                    </list>
+                </entry>
+                <entry key="lecm-contract-dic:delete-reason">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-contract-dic:delete-reason-code</value>
+                    </list>
+                </entry>
+                <entry key="lecm-contract-dic:contract-subjects">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-contract-dic:contract-subjects-code</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>
