@@ -127,7 +127,9 @@ LogicECM.module = LogicECM.module || {};
 
 			additionalFilter: "",
 
-            ignoreNodes: null
+            ignoreNodes: null,
+
+            hiddenStart: false
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -251,6 +253,11 @@ LogicECM.module = LogicECM.module || {};
                 }
                 if(!this.options.disabled)
                 {
+                    if (this.options.hiddenStart){
+                        this.selectedItems = {};
+                        this.singleSelectedItem = null;
+                        this.options.hiddenStart=false;
+                    }
                     this.updateSelectedItems();
                     this.updateAddButtons();
                 }

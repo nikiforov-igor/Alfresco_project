@@ -33,6 +33,12 @@
 	<#assign showViewIncompleteWarning = true>
 </#if>
 
+<#if field.control.params.hiddenStart?? && field.control.params.hiddenStart == "true">
+    <#assign hiddenStart = true>
+<#else>
+    <#assign hiddenStart  = false>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <script type="text/javascript">//<![CDATA[
@@ -69,7 +75,8 @@
         selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
     </#if>
         nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
-        additionalFilter: "${field.control.params.additionalFilter!''}"
+        additionalFilter: "${field.control.params.additionalFilter!''}",
+        hiddenStart: ${hiddenStart?string}
     });
 
     LogicECM.CurrentModules["${treeViewJsName}"] = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" );
@@ -109,7 +116,8 @@
         plane: true,
         currentValue: "${field.value!''}",
         itemType:"${field.control.params.itemType!field.endpointType}",
-        additionalFilter: "${field.control.params.additionalFilter!''}"
+        additionalFilter: "${field.control.params.additionalFilter!''}",
+        hiddenStart: ${hiddenStart?string}
     }).setMessages( ${messages} );
 })();
 //]]></script>

@@ -43,7 +43,8 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
         {
             options: {
                 documentRef: null,
-                bublingLabel: ""
+                bublingLabel: "",
+                creatorRef: ""
             },
 
             id: null,
@@ -55,11 +56,29 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
 
             onReady: function()
             {
-
+                this.getIgnoredNode();
                 this.transfers.transferButton = Alfresco.util.createYUIButton(this, this.controlId + "-transfer-right-button", this.findFormEmployee,{},Dom.get(this.controlId + "-transfer-right-button"));
 
             },
-
+            getIgnoredNode: function()
+            {
+                Alfresco.util.Ajax.request(
+                    {
+                        method: "GET",
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/api/getProperties",
+                        dataObj: {
+                            nodeRef: this.options.documentRef
+                        },
+                        successCallback: {
+                            fn:function(response){
+                                this.options.creatorRef = response.json[0]["creator-ref"];
+                            },
+                            scope: this
+                        },
+                        failureMessage: "message.failure",
+                        execScripts:true
+                    });
+            },
             findFormEmployee: function (e, p_obj) {
 
                 var me = this;
@@ -76,7 +95,8 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
                         itemId: this.options.documentRef,
                         mode: "edit",
                         formId: "transfer-right",
-                        submitType: "json"
+                        submitType: "json",
+                        ignoreNodes: this.options.creatorRef
                     });
 
 //				// Using Forms Service, so always create new instance
