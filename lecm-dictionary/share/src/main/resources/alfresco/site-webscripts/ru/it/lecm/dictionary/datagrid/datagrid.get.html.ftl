@@ -26,12 +26,6 @@ function createDatagrid(attributeForShow) {
                     },
                     {
                         type:"datagrid-action-link-${bubblingLabel}",
-                        id:"onActionDuplicate",
-                        permission:"create",
-                        label:"${msg("actions.duplicate-row")}"
-                    },
-                    {
-                        type:"datagrid-action-link-${bubblingLabel}",
                         id:"onActionDelete",
                         permission:"delete",
                         label:"${msg("actions.delete-row")}"
