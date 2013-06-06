@@ -140,4 +140,11 @@
 		<property name="approvalListService" ref="lecm.approval.service.parallel"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
 	</bean>
+    <bean id="webscript.ru.it.lecm.approval.OverrideReassign.get" class="ru.it.lecm.approval.webscript.OverrideReassign" parent="webscript">
+        <property name="workflowService" ref="WorkflowService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="approvalListService" ref="lecm.approval.service.parallel"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+    </bean>
 </beans>

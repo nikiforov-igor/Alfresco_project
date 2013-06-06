@@ -1,19 +1,24 @@
 package ru.it.lecm.approval;
 
+import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
+import org.alfresco.repo.workflow.WorkflowModel;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
+import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.ParameterCheck;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -22,34 +27,17 @@ import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.activiti.engine.delegate.VariableScope;
-import org.alfresco.repo.workflow.WorkflowModel;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.workflow.WorkflowInstance;
-import org.alfresco.service.cmr.workflow.WorkflowService;
-import org.alfresco.service.cmr.workflow.WorkflowTask;
-import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
-import org.alfresco.service.cmr.workflow.WorkflowTaskState;
-import org.apache.commons.lang.time.DateUtils;
-import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.wcalendar.IWorkCalendar;
+import java.util.*;
 
 /**
  *
@@ -476,6 +464,11 @@ public abstract class ApprovalListServiceAbstract extends BaseBean implements Ap
 	@Override
 	public void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage) {
 		NodeRef documentRef = getDocumentFromBpmPackage(bpmPackage);
+		this.grantReviewerPermissionsInternal(employeeRef, documentRef);
+	}
+
+    @Override
+	public void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef) {
 		if (documentRef != null) {
 			NodeRef member = documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, "LECM_BASIC_PG_Reviewer");
             if (member == null) { // сотрудник уже добавлен как участник - значит просто раздаем доп права

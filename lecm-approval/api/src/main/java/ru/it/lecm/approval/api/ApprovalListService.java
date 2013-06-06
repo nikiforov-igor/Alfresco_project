@@ -65,6 +65,13 @@ public interface ApprovalListService {
 	 */
 	void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
 
+    /**
+	 * раздать всем участникам процесса согласования права LECM_BASIC_PG_Reviewer
+	 * @param employees
+	 * @param documentRef
+	 */
+	void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef);
+
 	void notifyApprovalStarted(final NodeRef employeeRef, final Date dueDate, final NodeRef bpmPackage);
 
 	/**
