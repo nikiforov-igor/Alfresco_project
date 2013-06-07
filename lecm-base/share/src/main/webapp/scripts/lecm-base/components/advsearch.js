@@ -103,7 +103,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.currentForm = form;
 
                 var formDiv = Dom.get("searchBlock-forms"); // элемент в который будет отрисовываться форма
-                form.htmlid = this.options.searchFormId;
+                form.htmlid = this.options.searchFormId + "-" + form.type.split(":").join("_");
 
                 // load the form component for the appropriate type
                 var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
@@ -419,7 +419,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onBeforeFormRuntimeInit:function ADVSearch_onBeforeFormRuntimeInit(layer, args) {
                 // extract the current form runtime - so we can reference it later
-                if (this.currentForm && args[1].runtime.formId == (this.options.searchFormId + "-form")) {
+                if (this.currentForm && args[1].runtime.formId == (this.options.searchFormId + "-" + this.currentForm.type.split(":").join("_") + "-form")) {
                     this.currentForm.runtime = args[1].runtime;
                 }
             },

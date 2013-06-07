@@ -31,7 +31,6 @@
             <properties>
                 <pagination>true</pagination>
                 <bubblingLabel>documents</bubblingLabel>
-                <advSearchFormId>documents-search</advSearchFormId>
             </properties>
         </component>
     </components>

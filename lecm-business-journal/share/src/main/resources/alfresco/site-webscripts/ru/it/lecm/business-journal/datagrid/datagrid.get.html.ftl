@@ -32,8 +32,7 @@
 							],
 							bubblingLabel: "${bubblingLabel!"bj-records"}",
 							showCheckboxColumn: true,
-							attributeForShow:"lecm-busjournal:bjRecord-date",
-                            advSearchFormId: "busjournal-search-form"
+							attributeForShow:"lecm-busjournal:bjRecord-date"
 						}).setMessages(${messages});
 
                 YAHOO.util.Event.onContentReady ('${id}', function () {
@@ -46,8 +45,7 @@
                                 filter: '+PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Бизнес-журнал//*"'
                             }
                         },
-                        bubblingLabel: "bj-records",
-                        advSearchFormId: "busjournal-search-form"
+                        bubblingLabel: "bj-records"
                     });
                 });
 			}

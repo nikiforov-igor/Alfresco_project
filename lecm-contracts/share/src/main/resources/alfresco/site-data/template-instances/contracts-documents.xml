@@ -40,7 +40,6 @@
             <properties>
                 <itemType>lecm-additional-document:additionalDocument</itemType>
                 <bubblingLabel>contracts-documents</bubblingLabel>
-                <advSearchFormId>contracts-documents-search</advSearchFormId>
                 <attributeForShow>lecm-additional-document:number</attributeForShow>
                 <excludedColumns>lecm-document:creator-ref</excludedColumns>
                 <filterProperty>lecm-additional-document:additionalDocumentType-text-content</filterProperty>

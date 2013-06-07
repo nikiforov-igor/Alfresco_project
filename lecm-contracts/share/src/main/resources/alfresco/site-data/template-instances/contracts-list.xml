@@ -40,9 +40,8 @@
             <properties>
                 <itemType>lecm-contract:document</itemType>
                 <bubblingLabel>contracts</bubblingLabel>
-                <advSearchFormId>contracts-search</advSearchFormId>
                 <attributeForShow>lecm-contract:regNumProject</attributeForShow>
-                <excludedColumns>lecm-document:creator-ref,lecm-contract:currency-assoc</excludedColumns>
+                <excludedColumns>lecm-document:creator-ref</excludedColumns>
                 <filterProperty>lecm-statemachine:status</filterProperty>
                 <formId>{formId}</formId>
                 <filter>{query}</filter>

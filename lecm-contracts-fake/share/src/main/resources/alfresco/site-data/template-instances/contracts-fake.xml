@@ -40,7 +40,6 @@
             <properties>
                 <itemType>lecm-contract-fake:document</itemType>
                 <bubblingLabel>contracts-fake</bubblingLabel>
-                <advSearchFormId>contracts-fake-search</advSearchFormId>
                 <attributeForShow>lecm-contract:regNumProject</attributeForShow>
                 <filterProperty>lecm-statemachine:status</filterProperty>
                 <formId>{formId}</formId>
