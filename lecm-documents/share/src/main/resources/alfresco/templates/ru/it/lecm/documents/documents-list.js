@@ -9,17 +9,21 @@ if (permissionsStr.status == 200) {
         userPermissions = userPermissions + permissionsList[i].id + ",";
     }
 }
-
-var rolesStr = remote.connect("alfresco").get("/lecm/orgstructure/api/getCurrentEmployeeRoles");
-if (rolesStr.status == 200) {
-    var rolesList = eval("(" + rolesStr + ")");
-    for (var i = 0; i < rolesList.length; i++) {
-        if (userPermissions.indexOf(rolesList[i].id) >= 0) {
-            hasRole = true;
-            break;
+if (userPermissions != "") {
+    var rolesStr = remote.connect("alfresco").get("/lecm/orgstructure/api/getCurrentEmployeeRoles");
+    if (rolesStr.status == 200) {
+        var rolesList = eval("(" + rolesStr + ")");
+        for (var i = 0; i < rolesList.length; i++) {
+            if (userPermissions.indexOf(rolesList[i].id) >= 0) {
+                hasRole = true;
+                break;
+            }
         }
     }
+} else {
+    hasRole = true;
 }
+
 model.hasPermission = hasRole;
 
 if (hasRole) {
