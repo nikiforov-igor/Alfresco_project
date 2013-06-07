@@ -122,7 +122,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 		}
 
 		// TODO: temporary
-		openOfficeExecute();
+		//openOfficeExecute();
 
 		return bquery.toString();
 	}
@@ -512,6 +512,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 		return (float) (duration_ms / MILLIS_PER_DAY);
 	}
 
+	/*
 	private void openOfficeExecute() {
 		final String ooFileNameTemplate = "/reportdefinitions/oo-templates/ExampleArgsOfTheDoc.odt";
 		final String ooFileNameResult = "/reportdefinitions/oo-templates/generated.odt";
@@ -521,6 +522,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 			logger.error(String.format( "Error generating ooffice new file\n\t '{%s}'\n\t from '{%s}'\n\t error %s", ooFileNameResult, ooFileNameTemplate, tx.getMessage()), tx);
 		}
 	}
+	 */
 
 	private static void ooConvert(String namein, String nameout)
 			throws BootstrapException, com.sun.star.io.IOException, Exception, MalformedURLException
