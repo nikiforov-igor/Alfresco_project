@@ -44,9 +44,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			onReady: function () {
 				this.widgets.submitButton = Alfresco.util.createYUIButton(this, "submit-button", this.onSubmit);
+				YAHOO.util.Event.addListener(Dom.get(this.id + "-property-value"), "keypress", this.adjustTextareaHeight, this);
 			},
 
-			onSubmit: function() {
+			onSubmit: function () {
 				var me = this;
 				Alfresco.util.Ajax.jsonRequest(
 					{
@@ -61,10 +62,24 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					});
 			},
 
-			updateDocumentPage: function(layer, args) {
+			updateDocumentPage: function (layer, args) {
 				if (args[1] != null && args[1].title != null) {
 					Dom.get(this.id + "-page").innerHTML = args[1].title;
 				}
+			},
+
+			adjustTextareaHeight: function (event, scope) {
+				var textarea = event.currentTarget;
+				setTimeout(function() {
+					var dif = textarea.scrollHeight - textarea.clientHeight
+					if (dif) {
+						if (isNaN(parseInt(textarea.style.height))) {
+							textarea.style.height = textarea.scrollHeight + "px"
+						} else {
+							textarea.style.height = parseInt(textarea.style.height) + dif + "px"
+						}
+					}
+				}, 1);
 			}
 		});
 })();
