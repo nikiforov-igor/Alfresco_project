@@ -15,6 +15,8 @@
     <#assign exSearch = showExSearchBtn/>
 </#if>
 
+<#assign createBtnLabel = msg("button.new-row")/>
+
 <#assign newRowButtonLabel = "button.new-row"/>
 <#if args.newRowLabel??>
     <#assign newRowButtonLabel = args.newRowLabel/>
@@ -22,6 +24,10 @@
     <#if args.itemType??>
         <#assign newRowButtonLabel = ("button." + args.itemType?replace(":","_") + ".new")/>
     </#if>
+</#if>
+
+<#if msg(newRowButtonLabel) != newRowButtonLabel>
+    <#assign createBtnLabel = msg(newRowButtonLabel)/>
 </#if>
 
 <#assign newRowTitle = "label.create-row.title"/>
@@ -51,7 +57,7 @@ YAHOO.util.Event.onDOMReady(init);
 <div class="new-row">
         <span id="${id}-newDocumentButton" class="yui-button yui-push-button">
            <span class="first-child">
-              <button type="button" title="${msg(newRowButtonLabel)}">${msg(newRowButtonLabel)}</button>
+              <button type="button" title="${createBtnLabel}">${createBtnLabel}</button>
            </span>
         </span>
 </div>

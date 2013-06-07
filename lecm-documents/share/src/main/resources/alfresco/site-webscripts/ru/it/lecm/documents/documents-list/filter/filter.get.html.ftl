@@ -8,6 +8,10 @@
     </#if>
 </#if>
 
+<#assign filterTitle = msg("label.documents")/>
+<#if msg(f_label) != f_label>
+    <#assign filterTitle = msg(f_label)/>
+</#if>
 <#assign pageLink = args.linkPage!"documents-list"/>
 
 <#assign isDocListPage = false/>
@@ -17,7 +21,7 @@
 
 <div id="documents-filter" class="documents-filter-panel">
     <div class="documents-filter-block">
-        <h2 class="thin" style="margin-left: 16px;">${msg(f_label)}</h2>
+        <h2 class="thin" style="margin-left: 16px;">${filterTitle}</h2>
         <hr/>
         <div id="filter-groups-set" class="filterBlock">
         <#if statusesGroups??>

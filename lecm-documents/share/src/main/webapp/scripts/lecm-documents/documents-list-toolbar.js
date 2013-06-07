@@ -210,8 +210,13 @@
                 var me = this;
                 var doBeforeDialogShow = function (p_form, p_dialog) {
                     var addMsg = meta.addMessage;
+                    var defaultMsg = this.msg("label.create-row.title");
+                    var testMsg = this.msg(me.options.newRowDialogTitle);
+                    if (testMsg != me.options.newRowDialogTitle){
+                        defaultMsg = testMsg;
+                    }
                     Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-form-container_h", addMsg ? addMsg : this.msg(me.options.newRowDialogTitle) ]
+                        [ p_dialog.id + "-form-container_h", addMsg ? addMsg : defaultMsg ]
                     );
 
                     Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
