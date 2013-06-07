@@ -136,6 +136,8 @@
                     var btn = frm.buttons.cancel;
                     btn._button.style.display = "none";
                     btn._button.hidden = "hidden";
+                    LogicECM.CurrentModules.employeesAssocAutoComplete.setOptions( { multipleSelectMode: false } );
+                    LogicECM.CurrentModules.employeesAssocTreeView.setOptions( { multipleSelectMode: false } );
                 },
                 scope: editDetails
             },
