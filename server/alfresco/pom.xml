@@ -150,20 +150,6 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.dictionary</groupId>
-			<artifactId>dictionary-regions-repo</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.dictionary</groupId>
-			<artifactId>dictionary-test-repo</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.contracts</groupId>
 			<artifactId>contracts-repo</artifactId>
 			<version>${platform.version}</version>

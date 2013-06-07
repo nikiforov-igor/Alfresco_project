@@ -94,20 +94,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.dictionary</groupId>
-			<artifactId>dictionary-regions-share</artifactId>
-			<version>${platform.version}</version>
-			<type>amp</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.dictionary</groupId>
-			<artifactId>dictionary-test-share</artifactId>
-			<version>${platform.version}</version>
-			<type>amp</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.contracts</groupId>
 			<artifactId>contracts-share</artifactId>
 			<version>${platform.version}</version>
