@@ -80,8 +80,10 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.forms.jasperforms</groupId>
-			<artifactId>jasperforms-share</artifactId>
+			<!-- <groupId>ru.it.lecm.forms.jasperforms</groupId> -->
+			<groupId>ru.it.lecm.reports</groupId>
+			<!-- <artifactId>jasperforms-share</artifactId> -->
+			<artifactId>lecm-reports-share</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
 			<scope>runtime</scope>
