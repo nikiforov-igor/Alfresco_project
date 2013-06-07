@@ -1,39 +1,43 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dictionary name="Вид документа к договору">
-	<property name="lecm-dic:attributeForShow">cm:name</property>
-	<property name="lecm-dic:type">lecm-contract-dic:contract-documents-type</property>
-	<property name="lecm-dic:active">true</property>
-	<property name="lecm-dic:show_control_in_separate_window">false</property>
-	<property name="lecm-dic:plane">true</property>
-	<property name="lecm-dic:description">Вид документа к договору</property>
-	<items>
-		<item name="Дополнительное соглашение">
-			<property name="cm:name">Дополнительное соглашение</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">additionalAgreement</property>
-		</item>
-		<item name="Соглашение">
-			<property name="cm:name">Соглашение</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">agreement</property>
-		</item>
-		<item name="Соглашение о расторжении">
-			<property name="cm:name">Соглашение о расторжении</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">terminationAgreement</property>
-		</item>
-		<item name="Изменения к договору">
-			<property name="cm:name">Изменения к договору</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">changesToAgreement</property>
-		</item>
-		<item name="Изменение к доп. Соглашению">
-			<property name="cm:name">Изменение к доп. Соглашению</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">changesToAdditionalAgreement</property>
-		</item>
-        <item name="Протокол разногласий">
-			<property name="cm:name">Протокол разногласий</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">protocolDifferences</property>
-		</item>
-        <item name="Протокол согласования разногласий">
-			<property name="cm:name">Протокол согласования разногласий</property>
-			<property name="lecm-contract-dic:contract-documents-type-code">negotiationProtocolDifferences</property>
-		</item>
-	</items>
-</dictionary>
+<items>
+    <item name="lecm-dic:Вид документа к договору" type="lecm-dic:dictionary">
+        <property name="cm:name">Вид документа к договору</property>
+        <property name="lecm-dic:attributeForShow">cm:name</property>
+        <property name="lecm-dic:type">lecm-contract-dic:contract-documents-type</property>
+        <property name="lecm-dic:active">true</property>
+        <property name="lecm-dic:show_control_in_separate_window">false</property>
+        <property name="lecm-dic:plane">true</property>
+        <property name="lecm-dic:description">Вид документа к договору</property>
+        <items>
+            <item name="cm:Дополнительное соглашение" type="lecm-contract-dic:contract-documents-type">
+                <property name="cm:name">Дополнительное соглашение</property>
+                <property name="lecm-contract-dic:contract-documents-type-code">additionalAgreement</property>
+            </item>
+            <item name="cm:Соглашение" type="lecm-contract-dic:contract-documents-type">
+                <property name="cm:name">Соглашение</property>
+                <property name="lecm-contract-dic:contract-documents-type-code">agreement</property>
+            </item>
+            <item name="cm:Соглашение о расторжении" type="lecm-contract-dic:contract-documents-type">
+                <property name="cm:name">Соглашение о расторжении</property>
+                <property name="lecm-contract-dic:contract-documents-type-code">terminationAgreement</property>
+            </item>
+            <item name="cm:Изменения к договору" type="lecm-contract-dic:contract-documents-type">
+                <property name="cm:name">Изменения к договору</property>
+                <property name="lecm-contract-dic:contract-documents-type-code">changesToAgreement</property>
+            </item>
+            <item name="cm:Изменение к доп. Соглашению" type="lecm-contract-dic:contract-documents-type">
+                <property name="cm:name">Изменение к доп. Соглашению</property>
+                <property name="lecm-contract-dic:contract-documents-type-code">changesToAdditionalAgreement</property>
+            </item>
+            <item name="cm:Протокол разногласий" type="lecm-contract-dic:contract-documents-type">
+                <property name="cm:name">Протокол разногласий</property>
+                <property name="lecm-contract-dic:contract-documents-type-code">protocolDifferences</property>
+            </item>
+            <item name="cm:Протокол согласования разногласий" type="lecm-contract-dic:contract-documents-type">
+                <property name="cm:name">Протокол согласования разногласий</property>
+                <property name="lecm-contract-dic:contract-documents-type-code">negotiationProtocolDifferences
+                </property>
+            </item>
+        </items>
+    </item>
+</items>

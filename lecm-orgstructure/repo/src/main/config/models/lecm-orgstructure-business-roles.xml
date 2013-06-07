@@ -1,9 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dictionary name="Бизнес роли">
-	<property name="lecm-dic:description">Справочник всех бизнес ролей</property>
-	<property name="lecm-dic:type">lecm-orgstr:business-role</property>
-	<property name="lecm-dic:attributeForShow">cm:name</property>
-	<property name="lecm-dic:show_control_in_separate_window">false</property>
-	<property name="lecm-dic:plane">true</property>
-	<property name="lecm-dic:active">true</property>
-</dictionary>
+<items>
+    <item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
+        <property name="cm:name">Бизнес роли</property>
+        <property name="lecm-dic:description">Справочник всех бизнес ролей</property>
+        <property name="lecm-dic:type">lecm-orgstr:business-role</property>
+        <property name="lecm-dic:attributeForShow">cm:name</property>
+        <property name="lecm-dic:show_control_in_separate_window">false</property>
+        <property name="lecm-dic:plane">true</property>
+        <property name="lecm-dic:active">true</property>
+    </item>
+</items>

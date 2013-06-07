@@ -1,9 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dictionary name="Шаблон сообщения">
-    <property name="lecm-dic:description">Системный справочник, содержащий человеко-читаемые описания возможных действий в системе</property>
-    <property name="lecm-dic:type">lecm-busjournal:messageTemplate</property>
-    <property name="lecm-dic:attributeForShow">cm:name</property>
-    <property name="lecm-dic:show_control_in_separate_window">false</property>
-    <property name="lecm-dic:plane">true</property>
-    <property name="lecm-dic:active">true</property>
-</dictionary>
+<items>
+    <item name="lecm-dic:Шаблон сообщения" type="lecm-dic:dictionary">
+        <property name="cm:name">Шаблон сообщения</property>
+        <property name="lecm-dic:attributeForShow">cm:name</property>
+        <property name="lecm-dic:description">Системный справочник, содержащий человеко-читаемые описания возможных действий в системе</property>
+        <property name="lecm-dic:type">lecm-busjournal:messageTemplate</property>
+        <property name="lecm-dic:show_control_in_separate_window">false</property>
+        <property name="lecm-dic:plane">true</property>
+        <property name="lecm-dic:active">true</property>
+    </item>
+</items>

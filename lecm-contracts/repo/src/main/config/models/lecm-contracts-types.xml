@@ -1,39 +1,42 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dictionary name="Вид договора">
-	<property name="lecm-dic:attributeForShow">cm:name</property>
-	<property name="lecm-dic:type">lecm-contract-dic:contract-type</property>
-	<property name="lecm-dic:active">true</property>
-	<property name="lecm-dic:show_control_in_separate_window">false</property>
-	<property name="lecm-dic:plane">true</property>
-	<property name="lecm-dic:description">Вид договора</property>
-	<items>
-		<item name="Купли-продажи">
-			<property name="cm:name">Купли-продажи</property>
-			<property name="lecm-contract-dic:contract-type-code">sale</property>
-		</item>
-		<item name="Аренды">
-			<property name="cm:name">Аренды</property>
-			<property name="lecm-contract-dic:contract-type-code">lease</property>
-		</item>
-		<item name="Перевозки">
-			<property name="cm:name">Перевозки</property>
-			<property name="lecm-contract-dic:contract-type-code">traffic</property>
-		</item>
-		<item name="Найма">
-			<property name="cm:name">Найма</property>
-			<property name="lecm-contract-dic:contract-type-code">employment</property>
-		</item>
-		<item name="Подряда">
-			<property name="cm:name">Подряда</property>
-			<property name="lecm-contract-dic:contract-type-code">work</property>
-		</item>
-		<item name="Хранения">
-			<property name="cm:name">Хранения</property>
-			<property name="lecm-contract-dic:contract-type-code">storage</property>
-		</item>
-		<item name="Лицензионный">
-			<property name="cm:name">Лицензионный</property>
-			<property name="lecm-contract-dic:contract-type-code">license</property>
-		</item>
-	</items>
-</dictionary>
+<items>
+    <item name="lecm-dic:Вид договора" type="lecm-dic:dictionary">
+        <property name="cm:name">Вид договора</property>
+        <property name="lecm-dic:attributeForShow">cm:name</property>
+        <property name="lecm-dic:type">lecm-contract-dic:contract-type</property>
+        <property name="lecm-dic:active">true</property>
+        <property name="lecm-dic:show_control_in_separate_window">false</property>
+        <property name="lecm-dic:plane">true</property>
+        <property name="lecm-dic:description">Вид договора</property>
+        <items>
+            <item name="cm:Купли-продажи" type="lecm-contract-dic:contract-type">
+                <property name="cm:name">Купли-продажи</property>
+                <property name="lecm-contract-dic:contract-type-code">sale</property>
+            </item>
+            <item name="cm:Аренды" type="lecm-contract-dic:contract-type">
+                <property name="cm:name">Аренды</property>
+                <property name="lecm-contract-dic:contract-type-code">lease</property>
+            </item>
+            <item name="cm:Перевозки" type="lecm-contract-dic:contract-type">
+                <property name="cm:name">Перевозки</property>
+                <property name="lecm-contract-dic:contract-type-code">traffic</property>
+            </item>
+            <item name="cm:Найма" type="lecm-contract-dic:contract-type">
+                <property name="cm:name">Найма</property>
+                <property name="lecm-contract-dic:contract-type-code">employment</property>
+            </item>
+            <item name="cm:Подряда" type="lecm-contract-dic:contract-type">
+                <property name="cm:name">Подряда</property>
+                <property name="lecm-contract-dic:contract-type-code">work</property>
+            </item>
+            <item name="cm:Хранения" type="lecm-contract-dic:contract-type">
+                <property name="cm:name">Хранения</property>
+                <property name="lecm-contract-dic:contract-type-code">storage</property>
+            </item>
+            <item name="cm:Лицензионный" type="lecm-contract-dic:contract-type">
+                <property name="cm:name">Лицензионный</property>
+                <property name="lecm-contract-dic:contract-type-code">license</property>
+            </item>
+        </items>
+    </item>
+</items>
