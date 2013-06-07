@@ -268,7 +268,43 @@
 							<excludes>META*</excludes>
 						</configuration>
 					</execution>
-				</executions>
+                    <execution>
+                        <id>copy-share</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeTypes>amp</includeTypes>
+                            <outputDirectory>${project.build.directory}/../../install/amps/share</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-share-webapp</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>${project.packaging}</type>
+                                    <destFileName>share.war</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/../../install/war</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
 				<dependencies>
 					<!--
 				   This is required to be re-defined explicitly at plugin level as

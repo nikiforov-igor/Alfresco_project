@@ -7,5 +7,5 @@ if ""%1""=="""" (
     COPY amps\alfresco\*.amp %1\amps
     DEL %1\amps_share\*.amp
     COPY amps\share\*.amp %1\amps_share
-    %1\bin\apply_amps.bat
+    %1\bin\apply_amps.bat nowait
 )
