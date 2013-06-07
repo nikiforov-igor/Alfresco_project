@@ -133,7 +133,11 @@ public class DiagramGenerator{
             NodeRef employee = service.getEmployeeByPosition(position);
             String positionName = nodeService.getProperty(service.getPositionByStaff(position), ContentModel.PROP_NAME).toString();
             if (employee != null) {
-                String name = nodeService.getProperty(employee, ContentModel.PROP_NAME).toString();
+                Object name = nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+
+                if (name == null) {
+                    name = nodeService.getProperty(employee, ContentModel.PROP_NAME);
+                }
 
                 boolean isBoss = (Boolean) nodeService.getProperty(position, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS);
                 if (isBoss) {
