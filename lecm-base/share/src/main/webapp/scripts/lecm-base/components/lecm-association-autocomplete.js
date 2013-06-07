@@ -62,9 +62,7 @@ LogicECM.module = LogicECM.module || {};
 
 				additionalFilter: "",
 
-                ignoreNodes: [],
-
-                hiddenStart: false
+                ignoreNodes: []
             },
 
             selectedItems: null,
@@ -89,13 +87,10 @@ LogicECM.module = LogicECM.module || {};
             },
 
             onReady:function AssociationAutoComplete_onReady() {
-                if (!this.options.hiddenStart) {
-                    if (!this.options.disabled) {
-                        this.populateData();
-                    }
-                    this.loadSelectedItems();
+                if (!this.options.disabled) {
+                    this.populateData();
                 }
-                this.options.hiddenStart = false;
+                this.loadSelectedItems();
             },
 
             onRefreshAutocompleteItemList: function AssociationAutoComplete_onRefreshItemList(layer, args)

@@ -37,6 +37,7 @@ public interface DocumentService {
     public static final QName PROP_DOCUMENT_MODIFIER_REF = QName.createQName(DOCUMENT_NAMESPACE_URI, "modifier-ref");
     public static final QName PROP_DOCUMENT_IS_TRANSMIT = QName.createQName(DOCUMENT_NAMESPACE_URI, "istransmit");
     public static final QName PROP_DOCUMENT_DEPRIVE_RIGHT = QName.createQName(DOCUMENT_NAMESPACE_URI, "deprive-right");
+    public static final QName PROP_DOCUMENT_EMPLOYEE_REF = QName.createQName(DOCUMENT_NAMESPACE_URI, "employee-ref");
 
     public static final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 

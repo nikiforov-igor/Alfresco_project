@@ -56,8 +56,7 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
 
             onReady: function()
             {
-                this.getIgnoredNode();
-                this.transfers.transferButton = Alfresco.util.createYUIButton(this, this.controlId + "-transfer-right-button", this.findFormEmployee,{},Dom.get(this.controlId + "-transfer-right-button"));
+                this.transfers.transferButton = Alfresco.util.createYUIButton(this, this.controlId + "-transfer-right-button", this.getIgnoredNode,{},Dom.get(this.controlId + "-transfer-right-button"));
 
             },
             getIgnoredNode: function()
@@ -72,6 +71,7 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
                         successCallback: {
                             fn:function(response){
                                 this.options.creatorRef = response.json[0]["creator-ref"];
+                                this.findFormEmployee();
                             },
                             scope: this
                         },

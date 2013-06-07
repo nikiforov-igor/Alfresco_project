@@ -133,12 +133,13 @@ public class DocumentPolicy extends BaseBean
      */
     public void documentTransmit(NodeRef documentRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         NodeRef beforeAuthor = new NodeRef(before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).toString());
-        NodeRef afterAuthor = new NodeRef(after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).toString());
+        NodeRef afterAuthor = new NodeRef(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF).toString());
         Set<AccessPermission> permissionsDoc = permissionService.getAllSetPermissions(documentRef);
         Set<String> permissionsEmployee = authorityService.getAuthoritiesForUser(orgstructureService.getEmployeeLogin(beforeAuthor));
 
         nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(afterAuthor));
         nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_CREATOR_REF, afterAuthor.toString());
+        nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_EMPLOYEE_REF, "");
 
         for (AccessPermission permission : permissionsDoc) {
             if (permissionsEmployee.contains(permission.getAuthority()) && !PermissionService.ALL_AUTHORITIES.equals(permission.getAuthority())) {
@@ -184,7 +185,7 @@ public class DocumentPolicy extends BaseBean
                     if (addDoc.size() > 0) {
                         // присваиваем значения property документу к договору, чтобы инициализировать policy уже для
                         // документа к договору при это устанавливаем значения как и основном документе
-                        nodeService.setProperty(addDoc.get(0).getTargetRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, afterAuthor.toString());
+                        nodeService.setProperty(addDoc.get(0).getTargetRef(), DocumentService.PROP_DOCUMENT_EMPLOYEE_REF, afterAuthor.toString());
                         nodeService.setProperty(addDoc.get(0).getTargetRef(), DocumentService.PROP_DOCUMENT_IS_TRANSMIT, after.get(DocumentService.PROP_DOCUMENT_IS_TRANSMIT).toString());
                         nodeService.setProperty(addDoc.get(0).getTargetRef(), DocumentService.PROP_DOCUMENT_DEPRIVE_RIGHT, after.get(DocumentService.PROP_DOCUMENT_DEPRIVE_RIGHT).toString());
                     }
@@ -202,7 +203,7 @@ public class DocumentPolicy extends BaseBean
         }
         if (before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF) != null && !before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals("") &&
                 !after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals("")) {
-            if (!before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals(after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF))) {
+            if (!before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF))) {
                 documentTransmit(nodeRef, before, after);
             }
         }
