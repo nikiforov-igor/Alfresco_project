@@ -30,21 +30,24 @@
 	    <@region id="actions-common" scope="template"/>
 	    <@region id="actions" scope="template"/>
         <div class="yui-gc">
-            <div id="main-region" class="yui-u first">
-                <div class="yui-gd grid columnSize2">
-                    <div class="yui-u first column1">
-                        <@region id="metadata" scope="template"/>
-                    <@region id="members" scope="template"/>
-                    </div>
-                    <div class="yui-u column2">
-                        <@region id="attachments" scope="template"/>
-                        <@region id="tasks" scope="template"/>
-                    </div>
-                </div>
-                <@region id="rating" scope="template"/>
-                <@region id="comments" scope="template"/>
-            </div>
-            <div id="custom-region" class="yui-u first" style="display:none"></div>
+	        <div id="main-content" class="yui-u first">
+		        <div id="main-region">
+	                <div class="yui-gd grid columnSize2">
+	                    <div class="yui-u first column1">
+	                        <@region id="metadata" scope="template"/>
+	                    <@region id="members" scope="template"/>
+	                    </div>
+	                    <div class="yui-u column2">
+	                        <@region id="attachments" scope="template"/>
+	                        <@region id="tasks" scope="template"/>
+	                    </div>
+	                </div>
+	                <@region id="rating" scope="template"/>
+	                <@region id="comments" scope="template"/>
+	            </div>
+	            <div id="custom-region" style="display:none"></div>
+		        <@region id="document-status-string" scope="template"/>
+	        </div>
             <div class="yui-u bordered-panel doc-right-part">
 	            <@region id="document-final-actions" scope="template"/>
                 <@region id="document-actions" scope="template"/>

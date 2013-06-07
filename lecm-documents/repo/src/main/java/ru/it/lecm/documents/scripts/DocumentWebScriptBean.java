@@ -120,17 +120,21 @@ public class DocumentWebScriptBean extends BaseWebScript {
     }
 
     public ScriptNode editDocument(String nodeRef, Scriptable properties) {
-        NodeRef documentRef = new NodeRef(nodeRef);
-        Map<String, String> property = takeProperties(Context.getCurrentContext().getElements(properties));
-        documentRef = documentService.editDocument(documentRef, property);
-
-        if (logger.isInfoEnabled()) {
-        	final StringBuilder sb = lecmPermissionService.trackAllLecmPermissions("Before edit document permissions:", documentRef, new String[]{null});
-        	logger.info(sb.toString());
-        }
-
-        return new ScriptNode(documentRef, serviceRegistry, getScope());
+      return editDocument(nodeRef, Context.getCurrentContext().getElements(properties));
     }
+
+	public ScriptNode editDocument(String nodeRef, Object[] properties) {
+		NodeRef documentRef = new NodeRef(nodeRef);
+		Map<String, String> property = takeProperties(properties);
+		documentRef = documentService.editDocument(documentRef, property);
+
+		if (logger.isInfoEnabled()) {
+			final StringBuilder sb = lecmPermissionService.trackAllLecmPermissions("Before edit document permissions:", documentRef, new String[]{null});
+			logger.info(sb.toString());
+		}
+
+		return new ScriptNode(documentRef, serviceRegistry, getScope());
+	}
 
     public ScriptNode getDraftsRoot() {
         return new ScriptNode(documentService.getDraftRoot(), serviceRegistry, getScope());

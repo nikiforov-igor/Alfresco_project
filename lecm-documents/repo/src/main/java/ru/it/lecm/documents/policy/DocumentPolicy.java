@@ -202,7 +202,7 @@ public class DocumentPolicy extends BaseBean
             nodeService.setProperty(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF, employeeRef.toString());
         }
         if (before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF) != null && !before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals("") &&
-                !after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals("")) {
+		        after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF) != null && !after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals("")) {
             if (!before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF))) {
                 documentTransmit(nodeRef, before, after);
             }

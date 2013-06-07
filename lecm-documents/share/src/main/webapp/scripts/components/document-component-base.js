@@ -86,6 +86,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     Dom.setStyle(this.TITLE + "-span", "display", "none");
                     Dom.setStyle(this.TITLE, "display", "inline");
                 }
+
+	            YAHOO.Bubbling.fire("updateDocumentPage",
+		            {
+			            title: this.getTitle()
+		            });
             },
 
             getDocumentTitle: function(){
