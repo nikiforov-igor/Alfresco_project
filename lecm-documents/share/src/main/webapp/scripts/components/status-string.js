@@ -88,7 +88,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						} else {
 							textarea.style.height = parseInt(textarea.style.height) + dif + "px";
 						}
-                        this.setPlaceholderHeight();
+                        scope.setPlaceholderHeight();
                     }
 				}, 1);
 			},
