@@ -23,3 +23,11 @@
 </div>
 
 <br/>
+<div>
+	<h3>
+		<a href="#" id="docflow-counters-reports-link" class="theme-color-1" style="font-weight: bold;" onClick='LogicECM.module.Contracts.reports.reportLinkClicked(this, {"reportType": "docflow-counters"});'>Сводный отчёт по договорам</a>
+	</h3>
+	Сводный отчёт по договорам (изменить текст)
+</div>
+
+<br/>

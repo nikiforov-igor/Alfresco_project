@@ -1,17 +1,21 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Отчет «Сроки прохождения маршрута»
+	Отчет «Сводный отчет по договорам»
 
 	model of the contract/document:
 		.\lecm-contracts\repo\src\main\config\models\lecm-contracts-model.xml
 	provider:
-		ru.it.lecm.reports.jasper.DSProviderDocflowStatusTimings
+		ru.it.lecm.reports.jasper.DSProviderDocflowStatusCounters
 
 Фильтры: 
 •	Вид договора
 •	Тематика договора
 •	Контрагент
-•	Дата регистрации проекта (Период)
+•	Дата регистрации проекта (задавать Период)
+•	Дата договора (задавать Период)
+•	Сумма (интервал)
+•	Инициатор
+
 
 Измерение (выбрать одно):
 •	Вид договора
@@ -53,6 +57,19 @@
 			 -->
 		</list>
 	</statuses>
+	
+	<status.flags>
+		<map>
+			<!--
+			   rowSum.show: надо ли вычислять сумму по строкам (по всем статусам) 
+			     и включать соот-щую колонку для dataSource отчёта
+			   rowSum.colName: название колонки с суммой данных по строке (имеет значение только при rowSum.show=true)
+			   (!) это же название надо описать и здесь в секции fields.jasper.
+			 -->
+			<item key="rowSum.show">true</item>
+			<item key="rowSum.colName">col_RowSum</item>
+		</map>
+	</status.flags>
 
 	<!--
 		Описания группировок. Ключи это значения параметра формирования отчёта "reportGroupBy".
@@ -107,8 +124,7 @@
 
 		<field jrFldName="col_Count10" queryFldName="status10.counter" displayName="Статус10.Кол-во" javaValueClass="int" />
 		<field jrFldName="col_Count11" queryFldName="statusOther.counter" displayName="СтатусДругие.Кол-во" javaValueClass="int" />
-
-		<!-- атрибуты для таблицы вложенных файлов -->
+		<field jrFldName="col_RowSum" queryFldName="statusTotal.counter" displayName="Общее.Кол-во" javaValueClass="int" />
 
 		<!--
 			<field queryFldName="fmydata" dislayName="" javaValueClass="my.check.type"/>

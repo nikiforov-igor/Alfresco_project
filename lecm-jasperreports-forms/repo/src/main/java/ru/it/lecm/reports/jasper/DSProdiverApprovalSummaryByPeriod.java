@@ -475,8 +475,8 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 						 * Если X > Y, то считаем такое согласование Просроченным, 
 						 * и  величина, равная X – Y будет составлять Срок просрочки.
 						 */
-						final float fact_duration = calcDuration( userApprovStartAt, userApprovedAt, 0); // X
-						final float norm_duration = calcDuration( userApprovStartAt, userDueAt, NORMAL_APPROVE_DURATION); // Y
+						final float fact_duration = Utils.calcDurationInDays( userApprovStartAt, userApprovedAt, 0); // X
+						final float norm_duration = Utils.calcDurationInDays( userApprovStartAt, userDueAt, NORMAL_APPROVE_DURATION); // Y
 						// final boolean isOutOfTime = fact_duration > norm_duration;
 
 						final EmployeeInfo userInfo;
@@ -497,22 +497,6 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 		}
 	}
 
-	final static int MILLIS_PER_DAY = 86400000;
-
-	/**
-	 * Вычислить длительность в днях между парой дат
-	 * @param startAt
-	 * @param endAt
-	 * @return
-	 */
-	final static float calcDuration(Date startAt, Date endAt, float defaultValue) {
-		if (startAt == null || endAt == null)
-			return defaultValue;
-		final double duration_ms = (endAt.getTime() - startAt.getTime());
-		return (float) (duration_ms / MILLIS_PER_DAY);
-	}
-
-	/*
 	private void openOfficeExecute() {
 		final String ooFileNameTemplate = "/reportdefinitions/oo-templates/ExampleArgsOfTheDoc.odt";
 		final String ooFileNameResult = "/reportdefinitions/oo-templates/generated.odt";
@@ -522,7 +506,6 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 			logger.error(String.format( "Error generating ooffice new file\n\t '{%s}'\n\t from '{%s}'\n\t error %s", ooFileNameResult, ooFileNameTemplate, tx.getMessage()), tx);
 		}
 	}
-	 */
 
 	private static void ooConvert(String namein, String nameout)
 			throws BootstrapException, com.sun.star.io.IOException, Exception, MalformedURLException

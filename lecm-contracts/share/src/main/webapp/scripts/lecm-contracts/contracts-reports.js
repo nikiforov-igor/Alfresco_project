@@ -41,6 +41,33 @@
 		"assoc_lecm-contract-reports_dft-contract-subject_added": "",
 		"assoc_lecm-contract-reports_dft-contract-subject_removed": "",
 
+		"prop_lecm-contract-reports_dfc-reg-after": "dateRegAfter",
+		"prop_lecm-contract-reports_dfc-reg-before": "dateRegBefore",
+
+		"prop_lecm-contract-reports_dfc-start-after": "dateContractStartAfter",
+		"prop_lecm-contract-reports_dfc-start-before": "dateContractStartBefore",
+
+		"prop_lecm-contract-reports_dfc-sum-low": "contractSumLow",
+		"prop_lecm-contract-reports_dfc-sum-up": "contractSumHi",
+		"prop_lecm-contract-reports_dfc-report-type": "groupBy",
+
+		"assoc_lecm-contract-reports_dfc-contractor": "contragent",
+		"assoc_lecm-contract-reports_dfc-contract-type": "contractType",
+		"assoc_lecm-contract-reports_dfc-contract-subject": "contractSubject",
+		"assoc_lecm-contract-reports_dfc-contract-initiator": "author",
+
+		"assoc_lecm-contract-reports_dfc-contractor_added": "",
+		"assoc_lecm-contract-reports_dfc-contractor_removed": "",
+
+		"assoc_lecm-contract-reports_dfc-contract-type_added": "",
+		"assoc_lecm-contract-reports_dfc-contract-type_removed": "",
+
+		"assoc_lecm-contract-reports_dfc-contract-subject_added": "",
+		"assoc_lecm-contract-reports_dfc-contract-subject_removed": "",
+
+		"assoc_lecm-contract-reports_dfc-contract-initiator_added": "",
+		"assoc_lecm-contract-reports_dfc-contract-initiator_removed": "",
+
 		"contracts-list-reports-link-printReportForm_assoc_lecm-contract-reports_contracts-list-contractor-cntrl-selectedItems": ""
 	};
 

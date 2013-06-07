@@ -177,4 +177,41 @@ public class Utils {
 		return " @"+ fldName+ ":[" + stMIN + " TO "+ stMAX+ "]";
 	}
 
+	/**
+	 * Сформировать lucene-style проверку попадания поля числа в указанный интервал.
+	 * Формируется условие вида " @fld:[ x TO y]"
+	 * Если обе границы пустые - ничего не формируется
+	 * @param fldName экранированное (!) имя поля
+	 * @param from числовая границы слева
+	 * @param upto числовая границы справа
+	 * @return условие проверки вхождения числа в диапазон или NULL, если обе границы NULL
+	 */
+	public static String emmitNumericIntervalCheck( String fldName, Double from, Double upto) {
+		final boolean needEmmition = (from != null || upto !=  null);
+		if (!needEmmition)
+			return null;
+		// add " ... [X TO Y]"
+		final String stMIN = (from != null) ? String.format( "%f", from) : "MIN";
+		final String stMAX = (upto != null) ? String.format( "%f", upto) : "MAX";
+		return " @"+ fldName+ ":[" + stMIN + " TO "+ stMAX+ "]";
+	}
+
+
+	final public static int MILLIS_PER_DAY = 86400000;
+
+	/**
+	 * Вычислить длительность в днях между парой дат
+	 * @param startAt время начала
+	 * @param endAt время окончания
+	 * @param defaultValue значение по-умолчанию
+	 * @return разницу в днях (возможно нецелое значение) между двумя датами;
+	 * значение по-умолчанию воз-ся если одна из дат или обе null. 
+	 */
+	final public static float calcDurationInDays(Date startAt, Date endAt, float defaultValue) {
+		if (startAt == null || endAt == null)
+			return defaultValue;
+		final double duration_ms = (endAt.getTime() - startAt.getTime());
+		return (float) (duration_ms / MILLIS_PER_DAY);
+	}
+
 }
