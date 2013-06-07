@@ -183,6 +183,16 @@
 		</property>
 	</bean>
 
+	<bean id="subscriptionsToTypeLogEventBusinessRolePolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventBusinessRolePolicy"
+	      init-method="init">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="businessJournalService">
+			<ref bean="businessJournalService"/>
+		</property>
+	</bean>
+
 	<bean id="subscriptionsToTypeLogEventsOrganizationUnitPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventOrganizationUnitPolicy"
 		init-method="init">
 		<property name="policyComponent">

@@ -223,7 +223,14 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 				nodeService.createAssociation(result, ref, ASSOC_RECIPIENT_POSITION);
 			}
 		}
-		return result;
+
+        if (notification.getRecipientBusinessRoleRefs() != null) {
+            for (NodeRef ref : notification.getRecipientBusinessRoleRefs()) {
+                nodeService.createAssociation(result, ref, ASSOC_RECIPIENT_BUSINESS_ROLE);
+            }
+        }
+
+        return result;
 	}
 
 	/**
@@ -259,6 +266,13 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     }
                 }
             }
+
+            if (generalizedNotification.getRecipientBusinessRoleRefs() != null) {
+                for (NodeRef businessRoleRef : generalizedNotification.getRecipientBusinessRoleRefs()) {
+                    employeeRefs.addAll(orgstructureService.getEmployeesByBusinessRole(businessRoleRef));
+                }
+            }
+
 			for (NodeRef typeRef : generalizedNotification.getTypeRefs()) {
                 addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
             }
@@ -303,6 +317,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		if ((notification.getRecipientEmployeeRefs() == null || notification.getRecipientEmployeeRefs().size() == 0) &&
 				(notification.getRecipientOrganizationUnitRefs() == null || notification.getRecipientOrganizationUnitRefs().size() == 0) &&
 				(notification.getRecipientPositionRefs() == null || notification.getRecipientPositionRefs().size() == 0) &&
+				(notification.getRecipientBusinessRoleRefs() == null || notification.getRecipientBusinessRoleRefs().size() == 0) &&
 				(notification.getRecipientWorkGroupRefs() == null || notification.getRecipientWorkGroupRefs().size() == 0)) {
 			logger.warn("Должен быть хотя бы один получатель уведомления");
 			return false;

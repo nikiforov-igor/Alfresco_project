@@ -96,6 +96,19 @@ public class SubscriptionsToTypeLogEventPolicy implements NodeServicePolicies.On
 					}
 				}
 			}
+
+			List<AssociationRef> businessRoles = nodeService.getTargetAssocs(nodeRef, SubscriptionsService.ASSOC_DESTINATION_BUSINESS_ROLE);
+			if (businessRoles != null) {
+				for (AssociationRef businessRoleAssoc: businessRoles) {
+					List<String> objects = new ArrayList<String>();
+					objects.add(businessRoleAssoc.getTargetRef().toString());
+					try {
+						businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) подписку #mainobject для бизнес-роли #object1", objects);
+					} catch (Exception e) {
+						logger.error("Could not create the record business-journal", e);
+					}
+				}
+			}
 		}
 	}
 
@@ -135,6 +148,19 @@ public class SubscriptionsToTypeLogEventPolicy implements NodeServicePolicies.On
 					objects.add(workGroupAssoc.getTargetRef().toString());
 					try {
 						businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внёс(ла) изменения в подписку #mainobject для рабочей группы #object1", objects);
+					} catch (Exception e) {
+						logger.error("Could not create the record business-journal", e);
+					}
+				}
+			}
+
+			List<AssociationRef> businessRoles = nodeService.getTargetAssocs(nodeRef, SubscriptionsService.ASSOC_DESTINATION_BUSINESS_ROLE);
+			if (businessRoles != null) {
+				for (AssociationRef businessRoleAssoc: businessRoles) {
+					List<String> objects = new ArrayList<String>();
+					objects.add(businessRoleAssoc.getTargetRef().toString());
+					try {
+						businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внёс(ла) изменения в подписку #mainobject для бизнес-роли #object1", objects);
 					} catch (Exception e) {
 						logger.error("Could not create the record business-journal", e);
 					}

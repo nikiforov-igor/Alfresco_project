@@ -28,6 +28,7 @@ public interface SubscriptionsService {
 	public static final QName ASSOC_DESTINATION_POSITION = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-position-assoc");
 	public static final QName ASSOC_DESTINATION_ORGANIZATION_UNIT = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-organization-unit-assoc");
 	public static final QName ASSOC_DESTINATION_WORK_GROUP = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-work-group-assoc");
+	public static final QName ASSOC_DESTINATION_BUSINESS_ROLE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "destination-business-role-assoc");
 	public static final QName ASSOC_OBJECT_TYPE = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "object-type-assoc");
 	public static final QName ASSOC_EVENT_CATEGORY = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "event-category-assoc");
 	public static final QName PROP_DESCRIPTION = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "description");

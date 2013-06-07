@@ -32,6 +32,7 @@ public interface NotificationsService {
 	public final QName ASSOC_RECIPIENT_POSITION = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-position-assoc");
 	public final QName ASSOC_RECIPIENT_ORGANIZATION_UNIT = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-organization-unit-assoc");
 	public final QName ASSOC_RECIPIENT_WORK_GROUP = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-work-group-assoc");
+	public final QName ASSOC_RECIPIENT_BUSINESS_ROLE = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-business-role-assoc");
 	public final QName ASSOC_NOTIFICATION_OBJECT = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "object-assoc");
 
 	public final String NOTIFICATION_TYPE_DICTIONARY_NAME = "Типы доставки уведомлений";

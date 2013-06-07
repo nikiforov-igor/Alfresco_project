@@ -58,6 +58,12 @@ public class Notification {
 	 * Берётся из подписки.
 	 */
 	private List<NodeRef> recipientWorkGroupRefs;
+	/**
+	 * Список ссылок на получателей (бизнес-роли).
+	 * Берётся из подписки.
+	 */
+	private List<NodeRef> recipientBusinessRoleRefs;
+
     private NodeRef initiatorRef;
 
     public Notification() {
@@ -138,6 +144,14 @@ public class Notification {
 	public void setRecipientWorkGroupRefs(List<NodeRef> recipientWorkGroupRefs) {
 		this.recipientWorkGroupRefs = recipientWorkGroupRefs;
 	}
+
+    public List<NodeRef> getRecipientBusinessRoleRefs() {
+        return recipientBusinessRoleRefs;
+    }
+
+    public void setRecipientBusinessRoleRefs(List<NodeRef> recipientBusinessRoleRefs) {
+        this.recipientBusinessRoleRefs = recipientBusinessRoleRefs;
+    }
 
     public void setInitiatorRef(NodeRef initiatorRef) {
         this.initiatorRef = initiatorRef;

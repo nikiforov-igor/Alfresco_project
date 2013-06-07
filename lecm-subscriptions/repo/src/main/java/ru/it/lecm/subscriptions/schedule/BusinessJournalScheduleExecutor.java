@@ -138,6 +138,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 			List<NodeRef> positions = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_POSITION);
 			List<NodeRef> units = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_ORGANIZATION_UNIT);
 			List<NodeRef> workgroups = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_WORK_GROUP);
+			List<NodeRef> businessRoles = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_BUSINESS_ROLE);
 			Notification notification = new Notification();
 			notification.setObjectRef(mainObject);
 			notification.setAutor(author);
@@ -149,6 +150,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 			notification.setRecipientPositionRefs(positions);
 			notification.setRecipientOrganizationUnitRefs(units);
 			notification.setRecipientWorkGroupRefs(workgroups);
+			notification.setRecipientBusinessRoleRefs(businessRoles);
 			notificationsService.sendNotification(notification);
 		}
 	}
