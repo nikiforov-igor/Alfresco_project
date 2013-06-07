@@ -6,7 +6,7 @@
 	</div>
 
 	<div id="${el}-form">
-		<input id="${el}-property-value" type="text" name="propertyValue">
+		<textarea id="${el}-property-value" cols="80" rows="1"></textarea>
 		<span id="${el}-submit-button" class="yui-button yui-push-button search-icon">
             <span class="first-child">
                 <button type="button">${msg('button.submit')}</button>
