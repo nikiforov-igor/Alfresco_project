@@ -35,9 +35,7 @@ public class XmlDictionaryImporter {
     private NodeService nodeService;
 	private NamespaceService namespaceService;
 	private DictionaryService dictionaryService;
-	private QName itemsType = null;
 	private InputStream inputStream;
-	private NodeRef dictionariesRoot;
     private static final transient Logger logger = LoggerFactory.getLogger(XmlDictionaryImporter.class);
 
     /**
@@ -46,55 +44,44 @@ public class XmlDictionaryImporter {
      * @param nodeService           nodeService
      * @param namespaceService      namespaceService
      * @param repositoryHelper      repositoryHelper
-     * @param dictionariesRoot Корневая папка для словарей.
      */
-	public XmlDictionaryImporter(InputStream inputStream, NodeService nodeService, NamespaceService namespaceService, DictionaryService dictionaryService, Repository repositoryHelper, NodeRef dictionariesRoot) {
+	public XmlDictionaryImporter(InputStream inputStream, NodeService nodeService, NamespaceService namespaceService, DictionaryService dictionaryService, Repository repositoryHelper) {
 		this.inputStream = inputStream;
 		this.nodeService = nodeService;
 		this.namespaceService = namespaceService;
 		this.dictionaryService = dictionaryService;
-		this.dictionariesRoot = dictionariesRoot;
 		this.repositoryHelper = repositoryHelper;
 	}
 
 	/**
-	 * Считывание справочника
-	 * @throws XMLStreamException
+     * Считывание элементов из файла
+     *
+     * @param parentNodeRef родительский элемен, в котором будут созданы импортируемые
+     * @throws XMLStreamException
 	 */
-	public void readDictionary() throws XMLStreamException {
-		readDictionary(false);
+	public void readItems(NodeRef parentNodeRef) throws XMLStreamException {
+		readItems(parentNodeRef, false);
 	}
 
 	/**
-	 * Считывание справочника
-	 * @param doNotUpdateIfExist не обновлять, если такой справочник уже существует, иначе обновить свойства справочника и элементы
-	 * @throws XMLStreamException
+	 * Считывание элементов из файла
+	 *
+     * @param parentNodeRef родительский элемен, в котором будут созданы импортируемые
+     * @param doNotUpdateIfExist не обновлять, если такой справочник уже существует, иначе обновить свойства справочника и элементы
+     * @throws XMLStreamException
 	 */
-	public void readDictionary(boolean doNotUpdateIfExist) throws XMLStreamException {
+	public void readItems(NodeRef parentNodeRef, boolean doNotUpdateIfExist) throws XMLStreamException {
         logger.info("Importing dictionary. (doNotUpdateIfExist = {})", doNotUpdateIfExist);
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLStreamReader xmlr = inputFactory.createXMLStreamReader(inputStream);
-		NodeRef parentNodeRef;
 		String str = "";
 
-		while (xmlr.hasNext() && !(str.equals(ExportNamespace.TAG_DICTIONARY) || str.equals(ExportNamespace.TAG_ITEMS))) {
+		while (xmlr.hasNext() && !str.equals(ExportNamespace.TAG_ITEMS)) {
 			xmlr.nextTag();
 			str = xmlr.getLocalName();
 		}
-		if (str.equals(ExportNamespace.TAG_DICTIONARY)) {
-			String dictionaryName = xmlr.getAttributeValue("", ExportNamespace.ATTR_NAME);
-			if (dictionaryName == null) {
-				return;
-			}
-			xmlr.nextTag();
-			Map<QName, Serializable> dicProps = getProperties(xmlr);
-			parentNodeRef = createDictionary(dictionaryName, dicProps, doNotUpdateIfExist);
-			String type = nodeService.getProperty(parentNodeRef, ExportNamespace.PROP_TYPE).toString();
-			itemsType = QName.createQName(type, namespaceService);
-            logger.info("Items type '{}'", itemsType);
-			readItems(xmlr, parentNodeRef, doNotUpdateIfExist);
-		} else if (str.equals(ExportNamespace.TAG_ITEMS)) {
-            readItems(xmlr, getDictionariesRoot(), doNotUpdateIfExist);
+		if (str.equals(ExportNamespace.TAG_ITEMS)) {
+            readItems(xmlr, parentNodeRef, doNotUpdateIfExist);
         }
 	}
 
@@ -142,7 +129,7 @@ public class XmlDictionaryImporter {
 		}
 		String itemNameAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_NAME);
 		String itemTypeAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_TYPE);
-        QName itemType = itemsType;
+        QName itemType = null;
         QName itemName = null;
         if (itemTypeAttr != null && !itemTypeAttr.isEmpty()) {
             itemType = QName.createQName(itemTypeAttr, namespaceService);
@@ -244,33 +231,6 @@ public class XmlDictionaryImporter {
         return result;
     }
 
-    /** создание справочника, если существует - обновить свойства
-	 *
-	 * @param dictionaryName имя справочника
-	 * @param dicProps свойства
-	 * @param doNotUpdateIfExist не обновлять существующие записи
-	 * @return ссылка на справочник
-	 */
-	private NodeRef createDictionary(String dictionaryName, Map<QName, Serializable> dicProps, boolean doNotUpdateIfExist) {
-		final NodeRef root = getDictionariesRoot();
-		NodeRef dictionary = nodeService.getChildByName(root, ContentModel.ASSOC_CONTAINS, dictionaryName);
-		if (dictionary == null) {
-			//создание справочника
-			Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-			properties.put(ContentModel.PROP_NAME, dictionaryName);
-			properties.putAll(dicProps);
-			dictionary = nodeService.createNode(root, ContentModel.ASSOC_CONTAINS,
-					QName.createQName(ExportNamespace.DICTIONARY_NAMESPACE_URI, dictionaryName),
-					ExportNamespace.DICTIONARY,
-					properties).getChildRef();
-            logger.info("Dictionary '{}' created", dictionaryName);
-		} else if (!doNotUpdateIfExist) {
-			nodeService.addProperties(dictionary, dicProps);
-            logger.info("Dictionary '{}' updated", dictionaryName);
-		}
-		return dictionary;
-	}
-
 	/** создание элемента, если существует - обновить свойства\
 	 *
 	 *
@@ -309,14 +269,6 @@ public class XmlDictionaryImporter {
         }
         return node;
     }
-
-	/** получение корня справочников, если нет - создать
-	 *
-	 * @return ссылку на корневой контейнер справочников
-	 */
-	private NodeRef getDictionariesRoot() {
-		return this.dictionariesRoot;
-	}
 
 	/** считываем свойства из XML
 	 *

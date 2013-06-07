@@ -52,8 +52,8 @@ public class Import extends AbstractWebScript {
 
 		    inputStream = fields[0].getInputStream();
 			NodeRef rootDir = dictionaryBean.getDictionariesRoot();
-		    XmlDictionaryImporter xmlDictionaryImporter = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, dictionaryService, repositoryHelper, rootDir);
-		    xmlDictionaryImporter.readDictionary();
+		    XmlDictionaryImporter xmlDictionaryImporter = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, dictionaryService, repositoryHelper);
+		    xmlDictionaryImporter.readItems(rootDir);
 		    //Возможно необходимо выводить статистику по добавленым значениям
 		    wf.put("text", "Справочник успешно создан");
 		    compositions.put(wf);

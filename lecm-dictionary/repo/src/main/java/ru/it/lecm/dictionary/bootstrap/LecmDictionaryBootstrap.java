@@ -79,8 +79,8 @@ public class LecmDictionaryBootstrap extends BaseBean {
 							public Object execute() throws Throwable {
 								InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
 								try {
-									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, dictionaryService, repositoryHelper, rootDir);
-									importer.readDictionary(true);
+									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, dictionaryService, repositoryHelper);
+									importer.readItems(rootDir, true);
 								} catch (Exception e) {
 									logger.error("Can not create dictionary: " + dictionary, e);
 								} finally {
@@ -105,8 +105,8 @@ public class LecmDictionaryBootstrap extends BaseBean {
 							public Object execute() throws Throwable {
 								InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
 								try {
-									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, dictionaryService, repositoryHelper, rootDir);
-									importer.readDictionary(false);
+									XmlDictionaryImporter importer = new XmlDictionaryImporter(inputStream, nodeService, namespaceService, dictionaryService, repositoryHelper);
+									importer.readItems(rootDir, false);
 								} catch (Exception e) {
 									logger.error("Can not create dictionary: " + dictionary);
 								} finally {
