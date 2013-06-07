@@ -1120,6 +1120,7 @@ z-index: 9000;
 }
 .yui-skin-lecmTheme .sticky-wrapper #doc3 {
     padding-top: 70px;
+    overflow: hidden;
 }
 .yui-skin-lecmTheme .sticky-push,
 .yui-skin-lecmTheme .sticky-footer {

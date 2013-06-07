@@ -72,7 +72,19 @@
 </@>
 
 <@templateFooter>
-<div id="alf-ft">
-    <@region id="footer" scope="global"/>
-</div>
+<div id="alf-ft"></div>
 </@>
+
+<script type="text/javascript"> //<![CDATA[
+(function() {
+    var Event = YAHOO.util.Event;
+
+    Event.on(window, "resize", function(e) {
+        LogicECM.module.Base.Util.setDocPageHeight();
+    }, this, true);
+
+    Event.onDOMReady(function() {
+        LogicECM.module.Base.Util.setDocPageHeight();
+    });
+})();
+//]]></script>

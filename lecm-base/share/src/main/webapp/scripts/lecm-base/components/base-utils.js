@@ -35,8 +35,8 @@ LogicECM.module.Base.Util = {
      * Set common block height
      */
     setHeight: function() {
-        var Dom = YAHOO.util.Dom;
-        var Bubbling = YAHOO.Bubbling;
+        var Dom = YAHOO.util.Dom,
+            Bubbling = YAHOO.Bubbling;
         var bd = Dom.get('bd');
         var block = Dom.get('lecm-page');
         var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
@@ -49,6 +49,23 @@ LogicECM.module.Base.Util = {
 
         Dom.setStyle(block, 'min-height', h + 'px');
         Bubbling.fire("HeightSetted");
+    },
+
+    /*
+     * Set document page height
+     */
+    setDocPageHeight: function() {
+        var Dom = YAHOO.util.Dom;
+        var doc = Dom.get('doc-bd');
+        var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
+
+        Dom.setStyle(doc, 'height', 'auto');
+
+        var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(doc)
+            - parseInt(Dom.getStyle(doc, 'margin-bottom'))
+            - parseInt(Dom.getStyle(doc, 'border-top-width')) - parseInt(Dom.getStyle(doc, 'border-bottom-width'));
+
+        Dom.setStyle(doc, 'min-height', h + 'px');
     },
 
     setDashletsHeight: function(dashletsBlockId) {

@@ -20,6 +20,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	 */
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event;
+    var statusString;
 
 	/**
 	 * DocumentHistory constructor.
@@ -43,8 +44,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			},
 
 			onReady: function () {
+                statusString = Dom.get(this.id + "-body");
+
 				this.widgets.submitButton = Alfresco.util.createYUIButton(this, "submit-button", this.onSubmit);
-				YAHOO.util.Event.addListener(Dom.get(this.id + "-property-value"), "keypress", this.adjustTextareaHeight, this);
+				Event.addListener(Dom.get(this.id + "-property-value"), "keypress", this.adjustTextareaHeight, this);
+                Event.on(window, "resize", function() {
+                    this.setStatusStringWidth();
+                    this.fixStatusString();
+                }, this, true);
+                this.setStatusStringWidth();
+                this.fixStatusString();
 			},
 
 			onSubmit: function () {
@@ -70,16 +79,43 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			adjustTextareaHeight: function (event, scope) {
 				var textarea = event.currentTarget;
+
 				setTimeout(function() {
-					var dif = textarea.scrollHeight - textarea.clientHeight
+					var dif = textarea.scrollHeight - textarea.clientHeight;
 					if (dif) {
 						if (isNaN(parseInt(textarea.style.height))) {
-							textarea.style.height = textarea.scrollHeight + "px"
+							textarea.style.height = textarea.scrollHeight + "px";
 						} else {
-							textarea.style.height = parseInt(textarea.style.height) + dif + "px"
+							textarea.style.height = parseInt(textarea.style.height) + dif + "px";
 						}
-					}
+                        this.setPlaceholderHeight();
+                    }
 				}, 1);
-			}
+			},
+
+            setStatusStringWidth: function() {
+                var width = parseInt(Dom.getStyle("main-region", "width"));
+                // придется сразу учитывать наличие скролла,
+                // иначе бесчисленное множество мест, где может увеличиться высота страницы,
+                // что повлечет за собой появление скролла
+                var scrollbarWidth = 18;
+
+                width = width - parseInt(Dom.getStyle(statusString, "border-right-width")) - scrollbarWidth;
+                Dom.setStyle(statusString, "width", width + "px");
+            },
+
+            setPlaceholderHeight: function() {
+                var height = Dom.get(statusString).offsetHeight;
+
+                Dom.setStyle(this.id + "-placeholder", "height", height + "px");
+            },
+
+            fixStatusString: function() {
+                var doc = Dom.get('doc-bd');
+                var bottom = parseInt(Dom.getStyle(doc, 'margin-bottom'));
+
+                Dom.setStyle(statusString, "bottom", bottom + "px");
+                this.setPlaceholderHeight();
+            }
 		});
 })();

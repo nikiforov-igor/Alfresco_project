@@ -1,5 +1,6 @@
 <#assign el=args.htmlid?js_string>
 
+<div id="${el}-placeholder" class="status-string-placeholder"></div>
 <div id="${el}-body" class="status-string">
 	<div id="${el}-document-name">
 		${documentName}. <span id="${el}-page"></span>
