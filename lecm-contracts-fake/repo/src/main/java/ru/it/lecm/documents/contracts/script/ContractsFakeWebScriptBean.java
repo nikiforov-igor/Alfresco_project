@@ -1,7 +1,8 @@
 package ru.it.lecm.documents.contracts.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 
@@ -12,18 +13,29 @@ import ru.it.lecm.documents.beans.DocumentService;
  */
 public class ContractsFakeWebScriptBean extends BaseWebScript {
     private DocumentService service;
+    private NamespaceService namespaceService;
 
     public void setService(DocumentService service) {
         this.service = service;
     }
 
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
     public ScriptNode getDraftRoot() {
-        String rootName = service.getDraftRootLabel("lecm-contract-fake:document");
-        return new ScriptNode(service.getDraftRoot(rootName), serviceRegistry, getScope());
+        QName fakeContractType = QName.createQName("lecm-contract-fake:document", namespaceService);
+        if (fakeContractType != null) {
+            return new ScriptNode(service.getDraftRootByType(fakeContractType), serviceRegistry, getScope());
+        }
+        return null;
     }
 
     public String getDraftPath() {
-        return service.getDraftPath(service.getDraftRootLabel("lecm-contract-fake:document"));
+        QName fakeContractType = QName.createQName("lecm-contract-fake:document", namespaceService);
+        if (fakeContractType != null) {
+            return service.getDraftPathByType(fakeContractType);
+        }
+        return null;
     }
-
 }

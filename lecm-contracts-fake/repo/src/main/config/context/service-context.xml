@@ -71,6 +71,9 @@
         <property name="service">
             <ref bean="documentService"/>
         </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
     </bean>
 
     <bean id="contractsFake.businessJournalDictionaryBootstrap"

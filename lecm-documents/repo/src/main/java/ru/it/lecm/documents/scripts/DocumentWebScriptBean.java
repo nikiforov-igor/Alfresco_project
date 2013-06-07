@@ -45,10 +45,6 @@ public class DocumentWebScriptBean extends BaseWebScript {
         this.nodeService = nodeService;
     }
 
-    public LecmPermissionService getLecmPermissionService() {
-		return lecmPermissionService;
-	}
-
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
 	}
@@ -97,21 +93,6 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return null;
     }
 
-    public String getProperties(String nodeRef) {
-        NodeRef documentRef = new NodeRef(nodeRef);
-        JSONArray properties = new JSONArray();
-        JSONObject object = new JSONObject();
-        Map<QName, Serializable> data = documentService.getProperties(documentRef);
-        try {
-            for (Map.Entry<QName, Serializable> e: data.entrySet() ) {
-                object.put(e.getKey().getLocalName(), e.getValue());
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return properties.put(object).toString();
-    }
-
     public ScriptNode createDocument(String type, Scriptable properties) {
         Map<String, String> property = takeProperties(Context.getCurrentContext().getElements(properties));
         NodeRef documentRef = documentService.createDocument(type, property);
@@ -127,12 +108,6 @@ public class DocumentWebScriptBean extends BaseWebScript {
 		NodeRef documentRef = new NodeRef(nodeRef);
 		Map<String, String> property = takeProperties(properties);
 		documentRef = documentService.editDocument(documentRef, property);
-
-		if (logger.isInfoEnabled()) {
-			final StringBuilder sb = lecmPermissionService.trackAllLecmPermissions("Before edit document permissions:", documentRef, new String[]{null});
-			logger.info(sb.toString());
-		}
-
 		return new ScriptNode(documentRef, serviceRegistry, getScope());
 	}
 
@@ -150,9 +125,9 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     public ScriptNode getDraftRoot(String rootType) {
         ParameterCheck.mandatory("rootType", rootType);
-        String rootName = documentService.getDraftRootLabel(rootType);
-        if (rootName != null) {
-            return new ScriptNode(documentService.getDraftRoot(rootName), serviceRegistry, getScope());
+        QName rootQNameType = QName.createQName(rootType, namespaceService);
+        if (rootQNameType != null) {
+            return new ScriptNode(documentService.getDraftRootByType(rootQNameType), serviceRegistry, getScope());
         } else {
             return null;
         }
@@ -160,19 +135,17 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     public String getDraftPath(String rootType) {
         ParameterCheck.mandatory("rootType", rootType);
-        String rootName = documentService.getDraftRootLabel(rootType);
-        NodeRef draftRoot = documentService.getDraftRoot(rootName);
-        if (draftRoot != null) {
-            return nodeService.getPath(draftRoot).toPrefixString(namespaceService);
-        } else {
-            return null;
+        QName rootQNameType = QName.createQName(rootType, namespaceService);
+        if (rootQNameType != null) {
+            return documentService.getDraftPathByType(rootQNameType);
         }
+        return null;
     }
 
     private Map<String, String> takeProperties(Object[] object){
         Map<String, String> map =  new HashMap<String, String>();
         String[] string;
-        String value = "";
+        String value;
         for (Object obj : object) {
             string = obj.toString().split("=");
             value = (string.length < 2) ? "" : string[1];
@@ -189,8 +162,12 @@ public class DocumentWebScriptBean extends BaseWebScript {
         Map<String, String> filters = getFilters(type);
         HashMap<String, String> defaultFilter = new HashMap<String, String>();
         String defaultKey = DocumentStatusesFilterBean.getDefaultFilter(type);
-        if (defaultKey != null) {
-            defaultFilter.put(defaultKey, filters.get(defaultKey));
+        if (filters != null) {
+            if (defaultKey != null) {
+                defaultFilter.put(defaultKey, filters.get(defaultKey));
+            }
+        } else {
+            defaultFilter.put(defaultKey, "*");
         }
         return defaultFilter;
     }
@@ -217,6 +194,25 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return documentService.getDocuments(qNameTypes, getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses))).size();
     }
 
+    public List<String> getAccessPermissionsList(String type) {
+        return DocumentsPermissionsBean.getPermissionsByType(type);
+    }
+
+    public String getProperties(String nodeRef) {
+        NodeRef documentRef = new NodeRef(nodeRef);
+        JSONArray properties = new JSONArray();
+        JSONObject object = new JSONObject();
+        Map<QName, Serializable> data = documentService.getProperties(documentRef);
+        try {
+            for (Map.Entry<QName, Serializable> e: data.entrySet() ) {
+                object.put(e.getKey().getLocalName(), e.getValue());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return properties.put(object).toString();
+    }
+
     private ArrayList<String> getElements(Object[] object){
         ArrayList<String> arrayList = new ArrayList<String>();
         for (Object obj : object) {
@@ -228,9 +224,5 @@ public class DocumentWebScriptBean extends BaseWebScript {
             }
         }
         return arrayList;
-    }
-
-    public List<String> getAccessPermissionsList(String type) {
-        return DocumentsPermissionsBean.getPermissionsByType(type);
     }
 }

@@ -2,7 +2,6 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
@@ -34,9 +33,6 @@ import java.util.*;
  * Time: 16:28
  */
 public class DocumentServiceImpl extends BaseBean implements DocumentService {
-    public void init() {
-    }
-
     private OrgstructureBean orgstructureService;
     private BusinessJournalService businessJournalService;
     private Repository repositoryHelper;
@@ -146,26 +142,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         return null;
     }
 
-    private void refreshValues(NodeRef documentNodeRef) {
-        int personsCount = 0;
-        int summaryRating = 0;
-        int size;
-
-        for (int i = 1; i < 6; i++) {
-            List<NodeRef> rated = (List<NodeRef>) nodeService.getProperty(documentNodeRef, QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "rated-" + i));
-
-            if (rated != null && !rated.isEmpty()) {
-                size = rated.size();
-                personsCount += size;
-                summaryRating += (size * i);
-            }
-        }
-        BigDecimal rating = (new BigDecimal((float) summaryRating / personsCount)).setScale(1, BigDecimal.ROUND_HALF_UP);
-
-        nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATED_PERSONS_COUNT, personsCount);
-        nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATING, rating.toString());
-    }
-
     @Override
     public Map<QName, Serializable> getProperties(NodeRef documentRef) {
         lecmPermissionService.checkPermission(LecmPermissionService.PERM_ATTR_LIST, documentRef);
@@ -225,19 +201,11 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         return nodeRef;
     }
 
-    @Override
-    public Map<QName, Serializable> changeProperties(NodeRef documentRef, Map<QName, Serializable> properties) {
-        return null;
-    }
-
 	@Override
 	public boolean isDocument(NodeRef ref) {
 		QName refType = nodeService.getType(ref);
-		if (refType != null) {
-			return dictionaryService.isSubClass(refType, DocumentService.TYPE_BASE_DOCUMENT);
-		}
-		return false;
-	}
+        return refType != null && dictionaryService.isSubClass(refType, DocumentService.TYPE_BASE_DOCUMENT);
+    }
 
     public String getDraftPath() {
         NodeRef draftRef = getDraftRoot();
@@ -245,8 +213,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     @Override
-    public String getDraftPath(String rootName) {
-        NodeRef draftRef = getDraftRoot(rootName);
+    public String getDraftPathByType(QName docType) {
+        NodeRef draftRef = getDraftRootByType(docType);
         return  nodeService.getPath(draftRef).toPrefixString(namespaceService);
     }
 
@@ -255,8 +223,9 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         return repositoryStructureHelper.getDraftsRef(person);
     }
 
-    public NodeRef getDraftRoot(final String rootName) {
+    public NodeRef getDraftRootByType(QName docType) {
         final NodeRef draftRef = getDraftRoot();
+        final String rootName = getDraftRootLabel(docType);
         NodeRef nodeRef = nodeService.getChildByName(draftRef, ContentModel.ASSOC_CONTAINS, rootName);
 
         if (nodeRef == null) {
@@ -276,6 +245,11 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 	        }, false, true);
         }
         return nodeRef;
+    }
+
+    @Override
+    public String getDraftRootLabel(QName docType) {
+        return getDraftRootLabel(docType.toPrefixString(namespaceService));
     }
 
     public String getDocumentsFolderPath() {
@@ -307,14 +281,12 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         return findNodesByAssociationRef(membersUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
     }
 
-    /**
-     * Поиск документов
-     * @return List<NodeRef>
-     */
+    @Override
     public List<NodeRef> getDocuments(List<QName> docTypes, List<String> paths, ArrayList<String> statuses) {
         return getDocumentsByFilter(docTypes, null, null, null, paths, statuses, null, null);
     }
 
+    @Override
     public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> inititatorsList, List<NodeRef> docsList) {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
@@ -408,7 +380,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         return records;
     }
 
-    public String getDraftRootLabel(String docType) {
+    private String getDraftRootLabel(String docType) {
         QName typeQName = QName.createQName(docType, namespaceService);
         TypeDefinition definition = dictionaryService.getType(typeQName);
         String key = definition.getModel().getName().toPrefixString(namespaceService);
@@ -417,4 +389,26 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
         return I18NUtil.getMessage(key, I18NUtil.getLocale());
     }
+
+
+    private void refreshValues(NodeRef documentNodeRef) {
+        int personsCount = 0;
+        int summaryRating = 0;
+        int size;
+
+        for (int i = 1; i < 6; i++) {
+            List<NodeRef> rated = (List<NodeRef>) nodeService.getProperty(documentNodeRef, QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "rated-" + i));
+
+            if (rated != null && !rated.isEmpty()) {
+                size = rated.size();
+                personsCount += size;
+                summaryRating += (size * i);
+            }
+        }
+        BigDecimal rating = (new BigDecimal((float) summaryRating / personsCount)).setScale(1, BigDecimal.ROUND_HALF_UP);
+
+        nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATED_PERSONS_COUNT, personsCount);
+        nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATING, rating.toString());
+    }
+
 }

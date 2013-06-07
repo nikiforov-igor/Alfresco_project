@@ -81,16 +81,17 @@ public interface DocumentService {
 
     public NodeRef editDocument(NodeRef nodeRef, Map<String, String> properties);
 
-    public Map<QName, Serializable> changeProperties (NodeRef documentRef, Map<QName, Serializable> properties);
-
 	public boolean isDocument(NodeRef ref);
 
-    /** Получение пути для папки черновиков
+    /** Получение пути для корневой папки черновиков для текущего пользователя
      * @return xpath до директории с черновиками
      */
     String getDraftPath();
 
-    String getDraftPath(String rootName);
+    /** Получение пути для корневой папки для данного типа документов для текущего пользователя
+     * @return xpath до директории
+     */
+    String getDraftPathByType(QName docType);
     
     /**
      * Получение пути для папки Documents
@@ -99,13 +100,16 @@ public interface DocumentService {
     String getDocumentsFolderPath();
 
     /**
-     * Получение ноды с черновиками
+     * Получение корневой ноды с черновиками
      * @return NodeRef
      */
     NodeRef getDraftRoot();
 
-    NodeRef getDraftRoot(String rootName);
-
+    /**
+     * Получение ноды с черновиками для заданного типа документов
+     * @return NodeRef
+     */
+    NodeRef getDraftRootByType(QName docType);
 
 	/**
 	 * Полечение документа из workflow listener
@@ -113,12 +117,26 @@ public interface DocumentService {
 	 * @return Ссылка на документ
 	 */
 	public NodeRef getDocumentFromPackageItems(NodeRef packageRef);
-
+    /**
+     * Получение списка участников для данного типа документов
+     * @return List<NodeRef> - ссылок на сотрудников
+     */
     public List<NodeRef> getMembers(QName docType);
 
+    /**
+     * Поиск документов
+     * @return List<NodeRef> - ссылок на документы
+     */
     public List<NodeRef> getDocuments(List<QName> docTypes, List<String> paths, ArrayList<String> statuses);
-
+    /**
+     * Поиск документов по разным параметрам
+     * @return List<NodeRef> - ссылок на документы
+     */
     public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> inititatorsList, List<NodeRef> docsList);
 
-    public String getDraftRootLabel(String docType);
+    /**
+     * Метод для получения папки с черновиками для заданного типа
+     * @return имя папки с черновиками
+     */
+    public String getDraftRootLabel(QName docType);
 }

@@ -77,7 +77,7 @@
         </property>
     </bean>
 
-    <bean id="documentService" init-method="init" class="ru.it.lecm.documents.beans.DocumentServiceImpl"
+    <bean id="documentService" class="ru.it.lecm.documents.beans.DocumentServiceImpl"
           depends-on="transactionService, nodeService, serviceOrgstructure">
         <property name="transactionService" ref="transactionService"/>
         <property name="nodeService" ref="nodeService"/>

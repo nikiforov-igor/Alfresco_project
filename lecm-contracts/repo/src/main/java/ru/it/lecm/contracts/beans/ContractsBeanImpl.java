@@ -138,11 +138,11 @@ public class ContractsBeanImpl extends BaseBean {
 	}
 
 	public NodeRef getDraftRoot() {
-		return  documentService.getDraftRoot(documentService.getDraftRootLabel(TYPE_CONTRACTS_DOCUMENT.toPrefixString(namespaceService)));
+		return  documentService.getDraftRootByType(TYPE_CONTRACTS_DOCUMENT);
 	}
 
 	public String getDraftPath() {
-		return  documentService.getDraftPath(documentService.getDraftRootLabel(TYPE_CONTRACTS_DOCUMENT.toPrefixString(namespaceService)));
+		return  documentService.getDraftPathByType(TYPE_CONTRACTS_DOCUMENT);
 	}
 
     public String getDocumentsFolderPath(){
