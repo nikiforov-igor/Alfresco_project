@@ -44,7 +44,7 @@
 	<parameter name="CMIS_ALLVERSIONS" class="java.lang.Boolean" isForPrompting="false">
 		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
 	</parameter>
-	<parameter name="CMIS_QUERY" class="java.lang.String">
+	<parameter name="CMIS_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["select * from lecm-contract:document as Contract"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String">
@@ -114,9 +114,9 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="29" splitType="Stretch">
+		<band height="23" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="540" height="29"/>
+				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="540" height="22"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
@@ -125,12 +125,12 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="23" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<property name="cmis.url" value="http://127.0.0.1:8080/alfresco/cmisatom"/>
 			<property name="cmis.binding_type" value="atompub"/>
 			<property name="cmis.user" value="admin"/>
 			<property name="cmis.password" value="111"/>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="af6f4c2e-3cd8-4c3c-9b21-9b505e9c34a7" x="0" y="0" width="540" height="20"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Sans Mono"/>
@@ -139,6 +139,20 @@
 + (($F{col_Regnum} == null) ? "" : " № "+ $F{col_Regnum})
 + (($F{col_Register} == null) ? "" : msg( " от {0,date,short}", $F{col_Register}))]]></textFieldExpression>
 			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="35c49e4c-0413-49d6-8da7-31bfd96f232b" x="110" y="20" width="430" height="20"/>
+				<textElement textAlignment="Left">
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{col_Contragent.name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9fbf1225-5e61-4c50-bc38-59cc2c5a3e5d" x="38" y="20" width="72" height="20"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[Контрагент]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>

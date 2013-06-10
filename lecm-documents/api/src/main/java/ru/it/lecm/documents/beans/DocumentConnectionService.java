@@ -92,7 +92,7 @@ public interface DocumentConnectionService {
 	/**
 	 * Получение документов, связанных с документом
 	 * @param documentRef Ссылка на документ
-	 * @return Список сслыок на связи
+	 * @return Список ссылок на связи
 	 */
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef);
 

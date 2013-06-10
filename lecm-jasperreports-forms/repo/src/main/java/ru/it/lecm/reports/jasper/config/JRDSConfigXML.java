@@ -3,10 +3,13 @@ package ru.it.lecm.reports.jasper.config;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -18,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -29,8 +33,9 @@ import ru.it.lecm.reports.jasper.utils.XmlHelper;
  * Реализация для чтения конфы из XML.
  * (!) При загрузке XML автоматом читаются:
  * 		1) Аргументы, перечисленные в getArgs (список задётся в setDefaults или может быть расширен провайдером)
- * 		2) Список метаописаний "fields.jasper"
- * 		3) (!) Другие данные их XML игнорируются.
+ * 		2) Список метаописаний "fields.jasper", элементы "field", + атрибуты в каждом field.
+ * 		3) Параметры из списка defaults (загружаются как отдельные блоки <xxx> ... </xxx>)
+ * 		4) (!) Другие данные из XML игнорируются.
  * @author rabdullin
  */
 public class JRDSConfigXML extends JRDSConfigBaseImpl {
@@ -69,18 +74,23 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		defaults.put( XMLTAG_PSW, null);
 	}
 
+	@Override
+	public void clear() {
+		super.clear();
+	}
+
 	/**
 	 * @return название текущей конфигурации
 	 */
 	public String getConfigName() {
-		return getstr(JRDSConfigXML.TAG_CONFIGNAME);
+		return getstr(TAG_CONFIGNAME);
 	}
 
 	/**
 	 * @param название текущей конфигурации
 	 */
 	public void setConfigName(String value) {
-		getArgs().put( JRDSConfigXML.TAG_CONFIGNAME, value);
+		getArgs().put( TAG_CONFIGNAME, value);
 	}
 
 	static final String PARAM_CMIS_XMLCONFIG = "CMIS_XMLCONFIG";
@@ -195,7 +205,7 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 				throw new RuntimeException("Root '" + XMLTAG_ROOT + "' element expected");
 			}
 
-			// загрузка аргументов зарегеных в args
+			// загрузка аргументов по-умолчанию "зарегеных" в args
 			if (getArgs() != null) {
 				final List<String> names = new ArrayList<String>( getArgs().keySet());
 				for(String argname: names) {
@@ -306,6 +316,9 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		return result;
 	}
 
+	/** Набор стандартных названий атрибутов */
+	final static Set<String> STD_SML_ARGS = new HashSet<String>( Arrays.asList( XMLATTR_JR_FIELDNAME, XMLATTR_QUERY_FILEDNAME, XMLATTR_DISPLAYNAME, XMLATTR_JAVA_VALUECLASS));
+
 	private void xmlGetMetaFields(List<Node> fieldsNodes) {
 		if (fieldsNodes == null || fieldsNodes.isEmpty()) {
 			return;
@@ -359,6 +372,10 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 			}
 			fld.setValueClass(javaClass);
 	
+			// подгрузка остальных атрибутов ...
+			takeAttributes( fld, fldNode.getAttributes(), STD_SML_ARGS);
+
+			// журналирование
 			if (logger.isDebugEnabled())
 				sb.append( String.format( "got column/field %s: %s/%s [%s] '%s'"
 					, i, fld.getName(), fld.getValueLink(), fld.getValueClass(), fld.getDescription())); 
@@ -368,6 +385,27 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		if (logger.isInfoEnabled()) {
 			sb.append( String.format( "found fields: %s", i)); 
 			logger.info( sb.toString());
+		}
+	}
+
+
+	/**
+	 * Получение значений атрибутов в список флагов объекта destFld из мапы src
+	 * @param dest целевой объект
+	 * @param src исходный список атрибутов
+	 * @param stdSkipArgs названия атрибутов, которые надо (!) пропускать
+	 */
+	private void takeAttributes( JRXField dest, NamedNodeMap src,
+			Set<String> stdSkipArgs) {
+		if (src == null)
+			return;
+		for( int ind = 0; ind < src.getLength(); ind++) {
+			final Node n = src.item(ind);
+			if (n == null) continue;
+			// фильтра нет или значение не фильтруется
+			final boolean isStdName = (stdSkipArgs != null) && stdSkipArgs.contains(n.getNodeName());
+			if (!isStdName)
+				dest.addFlag(n.getNodeName(), n.getNodeValue());
 		}
 	}
 

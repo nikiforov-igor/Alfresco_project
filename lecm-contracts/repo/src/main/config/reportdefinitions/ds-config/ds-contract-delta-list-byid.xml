@@ -30,44 +30,73 @@
 
 	<fields.jasper>
 		<!-- Данные по "Виду договора" (с типом "lecm-contract-dic:contract-type") -->
-		<field jrFldName="col_DocKind" queryFldName="{lecm-contract:typeContract-assoc/cm:name}" displayName="Вид договора" />
+		<field jrFldName="col_DocKind" queryFldName="{lecm-contract:typeContract-assoc/cm:name}"
+			displayName="Вид договора"
+			inMainDoc="true"/>
 
 		<!-- Регистрационный номер договора -->
 		<field queryFldName="lecm-contract:regNumSystem"
 				jrFldName="col_Regnum"
-				displayName="Регистрационный номер договора" javaValueClass="String"/>
+				displayName="Регистрационный номер договора"
+				inMainDoc="true"
+				javaValueClass="String"/>
 
 		<!-- Регистрационный номер контрагента -->
 		<field queryFldName="lecm-contract:regNumContractor"
 				jrFldName="col_RegnumContractor"
-				displayName="Регистрационный номер контрагента" javaValueClass="String"/>
+				displayName="Регистрационный номер контрагента"
+				inMainDoc="true"
+				javaValueClass="String"/>
 
 		<!-- Дата регистрации договора -->
 		<field queryFldName="lecm-contract:dateRegContracts"
 				jrFldName="col_Register"
-				displayName="Дата регистрации договора" javaValueClass="date"/>
+				displayName="Дата регистрации договора"
+				inMainDoc="true"
+				javaValueClass="date"/>
 
 		<!-- Полное наименование котрагента "lecm-contract:partner-assoc": target "lecm-contractor:contractor-type"
 			и пр атрибуты котрагента
 		  -->
-		<field jrFldName="col_Contragent.name"  queryFldName="{lecm-contract:partner-assoc/lecm-contractor:shortname}" displayName="Контрагент.Короткое"/>
-		<field jrFldName="col_Contragent.fullname"  queryFldName="{lecm-contract:partner-assoc/lecm-contractor:fullname}" displayName="Контрагент.Полное наименование"/>
-		<field jrFldName="col_Contragent.phone" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:phone}" displayName="Контрагент.Тел" />
+		<field jrFldName="col_Contragent.name"  queryFldName="{lecm-contract:partner-assoc/lecm-contractor:shortname}"
+				displayName="Контрагент.Короткое"
+				inMainDoc="true"/>
+		<field jrFldName="col_Contragent.fullname"  queryFldName="{lecm-contract:partner-assoc/lecm-contractor:fullname}"
+				displayName="Контрагент.Полное наименование"
+				inMainDoc="true"/>
+		<field jrFldName="col_Contragent.phone" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:phone}"
+				displayName="Контрагент.Тел"
+				inMainDoc="true"/>
 
-		<field jrFldName="col_Contragent.YurAddress" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:legal-address}" displayName="Контрагент.Юридический адрес" />
-		<field jrFldName="col_Contragent.PhisAddress" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:physical-address}" displayName="Контрагент.Фактический адрес" />
+		<field jrFldName="col_Contragent.YurAddress" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:legal-address}"
+				displayName="Контрагент.Юридический адрес"
+				inMainDoc="true"/>
+		<field jrFldName="col_Contragent.PhisAddress" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:physical-address}"
+				displayName="Контрагент.Фактический адрес"
+				inMainDoc="true"/>
 
 		<!-- Дата заключения договора -->
 		<field jrFldName="col_ConclusionDate" queryFldName="lecm-contract:dateConclusionContracts" displayName="Дата заключения"
-			javaValueClass="date"/>
+				inMainDoc="true"
+				javaValueClass="date"/>
 
 		<!-- Статус -->
-		<field jrFldName="col_Status" queryFldName="lecm-statemachine:status" displayName="Статус" />
+		<field jrFldName="col_Status" queryFldName="lecm-statemachine:status"
+				displayName="Статус"
+				inMainDoc="true"/>
 		<!-- Дата изменения статуса -->
-		<field jrFldName="col_StatusDate" queryFldName="lecm-document:status-changed-date" displayName="Дата смены статус"
+		<field jrFldName="col_StatusDate" queryFldName="lecm-document:status-changed-date" displayName="Дата смены статуса"
+				inMainDoc="true"
 				javaValueClass="java.util.Date"/>
 
-		<!-- атрибуты для таблицы вложенных файлов -->
+		<!-- Данные по "Тематика договора" (ассоциация "lecm-contract:document" с типом target "lecm-contract-dic:contract-subjects") -->
+		<field jrFldName="col_Theme.code" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code}" displayName="Тематика.Код" />
+		<field jrFldName="col_Theme.tname" queryFldName="{lecm-contract:subjectContract-assoc/cm:name}" displayName="Тематика.Название" />
+		<field jrFldName="col_Theme.desc" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-description}" displayName="Тематика.Описание" />
+
+		<!-- атрибуты для таблицы вложенных файлов надо обозначать 
+			относительно связи с типом "lecm-connect:connection"
+		  -->
 
 		<!-- <Тип документа>
 			(изменения к договору, спецификация, протокол согласования/разногласий)
@@ -76,21 +105,16 @@
 					<property name="lecm-dic:attributeForShow">cm:name</property>
 					<property name="lecm-dic:type">lecm-connect-types:connection-type</property>
 		  -->
-		<field jrFldName="col_Item.Doctype" queryFldName="{{@list/lecm-connect-types:connection-type}}" displayName="Вложение.ТипДокумента" />
-
-		<!-- Данные по "Тематика договора" (с типом "lecm-contract-dic:contract-subjects") -->
-		<field jrFldName="col_Theme.code" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code}" displayName="Тематика.Код" />
-		<field jrFldName="col_Theme.tname" queryFldName="{lecm-contract:subjectContract-assoc/cm:name}" displayName="Тематика.Название" />
-		<field jrFldName="col_Theme.desc" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-description}" displayName="Тематика.Описание" />
+		<field jrFldName="col_Item.Doctype" queryFldName="{lecm-connect:connection-type-assoc/lecm-connect-types:reverse-name}" displayName="Вложение.ТипДокумента" />
 
 		<!-- Статус вложенного -->
-		<field jrFldName="col_Item.Status" queryFldName="{{@list/lecm-statemachine:status}}" displayName="Вложение.Статус" />
+		<field jrFldName="col_Item.Status" queryFldName="{lecm-connect:connected-document-assoc/lecm-statemachine:status}" displayName="Вложение.Статус" />
 		<!-- Дата изменения статуса вложенного -->
-		<field jrFldName="col_Item.StatusDate" queryFldName="{{@list/lecm-document:status-changed-date}}" displayName="Вложение.Дата смены статус"
+		<field jrFldName="col_Item.StatusDate" queryFldName="{lecm-connect:connected-document-assoc/lecm-document:status-changed-date}" displayName="Вложение.Дата смены статус"
 				javaValueClass="java.util.Date"/>
 		<!-- Номер вложенного -->
 		<field  jrFldName="col_Item.Regnum"
-				queryFldName="{{@list/lecm-document:regnum}}"
+				queryFldName="{lecm-connect:connected-document-assoc/lecm-document:regnum}"
 				displayName="Регистрационный номер вложенного документа"/>
 
 		<!--

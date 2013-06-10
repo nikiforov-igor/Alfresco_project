@@ -25,6 +25,11 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 	// мапер имя поля в jrxml -> описание поля
 	private Map<String, JRXField> metaFields;
 
+	public void clear() {
+		this.args = null;
+		this.metaFields = null;
+	}
+
 	/**
 	 * Добавить поле с именем из jr-report файла
 	 * @param jrFldName
@@ -68,11 +73,11 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 
 	/**
 	 * Здесь ожидается наполнение поддерживаемыми именами списка defaults (в принципе и metaFields тоже).
-	 * Предоставляем дефолтную рпустую реализацию, чтобы можно было использовать
+	 * Предоставляем дефолтную пустую реализацию, чтобы можно было использовать
 	 * класс напрямую. 
-	 * @param defaults список для задания умолчаний
+	 * @param destDefaults список для задания в нём умолчаний
 	 */
-	protected void setDefaults(Map<String, Object> defaults) {
+	protected void setDefaults(Map<String, Object> destDefaults) {
 		// defaults.put("MY_DATA_NAME", "MyValue");
 		// defaults.put("USERNAME", "Guest");
 	}
@@ -182,5 +187,6 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 	public Map<String, Object> getMap(final String argName) {
 		return getMap( argName, null);
 	}
+
 }
 

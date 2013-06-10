@@ -63,11 +63,15 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 	 */
 	protected Set<String> jrSimpleProps;
 
-	private NodeRef nodeRef;
-	private String preferedType;
+	protected NodeRef nodeRef;
+	protected String preferedType;
 
 	public DSProviderSearchQueryReportBase() {
 		logger.debug( "created "+ this.getClass().getSimpleName());
+	}
+
+	public NodeRef nodeRef() {
+		return nodeRef;
 	}
 
 	public String getNodeRef() {

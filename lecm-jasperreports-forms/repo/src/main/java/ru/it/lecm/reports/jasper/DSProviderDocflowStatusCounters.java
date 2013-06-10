@@ -313,7 +313,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 		// Сумма договора (указан минимум)
 		{
 			// bquery.append( " AND @lecm\\-contract\\:totalAmount:(" + filter.contractSumLow.toString() + " TO *)");
-			final String cond = Utils.emmitNumericIntervalCheck("@lecm\\-contract\\:totalAmount", filter.contractSumLow, filter.contractSumHi);
+			final String cond = Utils.emmitNumericIntervalCheck("lecm\\-contract\\:totalAmount", filter.contractSumLow, filter.contractSumHi);
 			if (cond != null)
 				bquery.append( " AND "+ cond);
 		}

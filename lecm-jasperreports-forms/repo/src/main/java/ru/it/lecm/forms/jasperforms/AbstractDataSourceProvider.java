@@ -12,6 +12,8 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import org.alfresco.service.ServiceRegistry;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -28,6 +30,8 @@ public abstract class AbstractDataSourceProvider
 	protected ServiceRegistry serviceRegistry;
 	protected SubstitudeBean substitudeService;
 	protected OrgstructureBean orgstructureService;
+	protected DocumentService documentService;
+	protected DocumentConnectionService documentConnectionService;
 
 	private List<JRField> fieldsList;
 
@@ -68,6 +72,23 @@ public abstract class AbstractDataSourceProvider
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+
+	public DocumentService getDocumentService() {
+		return documentService;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
+	}
+
+	public DocumentConnectionService getDocumentConnectionService() {
+		return documentConnectionService;
+	}
+
+	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+		this.documentConnectionService = documentConnectionService;
 	}
 
 	/**

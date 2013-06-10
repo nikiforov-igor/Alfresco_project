@@ -34,6 +34,8 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.jasper.ArgsHelper;
 import ru.it.lecm.reports.jasper.utils.Utils;
@@ -57,6 +59,8 @@ public class JasperFormProducer extends AbstractWebScript {
 	private ServiceRegistry serviceRegistry;
 	private SubstitudeBean substitudeService;
 	private OrgstructureBean orgstructureService;
+	private DocumentService documentService;
+	private DocumentConnectionService documentConnectionService;
 
 	public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
@@ -80,6 +84,23 @@ public class JasperFormProducer extends AbstractWebScript {
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+	public DocumentService getDocumentService() {
+		return documentService;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
+	}
+
+	public DocumentConnectionService getDocumentConnectionService() {
+		return documentConnectionService;
+	}
+
+	public void setDocumentConnectionService(
+			DocumentConnectionService documentConnectionService) {
+		this.documentConnectionService = documentConnectionService;
 	}
 
 	static Map<String, String[]> getRequestParameters( WebScriptRequest webScriptRequest
@@ -208,9 +229,13 @@ public class JasperFormProducer extends AbstractWebScript {
 				// "своих" особо облагородим ...
 				if (dsProvider instanceof AbstractDataSourceProvider) {
 					final AbstractDataSourceProvider adsp = (AbstractDataSourceProvider) dsProvider;
+
 					adsp.setServiceRegistry( this.getServiceRegistry());
 					adsp.setSubstitudeService( this.getSubstitudeService());
 					adsp.setOrgstructureService(this.getOrgstructureService());
+
+					adsp.setDocumentService(this.getDocumentService());
+					adsp.setDocumentConnectionService(this.getDocumentConnectionService());
 				}
 
 				BeanUtils.populate(dsProvider, requestParameters);

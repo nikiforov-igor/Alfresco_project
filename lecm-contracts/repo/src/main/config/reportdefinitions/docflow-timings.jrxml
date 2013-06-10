@@ -68,37 +68,37 @@
 	<field name="col_RowTag" class="java.lang.String">
 		<fieldDescription><![CDATA[Измерение.Название]]></fieldDescription>
 	</field>
-	<variable name="colAvg1" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg1" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count1}]]></variableExpression>
 	</variable>
-	<variable name="colAvg2" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg2" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count2}]]></variableExpression>
 	</variable>
-	<variable name="colAvg3" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg3" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count3}]]></variableExpression>
 	</variable>
-	<variable name="colAvg4" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg4" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count4}]]></variableExpression>
 	</variable>
-	<variable name="colAvg5" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg5" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count5}]]></variableExpression>
 	</variable>
-	<variable name="colAvg6" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg6" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count6}]]></variableExpression>
 	</variable>
-	<variable name="colAvg7" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg7" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count7}]]></variableExpression>
 	</variable>
-	<variable name="colAvg8" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg8" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count8}]]></variableExpression>
 	</variable>
-	<variable name="colAvg9" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg9" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count9}]]></variableExpression>
 	</variable>
-	<variable name="colAvg10" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg10" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count10}]]></variableExpression>
 	</variable>
-	<variable name="colAvg11" class="java.lang.Integer" calculation="Average">
+	<variable name="colAvg11" class="java.lang.Double" calculation="Average">
 		<variableExpression><![CDATA[$F{col_Count11}]]></variableExpression>
 	</variable>
 	<background>
