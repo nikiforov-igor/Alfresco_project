@@ -390,6 +390,14 @@
         <property name="authorityService" ref="authorityService" />
     </bean>
 
+    <bean  id="initiatorDocumentPolicy" class="ru.it.lecm.documents.policy.InitiatorDocumentPolicy"
+           init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="authenticationService" ref="authenticationService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
+    </bean>
+
     <bean id="documentStatusesFilter" class="ru.it.lecm.documents.beans.DocumentStatusesFilterBean" abstract="true"/>
 
     <bean id="customDocNameProperty" class="ru.it.lecm.documents.beans.CustomBaseDocNameProperty">

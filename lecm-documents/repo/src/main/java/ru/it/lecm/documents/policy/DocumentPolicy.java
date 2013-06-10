@@ -47,8 +47,6 @@ import java.util.*;
 public class DocumentPolicy extends BaseBean
         implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.OnUpdatePropertiesPolicy {
 
-	private static final String GRAND_DYNAMIC_ROLE_CODE_INITIATOR = "BR_INITIATOR";
-
     final static protected Logger logger = LoggerFactory.getLogger(DocumentPolicy.class);
     final private QName[] IGNORED_PROPERTIES = {DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT, StatemachineModel.PROP_STATUS};
 
@@ -292,12 +290,6 @@ public class DocumentPolicy extends BaseBean
         final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
-
-	    // Добавление прав инициатора
-	    NodeRef docRef = childAssocRef.getChildRef();
-	    String authorLogin = authenticationService.getCurrentUserName();
-	    NodeRef employee = orgstructureService.getEmployeeByPerson(authorLogin);
-	    lecmPermissionService.grantDynamicRole(GRAND_DYNAMIC_ROLE_CODE_INITIATOR, docRef, employee.getId(), lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Initiator) );
     }
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
