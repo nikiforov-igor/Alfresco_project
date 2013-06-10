@@ -438,6 +438,9 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     @Override
     public String getCurrentTaskId(String executionId) {
+        if (executionId == null) {
+            return null;
+        }
         TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
         TaskQuery taskQuery = taskService.createTaskQuery();
         Task task = taskQuery.executionId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
