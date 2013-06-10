@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$1" = "" ] ; then
-    echo "Alfresco path is not set. Use install.bat alfresco_home"
+    echo "Alfresco path is not set. Use install.sh alfresco_home"
 else
     rm $1/amps/*.amp
     cp amps/alfresco/*.amp $1/amps
