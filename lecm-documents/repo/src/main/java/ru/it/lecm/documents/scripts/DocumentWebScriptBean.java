@@ -93,9 +93,17 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return null;
     }
 
-    public ScriptNode createDocument(String type, Scriptable properties) {
-        Map<String, String> property = takeProperties(Context.getCurrentContext().getElements(properties));
-        NodeRef documentRef = documentService.createDocument(type, property);
+    public ScriptNode createDocument(String type, Scriptable properties, Scriptable associations) {
+        Map<String, String> mapProperties = new HashMap<String, String>();
+        Map<String, String> mapAssociation = new HashMap<String,String>();
+        if (properties != null) {
+            mapProperties = takeProperties(Context.getCurrentContext().getElements(properties));
+        }
+        if (associations != null) {
+            mapAssociation = takeProperties(Context.getCurrentContext().getElements(associations));
+        }
+
+        NodeRef documentRef = documentService.createDocument(type, mapProperties, mapAssociation);
 
         return new ScriptNode(documentRef, serviceRegistry, getScope());
     }
@@ -143,13 +151,16 @@ public class DocumentWebScriptBean extends BaseWebScript {
     }
 
     private Map<String, String> takeProperties(Object[] object){
+        List<String> list = getElements(object);
         Map<String, String> map =  new HashMap<String, String>();
         String[] string;
         String value;
-        for (Object obj : object) {
-            string = obj.toString().split("=");
-            value = (string.length < 2) ? "" : string[1];
-            map.put(string[0],value);
+        for (String str : list) {
+            if (!str.equals("")) {
+                string = str.split("=");
+                value = (string.length < 2) ? "" : string[1];
+                map.put(string[0],value);
+            }
         }
         return map;
     }
@@ -174,7 +185,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     /**
      * Получить количество участников для данного типа документа
-     * @return
+     * @return список nodeRef
      */
     public Integer getAmountMembers(String type) {
         QName qNameType = QName.createQName(type, namespaceService);

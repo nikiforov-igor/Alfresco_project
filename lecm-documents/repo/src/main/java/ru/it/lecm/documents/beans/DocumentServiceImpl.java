@@ -163,30 +163,38 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
      * @return
      */
     @Override
-    public NodeRef createDocument(String type, Map<String, String> property) {
+    public NodeRef createDocument(String type, Map<String, String> property, final Map<String,String> association) {
         // получение папки черновиков для документа
-        NodeRef draftRef = getDraftRoot();
+        final NodeRef draftRef;
+        if (getDraftRootLabel(type) != null) {
+            draftRef = getDraftRootByType(QName.createQName(type, namespaceService));
+        } else {
+            draftRef = getDraftRoot();
+        }
 
-        QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-        QName assocQName = ContentModel.ASSOC_CONTAINS;
-        QName nodeTypeQName =  QName.createQName(type, namespaceService);
+        final QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+        final QName assocQName = ContentModel.ASSOC_CONTAINS;
+        final QName nodeTypeQName =  QName.createQName(type, namespaceService);
 
-        Map<QName, Serializable> properties =  new HashMap<QName, Serializable>();
+        final Map<QName, Serializable> properties =  new HashMap<QName, Serializable>();
         for(Map.Entry<String, String> e: property.entrySet()) {
             properties.put(QName.createQName(e.getKey(),namespaceService),e.getValue());
         }
 
         ChildAssociationRef associationRef = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 
-        return associationRef.getChildRef();
+        for(Map.Entry<String, String> assoc : association.entrySet()) {
+           nodeService.createAssociation(associationRef.getChildRef(), new NodeRef(assoc.getValue()), QName.createQName(assoc.getKey().toString(),namespaceService));
+        }
 
+        return associationRef.getChildRef();
     }
 
     /**
      * Изменение свойств документа
      * @param nodeRef
      * @param property
-     * @return
+     * @return ссылка на на документ
      */
     @Override
     public NodeRef editDocument(NodeRef nodeRef, Map<String, String> property) {
