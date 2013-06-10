@@ -504,11 +504,14 @@ top: 4.5em;
 width: 16em;
 margin-left: -8em;
 }
-.yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-y,.yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-m,.yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-b {
-padding: 5px 10px 5px 10px;
+.yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-y,
+.yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-m,
+.yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-b {
+    padding: 5px 10px;
+    overflow: hidden;
 }
 .yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-b {
-text-align: center;
+    text-align: center;
 }
 .yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-e {
 margin-top: 5px;
@@ -524,6 +527,9 @@ font-weight: bold;
 .yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-mc {
 width: 100%;
 _width: auto;
+}
+.yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-y input {
+    margin-left: 52px;
 }
 .yui-skin-lecmTheme .yui-calcontainer .yui-cal-nav-y input.yui-invalid {
 background-color: #FFEE69;
