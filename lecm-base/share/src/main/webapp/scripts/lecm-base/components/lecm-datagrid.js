@@ -1089,6 +1089,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             _setupDataTable: function (columnDefinitions, me) {
 
             var generateRequest = function (oState, oSelf) {
+                me.widgets.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON);
                 var sort = me.datagridMeta.sort,
                     sortField;
                 if (me.currentSort) {
@@ -1147,7 +1148,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }
 
                     // We don't get an renderEvent for an empty recordSet, but we'd like one anyway
-                    if (oResponse.results.length === 0) {
+                    if (oResponse.results && oResponse.results.length === 0) {
                         this.fireEvent("renderEvent",
                             {
                                 type: "renderEvent"
