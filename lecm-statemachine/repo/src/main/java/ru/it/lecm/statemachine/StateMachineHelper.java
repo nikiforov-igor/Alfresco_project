@@ -646,7 +646,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     public boolean hasActiveStatemachine(NodeRef document) {
         String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
-        Execution execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        Execution execution = null;
+        if (statemachineId != null) {
+            execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        }
         return execution != null;
     }
 
