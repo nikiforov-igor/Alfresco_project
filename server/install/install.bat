@@ -1,7 +1,7 @@
 @echo off
 
 if ""%1""=="""" (
-   echo Alfresco path is not set
+   echo Alfresco path is not set. Use install.bat alfresco_home
 ) else (
     DEL %1\amps\*.amp
     COPY amps\alfresco\*.amp %1\amps
