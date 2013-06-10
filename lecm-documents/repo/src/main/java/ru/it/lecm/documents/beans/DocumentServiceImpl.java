@@ -200,7 +200,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     public NodeRef editDocument(NodeRef nodeRef, Map<String, String> property) {
         lecmPermissionService.checkPermission(LecmPermissionService.PERM_ATTR_EDIT, nodeRef);
 
-        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+        Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
         for (Map.Entry<String, String> e : property.entrySet()) {
             properties.put(QName.createQName(e.getKey(), namespaceService), e.getValue());
         }
