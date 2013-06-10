@@ -1,7 +1,7 @@
 @echo off
 
 if ""%1""=="""" (
-   echo alfresco path not set
+   echo Alfresco path is not set
 ) else (
     DEL %1\amps\*.amp
     COPY amps\alfresco\*.amp %1\amps
