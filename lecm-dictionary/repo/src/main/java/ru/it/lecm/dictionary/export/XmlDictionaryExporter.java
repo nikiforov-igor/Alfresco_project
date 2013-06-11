@@ -161,7 +161,7 @@ public class XmlDictionaryExporter {
     private void writeProperty(QName name, String value) throws XMLStreamException {
 		xmlw.writeStartElement(ExportNamespace.TAG_PROPERTY);
 		xmlw.writeAttribute(ExportNamespace.ATTR_NAME, name.toPrefixString());
-		xmlw.writeCharacters(value);
+		xmlw.writeCData(value);
 		xmlw.writeEndElement();
 	}
 
