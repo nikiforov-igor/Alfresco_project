@@ -4,7 +4,7 @@
 	        <default-controls>
 		        <!--Переопределённые базовые контролы-->
 		        <!--Переопределяются только контролы с параметрами, потому что параметры затираются (баг в alfresco)-->
-		        <type name="datetime" template="/org/alfresco/components/form/controls/date.ftl">
+		        <type name="datetime" template="/ru/it/lecm/base-share/components/controls/date.ftl">
 			        <control-param name="showTime">true</control-param>
 		        </type>
                 <type name="date" template="/ru/it/lecm/base-share/components/controls/date.ftl" />
