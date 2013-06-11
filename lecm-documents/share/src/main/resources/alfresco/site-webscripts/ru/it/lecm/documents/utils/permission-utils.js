@@ -51,3 +51,16 @@ function hasOnlyInDraftPermission(nodeRef, permissionGroup) {
     var perm = eval('(' + result + ')');
     return (("" + perm) ==  "true");
 }
+
+function hasRole(roleId) {
+	if (roleId == null) {
+		return false;
+	}
+	var url = '/lecm/orgstructure/isCurrentEmployeeHasBusinessRole?roleId=' + roleId;
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
+		return false;
+	}
+	var hasRole = eval('(' + result + ')');
+	return (("" + hasRole) ==  "true");
+}
