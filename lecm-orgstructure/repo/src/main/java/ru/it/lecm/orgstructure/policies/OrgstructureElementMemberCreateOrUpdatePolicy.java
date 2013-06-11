@@ -17,7 +17,7 @@ import java.io.Serializable;
  * Time: 11:06
  * To change this template use File | Settings | File Templates.
  */
-public class OrgstructureStaffListCreateOrUpdatePolicy extends LogicECMAssociationPolicy {
+public class OrgstructureElementMemberCreateOrUpdatePolicy extends LogicECMAssociationPolicy {
 
     private SubstitudeBean substitudeService;
 
@@ -25,10 +25,10 @@ public class OrgstructureStaffListCreateOrUpdatePolicy extends LogicECMAssociati
     public final void init() {
         super.init();
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-                OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onDeleteAssociation"));
+                OrgstructureBean.TYPE_ORGANIZATION_ELEMENT_MEMBER, new JavaBehaviour(this, "onDeleteAssociation"));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                OrgstructureBean.TYPE_STAFF_LIST, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+                OrgstructureBean.TYPE_ORGANIZATION_ELEMENT_MEMBER, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
     }
     @Override

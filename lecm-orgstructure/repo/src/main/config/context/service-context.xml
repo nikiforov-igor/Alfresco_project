@@ -226,7 +226,7 @@
         </property>
     </bean>
 
-    <bean id="staffListOnCreateAssocsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffListCreateOrUpdatePolicy"
+    <bean id="staffListOnCreateAssocsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureElementMemberCreateOrUpdatePolicy"
           init-method="init" depends-on="serviceOrgstructure">
         <property name="policyComponent">
             <ref bean="policyComponent"/>
