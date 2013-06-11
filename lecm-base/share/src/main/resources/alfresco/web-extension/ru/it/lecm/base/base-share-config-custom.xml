@@ -7,6 +7,7 @@
 		        <type name="datetime" template="/org/alfresco/components/form/controls/date.ftl">
 			        <control-param name="showTime">true</control-param>
 		        </type>
+                <type name="date" template="/ru/it/lecm/base-share/components/controls/date.ftl" />
 
 		        <!--Контролы оргструктуры-->
 		        <type name="association:lecm-orgstr:organization-unit" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
@@ -93,6 +94,7 @@
                 <js src="/scripts/lecm-base/components/lecm-association-cascading-selectone.js" />
                 <js src="/scripts/lecm-base/components/lecm-association-autocomplete.js" />
                 <js src="/scripts/lecm-base/components/lecm-validation.js" />
+                <js src="/scripts/lecm-base/components/lecm-date-display.js" />
                 <js src="/scripts/lecm-base/components/lecm-fillproperties.js" />
                 <css src="/css/lecm-base/components/association-tree/association-tree-view.css" />
                 <js src="/scripts/lecm-base/components/association-tree/association-tree-view.js" />
