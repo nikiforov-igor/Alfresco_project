@@ -35,8 +35,7 @@
             </item>
             <item name="cm:Протокол согласования разногласий" type="lecm-contract-dic:contract-documents-type">
                 <property name="cm:name">Протокол согласования разногласий</property>
-                <property name="lecm-contract-dic:contract-documents-type-code">negotiationProtocolDifferences
-                </property>
+                <property name="lecm-contract-dic:contract-documents-type-code">negotiationProtocolDifferences</property>
             </item>
         </items>
     </item>
