@@ -64,7 +64,7 @@ public class OrgstructureUnitPolicy
         NodeRef parent = orgstructureService.getParentUnit(unit);
         if (parent == null) {
             NodeRef root = orgstructureService.getRootUnit();
-            if (root != null) {
+            if (root != null && !root.equals(unit)) {
                 throw new  AlfrescoRuntimeException("Нельзя создать два корневых подразделения!");
             }
         }
