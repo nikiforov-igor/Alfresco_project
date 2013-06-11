@@ -2,11 +2,14 @@ package ru.it.lecm.reports.jasper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -62,6 +65,45 @@ public class DSProviderContractsDeltaById
 			super();
 			this.nodeRef = nodeRef;
 		}
+
+//		private DSProviderContractsDeltaById getOuterType() {
+//			return DSProviderContractsDeltaById.this;
+//		}
+
+		@Override
+		public String toString() {
+			// return "NodeInfo [nodeRef=" + nodeRef + ", props=" + props + "]";
+			return ""+ nodeRef;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			// result = prime * result + getOuterType().hashCode();
+			result = prime * result + ((nodeRef == null) ? 0 : nodeRef.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			final NodeInfo other = (NodeInfo) obj;
+			// if (!getOuterType().equals(other.getOuterType()))
+			//	return false;
+			if (nodeRef == null) {
+				if (other.nodeRef != null)
+					return false;
+			} else if (!nodeRef.equals(other.nodeRef))
+				return false;
+			return true;
+		}
+
 	}
 
 	/**
@@ -109,7 +151,7 @@ public class DSProviderContractsDeltaById
 //				final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
 				while(context.getRsIter().hasNext()) { // тут только одна запись будет по-идее
-					final int predCounter = result.size();
+					// final int predCounter = result.size();
 					final ResultSetRow rs = context.getRsIter().next();
 					final NodeRef docId = rs.getNodeRef(); // id основного документа
 
@@ -121,6 +163,7 @@ public class DSProviderContractsDeltaById
 						final LinkedDocumentInfo linkedDoc = new LinkedDocumentInfo( conn, mainDoc);
 						loadDocInfo( linkedDoc.connectionInfo, false); // прогрузить остальное
 						result.add( linkedDoc);
+						logger.info(String.format(" for doc %s found linked %s", docId, linkedDoc.connectionInfo));
 					} // for
 				} // while
 			}
@@ -146,14 +189,19 @@ public class DSProviderContractsDeltaById
 		private List<NodeRef> findSystemConnections(NodeRef docId) {
 			final NodeService srv = getServiceRegistry().getNodeService();
 
-			/* получение списка Связей службой документальных связей ... */
-			final List<NodeRef> connectionsList = documentConnectionService.getConnectionsWithDocument(docId);
+			/* получение списка Связей службой документальных связей ... */ 
+			// final List<NodeRef> connectionsList = documentConnectionService.getConnectionsWithDocument(docId);
+			final NodeRef linksRef = documentConnectionService.getRootFolder(docId); // получить ссылку на "Связи"
+
+			final QName qnConnection = QName.createQName("lecm-connect:connection", getServiceRegistry().getNamespaceService());
+			final List<ChildAssociationRef> connectionsList = srv.getChildAssocs(linksRef, new HashSet<QName>( Arrays.asList( qnConnection)));
 			if (connectionsList == null)
 				return null;
 
 			/* отбор только системных связей */
 			final List<NodeRef> result = new ArrayList<NodeRef>(); 
-			for(NodeRef connector: connectionsList) {
+			for(ChildAssociationRef cref: connectionsList) {
+				final NodeRef connector = cref.getChildRef();
 				final Boolean isSys = (Boolean) srv.getProperty(connector, DocumentConnectionService.PROP_IS_SYSTEM);
 				if ( Boolean.TRUE.equals(isSys)) { // добавление второго конца ...
 					result.add( connector);
@@ -182,15 +230,15 @@ public class DSProviderContractsDeltaById
 			final NamespaceService ns = getServiceRegistry().getNamespaceService();
 			for(Map.Entry<String, JRXField> e: conf().getMetaFields().entrySet()) {
 				final JRXField fld = e.getValue();
-				if ( fld != null && fld.hasXAttributes()) {
-					if (fld.getAttributes().containsKey("inMainDoc") == isInMainDoc) {
-						final String link = fld.getValueLink();
-						// данные получаем либо непосредственно из атрибутов, либо по ссылкам
-						final Serializable value = (context.isCalcField(link))
-									? /* по ссылке */ getSubstitudeService().formatNodeTitle(docInfo.nodeRef, link)
-									: props.get( QName.createQName( link, ns) );
-						docInfo.props.put( fld.getName(), value);
-					}
+				final boolean hasInMainDoc = fld.hasXAttributes() && fld.getAttributes().containsKey("inMainDoc");
+				if ( hasInMainDoc == isInMainDoc) {
+					final String link = fld.getValueLink();
+					// данные получаем либо непосредственно из атрибутов, либо по ссылкам
+					@SuppressWarnings("static-access")
+					final Serializable value = (context.isCalcField(link))
+								? /* по ссылке */ getSubstitudeService().formatNodeTitle(docInfo.nodeRef, link)
+								: props.get( QName.createQName( link, ns) );
+					docInfo.props.put( fld.getName(), value);
 				}
 			}
 		}

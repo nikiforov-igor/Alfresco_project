@@ -20,6 +20,8 @@
 	<Дата документа>
 	<Статус>
 
+( ($F{col_Item.Regnum} != null && !"Не присвоено".equals($F{col_Item.Regnum}) )? $F{col_Item.Regnum} : "нет")
+
 	-->
 
 <cmis-ds.config>
@@ -50,7 +52,7 @@
 
 		<!-- Дата регистрации договора -->
 		<field queryFldName="lecm-contract:dateRegContracts"
-				jrFldName="col_Register"
+				jrFldName="col_DateRegister"
 				displayName="Дата регистрации договора"
 				inMainDoc="true"
 				javaValueClass="date"/>
@@ -101,17 +103,31 @@
 		<!-- <Тип документа>
 			(изменения к договору, спецификация, протокол согласования/разногласий)
 
-			Dictionary name="Типы связи">:
+			Dictionary name="Типы связи":
 					<property name="lecm-dic:attributeForShow">cm:name</property>
 					<property name="lecm-dic:type">lecm-connect-types:connection-type</property>
+					prop: "lecm-connect-types:reverse-name" для названия типа связи
+
+			Тип вложенного документа (самого):
+				assoc-type: "lecm-connect:connected-document-assoc"
+				target: "lecm-document:base" ->  "lecm-additional-document:additionalDocumen"
+					prop: "lecm-additional-document:additionalDocumentType-text-content"
 		  -->
-		<field jrFldName="col_Item.Doctype" queryFldName="{lecm-connect:connection-type-assoc/lecm-connect-types:reverse-name}" displayName="Вложение.ТипДокумента" />
+		<field jrFldName="col_Item.Doctype"
+				queryFldName="{lecm-connect:connected-document-assoc/lecm-additional-document:additionalDocumentType-text-content}"
+				displayName="Вложение.ТипДокумента" />
 
 		<!-- Статус вложенного -->
-		<field jrFldName="col_Item.Status" queryFldName="{lecm-connect:connected-document-assoc/lecm-statemachine:status}" displayName="Вложение.Статус" />
+		<field jrFldName="col_Item.Status"
+				queryFldName="{lecm-connect:connected-document-assoc/lecm-statemachine:status}"
+				displayName="Вложение.Статус" />
+
 		<!-- Дата изменения статуса вложенного -->
-		<field jrFldName="col_Item.StatusDate" queryFldName="{lecm-connect:connected-document-assoc/lecm-document:status-changed-date}" displayName="Вложение.Дата смены статус"
+		<field jrFldName="col_Item.StatusDate"
+				queryFldName="{lecm-connect:connected-document-assoc/lecm-document:status-changed-date}"
+				displayName="Вложение.Дата смены статус"
 				javaValueClass="java.util.Date"/>
+
 		<!-- Номер вложенного -->
 		<field  jrFldName="col_Item.Regnum"
 				queryFldName="{lecm-connect:connected-document-assoc/lecm-document:regnum}"

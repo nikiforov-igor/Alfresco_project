@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ContractsSummaryList" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="dataSource" value="ru.it.lecm.reports.jasper.DSProviderContractsDeltaById"/>
@@ -83,10 +83,10 @@
 	<field name="col_Status" class="java.lang.String">
 		<fieldDescription><![CDATA[Статус]]></fieldDescription>
 	</field>
-	<field name="col_Item.StatusDate" class="java.util.Date">
+	<field name="col_Item.StatusDate" class="java.lang.String">
 		<fieldDescription><![CDATA[Вложение.Дата смены статус]]></fieldDescription>
 	</field>
-	<field name="col_Register" class="java.util.Date">
+	<field name="col_DateRegister" class="java.util.Date">
 		<fieldDescription><![CDATA[Дата регистрации договора]]></fieldDescription>
 	</field>
 	<field name="col_Contragent.YurAddress" class="java.lang.String">
@@ -137,7 +137,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[(($F{col_DocKind} == null) ? "" : $F{col_DocKind})
 + (($F{col_Regnum} == null) ? "" : " № "+ $F{col_Regnum})
-+ (($F{col_Register} == null) ? "" : msg( " от {0,date,short}", $F{col_Register}))]]></textFieldExpression>
++ (($F{col_DateRegister} == null) ? "" : msg( " от {0,date,short}", $F{col_DateRegister}))]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="35c49e4c-0413-49d6-8da7-31bfd96f232b" x="110" y="20" width="430" height="20"/>
@@ -161,14 +161,7 @@
 				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" stretchType="RelativeToBandHeight" x="1" y="1" width="540" height="30" backcolor="#DCDCDC"/>
 			</rectangle>
 			<textField>
-				<reportElement uuid="52e19f23-e656-451b-84d6-f210e47da030" x="5" y="3" width="30" height="26"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" isItalic="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="8514e4c9-574d-4cbd-87f1-2afb80a884a2" x="38" y="3" width="160" height="26"/>
+				<reportElement uuid="8514e4c9-574d-4cbd-87f1-2afb80a884a2" x="2" y="3" width="194" height="26"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
@@ -196,9 +189,6 @@
 				<textFieldExpression><![CDATA["Статус"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement uuid="78d10133-2d29-4069-b91c-504a32934661" x="34" y="0" width="1" height="30"/>
-			</line>
-			<line>
 				<reportElement uuid="56ae79d3-e30a-4f27-a518-b279ac2da993" x="200" y="0" width="1" height="30"/>
 			</line>
 			<line>
@@ -214,16 +204,8 @@
 			<printWhenExpression><![CDATA[$V{REPORT_COUNT} <= 200]]></printWhenExpression>
 			<frame>
 				<reportElement uuid="1e092e56-8305-48da-8ce3-c4deba187eda" style="styleOdd" stretchType="RelativeToBandHeight" x="0" y="1" width="540" height="24" backcolor="#FFFFFF"/>
-				<textField pattern="" isBlankWhenNull="true">
-					<reportElement uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a" x="2" y="2" width="30" height="20" isPrintWhenDetailOverflows="true"/>
-					<textElement textAlignment="Center">
-						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-					<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" stretchType="RelativeToBandHeight" x="38" y="2" width="160" height="20"/>
+					<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" stretchType="RelativeToBandHeight" x="5" y="2" width="192" height="20"/>
 					<textElement textAlignment="Left" markup="none">
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
@@ -236,7 +218,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[( ($F{col_Item.Regnum} != null && !"Не присвоено".equals($F{col_Item.Regnum}) )? $F{col_Item.Regnum} : "нет")]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement uuid="7fe3fbca-e8e2-431c-b0d1-35a9f6eba3e9" stretchType="RelativeToTallestObject" x="274" y="2" width="100" height="20" isPrintWhenDetailOverflows="true"/>
@@ -257,9 +239,6 @@
 			</frame>
 			<line>
 				<reportElement uuid="d905283e-8430-40da-a9e5-2d1ce6418c36" stretchType="RelativeToBandHeight" x="1" y="0" width="1" height="24"/>
-			</line>
-			<line>
-				<reportElement uuid="f8491e6d-c03d-466d-a8b0-058a93d6ba80" stretchType="RelativeToBandHeight" x="34" y="0" width="1" height="24"/>
 			</line>
 			<line>
 				<reportElement uuid="450f5a30-0014-4ef3-8baf-1dbd28f4bb20" stretchType="RelativeToBandHeight" x="200" y="0" width="1" height="24"/>

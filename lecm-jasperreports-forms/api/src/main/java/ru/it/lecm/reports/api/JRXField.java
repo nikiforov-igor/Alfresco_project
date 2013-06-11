@@ -92,7 +92,7 @@ public class JRXField extends JRDesignField {
 
 	@Override
 	public String toString() {
-		return String.format( "%s(link: %s, '%s')", super.getName(), valueLink
+		return String.format( "%s(link: %s, '%s' %s)", super.getName(), valueLink
 				, super.getDescription(), (attributes == null ? "" : attributes.toString())
 		);
 	}
