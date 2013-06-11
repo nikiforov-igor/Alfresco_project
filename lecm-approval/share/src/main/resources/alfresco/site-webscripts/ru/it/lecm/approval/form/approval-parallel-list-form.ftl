@@ -14,7 +14,7 @@
 
 <@formLib.renderFormContainer formId = formId>
     <@formLib.renderField field = form.fields["prop_bpm_workflowDueDate"] />
-    <@formLib.renderField field = form.fields["assoc_lecmPar_employeesAssoc"] />
+    <@formLib.renderField field = form.fields["assoc_lecmApprove_employeesAssoc"] />
     <@formLib.renderField field = form.fields["assoc_packageItems"] />
     <@formLib.renderField field = form.fields["prop_bpm_workflowDescription"] /><!-- Hidden! -->
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model name="lecmPar:parallelApprovalWorkflow" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-	<description>Workflow model for parallel approvement</description>
+<model name="lecmApprove:approvalWorkflow" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Workflow model for parallel and sequential approvement</description>
 	<author>vlevin</author>
 	<version>1.0</version>
 
@@ -9,40 +9,56 @@
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.it.ru/logicECM/model/approval-list/1.0" prefix="lecm-al"/>
 	</imports>
 
 	<namespaces>
-		<namespace uri="http://www.it.ru/logicECM/model/approval/parallel/wokflow/1.0" prefix="lecmPar"/>
+		<namespace uri="http://www.it.ru/logicECM/model/approval/wokflow/1.0" prefix="lecmApprove"/>
 	</namespaces>
 
 	<types>
-		<type name="lecmPar:parallelApproval">
-			<title>Workflow model for parallel approvement</title>
+		<type name="lecmApprove:approval">
+			<title>Workflow model for parallel and sequential approvement</title>
 			<parent>bpm:startTask</parent>
 
+			<properties>
+				<property name="lecmApprove:approvalType">
+					<type>d:text</type>
+					<constraints>
+						<constraint name="lecmApprove:approvalTypeConstraint" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>SEQUENTIAL</value> <!-- последовательное согласование -->
+									<value>PARALLEL</value> <!-- параллельное согласование -->
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+			</properties>
+
 			<associations>
-				<association name="lecmPar:employeesAssoc">
+				<association name="lecmApprove:assigneeAssoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</source>
 					<target>
-						<class>lecm-orgstr:employee</class>
+						<class>lecm-al:assignees-item</class>
 						<mandatory>true</mandatory>
 						<many>true</many>
 					</target>
 				</association>
 			</associations>
 		</type>
-
-		<type name="lecmPar:approveTask">
+		<type name="lecmApprove:approveTask">
 			<parent>bpm:activitiOutcomeTask</parent>
 			<properties>
-				<property name="lecmPar:approveTaskResult">
+				<property name="lecmApprove:approveTaskResult">
 					<type>d:text</type>
 					<default>REJECTED</default>
 					<constraints>
-						<constraint name="lecmPar:approveTaskResultConstraint" type="LIST">
+						<constraint name="lecmApprove:approveTaskResultConstraint" type="LIST">
 							<parameter name="allowedValues">
 								<list>
 									<value>APPROVED</value> <!-- согласован -->
@@ -55,7 +71,7 @@
 				</property>
 			</properties>
 			<associations>
-				<association name="lecmPar:approveTaskCommentAssoc">
+				<association name="lecmApprove:approveTaskCommentAssoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
@@ -72,7 +88,7 @@
 					<default>edit_package_item_actions</default>
 				</property>
 				<property name="bpm:outcomePropertyName">
-					<default>{http://www.it.ru/logicECM/model/approval/parallel/approve-task/1.0}approveTaskResult</default>
+					<default>{http://www.it.ru/logicECM/model/approval/approve-task/1.0}approveTaskResult</default>
 				</property>
 			</overrides>
 		</type>

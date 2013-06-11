@@ -101,6 +101,7 @@
 									<value>APPROVED</value> <!-- согласован -->
 									<value>APPROVED_WITH_REMARK</value> <!-- согласован с замечанием -->
 									<value>REJECTED</value> <!-- отклонен -->
+									<value>REASSIGNED</value> <!-- задача переназначена -->
 								</list>
 							</parameter>
 						</constraint>

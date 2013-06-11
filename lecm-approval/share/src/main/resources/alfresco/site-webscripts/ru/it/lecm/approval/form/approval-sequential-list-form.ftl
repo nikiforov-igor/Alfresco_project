@@ -36,6 +36,7 @@
 
     <@formLib.renderField field = form.fields["assoc_packageItems"] />
     <@formLib.renderField field = form.fields["prop_bpm_workflowDescription"] /><!-- Hidden! -->
+	<@formLib.renderField field = form.fields["prop_lecmApprove_approvalType"] />
 
     <div id="${addAssigneeButtonId}"></div>
 
@@ -53,9 +54,9 @@
         <div id="${saveAssigneesListButtonId}"></div>
     </div>
 
-    <input type="hidden" id="workflow-form_assoc_lecmSeq_assigneeAssoc-cntrl-added" name="assoc_lecmSeq_assigneeAssoc_added"/>
-    <input type="hidden" id="workflow-form_assoc_lecmSeq_assigneeAssoc-cntrl-removed" name="assoc_lecmSeq_assigneeAssoc_removed"/>
-    <input type="hidden" id="workflow-form_assoc_lecmSeq_assigneeAssoc-cntrl-selectedItems" />
+    <input type="hidden" id="workflow-form_assoc_lecmApprove_assigneeAssoc-cntrl-added" name="assoc_lecmApprove_assigneeAssoc_added"/>
+    <input type="hidden" id="workflow-form_assoc_lecmApprove_assigneeAssoc-cntrl-removed" name="assoc_lecmApprove_assigneeAssoc_removed"/>
+    <input type="hidden" id="workflow-form_assoc_lecmApprove_assigneeAssoc-cntrl-selectedItems" />
 </@>
 
 </div>
@@ -78,7 +79,7 @@
     // Constants
     function constants() {
         return {
-            URL_GET_DEFAULT_SEQUENTIAL_FOLDER_REF: "lecm/approval/getdefaultsequentialfolderref",
+            URL_GET_DEFAULT_SEQUENTIAL_FOLDER_REF: "lecm/approval/getDefaultListRef",
             URL_FORM: "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&showCancelButton={showCancelButton}",
 
             STRING_ADD_ASSIGNEE_BUTTON_LABEL: "Добавить согласующего",
@@ -375,7 +376,7 @@
 
         function updateFormFields() {
 
-            var addedInputElement = YAHOO.util.Dom.get( "workflow-form_assoc_lecmSeq_assigneeAssoc-cntrl-added" ),
+            var addedInputElement = YAHOO.util.Dom.get( "workflow-form_assoc_lecmApprove_assigneeAssoc-cntrl-added" ),
 
                 currentRecordSet = objects.assigneesDatagrid.widgets.dataTable.getRecordSet(),
                 currentRecords = currentRecordSet.getRecords(),
@@ -767,7 +768,7 @@
                         data: YAHOO.lang.JSON.stringify( dataObj ), // jQuery странно кодирует данные. пусть YUI эаймеся преобразованием в JSON
                         processData: false, // данные не трогать, не кодировать вообще
                         success: function ( result, textStatus, jqXHR ) {
-                            form.dataObj[ "assoc_lecmSeq_assigneeAssoc_added" ] = result.items;
+                            form.dataObj[ "assoc_lecmApprove_assigneeAssoc_added" ] = result.items;
                         },
                         error: function( jqXHR, textStatus, errorThrown ) {
                             Alfresco.util.PopupManager.displayMessage({

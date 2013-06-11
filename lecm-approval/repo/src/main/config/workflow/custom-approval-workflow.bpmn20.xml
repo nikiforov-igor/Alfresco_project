@@ -24,7 +24,7 @@
 							var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);
 							var finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";
 							var approvalListRef = execution.getVariable("approvalListRef");
-							approvalCustom.logFinalDecision(approvalListRef, finalDecision);
+							approval.logFinalDecision(approvalListRef, finalDecision);
 						}
                         ]]></activiti:string>
                 </activiti:field>
@@ -39,15 +39,15 @@
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string>
-                            var executorBoss = approvalCustom.getExecutorBoss(documentExecutor);
+                            var executorBoss = approval.getExecutorBoss(documentExecutor);
                             if (executorBoss != null) {
                                 task.setAssignee(executorBoss);
                             } else {
                                 task.setAssignee(documentExecutor);
                             }
 
-                            approvalCustom.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
-                            approvalCustom.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+                            approval.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
+                            approval.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -90,15 +90,15 @@
 
 							var decisionsMap = execution.getVariable("decisionsMap");
 							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approvalCustom.addDecision method");
+								logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
 							}
-                            decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+                            decisionsMap = approval.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
                             execution.setVariable("decisionsMap", decisionsMap);
 
 			            	execution.setVariable("executorBossDecision", decision);
 
 			            	var approvalListRef = execution.getVariable("approvalListRef");
-			            	approvalCustom.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+			            	approval.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
 			            //]]>
                         </activiti:string>
                     </activiti:field>
@@ -120,8 +120,8 @@
                             dueDate.setDate(dueDate.getDate() + 2);
 							task.setDueDate(dueDate);
 
-                            approvalCustom.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
-                            approvalCustom.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+                            approval.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
+                            approval.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -163,20 +163,20 @@
 
 							var decisionsMap = execution.getVariable("decisionsMap");
 							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approvalCustom.addDecision method");
+								logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
 							}
-                            decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+                            decisionsMap = approval.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
                             execution.setVariable("decisionsMap", decisionsMap);
 
                             var divisionBossDecisions = execution.getVariable("divisionBossDecisions");
                             if (!divisionBossDecisions) {
-                                logger.log("Attention: divisionBossDecisions is null, it will be created in approvalCustom.addDecision method");
+                                logger.log("Attention: divisionBossDecisions is null, it will be created in approval.addDecision method");
                             }
-                            divisionBossDecisions = approvalCustom.addDecision(divisionBossDecisions, jsonUtils.toJSONString(taskDecision));
+                            divisionBossDecisions = approval.addDecision(divisionBossDecisions, jsonUtils.toJSONString(taskDecision));
                             execution.setVariable("divisionBossDecisions", divisionBossDecisions);
 
                             var approvalListRef = execution.getVariable("approvalListRef");
-                            approvalCustom.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+                            approval.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
                             //]]>
                         </activiti:string>
                     </activiti:field>
@@ -190,7 +190,7 @@
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string>
-                            var departmentBoss = approvalCustom.getUnitBoss("департамент");
+                            var departmentBoss = approval.getUnitBoss("департамент");
                             if (departmentBoss != null) {
                                 task.setAssignee(departmentBoss);
                             } else {
@@ -201,8 +201,8 @@
                             dueDate.setDate(dueDate.getDate() + 3);
                             task.setDueDate(dueDate);
 
-                            approvalCustom.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
-                            approvalCustom.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+                            approval.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
+                            approval.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -245,15 +245,15 @@
 
 							var decisionsMap = execution.getVariable("decisionsMap");
 							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approvalCustom.addDecision method");
+								logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
 							}
-                            decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+                            decisionsMap = approval.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
                             execution.setVariable("decisionsMap", decisionsMap);
 
 			            	execution.setVariable("departmentBossDecision", decision);
 
 			            	var approvalListRef = execution.getVariable("approvalListRef");
-			            	approvalCustom.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+			            	approval.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
 			            //]]>
                         </activiti:string>
                     </activiti:field>
@@ -266,7 +266,7 @@
                 <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
                     <activiti:field name="script">
                         <activiti:string>
-                            var curator = approvalCustom.getFirstCurator();
+                            var curator = approval.getFirstCurator();
                             if (curator != null) {
                                 task.setAssignee(curator);
                             } else {
@@ -277,8 +277,8 @@
                             dueDate.setDate(dueDate.getDate() + 2);
                             task.setDueDate(dueDate);
 
-                            approvalCustom.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
-                            approvalCustom.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+                            approval.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
+                            approval.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -321,13 +321,13 @@
 
 							var decisionsMap = execution.getVariable("decisionsMap");
 							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approvalCustom.addDecision method");
+								logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
 							}
-                            decisionsMap = approvalCustom.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
+                            decisionsMap = approval.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
                             execution.setVariable("decisionsMap", decisionsMap);
 
 			            	var approvalListRef = execution.getVariable("approvalListRef");
-			            	approvalCustom.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+			            	approval.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
 			            //]]>
                         </activiti:string>
                     </activiti:field>
@@ -341,7 +341,7 @@
             <extensionElements>
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-						var approvalListRef = approvalCustom.createApprovalList(bpm_package, documentAttachmentCategoryName)
+						var approvalListRef = approval.createApprovalList(bpm_package, documentAttachmentCategoryName, "CUSTOM")
 						execution.setVariable("approvalListRef", approvalListRef);
 
 						var documentExecutor = bpm_package.children[0].properties["cm:creator"];
@@ -370,13 +370,13 @@
                         if (!decisionsMap) {
                             logger.log("Attention: decisionsMap is null!");
                         }
-                        var finalDecision = approvalCustom.getFinalDecision(decisionsMap);
+                        var finalDecision = approval.getFinalDecision(decisionsMap);
                         execution.setVariable("finalDecision", finalDecision);
-                        execution.setVariable("isApproved", approvalCustom.isApproved(finalDecision));
+                        execution.setVariable("isApproved", approval.isApproved(finalDecision));
 
                         var approvalListRef = execution.getVariable("approvalListRef");
-                        approvalCustom.logFinalDecision(approvalListRef, finalDecision);
-                        approvalCustom.notifyFinalDecision(finalDecision, bpm_package)
+                        approval.logFinalDecision(approvalListRef, finalDecision);
+                        approval.notifyFinalDecision(finalDecision, bpm_package)
 
                         execution.setVariable("approvalCompleted", "approvalCompleted");
                             ]]></activiti:string>
@@ -399,7 +399,7 @@
                     <activiti:field name="script">
                         <activiti:string>
                             //<![CDATA[
-                                var divisionBosses = approvalCustom.getDivisionBosses("отдел1,отдел2");
+                                var divisionBosses = approval.getDivisionBosses("отдел1,отдел2");
 			            	    execution.setVariable("divisionBosses", divisionBosses);
 			                //]]>
                         </activiti:string>
@@ -423,8 +423,8 @@
                                  if (!divisionBossDecisions) {
                                     logger.log("Attention: divisionBossDecisions is null!");
                                  }
-                                 var divisionBossFinalDecision = approvalCustom.getFinalDecision(divisionBossDecisions);
-                                 execution.setVariable("divisionBossFinalDecision", approvalCustom.isApproved(divisionBossFinalDecision));
+                                 var divisionBossFinalDecision = approval.getFinalDecision(divisionBossDecisions);
+                                 execution.setVariable("divisionBossFinalDecision", approval.isApproved(divisionBossFinalDecision));
 			                //]]>
                         </activiti:string>
                     </activiti:field>

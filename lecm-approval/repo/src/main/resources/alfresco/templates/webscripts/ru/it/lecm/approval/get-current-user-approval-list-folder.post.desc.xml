@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <webscript>
-    <shortname>Approval Get Parallel Folder NodeRef</shortname>
+    <shortname>Get current user's approval lists folder</shortname>
     <description></description>
-    <url>/lecm/approval/getdefaultparallelfolderref</url>
+    <url>/lecm/approval/getCurrentUserApprovalListFolder</url>
     <format default="json"/>
     <authentication>user</authentication>
     <transaction>required</transaction>

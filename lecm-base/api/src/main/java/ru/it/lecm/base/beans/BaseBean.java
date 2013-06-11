@@ -19,6 +19,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.ParameterCheck;
 
 /**
  * User: AIvkin
@@ -358,4 +360,55 @@ public abstract class BaseBean implements InitializingBean {
 	 * @return Ссылка на каталог, в котором находятся все данные сервиса
 	 */
 	abstract public NodeRef getServiceRootFolder();
+
+	/**
+	 * создаем папку у указанного родителя
+	 *
+	 * @param parentRef ссылка на родителя
+	 * @param folder имя папки без слешей и прочей ерунды
+	 * @return NodeRef свежесозданной папки
+	 */
+	protected NodeRef createFolder(final NodeRef parentRef, final String folder) {
+		ParameterCheck.mandatory("parentRef", parentRef);
+		ParameterCheck.mandatory("folder", folder);
+		NodeRef folderRef = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+			@Override
+			public NodeRef doWork() throws Exception {
+				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+				return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+					@Override
+					public NodeRef execute() throws Throwable {
+						QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, folder);
+						Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+						properties.put(ContentModel.PROP_NAME, folder);
+						ChildAssociationRef childAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+						return childAssoc.getChildRef();
+					}
+				});
+			}
+		});
+		return folderRef;
+	}
+
+	/**
+	 * получаем папку у указанного родителя
+	 *
+	 * @param parentRef ссылка на родителя
+	 * @param folder имя папки без слешей и прочей ерунды
+	 * @return NodeRef если папка есть, null в противном случае
+	 */
+	protected NodeRef getFolder(final NodeRef parentRef, final String folder) {
+		NodeRef folderRef = null;
+		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(parentRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+		if (childAssocs != null) {
+			for (ChildAssociationRef childAssoc : childAssocs) {
+				NodeRef childRef = childAssoc.getChildRef();
+				if (folder.equals(nodeService.getProperty(childRef, ContentModel.PROP_NAME))) {
+					folderRef = childRef;
+					break;
+				}
+			}
+		}
+		return folderRef;
+	}
 }

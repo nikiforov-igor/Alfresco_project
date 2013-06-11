@@ -81,7 +81,7 @@ public class OverrideReassign extends DeclarativeWebScript {
 
         result.put("personLogin", personLogin);
 
-        grandPermissions(taskID, employeeNodeRef);
+//        grandPermissions(taskID, employeeNodeRef);
 
         return result;
     }

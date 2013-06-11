@@ -2,17 +2,14 @@ package ru.it.lecm.approval.extensions;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
-import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.approval.api.ApprovalListService;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -44,57 +41,21 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		this.authenticationService = authenticationService;
 	}
 
-	public void setPersonService(PersonService personService) {
-		//nop
-	}
-
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
-	}
-
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		//nop
-	}
-
-	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		//nop
 	}
 
 	public void setApprovalListService(ApprovalListService approvalListService) {
 		this.approvalListService = approvalListService;
 	}
 
-	private enum ApprovementType {
-
-		PARALLEL,
-		SEQUENTIAL
-	}
-
-	/**
-	 * @return список согласующих по умолчанию для параллельного согласования
-	 */
-	public String getDefaultParallelListFolderRef() {
-		return getDefaultListFolderRef(ApprovementType.PARALLEL).toString();
-	}
-
-	/**
-	 * @return список согласующих по умолчанию для последовательного
-	 * согласования
-	 */
-	public String getDefaultSequentialListFolderRef() {
-		return getDefaultListFolderRef(ApprovementType.SEQUENTIAL).toString();
-	}
-
 	/**
 	 * Возвращает NodeRef на каталог, в котором текущий пользователь хранит
-	 * списки согласующих определенного типа.
+	 * списки согласующих.
 	 *
-	 * @param approvalType тип списка согласующих: "PARALLEL" или "SEQUENTIAL"
 	 * @return NodeRef на каталог со списками согласующих
 	 */
-	private NodeRef getListFolderRef(final ApprovementType approvementType) {
-		final String[] ASSIGNEES_LISTS_FOLDERS = {ApprovalListService.ASSIGNEES_LISTS_PARALLEL_FOLDER_NAME, ApprovalListService.ASSIGNEES_LISTS_SEQUENTIAL_FOLDER_NAME};
-		final Map<String, NodeRef> assigneesListsFolders = new HashMap<String, NodeRef>();
+	public NodeRef getListsFolderRef() {
 
 		String currentUserName = authenticationService.getCurrentUserName();
 		NodeRef approvalHomeRef = approvalListService.getApprovalFolder();
@@ -122,43 +83,20 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 					ContentModel.TYPE_FOLDER,
 					properties).getChildRef();
 
-			// Создадим папки "Параллельное согласование" и "Последовательное согласование".
-			for (String assigneesListFolder : ASSIGNEES_LISTS_FOLDERS) {
-				properties.put(ContentModel.PROP_NAME, assigneesListFolder);
-				NodeRef assigneesListsParallel = nodeService.createNode(assigneesLists,
-						ContentModel.ASSOC_CONTAINS,
-						QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, assigneesListFolder),
-						ContentModel.TYPE_FOLDER,
-						properties).getChildRef();
-				assigneesListsFolders.put(assigneesListFolder, assigneesListsParallel);
-			}
-
+			return assigneesLists;
 		} else { // Если нашли...
-			for (String assigneesListFolder : ASSIGNEES_LISTS_FOLDERS) {
-				NodeRef assigneesListFolderRef = nodeService.getChildByName(assigneesListsFolderRef, ContentModel.ASSOC_CONTAINS, assigneesListFolder);
-				assigneesListsFolders.put(assigneesListFolder, assigneesListFolderRef);
-			}
-		}
-
-		if (ApprovementType.PARALLEL.equals(approvementType)) {
-			return assigneesListsFolders.get(ApprovalListService.ASSIGNEES_LISTS_PARALLEL_FOLDER_NAME);
-		} else if (ApprovementType.SEQUENTIAL.equals(approvementType)) {
-			return assigneesListsFolders.get(ApprovalListService.ASSIGNEES_LISTS_SEQUENTIAL_FOLDER_NAME);
-		} else {
-			return null;
+			return assigneesListsFolderRef;
 		}
 	}
 
 	/**
 	 * Список согласущих данного типа по умолчанию.
 	 *
-	 * @param approvementType тип списка согласующих: "PARALLEL" или
-	 * "SEQUENTIAL"
 	 * @return NodeRef на список согласующих
 	 */
-	private NodeRef getDefaultListFolderRef(final ApprovementType approvementType) {
+	public NodeRef getDefaultListFolderRef() {
 		// папка с листами согласующих
-		final NodeRef parentListsFolder = getListFolderRef(approvementType);
+		final NodeRef parentListsFolder = getListsFolderRef();
 		// ищем папку с названием "Список по умолчанию"...
 		NodeRef defaultAssigneesListFolderRef = nodeService.getChildByName(parentListsFolder, ContentModel.ASSOC_CONTAINS, ApprovalListService.ASSIGNEES_DEFAULT_LIST_FOLDER_NAME);
 
@@ -208,7 +146,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		}
 
 		// папка с листами согласующих
-		parentFolder = getAsigneesListParentFolderByType(approvalType);
+		parentFolder = getListsFolderRef();
 
 		// ищем лист согласующих с данным именем
 		NodeRef listNodeRef = nodeService.getChildByName(parentFolder, ContentModel.ASSOC_CONTAINS, listName);
@@ -230,7 +168,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 				properties).getChildRef();
 
 		// бежим по json-массиву "listItems"
-        StringBuilder builder = new StringBuilder();
+		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < listItems.length(); i++) {
 			String employeeNodeRefStr, dueDateStr;
 			int order;
@@ -276,20 +214,22 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 			// создать ассоциацию с сотрудником
 			nodeService.createAssociation(itemNodeRef, employeeNodeRef, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC);
 
-            builder.append(itemNodeRef.toString()).append(",");
+			builder.append(itemNodeRef.toString()).append(",");
 		}
-        builder.delete(builder.length() - 1, builder.length());
-        return builder.toString();
+		builder.delete(builder.length() - 1, builder.length());
+		return builder.toString();
 	}
 
 	/**
 	 * Получить списки согласующих по типу согласования.
 	 *
-	 * @param json { "approvalType": "seq" || "par"}
-	 * @return [ {
-	 * "listName": "имя листа согласущих",
-	 * "nodeRef": "NodeRef на лист согласующих"
-	 * } ]
+	 * @return {
+	 * "defaultListRef": "NodeRef на список по умолчанию",
+	 * "lists": [ {
+	 * "listName": "название списка",
+	 * "nodeRef": "NodeRef списка"
+	 * }]
+	 * }
 	 */
 	public JSONArray getAssigneesLists(final JSONObject json) {
 		String approvalType;
@@ -391,16 +331,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 	}
 
 	private NodeRef getAsigneesListParentFolderByType(final String approvalType) {
-		NodeRef parentFolder;
-
-		if ("par".equals(approvalType)) {
-			parentFolder = getListFolderRef(ApprovementType.PARALLEL);
-		} else if ("seq".equals(approvalType)) {
-			parentFolder = getListFolderRef(ApprovementType.SEQUENTIAL);
-		} else {
-			throw new WebScriptException("Unknown approval type: " + approvalType);
-		}
-		return parentFolder;
+		return getListsFolderRef();
 	}
 
 	public void deleteList(final JSONObject json) {
@@ -422,14 +353,16 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 	 * "assigneeItemNodeRef": "NodeRef элемента списка согласующих",
 	 * "moveDirection": "up" || "down"
 	 * }
-	 * @return true - перемещение элемента по списку произошло. false - элемент
-	 * первый или последний в списке и больше не двигается в указанном
-	 * направлении
+	 * @return {
+	 * "success": true|false (произошло ли перемещение по списку),
+	 * "assigneesListNodeRef": "NodeRef списка согласующих"
+	 * }
 	 */
-	public boolean changeOrder(final JSONObject json) {
+	public JSONObject changeOrder(final JSONObject json) {
 		String listItemNodeRefStr, direction;
 		int currentItemOrder, newItemOrder = 0;
-		boolean stopReordering = false;
+		boolean stopReordering = false, success;
+		JSONObject result = new JSONObject();
 
 		try {
 			listItemNodeRefStr = json.getString("assigneeItemNodeRef");
@@ -460,25 +393,32 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		}
 
 		if (stopReordering) {
-			return false;
+			success = false;
+		} else {
+			for (AssociationRef targetAssoc : listItemsTargetAssocs) {
+				NodeRef item = targetAssoc.getTargetRef();
+				if (item.equals(listItemNodeRef)) {
+					continue;
+				}
+				int itemOrder = (Integer) nodeService.getProperty(item, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER);
+				if (itemOrder == newItemOrder) {
+					nodeService.setProperty(item, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER, currentItemOrder);
+					break;
+				}
+			}
+
+			nodeService.setProperty(listItemNodeRef, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER, newItemOrder);
+			success = true;
 		}
 
-		for (AssociationRef targetAssoc : listItemsTargetAssocs) {
-			NodeRef item = targetAssoc.getTargetRef();
-			if (item.equals(listItemNodeRef)) {
-				continue;
-			}
-			int itemOrder = (Integer) nodeService.getProperty(item, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER);
-			if (itemOrder == newItemOrder) {
-				nodeService.setProperty(item, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER, currentItemOrder);
-				break;
-			}
-
+		try {
+			result.put("success", success);
+			result.put("assigneesListNodeRef", assigeesListNodeRef.toString());
+		} catch (JSONException ex) {
+			throw new WebScriptException("Can not form JSONObject", ex);
 		}
 
-		nodeService.setProperty(listItemNodeRef, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER, newItemOrder);
-
-		return true;
+		return result;
 	}
 
 	/**

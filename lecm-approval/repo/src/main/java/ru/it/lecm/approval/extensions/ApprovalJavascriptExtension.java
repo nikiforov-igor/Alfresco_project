@@ -3,9 +3,9 @@ package ru.it.lecm.approval.extensions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
@@ -16,11 +16,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.extensions.surf.util.ParameterCheck;
+import ru.it.lecm.approval.Utils;
 import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
@@ -35,10 +33,9 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	private ApprovalListService approvalListService;
 	private StateMachineServiceBean stateMachineHelper;
 
-
-    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
-        this.stateMachineHelper = stateMachineHelper;
-    }
+	public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
+		this.stateMachineHelper = stateMachineHelper;
+	}
 
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
@@ -60,69 +57,20 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		this.approvalListService = approvalListService;
 	}
 
-	public ActivitiScriptNodeList getPersonListByEmployeeList(ActivitiScriptNodeList employeeList) {
-		ParameterCheck.mandatory("employeeList", employeeList);
-		ActivitiScriptNodeList personList = new ActivitiScriptNodeList();
-		for (ActivitiScriptNode employee: employeeList) {
-			NodeRef personNodeRef = orgstructureService.getPersonForEmployee(employee.getNodeRef());
-			if (personNodeRef != null && nodeService.exists(personNodeRef)) {
-				ActivitiScriptNode person = new ActivitiScriptNode(personNodeRef, serviceRegistry);
-				personList.add(person);
-			}
-		}
-		return personList;
-	}
-
 	/**
 	 * формирование нового листа согласования, для текущей версии регламента
+	 *
 	 * @param employeeList список сотрудников, ака согласущие лица
-	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех item-ов workflow
-	 * @param documentAttachmentCategoryName  название категории вложений, в которой хранится файл документа
+	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех
+	 * item-ов workflow
+	 * @param approvalType тип согласования: APPROVAL, SEQUENTIAL, CUSTOM
+	 * @param documentAttachmentCategoryName название категории вложений, в
+	 * которой хранится файл документа
 	 * @return ссылку на новый лист согласования
 	 */
-	public ActivitiScriptNode createApprovalList(final ActivitiScriptNode bpmPackage, final String documentAttachmentCategoryName) {
-		NodeRef approvalListRef = approvalListService.createApprovalList(bpmPackage.getNodeRef(), documentAttachmentCategoryName);
+	public ActivitiScriptNode createApprovalList(final ActivitiScriptNode bpmPackage, final String documentAttachmentCategoryName, final String approvalType, ActivitiScriptNodeList assigneesList) {
+		NodeRef approvalListRef = approvalListService.createApprovalList(bpmPackage.getNodeRef(), documentAttachmentCategoryName, approvalType, assigneesList);
 		return new ActivitiScriptNode(approvalListRef, serviceRegistry);
-	}
-
-	/**
-	 * добавление решения о согласовании от текущего исполнителя
-	 * @param decisionMap карта с решениями
-	 * @param userName имя пользователя, являющегося исполнителем
-	 * @param decision решение принятое пользователем
-	 * @return карта, дополненная новым решением
-	 */
-	public Map<String, String> addDecision(final Map<String, String> decisionMap, final String taskDecision) {
-		Map<String, String> currentDecisionMap = (decisionMap == null) ? new HashMap<String, String>() : decisionMap;
-		String userName = null;
-		String decision = null;
-		try {
-			JSONObject task = new JSONObject(taskDecision);
-			userName = task.getString("userName");
-			decision = task.getString("decision");
-		} catch(JSONException ex) {
-			logger.error(ex.getMessage(), ex);
-		}
-		currentDecisionMap.put(userName, decision);
-		return currentDecisionMap;
-	}
-
-	/**
-	 * запись решения о согласовании от текущего исполнителя в лист согласования
-	 * @param approvalListRef ссылка на лист согласования
-	 * @param userName имя пользователя, являющегося исполнителем
-	 * @param decision решение принятое пользователем
-	 * @return
-	 */
-	public void logDecision(final ActivitiScriptNode approvalListRef, final String taskDecision) {
-		logger.debug(taskDecision);
-		JSONObject task = null;
-		try {
-			task = new JSONObject(taskDecision);
-		} catch (JSONException ex) {
-			logger.error(ex.getMessage(), ex);
-		}
-		approvalListService.logDecision(approvalListRef.getNodeRef(), task);
 	}
 
 	public String getFinalDecision(final Map<String, String> decisionMap) {
@@ -151,27 +99,30 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		if (ContentModel.TYPE_PERSON.isMatch(candidateType)) {
 			NodeRef employeeRef = orgstructureService.getEmployeeByPerson(candidate);
 			approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
-		} else if (ApprovalListService.TYPE_ASSIGNEES_ITEM.isMatch(candidateType)){
+		} else if (ApprovalListService.TYPE_ASSIGNEES_ITEM.isMatch(candidateType)) {
 			NodeRef employeeRef = approvalListService.getEmployeeForAssignee(candidate);
 			approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
 		}
 	}
 
 	public void grantPermissionsForReviewer(String userName, ActivitiScriptNode bpmPackage) {
-        if (userName == null || bpmPackage == null) {
-            return;
-        }
+		if (userName == null || bpmPackage == null) {
+			return;
+		}
 
-        NodeRef personRef = personService.getPerson(userName);
-        NodeRef employeeRef = orgstructureService.getEmployeeByPerson(personRef);
-        approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
-    }
+		NodeRef personRef = personService.getPerson(userName);
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(personRef);
+		approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
+	}
 
 	/**
-	 * прислать сотруднику уведомление о том, что начато согласование по документу
+	 * прислать сотруднику уведомление о том, что начато согласование по
+	 * документу
+	 *
 	 * @param assigneeRef cm:person согласующий по документу
 	 * @param dueDate индивидуальный срок согласования
-	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех item-ов workflow
+	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех
+	 * item-ов workflow
 	 */
 	public void notifyApprovalStarted(final ActivitiScriptNode assigneeRef, final Date dueDate, final ActivitiScriptNode bpmPackage) {
 		NodeRef candidate = assigneeRef.getNodeRef();
@@ -179,77 +130,85 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		if (ContentModel.TYPE_PERSON.isMatch(candidateType)) {
 			NodeRef employeeRef = orgstructureService.getEmployeeByPerson(candidate);
 			approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
-		} else if (ApprovalListService.TYPE_ASSIGNEES_ITEM.isMatch(candidateType)){
+		} else if (ApprovalListService.TYPE_ASSIGNEES_ITEM.isMatch(candidateType)) {
 			NodeRef employeeRef = approvalListService.getEmployeeForAssignee(candidate);
 			approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
 		}
 	}
 
 	public void notifyCustomApprovalStarted(String userName, Date dueDate, final ActivitiScriptNode bpmPackage) {
-        if (userName == null || bpmPackage == null) {
-            return;
-        }
+		if (userName == null || bpmPackage == null) {
+			return;
+		}
 
-        NodeRef personRef = personService.getPerson(userName);
-        NodeRef employeeRef = orgstructureService.getEmployeeByPerson(personRef);
-        approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
+		NodeRef personRef = personService.getPerson(userName);
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(personRef);
+		approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
 	}
 
 	public void notifyFinalDecision(final String decision, final ActivitiScriptNode bpmPackage) {
 		approvalListService.notifyFinalDecision(decision, bpmPackage.getNodeRef());
 	}
 
-    public void terminateApproval(ActivitiScriptNode bpmPackage, String variable, Object value) {
-        NodeRef document = approvalListService.getDocumentFromBpmPackage(bpmPackage.getNodeRef());
-        ArrayList<String> definitions = new ArrayList<String>();
-        definitions.add("lecmParallelApproval");
-        definitions.add("lecmSequentialApproval");
-        definitions.add("lecmCustomApproval");
-        stateMachineHelper.terminateWorkflowsByDefinitionId(document, definitions, variable, value);
-    }
+	public void terminateApproval(ActivitiScriptNode bpmPackage, String variable, Object value) {
+		NodeRef document = Utils.getDocumentFromBpmPackage(bpmPackage.getNodeRef());
+		ArrayList<String> definitions = new ArrayList<String>();
+		definitions.add("lecmApproval");
+		definitions.add("lecmCustomApproval");
+		stateMachineHelper.terminateWorkflowsByDefinitionId(document, definitions, variable, value);
+	}
 
 	/**
 	 * если до наступления срока согласования остались сутки или меньше,
 	 * то уведомить исполнителей и инициатора согласования о том,
 	 * что необходимо принять решение
+	 *
 	 * @param processInstanceId ИД работающего процесса согласования
 	 */
 	public void notifyDeadlineTasks(final String processInstanceId, final ActivitiScriptNode bpmPackage, final VariableScope variableScope) {
 		approvalListService.notifyAssigneesDeadline(processInstanceId, bpmPackage.getNodeRef());
 		approvalListService.notifyInitiatorDeadline(processInstanceId, bpmPackage.getNodeRef(), variableScope);
 	}
-    public String getExecutorBoss(String executorPersonName) {
-        return approvalListService.getExecutorBoss(executorPersonName);
-    }
 
-    public String getUnitBoss(String unitCode) {
-        NodeRef unitBossRef = orgstructureService.getUnitBoss(unitCode);
-        return orgstructureService.getEmployeeLogin(unitBossRef);
-    }
+	public String getExecutorBoss(String executorPersonName) {
+		return Utils.getExecutorBoss(executorPersonName);
+	}
 
-    public String getFirstCurator() {
-        List<NodeRef> curators = approvalListService.getCurators();
-        if (curators == null || curators.size() == 0) {
-            return null;
-        }
+	public String getUnitBoss(String unitCode) {
+		NodeRef unitBossRef = orgstructureService.getUnitBoss(unitCode);
+		return orgstructureService.getEmployeeLogin(unitBossRef);
+	}
 
-        NodeRef firstCuratorEmployee = curators.get(0);
-        return orgstructureService.getEmployeeLogin(firstCuratorEmployee);
-    }
+	public String getFirstCurator() {
+		List<NodeRef> curators = Utils.getCurators();
+		if (curators == null || curators.isEmpty()) {
+			return null;
+		}
 
-    public Collection<String> getDivisionBosses(String divisionCodesStr) {
-        if (divisionCodesStr == null) {
-            return null;
-        }
+		NodeRef firstCuratorEmployee = curators.get(0);
+		return orgstructureService.getEmployeeLogin(firstCuratorEmployee);
+	}
 
-        String[] divisionCodes = divisionCodesStr.split(",");
-        Collection<String> result = new ArrayList<String>();
-        for (String divisionCode : divisionCodes) {
-            String divisionBoss = getUnitBoss(divisionCode);
-            result.add(divisionBoss);
-        }
+	public Collection<String> getDivisionBosses(String divisionCodesStr) {
+		if (divisionCodesStr == null) {
+			return null;
+		}
 
-        return result;
-    }
+		String[] divisionCodes = divisionCodesStr.split(",");
+		Collection<String> result = new ArrayList<String>();
+		for (String divisionCode : divisionCodes) {
+			String divisionBoss = getUnitBoss(divisionCode);
+			result.add(divisionBoss);
+		}
 
+		return result;
+	}
+
+	public void assignTask(ActivitiScriptNode assignee, DelegateTask task) {
+		approvalListService.assignTask(assignee.getNodeRef(), task);
+	}
+
+	public void completeTask(ActivitiScriptNode assignee, DelegateTask task) {
+		approvalListService.completeTask(assignee.getNodeRef(), task);
+	}
 }

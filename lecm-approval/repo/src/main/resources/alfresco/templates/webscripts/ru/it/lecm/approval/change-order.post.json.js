@@ -1,1 +1,1 @@
-model.success = approvalService.changeOrder(json);
+model.result = approvalService.changeOrder(json);

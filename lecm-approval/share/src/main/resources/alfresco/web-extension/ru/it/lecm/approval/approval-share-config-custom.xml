@@ -5,170 +5,104 @@
 			<dependencies>
 				<js src="/scripts/lecm-approval/activiti-transitions-radiobuttons.js"/>
 				<js src="/scripts/lecm-approval/approval-validators.js"/>
-                <css src="/css/lecm-approval/sequential-approval-form.css"/>
+				<css src="/css/lecm-approval/sequential-approval-form.css"/>
 			</dependencies>
 		</forms>
 	</config>
 
-    <config evaluator="model-type" condition="lecm-al:assignees-list">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:name"/>                                                                                <!-- Название списка согласующих -->
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="model-type" condition="lecm-orgstr:employees">
-        <forms>
-            <form id="reassign-override-form">
-                <field-visibility>
-                    <show id="cm:contains" force="true"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:contains">
-                        <!--<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">-->
-                            <!--<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>-->
-                            <!--<control-param name="showCreateNewButton">false</control-param>-->
-                            <!--<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>-->
-                        <!--</control>-->
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="autoCompleteJsName">employeesAssocAutoComplete</control-param>
-                            <control-param name="treeViewJsName">employeesAssocTreeView</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
-    <!-- Элемент списка согласования: создание и таблица -->
-    <config evaluator="model-type" condition="lecm-al:assignees-item">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-al:assignees-item-due-date"/>                                                        <!-- Срок согласования -->
-                    <show id="lecm-al:assignees-item-employee-assoc"/>                                                  <!-- Ссылка на "Сотрудника" -->
-                </field-visibility>
-            </form>
-            <form id="datagrid">
-                <field-visibility>
-                    <show id="lecm-al:assignees-item-order"/>                                                           <!-- Порядковый номер элемента -->
-                    <show id="lecm-al:assignees-item-due-date"/>                                                        <!-- Срок согласования -->
-                    <show id="lecm-al:assignees-item-employee-assoc"/>                                                  <!-- Ссылка на "Сотрудника" -->
-                </field-visibility>
-                <appearance>
-                    <field id="lecm-al:assignees-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
-                </appearance>
-            </form>
-            <form id="assignees-list-name">
-                <field-visibility>
-                    <show id="lecm-al:fake-assignees-list-name" force="true"/>
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
-    <!-- Элемент списка согласования: редактирование -->
-    <config evaluator="node-type" condition="lecm-al:assignees-item">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecm-al:assignees-item-due-date"/>                                                        <!-- Срок согласования -->
-                    <show id="lecm-al:assignees-item-employee-assoc"/>                                                  <!-- Ссылка на "Сотрудника" -->
-                </field-visibility>
-            </form>
-        </forms>
-    </config>
-
-    <config evaluator="string-compare" condition="activiti$lecmParallelApproval">
+	<config evaluator="model-type" condition="lecm-al:assignees-list">
 		<forms>
 			<form>
-                <create-form template="/ru/it/lecm/approval/form/approval-parallel-list-form.ftl" />
 				<field-visibility>
-					<show id="bpm:workflowDueDate"/>
-					<show id="lecmPar:employeesAssoc"/>
-					<show id="packageItems"/>
-					<show id="bpm:workflowDescription" />
+					<!-- Название списка согласующих -->
+					<show id="cm:name"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-orgstr:employees">
+		<forms>
+			<form id="reassign-override-form">
+				<field-visibility>
+					<show id="cm:contains" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="bpm:workflowDescription" labelid="workflow.field.message">
-						<control template="/ru/it/lecm/approval/controls/document-present-string-hidden.ftl"/>
-					</field>
-
-					<field id="bpm:workflowDueDate" mandatory="true">
-						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.noPastDates" event="blur"/>
-						</constraint-handlers>
-						<control template="/org/alfresco/components/form/controls/date.ftl"/>
-					</field>
-
-					<field id="lecmPar:employeesAssoc">
+					<field id="cm:contains">
+						<!--<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">-->
+						<!--<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>-->
+						<!--<control-param name="showCreateNewButton">false</control-param>-->
+						<!--<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>-->
+						<!--</control>-->
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
-                            <control-param name="autoCompleteJsName">employeesAssocAutoComplete</control-param>
-                            <control-param name="treeViewJsName">employeesAssocTreeView</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="autoCompleteJsName">employeesAssocAutoComplete</control-param>
+							<control-param name="treeViewJsName">employeesAssocTreeView</control-param>
 						</control>
-					</field>
-
-					<field id="packageItems">
-						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
 					</field>
 				</appearance>
 			</form>
 		</forms>
 	</config>
 
-	<config evaluator="task-type" condition="lecmPar:approveTask">
+	<!-- Элемент списка согласования: создание и таблица -->
+	<config evaluator="model-type" condition="lecm-al:assignees-item">
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecmPar:presentString"/>
-					<show id="bpm:dueDate" />
-					<show id="lecmPar:approveTaskResult" />
-					<show id="bpm:comment" />
-					<show id="lecmPar:approveTaskCommentAssoc" />
-					<show id="reassignScriptField" force="true" />
+					<!-- Срок согласования -->
+					<show id="lecm-al:assignees-item-due-date"/>
+					<!-- Ссылка на "Сотрудника" -->
+					<show id="lecm-al:assignees-item-employee-assoc"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<!-- Порядковый номер элемента -->
+					<show id="lecm-al:assignees-item-order"/>
+					<!-- Срок согласования -->
+					<show id="lecm-al:assignees-item-due-date"/>
+					<!-- Ссылка на "Сотрудника" -->
+					<show id="lecm-al:assignees-item-employee-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecmPar:presentString">
-						<control template="/ru/it/lecm/approval/controls/document-present-string.ftl" />
-					</field>
-					<field id="bpm:dueDate" label-id="workflow.field.due">
-						<control template="/org/alfresco/components/form/controls/info.ftl" />
-					</field>
-					<field id="lecmPar:approveTaskResult">
-						<control template="/ru/it/lecm/approval/controls/activiti-transitions-radiobuttons.ftl" />
-					</field>
-					<field id="lecmPar:approveTaskCommentAssoc">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
-							<control-param name="uploadDirectoryPath">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
-						</control>
-					</field>
-                    <field id="reassignScriptField">
-                        <control template="/ru/it/lecm/approval/controls/reassign-override-script-field.ftl" />
-                    </field>
+					<field id="lecm-al:assignees-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
 				</appearance>
+			</form>
+			<form id="assignees-list-name">
+				<field-visibility>
+					<show id="lecm-al:fake-assignees-list-name" force="true"/>
+				</field-visibility>
 			</form>
 		</forms>
 	</config>
 
-	<config evaluator="string-compare" condition="activiti$lecmSequentialApproval">
+	<!-- Элемент списка согласования: редактирование -->
+	<config evaluator="node-type" condition="lecm-al:assignees-item">
 		<forms>
 			<form>
-                <create-form template="/ru/it/lecm/approval/form/approval-sequential-list-form.ftl" />
+				<field-visibility>
+					<!-- Срок согласования -->
+					<show id="lecm-al:assignees-item-due-date"/>
+					<!-- Ссылка на "Сотрудника" -->
+					<show id="lecm-al:assignees-item-employee-assoc"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="string-compare" condition="activiti$lecmApproval">
+		<forms>
+			<form>
+				<create-form template="/ru/it/lecm/approval/form/approval-sequential-list-form.ftl" />
 				<field-visibility>
 					<show id="bpm:workflowDueDate"/>
 					<show id="packageItems"/>
 					<show id="bpm:workflowDescription" />
+					<show id="lecmApprove:approvalType"/>
 				</field-visibility>
 				<appearance>
 					<field id="bpm:workflowDescription" labelid="workflow.field.message">
@@ -190,41 +124,41 @@
 		</forms>
 	</config>
 
-	<config evaluator="task-type" condition="lecmSeq:approveTask">
+	<config evaluator="task-type" condition="lecmApprove:approveTask">
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecmSeq:presentString"/>
+					<show id="lecmApprove:presentString"/>
 					<show id="bpm:dueDate" />
-					<show id="lecmSeq:approveTaskResult" />
+					<show id="lecmApprove:approveTaskResult" />
 					<show id="bpm:comment" />
-					<show id="lecmSeq:approveTaskCommentAssoc" />
-                    <show id="reassignScriptField" force="true" />
+					<show id="lecmApprove:approveTaskCommentAssoc" />
+					<show id="reassignScriptField" force="true" />
 				</field-visibility>
 				<appearance>
-					<field id="lecmSeq:presentString">
+					<field id="lecmApprove:presentString">
 						<control template="/ru/it/lecm/approval/controls/document-present-string.ftl" />
 					</field>
 					<field id="bpm:dueDate" label-id="workflow.field.due">
 						<control template="/org/alfresco/components/form/controls/info.ftl" />
 					</field>
-					<field id="lecmSeq:approveTaskResult">
+					<field id="lecmApprove:approveTaskResult">
 						<control template="/ru/it/lecm/approval/controls/activiti-transitions-radiobuttons.ftl" />
 					</field>
-					<field id="lecmSeq:approveTaskCommentAssoc">
+					<field id="lecmApprove:approveTaskCommentAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
 							<control-param name="uploadDirectoryPath">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
 						</control>
 					</field>
-                    <field id="reassignScriptField">
-                        <control template="/ru/it/lecm/approval/controls/reassign-override-script-field.ftl" />
-                    </field>
+					<field id="reassignScriptField">
+						<control template="/ru/it/lecm/approval/controls/reassign-override-script-field.ftl" />
+					</field>
 				</appearance>
 			</form>
 		</forms>
 	</config>
 
-	<config evaluator="task-type" condition="lecmPar:parallelApproval">
+	<config evaluator="task-type" condition="lecmApprove:approval">
 		<forms>
 			<form id="workflow-details">
 				<field-visibility>
@@ -240,23 +174,6 @@
 			</form>
 		</forms>
 	</config>
-
-    <config evaluator="task-type" condition="lecmSeq:sequentialApproval">
-        <forms>
-            <form id="workflow-details">
-                <field-visibility>
-                    <show id="packageItems"/>
-                </field-visibility>
-                <appearance>
-                    <field id="packageItems">
-                        <control template="/ru/it/lecm/approval/controls/package-items-with-approval-list-control.ftl">
-                            <control-param name="nameSubstituteString">{lecm-document:present-string}</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
 
 	<config evaluator="node-type" condition="lecm-al:approval-list">
 		<forms>
@@ -294,7 +211,7 @@
 					<show id="lecm-al:approval-item-comment-assoc"/>
 				</field-visibility>
 				<appearance>
-                    <field id="lecm-al:approval-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
+					<field id="lecm-al:approval-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
 					<field id="lecm-al:approval-item-employee-unit" substituteString="{lecm-al:approval-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}"/>
 					<field id="lecm-al:approval-item-employee-position" substituteString="{lecm-al:approval-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
 					<field id="lecm-al:approval-item-comment-assoc" label-id="field.comment.file"/>
@@ -354,72 +271,72 @@
 	</config>
 
 
-    <config evaluator="string-compare" condition="activiti$lecmCustomApproval">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="warning"/>
-                    <show id="packageItems"/>
-                </field-visibility>
-                <appearance>
-                    <field id="warning">
-                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
-                            <control-param name="msg">ru.it.approval.custom</control-param>
-                        </control>
-                    </field>
-                    <field id="packageItems">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
+	<config evaluator="string-compare" condition="activiti$lecmCustomApproval">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="warning"/>
+					<show id="packageItems"/>
+				</field-visibility>
+				<appearance>
+					<field id="warning">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">ru.it.approval.custom</control-param>
+						</control>
+					</field>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 
-    <config evaluator="task-type" condition="lecmCustom:approveTask">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecmCustom:presentString"/>
-                    <show id="bpm:dueDate" />
-                    <show id="lecmCustom:approveTaskResult" />
-                    <show id="bpm:comment" />
-                    <show id="lecmCustom:approveTaskCommentAssoc" />
-                </field-visibility>
-                <appearance>
-                    <field id="lecmCustom:presentString">
-                        <control template="/ru/it/lecm/approval/controls/document-present-string.ftl" />
-                    </field>
-                    <field id="bpm:dueDate" label-id="workflow.field.due">
-                        <control template="/org/alfresco/components/form/controls/info.ftl" />
-                    </field>
-                    <field id="lecmCustom:approveTaskResult">
-                        <control template="/ru/it/lecm/approval/controls/activiti-transitions-radiobuttons.ftl" />
-                    </field>
-                    <field id="lecmCustom:approveTaskCommentAssoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
+	<config evaluator="task-type" condition="lecmCustom:approveTask">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecmCustom:presentString"/>
+					<show id="bpm:dueDate" />
+					<show id="lecmCustom:approveTaskResult" />
+					<show id="bpm:comment" />
+					<show id="lecmCustom:approveTaskCommentAssoc" />
+				</field-visibility>
+				<appearance>
+					<field id="lecmCustom:presentString">
+						<control template="/ru/it/lecm/approval/controls/document-present-string.ftl" />
+					</field>
+					<field id="bpm:dueDate" label-id="workflow.field.due">
+						<control template="/org/alfresco/components/form/controls/info.ftl" />
+					</field>
+					<field id="lecmCustom:approveTaskResult">
+						<control template="/ru/it/lecm/approval/controls/activiti-transitions-radiobuttons.ftl" />
+					</field>
+					<field id="lecmCustom:approveTaskCommentAssoc">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
+							<control-param name="uploadDirectoryPath">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 
-    <config evaluator="task-type" condition="lecmCustom:customApproval">
-        <forms>
-            <form id="workflow-details">
-                <field-visibility>
-                    <show id="packageItems"/>
-                </field-visibility>
-                <appearance>
-                    <field id="packageItems">
-                        <control template="/ru/it/lecm/approval/controls/package-items-with-approval-list-control.ftl">
-                            <control-param name="nameSubstituteString">{lecm-document:present-string}</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
+	<config evaluator="task-type" condition="lecmCustom:customApproval">
+		<forms>
+			<form id="workflow-details">
+				<field-visibility>
+					<show id="packageItems"/>
+				</field-visibility>
+				<appearance>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/approval/controls/package-items-with-approval-list-control.ftl">
+							<control-param name="nameSubstituteString">{lecm-document:present-string}</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 
 </alfresco-config>
