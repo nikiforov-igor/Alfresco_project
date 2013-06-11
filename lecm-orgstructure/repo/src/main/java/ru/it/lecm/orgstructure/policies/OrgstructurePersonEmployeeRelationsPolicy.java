@@ -1,9 +1,5 @@
 package ru.it.lecm.orgstructure.policies;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
@@ -18,6 +14,11 @@ import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Полиси, которые регулируют отношения между lecm-orgstr:employee (сотрудником)
@@ -71,10 +72,6 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				ContentModel.TYPE_PERSON, ContentModel.ASSOC_AVATAR,
 				new JavaBehaviour(this, "onCreatePersonAvatarAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				ContentModel.TYPE_PERSON, ContentModel.ASSOC_AVATAR,
-				new JavaBehaviour(this, "onDeletePersonAvatarAssociation"));
-
 
 //		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
 //				ContentModel.TYPE_PERSON, new JavaBehaviour(this, "onDeletePersonNode"));
@@ -265,28 +262,6 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 				}
 			} finally {
 				behaviourFilter.enableBehaviour(employee);
-			}
-		}
-	}
-
-	/**
-	 * Удален аватар пользователя. Удалить и фотографию сотрудника.
-	 * NB! Полиси пока не влючена, так как из-за зацикливания
-	 * onCreatePersonAvatarAssociation и onCreateEmployeePhotoAssociation
-	 * принято решение синхронизировать фотографию итолько от сотрудника к
-	 * пользователю.
-	 */
-	public void onDeletePersonAvatarAssociation(AssociationRef nodeAssocRef) {
-		final NodeRef person = nodeAssocRef.getSourceRef();
-		final NodeRef employee = orgstructureService.getEmployeeByPerson(person);
-		// есть сотрудник не привязан, то все тщетно
-		if (employee != null) {
-			// получить фото
-			final NodeRef employeePhoto = orgstructureService.getEmployeePhoto(employee);
-			// если оно существует...
-			if (employeePhoto != null) {
-				// то удалить его
-				nodeService.removeAssociation(employee, employeePhoto, OrgstructureBean.ASSOC_EMPLOYEE_PHOTO);
 			}
 		}
 	}

@@ -2271,3 +2271,40 @@ span.person a h3 {
     margin-right: 10px;
 }
 
+.thumbnail-view {
+    position: absolute;
+    right: 50px;
+    text-align: right;
+    top: 60px;
+}
+
+.thumbnail-view-text {
+    border: 2px solid #acacac;
+    display: block;
+    padding: 20px 0;
+    text-align: center;
+    white-space: normal;
+    width: 80px;
+    top:60px;
+    position: absolute;
+    right: 50px;
+
+}
+.thumbnail-edit {
+    position: absolute;
+    right: 15px;
+    text-align: right;
+    top: 40px;
+}
+
+.thumbnail-edit-text {
+    border: 2px solid #acacac;
+    display: block;
+    padding: 20px 0;
+    text-align: center;
+    white-space: normal;
+    width: 80px;
+    top:40px;
+    position: absolute;
+    right: 5px;
+}
