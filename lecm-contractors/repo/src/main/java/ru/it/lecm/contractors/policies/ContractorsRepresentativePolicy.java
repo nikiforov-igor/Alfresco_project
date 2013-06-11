@@ -9,6 +9,8 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 
+import java.io.Serializable;
+
 /**
  * @author dgonchar
  */
@@ -42,7 +44,11 @@ public class ContractorsRepresentativePolicy implements NodeServicePolicies.OnUp
 
         String surname = nodeService.getProperty(representative, QName.createQName("http://www.it.ru/lecm/contractors/model/representative/1.0", "surname")).toString();
         String firstname = nodeService.getProperty(representative, QName.createQName("http://www.it.ru/lecm/contractors/model/representative/1.0", "firstname")).toString();
-        String middlename = nodeService.getProperty(representative, QName.createQName("http://www.it.ru/lecm/contractors/model/representative/1.0", "middlename")).toString();
+        Serializable propMiddlename = nodeService.getProperty(representative, QName.createQName("http://www.it.ru/lecm/contractors/model/representative/1.0", "middlename"));
+        String middlename = "";
+        if (propMiddlename != null) {
+            middlename = propMiddlename.toString();
+        }
 
         String fullname = String.format("%s %s %s", surname, firstname, middlename); // "Иванов Иван Иванович"
         fullname = fullname.trim().replaceAll("[^_\\-\\dA-Za-zА-Яа-я ]", "");
