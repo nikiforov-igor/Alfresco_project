@@ -1256,16 +1256,21 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				}
 
                 if (searchConfig) { // Поиск через SOLR
-                    searchConfig.formData = {
-                        datatype:this.datagridMeta.itemType
-                    };
+                    if (searchConfig.formData) {
+                        searchConfig.formData.datatype = this.datagridMeta.itemType;
+                    } else {
+                        searchConfig.formData = {
+                            datatype: this.datagridMeta.itemType
+                        };
+                    }
                     //при первом поиске сохраняем настройки
-                    if (this.initialSearchConfig == null){
-                        this.initialSearchConfig = {fullTextSearch:null};
+                    if (this.initialSearchConfig == null) {
+                        this.initialSearchConfig = {fullTextSearch: null};
                         this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
                     }
 
                     this.search.performSearch({
+                        parent: this.datagridMeta.nodeRef,
                         searchConfig:searchConfig,
                         searchShowInactive: searchShowInactive,
                         sort:sort
@@ -1853,41 +1858,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             _updateDataGrid: function DataGrid__updateDataGrid(p_obj)
             {
-                p_obj = p_obj || {};
-                Alfresco.logger.debug("DataGrid__updateDataGrid: ", p_obj.filter);
-                var loadingMessage = null,
-                    timerShowLoadingMessage = null,
-                    me = this;
-
                 var successFilter = YAHOO.lang.merge({}, p_obj.filter ? p_obj.filter : this.currentFilter);
-
-                // Clear the current document list if the data webscript is taking too long
-                var fnShowLoadingMessage = function DataGrid_fnShowLoadingMessage()
-                {
-                    Alfresco.logger.debug("DataGrid__uDG_fnShowLoadingMessage: slow data webscript detected.");
-                    // Check the timer still exists. This is to prevent IE firing the event after we cancelled it. Which is "useful".
-                    if (timerShowLoadingMessage)
-                    {
-                        loadingMessage = Alfresco.util.PopupManager.displayMessage(
-                            {
-                                displayTime: 0,
-                                text: '<span class="wait">' + $html(this.msg("message.loading")) + '</span>',
-                                noEscape: true
-                            });
-
-                        if (YAHOO.env.ua.ie > 0)
-                        {
-                            this.loadingMessageShowing = true;
-                        }
-                        else
-                        {
-                            loadingMessage.showEvent.subscribe(function()
-                            {
-                                this.loadingMessageShowing = true;
-                            }, this, true);
-                        }
-                    }
-                };
 
                 // Reset the custom error messages
                 this._setDefaultDataTableErrors(this.widgets.dataTable);
@@ -1895,85 +1866,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // More Actions menu no longer relevant
                 this.showingMoreActions = false;
 
-                // Slow data webscript message
-                this.loadingMessageShowing = false;
-                timerShowLoadingMessage = YAHOO.lang.later(this.options.loadingMessageDelay, this, fnShowLoadingMessage);
-
-                var destroyLoaderMessage = function DataGrid__uDG_destroyLoaderMessage()
-                {
-                    if (timerShowLoadingMessage)
-                    {
-                        // Stop the "slow loading" timed function
-                        timerShowLoadingMessage.cancel();
-                        timerShowLoadingMessage = null;
-                    }
-
-                    if (loadingMessage)
-                    {
-                        if (this.loadingMessageShowing)
-                        {
-                            // Safe to destroy
-                            loadingMessage.destroy();
-                            loadingMessage = null;
-                        }
-                        else
-                        {
-                            // Wait and try again later. Scope doesn't get set correctly with "this"
-                            YAHOO.lang.later(100, me, destroyLoaderMessage);
-                        }
-                    }
-                };
-
-                var successHandler = function DataGrid__uDG_successHandler(sRequest, oResponse, oPayload)
-                {
-                    destroyLoaderMessage();
-                    this.currentFilter = successFilter;
-                    // Updating the DotaGrid may change the item selection
-                    var fnAfterUpdate = function DataGrid__uDG_sH_fnAfterUpdate()
-                    {
-                        Bubbling.fire("selectedFilesChanged");
-                    };
-                    this.afterDataGridUpdate.push(fnAfterUpdate);
-                    this.widgets.dataTable.onDataReturnReplaceRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
-                };
-
-                var failureHandler = function DataGrid__uDG_failureHandler(sRequest, oResponse)
-                {
-                    destroyLoaderMessage();
-                    // Clear out deferred functions
-                    this.afterDataGridUpdate = [];
-
-                    if (oResponse.status == 401)
-                    {
-                        // Our session has likely timed-out, so refresh to offer the login page
-                        window.location.reload(true);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-                            this.widgets.dataTable.set("MSG_ERROR", response.message);
-                            this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-                            if (oResponse.status == 404)
-                            {
-                                // Site or container not found - deactivate controls
-                                Bubbling.fire("deactivateAllControls");
-                            }
-                        }
-                        catch(e)
-                        {
-                            this._setDefaultDataTableErrors(this.widgets.dataTable);
-                        }
-                    }
-                };
-
                 var searchConfig = this.datagridMeta.searchConfig;
-                var sort = this.datagridMeta.sort;
                 if (searchConfig) { // Поиск через SOLR
-                    searchConfig.formData = {
-                        datatype:this.datagridMeta.itemType
-                    };
+                    if (searchConfig.formData) {
+                        searchConfig.formData.datatype = this.datagridMeta.itemType;
+                    } else {
+                        searchConfig.formData = {
+                            datatype:this.datagridMeta.itemType
+                        };
+                    }
                 }
                 // Update the DataSource
                 var offset = 0;
@@ -1981,13 +1882,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     offset = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
                 }
 
-                var requestParams = this.search.buildSearchParams(this.datagridMeta.nodeRef, this.datagridMeta.itemType, sort, searchConfig, this.dataRequestFields.join(","), this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, offset, successFilter);
-                this.widgets.dataSource.sendRequest(YAHOO.lang.JSON.stringify(requestParams),
-                    {
-                        success:successHandler,
-                        failure:failureHandler,
-                        scope:this
-                    });
+                this.search.performSearch({
+                    searchConfig: this.datagridMeta.searchConfig,
+                    searchShowInactive: this.options.searchShowInactive,
+                    parent: this.datagridMeta.nodeRef,
+                    itemType: this.datagridMeta.itemType,
+                    sort:this.datagridMeta.sort,
+                    offset:offset,
+                    filter: successFilter
+                });
             },
 
             /**
@@ -2006,7 +1909,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     reqFields.push(columnName);
                     reqNameSubstituteStrings.push(column.nameSubstituteString);
                 }
-                var fields = reqFields.join(",");
                 var nameSubstituteStrings = reqNameSubstituteStrings.join(",");
                 return {
                     fields: this.dataRequestFields,
@@ -2040,6 +1942,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 return null;
             },
 
+            /**
+             * @return {boolean}
+             */
             _hasEventInterest: function DataGrid_hasEventInterest(bubbleLabel){
                 if (!this.options.bubblingLabel || !bubbleLabel) {
                     return true;

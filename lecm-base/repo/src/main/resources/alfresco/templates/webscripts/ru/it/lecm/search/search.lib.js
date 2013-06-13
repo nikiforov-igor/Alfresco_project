@@ -295,11 +295,7 @@ function getSearchResults(params) {
                 }
                 if (fieldsQuery.length > 5) {
                     fieldsQuery = fieldsQuery.substring(0, fieldsQuery.length - 4);
-                    if (searchConfig.filter.indexOf('PATH') == -1) {
-                        fullTextSearchQuery += " AND (" + fieldsQuery + ")";
-                    } else {
-                        fullTextSearchQuery += " (" + fieldsQuery + ")";
-                    }
+                    fullTextSearchQuery += (fullTextSearchQuery.length > 0 ? " AND " : "") + " (" + fieldsQuery + ")";
                 }
             }
         }

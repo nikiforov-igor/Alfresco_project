@@ -225,18 +225,26 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             this.tree.onEventToggleHighlight(node);
             var me = this;
             // Отрисовка датагрида если указан ItemType
-            if(this.options.itemType) {
+            if (this.options.itemType) {
+                var meta = this.modules.dataGrid.datagridMeta;
+                meta.itemType = me.options.itemType;
+                meta.nodeRef = node.data.nodeRef;
+                meta.actionsConfig = {// настройки экшенов. (необязателен)
+                    fullDelete: me.options.fullDelete // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
+                };
+                if (meta.searchConfig) {
+                    if (meta.searchConfig.fullTextSearch) {
+                        if (typeof meta.searchConfig.fullTextSearch == "string") {
+                            meta.searchConfig.fullTextSearch = YAHOO.lang.JSON.parse(meta.searchConfig.fullTextSearch);
+                        }
+                        meta.searchConfig.fullTextSearch.parentNodeRef = node.data.nodeRef;
+                    }
+                }
                 Bubbling.fire("activeGridChanged",
                     {
-                        datagridMeta:{
-                            itemType:me.options.itemType, // тип объектов, которые будут рисоваться в гриде (обязателен)
-                            nodeRef:node.data.nodeRef, // ссылка на текущую(корневую) ноды (необязателен)
-                            actionsConfig: {// настройки экшенов. (необязателен)
-                                fullDelete:me.options.fullDelete // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
-                            }
-                        }
+                        datagridMeta: meta
                     });
-            };
+            }
 
             if (node.data.type == "lecm-orgstr:organization-unit") {
                 if (LogicECM.module.OrgStructure.IS_ENGINEER) {

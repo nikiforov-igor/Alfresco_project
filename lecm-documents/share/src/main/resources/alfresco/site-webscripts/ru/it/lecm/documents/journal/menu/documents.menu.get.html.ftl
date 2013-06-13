@@ -4,7 +4,7 @@
 <#list filtersSet as filter>
     <div id="${filter.type}" class="journal-filter">
         <#list filter.cases as case>
-            <span id="${filter.type}-${case.id}" title=${msg("button.close")}"${case.label}" style="display:none"><#if case.value??>${case.value}</#if></span>
+            <span id="${filter.type}-${case.id}" title="${case.label}" style="display:none"><#if case.value??>${case.value}</#if></span>
         </#list>
     </div>
     <#if filter.label??>

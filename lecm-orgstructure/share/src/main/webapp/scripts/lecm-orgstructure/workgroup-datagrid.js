@@ -211,20 +211,37 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
 
             var searchConfig = this.datagridMeta.searchConfig;
             var sort = this.datagridMeta.sort;
+            var searchShowInactive;
+            if (this.datagridMeta.hasOwnProperty ("searchShowInactive")) {
+                searchShowInactive = this.datagridMeta.searchShowInactive;
+            } else {
+                searchShowInactive = this.options.searchShowInactive;
+            }
             if (searchConfig) { // Поиск через SOLR
-                searchConfig.formData = {
-                    datatype: this.datagridMeta.itemType
-                };
+                if (searchConfig.formData) {
+                    searchConfig.formData.datatype = this.datagridMeta.itemType;
+                } else {
+                    searchConfig.formData = {
+                        datatype: this.datagridMeta.itemType
+                    };
+                }
+                //при первом поиске сохраняем настройки
+                if (this.initialSearchConfig == null) {
+                    this.initialSearchConfig = {fullTextSearch: null};
+                    this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
+                }
+
                 this.search.performSearch({
-                    searchConfig: searchConfig,
-                    searchShowInactive: false,
+                    parent: this.datagridMeta.nodeRef,
+                    searchConfig:searchConfig,
+                    searchShowInactive: searchShowInactive,
                     sort:sort
                 });
             } else { // Поиск без использования SOLR
                 this.search.performSearch({
                     parent: this.datagridMeta.nodeRef,
                     itemType: this.datagridMeta.itemType,
-                    searchShowInactive: false,
+                    searchShowInactive: searchShowInactive,
                     sort:sort
                 });
             }

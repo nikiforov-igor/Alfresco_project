@@ -88,6 +88,7 @@
 	        </default-controls>
 
             <dependencies>
+                <js src="/scripts/lecm-base/components/lecm-toolbar.js" />
                 <css src="/css/lecm-base/components/object-finder/lecm-object-finder.css" />
                 <js src="/scripts/lecm-base/components/object-finder/lecm-object-finder.js" />
                 <js src="/scripts/lecm-base/components/lecm-association-selectone.js" />

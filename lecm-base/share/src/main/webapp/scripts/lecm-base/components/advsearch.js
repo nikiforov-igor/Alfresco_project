@@ -125,19 +125,37 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 if (this.searchDialog != null) {
 	                                if (isClearSearch) {
                                         //сбрасываем на значение по умолчанию
-                                        if (this.dataGrid.initialSearchConfig != null) {
-                                            this.dataGrid.datagridMeta.searchConfig = YAHOO.lang.merge({}, this.dataGrid.initialSearchConfig);
-                                        } else {
-                                            this.dataGrid.datagridMeta.searchConfig = null;
+                                        if (this.dataGrid.datagridMeta.searchConfig) {
+                                            // сбрасываем данные формы
+                                            this.dataGrid.datagridMeta.searchConfig.formData = {
+                                                datatype:this.dataGrid.datagridMeta.itemType
+                                            };
+
+                                            // если у нас не задан терм поиска, значит делаем полный сброс полнотекстового поиска
+                                            if (this.dataGrid.datagridMeta.searchConfig.fullTextSearch) {
+                                                if(typeof this.dataGrid.datagridMeta.searchConfig.fullTextSearch == "string") {
+                                                    this.dataGrid.datagridMeta.searchConfig.fullTextSearch =
+                                                        YAHOO.lang.JSON.parse(this.dataGrid.datagridMeta.searchConfig.fullTextSearch);
+                                                }
+                                                if (!this.dataGrid.datagridMeta.searchConfig.fullTextSearch.searchTerm ||
+                                                    this.dataGrid.datagridMeta.searchConfig.fullTextSearch.searchTerm.length <= 0) {
+                                                    this.dataGrid.datagridMeta.searchConfig.fullTextSearch = null;
+                                                }
+                                            }
+
+                                            this.performSearch({
+                                                parent:this.dataGrid.datagridMeta.nodeRef,
+                                                sort:this.dataGrid.datagridMeta.sort,
+                                                itemType:this.dataGrid.datagridMeta.itemType,
+                                                searchConfig:this.dataGrid.datagridMeta.searchConfig,
+                                                searchShowInactive:this.dataGrid.options.searchShowInactive
+                                            });
+
                                         }
-                                        //this.searchDialog.hide();
-                                        this.performSearch({
-                                            parent:this.dataGrid.datagridMeta.nodeRef,
-                                            itemType:this.dataGrid.datagridMeta.itemType,
-                                            searchConfig:this.dataGrid.datagridMeta.searchConfig,
-                                            searchShowInactive:this.dataGrid.options.searchShowInactive
-                                        });
-	                                } else {
+                                        if (!this.dataGrid.datagridMeta.searchConfig || !this.dataGrid.datagridMeta.searchConfig.fullTextSearch) {
+                                            YAHOO.Bubbling.fire("hideFilteredLabel");
+                                        }
+                                    } else {
 		                                this.searchDialog.show();
 	                                }
                                 }
@@ -180,7 +198,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         sConfig = {};
                     }
                     sConfig.formData = formData; // запрос
-                    sConfig.fullTextSearch = fullTextSearch;
+                    if (sConfig.fullTextSearch) {
+                        if (typeof sConfig.fullTextSearch == "string"){
+                            sConfig.fullTextSearch = YAHOO.lang.JSON.parse(sConfig.fullTextSearch);
+                        }
+                    } else {
+                        sConfig.fullTextSearch = {};
+                    }
+                    sConfig.fullTextSearch = YAHOO.lang.merge(sConfig.fullTextSearch, fullTextSearch);
+
+                    me.dataGrid.datagridMeta.searchConfig = sConfig;
+
                     this.performSearch(
                         {
                             searchConfig:sConfig,
@@ -205,7 +233,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	         */
 	        onClearSearchClick:function ADVSearch_onSearchClick(e, obj) {
 		        this.renderFormTemplate(this.currentForm, true, e, obj);
-		        YAHOO.Bubbling.fire("hideFilteredLabel");
 	        },
 
             /**
@@ -217,7 +244,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     searchShowInactive = args.searchShowInactive,
                     parent = args.parent,
                     itemType = args.itemType,
-                    sort = args.sort;
+                    sort = args.sort,
+                    offset = args.offset ? args.offset : -1;
                 // дополнительный фильтр из адресной строки (или параметров)
                 var successFilter = args.filter;
                 if (!successFilter) {
@@ -362,7 +390,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this.buildSearchParams(parent, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, -1, successFilter);
+                var searchParams = this.buildSearchParams(parent, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, offset, successFilter);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,

@@ -155,28 +155,38 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 				showExtendSearchBlock: this.options.showExtendSearchBlock
 			});
 
-			var searchConfig = this.datagridMeta.searchConfig;
-			var sort = this.datagridMeta.sort;
-			if (searchConfig) { // Поиск через SOLR
-				if (searchConfig.parent == null || searchConfig.parent.length == 0) {
-					searchConfig.parent = this.datagridMeta.nodeRef;
-				}
-				searchConfig.formData = {
-					datatype: this.datagridMeta.itemType
-				};
-				this.search.performSearch({
-					searchConfig: searchConfig,
-					searchShowInactive: false,
-					sort: sort
-				});
-			} else { // Поиск без использования SOLR
-				this.search.performSearch({
-					parent: this.datagridMeta.nodeRef,
-					itemType: this.datagridMeta.itemType,
-					searchShowInactive: false,
-					sort: sort
-				});
-			}
+            var searchConfig = this.datagridMeta.searchConfig;
+            var sort = this.datagridMeta.sort;
+            var searchShowInactive = false;
+
+            if (searchConfig) { // Поиск через SOLR
+                if (searchConfig.formData) {
+                    searchConfig.formData.datatype = this.datagridMeta.itemType;
+                } else {
+                    searchConfig.formData = {
+                        datatype: this.datagridMeta.itemType
+                    };
+                }
+                //при первом поиске сохраняем настройки
+                if (this.initialSearchConfig == null) {
+                    this.initialSearchConfig = {fullTextSearch: null};
+                    this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
+                }
+
+                this.search.performSearch({
+                    parent: this.datagridMeta.nodeRef,
+                    searchConfig:searchConfig,
+                    searchShowInactive: searchShowInactive,
+                    sort:sort
+                });
+            } else { // Поиск без использования SOLR
+                this.search.performSearch({
+                    parent: this.datagridMeta.nodeRef,
+                    itemType: this.datagridMeta.itemType,
+                    searchShowInactive: searchShowInactive,
+                    sort:sort
+                });
+            }
 		}
 	}, true);
 
