@@ -19,12 +19,9 @@
 
 <script type="text/javascript">//<![CDATA[
 function Absence_CheckboxChanged(skipFiring) {
-	debugger;
-
 	var myID = "${fieldHtmlId}";
 
-	var formContainer = YAHOO.util.Dom.get("${formId}-container");
-	formContainer.style.width = "45em";
+	
 
 	var unlimitedCheckbox = YAHOO.util.Dom.get(myID);
 	unlimitedCheckbox.value = unlimitedCheckbox.checked;
@@ -36,9 +33,6 @@ function Absence_CheckboxChanged(skipFiring) {
 	var endInputDate = YAHOO.util.Dom.get(commonID + "_end-cntrl-date");
 	var endInputIcon = YAHOO.util.Dom.get(commonID + "_end-cntrl-icon");
 	var endInputHidden = YAHOO.util.Dom.get(commonID + "_end");
-
-	var formatInfo = YAHOO.util.Dom.getElementsByClassName('format-info', 'div')[0];
-	formatInfo.style.display = "none";
 
 	if (unlimitedCheckbox.checked) {
 		var today = new Date();
@@ -63,16 +57,28 @@ function Absence_CheckboxChanged(skipFiring) {
 		YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 	}
 }
-<#if isTrue>
+
+function Absence_ChangeFormView() {
+	var formatInfosArray = YAHOO.util.Dom.getElementsByClassName('format-info', 'div');
+	for (var i = 0; i < formatInfosArray.length; i++) {
+		var formatInfo = formatInfosArray[i];
+		formatInfo.style.display = "none";
+	}
+	var formContainer = YAHOO.util.Dom.get("${formId}-container");
+	formContainer.style.width = "45em";
+}
+
 (function() {
 	var myID = "${fieldHtmlId}";
 	var IDElements = myID.split("_");
 	IDElements.splice(-3, 3);
 	var commonID = IDElements.join("_");
 	var formID = commonID + "-form"
+	YAHOO.util.Event.onContentReady(formID, Absence_ChangeFormView, true);
+<#if isTrue>
 	YAHOO.util.Event.onContentReady(formID, Absence_CheckboxChanged, true);
-})();
 </#if>
+})();
 //]]></script>
 
 <div class="form-field" style="text-align: right; margin-bottom: 0px;">
