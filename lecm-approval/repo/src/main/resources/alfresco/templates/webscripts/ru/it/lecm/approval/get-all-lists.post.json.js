@@ -1,1 +1,1 @@
-model.jsonResponse = approvalService.getAssigneesLists(json);
+model.jsonResponse = approvalService.getAssigneesLists();

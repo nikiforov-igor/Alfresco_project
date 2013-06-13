@@ -231,39 +231,41 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 	 * }]
 	 * }
 	 */
-	public JSONArray getAssigneesLists(final JSONObject json) {
-		String approvalType;
-		JSONArray result = new JSONArray();
+    public JSONObject getAssigneesLists() {
+        JSONObject result = new JSONObject();
+        JSONArray resultArray = new JSONArray();
 
-		try {
-			// требуемый тип согласования
-			approvalType = json.getString("approvalType");
-		} catch (JSONException ex) {
-			throw new WebScriptException("Insufficient params in JSON", ex);
-		}
+        // получить (попутно создав) список по умолчанию
+        NodeRef defaultList = getDefaultListFolderRef();
+        // получаем все листы согласующих
+        NodeRef parentFolder = getListsFolderRef();
+        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(parentFolder);
+        // бежим по листам
+        for (ChildAssociationRef childAssoc : childAssocs) {
+            NodeRef assigneesListRef = childAssoc.getChildRef();
+            String assigneesListName = (String) nodeService.getProperty(assigneesListRef, ContentModel.PROP_NAME);
 
-		// получаем все листы согласующих
-		NodeRef parentFolder = getAsigneesListParentFolderByType(approvalType);
-		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(parentFolder);
-		// бежим по листам
-		for (ChildAssociationRef childAssoc : childAssocs) {
-			NodeRef assigneesListRef = childAssoc.getChildRef();
-			String assigneesListName = (String) nodeService.getProperty(assigneesListRef, ContentModel.PROP_NAME);
+            JSONObject jsonItem = new JSONObject();
 
-			JSONObject jsonItem = new JSONObject();
+            try {
+                // для каждого строим JSON-объект
+                jsonItem.put("listName", assigneesListName);
+                jsonItem.put("nodeRef", assigneesListRef.toString());
+            } catch (JSONException ex) {
+                throw new WebScriptException("Can not form JSONArray", ex);
+            }
+            // складываем в json-array
+            resultArray.put(jsonItem);
+        }
 
-			try {
-				// для каждого строим JSON-объект
-				jsonItem.put("listName", assigneesListName);
-				jsonItem.put("nodeRef", assigneesListRef.toString());
-			} catch (JSONException ex) {
-				throw new WebScriptException("Can not form JSONObject", ex);
-			}
-			// складываем в json-array
-			result.put(jsonItem);
-		}
-		return result;
-	}
+        try {
+            result.put("lists", resultArray);
+            result.put("defaultListRef", defaultList.toString());
+        } catch (JSONException ex) {
+            throw new WebScriptException("Can not form JSONObject", ex);
+        }
+        return result;
+    }
 
 	/**
 	 * Получить содержимое листа согласующих
@@ -328,10 +330,6 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		}
 
 		return result;
-	}
-
-	private NodeRef getAsigneesListParentFolderByType(final String approvalType) {
-		return getListsFolderRef();
 	}
 
 	public void deleteList(final JSONObject json) {

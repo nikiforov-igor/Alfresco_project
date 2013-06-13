@@ -2,7 +2,6 @@ package ru.it.lecm.approval.api;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.List;
@@ -112,5 +111,7 @@ public interface ApprovalListService {
 	void assignTask(NodeRef assignee, DelegateTask task);
 
 	void completeTask(NodeRef assignee, DelegateTask task);
+
+	List<NodeRef> createAssigneesList(NodeRef assigneesListNode);
 
 }

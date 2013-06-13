@@ -211,4 +211,13 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	public void completeTask(ActivitiScriptNode assignee, DelegateTask task) {
 		approvalListService.completeTask(assignee.getNodeRef(), task);
 	}
+
+	public ActivitiScriptNodeList createAssigneesList(ActivitiScriptNode assigneesListNode) {
+		List<NodeRef> assigneesList = approvalListService.createAssigneesList(assigneesListNode.getNodeRef());
+		ActivitiScriptNodeList assigneesActivitiList = new ActivitiScriptNodeList();
+		for (NodeRef assigneeNode: assigneesList) {
+			assigneesActivitiList.add(new ActivitiScriptNode(assigneeNode, serviceRegistry));
+		}
+		return assigneesActivitiList;
+	}
 }

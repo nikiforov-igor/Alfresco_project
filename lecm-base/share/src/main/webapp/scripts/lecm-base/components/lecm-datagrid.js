@@ -270,7 +270,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 repoDatasource: true,
 
                 /**
-                 * Форсировать ли подписку для новых datagrid'ов.
+                 * Форсировать ли подписку для новых datagrid'ов
                  * Должно быть true, если за один жизненный цикл страницы на неё могут быть добавлены/удалены несколько
                  * datagrid'ов.
                  *
@@ -279,6 +279,16 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * @default false
                  */
                 forceSubscribing: false,
+
+                /**
+                 * Переопределить сортировку с указанным значением
+                 * Если не равно null, то все столбцы таблицы получат значение этого свойства в атрибут сортировки
+                 *
+                 * @property overrideSortingWith
+                 * @type boolean
+                 * @default null
+                 */
+                overrideSortingWith: null,
 
                 /**
                  * Колонки которые не следует показывать
@@ -1001,7 +1011,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var column, sortable;
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
                     column = this.datagridColumns[i];
-                    sortable = column.sortable;
+
+                    if (this.options.overrideSortingWith === null) {
+                        sortable = column.sortable;
+                    } else {
+                        sortable = this.options.overrideSortingWith;
+                    }
+
                     if (!(this.options.excludeColumns.length > 0 && inArray(column.name, this.options.excludeColumns))) {
                     columnDefinitions.push(
                         {
@@ -1339,7 +1355,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         if (evaluator != null && typeof evaluator == "function") {
                             //var result = ;
                             //if (result != undefined){
-                            showAction = evaluator(oData);
+                            showAction = evaluator.call(this, oData);
                             //}
                         }
                         var actionDiv = getActionDivByClass(action.id);

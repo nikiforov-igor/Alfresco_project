@@ -33,8 +33,9 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-						execution.setVariableLocal("assigneesList", lecmApprove_assigneeAssoc);
-						var approvalListRef = approval.createApprovalList(bpm_package, documentAttachmentCategoryName, lecmApprove_approvalType, lecmApprove_assigneeAssoc);
+						var assigneesList = approval.createAssigneesList(lecmApprove_assigneesListAssoc);
+						execution.setVariableLocal("assigneesList", assigneesList);
+						var approvalListRef = approval.createApprovalList(bpm_package, documentAttachmentCategoryName, lecmApprove_approvalType, assigneesList);
 						execution.setVariable("approvalListRef", approvalListRef);
 					]]></activiti:string>
 				</activiti:field>

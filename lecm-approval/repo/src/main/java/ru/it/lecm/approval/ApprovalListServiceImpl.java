@@ -616,4 +616,9 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	public NodeRef getApprovalFolder() {
 		return getFolder(APPROVAL_FOLDER);
 	}
+
+	@Override
+	public List<NodeRef> createAssigneesList(NodeRef assigneesListNode) {
+		return findNodesByAssociationRef(assigneesListNode, ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM, TYPE_ASSIGNEES_ITEM, ASSOCIATION_TYPE.TARGET);
+	}
 }

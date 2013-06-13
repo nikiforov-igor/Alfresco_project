@@ -38,15 +38,15 @@
 			</properties>
 
 			<associations>
-				<association name="lecmApprove:assigneeAssoc">
+				<association name="lecmApprove:assigneesListAssoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</source>
 					<target>
-						<class>lecm-al:assignees-item</class>
+						<class>lecm-al:assignees-list</class>
 						<mandatory>true</mandatory>
-						<many>true</many>
+						<many>false</many>
 					</target>
 				</association>
 			</associations>

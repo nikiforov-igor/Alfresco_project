@@ -1811,7 +1811,7 @@ div.form-field input[type="text"],
 /*div.form-field input,*/
 div.form-field select,
 div.form-field .yui-push-button button,
-div.form-field .yui-button .first-child button,
+div.form-field .yui-button:not(.yui-radio-button) .first-child button,
 div.association-auto-complete-selected-item,
 div.association-auto-complete-selected-item-even {
     color: #494949;
@@ -1862,12 +1862,19 @@ div.form-field .yui-button .first-child {
 }
 
 span.create-new-button .yui-button .first-child,
+span.save-button .yui-button .first-child,
+span.delete-button .yui-button .first-child,
 span.tree-picker-button .yui-button .first-child {
     width: 26px;
 }
-
 span.create-new-button .yui-button .first-child {
     background: url(images/create-new-button.png) no-repeat center center;
+}
+span.save-button .yui-button .first-child {
+    background: url(images/button-save.png) no-repeat center center;
+}
+span.delete-button .yui-button .first-child {
+    background: url(images/button-delete.png) no-repeat center center;
 }
 
 span.tree-picker-button .yui-button .first-child button {
