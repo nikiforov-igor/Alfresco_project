@@ -1,8 +1,5 @@
 package ru.it.lecm.dictionary.beans;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
@@ -18,6 +15,12 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: ORakovskaya
@@ -120,7 +123,7 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 				NodeRef record = dicValue.getChildRef();
 				if (!isArchive(record)) {
 					Serializable recordClass = nodeService.getProperty(record, parameter);
-					if (recordClass.equals(value)) {
+					if (recordClass != null && recordClass.equals(value)) {
 						results.add(record);
 					}
 				}
