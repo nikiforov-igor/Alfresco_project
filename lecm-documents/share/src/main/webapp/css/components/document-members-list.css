@@ -30,7 +30,32 @@
     margin-left: 3%;
 }
 
-.detail-list-item .person a,.detail-list-item .person a:visited {
+.detail-list-item .person a,
+.detail-list-item .person a:visited {
     color: #6CA5CE;
     text-decoration: underline;
 }
+
+/* Dashlet styles */
+.dashlet.members .detail-list-item {
+    border-bottom: none;
+    overflow: hidden;
+}
+.dashlet.members .detail-list-item:first-of-type {
+    padding-top: 15px;
+}
+.dashlet.members .detail-list-item .avatar,
+.dashlet.members .detail-list-item .avatar img {
+    width: 40px;
+    height: 40px;
+}
+.dashlet.members .detail-list-item .person a,
+.dashlet.members .detail-list-item .person a:hover,
+.dashlet.members .detail-list-item .person a:visited {
+    text-decoration: none;
+}
+.dashlet.members .detail-list-item .person > div {
+    color: #969696;
+    padding-left: 5px;
+}
+
