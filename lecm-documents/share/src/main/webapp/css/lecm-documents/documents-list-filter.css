@@ -7,13 +7,15 @@ h2.thin {
     background-color: #F2F2F2;
     border: 1px solid #cbcbcb;
     margin-right: -15px;
+    padding: 10px 0;
+    border-radius: 5px;
 }
 
 .status-button {
-    border: 1px solid transparent;
     cursor: pointer;
-    font: 14px Arial;
-    margin: 0 0 5px 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    margin: 0 0 5px;
     text-decoration: none;
     float: left;
 }
@@ -26,19 +28,31 @@ h2.thin {
     position: relative;
 }
 
-.documents-filter-panel .filterBlock {
-    padding-left: 16px;
-    margin: 0;
+.documents-filter-panel .filterBlock > div {
+    padding: 4px 0 0 30px;
+}
+.documents-filter-panel .filterBlock > div.selected {
+    background: #bbe6f3;
+    font-weight: bold;
+}
+.documents-filter-panel #filter-statuses-set > div {
+    padding-left: 50px;
 }
 
 .documents-filter-panel a:hover {
     text-decoration: underline;
 }
+.documents-filter-panel .filterBlock > div.selected a:hover {
+    text-decoration: none;
+}
 
 .documents-filter-block {
-    margin: 0 15px;
-    padding: 5px;
     position: relative;
+}
+
+.documents-filter-block .alfresco-twister {
+    padding-left: 30px !important;
+    background-position: 15px 50%;
 }
 
 .yui-gd.grid {
@@ -46,20 +60,12 @@ h2.thin {
 }
 
 .total-tasks-count-right {
-    width: 19px;
     height: 19px;
     line-height: 19px;
-    background: #969696;
     position: absolute;
-    right: 0;
-    top: 0;
-    text-align: center;
-    vertical-align: middle;
-    color: #fff;
+    right: 20px;
+    top: 4px;
+    color: #f08020;
     font-weight: bold;
     font-size: 13px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -o-border-radius: 5px;
-    border-radius: 5px;
 }

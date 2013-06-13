@@ -1,12 +1,12 @@
 /* Common */
 #lecm-menu #menu-buttons .yui-button.yui-button-disabled span.first-child {
-    opacity: .3;
+    opacity: .1;
 }
 #lecm-menu #menu-buttons .yui-button span.first-child {
-    opacity: .5;
+    opacity: .3;
 }
 #lecm-menu #menu-buttons .yui-button.yui-button-hover span.first-child {
-    opacity: .8;
+    opacity: .7;
 }
 #lecm-menu #menu-buttons .yui-button.yui-button-active span.first-child,
 #lecm-menu #menu-buttons .yui-button.selected span.first-child {

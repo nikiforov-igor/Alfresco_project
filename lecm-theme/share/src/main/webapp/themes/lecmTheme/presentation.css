@@ -1662,7 +1662,7 @@ border-bottom-color: #c3d9ff;
 
 .alfresco-twister-closed
 {
-   background: transparent url(images/collapsed.png) no-repeat scroll 0 50% !important;
+   background: transparent url(images/collapsed.png) no-repeat scroll 0 50%;
 }
 
 /* Preview Tooltip */

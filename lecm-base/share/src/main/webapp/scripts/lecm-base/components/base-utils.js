@@ -100,6 +100,24 @@ LogicECM.module.Base.Util = {
     },
 
     /**
+     * Get the URL parameter by key
+     * @param key - string : the key of parameter
+     */
+    getUrlParam: function(key) {
+        var query = document.location.search.split("+").join(" ");
+
+        var params = {}, tokens,
+            re = /[?&]?([^=]+)=([^&]*)/g;
+
+        while (tokens = re.exec(query)) {
+            params[decodeURIComponent(tokens[1])]
+                = decodeURIComponent(tokens[2]);
+        }
+
+        return params[key];
+    },
+
+    /**
      * Add a URL parameter (or changing it if it already exists)
      * @param {search} string  this is typically document.location.search
      * @param {key}    string  the key to set

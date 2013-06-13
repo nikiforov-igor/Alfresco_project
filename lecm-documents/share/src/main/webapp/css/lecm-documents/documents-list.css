@@ -13,7 +13,9 @@
 #yui-main div.datalist-toolbar {
     border: 0;
 }
-#yui-main div.datalist-toolbar div.header-bar,
+#yui-main div.datalist-toolbar div.header-bar {
+    background: none;
+}
 #yui-main #lecm-content-ft {
     background: #f2f2f2;
 }

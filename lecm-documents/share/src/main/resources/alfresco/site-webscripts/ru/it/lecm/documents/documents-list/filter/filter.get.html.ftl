@@ -18,21 +18,22 @@
 <#if page.url.args.doctype?? && page.url.args.doctype != "">
     <#assign isDocListPage = true/>
 </#if>
+<#if page.url.args.formId?? && page.url.args.formId != "">
+    <#assign formId = page.url.args.formId/>
+</#if>
 
 <div id="documents-filter" class="documents-filter-panel">
     <div class="documents-filter-block">
-        <h2 class="thin" style="margin-left: 16px;">${filterTitle}</h2>
-        <hr/>
         <div id="filter-groups-set" class="filterBlock">
         <#if statusesGroups??>
             <#list statusesGroups as group>
-                <div class="text-cropped">
+                <div class="text-cropped <#if formId?? && formId == group.name>selected</#if>">
                     <#if isDocListPage>
-                        <a href="${url.context}/page/${pageLink}?doctype=${page.url.args.doctype}&query=${group.value}&formId=${group.name}" class="status-button"
-                           title="<#if group.value == "*">Все<#else>${group.value}</#if>">${group.name}</a>
+                        <a href="${url.context}/page/${pageLink}?doctype=${page.url.args.doctype}&query=${group.value}&formId=${group.name}"
+                           class="status-button" title="<#if group.value == "*">Все<#else>${group.value}</#if>">${group.name}</a>
                     <#else>
-                        <a href="${url.context}/page/${pageLink}?query=${group.value}&formId=${group.name}" class="status-button"
-                           title="<#if group.value == "*">Все<#else>${group.value}</#if>">${group.name}</a>
+                        <a href="${url.context}/page/${pageLink}?query=${group.value}&formId=${group.name}"
+                           class="status-button" title="<#if group.value == "*">Все<#else>${group.value}</#if>">${group.name}</a>
                     </#if>
                     <span class="total-tasks-count-right">${group.count}</span><br/>
                 </div>
@@ -54,29 +55,25 @@
     <div class="documents-filter-block">
         <h2 id="${id}-heading" class="thin">${msg("label.byStatus")}</h2>
         <div>
-            <hr/>
-            <div>
-                <div id="filter-statuses-set" class="filterBlock">
-                <#if statusesList??>
-                    <#assign count = 0/>
-                    <#list statusesList as status>
-                        <div class="text-cropped">
+            <div id="filter-statuses-set" class="filterBlock">
+            <#if statusesList??>
+                <#assign count = 0/>
+                <#list statusesList as status>
+                    <div class="text-cropped <#if formId?? && formId == status>selected</#if>">
 
-                            <#if isDocListPage>
-                                <a href="${url.context}/page/${pageLink}?doctype=${page.url.args.doctype}&query=${status}&formId=${status}"
-                                   class="status-button text-broken">${status}</a>
-                            <#else>
-                                <a href="${url.context}/page/${pageLink}?query=${status}&formId=${status}"
-                                   class="status-button text-broken">${status}</a>
-                            </#if>
-                        </div>
-                        <#assign count = count +1 />
-                    </#list>
-                </#if>
-                </div>
+                        <#if isDocListPage>
+                            <a href="${url.context}/page/${pageLink}?doctype=${page.url.args.doctype}&query=${status}&formId=${status}"
+                               class="status-button text-broken">${status}</a>
+                        <#else>
+                            <a href="${url.context}/page/${pageLink}?query=${status}&formId=${status}"
+                               class="status-button text-broken">${status}</a>
+                        </#if>
+                    </div>
+                    <#assign count = count +1 />
+                </#list>
+            </#if>
             </div>
         </div>
-        <hr/>
     </div>
 
     <script type="text/javascript">//<![CDATA[
