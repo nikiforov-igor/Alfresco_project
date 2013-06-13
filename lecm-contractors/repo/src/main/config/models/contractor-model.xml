@@ -35,6 +35,11 @@
                     <title>Short Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+	                <index enabled="true">
+		                <atomic>true</atomic>
+		                <stored>false</stored>
+		                <tokenised>both</tokenised>
+	                </index>
                 </property>
 
                 <!-- Полное наименование -->
@@ -60,11 +65,21 @@
                 <property name="lecm-contractor:physical-address">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+	                <index enabled="true">
+		                <atomic>true</atomic>
+		                <stored>false</stored>
+		                <tokenised>both</tokenised>
+	                </index>
                 </property>
 
                 <!-- Телефон -->
                 <property name="lecm-contractor:phone">
                     <type>d:text</type>
+	                <index enabled="true">
+		                <atomic>true</atomic>
+		                <stored>false</stored>
+		                <tokenised>both</tokenised>
+	                </index>
                 </property>
 
                 <!-- Факс -->
