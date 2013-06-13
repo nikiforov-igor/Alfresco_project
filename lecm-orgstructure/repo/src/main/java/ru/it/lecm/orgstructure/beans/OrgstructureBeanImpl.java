@@ -1220,12 +1220,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public boolean isCalendarEngineer(final NodeRef employeeRef) {
-		NodeRef brEngineer = getBusinessRoleCalendarEngineer();
-		if (brEngineer == null) {
-			return false;
-		}
-		List<NodeRef> employees = getEmployeesByBusinessRole(brEngineer);
-		return employees.contains(employeeRef);
+		return isEmployeeHasBusinessRole(employeeRef, BUSINESS_ROLE_CALENDAR_ENGINEER_ID, true);
 	}
 
 	private boolean isBossInternal(final NodeRef employeeRef) {
@@ -1246,12 +1241,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public boolean isDelegationEngineer (NodeRef employeeRef) {
-		NodeRef brEngineer = getBusinessRoleDelegationEngineer ();
-		if (brEngineer == null) {
-			return false;
-		}
-		List<NodeRef> employees = getEmployeesByBusinessRole (brEngineer);
-		return employees.contains (employeeRef);
+		return isEmployeeHasBusinessRole(employeeRef, BUSINESS_ROLE_ENGINEER_ID, true);
 	}
 
 	private boolean hasSubordinateInternal (NodeRef bossRef, NodeRef subordinateRef) {
@@ -1276,7 +1266,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 				if ((Boolean) nodeService.getProperty(businessRoleByIdentifier, OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC)){
 					return true;
 				}
-				
+
 				List<NodeRef> employeesByBusinessRole = getEmployeesByBusinessRole(businessRoleByIdentifier);
 				return employeesByBusinessRole.contains(employeeRef);
 			}
@@ -1341,6 +1331,26 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			}
 		}
 		return new ArrayList<NodeRef>(results);
+	}
+
+	@Override
+	public List<NodeRef> getEmployeeRolesWithDelegation(final NodeRef employeeRef) {
+		Set<NodeRef> roles = new HashSet<NodeRef>();
+		//получаем бизнес роли через активные доверенности
+		List<NodeRef> procuracies = getActiveProcuracies(employeeRef);
+		for (NodeRef procuracy : procuracies) {
+			NodeRef role = findNodeByAssociationRef (procuracy, IDelegation.ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+			roles.add(role);
+		}
+		//получаем список delegation-opts, где employeeRef участвует в виде доверенного лица
+		List<NodeRef> delegationOptsList = findNodesByAssociationRef(employeeRef, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+		for (NodeRef delegationOpts : delegationOptsList) {
+			// Получаем хозяина настроек делегировая, который доверил нешему чуваку что-либо
+			NodeRef owner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			//берем все бизнес роли хозяина
+			roles.addAll(getEmployeeRoles(owner));
+		}
+		return new ArrayList<NodeRef>(roles);
 	}
 
 	private List<NodeRef> getHigherUnits(NodeRef unitRef) {
