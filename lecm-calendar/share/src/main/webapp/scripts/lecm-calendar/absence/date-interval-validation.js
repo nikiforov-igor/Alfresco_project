@@ -112,6 +112,8 @@ LogicECM.module.WCalendar.Absence.dateIntervalValidation =
 				});
 
 			}
+		} else {
+			valid = false;
 		}
 
 		//Ругнуться, что даты неправильные

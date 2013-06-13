@@ -19,6 +19,7 @@
 
 <script type="text/javascript">//<![CDATA[
 function Absence_CheckboxChanged(skipFiring) {
+	debugger;
 
 	var myID = "${fieldHtmlId}";
 
@@ -51,7 +52,7 @@ function Absence_CheckboxChanged(skipFiring) {
 		YAHOO.util.UserAction.keyup(endInputHidden);
 	} else {
 		endInputDate.removeAttribute("readonly");
-		endInputDate.removeAttribute("value");
+		endInputDate.value = "";
 		endInputHidden.removeAttribute("value");
 		endInputIcon.style.display = "block";
 
