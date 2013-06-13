@@ -84,4 +84,11 @@
 		<property name="delegationService" ref="delegationService"/>
 	</bean>
 
+	<bean id="delegationAssociationPolicy" class="ru.it.lecm.delegation.policies.DelegationAssociationPolicy" init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+	</bean>
+
 </beans>

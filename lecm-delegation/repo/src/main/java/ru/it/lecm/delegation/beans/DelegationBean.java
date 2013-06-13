@@ -191,37 +191,15 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	@Override
 	public List<NodeRef> getUniqueBusinessRolesByEmployee (final NodeRef employeeNodeRef, final boolean onlyActive) {
 		//получаем все бизнес роли
-		Set<NodeRef> uniqueBusinessRoleNodeRefs = new HashSet<NodeRef> ();
-		List<NodeRef> result = new ArrayList<NodeRef> ();
-		List<NodeRef> businessRoleNodeRefs = orgstructureService.getBusinesRoles (onlyActive);
-		if (businessRoleNodeRefs != null) {
-			//пробегаемся по всем бизнес ролям которые есть в системе и находим employees которые с ними связаны
-			for (NodeRef businessRoleNodeRef : businessRoleNodeRefs) {
-				List<NodeRef> employeeNodeRefs = orgstructureService.getEmployeesByBusinessRole (businessRoleNodeRef);
-				//если текущая бизнес роль связана с одним и только одним пользователем, то мы ее рассматриваем
-				//остальные пропускаем
-//				if (employeeNodeRefs != null && employeeNodeRefs.size () == 1 && employeeNodeRef.equals (employeeNodeRefs.get (0))) {
-				if (employeeNodeRefs != null && employeeNodeRefs.contains(employeeNodeRef)) {
-					uniqueBusinessRoleNodeRefs.add (businessRoleNodeRef);
-				}
-			}
-			result.addAll (uniqueBusinessRoleNodeRefs);
-		}
-
-        // Запрашиваем динамические безнес роли
-        //NodeRef businessRolesRoot = dictionaryService.getDictionaryByName (OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME);
-        //Set<QName> roles = new HashSet<QName>();
-        //roles.add(OrgstructureBean.TYPE_BUSINESS_ROLE);
-
-        //List<ChildAssociationRef> dynamicBusinessRoles = nodeService.getChildAssocs(businessRolesRoot, roles);
+		Set<NodeRef> uniqueBusinessRoleNodeRefs = new HashSet<NodeRef> (orgstructureService.getEmployeeRoles(employeeNodeRef));
         final List<NodeRef> dynamicBusinessRoles = dictionaryService.getRecordsByParamValue(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME, OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC, true);
         for (NodeRef businessRole : dynamicBusinessRoles) {
             if (!isArchive(businessRole)) {
-                result.add(businessRole);
+                uniqueBusinessRoleNodeRefs.add(businessRole);
             }
         }
 
-        return result;
+        return new ArrayList<NodeRef>(uniqueBusinessRoleNodeRefs);
 	}
 
 	@Override
