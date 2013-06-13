@@ -23,6 +23,17 @@ function main()
     if (showButtons){
         model.showButtons = (showButtons == 'true');
     }
+
+    var rolesStr = remote.connect ("alfresco").get ("/lecm/orgstructure/api/getCurrentEmployeeRoles");
+    var rolesList = eval("(" + rolesStr + ")");
+    var hasRole = false;
+    for (var i = 0; i < rolesList.length; i++) {
+        if (rolesList[i].id == "BR_ORGSTRUCTURE_ENGINEER") {
+            hasRole = true;
+            break;
+        }
+    }
+    model.isOrgEngineer = hasRole;
 }
 
 main();

@@ -50,13 +50,15 @@ function init() {
 YAHOO.util.Event.onDOMReady(init);
 //]]></script>
 <@comp.baseToolbar id buttons searchBlock exSearch>
-	<div class="new-row">
+    <#if isOrgEngineer>
+    <div class="new-row">
         <span id="${newUnitSpanId}" class="yui-button yui-push-button">
            <span class="first-child">
               <button type="button">${msg(newRowButtonLabel)}</button>
            </span>
         </span>
-	</div>
+    </div>
+    </#if>
     <#if showStructureBlock >
         <div class="print">
             <span id="${structureId}" class="yui-button yui-push-button">

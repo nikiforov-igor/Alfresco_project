@@ -236,7 +236,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                         if (buttons.hasOwnProperty(btnIndx)) {
                                             button = buttons[btnIndx];
                                             if (button != null) {
-                                                button.set("disabled", LogicECM.module.OrgStructure.IS_ENGINEER ? false : true);
+                                                button.set("disabled", false);
                                             }
                                         }
                                     }
@@ -324,7 +324,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         }
                     }
                 }
-                return button;
+                return null;
             },
 
             /**
