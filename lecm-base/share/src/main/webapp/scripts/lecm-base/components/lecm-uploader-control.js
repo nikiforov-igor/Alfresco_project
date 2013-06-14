@@ -37,7 +37,12 @@ LogicECM.control = LogicECM.control || {};
 			disabled: false,
 			controlId: null,
 			uploadDirectoryPath: null,
-			currentValue: ""
+			currentValue: "",
+
+            /**
+             * Отображать загруженный контент
+             */
+            showImage: false
 		},
 
 		onReady: function () {
@@ -52,6 +57,20 @@ LogicECM.control = LogicECM.control || {};
 					{ onclick: { fn: this.onFileUpload, obj: null, scope: this } }
 				);
 			}
+
+            if (this.options.showImage){
+                var imageContainer = YAHOO.util.Dom.get(this.options.controlId+"-container");
+                var imgRef = this.generateThumbnailUrl(this.options.currentValue, false);
+                var className = this.options.disabled ? "thumbnail-view" :"thumbnail-edit";
+
+                if (imgRef != "") {
+                    var ref = this.options.currentValue;
+                    var imageId = ref.slice(ref.lastIndexOf('/') + 1);
+                    imageContainer.innerHTML = '<span class="'+ className +'">' + '<a href="' + this.generateThumbnailUrl(ref, true) +'" target="_blank"><img id="' + imageId + '" src="' + imgRef + '" /></a></span>';
+                } else {
+                    imageContainer.innerHTML = '<span class="'+ className+'-text">' + this.msg('message.upload.not-loaded') + '</span>';
+                }
+            }
 		},
 
 		setUploaders: function() {
@@ -172,10 +191,33 @@ LogicECM.control = LogicECM.control || {};
 				var fileName = obj.successful[0].fileName;
 				var nodeRef = obj.successful[0].nodeRef;
 
+                if (this.options.showImage){
+                    this.updateImage(nodeRef);
+                }
+
 				this.selectedItems[nodeRef] = obj.successful[0];
 				this.updateFormFields();
 			}
 		},
+
+        updateImage: function(nodeRef){
+            var imageContainer = Dom.get(this.options.controlId+"-container");
+            var url = this.generateThumbnailUrl(nodeRef, this.options.disabled);
+            imageContainer.innerHTML = '<span class="'+ "thumbnail-edit" +'">' + '<a href="' + url +'" target="_blank"><img id="' + nodeRef + '" src="' + url + '" /></a></span>';
+        },
+
+        generateThumbnailUrl: function(ref, view) {
+            if (ref != null && ref != undefined && ref.length > 0) {
+                var nodeRef = new Alfresco.util.NodeRef(ref);
+                if (!view) {
+                    return Alfresco.constants.PROXY_URI + "api/node/" + nodeRef.uri + "/content/thumbnails/doclib?c=force&ph=true";
+                } else {
+                    return Alfresco.constants.PROXY_URI + "api/node/" + nodeRef.uri + "/content";
+                }
+            } else {
+                return "";
+            }
+        },
 
 		// Updates all form fields
 		updateFormFields: function ()
@@ -194,8 +236,7 @@ LogicECM.control = LogicECM.control || {};
 				if(this.options.disabled) {
 					el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' ' + '</div>';
 				} else {
-					el.innerHTML
-						+= '<div class="' + divClass + '"> ' + displayName + '</div>';
+					el.innerHTML += '<div class="' + divClass + '"> ' + displayName + '</div>';
 				}
 			}
 
@@ -228,7 +269,7 @@ LogicECM.control = LogicECM.control || {};
 					el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
 				}
 
-//				Dom.get(this.eventGroup).value = selectedItems.toString();
+				Dom.get(this.eventGroup).value = selectedItems.toString();
 
 				if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
 					YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {

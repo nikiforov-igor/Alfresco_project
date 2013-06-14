@@ -16,7 +16,7 @@
 <#if field.control.params.showImage?? && field.control.params.showImage=="true">
     <#assign showImage = true>
 </#if>
-<#if field.control.params.hideItem?? && field.control.params.showImage=="true">
+<#if field.control.params.hideItem?? && field.control.params.hideItem=="true">
     <#assign hideItem = true>
 </#if>
 
@@ -29,76 +29,15 @@
 				<#if disabled>
 					disabled: true,
 				</#if>
+                <#if showImage>
+                    showImage: true,
+                </#if>
+
 				<#if field.control.params.uploadDirectoryPath??>
 					uploadDirectoryPath: "${field.control.params.uploadDirectoryPath}",
 				</#if>
 				currentValue: "${field.value!''}"
 			});
-
-
-<#if showImage>
-    //создаем объект, который будет отлавливать изменения картинки и заменять её
-    ImageUpdater = function()
-    {
-        YAHOO.Bubbling.on("imageUpdated", function(layer,args){
-            var imageContainer = YAHOO.util.Dom.get("${controlId}-container");
-            var className ="${disabled?string}"=="true" ? "thumbnail-view" :"thumbnail-edit";
-            if(imageContainer){
-                // получаем ссылку на текущую картинку
-                var added = YAHOO.util.Dom.get("${controlId}-added");
-                if(added.value == "") { // берем из текущего
-                    added = YAHOO.util.Dom.get("${fieldHtmlId}");
-                }
-                var imgRef = generateThumbnailUrl(added.value != "" ? added.value != ""  : "${field.value}", false);
-                if (imgRef != "") {
-                    var ref = added.value;
-                    var imageId = ref.slice(ref.lastIndexOf('/') + 1);
-                    imageContainer.innerHTML = '<span class="'+ className +'">' + '<a href="' + generateThumbnailUrl(added.value, true) +'" target="_blank"><img id="' + imageId + '" src="' + imgRef + '" /></a></span>';
-                }
-            }
-        }, this);
-
-        return this;
-    };
-
-    var imageUpdater = new ImageUpdater();
-
-    function generateThumbnailUrl(ref, view) {
-        if (ref != null && ref != undefined && ref.length > 0) {
-            var nodeRef = new Alfresco.util.NodeRef(ref);
-            if (!view) {
-                return Alfresco.constants.PROXY_URI + "api/node/" + nodeRef.uri + "/content/thumbnails/doclib?c=force&ph=true";
-            } else {
-                return Alfresco.constants.PROXY_URI + "api/node/" + nodeRef.uri + "/content";
-            }
-        } else {
-            return "";
-        }
-    }
-    function init() {
-        var imageContainer = YAHOO.util.Dom.get("${controlId}-container");
-        var imgRef = generateThumbnailUrl("${field.value}", false);
-        var className = "${disabled?string}"=="true" ? "thumbnail-view" :"thumbnail-edit";
-
-        if (imgRef != "") {
-            var ref = "${field.value}";
-            var imageId = ref.slice(ref.lastIndexOf('/') + 1);
-            imageContainer.innerHTML = '<span class="'+ className +'">' + '<a href="' + generateThumbnailUrl("${field.value}", true) +'" target="_blank"><img id="' + imageId + '" src="' + imgRef + '" /></a></span>';
-        } else {
-            imageContainer.innerHTML = '<span class="'+ className+'-text">' + "${msg('message.upload.not-loaded')}" + '</span>';
-        }
-
-    }
-
-    function OnElementAvaiable(id) {
-        YAHOO.util.Event.onContentReady(id, this.handleOnAvailable, this);
-    }
-    OnElementAvaiable.prototype.handleOnAvailable = function (me) {
-        init();
-    };
-
-    var obj = new OnElementAvaiable("${controlId}-container");
-</#if>
 })();
 //]]></script>
 
