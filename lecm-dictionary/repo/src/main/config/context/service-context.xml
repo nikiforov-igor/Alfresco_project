@@ -28,23 +28,32 @@
 		</property>
 	</bean>
 
+    <bean id="lecmDictionaryExportBean" class="ru.it.lecm.dictionary.beans.XMLExportBeanImpl">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="exportSettings" ref="dictionary.exportSettings"/>
+    </bean>
+
+    <bean id="lecmDictionaryImportBean" class="ru.it.lecm.dictionary.beans.XMLImportBeanImpl">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
+    </bean>
+
     <bean id="lecmDictionaryBootstrap" init-method="bootstrap" abstract="true"
           class="ru.it.lecm.dictionary.bootstrap.LecmDictionaryBootstrap" depends-on="dictionaryBootstrap">
         <property name="nodeService" ref="nodeService"/>
         <property name="transactionService" ref="transactionService"/>
-	    <property name="namespaceService" ref="namespaceService"/>
-        <property name="dictionaryService" ref="dictionaryService"/>
         <property name="dictionaryBean" ref="serviceDictionary"/>
-        <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="xmlImportBean" ref="lecmDictionaryImportBean"/>
     </bean>
 
 
     <bean id="webscript.ru.it.lecm.dictionary.export.get"
           class="ru.it.lecm.dictionary.export.Export"
           parent="webscript">
-        <property name="nodeService" ref="nodeService"/>
-	    <property name="namespaceService" ref="namespaceService"/>
-        <property name="exportSettings" ref="dictionary.exportSettings"/>
+        <property name="xmlExportBean" ref="lecmDictionaryExportBean"/>
     </bean>
 
     <bean id="webscript.ru.it.lecm.dictionary.export-csv.get"
@@ -58,19 +67,14 @@
     <bean id="webscript.ru.it.lecm.dictionary.import.post"
           class="ru.it.lecm.dictionary.imports.Import"
           parent="webscript">
-        <property name="nodeService" ref="nodeService"/>
-	    <property name="namespaceService" ref="namespaceService"/>
-	    <property name="dictionaryService" ref="dictionaryService"/>
 		<property name="dictionaryBean" ref="serviceDictionary"/>
-        <property name="repositoryHelper" ref="repositoryHelper"/>
+        <property name="xmlImportBean" ref="lecmDictionaryImportBean"/>
     </bean>
 
 	<bean id="webscript.ru.it.lecm.dictionary.api.export.get"
 	      class="ru.it.lecm.dictionary.export.ExportAPI"
 	      parent="webscript">
-		<property name="nodeService" ref="nodeService"/>
-		<property name="namespaceService" ref="namespaceService"/>
-        <property name="exportSettings" ref="dictionary.exportSettings"/>
+        <property name="xmlExportBean" ref="lecmDictionaryExportBean"/>
 	</bean>
 
 	<util:constant id="DICTIONARIES_ROOT_ID" static-field="ru.it.lecm.dictionary.beans.DictionaryBean.DICTIONARIES_ROOT_ID"/>

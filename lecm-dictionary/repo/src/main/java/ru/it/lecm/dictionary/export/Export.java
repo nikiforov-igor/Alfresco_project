@@ -1,14 +1,12 @@
 package ru.it.lecm.dictionary.export;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.NamespaceService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-import ru.it.lecm.dictionary.ExportSettings;
+import ru.it.lecm.dictionary.beans.XMLExportBean;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -22,20 +20,10 @@ import java.io.OutputStream;
 public class Export extends AbstractWebScript {
 
 	private static final Log log = LogFactory.getLog(Export.class);
-	private NodeService nodeService;
-	private NamespaceService namespaceService;
-	private ExportSettings exportSettings;
+    private XMLExportBean xmlExportBean;
 
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
-	}
-
-	public void setNamespaceService(NamespaceService namespaceService) {
-		this.namespaceService = namespaceService;
-	}
-
-    public void setExportSettings(ExportSettings exportSettings) {
-        this.exportSettings = exportSettings;
+    public void setXmlExportBean(XMLExportBean xmlExportBean) {
+        this.xmlExportBean = xmlExportBean;
     }
 
     @Override
@@ -52,7 +40,7 @@ public class Export extends AbstractWebScript {
 			// Create an XML stream writer
 			resOutputStream = res.getOutputStream();
 
-			XmlDictionaryExporter xmlDictionaryExporter = new XmlDictionaryExporter(resOutputStream, exportSettings, nodeService, namespaceService);
+			XMLExportBean.XMLExporter xmlDictionaryExporter = xmlExportBean.getXMLExporter(resOutputStream);
 			xmlDictionaryExporter.writeItems(nodeRef);
 			xmlDictionaryExporter.close();
 			resOutputStream.flush();
