@@ -4,6 +4,7 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign showImage = false>
 <#assign hideItem = false>
+<#assign multiple = false>
 
 <#if fieldValue?string == "" && field.control.params.defaultValueContextProperty??>
 	<#if context.properties[field.control.params.defaultValueContextProperty]??>
@@ -19,6 +20,9 @@
 <#if field.control.params.hideItem?? && field.control.params.hideItem=="true">
     <#assign hideItem = true>
 </#if>
+<#if field.control.params.multiple?? && field.control.params.multiple=="true">
+    <#assign multiple = true>
+</#if>
 
 <script type="text/javascript">//<![CDATA[
 (function()
@@ -31,6 +35,9 @@
 				</#if>
                 <#if showImage>
                     showImage: true,
+                </#if>
+                <#if disabled>
+                    multiple: true,
                 </#if>
 
 				<#if field.control.params.uploadDirectoryPath??>

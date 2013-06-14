@@ -42,7 +42,12 @@ LogicECM.control = LogicECM.control || {};
             /**
              * Отображать загруженный контент
              */
-            showImage: false
+            showImage: false,
+
+            /**
+             * Загрузка нескольких файлов поочередно
+             */
+            multiple: false
 		},
 
 		onReady: function () {
@@ -171,7 +176,10 @@ LogicECM.control = LogicECM.control || {};
 					{
 						fn: this.fileUploadComplete,
 						scope: this
-					}
+					},
+                    // данный параметр запрещает обновление формы
+                    // в false выполняется bubbling metadataRefresh
+                    suppressRefreshEvent: true
 				};
 				this.fileUpload.show(uploadConfig);
 				Event.preventDefault(e);
@@ -195,6 +203,9 @@ LogicECM.control = LogicECM.control || {};
                     this.updateImage(nodeRef);
                 }
 
+                if (!this.options.multiple) {
+                    this.selectedItems = {};
+                }
 				this.selectedItems[nodeRef] = obj.successful[0];
 				this.updateFormFields();
 			}
@@ -233,10 +244,10 @@ LogicECM.control = LogicECM.control || {};
 
 
 				var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
-				if(this.options.disabled) {
-					el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' ' + '</div>';
-				} else {
+				if(this.options.multiple) {
 					el.innerHTML += '<div class="' + divClass + '"> ' + displayName + '</div>';
+				} else {
+					el.innerHTML = '<div class="' + divClass + '"> ' + displayName + '</div>';
 				}
 			}
 
