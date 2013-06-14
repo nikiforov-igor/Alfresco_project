@@ -22,7 +22,7 @@
 		</property>
 	</bean>
 	<bean id="${groupId}.${artifactId}.wCalendarBusinessRolesDicBootstrap"
-		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap, businessJournalLogEventsPolicy" >
+		  parent="lecmDictionaryBootstrap" depends-on="${groupId}.${artifactId}.wCalendarBootstrap, businessJournalLogEventsPolicy, ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap" >
 		<property name="createOrUpdateDictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/wcalendar-business-roles-dictionary-items.xml</value>
