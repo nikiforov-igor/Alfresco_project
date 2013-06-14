@@ -13,12 +13,11 @@
                 // Переопределяем метод onActionDelete. Добавляем проверки
                 LogicECM.module.Base.DataGrid.prototype.onActionDelete =
                     function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
-                        var me = this,
-                                items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
-                        var deletedUnit = items[0];
+                        var me = this;
+                        var orgRoleToDelete = YAHOO.lang.isArray(p_items) ? p_items[0] : p_items;
 
                         // Проверим назначены ли на роль сотрудники
-                        var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getOrgRoleEmployees?nodeRef=" + deletedUnit.nodeRef;
+                        var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getOrgRoleEmployees?nodeRef=" + orgRoleToDelete.nodeRef;
                         var callback = {
                             success:function (oResponse) {
                                 var oResults = eval("(" + oResponse.responseText + ")");

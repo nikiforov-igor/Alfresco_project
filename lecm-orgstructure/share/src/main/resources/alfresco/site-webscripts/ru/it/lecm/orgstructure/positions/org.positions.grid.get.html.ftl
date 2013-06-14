@@ -9,6 +9,46 @@
 		<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
 			<script type="text/javascript">//<![CDATA[
 			function createDatagrid() {
+
+                // Переопределяем метод onActionDelete. Добавляем проверки
+                LogicECM.module.Base.DataGrid.prototype.onActionDelete =
+                    function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
+                        var me = this;
+                        var positionToDelete = YAHOO.lang.isArray(p_items) ? p_items[0] : p_items;
+
+                        // Проверим назначены ли на должность сотрудники
+                        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getPositionEmployees?nodeRef=" + positionToDelete.nodeRef;
+                        var callback = {
+                            success:function (oResponse) {
+                                var oResults = eval("(" + oResponse.responseText + ")");
+                                if (oResults && oResults.length > 0) {
+                                    var employees = [];
+                                    var i;
+                                    for (i in oResults) {
+                                        employees.push(oResults[i].shortName);
+                                    }
+
+                                    var employeesStr = employees.join(", ");
+                                    Alfresco.util.PopupManager.displayMessage(
+                                            {
+                                                text:me.msg("message.delete.position.failure.employees.assigned", employeesStr)
+                                            });
+                                } else {
+                                    me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
+                                }
+                            },
+                            failure:function (oResponse) {
+                                Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text:me.msg("message.delete.position.error")
+                                        });
+                            },
+                            argument:{
+                            }
+                        };
+                        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                    };
+
 				var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
