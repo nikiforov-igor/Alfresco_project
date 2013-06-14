@@ -13,10 +13,10 @@
 	</#if>
 </#if>
 <#assign disabled = form.mode == "view">
-<#if field.control.params.showImage?? || field.control.params.showImage=="true">
+<#if field.control.params.showImage?? && field.control.params.showImage=="true">
     <#assign showImage = true>
 </#if>
-<#if field.control.params.hideItem?? || field.control.params.showImage=="true">
+<#if field.control.params.hideItem?? && field.control.params.showImage=="true">
     <#assign hideItem = true>
 </#if>
 
