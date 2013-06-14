@@ -197,23 +197,6 @@
 		<property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
 	</bean>
 
-    <bean id="additionalDocumentOnCreateAssocsPolicy" class="ru.it.lecm.contracts.policies.AdditionalDocumentOnCreateAssocsPolicy"
-          init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
-        <property name="namespaceService">
-            <ref bean="namespaceService"/>
-        </property>
-        <property name="dictionaryService">
-            <ref bean="dictionaryService"/>
-        </property>
-    </bean>
-
-
     <bean id="contractsInitiatorNotificationExecutor" class="ru.it.lecm.contracts.schedule.InitiatorEveryDayNotificationExecutor" parent="action-executer">
         <property name="ignoreLock" value="false"/>
         <property name="contractsService" ref="contractService"/>
@@ -280,21 +263,8 @@
 		</property>
 	</bean>
 
-    <bean id="contractsOnCreateAssocsPolicy" class="ru.it.lecm.contracts.policies.ContractsOnCreateAssocsPolicy"
-          init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
-        <property name="namespaceService">
-            <ref bean="namespaceService"/>
-        </property>
-        <property name="dictionaryService">
-            <ref bean="dictionaryService"/>
-        </property>
-    </bean>
+    <bean id="contractsOnCreateAssocsPolicy" class="ru.it.lecm.contracts.policies.ContractsOnCreateAssocsPolicy" parent="logicEcmAssociationPolicy"
+          init-method="init"/>
 
     <bean id="webscript.ru.it.lecm.contracts.substitute.string.get" class="ru.it.lecm.contracts.AssociationSubstituteString" parent="webscript">
         <property name="substituteService" ref="substitudeService"/>

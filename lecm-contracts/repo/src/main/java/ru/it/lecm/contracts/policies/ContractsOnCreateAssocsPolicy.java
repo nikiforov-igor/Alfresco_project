@@ -19,5 +19,11 @@ public class ContractsOnCreateAssocsPolicy extends LogicECMAssociationPolicy {
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT, new JavaBehaviour(this, "onCreateAssociation"));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+                ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, new JavaBehaviour(this, "onDeleteAssociation"));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, new JavaBehaviour(this, "onCreateAssociation"));
     }
 }

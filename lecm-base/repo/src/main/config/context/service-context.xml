@@ -159,4 +159,20 @@
 	      parent="abstractWorkflowWebScript" depends-on="serviceOrgstructure">
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
+
+    <bean id="logicEcmAssociationPolicy" init-method="init" abstract="true"
+          class="ru.it.lecm.base.policies.LogicECMAssociationPolicy">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+    </bean>
 </beans>

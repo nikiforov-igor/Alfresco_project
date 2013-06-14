@@ -227,19 +227,7 @@
     </bean>
 
     <bean id="staffListOnCreateAssocsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureElementMemberCreateOrUpdatePolicy"
-          init-method="init" depends-on="serviceOrgstructure">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
-        <property name="namespaceService">
-            <ref bean="namespaceService"/>
-        </property>
-        <property name="dictionaryService">
-            <ref bean="dictionaryService"/>
-        </property>
+          init-method="init" depends-on="serviceOrgstructure" parent="logicEcmAssociationPolicy">
         <property name="substitudeService">
             <ref bean="substitudeService"/>
         </property>

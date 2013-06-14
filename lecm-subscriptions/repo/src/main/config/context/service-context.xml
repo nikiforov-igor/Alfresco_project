@@ -135,20 +135,7 @@
 	</bean>
 
 	<bean id="subscriptionToTypeOnCreateAssocsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsOnCreateAssocsPolicy"
-	      init-method="init">
-		<property name="policyComponent">
-			<ref bean="policyComponent"/>
-		</property>
-		<property name="nodeService">
-			<ref bean="nodeService"/>
-		</property>
-		<property name="namespaceService">
-			<ref bean="namespaceService"/>
-		</property>
-		<property name="dictionaryService">
-			<ref bean="dictionaryService"/>
-		</property>
-	</bean>
+	      init-method="init" parent="logicEcmAssociationPolicy"/>
 
 	<bean id="subscriptionsToObjectLogEventsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToObjectLogEventsPolicy"
 	      init-method="init">
