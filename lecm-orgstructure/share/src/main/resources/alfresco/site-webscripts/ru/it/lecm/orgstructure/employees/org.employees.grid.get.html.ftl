@@ -123,10 +123,19 @@
 									label:"${msg("actions.delete-row")}",
 									evaluator: function (rowData) {
                                         var itemData = rowData.itemData;
-                                        var isActive = itemData["prop_lecm-dic_active"] == undefined || itemData["prop_lecm-dic_active"].value == true;
+                                        var isActive = this.isActiveItem(itemData);
                                         return isActive && (itemData["prop_lecm-orgstr_employee-main-position"] == undefined ||
 		                                        itemData["prop_lecm-orgstr_employee-main-position"].value.length == 0);
                                     }
+								},
+								{
+									type:"datagrid-action-link-${bubblingLabel!"employee"}",
+									id:"onActionRestore",
+									permission:"delete",
+									label:"${msg("actions.restore-row")}",
+									evaluator: function (rowData) {
+										return !this.isActiveItem(rowData.itemData);
+									}
 								}
 							],
 							bubblingLabel: "${bubblingLabel!"employee"}",

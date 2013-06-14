@@ -2415,7 +2415,114 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     // Should be a filterId in the arguments
                     this.currentFilter = Alfresco.util.cleanBubblingObject(obj);
                 }
-            }
+            },
+
+	        isActiveItem: function DataGrid_isActiveItem(itemData) {
+		        return itemData["prop_lecm-dic_active"] == undefined || itemData["prop_lecm-dic_active"].value == true;
+	        },
+
+	        /**
+	         * Восстановление элемента.
+	         *
+	         * @method onActionRestore
+	         * @param p_items {Object | Array} Object literal representing the Data Item to be actioned, or an Array thereof
+	         * @param owner {Object} не используется Dom-объект
+	         * @param actionsConfig {Object} Объект с настройками для экшена
+	         * @param fnDeleteComplete {Object} CallBack, который вызовется после завершения удаления
+	         */
+	        onActionRestore:function DataGridActions_onActionRestore(p_items, owner, actionsConfig, fnComplete) {
+		        this.onRestore(p_items, owner, actionsConfig, fnComplete, null);
+	        },
+
+	        /**
+	         Восстановление элемента. onActionRestore дергает этот метод.
+	         Вынесено в отдельный метод, чтобы в конкретных датагридах не копировать
+	         код и иметь возможность навешивать доп проверки
+	         */
+	        onRestore: function DataGridActions_onRestore(p_items, owner, actionsConfig, fnComplete, fnPrompt){
+		        var me = this,
+			        items = YAHOO.lang.isArray(p_items) ? p_items : [p_items];
+
+		        var itemNames = [];
+		        var propToShow = "prop_cm_name";
+		        for (var j = 0, jj = this.datagridColumns.length; j < jj; j++) {
+			        var column = this.datagridColumns[j];
+			        if (me.options.attributeForShow != null && column.name == me.options.attributeForShow) {
+				        propToShow = column.formsName;
+				        break;
+			        }
+		        }
+		        for (var k = 0; k < items.length; k++) {
+			        if (items[k] && items[k].itemData && items[k].itemData[propToShow]) {
+				        itemNames.push("'" + items[k].itemData[propToShow].displayValue + "'");
+			        }
+		        }
+
+		        var itemsString = itemNames.join(", ");
+		        var fnActionRestoreConfirm = function DataGridActions__onActionRestore_confirm(items) {
+			        var nodeRefs = [];
+			        for (var i = 0, ii = items.length; i < ii; i++) {
+				        nodeRefs.push(items[i].nodeRef);
+			        }
+			        this.modules.actions.genericAction(
+				        {
+					        success:{
+						        event:{
+							        name:"datagridRefresh",
+							        obj:{
+								        items:items,
+								        bubblingLabel:me.options.bubblingLabel
+							        }
+						        },
+						        message:this.msg((actionsConfig && actionsConfig.successMessage)? actionsConfig.successMessage : "message.restore.success", items.length),
+						        callback:{
+							        fn:fnComplete
+						        }
+					        },
+					        failure:{
+						        message:this.msg("message.restore.failure")
+					        },
+					        webscript:{
+						        method: Alfresco.util.Ajax.POST,
+						        name: "restore"
+					        },
+					        config:{
+						        requestContentType:Alfresco.util.Ajax.JSON,
+						        dataObj:{
+							        nodeRefs:nodeRefs
+						        }
+					        }
+				        });
+		        };
+
+		        if (!fnPrompt){
+			        fnPrompt = function onRestore_Prompt(fnAfterPrompt){
+				        Alfresco.util.PopupManager.displayPrompt(
+					        {
+						        title:this.msg("message.confirm.restore.title", items.length),
+						        text: (items.length > 1) ? this.msg("message.confirm.restore.group.description", items.length) : this.msg("message.confirm.restore.description", itemsString),
+						        buttons:[
+							        {
+								        text:this.msg("button.restore"),
+								        handler:function DataGridActions__onActionRestore_restore() {
+									        this.destroy();
+									        me.selectItems("selectNone");
+									        fnAfterPrompt.call(me, items);
+								        }
+							        },
+							        {
+								        text:this.msg("button.cancel"),
+								        handler:function DataGridActions__onActionRestore_cancel() {
+									        this.destroy();
+								        },
+								        isDefault:true
+							        }
+						        ]
+					        });
+			        }
+		        }
+		        fnPrompt.call(this, fnActionRestoreConfirm);
+	        }
         }, true);
 })();
 

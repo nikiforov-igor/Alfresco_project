@@ -25,7 +25,19 @@
 									type:"datagrid-action-link-${bubblingLabel!"dictionary"}",
 									id:"onActionDelete",
 									permission:"delete",
-									label:"${msg("actions.delete-row")}"
+									label:"${msg("actions.delete-row")}",
+									evaluator: function (rowData) {
+										return this.isActiveItem(rowData.itemData);
+									}
+								},
+								{
+									type:"datagrid-action-link-${bubblingLabel!"employee"}",
+									id:"onActionRestore",
+									permission:"delete",
+									label:"${msg("actions.restore-row")}",
+									evaluator: function (rowData) {
+										return !this.isActiveItem(rowData.itemData);
+									}
 								}
 							],
 							bubblingLabel: "${bubblingLabel!"staffPosition"}",

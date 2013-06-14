@@ -114,12 +114,19 @@
 										label:"${msg("actions.delete-row")}",
                                         evaluator: function (rowData) {
                                             if (rowData) {
-                                                var itemData = rowData.itemData;
-                                                return itemData["prop_lecm-dic_active"] == undefined ||
-                                                        itemData["prop_lecm-dic_active"].value == true;
+                                                return this.isActiveItem(rowData.itemData);
                                             }
                                             return false;
                                         }
+									},
+									{
+										type:"datagrid-action-link-${bubblingLabel!"employee"}",
+										id:"onActionRestore",
+										permission:"delete",
+										label:"${msg("actions.restore-row")}",
+										evaluator: function (rowData) {
+											return !this.isActiveItem(rowData.itemData);
+										}
 									}
 								],
 								bubblingLabel: "${bubblingLabel!"orgstructure"}",
