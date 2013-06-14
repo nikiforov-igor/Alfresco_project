@@ -269,8 +269,6 @@ LogicECM.control = LogicECM.control || {};
 					el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
 				}
 
-				Dom.get(this.eventGroup).value = selectedItems.toString();
-
 				if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
 					YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
 						selectedItems: this.selectedItems
