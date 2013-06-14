@@ -124,6 +124,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 fieldName = field;
             }
             for (String el : transitions) {
+	            showNodes.clear();
                 Map<String, String> expressions = getExpression(el);
                 if (!expressions.isEmpty()) {
                     el = el.substring(0, el.indexOf(OPEN_EXPRESSIONS_SYMBOL));
@@ -183,11 +184,22 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                         break;
                     }
                 } else if (!showNodes.isEmpty()) {
+	                boolean exist = false;
                     for (NodeRef nodeRef : showNodes) {
                         if (!isArchive(nodeRef)) {
                             showNode = nodeRef;
+	                        exist = true;
                         }
                     }
+	                if (!exist) {
+		                logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
+		                showNode = null;
+		                break;
+	                }
+                } else {
+	                logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
+	                showNode = null;
+	                break;
                 }
             }
         } else {
