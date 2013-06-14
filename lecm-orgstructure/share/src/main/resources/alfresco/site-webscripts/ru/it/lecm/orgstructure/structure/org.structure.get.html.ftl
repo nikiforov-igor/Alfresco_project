@@ -148,8 +148,6 @@
 	</div>
 	<div id="alf-filters" class="tree">
 		<@orgTree.tree nodeType="lecm-orgstr:organization-unit" itemType="lecm-orgstr:organization-unit"
-						nodePattern="lecm-orgstr_element-full-name" itemPattern="lecm-orgstr_element-full-name"
-						drawEditors=false fullDelete=realDelete maxNodesOnTopLevel=1 markOnCreateAsParent=true>
-		</@orgTree.tree>
+					   fullDelete=realDelete maxNodesOnTopLevel=1 markOnCreateAsParent=true/>
 	</div>
 </div>

@@ -64,9 +64,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         options: {
             itemType: null,
             nodeType: null,
-            nodePattern: "cm_name",
-            itemPattern: "cm_name",
-            drawEditors: true,
+            drawEditors: false,
             fullDelete: false,
             insituEditors: null,
             maxNodesOnTopLevel: -1,
@@ -88,9 +86,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             var root = this.tree.getRoot();
             this._loadTree(root);
 
-//            this.tree.subscribe("expand", this._treeNodeSelected.bind(this));
-//            this.tree.subscribe("expandComplete", this.onExpandComplete, this, true);
-//            this.tree.subscribe("collapse", this._treeNodeSelected.bind(this));
             this.tree.subscribe('dblClickEvent', this._editNode.bind(this));
             this.tree.subscribe('clickEvent', function (event) {
                 this._treeNodeSelected(event.node);
@@ -305,7 +300,6 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
         _addNode:function editNodeByEvent(event) {
             var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, this.options.nodeType);
-            var pattern = this.options.nodePattern;
             new Alfresco.module.SimpleDialog("addUnit-dialog").setOptions({
                 width:"50em",
                 templateUrl:templateUrl,

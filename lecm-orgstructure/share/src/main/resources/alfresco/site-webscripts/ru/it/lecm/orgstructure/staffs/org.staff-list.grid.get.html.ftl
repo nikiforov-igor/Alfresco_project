@@ -429,8 +429,9 @@
 		</div>
 	</div>
 	<div id="alf-filters" class="tree">
-		<@orgTree.tree nodeType="lecm-orgstr:organization-unit" itemType="lecm-orgstr:staff-list"
-						nodePattern="lecm-orgstr_element-full-name" drawEditors=false fullDelete=true>
+		<@orgTree.tree nodeType="lecm-orgstr:organization-unit"
+                       itemType="lecm-orgstr:staff-list"
+					   fullDelete=true>
 		</@orgTree.tree>
 	</div>
 </div>
