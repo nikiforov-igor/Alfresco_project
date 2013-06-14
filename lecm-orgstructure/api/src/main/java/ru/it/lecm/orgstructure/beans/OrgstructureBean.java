@@ -645,4 +645,8 @@ public interface OrgstructureBean {
     NodeRef getUnitBoss(String unitCode);
 
     NodeRef getRootUnit();
+
+    List<NodeRef> getOrgRoleEmployees(NodeRef unitRef);
+
+    boolean isWorkRole(NodeRef ref);
 }

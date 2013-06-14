@@ -332,6 +332,13 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		}
 	}
 
+	public Scriptable getOrgRoleEmployees(ScriptNode orgRole) {
+		ParameterCheck.mandatory("orgRoleRef", orgRole);
+		List<NodeRef> employees = orgstructureService.getOrgRoleEmployees(orgRole.getNodeRef());
+
+        return createScriptable(employees);
+    }
+
 	/**
 	 * Получение перечня вакантных должностей в подразделении
 	 */

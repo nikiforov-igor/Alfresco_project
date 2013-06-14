@@ -266,6 +266,13 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 	@Override
+	public boolean isWorkRole(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_WORK_ROLE);
+		return isProperType(ref, types);
+	}
+
+	@Override
 	public boolean isBusinessRole(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_BUSINESS_ROLE);
@@ -412,7 +419,32 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return results;
 	}
 
-	@Override
+    @Override
+    public List<NodeRef> getOrgRoleEmployees(NodeRef nodeRef) {
+        if (!isWorkRole(nodeRef)) { // если роль для рабочей группы
+            return new ArrayList<NodeRef>();
+        }
+
+        List<NodeRef> results = new ArrayList<NodeRef>();
+        List<AssociationRef> workForceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_ELEMENT_MEMBER_POSITION);
+        for (AssociationRef workForceAssoc : workForceAssocs) {
+            NodeRef workForce = workForceAssoc.getSourceRef();
+            if (isArchive(workForce)) {
+                continue;
+            }
+
+            //получает ссылку на сотрудника
+            List<AssociationRef> empLinks = nodeService.getTargetAssocs(workForce, ASSOC_ELEMENT_MEMBER_EMPLOYEE);
+            if (empLinks.size() > 0) { // сотрудник задан -> по ссылке получаем сотрудника
+                NodeRef employee = getEmployeeByLink(empLinks.get(0).getTargetRef());
+                results.add(employee);
+            }
+        }
+
+        return results;
+    }
+
+    @Override
 	public NodeRef getEmployeeByPosition(NodeRef positionRef) {
 		NodeRef employeeLink = getEmployeeLinkByPosition(positionRef);
 		if (employeeLink != null && !isArchive(employeeLink)){
