@@ -524,6 +524,7 @@ h4 .lighter
 /* historic-properties-viewer */
 .yui-skin-lecmTheme div.yui-panel.historic-properties-viewer .form-container .form-fields {
     margin-left: -1px;
+    max-height: none;
 }
 .yui-skin-lecmTheme div.yui-panel.historic-properties-viewer .yui-navset .form-container {
     padding: 0;

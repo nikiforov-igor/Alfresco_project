@@ -14,7 +14,7 @@ function drawForm(nodeRef){
 			{
 				url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
 				dataObj:{
-					htmlid:"${id}",
+					htmlid:"${id}"+"-personal-data",
 					itemKind:"node",
 					itemId:nodeRef,
 					<#--formId:"${id}",-->
