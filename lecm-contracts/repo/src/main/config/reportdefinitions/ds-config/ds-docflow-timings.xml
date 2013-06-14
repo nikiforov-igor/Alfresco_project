@@ -28,10 +28,54 @@
 
 <cmis-ds.config>
 
+	<!-- Ограничения основной выборки -->
 	<query_offset>0</query_offset>
 	<query_limit>-1</query_limit>
 	<query_pgsize>-1</query_pgsize>
 
+	<!--
+		Описания для группирования строк из НД, полученного после сбора всех договоров.
+		(!) Ключи "key" - это значения параметра формирования отчёта "reportGroupBy"
+		, а соот-щие значения - форматная строка для отчёта.
+		В дону группу попадут строки с одинаковым значением отформатированной строки.
+
+		Пример форматной строки:
+
+		[CDATA[{lecm-additional-document:additionalDocumentType/cm:name} <i>№{lecm-additional-document:number}</i> от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts} с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}
+		]]
+		детально:
+		[CDATA[
+				{lecm-additional-document:additionalDocumentType/cm:name}
+				<i>№{lecm-additional-document:number}</i>
+				от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts}
+				с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}
+		]]
+		будет формировать для каждой выходной строки:
+			<Название_документа> №<Номер> от <ДатаСоглОсновногоДокумента> с <НазваниеОгранизацииПартнёра>
+	  -->
+	<groupby.formats>
+		<map>
+			<item key="contractKind">
+				<![CDATA[ Вид договора {lecm-contract:typeContract-assoc/cm:name}]]>
+			</item>
+
+			<item key="contractTheme">
+				<![CDATA[ Тематика договора {lecm-contract:subjectContract-assoc/cm:name}]]>
+			</item>
+
+			<item key="contractor">
+				<![CDATA[Контрагент {lecm-contract:partner-assoc/lecm-contractor:shortname}]]>
+			</item>
+
+			<item key="initiator">
+				<![CDATA[ Инициатор {~AUTHOR} ]]>
+			</item>
+		</map>
+	</groupby.formats>
+
+	<!-- Список реальных значений атрибута-статуса для группировки 
+	     внутри групп после примеенения grupby.format
+	  -->
 	<statuses>
 		<list>
 			<item>Черновик</item>
@@ -54,37 +98,26 @@
 		</list>
 	</statuses>
 
-	<!--
-		Описания группировок. Ключи это значения параметра формирования отчёта "reportGroupBy".
-		[CDATA[{lecm-additional-document:additionalDocumentType/cm:name} <i>№{lecm-additional-document:number}</i> от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts} с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}
-		]]
-		[CDATA[
-				{lecm-additional-document:additionalDocumentType/cm:name}
-				<i>№{lecm-additional-document:number}</i>
-				от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts}
-				с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}
-		]]
-	  -->
-	<groupby.formats>
+	<!-- Доп флажки для провайдера НД -->
+	<status.flags>
 		<map>
-			<item key="contractKind">
-				<![CDATA[ Вид договора {lecm-contract:typeContract-assoc/cm:name}]]>
-			</item>
+			<!--
+			   rowSum.show: надо ли вычислять сумму по строкам (по всем статусам) 
+			     и включать соот-щую колонку для dataSource отчёта
+			   rowSum.colName: (имеет значение только при rowSum.show=true)
+			   название колонки в секции fields.jasper с суммой данных по строке
+			   (!) это название одинаково тут и в секции fields.jasper.
+			 -->
+			<item key="rowSum.show">false</item>
+			<item key="rowSum.colName">col_RowSum</item>
 
-			<item key="contractTheme">
-				<![CDATA[ Тематика договора {lecm-contract:subjectContract-assoc/cm:name}]]>
-			</item>
-
-			<item key="contractor">
-				<![CDATA[Котрагент {lecm-contract:partner-assoc/lecm-contractor:shortname}]]>
-			</item>
-
-			<item key="initiator">
-				<![CDATA[ Инициатор {~AUTHOR} ]]>
-			</item>
+			<!--
+			<item key="doc.statusProperty">lecm-statemachine:status</item>
+			  -->
 		</map>
-	</groupby.formats>
+	</status.flags>
 
+	<!-- Описания полей  данных в наборе -->
 	<fields.jasper>
 
 		<!-- Первый столбец это значение выбранного Измерения, т.е. название вида договоров,
@@ -115,6 +148,7 @@
 		  -->
 	</fields.jasper>
 
+	<!-- параметры соединения с Альфреско (пока не используются) -->
 	<url>http://localhost:8080/alfresco/service/cmis</url>
 	<username>admin</username>
 	<password>111</password>

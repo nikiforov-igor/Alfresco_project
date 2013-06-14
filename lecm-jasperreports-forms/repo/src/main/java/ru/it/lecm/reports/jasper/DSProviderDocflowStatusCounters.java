@@ -58,6 +58,8 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	/** название столбца содержащего сумму по строке */
 	final static String XMLSTATUS_FLAGS_ITEM_ROWSUM_COLNAME = "rowSum.colName";
 
+	/** название атрибута со статусом */
+	final static String XMLSTATUS_PROPERTY = "doc.statusProperty";
 
 	/**
 	 * Формат названия колонки со счётчиками
@@ -523,7 +525,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 //				final NamespaceService ns = serviceRegistry.getNamespaceService();
 //				final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
-				final QName status = QName.createQName( ATTR_STATUS, serviceRegistry.getNamespaceService());
+				final QName status = QName.createQName( getStatusAttrName(), serviceRegistry.getNamespaceService());
 
 				while(context.getRsIter().hasNext()) {
 					final ResultSetRow rs = context.getRsIter().next();
@@ -553,6 +555,21 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 			logger.info( String.format( "found %s row(s)", result.size()));
 
 			return result.size();
+		}
+
+		/**
+		 * Вернуть название атрибута со статусом.
+		 * Если имеется непустой конфигурационный параметр [(Map)"status.flags"]["doc.statusProperty"]
+		 * то используется он, иначе используется const ATTR_STATUS.
+		 * @return
+		 */
+		private String getStatusAttrName() {
+			String result = null;
+			final Map<String, Object> mapStatusFlags =  conf().getMap(XMLSTATUS_FLAGS_MAP);
+			if (mapStatusFlags != null && mapStatusFlags.containsKey(XMLSTATUS_PROPERTY)) {
+				result = Utils.coalesce( mapStatusFlags.get(XMLSTATUS_PROPERTY), ATTR_STATUS).trim();
+			}
+			return ( (result != null) && result.length() > 0 ) ?  result : ATTR_STATUS;
 		}
 
 		@Override
