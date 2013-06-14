@@ -1874,7 +1874,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             _updateDataGrid: function DataGrid__updateDataGrid(p_obj)
             {
-                var successFilter = YAHOO.lang.merge({}, p_obj.filter ? p_obj.filter : this.currentFilter);
+                var successFilter = p_obj.filter ? p_obj.filter: null;
 
                 // Reset the custom error messages
                 this._setDefaultDataTableErrors(this.widgets.dataTable);
