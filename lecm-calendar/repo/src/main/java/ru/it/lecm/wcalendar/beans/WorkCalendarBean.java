@@ -46,14 +46,12 @@ public class WorkCalendarBean implements IWorkCalendar {
 		if (!orgstructureService.isEmployee(node)) {
 			String errMessage = "Argument 'node' must be an Employee!";
 			IllegalArgumentException t = new IllegalArgumentException(errMessage);
-			logger.error(errMessage, t);
 			throw t;
 		}
 		NodeRef schedule = getScheduleOrParentSchedule(node);
 		if (schedule == null) {
-			String errMessage = "No schedule associated with employee nor with it's parent OUs!";
+			String errMessage = String.format("No schedule associated with employee [%s] nor with it's parent OUs! ", node.toString());
 			IllegalArgumentException t = new IllegalArgumentException(errMessage);
-			logger.error(errMessage, t);
 			throw t;
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
@@ -64,7 +62,6 @@ public class WorkCalendarBean implements IWorkCalendar {
 			if (isPresent == null) {
 				String errMessage = String.format("No calendar for such year (%d)!", getYearByDate(day));
 				IllegalArgumentException t = new IllegalArgumentException(errMessage);
-				logger.error(errMessage, t);
 				throw t;
 			} else {
 				result = isPresent;
@@ -78,7 +75,6 @@ public class WorkCalendarBean implements IWorkCalendar {
 		} else {
 			String errMessage = String.format("Something wrong with schedule: it has some strange type: %s", scheduleType);
 			RuntimeException t = new RuntimeException(errMessage);
-			logger.error(errMessage, t);
 			throw t;
 		}
 
