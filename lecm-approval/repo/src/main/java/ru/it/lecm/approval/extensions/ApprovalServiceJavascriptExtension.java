@@ -10,32 +10,44 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.approval.api.ApprovalListService;
-
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.alfresco.util.ISO8601DateFormat;
 import org.apache.commons.lang.time.DateUtils;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.joda.time.Days;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.wcalendar.IWorkCalendar;
 
 public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExtension {
 
+	private final static Logger logger = LoggerFactory.getLogger(ApprovalServiceJavascriptExtension.class);
 	private final static DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 	private AuthenticationService authenticationService;
 	private NodeService nodeService;
 	private ApprovalListService approvalListService;
+	private IWorkCalendar workCalendarService;
+
+	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
+		this.workCalendarService = workCalendarService;
+	}
 
 	public void setAuthenticationService(AuthenticationService authenticationService) {
 		this.authenticationService = authenticationService;
@@ -231,41 +243,41 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 	 * }]
 	 * }
 	 */
-    public JSONObject getAssigneesLists() {
-        JSONObject result = new JSONObject();
-        JSONArray resultArray = new JSONArray();
+	public JSONObject getAssigneesLists() {
+		JSONObject result = new JSONObject();
+		JSONArray resultArray = new JSONArray();
 
-        // получить (попутно создав) список по умолчанию
-        NodeRef defaultList = getDefaultListFolderRef();
-        // получаем все листы согласующих
-        NodeRef parentFolder = getListsFolderRef();
-        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(parentFolder);
-        // бежим по листам
-        for (ChildAssociationRef childAssoc : childAssocs) {
-            NodeRef assigneesListRef = childAssoc.getChildRef();
-            String assigneesListName = (String) nodeService.getProperty(assigneesListRef, ContentModel.PROP_NAME);
+		// получить (попутно создав) список по умолчанию
+		NodeRef defaultList = getDefaultListFolderRef();
+		// получаем все листы согласующих
+		NodeRef parentFolder = getListsFolderRef();
+		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(parentFolder);
+		// бежим по листам
+		for (ChildAssociationRef childAssoc : childAssocs) {
+			NodeRef assigneesListRef = childAssoc.getChildRef();
+			String assigneesListName = (String) nodeService.getProperty(assigneesListRef, ContentModel.PROP_NAME);
 
-            JSONObject jsonItem = new JSONObject();
+			JSONObject jsonItem = new JSONObject();
 
-            try {
-                // для каждого строим JSON-объект
-                jsonItem.put("listName", assigneesListName);
-                jsonItem.put("nodeRef", assigneesListRef.toString());
-            } catch (JSONException ex) {
-                throw new WebScriptException("Can not form JSONArray", ex);
-            }
-            // складываем в json-array
-            resultArray.put(jsonItem);
-        }
+			try {
+				// для каждого строим JSON-объект
+				jsonItem.put("listName", assigneesListName);
+				jsonItem.put("nodeRef", assigneesListRef.toString());
+			} catch (JSONException ex) {
+				throw new WebScriptException("Can not form JSONArray", ex);
+			}
+			// складываем в json-array
+			resultArray.put(jsonItem);
+		}
 
-        try {
-            result.put("lists", resultArray);
-            result.put("defaultListRef", defaultList.toString());
-        } catch (JSONException ex) {
-            throw new WebScriptException("Can not form JSONObject", ex);
-        }
-        return result;
-    }
+		try {
+			result.put("lists", resultArray);
+			result.put("defaultListRef", defaultList.toString());
+		} catch (JSONException ex) {
+			throw new WebScriptException("Can not form JSONObject", ex);
+		}
+		return result;
+	}
 
 	/**
 	 * Получить содержимое листа согласующих
@@ -305,10 +317,9 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 
 		// бежим по элементам листа согласующих
 		for (NodeRef listItem : listItemsNodes) {
-			int order = (Integer) nodeService.getProperty(listItem, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER);
+			int order = getAssigneeListItemOrder(listItem);
 			Date dueDate = (Date) nodeService.getProperty(listItem, ApprovalListService.PROP_ASSIGNEES_ITEM_DUE_DATE);
-			List<AssociationRef> employeeAssocList = nodeService.getTargetAssocs(listItem, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC);
-			NodeRef employeeNode = employeeAssocList.get(0).getTargetRef();
+			NodeRef employeeNode = getEmployeeFromAssigneeListItem(listItem);
 			JSONObject listItemJSON = new JSONObject();
 			try {
 				// для каждого из элементов создаем json-объект
@@ -369,7 +380,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 			throw new WebScriptException("Insufficient params in JSON", ex);
 		}
 		NodeRef listItemNodeRef = new NodeRef(listItemNodeRefStr);
-		currentItemOrder = (Integer) nodeService.getProperty(listItemNodeRef, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER);
+		currentItemOrder = getAssigneeListItemOrder(listItemNodeRef);
 		List<AssociationRef> assigneesListAssocs = nodeService.getSourceAssocs(listItemNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
 		NodeRef assigeesListNodeRef = assigneesListAssocs.get(0).getSourceRef();
 		List<AssociationRef> listItemsTargetAssocs = nodeService.getTargetAssocs(assigeesListNodeRef, ApprovalListService.ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM);
@@ -398,7 +409,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 				if (item.equals(listItemNodeRef)) {
 					continue;
 				}
-				int itemOrder = (Integer) nodeService.getProperty(item, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER);
+				int itemOrder = getAssigneeListItemOrder(item);
 				if (itemOrder == newItemOrder) {
 					nodeService.setProperty(item, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER, currentItemOrder);
 					break;
@@ -483,11 +494,11 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		Date previousDate;
 		Date currentDate;
 
-		nodeService.setProperty(assigneesListItems.get(0), ApprovalListService.PROP_ASSIGNEES_ITEM_DUE_DATE, DateUtils.addDays(today, period));
+		setAssigneeListItemDueDate(assigneesListItems.get(0), DateUtils.addDays(today, period));
 		for (int i = 1; i < assigneesListItems.size(); i++) {
 			previousDate = (Date) nodeService.getProperty(assigneesListItems.get(i - 1), ApprovalListService.PROP_ASSIGNEES_ITEM_DUE_DATE);
 			currentDate = DateUtils.addDays(previousDate, period);
-			nodeService.setProperty(assigneesListItems.get(i), ApprovalListService.PROP_ASSIGNEES_ITEM_DUE_DATE, currentDate);
+			setAssigneeListItemDueDate(assigneesListItems.get(i), currentDate);
 		}
 	}
 
@@ -498,5 +509,157 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 			result.add(listItemAssoc.getTargetRef());
 		}
 		return result;
+	}
+
+	private int getAssigneeListItemOrder(NodeRef listItemNodeRef) {
+		return (Integer) nodeService.getProperty(listItemNodeRef, ApprovalListService.PROP_ASSIGNEES_ITEM_ORDER);
+	}
+
+	private List<NodeRef> sortAssigneesListItems(List<NodeRef> assigneesListItems) {
+		List<NodeRef> sortedAssigneesListItems = new ArrayList<NodeRef>(assigneesListItems);
+
+		Comparator<NodeRef> comparator = new Comparator<NodeRef>() {
+			@Override
+			public int compare(NodeRef o1, NodeRef o2) {
+				int order1 = getAssigneeListItemOrder(o1);
+				int order2 = getAssigneeListItemOrder(o2);
+				return (order1 < order2) ? -1 : ((order1 == order2) ? 0 : 1);
+			}
+		};
+		Collections.sort(sortedAssigneesListItems, comparator);
+
+		return sortedAssigneesListItems;
+	}
+
+	public void setDueDates(JSONObject json) {
+		String assigneeListNodeRefStr, workflowDueDateStr;
+		try {
+			assigneeListNodeRefStr = json.getString("assigneeListNodeRef");
+			workflowDueDateStr = json.getString("workflowDueDate");
+		} catch (JSONException ex) {
+			throw new WebScriptException("Error parsing JSON", ex);
+		}
+		setDueDates(new NodeRef(assigneeListNodeRefStr), ISO8601DateFormat.parse(workflowDueDateStr));
+	}
+
+	private void setDueDates(NodeRef assigneeListNodeRef, Date workflowDueDate) {
+		List<NodeRef> assigneeListItems = sortAssigneesListItems(getAssigneesListItems(assigneeListNodeRef));
+		Date workflowDueDateTruncated = DateUtils.truncate(workflowDueDate, Calendar.DATE);
+		Date today = DateUtils.truncate(new Date(), Calendar.DATE);
+
+		final int daysCount = Days.daysBetween(new DateTime(today), new DateTime(workflowDueDateTruncated)).getDays() + 1;
+		final int peopleCount = assigneeListItems.size();
+
+		int i, remainingDays = daysCount, remainingPeople = peopleCount;
+
+		double day = 0, daysPerPeople, peoplePerDay,
+				daysModulo, peopleModulo, daysBuffer = 0, peopleBuffer = 0;
+
+		if (daysCount >= peopleCount) {
+			daysPerPeople = (double) daysCount / peopleCount;
+			daysModulo = daysPerPeople % 1;
+
+			for (i = 0; i < peopleCount; ++i) {
+				NodeRef assigneeListItem = assigneeListItems.get(i);
+				daysBuffer += daysModulo;
+				if (daysPerPeople < remainingDays) {
+					day += daysPerPeople;
+					if (daysBuffer >= 1) {
+						int curDay = (int) Math.floor(day + 0.5) - 1;
+						Date dueDate = DateUtils.addDays(today, curDay);
+						setEffectiveDueDate(assigneeListItem, dueDate);
+						daysBuffer = Math.abs(daysBuffer - 1);
+					} else {
+						int curDay = (int) Math.floor(day) - 1;
+						Date dueDate = DateUtils.addDays(today, curDay);
+						setEffectiveDueDate(assigneeListItem, dueDate);
+					}
+
+					remainingDays -= daysPerPeople;
+				} else {
+					int curDay = (int) Math.round(day + remainingDays) - 1;
+					Date dueDate = DateUtils.addDays(today, curDay);
+					setEffectiveDueDate(assigneeListItem, dueDate);
+				}
+			}
+		} else {
+			int curPerson = 0;
+
+			peoplePerDay = (double) peopleCount / daysCount;
+			int peoplePerDayFloored = (int) Math.floor(peoplePerDay);
+			peopleModulo = peoplePerDay % 1;
+
+			for (i = 0; i < daysCount; ++i) {
+				Date dueDate = DateUtils.addDays(today, i);
+				peopleBuffer += peopleModulo;
+
+				if (peoplePerDay < remainingPeople) {
+					if (peopleBuffer >= 1) {
+						for (int j = 0; j <= peoplePerDayFloored; j++) {
+							NodeRef assigneeListItem = assigneeListItems.get(curPerson);
+							setEffectiveDueDate(assigneeListItem, dueDate);
+							curPerson++;
+						}
+						peopleBuffer = Math.abs(peopleBuffer - 1);
+					} else {
+						for (int j = 0; j < peoplePerDayFloored; j++) {
+							NodeRef assigneeListItem = assigneeListItems.get(curPerson);
+							setEffectiveDueDate(assigneeListItem, dueDate);
+							curPerson++;
+						}
+					}
+
+					remainingPeople -= peoplePerDay;
+				} else {
+					if (peopleBuffer >= 1) {
+						for (int j = 0; j <= remainingPeople; j++) {
+							NodeRef assigneeListItem = assigneeListItems.get(curPerson);
+							setEffectiveDueDate(assigneeListItem, dueDate);
+							curPerson++;
+						}
+						peopleBuffer = Math.abs(peopleBuffer - 1);
+					} else {
+						for (int j = 0; j < remainingPeople; j++) {
+							NodeRef assigneeListItem = assigneeListItems.get(curPerson);
+							setEffectiveDueDate(assigneeListItem, dueDate);
+							curPerson++;
+						}
+					}
+					remainingPeople -= remainingPeople;
+				}
+			}
+		}
+	}
+
+	private void setEffectiveDueDate(NodeRef assigneeListItem, Date priorDueDate) {
+		Date effectiveDueDate = new Date(priorDueDate.getTime());
+		NodeRef employeeNode = getEmployeeFromAssigneeListItem(assigneeListItem);
+		boolean employeePresent = false;
+		while (!employeePresent) {
+			try {
+				employeePresent = workCalendarService.getEmployeeAvailability(employeeNode, effectiveDueDate);
+			} catch (IllegalArgumentException ex) {
+				logger.warn(ex.getMessage());
+				break;
+			}
+			if (!employeePresent) {
+				effectiveDueDate = DateUtils.addDays(effectiveDueDate, 1);
+			}
+		}
+		setAssigneeListItemDueDate(assigneeListItem, effectiveDueDate);
+
+	}
+
+	private void setAssigneeListItemDueDate(NodeRef assigneeListItem, Date dueDate) {
+		nodeService.setProperty(assigneeListItem, ApprovalListService.PROP_ASSIGNEES_ITEM_DUE_DATE, dueDate);
+	}
+
+	private NodeRef getEmployeeFromAssigneeListItem(NodeRef assigneeListItem) {
+		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(assigneeListItem, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC);
+		if (targetAssocs.isEmpty()) {
+			return null;
+		} else {
+			return targetAssocs.get(0).getTargetRef();
+		}
 	}
 }

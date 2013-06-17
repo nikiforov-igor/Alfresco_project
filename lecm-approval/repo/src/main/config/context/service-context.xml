@@ -98,6 +98,7 @@
 		<property name="authenticationService" ref="authenticationService"/>
 		<property name="approvalListService" ref="lecm.approval.service"/>
 		<property name="nodeService" ref="nodeService"/>
+		<property name="workCalendarService" ref="WorkCalendarService"/>
 	</bean>
 
 	<bean id="lecm.approval.ApprovalListItemPolicy" class="ru.it.lecm.approval.policies.ApprovalListItemPolicy" init-method="init" depends-on="lecm.approval.modelBootstrap">
