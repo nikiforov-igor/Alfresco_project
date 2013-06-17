@@ -789,6 +789,9 @@
                     <show id="lecm-orgstr:staffPosition-name-d"/>
                     <show id="lecm-orgstr:staffPosition-code"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="lecm-orgstr_staffPosition-name"/>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -802,6 +805,9 @@
                     <show id="lecm-orgstr:staffPosition-name-d"/>
                     <show id="lecm-orgstr:staffPosition-code"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="lecm-orgstr_staffPosition-name"/>
+                </appearance>
             </form>
             <form id="search">
                 <field-visibility>
@@ -809,11 +815,17 @@
                     <show id="lecm-orgstr:staffPosition-name-g"/>
                     <show id="lecm-orgstr:staffPosition-name-d"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="lecm-orgstr_staffPosition-name"/>
+                </appearance>
             </form>
             <form id="datagrid">
                 <field-visibility>
                     <show id="cm:name"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="lecm-orgstr_staffPosition-name"/>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -825,6 +837,9 @@
                     <show id="cm:name"/>
                     <show id="lecm-orgstr:workRole-description"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="lecm-orgstr_workRole-name"/>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -836,12 +851,18 @@
                     <show id="cm:name"/>
                     <show id="lecm-orgstr:workRole-description"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="lecm-orgstr_workRole-name"/>
+                </appearance>
             </form>
             <form id="search">
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-orgstr:workRole-description"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="lecm-orgstr_workRole-name"/>
+                </appearance>
             </form>
         </forms>
     </config>
