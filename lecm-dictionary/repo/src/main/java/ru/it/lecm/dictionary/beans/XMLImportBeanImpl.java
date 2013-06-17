@@ -63,7 +63,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
 
     public class XMLImporterImpl implements XMLImporter {
         private InputStream inputStream;
-
+	    private XMLImporterInfo importInfo;
 
         /**
          * Конструктор загрузчика XML
@@ -79,8 +79,8 @@ public class XMLImportBeanImpl implements XMLImportBean {
          * @param parentNodeRef родительский элемен, в котором будут созданы импортируемые
          * @throws javax.xml.stream.XMLStreamException
          */
-        public void readItems(NodeRef parentNodeRef) throws XMLStreamException {
-            readItems(parentNodeRef, false);
+        public XMLImporterInfo readItems(NodeRef parentNodeRef) throws XMLStreamException {
+            return readItems(parentNodeRef, false);
         }
 
         /**
@@ -90,7 +90,9 @@ public class XMLImportBeanImpl implements XMLImportBean {
          * @param doNotUpdateIfExist не обновлять, если такой справочник уже существует, иначе обновить свойства справочника и элементы
          * @throws XMLStreamException
          */
-        public void readItems(NodeRef parentNodeRef, boolean doNotUpdateIfExist) throws XMLStreamException {
+        public XMLImporterInfo readItems(NodeRef parentNodeRef, boolean doNotUpdateIfExist) throws XMLStreamException {
+	        this.importInfo = new XMLImporterInfo();
+
             logger.info("Importing dictionary. (doNotUpdateIfExist = {})", doNotUpdateIfExist);
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();
             XMLStreamReader xmlr = inputFactory.createXMLStreamReader(inputStream);
@@ -103,6 +105,8 @@ public class XMLImportBeanImpl implements XMLImportBean {
             if (str.equals(ExportNamespace.TAG_ITEMS)) {
                 readItems(xmlr, parentNodeRef, doNotUpdateIfExist);
             }
+
+	        return importInfo;
         }
 
         /** считывание элементов и создание
@@ -223,6 +227,8 @@ public class XMLImportBeanImpl implements XMLImportBean {
                         logger.warn("Skip create association: {}. Already exist.", new AssociationRef(parent, assocType, targetRef));
                     }
                 }
+            } else {
+	            this.importInfo.addAssocNotFoundError(assocTypeAttr, assocPathAttr);
             }
             xmlr.nextTag();//выходим из </assoc>
             xmlr.nextTag();//выходим из </assoc>
@@ -282,9 +288,11 @@ public class XMLImportBeanImpl implements XMLImportBean {
                         assocQName,
                         itemType,
                         properties).getChildRef();
+	            this.importInfo.setCreatedElementsCount(this.importInfo.getCreatedElementsCount() + 1);
                 logger.info("Item '{}' created", name);
             } else if (!doNotUpdateIfExist) {
                 nodeService.addProperties(node, properties);
+	            this.importInfo.setUpdatedElementsCount(this.importInfo.getUpdatedElementsCount() + 1);
                 logger.info("Item '{}' updated", name);
             }
             return node;

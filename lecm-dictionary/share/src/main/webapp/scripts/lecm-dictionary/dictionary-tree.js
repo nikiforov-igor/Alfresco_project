@@ -206,10 +206,8 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 var callback = {
                     success:function (oResponse) {
                         var oResults = eval("(" + oResponse.responseText + ")");
-                        if (oResults != null) {
-                            for (var nodeIndex in oResults) {
-                                nodeDictionary = oResults[nodeIndex].toString();
-                            }
+                        if (oResults != null && oResults.nodeRef != null) {
+                            nodeDictionary = oResults.nodeRef;
                         }
                         me.draw();
                     },

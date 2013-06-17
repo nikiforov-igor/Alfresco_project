@@ -40,3 +40,16 @@
     cursor: pointer;
     font-size: 30px;
 }
+
+.import-info-content {
+	margin: 5px 20px;
+	padding-bottom: 5px;
+}
+
+.import-form {
+	margin: 5px 20px;
+}
+
+.import-form li{
+	padding-bottom: 5px;
+}

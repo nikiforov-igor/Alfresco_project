@@ -15,8 +15,8 @@ public interface XMLImportBean {
     XMLImporter getXMLImporter(InputStream inputStream);
 
     public interface XMLImporter {
-        public void readItems(NodeRef parentNodeRef) throws XMLStreamException;
+        public XMLImporterInfo readItems(NodeRef parentNodeRef) throws XMLStreamException;
 
-        public void readItems(NodeRef parentNodeRef, boolean doNotUpdateIfExist) throws XMLStreamException;
+        public XMLImporterInfo readItems(NodeRef parentNodeRef, boolean doNotUpdateIfExist) throws XMLStreamException;
     }
 }

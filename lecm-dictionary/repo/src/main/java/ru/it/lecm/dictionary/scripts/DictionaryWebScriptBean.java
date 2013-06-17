@@ -1,6 +1,7 @@
 package ru.it.lecm.dictionary.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
@@ -43,4 +44,12 @@ public class DictionaryWebScriptBean extends BaseWebScript {
         return (dictionary == null) ? null : new ScriptNode(dictionary, serviceRegistry, getScope());
     }
 
+	/**
+	 * Получение корневой папки уведомлений активного канала
+	 * @return
+	 */
+	public ScriptNode getRootDirectory() {
+		NodeRef ref = this.dictionaryService.getDictionariesRoot();
+		return new ScriptNode(ref, serviceRegistry, getScope());
+	}
 }

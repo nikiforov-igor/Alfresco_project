@@ -69,6 +69,9 @@
           parent="webscript">
 		<property name="dictionaryBean" ref="serviceDictionary"/>
         <property name="xmlImportBean" ref="lecmDictionaryImportBean"/>
+	    <property name="transactionService" ref="transactionService"/>
+	    <property name="dictionaryService" ref="dictionaryService"/>
+	    <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
 	<bean id="webscript.ru.it.lecm.dictionary.api.export.get"

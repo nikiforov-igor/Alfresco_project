@@ -89,6 +89,12 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
              */
             options: {},
 
+	        importFromDialog: null,
+
+	        importInfoDialog: null,
+
+	        submitButton: null,
+
             /**
              * Fired by YUI when parent element is available for scripting.
              *
@@ -96,34 +102,67 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
              */
             onReady: function Toolbar_onReady() {
                 // Import XML
-                var importXmlButton = Alfresco.util.createYUIButton(this, "importXmlButton", function(){},{});
-                var inputId = this.id + "-import-xml-input";
+                var importXmlButton = Alfresco.util.createYUIButton(this, "importXmlButton", this.showImportDialog,{});
 
-                Event.on(inputId, "mouseenter", function() {
-                    UA.mouseover(importXmlButton);
-                });
-                Event.on(inputId, "mouseleave", function() {
-                    UA.mouseout(importXmlButton);
-                });
-                Event.on(inputId, "change", this.onImportXML, null, this);
+	            this.submitButton = Alfresco.util.createYUIButton(this, "import-form-submit", this.onImportXML,{
+		            disabled: true
+	            });
+                var importXmlButton = Alfresco.util.createYUIButton(this, "import-form-cancel", this.hideImportDialog,{});
+
+                Event.on(this.id + "-import-form-import-file", "change", this.checkImportFile, null, this);
 
 	            // Finally show the component body here to prevent UI artifacts on YUI button decoration
 	            Dom.setStyle(this.id + "-body", "visibility", "visible");
+
+	            this.importInfoDialog = Alfresco.util.createYUIPanel(this.id + "-import-info-form",
+		            {
+			            width: "50em"
+		            });
+
+	            this.importFromDialog = Alfresco.util.createYUIPanel(this.id + "-import-form",
+		            {
+			            width: "50em"
+		            });
             },
+
+	        showImportDialog: function() {
+		        this.importFromDialog.show();
+	        },
+
+	        hideImportDialog: function() {
+		        this.importFromDialog.hide();
+	        },
+
+	        checkImportFile: function(event) {
+		        this.submitButton.set("disabled", event.currentTarget.value == null || event.currentTarget.value.length == 0);
+	        },
 
             /**
              * On "submit"-button click.
              */
             onImportXML: function() {
+	            var me = this;
                 Connect.setForm(this.id + '-import-xml-form', true);
                 var url = Alfresco.constants.URL_CONTEXT + "proxy/alfresco/lecm/dictionary/post/import";
-                var fileUploadCallback = {
-                    upload:function(o){
-                        console.log('Server Response: ' + o.responseText);
-                        document.location.reload(true);
+                var callback = {
+	                upload: function(oResponse){
+	                    var oResults = YAHOO.lang.JSON.parse(oResponse.responseText);
+	                    if (oResults[0] != null && oResults[0].text != null) {
+		                    Dom.get(me.id + "-import-info-form-content").innerHTML = oResults[0].text;
+		                    me.importInfoDialog.show();
+	                    } else if (oResults.exception != null && oResults.message != null) {
+		                    Dom.get(me.id + "-import-info-form-content").innerHTML = oResults.message.replace(/\n/g, '<br>').replace(/\r/g, '<br>');
+		                    me.importInfoDialog.show();
+	                    }
+
+		                YAHOO.Bubbling.fire("datagridRefresh",
+			                {
+				                bubblingLabel: "dictionaries-all-datagrid"
+			                });
                     }
                 };
-                Connect.asyncRequest(Alfresco.util.Ajax.GET, url, fileUploadCallback);
+	            this.hideImportDialog();
+	            Connect.asyncRequest(Alfresco.util.Ajax.POST, url, callback);
             }
         }, true);
 })();
