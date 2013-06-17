@@ -128,7 +128,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
 									        });
 							        }.bind(me);
 
-							        me.onDelete([oResult], owner, {fullDelete: true, targetDelete: true, successMessage: "message.employee.role.delete.success"}, fnDeleteComplete, onPrompt);
+							        me.onDelete([oResult], owner, {fullDelete: true, trash: false, successMessage: "message.employee.role.delete.success"}, fnDeleteComplete, onPrompt);
 						        } else {
 							        Alfresco.util.PopupManager.displayMessage(
 								        {

@@ -150,7 +150,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                                 nodeRef: nodeRef,
                                 actionsConfig: {
                                     fullDelete: true,
-                                    targetDelete: true
+                                    trash: false
                                 }
                             },
                             bubblingLabel: "workForce"
@@ -267,7 +267,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                         nodeRef: selectItem.getData().nodeRef,
                         actionsConfig: {
                             fullDelete: true,
-                            targetDelete: true
+                            trash: false
                         }
                     },
                     bubblingLabel: "workForce"

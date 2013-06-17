@@ -100,7 +100,7 @@
                         nodeRef: "${contractorRef}",
                         actionsConfig: {
                             fullDelete: true,
-                            targetDelete: true
+                            trash: false
                         }
                     }
                 });

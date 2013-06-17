@@ -2022,10 +2022,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         if (fullDelete != null && trash != null) {
                             query = query + "&trash=" + trash;
                         }
-                        var target = actionsConfig.targetDelete;
-                        if (target != null) {
-                            query = query + (query.length > 0 ? "&": "") +  "target=" + target;
-                        }
                     }
                     this.modules.actions.genericAction(
                         {

@@ -95,7 +95,7 @@
                                                                         text:me.msg("message.employee.position.delete.failure.primary")
                                                                     });
                                                         } else { // удаляем! вызов метода из грида
-                                                            me.onDelete([oResult], owner, {fullDelete:true, targetDelete:true, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
+                                                            me.onDelete([oResult], owner, {fullDelete:true, trash:false, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
                                                         }
                                                     },
                                                     failure:function (oResponse) {
@@ -109,7 +109,7 @@
                                                 };
                                                 YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
                                             } else {
-                                                me.onDelete([oResult], owner, {fullDelete:true, targetDelete:true, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
+                                                me.onDelete([oResult], owner, {fullDelete:true, trash:false, successMessage: "message.employee.position.delete.success"}, fnDeleteComplete, onPrompt);
                                             }
                                         } else {
                                             Alfresco.util.PopupManager.displayMessage(

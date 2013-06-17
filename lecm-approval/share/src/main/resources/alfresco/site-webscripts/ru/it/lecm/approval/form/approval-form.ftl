@@ -110,7 +110,7 @@
                     sort: "lecm-al:assignees-item-order|true",
                     actionsConfig: {
                         fullDelete: true,
-                        targetDelete: true
+                        trash: false
                     }
                 }
             });
@@ -423,7 +423,7 @@
                     sort: "lecm-al:assignees-item-order|true",
                     actionsConfig: {
                         fullDelete: true,
-                        targetDelete: true
+                        trash: false
                     }
                 }
             });
@@ -666,7 +666,7 @@
                     sort: "lecm-al:assignees-item-order|true",
                     actionsConfig: {
                         fullDelete: true,
-                        targetDelete: true
+                        trash: false
                     }
                 }
             });

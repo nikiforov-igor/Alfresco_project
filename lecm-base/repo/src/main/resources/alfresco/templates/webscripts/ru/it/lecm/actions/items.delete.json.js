@@ -44,10 +44,8 @@ function runAction(p_params) {
 
     var full = args["full"] != null ? args["full"] : false;
     var trash = args["trash"] != null ? args["trash"] : true;
-    var target = args["target"] != null ? args["target"] : false;
     // фикс, чтобы всегда работали со строками
     full = "" + full;
-    target = "" + target;
     for (item in items) {
         nodeRef = items[item];
         result =
@@ -65,27 +63,6 @@ function runAction(p_params) {
                     itemNode.save();
                     result.success = true;
                 } else {//реальное удаление объекта
-                    var sAssocs;
-                    sAssocs = itemNode.getSourceAssocs();
-                    // удалить все ссылки на объект
-                    for (key in sAssocs) {
-                        var assocsList = sAssocs[key];
-                        for (index in assocsList) {
-                            var targetA = assocsList[index];
-                            targetA.removeAssociation(itemNode, key);
-                        }
-                    }
-                    if (target == "true") {
-                        var tAssocs;
-                        tAssocs = itemNode.getAssocs();
-                        for (key in tAssocs) {
-                            var assocsList = tAssocs[key];
-                            for (index in assocsList) {
-                                var targetA = assocsList[index];
-                                itemNode.removeAssociation(targetA, key);
-                            }
-                        }
-                    }
                     if (trash == "false") {
                         itemNode.addAspect("sys:temporary");
                     }

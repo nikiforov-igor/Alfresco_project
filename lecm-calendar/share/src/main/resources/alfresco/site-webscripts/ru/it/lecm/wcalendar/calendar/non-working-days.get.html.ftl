@@ -33,7 +33,7 @@ YAHOO.util.Event.onContentReady ('${id}', function () {
             nodeRef: "NOT_LOAD",
             actionsConfig: {
                 fullDelete:true,
-                targetDelete:true
+                trash:false
             }
         },
     bubblingLabel: LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL

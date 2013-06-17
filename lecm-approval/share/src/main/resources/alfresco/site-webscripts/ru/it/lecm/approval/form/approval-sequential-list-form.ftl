@@ -140,7 +140,7 @@
                                 sort: "lecm-al:assignees-item-order|true",
                                 actionsConfig: {
                                     fullDelete: true,
-                                    targetDelete: true
+                                    trash: false
                                 }
                             },
                             bubblingLabel: "workflow-form-form-datagrid-label"
@@ -180,7 +180,7 @@
                                 sort: "lecm-al:assignees-item-order|true",
                                 actionsConfig: {
                                     fullDelete: true,
-                                    targetDelete: true
+                                    trash: false
                                 }
                             },
                             bubblingLabel: "workflow-form-form-datagrid-label"
@@ -218,7 +218,7 @@
                     sort: "lecm-al:assignees-item-order|true",
                     actionsConfig: {
                         fullDelete: true,
-                        targetDelete: true
+                        trash: false
                     }
                 },
                 bubblingLabel: "workflow-form-form-datagrid-label"
@@ -302,7 +302,7 @@
                     sort: "lecm-al:assignees-item-order|true",
                     actionsConfig: {
                         fullDelete: true,
-                        targetDelete: true
+                        trash: false
                     }
                 }
             });
