@@ -2535,7 +2535,7 @@ LogicECM.module = LogicECM.module || {};
             if (p_key.toLowerCase() == "icon")
             {
                 var src = '';
-                if (item.type && item.type.indexOf("lecm") >=0) {
+                if (item.type && item.type.indexOf("lecm") >=0 && item.type.indexOf("document") >=0) {
                      src = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + item.type.replace(":", "_") + ".png";
                 } else {
                     src = me.getIconURL(item, iconSize);

@@ -105,16 +105,9 @@
          var timeEntry = theDate.toString(this._msg("form.control.date-picker.entry.time.format"));
          
          // populate the input fields
-         if (this.options.currentValue !== "")
-         {
-            // show the formatted date
-            Dom.get(this.id + "-date").innerHTML = dateEntry;
-            
-            if (this.options.showTime)
-            {
-               Dom.get(this.id + "-time").innerHTML = timeEntry;
-            }
-         }
+          if (this.options.currentValue !== "") {
+              Dom.get(this.id + "-date").innerHTML = dateEntry + (this.options.showTime ? " " + timeEntry : "");
+          }
       },
 
       /**

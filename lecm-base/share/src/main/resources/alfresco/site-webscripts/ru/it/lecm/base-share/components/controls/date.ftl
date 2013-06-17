@@ -40,10 +40,6 @@
              //]]></script>
 
              <span id="${controlId}-date" class="date-entry" <#if field.description??>title="${field.description}"</#if> />
-             <#if showTime>
-                 <span id="${controlId}-time" class="time-entry" <#if field.description??>title="${field.description}"</#if> />
-             </#if>
-
          <#else>
              <#list field.value?split(",") as dateEl>
             ${xmldate(dateEl)?string(viewFormat)}<#if dateEl_has_next>,</#if>
