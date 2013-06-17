@@ -4,7 +4,6 @@
 			<dependencies>
 				<js src="/scripts/lecm-subscriptions/controls/lecm-subscribe.js"/>
 				<js src="/scripts/lecm-subscriptions/constraints/subscription-destination-validator.js"/>
-				<js src="/modules/simple-dialog.js"/>
 				<css src="/css/lecm-subscriptions/subscription-control.css"/>
 			</dependencies>
 		</forms>

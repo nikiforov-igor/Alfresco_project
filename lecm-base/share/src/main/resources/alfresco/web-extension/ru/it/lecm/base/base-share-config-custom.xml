@@ -123,6 +123,7 @@
 	            <css src="/components/upload/flash-upload.css" />
 	            <css src="/components/upload/html-upload.css" />
                 <js src="/jquery/jquery-1.6.2.js"/>
+                <js src="/modules/simple-dialog.js"/>
             </dependencies>
 
             <constraint-handlers>

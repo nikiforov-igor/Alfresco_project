@@ -2,7 +2,6 @@
 <#include "/org/alfresco/include/documentlibrary.inc.ftl" />
 <@templateHeader "transitional">
 	<#include "/org/alfresco/components/form/form.get.head.ftl">
-	<@script type="text/javascript" src="${page.url.context}/res/modules/simple-dialog.js"></@script>
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-orgstructure/orgstructure-work-groups.css" />
 
 <!-- Advanced Search -->
