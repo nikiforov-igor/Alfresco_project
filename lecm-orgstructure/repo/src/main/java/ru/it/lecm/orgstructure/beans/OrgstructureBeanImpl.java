@@ -421,7 +421,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
     @Override
     public List<NodeRef> getOrgRoleEmployees(NodeRef nodeRef) {
-        if (!isWorkRole(nodeRef)) { // если роль для рабочей группы
+        if (!isWorkRole(nodeRef)) { // если не роль для рабочей группы
             return new ArrayList<NodeRef>();
         }
 
@@ -880,14 +880,20 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public List<NodeRef> getEmployeeLinks(NodeRef employeeRef) {
+		return getEmployeeLinks(employeeRef, false);
+	}
+
+	@Override
+	public List<NodeRef> getEmployeeLinks(NodeRef employeeRef, boolean includeArchived) {
 		List<NodeRef> links = new ArrayList<NodeRef>();
 		if (isEmployee(employeeRef)) {
 			List<AssociationRef> lRefs = nodeService.getSourceAssocs(employeeRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
 			for (AssociationRef lRef : lRefs) {
-				if (!isArchive(lRef.getSourceRef())) {
-				   links.add(lRef.getSourceRef());
+				if (!includeArchived && isArchive(lRef.getSourceRef())) {
+                    continue;
 				}
-			}
+                links.add(lRef.getSourceRef());
+            }
 		}
 		return links;
 	}

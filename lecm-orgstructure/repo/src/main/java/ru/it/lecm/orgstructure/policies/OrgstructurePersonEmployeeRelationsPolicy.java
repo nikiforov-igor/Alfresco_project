@@ -17,6 +17,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -128,7 +129,16 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 		if (changed) { // произошло переключение активности -> отработать ...
 			notifyEmploeeTie(nodeRef, nowActive);
 		}
-	}
+
+        //если сотрудник удаляется
+        if (changed && !nowActive) {
+            List<NodeRef> employeeLinks = orgstructureService.getEmployeeLinks(nodeRef, true);
+            for (NodeRef employeeLink : employeeLinks) {
+                nodeService.addAspect(employeeLink, ContentModel.ASPECT_TEMPORARY, null);
+                nodeService.deleteNode(employeeLink);
+            }
+        }
+    }
 
 	/**
 	 * Запись в бизнес-журнал об изменении в сотруднике.
