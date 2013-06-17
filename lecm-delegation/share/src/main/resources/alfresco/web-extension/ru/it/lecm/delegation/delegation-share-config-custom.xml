@@ -19,6 +19,7 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -45,6 +46,7 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-d8n:delegation-opts-trustee-assoc" mandatory="true">
@@ -53,6 +55,7 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.Delegation.Validator.HasTrusteeValidator"
@@ -100,6 +103,7 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
 						</control>
 					</field>
 				</appearance>

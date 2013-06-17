@@ -989,6 +989,7 @@
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
 						</control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.OrgStructure.Absence.noderefsHasNoAbsenceValidation" event="change" message="Сотрудник имеет активные отсутствия."/>
