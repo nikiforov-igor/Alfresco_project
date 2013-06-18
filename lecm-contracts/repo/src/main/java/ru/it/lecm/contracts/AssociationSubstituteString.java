@@ -4,6 +4,8 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -18,6 +20,7 @@ import java.nio.charset.Charset;
  * Time: 11:21
  */
 public class AssociationSubstituteString extends AbstractWebScript{
+	final private static Logger logger = LoggerFactory.getLogger(AssociationSubstituteString.class);
 
     private SubstitudeBean substituteService;
 
@@ -53,7 +56,7 @@ public class AssociationSubstituteString extends AbstractWebScript{
             res.setContentEncoding(Charset.defaultCharset().displayName());
             res.getWriter().write(wf.toString());
         } catch (JSONException e) {
-            e.printStackTrace();
+	        logger.error(e.getMessage(), e);
         }
 
     }

@@ -1,11 +1,11 @@
 package ru.it.lecm.statemachine.editor.export;
 
 import org.alfresco.service.cmr.repository.NodeService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.io.OutputStream;
  * To change this template use File | Settings | File Templates.
  */
 public class Export extends AbstractWebScript {
-    private static final Log log = LogFactory.getLog(Export.class);
+	private static final transient Logger log = LoggerFactory.getLogger(Export.class);
     private static final String STATUSES_NODE_REF = "statusesNodeRef";
 
     private NodeService nodeService;
@@ -50,9 +50,9 @@ public class Export extends AbstractWebScript {
 
             resOutputStream.flush();
         } catch (XMLStreamException e) {
-            e.printStackTrace();
+	        log.error(e.getMessage(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+	        log.error(e.getMessage(), e);
         } finally {
             if (resOutputStream != null) {
                 resOutputStream.close();

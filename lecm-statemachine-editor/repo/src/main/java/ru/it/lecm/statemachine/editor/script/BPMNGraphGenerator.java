@@ -3,6 +3,8 @@ package ru.it.lecm.statemachine.editor.script;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.view.mxGraph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -28,6 +30,7 @@ import java.util.HashSet;
  * Time: 14:49
  */
 public class BPMNGraphGenerator {
+	private static final transient Logger logger = LoggerFactory.getLogger(BPMNGraphGenerator.class);
 
 	public InputStream generate(InputStream bpmnInputStream) {
 
@@ -97,11 +100,11 @@ public class BPMNGraphGenerator {
 			BufferedImage image = mxCellRenderer.createBufferedImage(graph, null, 1, Color.WHITE, true, null);
 			ImageIO.write(image, "png", baos);
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (SAXException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 		return new ByteArrayInputStream(baos.toByteArray());

@@ -3,8 +3,8 @@ package ru.it.lecm.statemachine.expression;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -25,7 +25,7 @@ public class Expression {
 	private ExpressionUser user;
 	private StandardEvaluationContext context;
 
-    private static Log logger = LogFactory.getLog(Expression.class);
+	private static final transient Logger logger = LoggerFactory.getLogger(Expression.class);
 
     public Expression(NodeRef document, ServiceRegistry serviceRegistry, OrgstructureBean orgstructureBean) {
         this.doc = new ExpressionDocument(document, serviceRegistry);

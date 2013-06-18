@@ -4,13 +4,13 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.subscriptions.beans.SubscriptionsServiceImpl;
@@ -39,7 +39,7 @@ public class SubscriptionsWebScriptBean extends BaseWebScript {
 	public static final String TYPE_SUBSCRIPT_TYPE = "subscription-to-type";
 
 
-	private static Log logger = LogFactory.getLog(SubscriptionsWebScriptBean.class);
+	private static final transient Logger logger = LoggerFactory.getLogger(SubscriptionsWebScriptBean.class);
 
 	/**
 	 * Repository helper
@@ -95,7 +95,7 @@ public class SubscriptionsWebScriptBean extends BaseWebScript {
 			nodes.put(root);
 
 		} catch (JSONException e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 		}
 		return nodes.toString();
 	}

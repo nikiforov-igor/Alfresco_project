@@ -118,9 +118,9 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 			try {
 				userTransaction.rollback();
 			} catch (SystemException e1) {
-				e1.printStackTrace();
+				logger.error(e.getMessage(), e1);
 			}
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
 			authenticationContext.clearCurrentSecurityContext();
 		}
@@ -188,7 +188,7 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 			BigInteger bigInt = new BigInteger(1, digest);
 			result = bigInt.toString(16);
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
 			is.close();
 		}

@@ -7,6 +7,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -35,6 +37,7 @@ import java.util.List;
  * Time: 10:57
  */
 public class BPMNGenerator {
+	private static final transient Logger logger = LoggerFactory.getLogger(BPMNGenerator.class);
 
 	private String statemachineNodeRef;
 	private NodeService nodeService;
@@ -144,7 +147,7 @@ public class BPMNGenerator {
 
 			transformer.transform(source, result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return new ByteArrayInputStream(baos.toByteArray());
 	}

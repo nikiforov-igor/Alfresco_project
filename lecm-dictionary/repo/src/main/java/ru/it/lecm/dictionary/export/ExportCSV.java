@@ -4,8 +4,8 @@ import com.csvreader.CsvWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -23,7 +23,7 @@ import java.util.*;
 
 public class ExportCSV extends AbstractWebScript {
 
-	private static final Log log = LogFactory.getLog(Export.class);
+	private static final transient Logger log = LoggerFactory.getLogger(ExportCSV.class);
 
 	protected NodeService nodeService;
 
@@ -102,7 +102,7 @@ public class ExportCSV extends AbstractWebScript {
 			wr.close();
 			resOutputStream.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} finally {
 			if (resOutputStream != null) {
 				resOutputStream.close();

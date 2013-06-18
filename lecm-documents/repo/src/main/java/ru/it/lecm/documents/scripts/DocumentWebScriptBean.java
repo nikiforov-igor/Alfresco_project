@@ -219,7 +219,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
                 object.put(e.getKey().getLocalName(), e.getValue());
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+	        logger.error(e.getMessage(), e);
         }
         return properties.put(object).toString();
     }

@@ -133,7 +133,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
                 xmlr.nextTag();//выходим из </items>
             } catch (WstxParsingException ignored) {
             } catch (XMLStreamException e) {
-                e.printStackTrace();
+	            logger.error(e.getMessage(), e);
             }
             return true;
         }
@@ -186,7 +186,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
                 }
                 xmlr.nextTag();//выходим из </assocs>
             } catch (XMLStreamException e) {
-                e.printStackTrace();
+	            logger.error(e.getMessage(), e);
             }
             return true;
         }

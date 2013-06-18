@@ -11,8 +11,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
@@ -39,7 +39,7 @@ public class StatusChangeAction extends StateMachineAction {
 	private Set<StateField> fields = new HashSet<StateField>();
 	private Set<StateField> categories = new HashSet<StateField>();
 
-	private static Log logger = LogFactory.getLog(StatusChangeAction.class);
+	private static final transient Logger logger = LoggerFactory.getLogger(StatusChangeAction.class);
 
 	@Override
 	public void init(Element action, String processId) {

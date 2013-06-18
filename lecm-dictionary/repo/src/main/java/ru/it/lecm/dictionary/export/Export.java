@@ -1,8 +1,8 @@
 package ru.it.lecm.dictionary.export;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -18,8 +18,8 @@ import java.io.OutputStream;
  * Time: 12:01
  */
 public class Export extends AbstractWebScript {
+	private static final transient Logger log = LoggerFactory.getLogger(Export.class);
 
-	private static final Log log = LogFactory.getLog(Export.class);
     private XMLExportBean xmlExportBean;
 
     public void setXmlExportBean(XMLExportBean xmlExportBean) {
@@ -45,9 +45,9 @@ public class Export extends AbstractWebScript {
 			xmlDictionaryExporter.close();
 			resOutputStream.flush();
 		} catch (XMLStreamException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} finally {
 			if (resOutputStream != null) {
 				resOutputStream.close();

@@ -7,6 +7,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -21,6 +23,7 @@ import java.io.InputStream;
  * Time: 16:33
  */
 public class ImportCSV extends AbstractWebScript {
+	private static final transient Logger logger = LoggerFactory.getLogger(ImportCSV.class);
 
 	NodeService nodeService;
 	NamespaceService namespaceService;
@@ -60,7 +63,7 @@ public class ImportCSV extends AbstractWebScript {
 			res.getWriter().write(compositions.toString());
 
 		} catch (JSONException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 }

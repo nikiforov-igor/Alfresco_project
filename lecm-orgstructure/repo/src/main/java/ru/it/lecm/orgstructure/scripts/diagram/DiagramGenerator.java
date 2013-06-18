@@ -12,6 +12,8 @@ import com.mxgraph.view.mxGraph;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import javax.imageio.ImageIO;
@@ -30,6 +32,7 @@ import java.util.List;
  * Time: 13:54
  */
 public class DiagramGenerator{
+	private static final transient Logger logger = LoggerFactory.getLogger(DiagramGenerator.class);
 
     private OrgstructureBean service;
     private NodeService nodeService;
@@ -118,7 +121,7 @@ public class DiagramGenerator{
         try {
             ImageIO.write(result, "png", baos);
         } catch (IOException e) {
-            e.printStackTrace();
+	        logger.error(e.getMessage(), e);
         }
         return new ByteArrayInputStream(baos.toByteArray());
 

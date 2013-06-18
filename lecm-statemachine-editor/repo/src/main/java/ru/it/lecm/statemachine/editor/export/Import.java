@@ -5,8 +5,8 @@ import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -25,7 +25,7 @@ import java.io.InputStream;
  * Time: 17:45
  */
 public class Import extends AbstractWebScript {
-    private static final Log log = LogFactory.getLog(Export.class);
+	private static final transient Logger log = LoggerFactory.getLogger(Import.class);
 
     private RepositoryStructureHelper repositoryStructureHelper;
     private NodeService nodeService;

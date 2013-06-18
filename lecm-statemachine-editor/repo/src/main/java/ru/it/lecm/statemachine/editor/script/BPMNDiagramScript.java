@@ -6,6 +6,8 @@ import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -23,6 +25,7 @@ import java.util.HashMap;
  * Time: 16:43
  */
 public class BPMNDiagramScript extends AbstractWebScript {
+	private static final transient Logger logger = LoggerFactory.getLogger(BPMNDiagramScript.class);
 
 	private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
 	private NodeService nodeService;
@@ -98,7 +101,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
                 XMLExporter exporter = new XMLExporter(restoreOut, nodeService);
                 exporter.write(statemachineNodeRef);
             } catch (XMLStreamException e) {
-                e.printStackTrace();
+	            logger.error(e.getMessage(), e);
             }
             NodeRef restoreFile = nodeService.getChildByName(restore, ContentModel.ASSOC_CONTAINS, machineName + ".xml");
             if (restoreFile == null) {

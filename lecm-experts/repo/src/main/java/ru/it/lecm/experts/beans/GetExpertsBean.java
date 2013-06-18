@@ -13,12 +13,12 @@ import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.xerces.dom.ElementNSImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.it.lecm.experts.client.RequestExpertsExResponse;
@@ -43,7 +43,7 @@ public class GetExpertsBean extends BaseProcessorExtension {
 	private NodeService get_nodeService;
 	private ContentService get_contentService;
 
-	private static Log logger = LogFactory.getLog(GetExpertsBean.class);
+	private static final transient Logger logger = LoggerFactory.getLogger(GetExpertsBean.class);
 
 	public String get(String ref) {
 		String expertsArray = null;
@@ -81,7 +81,7 @@ public class GetExpertsBean extends BaseProcessorExtension {
 					expertsArray = get(binaryData, fileName);
 				}
 			} catch (IOException e) {
-				logger.error(e);
+				logger.error(e.getMessage(), e);
 			} finally {
 				IOUtils.closeQuietly(originalInputStream);
 				IOUtils.closeQuietly(outputStream);
@@ -118,7 +118,7 @@ public class GetExpertsBean extends BaseProcessorExtension {
 						exp.put(ATTR_FNAME, attr.getTextContent());
 					}
 				} catch (JSONException e) {
-					logger.error(e);
+					logger.error(e.getMessage(), e);
 				}
 			}
 			expertsArray.put(exp);

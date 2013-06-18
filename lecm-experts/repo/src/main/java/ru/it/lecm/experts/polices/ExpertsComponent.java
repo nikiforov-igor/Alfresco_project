@@ -22,11 +22,11 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.experts.beans.GetExpertsBean;
 
 /**
@@ -36,7 +36,7 @@ import ru.it.lecm.experts.beans.GetExpertsBean;
  */
 public class ExpertsComponent implements ContentServicePolicies.OnContentUpdatePolicy, NodeServicePolicies.OnCreateNodePolicy, VersionServicePolicies.AfterCreateVersionPolicy {
 
-	private static Log logger = LogFactory.getLog(ExpertsComponent.class);
+	private static final transient Logger logger = LoggerFactory.getLogger(ExpertsComponent.class);
 	private final static QName EXPERTS_ASPECT = QName.createQName("http://www.it.ru/logicECM/experts/1.0", "hasExperts");
 	private final static QName EXPERTS_ASPECT_PROPERTY = QName.createQName("http://www.it.ru/logicECM/experts/1.0", "experts");
 
@@ -112,7 +112,7 @@ public class ExpertsComponent implements ContentServicePolicies.OnContentUpdateP
 					try {
 						Thread.sleep(DELAY);
 					} catch (InterruptedException e) {
-						logger.error(e);
+						logger.error(e.getMessage(), e);
 					}
 				}
 			}
@@ -178,7 +178,7 @@ public class ExpertsComponent implements ContentServicePolicies.OnContentUpdateP
 			} /*catch (IOException e) {
 				logger.error(e);
 			}*/ catch (Exception ex) {
-				logger.error(ex);
+				logger.error(ex.getMessage(), ex);
 			} finally {
 				IOUtils.closeQuietly(originalInputStream);
 				IOUtils.closeQuietly(outputStream);
@@ -199,17 +199,17 @@ public class ExpertsComponent implements ContentServicePolicies.OnContentUpdateP
 					NodeRef personRef = exp_personService.getPerson(login, false);
 					exp_nodeService.createAssociation(ref, personRef, EXPERTS_ASPECT_PROPERTY);
 				} catch (NoSuchPersonException ex) {
-					logger.debug(ex);
+					logger.error(ex.getMessage(), ex);
 				} catch (AssociationExistsException ex) {
-					logger.debug(ex);
+					logger.error(ex.getMessage(), ex);
 				} catch (JSONException ex) {
-					logger.debug(ex);
+					logger.error(ex.getMessage(), ex);
 				} catch (Exception ex) {
-					logger.error(ex);
+					logger.error(ex.getMessage(), ex);
 				}
 			}
 		} catch (JSONException e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 		}
 	}
 

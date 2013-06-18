@@ -12,8 +12,8 @@ import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
     private String status = "UNKNOWN";
     private String qnameArchivePath = null;
 
-    private static Log logger = LogFactory.getLog(ArchiveDocumentAction.class);
+	private static final transient Logger logger = LoggerFactory.getLogger(ArchiveDocumentAction.class);
 
     @Override
     public void execute(DelegateExecution execution) {

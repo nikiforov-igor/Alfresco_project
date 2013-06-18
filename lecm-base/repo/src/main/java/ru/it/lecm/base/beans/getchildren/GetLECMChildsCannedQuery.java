@@ -23,8 +23,8 @@ import org.alfresco.service.cmr.repository.datatype.DefaultTypeConverter;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.Pair;
 import org.alfresco.util.ParameterCheck;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author dbashmakov
@@ -32,8 +32,7 @@ import org.apache.commons.logging.LogFactory;
  *         Time: 10:58
  */
 public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
-
-	private Log logger = LogFactory.getLog(getClass());
+	private static final transient Logger logger = LoggerFactory.getLogger(GetLECMChildsCannedQuery.class);
 
 	private static final String QUERY_NAMESPACE = "alfresco.node";
 	private static final String QUERY_SELECT_GET_CHILDREN_WITH_PROPS = "select_GetChildrenCannedQueryWithProps";

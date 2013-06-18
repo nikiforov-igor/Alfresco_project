@@ -27,8 +27,8 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.alfresco.service.ServiceRegistry;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -54,7 +54,7 @@ import ru.it.lecm.reports.jasper.utils.Utils;
  */
 public class JasperFormProducer extends AbstractWebScript {
 
-	private static final Log log = LogFactory.getLog(JasperFormProducer.class);
+	private static final transient Logger log = LoggerFactory.getLogger(JasperFormProducer.class);
 
 	private ServiceRegistry serviceRegistry;
 	private SubstitudeBean substitudeService;

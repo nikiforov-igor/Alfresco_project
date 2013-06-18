@@ -91,7 +91,7 @@ public class Import extends AbstractWebScript {
 				    importInfo = xmlDictionaryImporter.readItems(rootDir);
 			    } catch (XMLStreamException e) {
 				    importInfo = new XMLImporterInfo();
-				    e.printStackTrace();
+				    logger.error(e.getMessage(), e);
 			    }
 			    if (importInfo.existErrors() && !ignoreErrors) {
 				    ut.rollback();
@@ -128,7 +128,7 @@ public class Import extends AbstractWebScript {
 		    res.setContentEncoding("utf-8");
 		    res.getWriter().write(compositions.toString());
 	    } catch (JSONException e) {
-		    e.printStackTrace();
+		    logger.error(e.getMessage(), e);
 	    } finally {
 		    if (inputStream != null) {
 			    inputStream.close();
