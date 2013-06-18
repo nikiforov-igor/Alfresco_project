@@ -550,16 +550,14 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		final int daysCount = Days.daysBetween(new DateTime(today), new DateTime(workflowDueDateTruncated)).getDays() + 1;
 		final int peopleCount = assigneeListItems.size();
 
-		int i, remainingDays = daysCount, remainingPeople = peopleCount;
-
-		double day = 0, daysPerPeople, peoplePerDay,
+		double day = 0, daysPerPeople, peoplePerDay, remainingDays = daysCount, remainingPeople = peopleCount,
 				daysModulo, peopleModulo, daysBuffer = 0, peopleBuffer = 0;
 
 		if (daysCount >= peopleCount) {
 			daysPerPeople = (double) daysCount / peopleCount;
 			daysModulo = daysPerPeople % 1;
 
-			for (i = 0; i < peopleCount; ++i) {
+			for (int i = 0; i < peopleCount; ++i) {
 				NodeRef assigneeListItem = assigneeListItems.get(i);
 				daysBuffer += daysModulo;
 				if (daysPerPeople < remainingDays) {
@@ -589,7 +587,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 			int peoplePerDayFloored = (int) Math.floor(peoplePerDay);
 			peopleModulo = peoplePerDay % 1;
 
-			for (i = 0; i < daysCount; ++i) {
+			for (int i = 0; i < daysCount; ++i) {
 				Date dueDate = DateUtils.addDays(today, i);
 				peopleBuffer += peopleModulo;
 
