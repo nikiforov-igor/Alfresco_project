@@ -20,7 +20,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 public class OrgstructureWorkForcePolicy
 		extends SecurityJournalizedPolicyBase
 		implements NodeServicePolicies.OnCreateNodePolicy
-					, NodeServicePolicies.OnDeleteNodePolicy
+					, NodeServicePolicies.BeforeDeleteNodePolicy
 {
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
@@ -32,8 +32,8 @@ public class OrgstructureWorkForcePolicy
 		super.init();
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				OrgstructureBean.TYPE_WORKFORCE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
-				OrgstructureBean.TYPE_WORKFORCE, new JavaBehaviour(this, "onDeleteNode"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
+				OrgstructureBean.TYPE_WORKFORCE, new JavaBehaviour(this, "beforeDeleteNode"));
 	}
 
 	@Override
@@ -47,16 +47,16 @@ public class OrgstructureWorkForcePolicy
 		businessJournalService.log(group, EventCategory.ADD_GROUP_ROLE, "#initiator внес(ла) сведения о добавлении роли #object1 в рабочую группу #mainobject", objects);
 	}
 
-	@Override
-	public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
-		if (!isNodeArchived) {
-			NodeRef workforce = childAssocRef.getChildRef();
-			NodeRef group = orgstructureService.getWorkGroupByWorkForce(workforce);
+    @Override
+    public void beforeDeleteNode(NodeRef nodeRef) {
+        try {
+            NodeRef group = orgstructureService.getWorkGroupByWorkForce(nodeRef);
 
-			final List<String> objects = new ArrayList<String>(1);
-			objects.add(workforce.toString());
-
-			businessJournalService.log(group, EventCategory.REMOVE_GROUP_ROLE, "#initiator внес(ла) сведения об исключении роли #object1 из рабочей группы #mainobject", objects);
-		}
-	}
+            final List<String> objects = new ArrayList<String>(1);
+            objects.add(nodeRef.toString());
+            businessJournalService.log(group, EventCategory.REMOVE_GROUP_ROLE, "#initiator внес(ла) сведения об исключении роли #object1 из рабочей группы #mainobject", objects);
+        } catch (Exception ex) {
+            logger.warn("Не удалось получить рабочую группу по удаляемому участнику");
+        }
+    }
 }
