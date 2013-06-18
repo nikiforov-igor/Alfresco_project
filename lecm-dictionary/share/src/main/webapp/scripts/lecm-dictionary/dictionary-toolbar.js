@@ -132,6 +132,20 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                             scope: this
                         }
                     });
+            },
+            /**
+             * Удаление выбранного значения в dataGrid.
+             * Появляется диалоговое окно с потверждением на удаление
+             */
+            onDeleteRow: function Toolbar_onDeleteRow() {
+                var dataGrid = this.modules.dataGrid;
+                if (dataGrid) {
+                    // Get the function related to the clicked item
+                    var fn = "onActionDelete";
+                    if (fn && (typeof dataGrid[fn] == "function")) {
+                        dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems(), null, {fullDelete: false});
+                    }
+                }
             }
         }, true);
 })();
