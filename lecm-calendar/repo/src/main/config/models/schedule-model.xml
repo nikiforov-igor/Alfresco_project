@@ -24,6 +24,24 @@
 			<title>Schedule for employee or structure</title>
 			<parent>cm:folder</parent>
 			<properties>
+				<!-- Атрибуты для поиска и сортировки -->
+				<property name="lecm-sched:sched-employee-link-assoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-sched:sched-employee-link-assoc-assoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+
 				<!-- Тип расписания: обычный или особый. Обычный - согласно трудовому календарю. Все остальное - особый. -->
 				<property name="lecm-sched:type">
 					<type>d:text</type>

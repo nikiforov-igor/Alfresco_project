@@ -245,15 +245,17 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="absenceService" ref="AbsenceService"/>
 	</bean>
+	<bean id="absenceAssociationPolicy" class="ru.it.lecm.wcalendar.absence.policy.AbsenceAssociationPolicy" init-method="init" parent="logicEcmAssociationPolicy"/>
 	<!-- Полиси для сервиса графиков -->
 	<bean id="scheduleDeletePolicy" class="ru.it.lecm.wcalendar.schedule.policy.ScheduleDeletePolicy" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="scheduleService" ref="ScheduleService"/>
 	</bean>
-	<bean id="ScheduleCreatePolicy" class="ru.it.lecm.wcalendar.schedule.policy.ScheduleCreatePolicy" init-method="init">
+	<bean id="scheduleCreatePolicy" class="ru.it.lecm.wcalendar.schedule.policy.ScheduleCreatePolicy" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="scheduleService" ref="ScheduleService"/>
 	</bean>
+	<bean id="scheduleAssociationPolicy" class="ru.it.lecm.wcalendar.schedule.policy.SheduleAssociationPolicy" init-method="init" parent="logicEcmAssociationPolicy"/>
 
     <bean id="calendar.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
         <constructor-arg>

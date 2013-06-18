@@ -1,6 +1,5 @@
 package ru.it.lecm.wcalendar.absence.policy;
 
-import java.util.Calendar;
 import java.util.Date;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
