@@ -214,6 +214,13 @@
 			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
+        <dependency>
+            <groupId>ru.it.lecm.reports-editor</groupId>
+            <artifactId>reports-editor-share</artifactId>
+            <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
 	</dependencies>
 
 	<build>
