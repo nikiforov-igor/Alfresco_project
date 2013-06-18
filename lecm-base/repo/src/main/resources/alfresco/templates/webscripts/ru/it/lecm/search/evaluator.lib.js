@@ -133,7 +133,7 @@ var Evaluator =
        }
        else if (type.indexOf(":") > 0 && node.isSubType("cm:cmobject")) {
            obj = Evaluator.getContentObject(value);
-           if (obj == null) {
+           if (obj == null || obj.nodeRef.toString().startsWith("archive")) {
                return false;
            }
            if (substituteNode == null) {
