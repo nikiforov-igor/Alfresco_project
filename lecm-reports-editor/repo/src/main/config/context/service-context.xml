@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 <!--
 	Licensed to the Apache Software Foundation (ASF) under one or more
 	contributor license agreements.  See the NOTICE file distributed with
@@ -7,26 +6,66 @@
 	The ASF licenses this file to You under the Apache License, Version 2.0
 	(the "License"); you may not use this file except in compliance with
 	the License.  You may obtain a copy of the License at
-	
+
 	http://www.apache.org/licenses/LICENSE-2.0
-	
+
 	Unless required by applicable law or agreed to in writing, software
 	distributed under the License is distributed on an "AS IS" BASIS,
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-	
+
 -->
-<beans>
-    <!-- Registration of orgStructure models 
-    <bean id="${groupId}.${artifactId}.orgStructureBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap">
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- Registration of Business Journal models -->
+    <bean id="ru.it.lecm.reports-editor.modelBootstrap" parent="dictionaryModelBootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/${artifactId}/models/logic-ecm-org-structure-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-reports-editor-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/reports-editor</value>
             </list>
         </property>
     </bean>
--->
 
+    <util:constant id="RE_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_ROOT_ID"/>
+    <util:constant id="RE_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_ROOT_NAME"/>
+
+    <util:constant id="RE_DICTIONARY_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_DICTIONARY_ROOT_ID"/>
+    <util:constant id="RE_DICTIONARY_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_DICTIONARY_ROOT_NAME"/>
+
+    <util:constant id="RE_SOURCES_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_SOURCES_ROOT_ID"/>
+    <util:constant id="RE_SOURCES_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_SOURCES_ROOT_NAME"/>
+
+    <util:constant id="RE_TEMPLATES_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_TEMPLATES_ROOT_ID"/>
+    <util:constant id="RE_TEMPLATES_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_TEMPLATES_ROOT_NAME"/>
+
+    <util:constant id="RE_REPORTS_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_REPORTS_ROOT_ID"/>
+    <util:constant id="RE_REPORTS_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_REPORTS_ROOT_NAME"/>
+
+    <bean id="reportsEditorService" init-method="init" class="ru.it.lecm.reports.editor.ReporstEditorService" parent="baseBean"
+          depends-on="ru.it.lecm.reports-editor.modelBootstrap">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="transactionService" ref="transactionService"/>
+        <property name="authService" ref="authenticationService"/>
+        <!-- Автоматическое создание каталогов. -->
+        <property name="folders">
+            <map>
+                <entry key="#{RE_ROOT_ID}" value="#{RE_ROOT_NAME}"/>
+                <entry key="#{RE_DICTIONARY_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_DICTIONARY_ROOT_NAME}"/>
+                <entry key="#{RE_SOURCES_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_SOURCES_ROOT_NAME}"/>
+                <entry key="#{RE_TEMPLATES_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_TEMPLATES_ROOT_NAME}"/>
+                <entry key="#{RE_REPORTS_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_REPORTS_ROOT_NAME}"/>
+            </map>
+        </property>
+    </bean>
 </beans>
