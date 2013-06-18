@@ -50,9 +50,7 @@
 
 <div class="form-field">
     <#if showImage>
-        <div class="yui-dt45-col-thumbnail yui-dt-col-thumbnail" style="width: 100px;">
-            <div class="yui-dt-liner" style="width: 100px;" id="${controlId}-container"></div>
-        </div>
+        <div class="thumbnail-container" id="${controlId}-container"></div>
     </#if>
 	<#if disabled>
         <#if !hideItem>

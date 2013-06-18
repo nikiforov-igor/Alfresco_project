@@ -1886,8 +1886,6 @@ span.tree-picker-button .yui-button .first-child button {
     font-weight: 900;
 }
 
-/* currentValueDisplay */
-
 div.form-field input[type="text"],
 div.form-field ul,
 div.current-values,
@@ -2283,40 +2281,58 @@ span.person a h3 {
     margin-right: 10px;
 }
 
-.thumbnail-view {
-    position: absolute;
-    right: 50px;
-    text-align: right;
-    top: 60px;
+/* Стили для фото в карточке сотрудника + прочие сопутствующие */
+.alfresco-share .yui-panel .bd .fio-and-photo .yui-u {
+    width: 110px;
+    padding: 0;
+}
+.alfresco-share .yui-panel .bd .fio-and-photo .yui-u.first {
+    width: 490px;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel div.fio-and-photo div.form-field > div.thumbnail-container {
+    max-width: 100px;
+    max-height: 120px;
+    margin: 0;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel div.fio-and-photo div.form-field div.thumbnail-container img {
+    max-width: 100px;
+    max-height: 120px;
 }
 
-.thumbnail-view-text {
-    border: 2px solid #acacac;
+.fio-and-photo div.thumbnail-container .thumbnail-view-text,
+.fio-and-photo div.thumbnail-container .thumbnail-edit-text {
+    width: 100px;
     display: block;
-    padding: 20px 0;
+    padding: 25px 0;
+    border: 1px dashed #8d8d8d;
     text-align: center;
     white-space: normal;
-    width: 80px;
-    top:60px;
-    position: absolute;
-    right: 50px;
-
-}
-.thumbnail-edit {
-    position: absolute;
-    right: 15px;
-    text-align: right;
-    top: 40px;
 }
 
-.thumbnail-edit-text {
-    border: 2px solid #acacac;
-    display: block;
-    padding: 20px 0;
-    text-align: center;
-    white-space: normal;
-    width: 80px;
-    top:40px;
-    position: absolute;
-    right: 5px;
+.yui-skin-lecmTheme.alfresco-share .yui-panel div.fio-and-photo div.form-field div.viewmode-field span.viewmode-value,
+.yui-skin-lecmTheme.alfresco-share .yui-panel div.fio-and-photo div.form-field input[type="text"] {
+    max-width: 320px;
+}
+
+.yui-skin-lecmTheme.alfresco-share .yui-panel div.fio-and-photo div.form-field .thumbnail-container ~ label {
+    display: none;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel div.fio-and-photo div.form-field .thumbnail-container ~ .object-finder {
+    margin: 0;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel div.fio-and-photo div.form-field .thumbnail-container ~ .object-finder .current-values {
+   display: none;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel div.fio-and-photo div.form-field .thumbnail-container ~ .object-finder .show-picker {
+    margin: 10px 0 0 6px;
+}
+
+/* Просмотр формы сотрудника на полном экране */
+.alfresco-share .fio-and-photo .yui-u {
+    width: 110px;
+    padding: 0;
+    float: left;
+}
+.alfresco-share .fio-and-photo .yui-u.first {
+    width: 250px;
 }

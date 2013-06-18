@@ -26,35 +26,37 @@
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="info.common-info" />
+                    <set id="fioAndPhoto" parent="common" template="/ru/it/lecm/base-share/components/controls/fio-and-photo.ftl" appearance="" label-id="" />
+                    <set id="commonOther" parent="common" appearance="" label-id="" />
                     <set id="personal" appearance="" label-id="info.personal-info" />
                     <set id="positionsAndGroups" appearance="" label-id="info.personal-positions-and-groups" />
                     <set id="businessRoles" appearance="" label-id="info.business-roles"/>
                     <set id="busjournalHistory" appearance="" label-id="info.business-journal-history"/>
 
-	                <field id="lecm-orgstr:employee-first-name" set="common"/>
-                    <field id="lecm-orgstr:employee-middle-name" set="common"/>
-                    <field id="lecm-orgstr:employee-last-name" set="common"/>
-                    <field id="lecm-orgstr:employee-sex" set="common"/>
-                    <field id="lecm-orgstr:employee-email" set="common"/>
-                    <field id="lecm-orgstr:employee-photo-assoc" set="common">
+	                <field id="lecm-orgstr:employee-first-name" set="fioAndPhoto"/>
+                    <field id="lecm-orgstr:employee-middle-name" set="fioAndPhoto"/>
+                    <field id="lecm-orgstr:employee-last-name" set="fioAndPhoto"/>
+                    <field id="lecm-orgstr:employee-photo-assoc" set="fioAndPhoto">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">/app:company_home/app:user_homes</control-param>
                             <control-param name="showImage">true</control-param>
                             <control-param name="hideItem">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-orgstr:employee-phone" set="common"/>
-                    <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-number-uniqueness-help-id">
+                    <field id="lecm-orgstr:employee-sex" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-email" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-phone" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-number" set="commonOther" help-id="lecm-validation-number-uniqueness-help-id">
                         <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
                         <constraint-handlers>
                             <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-orgstr:employee-fio-g" set="common"/>
-                    <field id="lecm-orgstr:employee-fio-d" set="common"/>
-                    <field id="lecm-orgstr:employee-person-assoc" set="common"/>
-                    <field id="lecm-subscr-aspects" set="common"/>
-                    <field id="lecm-subscr-aspects" set="common">
+                    <field id="lecm-orgstr:employee-fio-g" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-fio-d" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-person-assoc" set="commonOther"/>
+                    <field id="lecm-subscr-aspects" set="commonOther"/>
+                    <field id="lecm-subscr-aspects" set="commonOther">
                         <control template="/ru/it/lecm/subscriptions/controls/subscribe.ftl"/>
                     </field>
                     <field id="lecm-orgstr:employee-person-data-assoc" set="personal">
@@ -196,27 +198,32 @@
                     <show id="lecm-orgstr:employee-person-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <set id="common" appearance="" label-id="info.common-info" />
-                    <set id="personal" appearance="" label-id="info.personal-info" />
-                    <field id="lecm-orgstr:employee-first-name" set="common"/>
-                    <field id="lecm-orgstr:employee-middle-name" set="common"/>
-                    <field id="lecm-orgstr:employee-last-name" set="common"/>
-                    <field id="lecm-orgstr:employee-sex" set="common"/>
-                    <field id="lecm-orgstr:employee-email" set="common"/>
-                    <field id="lecm-orgstr:employee-photo-assoc" set="common">
-                        <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl"/>
+                    <set id="fioAndPhoto" template="/ru/it/lecm/base-share/components/controls/fio-and-photo.ftl" appearance="" label-id="" />
+                    <set id="commonOther" appearance="" label-id="" />
+
+                    <field id="lecm-orgstr:employee-first-name" set="fioAndPhoto"/>
+                    <field id="lecm-orgstr:employee-middle-name" set="fioAndPhoto"/>
+                    <field id="lecm-orgstr:employee-last-name" set="fioAndPhoto"/>
+                    <field id="lecm-orgstr:employee-photo-assoc" set="fioAndPhoto">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">/app:company_home/app:user_homes</control-param>
+                            <control-param name="showImage">true</control-param>
+                            <control-param name="hideItem">true</control-param>
+                        </control>
                     </field>
-                    <field id="lecm-orgstr:employee-phone" set="common"/>
-                    <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-number-uniqueness-help-id">
+                    <field id="lecm-orgstr:employee-sex" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-email" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-phone" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-number" set="commonOther" help-id="lecm-validation-number-uniqueness-help-id">
                         <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
                         <constraint-handlers>
                             <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-orgstr:employee-fio-g" set="common"/>
-                    <field id="lecm-orgstr:employee-fio-d" set="common"/>
-                    <field id="lecm-orgstr:employee-person-assoc" set="common"/>
-                    <field id="cm:name" set="common">
+                    <field id="lecm-orgstr:employee-fio-g" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-fio-d" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-person-assoc" set="commonOther"/>
+                    <field id="cm:name" set="commonOther">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>
