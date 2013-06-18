@@ -160,8 +160,21 @@ a:hover {
     padding: 0;
 }
 
-#alf-filters{
+#alf-filters {
 	margin-left: -5px;
+}
+#alf-filters .filter h2 {
+    background-position: 15px 50%;
+    padding-left: 30px !important;
+}
+#alf-filters .filter ul.filterLink li {
+    padding-left: 30px;
+}
+
+/* My-tasks page */
+#alfresco-myworkflows .task-list-toolbar,
+#alfresco-myworkflows .task-list > div {
+    margin-right: 0;
 }
 
 .datalists.tree{
