@@ -452,6 +452,11 @@
 							<control-param name="styleClass">color</control-param>
 						</control>
 					</field>
+					<field id="lecm-absence:code">
+						<control template="/org/alfresco/components/form/controls/textfield.ftl">
+							<control-param name="maxLength">10</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 			<form id="datagrid">
