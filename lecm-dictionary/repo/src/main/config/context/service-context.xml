@@ -42,7 +42,7 @@
     </bean>
 
     <bean id="lecmDictionaryBootstrap" init-method="bootstrap" abstract="true"
-          class="ru.it.lecm.dictionary.bootstrap.LecmDictionaryBootstrap" depends-on="dictionaryBootstrap">
+          class="ru.it.lecm.dictionary.bootstrap.LecmDictionaryBootstrap" depends-on="dictionaryBootstrap, LogicECMContentPolicy">
         <property name="nodeService" ref="nodeService"/>
         <property name="transactionService" ref="transactionService"/>
         <property name="dictionaryBean" ref="serviceDictionary"/>

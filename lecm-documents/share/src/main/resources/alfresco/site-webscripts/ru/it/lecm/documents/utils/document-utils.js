@@ -20,7 +20,7 @@ var DocumentUtils =
    {
       if (nodeRef)
       {
-         var url = '/lecm/document/node/' + nodeRef.replace('://', '/');
+         var url = '/lecm/node/' + nodeRef.replace('://', '/');
          if (!site)
          {
             // Repository mode

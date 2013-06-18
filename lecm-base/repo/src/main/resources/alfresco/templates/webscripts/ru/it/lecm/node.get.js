@@ -50,7 +50,7 @@ function getDoclist() {
     if (isThumbnailNameRegistered && item.node.isSubType("cm:content")) {
         // Make sure we have a thumbnail.
         thumbnail = item.node.getThumbnail(THUMBNAIL_NAME);
-        if (thumbnail === null) {
+        if (thumbnail === null && item.node.properties["cm:content"] != null) {
             // No thumbnail, so queue creation
             item.node.createThumbnail(THUMBNAIL_NAME, true);
         }
