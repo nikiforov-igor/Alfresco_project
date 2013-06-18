@@ -2026,16 +2026,29 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     this.modules.actions.genericAction(
                         {
                             success:{
-                                event:{
-                                    name:"dataItemsDeleted",
-                                    obj:{
-                                        items:items,
-                                        bubblingLabel:me.options.bubblingLabel
-                                    }
-                                },
-                                message:this.msg((actionsConfig && actionsConfig.successMessage)? actionsConfig.successMessage : "message.delete.success", items.length),
                                 callback:{
-                                    fn:fnDeleteComplete
+                                    fn: function (response) {
+                                        if(fnDeleteComplete){
+                                            fnDeleteComplete.call(me);
+                                        }
+                                        if (response.json.overallSuccess){
+                                            Bubbling.fire("dataItemsDeleted",
+                                                {
+                                                    items:items,
+                                                    bubblingLabel:me.options.bubblingLabel
+                                                });
+                                            Alfresco.util.PopupManager.displayMessage(
+                                                {
+                                                    text:this.msg((actionsConfig && actionsConfig.successMessage)? actionsConfig.successMessage : "message.delete.success", items.length)
+                                                });
+                                        } else {
+                                            Alfresco.util.PopupManager.displayMessage(
+                                                {
+                                                    text:this.msg("message.delete.failure")
+                                                });
+                                        }
+                                    },
+                                    scope: this
                                 }
                             },
                             failure:{
