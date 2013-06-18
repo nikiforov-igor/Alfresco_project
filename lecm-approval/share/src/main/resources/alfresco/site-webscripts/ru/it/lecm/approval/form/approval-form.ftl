@@ -9,6 +9,7 @@
 <#assign formContainerId = htmlId + "-container">
 
 <#assign addAssigneeButtonId = htmlId + "-add-assignee-button">
+<#assign computeTermsButtonId = htmlId + "-compute-terms-button">
 <#assign newAssigneesListButtonId = htmlId + "-save-assignees-list-button">
 <#assign deleteAssigneesListButtonId = htmlId + "-delete-assignees-list-button">
 
@@ -53,6 +54,7 @@
                 </div>
 
                 <button id="${addAssigneeButtonId}"></button>
+                <button id="${computeTermsButtonId}"></button>
                 <div class="form-field with-grid">
                     <@grid.datagrid datagridId false />
                 </div>
@@ -379,6 +381,42 @@
                 });
 
                 return true;
+            },
+
+            _onComputeTermsButtonClick: function approvalForm_onComputeTermsButtonClick(event) {
+                var currentSelectedListRef = this.widgets.$assigneesListSelectElem.attr( "value" );
+
+                debugger;
+
+                if( currentSelectedListRef.indexOf( "workspace://" ) === -1 ) {
+                    return false;
+                }
+
+                Alfresco.util.Ajax.request({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/setDueDates",
+                    dataObj: {
+                        assigneeListNodeRef: currentSelectedListRef,
+                        workflowDueDate: Alfresco.util.toISO8601(this.widgets.calendar.getSelectedDates()[0])
+                    },
+                    requestContentType: "application/json",
+                    responseContentType: "application/json",
+                    successCallback: {
+                        fn: function() {
+                            this.refreshDatagrid();
+                        },
+                        scope: this
+                    },
+                    failureCallback: {
+                        fn: function () {
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: "Не удалось автоматически рассчитать сроки согласования, попробуйте еще раз"
+                            });
+                        }
+                    }
+                });
+
+                return true;
             }
         },
 
@@ -550,6 +588,7 @@
             this.widgets.addAssigneeButton.subscribe( "click", this.handlers._onAddAssigneeButtonClick, null, this );
             this.widgets.deleteAssigneesListButton.subscribe( "click", this.handlers._onDeleteAssigneesListButtonClick, null, this );
             this.widgets.newAssigneesListButton.subscribe( "click", this.handlers._onNewAssigneesListButtonClick, null, this );
+            this.widgets.computeTermsButton.subscribe("click", this.handlers._onComputeTermsButtonClick, null, this);
 
             this.widgets.assigneesListSelectElem.subscribe( "change", this.refreshDatagrid, null, this );
         },
@@ -592,6 +631,16 @@
         _initAddAssigneeButton: function approvalForm_initAddAssigneeButton() {
             this.widgets.addAssigneeButton = Alfresco.util.createYUIButton( this, "add-assignee-button", null, { label: "Добавить согласующего", title: "Добавить согласующего в выбранный список" }, "${addAssigneeButtonId}" );
             this.widgets.addAssigneeButton.setStyle( "margin", "0 0 5px 1px" );
+        },
+
+        /**
+         * Создаёт кнопку 'Рассчитать сроки согласования'
+         *
+         * @method approvalForm_initComputeTermsButton
+         */
+        _initComputeTermsButton: function approvalForm_initComputeTermsButton() {
+            this.widgets.computeTermsButton = Alfresco.util.createYUIButton( this, "compute-terms-button", null, { label: "Рассчитать сроки согласования", title: "Автоматически рассчитать сроки согласования (старые сроки будут утеряны)" }, "${computeTermsButtonId}" );
+            this.widgets.computeTermsButton.setStyle( "margin", "0 0 5px 1px" );
         },
 
         /**
@@ -716,6 +765,7 @@
             this._initAddAssigneeButton();
             this._initDeleteAssigneesListButton();
             this._initNewAssigneesListButton();
+            this._initComputeTermsButton();
 
             // Инициализация меню выбора списка согласующих
             this._initSelectApprovalListMenu();
