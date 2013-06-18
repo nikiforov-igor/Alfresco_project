@@ -18,6 +18,8 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 /**
@@ -40,8 +42,9 @@ public class AbsenceEndSchedule extends AbstractScheduledAction {
 	private String cronExpression = "0 59 * * * ? *"; // каждый час в xx:59
 	private IAbsence absenceService;
 	private SearchService searchService;
-	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH");
-	private final String searchQuery = "PARENT:\"%s\" AND TYPE:\"%s\" AND @%s:\"%s\" AND NOT (@%s:true) AND @%s:true AND NOT (@lecm\\-dic:active:false)";
+	private DateFormat dateFormat = new SimpleDateFormat("yyyy\\-MM\\-dd'T'HH");
+	private final String searchQueryFormat = "PARENT:\"%s\" AND TYPE:\"%s\" AND @%s:[MIN TO %s] AND NOT (@%s:true) AND @%s:true AND NOT (@lecm\\-dic:active:false)";
+	private final static Logger logger = LoggerFactory.getLogger(AbsenceEndSchedule.class);
 
 	@Override
 	public Action getAction(NodeRef nodeRef) {
@@ -69,8 +72,10 @@ public class AbsenceEndSchedule extends AbstractScheduledAction {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		sp.setQuery(String.format(searchQuery, parentContainer.toString(), IAbsence.TYPE_ABSENCE.toString(), IAbsence.PROP_ABSENCE_END.toString(),
-				dateFormat.format(now), IAbsence.PROP_ABSENCE_UNLIMITED.toString(), IAbsence.PROP_ABSENCE_ACTIVATED.toString()));
+		String searchQuery = String.format(searchQueryFormat, parentContainer.toString(), IAbsence.TYPE_ABSENCE.toString(), IAbsence.PROP_ABSENCE_END.toString(),
+				dateFormat.format(now), IAbsence.PROP_ABSENCE_UNLIMITED.toString(), IAbsence.PROP_ABSENCE_ACTIVATED.toString());
+		logger.trace("Searching absences to be ended: " + searchQuery);
+		sp.setQuery(searchQuery);
 		ResultSet results = null;
 		try {
 			results = searchService.query(sp);
