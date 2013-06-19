@@ -175,4 +175,16 @@
             <ref bean="dictionaryService"/>
         </property>
     </bean>
+
+	<bean id="webscript.ru.it.lecm.actions.export-csv.post"
+	      class="ru.it.lecm.base.scripts.ExportCSV"
+	      parent="webscript"
+		  depends-on="substitudeService">
+		<property name="nodeService">
+			<ref bean="nodeService" />
+		</property>
+		<property name="substituteService">
+			<ref bean="substitudeService" />
+		</property>
+	</bean>
 </beans>

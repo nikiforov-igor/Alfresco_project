@@ -1,14 +1,18 @@
-package ru.it.lecm.dictionary.export;
+package ru.it.lecm.base.scripts;
 
 import com.csvreader.CsvWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import ru.it.lecm.base.beans.SubstitudeBean;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,6 +30,7 @@ public class ExportCSV extends AbstractWebScript {
 	private static final transient Logger log = LoggerFactory.getLogger(ExportCSV.class);
 
 	protected NodeService nodeService;
+	private SubstitudeBean substituteService;
 
 	/**
 	 * Russian locale
@@ -41,17 +46,20 @@ public class ExportCSV extends AbstractWebScript {
 		this.nodeService = nodeService;
 	}
 
+	public void setSubstituteService(SubstitudeBean substitudeService) {
+		this.substituteService = substitudeService;
+	}
+
 	@Override
 	public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 
+
 		OutputStream resOutputStream = null;
 		try {
-			ArrayList<String> namespace = new ArrayList<String>();
-			String[] fields = req.getParameter("fields").split(",");
-			String[] selectItems = req.getParameter("selectedItems").split(",");
-			String[] columnsName = req.getParameter("datagridColumns").split(",");
 			String fileName = req.getParameter("fileName");
-			NodeRef nodeRef;
+			String[] nodeRefs = req.getParameterValues("nodeRef");
+			String[] fields = req.getParameterValues("field");
+			String[] fieldLabels = req.getParameterValues("fieldLabel");
 
 			res.setContentEncoding("UTF-8");
 			res.setContentType("text/csv");
@@ -62,38 +70,33 @@ public class ExportCSV extends AbstractWebScript {
 			// По умолчанию charset в UTF-8
 			Charset charset = Charset.defaultCharset();
 			CsvWriter wr = new CsvWriter(resOutputStream, ';', charset);
-			for (int i=0; i<fields.length; i++){
-				namespace.add(fields[i].split(":")[1]);
-				if (i == 0) {
-					wr.write("\ufeff" + columnsName[i]); //UTF c BOM идентификатором
-				} else {
-					wr.write(columnsName[i]);
+			if (fieldLabels != null) {
+				for (int i=0; i< fieldLabels.length; i++){
+					if (i == 0) {
+						wr.write("\ufeff" + fieldLabels[i]); //UTF c BOM идентификатором
+					} else {
+						wr.write(fieldLabels[i]);
+					}
 				}
 			}
 
 			wr.endRecord();
-			if (selectItems != null) {
-				Boolean noProperties;
-				for (String item : selectItems ) {
-					nodeRef = new NodeRef(item);
-					Set set = nodeService.getProperties(nodeRef).entrySet();
-					for (String aNamespace : namespace) {
-						noProperties = true;
-						for (Object aSet : set) {
-							Map.Entry m = (Map.Entry) aSet;
-							QName key = (QName) m.getKey();
-							String value = m.getValue().toString();
-							if (key.getLocalName().equals(aNamespace)) {
-								if (m.getValue() instanceof Date) {
-									Date date = (Date)m.getValue();
-									value = new SimpleDateFormat(DATE_FORMAT, LOCALE_RU).format(date);
-								}
-								wr.write(value);
-								noProperties = false;
+			if (nodeRefs != null && fields != null && fieldLabels != null && fields.length == fieldLabels.length) {
+				for (String item : nodeRefs) {
+					NodeRef nodeRef = new NodeRef(item);
+					if (nodeService.exists(nodeRef)) {
+						for (String field: fields) {
+							if (field.startsWith("$parent")) {
+								field = field.replace("$parent", "");
 							}
-						}
-						if (noProperties) {
-							wr.write("");
+							if (field.startsWith("$includeRef")) {
+								field = field.replace("$includeRef", "");
+							}
+
+							String fieldValue = substituteService.formatNodeTitle(nodeRef, field);
+							fieldValue = fieldValue.replaceAll("<a[^>]*>", "");
+							fieldValue = fieldValue.replaceAll("</a>", "");
+							wr.write(fieldValue);
 						}
 					}
 					wr.endRecord();

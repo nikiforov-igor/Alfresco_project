@@ -65,6 +65,10 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
      */
     YAHOO.lang.augmentObject(LogicECM.module.Dictionary.Toolbar.prototype,
         {
+	        options: {
+		        dictionaryName: null
+	        },
+
             /**
              * FileUpload module instance.
              *
@@ -96,43 +100,12 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
              * Экспорт CSV
              */
             onExportCSV: function(){
-                var datagridMeta = this.modules.dataGrid.datagridMeta;
-                var selectItems = this.modules.dataGrid.selectedItems;
-                var sUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(datagridMeta.itemType) + "&formId=export-fields";
-                Alfresco.util.Ajax.jsonGet(
-                    {
-                        url: sUrl,
-                        successCallback:
-                        {
-                            fn: function(response){
-                                var datagridColumns = response.json.columns;
-                                var fields = "";
-                                var items = "";
-                                var columns = "";
-                                for (var nodeIndex in datagridColumns) {
-                                    fields += (fields.length > 0 ? "," : "") + encodeURIComponent(datagridColumns[nodeIndex].name);
-                                    columns += (columns.length > 0 ? "," : "") + encodeURIComponent(datagridColumns[nodeIndex].label);
-                                }
-                                for (var item in selectItems) {
-                                    if (selectItems[item]) {
-                                        items += (items.length > 0 ? "," : "") + encodeURIComponent(item);
-                                    }
-                                }
-                                document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export-csv"
-                                    + "?fields=" + fields
-                                    + "&datagridColumns=" + columns
-                                    + "&selectedItems=" + items
-                                    + "&fileName=dictionary";
-                            },
-                            scope: this
-                        },
-                        failureCallback:
-                        {
-                            fn: function() {alert("Failed to load webscript export CSV.")},
-                            scope: this
-                        }
-                    });
+	            var dataGrid = this.modules.dataGrid;
+	            if (dataGrid) {
+		            dataGrid.onExportCsv(this.options.dictionaryName);
+	            }
             },
+
             /**
              * Удаление выбранного значения в dataGrid.
              * Появляется диалоговое окно с потверждением на удаление

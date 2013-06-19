@@ -1,7 +1,7 @@
 <webscript>
     <shortname>Export</shortname>
     <description>Export</description>
-    <url>/lecm/dictionary/get/export-csv</url>
+    <url>/lecm/base/action/export-csv</url>
     <format default="text">extension</format>
     <authentication>user</authentication>
 </webscript>

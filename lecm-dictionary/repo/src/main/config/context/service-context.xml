@@ -56,14 +56,6 @@
         <property name="xmlExportBean" ref="lecmDictionaryExportBean"/>
     </bean>
 
-    <bean id="webscript.ru.it.lecm.dictionary.export-csv.get"
-          class="ru.it.lecm.dictionary.export.ExportCSV"
-          parent="webscript">
-        <property name="nodeService">
-            <ref bean="nodeService" />
-        </property>
-    </bean>
-
     <bean id="webscript.ru.it.lecm.dictionary.import.post"
           class="ru.it.lecm.dictionary.imports.Import"
           parent="webscript">

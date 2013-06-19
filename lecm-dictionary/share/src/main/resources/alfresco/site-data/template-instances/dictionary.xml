@@ -21,6 +21,7 @@
 			<url>/lecm/dictionary/toolbar</url>
 			<properties>
 				<pagination>true</pagination>
+				<dictionaryName>{dic}</dictionaryName>
 			</properties>
 		</component>
         <!-- Datagrid -->
