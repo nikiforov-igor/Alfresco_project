@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import ru.it.lecm.wcalendar.schedule.ISchedule;
 
 /**
  * Полиси, которые регулируют отношения между lecm-orgstr:employee (сотрудником)
@@ -30,6 +31,7 @@ import java.util.Set;
  */
 public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournalizedPolicyBase {
 
+	private ISchedule scheduleService;
 	private BehaviourFilter behaviourFilter;
 	// атрибуты cm:person, при изменении которых мы будем проводить синхронизацию cm:person -> lecm-orgstr:employee
 	private final static QName[] AFFECTED_PERSON_PROPERTIES = {ContentModel.PROP_FIRSTNAME, ContentModel.PROP_LASTNAME,
@@ -37,6 +39,10 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 
 	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
 		this.behaviourFilter = behaviourFilter;
+	}
+
+	public void setScheduleService(ISchedule scheduleService) {
+		this.scheduleService = scheduleService;
 	}
 
 	@Override
@@ -137,6 +143,11 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
                 nodeService.addAspect(employeeLink, ContentModel.ASPECT_TEMPORARY, null);
                 nodeService.deleteNode(employeeLink);
             }
+			NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef);
+			if (schedule != null) {
+				nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
+				nodeService.deleteNode(schedule);
+			}
         }
     }
 

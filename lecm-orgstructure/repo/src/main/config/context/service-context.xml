@@ -137,6 +137,7 @@
 		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="behaviourFilter" ref="policyBehaviourFilter" />
+		<property name="scheduleService" ref="ScheduleService"/>
 	</bean>
 
 	<bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
@@ -157,6 +158,7 @@
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="authService" ref="authenticationService"/>
 		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
+		<property name="scheduleService" ref="ScheduleService"/>
 	</bean>
 
 	<bean id="orgstructureStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffListPolicy"

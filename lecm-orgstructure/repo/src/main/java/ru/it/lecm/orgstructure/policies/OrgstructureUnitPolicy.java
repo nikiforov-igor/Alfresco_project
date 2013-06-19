@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -18,6 +19,7 @@ import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.wcalendar.schedule.ISchedule;
 
 /**
  * @author dbashmakov
@@ -33,6 +35,7 @@ public class OrgstructureUnitPolicy
 	final static String CHKNAME_AUTH_SERVICE = "authService";
 
 	private AuthenticationService authService; // optional
+	private ISchedule scheduleService;
 
 	@Override
 	public void init() {
@@ -46,6 +49,8 @@ public class OrgstructureUnitPolicy
 				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onCreateUnitLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onUpdateUnitLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onUpdateUnit"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
 				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onDeleteNode"));
 	}
@@ -56,6 +61,10 @@ public class OrgstructureUnitPolicy
 
 	public void setAuthService(AuthenticationService authService) {
 		this.authService = authService;
+	}
+
+	public void setScheduleService(ISchedule scheduleService) {
+		this.scheduleService = scheduleService;
 	}
 
 	@Override
@@ -97,6 +106,21 @@ public class OrgstructureUnitPolicy
 				notifyNodeCreated( PolicyUtils.makeOrgUnitSVPos(nodeRef, nodeService));
 				(!) для OUSV явный вызов не потребуется, т.к. notifyOU автоматом создаёт sv-часть
 				*/
+			}
+		}
+	}
+
+	public void onUpdateUnit(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		final Boolean nowActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
+		final Boolean oldActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
+		final boolean changed = !PolicyUtils.safeEquals(oldActive, nowActive);
+
+		//если подразделение удаляется
+		if (changed && !nowActive) {
+			NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef);
+			if (schedule != null) {
+				nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
+				nodeService.deleteNode(schedule);
 			}
 		}
 	}
