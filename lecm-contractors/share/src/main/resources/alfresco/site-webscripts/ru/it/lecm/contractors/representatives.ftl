@@ -138,7 +138,7 @@
             var isPrimaryCheckboxChecked;
 
             addRepresentativeForm.setOptions({
-                width: "500px",
+                width: "50em",
                 templateUrl: templateUrl,
                 destroyOnHide: true,
                 doBeforeFormSubmit: {
