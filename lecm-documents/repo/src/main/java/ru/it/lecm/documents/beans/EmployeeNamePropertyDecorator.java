@@ -44,7 +44,7 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
         Map<String, Serializable> map = new LinkedHashMap<String, Serializable>(4);
         map.put("userName", username);
 
-        if (this.personService.personExists(username)) {
+        if (this.personService.personExists(username) && !username.equals("System")) {
             NodeRef employeeRef = orgstructureService.getEmployeeByPerson(username);
             if (employeeRef != null) {
                 Map<QName, Serializable> properties = this.nodeService.getProperties(employeeRef);
@@ -62,7 +62,7 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
             }
         } else if (username.equals("System") || username.startsWith("System@")) {
             firstName = "System";
-            lastName = "User";
+            lastName = "";
             middleName = "";
         } else {
             map.put("isDeleted", true);
