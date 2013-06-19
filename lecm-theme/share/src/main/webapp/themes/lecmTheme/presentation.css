@@ -2209,7 +2209,15 @@ span.person a h3 {
 }
 /* Notifications - end */
 
-.grid .archive-record, .grid .archive-record span a, .grid .archive-record a {
+.grid .archive-record,
+.grid .archive-record span a,
+.grid .archive-record span a:hover,
+.grid .archive-record span a:active,
+.grid .archive-record span a:visited,
+.grid .archive-record a,
+.grid .archive-record a:hover,
+.grid .archive-record a:active,
+.grid .archive-record a:visited {
     color:red;
 }
 
