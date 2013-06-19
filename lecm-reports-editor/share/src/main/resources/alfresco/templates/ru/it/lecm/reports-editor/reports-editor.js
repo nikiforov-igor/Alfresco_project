@@ -1,0 +1,1 @@
+model.settings = remote.connect("alfresco").get("/lecm/reports-editor/settings");

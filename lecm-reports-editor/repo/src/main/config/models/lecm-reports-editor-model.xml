@@ -19,7 +19,7 @@
         <!-- Тип отчета -->
         <type name="lecm-rpeditor:reportType">
             <title>Report Type</title>
-            <parent>cm:cmobject</parent>
+            <parent>lecm-dic:plane_dictionary_values</parent>
             <properties>
                 <property name="lecm-rpeditor:reportTypeCode">
                     <title>Report Type Code</title>
@@ -27,15 +27,12 @@
                     <mandatory>true</mandatory>
                 </property>
             </properties>
-            <mandatory-aspects>
-                <aspect>lecm-dic:aspect_active</aspect>
-            </mandatory-aspects>
         </type>
 
         <!-- Тип провайдера-->
         <type name="lecm-rpeditor:reportProvider">
             <title>Report Provider</title>
-            <parent>cm:cmobject</parent>
+            <parent>lecm-dic:plane_dictionary_values</parent>
             <properties>
                 <property name="lecm-rpeditor:reportProviderCode">
                     <title>Report Provider Code</title>
@@ -48,15 +45,12 @@
                     <mandatory>true</mandatory>
                 </property>
             </properties>
-            <mandatory-aspects>
-                <aspect>lecm-dic:aspect_active</aspect>
-            </mandatory-aspects>
         </type>
 
         <!-- Тип колонок в отчете-->
         <type name="lecm-rpeditor:reportColumnType">
             <title>Report Column Type</title>
-            <parent>cm:cmobject</parent>
+            <parent>lecm-dic:plane_dictionary_values</parent>
             <properties>
                 <property name="lecm-rpeditor:reportColumnTypeCode">
                     <title>Report Column Type Code</title>
@@ -69,15 +63,12 @@
                     <mandatory>true</mandatory>
                 </property>
             </properties>
-            <mandatory-aspects>
-                <aspect>lecm-dic:aspect_active</aspect>
-            </mandatory-aspects>
         </type>
 
         <!-- Тип параметра-->
         <type name="lecm-rpeditor:reportParameterType">
             <title>Report Parameter Type</title>
-            <parent>cm:cmobject</parent>
+            <parent>lecm-dic:plane_dictionary_values</parent>
             <properties>
                 <property name="lecm-rpeditor:reportParameterTypeCode">
                     <title>Report Parameter Code</title>
@@ -93,9 +84,6 @@
                     <type>d:text</type>
                 </property>
             </properties>
-            <mandatory-aspects>
-                <aspect>lecm-dic:aspect_active</aspect>
-            </mandatory-aspects>
         </type>
 
         <!-- Шаблон отчета -->
@@ -125,11 +113,6 @@
             <properties>
                 <property name="lecm-rpeditor:reportCode">
                     <title>Report Code</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                </property>
-                <property name="lecm-rpeditor:reportName">
-                    <title>Report Display Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
@@ -171,7 +154,7 @@
                     </source>
                     <target>
                         <class>lecm-rpeditor:reportType</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>
@@ -182,7 +165,7 @@
                     </source>
                     <target>
                         <class>lecm-rpeditor:reportProvider</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>
@@ -193,7 +176,7 @@
                     </source>
                     <target>
                         <class>lecm-rpeditor:reportTemplate</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>

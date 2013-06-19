@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+	<template-type>ru/it/lecm/reports-editor/reports-editor</template-type>
+    <components>
+        <!-- Title -->
+        <component>
+            <region-id>title</region-id>
+            <url>/lecm/base/title-with-filter-label</url>
+            <properties>
+                <title>page.lecm.reports-editor.title</title>
+            </properties>
+        </component>
+        <!-- Toolbar -->
+        <component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/reports-editor/toolbar</url>
+        </component>
+        <!-- Menu -->
+        <component>
+            <region-id>menu</region-id>
+            <url>/lecm/reports-editor/menu</url>
+        </component>
+        <component>
+            <region-id>content</region-id>
+            <url>/lecm/reports-editor/main</url>
+            <properties>
+                <statemachineId>{reportId}</statemachineId>
+            </properties>
+        </component>
+    </components>
+</template-instance>

@@ -1,4 +1,55 @@
 <alfresco-config>
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-reports-editor/reports-editor-const.js"/>
+            </dependencies>
+        </forms>
+    </config>
 
+    <config evaluator="node-type" condition="lecm-rpeditor:reportDescriptor">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportCode"/>
+                    <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
+                    <show id="lecm-rpeditor:reportTypeAssoc"/>
+                    <show id="lecm-rpeditor:reportProviderAssoc"/>
+                    <show id="lecm-rpeditor:reportTemplateAssoc"/>
+                    <show id="lecm-rpeditor:reportQuery"/>
+                    <show id="lecm-rpeditor:reportQueryOffset"/>
+                    <show id="lecm-rpeditor:reportQueryLimit"/>
+                    <show id="lecm-rpeditor:reportQueryPgSize"/>
+                    <show id="lecm-rpeditor:reportExtFlags"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 
+    <config evaluator="model-type" condition="lecm-rpeditor:reportDescriptor">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportCode"/>
+                    <show id="lecm-rpeditor:reportTypeAssoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

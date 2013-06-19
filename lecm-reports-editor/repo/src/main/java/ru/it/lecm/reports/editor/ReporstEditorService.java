@@ -42,4 +42,20 @@ public class ReporstEditorService extends BaseBean {
     public NodeRef getServiceRootFolder() {
         return reRootRef;
     }
+
+    public NodeRef getReportsRootFolder() {
+        return reReportsRef;
+    }
+
+    public NodeRef getSourcesRootFolder() {
+        return reSourcesRef;
+    }
+
+    public NodeRef getTemplatesRootFolder() {
+        return reTemplatesRef;
+    }
+
+    public NodeRef getDictionariesRootFolder() {
+        return reDictionaryRef;
+    }
 }

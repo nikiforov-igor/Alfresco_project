@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Тип столбцов" type="lecm-dic:dictionary" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники">
+        <property name="cm:name">Тип столбцов</property>
+        <property name="lecm-dic:attributeForShow">cm:name</property>
+        <property name="lecm-dic:type">lecm-rpeditor:reportColumnType</property>
+        <property name="lecm-dic:active">true</property>
+        <property name="lecm-dic:plane">true</property>
+        <property name="lecm-dic:description">Тип столбцов</property>
+        <items>
+            <item name="cm:String" type="lecm-rpeditor:reportColumnType">
+                <property name="cm:name">String</property>
+                <property name="lecm-rpeditor:reportColumnTypeCode">COLUMN_TYPE_STRING</property>
+                <property name="lecm-rpeditor:reportColumnTypeClass">java.lang.String</property>
+            </item>
+            <item name="cm:Date" type="lecm-rpeditor:reportColumnType">
+                <property name="cm:name">Date</property>
+                <property name="lecm-rpeditor:reportColumnTypeCode">COLUMN_TYPE_DATE</property>
+                <property name="lecm-rpeditor:reportColumnTypeClass">java.util.Date</property>
+            </item>
+            <item name="cm:Int" type="lecm-rpeditor:reportColumnType">
+                <property name="cm:name">Int</property>
+                <property name="lecm-rpeditor:reportColumnTypeCode">COLUMN_TYPE_INT</property>
+                <property name="lecm-rpeditor:reportColumnTypeClass">java.lang.Integer</property>
+            </item>
+            <item name="cm:Boolean" type="lecm-rpeditor:reportColumnType">
+                <property name="cm:name">Boolean</property>
+                <property name="lecm-rpeditor:reportColumnTypeCode">COLUMN_TYPE_BOOLEAN</property>
+                <property name="lecm-rpeditor:reportColumnTypeClass">java.lang.Boolean</property>
+            </item>
+        </items>
+    </item>
+</items>

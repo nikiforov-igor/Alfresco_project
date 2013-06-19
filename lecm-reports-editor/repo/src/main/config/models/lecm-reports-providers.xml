@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Тип провайдера" type="lecm-dic:dictionary" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники">
+        <property name="cm:name">Тип провайдера</property>
+        <property name="lecm-dic:attributeForShow">cm:name</property>
+        <property name="lecm-dic:type">lecm-rpeditor:reportProvider</property>
+        <property name="lecm-dic:active">true</property>
+        <property name="lecm-dic:plane">true</property>
+        <property name="lecm-dic:description">Тип провайдера</property>
+        <items>
+            <item name="cm:SubstitudeService" type="lecm-rpeditor:reportProvider">
+                <property name="cm:name">SubstitudeService</property>
+                <property name="lecm-rpeditor:reportProviderCode">PROV_SUSTITUDE</property>
+                <property name="lecm-rpeditor:reportProviderClass">ru.it.lecm.base.beans.SubstitudeBeanImpl</property>
+            </item>
+        </items>
+    </item>
+</items>

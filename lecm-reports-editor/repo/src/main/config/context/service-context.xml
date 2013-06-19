@@ -23,7 +23,7 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!-- Registration of Business Journal models -->
-    <bean id="ru.it.lecm.reports-editor.modelBootstrap" parent="dictionaryModelBootstrap">
+    <bean id="reportsEditor.modelBootstrap" parent="dictionaryModelBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-reports-editor-model.xml</value>
@@ -52,7 +52,7 @@
     <util:constant id="RE_REPORTS_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_REPORTS_ROOT_NAME"/>
 
     <bean id="reportsEditorService" init-method="init" class="ru.it.lecm.reports.editor.ReporstEditorService" parent="baseBean"
-          depends-on="ru.it.lecm.reports-editor.modelBootstrap">
+          depends-on="reportsEditor.modelBootstrap">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="transactionService" ref="transactionService"/>
@@ -66,6 +66,28 @@
                 <entry key="#{RE_TEMPLATES_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_TEMPLATES_ROOT_NAME}"/>
                 <entry key="#{RE_REPORTS_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_REPORTS_ROOT_NAME}"/>
             </map>
+        </property>
+    </bean>
+
+    <bean id="reportsEditorScript" parent="baseScript" class="ru.it.lecm.reports.editor.scripts.ReportsEditorWebScriptBean"
+          depends-on="reportsEditorService">
+        <property name="extensionName">
+            <value>reportsEditor</value>
+        </property>
+        <property name="service">
+            <ref bean="reportsEditorService"/>
+        </property>
+    </bean>
+
+    <bean id="reportsEditor.LogicEcmDictionariesBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditor.modelBootstrap, reportsEditorService, businessJournalLogEventsPolicy">
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-reports-columns-types.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-reports-parameters-types.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-reports-providers.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-reports-types.xml</value>
+            </list>
         </property>
     </bean>
 </beans>

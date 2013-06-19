@@ -153,6 +153,8 @@ public class XMLImportBeanImpl implements XMLImportBean {
             }
             String itemNameAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_NAME);
             String itemTypeAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_TYPE);
+            String parentPathAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_PATH);
+
             QName itemType = null;
             QName itemName = null;
             if (itemTypeAttr != null && !itemTypeAttr.isEmpty()) {
@@ -167,6 +169,12 @@ public class XMLImportBeanImpl implements XMLImportBean {
                 properties.put(ContentModel.PROP_NAME, itemName.getLocalName());
             }
             properties.putAll(getProperties(xmlr));
+            if (parentPathAttr != null && parentPathAttr.length() > 0) {
+                NodeRef actualParent = getNodeByPath(parentPathAttr);
+                if (actualParent != null){
+                    parent = actualParent;
+                }
+            }
             NodeRef current = createItem(parent, itemName, itemType, properties, doNotUpdateIfExist);
             readItems(xmlr, current, doNotUpdateIfExist);
             readAssocs(xmlr, current, doNotUpdateIfExist);
