@@ -1,12 +1,5 @@
 package ru.it.lecm.wcalendar.absence.beans;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
@@ -19,6 +12,11 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -291,7 +289,8 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 
 	@Override
 	public boolean isAutoAnswerUsed(NodeRef absenceNode) {
-		return (Boolean) nodeService.getProperty(absenceNode, PROP_ABSENCE_AUTO_ANSWER_ACTIVATED);
+        Serializable isAutoAnswer = nodeService.getProperty(absenceNode, PROP_ABSENCE_AUTO_ANSWER_ACTIVATED);
+        return isAutoAnswer == null ? false : (Boolean) isAutoAnswer;
 	}
 
 	@Override
