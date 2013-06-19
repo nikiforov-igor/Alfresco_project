@@ -60,7 +60,7 @@
         ignoreNodes: "${args.ignoreNodes}".split(","),
     </#if>
         multipleSelectMode: ${field.endpointMany?string},
-        itemType: "${field.endpointType}",
+        itemType: "${field.control.params.itemType!field.endpointType}",
         currentValue: "${field.value!''}",
         itemFamily: "node",
         maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
