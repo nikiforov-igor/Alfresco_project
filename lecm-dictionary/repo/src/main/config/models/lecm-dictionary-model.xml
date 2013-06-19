@@ -56,17 +56,6 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
-                <property name="lecm-dic:show_control_in_separate_window">
-                    <title>Show control in separate window</title>
-                    <type>d:boolean</type>
-                    <mandatory>true</mandatory>
-                    <default>true</default>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
 				<property name="lecm-dic:plane">
 					<title>Plane</title>
 					<type>d:boolean</type>

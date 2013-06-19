@@ -15,9 +15,7 @@
 					<show id="cm:name" force="true"/>
                     <show id="lecm-dic:description" force="true"/>
 					<show id="lecm-dic:type" force="true"/>
-					<show id="lecm-dic:show_control_in_separate_window" force="true"/>
                     <show id="lecm-dic:attributeForShow" force="true"/>
-                    <show id="lecm-dic:plane" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -30,7 +28,6 @@
 					<show id="cm:name" force="true"/>
                     <show id="lecm-dic:description" force="true"/>
 					<show id="lecm-dic:type" force="true"/>
-					<show id="lecm-dic:show_control_in_separate_window" force="true"/>
 					<show id="lecm-dic:attributeForShow" force="true"/>
 					<show id="lecm-dic:plane" force="true"/>
 				</field-visibility>

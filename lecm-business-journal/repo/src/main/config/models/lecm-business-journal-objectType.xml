@@ -5,7 +5,6 @@
         <property name="lecm-dic:description">Справочник, содержащий перечень объектов, действия с которым подлежат записи в бизнес-журнал</property>
         <property name="lecm-dic:type">lecm-busjournal:objectType</property>
         <property name="lecm-dic:attributeForShow">cm:name</property>
-        <property name="lecm-dic:show_control_in_separate_window">false</property>
         <property name="lecm-dic:plane">true</property>
         <property name="lecm-dic:active">true</property>
         <items>
