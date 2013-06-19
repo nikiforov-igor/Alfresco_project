@@ -77,7 +77,7 @@ markupToDraw[2] = '<@compress single_line=true>
 	<@htmlMarkup field plane2 showSearch/>
 </@compress>';
 
-function Schedule_DrawPicker(instance) {
+LogicECM.module.WCalendar.Schedule.drawPicker = function Schedule_DrawPicker(instance) {
 
     picker = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
         <#if disabled>
@@ -165,7 +165,7 @@ function Schedule_DrawPicker(instance) {
 	YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 }
 
-function Schedule_PickerOKPressed(layer, args) {
+LogicECM.module.WCalendar.Schedule.pickerOKPressed = function Schedule_PickerOKPressed(layer, args) {
 	var scope = this;
 	var picker = args[1];
 	var selectedItems = picker.getSelectedItems();
@@ -203,9 +203,9 @@ function Schedule_PickerOKPressed(layer, args) {
 	});
 }
 
-YAHOO.Bubbling.on("${controlPickerLabel}", Schedule_PickerOKPressed, this);
+YAHOO.Bubbling.on("${controlPickerLabel}", LogicECM.module.WCalendar.Schedule.pickerOKPressed, this);
 
-Schedule_DrawPicker({ value: '1'});
+LogicECM.module.WCalendar.Schedule.drawPicker({ value: '1'});
 
 //]]></script>
 
@@ -229,8 +229,8 @@ Schedule_DrawPicker({ value: '1'});
 	<#else>
 		<label style="height: 50px; word-wrap: break-word;" for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 		<div>
-			<div><input type="radio" name="picker-instance" value="1" id="${controlPickerId}-1" onclick="Schedule_DrawPicker(this);" checked > ${msg(field.control.params.pickerLabel1)}</div>
-			<div><input type="radio" name="picker-instance" value="2" id="${controlPickerId}-2" onclick="Schedule_DrawPicker(this);" > ${msg(field.control.params.pickerLabel2)}</div>
+			<div><input type="radio" name="picker-instance" value="1" id="${controlPickerId}-1" onclick="LogicECM.module.WCalendar.Schedule.drawPicker(this);" checked > ${msg(field.control.params.pickerLabel1)}</div>
+			<div><input type="radio" name="picker-instance" value="2" id="${controlPickerId}-2" onclick="LogicECM.module.WCalendar.Schedule.drawPicker(this);" > ${msg(field.control.params.pickerLabel2)}</div>
 			<div style="clear: both"></div>
 		</div>
 		<div id="${controlId}" class="object-finder">
