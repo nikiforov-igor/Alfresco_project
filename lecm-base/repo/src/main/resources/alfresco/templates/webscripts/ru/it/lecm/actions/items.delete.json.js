@@ -58,25 +58,28 @@ function runAction(p_params) {
         try {
             var itemNode = search.findNode(nodeRef);
             if (itemNode != null) {
-                if (full == "false") {// пометить объект как неактивный
-                    itemNode.properties["lecm-dic:active"] = false;
-                    itemNode.save();
-                    result.success = true;
-                } else {//реальное удаление объекта
-                    var sAssocs;
-                    sAssocs = itemNode.getSourceAssocs();
-                    // удалить все ссылки на объект
-                    for (key in sAssocs) {
-                        var assocsList = sAssocs[key];
-                        for (index in assocsList) {
-                            var targetA = assocsList[index];
-                            targetA.removeAssociation(itemNode, key);
+                var deletePermission = itemNode.hasPermission("Delete");
+                if (deletePermission) {
+                    if (full == "false") {// пометить объект как неактивный
+                        itemNode.properties["lecm-dic:active"] = false;
+                        itemNode.save();
+                        result.success = true;
+                    } else {//реальное удаление объекта
+                        var sAssocs;
+                        sAssocs = itemNode.getSourceAssocs();
+                        // удалить все ссылки на объект
+                        for (key in sAssocs) {
+                            var assocsList = sAssocs[key];
+                            for (index in assocsList) {
+                                var targetA = assocsList[index];
+                                targetA.removeAssociation(itemNode, key);
+                            }
                         }
+                        if (trash == "false") {
+                            itemNode.addAspect("sys:temporary");
+                        }
+                        result.success = itemNode.remove();
                     }
-                    if (trash == "false") {
-                        itemNode.addAspect("sys:temporary");
-                    }
-                    result.success = itemNode.remove();
                 }
             }
         }
