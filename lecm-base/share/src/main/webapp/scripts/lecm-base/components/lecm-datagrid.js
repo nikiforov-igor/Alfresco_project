@@ -1606,26 +1606,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             getSelectedItems: function DataGrid_getSelectedItems()
             {
-                var items = [],
-                    recordSet = this.widgets.dataTable.getRecordSet(),
-                    aPageRecords,
-                    startRecord,
-                    endRecord,
-                    record;
-                if (this.widgets.paginator) {
-                    aPageRecords = this.widgets.paginator.getPageRecords();
-                    startRecord = aPageRecords[0];
-                    endRecord = aPageRecords[1];
-                } else {
-                    startRecord = 0;
-                    endRecord = this.totalRecords;
-                }
-                for (var i = startRecord; i <= endRecord; i++)
+	            var items = [];
+                for (var nodeRef in this.selectedItems)
                 {
-                    record = recordSet.getRecord(i);
-                    if (this.selectedItems[record.getData("nodeRef")])
+                    if (this.selectedItems[nodeRef])
                     {
-                        items.push(record.getData());
+                        items.push(nodeRef);
                     }
                 }
 
@@ -2535,7 +2521,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	        onExportCsv: function DataGrid__onExportCsv(fileName)
 	        {
-		        var items = this.getSelectedItems();
+		        var selectedItems = this.getSelectedItems();
 
 		        var form = document.createElement("form");
 		        form.enctype = "multipart/form-data";
@@ -2548,11 +2534,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        inputFileName.value = encodeURIComponent(fileName);
 		        form.appendChild(inputFileName);
 
-		        for (var i = 0; i < items.length;i++) {
+		        for (var i = 0; i < selectedItems.length;i++) {
 			        var inputNodeRef = document.createElement("input");
 			        inputNodeRef.type = "hidden";
 			        inputNodeRef.name = "nodeRef";
-			        inputNodeRef.value = items[i].nodeRef;
+			        inputNodeRef.value = selectedItems[i];
 			        form.appendChild(inputNodeRef);
 		        }
 
