@@ -1623,7 +1623,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	            for (var i = startRecord; i <= endRecord; i++)
 	            {
 		            record = recordSet.getRecord(i);
-		            if (this.selectedItems[record.getData("nodeRef")])
+		            if (record && this.selectedItems[record.getData("nodeRef")])
 		            {
 			            items.push(record.getData());
 		            }
@@ -2032,15 +2032,37 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                             fnDeleteComplete.call(me);
                                         }
                                         if (response.json.overallSuccess){
-                                            Bubbling.fire("dataItemsDeleted",
-                                                {
-                                                    items:items,
-                                                    bubblingLabel:me.options.bubblingLabel
-                                                });
-                                            Alfresco.util.PopupManager.displayMessage(
-                                                {
-                                                    text:this.msg((actionsConfig && actionsConfig.successMessage)? actionsConfig.successMessage : "message.delete.success", items.length)
-                                                });
+                                            if(!this.options.searchShowInactive){
+                                                Bubbling.fire("dataItemsDeleted",
+                                                    {
+                                                        items:items,
+                                                        bubblingLabel:me.options.bubblingLabel
+                                                    });
+                                                Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text:this.msg((actionsConfig && actionsConfig.successMessage)? actionsConfig.successMessage : "message.delete.success", items.length)
+                                                    });
+                                            } else {
+                                                for (var i = 0, ii = response.json.results.length; i < ii; i++) {
+                                                    // Reload the node's metadata
+                                                    Alfresco.util.Ajax.jsonPost(
+                                                        {
+                                                            url: Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + new Alfresco.util.NodeRef(response.json.results[i].nodeRef).uri,
+                                                            dataObj: this._buildDataGridParams(),
+                                                            successCallback: {
+                                                                fn: function DataGrid_onActionEdit_refreshSuccess(response) {
+                                                                    // Fire "itemUpdated" event
+                                                                    YAHOO.Bubbling.fire("dataItemUpdated",
+                                                                        {
+                                                                            item: response.json.item,
+                                                                            bubblingLabel: me.options.bubblingLabel
+                                                                        });
+                                                                },
+                                                                scope: this
+                                                            }
+                                                        });
+                                                }
+                                            }
                                         } else {
                                             Alfresco.util.PopupManager.displayMessage(
                                                 {

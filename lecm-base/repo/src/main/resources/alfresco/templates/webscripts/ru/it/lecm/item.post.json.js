@@ -45,6 +45,9 @@ function getData()
           if (!("cm_versionLabel" in jsonFields)) {
              jsonFields.put("cm_versionLabel");
           }
+          if (!("lecm-dic_active" in jsonFields)) {
+                jsonFields.put("lecm-dic_active");
+          }
       }
       numFields = jsonFields.length();
       for (count = 0; count < numFields; count++)
