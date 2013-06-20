@@ -87,6 +87,7 @@ LogicECM.module = LogicECM.module || {};
             },
 
             onReady:function AssociationAutoComplete_onReady() {
+                Dom.get(this.controlId + "-autocomplete-input").blur();
                 if (!this.options.disabled) {
                     this.populateData();
                 }
@@ -174,7 +175,6 @@ LogicECM.module = LogicECM.module || {};
                 var oDS = new YAHOO.util.LocalDataSource(this.dataArray);
                 oDS.responseSchema = {fields:["name", "nodeRef"]};
                 var oAC = new YAHOO.widget.AutoComplete(this.controlId + "-autocomplete-input", this.controlId + "-autocomplete-container", oDS);
-                oAC.delimChar = this.options.delimChar;
                 oAC.prehighlightClassName = "yui-ac-prehighlight";
                 oAC.useShadow = true;
                 oAC.forceSelection = true;
