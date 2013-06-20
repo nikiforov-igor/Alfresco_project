@@ -111,12 +111,19 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
 
                 Event.on(this.id + "-import-form-import-file", "change", this.checkImportFile, null, this);
 
+	            Event.on(this.id + "-import-error-form-show-more-link", "click", this.errorFormShowMore, null, this);
+
 	            // Finally show the component body here to prevent UI artifacts on YUI button decoration
 	            Dom.setStyle(this.id + "-body", "visibility", "visible");
 
 	            this.importInfoDialog = Alfresco.util.createYUIPanel(this.id + "-import-info-form",
 		            {
 			            width: "50em"
+		            });
+
+	            this.importErrorDialog = Alfresco.util.createYUIPanel(this.id + "-import-error-form",
+		            {
+			            width: "60em"
 		            });
 
 	            this.importFromDialog = Alfresco.util.createYUIPanel(this.id + "-import-form",
@@ -126,6 +133,8 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
             },
 
 	        showImportDialog: function() {
+		        Dom.get(this.id + "-import-form-chbx-ignore").checked = false;
+		        Dom.get(this.id + "-import-form-import-file").value = "";
 		        this.importFromDialog.show();
 	        },
 
@@ -150,9 +159,11 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
 	                    if (oResults[0] != null && oResults[0].text != null) {
 		                    Dom.get(me.id + "-import-info-form-content").innerHTML = oResults[0].text;
 		                    me.importInfoDialog.show();
-	                    } else if (oResults.exception != null && oResults.message != null) {
-		                    Dom.get(me.id + "-import-info-form-content").innerHTML = oResults.message.replace(/\n/g, '<br>').replace(/\r/g, '<br>');
-		                    me.importInfoDialog.show();
+	                    } else if (oResults.exception != null) {
+		  	                Dom.get(me.id + "-import-error-form-exception").innerHTML = oResults.exception.replace(/\n/g, '<br>').replace(/\r/g, '<br>');
+		  	                Dom.get(me.id + "-import-error-form-stack-trace").innerHTML = me.getStackTraceString(oResults.callstack);
+		                    Dom.setStyle(me.id + "-import-error-form-more", "display", "none");
+		                    me.importErrorDialog.show();
 	                    }
 
 		                YAHOO.Bubbling.fire("datagridRefresh",
@@ -163,6 +174,22 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
                 };
 	            this.hideImportDialog();
 	            Connect.asyncRequest(Alfresco.util.Ajax.POST, url, callback);
-            }
+            },
+
+	        getStackTraceString: function(callstack) {
+		        var result = "";
+		        if (callstack != null) {
+			        for (var i = 0; i < callstack.length; i++) {
+				        if (callstack[i].length > 0) {
+				            result += callstack[i] + "<br/>";
+				        }
+			        }
+		        }
+		        return result;
+	        },
+
+	        errorFormShowMore: function() {
+		        Dom.setStyle(this.id + "-import-error-form-more", "display", "block");
+	        }
         }, true);
 })();

@@ -44,6 +44,7 @@
 .import-info-content {
 	margin: 5px 20px;
 	padding-bottom: 5px;
+	word-wrap: break-word;
 }
 
 .import-form {
@@ -52,4 +53,22 @@
 
 .import-form li{
 	padding-bottom: 5px;
+}
+
+.import-error-exception,
+.import-error-stack-trace {
+	margin-top: 5px;
+}
+
+.import-error-more {
+	height: 250px;
+	overflow-y: auto;
+}
+
+.import-error-header {
+	text-align: center;
+}
+
+.import-error-more {
+	display: none;
 }

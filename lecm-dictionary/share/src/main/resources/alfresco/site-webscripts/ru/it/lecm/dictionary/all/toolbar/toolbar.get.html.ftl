@@ -1,6 +1,7 @@
 <#assign id = args.htmlid>
 <#assign importFormId = id + "-import-form">
 <#assign importInfoFormId = id + "-import-info-form">
+<#assign importErrorFormId = id + "-import-error-form">
 <script type="text/javascript">//<![CDATA[
 function init() {
 	new LogicECM.module.AllDictionary.Toolbar("${id}").setMessages(${messages});
@@ -31,6 +32,30 @@ YAHOO.util.Event.onDOMReady(init);
 		<div id="${importInfoFormId}-head" class="hd">${msg("title.import.info")}</div>
 		<div id="${importInfoFormId}-body" class="bd">
 			<div id="${importInfoFormId}-content" class="import-info-content"></div>
+		</div>
+	</div>
+
+	<div id="${importErrorFormId}" class="yui-panel">
+		<div id="${importErrorFormId}-head" class="hd">${msg("title.import.info")}</div>
+		<div id="${importErrorFormId}-body" class="bd">
+			<div id="${importErrorFormId}-content" class="import-info-content">
+				<div class="import-error-header">
+					<h3>${msg("import.failure")}</h3>
+					<a href="javascript:void(0);" id="${importErrorFormId}-show-more-link">${msg("import.failure.showMore")}</a>
+				</div>
+				<div id="${importErrorFormId}-more" class="import-error-more">
+					<div class="import-error-exception">
+					${msg("import.failure.exception")}:
+						<div class="import-error-exception-content" id="${importErrorFormId}-exception">
+						</div>
+					</div>
+					<div class="import-error-stack-trace">
+					${msg("import.failure.stack-trace")}:
+						<div class="import-error-stack-trace-content" id="${importErrorFormId}-stack-trace">
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
