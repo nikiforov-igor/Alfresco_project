@@ -1606,14 +1606,28 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             getSelectedItems: function DataGrid_getSelectedItems()
             {
-	            var items = [];
-                for (var nodeRef in this.selectedItems)
-                {
-                    if (this.selectedItems[nodeRef])
-                    {
-                        items.push(nodeRef);
-                    }
-                }
+	            var items = [],
+		            recordSet = this.widgets.dataTable.getRecordSet(),
+		            aPageRecords,
+		            startRecord,
+		            endRecord,
+		            record;
+	            if (this.widgets.paginator) {
+		            aPageRecords = this.widgets.paginator.getPageRecords();
+		            startRecord = aPageRecords[0];
+		            endRecord = aPageRecords[1];
+	            } else {
+		            startRecord = 0;
+		            endRecord = this.totalRecords;
+	            }
+	            for (var i = startRecord; i <= endRecord; i++)
+	            {
+		            record = recordSet.getRecord(i);
+		            if (this.selectedItems[record.getData("nodeRef")])
+		            {
+			            items.push(record.getData());
+		            }
+	            }
 
                 return items;
             },
@@ -2538,7 +2552,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			        var inputNodeRef = document.createElement("input");
 			        inputNodeRef.type = "hidden";
 			        inputNodeRef.name = "nodeRef";
-			        inputNodeRef.value = selectedItems[i];
+			        inputNodeRef.value = selectedItems[i].nodeRef;
 			        form.appendChild(inputNodeRef);
 		        }
 
