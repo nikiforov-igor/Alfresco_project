@@ -87,7 +87,6 @@ LogicECM.module = LogicECM.module || {};
             },
 
             onReady:function AssociationAutoComplete_onReady() {
-                Dom.get(this.controlId + "-autocomplete-input").blur();
                 if (!this.options.disabled) {
                     this.populateData();
                 }
@@ -178,6 +177,7 @@ LogicECM.module = LogicECM.module || {};
                 oAC.prehighlightClassName = "yui-ac-prehighlight";
                 oAC.useShadow = true;
                 oAC.forceSelection = true;
+                oAC._bFocused = true;
 
                 var selectItemHandler = function (sType, aArgs) {
                     var node = {
