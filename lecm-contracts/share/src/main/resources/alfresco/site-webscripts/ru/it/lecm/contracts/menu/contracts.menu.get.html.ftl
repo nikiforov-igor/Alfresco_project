@@ -1,4 +1,3 @@
-<#if hasPermission>
     <#assign id = args.htmlid,
     selected = args.selected/>
 
@@ -7,7 +6,9 @@
         <@comp.baseMenuButton "main" msg('lecm.contracts.main.btn') selected true />
         <@comp.baseMenuButton "list" msg('lecm.contracts.list.btn') selected true true />
         <@comp.baseMenuButton "documents" msg('lecm.contracts.documents.btn') selected true true />
-        <@comp.baseMenuButton "reports" msg('lecm.contracts.reports.btn') selected true />
+        <#if hasPermission>
+            <@comp.baseMenuButton "reports" msg('lecm.contracts.reports.btn') selected true />
+        </#if>
     </@comp.baseMenu>
 
 <script type="text/javascript">//<![CDATA[
@@ -23,4 +24,3 @@
 })();
 //]]></script>
 
-</#if>
