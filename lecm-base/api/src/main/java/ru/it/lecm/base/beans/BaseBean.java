@@ -137,8 +137,12 @@ public abstract class BaseBean implements InitializingBean {
 	 */
 	public boolean isArchive(NodeRef ref){
 		boolean isArchive = StoreRef.STORE_REF_ARCHIVE_SPACESSTORE.equals (ref.getStoreRef ());
-		Boolean isActive = (Boolean) nodeService.getProperty(ref, IS_ACTIVE);
-		return isArchive || (isActive != null && !isActive);
+		if (isArchive) {
+			return true;
+		} else {
+			Boolean isActive = (Boolean) nodeService.getProperty(ref, IS_ACTIVE);
+			return isActive != null && !isActive;
+		}
 	}
 
 	/**

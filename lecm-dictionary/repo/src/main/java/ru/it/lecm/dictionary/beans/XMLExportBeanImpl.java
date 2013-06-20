@@ -199,9 +199,14 @@ public class XMLExportBeanImpl implements XMLExportBean {
          * @return true - если элемент архивный, иначе false
          */
         private boolean isArchive(NodeRef ref){
-            boolean isArchive = StoreRef.STORE_REF_ARCHIVE_SPACESSTORE.equals (ref.getStoreRef ());
-            Boolean isActive = (Boolean) nodeService.getProperty(ref, QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active"));
-            return isArchive || (isActive != null && !isActive);
+	        boolean isArchive = StoreRef.STORE_REF_ARCHIVE_SPACESSTORE.equals (ref.getStoreRef ());
+	        if (isArchive) {
+		        return true;
+	        } else {
+		        Boolean isActive = (Boolean) nodeService.getProperty(ref, QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active"));
+		        return isActive != null && !isActive;
+	        }
         }
+
     }
 }
