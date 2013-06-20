@@ -37,9 +37,7 @@
 		depends-on="businessJournalLogEventsPolicy, orgstructureBusinessRolePolicy, orgstructureBossPolicy
 			, orgstructurePrimaryPositionPolicy, orgstucturePersonEmployeeRelationsPolicy, orgstructureEmployeeLinkPolicy
 			, orgstructureUnitPolicy, orgstructureStaffListPolicy, orgstructureOrganizationPolicy
-			, orgstructureStaffPositionPolicy, orgstructureWorkGroupPolicy, orgstructureWorkForcePolicy
-		">
-
+			, orgstructureStaffPositionPolicy, orgstructureWorkGroupPolicy, orgstructureWorkForcePolicy, ${groupId}.${artifactId}.orgStructureBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-roles.xml</value>
