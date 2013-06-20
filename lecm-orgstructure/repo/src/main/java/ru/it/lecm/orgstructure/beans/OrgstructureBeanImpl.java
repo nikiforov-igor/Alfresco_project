@@ -1325,6 +1325,11 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public List<NodeRef> getEmployeeRoles(NodeRef employeeRef) {
+        return getEmployeeRoles(employeeRef, false);
+    }
+
+	@Override
+	public List<NodeRef> getEmployeeRoles(NodeRef employeeRef, boolean includeDelegatedRoles) {
 		Set<NodeRef> results = new HashSet<NodeRef>();
 		if (isEmployee(employeeRef)){
 			// роли непосредственно имеющиеся у сотрудника
@@ -1368,6 +1373,9 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 				}
 			}
 		}
+        if (includeDelegatedRoles) {
+            results.addAll(getEmployeeRolesWithDelegation(employeeRef));
+        }
 		return new ArrayList<NodeRef>(results);
 	}
 

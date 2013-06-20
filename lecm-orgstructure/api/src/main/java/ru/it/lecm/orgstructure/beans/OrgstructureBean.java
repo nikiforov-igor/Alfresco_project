@@ -570,6 +570,8 @@ public interface OrgstructureBean {
 
 	List<NodeRef> getEmployeeRoles(NodeRef employeeRef);
 
+    List<NodeRef> getEmployeeRoles(NodeRef employeeRef, boolean includeDelegatedRoles);
+
 	/**
 	 * получить список бизнес ролей сотрудника согласно действующему делегированию
 	 * @param employeeRef ссылка на сотрудника
