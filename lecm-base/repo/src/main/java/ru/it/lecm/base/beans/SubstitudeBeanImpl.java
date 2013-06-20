@@ -162,21 +162,23 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 if (!expressions.isEmpty()) {
                     boolean exist = false;
                     for (NodeRef nodeRef : showNodes) {
-                        boolean expressionsFalse = false;
-                        for (Map.Entry<String, String> entry : expressions.entrySet()) {
-                            Object currentPropertyValue =
-                                    nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
-                            if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
-                                    || !currentPropertyValue.toString().equals(entry.getValue())) {
-                                expressionsFalse = true;
-                                break;
-                            }
-                        }
-                        if (!isArchive(nodeRef) && !expressionsFalse) {
-                            showNode = nodeRef;
-                            exist = true;
-                            break;
-                        }
+	                    if (!isArchive(nodeRef)) {
+	                        boolean expressionsFalse = false;
+	                        for (Map.Entry<String, String> entry : expressions.entrySet()) {
+	                            Object currentPropertyValue =
+	                                    nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
+	                            if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
+	                                    || !currentPropertyValue.toString().equals(entry.getValue())) {
+	                                expressionsFalse = true;
+	                                break;
+	                            }
+	                        }
+	                        if (!expressionsFalse) {
+	                            showNode = nodeRef;
+	                            exist = true;
+	                            break;
+	                        }
+	                    }
                     }
                     if (!exist) {
                         logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
