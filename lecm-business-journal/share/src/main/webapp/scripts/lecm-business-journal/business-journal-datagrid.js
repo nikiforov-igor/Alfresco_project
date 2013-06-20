@@ -85,8 +85,6 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                                     if (data.displayValue && data.displayValue.length <= 8) {
                                         columnContent += "(нет)";
                                     } else {
-                                        var re = new RegExp(/(;\s)/g);
-                                        data.displayValue = data.displayValue.replace(re, "&nbsp;");
                                         columnContent = data.displayValue;
                                     }
                                     break;
