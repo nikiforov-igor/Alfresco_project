@@ -21,7 +21,8 @@
                     <show id="lecm-orgstr:employee-positions"/>
                     <show id="lecm-orgstr:employee-roles"/>
 	                <show id="lecm-busjournal-aspects:history-list"/>
-	                <show id="lecm-orgstr:employee-business-roles"/>
+	                <show id="lecm-orgstr:employee-only-business-roles"/>
+	                <show id="lecm-orgstr:employee-delegated-business-roles"/>
                     <show id="lecm-subscr-aspects"/>
                 </field-visibility>
                 <appearance>
@@ -80,14 +81,24 @@
                             <control-param name="ds">lecm/orgstructure/ds/employee-roles</control-param>
                         </control>
                     </field>
-	                <field id="lecm-orgstr:employee-business-roles" set="businessRoles" label-id="lecm-orgstr_employee-business-roles">
+	                <field id="lecm-orgstr:employee-only-business-roles" set="businessRoles"
+                           label-id="lecm-orgstr_employee-business-roles">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-orgstr:business-role</control-param>
                             <control-param name="allowCreate">false</control-param>
                             <control-param name="showActions">false</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
-                            <control-param name="ds">lecm/orgstructure/ds/getEmployeeBusinessRoles</control-param>
-                            <control-param name="ds">lecm/orgstructure/ds/getEmployeeBusinessRoles</control-param>
+                            <control-param name="ds">lecm/orgstructure/ds/getEmployeeOnlyBusinessRoles</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-orgstr:employee-delegated-business-roles" set="businessRoles"
+                           label-id="lecm-orgstr_employee-delegated-business-roles">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-orgstr:business-role</control-param>
+                            <control-param name="allowCreate">false</control-param>
+                            <control-param name="showActions">false</control-param>
+                            <control-param name="datagridFormId">datagrid</control-param>
+                            <control-param name="ds">lecm/orgstructure/ds/getEmployeeDelegatedBusinessRoles</control-param>
                         </control>
                     </field>
                     <field id="lecm-busjournal-aspects:history-list" set="busjournalHistory">

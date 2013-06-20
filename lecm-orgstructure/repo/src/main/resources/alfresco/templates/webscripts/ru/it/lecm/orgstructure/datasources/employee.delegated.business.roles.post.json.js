@@ -11,7 +11,7 @@ function main() {
         var pars = json.get("params");
         var employeeRef = (pars.get("parent").length() > 0)  ? pars.get("parent") : null;
 
-        roles = orgstructure.getEmployeeBusinessRoles(employeeRef);
+        roles = orgstructure.getEmployeeDelegatedBusinessRoles(employeeRef);
         fields = (pars.get("fields").length() > 0) ? pars.get("fields") : null;
         nameSubstituteStrings = (pars.get("nameSubstituteStrings") !== null) ? pars.get("nameSubstituteStrings") : null;
     }

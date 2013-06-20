@@ -767,12 +767,30 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	}
 
     /**
-     * Получение информации о роляx сотрудника
+     * Получение информации о всех роляx сотрудника
      */
     public Scriptable getEmployeeBusinessRoles(String employeeRef) {
         NodeRef employee = new NodeRef(employeeRef);
 		Set<NodeRef> roles = new HashSet<NodeRef>();
         roles.addAll(orgstructureService.getEmployeeRoles(employee));
+		roles.addAll(orgstructureService.getEmployeeRolesWithDelegation(employee));
+        return createScriptable(new ArrayList<NodeRef>(roles));
+    }
+    /**
+     * Получение информации о собственных роляx сотрудника
+     */
+    public Scriptable getEmployeeOnlyBusinessRoles(String employeeRef) {
+        NodeRef employee = new NodeRef(employeeRef);
+		Set<NodeRef> roles = new HashSet<NodeRef>();
+        roles.addAll(orgstructureService.getEmployeeRoles(employee));
+        return createScriptable(new ArrayList<NodeRef>(roles));
+    }
+    /**
+     * Получение информации о роляx сотрудника, которые ему делегированы
+     */
+    public Scriptable getEmployeeDelegatedBusinessRoles(String employeeRef) {
+        NodeRef employee = new NodeRef(employeeRef);
+		Set<NodeRef> roles = new HashSet<NodeRef>();
 		roles.addAll(orgstructureService.getEmployeeRolesWithDelegation(employee));
         return createScriptable(new ArrayList<NodeRef>(roles));
     }
