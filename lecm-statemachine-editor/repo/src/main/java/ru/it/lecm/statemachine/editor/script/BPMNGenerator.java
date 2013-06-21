@@ -60,6 +60,7 @@ public class BPMNGenerator {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		NodeRef statusesRef = new NodeRef(statemachineNodeRef);
 		try {
+            logger.debug("Start diagram generating process");
 			DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
 			dbfac.setNamespaceAware(true);
 			DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
@@ -155,6 +156,7 @@ public class BPMNGenerator {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
+        logger.debug("Diagram generating is finished");
 		return new ByteArrayInputStream(baos.toByteArray());
 	}
 

@@ -69,6 +69,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
 			NodeRef statemachine = new NodeRef(statemachineNodeRef);
 			statemachine = nodeService.getPrimaryParent(statemachine).getParentRef();
             String machineName = nodeService.getProperty(statemachine, ContentModel.PROP_NAME).toString();
+            logger.debug("Start generate diagram and deploy it for statemachine " + machineName);
 
             //Создаем результирующую диаграмму
             String fileName = machineName + ".bpmn20.xml";
@@ -91,6 +92,8 @@ public class BPMNDiagramScript extends AbstractWebScript {
 			ByteArrayInputStream is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
 			writer.putContent(is);
 			is.close();
+
+            logger.debug("Diagram is generated. Create version for deployment.");
 
             //Создаем версию
             NodeRef statemachines = nodeService.getPrimaryParent(statemachine).getParentRef();
@@ -150,7 +153,9 @@ public class BPMNDiagramScript extends AbstractWebScript {
             nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 
             //Публикуем машину состояний
+            logger.debug("Deploy process");
             lecmWorkflowDeployer.redeploy();
+            logger.debug("Process is deployed");
 		} else if (statemachineNodeRef != null && "diagram".equals(type)) {
 			res.setContentType("image/png");
 			// Create an XML stream writer

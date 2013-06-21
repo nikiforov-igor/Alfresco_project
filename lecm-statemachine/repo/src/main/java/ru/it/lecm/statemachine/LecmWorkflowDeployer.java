@@ -69,6 +69,8 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 		UserTransaction userTransaction = transactionService.getUserTransaction();
 
 		try {
+            logger.debug("Start BPMN deployment");
+            logger.debug("Start transaction");
 			userTransaction.begin();
 			NodeRef companyHome = repositoryHelper.getCompanyHome();
 			NodeRef workflowRef = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, WORKFLOW_FOLDER);
@@ -83,11 +85,13 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 						props);
 				workflowRef = childAssocRef.getChildRef();
 			}
+            logger.debug("Getting workflow files");
 			List<ChildAssociationRef> workflows = nodeService.getChildAssocs(workflowRef);
 			for (ChildAssociationRef workflow : workflows) {
 				ContentReader reader = contentService.getReader(workflow.getChildRef(), ContentModel.PROP_CONTENT);
 				String fileName = (String) nodeService.getProperty(workflow.getChildRef(), ContentModel.PROP_NAME);
 				InputStream is = reader.getContentInputStream();
+                logger.debug("Deploy file " + fileName);
 				byte[] buf = new byte[1 << 8];
 				int c;
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -97,6 +101,7 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 				byte[] bytes = baos.toByteArray();
 				baos.close();
 				if (workflowService.isDefinitionDeployed(ENGINE_ID, new ByteArrayInputStream(bytes), MIMETYPE)) {
+                    logger.debug("Definition is deployed. Redeploy it.");
 					String key = getProcessKey(new ByteArrayInputStream(bytes));
 					RepositoryService repositoryService = activitiProcessEngineConfiguration.getRepositoryService();
 					ProcessDefinition definition = repositoryService.createProcessDefinitionQuery().processDefinitionKey(key).latestVersion().singleResult();
@@ -109,11 +114,13 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 						}
 					}
 				} else {
+                    logger.debug("It is a new definition. Create new definition.");
 					deploy(ENGINE_ID, MIMETYPE, new ByteArrayInputStream(bytes), fileName);
 				}
-				logger.info("Statemachine " + fileName + "deployed successfully");
+				logger.debug("Statemachine " + fileName + "deployed successfully");
 			}
 			userTransaction.commit();
+            logger.debug("Transaction commited. All definitions is refreshed.");
 		} catch (Exception e) {
 			try {
 				userTransaction.rollback();
