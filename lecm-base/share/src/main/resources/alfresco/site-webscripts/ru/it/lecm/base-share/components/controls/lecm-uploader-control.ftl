@@ -36,7 +36,7 @@
                 <#if showImage>
                     showImage: true,
                 </#if>
-                <#if disabled>
+                <#if multiple>
                     multiple: true,
                 </#if>
 
