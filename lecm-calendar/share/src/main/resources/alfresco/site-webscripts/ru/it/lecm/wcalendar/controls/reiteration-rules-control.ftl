@@ -73,7 +73,7 @@
 		var monthDaysInput = YAHOO.util.Dom.get("month-days-input");
 
 		var selectedDates = monthDaysInput.value.split(",");
-		dateSelected = this.innerText;
+		dateSelected = this.textContent;
 		// Дата, которую только что выбрали, уже есть в списке выбранных
 		if (selectedDates.indexOf(dateSelected) > -1) {
 			var newMonthDaysInput = "";
@@ -92,7 +92,7 @@
 			if (monthDaysInput.value.length > 0) {
 				monthDaysInput.value += "," + dateSelected;
 			} else {
-				monthDaysInput.value += this.innerText;
+				monthDaysInput.value += this.textContent;
 			}
 			this.setAttribute("class", "selected-date");
 		}
