@@ -23,7 +23,8 @@
 	                <show id="lecm-busjournal-aspects:history-list"/>
 	                <show id="lecm-orgstr:employee-only-business-roles"/>
 	                <show id="lecm-orgstr:employee-delegated-business-roles"/>
-                    <show id="lecm-subscr-aspects"/>
+                    <show id="employee-schedule" for-mode="view"/>
+					<show id="lecm-subscr-aspects"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="info.common-info" />
@@ -33,6 +34,7 @@
                     <set id="positionsAndGroups" appearance="" label-id="info.personal-positions-and-groups" />
                     <set id="businessRoles" appearance="" label-id="info.business-roles"/>
                     <set id="busjournalHistory" appearance="" label-id="info.business-journal-history"/>
+					<set id="employeeSchedule" appearance="" label-id="info.employee-schedule"/>
 
 	                <field id="lecm-orgstr:employee-first-name" set="fioAndPhoto"/>
                     <field id="lecm-orgstr:employee-middle-name" set="fioAndPhoto"/>
@@ -104,6 +106,9 @@
                     <field id="lecm-busjournal-aspects:history-list" set="busjournalHistory">
                         <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl"/>
                     </field>
+					<field id="employee-schedule" set="employeeSchedule">
+						<control template="/ru/it/lecm/orgstructure/controls/employee.schedule.ftl"/>
+					</field>
                 </appearance>
             </form>
             <form id="versions">
