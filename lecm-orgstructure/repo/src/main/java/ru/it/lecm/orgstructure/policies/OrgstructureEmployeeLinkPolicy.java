@@ -22,7 +22,7 @@ public class OrgstructureEmployeeLinkPolicy
 		implements
 		NodeServicePolicies.OnCreateNodePolicy
 		, NodeServicePolicies.OnCreateAssociationPolicy
-		, NodeServicePolicies.OnDeleteAssociationPolicy {
+		, NodeServicePolicies.BeforeDeleteNodePolicy {
 
 	@Override
 	public void init() {
@@ -33,9 +33,8 @@ public class OrgstructureEmployeeLinkPolicy
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				OrgstructureBean.TYPE_EMPLOYEE_LINK, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE,
 				new JavaBehaviour(this, "onCreateAssociation"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				OrgstructureBean.TYPE_EMPLOYEE_LINK, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE,
-				new JavaBehaviour(this, "onDeleteAssociation"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
+				OrgstructureBean.TYPE_EMPLOYEE_LINK, new JavaBehaviour(this, "beforeDeleteNode"));
 	}
 
 	@Override
@@ -92,12 +91,11 @@ public class OrgstructureEmployeeLinkPolicy
 	}
 
 	@Override
-	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+	public void beforeDeleteNode(NodeRef nodeRef) {
 		try {
-			final NodeRef employeeLink = nodeAssocRef.getSourceRef();
+			final NodeRef employeeLink = nodeRef;
 			final NodeRef parent = nodeService.getPrimaryParent(employeeLink).getParentRef();
-			final NodeRef staff = nodeService.getPrimaryParent(employeeLink).getParentRef();
-			final NodeRef employee = nodeAssocRef.getTargetRef();
+			final NodeRef employee = orgstructureService.getEmployeeByLink(employeeLink);
 
 			if (orgstructureService.isStaffList(parent)) { // -> запись в БЖ
 				String defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с должности #object1 в подразделении #object2";
@@ -109,18 +107,18 @@ public class OrgstructureEmployeeLinkPolicy
 
 				businessJournalService.log(employee, EventCategory.RELEASE_JOB_POSITION, defaultDescription, objects);
 
-				if ((Boolean) nodeService.getProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
+				if ((Boolean) nodeService.getProperty(parent, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
 					// Назначение на должность
 					defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с руководящей должности в подразделении #object1\"";
 					objects = new ArrayList<String>(1);
 					objects.add(unit != null ? unit.toString() : "");
 					businessJournalService.log(employee, EventCategory.RELEASE_BOSS_POSITION, defaultDescription, objects);
 				}
-				notifyEmploeeRemoveDP(employee, staff);
+				notifyEmploeeRemoveDP(employee, parent);
 			} else if (orgstructureService.isWorkForce(parent)) {
 				String defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с роли #object1 в рабочей группе #object2";
 				NodeRef role = orgstructureService.getRoleByWorkForce(parent);
-				NodeRef group = orgstructureService.getWorkGroupByWorkForce(staff);
+				NodeRef group = orgstructureService.getWorkGroupByWorkForce(parent);
 				List<String> objects = new ArrayList<String>(2);
 				objects.add(role != null ? role.toString() : "");
 				objects.add(group != null ? group.toString() : "");
@@ -133,5 +131,4 @@ public class OrgstructureEmployeeLinkPolicy
 			logger.error("Exception at association post processing onDeleteAssociation:", e);
 		}
 	}
-
 }
