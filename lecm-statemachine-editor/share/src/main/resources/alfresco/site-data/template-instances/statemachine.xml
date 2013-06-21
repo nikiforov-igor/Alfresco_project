@@ -7,14 +7,15 @@
 			<url>/lecm/statemachine/main</url>
 			<properties>
 				<statemachineId>{statemachineId}</statemachineId>
+                <default>{default}</default>
 			</properties>
 		</component>
 		<!-- Title -->
 		<component>
 			<region-id>title</region-id>
-			<url>/components/title/simple-title</url>
+			<url>/lecm/statemachine/editor/title</url>
 			<properties>
-				<title>Редактор машины состояний</title>
+				<statemachineId>{statemachineId}</statemachineId>
 			</properties>
 		</component>
 		<!-- Menu -->

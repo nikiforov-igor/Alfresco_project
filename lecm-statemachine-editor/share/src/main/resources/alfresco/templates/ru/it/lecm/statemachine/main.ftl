@@ -41,6 +41,9 @@
 
     <script type="text/javascript" src="${page.url.context}/scripts/lecm-statemachine-editor/main.js"></script>
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-statemachine-editor/editor.css">
+
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-statemachine-editor/menu.css" />
+    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-statemachine-editor/menu.js"></@script>
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>

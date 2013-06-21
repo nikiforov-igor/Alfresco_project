@@ -62,9 +62,10 @@
 		<property name="lecmWorkflowDeployer" ref="lecmWorkflowDeployer"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="contentService" ref="contentService"/>
+        <property name="fileFolderService" ref="FileFolderService"/>
 	</bean>
 
-	<bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.export.get"
+    <bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.export.get"
 		  class="ru.it.lecm.statemachine.editor.export.Export"
 		  parent="webscript">
         <property name="nodeService" ref="nodeService"/>

@@ -99,4 +99,11 @@ public interface StateMachineServiceBean {
      */
     public Set<String> getArchiveFolders(String documentType);
 
+    /**
+     *
+     * @param document
+     * @return Версия машины состояний для документа
+     */
+    public String getStatemachineVersion(NodeRef document);
+
 }

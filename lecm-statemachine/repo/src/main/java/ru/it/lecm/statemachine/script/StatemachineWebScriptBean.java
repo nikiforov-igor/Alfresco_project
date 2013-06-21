@@ -253,4 +253,14 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 	public boolean isFinal(String nodeRef) {
 		return stateMachineHelper.isFinal(new NodeRef(nodeRef));
 	}
+
+    /**
+     * Возвращает номер версии машины состояний
+     * @param node
+     * @return
+     */
+    public String getStatemachineVersion(ScriptNode node) {
+        return stateMachineHelper.getStatemachineVersion(node.getNodeRef());
+    }
+
 }

@@ -3,6 +3,7 @@
 <#assign aDateTime = .now>
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
+<#assign objectId = fieldHtmlId?replace("-", "_")?replace(":", "")>
 
 <#assign allowCreate = true/>
 <#if field.control.params.allowCreate??>
@@ -14,9 +15,27 @@
     <#assign allowDelete = field.control.params.allowDelete?lower_case/>
 </#if>
 
+<#assign allowEdit = "true"/>
+<#if field.control.params.allowEdit??>
+    <#assign allowEdit = field.control.params.allowEdit?lower_case/>
+</#if>
+
 <#assign showActions = true/>
 <#if field.control.params.showActions??>
 	<#assign showActions = field.control.params.showActions/>
+</#if>
+
+<#assign useBubbling = "true"/>
+<#if field.control.params.useBubbling??>
+    <#assign useBubbling = field.control.params.useBubbling?lower_case/>
+<#else>
+    <#assign useBubbling = "true"/>
+</#if>
+
+<#if useBubbling = "false">
+    <#assign bubblingId = ""/>
+<#else>
+    <#assign bubblingId = containerId/>
 </#if>
 
 <#assign usePagination = false/>
@@ -30,20 +49,46 @@
     <@grid.datagrid containerId false>
         <script type="text/javascript">//<![CDATA[
             (function () {
+
+                LogicECM.module.Base.DataGridControl${objectId} = function(htmlId) {
+                    var module = LogicECM.module.Base.DataGridControl${objectId}.superclass.constructor.call(this, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
+                    return module;
+                };
+
+                YAHOO.extend(LogicECM.module.Base.DataGridControl${objectId}, LogicECM.module.Base.DataGrid, {
+                    ${field.control.params.actionsHandler!""}
+                });
+
                 YAHOO.util.Event.onDOMReady(function (){
-                    var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
+
+                    var datagrid = new LogicECM.module.Base.DataGridControl${objectId}('${containerId}').setOptions({
                         usePagination: ${usePagination?string},
                         showExtendSearchBlock: false,
-                        actions: [{
-                                        type: "datagrid-action-link-${containerId}",
-                                        id: "onActionEdit",
-                                        permission: "edit",
-                                        label: "${msg("actions.edit")}"
-                                    }
-                                    <#if allowDelete = "true">
+                        actions: [
+                                    <#if field.control.params.actionsDescriptor?? >
+                                        ${field.control.params.actionsDescriptor}
+                                    </#if>
+
+                                    <#if field.control.params.actionsDescriptor?? && (allowEdit = "true" || allowDelete = "true")>
                                         ,
+                                    </#if>
+
+                                    <#if allowEdit = "true">
                                         {
-                                            type: "datagrid-action-link-${containerId}",
+                                            type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>-custom</#if>",
+                                            id: "onActionEdit",
+                                            permission: "edit",
+                                            label: "${msg("actions.edit")}"
+                                        }
+                                    </#if>
+
+                                    <#if allowEdit = "true" && allowDelete = "true">
+                                        ,
+                                    </#if>
+
+                                    <#if allowDelete = "true">
+                                        {
+                                            type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
                                             id: "onActionDelete",
                                             permission: "delete",
                                             label: "${msg("actions.delete-row")}"
@@ -57,10 +102,15 @@
                                 nodeRef: <#if field.value?? && field.value != "">"${field.value}"<#else>"${form.arguments.itemId}"</#if>,
                                 actionsConfig: {
                                     fullDelete: "${field.control.params.fullDelete!"false"}"
-                                }
+                                },
+                                sort: "${field.control.params.sort!""}"
                             },
                         dataSource:"${field.control.params.ds!"lecm/search"}",
-                        bubblingLabel: "${containerId}",
+                        <#if bubblingId != "">
+                            bubblingLabel: "${bubblingId}",
+                        <#else>
+                            bubblingLabel: "custom",
+                        </#if>
                         <#if field.control.params.height??>
                             height: ${field.control.params.height},
                         </#if>

@@ -88,6 +88,10 @@
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
+                <property name="lecm-statemachine:statemachineVersion">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
             </properties>
         </aspect>
 	</aspects>

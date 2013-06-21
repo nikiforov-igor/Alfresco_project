@@ -2,6 +2,7 @@
 {
     packageNodeRef: "${packageNodeRef}",
     machineNodeRef: "${machineNodeRef}",
+    versionsNodeRef: "${versionsNodeRef}",
     statuses: [
     <#list statuses as status>
         <@printStatus status />

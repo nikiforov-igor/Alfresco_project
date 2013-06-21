@@ -6,7 +6,6 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CDATASection;
@@ -126,7 +125,14 @@ public class BPMNGenerator {
 			}
 
 			List<ChildAssociationRef> statuses = nodeService.getChildAssocs(statusesRef);
-            String version = GUID.generate();
+
+            NodeRef statemachines = nodeService.getPrimaryParent(stateMachine).getParentRef();
+            NodeRef versions = nodeService.getChildByName(statemachines, ContentModel.ASSOC_CONTAINS, "versions");
+            NodeRef statemachineVersions = nodeService.getChildByName(versions, ContentModel.ASSOC_CONTAINS, processId);
+            Long versionValue = (Long) nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
+
+            String version = (++versionValue).toString();
+
 			for (ChildAssociationRef status : statuses) {
 				String statusName = (String) nodeService.getProperty(status.getChildRef(), ContentModel.PROP_NAME);
 				String statusVar = "id" + status.getChildRef().getId().replace("-", "");

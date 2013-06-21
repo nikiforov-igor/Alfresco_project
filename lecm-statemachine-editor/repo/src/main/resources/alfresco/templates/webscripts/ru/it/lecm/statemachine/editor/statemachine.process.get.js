@@ -29,9 +29,22 @@ if (statemachineId != null && statemachineId != '') {
 		startStatus.save();
 	}
 
+    //Создание папки с версиями
+    var versions = machinesFolder.childByNamePath("versions");
+    if (versions == null) {
+        versions = machinesFolder.createNode("versions", "cm:folder", "cm:contains")
+    }
+    var version = versions.childByNamePath(statemachineId);
+    if (version == null) {
+        version = versions.createNode(statemachineId, "lecm-stmeditor:versions", "cm:contains");
+        version.properties["lecm-stmeditor:last_version"] = 0;
+        version.save();
+    }
+
 	var statuses = machine.childByNamePath("statuses");
 	model.machineNodeRef = machine.nodeRef.toString();
 	model.packageNodeRef = statuses.nodeRef.toString();
+	model.versionsNodeRef = version.nodeRef.toString();
 
 	var machineStatuses = statuses.getChildren();
 	var statuses = [];

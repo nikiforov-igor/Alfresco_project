@@ -46,3 +46,8 @@
     padding: 0 10px;
     margin-bottom: 10px;
 }
+
+.datagrid .onVersionRestore a {
+    background-image: url("../../../images/lecm-base/components/base/alf_base_versions_16.png");
+}
+

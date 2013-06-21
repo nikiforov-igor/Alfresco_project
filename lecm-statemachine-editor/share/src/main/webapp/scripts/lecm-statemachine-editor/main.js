@@ -16,12 +16,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
  */
 LogicECM.module = LogicECM.module || {};
 
+LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHandler || {};
 
 /**
- * OrgStructure module.
  *
  * @namespace LogicECM.module
- * @class LogicECM.module.OrgStructure
+ * @class LogicECM.module.StatemachineEditor
  */
 (function () {
 
@@ -29,23 +29,30 @@ LogicECM.module = LogicECM.module || {};
 	var Bubbling = YAHOO.Bubbling;
 	var Event = YAHOO.util.Event;
 
+    LogicECM.module.StatemachineEditorHandler.restoreVersion = function() {};
+
 	LogicECM.module.StatemachineEditor = function (htmlId) {
 
         Bubbling.on("showPanel", function(layer, args) {
             args[1].panel.cfg.setProperty("y", 50);
         });
 
-		return LogicECM.module.StatemachineEditor.superclass.constructor.call(
+		var module = LogicECM.module.StatemachineEditor.superclass.constructor.call(
 			this,
 			"LogicECM.module.StatemachineEditor",
 			htmlId,
 			["button", "container", "connection", "json", "selector"]);
+
+        LogicECM.module.StatemachineEditorHandler.restoreVersion = module.restoreStatemachineVersion.bind(module);
+
+        return module;
 	};
 
 	YAHOO.extend(LogicECM.module.StatemachineEditor, Alfresco.component.Base, {
 		statemachineId: null,
 		packageNodeRef: null,
 		machineNodeRef: null,
+		versionsNodeRef: null,
 		layout: null,
 		startActionsMenu: null,
 		userActionsMenu: null,
@@ -54,6 +61,7 @@ LogicECM.module = LogicECM.module || {};
 		currentStatus: null,
 		splashScreen: null,
 		currentTaskName: null,
+        versionsForm: null,
 		options:{},
 
 		setStatemachineId: function(statemachineId) {
@@ -72,6 +80,7 @@ LogicECM.module = LogicECM.module || {};
 					var oResults = eval("(" + oResponse.responseText + ")");
 					oResponse.argument.parent.packageNodeRef = oResults.packageNodeRef;
 					oResponse.argument.parent.machineNodeRef = oResults.machineNodeRef;
+                    oResponse.argument.parent.versionsNodeRef = oResults.versionsNodeRef;
 					oResponse.argument.parent._drawElements(el, oResults.statuses);
 					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=diagram";
 					sUrl = YAHOO.lang.substitute(sUrl, {
@@ -317,47 +326,70 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		_deployStatemachine: function() {
+            var commentConfirm = new LogicECM.module.CommentConfirm();
             var me = this;
-            Alfresco.util.PopupManager.displayPrompt({
-                title: "Развертывание машины состояний",
-                text: "Вы действительно хотите развернуть машину состояний в системе?",
-                buttons: [
-                    {
-                        text: "Да",
-                        handler: function dlA_onActionDeploy()
-                        {
-                            this.destroy();
-                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=deploy";
-                            sUrl = YAHOO.lang.substitute(sUrl, {
-                                statemachineNodeRef: me.packageNodeRef
-                            });
-                            me._showSplash();
-                            var callback = {
-                                success:function (oResponse) {
-                                    oResponse.argument.parent._hideSplash();
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text: "Машина состояний развернута в системе",
-                                            displayTime: 3
-                                        });
-                                },
-                                argument:{
-                                    parent: me
-                                },
-                                timeout: 60000
-                            };
-                            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);                            }
-                    },
-                    {
-                        text: "Нет",
-                        handler: function dlA_onActionDelete_cancel()
-                        {
-                            this.destroy();
+            commentConfirm.setOptions({
+                title: "Публикация новой версии",
+                fieldTitle: "Примечания к новой версии",
+                onSave: function save_deployComment(comment) {
+                    var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/diagram";
+                    var data = "statemachineNodeRef={statemachineNodeRef}&type=deploy&comment={comment}";
+                    data = YAHOO.lang.substitute(data, {
+                        statemachineNodeRef: me.packageNodeRef,
+                        comment: comment
+                    });
+                    me._showSplash();
+                    var callback = {
+                        success:function (oResponse) {
+                            oResponse.argument.parent._hideSplash();
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text: "Машина состояний опубликована в системе",
+                                    displayTime: 3
+                                });
                         },
-                        isDefault: true
-                    }]
-                });
+                        argument:{
+                            parent: me
+                        },
+                        timeout: 60000
+                    };
+                    YAHOO.util.Connect.asyncRequest('GET', sUrl + "?" + encodeURI(data), callback);
+                }
+            });
+            commentConfirm.show();
 		},
+
+        showVersions: function showVersions_function() {
+            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+            templateUrl = YAHOO.lang.substitute(templateUrl, {
+                itemKind:"node",
+                itemId: this.versionsNodeRef,
+                mode:"edit",
+                submitType:"json"
+            });
+
+            this._showSplash();
+
+            this.versionsForm = new Alfresco.module.SimpleDialog("statemachine-editor-versions").setOptions({
+                width:"60em",
+                templateUrl:templateUrl,
+                actionUrl:null,
+                destroyOnHide:true,
+                doBeforeDialogShow:{
+                    fn: function(p_form, p_dialog) {
+                        this._hideSplash();
+                        this._setFormDialogTitle(p_form, p_dialog, "История версий машины состояний");
+                    },
+                    scope: this
+                },
+                onSuccess:{
+                    fn:function (response) {
+                        this._hideSplash();
+                    },
+                    scope:this
+                }
+            }).show();
+        },
 
         _restoreDefaultStatemachine: function() {
             var me = this;
@@ -383,7 +415,7 @@ LogicECM.module = LogicECM.module || {};
                                             text: "Машина состояний восстановлена",
                                             displayTime: 3
                                         });
-                                    document.location.reload(true);
+                                    document.location.href = Alfresco.constants.URL_CONTEXT + "page/statemachine?statemachineId=" + oResponse.argument.parent.statemachineId;
                                 },
                                 argument:{
                                     parent: me
@@ -403,20 +435,27 @@ LogicECM.module = LogicECM.module || {};
             });
         },
 
-        _restoreLastDeployedStatemachine: function() {
+        restoreStatemachineVersion: function(item) {
             var me = this;
+            var version = item.itemData["prop_lecm-stmeditor_version"].value;
             Alfresco.util.PopupManager.displayPrompt({
                 title: "Восстановление машины состояний",
-                text: "Вы действительно хотите восстановить последнюю развернутую машину?",
+                text: "Вы действительно хотите восстановить машину состояний с версией " + version + "?",
                 buttons: [
                     {
                         text: "Да",
                         handler: function dlA_onActionDeploy()
                         {
                             this.destroy();
-                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/import?last=true&stateMachineId={statemachineId}";
+                            if (me.versionsForm != null) {
+                                me.versionsForm.hide();
+                                me.versionsForm.destroy();
+                            }
+                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/import?history=true&stateMachineId={statemachineId}&version={version}&nodeRef={nodeRef}";
                             sUrl = YAHOO.lang.substitute(sUrl, {
-                                statemachineId: me.statemachineId
+                                statemachineId: me.statemachineId,
+                                nodeRef: me.machineNodeRef,
+                                version: version
                             });
                             me._showSplash();
                             var callback = {
@@ -611,5 +650,67 @@ LogicECM.module = LogicECM.module || {};
 		}
 
 	});
+
+})();
+
+(function () {
+    LogicECM.module.CommentConfirm = function CommentConfirm_constructor(htmlId) {
+        var module = LogicECM.module.CommentConfirm.superclass.constructor.call(this, "LogicECM.module.CommentConfirm", htmlId, ["button"]);
+        return module;
+    };
+
+    YAHOO.extend(LogicECM.module.CommentConfirm, Alfresco.component.Base, {
+
+        options: {
+            fieldTitle: "Confirm Comment",
+            name: "Confirm Comment",
+            onSave: null
+        },
+
+        show: function showCommentConfirm() {
+            var containerDiv = document.createElement("div");
+            var form = '<div id="confirm-comment-form-container" class="yui-panel">' +
+                '<div id="confirm-comment-head" class="hd">' + this.options.title + '</div>' +
+                '<div id="confirm-comment-body" class="bd">' +
+                '<div id="confirm-comment-content" class="form-container"><div class="form-fields" style="padding: 1em">' +
+                '<label for="confirm-comment-textarea">' + this.options.fieldTitle+ ':</label>' +
+                '<textarea id="confirm-comment-textarea" name="confirm-comment-textarea" rows="9" style="margin: 0 0 5px 0; width: 360px;"></textarea>' +
+                '<span id="confirm-comment-edit" class="yui-button yui-push-button">' +
+                '<span class="first-child">' +
+                '<button id="confirm-comment-edit-button" type="button" tabindex="0">Ок</button>' +
+                '</span>' +
+                '</span>' +
+                '<span id="confirm-comment-cancel" class="yui-button yui-push-button">' +
+                '<span class="first-child">' +
+                '<button id="confirm-comment-cancel-button" type="button" tabindex="0">Отмена</button>' +
+                '</span>' +
+                '</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+            containerDiv.innerHTML = form;
+            this.dialog = Alfresco.util.createYUIPanel(Dom.getFirstChild(containerDiv),
+                {
+                    width: "30em"
+                });
+            Dom.setStyle("confirm-comment-form-container", "display", "block");
+            this.dialog.show();
+
+            var button = document.getElementById("confirm-comment-cancel-button");
+            button.onclick = function() {
+                this.dialog.hide();
+            }.bind(this);
+
+            button = document.getElementById("confirm-comment-edit-button");
+            button.onclick = function() {
+                this.dialog.hide();
+                if (this.options.onSave != null) {
+                    var textarea = document.getElementById("confirm-comment-textarea");
+                    this.options.onSave(textarea.value);
+                }
+            }.bind(this);
+        }
+
+    });
 
 })();

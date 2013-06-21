@@ -9,9 +9,53 @@
 </#list>
 
 <#else>
-<div class="title">
-    <h3>${title}</h3>
-</div>
+<div style="height: 5px">&nbsp;</div>
+<div id="statemachine-properties-menu"></div>
+<span class="statemachine-menu">
+		<span id="menu-buttons-properties-menu-button" class="yui-button yui-push-button">
+	        <span class="first-child">
+	            <button type="button" title="Свойства">&nbsp;</button>
+	        </span>
+	    </span>
+</span>
+<div class="statatemachine-menu-spin">&nbsp;</div>
+<span class="statemachine-menu">
+		<span id="menu-buttons-deploy-menu-button" class="yui-button yui-push-button">
+	        <span class="first-child">
+	            <button type="button" title="Развертывание машины состояний">&nbsp;</button>
+	        </span>
+	    </span>
+</span>
+
+<span class="statemachine-menu">
+		<span id="menu-buttons-versions-menu-button" class="yui-button yui-push-button">
+	        <span class="first-child">
+	            <button type="button" title="Версии машины состояний">&nbsp;</button>
+	        </span>
+	    </span>
+</span>
+
+<span class="statemachine-menu">
+		<span id="menu-buttons-machine-export" class="yui-button yui-push-button">
+	        <span class="first-child">
+	            <button type="button" title="${msg('button.export-xml')}">&nbsp;</button>
+	        </span>
+	    </span>
+</span>
+
+<span class="statemachine-menu">
+    <span id="menu-buttons-machine-import" class="yui-button yui-push-button">
+        <span class="first-child">
+            <button type="button" title="${msg('button.import-xml')}">&nbsp;</button>
+        </span>
+    </span>
+    <form method="post" id="menu-buttons-import-xml-form" enctype="multipart/form-data"
+          action="${url.context}/proxy/alfresco/lecm/statemachine/editor/import" class="statatemachine-import-form">
+        <input type="file" id="menu-buttons-import-xml-input" name="f" accept=".xml,application/xml,text/xml" class="statatemachine-import-input">
+        <input type="hidden" id="menu-buttons-stateMachineId-input" name="stateMachineId" value="${page.url.args.statemachineId}">
+    </form>
+</span>
+
 <hr/>
 <div class="title">
     <h3>Карта</h3>
@@ -22,9 +66,30 @@
     </div>
 </div>
 <hr/>
-<div class="title">
-    <h3>Статусы</h3>
-</div>
+<table cellpadding="0" cellspacing="2" style="margin-bottom: 5px">
+    <tr>
+        <td><h3>Статусы</h3></td>
+        <td>
+            <span class="statemachine-menu">
+                <span id="menu-buttons-new-status-menu-button" class="yui-button yui-push-button">
+                    <span class="first-child">
+                        <button type="button" title="Новый статус">&nbsp;</button>
+                    </span>
+                </span>
+            </span>
+        </td>
+        <td>
+            <span class="statemachine-menu">
+                    <span id="menu-buttons-end-event-menu-button" class="yui-button yui-push-button">
+                        <span class="first-child">
+                            <button type="button" title="Новый финальный статус">&nbsp;</button>
+                        </span>
+                    </span>
+            </span>
+        </td>
+    </tr>
+</table>
+
 <div id="statuses-cont"></div>
 
 <script type="text/javascript">
@@ -37,6 +102,9 @@ var workflowForm;
         statemachineEditor.setStatemachineId("${page.url.args.statemachineId}");
         statemachineEditor.setMessages(${messages});
         statemachineEditor.draw();
+        if (<#if page.url.args.default??>true<#else>false</#if>) {
+            statemachineEditor._restoreDefaultStatemachine();
+        }
         var menu = new LogicECM.module.StatemachineEditor.Menu("menu-buttons");
         menu.setMessages(${messages});
         menu.setEditor(statemachineEditor);

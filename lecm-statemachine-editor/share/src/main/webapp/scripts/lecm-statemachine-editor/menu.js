@@ -64,32 +64,6 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
                 window.location.href = url + (type != null && type != '' ? type : "StatemachineEditor");
             }
 
-            var statusMenu = new YAHOO.widget.Menu("statusMenu");
-
-            statusMenu.addItems([
-                {
-                    text: "Добавить статус",
-                    onclick: {
-                        fn: this.editor._createStatus,
-                        scope: this.editor
-                    }
-                },
-                {
-                    text: "Добавить финальный статус",
-                    onclick: {
-                        fn: this.editor._createEndEvent,
-                        scope: this.editor
-                    }
-                }
-            ]);
-
-            statusMenu.render("statemachine-status-menu");
-            var onClickStatusMenuButton = function(e) {
-                statusMenu.moveTo(e.clientX, e.clientY);
-                statusMenu.show();
-            }
-            Alfresco.util.createYUIButton(this, "status-menu-button", onClickStatusMenuButton, {});
-
             var propertiesMenu = new YAHOO.widget.Menu("propertiesMenu");
 
             propertiesMenu.addItems([
@@ -123,39 +97,31 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
             }
             Alfresco.util.createYUIButton(this, "properties-menu-button", onClickPropertiesMenuButton, {});
 
-            var deployMenu = new YAHOO.widget.Menu("deployMenu");
-
-            deployMenu.addItems([
-                {
-                    text: "Развернуть машину состояний",
-                    onclick: {
-                        fn: this.editor._deployStatemachine,
-                        scope: this.editor
-                    }
-                },
-                {
-                    text: "Восстановить машину состояний по умолчанию",
-                    onclick: {
-                        fn: this.editor._restoreDefaultStatemachine,
-                        scope: this.editor
-                    }
-                },
-                {
-                    text: "Восстановить последнюю развернутую машину состояний",
-                    onclick: {
-                        fn: this.editor._restoreLastDeployedStatemachine,
-                        scope: this.editor
-                    }
-                }
-            ]);
-
-            deployMenu.render("statemachine-deploy-menu");
+            //Deploy
             var onClickDeployMenuButton = function(e) {
-                deployMenu.moveTo(e.clientX, e.clientY);
-                deployMenu.show();
+                this.editor._deployStatemachine();
             }
             Alfresco.util.createYUIButton(this, "deploy-menu-button", onClickDeployMenuButton, {});
 
+            //Versions
+            var onClickVersionsMenuButton = function(e) {
+                this.editor.showVersions();
+            }
+            Alfresco.util.createYUIButton(this, "versions-menu-button", onClickVersionsMenuButton, {});
+
+            //New Status
+            var onClickNewStatusMenuButton = function(e) {
+                this.editor._createStatus();
+            }
+            Alfresco.util.createYUIButton(this, "new-status-menu-button", onClickNewStatusMenuButton, {});
+
+            //End Status
+            var onClickEndEventMenuButton = function(e) {
+                this.editor._createEndEvent();
+            }
+            Alfresco.util.createYUIButton(this, "end-event-menu-button", onClickEndEventMenuButton, {});
+
+            //Export
             var onButtonClick5 = function (e) {
 				this.editor._exportStatemachine();
 			};

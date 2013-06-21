@@ -4,10 +4,12 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.ExecutionListener;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.bpmn.behavior.NoneEndEventActivityBehavior;
 import org.activiti.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
+import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -651,6 +653,48 @@ public class StateMachineHelper implements StateMachineServiceBean {
             execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
         }
         return execution != null;
+    }
+
+    public String getStatemachineVersion(NodeRef document) {
+        String result = null;
+        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        Execution execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        if (execution != null) {
+            String taskId = getCurrentTaskId(execution.getId());
+            List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
+            for (StateMachineAction action : actions) {
+                if (action instanceof  StatusChangeAction) {
+                    result = ((StatusChangeAction) action).getVersion();
+                }
+            }
+        } else {
+            HistoricProcessInstance process = activitiProcessEngineConfiguration.getHistoryService().createHistoricProcessInstanceQuery().processInstanceId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
+
+            ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(process.getProcessDefinitionId());
+            List<ActivityImpl> activities = processDefinitionEntity.getActivities();
+            ActivityImpl activity = null;
+            for (ActivityImpl act : activities) {
+                if (act.getActivityBehavior() instanceof UserTaskActivityBehavior) {
+                    activity = act;
+                }
+            }
+            if (activity != null) {
+                List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
+                if (listeners != null) {
+                    for (ExecutionListener listener : listeners) {
+                        if (listener instanceof StateMachineHandler.StatemachineTaskListener) {
+                            List<StateMachineAction> actions = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("start");
+                            for (StateMachineAction action : actions) {
+                                if (action instanceof  StatusChangeAction) {
+                                    result = ((StatusChangeAction) action).getVersion();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     @Override

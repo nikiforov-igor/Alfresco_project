@@ -458,7 +458,39 @@
             </properties>
         </type>
 
-	</types>
+        <!-- Versions Root -->
+        <type name="lecm-stmeditor:versions">
+            <title>Versions Root</title>
+            <parent>cm:folder</parent>
+            <properties>
+                <property name="lecm-stmeditor:last_version">
+                    <type>d:long</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
+
+        <!-- Version Object -->
+        <type name="lecm-stmeditor:versionContainer">
+            <title>Version Object</title>
+            <parent>cm:folder</parent>
+            <properties>
+                <property name="lecm-stmeditor:version">
+                    <type>d:long</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-stmeditor:publishDate">
+                    <type>d:datetime</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-stmeditor:publishComment">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
+
+    </types>
 
 	<aspects>
 

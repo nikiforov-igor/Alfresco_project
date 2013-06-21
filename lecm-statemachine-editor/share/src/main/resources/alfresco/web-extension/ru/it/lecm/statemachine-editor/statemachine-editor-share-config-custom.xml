@@ -1123,6 +1123,64 @@
         </forms>
     </config>
 
+    <config evaluator="node-type" condition="lecm-stmeditor:versions">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:versionObjects" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:versionObjects" label-id="statemachine.editor.form.label.versions">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:versionContainer</control-param>
+                            <control-param name="allowCreate">false</control-param>
+                            <control-param name="allowEdit">false</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="height">300</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                            <control-param name="useBubbling">false</control-param>
+                            <control-param name="sort">lecm-stmeditor:version|false</control-param>
+                            <control-param name="actionsDescriptor"><![CDATA[
+                                        {
+                                            type: "datagrid-action-link-custom",
+                                            id: "onVersionRestore",
+                                            permission: "edit",
+                                            label: "Опубликовать версию"
+                                        }
+                            ]]>
+                            </control-param>
+                            <control-param name="actionsHandler"><![CDATA[
+                                onVersionRestore: function(item) {
+                                    LogicECM.module.StatemachineEditorHandler.restoreVersion(item);
+                                }
+                            ]]>
+                            </control-param>
+
+                        </control>
+                    </field>
+
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-stmeditor:versionContainer">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:version" force="true"/>
+                    <show id="lecm-stmeditor:publishDate" force="true"/>
+                    <show id="lecm-stmeditor:publishComment" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:version" />
+                    <field id="lecm-stmeditor:publishDate" />
+                    <field id="lecm-stmeditor:publishComment" />
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
 	<config evaluator="string-compare" condition="Workflow">
 		<hidden-workflows>
 			<workflow name="activiti$default_statemachine"/>

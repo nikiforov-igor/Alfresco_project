@@ -25,6 +25,7 @@ public class StatemachineEditorModel {
 	public final static QName TYPE_INPUT_VARIABLE = QName.createQName(STATEMACHINE_EDITOR_URI, "inputVariable");
 	public final static QName TYPE_DYNAMIC_ROLE = QName.createQName(STATEMACHINE_EDITOR_URI, "dynamic-role");
 	public final static QName TYPE_CONDITION_ACCESS = QName.createQName(STATEMACHINE_EDITOR_URI, "conditionAccess");
+	public final static QName TYPE_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "versionContainer");
 
 	public final static QName PROP_ACTION_ID = QName.createQName(STATEMACHINE_EDITOR_URI, "actionId");
 	public final static QName PROP_ACTION_EXECUTION = QName.createQName(STATEMACHINE_EDITOR_URI, "actionExecution");
@@ -58,6 +59,10 @@ public class StatemachineEditorModel {
     public final static QName PROP_CONDITION_ERROR_MESSAGE = QName.createQName(STATEMACHINE_EDITOR_URI, "conditionErrorMessage");
     public final static QName PROP_CONDITION_HIDE_ACTION = QName.createQName(STATEMACHINE_EDITOR_URI, "hideAction");
 	public final static QName PROP_ROLES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "rolesFolder");
+	public final static QName PROP_LAST_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "last_version");
+	public final static QName PROP_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "version");
+	public final static QName PROP_PUBLISH_DATE = QName.createQName(STATEMACHINE_EDITOR_URI, "publishDate");
+	public final static QName PROP_PUBLISH_COMMENT = QName.createQName(STATEMACHINE_EDITOR_URI, "publishComment");
 
 	public final static QName ASSOC_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatus");
 	public final static QName ASSOC_ROLE = QName.createQName(STATEMACHINE_EDITOR_URI, "role-assoc");
@@ -65,7 +70,7 @@ public class StatemachineEditorModel {
     public final static QName ASPECT_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatusAspect");
 
     public static final String STATEMACHINES = "statemachines";
-    public static final String FOLDER_RESTORE = "restore";
+    public static final String FOLDER_VERSIONS = "versions";
     public static final String STATUSES = "statuses";
     public static final String ACTIONS = "actions";
     public static final String ROLES = "roles";
