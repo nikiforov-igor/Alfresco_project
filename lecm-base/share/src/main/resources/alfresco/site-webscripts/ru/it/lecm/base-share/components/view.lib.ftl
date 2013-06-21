@@ -7,7 +7,7 @@
 				{
 					url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
 					dataObj:{
-						htmlid:"NodeMetadata-" + nodeRef,
+						htmlid:nodeRef.replace("workspace://SpacesStore/","").replace("-",""),
 						itemKind:"node",
 						itemId:nodeRef,
 						formId:"${formId}",

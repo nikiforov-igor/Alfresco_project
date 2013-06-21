@@ -15,7 +15,7 @@
 })();
 
 function Orgstructure_makeSchedulesRequest() {
-	var employeeNodeRef = "${fieldHtmlId}".split("_")[0].split('-').splice(1).join('-');
+	var employeeNodeRef = "${form.arguments.itemId}";
 
 	var dataObj = {
 		nodeRef: employeeNodeRef
