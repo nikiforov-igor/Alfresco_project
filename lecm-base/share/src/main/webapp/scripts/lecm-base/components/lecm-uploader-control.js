@@ -176,10 +176,10 @@ LogicECM.control = LogicECM.control || {};
 					{
 						fn: this.fileUploadComplete,
 						scope: this
-					},
+					}
                     // данный параметр запрещает обновление формы
                     // в false выполняется bubbling metadataRefresh
-                    suppressRefreshEvent: true
+//                    suppressRefreshEvent: true
 				};
 				this.fileUpload.show(uploadConfig);
 				Event.preventDefault(e);
