@@ -41,16 +41,24 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 	 * @return Заголовок элемента
 	 */
 	@Override
-	public String formatNodeTitle(NodeRef node, String formatString) {
+	public String formatNodeTitle(NodeRef node, String formatString, String dateFormat, Integer timeZoneOffset) {
 		if (node == null) {
 			return "";
+		}
+		if (dateFormat == null) {
+			dateFormat = this.dateFormat;
 		}
 		String result = formatString;
 		List<String> nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
 		for (String param : nameParams) {
-			result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param).toString());
+			result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param, dateFormat, timeZoneOffset).toString());
 		}
 		return result;
+	}
+
+	@Override
+	public String formatNodeTitle(NodeRef node, String formatString) {
+		return formatNodeTitle(node, formatString, null, null);
 	}
 
     @Override
@@ -95,7 +103,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 	 * @param field выражение для элемента (ассоциации, условия и атрибуты)
 	 * @return {Object}
 	 */
-	public Object getSubstitudeField(NodeRef node, String field) {
+	public Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset) {
 		NodeRef showNode = node;
 		List<NodeRef> showNodes = new ArrayList<NodeRef>();
 		String fieldName = null;
@@ -221,6 +229,13 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 if (property != null) {
                     result = result.toString().isEmpty() ? property : result;
                     if (result instanceof Date) {
+	                    if (timeZoneOffset != null) {
+		                    Calendar cal = Calendar.getInstance();
+		                    cal.setTime((Date) result);
+		                    cal.add(Calendar.MILLISECOND, timeZoneOffset - TimeZone.getDefault().getRawOffset());
+		                    result = cal.getTime();
+	                    }
+
                         DateFormat dFormat = new SimpleDateFormat(dateFormat);
                         result = dFormat.format(result);
                     }

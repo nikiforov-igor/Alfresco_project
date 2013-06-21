@@ -85,6 +85,8 @@ public interface SubstitudeBean {
 	 */
 	public String formatNodeTitle(NodeRef node, String formatString);
 
+	public String formatNodeTitle(NodeRef node, String formatString, String dateFormat, Integer timeZoneOffset);
+
     public String getObjectDescription(NodeRef object);
 
     public String getTemplateStringForObject(NodeRef object);

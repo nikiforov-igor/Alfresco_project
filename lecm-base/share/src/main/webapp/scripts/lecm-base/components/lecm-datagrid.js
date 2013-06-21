@@ -2570,6 +2570,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        inputFileName.value = encodeURIComponent(fileName);
 		        form.appendChild(inputFileName);
 
+		        var inputTimeZone = document.createElement("input");
+		        inputTimeZone.type = "hidden";
+		        inputTimeZone.name = "timeZoneOffset";
+		        inputTimeZone.value = new Date().getTimezoneOffset();
+		        form.appendChild(inputTimeZone);
+
 		        for (var i = 0; i < selectedItems.length;i++) {
 			        var inputNodeRef = document.createElement("input");
 			        inputNodeRef.type = "hidden";

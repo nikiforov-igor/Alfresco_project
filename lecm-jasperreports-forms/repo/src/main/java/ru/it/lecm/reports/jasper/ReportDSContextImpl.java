@@ -214,13 +214,18 @@ public class ReportDSContextImpl implements ReportDSContext {
 			return (realBean == null) ? null : realBean.getObjectsByTitle(object, formatTitle);
 		}
 
-		public String formatNodeTitle(NodeRef node, String fmt) {
+		public String formatNodeTitle(NodeRef node, String fmt, String dateFormat, Integer timeZoneOffset) {
 			if (fmt == null)
 				return null;
 			if (isExtendedSyntax(fmt)) {
 				return extendedFormatNodeTitle(node, fmt);
 			}
-			return (realBean == null) ? null : realBean.formatNodeTitle(node, fmt);
+			return (realBean == null) ? null : realBean.formatNodeTitle(node, fmt, dateFormat, timeZoneOffset);
+		}
+
+		@Override
+		public String formatNodeTitle(NodeRef node, String formatString) {
+			return formatNodeTitle(node, formatString, null, null);
 		}
 
 		protected boolean isExtendedSyntax(String fmt) {

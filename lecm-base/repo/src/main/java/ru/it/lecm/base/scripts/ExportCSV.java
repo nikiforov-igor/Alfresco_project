@@ -57,6 +57,12 @@ public class ExportCSV extends AbstractWebScript {
 		OutputStream resOutputStream = null;
 		try {
 			String fileName = req.getParameter("fileName");
+			Integer timeZoneOffset = null;
+			try {
+				timeZoneOffset = - Integer.parseInt(req.getParameter("timeZoneOffset")) * 1000 * 60;
+			} catch (NumberFormatException ex){
+				log.warn("Неправльнай параметр timeZoneOffset", req.getParameter("timeZoneOffset"));
+			}
 			String[] nodeRefs = req.getParameterValues("nodeRef");
 			String[] fields = req.getParameterValues("field");
 			String[] fieldLabels = req.getParameterValues("fieldLabel");
@@ -93,7 +99,7 @@ public class ExportCSV extends AbstractWebScript {
 								field = field.replace("$includeRef", "");
 							}
 
-							String fieldValue = substituteService.formatNodeTitle(nodeRef, field);
+							String fieldValue = substituteService.formatNodeTitle(nodeRef, field, DATE_FORMAT, timeZoneOffset);
 							fieldValue = fieldValue.replaceAll("<a[^>]*>", "");
 							fieldValue = fieldValue.replaceAll("</a>", "");
 							wr.write(fieldValue);
