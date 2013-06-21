@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.businessjournal.policies.BusinessJournalOnCreateAssocsPolicy;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
@@ -50,6 +51,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
     private DictionaryService dicService;
     private LecmPermissionService lecmPermissionService;
     private StateMachineServiceBean stateMachineService;
+    private BusinessJournalOnCreateAssocsPolicy businessJournalOnCreateAssocsPolicy;
 
     private ThreadLocal<IgnoredCounter> threadSettings = new ThreadLocal<IgnoredCounter>();
     private static final String KEY_IGNORE_NEXT_RECORD = "BG_IGNORE_NEXT_RECORD";
@@ -86,6 +88,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         this.stateMachineService = stateMachineService;
     }
 
+    public void setBusinessJournalOnCreateAssocsPolicy(BusinessJournalOnCreateAssocsPolicy businessJournalOnCreateAssocsPolicy) {
+        this.businessJournalOnCreateAssocsPolicy = businessJournalOnCreateAssocsPolicy;
+    }
+
     @Override
 	public NodeRef getServiceRootFolder() {
 		return bjRootRef;
@@ -108,6 +114,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 * Записыывает в свойства сервиса nodeRef директории с бизнес-журналами
 	 */
 	public void init() {
+        businessJournalOnCreateAssocsPolicy.setBusinessJournalService(this);
 		bjRootRef = getFolder(BJ_ROOT_ID);
 		bjArchiveRef =  getFolder(BJ_ARCHIVE_ROOT_ID);
 	}

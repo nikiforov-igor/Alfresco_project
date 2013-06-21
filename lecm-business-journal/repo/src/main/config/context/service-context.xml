@@ -84,6 +84,7 @@
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
         <property name="authService" ref="authenticationService"/>
         <property name="stateMachineService"  ref="stateMachineHelper"/>
+        <property name="businessJournalOnCreateAssocsPolicy"  ref="businessJournalOnCreateAssocsPolicy"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -213,9 +214,6 @@
 
     <bean id="businessJournalOnCreateAssocsPolicy" class="ru.it.lecm.businessjournal.policies.BusinessJournalOnCreateAssocsPolicy"
           parent="logicEcmAssociationPolicy" init-method="init">
-        <property name="businessJournalService">
-            <ref bean="businessJournalService"/>
-        </property>
     </bean>
 
     <bean id="businessJournal.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
