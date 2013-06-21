@@ -1,3 +1,5 @@
+<#assign formId=args.htmlid?js_string + "-form">
+
 <script type="text/javascript">//<![CDATA[
 	if (!Array.prototype.indexOf) {
 		Array.prototype.indexOf = function(needle) {
@@ -9,6 +11,14 @@
 			return -1;
 		};
 	}
+
+	YAHOO.util.Event.onContentReady("${formId}", function () {
+		var formatInfosArray = YAHOO.util.Dom.getElementsByClassName('format-info', 'div');
+		for (var i = 0; i < formatInfosArray.length; i++) {
+			var formatInfo = formatInfosArray[i];
+			formatInfo.style.display = "none";
+		}
+	}, true);
 
 	YAHOO.Bubbling.on("reiterationRulesUpdated", LogicECM.module.WCalendar.Schedule.reiterationRulesValidation);
 

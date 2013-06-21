@@ -21,8 +21,6 @@
 function Absence_CheckboxChanged(skipFiring) {
 	var myID = "${fieldHtmlId}";
 
-	
-
 	var unlimitedCheckbox = YAHOO.util.Dom.get(myID);
 	unlimitedCheckbox.value = unlimitedCheckbox.checked;
 
@@ -69,14 +67,9 @@ function Absence_ChangeFormView() {
 }
 
 (function() {
-	var myID = "${fieldHtmlId}";
-	var IDElements = myID.split("_");
-	IDElements.splice(-3, 3);
-	var commonID = IDElements.join("_");
-	var formID = commonID + "-form"
-	YAHOO.util.Event.onContentReady(formID, Absence_ChangeFormView, true);
+	YAHOO.util.Event.onContentReady("${formId}", Absence_ChangeFormView, true);
 <#if isTrue>
-	YAHOO.util.Event.onContentReady(formID, Absence_CheckboxChanged, true);
+	YAHOO.util.Event.onContentReady("${formId}", Absence_CheckboxChanged, true);
 </#if>
 })();
 //]]></script>
