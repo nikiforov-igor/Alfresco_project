@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<title>Редактор отчетов - Выбор Набора Данных</title>
+	<description>Выбор Набора Данных</description>
+	<template-instance>reports-editor-source-add</template-instance>
+	<authentication>user</authentication>
+</page>

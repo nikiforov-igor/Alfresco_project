@@ -90,4 +90,7 @@
             </list>
         </property>
     </bean>
+
+    <bean id="reportsEditorOnCreateAssocsPolicy" class="ru.it.lecm.reports.editor.policies.ReportsEditorOnCreateAssocsPolicy" parent="logicEcmAssociationPolicy"
+          init-method="init"/>
 </beans>

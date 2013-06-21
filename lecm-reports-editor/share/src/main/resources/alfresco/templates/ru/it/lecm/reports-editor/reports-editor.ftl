@@ -14,6 +14,8 @@ LogicECM.module.ReportsEditor.SETTINGS =
     <#else>
         {}
     </#if>;
+LogicECM.module.ReportsEditor.SETTINGS.DESTINATION =
+        LogicECM.module.ReportsEditor.SETTINGS.DESTINATION ? LogicECM.module.ReportsEditor.SETTINGS.DESTINATION : null;
 //]]></script>
 </@>
 

@@ -1,11 +1,16 @@
-<#if !page.url.args.reportId??>
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 <#assign id = args.htmlid>
+<script type="text/javascript">//<![CDATA[
+    LogicECM.module.ReportsEditor.SETTINGS.DESTINATION = LogicECM.module.ReportsEditor.SETTINGS.reportsContainer;
+//]]></script>
+
+<#if !page.url.args.reportId??>
 <div class="yui-t1" id="bj-dictionary-grid">
     <div id="yui-main-2">
         <div class="yui-b" id="alf-content" style="margin-left: 0;">
             <@grid.datagrid id=id showViewForm=false>
                 <script type="text/javascript">//<![CDATA[
+                LogicECM.module.ReportsEditor.SETTINGS.DESTINATION
 
                 LogicECM.module.ReportsEditor.Grid = function (containerId) {
                     return LogicECM.module.ReportsEditor.Grid.superclass.constructor.call(this, containerId);
@@ -86,22 +91,60 @@
     </div>
 </div>
 <#else>
-<div id="reportsEditor">
-</div>
+<div id="${id}-reportForm"></div>
 <script type="text/javascript">
     //<![CDATA[
     var reportForm;
     (function () {
         function init() {
-            var reportsEditor = new LogicECM.module.ReportsEditor.Editor("reportsEditor");
-            reportsEditor.setReportId("${page.url.args.reportId}");
-            reportsEditor.setMessages(${messages});
-            reportsEditor.draw();
-
-            var menu = new LogicECM.module.ReportsEditor.Menu("menu-buttons");
-            menu.setMessages(${messages});
-            menu.setEditor(reportsEditor);
-            menu.draw();
+            Alfresco.util.Ajax.request(
+                    {
+                        url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                        dataObj:{
+                            htmlid:"Report-" + "${page.url.args.reportId}",
+                            itemKind:"node",
+                            itemId:"${page.url.args.reportId}",
+                            mode: "edit",
+                            submitType:"json",
+                            showSubmitButton:"true"
+                        },
+                        successCallback:{
+                            fn: function (response) {
+                                var formEl = Dom.get("${id}-reportForm");
+                                formEl.innerHTML = response.serverResponse.responseText;
+                                Dom.setStyle("${id}-footer", "opacity", "1");
+                                // Form definition
+                                var form = new Alfresco.forms.Form('Report-' + '${page.url.args.reportId}' + '-form');
+                                form.ajaxSubmit = true;
+                                form.setAJAXSubmit(true,
+                                        {
+                                            successCallback: {
+                                                fn: function () {
+                                                    Alfresco.util.PopupManager.displayMessage(
+                                                            {
+                                                                text: "Данные обновлены"
+                                                            });
+                                                },
+                                                scope: this
+                                            },
+                                            failureCallback: {
+                                                fn: function () {
+                                                    Alfresco.util.PopupManager.displayMessage(
+                                                            {
+                                                                text: "Не удалось обновить данные"
+                                                            });
+                                                },
+                                                scope: this
+                                            }
+                                        });
+                                form.setSubmitAsJSON(true);
+                                form.setShowSubmitStateDynamically(true, false);
+                                form.init();
+                            }
+                        },
+                        failureMessage:"message.failure",
+                        execScripts:true
+                    });
         }
 
         YAHOO.util.Event.onDOMReady(init);

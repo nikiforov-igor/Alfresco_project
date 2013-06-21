@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<title>Редактор отчетов - Список шаблонов</title>
+	<description>Список шаблонов</description>
+	<template-instance>reports-editor-templates</template-instance>
+	<authentication>user</authentication>
+</page>

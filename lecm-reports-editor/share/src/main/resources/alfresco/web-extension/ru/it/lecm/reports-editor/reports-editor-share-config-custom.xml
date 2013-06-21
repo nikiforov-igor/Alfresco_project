@@ -14,9 +14,6 @@
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
-                    <show id="lecm-rpeditor:reportTypeAssoc"/>
-                    <show id="lecm-rpeditor:reportProviderAssoc"/>
-                    <show id="lecm-rpeditor:reportTemplateAssoc"/>
                     <show id="lecm-rpeditor:reportQuery"/>
                     <show id="lecm-rpeditor:reportQueryOffset"/>
                     <show id="lecm-rpeditor:reportQueryLimit"/>
@@ -25,6 +22,9 @@
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
+                    <field id="lecm-rpeditor:reportQuery">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
                 </appearance>
             </form>
         </forms>

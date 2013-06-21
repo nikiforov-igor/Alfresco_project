@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<title>Редактор отчетов - Тип отчетов</title>
+	<description>Справочник Тип отчетов</description>
+	<template-instance>reports-editor-report-types</template-instance>
+	<authentication>user</authentication>
+</page>

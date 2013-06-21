@@ -1,37 +1,33 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-	<template-type>ru/it/lecm/reports-editor/reports-editor</template-type>
+    <template-type>ru/it/lecm/reports-editor/reports-editor</template-type>
     <components>
         <!-- Title -->
         <component>
             <region-id>title</region-id>
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
-                <title>page.lecm.reports-editor</title>
+                <title>page.lecm.reports-editor.edit-source</title>
             </properties>
         </component>
         <!-- Toolbar -->
-        <component>
+        <!--<component>
             <region-id>toolbar</region-id>
             <url>/lecm/reports-editor/toolbar</url>
             <properties>
-                <itemType>lecm-rpeditor:reportDescriptor</itemType>
-                <bubblingLabel>reports</bubblingLabel>
+                <itemType>lecm-rpeditor:reportColumnType</itemType>
+                <bubblingLabel>report-column-type</bubblingLabel>
                 <showSearch>false</showSearch>
-                <showCreateBtn>true</showCreateBtn>
+                <showCreateBtn>false</showCreateBtn>
             </properties>
-        </component>
+        </component>-->
         <!-- Menu -->
         <component>
             <region-id>menu</region-id>
             <url>/lecm/reports-editor/menu</url>
             <properties>
-                <selected>reportsList</selected>
+                <selected>editDataSource</selected>
             </properties>
-        </component>
-        <component>
-            <region-id>content</region-id>
-            <url>/lecm/reports-editor/main</url>
         </component>
     </components>
 </template-instance>

@@ -1,0 +1,40 @@
+#lecm-menu #menu-buttons #menu-buttons-reportsListBtn span.first-child {
+    background: url("/share/res/images/lecm-dictionary/dictionary_32.png") no-repeat scroll 4px 4px;
+}
+
+#lecm-menu #menu-buttons #menu-buttons-addDataSourceBtn span.first-child {
+    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png') no-repeat 4px 4px;
+}
+
+#lecm-menu #menu-buttons #menu-buttons-editDataSourceBtn span.first-child {
+    background: url("/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png") no-repeat scroll 4px 4px;
+}
+
+#lecm-menu #menu-buttons #menu-buttons-editTemplateBtn span.first-child {
+    background: url("/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png") no-repeat scroll 4px 4px;
+}
+
+#lecm-menu #menu-buttons #menu-buttons-templatesListBtn span.first-child {
+    background: url("/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png") no-repeat scroll 4px 4px;
+}
+
+#lecm-menu #menu-buttons #menu-buttons-sourcesListBtn span.first-child {
+    background: url("/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png") no-repeat scroll 4px 4px;
+}
+
+#lecm-menu #menu-buttons #menu-buttons-reportTypesBtn span.first-child {
+    background: url("/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png") no-repeat scroll 4px 4px;
+}
+
+#lecm-menu #menu-buttons #menu-buttons-reportProvidersBtn span.first-child {
+    background: url("/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png") no-repeat scroll 4px 4px;
+}
+
+#lecm-menu #menu-buttons #menu-buttons-reportColumnTypesBtn span.first-child {
+    background: url("/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png") no-repeat scroll 4px 4px;
+}
+
+#lecm-menu #menu-buttons #menu-buttons-reportParameterTypesBtn span.first-child {
+    background: url("/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png") no-repeat scroll 4px 4px;
+}
+
