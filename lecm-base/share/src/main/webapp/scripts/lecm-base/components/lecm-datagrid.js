@@ -66,6 +66,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         $combine = Alfresco.util.combinePaths,
         $userProfile = Alfresco.util.userProfileLink;
 
+    var editDialogOpening = false;
+
     /**
      * DataGrid constructor.
      *
@@ -103,6 +105,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("datagridRefresh", this.onDataGridRefresh, this);
         Bubbling.on("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
         Bubbling.on("changeFilter", this.onFilterChanged, this);
+        // Во время закрытия диалогового окна сбрасываем параметр в false
+        Bubbling.on("formContainerDestroyed", function() {
+            if (editDialogOpening) {
+                editDialogOpening = false;
+            }
+        });
+
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onGridTypeChanged"],
             {
@@ -2217,6 +2226,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @param item {object} Object literal representing one data item
              */
             onActionEdit:function DataGrid_onActionEdit(item) {
+                // Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку редактирования)
+                if (editDialogOpening) {
+                    return;
+                }
+                editDialogOpening = true;
                 var me = this;
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
