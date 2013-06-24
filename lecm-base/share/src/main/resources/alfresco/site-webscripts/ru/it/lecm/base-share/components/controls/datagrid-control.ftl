@@ -3,7 +3,7 @@
 <#assign aDateTime = .now>
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
-<#assign objectId = fieldHtmlId?replace("-", "_")?replace(":", "")>
+<#assign objectId = field.name?replace("-", "_")>
 
 <#assign allowCreate = true/>
 <#if field.control.params.allowCreate??>
@@ -50,18 +50,18 @@
         <script type="text/javascript">//<![CDATA[
             (function () {
 
-                LogicECM.module.Base.DataGridControl${objectId} = function(htmlId) {
-                    var module = LogicECM.module.Base.DataGridControl${objectId}.superclass.constructor.call(this, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
+                LogicECM.module.Base.DataGridControl_${objectId} = function(htmlId) {
+                    var module = LogicECM.module.Base.DataGridControl_${objectId}.superclass.constructor.call(this, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
                     return module;
                 };
 
-                YAHOO.extend(LogicECM.module.Base.DataGridControl${objectId}, LogicECM.module.Base.DataGrid, {
+                YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, LogicECM.module.Base.DataGrid, {
                     ${field.control.params.actionsHandler!""}
                 });
 
                 YAHOO.util.Event.onDOMReady(function (){
 
-                    var datagrid = new LogicECM.module.Base.DataGridControl${objectId}('${containerId}').setOptions({
+                    var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
                         usePagination: ${usePagination?string},
                         showExtendSearchBlock: false,
                         actions: [
