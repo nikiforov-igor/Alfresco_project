@@ -81,7 +81,7 @@
 
     <bean id="reportsEditor.LogicEcmDictionariesBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditor.modelBootstrap, reportsEditorService, businessJournalLogEventsPolicy">
-        <property name="dictionaries">
+        <property name="createOrUpdateDictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-reports-columns-types.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-reports-parameters-types.xml</value>

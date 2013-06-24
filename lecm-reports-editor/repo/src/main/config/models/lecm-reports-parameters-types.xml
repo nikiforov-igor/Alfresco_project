@@ -12,8 +12,8 @@
                 <property name="cm:name">Список</property>
                 <property name="lecm-rpeditor:reportParameterTypeCode">PARAM_TYPE_LIST</property>
             </item>
-            <item name="cm:Диапозон" type="lecm-rpeditor:reportParameterType">
-                <property name="cm:name">Диапозон</property>
+            <item name="cm:Диапазон" type="lecm-rpeditor:reportParameterType">
+                <property name="cm:name">Диапазон</property>
                 <property name="lecm-rpeditor:reportParameterTypeCode">PARAM_TYPE_RANGE</property>
             </item>
             <item name="cm:Значение" type="lecm-rpeditor:reportParameterType">
