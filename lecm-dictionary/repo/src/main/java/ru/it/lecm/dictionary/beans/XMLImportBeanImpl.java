@@ -96,17 +96,21 @@ public class XMLImportBeanImpl implements XMLImportBean {
             logger.info("Importing dictionary. (doNotUpdateIfExist = {})", doNotUpdateIfExist);
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();
             XMLStreamReader xmlr = inputFactory.createXMLStreamReader(inputStream);
-            String str = "";
+            try {
+                String str = "";
 
-            while (xmlr.hasNext() && !str.equals(ExportNamespace.TAG_ITEMS)) {
-                xmlr.nextTag();
-                str = xmlr.getLocalName();
-            }
-            if (str.equals(ExportNamespace.TAG_ITEMS)) {
-                readItems(xmlr, parentNodeRef, doNotUpdateIfExist);
+                while (xmlr.hasNext() && !str.equals(ExportNamespace.TAG_ITEMS)) {
+                    xmlr.nextTag();
+                    str = xmlr.getLocalName();
+                }
+                if (str.equals(ExportNamespace.TAG_ITEMS)) {
+                    readItems(xmlr, parentNodeRef, doNotUpdateIfExist);
+                }
+            } finally {
+                xmlr.close();
             }
 
-	        return importInfo;
+            return importInfo;
         }
 
         /** считывание элементов и создание
