@@ -64,7 +64,7 @@ public class TimerAction extends StateMachineAction {
         }
 
         if (eventName.equalsIgnoreCase("end")) {
-            getTimerActionHelper().removeTimer(stateMachineExecutionId);
+            getTimerActionHelper().removeTimerNode(stateMachineExecutionId);
         }
     }
 }

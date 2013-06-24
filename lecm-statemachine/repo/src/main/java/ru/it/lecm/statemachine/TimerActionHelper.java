@@ -82,7 +82,7 @@ public class TimerActionHelper implements InitializingBean {
         addTimerNode(stateMachineExecutionId, stateMachineTaskId, finishTimestamp, variable, expressions);
     }
 
-    public void removeTimer(String stateMachineExecutionId) {
+    public void removeTimerNode(String stateMachineExecutionId) {
         String stateMachineTaskId = new StateMachineHelper().getCurrentTaskId(stateMachineExecutionId);
         stateMachineTaskId = clearPrefix(stateMachineTaskId);
         final NodeRef timerFolderRef = getTimerFolderRef();
@@ -147,19 +147,20 @@ public class TimerActionHelper implements InitializingBean {
         Execution execution = stateMachineHelper.getExecution(stateMachineExecutionId);
         if (execution == null) {
             //execution is over
-            removeTimer(stateMachineExecutionId);
+            removeTimerNode(stateMachineExecutionId);
             return;
         }
 
         String currentTaskId = stateMachineHelper.getCurrentTaskId(stateMachineExecutionId);
         if (!clearPrefix(currentTaskId).equals(clearPrefix(stateMachineTaskId))) {
             //task is over
-            removeTimer(stateMachineExecutionId);
+            removeTimerNode(stateMachineExecutionId);
             return;
         }
 
         TransitionExpression expression = getFittingExpression(stateMachineExecutionId, expressions);
         if (expression == null) {
+            removeTimerNode(stateMachineExecutionId);
             return;
         }
 
