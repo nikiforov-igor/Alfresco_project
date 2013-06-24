@@ -42,6 +42,10 @@
                 <property name="cm:name">Копирование вложения</property>
                 <property name="lecm-busjournal:eventCategory-code">COPY_DOCUMENT_ATTACHMENT</property>
             </item>
+	        <item name="cm:Передача документа" type="lecm-busjournal:eventCategory">
+		        <property name="cm:name">Передача документа</property>
+		        <property name="lecm-busjournal:eventCategory-code">TRANSMIT_DOCUMENT</property>
+	        </item>
         </items>
     </item>
 </items>

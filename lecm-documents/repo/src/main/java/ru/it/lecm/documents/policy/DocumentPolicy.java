@@ -169,6 +169,11 @@ public class DocumentPolicy extends BaseBean
         } else {
             lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), documentRef, beforeAuthor.getId());
         }
+
+	    List<String> objects = new ArrayList<String>(1);
+	    objects.add(afterAuthor.toString());
+	    businessJournalService.log(documentRef, EventCategory.TRANSMIT_DOCUMENT, "#initiator передал документ \"#mainobject\" сотруднику #object1", objects);
+
         // Нужно ли передовать права на документы введенные на основании
         if (after.get(DocumentService.PROP_DOCUMENT_IS_TRANSMIT).toString().equals("true")) {
             // переопределяем права на документы к договору.
