@@ -133,9 +133,11 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 			var content  = '<div style="visibility: hidden" id="' + this.notificationsWindowId + '" class="yui-panel">';
 				content += '    <div id="' + this.notificationsWindowId + '-head" class="hd">' + this.msg("notifications") + '</div>';
 				content += '    <div id="' + this.notificationsWindowId + '-body" class="bd">';
-				content += '        <div class="main-part">';
+				content += '        <div id="' + this.notificationsWindowId + '-main-part" class="main-part">';
 				content += '            <div id="' + this.notificationsWindowId + '-content"></div>';
-				content += '            <div id="' + this.notificationsWindowId + '-next"></div>';
+				content += '            <div id="' + this.notificationsWindowId + '-loading">';
+				content += '                <img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/lightbox/loading.gif">';
+				content += '            </div>';
 				content += '        </div>';
 				content += '        <div class="bdft">';
 				content += '            <span id="' + this.notificationsWindowId + '-cancel" class="yui-button yui-push-button">';
@@ -163,9 +165,7 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 				}
 			});
 
-			var moreContainer = Dom.get(this.notificationsWindowId + "-next");
-			moreContainer.innerHTML = '<a id="' + this.notificationsWindowId + '-next-link" href="javascript:void(0);">' + this.msg("notifications.link.more") + '</a>';
-			Event.on(this.notificationsWindowId + "-next-link", "click", this.showMoreNotifications, null, this);
+			YAHOO.util.Event.addListener(this.notificationsWindowId + "-main-part", "scroll", this.onContainerScroll, this);
 		},
 
 		showNotificationsWindow: function() {
@@ -178,10 +178,6 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 			if (this.notificationsWindow != null) {
 				this.notificationsWindow.hide();
 			}
-		},
-
-		showMoreNotifications: function() {
-			this.loadNotifications();
 		},
 
 		loadNewNotificationsCount: function() {
@@ -264,14 +260,10 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 								container.appendChild(div);
 							}
 
-							Dom.setStyle(me.notificationsWindowId + "-next", "display",
-								response.json.hasNext == "true" ? "block" : "none");
 							if (readNewNotifications.length > 0) {
 								me.setReadNotifications(readNewNotifications);
 							}
-							if (me.readNotifications.length > me.loadItemsCount) {
-								container.scrollTop = container.scrollHeight;
-							}
+							Dom.setStyle(this.notificationsWindowId + "-loading", "visibility", "hidden");
 							me.showNotificationsWindow();
 						},
 						scope:this
@@ -313,6 +305,14 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 			this.skipItemsCount = 0;
 			this.readNotifications = [];
 			this.loadNotifications();
+		},
+
+		onContainerScroll: function (event, scope) {
+			var container = event.currentTarget;
+			if (container.scrollTop + container.clientHeight == container.scrollHeight) {
+				Dom.setStyle(scope.notificationsWindowId + "-loading", "visibility", "visible");
+				scope.loadNotifications();
+			}
 		}
 	});
 })();
