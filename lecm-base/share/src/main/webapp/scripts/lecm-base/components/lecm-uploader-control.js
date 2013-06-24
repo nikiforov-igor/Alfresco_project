@@ -25,6 +25,7 @@ LogicECM.control = LogicECM.control || {};
 	{
 		LogicECM.control.Uploader.superclass.constructor.call(this, "LogicECM.control.Uploader", fieldHtmlId);
 		this.selectedItems = {};
+		this.currentValueHtmlId = fieldHtmlId;
 		return this;
 	};
 
@@ -49,7 +50,9 @@ LogicECM.control = LogicECM.control || {};
              */
             multiple: false,
 
-            mandatory: false
+            mandatory: false,
+
+			currentValueHtmlId: ""
 		},
 
 		onReady: function () {
@@ -281,6 +284,8 @@ LogicECM.control = LogicECM.control || {};
 				for (i in selectedItems) {
 					el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
 				}
+
+				Dom.get(this.currentValueHtmlId).value = selectedItems.toString();
 
 				if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
 					YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
