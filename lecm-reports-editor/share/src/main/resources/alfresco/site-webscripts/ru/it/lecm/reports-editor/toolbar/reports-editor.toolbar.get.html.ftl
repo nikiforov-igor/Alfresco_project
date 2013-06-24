@@ -31,8 +31,6 @@
 function init() {
     new LogicECM.module.ReportsEditor.Toolbar("${id}").setMessages(${messages}).setOptions({
         bubblingLabel: "${args.bubblingLabel!'reports'}",
-        itemType: "${args.itemType}",
-        destination: LogicECM.module.ReportsEditor.SETTINGS.DESTINATION,
         newRowDialogTitle: "${newRowTitle}"
     });
 }

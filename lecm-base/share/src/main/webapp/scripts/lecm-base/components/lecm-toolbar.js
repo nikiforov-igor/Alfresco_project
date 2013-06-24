@@ -80,6 +80,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             options: {
                 bubblingLabel: null,
+                newRowDialogTitle: 'label.create-row.title',
                 searchButtonsType: 'defaultActive',
                 newRowButtonType: 'defaultActive'
             },

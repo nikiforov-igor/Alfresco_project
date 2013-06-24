@@ -19,6 +19,8 @@
                 <bubblingLabel>reports</bubblingLabel>
                 <showSearch>false</showSearch>
                 <showCreateBtn>true</showCreateBtn>
+                <newRowLabel>label.new-report.btn</newRowLabel>
+                <newRowDialogTitle>label.create-report.title</newRowDialogTitle>
             </properties>
         </component>
         <!-- Menu -->

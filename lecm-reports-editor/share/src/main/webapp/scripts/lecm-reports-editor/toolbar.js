@@ -1,10 +1,5 @@
 (function () {
     /**
-     * YUI Library aliases
-     */
-    var Dom = YAHOO.util.Dom;
-
-    /**
      * Toolbar constructor.
      *
      * @param htmlId {String} The HTML id of the parent element
@@ -27,27 +22,29 @@
              */
             options: {
                 bubblingLabel: null,
-                destination: null,
-                itemType: null,
-                newRowDialogTitle: "label.create-row.title",
+                newRowDialogTitle: 'label.create-row.title',
                 searchButtonsType: 'defaultActive',
                 newRowButtonType: 'defaultActive'
             },
 
             _initButtons: function() {
-                this.toolbarButtons[this.options.newRowButtonType].newDocumentButton = Alfresco.util.createYUIButton(this, "newReportButton", this.onNewReport,
+                this.toolbarButtons[this.options.newRowButtonType].newDocumentButton = Alfresco.util.createYUIButton(this, 'newReportButton', this.onNewRow,
                     {
-                        value: "create"
+                        disabled: this.options.newRowButtonType != 'defaultActive',
+                        value: 'create'
                     });
             },
 
-            onNewReport: function (e, p_obj) {
-                var destination = this.options.destination,
-                    itemType = this.options.itemType;
-                this._showCreateDialog({itemType: itemType, nodeRef: destination});
+            onNewRow: function (e, p_obj) {
+                var meta = this.modules.dataGrid.datagridMeta;
+                if (meta != null && meta.nodeRef.indexOf(":") > 0) {
+                    var destination = meta.nodeRef;
+                    var itemType = meta.itemType;
+                    this.showCreateDialog({itemType: itemType, nodeRef: destination});
+                }
             },
 
-            _showCreateDialog: function (meta) {
+            showCreateDialog: function (meta, successMessage) {
                 // Intercept before dialog show
                 var me = this;
                 var doBeforeDialogShow = function (p_form, p_dialog) {
@@ -64,7 +61,7 @@
                     Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
                 };
 
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
+                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
                     {
                         itemKind: "type",
                         itemId: meta.itemType,
@@ -86,16 +83,24 @@
                             fn: doBeforeDialogShow,
                             scope: this
                         },
-                        onSuccess: {
+                        onSuccess:{
                             fn: function DataGrid_onActionCreate_success(response) {
+                                YAHOO.Bubbling.fire("nodeCreated",
+                                    {
+                                        nodeRef: response.json.persistedObject,
+                                        bubblingLabel: this.options.bubblingLabel
+                                    });
+                                YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
+                                    {
+                                        nodeRef: response.json.persistedObject,
+                                        bubblingLabel: this.options.bubblingLabel
+                                    });
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
-                                        text: this.msg("message.save.success")
+                                        text: this.msg(successMessage ? successMessage : "message.save.success")
                                     });
-                                window.location.href = window.location.protocol + "//" + window.location.host +
-                                    Alfresco.constants.URL_PAGECONTEXT + "reports-editor?reportId=" + response.json.persistedObject;
                             },
-                            scope: this
+                            scope:this
                         },
                         onFailure: {
                             fn: function DataGrid_onActionCreate_failure(response) {

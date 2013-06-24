@@ -103,4 +103,158 @@
             </form>
         </forms>
     </config>
+
+    <config evaluator="node-type" condition="lecm-rpeditor:reportType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-rpeditor:reportType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportTypeCode"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportTypeCode"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-rpeditor:reportProvider">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportProviderClass"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-rpeditor:reportProvider">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportProviderCode"/>
+                    <show id="lecm-rpeditor:reportProviderClass"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportProviderCode"/>
+                    <show id="lecm-rpeditor:reportProviderClass"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-rpeditor:reportColumnType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportColumnTypeClass"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-rpeditor:reportColumnType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportColumnTypeCode"/>
+                    <show id="lecm-rpeditor:reportColumnTypeClass"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportColumnTypeCode"/>
+                    <show id="lecm-rpeditor:reportColumnTypeClass"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-rpeditor:reportParameterType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportParameterTypeLabel1"/>
+                    <show id="lecm-rpeditor:reportParameterTypeLabel2"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-rpeditor:reportParameterType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportParameterTypeCode"/>
+                    <show id="lecm-rpeditor:reportParameterTypeLabel1"/>
+                    <show id="lecm-rpeditor:reportParameterTypeLabel2"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportParameterTypeCode"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>
