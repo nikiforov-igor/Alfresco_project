@@ -22,7 +22,7 @@
 <span class="statemachine-menu">
 		<span id="menu-buttons-deploy-menu-button" class="yui-button yui-push-button">
 	        <span class="first-child">
-	            <button type="button" title="Развертывание машины состояний">&nbsp;</button>
+	            <button type="button" title="Публикация машины состояний">&nbsp;</button>
 	        </span>
 	    </span>
 </span>
