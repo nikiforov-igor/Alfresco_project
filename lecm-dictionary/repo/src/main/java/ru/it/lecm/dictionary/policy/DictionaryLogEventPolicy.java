@@ -4,11 +4,13 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.policy.PolicyScope;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.version.VersionServicePolicies;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
@@ -34,12 +36,13 @@ public class DictionaryLogEventPolicy implements
 		NodeServicePolicies.OnUpdatePropertiesPolicy,
 		NodeServicePolicies.OnCreateAssociationPolicy,
 		NodeServicePolicies.OnDeleteAssociationPolicy,
-		VersionServicePolicies.AfterCreateVersionPolicy {
+		VersionServicePolicies.OnCreateVersionPolicy {
 	private final static Logger logger = LoggerFactory.getLogger(DictionaryLogEventPolicy.class);
 
 	private PolicyComponent policyComponent;
 	private BusinessJournalService businessJournalService;
 	private DictionaryBean dictionaryService;
+	protected NodeService nodeService;
 
 	private String lastTransactionId = "";
 
@@ -53,6 +56,10 @@ public class DictionaryLogEventPolicy implements
 
 	public void setDictionaryService(DictionaryBean dictionaryService) {
 		this.dictionaryService = dictionaryService;
+	}
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
 	}
 
 	public final void init () {
@@ -72,13 +79,15 @@ public class DictionaryLogEventPolicy implements
 				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindClassBehaviour(VersionServicePolicies.AfterCreateVersionPolicy.QNAME,
-				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "afterCreateVersion"));
+		policyComponent.bindClassBehaviour(VersionServicePolicies.OnCreateVersionPolicy.QNAME,
+				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateVersion", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindClassBehaviour(VersionServicePolicies.AfterCreateVersionPolicy.QNAME,
-				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "afterCreateVersion"));
+		policyComponent.bindClassBehaviour(VersionServicePolicies.OnCreateVersionPolicy.QNAME,
+				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateVersion", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
@@ -103,15 +112,18 @@ public class DictionaryLogEventPolicy implements
 	}
 
 	@Override
-	public void afterCreateVersion(NodeRef versionableNode, Version version) {
+	public void onCreateVersion(QName classRef, NodeRef versionableNode, Map<String, Serializable> versionProperties, PolicyScope nodeDetails) {
 		NodeRef dictionary = dictionaryService.getDictionaryByDictionaryValue(versionableNode);
 		List<String> objects = new ArrayList<String>();
 		objects.add(versionableNode.toString());
 
-		try {
-			businessJournalService.log(dictionary, EventCategory.ADD_NEW_VERSION, "#initiator создал(а) новую версию элемента #object1 справочника #mainobject", objects);
-		} catch (Exception e) {
-			logger.error("Could not create the record business-journal", e);
+		Boolean isActive = (Boolean) nodeService.getProperty(versionableNode, BaseBean.IS_ACTIVE);
+		if (versionProperties.size() > 0 && (isActive == null || isActive)) {
+			try {
+				businessJournalService.log(dictionary, EventCategory.ADD_NEW_VERSION, "#initiator создал(а) новую версию элемента #object1 справочника #mainobject", objects);
+			} catch (Exception e) {
+				logger.error("Could not create the record business-journal", e);
+			}
 		}
 		this.lastTransactionId = AlfrescoTransactionSupport.getTransactionId();
 	}
