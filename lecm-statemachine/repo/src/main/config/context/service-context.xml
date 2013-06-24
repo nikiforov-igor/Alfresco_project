@@ -97,6 +97,7 @@
 	</bean>
 
     <bean id="timerActionHelper" class="ru.it.lecm.statemachine.TimerActionHelper">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
         <property name="nodeService" ref="nodeService"/>
         <property name="transactionService" ref="transactionService" />
@@ -225,7 +226,7 @@
 	<bean id="timerAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
 		<property name="name" value="TimerAction"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.TimerAction" />
-		<property name="type" value="system" />
+		<property name="type" value="user" />
 		<property name="execution" value="start, end" />
     </bean>
 

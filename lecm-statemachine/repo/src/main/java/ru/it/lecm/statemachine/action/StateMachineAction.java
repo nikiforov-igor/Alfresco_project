@@ -28,6 +28,13 @@ import ru.it.lecm.statemachine.bean.StateMachineActions;
 abstract public class StateMachineAction {
     public static final String PROP_STOP_SUBWORKFLOWS = "stopSubWorkflows";
 
+    public static final String TAG_EXPRESSIONS = "expressions";
+    public static final String TAG_EXPRESSION = "expression";
+
+    public static final String PROP_EXPRESSION = "expression";
+    public static final String PROP_OUTPUT_VARIABLE = "outputVariable";
+    public static final String PROP_OUTPUT_VALUE = "outputValue";
+
 	private ServiceRegistry serviceRegistry;
 	private LecmPermissionService lecmPermissionService;
 	private BusinessJournalService businessJournalService;

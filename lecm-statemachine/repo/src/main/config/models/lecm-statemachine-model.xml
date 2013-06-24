@@ -36,7 +36,7 @@
 		</type>
         <type name="lecm-statemachine:timer">
             <title>Logic ECM Statemachine Task Timer</title>
-            <parent>cm:cmobject</parent>
+            <parent>cm:folder</parent>
             <properties>
                 <property name="lecm-statemachine:executionId">
                     <type>d:text</type>
@@ -54,8 +54,20 @@
                     <type>d:long</type>
                     <mandatory>true</mandatory>
                 </property>
+            </properties>
+        </type>
+        <type name="lecm-statemachine:transitionExpression">
+            <title>Logic ECM Statemachine Transition Expression</title>
+            <parent>cm:cmobject</parent>
+            <properties>
                 <property name="lecm-statemachine:stopSubWorkflows">
                     <type>d:boolean</type>
+                </property>
+                <property name="lecm-statemachine:expression">
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-statemachine:outputValue">
+                    <type>d:text</type>
                 </property>
             </properties>
         </type>

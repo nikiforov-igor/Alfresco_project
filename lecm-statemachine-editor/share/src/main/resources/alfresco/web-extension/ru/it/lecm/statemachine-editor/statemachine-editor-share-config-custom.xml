@@ -18,8 +18,7 @@
 					<show id="lecm-stmeditor:staticRoles" force="true"/>
 					<show id="lecm-stmeditor:dynamicRoles" force="true"/>
 					<show id="lecm-stmeditor:timerDuration" force="true"/>
-                    <show id="lecm-stmeditor:transitionStatus" force="true"/>
-                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
+					<show id="lecm-stmeditor:startTimerAction" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="info" appearance="" label-id="statemachine.editor.form.info" />
@@ -27,8 +26,9 @@
 					<set id="actions" appearance="" label-id="statemachine.editor.form.actions" />
 					<set id="events" appearance="" label-id="statemachine.editor.form.events" />
 					<set id="permissions" appearance="" label-id="statemachine.editor.form.permissions" />
-					<set id="timer" appearance="" label-id="statemachine.editor.form.timer" />
 					<field id="cm:name" set="info" />
+
+                    <field id="lecm-stmeditor:timerDuration" set="info" />
 
 					<!-- behavior Set -->
 					<field id="lecm-stmeditor:startWaitForDocumentChange" set="behavior">
@@ -51,7 +51,17 @@
 						</control>
 					</field>
 
-					<!-- Action Set -->
+					<field id="lecm-stmeditor:startTimerAction" set="behavior">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:transition</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
+						</control>
+					</field>
+
+                    <!-- Action Set -->
 					<field id="lecm-stmeditor:takeFinishStateWithTransitionUser" set="actions">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:userTransition</control-param>
@@ -144,18 +154,6 @@
 							<control-param name="ds">lecm/statemachine/editor/ds/dynamicroles</control-param>
 						</control>
 					</field>
-
-					<field id="lecm-stmeditor:timerDuration" set="timer" />
-
-                    <field id="lecm-stmeditor:transitionStatus" set="timer" >
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
-                            <control-param name="webscriptType">server</control-param>
-                            <control-param name="webscript">/lecm/statemachine/editor/status/control</control-param>
-                            <control-param name="withEmpty">true</control-param>
-                        </control>
-                    </field>
-
-                    <field id="lecm-stmeditor:stopSubWorkflows" set="timer" />
 
                 </appearance>
 			</form>

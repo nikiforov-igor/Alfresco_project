@@ -4,6 +4,7 @@ import org.activiti.engine.runtime.Execution;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -13,6 +14,8 @@ import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import org.springframework.beans.factory.InitializingBean;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
+import ru.it.lecm.statemachine.expression.Expression;
+import ru.it.lecm.statemachine.expression.TransitionExpression;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
@@ -28,10 +31,15 @@ import java.util.*;
 public class TimerActionHelper implements InitializingBean {
     private static final String TIMER_FOLDER_NAME = "Таймеры машины состояний";
 
+    private static ServiceRegistry serviceRegistry;
     private static NodeService nodeService;
     private static TransactionService transactionService;
     private static RepositoryStructureHelper repositoryStructureHelper;
     private static IWorkCalendar workCalendarService;
+
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+        TimerActionHelper.serviceRegistry = serviceRegistry;
+    }
 
     public void setNodeService(NodeService nodeService) {
         TimerActionHelper.nodeService = nodeService;
@@ -62,25 +70,16 @@ public class TimerActionHelper implements InitializingBean {
         });
     }
 
-    public void addTimer(String stateMachineExecutionId, String variable, int timerDuration, boolean stopSubWorkflows) {
-        Date finishDate = workCalendarService.getNextWorkingDate(new Date(), timerDuration);
+    public void addTimer(String stateMachineExecutionId, int timerDuration, String variable, List<TransitionExpression> expressions) {
+        if (stateMachineExecutionId == null || timerDuration <= 0 || variable == null || expressions.size() == 0) {
+            return;
+        }
 
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTime(finishDate);
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
-
-        long finishTimestamp = calendar.getTimeInMillis();
-
-        //TODO:stub for testing!!!
-        GregorianCalendar calendarStub = new GregorianCalendar();
-        calendarStub.add(Calendar.MINUTE, timerDuration);
-        finishTimestamp = calendarStub.getTimeInMillis();
-
+        long finishTimestamp = calculateFinishTimestamp(timerDuration);
         String stateMachineTaskId = new StateMachineHelper().getCurrentTaskId(stateMachineExecutionId);
-        startTimer(stateMachineExecutionId, stateMachineTaskId, variable, finishTimestamp, stopSubWorkflows);
-        addTimerNode(stateMachineExecutionId, stateMachineTaskId, variable, finishTimestamp, stopSubWorkflows);
+
+        startTimer(stateMachineExecutionId, stateMachineTaskId, finishTimestamp, variable, expressions);
+        addTimerNode(stateMachineExecutionId, stateMachineTaskId, finishTimestamp, variable, expressions);
     }
 
     public void removeTimer(String stateMachineExecutionId) {
@@ -105,7 +104,7 @@ public class TimerActionHelper implements InitializingBean {
         }
     }
 
-    private void startTimer(final String stateMachineExecutionId, final String stateMachineTaskId, final String variable, long finishTimestamp, final boolean stopSubWorkflows) {
+    private void startTimer(final String stateMachineExecutionId, final String stateMachineTaskId, long finishTimestamp, final String variable, final List<TransitionExpression> expressions) {
         if (finishTimestamp < new Date().getTime()) {
             return;
         }
@@ -116,10 +115,7 @@ public class TimerActionHelper implements InitializingBean {
                 AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                     @Override
                     public Object doWork() throws Exception {
-                        if (stopSubWorkflows) {
-                            new StateMachineHelper().stopDocumentSubWorkflows(stateMachineExecutionId);
-                        }
-                        nextTransition(stateMachineExecutionId, stateMachineTaskId, variable, true);
+                        nextTransition(stateMachineExecutionId, stateMachineTaskId, variable, expressions);
                         return null;
                     }
                 });
@@ -129,34 +125,130 @@ public class TimerActionHelper implements InitializingBean {
         new Timer().schedule(timerTask, new Date(finishTimestamp));
     }
 
-    private void addTimerNode(String stateMachineExecutionId, String stateMachineTaskId, String variable, long finishTimestamp, boolean stopSubWorkflows) {
+    private TransitionExpression getFittingExpression(String stateMachineExecutionId, List<TransitionExpression> expressions) {
+        StateMachineHelper stateMachineHelper = new StateMachineHelper();
+
+        NodeRef document = stateMachineHelper.getStatemachineDocument(stateMachineExecutionId);
+        Map<String, Object> variables = stateMachineHelper.getVariables(stateMachineExecutionId);
+        Expression lecmExpression = new Expression(document, variables, serviceRegistry);
+
+        for (TransitionExpression expression : expressions) {
+            if (lecmExpression.execute(expression.getExpression())) {
+                return expression;
+            }
+        }
+
+        return null;
+    }
+
+    private void nextTransition(String stateMachineExecutionId, String stateMachineTaskId, String variable, List<TransitionExpression> expressions) {
+        StateMachineHelper stateMachineHelper = new StateMachineHelper();
+
+        Execution execution = stateMachineHelper.getExecution(stateMachineExecutionId);
+        if (execution == null) {
+            //execution is over
+            removeTimer(stateMachineExecutionId);
+            return;
+        }
+
+        String currentTaskId = stateMachineHelper.getCurrentTaskId(stateMachineExecutionId);
+        if (!clearPrefix(currentTaskId).equals(clearPrefix(stateMachineTaskId))) {
+            //task is over
+            removeTimer(stateMachineExecutionId);
+            return;
+        }
+
+        TransitionExpression expression = getFittingExpression(stateMachineExecutionId, expressions);
+        if (expression == null) {
+            return;
+        }
+
+        if (expression.isStopSubWorkflows()) {
+            String statemachineId = stateMachineHelper.getCurrentExecutionId(stateMachineTaskId);
+            stateMachineHelper.stopDocumentSubWorkflows(statemachineId);
+        }
+
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put(variable, expression.getOutputValue());
+        stateMachineHelper.setExecutionParamentersByTaskId(stateMachineTaskId, parameters);
+        stateMachineHelper.nextTransition(providePrefix(stateMachineTaskId));
+    }
+
+    private void addTimerNode(String stateMachineExecutionId, String stateMachineTaskId, long finishTimestamp, String variable, List<TransitionExpression> expressions) {
         final NodeRef timerFolderRef = getTimerFolderRef();
 
         final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         properties.put(StatemachineModel.PROP_EXECUTION_ID, stateMachineExecutionId);
         properties.put(StatemachineModel.PROP_TASK_ID, stateMachineTaskId);
-        properties.put(StatemachineModel.PROP_VARIABLE, variable);
         properties.put(StatemachineModel.PROP_FINISH_TIMESTAMP, finishTimestamp);
-        properties.put(StatemachineModel.PROP_STOP_SUBWORKFLOWS, stopSubWorkflows);
+        properties.put(StatemachineModel.PROP_VARIABLE, variable);
 
+        final ChildAssociationRef[] timer = new ChildAssociationRef[1];
         transactionService.getRetryingTransactionHelper().doInTransaction(
                 new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
                     @Override
                     public Object execute() throws Throwable {
-                        nodeService.createNode(timerFolderRef, ContentModel.ASSOC_CONTAINS,
+                        timer[0] = nodeService.createNode(timerFolderRef, ContentModel.ASSOC_CONTAINS,
                                 QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(GUID.generate())), StatemachineModel.TYPE_TIMER, properties);
                         return null;
                     }
                 }, false, true);
+
+        for (TransitionExpression expression : expressions) {
+            properties.clear();
+            properties.put(StatemachineModel.PROP_STOP_SUBWORKFLOWS, expression.isStopSubWorkflows());
+            properties.put(StatemachineModel.PROP_EXPRESSION, expression.getExpression());
+            properties.put(StatemachineModel.PROP_OUTPUT_VALUE, expression.getOutputValue());
+
+            transactionService.getRetryingTransactionHelper().doInTransaction(
+                    new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+                        @Override
+                        public Object execute() throws Throwable {
+                            nodeService.createNode(timer[0].getChildRef(), ContentModel.ASSOC_CONTAINS,
+                                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(GUID.generate())), StatemachineModel.TYPE_TRANSITION_EXPRESSION, properties);
+                            return null;
+                        }
+                    }, false, true);
+        }
     }
 
-    private void nextTransition(String executionId, String taskId, String variable, boolean isVariableSet) {
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put(variable, isVariableSet);
+    private void restoreTimers() {
+        List<NodeRef> timers = getTimers();
+        for (NodeRef timer : timers) {
+            String timerExecutionId = (String) nodeService.getProperty(timer, StatemachineModel.PROP_EXECUTION_ID);
+            String timerTaskId = (String) nodeService.getProperty(timer, StatemachineModel.PROP_TASK_ID);
+            long finishTimestamp = (Long) nodeService.getProperty(timer, StatemachineModel.PROP_FINISH_TIMESTAMP);
+            String variable = (String) nodeService.getProperty(timer, StatemachineModel.PROP_VARIABLE);
 
-        StateMachineHelper helper = new StateMachineHelper();
-        helper.setExecutionParameters(executionId, parameters);
-        helper.nextTransition(providePrefix(taskId));
+            List<TransitionExpression> transitionExpressions = new ArrayList<TransitionExpression>();
+            List<ChildAssociationRef> expressionAssocs = nodeService.getChildAssocs(timer);
+            for (ChildAssociationRef expressionAssoc : expressionAssocs) {
+                NodeRef expressionRef = expressionAssoc.getChildRef();
+                String expression = (String) nodeService.getProperty(expressionRef, StatemachineModel.PROP_EXPRESSION);
+                String outputValue = (String) nodeService.getProperty(expressionRef, StatemachineModel.PROP_OUTPUT_VALUE);
+                boolean stopSubWorkflows = (Boolean) nodeService.getProperty(expressionRef, StatemachineModel.PROP_STOP_SUBWORKFLOWS);
+                TransitionExpression transitionExpression = new TransitionExpression(expression, outputValue, stopSubWorkflows);
+                transitionExpressions.add(transitionExpression);
+            }
+
+            if (finishTimestamp < new Date().getTime()) {
+                nextTransition(timerExecutionId, timerTaskId, variable, transitionExpressions);
+            } else {
+                startTimer(timerExecutionId, timerTaskId, finishTimestamp, variable, transitionExpressions);
+            }
+        }
+    }
+
+    private List<NodeRef> getTimers() {
+        List<NodeRef> result = new ArrayList<NodeRef>();
+
+        NodeRef timerFolderRef = getTimerFolderRef();
+        List<ChildAssociationRef> timerAssocs = nodeService.getChildAssocs(timerFolderRef);
+        for (ChildAssociationRef timerAssoc : timerAssocs) {
+            result.add(timerAssoc.getChildRef());
+        }
+
+        return result;
     }
 
     private void createTimerFolderRef() {
@@ -179,62 +271,31 @@ public class TimerActionHelper implements InitializingBean {
                 }, false, true);
     }
 
-    private void restoreTimers() {
-        List<NodeRef> timers = getTimers();
-        for (NodeRef timer : timers) {
-            final String timerExecutionId = (String) nodeService.getProperty(timer, StatemachineModel.PROP_EXECUTION_ID);
-            final String timerTaskId = (String) nodeService.getProperty(timer, StatemachineModel.PROP_TASK_ID);
-            Execution execution = new StateMachineHelper().getExecution(timerExecutionId);
-            if (execution == null) {
-                removeTimer(timerTaskId);
-                continue;
-            }
-
-            String currentTaskId = new StateMachineHelper().getCurrentTaskId(timerExecutionId);
-            if (!clearPrefix(currentTaskId).equals(clearPrefix(timerTaskId))) {
-                removeTimer(timerTaskId);
-                continue;
-            }
-
-            final String variable = (String) nodeService.getProperty(timer, StatemachineModel.PROP_VARIABLE);
-            boolean stopSubWorkflows = (Boolean) nodeService.getProperty(timer, StatemachineModel.PROP_STOP_SUBWORKFLOWS);
-            long finishTimestamp = (Long) nodeService.getProperty(timer, StatemachineModel.PROP_FINISH_TIMESTAMP);
-            if (finishTimestamp < new Date().getTime()) {
-                TimerTask timerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-                            @Override
-                            public Object doWork() throws Exception {
-                                nextTransition(timerExecutionId, timerTaskId, variable, true);
-                                return null;
-                            }
-                        });
-                    }
-                };
-
-                new Timer().schedule(timerTask, 300000);
-                continue;
-            }
-
-            startTimer(timerExecutionId, timerTaskId, variable, finishTimestamp, stopSubWorkflows);
-        }
+    private NodeRef getTimerFolderRef() {
+        return nodeService.getChildByName(repositoryStructureHelper.getHomeRef(), ContentModel.ASSOC_CONTAINS, TIMER_FOLDER_NAME);
     }
 
-    private List<NodeRef> getTimers() {
-        List<NodeRef> result = new ArrayList<NodeRef>();
+    private long calculateFinishTimestamp(int timerDuration) {
+        Date finishDate = workCalendarService.getNextWorkingDate(new Date(), timerDuration);
 
-        NodeRef timerFolderRef = getTimerFolderRef();
-        List<ChildAssociationRef> timerAssocs = nodeService.getChildAssocs(timerFolderRef);
-        for (ChildAssociationRef timerAssoc : timerAssocs) {
-            result.add(timerAssoc.getChildRef());
-        }
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(finishDate);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
 
-        return result;
+        long finishTimestamp = calendar.getTimeInMillis();
+
+        //TODO:stub for testing!!!
+        GregorianCalendar calendarStub = new GregorianCalendar();
+        calendarStub.add(Calendar.MINUTE, timerDuration);
+        finishTimestamp = calendarStub.getTimeInMillis();
+
+        return finishTimestamp;
     }
 
     //Activiti works WITHOUT prefix
-    //Alfresco works WITH prefix (WorkflowService)
+    //Alfresco (WorkflowService) works WITH prefix
     private String clearPrefix(String activityId) {
         if (activityId == null) {
             return null;
@@ -244,9 +305,5 @@ public class TimerActionHelper implements InitializingBean {
 
     private String providePrefix(String activityId) {
         return StateMachineHelper.ACTIVITI_PREFIX + clearPrefix(activityId);
-    }
-
-    private NodeRef getTimerFolderRef() {
-        return nodeService.getChildByName(repositoryStructureHelper.getHomeRef(), ContentModel.ASSOC_CONTAINS, TIMER_FOLDER_NAME);
     }
 }

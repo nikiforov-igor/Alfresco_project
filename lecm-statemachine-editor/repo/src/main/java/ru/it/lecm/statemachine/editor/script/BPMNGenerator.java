@@ -132,7 +132,7 @@ public class BPMNGenerator {
             NodeRef statemachineVersions = nodeService.getChildByName(versions, ContentModel.ASSOC_CONTAINS, processId);
             Long versionValue = (Long) nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
 
-            String version = (++versionValue).toString();
+            String version = "" + (++versionValue);
 
 			for (ChildAssociationRef status : statuses) {
 				String statusName = (String) nodeService.getProperty(status.getChildRef(), ContentModel.PROP_NAME);
@@ -319,9 +319,6 @@ public class BPMNGenerator {
 			flows.addAll(createEvent(extentionElements, end, statusVar, action, actionId, actionVar));
 		}
 
-        //timerAction
-        flows.addAll(createTimerEvent(status, start, end, statusVar));
-
 		if (flows.size() == 1) {
 			Flow flow = flows.get(0);
 			Element flowElement = createFlow(flow.getSourceRef(), flow.getTargetRef(), flow.getContent());
@@ -345,52 +342,10 @@ public class BPMNGenerator {
     private int getTimerDuration(NodeRef status) {
         try {
             String durationString = (String) nodeService.getProperty(status, StatemachineEditorModel.PROP_TIMER_DURATION);
-            return Integer.parseInt(durationString);
+            return durationString != null ? Integer.parseInt(durationString) : -1;
         } catch (Exception e) {
             return -1;
         }
-    }
-
-    private List<Flow> createTimerEvent(NodeRef status, Element start, Element end, String statusVar) {
-        int timerDuration = getTimerDuration(status);
-        if (timerDuration <= 0) {
-            return new ArrayList<Flow>();
-        }
-
-        List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(status, StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
-        if (targetAssocs.size() == 0) {
-            return new ArrayList<Flow>();
-        }
-
-        Element actionElement = doc.createElement("lecm:action");
-        actionElement.setAttribute("type", StatemachineEditorModel.ACTION_TIMER_ACTION);
-        start.appendChild(actionElement);
-
-        String variableName = "ta" + statusVar;
-
-        Element attribute = doc.createElement("lecm:attribute");
-        attribute.setAttribute("name", TimerAction.PROP_VARIABLE_NAME);
-        attribute.setAttribute("value", variableName);
-        actionElement.appendChild(attribute);
-
-        attribute = doc.createElement("lecm:attribute");
-        attribute.setAttribute("name", TimerAction.PROP_TIMER_DURATION);
-        attribute.setAttribute("value", "" + timerDuration);
-        actionElement.appendChild(attribute);
-
-        Element stopSubWorkflowsAttribute = createStopSubWorkflowsAttribute(status);
-        actionElement.appendChild(stopSubWorkflowsAttribute);
-
-        AssociationRef targetStatusRef = targetAssocs.get(0);
-        String target = "id" + targetStatusRef.getTargetRef().getId().replace("-", "");
-        List<Flow> flows = new ArrayList<Flow>();
-        flows.add(new Flow(statusVar, target, "${!empty " + variableName + " && " + variableName + "}"));
-
-        actionElement = doc.createElement("lecm:action");
-        actionElement.setAttribute("type", StatemachineEditorModel.ACTION_TIMER_ACTION);
-        end.appendChild(actionElement);
-
-        return flows;
     }
 
     private Boolean getStopSubWorkflowsProperty(NodeRef nodeRef) {
@@ -507,9 +462,55 @@ public class BPMNGenerator {
 			return Collections.EMPTY_LIST;
 		} else if (StatemachineEditorModel.ACTION_WAIT_FOR_DOCUMENT_CHANGE.equals(actionId)) {
 			return createWaitForDocumentChangeEvent(eventElement, statusVar, action, actionVar);
+		} else if (StatemachineEditorModel.ACTION_TIMER_ACTION.equals(actionId)) {
+			return createTimerEvent(eventElement, statusVar, action, actionVar);
 		}
 		return Collections.EMPTY_LIST;
 	}
+
+    //TODO: refactor - duplicated from createWaitForDocumentChangeEvent!!!
+    private List<Flow> createTimerEvent(Element eventElement, String statusVar, ChildAssociationRef action, String actionVar) {
+        NodeRef actions = action.getParentRef();
+        NodeRef status = nodeService.getPrimaryParent(actions).getParentRef();
+        int timerDuration = getTimerDuration(status);
+        if (timerDuration <= 0) {
+            return new ArrayList<Flow>();
+        }
+
+        List<Flow> flows = new ArrayList<Flow>();
+        Element actionElement = doc.createElement("lecm:action");
+        actionElement.setAttribute("type", StatemachineEditorModel.ACTION_TIMER_ACTION);
+        eventElement.appendChild(actionElement);
+
+        List<ChildAssociationRef> expressions = nodeService.getChildAssocs(action.getChildRef());
+        if (expressions.size() > 0) {
+            Element attribute = doc.createElement("lecm:attribute");
+            attribute.setAttribute("name", TimerAction.PROP_TIMER_DURATION);
+            attribute.setAttribute("value", "" + timerDuration);
+            actionElement.appendChild(attribute);
+
+            Element expressionsElement = doc.createElement("lecm:expressions");
+            expressionsElement.setAttribute("outputVariable", "var" + actionVar);
+            actionElement.appendChild(expressionsElement);
+
+            for (ChildAssociationRef expression : expressions) {
+                Element expressionElement = doc.createElement("lecm:expression");
+                String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_EXPRESSION);
+                expressionElement.setAttribute("expression", expressionValue);
+                AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS).get(0);
+                String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
+                expressionElement.setAttribute("outputValue", target);
+
+                Boolean stopSubWorkflows = getStopSubWorkflowsProperty(expression.getChildRef());
+                expressionElement.setAttribute(StateMachineAction.PROP_STOP_SUBWORKFLOWS, stopSubWorkflows.toString());
+
+                expressionsElement.appendChild(expressionElement);
+                String var = "var" + actionVar;
+                flows.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));
+            }
+        }
+        return flows;
+    }
 
     /*
         <lecm:action type="UserWorkflow" >

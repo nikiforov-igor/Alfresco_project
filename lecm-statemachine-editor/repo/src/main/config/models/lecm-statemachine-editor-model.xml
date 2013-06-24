@@ -210,6 +210,11 @@
                     <mandatory>false</mandatory>
                 </property>
 
+                <property name="lecm-stmeditor:startTimerAction">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+
             </properties>
 
             <mandatory-aspects>
@@ -318,6 +323,12 @@
 		<!-- Объект действие TransitionAction -->
 		<type name="lecm-stmeditor:TransitionAction">
 			<title>Logic ECM Statemachine UserWorkflow Action Object</title>
+			<parent>lecm-stmeditor:action</parent>
+		</type>
+
+		<!-- Объект действие TimerAction -->
+		<type name="lecm-stmeditor:TimerAction">
+			<title>Logic ECM Statemachine Timer Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
 		</type>
 

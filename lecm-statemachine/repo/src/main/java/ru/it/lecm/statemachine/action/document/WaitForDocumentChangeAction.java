@@ -20,13 +20,6 @@ public class WaitForDocumentChangeAction extends StateMachineAction {
 
 	private List<Expression> expressions = new ArrayList<Expression>();
 
-	private static final String TAG_EXPRESSIONS = "expressions";
-	private static final String TAG_EXPRESSION = "expression";
-
-	private static final String PROP_EXPRESSION = "expression";
-	private static final String PROP_OUTPUT_VARIABLE = "outputVariable";
-	private static final String PROP_OUTPUT_VALUE = "outputValue";
-
 	@Override
 	public void init(Element element, String processId) {
 		Element expressions = element.element(TAG_EXPRESSIONS);
@@ -100,5 +93,5 @@ public class WaitForDocumentChangeAction extends StateMachineAction {
         public boolean isStopSubWorkflows() {
             return stopSubWorkflows;
         }
-    }
+	}
 }
