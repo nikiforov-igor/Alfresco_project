@@ -52,4 +52,55 @@
             </form>
         </forms>
     </config>
+
+    <config evaluator="node-type" condition="lecm-rpeditor:reportTemplate">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportTemplateFile"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                    <field id="lecm-rpeditor:reportTemplateFile">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Шаблоны
+                            </control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-rpeditor:reportTemplate">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportTemplateFile"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                    <field id="lecm-rpeditor:reportTemplateFile">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Шаблоны
+                            </control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportTemplateFile"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

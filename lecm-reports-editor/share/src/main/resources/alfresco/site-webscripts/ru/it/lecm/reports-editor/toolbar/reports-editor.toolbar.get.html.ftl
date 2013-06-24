@@ -44,7 +44,7 @@ YAHOO.util.Event.onDOMReady(init);
     <div class="new-row">
     <span id="${id}-newReportButton" class="yui-button yui-push-button">
            <span class="first-child">
-              <button type="button" title="${createBtnLabel}">${createBtnLabel}</button>
+              <button type="button" title="${msg(createBtnLabel)}">${msg(createBtnLabel)}</button>
            </span>
     </span>
     </div>

@@ -39,7 +39,9 @@
                 <#if multiple>
                     multiple: true,
                 </#if>
-
+                <#if field.mandatory??>
+                    mandatory: ${field.mandatory?string},
+                </#if>
 				<#if field.control.params.uploadDirectoryPath??>
 					uploadDirectoryPath: "${field.control.params.uploadDirectoryPath}",
 				</#if>

@@ -47,7 +47,9 @@ LogicECM.control = LogicECM.control || {};
             /**
              * Загрузка нескольких файлов поочередно
              */
-            multiple: false
+            multiple: false,
+
+            mandatory: false
 		},
 
 		onReady: function () {

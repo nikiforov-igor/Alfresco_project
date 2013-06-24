@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Base Datagrid</shortname>
+    <description>Base Datagrid</description>
+    <url>/lecm/base/datagrid</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>
