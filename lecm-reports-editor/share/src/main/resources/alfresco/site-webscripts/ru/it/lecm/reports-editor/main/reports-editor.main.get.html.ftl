@@ -10,7 +10,6 @@
         <div class="yui-b" id="alf-content" style="margin-left: 0;">
             <@grid.datagrid id=id showViewForm=false>
                 <script type="text/javascript">//<![CDATA[
-                LogicECM.module.ReportsEditor.SETTINGS.DESTINATION
 
                 LogicECM.module.ReportsEditor.Grid = function (containerId) {
                     return LogicECM.module.ReportsEditor.Grid.superclass.constructor.call(this, containerId);

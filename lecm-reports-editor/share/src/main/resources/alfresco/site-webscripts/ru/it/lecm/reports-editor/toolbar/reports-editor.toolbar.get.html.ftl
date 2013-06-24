@@ -31,6 +31,9 @@
 function init() {
     new LogicECM.module.ReportsEditor.Toolbar("${id}").setMessages(${messages}).setOptions({
         bubblingLabel: "${args.bubblingLabel!'reports'}",
+        <#if newRowButtonType??>
+            newRowButtonType:"${newRowButtonType}"
+        </#if>
         newRowDialogTitle: "${newRowTitle}"
     });
 }
@@ -40,7 +43,7 @@ YAHOO.util.Event.onDOMReady(init);
 <@comp.baseToolbar id true showSearchControl exSearch>
     <#if showCreateButton>
     <div class="new-row">
-    <span id="${id}-newReportButton" class="yui-button yui-push-button">
+    <span id="${id}-newElementButton" class="yui-button yui-push-button">
            <span class="first-child">
               <button type="button" title="${msg(createBtnLabel)}">${msg(createBtnLabel)}</button>
            </span>

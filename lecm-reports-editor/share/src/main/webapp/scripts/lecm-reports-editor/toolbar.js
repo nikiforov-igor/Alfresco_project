@@ -28,7 +28,7 @@
             },
 
             _initButtons: function() {
-                this.toolbarButtons[this.options.newRowButtonType].newDocumentButton = Alfresco.util.createYUIButton(this, 'newReportButton', this.onNewRow,
+                this.toolbarButtons[this.options.newRowButtonType].newDocumentButton = Alfresco.util.createYUIButton(this, 'newElementButton', this.onNewRow,
                     {
                         disabled: this.options.newRowButtonType != 'defaultActive',
                         value: 'create'

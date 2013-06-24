@@ -211,6 +211,11 @@
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
+                <property name="lecm-rpeditor:dataColumnExpression">
+                    <title>Data Column Expression</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-rpeditor:columnTypeAssoc">

@@ -1,0 +1,21 @@
+/* Work groups */
+report-editor-sourcesList #alf-content .toolbar.datalist-toolbar {
+    margin: 0 -5px 0 -10px;
+}
+report-editor-sourcesList #alf-content .grid.yui-dt {
+    margin-left: -5px;
+}
+report-editor-sourcesList #alf-filters .grid.yui-dt {
+    margin: 0 5px;
+}
+report-editor-sourcesList #alf-content .toolbar.datalist-toolbar,
+report-editor-sourcesList #alf-filters .toolbar.datalist-toolbar {
+    overflow-x: hidden;
+}
+report-editor-sourcesList #alf-content .toolbar.datalist-toolbar .header-bar,
+report-editor-sourcesList #alf-filters .toolbar.datalist-toolbar .header-bar {
+    min-width: 400px;
+}
+report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
+    cursor: pointer;
+}

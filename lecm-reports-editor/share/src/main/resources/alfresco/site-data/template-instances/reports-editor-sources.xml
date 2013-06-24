@@ -12,14 +12,8 @@
         </component>
         <!-- Toolbar -->
         <component>
-            <region-id>toolbar</region-id>
-            <url>/lecm/reports-editor/toolbar</url>
-            <properties>
-                <itemType>lecm-rpeditor:reportDataSource</itemType>
-                <bubblingLabel>report-sources</bubblingLabel>
-                <showSearch>false</showSearch>
-                <showCreateBtn>false</showCreateBtn>
-            </properties>
+            <region-id>content</region-id>
+            <url>/lecm/reports-editor/sources</url>
         </component>
         <!-- Menu -->
         <component>
