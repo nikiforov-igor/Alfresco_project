@@ -285,7 +285,7 @@ LogicECM.module = LogicECM.module || {};
             containerDiv.innerHTML = form;
             this.dialog = Alfresco.util.createYUIPanel(Dom.getFirstChild(containerDiv),
                 {
-                    width: "30em"
+                    width: "35em"
                 });
             Dom.setStyle("confirm-edit-fields-form-container", "display", "block");
             this.dialog.show();
