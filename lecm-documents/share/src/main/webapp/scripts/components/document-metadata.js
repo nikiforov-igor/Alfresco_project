@@ -19,7 +19,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * YUI Library aliases
      */
     var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
+        Event = YAHOO.util.Event,
+        Bubbling = YAHOO.Bubbling;
+    var docMetaOpening = false;
 
     /**
      * DocumentHistory constructor.
@@ -71,6 +73,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     linkEl.onclick = this.onExpand.bind(this);
                 }
                 Alfresco.util.createTwister(this.id + "-heading", "DocumentMetadata");
+
+                // Во время закрытия диалогового окна сбрасываем параметр в false
+                Bubbling.on("formContainerDestroyed", function() {
+                    if (docMetaOpening) {
+                        docMetaOpening = false;
+                    }
+                });
             },
 
             onExpand: function () {
@@ -94,6 +103,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             onEdit: function (containerId, formId, moveStartPage) {
+                // Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку редактирования)
+                if (docMetaOpening) {
+                    return;
+                }
+                docMetaOpening = true;
                 if (formId != undefined || formId != null) {
                     this.options.formId = formId;
                 }
@@ -104,6 +118,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     this.options.moveStartPage = moveStartPage;
                 }
                 var templateUrl = this.generateCreateNewUrl(this.options.nodeRef, "NodeMetadata-" + this.id);
+
                 new Alfresco.module.SimpleDialog("documentMetadata-" + this.id + "_results").setOptions({
                     width: "70em",
                     templateUrl: templateUrl,
