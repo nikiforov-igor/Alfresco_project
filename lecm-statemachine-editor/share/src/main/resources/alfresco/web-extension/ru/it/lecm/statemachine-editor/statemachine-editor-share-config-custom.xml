@@ -1145,7 +1145,7 @@
                                             type: "datagrid-action-link-custom",
                                             id: "onVersionRestore",
                                             permission: "edit",
-                                            label: "Опубликовать версию"
+                                            label: "Сделать версию текущей"
                                         }
                             ]]>
                             </control-param>
