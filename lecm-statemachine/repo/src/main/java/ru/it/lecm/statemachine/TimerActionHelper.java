@@ -215,12 +215,12 @@ public class TimerActionHelper implements InitializingBean {
     private void restoreTimers() {
         List<NodeRef> timers = getTimers();
         for (NodeRef timer : timers) {
-            String timerExecutionId = (String) nodeService.getProperty(timer, StatemachineModel.PROP_EXECUTION_ID);
-            String timerTaskId = (String) nodeService.getProperty(timer, StatemachineModel.PROP_TASK_ID);
+            final String timerExecutionId = (String) nodeService.getProperty(timer, StatemachineModel.PROP_EXECUTION_ID);
+            final String timerTaskId = (String) nodeService.getProperty(timer, StatemachineModel.PROP_TASK_ID);
             long finishTimestamp = (Long) nodeService.getProperty(timer, StatemachineModel.PROP_FINISH_TIMESTAMP);
-            String variable = (String) nodeService.getProperty(timer, StatemachineModel.PROP_VARIABLE);
+            final String variable = (String) nodeService.getProperty(timer, StatemachineModel.PROP_VARIABLE);
 
-            List<TransitionExpression> transitionExpressions = new ArrayList<TransitionExpression>();
+            final List<TransitionExpression> transitionExpressions = new ArrayList<TransitionExpression>();
             List<ChildAssociationRef> expressionAssocs = nodeService.getChildAssocs(timer);
             for (ChildAssociationRef expressionAssoc : expressionAssocs) {
                 NodeRef expressionRef = expressionAssoc.getChildRef();
@@ -232,7 +232,20 @@ public class TimerActionHelper implements InitializingBean {
             }
 
             if (finishTimestamp < new Date().getTime()) {
-                nextTransition(timerExecutionId, timerTaskId, variable, transitionExpressions);
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                            @Override
+                            public Object doWork() throws Exception {
+                                nextTransition(timerExecutionId, timerTaskId, variable, transitionExpressions);
+                                return null;
+                            }
+                        });
+                    }
+                };
+
+                new Timer().schedule(timerTask, 300000);
             } else {
                 startTimer(timerExecutionId, timerTaskId, finishTimestamp, variable, transitionExpressions);
             }
