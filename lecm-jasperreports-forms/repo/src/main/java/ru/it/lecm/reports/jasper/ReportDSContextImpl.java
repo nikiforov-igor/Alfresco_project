@@ -166,7 +166,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 			logger.warn("(!) substitudeService is NULL -> fld values cannot be loaded");
 		}
 
-		return (String.class.equals(jrField.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
+		return (jrField != null && String.class.equals(jrField.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
 	}
 
 	/**
@@ -180,7 +180,18 @@ public class ReportDSContextImpl implements ReportDSContext {
 	 */
 	private class ProxySubstitudeBean implements SubstitudeBean {
 
-		static final String XSYNTAX_MARKER = "{{";
+		/**
+		 *  префикс расширенного синтаксиса
+		 *  предполагается что строка вся феликом будет окружена: "{{ ... }}"
+		 */
+		final public static String XSYNTAX_MARKER = "{{";
+
+		/**
+		 * префикс доп функции: сейчас используется пока только для @AUTHOR.REF
+		 */
+		final public static String PREFIX_XFUNC = "@";
+
+		final public static String AUTHORREF = AUTHOR + ".REF";
 
 		SubstitudeBean realBean; // имплементация нативного бина, который организует "хождение" по ссылкам
 
@@ -232,14 +243,36 @@ public class ReportDSContextImpl implements ReportDSContext {
 			return (fmt != null) && fmt.startsWith(XSYNTAX_MARKER);
 		}
 
+		@Override
+		public List<NodeRef> getObjectByPseudoProp(NodeRef object,
+				String psedudoProp) {
+			return (realBean == null) ? null : realBean.getObjectByPseudoProp(object, psedudoProp);
+		}
+
 		/**
-		 * Фнукция расширения
+		 * Функция расширенной обработки. Вызывается когда выражение начинается 
+		 * с двойной фигурной скобки. Здесь сейчас отрабатывает дополнительно
+		 * только @AUTHOR.REF, чтобы выполнить получение автора и применить к 
+		 * нему отсавшуюся часть выражения.
 		 * @param node
 		 * @param fmt
 		 * @return
 		 */
 		protected String extendedFormatNodeTitle(NodeRef node, String fmt) {
 			// TODO: here new features can be implemented
+			final String begAuthorRef = XSYNTAX_MARKER + PREFIX_XFUNC + AUTHORREF; // "{{@AUTHOR.REF"
+			if ( fmt != null && fmt.startsWith( begAuthorRef) ) {
+				// замена node на узел Автора 
+				final List<NodeRef> list = realBean.getObjectByPseudoProp(node, AUTHOR);
+				node = (list != null && !list.isEmpty()) ? list.get(0) : null;
+
+				// убираем из строки fmt одну пару скобок: {{@AUTHOR.REF/...}}  -> {...}
+				// можно скорректировать и сделать более точно: fmt = fmt.substring(1, 1+ fmt.indexOf("}}")) + ...;
+				int startPos = begAuthorRef.length();
+				if (fmt.charAt(startPos) == '/') startPos++; // если после "@AUTHOR.REF" есть символ '/' его тоже убираем
+				fmt = "{" + fmt.substring(startPos, fmt.length() - 1); // убираем в начале "{{@AUTHOR.REF/" и последюю скобку
+				return realBean.formatNodeTitle(node, fmt);
+			}
 			return fmt;
 		}
 

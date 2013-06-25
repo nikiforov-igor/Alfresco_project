@@ -24,13 +24,23 @@
 	<query_pgsize>-1</query_pgsize>
 
 	<fields.jasper>
-		<!-- Инициатор договора == Регистратор assoc "lecm-contract:registrator-assoc", target "lecm-orgstr:employee" -->
+		<!-- Регистратор assoc "lecm-contract:registrator-assoc", target "lecm-orgstr:employee" -->
+		<!--
 		<field jrFldName="col_Initiator.Family" queryFldName="{lecm-contract:registrator-assoc/lecm-orgstr:employee-last-name}" displayName="Инициатор.Фамилия" />
 		<field jrFldName="col_Initiator.Name" queryFldName="{lecm-contract:registrator-assoc/lecm-orgstr:employee-first-name}" displayName="Инициатор.Имя" />
 		<field jrFldName="col_Initiator.Otchestvo" queryFldName="{lecm-contract:registrator-assoc/lecm-orgstr:employee-middle-name}" displayName="Инициатор.Отчество" />
 		<field jrFldName="col_Initiator.Staff" queryFldName="{lecm-contract:registrator-assoc/lecm-representative:rank}" displayName="Инициатор.Должность" />
 		<field jrFldName="col_Initiator.OU" queryFldName="{lecm-contract:registrator-assoc/lecm-representative:rank}" displayName="Инициатор.Подразделение" />
 		<field jrFldName="col_Initiator.Phone" queryFldName="{lecm-contract:registrator-assoc/lecm-representative:rank}" displayName="Инициатор.Телефон" />
+		  -->
+
+		<!-- Инициатор договора == Автор "lecm-orgstr:employee" -->
+		<field jrFldName="col_Initiator.Family" queryFldName="{{@AUTHOR.REF/lecm-orgstr:employee-last-name}}" displayName="Инициатор.Фамилия" />
+		<field jrFldName="col_Initiator.Name" queryFldName="{{@AUTHOR.REF/lecm-orgstr:employee-first-name}}" displayName="Инициатор.Имя" />
+		<field jrFldName="col_Initiator.Otchestvo" queryFldName="{{@AUTHOR.REF/lecm-orgstr:employee-middle-name}}" displayName="Инициатор.Отчество" />
+		<field jrFldName="col_Initiator.Staff" queryFldName="{{@AUTHOR.REF/lecm-representative:rank}}" displayName="Инициатор.Должность" />
+		<field jrFldName="col_Initiator.OU" queryFldName="{{@AUTHOR.REF/lecm-representative:rank}}" displayName="Инициатор.Подразделение" />
+		<field jrFldName="col_Initiator.Phone" queryFldName="{{@AUTHOR.REF/lecm-representative:rank}}" displayName="Инициатор.Телефон" />
 
 		<!-- Статус -->
 		<field jrFldName="col_Status" queryFldName="lecm-statemachine:status" displayName="Статус" />

@@ -117,7 +117,8 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             wrapAsLink = true;
             field = field.substring(1);
         }
-        if(!field.startsWith(PSEUDO_PROPERTY_SYMBOL)) {
+        final boolean isPseudoProp = field.startsWith(PSEUDO_PROPERTY_SYMBOL);
+        if(!isPseudoProp) {
             if (field.contains(SPLIT_TRANSITIONS_SYMBOL)) {
                 int firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL);
                 transitions.add(field.substring(0, firstIndex));
@@ -215,11 +216,10 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         } else {
             fieldName = field;
             field = field.substring(1);
-            if (field.toUpperCase().equals(AUTHOR)) {
-                showNode = getDocumentAuthor(showNode);
-                if (showNode != null) {
-                    result = getObjectDescription(showNode);
-                }
+            final List<NodeRef> found = getObjectByPseudoProp(showNode, field);
+            showNode = (found != null && found.size() > 0) ? found.get(0) : null;
+            if (showNode != null) {
+            	result = getObjectDescription(showNode);
             }
         }
 
@@ -268,7 +268,28 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         return null;
     }
 
-    /**
+	/**
+	 * Получение псевдо свойста или выполнение встроенной функции
+	 * @param object исходный узел
+	 * @param psedudoProp мнемоника псевдо-свойства или функции (уже без всяких префиксных символов) 
+	 * @return список узлов после выполнения функции (псевдо-свойства)
+	 */
+	@Override
+	public List<NodeRef> getObjectByPseudoProp(NodeRef object, final String psedudoProp) {
+		if (psedudoProp == null)
+			return null;
+
+		final List<NodeRef> result = new ArrayList<NodeRef>();
+
+		if (AUTHOR.equalsIgnoreCase(psedudoProp)) {
+			final NodeRef auth = getDocumentAuthor(object);
+			if (auth != null)
+				result.add(auth);
+		} // NOTE: here other functions can be implemented
+		return result;
+	}
+
+	/**
 	 * Получение выражений из форматной строки
 	 *
 	 * @param str         форматная строка

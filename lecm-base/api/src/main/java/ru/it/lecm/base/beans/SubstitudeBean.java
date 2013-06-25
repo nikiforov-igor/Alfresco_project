@@ -52,28 +52,28 @@ public interface SubstitudeBean {
 	 */
 	final String CLOSE_SUBSTITUDE_SYMBOL = "}";
 
-    /**
-     * Символ обертки объекта в ссылку
-     */
-    final String WRAP_AS_LINK_SYMBOL = "!";
+	/**
+	 * Символ обертки объекта в ссылку
+	 */
+	final String WRAP_AS_LINK_SYMBOL = "!";
 
-    /**
-     * Символ, указывающий что далее следует псевдо-свойство
-     */
-    final String PSEUDO_PROPERTY_SYMBOL = "~";
+	/**
+	 * Символ, указывающий что далее следует псевдо-свойство
+	 */
+	final String PSEUDO_PROPERTY_SYMBOL = "~";
 
-    final String AUTHOR = "AUTHOR";
+	final String AUTHOR = "AUTHOR";
 
-    final String DEFAULT_OBJECT_TYPE_TEMPLATE = "{cm:name}";
-    final String DEFAULT_OBJECT_TYPE_LIST_TEMPLATE = "автор : {!~AUTHOR}, дата изменения: {cm:modified}";
+	final String DEFAULT_OBJECT_TYPE_TEMPLATE = "{cm:name}";
+	final String DEFAULT_OBJECT_TYPE_LIST_TEMPLATE = "автор : {!~AUTHOR}, дата изменения: {cm:modified}";
 
-    final String BJ_NAMESPACE_URI = "http://www.it.ru/logicECM/business-journal/1.0";
-    final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
+	final String BJ_NAMESPACE_URI = "http://www.it.ru/logicECM/business-journal/1.0";
+	final String ORGSTRUCTURE_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/1.0";
 
-    final QName PROP_OBJ_TYPE_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "objectType-template");
-    final QName PROP_OBJ_TYPE_LIST_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "objectType-list-template");
-    final QName PROP_OBJ_TYPE_CLASS = QName.createQName(BJ_NAMESPACE_URI, "objectType-class");
-    final QName ASSOC_EMPLOYEE_PERSON = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-person-assoc");
+	final QName PROP_OBJ_TYPE_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "objectType-template");
+	final QName PROP_OBJ_TYPE_LIST_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "objectType-list-template");
+	final QName PROP_OBJ_TYPE_CLASS = QName.createQName(BJ_NAMESPACE_URI, "objectType-class");
+	final QName ASSOC_EMPLOYEE_PERSON = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-person-assoc");
 
 	/**
 	 * Получение заголовка элемента в соответствии с форматной строкой.
@@ -87,11 +87,19 @@ public interface SubstitudeBean {
 
 	public String formatNodeTitle(NodeRef node, String formatString, String dateFormat, Integer timeZoneOffset);
 
-    public String getObjectDescription(NodeRef object);
+	public String getObjectDescription(NodeRef object);
 
-    public String getTemplateStringForObject(NodeRef object);
+	public String getTemplateStringForObject(NodeRef object);
 
-    public String getTemplateStringForObject(NodeRef object, boolean forList);
+	public String getTemplateStringForObject(NodeRef object, boolean forList);
 
-    public List<NodeRef> getObjectsByTitle(NodeRef object, String formatTitle);
+	public List<NodeRef> getObjectsByTitle(NodeRef object, String formatTitle);
+
+	/**
+	 * Получение псевдо свойста или выполнение встроенной функции
+	 * @param object исходный узел
+	 * @param psedudoProp мнемоника псевдо-свойства или функции (уже без всяких префиксных символов) 
+	 * @return список узлов после выполнения функции (псевдо-свойства)
+	 */
+	public List<NodeRef> getObjectByPseudoProp(NodeRef object, final String psedudoProp); 
 }
