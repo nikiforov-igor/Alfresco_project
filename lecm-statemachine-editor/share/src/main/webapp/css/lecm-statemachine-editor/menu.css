@@ -1,40 +1,45 @@
+#lecm-menu #menu-buttons-homeBtn span.first-child {
+    background: url('/share/res/images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
+}
+
+
 .statemachine-menu #menu-buttons-properties-menu-button span.first-child {
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
     background: url('/share/res/images/lecm-statemachine-editor/properties.png') no-repeat 4px 4px;
 }
 
 .statemachine-menu #menu-buttons-deploy-menu-button span.first-child {
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
 	background: url('/share/res/images/lecm-statemachine-editor/deploy.png') no-repeat 4px 4px;
 }
 
 .statemachine-menu #menu-buttons-versions-menu-button span.first-child {
-    width: 40px;
-    height: 40px;
-    background: url('/share/res/images/lecm-statemachine-editor/deploy.png') no-repeat 4px 4px;
+    width: 24px;
+    height: 24px;
+    background: url('/share/res/images/lecm-statemachine-editor/versions.png') no-repeat 4px 4px;
 }
 
 .statemachine-menu #menu-buttons-machine-export span.first-child {
-	background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
-    width: 40px;
-    height: 40px;
+	background: url('../../res/images/lecm-statemachine-editor/export.png') no-repeat 4px 4px;
+    width: 24px;
+    height: 24px;
 }
 
 .statemachine-menu #menu-buttons-machine-import span.first-child {
-    background: url('../../res/images/lecm-orgstructure/alf_orgstructure_podrazdel_32.png') no-repeat 4px 4px;
-    width: 40px;
-    height: 40px;
+    background: url('../../res/images/lecm-statemachine-editor/import.png') no-repeat 4px 4px;
+    width: 24px;
+    height: 24px;
 }
 
 .statatemachine-import-form {
     position: absolute;
     border: 1px solid black;
     opacity: 0;
-    width: 40px;
-    height: 40px;
-    margin: -42px 0 0 508px;
+    width: 24px;
+    height: 24px;
+    margin: -26px 0 0 466px;
 }
 
 .statatemachine-menu-spin {
@@ -42,9 +47,16 @@
     width: 300px;
 }
 
+.statatemachine-menu-spin1 {
+    display: inline-block;
+    width: 18px;
+}
+
+
 .statatemachine-import-input {
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
 }
 
 .statemachine-status-title {

@@ -64,6 +64,12 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
                 window.location.href = url + (type != null && type != '' ? type : "StatemachineEditor");
             }
 
+            //Home
+            var onClickHomeMenuButton = function(e) {
+                document.location.href = Alfresco.constants.URL_CONTEXT + "page/statemachine";
+            }
+            Alfresco.util.createYUIButton(this, "homeBtn", onClickHomeMenuButton, {});
+
             var propertiesMenu = new YAHOO.widget.Menu("propertiesMenu");
 
             propertiesMenu.addItems([

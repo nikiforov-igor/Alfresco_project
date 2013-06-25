@@ -34,7 +34,7 @@
 	        </span>
 	    </span>
 </span>
-
+<div class="statatemachine-menu-spin1">&nbsp;</div>
 <span class="statemachine-menu">
 		<span id="menu-buttons-machine-export" class="yui-button yui-push-button">
 	        <span class="first-child">
@@ -51,7 +51,7 @@
     </span>
     <form method="post" id="menu-buttons-import-xml-form" enctype="multipart/form-data"
           action="${url.context}/proxy/alfresco/lecm/statemachine/editor/import" class="statatemachine-import-form">
-        <input type="file" id="menu-buttons-import-xml-input" name="f" accept=".xml,application/xml,text/xml" class="statatemachine-import-input">
+        <input type="file" id="menu-buttons-import-xml-input" name="f" accept=".xml,application/xml,text/xml" class="statatemachine-import-input" title="${msg('button.import-xml')}">
         <input type="hidden" id="menu-buttons-stateMachineId-input" name="stateMachineId" value="${page.url.args.statemachineId}">
     </form>
 </span>
@@ -68,7 +68,7 @@
 <hr/>
 <table cellpadding="0" cellspacing="2" style="margin-bottom: 5px">
     <tr>
-        <td><h3>Статусы</h3></td>
+        <td style="padding-right: 26px;"><h3>Статусы</h3></td>
         <td>
             <span class="statemachine-menu">
                 <span id="menu-buttons-new-status-menu-button" class="yui-button yui-push-button">
