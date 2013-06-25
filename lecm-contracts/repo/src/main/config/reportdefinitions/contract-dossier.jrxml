@@ -144,11 +144,11 @@
 						<font fontName="DejaVu Sans Mono" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_Initiator.Family} == null) ? "" : $F{col_Initiator.Family})
-+ (($F{col_Initiator.Name} == null) ? "" : "."+ ($F{col_Initiator.Name}+ " ").substring(0,1) )
-+ (($F{col_Initiator.Otchestvo} == null) ? "" : "."+ ($F{col_Initiator.Otchestvo}+ " ").substring(0,1) )
++ " "
++ (($F{col_Initiator.Name} == null) ? "" : ($F{col_Initiator.Name}+ " ").substring(0,1) + "." )
++ (($F{col_Initiator.Otchestvo} == null) ? "" : ($F{col_Initiator.Otchestvo}+ " ").substring(0,1)+ "." )
 + (($F{col_Initiator.Staff} == null) ? "" : ", " + $F{col_Initiator.Staff})
-+ (($F{col_Initiator.Phone} == null) ? "" : "тел. "+ $F{col_Initiator.Phone})
-]]></textFieldExpression>
++ (($F{col_Initiator.Phone} == null) ? "" : "тел. "+ $F{col_Initiator.Phone})]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="7bb365d6-f832-4ff0-91eb-ba8eee154d6d" x="5" y="4" width="245" height="20"/>
