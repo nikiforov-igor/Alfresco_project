@@ -166,41 +166,46 @@ LogicECM.module.WCalendar.Schedule.drawPicker = function Schedule_DrawPicker(ins
 }
 
 LogicECM.module.WCalendar.Schedule.pickerOKPressed = function Schedule_PickerOKPressed(layer, args) {
-	var scope = this;
-	var picker = args[1];
-	var selectedItems = picker.getSelectedItems();
-	var nodeRefObj = {nodeRef: selectedItems[0]};
+	var scope = this,
+		picker = args[1],
+		htmlNode = Dom.get("${controlTimeField}"),
+		selectedItems = picker.getSelectedItems();
 
-	Alfresco.util.Ajax.request({
-		method: "POST",
-		url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/schedule/get/parentScheduleStdTime",
-		dataObj: nodeRefObj,
-		requestContentType: "application/json",
-		responseContentType: "application/json",
-		successCallback: {
-			fn: function (response) {
-				var result = response.json;
-				var htmlOutput = "${msg("label.schedule.picker.parent-schedule")}:<br>";
-				if (result != null) {
-					if (result) {
-						if (result.type == "COMMON") {
-							htmlOutput += "c " + result.begin + " до " + result.end + "<br>";
-						} else if (result.type == "SPECIAL") {
-							htmlOutput += "особый<br>";
-						} else {
-							htmlOutput += "отсутствует<br>";
+	if (htmlNode) {
+		htmlNode.innerHTML = "";
+	}
+
+	if (selectedItems.length > 0) {
+		Alfresco.util.Ajax.request({
+			method: "POST",
+			url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/schedule/get/parentScheduleStdTime",
+			dataObj: { nodeRef: selectedItems[0] },
+			requestContentType: "application/json",
+			responseContentType: "application/json",
+			successCallback: {
+				fn: function (response) {
+					var result = response.json;
+					var htmlOutput = "${msg("label.schedule.picker.parent-schedule")}:<br>";
+					if (result != null) {
+						if (result) {
+							if (result.type == "COMMON") {
+								htmlOutput += "c " + result.begin + " до " + result.end + "<br>";
+							} else if (result.type == "SPECIAL") {
+								htmlOutput += "особый<br>";
+							} else {
+								htmlOutput += "отсутствует<br>";
+							}
+						}
+						var htmlNode = Dom.get("${controlTimeField}");
+						if (htmlNode) {
+							htmlNode.innerHTML = htmlOutput;
 						}
 					}
-					var htmlNode = Dom.get("${controlTimeField}");
-					if (htmlNode) {
-						htmlNode.innerHTML = "";
-						htmlNode.innerHTML = htmlOutput;
-					}
-				}
-			},
-			scope: this
-		}
-	});
+				},
+				scope: this
+			}
+		});
+	}
 }
 
 YAHOO.Bubbling.on("${controlPickerLabel}", LogicECM.module.WCalendar.Schedule.pickerOKPressed, this);
