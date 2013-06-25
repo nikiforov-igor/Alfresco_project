@@ -80,6 +80,8 @@ public class TimerActionHelper implements InitializingBean {
 
         startTimer(stateMachineExecutionId, stateMachineTaskId, finishTimestamp, variable, expressions);
         addTimerNode(stateMachineExecutionId, stateMachineTaskId, finishTimestamp, variable, expressions);
+
+        setOutputVarable(stateMachineExecutionId, variable, "");
     }
 
     public void removeTimerNode(String stateMachineExecutionId) {
@@ -169,9 +171,8 @@ public class TimerActionHelper implements InitializingBean {
             stateMachineHelper.stopDocumentSubWorkflows(statemachineId);
         }
 
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put(variable, expression.getOutputValue());
-        stateMachineHelper.setExecutionParamentersByTaskId(stateMachineTaskId, parameters);
+        setOutputVarable(stateMachineExecutionId, variable, expression.getOutputValue());
+
         stateMachineHelper.nextTransition(providePrefix(stateMachineTaskId));
     }
 
@@ -287,6 +288,12 @@ public class TimerActionHelper implements InitializingBean {
 
     private NodeRef getTimerFolderRef() {
         return nodeService.getChildByName(repositoryStructureHelper.getHomeRef(), ContentModel.ASSOC_CONTAINS, TIMER_FOLDER_NAME);
+    }
+
+    private void setOutputVarable(String stateMachineExecutionId, String variable, String value) {
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put(variable, value);
+        new StateMachineHelper().setExecutionParameters(stateMachineExecutionId, parameters);
     }
 
     private long calculateFinishTimestamp(int timerDuration) {
