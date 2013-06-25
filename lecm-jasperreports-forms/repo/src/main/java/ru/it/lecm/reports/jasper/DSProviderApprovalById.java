@@ -55,8 +55,8 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 		@Override
 		protected AlfrescoJRDataSource newJRDataSource( Iterator<ResultSetRow> iterator) {
 			final ApprovalItemsDS result = new ApprovalItemsDS(iterator);
-			result.context.setSubstitudeService(substitudeService);
-			result.context.setRegistryService(serviceRegistry);
+			result.context.setSubstitudeService(getServices().getSubstitudeService());
+			result.context.setRegistryService(getServices().getServiceRegistry());
 			result.context.setJrSimpleProps(jrSimpleProps);
 			if (conf() != null)
 				result.context.setMetaFields(conf().getMetaFields());
@@ -206,8 +206,8 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 
 				if (context.getRsIter() != null) {
 
-					final NodeService nodeSrv = serviceRegistry.getNodeService();
-					final NamespaceService ns = serviceRegistry.getNamespaceService();
+					final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
+					final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
 
 					final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
@@ -244,11 +244,11 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 							// Исполнитель:
 							final String loginCreator = Utils.coalesce( docProps.get(approveQNames.QFLD_CREATOR), null);
 							if (loginCreator != null) { // получение Исполнителя по его login
-								final NodeRef person = getServiceRegistry().getPersonService().getPerson(loginCreator);
+								final NodeRef person = getServices().getServiceRegistry().getPersonService().getPerson(loginCreator);
 								if (person != null) {
-									final NodeRef executorEmplId = getOrgstructureService().getEmployeeByPerson(person);
+									final NodeRef executorEmplId = getServices().getOrgstructureService().getEmployeeByPerson(person);
 									docInfo.docExecutor = new BasicEmployeeInfo(executorEmplId);
-									docInfo.docExecutor.loadProps(nodeSrv, getOrgstructureService());
+									docInfo.docExecutor.loadProps(nodeSrv, getServices().getOrgstructureService());
 								}
 							}
 						}
@@ -277,7 +277,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 							final NodeRef emplyeeId = employees.get(0).getTargetRef();
 							final ApprovalInfo apprInfo = new ApprovalInfo(emplyeeId, docInfo);
 
-							apprInfo.loadProps(nodeSrv, getOrgstructureService());
+							apprInfo.loadProps(nodeSrv, getServices().getOrgstructureService());
 
 							// <!-- дата фактического Согласования Сотрудником -->
 							apprInfo.approvedAt = (Date) childProps.get(approveQNames.QFLD_USER_APPROVED);

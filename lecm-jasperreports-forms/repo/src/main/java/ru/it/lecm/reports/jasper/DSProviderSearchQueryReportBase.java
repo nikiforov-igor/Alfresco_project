@@ -22,11 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.forms.jasperforms.AbstractDataSourceProvider;
-import ru.it.lecm.reports.api.JRXField;
+import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.xml.DSXMLProducer;
 
 /**
  * Реализация провайдера с поддержкой lucene-поиска по критериям:
@@ -124,9 +125,12 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 	 * @param defaults
 	 */
 	protected void setXMLDefaults(Map<String, Object> defaults) {
-		defaults.put( XML_OFFSET, null);
-		defaults.put( XML_LIMIT, null);
-		// defaults.put( XML_PGSIZE, null);
+		// "query"-section
+		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_OFFSET, null);
+		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_LIMIT, null);
+		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_PGSIZE, null);
+		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_TEXT, null);
+		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_ALLVERSIONS, null);
 	}
 
 	@Override
@@ -158,8 +162,8 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 
 		// Create a new data source
 		final AlfrescoJRDataSource dataSource = newJRDataSource(alfrescoResult.iterator());
-		dataSource.context.setSubstitudeService(substitudeService);
-		dataSource.context.setRegistryService(serviceRegistry);
+		dataSource.context.setSubstitudeService(getServices().getSubstitudeService());
+		dataSource.context.setRegistryService(getServices().getServiceRegistry());
 		dataSource.context.setJrSimpleProps(jrSimpleProps);
 		dataSource.context.setMetaFields(conf().getMetaFields());
 
@@ -228,7 +232,7 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 
 		if (getPreferedType() != null) {
 			hasData = true;
-			final QName qTYPE = QName.createQName( getPreferedType(), this.serviceRegistry.getNamespaceService());
+			final QName qTYPE = QName.createQName( getPreferedType(), this.getServices().getServiceRegistry().getNamespaceService());
 			bquery.append( "TYPE:"+ quoted(qTYPE.toString()));
 		}
 
@@ -247,11 +251,11 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 	protected void scanSimpleFieldsInMetaConf() {
 		jrSimpleProps = null; // no filter = all fields
 		if (conf() != null) { // вносим только поля Альфреско (которые отличаются от jr-полей)
-			final Map<String, JRXField> meta = conf().getMetaFields(); //
+			final Map<String, DataFieldColumn> meta = conf().getMetaFields(); //
 			if (meta != null && !meta.isEmpty()) {
 				jrSimpleProps = new HashSet<String>();
-				final NamespaceService ns = serviceRegistry.getNamespaceService();
-				for (JRXField fld: meta.values()) {
+				final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
+				for (DataFieldColumn fld: meta.values()) {
 					if (ReportDSContextImpl.isCalcField(fld.getValueLink())) { // пропускаем вычисляемые значения ... 
 						continue;
 					}
@@ -294,7 +298,7 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 			search.setMaxItems(maxItems);
 
 		if (queryText != null && queryText.length() > 0) { // (!) момент истины ЗАПРОСА
-			alfrescoResult = serviceRegistry.getSearchService().query(search);
+			alfrescoResult = getServices().getServiceRegistry().getSearchService().query(search);
 		}
 
 		final int foundCount = (alfrescoResult != null && alfrescoResult.hasMore()) ? alfrescoResult.length() : -1;

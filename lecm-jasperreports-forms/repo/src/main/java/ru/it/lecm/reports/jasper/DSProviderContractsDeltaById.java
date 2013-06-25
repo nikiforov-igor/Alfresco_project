@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
 
 import ru.it.lecm.documents.beans.DocumentConnectionService;
-import ru.it.lecm.reports.api.JRXField;
+import ru.it.lecm.reports.api.DataFieldColumn;
 
 /**
  * Провайдер для построения отчёта "Опись изменений к договору"
@@ -34,11 +34,11 @@ public class DSProviderContractsDeltaById
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource(
 			Iterator<ResultSetRow> iterator) {
-		ParameterCheck.mandatory("documentConnectionService", documentConnectionService);
+		ParameterCheck.mandatory("documentConnectionService", getServices().getDocumentConnectionService());
 
 		final LinkedDocumentsDS result = new LinkedDocumentsDS(iterator);
-		result.context.setSubstitudeService(substitudeService);
-		result.context.setRegistryService(serviceRegistry);
+		result.context.setSubstitudeService(getServices().getSubstitudeService());
+		result.context.setRegistryService(getServices().getServiceRegistry());
 		result.context.setJrSimpleProps(jrSimpleProps);
 		result.context.setMetaFields(conf().getMetaFields());
 		result.buildJoin();
@@ -187,13 +187,13 @@ public class DSProviderContractsDeltaById
 		 *		final NodeRef atype = srv.getTargetAssocs(connector, DocumentConnectionService.ASSOC_CONNECTION_TYPE).get(0).getTargetRef();
 		 */
 		private List<NodeRef> findSystemConnections(NodeRef docId) {
-			final NodeService srv = getServiceRegistry().getNodeService();
+			final NodeService srv = getServices().getServiceRegistry().getNodeService();
 
 			/* получение списка Связей службой документальных связей ... */ 
 			// final List<NodeRef> connectionsList = documentConnectionService.getConnectionsWithDocument(docId);
-			final NodeRef linksRef = documentConnectionService.getRootFolder(docId); // получить ссылку на "Связи"
+			final NodeRef linksRef = getServices().getDocumentConnectionService().getRootFolder(docId); // получить ссылку на "Связи"
 
-			final QName qnConnection = QName.createQName("lecm-connect:connection", getServiceRegistry().getNamespaceService());
+			final QName qnConnection = QName.createQName("lecm-connect:connection", getServices().getServiceRegistry().getNamespaceService());
 			final List<ChildAssociationRef> connectionsList = srv.getChildAssocs(linksRef, new HashSet<QName>( Arrays.asList( qnConnection)));
 			if (connectionsList == null)
 				return null;
@@ -221,22 +221,22 @@ public class DSProviderContractsDeltaById
 				return;
 
 			/* читаем свойства документа целиком */
-			final Map<QName, Serializable> props = getServiceRegistry().getNodeService().getProperties(docInfo.nodeRef);
+			final Map<QName, Serializable> props = getServices().getServiceRegistry().getNodeService().getProperties(docInfo.nodeRef);
 
 			/* проходим по всем сконфигурированным свойствам, выбираем нужные */
 			if (props == null)
 				return;
 
-			final NamespaceService ns = getServiceRegistry().getNamespaceService();
-			for(Map.Entry<String, JRXField> e: conf().getMetaFields().entrySet()) {
-				final JRXField fld = e.getValue();
+			final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
+			for(Map.Entry<String, DataFieldColumn> e: conf().getMetaFields().entrySet()) {
+				final DataFieldColumn fld = e.getValue();
 				final boolean hasInMainDoc = fld.hasXAttributes() && fld.getAttributes().containsKey("inMainDoc");
 				if ( hasInMainDoc == isInMainDoc) {
 					final String link = fld.getValueLink();
 					// данные получаем либо непосредственно из атрибутов, либо по ссылкам
 					@SuppressWarnings("static-access")
 					final Serializable value = (context.isCalcField(link))
-								? /* по ссылке */ getSubstitudeService().formatNodeTitle(docInfo.nodeRef, link)
+								? /* по ссылке */ getServices().getSubstitudeService().formatNodeTitle(docInfo.nodeRef, link)
 								: props.get( QName.createQName( link, ns) );
 					docInfo.props.put( fld.getName(), value);
 				}
@@ -249,8 +249,8 @@ public class DSProviderContractsDeltaById
 			final Map<String, Serializable> result = new HashMap<String, Serializable>();
 
 			// DONE: move the data from main & linked documents ...
-			for(Map.Entry<String, JRXField> e: conf().getMetaFields().entrySet()) {
-				final JRXField fld = e.getValue();
+			for(Map.Entry<String, DataFieldColumn> e: conf().getMetaFields().entrySet()) {
+				final DataFieldColumn fld = e.getValue();
 				final String reportColName = fld.getName();
 				if (item.docInfo.props.containsKey(reportColName))
 					result.put( reportColName, item.docInfo.props.get(reportColName));

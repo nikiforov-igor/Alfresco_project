@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.engine.JRField;
-
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -16,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.AssocDataFilter;
-import ru.it.lecm.reports.api.JRXField;
+import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.ReportDSContext;
 
 public class ReportDSContextImpl implements ReportDSContext {
@@ -27,7 +25,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 	final private ProxySubstitudeBean substitudeService = new ProxySubstitudeBean();
 
 	private AssocDataFilter filter; // может быть NULL
-	private Map<String, JRXField> metaFields; // ключ = имя колонки данных в jasper
+	private Map<String, DataFieldColumn> metaFields; // ключ = имя колонки данных в jasper
 
 	// список отобранных для Jasper атрибутов Альфреско для активной строки набора данных
 	// ключ = QName.toString() с короткими именами типов (т.е. вида "cm:folder" или "lecm-contract:document")
@@ -96,11 +94,11 @@ public class ReportDSContextImpl implements ReportDSContext {
 	}
 
 	@Override
-	public Map<String, JRXField> getMetaFields() {
+	public Map<String, DataFieldColumn> getMetaFields() {
 		return metaFields;
 	}
 
-	public void setMetaFields(Map<String, JRXField> metaFields) {
+	public void setMetaFields(Map<String, DataFieldColumn> metaFields) {
 		this.metaFields = metaFields;
 	}
 
@@ -141,13 +139,17 @@ public class ReportDSContextImpl implements ReportDSContext {
 	}
 
 	@Override
-	public Object getPropertyValueByJRField(JRField jrField) {
-		if (jrField== null)
+	public Object getPropertyValueByJRField(String reportColumnName) {
+		if ( reportColumnName == null)
 			return null;
 
 		// получаем нативное название данных
-		final JRXField fld = metaFields.get( jrField.getName());
-		final String fldAlfName = (fld != null && fld.getValueLink() != null) ? fld.getValueLink() : jrField.getName();
+		final DataFieldColumn fld = metaFields.get(reportColumnName);
+		final String fldAlfName = (fld != null && fld.getValueLink() != null)
+						? fld.getValueLink()
+						: reportColumnName;
+
+		/* если название имеется среди готовых свойств (прогруженных или вычисленных заранее) ... */ 
 		if (curProps != null) {
 			if (curProps.containsKey(fldAlfName))
 				return curProps.get(fldAlfName);
@@ -166,7 +168,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 			logger.warn("(!) substitudeService is NULL -> fld values cannot be loaded");
 		}
 
-		return (jrField != null && String.class.equals(jrField.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
+		return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
 	}
 
 	/**
@@ -258,20 +260,22 @@ public class ReportDSContextImpl implements ReportDSContext {
 		 * @param fmt
 		 * @return
 		 */
-		protected String extendedFormatNodeTitle(NodeRef node, String fmt) {
-			// TODO: here new features can be implemented
+		protected String extendedFormatNodeTitle(final NodeRef node, final String fmt) {
+			// NOTE: here new features can be implemented
 			final String begAuthorRef = XSYNTAX_MARKER + PREFIX_XFUNC + AUTHORREF; // "{{@AUTHOR.REF"
 			if ( fmt != null && fmt.startsWith( begAuthorRef) ) {
 				// замена node на узел Автора 
 				final List<NodeRef> list = realBean.getObjectByPseudoProp(node, AUTHOR);
-				node = (list != null && !list.isEmpty()) ? list.get(0) : null;
+				final NodeRef authNode = (list != null && !list.isEmpty()) ? list.get(0) : null;
 
 				// убираем из строки fmt одну пару скобок: {{@AUTHOR.REF/...}}  -> {...}
-				// можно скорректировать и сделать более точно: fmt = fmt.substring(1, 1+ fmt.indexOf("}}")) + ...;
+				// скорректировать и сделать более точно можно при условии скана ВСЕХ вхождений @XXX:
+				// while (...) {fmt = fmt.substring(1, 1+ fmt.indexOf("}}")) + ...; ...}
 				int startPos = begAuthorRef.length();
 				if (fmt.charAt(startPos) == '/') startPos++; // если после "@AUTHOR.REF" есть символ '/' его тоже убираем
-				fmt = "{" + fmt.substring(startPos, fmt.length() - 1); // убираем в начале "{{@AUTHOR.REF/" и последюю скобку
-				return realBean.formatNodeTitle(node, fmt);
+				// убираем в начале "{{@AUTHOR.REF/" и последюю скобку ...
+				final String shortFmt = "{" + fmt.substring(startPos, fmt.length() - 1);
+				return realBean.formatNodeTitle(authNode, shortFmt);
 			}
 			return fmt;
 		}

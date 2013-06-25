@@ -8,7 +8,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
-import ru.it.lecm.reports.api.JRXField;
+import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.jasper.utils.MacrosHelper;
 
 /**
@@ -23,7 +23,7 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 	// private Map<String, Object> defaults;
 
 	// мапер имя поля в jrxml -> описание поля
-	private Map<String, JRXField> metaFields;
+	private Map<String, DataFieldColumn> metaFields;
 
 	public void clear() {
 		this.args = null;
@@ -35,26 +35,26 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 	 * @param jrFldName
 	 * @return
 	 */
-	public JRXField addField(String jrFldName) {
-		JRXField result =  (this.getArgMetaFeilds().contains(jrFldName))
+	public DataFieldColumn addField(String jrFldName) {
+		DataFieldColumn result =  (this.getArgMetaFeilds().contains(jrFldName))
 					? this.getMetaFields().get(jrFldName) : null;
 		if (result == null) {
-			result = new JRXField();
+			result = new DataFieldColumn();
 			result.setName(jrFldName);
 			this.getMetaFields().put( jrFldName, result);
 		}
 		return result;
 	}
 
-	public Map<String, JRXField> getMetaFields() {
+	public Map<String, DataFieldColumn> getMetaFields() {
 		if (metaFields == null)
-			metaFields = new HashMap<String, JRXField>();
+			metaFields = new HashMap<String, DataFieldColumn>();
 		return metaFields;
 	}
 
 	@Override
 	public List<? extends JRField> getArgMetaFeilds() {
-		return new ArrayList<JRXField>(getMetaFields().values());
+		return new ArrayList<DataFieldColumn>(getMetaFields().values());
 	}
 
 	@Override

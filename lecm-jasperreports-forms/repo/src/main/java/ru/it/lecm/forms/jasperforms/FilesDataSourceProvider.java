@@ -14,11 +14,12 @@ import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.ListOfArrayDataSource;
 
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+
+import ru.it.lecm.reports.beans.WKServiceKeeper;
 
 /**
  * User: AZinovin
@@ -43,8 +44,8 @@ public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 		super();
 	}
 
-	public FilesDataSourceProvider(ServiceRegistry serviceRegistry) {
-		super(serviceRegistry);
+	public FilesDataSourceProvider(WKServiceKeeper services) {
+		super(services);
 	}
 
 	/**
@@ -128,7 +129,7 @@ public class FilesDataSourceProvider extends AbstractDataSourceProvider {
 		for (String nodeRefStr : this.nodeRefs) {
 			nodeRefs.addAll(NodeRef.getNodeRefs(nodeRefStr));
 		}
-		final FileFolderService fileFolderService = serviceRegistry.getFileFolderService();
+		final FileFolderService fileFolderService = getServices().getServiceRegistry().getFileFolderService();
 		List<FileInfo> fileInfos = new ArrayList<FileInfo>();
 
 		if (nodeRefs.size() == 1) {

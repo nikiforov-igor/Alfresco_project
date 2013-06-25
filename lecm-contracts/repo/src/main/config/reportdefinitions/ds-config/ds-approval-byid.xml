@@ -67,19 +67,31 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				вниз по <association name="lecm-al:approval-item-employee-assoc">
 				на <target>
   -->
-<cmis-ds.config>
+<ds.config>
 
-	<query_offset>0</query_offset>
-	<query_limit>-1</query_limit>
-	<query_pgsize>-1</query_pgsize>
+	<query.descriptor>
+		<offset>0</offset>
+		<limit>-1</limit>
+		<pgsize>-1</pgsize>
+		<allVersions>true</allVersions>
+		<!--
+			select * from lecm:documents
+		  -->
+		<queryText>
+			<![CDATA[
+				select * from lecm-al:approval-list as approvals
+			]]>
+		</queryText>
+	</query.descriptor>
 
-	<query>
-		<![CDATA[
-			select * from lecm-al:approval-list as approvals
-		]]>
-	</query>
+	<cmis.connection>
+		<url>http://localhost:8080/alfresco/service/cmis</url>
+		<username>admin</username>
+		<password>111</password>
+	</cmis.connection>
 
-	<fields.jasper>
+
+	<fields>
 
 		<!-- "lecm-contract:document": Регистрационный номер проекта договора-->
 		<field queryFldName="{lecm-contract:regNumProject}"
@@ -180,11 +192,6 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				jrFldName="col_Item.Employee.Unit.Name"
 				displayName="Отдел Согласующего.Наименование" />
 
-	</fields.jasper>
+	</fields>
 
-	<url>http://localhost:8080/alfresco/service/cmis</url>
-	<username>admin</username>
-	<password>qwe123</password>
-	<allVersions>true</allVersions>
-
-</cmis-ds.config>
+</ds.config>

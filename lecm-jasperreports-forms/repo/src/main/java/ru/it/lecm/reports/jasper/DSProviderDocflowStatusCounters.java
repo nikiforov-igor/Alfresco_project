@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
+import ru.it.lecm.reports.jasper.utils.ArgsHelper;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
 /**
@@ -165,9 +166,9 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 			if (!hasAny) // в фильтре ничего не задачно -> любые данные подойдут
 				return null;
 
-			final AssocDataFilterImpl result = new AssocDataFilterImpl( serviceRegistry);
+			final AssocDataFilterImpl result = new AssocDataFilterImpl( getServices().getServiceRegistry());
 
-			final NamespaceService ns = serviceRegistry.getNamespaceService();
+			final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
 
 			if (hasType) {
 				final QName qnCType = QName.createQName( "lecm-contract-dic:contract-type", ns); // Вид договора 
@@ -326,7 +327,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 		 */
 		if (filter.author != null) {
 			// cm:creator
-			final String login = super.orgstructureService.getEmployeeLogin(filter.author);
+			final String login = getServices().getOrgstructureService().getEmployeeLogin(filter.author);
 			bquery.append( " AND @cm\\:creator:\"" + login + "\"");
 		}
 
@@ -336,8 +337,8 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
 		final DocflowJRDataSource result = new DocflowJRDataSource(iterator);
-		result.context.setSubstitudeService(substitudeService);
-		result.context.setRegistryService(serviceRegistry);
+		result.context.setSubstitudeService(getServices().getSubstitudeService());
+		result.context.setRegistryService(getServices().getServiceRegistry());
 		result.context.setJrSimpleProps(jrSimpleProps);
 		result.context.setMetaFields(conf().getMetaFields());
 		if (filter != null)
@@ -521,11 +522,11 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 
 			if (context.getRsIter() != null) {
 
-				final NodeService nodeSrv = serviceRegistry.getNodeService();
+				final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
 //				final NamespaceService ns = serviceRegistry.getNamespaceService();
 //				final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
-				final QName status = QName.createQName( getStatusAttrName(), serviceRegistry.getNamespaceService());
+				final QName status = QName.createQName( getStatusAttrName(), getServices().getServiceRegistry().getNamespaceService());
 
 				while(context.getRsIter().hasNext()) {
 					final ResultSetRow rs = context.getRsIter().next();
@@ -537,7 +538,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 					}
 
 					/* Название ... */
-					final String docTag = substitudeService.formatNodeTitle(docId, fmtForTag);
+					final String docTag = getServices().getSubstitudeService().formatNodeTitle(docId, fmtForTag);
 
 					/* Статус */
 					final String statusName = (String) nodeSrv.getProperty(docId, status);

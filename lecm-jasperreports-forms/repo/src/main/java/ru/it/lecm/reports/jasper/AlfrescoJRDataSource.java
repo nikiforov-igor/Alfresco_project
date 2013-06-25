@@ -16,7 +16,7 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.it.lecm.reports.api.JRXField;
+import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
 
@@ -78,7 +78,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 
 	@Override
 	public Object getFieldValue(JRField jrf) throws JRException {
-		return context.getPropertyValueByJRField(jrf);
+		return context.getPropertyValueByJRField(jrf.getName());
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 * @return
 	 */
 	protected String getAlfAttrNameByJRKey(String jrFldName) {
-		final JRXField fld = (context != null) && context.getMetaFields().containsKey(jrFldName) 
+		final DataFieldColumn fld = (context != null) && context.getMetaFields().containsKey(jrFldName) 
 						? context.getMetaFields().get(jrFldName) 
 						: null;
 		return (fld != null) && (fld.getValueLink() != null)

@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.alfresco.service.namespace.QName;
 
-import ru.it.lecm.reports.jasper.ArgsHelper;
 
 public class Utils {
 
@@ -59,6 +58,16 @@ public class Utils {
 				}
 			}
 		return null; // all vales are null
+	}
+
+	/**
+	 * null-safe проверка объектов на равенство, при этом принимается null == null.
+	 * @param a
+	 * @param b
+	 * @return true если объекты равны или оба одновременно null, иначе false
+	 */
+	public static boolean isSafelyEquals(Object a, Object b) {
+		return (a == b) ? true : ((a == null) ? (b == null) : a.equals(b));
 	}
 
 	/**

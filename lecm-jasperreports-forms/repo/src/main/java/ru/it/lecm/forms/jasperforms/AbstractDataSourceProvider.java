@@ -8,13 +8,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignField;
-
-import org.alfresco.service.ServiceRegistry;
-
-import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.documents.beans.DocumentConnectionService;
-import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.beans.WKServiceKeeper;
 
 /**
  * User: AZinovin
@@ -27,14 +22,10 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 public abstract class AbstractDataSourceProvider
 		implements JRDataSourceProvider
 {
-	protected ServiceRegistry serviceRegistry;
-	protected SubstitudeBean substitudeService;
-	protected OrgstructureBean orgstructureService;
-	protected DocumentService documentService;
-	protected DocumentConnectionService documentConnectionService;
 
+	protected WKServiceKeeper services;
 	private List<JRField> fieldsList;
-
+	private ReportDescriptor reportDescriptor;
 
 	public AbstractDataSourceProvider() {
 		initFields();
@@ -45,50 +36,25 @@ public abstract class AbstractDataSourceProvider
 	 *
 	 * @param serviceRegistry точка доступа к сервисам - каждый провайдер может получить отсюда требующиеся для работы сервисы
 	 */
-	public AbstractDataSourceProvider(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
+	public AbstractDataSourceProvider(WKServiceKeeper wksServices) {
+		this.services = wksServices;
 		initFields();
 	}
 
-	public ServiceRegistry getServiceRegistry() {
-		return serviceRegistry;
+	public WKServiceKeeper getServices() {
+		return services;
 	}
 
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
+	public void setServices(WKServiceKeeper services) {
+		this.services = services;
 	}
 
-	public SubstitudeBean getSubstitudeService() {
-		return substitudeService;
+	public ReportDescriptor getReportDescriptor() {
+		return reportDescriptor;
 	}
 
-	public void setSubstitudeService(SubstitudeBean substitudeService) {
-		this.substitudeService = substitudeService;
-	}
-
-	public OrgstructureBean getOrgstructureService() {
-		return orgstructureService;
-	}
-
-	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		this.orgstructureService = orgstructureService;
-	}
-
-
-	public DocumentService getDocumentService() {
-		return documentService;
-	}
-
-	public void setDocumentService(DocumentService documentService) {
-		this.documentService = documentService;
-	}
-
-	public DocumentConnectionService getDocumentConnectionService() {
-		return documentConnectionService;
-	}
-
-	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
-		this.documentConnectionService = documentConnectionService;
+	public void setReportDescriptor(ReportDescriptor reportDesc) {
+		this.reportDescriptor = reportDesc;
 	}
 
 	/**

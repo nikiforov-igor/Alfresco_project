@@ -25,9 +25,10 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ru.it.lecm.reports.api.JRXField;
+import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.jasper.utils.MacrosHelper;
-import ru.it.lecm.reports.jasper.utils.XmlHelper;
+import ru.it.lecm.reports.xml.DSXMLProducer;
+import ru.it.lecm.reports.xml.XmlHelper;
 
 /**
  * Реализация для чтения конфы из XML.
@@ -46,32 +47,41 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 	// параметр с названием файла XML конфигурации
 	final static public String TAG_CONFIGNAME = "xmlconfigName";
 
-	final static public String XMLTAG_URL = "url";
-	final static public String XMLTAG_USERNAME = "username";
-	final static public String XMLTAG_PSW = "password";
+	/* Fields Descriptors - look at DSXMLProducer */
+	/*
+	final static private String XMLTAG_ROOT = "cmis-ds.config";
 
-	final static public String XMLTAG_QUERY = "query";
-	final static public String XMLTAG_ALLVER = "allVersions";
+	final static public String XML_PATH_URL = "url";
+	final static public String XML_PATH_USERNAME = "username";
+	final static public String XML_PATH_PSW = "password";
 
-	/* Fields Descriptors */
-	final static private String XMLTAG_LIST_FIELDS = "fields.jasper";
-	final static private String XMLTAG_FIELD = "field";
-		final static private String XMLATTR_QUERY_FILEDNAME = "queryFldName";
+	final static public String XMLNODE_QUERY = "query";
+	final static public String XMLNODE_PATH_ALLVER = "allVersions";
+
+	final static private String XMLNODE_LIST_FIELDS = "fields";
+	final static private String XMLNITEM_FIELD = "field";
+		final static private String XMLATTR_QUERY_FIELDNAME = "queryFldName";
 		final static private String XMLATTR_DISPLAYNAME = "displayName";
 		final static private String XMLATTR_JR_FIELDNAME = "jrFldName"; // если не указано - автоматически присваивается название @JR_COLNAMEPREFIX + N кол (от единицы), вида "COL_1", "COL_2" ...
 		final static private String XMLATTR_JAVA_VALUECLASS = "javaValueClass";
+
+	 */
 		final static String JR_COLNAMEPREFIX = "COL_"; // префикс названий колонок для передачи в jasper
 
 	@Override
 	protected void setDefaults(Map<String, Object> defaults) {
 		super.setDefaults(defaults);
 
-		defaults.put( XMLTAG_QUERY, null);
-		defaults.put( XMLTAG_URL, null);
-		defaults.put( XMLTAG_ALLVER, null);
+		// "cmis"-section
+		defaults.put( DSXMLProducer.XMLNODE_CMIS+ "/" + DSXMLProducer.XMLNODE_CMIS_URL, null);
+		defaults.put( DSXMLProducer.XMLNODE_CMIS+ "/" + DSXMLProducer.XMLNODE_CMIS_USERNAME, null);
+		defaults.put( DSXMLProducer.XMLNODE_CMIS+ "/" + DSXMLProducer.XMLNODE_CMIS_PASSWORD, null);
 
-		defaults.put( XMLTAG_USERNAME, null);
-		defaults.put( XMLTAG_PSW, null);
+		// DEBUG
+		// defaults.put( "A", null);
+		// defaults.put( "query.descriptor", null);
+		// defaults.put( "query.descriptor/BB", null);
+		// defaults.put( "query.descriptor/queryText/CCC", null);
 	}
 
 	@Override
@@ -153,8 +163,6 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		return false; // if errors
 	}
 
-	final static private String XMLTAG_ROOT = "cmis-ds.config";
-
 	/**
 	 * @param xml 
 	 */
@@ -162,27 +170,30 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
  * XML Example:
 <?xml version="1.0" encoding="UTF-8"?>
 
-<cmis-ds.config>
+<ds.config>
 
-	<url></url>
+	<cmis.connection>
+		<url></url>
+		<username></username>
+		<password></password>
+		<allVersions>false</allVersions>
+	</cmis.connection>
 
-	<username></username>
+	<fields>
+		<field queryFldName="cmis:id" dislayName="" javaValueClass="Integer"/>
+	</fields>
 
-	<password></password>
+	<query.descriptor>
+		<offset>0</offset>
+		<limit>-1</limit>
+		<pgsize>-1</pgsize>
+		<queryText>
+			<![CDATA[select * from lecm:documents $P{mdgfkahqf}
+			]]>
+		</queryText>	
+	</query.descriptor>
 
-	<fields.jasper>
-		<jrfield queryFldName="cmis:id" dislayName="" javaValueClass="Integer"/>
-	</fields.jasper>
-
-	<allVersions>false</allVersions>
-
-	<query>
-		<![CDATA[
-			select * from lecm:documents $P{mdgfkahqf}
-		]]>
-	</query>	
-
-</cmis-ds.config>
+</ds.config>
  */
 	public void xmlRead(InputStream xml, String info) {
 		logger.info("loading xml config: " + info);
@@ -201,11 +212,18 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 			final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xml);
 
 			final Element rootElem = doc.getDocumentElement();
-			if (!XMLTAG_ROOT.equals(rootElem.getNodeName())) {
-				throw new RuntimeException("Root '" + XMLTAG_ROOT + "' element expected");
+			if (!DSXMLProducer.XMLNODE_ROOT_DS_CONFIG.equals(rootElem.getNodeName())) {
+				throw new RuntimeException("Root '" + DSXMLProducer.XMLNODE_ROOT_DS_CONFIG + "' element expected");
 			}
 
-			// загрузка аргументов по-умолчанию "зарегеных" в args
+			/* 
+			 * загрузка аргументов по-умолчанию "зарегеных" в args:
+			 * если в имени аргумента есть "|", то это принимается за уровень 
+			 * вложенности внутри узла с таким именем, т.е. 
+			 * 		"A" это просто узел верхнего уровня с названием "А";
+			 * 		"А/Б" это узел второго уровня: первый это "А" и внутри него надо искать "Б".
+			 * 
+			 */
 			if (getArgs() != null) {
 				final List<String> names = new ArrayList<String>( getArgs().keySet());
 				for(String argname: names) {
@@ -215,10 +233,10 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 
 			// чтение мета-описаний полей ... 
 			{
-				final Element fieldsNode  = (Element) XmlHelper.getTagNode(rootElem, XMLTAG_LIST_FIELDS, null, null);
-				final List<Node> fieldsNodeList = XmlHelper.getNodesList(fieldsNode, XMLTAG_FIELD, null, null);
+				final Element fieldsNode  = (Element) XmlHelper.getTagNode(rootElem, DSXMLProducer.XMLNODE_LIST_FIELDS, null, null);
+				final List<Node> fieldsNodeList = XmlHelper.getNodesList(fieldsNode, DSXMLProducer.XMLNODE_FIELD, null, null);
 				if (fieldsNodeList == null || fieldsNodeList.isEmpty()) {
-					logger.warn( String.format( "xml %s contains no fields at %s/%s", info, XMLTAG_LIST_FIELDS, XMLTAG_FIELD));
+					logger.warn( String.format( "xml %s contains no fields at %s/%s", info, DSXMLProducer.XMLNODE_LIST_FIELDS, DSXMLProducer.XMLNODE_FIELD));
 				} else
 					xmlGetMetaFields( fieldsNodeList);
 			}
@@ -235,23 +253,56 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 
 	/**
 	 * Найти вложенный узел по имени и получить из него значение для аргумента.
-	 * (!) Списки поддерживаются  - списком будет считаться атрибут, если в нём есть узел "<list>"
-	 * (!) Если узла с таким именем нет - текущее значение аргумента НЕ ИЗМЕНЯЕТСЯ.
+	 * (!) XML-списки поддерживаются - списком будет считаться xml-узел, если в нём есть дочерний "<list>" или "<map>"
+	 * Загруженный list или map стновится текущим значением соответствующего this.args(). 
+	 * (!) Если таких вложенных узлов нет - текущее значение аргумента в this.args() НЕ ИЗМЕНЯЕТСЯ.
 	 * (!) Если узел есть - значение изменяется (даже если оно будет null). 
-	 * @param parentNode родительский узел
-	 * @param srcChildNodeTag название вложенного узла
+	 * @param parentNode родительский xml-узел
+	 * @param srcChildNodeTag название вложенного xml-узла:
+	 * (!) если в аргумента есть "/", то это принимается за резделитель уровней
+	 *     вложенности узлов, т.е. 
+	 * 		"A" это просто узел с названием "А" первого уровня относительно parentNode;
+	 * 		"А/Б" это узел второго уровня: первый это "А" и внутри него надо искать "Б";
+	 * 		"А/Б/В" это тройная вложенность и т.д.
+	 * 
 	 * @param destArgName название аргумента
 	 * @return значение аргумента (строка или список) или null, если нет 
 	 * вложенного childNodeTag или в нём пустое значение.
 	 */
 	private Object setArgFromXmlNode( Node parentNode, String srcChildNodeTag, String destArgName) {
+		if (srcChildNodeTag == null)
+			return null;
+
+		final String[] simpleNodeTags = srcChildNodeTag.split("/");
+		if (simpleNodeTags == null || simpleNodeTags.length == 0)
+			return null;
+
 		Object result = null;
-		final Element vNode = (Element) XmlHelper.getTagNode(parentNode, srcChildNodeTag, null, null);
-		if (vNode != null) {
-			result = getXmlNodeValue(vNode);
+		Node curNode = parentNode;
+		for (int i = 0; i < simpleNodeTags.length; i++) {
+			curNode = (Element) XmlHelper.getTagNode(curNode, simpleNodeTags[i], null, null);
+			if (curNode == null) {
+				logger.warn( String.format( "XML did not contain items deeper than '%s' for full path '%s' -> got as NULL"
+						, concat(simpleNodeTags, i)
+						, concat(simpleNodeTags, simpleNodeTags.length)
+						));
+				return null;
+			}
+		}
+		if (curNode != null) {
+			result = getXmlNodeValue(curNode);
 			getArgs().put( destArgName, result);
 		}
+
 		return result;
+	}
+
+	private static String concat(String[] items, int len) {
+		final StringBuilder result = new StringBuilder();
+		for (int i = 0; i < len; i++) {
+			result.append('/').append( items[i] );
+		}
+		return result.toString();
 	}
 
 	private Object getXmlNodeValue(Node node) {
@@ -317,7 +368,12 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 	}
 
 	/** Набор стандартных названий атрибутов */
-	final static Set<String> STD_SML_ARGS = new HashSet<String>( Arrays.asList( XMLATTR_JR_FIELDNAME, XMLATTR_QUERY_FILEDNAME, XMLATTR_DISPLAYNAME, XMLATTR_JAVA_VALUECLASS));
+	final static Set<String> STD_XML_ARGS = new HashSet<String>( Arrays.asList( 
+			  DSXMLProducer.XMLATTR_JR_FLDNAME
+			, DSXMLProducer.XMLATTR_QUERY_FLDNAME
+			, DSXMLProducer.XMLATTR_DISPLAYNAME
+			, DSXMLProducer.XMLATTR_JAVACLASS 
+		));
 
 	private void xmlGetMetaFields(List<Node> fieldsNodes) {
 		if (fieldsNodes == null || fieldsNodes.isEmpty()) {
@@ -332,8 +388,8 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 
 			// FIELD_QUERY_NAME
 			String jrFldname = "COL_"+ i; // default name for any field will be simple "col_nn"
-			if (fldNode.hasAttribute(XMLATTR_JR_FIELDNAME)) {
-				final String sname = fldNode.getAttribute(XMLATTR_JR_FIELDNAME);
+			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_JR_FLDNAME)) {
+				final String sname = fldNode.getAttribute(DSXMLProducer.XMLATTR_JR_FLDNAME);
 				if (sname != null && sname.length() > 0)
 					jrFldname = sname;
 			}
@@ -350,30 +406,30 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 				jrFldname = nameUnique;
 			}
 			// добавление новой jr-колонки
-			final JRXField fld = this.addField(jrFldname);
+			final DataFieldColumn fld = this.addField(jrFldname);
 
-			if (fldNode.hasAttribute(XMLATTR_QUERY_FILEDNAME)) {
-				final String queryFldName = fldNode.getAttribute(XMLATTR_QUERY_FILEDNAME);
+			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME)) {
+				final String queryFldName = fldNode.getAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME);
 				if (queryFldName != null && queryFldName.length() > 0)
 					fld.setValueLink( queryFldName);
 			}
 
 			// DISPLAY_NAME
-			if (fldNode.hasAttribute(XMLATTR_DISPLAYNAME)) {
-				final String displayName = fldNode.getAttribute(XMLATTR_DISPLAYNAME);
+			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_DISPLAYNAME)) {
+				final String displayName = fldNode.getAttribute(DSXMLProducer.XMLATTR_DISPLAYNAME);
 				fld.setDescription(displayName);
 			}
 
 			// JAVA_CLASS
 			Class<?> javaClass = String.class; // default class
-			if (fldNode.hasAttribute(XMLATTR_JAVA_VALUECLASS)) {
-				final String vClazz = fldNode.getAttribute(XMLATTR_JAVA_VALUECLASS);
+			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_JAVACLASS)) {
+				final String vClazz = fldNode.getAttribute(DSXMLProducer.XMLATTR_JAVACLASS);
 				javaClass = getJavaClassByName( vClazz, javaClass);
 			}
 			fld.setValueClass(javaClass);
 	
 			// подгрузка остальных атрибутов ...
-			takeAttributes( fld, fldNode.getAttributes(), STD_SML_ARGS);
+			takeAttributes( fld, fldNode.getAttributes(), STD_XML_ARGS);
 
 			// журналирование
 			if (logger.isDebugEnabled())
@@ -395,7 +451,7 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 	 * @param src исходный список атрибутов
 	 * @param stdSkipArgs названия атрибутов, которые надо (!) пропускать
 	 */
-	private void takeAttributes( JRXField dest, NamedNodeMap src,
+	private void takeAttributes( DataFieldColumn dest, NamedNodeMap src,
 			Set<String> stdSkipArgs) {
 		if (src == null)
 			return;

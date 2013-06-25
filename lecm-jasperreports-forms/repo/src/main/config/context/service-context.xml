@@ -11,8 +11,8 @@
 		</property>
 	</bean>
 
-	<bean id="webscript.ru.it.lecm.forms.jasper.form.get" class="ru.it.lecm.forms.jasperforms.JasperFormProducer"
-		parent="webscript">
+	<!-- Бин "часто используемых служб" -->
+	<bean id="wksKeeper" class="ru.it.lecm.reports.beans.WKServiceKeeperBean">
 		<property name="serviceRegistry" ref="ServiceRegistry" />
 		<property name="substitudeService" ref="substitudeService" />
 		<property name="orgstructureService" ref="serviceOrgstructure" />
@@ -20,4 +20,119 @@
 		<property name="documentConnectionService" ref="documentConnectionService"/>
 	</bean>
 
+	<!-- Генератор Jasper отчётов (версия v2.x lecm-сервиса) -->
+	<bean id="jasperReportGenerator" class="ru.it.lecm.reports.generators.JasperReportGeneratorImpl">
+		<property name="services" ref="wksKeeper"/>
+	</bean>
+
+	<bean id="reportDAOBean" class="ru.it.lecm.reports.model.DAO.ReportDAOImpl">
+		<property name="services" ref="wksKeeper"/>
+	</bean>
+
+	<bean id="webscript.ru.it.lecm.forms.jasper.form.get" class="ru.it.lecm.forms.jasperforms.JasperFormProducer"
+		parent="webscript" init-method="init">
+		<property name="jasperGenerator" ref="jasperReportGenerator"/>
+		<property name="reportDAO" ref="reportDAOBean"/>
+		<!--
+		<property name="oofficeGenerator" ref="oofficeReportGenerator"/>
+		<property name="cubeGenerator" ref="cubeReportGenerator"/>
+		  -->
+		<property name="descriptors[0]" ref="jasperTemplate_DocFlowCounters" />
+	</bean>
+
+	<!-- описатель шаблона jasper-отчёта "Сводный отчёт по договорам" -->
+	<bean id="jasperTemplate_DocFlowCounters" class="ru.it.lecm.reports.model.ReportDescriptorImpl">
+		<property name="mnem" value="docflow-counters" />
+		<property name="l18Name">
+			<bean class="ru.it.lecm.reports.model.L18Value">
+				<property name="l18items[ru]" value="Сводный отчёт по договорам" />
+				<property name="l18items[en]" value="Resume report on contracts" />
+			</bean>
+		</property>
+
+		<!-- ReportFlags flags -->
+		<property name="flags.multiRow" value="true"/>
+		<property name="flags.text" value="test query stub text" />
+		<property name="flags.offset" value="0" />
+		<property name="flags.limit" value="-1" />
+		<property name="flags.pgSize" value="1278" />
+		<property name="flags.allVersions" value="false" />
+
+		<!-- ReportType -->
+		<property name="reportType.mnem" value="JASPER" />
+		<property name="reportType.l18items[ru]" value="Отчёт Jasper" />
+		<property name="reportType.l18items[en]" value="Jasper report type" />
+
+		<!-- ReportTemplate -->
+		<property name="reportTemplate.fileName" value="docflow-counters.jrxml" />
+		<property name="reportTemplate.l18items[ru]" value="JRXML отчёта по кол-ву договоров в статусах" />
+		<property name="reportTemplate.l18items[en]" value="JRXML Report on number of contracts by doc-status" />
+
+		<!-- ReportProviderDescriptor -->
+		<property name="providerDescriptor">
+			<bean class="ru.it.lecm.reports.model.ReportProviderDescriptorImpl">
+				<constructor-arg index="0" type="java.lang.String" value="ru.it.lecm.reports.jasper.DSProviderDocflowStatusCounters"/>
+				<constructor-arg index="1" type="java.lang.String" value="DocflowStatusCounters"/>
+				<property name="l18items[ru]" value="Провайдер отчёта по кол-ву договоров в статусах" />
+				<property name="l18items[en]" value="Report Provider on number of contracts by doc-status" />
+			</bean>
+		</property>
+
+		<!-- DataSourceDescriptor -->
+		<property name="dsDescriptor.mnem"  value="DSDocflowStatusCounters" />
+		<property name="dsDescriptor.l18items[ru]" value="Источник данных для отчёта по кол-ву договоров в статусах" />
+		<property name="dsDescriptor.l18items[en]" value="Report data-source for report on number of contracts by doc-status" />
+
+		<property name="dsDescriptor.columns[0]">
+			<bean class="ru.it.lecm.reports.model.ColumnDescriptorImpl">
+				<constructor-arg type="java.lang.String" value="col_RowTag"/>
+				<constructor-arg type="java.lang.String" value="STRING"/>
+				<property name="l18items[ru]" value="Измерение.Название" />
+				<property name="l18items[en]" value="GroupBy.Name" />
+				<property name="expression" value="customTag" />
+			</bean>
+		</property>
+
+		<property name="dsDescriptor.columns[1]">
+			<bean class="ru.it.lecm.reports.model.ColumnDescriptorImpl">
+				<constructor-arg type="java.lang.String" value="col_Count1"/>
+				<constructor-arg type="java.lang.String" value="INTEGER"/>
+				<property name="l18items[ru]" value="Статус1.Кол-во" />
+				<property name="l18items[en]" value="Status1.Count" />
+				<property name="expression" value="status1.counter" />
+			</bean>
+		</property>
+
+		<property name="dsDescriptor.columns[2]">
+			<bean class="ru.it.lecm.reports.model.ColumnDescriptorImpl">
+				<constructor-arg type="java.lang.String" value="col_Count2"/>
+				<constructor-arg type="java.lang.String" value="INTEGER"/>
+				<property name="l18items[ru]" value="Статус2.Кол-во" />
+				<property name="l18items[en]" value="Status2.Count" />
+				<property name="expression" value="status2.counter" />
+			</bean>
+		</property>
+
+		<property name="dsDescriptor.columns[3]">
+			<bean class="ru.it.lecm.reports.model.ColumnDescriptorImpl">
+				<constructor-arg type="java.lang.String" value="col_RowSum"/>
+				<constructor-arg type="java.lang.String" value="FLOAT"/>
+				<property name="l18items[ru]" value="Общее.Кол-во" />
+				<property name="l18items[en]" value="Total.Counter" />
+				<property name="expression" value="statusTotal.counter" />
+			</bean>
+		</property>
+
+		<!-- 
+		<property name="dsDescriptor.columns[nnn]">
+			<bean class="ru.it.lecm.reports.model.ColumnDescriptorImpl">
+				<constructor-arg type="java.lang.String" value="XXX" />
+				<constructor-arg type="java.lang.String" value="FLOAT"/>
+				<property name="l18items[ru]" value="Колонка XXX" />
+				<property name="l18items[en]" value="Column XXX" />
+				<property name="expression" value="XXX" />
+			</bean>
+		</property>
+		  -->
+	</bean>
 </beans>

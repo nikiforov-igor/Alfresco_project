@@ -13,19 +13,31 @@
 •	Ср просрочка
   -->
 
-<cmis-ds.config>
+<ds.config>
 
-	<query_offset>0</query_offset>
-	<query_limit>-1</query_limit>
-	<query_pgsize>-1</query_pgsize>
+	<query.descriptor>
+		<offset>0</offset>
+		<limit>-1</limit>
+		<pgsize>-1</pgsize>
+		<allVersions>true</allVersions>
+		<!--
+			select * from lecm:documents
+		  -->
+		<queryText>
+			<![CDATA[
+				select * from lecm-al:approval-list as approvals
+			]]>
+		</queryText>
+	</query.descriptor>
 
-	<query>
-		<![CDATA[
-			select * from lecm-al:approval-list as approvals
-		]]>
-	</query>
+	<cmis.connection>
+		<url>http://localhost:8080/alfresco/service/cmis</url>
+		<username>admin</username>
+		<password>111</password>
+	</cmis.connection>
 
-	<fields.jasper>
+
+	<fields>
 		<!-- Период - начало и конец -->
 		<field queryFldName="{period.start}" jrFldName="col_Period.Start" displayName="Начало периода" javaValueClass="Date"/>
 		<field queryFldName="{period.end}" jrFldName="col_Period.End" displayName="Конец периода" javaValueClass="Date"/>
@@ -68,11 +80,6 @@
 				jrFldName="col_Employee.AvgMissed"
 				displayName="Средний срок просрочки, дней" javaValueClass="float"/>
 
-	</fields.jasper>
+	</fields>
 
-	<url>http://localhost:8080/alfresco/service/cmis</url>
-	<username>admin</username>
-	<password>111</password>
-	<allVersions>true</allVersions>
-
-</cmis-ds.config>
+</ds.config>

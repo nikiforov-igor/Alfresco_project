@@ -6,15 +6,15 @@ import java.util.Map;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
 /**
- * JRXField это jasper-поле + дополнительные поля.
- * JRXField может содержать:
+ * DataFieldColumn это jasper-поле + дополнительные поля.
+ * Может содержать:
  *    - описание простого поля (значение которого имеется непосредствено в текущем объекте авктивной строки отчёта),
  *    - "длинные" ссылки, обрабатываемые службой SubstitudeBean (вида "Axxx/Bxxx/.../Fldxxx"), 
  *    - custom-атрибуты (attributes), заполняемые непосредственно набором данных конкретного провайдера. 
  * @author Ruslan
  */
 // TODO: сделать опции (представление NULL и пр) либо поотдельности, либо Map-списком (хуже, т.к. опции станут неявными) 
-public class JRXField extends JRDesignField {
+public class DataFieldColumn extends JRDesignField {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class JRXField extends JRDesignField {
 
 	private boolean enUseAttributesTrim = true; // применять trim для значений атрибутов
 
-	public JRXField() {
+	public DataFieldColumn() {
 		super();
 	}
 

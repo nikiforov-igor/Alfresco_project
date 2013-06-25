@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
+import ru.it.lecm.reports.jasper.utils.ArgsHelper;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
 /**
@@ -68,9 +69,9 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 			if (!hasAny) // в фильтре ничего не задачно -> любые данные подойдут
 				return null;
 
-			final AssocDataFilterImpl result = new AssocDataFilterImpl( serviceRegistry);
+			final AssocDataFilterImpl result = new AssocDataFilterImpl( getServices().getServiceRegistry());
 
-			final NamespaceService ns = serviceRegistry.getNamespaceService();
+			final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
 
 			if (hasSubject) {
 				final QName qnCSubject = QName.createQName( "lecm-contract-dic:contract-subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
@@ -151,7 +152,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
 
-		final QName QFLD_CREATOR = QName.createQName("cm:creator", getServiceRegistry().getNamespaceService());
+		final QName QFLD_CREATOR = QName.createQName("cm:creator", getServices().getServiceRegistry().getNamespaceService());
 
 		final AlfrescoJRDataSource dataSource = new AlfrescoJRDataSource(iterator)  {
 
@@ -160,14 +161,14 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 				final boolean flag = super.loadAlfNodeProps(id);
 				if (flag) {
 					// подгрузим Исполнителя по его login-у
-					final NodeService nodeSrv = serviceRegistry.getNodeService();
+					final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
 					final String loginCreator = Utils.coalesce( nodeSrv.getProperty(id, QFLD_CREATOR), null);
 					if (loginCreator != null) { // получение Исполнителя по его login
-						final NodeRef person = getServiceRegistry().getPersonService().getPerson(loginCreator);
+						final NodeRef person = getServices().getServiceRegistry().getPersonService().getPerson(loginCreator);
 						if (person != null) {
-							final NodeRef executorEmplId = getOrgstructureService().getEmployeeByPerson(person);
+							final NodeRef executorEmplId = getServices().getOrgstructureService().getEmployeeByPerson(person);
 							final BasicEmployeeInfo docExecutor = new BasicEmployeeInfo(executorEmplId);
-							docExecutor.loadProps(nodeSrv, getOrgstructureService());
+							docExecutor.loadProps(nodeSrv, getServices().getOrgstructureService());
 							// сохраним ФИО ...
 							context.getCurNodeProps().put( getAlfAttrNameByJRKey(JRFLD_Executor_Name), docExecutor.firstName);
 							context.getCurNodeProps().put( getAlfAttrNameByJRKey(JRFLD_Executor_Otchestvo), docExecutor.middleName);
@@ -203,7 +204,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	@Override
 	protected String buildQueryText() {
 		final StringBuilder bquery = new StringBuilder();
-		final QName qTYPE = QName.createQName(TYPE_CONRACT, this.serviceRegistry.getNamespaceService());
+		final QName qTYPE = QName.createQName(TYPE_CONRACT, this.getServices().getServiceRegistry().getNamespaceService());
 		bquery.append( "TYPE:"+ quoted(qTYPE.toString()));
 
 		// начало .. конец

@@ -46,8 +46,8 @@ public class DSProviderDocflowStatusTimings extends DSProviderDocflowStatusCount
 	protected int adjustStatistic( final DocStatusGroup group, final String statusName, NodeRef docId)
 	{
 		/* время смены статуса */
-		final QName qnSTATUS_CHANGED = QName.createQName(ATTR_STATUS_CHANGED, getServiceRegistry().getNamespaceService());
-		final Date dtChanged  = (Date) getServiceRegistry().getNodeService().getProperty( docId, qnSTATUS_CHANGED);
+		final QName qnSTATUS_CHANGED = QName.createQName(ATTR_STATUS_CHANGED, getServices().getServiceRegistry().getNamespaceService());
+		final Date dtChanged  = (Date) getServices().getServiceRegistry().getNodeService().getProperty( docId, qnSTATUS_CHANGED);
 
 		/* счётчик длительности */
 		final Date now = new Date();

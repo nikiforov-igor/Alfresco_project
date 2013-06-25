@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
+import ru.it.lecm.reports.jasper.utils.ArgsHelper;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
 import com.sun.star.beans.PropertyValue;
@@ -108,7 +109,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 	protected String buildQueryText() {
 
 		final StringBuilder bquery = new StringBuilder();
-		final QName qTYPE = QName.createQName(TYPE_APPROVAL_LIST, this.serviceRegistry.getNamespaceService());
+		final QName qTYPE = QName.createQName(TYPE_APPROVAL_LIST, this.getServices().getServiceRegistry().getNamespaceService());
 		bquery.append( "TYPE:"+ quoted(qTYPE.toString()));
 
 		// выполненные Согласования -> вне статуса 'NO_DECISION'
@@ -423,8 +424,8 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 
 				final Map<NodeRef, EmployeeInfo> statistic = new HashMap<NodeRef, EmployeeInfo>(); // накопленная статистика по Позователю
 
-				final NodeService nodeSrv = serviceRegistry.getNodeService();
-				final NamespaceService ns = serviceRegistry.getNamespaceService();
+				final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
+				final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
 
 				final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
@@ -484,7 +485,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 							userInfo = statistic.get(emplyeeId);
 						} else { // создание стр-ры о Пользователе и наполнение всякой инфой (как зовут, где и кем работает, ...)
 							userInfo = new EmployeeInfo(emplyeeId);
-							userInfo.loadProps(nodeSrv, getOrgstructureService());
+							userInfo.loadProps(nodeSrv, getServices().getOrgstructureService());
 							statistic.put(emplyeeId, userInfo);
 						}
 						userInfo.registerDuration( norm_duration, fact_duration); // X,Y регистрируется

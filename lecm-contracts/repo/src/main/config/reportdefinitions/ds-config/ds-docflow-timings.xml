@@ -26,12 +26,30 @@
 Количество документов в статусах соот-но будет простой суммой в каждой группе.
 	-->
 
-<cmis-ds.config>
+<ds.config>
 
 	<!-- Ограничения основной выборки -->
-	<query_offset>0</query_offset>
-	<query_limit>-1</query_limit>
-	<query_pgsize>-1</query_pgsize>
+	<query.descriptor>
+		<offset>0</offset>
+		<limit>-1</limit>
+		<pgsize>-1</pgsize>
+		<allVersions>true</allVersions>
+		<!--
+			select * from lecm:documents
+		  -->
+		<queryText>
+			<![CDATA[
+				select * from lecm-contract:document as Contract
+			]]>
+		</queryText>
+	</query.descriptor>
+
+	<!-- параметры соединения с Альфреско (пока не используются) -->
+	<cmis.connection>
+		<url>http://localhost:8080/alfresco/service/cmis</url>
+		<username>admin</username>
+		<password>111</password>
+	</cmis.connection>
 
 	<!--
 		Описания для группирования строк из НД, полученного после сбора всех договоров.
@@ -118,7 +136,7 @@
 	</status.flags>
 
 	<!-- Описания полей  данных в наборе -->
-	<fields.jasper>
+	<fields>
 
 		<!-- Первый столбец это значение выбранного Измерения, т.е. название вида договоров,
 		тематика, котрагент или инициатор.
@@ -146,21 +164,6 @@
 		<!--
 			<field queryFldName="fmydata" dislayName="" javaValueClass="my.check.type"/>
 		  -->
-	</fields.jasper>
+	</fields>
 
-	<!-- параметры соединения с Альфреско (пока не используются) -->
-	<url>http://localhost:8080/alfresco/service/cmis</url>
-	<username>admin</username>
-	<password>111</password>
-	<allVersions>false</allVersions>
-
-	<!--
-		select * from lecm:documents
-	  -->
-	<query>
-		<![CDATA[
-			select * from lecm-contract:document as Contract
-		]]>
-	</query>
-
-</cmis-ds.config>
+</ds.config>

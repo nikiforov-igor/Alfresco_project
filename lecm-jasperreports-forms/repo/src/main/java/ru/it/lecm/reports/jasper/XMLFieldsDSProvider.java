@@ -11,7 +11,7 @@ import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import ru.it.lecm.reports.api.JRXField;
+import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
 
@@ -75,10 +75,10 @@ public class XMLFieldsDSProvider implements JRDataSourceProvider {
 
 	class SimpeJRDataSource implements JRDataSource {
 
-		final Map<String, JRXField> metaFields;
+		final Map<String, DataFieldColumn> metaFields;
 		boolean hasNext = true;
 
-		public SimpeJRDataSource(Map<String, JRXField> metaFields) {
+		public SimpeJRDataSource(Map<String, DataFieldColumn> metaFields) {
 			this.metaFields = metaFields;
 		}
 

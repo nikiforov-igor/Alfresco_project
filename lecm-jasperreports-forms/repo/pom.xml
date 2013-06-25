@@ -22,6 +22,7 @@
 		<module.log.level>debug</module.log.level>
 		<dependency.opencmis.version>0.7.0</dependency.opencmis.version>
 		<xalan.version>2.5.1</xalan.version>
+		<xerces.version>2.8.0</xerces.version>
 	</properties>
 
 	<!--
@@ -101,6 +102,11 @@
 			<groupId>xalan</groupId>
 			<artifactId>xalan</artifactId>
 			<version>${xalan.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>${xerces.version}</version>
 		</dependency>
 
 		<dependency>
