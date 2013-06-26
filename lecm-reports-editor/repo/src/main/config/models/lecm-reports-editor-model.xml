@@ -90,6 +90,16 @@
         <type name="lecm-rpeditor:reportTemplate">
             <title>Report Template</title>
             <parent>cm:cmobject</parent>
+            <properties>
+                <property name="lecm-rpeditor:reportTemplateType-text-content">
+                    <title>Type Text Content</title>
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-rpeditor:reportTemplateType-ref">
+                    <title>Type Ref</title>
+                    <type>d:text</type>
+                </property>
+            </properties>
             <associations>
                 <!-- Ссылка на файл -->
                 <association name="lecm-rpeditor:reportTemplateFile">
@@ -99,6 +109,17 @@
                     </source>
                     <target>
                         <class>cm:content</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <association name="lecm-rpeditor:reportTemplateType">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-rpeditor:reportType</class>
                         <mandatory>true</mandatory>
                         <many>false</many>
                     </target>

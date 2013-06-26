@@ -19,4 +19,9 @@ public class ReportsEditorModel {
     public final static QName TYPE_REPORT_DESCRIPTOR = QName.createQName(REPORTS_EDITOR_URI, "reportDescriptor");
     public final static QName TYPE_REPORT_DATA_SOURCE = QName.createQName(REPORTS_EDITOR_URI, "reportDataSource");
     public final static QName TYPE_REPORT_DATA_COLUMN = QName.createQName(REPORTS_EDITOR_URI, "reportDataColumn");
+
+    public final static QName ASSOC_REPORT_DESCRIPTOR_TEMPLATE = QName.createQName(REPORTS_EDITOR_URI, "reportTemplateAssoc");
+    public final static QName ASSOC_REPORT_DESCRIPTOR_REPORT_TYPE = QName.createQName(REPORTS_EDITOR_URI, "reportTypeAssoc");
+    public final static QName ASSOC_REPORT_TEMPLATE_TYPE = QName.createQName(REPORTS_EDITOR_URI, "reportTemplateType");
+    public final static QName ASSOC_REPORT_TEMPLATE_FILE = QName.createQName(REPORTS_EDITOR_URI, "reportTemplateFile");
 }

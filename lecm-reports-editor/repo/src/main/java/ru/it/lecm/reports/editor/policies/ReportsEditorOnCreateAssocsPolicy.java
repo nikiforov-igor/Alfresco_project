@@ -19,5 +19,11 @@ public class ReportsEditorOnCreateAssocsPolicy extends LogicECMAssociationPolicy
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 ReportsEditorModel.TYPE_REPORT_TYPE, new JavaBehaviour(this, "onCreateAssociation"));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+                ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onDeleteAssociation"));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onCreateAssociation"));
     }
 }

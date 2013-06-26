@@ -1,8 +1,13 @@
 package ru.it.lecm.reports.editor.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.reports.editor.ReporstEditorService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: dbashmakov
@@ -35,5 +40,10 @@ public class ReportsEditorWebScriptBean extends BaseWebScript {
 
     public ScriptNode getDictionariesRoot() {
         return new ScriptNode(service.getDictionariesRootFolder(), serviceRegistry, getScope());
+    }
+
+    public Scriptable getReportTypes() {
+        List<NodeRef> refs = service.getReportTypes();
+        return createScriptable(refs);
     }
 }

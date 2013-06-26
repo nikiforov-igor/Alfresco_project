@@ -5,7 +5,7 @@
 //]]></script>
 
 <#if !page.url.args.reportId??>
-<div class="yui-t1" id="bj-dictionary-grid">
+<div class="yui-t1" id="re-reports-grid">
     <div id="yui-main-2">
         <div class="yui-b" id="alf-content" style="margin-left: 0;">
             <@grid.datagrid id=id showViewForm=false>
@@ -96,11 +96,12 @@
     var reportForm;
     (function () {
         function init() {
+            var htmlId = "${page.url.args.reportId}".replace("workspace://SpacesStore/","").replace("-","");
             Alfresco.util.Ajax.request(
                     {
                         url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
                         dataObj:{
-                            htmlid:"Report-" + "${page.url.args.reportId}",
+                            htmlid:htmlId,
                             itemKind:"node",
                             itemId:"${page.url.args.reportId}",
                             mode: "edit",
@@ -113,7 +114,7 @@
                                 formEl.innerHTML = response.serverResponse.responseText;
                                 Dom.setStyle("${id}-footer", "opacity", "1");
                                 // Form definition
-                                var form = new Alfresco.forms.Form('Report-' + '${page.url.args.reportId}' + '-form');
+                                var form = new Alfresco.forms.Form(htmlId + '-form');
                                 form.ajaxSubmit = true;
                                 form.setAJAXSubmit(true,
                                         {

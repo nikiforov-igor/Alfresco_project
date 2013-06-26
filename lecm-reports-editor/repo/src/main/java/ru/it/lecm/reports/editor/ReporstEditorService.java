@@ -1,7 +1,15 @@
 package ru.it.lecm.reports.editor;
 
+import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: dbashmakov
@@ -32,9 +40,9 @@ public class ReporstEditorService extends BaseBean {
      */
     public void init() {
         reRootRef = getFolder(RE_ROOT_ID);
-        reDictionaryRef =  getFolder(RE_DICTIONARY_ROOT_ID);
+        reDictionaryRef = getFolder(RE_DICTIONARY_ROOT_ID);
         reSourcesRef = getFolder(RE_SOURCES_ROOT_ID);
-        reTemplatesRef =  getFolder(RE_TEMPLATES_ROOT_ID);
+        reTemplatesRef = getFolder(RE_TEMPLATES_ROOT_ID);
         reReportsRef = getFolder(RE_REPORTS_ROOT_ID);
     }
 
@@ -57,5 +65,20 @@ public class ReporstEditorService extends BaseBean {
 
     public NodeRef getDictionariesRootFolder() {
         return reDictionaryRef;
+    }
+
+    public List<NodeRef> getReportTypes() {
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        NodeRef typesDictionary = nodeService.getChildByName(getDictionariesRootFolder(), ContentModel.ASSOC_CONTAINS, "Тип отчета");
+
+        Set<QName> childType = new HashSet<QName>();
+        childType.add(ReportsEditorModel.TYPE_REPORT_TYPE);
+
+        List<ChildAssociationRef> refs = nodeService.getChildAssocs(typesDictionary, childType);
+
+        for (ChildAssociationRef ref : refs) {
+            result.add(ref.getChildRef());
+        }
+        return result;
     }
 }
