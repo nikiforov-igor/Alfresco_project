@@ -675,6 +675,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
                 '<div id="confirm-comment-content" class="form-container"><div class="form-fields" style="padding: 1em">' +
                 '<label for="confirm-comment-textarea">' + this.options.fieldTitle+ ':</label>' +
                 '<textarea id="confirm-comment-textarea" name="confirm-comment-textarea" rows="9" style="margin: 0 0 5px 0; width: 360px;"></textarea>' +
+                '<div style="text-align: right">' +
                 '<span id="confirm-comment-edit" class="yui-button yui-push-button">' +
                 '<span class="first-child">' +
                 '<button id="confirm-comment-edit-button" type="button" tabindex="0">Ок</button>' +
@@ -685,6 +686,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
                 '<button id="confirm-comment-cancel-button" type="button" tabindex="0">Отмена</button>' +
                 '</span>' +
                 '</span>' +
+                '</div>' +
                 '</div>' +
                 '</div>' +
                 '</div>';

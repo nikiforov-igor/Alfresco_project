@@ -47,7 +47,7 @@
     margin-bottom: 10px;
 }
 
-.datagrid .onVersionRestore a {
-    background-image: url("../../../images/lecm-base/components/base/alf_base_versions_16.png");
+.datagrid .action-set .onVersionRestore a {
+    background-image: url("/share/res/components/document-details/images/revert-16.png");
 }
 
