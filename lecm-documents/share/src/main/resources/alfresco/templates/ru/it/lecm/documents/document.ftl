@@ -2,15 +2,20 @@
 <@templateHeader>
 	<@script type="text/javascript" src="${page.url.context}/res/components/documentlibrary/actions.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/yui/resize/resize-min.js"></@script>
-    <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
     <@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
-    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/light-blue-bgr.css" />
-    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/document-components-panel.css" />
-    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/dashlet-components.css" />
-    <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
     <@script type="text/javascript" src="${page.url.context}/res/components/document-details/document-metadata.js"></@script>
-    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/page-document.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/modules/editors/tiny_mce/themes/advanced/skins/default/ui.css" />
+    <#-- IMPORTANT for IE ! -->
+    <#-- В IE9 следующие файлы подключаются только при использовании тэга <link>,
+        при подключении макросом - не работают.
+        Причина не выявлена, возможно, как-то связано с местом расположения файлов (/css/...)
+    -->
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/light-blue-bgr.css" />
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/document-components-panel.css" />
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/dashlet-components.css" />
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/page-document.css" />
     <@templateHtmlEditorAssets />
     <script type="text/javascript">
         //<![CDATA[
