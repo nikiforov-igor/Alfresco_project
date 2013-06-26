@@ -31,9 +31,9 @@ report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
 }
 
 #re-templates-grid #yui-main-2 {
-    width: 60%;
+    width: 90%;
     float: left;
-    margin-left: 15%;
+    margin-left: 0%;
 }
 
 .reports .flat-button .yuimenuitemlabel {
