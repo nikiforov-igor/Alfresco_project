@@ -1755,7 +1755,7 @@
                     </node>
                     <node>
                         <type>taskStatus</type>
-                        <name>Проект зарегистирован</name>
+                        <name>Проект зарегистрирован</name>
                         <nodeRef>workspace://SpacesStore/35048822-ff91-4898-88fb-572fbdd303b5</nodeRef>
                         <properties>
                             <property>
