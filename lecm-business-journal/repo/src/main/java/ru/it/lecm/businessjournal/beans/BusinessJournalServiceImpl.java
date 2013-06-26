@@ -601,7 +601,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
                                 NodeRef nodeRef = sourceAssoc.getTargetRef();
 
                                 if (lecmPermissionService.hasReadAccess(nodeRef)
-                                        && (!stateMachineService.isDraft(nodeRef) || isAuthorNode(nodeRef))) {
+                                        && (!stateMachineService.isDraft(nodeRef) || isOwnNode(nodeRef))) {
                                     records.add(rowNodeRef);
                                 }
                             }

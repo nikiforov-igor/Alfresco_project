@@ -18,7 +18,7 @@ public class DocumentCommentsServiceImpl extends BaseBean{
         if (admin.contains(person)){
             return true;
         } else {
-            return isAuthorNode(nodeRef);
+            return isOwnNode(nodeRef);
         }
     }
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/

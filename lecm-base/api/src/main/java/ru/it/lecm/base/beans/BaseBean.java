@@ -146,7 +146,7 @@ public abstract class BaseBean implements InitializingBean {
 	}
 
 	/**
-	 * Проверка элемента на архивность
+	 * Проверка является ли текущий пользователь автором узла
 	 * @param ref Ссылка на элемент
 	 * @return true - если элемент архивный, иначе false
 	 */
@@ -344,16 +344,6 @@ public abstract class BaseBean implements InitializingBean {
         String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
         return  "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + nodeRef + "\">"
                 + description + "</a>";
-    }
-
-    /**
-     * Проверка является ли текущий пользователь автором узла
-     * @param nodeRef
-     * @return
-     */
-    public boolean isAuthorNode (NodeRef nodeRef) {
-        String person = authService.getCurrentUserName();
-        return person.equals(nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR));
     }
 
 	/**
