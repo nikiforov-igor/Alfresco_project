@@ -12,6 +12,7 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.documents.beans.DocumentService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -255,16 +256,21 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 	}
 
     private NodeRef getDocumentAuthor(NodeRef document) {
-        Object creator = nodeService.getProperty(document, ContentModel.PROP_CREATOR);
-        NodeRef person = serviceRegistry.getPersonService().getPerson(creator.toString(), false);
-        if (person != null) {
-            List<AssociationRef> lRefs = nodeService.getSourceAssocs(person, ASSOC_EMPLOYEE_PERSON);
-            for (AssociationRef lRef : lRefs) {
-                if (!isArchive(lRef.getSourceRef())) {
-                    return lRef.getSourceRef();
-                }
-            }
-        }
+        Object documentCreator = nodeService.getProperty(document, DocumentService.PROP_DOCUMENT_CREATOR_REF);
+	    if (documentCreator != null) {
+			return new NodeRef(documentCreator.toString());
+	    } else {
+		    Object creator = nodeService.getProperty(document, ContentModel.PROP_CREATOR);
+		    NodeRef person = serviceRegistry.getPersonService().getPerson(creator.toString(), false);
+		    if (person != null) {
+			    List<AssociationRef> lRefs = nodeService.getSourceAssocs(person, ASSOC_EMPLOYEE_PERSON);
+			    for (AssociationRef lRef : lRefs) {
+				    if (!isArchive(lRef.getSourceRef())) {
+					    return lRef.getSourceRef();
+				    }
+			    }
+		    }
+	    }
         return null;
     }
 

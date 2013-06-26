@@ -360,11 +360,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
             boolean addOR = false;
             String employeesFilter = "";
             for (NodeRef employeeRef : inititatorsList) {
-                String personName = orgstructureService.getEmployeeLogin(employeeRef);
-                if (personName != null && !personName.isEmpty()) {
-                    employeesFilter += (addOR ? " OR " : "") + "@cm\\:creator:" + personName + "";
-                    addOR = true;
-                }
+                employeesFilter += (addOR ? " OR " : "") + "@lecm-document\\:creator-ref:" + employeeRef.toString().replace(":", "\\:") + "";
+                addOR = true;
             }
             query += " AND (" + employeesFilter + ")";
         }
