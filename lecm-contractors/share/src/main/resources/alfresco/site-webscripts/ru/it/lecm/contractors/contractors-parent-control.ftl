@@ -44,7 +44,7 @@
                         linkElem.innerHTML = response.json.parentContractorName;
 
                         YAHOO.util.Event.addListener( linkElem, "click", function() {
-                            LogicECM.CurrentModules.ViewFormModule[ "${viewParentFormId}" ].view( response.json.parentContractor, "contacts", "Простмотр материнской компании для " + response.json.childContractorName );
+                            LogicECM.CurrentModules.ViewFormModule[ "${viewParentFormId}" ].view( response.json.parentContractor, "contacts", "Просмотр материнской компании для " + response.json.childContractorName );
                         });
 
                         YAHOO.util.Dom.setStyle( "${formId}-view-parent-field", "display", "block" );
