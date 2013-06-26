@@ -425,6 +425,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             initialSearchConfig: null,
 
+            errorMessageDialog: null,
+
             onArchiveCheckBoxClicked: function (layer, args) {
                 var cbShowArchive = YAHOO.util.Dom.get(this.id + "-cbShowArchive");
                 if (cbShowArchive) {
@@ -2366,14 +2368,38 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text:this.msg("message.save.failure")
-                                    });
+                                this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
                             },
                             scope:this
                         }
                     }).show();
+            },
+
+            displayErrorMessageWithDetails: function(msgHeader, msgTitle, msgDetails) {
+                if (this.errorMessageDialog == null) {
+                    this.errorMessageDialog = new YAHOO.widget.SimpleDialog("errorMessageWithDetailsDialog", {
+                        width: "60em",
+                        fixedcenter: true,
+                        destroyOnHide: true,
+                        modal: true
+                    });
+                }
+
+                this.errorMessageDialog.setHeader(msgHeader);
+
+                var errorDialogBody = '<div style="text-align: center; padding:5px;"><h3>' + msgTitle + '</h3>';
+                errorDialogBody += '<a href="javascript:void(0);" id="' + this.id + '-error-message-show-details-link">' + this.msg("logicecm.base.error.show.details") + '</a></div>';
+                errorDialogBody += '<div id="' + this.id + '-error-message-show-details" style="display:none; text-align: center; padding:5px; height: 250px; overflow: auto;">' + msgDetails + '</div>';
+
+                this.errorMessageDialog.setBody(errorDialogBody);
+                this.errorMessageDialog.render(document.body);
+                this.errorMessageDialog.show();
+
+                Event.on(this.id + "-error-message-show-details-link", "click", this.errorMessageShowDetails, null, this);
+            },
+
+            errorMessageShowDetails: function() {
+                Dom.setStyle(this.id + "-error-message-show-details", "display", "block");
             },
 
             /**
