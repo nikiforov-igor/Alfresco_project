@@ -1098,7 +1098,7 @@ LogicECM.module = LogicECM.module || {};
                            }
                            else
                            {
-                              displayValue += this.options.objectRenderer.renderItem(item, 16, "<div class='itemtype-" + $html(item.type) + "'>{icon} {name}</div>");
+                              displayValue += this.options.objectRenderer.renderItem(item, 16, "<div class='itemtype-" + $html(item.type) + "'>{icon}<div>{name}</div></div>");
                            }
                         }
                         else if (this.options.displayMode == "list")

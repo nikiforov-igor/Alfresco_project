@@ -73,7 +73,18 @@
                                                         type:"datagrid-action-link-template-edit",
                                                         id:"onActionSelect",
                                                         permission:"edit",
-                                                        label:"${msg("actions.edit")}"
+                                                        label:"${msg("actions.edit")}",
+                                                        evaluator: function (rowData) {
+                                                            if (rowData) {
+                                                                var itemData = rowData.itemData;
+                                                                //проверяем имя уже выбранного шаблона
+                                                                var template = Dom.getElementsByClassName("itemtype-lecm-rpeditor:reportTemplate");
+                                                                var currentTemplateName = (template[0] && template[0].children[1]) ? template[0].children[1].innerHTML : null;
+                                                                var selectedTemplateName = itemData["prop_cm_name"].value;
+                                                                return currentTemplateName != selectedTemplateName;
+                                                            }
+                                                            return false;
+                                                        }
                                                     }
                                                 ],
                                                 bubblingLabel: "template-edit",

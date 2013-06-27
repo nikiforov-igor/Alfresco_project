@@ -54,9 +54,6 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
         QName parentType = nodeService.getType(parent);
         try {
             if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
-                //List<NodeRef> template = new ArrayList<NodeRef>();
-                //template.add(childAssociationRef.getChildRef());
-                //nodeService.setAssociations(parent, ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE, template);
                 replaceOrCreateAssoc(parent, childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
 
                 // берем тип отчета из шаблона
@@ -80,13 +77,16 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
             NodeRef oldTemplate = templates.get(0).getTargetRef();
             nodeService.removeAssociation(report, oldTemplate, assocName);
 
+            NodeRef templateFile = nodeService.getTargetAssocs(oldTemplate, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE).get(0).getTargetRef();
+
             nodeService.addAspect(oldTemplate, ContentModel.ASPECT_TEMPORARY, null);
-
-            //NodeRef templateFile = nodeService.getTargetAssocs(oldTemplate, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE).get(0).getTargetRef();
-           //nodeService.addAspect(templateFile, ContentModel.ASPECT_TEMPORARY, null);
-
             nodeService.deleteNode(oldTemplate);
-            //nodeService.deleteNode(templateFile);
+
+            List<AssociationRef> assocs = nodeService.getSourceAssocs(templateFile, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
+            if (assocs != null && assocs.size() == 0) {
+                nodeService.addAspect(templateFile, ContentModel.ASPECT_TEMPORARY, null);
+                nodeService.deleteNode(templateFile);
+            }
         }
         nodeService.createAssociation(report, template, assocName);
     }
