@@ -256,8 +256,8 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 	}
 
     private NodeRef getDocumentAuthor(NodeRef document) {
-        Object documentCreator = nodeService.getProperty(document, DocumentService.PROP_DOCUMENT_CREATOR_REF);
-	    if (documentCreator != null) {
+        String documentCreator = (String) nodeService.getProperty(document, DocumentService.PROP_DOCUMENT_CREATOR_REF);
+	    if (documentCreator != null && !documentCreator.isEmpty()) {
 			return new NodeRef(documentCreator.toString());
 	    } else {
 		    Object creator = nodeService.getProperty(document, ContentModel.PROP_CREATOR);
