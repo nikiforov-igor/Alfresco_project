@@ -24,12 +24,17 @@
 
 			<!-- Title and Version -->
 			<h1 class="thin dark">
-				<#assign modifyUser = node.properties["lecm-document:modifier"]!"">
-                <#assign modifyUserRef = node.properties["lecm-document:modifier-ref"]!"">
-				<#assign modifyDate = node.properties["cm:modified"]>
-				<#assign modifierLink = view.showViewLink(modifyUser, modifyUserRef, "logicecm.employee.view")>
-				${displayName}<span class="document-version">${item.version}</span><span class="document-modified-info">${msg("label.modified-by-user-on-date", modifierLink, xmldate(modifyDate.iso8601)?string(msg("date-format.defaultFTL")))}</span>
+				${displayName}
 			</h1>
+            <div class="second-row">
+                <#--<#assign modifyUser = node.properties["lecm-document:modifier"]!"">-->
+                <#--<#assign modifyUserRef = node.properties["lecm-document:modifier-ref"]!"">-->
+                <#--<#assign modifierLink = view.showViewLink(modifyUser, modifyUserRef, "logicecm.employee.view")>-->
+                <#assign modifyDate = node.properties["cm:modified"]>
+                <span>${msg("label.version")}</span>
+                <span class="document-version">${item.version}</span>
+                <span class="document-modified-info">${msg("label.modified-by-user-on-date", xmldate(modifyDate.iso8601)?string(msg("date-format.defaultFTL")))}</span>
+            </div>
 		</div>
 
 		<div class="clear"></div>

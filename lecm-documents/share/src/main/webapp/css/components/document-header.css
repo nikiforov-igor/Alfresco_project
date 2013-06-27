@@ -13,31 +13,28 @@
 	color: #333333;
 }
 
-.document-header h1 .document-version
-{
-	margin-left: 0.8em;
-	position: relative;
-	top: -2px;
+.document-header .document-version {
+	margin-left: 5px;
 	background-color: white;
 	color: black;
 	border: 1px solid black;
-
 	font-size: 13px;
 }
 
-.document-header h1.breadcrumb
-{
+.document-header h1.breadcrumb {
 	float: left;
 	padding: 0.5em 0.2em 0.2em 0.5em;
 }
 
-.document-header h1 .document-modified-info
-{
+.document-header .document-modified-info {
 	margin-left: 0.8em;
 	position: relative;
-
 	font-size: 13px;
 	font-weight: normal;
+}
+
+.document-header .second-row {
+	padding: 5px 8px 8px;
 }
 
 .document-header .document-info {
@@ -81,8 +78,7 @@
     border: 1px solid;
 }
 
-.document-header .attachment-thumbnail
-{
+.document-header .attachment-thumbnail {
 	float: left;
 	padding: 0.1em 0.5em 0.1em 0;
 }

@@ -12,10 +12,11 @@
 
 .yui-gc .yui-u {
     margin-left: 0;
-    width: 20%;
+    width: 25%;
 }
 
-.yui-gc .preview {
+.yui-gc .preview,
+.yui-gc #doc-attach-right {
 	margin-top: 5px;
 }
 
@@ -43,7 +44,7 @@
 }
 
 .yui-gc div.first {
-    width: 79.8%;
+    width: 74.8%;
 }
 
 .yui-gc .yui-u .columnSize2{

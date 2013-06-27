@@ -7,9 +7,6 @@
 .doc-right-part > div:last-child .document-forms-panel {
     border-bottom: none;
 }
-#doc-attach-right .document-components-panel {
-    padding-left: 0;
-}
 .document-components-panel > h2,
 .document-forms-panel > h2 {
     padding-left: 1em;
