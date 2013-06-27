@@ -398,8 +398,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         String key = definition.getModel().getName().toPrefixString(namespaceService);
         key += ".type." + docType + ".title";
         key = StringUtils.replace(key, ":", "_");
-
-        return I18NUtil.getMessage(key, I18NUtil.getLocale());
+        String label = I18NUtil.getMessage(key, I18NUtil.getLocale());
+        return label != null ? label : key;
     }
 
 
