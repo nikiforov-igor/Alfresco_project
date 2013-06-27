@@ -21,7 +21,7 @@
             (function () {
                 YAHOO.util.Event.onDOMReady(function (){
                     LogicECM.module.Base.DataGrid.prototype.onActionMakePrimary = function DataGridActions_onActionMakePrimary(p_item) {
-                        var me = this;
+	                    var me = this;
                         var staffRow = p_item;
                         // Получаем для штатного расписания ссылку на сотрудника
                         var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getStaffEmployeeLink?nodeRef=" + staffRow.nodeRef;
@@ -97,13 +97,16 @@
                         };
                         YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
                     };
+
+	                var bublingLabel = "${containerId}" + Alfresco.util.generateDomId();
+
                     var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
                         usePagination: false,
                         showExtendSearchBlock: false,
                         actions: [
 	                        <#if form.mode != "view">
 		                        {
-	                                type: "datagrid-action-link-${containerId}",
+	                                type: "datagrid-action-link-" + bublingLabel,
 	                                id: "onActionMakePrimary",
 	                                permission: "edit",
 	                                label: "${msg("actions.makePrimary")}",
@@ -120,7 +123,7 @@
                                 nodeRef: <#if field.value?? && field.value != "">"${field.value}"<#else>"${form.arguments.itemId}"</#if>
                             },
                         dataSource:"lecm/orgstructure/ds/employee-positions",
-                        bubblingLabel: "${containerId}",
+                        bubblingLabel: bublingLabel,
                         allowCreate: false,
                         showActionColumn: <#if form.mode == "view">false<#else>true</#if>,
                         showCheckboxColumn: false
