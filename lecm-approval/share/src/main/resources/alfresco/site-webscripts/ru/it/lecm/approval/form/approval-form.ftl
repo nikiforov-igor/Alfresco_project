@@ -6,7 +6,7 @@
 <#assign controlId = htmlId + "-cntrl">
 <#assign datagridId = htmlId + "-datagrid">
 <#assign selectId = "assoc_lecmApprove_assigneesListAssoc_added">
-<#assign formContainerId = htmlId + "-container">
+<#assign formContainerId = formId + "-container">
 
 <#assign addAssigneeButtonId = htmlId + "-add-assignee-button">
 <#assign computeTermsButtonId = htmlId + "-compute-terms-button">
@@ -19,7 +19,6 @@
 </#if>
 
 <@formLib.renderFormContainer formId = formId>
-
     <!-- Тип согласования (default: SEQUENTIAL) -->
     <input id="prop_lecmApprove_approvalType" name="prop_lecmApprove_approvalType" value="SEQUENTIAL" type="hidden"/>
 
@@ -88,7 +87,7 @@
     LogicECM.module.AssigneesGrid = function( htmlId ) {
         LogicECM.module.AssigneesGrid.superclass.constructor.call( this, htmlId );
         this.options.approvalType = "sequential";
-        this.options.currentList = "";
+        this.options.currentList = null;
 
         return this;
     };
@@ -102,7 +101,7 @@
          *
          * @method AssigneesGrid_refreshDatagrid
          */
-        refreshDatagrid: function AssigneesGrid_refreshDatagrid( response ) {
+        refreshDatagrid: function AssigneesGrid_refreshForm( response ) {
             YAHOO.Bubbling.fire( "activeGridChanged", {
                 bubblingLabel: "${datagridId}-label",
 
@@ -124,9 +123,14 @@
          * @method AssigneesGrid_onMoveUp
          */
         onMoveUp: function AssigneesGrid_onMoveUp( items ) {
-
             var currentNodeRef = items.nodeRef,
                     dataObj = { "assigneeItemNodeRef": currentNodeRef, "moveDirection": "up" };
+
+            function onFailure() {
+                Alfresco.util.PopupManager.displayMessage({
+                    text: "Не удалось переместить согласующего вверх по списку"
+                });
+            }
 
             Alfresco.util.Ajax.request({
                 method: "POST",
@@ -138,14 +142,9 @@
                     fn: this.refreshDatagrid
                 },
                 failureCallback: {
-                    fn: function() {
-                        Alfresco.util.PopupManager.displayMessage({
-                            text: "Не удалось переместить согласующего вверх по списку"
-                        });
-                    }
+                    fn: onFailure
                 }
             });
-
         },
 
         /**
@@ -154,9 +153,14 @@
          * @method AssigneesGrid_onMoveDown
          */
         onMoveDown: function AssigneesGrid_onMoveDown( items ) {
-
             var currentNodeRef = items.nodeRef, // {String}
                     dataObj = { "assigneeItemNodeRef": currentNodeRef, "moveDirection": "down" };
+
+            function onFailure() {
+                Alfresco.util.PopupManager.displayMessage({
+                    text: "Не удалось переместить согласующего вниз по списку"
+                });
+            }
 
             Alfresco.util.Ajax.request({
                 method: "POST",
@@ -168,11 +172,7 @@
                     fn: this.refreshDatagrid
                 },
                 failureCallback: {
-                    fn: function () {
-                        Alfresco.util.PopupManager.displayMessage({
-                            text: "Не удалось переместить согласующего вниз по списку"
-                        });
-                    }
+                    fn: onFailure
                 }
             });
         }
@@ -216,6 +216,8 @@
 
     LogicECM.module.ApprovalForm.prototype =
     {
+        workflowForm: null,
+
         options: {
             dates: null,
             currentList: null
@@ -229,15 +231,29 @@
         },
 
         _addBubblingLayers: function approvalForm_addBubblingLayers() {
-            Bubbling.on( "registerValidationHandler", this._customizeCalendar, this );
+            var that = this;
+
+            Bubbling.on( "registerValidationHandler", this._hookCalendar, this );
+
+            // Перед тем, как создавать новые формы, необходимо отписать старые от прослушивания beforeFormRuntimeInit,
+            // так как внутри обработчика bFRI формы инициализируют кнопки. Если этого не сделать, то на событие будут
+            // подписаны 2+ формы и все они получат кнопки от последней созданной. Следовательно, ждём, пока форма
+            // инициализирует formRuntime и отписываемся от beforeFormRuntimeInit.
+            Bubbling.on( "afterFormRuntimeInit", function onAfterFormRuntimeInit( layer, args ) {
+                var eventGroup = args[ 1 ].eventGroup;
+                if( eventGroup === "workflow-form-form" ) {
+                    var workflowForm = ComponentManager.get( "workflow-form" );
+                    that.workflowForm = ComponentManager.get( "workflow-form" ).form;
+
+                    YAHOO.Bubbling.unsubscribe( "beforeFormRuntimeInit", workflowForm.onBeforeFormRuntimeInit, workflowForm );
+                    YAHOO.Bubbling.unsubscribe( "afterFormRuntimeInit", onAfterFormRuntimeInit );
+                }
+            });
         },
 
         handlers: {
 
             _onNewAssigneesListButtonClick: function approvalForm_onNewAssigneesListButtonClick() {
-
-                debugger;
-
                 if ( this.constants.LISTS_FOLDER_REF === null ) {
                     return false;
                 }
@@ -256,6 +272,11 @@
                         showCancelButton: "true"
                     },
                     destroyOnHide: true,
+                    doBeforeDialogShow:{
+                        fn: function( p_form, p_dialog ) {
+                            p_dialog.dialog.setHeader( "Новый список согласования" );
+                        }
+                    },
                     onSuccess: {
                         fn: this.fillApprovalListMenu,
                         scope: this
@@ -322,6 +343,11 @@
                         ignoreNodes: this.getCurrentNodeRefs( "employee" )
                     },
                     destroyOnHide: true,
+                    doBeforeDialogShow:{
+                        fn: function( p_form, p_dialog ) {
+                            p_dialog.dialog.setHeader( "Добавить согласующего" );
+                        }
+                    },
                     onSuccess: {
                         fn: this.refreshDatagrid,
                         scope: this
@@ -335,8 +361,6 @@
                         scope: this
                     }
                 });
-
-                debugger;
 
                 this.widgets.addAssigneeForm.show();
             },
@@ -383,8 +407,14 @@
                 return true;
             },
 
-            _onComputeTermsButtonClick: function approvalForm_onComputeTermsButtonClick(event) {
-                var currentSelectedListRef = this.widgets.$assigneesListSelectElem.attr( "value" );
+            /**
+             * Обрабатывает нажатие на кнопку 'Рассчитать сроки согласования'
+             *
+             * @method approvalForm_onComputeTermsButtonClick
+             */
+            _onComputeTermsButtonClick: function approvalForm_onComputeTermsButtonClick() {
+                var currentSelectedListRef = this.widgets.$assigneesListSelectElem.val(),
+                        selectedDate = this.widgets.calendar.getSelectedDates()[ 0 ];
 
                 debugger;
 
@@ -397,14 +427,12 @@
                     url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/setDueDates",
                     dataObj: {
                         assigneeListNodeRef: currentSelectedListRef,
-                        workflowDueDate: Alfresco.util.toISO8601(this.widgets.calendar.getSelectedDates()[0])
+                        workflowDueDate: Alfresco.util.toISO8601( selectedDate )
                     },
                     requestContentType: "application/json",
                     responseContentType: "application/json",
                     successCallback: {
-                        fn: function() {
-                            this.refreshDatagrid();
-                        },
+                        fn: this.refreshDatagrid,
                         scope: this
                     },
                     failureCallback: {
@@ -425,7 +453,7 @@
          *
          * @method approvalForm_getCurrentNodeRefs
          */
-        getCurrentNodeRefs: function approvalForm_getCurrentNodeRefs( nodeRefType ) {
+        getCurrentNodeRefs: function approvalForm_getCurrentNodeRefs() {
             var datagrid = this.widgets.assigneesDatagrid,
                 dataTable = datagrid.widgets.dataTable,
                 recordsSet = dataTable.getRecordSet(),
@@ -437,15 +465,8 @@
                 return "";
             }
 
-            for( i = 0; i < records.length; ++i ) {
-                switch ( nodeRefType ) {
-                    case "employee":
-                        result.push( records[ i ].getData( "itemData" )[ "assoc_lecm-al_assignees-item-employee-assoc" ].value );
-                        break;
-                    case "assignee":
-                        result.push( records[ i ].getData( "nodeRef" ) );
-                        break;
-                }
+            for( i = 0; i < records.length; i++ ) {
+                result.push( records[ i ].getData( "itemData" )[ "assoc_lecm-al_assignees-item-employee-assoc" ].value );
             }
 
             return result.join();
@@ -472,7 +493,6 @@
          */
         _getListsFolderRef: function() {
             function onSuccess( response ) {
-                debugger;
                 this.constants.LISTS_FOLDER_REF = response.json.approvalListFolderRef;
             }
 
@@ -500,27 +520,23 @@
         /**
          * Заполняет dropDownList перечнем сохранённых списков согласования
          *
-         * @method sortFunction
-         * @param a {object} Sort record a
-         * @param b {object} Sort record b
-         * @param desc {boolean} Ascending/descending flag
-         * @param field {String} Field to sort by
+         * @method fillApprovalListMenu
+         * @param listToSelect {String} NodeRef'а списка, который будет выбран после заполнения перечня
+         * @param listToSelect {ajax.response} Response-объект Alfresco.util.Ajax.request'а
          */
         fillApprovalListMenu: function approvalForm_fillApprovalListMenu( listToSelect ) {
-
-            debugger;
-
             if ( listToSelect && YAHOO.lang.isString( listToSelect ) === false ) {
                 listToSelect = listToSelect.json.persistedObject;
             }
 
             function onGetAllListsSuccess( response ) {
 
-                var assigneesLists = response.json.lists,
+                var i = 0,
+                        assigneesLists = response.json.lists,
                         defaultListRef = response.json.defaultListRef,
                         $selectElem = this.widgets.$assigneesListSelectElem,
                         selectElem = this.widgets.assigneesListSelectElem,
-                        i = 0,
+
                         optionElemAttributes;
 
                 if ( selectElem.get( "options" ).length > 0 ) {
@@ -529,7 +545,7 @@
                     $selectElem.empty();
                 }
 
-                for( ; i < assigneesLists.length; ++i ) {
+                for( ; i < assigneesLists.length; i++ ) {
                     if ( assigneesLists[ i ].nodeRef === defaultListRef ) {
                         optionElemAttributes = {
                             value: assigneesLists[ i ].nodeRef,
@@ -544,7 +560,7 @@
                     }
                 }
 
-                for ( i = 0; i < assigneesLists.length; ++i ) {
+                for ( i = 0; i < assigneesLists.length; i++ ) {
                     optionElemAttributes = {
                         value: assigneesLists[ i ].nodeRef,
                         text: assigneesLists[ i ].listName,
@@ -578,9 +594,9 @@
         },
 
         /**
-         * События
+         * Подписывает обработчики на события всех пользовательских элементов формы
          *
-         * @method approvalForm_initAddAssigneeButton
+         * @method approvalForm_initEvents
          */
         _initEvents: function approvalForm_initEvents() {
             this.widgets.approvalTypeRadioButtons.subscribe( "checkedButtonChange", this.handlers._onApprovalTypeChange, null, this );
@@ -588,9 +604,63 @@
             this.widgets.addAssigneeButton.subscribe( "click", this.handlers._onAddAssigneeButtonClick, null, this );
             this.widgets.deleteAssigneesListButton.subscribe( "click", this.handlers._onDeleteAssigneesListButtonClick, null, this );
             this.widgets.newAssigneesListButton.subscribe( "click", this.handlers._onNewAssigneesListButtonClick, null, this );
-            this.widgets.computeTermsButton.subscribe("click", this.handlers._onComputeTermsButtonClick, null, this);
+            this.widgets.computeTermsButton.subscribe( "click", this.handlers._onComputeTermsButtonClick, null, this );
 
             this.widgets.assigneesListSelectElem.subscribe( "change", this.refreshDatagrid, null, this );
+        },
+
+        /**
+         * Подписывает валидацию на события RecordSet'а
+         *
+         * @method approvalForm_subscribeRecordSet
+         */
+        _subscribeRecordSet: function approvalForm_subscribeRecordSet() {
+            var assigneesSet = this.widgets.assigneesDatagrid.widgets.dataTable.getRecordSet();
+
+            assigneesSet.unsubscribe( "recordAddEvent", this.validateForm, this, true );
+            assigneesSet.unsubscribe( "recordUpdateEvent", this.validateForm, this, true );
+            assigneesSet.unsubscribe( "recordSetEvent", this.validateForm, this, true );
+            assigneesSet.unsubscribe( "recordsAddEvent", this.validateForm, this, true );
+            assigneesSet.unsubscribe( "recordsSetEvent", this.validateForm, this, true );
+            assigneesSet.unsubscribe( "recordDeleteEvent", this.validateForm, this, true );
+            assigneesSet.unsubscribe( "recordsDeleteEvent", this.validateForm, this, true );
+
+            assigneesSet.subscribe( "recordAddEvent", this.validateForm, this, true );
+            assigneesSet.subscribe( "recordUpdateEvent", this.validateForm, this, true );
+            assigneesSet.subscribe( "recordSetEvent", this.validateForm, this, true );
+            assigneesSet.subscribe( "recordsAddEvent", this.validateForm, this, true );
+            assigneesSet.subscribe( "recordsSetEvent", this.validateForm, this, true );
+            assigneesSet.subscribe( "recordDeleteEvent", this.validateForm, this, true );
+            assigneesSet.subscribe( "recordsDeleteEvent", this.validateForm, this, true );
+        },
+
+        /**
+         * Валидация
+         *
+         * @method approvalForm_initAddAssigneeButton
+         */
+        _initValidation: function approvalForm_initValidation() {
+            // При смене типа согласования
+            this.widgets.approvalTypeRadioButtons.subscribe( "checkedButtonChange", this.validateForm, null, this );
+
+            // Как только datagrid будет доступен, подпишемся на события recordSet'а
+            Bubbling.on( "datagridVisible", this._subscribeRecordSet, this );
+
+            // Здесь мы должны были бы подписаться на select и deselect события календаря, но из-за асинхронности событий
+            // и отсутствия доброго callback'а при инициализации календаря, единственная возможность отследить его
+            // появление это обработать registerValidationHandler, поэтому подписывание на select и deselect вынесено в
+            // this.approvalForm_hookCalendar
+        },
+
+        /**
+         * Метод-адаптер для вызова "встроенной" валидации формы
+         *
+         * @method approvalForm_validateForm
+         */
+        validateForm: function approvalForm_validateForm() {
+            if( this.workflowForm !== null ) {
+                this.workflowForm.updateSubmitElements();
+            }
         },
 
         /**
@@ -681,7 +751,6 @@
                 showActionColumn: true,
                 overrideSortingWith: false ,
 
-                // From Constructor...
                 approvalType: "sequential",
 
                 actions: [{
@@ -728,25 +797,95 @@
          * datepicker и calendar в this.widgets, устанавливает минимальную и максимальну дату, подсвечивает даты,
          * которые лучше не выбирать.
          *
-         * @method approvalForm_customizeCalendar
+         * @method approvalForm_hookCalendar
          */
-        _customizeCalendar: function approvalForm_customizeCalendar( layer, args ) {
+        _hookCalendar: function approvalForm_hookCalendar( layer, args ) {
             var i;
 
+            function getYahooDateString( date ) {
+                return ( date.getMonth() + 1 ) + "/" + date.getDate() + "/" + date.getFullYear();
+            }
+
             if( args[ 1 ].fieldId === "workflow-form_prop_bpm_workflowDueDate-cntrl-date" ) {
-                this.widgets.datepicker = this.widgets.datepicker || ComponentManager.get( "workflow-form_prop_bpm_workflowDueDate-cntrl" );
-                this.widgets.calendar = this.widgets.calendar || ComponentManager.get( "workflow-form_prop_bpm_workflowDueDate-cntrl" ).widgets.calendar;
 
-                this.widgets.calendar.cfg.setProperty( "mindate", this.options.dates.startDate );
-                this.widgets.calendar.cfg.setProperty( "maxdate", this.options.dates.endDate );
+                var zeroDate = new Date( 0 ),
+                        todayDate = new Date(),
+                        restrictedRange = getYahooDateString( zeroDate ) + "-" + getYahooDateString( todayDate );
 
-                for( i = 0; i < this.options.dates.restrictedDates.length; ++i ) {
-                    this.widgets.calendar.addRenderer( ( this.options.dates.restrictedDates[ i ].getMonth() + 1 ) + "/" +
-                            this.options.dates.restrictedDates[ i ].getDate() + "/" +
-                            this.options.dates.restrictedDates[ i ].getFullYear(),
-                            this.widgets.calendar.renderCellStyleHighlight3 );
+                this.widgets.datepicker = ComponentManager.get( "workflow-form_prop_bpm_workflowDueDate-cntrl" );
+                this.widgets.calendar = this.widgets.datepicker.widgets.calendar;
+
+                this.widgets.calendar.addRenderer( restrictedRange, this.widgets.calendar.renderCellStyleHighlight3 );
+
+                // Future...
+                //this.widgets.calendar.cfg.setProperty( "mindate", this.options.dates.startDate );
+                //this.widgets.calendar.cfg.setProperty( "maxdate", this.options.dates.endDate );
+
+                //for( i = 0; i < this.options.dates.restrictedDates.length; i++ ) {
+                    //this.widgets.calendar.addRenderer( ( this.options.dates.restrictedDates[ i ].getMonth() + 1 ) + "/" +
+                            //this.options.dates.restrictedDates[ i ].getDate() + "/" +
+                            //this.options.dates.restrictedDates[ i ].getFullYear(),
+                            //this.widgets.calendar.renderCellStyleHighlight3 );
+                //}
+
+                // Подписываем валидацию на select и deselect, так как в this._initValidation календарь не будет доступен.
+                // Подробнее в this._initValidation.
+                this.widgets.calendar.selectEvent.subscribe( this.validateForm, this, true );
+                this.widgets.calendar.deselectEvent.subscribe( this.validateForm, this, true );
+            }
+        },
+
+        /**
+         * MEMORY LEAKS?
+         *
+         * @method approvalForm_initDestructor
+         */
+        _initDestructor: function approvalForm_initDestructor() {
+            var that = this,
+                    componentsList = ComponentManager.list(),
+                    form = ComponentManager.get( "workflow-form" ),
+                    formIndex = componentsList.indexOf( form ); // IE9+
+
+            function Destructor() {
+                var assigneesSet = that.widgets.assigneesDatagrid.widgets.dataTable.getRecordSet(),
+                        assigneesDatagrid = that.widgets.assigneesDatagrid;
+
+                Bubbling.unsubscribe( "registerValidationHandler", that._hookCalendar, that );
+                Bubbling.unsubscribe( "registerValidationHandler", that._subscribeRecordSet, that );
+
+                Bubbling.unsubscribe( "activeGridChanged", assigneesDatagrid.onGridTypeChanged, assigneesDatagrid );
+                Bubbling.unsubscribe( "dataItemCreated", assigneesDatagrid.onDataItemCreated, assigneesDatagrid );
+                Bubbling.unsubscribe( "dataItemUpdated", assigneesDatagrid.onDataItemUpdated, assigneesDatagrid );
+                Bubbling.unsubscribe( "dataItemsDeleted", assigneesDatagrid.onDataItemsDeleted, assigneesDatagrid );
+                Bubbling.unsubscribe( "datagridRefresh", assigneesDatagrid.onDataGridRefresh, assigneesDatagrid );
+                Bubbling.unsubscribe( "archiveCheckBoxClicked", assigneesDatagrid.onArchiveCheckBoxClicked, assigneesDatagrid );
+                Bubbling.unsubscribe( "changeFilter", assigneesDatagrid.onFilterChanged, assigneesDatagrid );
+
+                assigneesSet.unsubscribeAll( "recordAddEvent" );
+                assigneesSet.unsubscribeAll( "recordUpdateEvent" );
+                assigneesSet.unsubscribeAll( "recordSetEvent" );
+                assigneesSet.unsubscribeAll( "recordsAddEvent" );
+                assigneesSet.unsubscribeAll( "recordsSetEvent" );
+                assigneesSet.unsubscribeAll( "recordDeleteEvent" );
+                assigneesSet.unsubscribeAll( "recordsDeleteEvent" );
+
+                that.widgets.approvalTypeRadioButtons.unsubscribeAll( "checkedButtonChange" );
+                that.widgets.addAssigneeButton.unsubscribeAll( "click" );
+                that.widgets.deleteAssigneesListButton.unsubscribeAll( "click" );
+                that.widgets.newAssigneesListButton.unsubscribeAll( "click" );
+                that.widgets.computeTermsButton.unsubscribeAll( "click" );
+                that.widgets.assigneesListSelectElem.unsubscribeAll( "change" );
+
+                that.widgets.calendar.selectEvent.unsubscribeAll();
+                that.widgets.calendar.deselectEvent.unsubscribeAll();
+
+                while( componentsList.length > formIndex ) { // Не оптимизируй...
+                    ComponentManager.unregister( componentsList[ formIndex ] );
                 }
             }
+
+            // Submit, Cancel, Esc, X
+            form.dialog.subscribe( "destroy", Destructor );
         },
 
         init: function approvalForm_onComponentsLoaded() {
@@ -758,6 +897,7 @@
 
             this._getListsFolderRef();
 
+            // Подписки через Bubbling
             this._addBubblingLayers();
 
             // Инициализация кнопок
@@ -775,8 +915,13 @@
 
             // Подписки
             this._initEvents();
+            this._initValidation();
 
-            this.fillApprovalListMenu();
+            // "Деструктор"
+            this._initDestructor();
+
+            // Заполнение перечня списков согласующих
+            this.fillApprovalListMenu( null );
         }
     };
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

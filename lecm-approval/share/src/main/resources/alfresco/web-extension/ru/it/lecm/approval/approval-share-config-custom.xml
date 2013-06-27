@@ -17,6 +17,9 @@
 					<!-- Название списка согласующих -->
 					<show id="cm:name"/>
 				</field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.assingees-list-name"/>
+                </appearance>
 			</form>
 		</forms>
 	</config>
@@ -128,7 +131,7 @@
 
 					<field id="bpm:workflowDueDate" mandatory="true">
 						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.noPastDates" event="blur"/>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
 						</constraint-handlers>
 						<control template="/org/alfresco/components/form/controls/date.ftl"/>
 					</field>
