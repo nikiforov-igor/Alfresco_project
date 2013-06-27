@@ -129,9 +129,10 @@
             actionUrl: null,
             destroyOnHide: true,
             doBeforeDialogShow: {
-                fn: function () {
+                fn: function ( p_form, p_dialog ) {
                     //debugger;
                     //editDetails.dialog.form.buttons.cancel.hide();
+                    Alfresco.util.populateHTML( [ p_dialog.id + "-form-container_h", "Переназначение задачи" ] );
                     var frm = Alfresco.util.ComponentManager.get(this.dialog.form.id);
                     var btn = frm.buttons.cancel;
                     btn._button.style.display = "none";
