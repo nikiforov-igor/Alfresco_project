@@ -30,7 +30,7 @@ report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
     padding: 4px 0.5em 2px;
 }
 
-#re-templates-grid #yui-main-2 {
+#re-templates-grid{
     width: 90%;
     float: left;
     margin-left: 0%;

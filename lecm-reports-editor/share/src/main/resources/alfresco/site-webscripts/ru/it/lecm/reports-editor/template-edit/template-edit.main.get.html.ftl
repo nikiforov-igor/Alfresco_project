@@ -7,11 +7,11 @@
 <#if page.url.args.reportId??>
 <div class="reports">
     <div class="title">
-        <h3>Текущий шаблон</h3>
+        <h3>${msg("label.current-template")}</h3>
     </div>
     <div id="${id}-reportTemplateInfo"></div>
     <div class="title">
-        <h3>Выбор шаблона</h3>
+        <h3>${msg("label.select-template")}</h3>
     </div>
     <table cellspacing="2" cellpadding="0" style="margin-bottom: 5px; width:100%">
         <tbody>
@@ -19,11 +19,11 @@
             <td valign="top">
                 <div class="flat-button">
                     <div class="report-editor-panel">
-         <span class="align-left yui-button yui-menu-button" id="${id}-reportType">
-            <span class="first-child">
-               <button type="button" tabindex="0"></button>
-            </span>
-         </span>
+                         <span class="align-left yui-button yui-menu-button" id="${id}-reportType">
+                            <span class="first-child">
+                               <button type="button" tabindex="0"></button>
+                            </span>
+                         </span>
                         <select id="${id}-reportType-menu">
                             <#assign count = 0/>
                             <#list reportTypes as reportType>
@@ -36,13 +36,10 @@
                             </#list>
                         </select>
                     </div>
-                    <div id="${id}-currentTemplate-name"></div>
-                    <input type="hidden" id="${id}-currentTemplate-ref" name="currentTemplate-ref"/>
                 </div>
             </td>
             <td>
                 <div id="re-templates-grid">
-                    <div id="yui-main-2">
                         <div class="yui-b" id="alf-content" style="margin-left: 0;">
                             <@grid.datagrid id="re-templates-grid" showViewForm=false>
                                 <script type="text/javascript">//<![CDATA[
@@ -73,7 +70,7 @@
                                                         type:"datagrid-action-link-template-edit",
                                                         id:"onActionSelect",
                                                         permission:"edit",
-                                                        label:"${msg("actions.edit")}",
+                                                        label:"${msg("actions.select")}",
                                                         evaluator: function (rowData) {
                                                             if (rowData) {
                                                                 var itemData = rowData.itemData;
@@ -111,7 +108,6 @@
                                 //]]></script>
                             </@grid.datagrid>
                         </div>
-                    </div>
                 </div>
             </td>
         </tr>
@@ -158,10 +154,6 @@
         YAHOO.util.Event.onDOMReady(initEditor);
     </script>
 </div>
-<#-- Empty results list template -->
-<div id="${id}-empty" style="display: none">
-    <div class="empty"><h3>${msg("empty.title")}</h3><span>${msg("empty.description")}</span></div>
-</div>
 <#else>
-    <div>Данная страница достпна только для конкретного отчета</div>
+    <div>${msg("label.unavaiable-page")}</div>
 </#if>

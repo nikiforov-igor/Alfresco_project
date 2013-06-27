@@ -85,7 +85,7 @@
 
             _showCreateForm: function (meta, response) {
                 var doBeforeDialogShow = function (p_form, p_dialog) {
-                    var defaultMsg = this.msg("label.create-row.title");
+                    var defaultMsg = this.msg("label.create-template.title");
                     Alfresco.util.populateHTML(
                         [ p_dialog.id + "-form-container_h", defaultMsg ]
                     );
