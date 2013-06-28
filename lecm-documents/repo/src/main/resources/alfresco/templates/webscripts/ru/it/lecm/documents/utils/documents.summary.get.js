@@ -3,7 +3,15 @@ var type = args["docType"];
 var draftPath = documentScript.getDraftPath(type);
 var documentPath = documentScript.getDocumentsPath();
 
-var paths = [draftPath, documentPath];
+var paths = [];
+
+if (draftPath) {
+    paths.push(draftPath);
+}
+
+if (documentPath) {
+    paths.push(documentPath);
+}
 
 var archDirectories = statemachine.getArchiveFolders(type);
 for (var index in archDirectories) {
