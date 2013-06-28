@@ -36,6 +36,16 @@
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
+<#if notSelectedOptionShow>
+    <#if field.control.params.notSelectedOptionLabel??>
+        <#assign notSelectedText = field.control.params.notSelectedOptionLabel>
+    <#elseif field.control.params.notSelectedOptionLabelCode??>
+        <#assign notSelectedText = msg(field.control.params.notSelectedOptionLabelCode)>
+    </#if>
+<#else>
+    <#assign notSelectedText = "">
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function()
 {
@@ -60,6 +70,7 @@
                 nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
                 showCreateNewButton: ${showCreateNewButton?string},
 	            notSelectedOptionShow: ${notSelectedOptionShow?string},
+	            notSelectedText: "${notSelectedText?string}",
 	            <#if field.control.params.primaryCascading??>
                     primaryCascading: ${field.control.params.primaryCascading},
 		        </#if>

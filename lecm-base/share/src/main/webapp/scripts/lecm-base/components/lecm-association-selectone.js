@@ -69,6 +69,8 @@ LogicECM.module = LogicECM.module || {};
 
 	            notSelectedOptionShow: false,
 
+                notSelectedText: "",
+
 	            disabled: false
             },
 
@@ -341,7 +343,9 @@ LogicECM.module = LogicECM.module || {};
 	                            scope: this
 	                        }
 	                    });
-	            }
+	            } else if (this.options.notSelectedOptionShow){
+                    this.currentDisplayValueElement.innerHTML = this.options.notSelectedText;
+                }
             },
 
             _createDataSource: function AssociationSelectOne__createDataSource() {
