@@ -606,7 +606,23 @@
             this.widgets.newAssigneesListButton.subscribe( "click", this.handlers._onNewAssigneesListButtonClick, null, this );
             this.widgets.computeTermsButton.subscribe( "click", this.handlers._onComputeTermsButtonClick, null, this );
 
-            this.widgets.assigneesListSelectElem.subscribe( "change", this.refreshDatagrid, null, this );
+            this.widgets.assigneesListSelectElem.subscribe( "change", this._changeSelectedList, null, this );
+        },
+
+        _changeSelectedList: function approvalForm_changeSelectedList( event ) {
+            var listRefToClear = event.target.value;
+
+            Alfresco.util.Ajax.request({
+                method: "POST",
+                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/clearDueDates",
+                dataObj: { "listRefToClear": listRefToClear },
+                requestContentType: "application/json",
+                responseContentType: "application/json",
+                successCallback: {
+                    fn: this.refreshDatagrid,
+                    scope: this
+                }
+            });
         },
 
         /**
@@ -800,7 +816,7 @@
          * @method approvalForm_hookCalendar
          */
         _hookCalendar: function approvalForm_hookCalendar( layer, args ) {
-            var i;
+            //var i;
 
             function getYahooDateString( date ) {
                 return ( date.getMonth() + 1 ) + "/" + date.getDate() + "/" + date.getFullYear();

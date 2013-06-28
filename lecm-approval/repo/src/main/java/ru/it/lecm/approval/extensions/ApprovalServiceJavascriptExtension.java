@@ -343,6 +343,29 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		return result;
 	}
 
+    /**
+     * Сбросить даты в списке согласующих
+     *
+     * @param json { "listRefToClear": "NodeRef на список согласующих" }
+     */
+    public void clearDueDates(final JSONObject json) {
+        String listRefToClear;
+
+        try {
+            listRefToClear = json.getString("listRefToClear");
+        } catch (JSONException ex) {
+            throw new WebScriptException("Insufficient params in JSON", ex);
+        }
+
+        NodeRef listNodeToClear = new NodeRef(listRefToClear);
+
+        List<NodeRef> assignees = getAssigneesListItems(listNodeToClear);
+
+        for(NodeRef assignee : assignees) {
+            nodeService.setProperty(assignee, ApprovalListService.PROP_ASSIGNEES_ITEM_DUE_DATE, null);
+        }
+    }
+
 	public void deleteList(final JSONObject json) {
 		String nodeRefStr;
 		try {
