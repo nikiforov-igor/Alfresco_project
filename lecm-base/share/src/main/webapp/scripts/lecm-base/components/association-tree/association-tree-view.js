@@ -827,7 +827,7 @@ LogicECM.module = LogicECM.module || {};
                 var templateUrl = me.generateCreateNewUrl(me.currentNode.data.nodeRef, me.options.itemType);
 
                 new Alfresco.module.SimpleDialog("create-form-dialog-" + me.eventGroup).setOptions({
-                    width:"40em",
+                    width:"50em",
                     templateUrl:templateUrl,
                     actionUrl:null,
                     destroyOnHide:true,
