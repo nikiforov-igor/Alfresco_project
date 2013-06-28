@@ -259,39 +259,32 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return isStarter(type, employee);
     }
 
+    /**
+     * Выборка статусов для всех экземпляров процессов для определенного типа документа
+     * @param documentType - тип документа
+     * @return
+     */
     @Override
     public List<String> getStatuses(String documentType) {
         HashSet<String> statuses = new HashSet<String>();
         String type = documentType.replace(":", "_");
+
+        //Выбираем статусы для текущей машины состояний даже если у нее нет ни одного запущенного процесса
+        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) activitiProcessEngineConfiguration.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(type).latestVersion().singleResult();
+        if (processDefinitionEntity != null) {
+            processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionEntity.getId());
+            HashSet<String> result = getDefinitionStatuses(processDefinitionEntity);
+            statuses.addAll(result);
+        }
+
+        //Выбираем все статусы для всех процессов
         List<WorkflowDefinition> definitions = serviceRegistry.getWorkflowService().getAllDefinitionsByName(ACTIVITI_PREFIX + type);
         for (WorkflowDefinition definition : definitions) {
             List<WorkflowInstance> instances = serviceRegistry.getWorkflowService().getActiveWorkflows(definition.getId());
             if (instances.size() > 0) {
-                ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(definition.getId().replace(ACTIVITI_PREFIX, ""));
-                List<ActivityImpl> activities = processDefinitionEntity.getActivities();
-                for (ActivityImpl activity : activities) {
-                    List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
-                    if (listeners != null) {
-                        for (ExecutionListener listener : listeners) {
-                            if (listener instanceof StateMachineHandler.StatemachineTaskListener) {
-                                List<StateMachineAction> result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("start");
-                                for (StateMachineAction action : result) {
-                                    if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(StatusChangeAction.class))) {
-                                        StatusChangeAction statusAction = (StatusChangeAction) action;
-                                        statuses.add(statusAction.getStatus());
-                                    }
-                                }
-                                result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("end");
-                                for (StateMachineAction action : result) {
-                                    if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(ArchiveDocumentAction.class))) {
-                                        ArchiveDocumentAction archiveDocumentAction = (ArchiveDocumentAction) action;
-                                        statuses.add(archiveDocumentAction.getStatusName());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(definition.getId().replace(ACTIVITI_PREFIX, ""));
+                HashSet<String> result = getDefinitionStatuses(processDefinitionEntity);
+                statuses.addAll(result);
             }
         }
         List<String> statusesList = new ArrayList<String>(statuses);
@@ -1284,4 +1277,39 @@ public class StateMachineHelper implements StateMachineServiceBean {
     private QName getDocumentType(NodeRef document) {
         return serviceRegistry.getNodeService().getType(document);
     }
+
+    /**
+     * Выборка имен статусов для определенного описателя процесса
+     * @param processDefinitionEntity
+     * @return Список имен статусов
+     */
+    private HashSet<String> getDefinitionStatuses(ProcessDefinitionEntity processDefinitionEntity) {
+        HashSet<String> statuses = new HashSet<String>();
+        List<ActivityImpl> activities = processDefinitionEntity.getActivities();
+        for (ActivityImpl activity : activities) {
+            List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
+            if (listeners != null) {
+                for (ExecutionListener listener : listeners) {
+                    if (listener instanceof StateMachineHandler.StatemachineTaskListener) {
+                        List<StateMachineAction> result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("start");
+                        for (StateMachineAction action : result) {
+                            if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(StatusChangeAction.class))) {
+                                StatusChangeAction statusAction = (StatusChangeAction) action;
+                                statuses.add(statusAction.getStatus());
+                            }
+                        }
+                        result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("end");
+                        for (StateMachineAction action : result) {
+                            if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(ArchiveDocumentAction.class))) {
+                                ArchiveDocumentAction archiveDocumentAction = (ArchiveDocumentAction) action;
+                                statuses.add(archiveDocumentAction.getStatusName());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return statuses;
+    }
+
 }
