@@ -251,15 +251,15 @@
                 <field-visibility>
                     <show id="lecm-busjournal:bjRecord-date"/>
                     <show id="lecm-busjournal:bjRecord-description"/>
-                    <show id="lecm-busjournal:bjRecord-initiator"/>
-                    <show id="lecm-busjournal:bjRecord-mainObject"/>
+                    <show id="lecm-busjournal:bjRecord-initiator-assoc-text-content"/>
+                    <show id="lecm-busjournal:bjRecord-mainObject-assoc-text-content"/>
                     <show id="lecm-busjournal:bjRecord-evCategory-assoc-text-content"/>
                     <show id="lecm-busjournal:bjRecord-objType-assoc-text-content"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj1"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj2"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj3"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj4"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj5"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj1-assoc-text-content"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj2-assoc-text-content"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj3-assoc-text-content"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj4-assoc-text-content"/>
+                    <show id="lecm-busjournal:bjRecord-secondaryObj5-assoc-text-content"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-busjournal:bjRecord-date">
