@@ -1054,7 +1054,8 @@
 					<show id="lecm-contract-reports:contracts-list-end-after"/>
 					<show id="lecm-contract-reports:contracts-list-end-before"/>
 					<show id="lecm-contract-reports:contracts-list-contractor"/>
-					<show id="lecm-contract-reports:contracts-list-sum"/>
+					<show id="lecm-contract-reports:contracts-list-sum-low"/>
+					<show id="lecm-contract-reports:contracts-list-sum-up"/>
 					<show id="lecm-contract-reports:contracts-list-contract-type"/>
 					<show id="lecm-contract-reports:contracts-list-contract-subject"/>
 					<show id="lecm-contract-reports:contracts-list-actual-only"/>
@@ -1076,7 +1077,8 @@
 					<field id="lecm-contract-reports:contracts-list-end-after"/>
 					<field id="lecm-contract-reports:contracts-list-end-before"/>
 
-					<field id="lecm-contract-reports:contracts-list-sum"/>
+					<field id="lecm-contract-reports:contracts-list-sum-low"/>
+					<field id="lecm-contract-reports:contracts-list-sum-up"/>
 					<field id="lecm-contract-reports:contracts-list-actual-only"/>
 					<field id="lecm-contract-reports:contracts-list-contract-type">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">

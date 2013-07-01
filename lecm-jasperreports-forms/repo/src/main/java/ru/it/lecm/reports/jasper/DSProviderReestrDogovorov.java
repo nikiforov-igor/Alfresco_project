@@ -24,7 +24,7 @@ import ru.it.lecm.reports.jasper.utils.Utils;
  *   "contractType" - тип договора
  *   "contractContractor" - контрагент
  *   "contractActualOnly" - только актуальные
- *   "contractSum" - сумма (минимальная)
+ *   "contractSumLow"/"contractSumHi" - диапазон для суммы договора
  *   "end" - стартовая дата, example "2013-04-03T00:00:00.000+06:00"
  *   "start" - конечна дата
  * @author rabdullin
@@ -49,13 +49,13 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	class SearchFilter  {
 
 		Date dateStartAfter, dateStartBefore, dateEndAfter, dateEndBefore;
-		Double contractSum;
+		Double contractSumLow, contractSumHi;
 		Boolean contractActualOnly;
 		NodeRef contractSubject, contractType, contragent;
 
 		public void clear() {
 			dateStartAfter = dateStartBefore = dateEndAfter = dateEndBefore = null;
-			contractSum = null;
+			contractSumLow = contractSumHi = null;
 			contractSubject = contractType = contragent = null;
 			contractActualOnly = null;
 		}
@@ -131,18 +131,35 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 		filter.contractActualOnly = Utils.isStringEmpty(value) ? null : Boolean.parseBoolean(value);
 	}
 
-	//"contractSum" - сумма
-	public void setContractSum(String value) {
+	/**
+	 * Нижняяя граница для суммы договора.
+	 * @param value
+	 */
+	public void setContractSumLow(String value) {
 		try {
-			filter.contractSum = Utils.isStringEmpty(value) ? null : Double.parseDouble(value);
-			if (filter.contractSum == 0) // значение ноль эквивалентно NULL
-				filter.contractSum = null;
+			filter.contractSumLow = Utils.isStringEmpty(value) ? null : Double.parseDouble(value);
+			if (filter.contractSumLow == 0) // значение ноль эквивалентно NULL
+				filter.contractSumLow = null;
 		} catch(Throwable e) {
-			logger.error( String.format( "unexpected double value '%s' for contractSum -> ignored as NULL", value), e);
-			filter.contractSum = null;
+			logger.error( String.format( "unexpected double value '%s' for contractSumLow -> ignored as NULL", value), e);
+			filter.contractSumLow = null;
 		}
 	}
 
+	/**
+	 * Верхняя граница для суммы договора.
+	 * @param value
+	 */
+	public void setContractSumHi(String value) {
+		try {
+			filter.contractSumHi = Utils.isStringEmpty(value) ? null : Double.parseDouble(value);
+			if (filter.contractSumHi == 0) // значение ноль эквивалентно NULL
+				filter.contractSumHi = null;
+		} catch(Throwable e) {
+			logger.error( String.format( "unexpected double value '%s' for contractSumHi -> ignored as NULL", value), e);
+			filter.contractSumHi = null;
+		}
+	}
 
 	final static String JRFLD_Executor_Family = "col_Executor_Family";
 	final static String JRFLD_Executor_Name= "col_Executor_Name";
@@ -223,11 +240,27 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 				bquery.append( " AND( (@lecm\\-contract\\:unlimited:true) OR ("+ cond+ ") )");
 		}
 
-
+		/*
 		// Сумма договора (указан минимум)
-		if (filter.contractSum != null && filter.contractSum.doubleValue() != 0) { // "X to *"
-			bquery.append( " AND @lecm\\-contract\\:totalAmount:(" + filter.contractSum.toString() + " TO *)");
+		// Boolean filter.contractSumExact;
+		if (filter.contractSum != null && filter.contractSum.doubleValue() != 0) { // сумма указана ...
+			if ( Boolean.TRUE.equals(filter.contractSumExact)) {
+				// точное соот-вие 
+				bquery.append( " AND @lecm\\-contract\\:totalAmount:" + filter.contractSum.toString());
+			} else { // интервал с заданной нижней границей: "X to *"
+				bquery.append( " AND @lecm\\-contract\\:totalAmount:(" + filter.contractSum.toString() + " TO *)");
+			}
 		}
+		 */
+
+		// Сумма договора (указан диапазон)
+		{
+			// bquery.append( " AND @lecm\\-contract\\:totalAmount:(" + filter.contractSumLow.toString() + " TO *)");
+			final String cond = Utils.emmitNumericIntervalCheck("lecm\\-contract\\:totalAmount", filter.contractSumLow, filter.contractSumHi);
+			if (cond != null)
+				bquery.append( " AND "+ cond);
+		}
+
 
 		// Контракт актуален: если ещё не истёк срок 
 		if ( Boolean.TRUE.equals(filter.contractActualOnly)) {

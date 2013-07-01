@@ -11,7 +11,8 @@
 
 		"prop_lecm-contract-reports_approval-discipline-end-before": "periodEndBefore",
 
-		"prop_lecm-contract-reports_contracts-list-sum": "contractSum",
+		"prop_lecm-contract-reports_contracts-list-sum-low": "contractSumLow",
+		"prop_lecm-contract-reports_contracts-list-sum-up": "contractSumHi",
 
 		"prop_lecm-contract-reports_approval-discipline-end": "periodEnd",
 		"prop_lecm-contract-reports_approval-discipline-start": "periodStart",

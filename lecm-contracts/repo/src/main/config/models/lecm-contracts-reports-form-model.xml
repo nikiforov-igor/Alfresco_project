@@ -49,9 +49,12 @@
 					<type>d:boolean</type>
 					<default>true</default>
 				</property>
-				<property name="lecm-contract-reports:contracts-list-sum">
+				<property name="lecm-contract-reports:contracts-list-sum-low">
 					<type>d:int</type>
 					<default>0</default>
+				</property>
+				<property name="lecm-contract-reports:contracts-list-sum-up">
+					<type>d:int</type>
 				</property>
 			</properties>
 			<associations>

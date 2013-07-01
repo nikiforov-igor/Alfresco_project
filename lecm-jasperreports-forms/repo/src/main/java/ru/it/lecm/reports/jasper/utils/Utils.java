@@ -180,6 +180,16 @@ public class Utils {
 		final boolean needEmmition = (from != null || upto !=  null);
 		if (!needEmmition)
 			return null;
+
+		// если даты не по-порядку - поменяем их местами
+		if (from != null && upto !=  null) {
+			if (from.after(upto)) {
+				final Date temp = from;
+				from = upto;
+				upto = temp;
+			}
+		}
+
 		// add " ... [X TO Y]"
 		final String stMIN = ArgsHelper.dateToStr( from, "MIN");
 		final String stMAX = ArgsHelper.dateToStr( upto, "MAX");
@@ -199,9 +209,20 @@ public class Utils {
 		final boolean needEmmition = (from != null || upto !=  null);
 		if (!needEmmition)
 			return null;
+		// если даты не по-порядку - поменяем их местами
+
+		if (from != null && upto !=  null) {
+			if (from > upto) {
+				final Double temp = from;
+				from = upto;
+				upto = temp;
+			}
+		}
+
 		// add " ... [X TO Y]"
-		final String stMIN = (from != null) ? String.format( "%f", from) : "MIN";
-		final String stMAX = (upto != null) ? String.format( "%f", upto) : "MAX";
+		//  используем формат без разделителя, чтобы нормально выполнялся строковый поиск ...
+		final String stMIN = (from != null) ? String.format( "%12.0f", from) : "MIN";
+		final String stMAX = (upto != null) ? String.format( "%12.0f", upto) : "MAX";
 		return " @"+ fldName+ ":[" + stMIN + " TO "+ stMAX+ "]";
 	}
 
