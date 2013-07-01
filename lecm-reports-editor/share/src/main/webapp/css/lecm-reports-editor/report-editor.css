@@ -49,3 +49,23 @@ report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
     font-weight: bold;
     margin: 5px 0;
 }
+
+.sources-left-grid {
+    float: right;
+    width: 100%;
+    margin-left: -25em;
+}
+
+.columns-right-grid {
+    width: 100%;
+    float: right;
+    margin-left: -100%;
+}
+
+.datagrid .onActionRemove a {
+       background-image: url('/share/res/components/images/delete-row-16.png');
+ }
+
+.datagrid .onActionAdd a {
+    background-image: url('/share/res/components/images/plus-16.png');
+}

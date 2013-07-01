@@ -1230,15 +1230,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 dTable.subscribe("beforeRenderEvent", this.beforeRenderFunction.bind(this), dTable, true);
 
                 // Rendering complete event handler
-                dTable.subscribe("renderEvent", function () {
-                    Alfresco.logger.debug("DataTable renderEvent");
-                    Bubbling.fire("GridRendered");
-                    // Deferred functions specified?
-                    for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++) {
-                        this.afterDataGridUpdate[i].call(this);
-                    }
-                    this.afterDataGridUpdate = [];
-                }, this, true);
+                dTable.subscribe("renderEvent", this.onRenderEvent.bind(this), this, true);
 
                 // Enable row highlighting
                 dTable.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
@@ -1249,6 +1241,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
 
                 return dTable;
+            },
+
+            onRenderEvent: function () {
+                Alfresco.logger.debug("DataTable renderEvent");
+                Bubbling.fire("GridRendered");
+                for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++) {
+                    this.afterDataGridUpdate[i].call(this);
+                }
+                this.afterDataGridUpdate = [];
             },
             /**
              * DataTable set-up and event registration

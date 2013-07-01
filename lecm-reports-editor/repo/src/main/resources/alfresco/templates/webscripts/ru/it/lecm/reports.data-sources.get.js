@@ -1,0 +1,1 @@
+model.sources = reportsEditor.getDataSources();

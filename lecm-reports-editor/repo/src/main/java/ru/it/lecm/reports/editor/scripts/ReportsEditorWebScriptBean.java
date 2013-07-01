@@ -46,4 +46,9 @@ public class ReportsEditorWebScriptBean extends BaseWebScript {
         List<NodeRef> refs = service.getReportTypes();
         return createScriptable(refs);
     }
+
+    public Scriptable getDataSources() {
+        List<NodeRef> refs = service.getDataSources();
+        return createScriptable(refs);
+    }
 }

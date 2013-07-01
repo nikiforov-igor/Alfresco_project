@@ -28,6 +28,8 @@ public class ReporstEditorService extends BaseBean {
     public static final String RE_TEMPLATES_ROOT_ID = "RE_TEMPLATES_ROOT_ID";
     public static final String RE_REPORTS_ROOT_NAME = "Отчеты";
     public static final String RE_REPORTS_ROOT_ID = "RE_REPORTS_ROOT_ID";
+    public static final String RE_TEMPLATES_FILES_ROOT_NAME = "Файлы";
+    public static final String RE_TEMPLATES_FILES_ROOT_ID = "RE_TEMPLATES_FILES_ROOT_ID";
 
     private NodeRef reRootRef;
     private NodeRef reDictionaryRef;
@@ -75,6 +77,20 @@ public class ReporstEditorService extends BaseBean {
         childType.add(ReportsEditorModel.TYPE_REPORT_TYPE);
 
         List<ChildAssociationRef> refs = nodeService.getChildAssocs(typesDictionary, childType);
+
+        for (ChildAssociationRef ref : refs) {
+            result.add(ref.getChildRef());
+        }
+        return result;
+    }
+
+    public List<NodeRef> getDataSources() {
+        List<NodeRef> result = new ArrayList<NodeRef>();
+
+        Set<QName> childType = new HashSet<QName>();
+        childType.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
+
+        List<ChildAssociationRef> refs = nodeService.getChildAssocs(getSourcesRootFolder(), childType);
 
         for (ChildAssociationRef ref : refs) {
             result.add(ref.getChildRef());

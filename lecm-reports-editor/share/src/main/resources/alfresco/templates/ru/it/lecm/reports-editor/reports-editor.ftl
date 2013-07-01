@@ -16,6 +16,11 @@ LogicECM.module.ReportsEditor.SETTINGS =
     </#if>;
 LogicECM.module.ReportsEditor.SETTINGS.DESTINATION =
         LogicECM.module.ReportsEditor.SETTINGS.DESTINATION ? LogicECM.module.ReportsEditor.SETTINGS.DESTINATION : null;
+
+    <#if page.url.args.reportId?? && page.url.args.reportId != "">
+        LogicECM.module.ReportsEditor.SETTINGS.REPORT_PATH =
+            LogicECM.module.ReportsEditor.SETTINGS.REPORT_PATH ? LogicECM.module.ReportsEditor.SETTINGS.REPORT_PATH : "${reportPath?js_string}";
+    </#if>
 //]]></script>
 </@>
 

@@ -99,7 +99,7 @@
                     <field id="lecm-rpeditor:reportTemplateFile">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">
-                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Шаблоны
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Шаблоны/cm:Файлы
                             </control-param>
                         </control>
                     </field>
@@ -412,7 +412,6 @@
                     <show id="lecm-rpeditor:columnTypeAssoc"/>
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:dataColumnExpression"/>
-                    <show id="lecm-rpeditor:columnParameterTypeAssoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>

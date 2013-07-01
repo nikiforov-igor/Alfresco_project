@@ -48,6 +48,9 @@
     <util:constant id="RE_TEMPLATES_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_TEMPLATES_ROOT_ID"/>
     <util:constant id="RE_TEMPLATES_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_TEMPLATES_ROOT_NAME"/>
 
+    <util:constant id="RE_TEMPLATES_FILES_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_TEMPLATES_FILES_ROOT_ID"/>
+    <util:constant id="RE_TEMPLATES_FILES_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_TEMPLATES_FILES_ROOT_NAME"/>
+
     <util:constant id="RE_REPORTS_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_REPORTS_ROOT_ID"/>
     <util:constant id="RE_REPORTS_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_REPORTS_ROOT_NAME"/>
 
@@ -64,6 +67,7 @@
                 <entry key="#{RE_DICTIONARY_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_DICTIONARY_ROOT_NAME}"/>
                 <entry key="#{RE_SOURCES_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_SOURCES_ROOT_NAME}"/>
                 <entry key="#{RE_TEMPLATES_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_TEMPLATES_ROOT_NAME}"/>
+                <entry key="#{RE_TEMPLATES_FILES_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_TEMPLATES_ROOT_NAME}/#{RE_TEMPLATES_FILES_ROOT_NAME}/"/>
                 <entry key="#{RE_REPORTS_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_REPORTS_ROOT_NAME}"/>
             </map>
         </property>
@@ -95,6 +99,22 @@
           init-method="init"/>
 
     <bean id="reportsEditorTemplatePolicy" class="ru.it.lecm.reports.editor.policies.ReportTemplatePolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+        <property name="dictionaryService">
+            <ref bean="dictionaryService"/>
+        </property>
+    </bean>
+
+    <bean id="dataSourcePolicy" class="ru.it.lecm.reports.editor.policies.DataSourcePolicy"
           init-method="init">
         <property name="policyComponent">
             <ref bean="policyComponent"/>
