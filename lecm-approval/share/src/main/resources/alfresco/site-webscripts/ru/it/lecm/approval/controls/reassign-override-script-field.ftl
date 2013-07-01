@@ -1,13 +1,11 @@
-
 <script type="text/javascript">//<![CDATA[
 
 (function() {
 
     var grandPermissionsAndGetPerson = function (form, formToReportProperties){
-        //debugger;
         var dataObj = {
             taskID : "",
-            employeeNodeRef : form.dataObj.assoc_cm_contains
+            employeeNodeRef : form.dataObj["reassign-to-employee"]
         };
 
         var searchString = location.search.replace("?","");
@@ -30,79 +28,59 @@
             async: false, // ничего не делаем, пока не отработал запром
             dataType: "json",
             contentType: "application/json",
-            //data: YAHOO.lang.JSON.stringify(dataObj), // jQuery странно кодирует данные. пусть YUI эаймеся преобразованием в JSON
             data: dataObj, // jQuery странно кодирует данные. пусть YUI эаймеся преобразованием в JSON
             processData: true, // данные не трогать, не кодировать вообще
             success: function (result, textStatus, jqXHR) {
-                //debugger;
                 personLogin = result.personLogin;
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 Alfresco.util.PopupManager.displayMessage({
                     text: errorThrown
                 });
-                //debugger;
             }
         });
 
-        // Start/stop inherit rules from parent folder
-        Alfresco.util.Ajax.jsonPut(
-                {
-                    url: Alfresco.constants.PROXY_URI_RELATIVE + "api/task-instances/" + dataObj.taskID,
-                    dataObj: {
-                        cm_owner: personLogin
-                    },
-                    successCallback:
-                    {
-                        fn: function(response, action)
-                        {
-                            var data = response.json.data;
-                            if (data)
-                            {
-                                Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text: "Переназначено!"
-                                        });
+        Alfresco.util.Ajax.jsonPut({
+			url: Alfresco.constants.PROXY_URI_RELATIVE + "api/task-instances/" + dataObj.taskID,
+			dataObj: {
+				cm_owner: personLogin
+			},
+			successCallback: {
+				fn: function(response, action) {
+					var data = response.json.data;
+					if (data) {
+						Alfresco.util.PopupManager.displayMessage( {
+							text: "Переназначено!"
+						});
 
-                                YAHOO.lang.later(3000, this, function(data)
-                                {
-                                    if (data.owner && data.owner.userName == Alfresco.constants.USERNAME)
-                                    {
-                                        // Let the user keep working on the task since he claimed it
-                                        document.location.reload();
-                                    }
-                                    else
-                                    {
-                                        // Take the user to the most suitable place
-                                        var taskEditdHtmlId = "${fieldHtmlId}";
-                                        taskEditdHtmlId = taskEditdHtmlId.replace("form", "header");
-                                        taskEditdHtmlId = taskEditdHtmlId.replace("_reassignScriptField", "");
-                                        var taskEditModel = Alfresco.util.ComponentManager.get(taskEditdHtmlId);
-                                        taskEditModel.navigateForward(true);
-                                    }
-                                }, data);
+						YAHOO.lang.later(3000, this, function(data) {
+							if (data.owner && data.owner.userName == Alfresco.constants.USERNAME) {
+								document.location.reload();
+							} else {
+								var taskEditdHtmlId = "${fieldHtmlId}";
+								taskEditdHtmlId = taskEditdHtmlId.replace("form", "header");
+								taskEditdHtmlId = taskEditdHtmlId.replace("_reassignScriptField", "");
+								var taskEditModel = Alfresco.util.ComponentManager.get(taskEditdHtmlId);
+								taskEditModel.navigateForward(true);
+							}
+						}, data);
 
-                            }
-                        },
-                        obj: null,
-                        scope: this
-                    },
-                    failureCallback:
-                    {
-                        fn: function(response)
-                        {
-                            Alfresco.util.PopupManager.displayPrompt(
-                                    {
-                                        title: this.msg("message.failure"),
-                                        text: this.msg("message." + "reassign" + ".failure")
-                                    });
-                        },
-                        scope: this
-                    }
-                });
-
-
-    };
+					}
+				},
+				obj: null,
+				scope: this
+			},
+			failureCallback: {
+				fn: function(response) {
+					Alfresco.util.PopupManager.displayPrompt({
+						title: this.msg("Ошибка при переназначении задачи"),
+						text: this.msg("Не удалось переназначить задачу на другого пользователя, попробуйте еще раз")
+					});
+				},
+				scope: this
+			}
+		});
+	};
 
     var payLoad = function(){
         var templateUrl = "lecm/components/form"
@@ -130,8 +108,6 @@
             destroyOnHide: true,
             doBeforeDialogShow: {
                 fn: function ( p_form, p_dialog ) {
-                    //debugger;
-                    //editDetails.dialog.form.buttons.cancel.hide();
 					p_dialog.dialog.setHeader( "Переназначение задачи" );
                     var frm = Alfresco.util.ComponentManager.get(this.dialog.form.id);
                     var btn = frm.buttons.cancel;
@@ -145,22 +121,6 @@
             doBeforeAjaxRequest: {
                 fn: grandPermissionsAndGetPerson,
                 scope : this
-            },
-            doBeforeFormSubmit: {
-                fn: function () {
-                },
-                scope: this
-            },
-            onSuccess: {
-                fn: function DataGrid_onActionEdit_success(response) {
-                },
-                scope: this
-            },
-            onFailure:{
-                fn:function DataGrid_onActionEdit_failure(response) {
-
-                },
-                scope:this
             }
         }).show();
     };
@@ -176,12 +136,8 @@
     var resignButtonHtmlId = fieldHtmlId
             .replace("form", "header")
             .replace("_reassignScriptField", "-reassign");
-    //Alfresco.util.ComponentManager.get("page_x002e_data-header_x002e_task-edit_x0023_default")
-    //page_x002e_data-header_x002e_task-edit_x0023_default-reassign
 
     YAHOO.util.Event.onContentReady(resignButtonHtmlId + "-button", reassignContentReady, resignButtonHtmlId);
 })();
-
-
 
 //]]></script>
