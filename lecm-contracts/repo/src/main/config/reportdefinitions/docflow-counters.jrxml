@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ContractsSummaryList" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
-	<property name="ireport.zoom" value="3.452271214393105"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="280"/>
+	<property name="ireport.zoom" value="1.9487171000000025"/>
+	<property name="ireport.x" value="9"/>
+	<property name="ireport.y" value="0"/>
 	<property name="dataSource" value="ru.it.lecm.reports.jasper.DSProviderDocflowStatusCounters"/>
 	<property name="dataSource2" value="org.nm.jr.extension.datasource.provider.JRCMISDataSourceProvider"/>
 	<style name="styleOdd" mode="Opaque" backcolor="#F4F5F5">
@@ -137,146 +137,146 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="77" splitType="Stretch">
+		<band height="82" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" stretchType="RelativeToBandHeight" x="0" y="0" width="550" height="77" backcolor="#DCDCDC"/>
+				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" stretchType="RelativeToBandHeight" x="0" y="0" width="550" height="82" backcolor="#DCDCDC"/>
 			</rectangle>
 			<textField>
-				<reportElement uuid="52e19f23-e656-451b-84d6-f210e47da030" x="5" y="3" width="30" height="70"/>
+				<reportElement uuid="52e19f23-e656-451b-84d6-f210e47da030" x="5" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" isItalic="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8514e4c9-574d-4cbd-87f1-2afb80a884a2" x="38" y="3" width="120" height="70"/>
+				<reportElement uuid="8514e4c9-574d-4cbd-87f1-2afb80a884a2" x="38" y="1" width="120" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Название"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="ad617c43-79fd-4734-84d2-1e37958cfa8c" x="160" y="3" width="30" height="70"/>
+				<reportElement uuid="ad617c43-79fd-4734-84d2-1e37958cfa8c" x="160" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Черновик"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="8ad34c1a-0436-4c27-9c1b-a84c2d955145" x="192" y="3" width="30" height="70"/>
+				<reportElement uuid="8ad34c1a-0436-4c27-9c1b-a84c2d955145" x="192" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Проект"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="0d56e8f5-5867-4897-97ab-c9f00c452f45" x="224" y="3" width="30" height="70"/>
+				<reportElement uuid="0d56e8f5-5867-4897-97ab-c9f00c452f45" x="224" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["На согласовании"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="8e330edb-4053-4fa9-8b27-970e51dedebf" x="256" y="3" width="30" height="70"/>
+				<reportElement uuid="8e330edb-4053-4fa9-8b27-970e51dedebf" x="256" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Согласован"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="1474ea49-0456-45c0-b1a1-745c3a43fd32" x="288" y="3" width="30" height="70"/>
+				<reportElement uuid="1474ea49-0456-45c0-b1a1-745c3a43fd32" x="288" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["На доработке"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="563ebd11-e1ac-4300-b8c1-e4642fc8de4d" x="320" y="3" width="30" height="70"/>
+				<reportElement uuid="563ebd11-e1ac-4300-b8c1-e4642fc8de4d" x="320" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["На подписаниии"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["На подписании"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="e7ccdb77-cdd6-4cb0-ad8f-2e9d222a9b0e" x="352" y="3" width="30" height="70"/>
+				<reportElement uuid="e7ccdb77-cdd6-4cb0-ad8f-2e9d222a9b0e" x="352" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Подписан"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="184212ed-36dd-4d35-b1a8-eff82aef37ed" x="384" y="3" width="30" height="70"/>
+				<reportElement uuid="184212ed-36dd-4d35-b1a8-eff82aef37ed" x="384" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Подписание контрагентом"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="4981da03-4762-430e-83a1-27dccb756c09" x="416" y="3" width="30" height="70"/>
+				<reportElement uuid="4981da03-4762-430e-83a1-27dccb756c09" x="416" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Зарегистрирован"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="84f10590-57a8-4121-8c89-4633c92d4af2" x="448" y="3" width="30" height="70"/>
+				<reportElement uuid="84f10590-57a8-4121-8c89-4633c92d4af2" x="448" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Действует"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="35182571-f28b-41a9-b79c-a7ead30a56b5" x="480" y="3" width="30" height="70"/>
+				<reportElement uuid="35182571-f28b-41a9-b79c-a7ead30a56b5" x="480" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Другие"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="b810b81f-f935-4d70-a792-1ab759558f74" x="512" y="3" width="30" height="70"/>
+				<reportElement uuid="b810b81f-f935-4d70-a792-1ab759558f74" x="512" y="1" width="30" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Итого"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement uuid="78d10133-2d29-4069-b91c-504a32934661" x="36" y="0" width="1" height="77"/>
+				<reportElement uuid="78d10133-2d29-4069-b91c-504a32934661" x="36" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="4133164b-c580-40e9-8e86-9e07fee9b342" x="159" y="0" width="1" height="77"/>
+				<reportElement uuid="4133164b-c580-40e9-8e86-9e07fee9b342" x="159" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="af115643-3f47-483a-8105-dcc34847b049" x="191" y="0" width="1" height="77"/>
+				<reportElement uuid="af115643-3f47-483a-8105-dcc34847b049" x="191" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="8995aaf2-a1f8-4593-b9bd-1c076ce692f5" x="223" y="0" width="1" height="77"/>
+				<reportElement uuid="8995aaf2-a1f8-4593-b9bd-1c076ce692f5" x="223" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="56ae79d3-e30a-4f27-a518-b279ac2da993" x="255" y="0" width="1" height="77"/>
+				<reportElement uuid="56ae79d3-e30a-4f27-a518-b279ac2da993" x="255" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="3c71b1c6-be1b-47d9-840b-01552089b6a5" x="287" y="0" width="1" height="77"/>
+				<reportElement uuid="3c71b1c6-be1b-47d9-840b-01552089b6a5" x="287" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="c32b6c47-4755-4756-9686-15b0ac426288" x="319" y="0" width="1" height="77"/>
+				<reportElement uuid="c32b6c47-4755-4756-9686-15b0ac426288" x="319" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="f1ac5779-a77d-48d5-9b82-6161d34284d7" x="351" y="0" width="1" height="77"/>
+				<reportElement uuid="f1ac5779-a77d-48d5-9b82-6161d34284d7" x="351" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="52d80997-885c-4778-a64b-4a3b843f6bcc" x="383" y="0" width="1" height="77"/>
+				<reportElement uuid="52d80997-885c-4778-a64b-4a3b843f6bcc" x="383" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="95a859c7-1d33-4855-97a1-930b637962c9" x="415" y="0" width="1" height="77"/>
+				<reportElement uuid="95a859c7-1d33-4855-97a1-930b637962c9" x="415" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="4705be60-8b6f-4832-8192-22ab577729e2" x="447" y="0" width="1" height="77"/>
+				<reportElement uuid="4705be60-8b6f-4832-8192-22ab577729e2" x="447" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="0fbfe07c-067d-4ddd-90f1-09791a28c5af" stretchType="RelativeToBandHeight" x="511" y="0" width="1" height="77"/>
+				<reportElement uuid="0fbfe07c-067d-4ddd-90f1-09791a28c5af" stretchType="RelativeToBandHeight" x="511" y="0" width="1" height="82"/>
 			</line>
 			<line>
-				<reportElement uuid="2f4ca894-025f-44fc-b5c3-d47ae6250990" x="479" y="0" width="1" height="77"/>
+				<reportElement uuid="2f4ca894-025f-44fc-b5c3-d47ae6250990" x="479" y="0" width="1" height="82"/>
 			</line>
 		</band>
 	</columnHeader>
