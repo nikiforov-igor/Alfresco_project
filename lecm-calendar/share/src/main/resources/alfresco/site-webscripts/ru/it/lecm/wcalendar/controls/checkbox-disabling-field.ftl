@@ -50,7 +50,7 @@ function Absence_CheckboxChanged(skipFiring) {
 
 		YAHOO.util.UserAction.keyup(endInputHidden);
 	}
-	
+
 	if (!skipFiring) {
 		YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 	}
@@ -62,8 +62,6 @@ function Absence_ChangeFormView() {
 		var formatInfo = formatInfosArray[i];
 		formatInfo.style.display = "none";
 	}
-	var formContainer = YAHOO.util.Dom.get("${formId}-container");
-	formContainer.style.width = "45em";
 }
 
 (function() {
@@ -83,10 +81,10 @@ function Absence_ChangeFormView() {
    <#else>
 		<label for="${fieldHtmlId}">&nbsp;</label>
       <input class="formsCheckBox" id="${fieldHtmlId}" type="checkbox" tabindex="0"  name="${field.name}" <#if field.description??>title="${field.description}"</#if>
-             <#if isTrue> value="true" checked="checked"</#if> 
-             <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if> 
+             <#if isTrue> value="true" checked="checked"</#if>
+             <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>
              <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
-             <#if field.control.params.style??>style="${field.control.params.style}"</#if> 
+             <#if field.control.params.style??>style="${field.control.params.style}"</#if>
              onchange='Absence_CheckboxChanged()' />
       <label for="${fieldHtmlId}" class="checkbox">${field.label?html}</label>
       <@formLib.renderFieldHelp field=field />
