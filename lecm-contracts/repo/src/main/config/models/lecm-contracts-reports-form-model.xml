@@ -143,7 +143,7 @@
 					<target>
 						<class>lecm-contractor:contractor-type</class>
 						<mandatory>false</mandatory>
-						<many>false</many>
+						<many>true</many>
 					</target>
 				</association>
 
@@ -214,7 +214,7 @@
 					<target>
 						<class>lecm-contractor:contractor-type</class>
 						<mandatory>false</mandatory>
-						<many>false</many> 
+						<many>true</many> 
 					</target>
 				</association>
 

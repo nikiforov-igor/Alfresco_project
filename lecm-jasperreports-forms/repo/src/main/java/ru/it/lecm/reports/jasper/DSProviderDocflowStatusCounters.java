@@ -142,14 +142,19 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 		 *  (!) Инициатор (автор) хранится как "cm:creator" : text, и отфильтровывается в основном запросе.
 		 *  Остальные являются настоящими ассоциацими и фильтруются в результатах основного запроса.
 		 */
-		NodeRef contractType, contractSubject, contragent, author;
-
+		NodeRef contractType, contractSubject, author;
+		List<NodeRef> contragents;
 
 		public void clear() {
 			dateRegAfter = dateRegBefore = dateContractStartAfter = dateContractStartBefore = null;
-			contractSubject = contractType = contragent = null;
+			contractSubject = contractType = null;
+			contragents = null;
 			contractSumLow = contractSumHi = null;
 			// contractActualOnly = null;
+		}
+
+		public void setContragents(List<NodeRef> list) {
+			this.contragents = (list == null || list.isEmpty()) ? null : list; 
 		}
 
 		/**
@@ -161,8 +166,8 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 
 			final boolean hasSubject = (contractSubject != null);
 			final boolean hasType = (contractType != null);
-			final boolean hasCAgent = (contragent != null);
-			final boolean hasAny = hasSubject || hasType || hasCAgent;
+			final boolean hasCAgents = (contragents != null);
+			final boolean hasAny = hasSubject || hasType || hasCAgents;
 			if (!hasAny) // в фильтре ничего не задачно -> любые данные подойдут
 				return null;
 
@@ -173,19 +178,19 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 			if (hasType) {
 				final QName qnCType = QName.createQName( "lecm-contract-dic:contract-type", ns); // Вид договора 
 				final QName qnAssocCType = QName.createQName( "lecm-contract:typeContract-assoc", ns);
-				result.addAssoc( qnCType, qnAssocCType, contractType, AssocKind.target);
+				result.addAssoc( AssocKind.target, qnAssocCType, qnCType, contractType);
 			}
 
 			if (hasSubject) {
 				final QName qnCSubject = QName.createQName( "lecm-contract-dic:contract-subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
-				result.addAssoc( qnCSubject, qnAssocCSubject, contractSubject, AssocKind.target);
+				result.addAssoc( AssocKind.target, qnAssocCSubject, qnCSubject, contractSubject);
 			}
 
-			if (hasCAgent) {
+			if (hasCAgents) {
 				final QName qnCAgent = QName.createQName( "lecm-contractor:contractor-type", ns); // Контрагенты, "lecm-contract:partner-assoc"
 				final QName qnAssocCAgent = QName.createQName( "lecm-contract:partner-assoc", ns);
-				result.addAssoc( qnCAgent, qnAssocCAgent, contragent, AssocKind.target);
+				result.addAssocList( AssocKind.target, qnAssocCAgent, qnCAgent, contragents);
 			}
 
 			return result;
@@ -240,7 +245,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	}
 
 	public void setContragent(String value) {
-		filter.contragent = ArgsHelper.makeNodeRef(value, "contragent");
+		filter.setContragents( ArgsHelper.makeNodeRefs(value, "contragents"));
 	}
 
 	/**
@@ -250,7 +255,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	public void setContractSumLow(String value) {
 		try {
 			filter.contractSumLow = Utils.isStringEmpty(value) ? null : Double.parseDouble(value);
-			if (filter.contractSumLow == 0) // значение ноль эквивалентно NULL
+			if (filter.contractSumLow != null && filter.contractSumLow == 0) // значение ноль эквивалентно NULL
 				filter.contractSumLow = null;
 		} catch(Throwable e) {
 			logger.error( String.format( "unexpected double value '%s' for contractSumLow -> ignored as NULL", value), e);
@@ -265,7 +270,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	public void setContractSumHi(String value) {
 		try {
 			filter.contractSumHi = Utils.isStringEmpty(value) ? null : Double.parseDouble(value);
-			if (filter.contractSumHi == 0) // значение ноль эквивалентно NULL
+			if (filter.contractSumHi != null && filter.contractSumHi == 0) // значение ноль эквивалентно NULL
 				filter.contractSumHi = null;
 		} catch(Throwable e) {
 			logger.error( String.format( "unexpected double value '%s' for contractSumHi -> ignored as NULL", value), e);

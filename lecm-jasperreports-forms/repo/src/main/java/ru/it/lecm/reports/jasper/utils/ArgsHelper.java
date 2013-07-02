@@ -2,7 +2,9 @@ package ru.it.lecm.reports.jasper.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -48,18 +50,53 @@ public class ArgsHelper {
 		return (value != null) ? DateFormatISO8601.format(value) : ifNULL;
 	}
 
-	public static NodeRef makeNodeRef(String value, String info) {
-		if (Utils.isStringEmpty(value))
+	/**
+	 * 
+	 * @param value значение NodeRef
+	 * @param destInfoTag целевое название присваиваемого объекта, наример, "id котректа" или "contragent"
+	 * @return сформированный NodeRef или null если строка пуста
+	 */
+	public static NodeRef makeNodeRef(String value, String destInfoTag) {
+		if (Utils.isStringEmpty(value) || value.trim().length() == 0)
 			return null;
 
 		NodeRef result;
 		try {
-			result = new NodeRef(value);
+			result = new NodeRef(value.trim());
 		} catch (Throwable e) {
-			logger.error( String.format( "unexpected nodeRef value '%s' for field '%s' -> ignored as NULL", value, info), e);
+			logger.error( String.format( "unexpected nodeRef value '%s' for field '%s' -> ignored as NULL", value, destInfoTag), e);
 			result = null;
 		}
 		return result;
+	}
+
+	/**
+	 * 
+	 * @param value
+	 * @param destInfoTag
+	 * @return непустой список [NodeRef] или null, если строка пуста
+	 */
+	public static List<NodeRef> makeNodeRefs(String value, String destInfoTag) {
+		if (Utils.isStringEmpty(value))
+			return null;
+
+		final List<NodeRef> result = new ArrayList<NodeRef>();
+		try {
+			final String[] items = value.split("[;,]");
+			if (items != null) {
+				int i = -1;
+				for(String s: items) {
+					i++;
+					final NodeRef ref = makeNodeRef( s, String.format( "%s.newItem[%d]", destInfoTag, i));
+					if (ref != null)
+						result.add(ref);
+				}
+			}
+		} catch (Throwable e) {
+			logger.error( String.format( "Invalid nodeRef values '%s' for field '%s' -> ignored as NULL list", value, destInfoTag), e);
+			return null;
+		}
+		return result.isEmpty() ? null : result;
 	}
 
 	/**
@@ -95,4 +132,5 @@ public class ArgsHelper {
 		final String[] values = findArgs(args, argName, null);
 		return (values != null) ? values[0] : ifDefault;
 	}
+
 }

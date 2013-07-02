@@ -25,8 +25,8 @@ public class AssocDataFilterImpl implements AssocDataFilter {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("AssocDataFilter [ assoc count: ");
-		builder.append( (assocList == null) ? "NULL" : assocList.size() ).append(" ");
-		builder.append( Utils.getAsString( assocList, "\n"));
+		builder.append( (assocList == null) ? "NULL" : assocList.size() ).append("\n\t ");
+		builder.append( Utils.getAsString( assocList, "\n\t"));
 		// builder.append(assocList != null ? assocList.subList(0, Math.min(assocList.size(), maxLen)) : null);
 		builder.append("\n]");
 		return builder.toString();
@@ -45,8 +45,13 @@ public class AssocDataFilterImpl implements AssocDataFilter {
 	}
 
 	@Override
-	public void addAssoc( QName type, QName assocType, NodeRef id, AssocKind kind) {
-		assocList.add( new AssocDesc( type, assocType, id, kind) );
+	public void addAssoc( AssocKind kind, QName assocType, QName type, NodeRef id) {
+		assocList.add( new AssocDesc( kind, assocType, id, type) );
+	}
+
+	@Override
+	public void addAssocList( AssocKind kind, QName assocType, QName type, List<NodeRef> idList) {
+		assocList.add( new AssocDesc( kind, assocType, type, idList) );
 	}
 
 	@Override
@@ -119,8 +124,8 @@ public class AssocDataFilterImpl implements AssocDataFilter {
 		if (links != null && !links.isEmpty()) {
 			for( ChildAssociationRef item: links) {
 				if (desc.type == null || desc.type.equals(item.getTypeQName())) {
-					if (   (isChild && item.getChildRef().equals(desc.id))
-							|| (!isChild && item.getParentRef().equals(desc.id)) )
+					if (   (isChild && desc.contains(item.getChildRef()))
+							|| (!isChild && desc.contains(item.getParentRef())) )
 						return true; // FOUND
 				}
 			}
@@ -141,8 +146,8 @@ public class AssocDataFilterImpl implements AssocDataFilter {
 		if (assocs != null && !assocs.isEmpty()) {
 			for( AssociationRef item: assocs) {
 				if (desc.assoctype == null || desc.assoctype.equals(item.getTypeQName()) ) {
-					if (   (isTarget && item.getTargetRef().equals(desc.id))
-							|| (!isTarget && item.getSourceRef().equals(desc.id)) ) {
+					if (   (isTarget && desc.contains(item.getTargetRef()))
+							|| (!isTarget && desc.contains(item.getSourceRef())) ) {
 						return true; // FOUND
 					}
 				}

@@ -2,6 +2,7 @@ package ru.it.lecm.reports.jasper;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -51,21 +52,27 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 		Date dateStartAfter, dateStartBefore, dateEndAfter, dateEndBefore;
 		Double contractSumLow, contractSumHi;
 		Boolean contractActualOnly;
-		NodeRef contractSubject, contractType, contragent;
+		NodeRef contractSubject, contractType;
+		List<NodeRef> contragents;
 
 		public void clear() {
 			dateStartAfter = dateStartBefore = dateEndAfter = dateEndBefore = null;
 			contractSumLow = contractSumHi = null;
-			contractSubject = contractType = contragent = null;
+			contractSubject = contractType = null;
+			contragents = null;
 			contractActualOnly = null;
+		}
+
+		public void setContragents(List<NodeRef> list) {
+			this.contragents = (list == null || list.isEmpty()) ? null : list; 
 		}
 
 		public AssocDataFilterImpl makeAssocFilter() {
 
 			final boolean hasSubject = (contractSubject != null);
 			final boolean hasType = (contractType != null);
-			final boolean hasCAgent = (contragent != null);
-			final boolean hasAny = hasSubject || hasType || hasCAgent;
+			final boolean hasCAgents = (contragents != null);
+			final boolean hasAny = hasSubject || hasType || hasCAgents;
 			if (!hasAny) // в фильтре ничего не задачно -> любые данные подойдут
 				return null;
 
@@ -76,19 +83,19 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 			if (hasSubject) {
 				final QName qnCSubject = QName.createQName( "lecm-contract-dic:contract-subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
-				result.addAssoc( qnCSubject, qnAssocCSubject, contractSubject, AssocKind.target);
+				result.addAssoc( AssocKind.target, qnAssocCSubject, qnCSubject, contractSubject);
 			}
 
 			if (hasType) {
 				final QName qnCType = QName.createQName( "lecm-contract-dic:contract-type", ns); // Вид договора 
 				final QName qnAssocCType = QName.createQName( "lecm-contract:typeContract-assoc", ns);
-				result.addAssoc( qnCType, qnAssocCType, contractType, AssocKind.target);
+				result.addAssoc( AssocKind.target, qnAssocCType, qnCType, contractType);
 			}
 
-			if (hasCAgent) {
+			if (hasCAgents) {
 				final QName qnCAgent = QName.createQName( "lecm-contractor:contractor-type", ns); // Контрагенты, "lecm-contract:partner-assoc"
 				final QName qnAssocCAgent = QName.createQName( "lecm-contract:partner-assoc", ns);
-				result.addAssoc( qnCAgent, qnAssocCAgent, contragent, AssocKind.target);
+				result.addAssocList( AssocKind.target, qnAssocCAgent, qnCAgent, contragents);
 			}
 
 			return result;
@@ -123,7 +130,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	}
 
 	public void setContractContractor(String value) {
-		filter.contragent = ArgsHelper.makeNodeRef(value, "contragent");
+		filter.setContragents( ArgsHelper.makeNodeRefs(value, "contragents"));
 	}
 
 	//"contractActualOnly" - только актуальные
@@ -138,7 +145,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	public void setContractSumLow(String value) {
 		try {
 			filter.contractSumLow = Utils.isStringEmpty(value) ? null : Double.parseDouble(value);
-			if (filter.contractSumLow == 0) // значение ноль эквивалентно NULL
+			if (filter.contractSumLow != null && filter.contractSumLow == 0) // значение ноль эквивалентно NULL
 				filter.contractSumLow = null;
 		} catch(Throwable e) {
 			logger.error( String.format( "unexpected double value '%s' for contractSumLow -> ignored as NULL", value), e);
@@ -153,7 +160,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	public void setContractSumHi(String value) {
 		try {
 			filter.contractSumHi = Utils.isStringEmpty(value) ? null : Double.parseDouble(value);
-			if (filter.contractSumHi == 0) // значение ноль эквивалентно NULL
+			if (filter.contractSumHi != null && filter.contractSumHi == 0) // значение ноль эквивалентно NULL
 				filter.contractSumHi = null;
 		} catch(Throwable e) {
 			logger.error( String.format( "unexpected double value '%s' for contractSumHi -> ignored as NULL", value), e);
