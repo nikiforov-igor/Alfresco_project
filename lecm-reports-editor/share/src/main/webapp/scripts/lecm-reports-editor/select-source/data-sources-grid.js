@@ -119,28 +119,6 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
         }
     },
 
-    /*getDataTableColumnDefinitions: function DataGrid_getDataTableColumnDefinitions() {
-        var columnDefinitions = [];
-
-        var column;
-        for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
-            column = this.datagridColumns[i];
-            columnDefinitions.push(
-                {
-                    key: this.dataResponseFields[i],
-                    label: column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
-                    sortable: false,
-                    formatter: this.getCellFormatter(column.dataType),
-                    className: (column.dataType == 'boolean') ? 'centered' : ''
-                });
-        }
-        // Add actions as last column
-        columnDefinitions.push(
-            { key: "actions", label: this.msg("label.column.actions"), sortable: false, formatter: this.fnRenderCellActions(), width: 80 }
-        );
-        return columnDefinitions;
-    },*/
-
     onDataItemCreated: function (layer, args) {
         var obj = args[1];
         if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
@@ -156,20 +134,21 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
                             var fnAfterUpdate = function DataGrid_onDataItemCreated_refreshSuccess_fnAfterUpdate() {
                                 var recordFound = this._findRecordByParameter(item.nodeRef, "nodeRef");
                                 if (recordFound !== null) {
-                                    // очищаем выделение
-                                    this.widgets.dataTable.unselectAllRows();
+                                    if (obj.oldNodeRef) {
+                                        // очищаем выделение
+                                        this.widgets.dataTable.unselectAllRows();
 
-                                    //выделяем новую строку
-                                    this.widgets.dataTable.selectRow(recordFound);
-                                    recordFound.getData().itemData.selected = true;
+                                        //выделяем новую строку
+                                        this.widgets.dataTable.selectRow(recordFound);
 
-                                    // удаляем из таблицы предыдущее значение (оно более никогда не будет использовано)
-                                    if (obj.oldNodeRef){
+                                        // удаляем из таблицы предыдущее значение (оно более никогда не будет использовано)
                                         var oldRecord = this._findRecordByParameter(obj.oldNodeRef, "nodeRef");
-                                        if (oldRecord !== null){
+                                        if (oldRecord !== null) {
                                             this.widgets.dataTable.deleteRow(oldRecord);
                                         }
                                     }
+
+                                    recordFound.getData().itemData.selected = true;
 
                                     // помечаем запись, которую скопировали как выбранную (чтобы скрыть кнопку выбора)
                                     if (obj.copiedRef){
@@ -187,7 +166,14 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
                                 }
                             };
                             this.afterDataGridUpdate.push(fnAfterUpdate);
-                            this.widgets.dataTable.addRow(item);
+                            if (obj.copiedRef){
+                                var record = this._findRecordByParameter(obj.copiedRef, "nodeRef");
+                                if (record) {
+                                    this.widgets.dataTable.addRow(item, record.getCount() + 1);
+                                }
+                            } else {
+                                this.widgets.dataTable.addRow(item);
+                            }
                         },
                         scope: this
                     },

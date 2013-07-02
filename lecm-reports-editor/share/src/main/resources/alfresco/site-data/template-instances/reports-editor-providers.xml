@@ -30,6 +30,7 @@
                 <itemType>lecm-rpeditor:reportProvider</itemType>
                 <bubblingLabel>report-providers</bubblingLabel>
                 <showActions>true</showActions>
+                <attributeForShow>none</attributeForShow>
                 <parent>/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_провайдера</parent>
             </properties>
         </component>

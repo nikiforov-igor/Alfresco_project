@@ -30,6 +30,7 @@
                 <itemType>lecm-rpeditor:reportType</itemType>
                 <bubblingLabel>report-types</bubblingLabel>
                 <showActions>true</showActions>
+                <attributeForShow>none</attributeForShow>
                 <parent>/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</parent>
             </properties>
         </component>

@@ -70,27 +70,25 @@ public class ReporstEditorService extends BaseBean {
     }
 
     public List<NodeRef> getReportTypes() {
-        List<NodeRef> result = new ArrayList<NodeRef>();
         NodeRef typesDictionary = nodeService.getChildByName(getDictionariesRootFolder(), ContentModel.ASSOC_CONTAINS, "Тип отчета");
-
-        Set<QName> childType = new HashSet<QName>();
-        childType.add(ReportsEditorModel.TYPE_REPORT_TYPE);
-
-        List<ChildAssociationRef> refs = nodeService.getChildAssocs(typesDictionary, childType);
-
-        for (ChildAssociationRef ref : refs) {
-            result.add(ref.getChildRef());
-        }
-        return result;
+        return getElements(typesDictionary, ReportsEditorModel.TYPE_REPORT_TYPE);
     }
 
     public List<NodeRef> getDataSources() {
+        return getElements(getSourcesRootFolder(), ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
+    }
+
+    public List<NodeRef> getTemplates() {
+        return getElements(getTemplatesRootFolder(), ReportsEditorModel.TYPE_REPORT_TEMPLATE);
+    }
+
+    private List<NodeRef> getElements(NodeRef parent, QName type) {
         List<NodeRef> result = new ArrayList<NodeRef>();
 
         Set<QName> childType = new HashSet<QName>();
-        childType.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
+        childType.add(type);
 
-        List<ChildAssociationRef> refs = nodeService.getChildAssocs(getSourcesRootFolder(), childType);
+        List<ChildAssociationRef> refs = nodeService.getChildAssocs(parent, childType);
 
         for (ChildAssociationRef ref : refs) {
             result.add(ref.getChildRef());

@@ -89,7 +89,7 @@
             Dom.setStyle(this.id + "-columns-toolbar-body", "visibility", "visible");
         },
 
-        copySource: function (sourceId, from, to, fireCreateEvent) {
+        copySource: function (sourceId, from, to, fromRepo) {
             var copyRefs = [];
             copyRefs.push(sourceId);
 
@@ -105,25 +105,25 @@
                     url: Alfresco.constants.PROXY_URI + "slingshot/doclib/action/copy-to/node/" + copyTo.uri,
                     successCallback: {
                         fn: function (response) {
-                            Alfresco.util.PopupManager.displayMessage({
-                                text: "Набор скопирован"
-                            });
                             if (response.json.overallSuccess) {
+                                Alfresco.util.PopupManager.displayMessage({
+                                    text: "Набор скопирован"
+                                });
                                 //блокируем кнопки - Сохранить как - данный набор уже и так сохранен
                                 YAHOO.Bubbling.fire("refreshButtonState", {
                                     bubblingLabel: "sourceColumns",
                                     disabledButtons: ["activeSourceIsNew"]
                                 });
-                                if (fireCreateEvent) {
+                                //if (fireCreateEvent) {
                                     // добаляем запись в таблицу и обновляем данные
                                     YAHOO.Bubbling.fire("dataItemCreated",
                                         {
                                             nodeRef: response.json.results[0].nodeRef,
-                                            oldNodeRef: this.dataSourceId,
+                                            oldNodeRef: fromRepo ? this.dataSourceId : null,
                                             copiedRef: sourceId,
                                             bubblingLabel: "sourcesList"
                                         });
-                                }
+                                //}
                             }
                         },
                         scope: this

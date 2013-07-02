@@ -12,7 +12,13 @@
                 buttonDefaultGroup: 'defaultActive'
             },
 
+            isNewTemplate: false,
+
             reportId: null,
+
+            markAsNewTemplate: function (isNew) {
+                this.isNewTemplate = isNew;
+            },
 
             setReportId: function (reportId) {
                 this.reportId = reportId;
@@ -30,7 +36,7 @@
                     });
                 this.toolbarButtons[group].newTemplateSaveButton = Alfresco.util.createYUIButton(this, 'newTemplateSaveButton', this.onCopyToRepository,
                     {
-                        disabled: true
+                        disabled: !this.isNewTemplate
                     });
                 this.toolbarButtons[group].prevPageButton = Alfresco.util.createYUIButton(this, 'prevPageButton', this.onPrevButton);
                 this.toolbarButtons[group].nextPageButton = Alfresco.util.createYUIButton(this, 'nextPageButton', this.onNextButton);

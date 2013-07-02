@@ -9,7 +9,8 @@
              .setOptions({
                  bubblingLabel: "template-edit"
              });
-     toolbar.setReportId("${page.url.args.reportId}")
+     toolbar.setReportId("${page.url.args.reportId}");
+     toolbar.markAsNewTemplate(!${existInRepo?string});
  }
  YAHOO.util.Event.onDOMReady(init);
  //]]></script>

@@ -6,14 +6,16 @@ function getTypes(){
     return [];
 }
 
-function getReportTemplateId(){
+function getReportTemplate(){
     var typesStr = remote.connect("alfresco").get("/lecm/reports-editor/report-template?reportId=" + page.url.args.reportId);
     if (typesStr.status == 200) {
         var template = eval ("(" + typesStr + ")");
-        return template.nodeRef;
+        return template;
     }
     return null;
 }
 
+var template = getReportTemplate();
+
 model.reportTypes = getTypes();
-model.activeTemplateId = getReportTemplateId();
+model.activeTemplateId = (template && template.nodeRef) ? template.nodeRef : null;

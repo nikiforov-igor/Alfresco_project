@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Reports Editor Types</shortname>
+    <description>Reports Editor Types</description>
+    <url>/lecm/reports-editor/templates</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>
