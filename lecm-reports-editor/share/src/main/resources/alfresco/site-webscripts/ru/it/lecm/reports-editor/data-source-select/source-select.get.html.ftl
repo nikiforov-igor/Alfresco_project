@@ -98,8 +98,10 @@
                             YAHOO.util.Event.onContentReady("${columnsGridId}", function () {
                                 YAHOO.Bubbling.fire("activeGridChanged", {
                                     datagridMeta: {
+                                        datagridFormId: "short-datagrid",
                                         itemType: "lecm-rpeditor:reportDataColumn",
-                                        nodeRef: "NOT_LOAD"
+                                        nodeRef: "NOT_LOAD",
+                                        sort: "lecm-rpeditor:dataColumnCode|true"
                                     },
                                     bubblingLabel: "sourceColumns"
                                 });

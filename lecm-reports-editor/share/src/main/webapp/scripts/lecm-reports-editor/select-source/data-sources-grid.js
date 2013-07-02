@@ -34,7 +34,8 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
                 {
                     datagridMeta: {
                         itemType: "lecm-rpeditor:reportDataColumn",
-                        nodeRef: nodeRef
+                        nodeRef: nodeRef,
+                        sort: "lecm-rpeditor:dataColumnCode|true"
                     },
                     bubblingLabel: "sourceColumns"
                 });
@@ -101,7 +102,8 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
             {
                 datagridMeta: {
                     itemType: "lecm-rpeditor:reportDataColumn",
-                    nodeRef: selectItem.getData().nodeRef
+                    nodeRef: selectItem.getData().nodeRef,
+                    sort: "lecm-rpeditor:dataColumnCode|true"
                 },
                 bubblingLabel: "sourceColumns"
             });

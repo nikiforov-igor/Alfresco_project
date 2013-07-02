@@ -79,7 +79,8 @@
                                     nodeRef: "NOT_LOAD",
                                     actionsConfig: {
                                         fullDelete: true
-                                    }
+                                    },
+                                    sort: "lecm-rpeditor:dataColumnCode|true"
                                 },
                                 bubblingLabel: "sourceColumns"
                             });
@@ -239,7 +240,8 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
                                 actionsConfig: {
                                     fullDelete: true,
                                     trash: false
-                                }
+                                },
+                                sort: "lecm-rpeditor:dataColumnCode|true"
                             },
                             bubblingLabel: "sourceColumns"
                         });
@@ -342,7 +344,8 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
                         actionsConfig: {
                             fullDelete: true,
                             trash: false
-                        }
+                        },
+                        sort: "lecm-rpeditor:dataColumnCode|true"
                     },
                     bubblingLabel: "sourceColumns"
                 });

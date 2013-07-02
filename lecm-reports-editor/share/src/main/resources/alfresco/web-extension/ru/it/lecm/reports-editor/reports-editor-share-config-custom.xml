@@ -406,12 +406,24 @@
                     </field>
                 </appearance>
             </form>
+            <form id="short-datagrid">
+                <field-visibility>
+                    <show id="lecm-rpeditor:dataColumnCode"/>
+                    <show id="lecm-rpeditor:columnTypeAssoc"/>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:dataColumnExpression"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-rpeditor:dataColumnCode"/>
                     <show id="lecm-rpeditor:columnTypeAssoc"/>
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:dataColumnExpression"/>
+                    <show id="lecm-rpeditor:columnParameterTypeAssoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
