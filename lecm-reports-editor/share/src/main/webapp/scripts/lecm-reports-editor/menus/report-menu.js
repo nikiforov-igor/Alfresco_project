@@ -47,6 +47,12 @@
                     Alfresco.constants.URL_PAGECONTEXT + "reports-editor-template-edit?reportId=" + context.reportId;
             };
             this.widgets.editTemplateBtn = Alfresco.util.createYUIButton(this, "editTemplateBtn", onButtonClick4, {});
+
+            var onButtonClick5 = function (e) {
+                window.location.href = window.location.protocol + "//" + window.location.host +
+                    Alfresco.constants.URL_PAGECONTEXT + "report-settings?reportId=" + context.reportId;
+            };
+            this.widgets.reportsListBtn = Alfresco.util.createYUIButton(this, "reportSettingsBtn", onButtonClick5, {});
         }
     });
 })();

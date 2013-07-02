@@ -49,7 +49,7 @@
             onNextButton: function () {
                 var context = this;
                 window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "reports-editor?reportId=" + context.reportId;
+                    Alfresco.constants.URL_PAGECONTEXT + "report-settings?reportId=" + context.reportId;
             },
 
             onNewTemplateFromSource: function () {

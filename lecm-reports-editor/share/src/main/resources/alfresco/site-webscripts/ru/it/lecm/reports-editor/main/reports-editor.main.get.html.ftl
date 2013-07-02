@@ -1,8 +1,5 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 <#assign id = args.htmlid>
-<script type="text/javascript">//<![CDATA[
-    LogicECM.module.ReportsEditor.SETTINGS.DESTINATION = LogicECM.module.ReportsEditor.SETTINGS.reportsContainer;
-//]]></script>
 
 <#if !page.url.args.reportId??>
 <div class="yui-t1" id="re-reports-grid">
@@ -15,19 +12,13 @@
                     return LogicECM.module.ReportsEditor.Grid.superclass.constructor.call(this, containerId);
                 };
 
-                /**
-                 * Extend from LogicECM.module.Base.DataGrid
-                 */
                 YAHOO.lang.extend (LogicECM.module.ReportsEditor.Grid, LogicECM.module.Base.DataGrid);
 
-                /**
-                 * Augment prototype with main class implementation, ensuring overwrite is enabled
-                 */
                 YAHOO.lang.augmentObject (LogicECM.module.ReportsEditor.Grid.prototype, {
 
                     onActionEdit: function (item) {
                         var baseUrl = window.location.protocol + "//" + window.location.host;
-                        var template = "reports-editor?reportId={reportId}";
+                        var template = "report-settings?reportId={reportId}";
                         var url = YAHOO.lang.substitute (baseUrl + Alfresco.constants.URL_PAGECONTEXT + template, {
                             reportId: item.nodeRef
                         });
@@ -69,7 +60,7 @@
                                     fullDelete: true,
                                     trash: false
                                 },
-                                sort:"cm:name|desc"
+                                sort:"cm:name|true"
                                 /*,searchConfig: {
                                     filter: '+PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Отчеты/*//*"'
                                 }*/
@@ -122,7 +113,7 @@
                                                 fn: function () {
                                                     Alfresco.util.PopupManager.displayMessage(
                                                             {
-                                                                text: "Данные обновлены"
+                                                                text: "Настройки отчета обновлены"
                                                             });
                                                 },
                                                 scope: this
@@ -131,7 +122,7 @@
                                                 fn: function () {
                                                     Alfresco.util.PopupManager.displayMessage(
                                                             {
-                                                                text: "Не удалось обновить данные"
+                                                                text: "Не удалось обновить настройки"
                                                             });
                                                 },
                                                 scope: this

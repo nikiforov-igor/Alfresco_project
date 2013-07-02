@@ -1,8 +1,5 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 <#assign id = args.htmlid>
-<script type="text/javascript">//<![CDATA[
-    LogicECM.module.ReportsEditor.SETTINGS.DESTINATION = LogicECM.module.ReportsEditor.SETTINGS.templatesContainer;
-//]]></script>
 
 <#if page.url.args.reportId??>
 <div class="reports">
