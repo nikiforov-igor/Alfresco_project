@@ -260,8 +260,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 				NodeRef employeeRef = findNodeByAssociationRef(approvalListItemRef, ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 
 				if (employeeRef != null) {
-                                        commentFileName.append(" ");
-					commentFileName.append(nodeService.getProperty(employeeRef, ContentModel.PROP_NAME));
+					commentFileName.append(" ").append(nodeService.getProperty(employeeRef, ContentModel.PROP_NAME));
 				}
 
 				String commentFileNameStr = FileNameValidator.getValidFileName(commentFileName.toString());

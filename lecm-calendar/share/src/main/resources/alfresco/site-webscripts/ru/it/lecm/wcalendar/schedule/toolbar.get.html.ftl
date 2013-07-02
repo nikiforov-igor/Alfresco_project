@@ -9,7 +9,8 @@
 		var wcalendarToolbar = new LogicECM.module.WCalendar.Schedule.Toolbar("${toolbarId}");
 		wcalendarToolbar.setMessages(${messages});
 		wcalendarToolbar.setOptions ({
-			pageId: "${pageId}"
+			pageId: "${pageId}",
+			bubblingLabel: LogicECM.module.WCalendar.Schedule.SCHEDULE_LABEL
 		});
 	})();
 //]]>

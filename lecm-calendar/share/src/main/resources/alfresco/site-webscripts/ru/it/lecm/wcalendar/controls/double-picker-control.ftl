@@ -113,7 +113,7 @@ LogicECM.module.WCalendar.Schedule.drawPicker = function Schedule_DrawPicker(ins
 	        changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
 	    </#if>
         <#if args.ignoreNodes??>
-            ignoreNodes: ["${args.ignoreNodes}"],
+            ignoreNodes: "${args.ignoreNodes}".split(","),
 	    </#if>
         showCreateNewLink: ${showCreateNewLink?string},
         currentValue: "${field.value!''}",
