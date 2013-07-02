@@ -193,13 +193,23 @@
                         recordFound.getData().itemData.selected = true;
 
                         //помечаем запись. откуда был скопирован набор как выбранную
-                        var copiedFrom = recordFound.getData().itemData["prop_lecm-rpeditor_dataSourceCode"].value;
-                        var copiedFromRecord = this._findRecordByParameter(this.sourcesDataGrid, "prop_lecm-rpeditor_dataSourceCode", copiedFrom);
-                        if (copiedFromRecord) {
-                            copiedFromRecord.getData().itemData.selected = true;
-                        }
+                        var copiedFrom = recordFound.getData().itemData["prop_cm_name"].value;
+                        var copiedFromRecords = this._findRecordsByParameter(this.sourcesDataGrid, "prop_cm_name", copiedFrom);
+                        if (copiedFromRecords) {
+                            for (var i = 0; i < copiedFromRecords.length; i++) {
+                                copiedFromRecords[i].getData().itemData.selected = true;
+                            }
 
-                        this.sourcesDataGrid.widgets.dataTable.fireEvent("renderEvent", {type: "renderEvent"});
+                        }
+                        //this.sourcesDataGrid.widgets.dataTable.fireEvent("renderEvent", {type: "renderEvent"});
+                        /*YAHOO.Bubbling.fire("activeGridChanged",
+                            {
+                                datagridMeta: {
+                                    itemType: "lecm-rpeditor:reportDataColumn",
+                                    nodeRef: recordFound.getData().nodeRef
+                                },
+                                bubblingLabel: "sourceColumns"
+                            });*/
                     }
                 }
             }
@@ -428,7 +438,8 @@
             return null;
         },
 
-        _findRecordByParameter: function (grid, parameter, value) {
+        _findRecordsByParameter: function (grid, parameter, value) {
+            var records = [];
             var recordSet = grid.widgets.dataTable.getRecordSet();
             var index = 0;
             if (grid.widgets.paginator) {
@@ -436,10 +447,10 @@
             }
             for (var i = index, j = recordSet.getLength(); i < j; i++) {
                 if (recordSet.getRecord(i).getData().itemData[parameter].value == value) {
-                    return recordSet.getRecord(i);
+                    records.push(recordSet.getRecord(i));
                 }
             }
-            return null;
+            return records;
         }
     });
 })();
