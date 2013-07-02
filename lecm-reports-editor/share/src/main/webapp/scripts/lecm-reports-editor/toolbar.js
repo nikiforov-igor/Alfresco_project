@@ -1,11 +1,4 @@
 (function () {
-    /**
-     * Toolbar constructor.
-     *
-     * @param htmlId {String} The HTML id of the parent element
-     * @return {LogicECM.module.ReportsEditor.Toolbar} The new Toolbar instance
-     * @constructor
-     */
     LogicECM.module.ReportsEditor.Toolbar = function (htmlId) {
         return LogicECM.module.ReportsEditor.Toolbar.superclass.constructor.call(this, "LogicECM.module.ReportsEditor.Toolbar", htmlId);
     };
@@ -14,12 +7,6 @@
 
     YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.Toolbar.prototype,
         {
-            /**
-             * Object container for initialization options
-             *
-             * @property options
-             * @type object
-             */
             options: {
                 bubblingLabel: null,
                 newRowDialogTitle: 'label.create-row.title',
@@ -35,7 +22,7 @@
                     });
             },
 
-            onNewRow: function (e, p_obj) {
+            onNewRow: function () {
                 var meta = this.modules.dataGrid.datagridMeta;
                 if (meta != null && meta.nodeRef.indexOf(":") > 0) {
                     var destination = meta.nodeRef;
@@ -45,7 +32,6 @@
             },
 
             showCreateDialog: function (meta, successMessage) {
-                // Intercept before dialog show
                 var me = this;
                 var doBeforeDialogShow = function (p_form, p_dialog) {
                     var addMsg = meta.addMessage;
@@ -71,11 +57,10 @@
                         submitType: "json"
                     });
 
-                // Using Forms Service, so always create new instance
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
                 createDetails.setOptions(
                     {
-                        width: "70em",
+                        width: "60em",
                         templateUrl: templateUrl,
                         actionUrl: null,
                         destroyOnHide: true,
@@ -85,12 +70,7 @@
                         },
                         onSuccess:{
                             fn: function DataGrid_onActionCreate_success(response) {
-                                YAHOO.Bubbling.fire("nodeCreated",
-                                    {
-                                        nodeRef: response.json.persistedObject,
-                                        bubblingLabel: this.options.bubblingLabel
-                                    });
-                                YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
+                                YAHOO.Bubbling.fire("dataItemCreated",
                                     {
                                         nodeRef: response.json.persistedObject,
                                         bubblingLabel: this.options.bubblingLabel

@@ -18,7 +18,7 @@ function listSources(){
 function isExistInRepo(testSourceCode){
     var sourcesList = listSources();
     for (var index in sourcesList) {
-        if (sourcesList[index].code == testSourceCode){
+        if (sourcesList[index].name == testSourceCode){
             return true;
         }
     }
@@ -26,7 +26,8 @@ function isExistInRepo(testSourceCode){
 }
 
 var dataSource = getDataSource();
-model.activeSourceId = dataSource ? dataSource.nodeRef : null;
+model.activeSourceId = (dataSource && dataSource.nodeRef) ?  dataSource.nodeRef : null;
 
-model.existInRepo = dataSource ? isExistInRepo(dataSource.code) : false;
+model.existInRepo = (dataSource && dataSource.name) ? isExistInRepo(dataSource.name) : false;
+
 

@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.editor.policies;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -19,7 +20,7 @@ import java.util.Set;
  * Date: 28.06.13
  * Time: 10:15
  */
-public class DataSourcePolicy implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.BeforeCreateNodePolicy {
+public class DataSourcePolicy implements NodeServicePolicies.BeforeCreateNodePolicy {
 
     protected PolicyComponent policyComponent;
     protected NamespaceService namespaceService;
@@ -43,38 +44,23 @@ public class DataSourcePolicy implements NodeServicePolicies.OnCreateNodePolicy,
     }
 
     public final void init() {
-        // создаем ассоциацию на шаблон для отчета
         policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeCreateNodePolicy.QNAME,
                 ReportsEditorModel.TYPE_REPORT_DATA_SOURCE, new JavaBehaviour(this, "beforeCreateNode"));
-
-        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-                ReportsEditorModel.TYPE_REPORT_DATA_SOURCE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-    }
-
-    @Override
-    public void onCreateNode(ChildAssociationRef childAssociationRef) {
-        NodeRef parent = childAssociationRef.getParentRef();
-        NodeRef newSource = childAssociationRef.getChildRef();
-        QName parentType = nodeService.getType(parent);
-            if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
-                //обрабатываем набор данных
-
-            }
     }
 
     @Override
     public void beforeCreateNode(NodeRef nodeRef, QName qName, QName qName2, QName qName3) {
         QName parentType = nodeService.getType(nodeRef);
         if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
-            //обрабатываем набор данных
+            //удаляем прежний набор (так как у отчета набор может быть лишь один)
             Set<QName> types = new HashSet<QName>();
             types.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
             List<ChildAssociationRef> childs = nodeService.getChildAssocs(nodeRef, types);
             for (ChildAssociationRef child : childs) {
                 NodeRef childRef = child.getChildRef();
+                nodeService.addAspect(childRef, ContentModel.ASPECT_TEMPORARY, null);
                 nodeService.deleteNode(childRef);
             }
         }
-
     }
 }

@@ -112,6 +112,9 @@
         <property name="dictionaryService">
             <ref bean="dictionaryService"/>
         </property>
+        <property name="copyService">
+            <ref bean="copyService"/>
+        </property>
     </bean>
 
     <bean id="dataSourcePolicy" class="ru.it.lecm.reports.editor.policies.DataSourcePolicy"

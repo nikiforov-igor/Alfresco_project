@@ -11,20 +11,20 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.reports.editor.ReportsEditorModel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: dbashmakov
  * Date: 25.06.13
  * Time: 10:15
  */
-public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePolicy {
+public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.BeforeCreateNodePolicy {
 
     protected PolicyComponent policyComponent;
     protected NamespaceService namespaceService;
     protected NodeService nodeService;
     protected DictionaryService dictionaryService;
+    private CopyService copyService;
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
@@ -42,7 +42,14 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
         this.policyComponent = policyComponent;
     }
 
+    public void setCopyService(CopyService copyService) {
+        this.copyService = copyService;
+    }
+
     public final void init() {
+        // удаляем предыдущие записи
+        policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeCreateNodePolicy.QNAME,
+                ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "beforeCreateNode"));
         // создаем ассоциацию на шаблон для отчета
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -54,7 +61,10 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
         QName parentType = nodeService.getType(parent);
         try {
             if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
-                replaceOrCreateAssoc(parent, childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
+                nodeService.createAssociation(parent, childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
+
+                //копируем файл с шаблоном из общей директории в отчет
+                copyTemplateFile(childAssociationRef.getChildRef(), parent);
 
                 // берем тип отчета из шаблона
                 NodeRef reportType;
@@ -71,23 +81,36 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
         }
     }
 
-    private void replaceOrCreateAssoc(NodeRef report, NodeRef template, QName assocName) {
-        List<AssociationRef> templates = nodeService.getTargetAssocs(report, assocName);
-        if (templates != null && !templates.isEmpty()) {
-            NodeRef oldTemplate = templates.get(0).getTargetRef();
-            nodeService.removeAssociation(report, oldTemplate, assocName);
+    @Override
+    public void beforeCreateNode(NodeRef nodeRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
+        QName parentType = nodeService.getType(nodeRef);
+        if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
+            List<AssociationRef> templates = nodeService.getTargetAssocs(nodeRef, ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
+            if (templates != null && !templates.isEmpty()) {
+                for (AssociationRef template : templates) {
+                    NodeRef oldTemplate = template.getTargetRef();
+                    nodeService.removeAssociation(nodeRef, oldTemplate, ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
 
-            NodeRef templateFile = nodeService.getTargetAssocs(oldTemplate, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE).get(0).getTargetRef();
+                    NodeRef templateFile = nodeService.getTargetAssocs(oldTemplate, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE).get(0).getTargetRef();
 
-            nodeService.addAspect(oldTemplate, ContentModel.ASPECT_TEMPORARY, null);
-            nodeService.deleteNode(oldTemplate);
+                    nodeService.addAspect(oldTemplate, ContentModel.ASPECT_TEMPORARY, null);
+                    nodeService.deleteNode(oldTemplate);
 
-            List<AssociationRef> assocs = nodeService.getSourceAssocs(templateFile, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
-            if (assocs != null && assocs.size() == 0) {
-                nodeService.addAspect(templateFile, ContentModel.ASPECT_TEMPORARY, null);
-                nodeService.deleteNode(templateFile);
+                    List<AssociationRef> assocs = nodeService.getSourceAssocs(templateFile, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
+                    if (assocs != null && assocs.size() == 0) { // на шаблон более не ссылаются - удаляем его
+                        nodeService.addAspect(templateFile, ContentModel.ASPECT_TEMPORARY, null);
+                        nodeService.deleteNode(templateFile);
+                    }
+                }
             }
         }
-        nodeService.createAssociation(report, template, assocName);
+    }
+
+    private void copyTemplateFile(NodeRef template, NodeRef report) {
+        NodeRef templateFile = nodeService.getTargetAssocs(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE).get(0).getTargetRef();
+        NodeRef newTemplateFile = copyService.copyAndRename(templateFile, report, ContentModel.ASSOC_CONTAINS, null, false);
+        if (newTemplateFile != null) {
+            nodeService.setAssociations(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(newTemplateFile));
+        }
     }
 }
