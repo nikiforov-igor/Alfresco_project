@@ -255,11 +255,12 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 				commentFileName.append(", ");
 
 				commentFileName.append(new SimpleDateFormat("dd.MM.yyyy HH:mm").format(new Date())).append(" + ");
-				commentFileName.append("Согласование сотрудником ");
+				commentFileName.append("Согласование сотрудником");
 
 				NodeRef employeeRef = findNodeByAssociationRef(approvalListItemRef, ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 
 				if (employeeRef != null) {
+                                        commentFileName.append(" ");
 					commentFileName.append(nodeService.getProperty(employeeRef, ContentModel.PROP_NAME));
 				}
 
