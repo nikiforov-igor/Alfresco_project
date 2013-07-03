@@ -27,7 +27,7 @@ if (!brEngineer) {
 }
 
 //по этой бизнес роли находим всех сотрудников которые там есть
-var employees = orgstructure.getEmployeesByBusinessRole (brEngineer.nodeRef);
+var employees = orgstructure.getEmployeesByBusinessRole (brEngineer.nodeRef, true);
 
 //среди них ищем нашего текущего сотрудника
 var isEngineer = false;

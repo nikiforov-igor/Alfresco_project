@@ -329,10 +329,14 @@ public interface OrgstructureBean {
 	 */
 	List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef);
 
+	List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef, boolean withDelegation);
+
 	/**
 	 * Получение перечня сотрудников, исполняющих определенную Бизнес-роль
 	 */
 	List<NodeRef> getEmployeesByBusinessRole(String businessRoleId);
+
+	List<NodeRef> getEmployeesByBusinessRole(String businessRoleId, boolean withDelegation);
 
 	/**
 	 * Получение перечня организационных элементов (подразделений и рабочих групп),

@@ -269,7 +269,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
             if (generalizedNotification.getRecipientBusinessRoleRefs() != null) {
                 for (NodeRef businessRoleRef : generalizedNotification.getRecipientBusinessRoleRefs()) {
-                    employeeRefs.addAll(orgstructureService.getEmployeesByBusinessRole(businessRoleRef));
+                    employeeRefs.addAll(orgstructureService.getEmployeesByBusinessRole(businessRoleRef, true));
                 }
             }
 

@@ -240,7 +240,7 @@ public class ContractsBeanImpl extends BaseBean {
 			nodeService.setProperty(contractRef, PROP_DATE_REG_CONTRACT_PROJECT, new Date());
 
 			// уведомление
-			List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID);
+			List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID, true);
 			StringBuilder notificationText = new StringBuilder();
 			notificationText.append("Зарегистрирован проект договора c ");
 
@@ -286,7 +286,7 @@ public class ContractsBeanImpl extends BaseBean {
 			nodeService.setProperty(documentRef, PROP_ADDITIONAL_DOCUMENT_NUMBER, documentNumber);
 
 			// уведомление
-			List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID);
+			List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID, true);
 			NodeRef contract = findNodeByAssociationRef(documentRef, ASSOC_DOCUMENT, null, ASSOCIATION_TYPE.TARGET);
 			if (contract != null) {
 				StringBuilder notificationText = new StringBuilder();
@@ -316,7 +316,7 @@ public class ContractsBeanImpl extends BaseBean {
 	}
 
 	public void sendingToSign(NodeRef contractRef) {
-		List<NodeRef> signers = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_SIGNER_ID);
+		List<NodeRef> signers = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_SIGNER_ID, true);
 		StringBuilder notificationText = new StringBuilder();
 		notificationText.append("Вам поступил проект договора ");
 		notificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
@@ -336,7 +336,7 @@ public class ContractsBeanImpl extends BaseBean {
 	}
 
 	public void sendingToContragentSign(NodeRef contractRef) {
-		List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID);
+		List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID, true);
 		StringBuilder notificationText = new StringBuilder();
 		notificationText.append("Проект договор номер ");
 		notificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
@@ -352,7 +352,7 @@ public class ContractsBeanImpl extends BaseBean {
 	}
 
 	public void signing(NodeRef contractRef) {
-		List<NodeRef> recorders = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_RECORDER_ID);
+		List<NodeRef> recorders = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_RECORDER_ID, true);
 		StringBuilder recordersNotificationText = new StringBuilder();
 		recordersNotificationText.append("Поступил новый договор на регистрации, номер проекта: ");
 		recordersNotificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
@@ -365,7 +365,7 @@ public class ContractsBeanImpl extends BaseBean {
 		recordersNotification.setInitiatorRef(orgstructureService.getCurrentEmployee());
 		notificationService.sendNotification(this.notificationChannels, recordersNotification);
 
-		List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID);
+		List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID, true);
 		StringBuilder executorsNotificationText = new StringBuilder();
 		executorsNotificationText.append("Проект договор номер ");
 		executorsNotificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
@@ -383,7 +383,7 @@ public class ContractsBeanImpl extends BaseBean {
 	public void additionalDocumentSendingToSign(NodeRef documentRef) {
 		NodeRef contract = findNodeByAssociationRef(documentRef, ASSOC_DOCUMENT, null, ASSOCIATION_TYPE.TARGET);
 		if (contract != null) {
-			List<NodeRef> signers = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_SIGNER_ID);
+			List<NodeRef> signers = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_SIGNER_ID, true);
 
 			StringBuilder notificationText = new StringBuilder();
 			notificationText.append("Вам поступил на подписание ");
@@ -411,7 +411,7 @@ public class ContractsBeanImpl extends BaseBean {
 	public void additionalDocumentSigning(NodeRef documentRef) {
 		NodeRef contract = findNodeByAssociationRef(documentRef, ASSOC_DOCUMENT, null, ASSOCIATION_TYPE.TARGET);
 		if (contract != null) {
-			List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID);
+			List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID, true);
 
 			StringBuilder notificationText = new StringBuilder();
 			notificationText.append("Документ ");

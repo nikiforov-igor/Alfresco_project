@@ -611,9 +611,13 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 * Получение перечня сотрудников, исполняющих определенную Бизнес-роль
 	 */
 	public Scriptable getEmployeesByBusinessRole(String businessRoleRef) {
+		return getEmployeesByBusinessRole(businessRoleRef, false);
+	}
+
+	public Scriptable getEmployeesByBusinessRole(String businessRoleRef, boolean withDelegation) {
 		ParameterCheck.mandatory("businessRoleRef", businessRoleRef);
 		NodeRef ref = new NodeRef(businessRoleRef);
-		List<NodeRef> results = orgstructureService.getEmployeesByBusinessRole(ref);
+		List<NodeRef> results = orgstructureService.getEmployeesByBusinessRole(ref, withDelegation);
 		return createScriptable(results);
 	}
 

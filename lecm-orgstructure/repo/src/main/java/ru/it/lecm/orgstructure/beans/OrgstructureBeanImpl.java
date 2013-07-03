@@ -814,17 +814,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return results;
 	}
 
-	@Override
-	public List<NodeRef> getEmployeesByBusinessRole(String businessRoleId) {
-		NodeRef businessRole = getBusinessRoleByIdentifier(businessRoleId);
-		if (businessRole != null) {
-			return getEmployeesByBusinessRole(businessRole);
-		}
-		return null;
-	}
-
-	@Override
-	public List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef) {
+	private Set<NodeRef> getEmployeesByBusinessRoleInternal(final NodeRef businessRoleRef) {
 		Set<NodeRef> results = new HashSet<NodeRef>();
 		if (isBusinessRole(businessRoleRef)) { // если бизнес роль
 			// получаем сотрудников
@@ -857,9 +847,76 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			}
 			results.addAll(new ArrayList<NodeRef>(results1));
 		}
-		return new ArrayList<NodeRef>(results);
+		return results;
 	}
 
+	@Override
+	public List<NodeRef> getEmployeesByBusinessRole(String businessRoleId) {
+		return getEmployeesByBusinessRole(businessRoleId, false);
+	}
+
+	@Override
+	public List<NodeRef> getEmployeesByBusinessRole(String businessRoleId, boolean withDelegation) {
+		NodeRef businessRole = getBusinessRoleByIdentifier(businessRoleId);
+		if (businessRole != null) {
+			return getEmployeesByBusinessRole(businessRole, withDelegation);
+		}
+		return null;
+	}
+
+	public List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef) {
+		return getEmployeesByBusinessRole(businessRoleRef, false);
+	}
+
+
+	/*
+    public List<NodeRef> getBossSubordinate (final NodeRef employeeRef, final boolean withDelegation) {
+        Set<NodeRef> employees = new HashSet<NodeRef> ();
+        employees.addAll(getBossSubordinateInternal(employeeRef));
+        if (withDelegation){
+            final List<NodeRef> bosses = getBosses(employeeRef);
+            for (NodeRef boss : bosses){
+                final List<NodeRef> bossSubordinateInternal = getBossSubordinateInternal(boss);
+                employees.addAll(bossSubordinateInternal);
+            }
+        }
+
+        return new ArrayList<NodeRef> (employees);
+    }
+	 */
+
+	@Override
+	public List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef, boolean withDelegation) {
+		//получаем сотрудников по бизнес роли, согласно оргштатки
+		Set<NodeRef> results = getEmployeesByBusinessRoleInternal(businessRoleRef);
+		if (withDelegation) {
+			//пробегаемся по сотрудникам, смотрим их активные параметры делегирования
+			//через активные параметры делегирования забираем доверенное лицо
+			Set<NodeRef> trustees = new HashSet<NodeRef>();
+			for (NodeRef employeeRef : results) {
+				List<NodeRef> delegationOptsList = findNodesByAssociationRef(employeeRef, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+				for (NodeRef delegationOpts : delegationOptsList) {
+					// Получаем ответственного, того сотрудника, кому мы делегировали полномочия
+					// только для активного делегирования
+					if (isActiveDelegationOpts(delegationOpts)) {
+						NodeRef trustee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+						trustees.add(trustee);
+					}
+				}
+			}
+			results.addAll(trustees);
+			//получаем сотрудников по бизнес роли через активные доверенности
+			List<NodeRef> procuraciesList = findNodesByAssociationRef(businessRoleRef, IDelegation.ASSOC_PROCURACY_BUSINESS_ROLE, IDelegation.TYPE_PROCURACY, ASSOCIATION_TYPE.SOURCE);
+			for (NodeRef procuracyRef : procuraciesList) {
+				//только для активных доверенностей
+				if (isProcuracyActive(procuracyRef)) {
+					NodeRef trustee = findNodeByAssociationRef(procuracyRef, IDelegation.ASSOC_PROCURACY_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+					results.add(trustee);
+				}
+			}
+		}
+		return new ArrayList<NodeRef>(results);
+	}
 
 	@Override
 	public List<NodeRef> getOrganizationElementsByBusinessRole(NodeRef businessRoleRef) {

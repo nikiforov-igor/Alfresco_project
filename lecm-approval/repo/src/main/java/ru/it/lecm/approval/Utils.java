@@ -164,7 +164,7 @@ public class Utils implements ApplicationContextAware {
 	}
 
 	public static List<NodeRef> getCurators() {
-		List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID);
+		List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID, true);
 		return curators != null ? curators : new ArrayList<NodeRef>();
 	}
 
