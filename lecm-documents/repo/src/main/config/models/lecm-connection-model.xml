@@ -22,7 +22,7 @@
 	<types>
 		<type name="lecm-connect:connection">
 			<title>Connection</title>
-			<parent>cm:content</parent>
+			<parent>cm:cmobject</parent>
 			<properties>
 				<property name="lecm-connect:is-system">
 					<title>Is system connection</title>
