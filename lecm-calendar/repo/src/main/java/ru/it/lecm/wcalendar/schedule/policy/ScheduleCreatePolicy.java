@@ -10,6 +10,7 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
 
 /**
@@ -47,7 +48,7 @@ public class ScheduleCreatePolicy implements NodeServicePolicies.OnCreateAssocia
 		final QName assocTypeQName = nodeAssocRef.getTypeQName();
 		if (ISchedule.ASSOC_SCHEDULE_EMPLOYEE_LINK.equals(assocTypeQName)) {
 			final NodeRef nodeRef = nodeAssocRef.getSourceRef();
-			scheduleService.addBusinessJournalRecord(nodeRef, EventCategory.ADD);
+			scheduleService.addBusinessJournalRecord(nodeRef, CalendarCategory.NEW_SHEDULE);
 			logger.debug(String.format("Policy ScheduleCreatePolicy invoked on %s", nodeRef.toString()));
 		}
 	}

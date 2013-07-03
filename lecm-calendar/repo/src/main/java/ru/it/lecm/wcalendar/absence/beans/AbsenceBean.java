@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import ru.it.lecm.wcalendar.CalendarCategory;
 
 /**
  *
@@ -173,7 +174,7 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 
 		if (employee != null) {
 			setAbsenceActivated(node, true);
-			addBusinessJournalRecord(node, EventCategory.START_ABSENCE_ON_WORK);
+			addBusinessJournalRecord(node, CalendarCategory.START_NOT_IN_OFFICE);
 			delegationService.startDelegation(employee);
 			logger.debug(String.format("Absence [%s] started.", node.toString()));
 		} else {
@@ -187,7 +188,7 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 
 		if (employee != null) {
 			setAbsenceActivated(node, false);
-			addBusinessJournalRecord(node, EventCategory.FINISH_ABSENCE_ON_WORK);
+			addBusinessJournalRecord(node, CalendarCategory.STOP_NOT_IN_OFFICE);
 			delegationService.stopDelegation(employee);
 			logger.debug(String.format("Absence [%s] ended.", node.toString()));
 		} else {
@@ -223,17 +224,17 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 		objects.add(absentEmployee.toString());
 		String messageTemplate = null;
 
-		if (EventCategory.ADD.equals(category)) {
+		if (CalendarCategory.ADD_ABSENCE.equals(category)) {
 			messageTemplate = BUSINESS_JOURNAL_ABSENCE_ADD;
-		} else if (EventCategory.DELETE.equals(category)) {
+		} else if (CalendarCategory.DELETE_ABSENCE.equals(category)) {
 			messageTemplate = BUSINESS_JOURNAL_ABSENCE_DELETE;
 		} else if (EventCategory.EDIT.equals(category)) {
 			messageTemplate = BUSINESS_JOURNAL_ABSENCE_PROLONG;
-		} else if (EventCategory.START_ABSENCE_ON_WORK.equals(category)) {
+		} else if (CalendarCategory.START_NOT_IN_OFFICE.equals(category)) {
 			Date absenceEnd = getAbsenceEndDate(node);
 			objects.add(dateFormat.format(absenceEnd));
 			messageTemplate = BUSINESS_JOURNAL_ABSENCE_START;
-		} else if (EventCategory.FINISH_ABSENCE_ON_WORK.equals(category)) {
+		} else if (CalendarCategory.STOP_NOT_IN_OFFICE.equals(category)) {
 			Date absenceStart = getAbsenceStartDate(node);
 			objects.add(dateFormat.format(absenceStart));
 			messageTemplate = BUSINESS_JOURNAL_ABSENCE_END;

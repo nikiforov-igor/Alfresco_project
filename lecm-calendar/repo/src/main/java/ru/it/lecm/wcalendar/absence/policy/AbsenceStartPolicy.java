@@ -12,6 +12,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 /**
@@ -51,7 +52,7 @@ public class AbsenceStartPolicy implements NodeServicePolicies.OnCreateAssociati
 			final NodeRef nodeRef = nodeAssocRef.getSourceRef();
 			final Date today = new Date();
 			final Date absenceStart = absenceService.getAbsenceStartDate(nodeRef);
-			absenceService.addBusinessJournalRecord(nodeRef, EventCategory.ADD);
+			absenceService.addBusinessJournalRecord(nodeRef, CalendarCategory.ADD_ABSENCE);
 			if (DateUtils.isSameDay(today, absenceStart)) {
 				absenceService.startAbsence(nodeRef);
 				logger.debug(String.format("Policy AbsenceStartPolicy invoked on %s for employee %s", nodeRef.toString(), nodeAssocRef.getTargetRef().toString()));

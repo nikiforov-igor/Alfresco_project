@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
 
 /**
@@ -51,7 +52,7 @@ public class ScheduleDeletePolicy implements NodeServicePolicies.OnUpdatePropert
 		final Boolean curActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
 
 		if (curActive != null && curActive == false && curActive != prevActive) {
-			scheduleService.addBusinessJournalRecord(nodeRef, EventCategory.DELETE);
+			scheduleService.addBusinessJournalRecord(nodeRef, CalendarCategory.DELETE_SHEDULE);
 			scheduleService.unlinkSchedule(nodeRef);
 		}
 		logger.debug(String.format("Policy ScheduleDeletePolicy invoked on %s", nodeRef.toString()));

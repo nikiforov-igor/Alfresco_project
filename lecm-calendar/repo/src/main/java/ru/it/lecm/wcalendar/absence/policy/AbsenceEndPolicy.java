@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 /**
@@ -64,7 +65,7 @@ public class AbsenceEndPolicy implements NodeServicePolicies.OnUpdatePropertiesP
 		// если: lecm-dic:active присутствует И нода отправилась в архив И нода раньше не была в архиве
 		if (curActive != null && curActive == false && curActive != prevActive) {
 			deleted = true;
-			absenceService.addBusinessJournalRecord(nodeRef, EventCategory.DELETE);
+			absenceService.addBusinessJournalRecord(nodeRef, CalendarCategory.DELETE_ABSENCE);
 		}
 		// если: нода была удалена И сегодняшняя дата позже начала отсутствия И раньше его конца
 		if (deleted && today.after(curStart) && today.before(curEnd)) {

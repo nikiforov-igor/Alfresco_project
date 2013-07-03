@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
 import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
+import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 
 /**
@@ -167,7 +168,7 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 
 	@Override
 	public void addBusinessJournalRecord(NodeRef node, String category) {
-		if (EventCategory.EDIT.equals(category)) {
+		if (CalendarCategory.SET_CALENDAR.equals(category)) {
 			businessJournalService.log(authService.getCurrentUserName(), node, category, BUSINESS_JOURNAL_CALENDAR_MODIFIED, null);
 		}
 	}

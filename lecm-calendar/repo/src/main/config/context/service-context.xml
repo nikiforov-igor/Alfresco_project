@@ -42,6 +42,19 @@
 			</list>
 		</property>
 	</bean>
+        
+        <!-- Добавление новых категорий событий -->
+        <bean id="${groupId}.${artifactId}.businessJournalDictionaryBootstrap"
+		  parent="lecmDictionaryBootstrap"
+		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">
+        <property name="createOrUpdateDictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-buisness-journal-eventCategory-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-buisness-journal-objectType-items.xml</value>
+            </list>
+        </property>
+        </bean>
+        
 	<!-- Настройки прав доступа на каталоги в рамках сервиса -->
 <!--	<bean id="${groupId}.${artifactId}.ScheduleServicePermissions" parent="ServiceFolderPermissionHelper"
 		  depends-on="${groupId}.${artifactId}.wCalendarBootstrap, ${groupId}.${artifactId}.wCalendarBusinessRolesDicBootstrap" >
@@ -235,6 +248,7 @@
 	<bean id="calendarModifyPolicy" class="ru.it.lecm.wcalendar.calendar.policy.CalendarModifyPolicy" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="wCalendarService" ref="WCalendarService"/>
+                <property name="nodeService" ref="nodeService"/>
 	</bean>
 	<!-- Полиси для сервиса отсутствий -->
 	<bean id="absenceStartPolicy" class="ru.it.lecm.wcalendar.absence.policy.AbsenceStartPolicy" init-method="init">

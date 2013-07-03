@@ -25,6 +25,7 @@ import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
 import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
+import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
 import ru.it.lecm.wcalendar.schedule.ISpecialScheduleRaw;
 
@@ -331,6 +332,10 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 		NodeRef orgSubj = getOrgSubjectBySchedule(node);
 		String messageTemplate = null;
 		String scheduleType = getScheduleType(node);
+                
+                if (scheduleType.equals(ISchedule.SCHEDULE_TYPE_SPECIAL) && category.equals(CalendarCategory.NEW_SHEDULE))
+                    category = CalendarCategory.NEW_INDIVIDUAL_SHEDULE;
+                
 		if (orgSubj == null) {
 			return;
 		}
@@ -338,7 +343,7 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 		List<String> objects = new ArrayList<String>();
 		objects.add(orgSubj.toString());
 
-		if (EventCategory.ADD.equals(category)) {
+		if (CalendarCategory.NEW_SHEDULE.equals(category) || CalendarCategory.NEW_INDIVIDUAL_SHEDULE.equals(category)) {
 			if (orgstructureService.isEmployee(orgSubj)) {
 				if (SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
 					messageTemplate = BUSINESS_JOURNAL_COMMON_SCHEDULE_EMPLOYEE_CREATE;
@@ -352,7 +357,7 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 					messageTemplate = BUSINESS_JOURNAL_SPECIAL_SCHEDULE_OU_CREATE;
 				}
 			}
-		} else if (EventCategory.DELETE.equals(category)) {
+		} else if (CalendarCategory.DELETE_SHEDULE.equals(category)) {
 			if (orgstructureService.isEmployee(orgSubj)) {
 				if (SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
 					messageTemplate = BUSINESS_JOURNAL_COMMON_SCHEDULE_EMPLOYEE_DELETE;
