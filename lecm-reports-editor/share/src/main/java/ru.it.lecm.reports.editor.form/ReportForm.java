@@ -1,15 +1,15 @@
-package ru.it.lecm.documents.form;
+package ru.it.lecm.reports.editor.form;
 
-import org.alfresco.web.config.forms.FormSet;
-import org.alfresco.web.config.forms.Mode;
+import org.alfresco.web.config.forms.*;
 import org.alfresco.web.scripts.forms.FormUIGet;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.extensions.webscripts.Cache;
-import org.springframework.extensions.webscripts.ScriptRemote;
-import org.springframework.extensions.webscripts.Status;
-import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.*;
+import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.api.model.ParameterTypedValue;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: pmelnikov
- * Date: 21.06.13
- * Time: 13:46
+ * User: dbashmakov
+ * Date: 03.07.13
+ * Time: 15:28
  */
 public class ReportForm extends FormUIGet {
 
@@ -37,48 +37,130 @@ public class ReportForm extends FormUIGet {
 
     @Override
     protected Map<String, Object> generateModel(String itemKind, String itemId, WebScriptRequest request, Status status, Cache cache) {
-        //Map<String, Object> superModel = super.generateModel(itemKind, itemId, request, status, cache);
+        ReportDescriptor descriptor = getReportDescriptor();
+
         HashMap<String, Object> model = new HashMap<String, Object>();
         HashMap<String, Object> form = new HashMap<String, Object>();
         model.put(MODEL_FORM, form);
-
         form.put(MODEL_MODE, Mode.CREATE);
         form.put(MODEL_METHOD, "post");
         form.put(MODEL_ENCTYPE, ENCTYPE_JSON);
-        form.put(MODEL_SUBMISSION_URL, "sendto");
+        form.put(MODEL_SUBMISSION_URL, "lecm/report/" + descriptor.getMnem());
         form.put(MODEL_ARGUMENTS, "");
         form.put(MODEL_DATA, new HashMap<Object, Object>());
-        form.put(MODEL_SHOW_CAPTION, true);
-        form.put(MODEL_SHOW_CANCEL_BUTTON, false);
-        form.put(MODEL_SHOW_RESET_BUTTON, true);
+        form.put(MODEL_SHOW_CAPTION, false);
+        form.put(MODEL_SHOW_CANCEL_BUTTON, true);
+        form.put(MODEL_SHOW_RESET_BUTTON, false);
         form.put(MODEL_SHOW_SUBMIT_BUTTON, true);
         form.put(MODEL_CONSTRAINTS, new ArrayList<Object>());
 
         ArrayList<Set> sets = new ArrayList<Set>();
         form.put(MODEL_STRUCTURE, sets);
-        Set set = new Set("", "По умолчанию");
-        FieldPointer fieldPointer = new FieldPointer("test_prop");
-        set.addChild(fieldPointer);
+        Set set = new Set("", "Набор параметров");
         sets.add(set);
 
-
-        //fields
         HashMap<String, Field> fields = new HashMap<String, Field>();
         form.put(MODEL_FIELDS, fields);
-        Field field = new Field();
-        field.setId("test_prop");
-        field.setName("test_prop");
-        field.setLabel("Тестовое поле");
-        field.setDescription("Описание поля");
-        FieldControl control = new FieldControl("/org/alfresco/components/form/controls/textfield.ftl");
-        field.setControl(control);
-        field.setDataKeyName("test_prop");
-        field.setDataType("text");
-        field.setType("property");
-        field.setValue("test_value");
-        fields.put("test_prop", field);
+
+        List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
+        for (ColumnDescriptor column : columns) {
+            ParameterTypedValue typedValue = column.getParameterValue();
+            if(typedValue != null) {
+                Field field = generateFieldModel(column,typedValue);
+                if (field != null) {
+                    fields.put(column.getColumnName(), field);
+                }
+            }
+        }
 
         return model;
+    }
+
+    protected Field generateFieldModel(ColumnDescriptor column, ParameterTypedValue typedValue) {
+
+        Field field = null;
+
+        try {
+            if (column != null) {
+                // create the initial field model
+                field = new Field();
+
+                field.setId(column.getColumnName());
+                field.setName(column.getColumnName());
+                field.setLabel("Название параметра");
+                field.setDescription("Название параметра");
+
+                processFieldControl(field, column, typedValue);
+
+                field.setDataKeyName(column.getColumnName());
+
+                //TODO изменить метод!
+                String dataType =  column.getDataType().toString();
+                dataType = dataType.startsWith("d:") ? dataType.replace("d:", "") : dataType;
+                field.setDataType(dataType);
+                field.setType(isNotAssoc(column.getDataType().toString()) ? "property" : "association");
+
+                field.setValue(null);
+            }
+        } catch (JSONException je) {
+            field = null;
+        }
+
+        return field;
+    }
+
+    protected void processFieldControl(Field field, ColumnDescriptor column, ParameterTypedValue typedValue) throws JSONException {
+        FieldControl control = null;
+
+        DefaultControlsConfigElement defaultControls = null;
+        FormsConfigElement formsGlobalConfig =
+                (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
+        if (formsGlobalConfig != null) {
+            defaultControls = formsGlobalConfig.getDefaultControls();
+        }
+
+        if (defaultControls == null) {
+            throw new WebScriptException("Failed to locate default controls configuration");
+        }
+
+        boolean isPropertyField = isNotAssoc(column.getDataType().toString());
+
+        Control defaultControlConfig;
+        if (isPropertyField) {
+            defaultControlConfig = defaultControls.getItems().get(column.getDataType().toString());
+
+            if (defaultControlConfig == null) {
+                defaultControlConfig = defaultControls.getItems().get(
+                        OLD_DATA_TYPE_PREFIX + column.getDataType().toString());
+            }
+        } else {
+            defaultControlConfig = defaultControls.getItems().get(
+                    ASSOCIATION + ":" + column.getDataType().toString());
+
+            if (defaultControlConfig == null) {
+                defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
+            }
+        }
+
+
+        if (defaultControlConfig != null) {
+            control = new FieldControl(defaultControlConfig.getTemplate());
+
+            List<ControlParam> paramsConfig = defaultControlConfig.getParamsAsList();
+            for (ControlParam param : paramsConfig) {
+                control.getParams().put(param.getName(), param.getValue());
+            }
+        }
+
+        field.setControl(control);
+    }
+
+    private ReportDescriptor getReportDescriptor() {
+        return null;
+    }
+
+    private boolean isNotAssoc(String typeKey){
+        return true;
     }
 
     public class Field extends Element
