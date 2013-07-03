@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.jasper;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.reports.api.AssocDataFilter;
 import ru.it.lecm.reports.api.DataFieldColumn;
+import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.ReportDSContext;
 
 public class ReportDSContextImpl implements ReportDSContext {
@@ -24,7 +25,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 	private ServiceRegistry serviceRegistry;
 	final private ProxySubstitudeBean substitudeService = new ProxySubstitudeBean();
 
-	private AssocDataFilter filter; // может быть NULL
+	private DataFilter filter; // может быть NULL
 	private Map<String, DataFieldColumn> metaFields; // ключ = имя колонки данных в jasper
 
 	// список отобранных для Jasper атрибутов Альфреско для активной строки набора данных
@@ -45,7 +46,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 	 * список простых gname Альфреско-атрибутов, которые требуются для JR-отчёта, 
 	 * здесь перечислены имена - с короткими префиксами, доступными для Jasper;
 	 * если список null - ограничений на имена не вносятся (и все поля объекта
-	 * Фльреско могут использоваться в самом jasper-шаблоне.
+	 * Альфреско могут использоваться в самом jasper-шаблоне.
 	 */
 	private Set<String> jrSimpleProps;
 
@@ -84,12 +85,12 @@ public class ReportDSContextImpl implements ReportDSContext {
 	}
 
 	@Override
-	public AssocDataFilter getFilter() {
+	public DataFilter getFilter() {
 		return filter;
 	}
 
 	@Override
-	public void setFilter(AssocDataFilter value) {
+	public void setFilter(DataFilter value) {
 		this.filter = value;
 	}
 
@@ -100,6 +101,15 @@ public class ReportDSContextImpl implements ReportDSContext {
 
 	public void setMetaFields(Map<String, DataFieldColumn> metaFields) {
 		this.metaFields = metaFields;
+	}
+
+	public void setMetaFields(List<DataFieldColumn> list) {
+		final Map<String, DataFieldColumn> result = new HashMap<String, DataFieldColumn>();
+		if (list != null) {
+			for(DataFieldColumn fld: list)
+				result.put( fld.getName(), fld);
+		}
+		this.metaFields = result;
 	}
 
 	@Override
@@ -172,10 +182,11 @@ public class ReportDSContextImpl implements ReportDSContext {
 	}
 
 	/**
-	 * ProxySubstitudeBean cейчас просто обходит расширеные выражения для 
-	 * функции formatNodeTitle, в дальнейшем можно добавить макросы, встроенные 
+	 * ProxySubstitudeBean cейчас отрабатывет расширеные выражения для функции
+	 * formatNodeTitle, в дальнейшем можно добавить макросы, встроенные 
 	 * функции и пр. 
-	 * Расширеный синтаксис маркируется строкой, начинающейся с пары "{{", вместо обычной "{"
+	 * Расширеный синтаксис выражений маркируется парами "{{" в начале строки и 
+	 * закрывающей "}}", вместо обычных "{" и "}".
 	 * 
 	 * @author rabdullin
 	 * 
@@ -184,7 +195,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 
 		/**
 		 *  префикс расширенного синтаксиса
-		 *  предполагается что строка вся феликом будет окружена: "{{ ... }}"
+		 *  предполагается что строка вся целиком будет окружена: "{{ ... }}"
 		 */
 		final public static String XSYNTAX_MARKER = "{{";
 

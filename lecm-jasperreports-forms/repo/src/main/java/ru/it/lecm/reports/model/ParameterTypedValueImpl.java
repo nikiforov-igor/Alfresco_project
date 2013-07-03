@@ -16,6 +16,7 @@ public class ParameterTypedValueImpl
 	private L18able[] prompts;
 	private Object[] bounds;
 	private Type type = Type.VALUE;
+	private boolean required = false;
 
 	public ParameterTypedValueImpl() {
 		super();
@@ -111,4 +112,21 @@ public class ParameterTypedValueImpl
 		this.type = value;
 	}
 
+	@Override
+	public boolean isRequired() {
+		return this.required;
+	}
+
+	@Override
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		if (this.type == Type.RANGE) // для интервала - проверить обе границы ...
+			return (getBound1() == null) && (getBound2() == null);
+
+		return (getBound1() == null); // для остальных - только одна граница
+	}
 }

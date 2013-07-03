@@ -12,6 +12,7 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru.it.lecm.reports.api.AssocDataFilter.AssocDesc;
 import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
@@ -95,7 +96,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 			if (hasCAgents) {
 				final QName qnCAgent = QName.createQName( "lecm-contractor:contractor-type", ns); // Контрагенты, "lecm-contract:partner-assoc"
 				final QName qnAssocCAgent = QName.createQName( "lecm-contract:partner-assoc", ns);
-				result.addAssocList( AssocKind.target, qnAssocCAgent, qnCAgent, contragents);
+				result.addAssoc( new AssocDesc(AssocKind.target, qnAssocCAgent, qnCAgent, contragents));
 			}
 
 			return result;
@@ -229,7 +230,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	protected String buildQueryText() {
 		final StringBuilder bquery = new StringBuilder();
 		final QName qTYPE = QName.createQName(TYPE_CONRACT, this.getServices().getServiceRegistry().getNamespaceService());
-		bquery.append( "TYPE:"+ quoted(qTYPE.toString()));
+		bquery.append( "TYPE:"+ Utils.quoted(qTYPE.toString()));
 
 		// начало .. конец
 		// начало == <!-- дата начала согласования -->

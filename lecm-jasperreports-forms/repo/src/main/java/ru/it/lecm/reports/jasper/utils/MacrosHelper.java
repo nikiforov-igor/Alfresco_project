@@ -135,17 +135,7 @@ public class MacrosHelper {
 				result = expr.getText();
 		} else 
 			result = jrparam.toString();
-		return dequote( (result != null) ? result : defaultValue);
-	}
-
-	final static char QUOTE = '"';
-
-	static String dequote( String s) {
-		if (s == null || s.length() <= 2) return null;
-		final int b = (s.charAt(0) == '"') ? 1 : 0;
-		int e = s.length();
-		if (s.charAt(e-1) == QUOTE) e--; 
-		return s.substring(b, e);
+		return Utils.dequote( (result != null) ? result : defaultValue);
 	}
 
 	public static String getJRParameterValue(Object jrparam) {

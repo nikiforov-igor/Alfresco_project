@@ -55,7 +55,7 @@ public class JRXMLProducer {
 	 * Выполнить патч указанного Jrxml-файла и сохранить результат в другой.
 	 * @param inJrxmlFileName
 	 * @param outJrxmlFileName
-	 * @param desc
+	 * @param desc мета-описание отчёта
 	 */
 	public static void patchJrxml( String inJrxmlFileName, String outJrxmlFileName, ReportDescriptor desc) {
 		String stage = "prepare";
@@ -63,18 +63,51 @@ public class JRXMLProducer {
 			stage = "open input file";
 			final File f = new File(inJrxmlFileName);
 
-			stage = String.format("open file '%s'", f.getAbsolutePath());
+			stage = String.format("open jrxml-file '%s'", f.getAbsolutePath());
 			final InputStream fin = new BufferedInputStream(new FileInputStream(f));
 
-			stage = String.format("updating file '%s'", f.getAbsolutePath());
+			stage = String.format("updating jrxml data of '%s'", f.getAbsolutePath());
 			final ByteArrayOutputStream outJrxml = updateJRXML( fin, f.getName(), desc);
 			fin.close();
 
-			stage = String.format("saveing into file '%s'", outJrxmlFileName);
+			stage = String.format("saving into jrxml-file '%s'", outJrxmlFileName);
 			outJrxml.writeTo( new FileOutputStream(outJrxmlFileName));
 			outJrxml.close();
 
-			System.out.println( String.format( "\n successfully saved into '%s'", outJrxmlFileName));
+			System.out.println( String.format( "\n successfully saved into jrxml '%s'", outJrxmlFileName));
+
+		} catch (Exception e) {
+			throw new RuntimeException( String.format("Exception at stage '%s': %s\n", stage, e.toString()), e);
+		}
+	}
+
+	// TODO: доработать прототип
+	/**
+	 * Создание jrxml-файла с простой многоколоночной таблицей.
+	 * @param inPrototypeFileName название файла с прототипом создаваемого файла.
+	 * В нём отмечены все нужные секции и есть прототип колокни данных для 
+	 * создания таблицы из всех колонок НД отчёта.
+	 * @param outJrxmlFileName сгенерированный файл.
+	 * @param desc мета-описание отчёта
+	 */
+	public static void createJrxml( String inPrototypeFileName, String outJrxmlFileName, ReportDescriptor desc) {
+		String stage = "prepare";
+		try {
+			stage = "open input file";
+			final File fInPrototype = new File(inPrototypeFileName);
+
+			stage = String.format("open prototype file '%s'", fInPrototype.getAbsolutePath());
+			final InputStream fin = new BufferedInputStream(new FileInputStream(fInPrototype));
+
+			stage = String.format("generating jrxml data of prototype '%s'", fInPrototype.getAbsolutePath());
+			final ByteArrayOutputStream outJrxml = updateJRXML( fin, fInPrototype.getName(), desc);
+			fin.close();
+
+			stage = String.format("saving into jrxml file '%s'", outJrxmlFileName);
+			outJrxml.writeTo( new FileOutputStream(outJrxmlFileName));
+			outJrxml.close();
+
+			System.out.println( String.format( "\n successfully saved into jrxml '%s'", outJrxmlFileName));
 
 		} catch (Exception e) {
 			throw new RuntimeException( String.format("Exception at stage '%s': %s\n", stage, e.toString()), e);

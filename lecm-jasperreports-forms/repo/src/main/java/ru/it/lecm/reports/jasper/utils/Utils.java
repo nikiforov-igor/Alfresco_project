@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.alfresco.service.namespace.QName;
 
+import ru.it.lecm.reports.api.model.ColumnDescriptor;
+
 
 public class Utils {
 
@@ -26,8 +28,47 @@ public class Utils {
 	}
 
 	final public static char QUOTE = '\"';
-	static String quoted( final String s) {
+	public static String quoted( final String s) {
 		return QUOTE + s+ QUOTE;
+	}
+
+	public static String dequote( String s) {
+		if (s == null || s.length() <= 2) return null;
+		final int b = (s.charAt(0) == '"') ? 1 : 0;
+		int e = s.length();
+		if (s.charAt(e-1) == QUOTE) e--; 
+		return s.substring(b, e);
+	}
+
+	/**
+	 * Экранировка символов [':', '-'] в указанной строке символом '\' для Lucene-строк
+	 * @return
+	 */
+	public static String luceneEncode(String s) {
+		return doCharsProtection( s, ":-");
+	}
+
+	private static final char CH_WALL = '\\'; // символ экранировки
+
+	/**
+	 * Экранировка указанных символов в строке символом '\'
+	 * @param s экранируемая строка
+	 * @param chars символы, которые подлежат экранировке
+	 * @return
+	 */
+	public static String doCharsProtection(String s, String chars) {
+		if (isStringEmpty(s) || isStringEmpty(chars))
+			return s;
+		final StringBuilder result = new StringBuilder();
+		for(int i = 0; i < s.length(); i++) {
+			final char ch = s.charAt(i);
+			if (	CH_WALL == ch   /* сам символ "экрана" тоже надо экранировать */
+					|| chars.indexOf(ch) >= 0
+				)// надо экранировку
+				result.append(CH_WALL);
+			result.append(ch); // сам символ
+		}
+		return result.toString();
 	}
 
 	/**
@@ -205,15 +246,14 @@ public class Utils {
 	 * @param upto числовая границы справа
 	 * @return условие проверки вхождения числа в диапазон или NULL, если обе границы NULL
 	 */
-	public static String emmitNumericIntervalCheck( String fldName, Double from, Double upto) {
+	public static String emmitNumericIntervalCheck( String fldName, Number from, Number upto) {
 		final boolean needEmmition = (from != null || upto !=  null);
 		if (!needEmmition)
 			return null;
 		// если даты не по-порядку - поменяем их местами
-
 		if (from != null && upto !=  null) {
-			if (from > upto) {
-				final Double temp = from;
+			if (from.doubleValue() > upto.doubleValue()) {
+				final Number temp = from;
 				from = upto;
 				upto = temp;
 			}
@@ -221,9 +261,28 @@ public class Utils {
 
 		// add " ... [X TO Y]"
 		//  используем формат без разделителя, чтобы нормально выполнялся строковый поиск ...
-		final String stMIN = (from != null) ? String.format( "%12.0f", from) : "MIN";
-		final String stMAX = (upto != null) ? String.format( "%12.0f", upto) : "MAX";
+		final String stMIN = (from != null) ? String.format( "%12.0f", from.doubleValue()) : "MIN";
+		final String stMAX = (upto != null) ? String.format( "%12.0f", upto.doubleValue()) : "MAX";
 		return " @"+ fldName+ ":[" + stMIN + " TO "+ stMAX+ "]";
+	}
+
+
+	/**
+	 * Сгенерировать условие для единичного параметра (кавыки " добавляются здесь).
+	 * Если параметр не задан (null) - поднимается исключение с сообщением errMsg.
+	 * @param bquery
+	 * @param column
+	 * @param prefix
+	 * @param errMsg
+	 */
+	public static void emmitParamCondition(final StringBuilder bquery
+			, ColumnDescriptor column
+			, final String prefix
+			, final String errMsg
+			) {
+		if (column == null || column.getParameterValue().getBound1() == null)
+			throw new RuntimeException(errMsg);
+		bquery.append( prefix+ Utils.quoted(column.getParameterValue().getBound1().toString()));
 	}
 
 

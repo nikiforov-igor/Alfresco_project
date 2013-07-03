@@ -2,11 +2,13 @@ package ru.it.lecm.reports.model;
 
 import java.util.Set;
 
+import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.FlagsExtendable;
 import ru.it.lecm.reports.api.model.JavaDataType;
 import ru.it.lecm.reports.api.model.NamedValue;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
+import ru.it.lecm.reports.jasper.utils.Utils;
 import ru.it.lecm.reports.model.JavaDataTypeImpl.SupportedTypes;
 
 /**
@@ -23,6 +25,7 @@ public class ColumnDescriptorImpl
 	private ParameterTypedValue parameterTypedValue;
 	private FlagsExtendable flagsExtendable;
 	private String expression;
+	private boolean special = false;
 
 	public ColumnDescriptorImpl() {
 		super();
@@ -41,10 +44,24 @@ public class ColumnDescriptorImpl
 		this(colname, (SupportedTypes) null);
 	}
 
+
+	/**
+	 * Проверить является ли мапинг параметра простым - т.е. сразу на атрибут (нет ассоциаций).
+	 * Сейчас такими принимаются любые непустые строки, которые НЕ начинаются с '{'.
+	 * @param column проверяемый описатель
+	 * @return true, если параметр смапирован на простое поле
+	 */
+	public static boolean isMapped2ImmediateProperty(ColumnDescriptor column) {
+		return (column != null)
+				&& !Utils.isStringEmpty(column.getExpression())
+				&& !column.getExpression().startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + (this.isSpecial() ? 1231 : 1237);
 		result = prime * result
 				+ ((getColumnName() == null) ? 0 : getColumnName().hashCode());
 		result = prime * result
@@ -57,6 +74,7 @@ public class ColumnDescriptorImpl
 		return result;
 	}
 
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -66,6 +84,9 @@ public class ColumnDescriptorImpl
 		if (getClass() != obj.getClass())
 			return false;
 		final ColumnDescriptorImpl other = (ColumnDescriptorImpl) obj;
+
+		if (this.isSpecial() != other.isSpecial())
+			return false;
 
 		final String columnName = getColumnName();
 		if (columnName == null) {
@@ -106,17 +127,12 @@ public class ColumnDescriptorImpl
 		return "ColumnDescriptorImpl ["
 				+ "mnem '"+ getMnem()+ "'"
 				+ ", dataType " + dataType
+				+ (isSpecial() ? ", special": "")
 				+ ", expression '"+ expression+ "'"
 				+ ", parameter " + parameterTypedValue
 				+ ", flagsExtendable " + flagsExtendable
 				+ "]";
 	}
-
-//	private ParameterTypedValue parameterValue() {
-//		if (this.parameterTypedValue == null)
-//			this.parameterTypedValue = new ParameterTypedValueImpl();
-//		return this.parameterTypedValue;
-//	}
 
 	private FlagsExtendable flagsExtendable() {
 		if (this.flagsExtendable == null)
@@ -167,6 +183,16 @@ public class ColumnDescriptorImpl
 	@Override
 	public Set<NamedValue> flags() {
 		return flagsExtendable().flags();
+	}
+
+	@Override
+	public boolean isSpecial() {
+		return this.special;
+	}
+
+	@Override
+	public void setSpecial(boolean flag) {
+		this.special = flag;		
 	}
 
 }

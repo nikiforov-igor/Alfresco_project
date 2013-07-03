@@ -23,15 +23,15 @@ import ru.it.lecm.reports.jasper.utils.Utils;
 /**
  * AlfrescoJRDataSource: набор данных обеспечивает JR-интерфейс для полученных данных Alfresco.
  * Подразумеваемтся такая схема получения данных:
- *    [ 0) имена JR-полей совпадают с названиями model-атрибутов Альфреско ]
+ *    [ (!) имена JR-полей совпадают с названиями model-колонок в context.metaFields]
  *    1) основной поисковый запрос выдаёт только id отобранных объектов
  *    2) далее LocalJRDataSource "догружает" в методе next() значения 
- * атрибутов Альфреско, которые прописаны в config (или грузит все атрибуты,
- * т.к. ссылки на них всё равно будут обеспечены по именам)
+ * атрибутов Альфреско, которые прописаны в context.metaFields (или грузит все 
+ * properties-атрибуты)
  *    3) имеется возможность иметь вычисляемые поля (кодируется в имени - обрамление символами '{}').  
 
- * Значения метаописаний fields из config, могут использоваться в дальнейшем 
- * для вычитывания части атрибутов данных, вместо выборки целиком всех.
+ * Значения метаописаний fields из context, могут использоваться в дальнейшем 
+ * для вычитывания части атрибутов данных вместо выборки целиком всех.
  * 
  * @author rabdullin
  *
@@ -51,6 +51,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 	}
 
 	public ReportDSContextImpl getContext() {
+		// if (context == null) context = new ReportDSContextImpl();
 		return context;
 	}
 
@@ -104,7 +105,8 @@ public class AlfrescoJRDataSource implements JRDataSource
 
 		final NodeService nodeSrv = context.getRegistryService().getNodeService();
 		final Map<QName, Serializable> realProps = nodeSrv.getProperties(id);
-		logAlfData( realProps, String.format("Loaded properties of %s\n\t Filtering fldNames for jasper-report by list: %s", id, context.getJrSimpleProps()));
+		log_alfreco_data( realProps, String.format("Loaded properties of %s\n\t Filtering fldNames for jasper-report by list: %s"
+				, id, Utils.coalesce(context.getJrSimpleProps(), "*") ));
 		if (realProps != null) { 
 			for (Map.Entry<QName, Serializable> e: realProps.entrySet()) {
 				// переводим название свойства в краткую форму
@@ -118,7 +120,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 		return true;
 	}
 
-	protected void logAlfData(Map<QName, Serializable> props, String info) {
+	protected void log_alfreco_data(Map<QName, Serializable> props, String info) {
 		if (logger.isDebugEnabled()) {
 			final StringBuilder dump = Utils.dumpAlfData(props, info);
 			logger.debug(dump.toString());
@@ -149,11 +151,12 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 * добавлением мы гарантируем, чтобы curProps содержал всё, что надо для jr.
 	 */
 	private HashMap<String, Serializable> ensureJRProps() {
-		final HashMap<String, Serializable> result = new HashMap<String, Serializable>();
+		final HashMap<String, Serializable> result;
 		final StringBuilder sb = new StringBuilder("Filtering alfresco properties by names: \n"); 
 		if (this.context.getJrSimpleProps() != null){
 			// все свойства включаем в набор с пустыми значениями
 			int i = 0;
+			result = new HashMap<String, Serializable>();
 			for (String fldName: this.context.getJrSimpleProps()) {
 				i++;
 				if (!context.isCalcField(fldName)) { // обычное поле
@@ -163,8 +166,10 @@ public class AlfrescoJRDataSource implements JRDataSource
 					// Если есть "пути" в именах -> атрибут косвенный -> в result здесь не включаем
 					sb.append( String.format( "\t[%d]\t referenced field '%s' detected -> using evaluator for it \n", i, fldName));
 			}
-		} else
+		} else {
 			sb.append("\t all fields will be included");
+			result = null;
+		}
 		if (logger.isDebugEnabled()) 
 			logger.debug(sb.toString());
 		return result;

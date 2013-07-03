@@ -110,7 +110,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 
 		final StringBuilder bquery = new StringBuilder();
 		final QName qTYPE = QName.createQName(TYPE_APPROVAL_LIST, this.getServices().getServiceRegistry().getNamespaceService());
-		bquery.append( "TYPE:"+ quoted(qTYPE.toString()));
+		bquery.append( "TYPE:"+ Utils.quoted(qTYPE.toString()));
 
 		// выполненные Согласования -> вне статуса 'NO_DECISION'
 		bquery.append( " AND NOT @lecm\\-al\\:approval\\-list\\-decision:"+ VALUE_STATUS_NOTREADY+ " ");
@@ -121,9 +121,6 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 			// bquery.append( " AND( (@lecm\\-contract\\:unlimited:true) OR (...) )");
 			bquery.append( " AND "+ cond);
 		}
-
-		// TODO: temporary
-		//openOfficeExecute();
 
 		return bquery.toString();
 	}

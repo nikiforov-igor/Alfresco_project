@@ -16,4 +16,14 @@ public interface ParameterTypedValue extends ParameterType {
 	Object getBound2();
 	void setBound2(Object value);
 
+	/**
+	 * Обязательность параметра (true) или опцион (false)
+	 */
+	boolean isRequired();
+	void setRequired(boolean flag);
+
+	/**
+	 * Пуст параметр (true) или заполнен (false)
+	 */
+	boolean isEmpty();
 }

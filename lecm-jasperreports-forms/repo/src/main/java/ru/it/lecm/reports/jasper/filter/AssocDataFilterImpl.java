@@ -45,13 +45,12 @@ public class AssocDataFilterImpl implements AssocDataFilter {
 	}
 
 	@Override
-	public void addAssoc( AssocKind kind, QName assocType, QName type, NodeRef id) {
-		assocList.add( new AssocDesc( kind, assocType, id, type) );
+	public void addAssoc( AssocDesc desc) {
+		assocList.add( desc);
 	}
 
-	@Override
-	public void addAssocList( AssocKind kind, QName assocType, QName type, List<NodeRef> idList) {
-		assocList.add( new AssocDesc( kind, assocType, type, idList) );
+	public void addAssoc( AssocKind kind, QName type, QName assocType, NodeRef id) {
+		addAssoc( new AssocDesc( kind, assocType, id, type) );
 	}
 
 	@Override

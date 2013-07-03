@@ -3,7 +3,6 @@ package ru.it.lecm.forms.jasperforms;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,10 +15,9 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import ru.it.lecm.reports.api.ReportGenerator;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
-import ru.it.lecm.reports.api.model.ParameterType.Type;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportDAO;
+import ru.it.lecm.reports.generators.ParameterMapper;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
 /**
@@ -36,7 +34,7 @@ import ru.it.lecm.reports.jasper.utils.Utils;
  */
 public class JasperFormProducer extends AbstractWebScript {
 
-	private static final transient Logger log = LoggerFactory.getLogger(JasperFormProducer.class);
+	static final transient Logger log = LoggerFactory.getLogger(JasperFormProducer.class);
 
 	private ReportGenerator jasperGenerator;
 	private ReportDAO reportDAO;
@@ -119,61 +117,10 @@ public class JasperFormProducer extends AbstractWebScript {
 
 		final ReportDescriptor reportDesc = initReportDesc( reportName);
 		if (reportDesc != null) {
-			assignParameters( reportDesc, requestParameters);
+			ParameterMapper.assignParameters( reportDesc, requestParameters);
 		}
 
 		this.jasperGenerator.produceReport(webScriptResponse, reportName, requestParameters, reportDesc);
-	}
-
-	/**
-	 * Задать параметры из списка. Подразумевается, что параметры имеют названия 
-	 * совпадающие с названиями параметра колонки данных из описателя reportDesc.getDsDescriptor.
-	 * @param reportDesc
-	 * @param params
-	 */
-	private void assignParameters( ReportDescriptor reportDesc, Map<String, String[]> params) {
-		if (params == null || reportDesc == null || reportDesc.getDsDescriptor() == null)
-			return;
-		//
-		for ( ColumnDescriptor colDesc: reportDesc.getDsDescriptor().getColumns()) {
-			// если колонка параметризована ...
-			if ( colDesc.getParameterValue() == null) // колонка не описана как параметр ...
-				continue;
-			final String paramRootName = colDesc.getParameterValue().getMnem(); // colDesc.getColumnName()
-			switch (colDesc.getParameterValue().getType()) {
-				case VALUE:
-				case LIST:
-					if (params.containsKey(paramRootName)) {
-						final String[] paramValue = params.get(paramRootName);
-						log.debug(String.format( "assigning for column '%s' parameter '%s': value '%s'"
-								, colDesc.getColumnName(), paramRootName, Arrays.toString(paramValue)) );
-						if ( (colDesc.getParameterValue().getType() == Type.VALUE)
-								&& (paramValue != null) && (paramValue.length > 0)
-								) // для простых значений явно зададим один элемент
-							colDesc.getParameterValue().setBound1(paramValue[0]);
-						else
-							colDesc.getParameterValue().setBound1(paramValue);
-					}
-					break;
-				case RANGE:
-					// диапазон задаётся параметрами "{mnem}_lo" и "{mnem}_hi" ...
-					if (params.containsKey(paramRootName + "_lo")) {
-						final String[] paramValue = params.get(paramRootName + "_lo");
-						log.debug(String.format( "assigning for column '%s' low-bound value '%s'", colDesc.getColumnName(), Arrays.toString(paramValue)) );
-						colDesc.getParameterValue().setBound1( (paramValue != null && paramValue.length > 0) ? paramValue[0] : null);
-					}
-					if (params.containsKey(paramRootName + "_hi")) {
-						final String[] paramValue = params.get(paramRootName + "_hi");
-						log.debug(String.format( "assigning for column '%s' high-bound value '%s'", colDesc.getColumnName(), Arrays.toString(paramValue)) );
-						colDesc.getParameterValue().setBound2( (paramValue != null && paramValue.length > 0) ? paramValue[0] : null);
-					}
-					break;
-				default:
-					log.error( String.format("Unsupported parameter type '%s' skipped", Utils.coalesce(colDesc.getParameterValue().getType(), "NULL") ));
-					break;
-			}
-
-		}
 	}
 
 	/**

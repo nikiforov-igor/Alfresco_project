@@ -22,8 +22,8 @@ public interface ReportDSContext {
 	public SubstitudeBean getSubstitudeService();
 
 	/** фильтр ассоциированных данных */
-	public AssocDataFilter getFilter();
-	public void setFilter(AssocDataFilter filter);
+	public DataFilter getFilter();
+	public void setFilter(DataFilter filter);
 
 	/**
 	 * Карта сопоставления ИМЁН полей из jrxml-шаблона и ОПИСАТЕЛЕЙ полей данных Альфреско.

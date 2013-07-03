@@ -9,7 +9,7 @@ import org.alfresco.service.namespace.QName;
 /**
  * Фильтр данных для ассоциаций
  */
-public interface AssocDataFilter {
+public interface AssocDataFilter extends DataFilter{
 
 
 	/**
@@ -23,29 +23,14 @@ public interface AssocDataFilter {
 	}
 
 	/**
-	 * Проверить, выполняются ли для указанного узла условия фильтра по ассоциациям
-	 * @param id
-	 * @return
-	 */
-	boolean isOk(NodeRef id); 
-
-	/**
 	 * Добавить условие для ассоциации 
+	 * @param type тип на другом конце связи или Null 
+	 * @param assocType тип связи-ассоциации
+	 * @param idAssoc связанный узел
 	 * @param kind вид самой связи
-	 * @param assocType тип связи-ассоциации или Null
-	 * @param type тип на другом конце связи
-	 * @param id связанный узел
 	 */
-	void addAssoc( AssocKind kind, QName assocType, QName type, NodeRef id);
+	void addAssoc( AssocDesc desc);
 
-	/**
-	 * Добавить список из доопустимых вариантов объектов на втором конце
-	 * @param kind
-	 * @param assocType
-	 * @param type
-	 * @param idList
-	 */
-	void addAssocList(AssocKind kind, QName assocType, QName type, List<NodeRef> idList);
 
 	/**
 	 * Получить текущий набор фильтруемых связей (сформированный addAssoc)
@@ -71,6 +56,13 @@ public interface AssocDataFilter {
 			this(kind, assocType, type, id == null ? null : Arrays.asList(id));
 		}
 
+		public AssocDesc(AssocKind kind, QName assoctype, NodeRef toId) {
+			this(kind, assoctype, toId, (QName) null);
+		}
+
+		/**
+	 	* Добавить список из допустимых вариантов объектов на втором конце
+		 */
 		public AssocDesc(AssocKind kind, QName assocType, QName type,
 				List<NodeRef> idList) {
 			super();

@@ -201,11 +201,6 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 	}
 	 */
 
-	final static char QUOTE = '\"';
-	static String quoted( final String s) {
-		return QUOTE + s+ QUOTE;
-	}
-
 	/**
 	 * Построить запрос к Альфреско (Lucene и пр) по данным соот-го фильтра отчёта.
 	 * Example: 
@@ -233,11 +228,11 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 		if (getPreferedType() != null) {
 			hasData = true;
 			final QName qTYPE = QName.createQName( getPreferedType(), this.getServices().getServiceRegistry().getNamespaceService());
-			bquery.append( "TYPE:"+ quoted(qTYPE.toString()));
+			bquery.append( "TYPE:"+ Utils.quoted(qTYPE.toString()));
 		}
 
 		if (this.getNodeRef() != null)
-			bquery.append( (hasData ? " AND": "")+ " ID:"+ quoted(Utils.coalesce( this.getNodeRef(), "-1")) );
+			bquery.append( (hasData ? " AND": "")+ " ID:"+ Utils.quoted(Utils.coalesce( this.getNodeRef(), "-1")) );
 
 		return bquery.toString();
 	}

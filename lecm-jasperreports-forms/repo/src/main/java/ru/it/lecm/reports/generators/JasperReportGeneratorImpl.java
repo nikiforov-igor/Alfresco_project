@@ -82,7 +82,7 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 
 		OutputStream outputStream = null;
 		try {
-			final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportDefinitionURL);// catch message NUllPoiterException for ...
+			final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportDefinitionURL);// catch message NullPoiterException for ...
 			webScriptResponse.setContentType( String.format("%s;charset=UTF-8;filename=%s", target.getMimeType(), generateFileName( reportName, target.getExtension()) ));
 			outputStream = webScriptResponse.getOutputStream();
 

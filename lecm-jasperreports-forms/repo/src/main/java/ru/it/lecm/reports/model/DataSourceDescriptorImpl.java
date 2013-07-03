@@ -6,6 +6,8 @@ import java.util.List;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.L18able;
+import ru.it.lecm.reports.generators.ParameterMapper;
+import ru.it.lecm.reports.jasper.utils.Utils;
 
 public class DataSourceDescriptorImpl
 		extends MnemonicNamedItem
@@ -79,6 +81,29 @@ public class DataSourceDescriptorImpl
 		}
 		builder.append("]");
 		return builder.toString();
+	}
+
+	@Override
+	public ColumnDescriptor findColumnByName(String colName) {
+		if (!Utils.isStringEmpty(colName)) {
+			for (ColumnDescriptor d: this.getColumns()) {
+				if (d != null && colName.equalsIgnoreCase(d.getColumnName()) )
+					return d; // FOUND
+			}
+		}
+		return null; // NOT FOUND
+	}
+
+	@Override
+	public ColumnDescriptor findColumnByParameter(String paramName) {
+		if (!Utils.isStringEmpty(paramName)) {
+			for (ColumnDescriptor d: this.getColumns()) {
+				final String argName = ParameterMapper.getArgRootName(d);
+				if (paramName.equalsIgnoreCase(argName))
+					return d; // FOUND
+			}
+		}
+		return null; // NOT FOUND
 	}
 
 }
