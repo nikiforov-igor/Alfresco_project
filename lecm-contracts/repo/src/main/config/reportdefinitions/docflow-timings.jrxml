@@ -189,7 +189,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="Left">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["На подписаниии"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["На подписании"]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement uuid="e7ccdb77-cdd6-4cb0-ad8f-2e9d222a9b0e" x="370" y="2" width="33" height="75"/>
