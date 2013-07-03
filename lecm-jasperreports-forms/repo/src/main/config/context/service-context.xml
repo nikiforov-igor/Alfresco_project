@@ -29,20 +29,26 @@
 		<property name="services" ref="wksKeeper"/>
 	</bean>
 
-	<bean id="webscript.ru.it.lecm.forms.jasper.form.get" class="ru.it.lecm.forms.jasperforms.JasperFormProducer"
-		parent="webscript" init-method="init">
-		<property name="jasperGenerator" ref="jasperReportGenerator"/>
+	<bean id="reportsManager" class="ru.it.lecm.reports.beans.ReportsManagerImpl"
+	 	init-method="init">
+		<!-- <property name="services" ref="wksKeeper"/> -->
 		<property name="reportDAO" ref="reportDAOBean"/>
+		<property name="descriptors[0]" ref="jasperTemplate_DocFlowCounters" />
+	</bean>
+
+	<bean id="webscript.ru.it.lecm.forms.jasper.form.get" class="ru.it.lecm.forms.jasperforms.JasperFormProducer"
+		parent="webscript">
+		<property name="reportGenerators[JASPER]" ref="jasperReportGenerator"/>
+		<property name="reportsManager" ref="reportsManager"/>
 		<!--
 		<property name="oofficeGenerator" ref="oofficeReportGenerator"/>
 		<property name="cubeGenerator" ref="cubeReportGenerator"/>
 		  -->
-		<property name="descriptors[0]" ref="jasperTemplate_DocFlowCounters" />
 	</bean>
 
 	<!-- описатель шаблона jasper-отчёта "Сводный отчёт по договорам" -->
 	<bean id="jasperTemplate_DocFlowCounters" class="ru.it.lecm.reports.model.ReportDescriptorImpl">
-		<property name="mnem" value="docflow-counters" />
+		<property name="mnem" value="docflow-counters-test" />
 		<property name="l18Name">
 			<bean class="ru.it.lecm.reports.model.L18Value">
 				<property name="l18items[ru]" value="Сводный отчёт по договорам" />
@@ -90,6 +96,18 @@
 				<property name="l18items[ru]" value="Измерение.Название" />
 				<property name="l18items[en]" value="GroupBy.Name" />
 				<property name="expression" value="customTag" />
+				<property name="parameterValue">
+					<bean class="ru.it.lecm.reports.model.ParameterTypedValueImpl">
+						<property name="prompt1.l18items[ru]" value="Измерение" /> 
+						<property name="prompt1.l18items[en]" value="Group by" />
+						<property name="l18items[ru]" value="Измерение для группировки" />
+						<property name="l18items[en]" value="Group by" />
+						<property name="required" value="true"/>
+						<property name="type">
+							<value type="ru.it.lecm.reports.api.model.ParameterType$Type">LIST</value>
+						</property>
+					</bean>
+				</property>
 			</bean>
 		</property>
 

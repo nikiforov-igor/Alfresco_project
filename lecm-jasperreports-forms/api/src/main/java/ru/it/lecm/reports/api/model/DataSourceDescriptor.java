@@ -12,7 +12,18 @@ import java.util.List;
 public interface DataSourceDescriptor extends Mnemonicable, L18able {
 
 	/** Стандартные названия колонок и параметров */
+
+	/**
+	 * для отчётов, задаваемых типом объектов:
+	 * "type" тип выбираемых объектов
+	 */
 	final static public String COLNAME_TYPE = "type";
+	
+	/**
+	 * для отчётов по одному объекту:
+	 * "id" колонка-параметр отчёта, в которой предполагается задание id объекта альфреско (в виде noderef-текста)
+	 * если его нет, тогда будет просмотрена параметр-колонка "nodeRef" 
+	 */
 	final static public String COLNAME_ID = "id";
 	final static public String COLNAME_NODEREF = "nodeRef";
 

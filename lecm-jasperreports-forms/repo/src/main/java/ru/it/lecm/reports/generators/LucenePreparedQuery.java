@@ -216,24 +216,30 @@ public class LucenePreparedQuery {
 	 */
 	private static void makeMasterCondition(final StringBuilder bquery, ReportDescriptor reportDescriptor) {
 		if ( reportDescriptor != null && reportDescriptor.getDsDescriptor() != null) {
-			if (reportDescriptor.getFlags().isMultiRow()) { // по типу ...
-				Utils.emmitParamCondition(
+			// @NOTE: (reportDescriptor.getFlags().isMultiRow()) не достаточно для определения того что именно долждно проверяться TYPE или ID
+			// так что выбираем оба значения
+
+			// по типу ...
+			final boolean hasType = Utils.emmitParamCondition(
 						bquery
 						, reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_TYPE)
 						, "TYPE:"
-						, String.format( "Multi-row query parameter '%s' must be specified", DataSourceDescriptor.COLNAME_TYPE)
+						// , String.format( "Multi-row query parameter '%s' must be specified", DataSourceDescriptor.COLNAME_TYPE)
 				);
-			} else { // по ID/NodeRef ...
-				ColumnDescriptor colWithID = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_ID);
-				if (colWithID == null)
-					colWithID = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_NODEREF);
-				Utils.emmitParamCondition(
+			// по ID/NodeRef ...
+			ColumnDescriptor colWithID = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_ID);
+			if (colWithID == null)
+				colWithID = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_NODEREF);
+			final boolean hasId = Utils.emmitParamCondition(
 						bquery
 						, colWithID
 						, "ID:"
-						, String.format( "Single-row query parameter '%s'/'%s' must be specified", DataSourceDescriptor.COLNAME_ID, DataSourceDescriptor.COLNAME_NODEREF)
+						// , String.format( "Single-row query parameter '%s'/'%s' must be specified", DataSourceDescriptor.COLNAME_ID, DataSourceDescriptor.COLNAME_NODEREF)
 				);
-			}
+
+			if (!(hasType || hasId))
+				logger.warn( String.format("None of main parameteres specified: '%s' nor '%s'/'%s' "
+						, DataSourceDescriptor.COLNAME_TYPE, DataSourceDescriptor.COLNAME_ID, DataSourceDescriptor.COLNAME_NODEREF) );
 		} else { // если НД не задан - выборка по документам ...
 			bquery.append( "TYPE:"+ Utils.quoted(DEFAULT_DOCUMENT_TYPE));
 		}

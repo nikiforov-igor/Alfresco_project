@@ -269,22 +269,45 @@ public class Utils {
 
 	/**
 	 * Сгенерировать условие для единичного параметра (кавыки " добавляются здесь).
-	 * Если параметр не задан (null) - поднимается исключение с сообщением errMsg.
-	 * @param bquery
+	 * Если параметр не задан (null) - поднимается исключение с сообщением errMsg, если raiseIfNull=true.
+	 * @param bquery текст запроса для добавления
 	 * @param column
-	 * @param prefix
-	 * @param errMsg
+	 * @param prefix текст перед добавляемым условием
+	 * @param errMsg сообщение, выводимое при пустом параметре и raiseIfNull = true
+	 * @param raiseIfNull true, чтобы поднять исключение когда параметр не задан
+	 * @return true, если условия по параметру было добавлено 
+	 * и false, когда raiseIfNull = false или исключение иначе
 	 */
-	public static void emmitParamCondition(final StringBuilder bquery
+	public static boolean emmitParamCondition(final StringBuilder bquery
 			, ColumnDescriptor column
 			, final String prefix
 			, final String errMsg
+			, boolean raiseIfNull
 			) {
-		if (column == null || column.getParameterValue().getBound1() == null)
-			throw new RuntimeException(errMsg);
+		if (column == null || column.getParameterValue().getBound1() == null) {
+			if (raiseIfNull)
+				throw new RuntimeException(errMsg);
+			return false;
+		}
 		bquery.append( prefix+ Utils.quoted(column.getParameterValue().getBound1().toString()));
+		return true;
 	}
 
+
+	/**
+	 * Сгенерировать условие для единичного параметра (кавыки " добавляются здесь).
+	 * Если параметр не задан ничего не добавляется.
+	 * @param bquery текст запроса для добавления
+	 * @param column
+	 * @param prefix текст перед добавляемым условием
+	 * @return true, если условия по параметру было добавлено и false иначе
+	 */
+	public static boolean emmitParamCondition(final StringBuilder bquery
+			, ColumnDescriptor column
+			, final String prefix
+			) {
+		return emmitParamCondition(bquery, column, prefix, null, false);
+	}
 
 	final public static int MILLIS_PER_DAY = 86400000;
 

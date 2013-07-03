@@ -33,11 +33,11 @@ public class ParameterTypedValueImpl
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(String.format( "ParameterTypeImpl [ '%s', ", getMnem()) );
+		builder.append(String.format( "%s [ mnem '%s', ", this.getClass().getSimpleName(), getMnem()) );
 		if (this.bounds != null) {
-			builder.append(String.format( ", %s='%s' ", getPrompt1().get(null, "V1"), this.bounds[0]));
+			builder.append(String.format( ", {bound1 %s='%s'} ", getPrompt1().get( /*locale*/ null, /*default*/ "V1"), this.bounds[0]));
 			if ( (this.bounds[1] != null) || (this.prompts != null && this.prompts[1] != null) )
-				builder.append(String.format( ", %s='%s' ", getPrompt2().get(null, "V2"), this.bounds[1]));
+				builder.append(String.format( ", {bound2 %s='%s'} ", getPrompt2().get( /*locale*/ null, /*default*/ "V2"), this.bounds[1]));
 		}
 		builder.append("]");
 		return builder.toString();

@@ -2,9 +2,7 @@ package ru.it.lecm.forms.jasperforms;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.alfresco.util.PropertyCheck;
@@ -15,8 +13,8 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import ru.it.lecm.reports.api.ReportGenerator;
+import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.DAO.ReportDAO;
 import ru.it.lecm.reports.generators.ParameterMapper;
 import ru.it.lecm.reports.jasper.utils.Utils;
 
@@ -36,43 +34,34 @@ public class JasperFormProducer extends AbstractWebScript {
 
 	static final transient Logger log = LoggerFactory.getLogger(JasperFormProducer.class);
 
-	private ReportGenerator jasperGenerator;
-	private ReportDAO reportDAO;
+	// Map<КодТипаОтчёта, Провайдер>
+	private Map< /*ReportType*/String, ReportGenerator> reportGenerators;
+
+	private ReportsManager reportsManager;
 
 	/**
-	 * Список зарегистрирванных отчётов
+	 * @return не NULL список [ReportTypeMnemonic -> ReportGenerator]
 	 */
-	private List<ReportDescriptor> descriptors;
-
-	public ReportGenerator getJasperGenerator() {
-		return jasperGenerator;
+	public Map</*ReportType*/String, ReportGenerator> getReportGenerators() {
+		if (reportGenerators == null)
+			reportGenerators = new HashMap<String, ReportGenerator>(1);
+		return reportGenerators;
 	}
 
-	public void setJasperGenerator(ReportGenerator jasperGenerator) {
-		this.jasperGenerator = jasperGenerator;
+	/**
+	 * Задать соот-вие типов отчётов и их провайдеров
+	 * @param map список [ReportTypeMnemonic -> ReportGenerator]
+	 */
+	public void setReportGenerators(Map<String, ReportGenerator> map) {
+		this.reportGenerators = map;
 	}
 
-	public ReportDAO getReportDAO() {
-		return reportDAO;
+	public ReportsManager getReportsManager() {
+		return reportsManager;
 	}
 
-	public void setReportDAO(ReportDAO reportDAO) {
-		this.reportDAO = reportDAO;
-	}
-
-	public List<ReportDescriptor> getDescriptors() {
-		if (this.descriptors == null)
-			this.descriptors = new ArrayList<ReportDescriptor>();
-		return this.descriptors;
-	}
-
-	public void setDescriptors(List<ReportDescriptor> list) {
-		this.descriptors = list;
-	}
-
-	public void regReportDescriptor(ReportDescriptor desc) {
-		if (desc != null)
-			getDescriptors().add(desc);
+	public void setReportsManager(ReportsManager reportsManager) {
+		this.reportsManager = reportsManager;
 	}
 
 	static Map<String, String[]> getRequestParameters( WebScriptRequest webScriptRequest
@@ -111,39 +100,25 @@ public class JasperFormProducer extends AbstractWebScript {
 
 		final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
 		final String reportName = templateParams.get("report");
+
+		// TODO: ТипОтчёта (Jasper/OOffice и пр) надо брать тоже из параметров
+		final String rtype = "JASPER";
+
 		final Map<String, String[]> requestParameters = getRequestParameters(webScriptRequest, String.format("Processing report '%s' with args: \n", reportName));
 
-		PropertyCheck.mandatory (this, "jasperGenerator", jasperGenerator);
+		PropertyCheck.mandatory (this, "reportGenerators", getReportGenerators());
+		PropertyCheck.mandatory(this, "reportsManager", getReportsManager() );
 
-		final ReportDescriptor reportDesc = initReportDesc( reportName);
+		final ReportDescriptor reportDesc = this.getReportsManager().getReportDescriptor(reportName);
 		if (reportDesc != null) {
 			ParameterMapper.assignParameters( reportDesc, requestParameters);
 		}
 
-		this.jasperGenerator.produceReport(webScriptResponse, reportName, requestParameters, reportDesc);
-	}
-
-	/**
-	 * Получить дексриптор отчёта по его мнемонике или вернуть null.
-	 * Поиск ведётся по зарегистрированным отчётам в this.descriptors и в БД.
-	 * @param reportName дескриптор
-	 * @return описатеть отчёта или null, если не найден
-	 */
-	private ReportDescriptor initReportDesc(String reportName) {
-		for(ReportDescriptor d: getDescriptors()) {
-			if (Utils.isSafelyEquals(reportName, d.getMnem()))
-				return d; // FOUND by Mnemonic
-		}
-
-		// попытка загрузить DAO-объект
-		if (reportDAO != null) {
-			final ReportDescriptor d = reportDAO.getReportDescriptor(reportName);
-			if (d != null)
-				return d; // FOUND by DAO mnemonic
-		}
-
-		log.warn(String.format( "Report '%s' has no descriptor", reportName));
-		return null; // NOT FOUND
+		// получение провайдера ...
+		final ReportGenerator reporter = this.getReportGenerators().get(rtype);
+		if (reporter == null)
+			throw new RuntimeException( String.format("Unsupported report kind '%s': no privider", rtype));
+		reporter.produceReport(webScriptResponse, reportName, requestParameters, reportDesc);
 	}
 
 	/**
@@ -165,9 +140,4 @@ public class JasperFormProducer extends AbstractWebScript {
 		out.write(answerURL);
 	}
 
-	public void init() {
-		log.info( String.format( " initialized templates count %s\n%s",
-					getDescriptors().size(), Utils.getAsString(getDescriptors()) 
-		));
-	}
 }
