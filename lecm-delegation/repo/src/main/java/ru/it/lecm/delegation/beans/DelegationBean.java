@@ -27,7 +27,14 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class DelegationBean extends BaseBean implements IDelegation, AuthenticationUtil.RunAsWork<NodeRef>, IDelegationDescriptor {
 
@@ -225,16 +232,15 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 					NodeRef procuracyNodeRef = childAssociationRef.getChildRef ();
 					//по идее еще и бизнес роль на активность надо проверять
 					NodeRef businessRoleRef = findNodeByAssociationRef (procuracyNodeRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+					NodeRef trusteeRef = findNodeByAssociationRef(procuracyNodeRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 					Boolean hasActiveBusinessRole;
 					if (businessRoleRef != null) {
 						hasActiveBusinessRole = (Boolean) nodeService.getProperty (businessRoleRef, IS_ACTIVE);
 					} else {
-						hasActiveBusinessRole = true;
+						hasActiveBusinessRole = false;
 					}
 
-					if (hasActiveBusinessRole && (!onlyActive || !isArchive (procuracyNodeRef))) {
-						procuracyNodeRefs.add (procuracyNodeRef);
-					} else if (hasActiveBusinessRole && (Boolean) nodeService.getProperty (procuracyNodeRef, IS_ACTIVE)) {
+					if (hasActiveBusinessRole && (!onlyActive || (!isArchive (procuracyNodeRef) && trusteeRef != null))) {
 						procuracyNodeRefs.add (procuracyNodeRef);
 					}
 				}
@@ -338,18 +344,14 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 				}
 			}
 		}
+		//пробегаемся по всем доверенностям у которых есть trustee и проставляем им active=true, типа доверенности настроены
+		List<NodeRef> procuracies = getProcuracies(delegationOptsNodeRef, false);
+		for(NodeRef procuracy : procuracies) {
+			NodeRef trustee = findNodeByAssociationRef(procuracy, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			nodeService.setProperty(procuracy, IS_ACTIVE, trustee != null);
+		}
 		logSaveDelegationOpts (delegationOptsNodeRef);
 		return "";
-	}
-
-	@Override
-	public void actualizeProcuracyActivity (final NodeRef procuracyNodeRef) {
-		List<AssociationRef> associationRefs = nodeService.getTargetAssocs (procuracyNodeRef, ASSOC_PROCURACY_TRUSTEE);
-		if (associationRefs == null || associationRefs.isEmpty ()) {
-			nodeService.setProperty (procuracyNodeRef, IS_ACTIVE, false);
-		} else {
-			nodeService.setProperty (procuracyNodeRef, IS_ACTIVE, true);
-		}
 	}
 
 	@Override
@@ -493,10 +495,10 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	public void stopDelegation (final NodeRef delegator) {
 		NodeRef delegationOptsRef = getDelegationOpts (delegator);
 		if (delegationOptsRef != null) {
-			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, false);
-			logStopDelegation (delegationOptsRef);
 			//отбирание ранее нарезанных прав согласно сервису Руслана
 			delegate (delegationOptsRef, false);
+			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, false);
+			logStopDelegation (delegationOptsRef);
 		} else {
 			logger.warn (String.format ("there is no any delegation-opts for NodeRef '%s'", delegator));
 		}

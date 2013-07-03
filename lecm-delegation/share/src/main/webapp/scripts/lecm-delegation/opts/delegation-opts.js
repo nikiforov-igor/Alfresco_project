@@ -48,6 +48,9 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 							Alfresco.util.PopupManager.displayMessage ({
 								text:"Данные обновлены"
 							});
+							YAHOO.Bubbling.fire("datagridRefresh", {
+								bubblingLabel: "procuracy-datagrid"
+							});
 						},
 						scope: this
 					},

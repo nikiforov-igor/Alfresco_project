@@ -15,6 +15,7 @@ import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.beans.DelegationBean;
 
 import java.util.List;
+import org.alfresco.model.ContentModel;
 
 /**
  * javascript root object для модуля делегирования
@@ -121,6 +122,7 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 							businessRoleNodeRefs.remove (businessRoleNodeRef);
 						} else {
 							//удалить доверенность с бизнес ролью, в которую пользователь уже не входит
+							nodeService.addAspect(procuracyNodeRef, ContentModel.ASPECT_TEMPORARY, null);
 							nodeService.deleteNode(procuracyNodeRef);
 						}
 					}

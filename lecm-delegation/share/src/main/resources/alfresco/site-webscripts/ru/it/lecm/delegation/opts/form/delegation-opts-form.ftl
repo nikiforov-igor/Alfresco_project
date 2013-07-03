@@ -53,7 +53,7 @@
 			.grid .archive-record,
 			.grid .archive-record span a,
 			.grid .archive-record a {
-				color:black;
+				color:#800000;
 			}
 		</style>
 		<div class="form-field with-grid">

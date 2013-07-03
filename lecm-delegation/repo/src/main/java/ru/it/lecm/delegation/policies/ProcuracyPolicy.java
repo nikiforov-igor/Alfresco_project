@@ -11,6 +11,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.delegation.IDelegation;
 
 /**
@@ -24,15 +25,10 @@ public class ProcuracyPolicy implements OnCreateAssociationPolicy, OnDeleteAssoc
 	private final static Logger logger = LoggerFactory.getLogger (ProcuracyPolicy.class);
 
 	private PolicyComponent policyComponent;
-	private IDelegation delegationService;
 	private NodeService nodeService;
 
 	public void setPolicyComponent (PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
-	}
-
-	public void setDelegationService (IDelegation delegationService) {
-		this.delegationService = delegationService;
 	}
 
 	public void setNodeService (NodeService nodeService) {
@@ -47,38 +43,36 @@ public class ProcuracyPolicy implements OnCreateAssociationPolicy, OnDeleteAssoc
 		policyComponent.bindAssociationBehaviour (OnDeleteAssociationPolicy.QNAME, IDelegation.TYPE_PROCURACY, new JavaBehaviour (this, "onDeleteAssociation"));
 	}
 
-	private void actualizeProcuracyActivity (final NodeRef nodeRef) {
-		logger.info ("actualizing procuracy activity with nodeRef '{}'...", nodeRef);
+	private void resetProcuracyActivity (final NodeRef procuracyRef) {
+		logger.info ("actualizing procuracy activity with nodeRef '{}'...", procuracyRef);
 		AuthenticationUtil.runAsSystem (new AuthenticationUtil.RunAsWork<Void> () {
 			@Override
 			public Void doWork () throws Exception {
-				delegationService.actualizeProcuracyActivity (nodeRef);
+				nodeService.setProperty(procuracyRef, BaseBean.IS_ACTIVE, false);
 				return null;
 			}
 		});
 	}
 
+	private void resetProcuracyActivity(final AssociationRef procuracyAssocRef) {
+		NodeRef sourceRef = procuracyAssocRef.getSourceRef ();
+		NodeRef targetRef = procuracyAssocRef.getTargetRef ();
+		if (IDelegation.TYPE_PROCURACY.isMatch (nodeService.getType (sourceRef))) {
+			resetProcuracyActivity (sourceRef);
+		} else if (IDelegation.TYPE_PROCURACY.isMatch (nodeService.getType (targetRef))) {
+			resetProcuracyActivity (targetRef);
+		}
+	}
+
 	@Override
 	public void onCreateAssociation (AssociationRef nodeAssocRef) {
 		logger.info ("onCreateAssociation");
-		NodeRef sourceRef = nodeAssocRef.getSourceRef ();
-		NodeRef targetRef = nodeAssocRef.getTargetRef ();
-		if (IDelegation.TYPE_PROCURACY.isMatch (nodeService.getType (sourceRef))) {
-			actualizeProcuracyActivity (sourceRef);
-		} else if (IDelegation.TYPE_PROCURACY.isMatch (nodeService.getType (targetRef))) {
-			actualizeProcuracyActivity (targetRef);
-		}
+		resetProcuracyActivity(nodeAssocRef);
 	}
 
 	@Override
 	public void onDeleteAssociation (AssociationRef nodeAssocRef) {
 		logger.info ("onDeleteAssociation");
-		NodeRef sourceRef = nodeAssocRef.getSourceRef ();
-		NodeRef targetRef = nodeAssocRef.getTargetRef ();
-		if (IDelegation.TYPE_PROCURACY.isMatch (nodeService.getType (sourceRef))) {
-			actualizeProcuracyActivity (sourceRef);
-		} else if (IDelegation.TYPE_PROCURACY.isMatch (nodeService.getType (targetRef))) {
-			actualizeProcuracyActivity (targetRef);
-		}
+		resetProcuracyActivity(nodeAssocRef);
 	}
 }

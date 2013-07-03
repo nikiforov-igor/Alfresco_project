@@ -1392,9 +1392,12 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		List<NodeRef> delegationOptsList = findNodesByAssociationRef(employeeRef, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
 		for (NodeRef delegationOpts : delegationOptsList) {
 			// Получаем хозяина настроек делегировая, который доверил нешему чуваку что-либо
-			NodeRef owner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-			//берем все бизнес роли хозяина
-			roles.addAll(getEmployeeRoles(owner));
+			// только для активного делегирования
+			if (isActiveDelegationOpts(delegationOpts)) {
+				NodeRef owner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+				//берем все бизнес роли хозяина
+				roles.addAll(getEmployeeRoles(owner));
+			}
 		}
 		return new ArrayList<NodeRef>(roles);
 	}
@@ -1418,12 +1421,13 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		boolean isProcuracy = isProperType (procuracyRef, IDelegation.TYPE_PROCURACY);
 		boolean isActive = false;
 		if (isProcuracy) {
-			boolean isProcuracyActive = Boolean.TRUE.equals (nodeService.getProperty (procuracyRef, IS_ACTIVE));
+			NodeRef trusteeRef = findNodeByAssociationRef(procuracyRef, IDelegation.ASSOC_PROCURACY_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			boolean isProcuracyActive = Boolean.TRUE.equals (nodeService.getProperty (procuracyRef, IS_ACTIVE)) && trusteeRef != null;
 			List<ChildAssociationRef> parents = nodeService.getParentAssocs (procuracyRef, IDelegation.ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
 			boolean isDelegationActive = false;
 			if ((parents != null) && (!parents.isEmpty ())) {
 				NodeRef delegationOpts = parents.get (0).getParentRef ();
-				isDelegationActive = Boolean.TRUE.equals (nodeService.getProperty (delegationOpts, IS_ACTIVE));
+				isDelegationActive = isActiveDelegationOpts(delegationOpts);
 			}
 			isActive = isProcuracyActive && isDelegationActive;
 		}

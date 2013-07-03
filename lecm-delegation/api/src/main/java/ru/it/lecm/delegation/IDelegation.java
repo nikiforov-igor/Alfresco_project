@@ -156,12 +156,6 @@ public interface IDelegation {
 	String saveDelegationOpts (final NodeRef delegationOptsNodeRef, final JSONObject options);
 
 	/**
-	 * Актуализировать active true/false у доверенности в зависимости от наличия ассоциации на доверенное лицо
-	 * @param procuracyNodeRef
-	 */
-	void actualizeProcuracyActivity (final NodeRef procuracyNodeRef);
-
-	/**
 	 * "удаление" доверенностей. На самом деле отрывается ассоциация на дловеренное лицо. И автоматом, с помощью policy active меняется на false
 	 * @param nodeRefs json массив нодов для удаления
 	 */

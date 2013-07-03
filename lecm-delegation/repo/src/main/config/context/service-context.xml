@@ -75,7 +75,6 @@
 
 	<bean id="procuracyPolicy" class="ru.it.lecm.delegation.policies.ProcuracyPolicy" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
-		<property name="delegationService" ref="delegationService"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
 

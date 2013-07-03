@@ -49,7 +49,7 @@
                             <control-param name="employeeAbsenceMarker">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-d8n:delegation-opts-trustee-assoc" mandatory="true">
+					<field id="lecm-d8n:delegation-opts-trustee-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
@@ -57,10 +57,6 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
 						</control>
-						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Delegation.Validator.HasTrusteeValidator"
-										event="change" message-id="message.has-trustee.error"/>
-						</constraint-handlers>
 					</field>
 				</appearance>
 				<field-visibility>
