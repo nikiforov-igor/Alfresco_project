@@ -57,6 +57,10 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		this.approvalListService = approvalListService;
 	}
 
+    public ActivitiScriptNode createApprovalList(ActivitiScriptNode bpmPackage, String documentAttachmentCategoryName, String approvalType) {
+        return createApprovalList(bpmPackage, documentAttachmentCategoryName, approvalType, new ActivitiScriptNodeList());
+    }
+
 	/**
 	 * формирование нового листа согласования, для текущей версии регламента
 	 *
