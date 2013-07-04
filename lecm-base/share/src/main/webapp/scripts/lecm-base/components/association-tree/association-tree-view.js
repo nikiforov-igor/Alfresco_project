@@ -1379,27 +1379,30 @@ LogicECM.module = LogicECM.module || {};
 		showEmployeeAutoAnswerPromt: function AssociationTreeView_showEmployeeAutoAnswer(item) {
 			var me = this;
 			var nodeRef = item.nodeRef;
-			var autoAnswerText = this.employeesAvailabilityInformation[nodeRef].autoAnswerText;
+			var autoAnswerText = this.employeesAvailabilityInformation[nodeRef].answerExtended;
 			if (autoAnswerText) {
 				Alfresco.util.PopupManager.displayPrompt({
 					title: this.msg("title.absence.auto-answer.title"),
 					text: autoAnswerText,
+                                        noEscape: true,
 					close: false,
 					modal: true,
-					buttons: [{
-							text: this.msg("button.cancel"),
-							handler: function AssociationTreeView_showEmployeeAutoAnswer_denySelection() {
-								this.destroy();
-								me.removeNode(null, item);
-							}
-						},
-						{
+					buttons: [
+                                                {
 							text: this.msg("button.ok"),
 							handler: function AssociationTreeView_showEmployeeAutoAnswer_acceptSelection() {
 								this.destroy();
 							},
 							isDefault: true
+						},
+                                                {
+							text: this.msg("button.cancel"),
+							handler: function AssociationTreeView_showEmployeeAutoAnswer_denySelection() {
+								this.destroy();
+								me.removeNode(null, item);
+							}
 						}
+						
 					]
 				});
 			}

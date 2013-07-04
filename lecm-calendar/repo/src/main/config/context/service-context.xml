@@ -106,7 +106,8 @@
 		<property name="wCalendarService" ref="WCalendarService"/>
 	</bean>
 	<bean id="AbsenceJavascriptExtension" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceJavascriptExtension" parent="baseJavaScriptExtension">
-		<property name="extensionName" value="absence"/>
+		<property name="nodeService" ref="nodeService"/>
+                <property name="extensionName" value="absence"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="absenceService" ref="AbsenceService"/>
 	</bean>
