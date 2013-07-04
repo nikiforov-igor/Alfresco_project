@@ -116,14 +116,6 @@
             this.toolbarButtons['defaultActive'].push(
                 Alfresco.util.createYUIButton(this, "saveAsButton", this._onCopySource, {value: "create", disabled: !this.isNewSource || !this.dataSourceId}, this.id + "-columns-toolbar-saveAsButton")
             );
-
-            this.toolbarButtons['defaultActive'].push(
-                Alfresco.util.createYUIButton(this, "prevPageButton", this._onPrevPage, {}, this.id + "-columns-toolbar-prevPageButton")
-            );
-
-            this.toolbarButtons['defaultActive'].push(
-                Alfresco.util.createYUIButton(this, "nextPageButton", this._onNextPage, {}, this.id + "-columns-toolbar-nextPageButton")
-            );
         },
 
         _onNewColumn: function () {
@@ -147,18 +139,6 @@
                     text: "Нет активного набора!"
                 });
             }
-        },
-
-        _onNextPage: function () {
-            var context = this;
-            window.location.href = window.location.protocol + "//" + window.location.host +
-                Alfresco.constants.URL_PAGECONTEXT + "reports-editor-template-edit?reportId=" + context.reportId;
-        },
-
-        _onPrevPage: function () {
-            var context = this;
-            window.location.href = window.location.protocol + "//" + window.location.host +
-                Alfresco.constants.URL_PAGECONTEXT + "reports-editor-source-add?reportId=" + context.reportId;
         },
 
         _showCreateForm: function (meta) {

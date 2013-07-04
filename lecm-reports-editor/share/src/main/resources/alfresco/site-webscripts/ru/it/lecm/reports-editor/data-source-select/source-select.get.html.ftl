@@ -24,20 +24,6 @@
                         </span>
                     </span>
                 </div>
-                <div class="prev-page">
-                    <span id="${toolbarId}-prevPageButton" class="yui-button yui-push-button">
-                       <span class="first-child">
-                          <button type="button" title="Назад">${msg("label.prev.btn")}</button>
-                       </span>
-                    </span>
-                </div>
-                <div class="next-page">
-                    <span id="${toolbarId}-nextPageButton" class="yui-button yui-push-button">
-                        <span class="first-child">
-                            <button type="button" title="Далее">${msg("label.next.btn")}</button>
-                        </span>
-                    </span>
-                </div>
             </@comp.baseToolbar>
             </div>
             <!-- Toolbar End-->

@@ -37,20 +37,6 @@
            </span>
     </span>
      </div>
-
-     <div class="prev-page">
-    <span id="${id}-prevPageButton" class="yui-button yui-push-button">
-           <span class="first-child">
-              <button type="button" title="Назад">Назад</button>
-           </span>
-    </span>
-     </div>
-     <div class="next-page">
-    <span id="${id}-nextPageButton" class="yui-button yui-push-button">
-           <span class="first-child">
-              <button type="button" title="Далее">Далее</button>
-           </span>
-    </span>
      </div>
      </@comp.baseToolbar>
  </#if>

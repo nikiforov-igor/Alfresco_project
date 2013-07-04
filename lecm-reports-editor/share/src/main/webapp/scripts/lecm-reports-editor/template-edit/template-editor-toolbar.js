@@ -38,8 +38,8 @@
                     {
                         disabled: !this.isNewTemplate
                     });
-                this.toolbarButtons[group].prevPageButton = Alfresco.util.createYUIButton(this, 'prevPageButton', this.onPrevButton);
-                this.toolbarButtons[group].nextPageButton = Alfresco.util.createYUIButton(this, 'nextPageButton', this.onNextButton);
+//                this.toolbarButtons[group].prevPageButton = Alfresco.util.createYUIButton(this, 'prevPageButton', this.onPrevButton);
+//                this.toolbarButtons[group].nextPageButton = Alfresco.util.createYUIButton(this, 'nextPageButton', this.onNextButton);
             },
 
             onCopyToRepository: function () {

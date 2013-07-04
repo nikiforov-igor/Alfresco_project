@@ -23,5 +23,18 @@
                 <selected>editDataSource</selected>
             </properties>
         </component>
+        <!-- Report Editor Toolbar -->
+        <component>
+            <region-id>reports-editor-toolbar</region-id>
+            <url>/lecm/reports-editor-toolbar</url>
+            <properties>
+                <!-- Доступность кнопки -->
+                <previousButton>true</previousButton>
+                <nextButton>true</nextButton>
+                <!-- Настройки перехода на страницу-->
+                <previousPage>reports-editor-source-add</previousPage>
+                <nextPage>reports-editor-template-edit</nextPage>
+            </properties>
+        </component>
     </components>
 </template-instance>
