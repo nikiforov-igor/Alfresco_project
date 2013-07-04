@@ -900,7 +900,9 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 					// только для активного делегирования
 					if (isActiveDelegationOpts(delegationOpts)) {
 						NodeRef trustee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-						trustees.add(trustee);
+						if (trustee != null) {
+							trustees.add(trustee);
+						}
 					}
 				}
 			}
@@ -911,7 +913,9 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 				//только для активных доверенностей
 				if (isProcuracyActive(procuracyRef)) {
 					NodeRef trustee = findNodeByAssociationRef(procuracyRef, IDelegation.ASSOC_PROCURACY_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-					results.add(trustee);
+					if (trustee != null) {
+						results.add(trustee);
+					}
 				}
 			}
 		}
