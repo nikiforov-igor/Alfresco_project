@@ -225,6 +225,7 @@
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
                             <control-param name="showCreateNewButton">true</control-param>
+                            <control-param name="createNewMessageId">contracts.contractor.createNew</control-param>
                         </control>
                     </field>
                     <field id="lecm-contract:representative-assoc" set="counterparty-info-1">
@@ -1061,11 +1062,11 @@
 					<show id="lecm-contract-reports:contracts-list-actual-only"/>
 				</field-visibility>
 				<appearance>
-					<!-- 
+					<!--
 					<set id="set-start" template="/org/alfresco/components/form/3-column-set.ftl" appearance="fieldset" label_id="set-date-start-label" />
 					<set id="set-end" template="/org/alfresco/components/form/3-column-set.ftl" appearance="fieldset" label_id="set-date-end-label" />
 					  -->
-					<!-- 
+					<!--
 					<set id="set-common" appearance="fieldset" label="" />
 					<set id="datestart" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
 					<set id="dateend" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
@@ -1140,11 +1141,11 @@
 					<show id="lecm-contract-reports:dft-contract-subject"/>
 				</field-visibility>
 				<appearance>
-					<!-- 
+					<!--
 					<set id="set-start" template="/org/alfresco/components/form/3-column-set.ftl" appearance="fieldset" label_id="set-date-start-label" />
 					<set id="set-end" template="/org/alfresco/components/form/3-column-set.ftl" appearance="fieldset" label_id="set-date-end-label" />
 					  -->
-					<!-- 
+					<!--
 					<set id="set-common" appearance="fieldset" label="" />
 					<set id="datestart" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
 					<set id="dateend" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
@@ -1211,11 +1212,11 @@
 				</field-visibility>
 
 				<appearance>
-					<!-- 
+					<!--
 					<set id="set-start" template="/org/alfresco/components/form/3-column-set.ftl" appearance="fieldset" label_id="set-date-start-label" />
 					<set id="set-end" template="/org/alfresco/components/form/3-column-set.ftl" appearance="fieldset" label_id="set-date-end-label" />
 					  -->
-					<!-- 
+					<!--
 					<set id="set-common" appearance="fieldset" label="" />
 					<set id="datestart" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
 					<set id="dateend" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
@@ -1266,7 +1267,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="changeItemsFireAction">lecm-contract-representative-assoc</control-param>
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-							<!-- 
+							<!--
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							  -->
 							<control-param name="showCreateNewLink">false</control-param>

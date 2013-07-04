@@ -70,6 +70,8 @@ LogicECM.module = LogicECM.module || {};
 		{
             showCreateNewLink: true,
 
+			createNewMessage: null, //message id по которому будет сформирован заголовок диалогового окна
+
 			showSearch: true,
 
 			showSelectedItemsPath: true,
@@ -168,15 +170,18 @@ LogicECM.module = LogicECM.module || {};
 		},
 
         showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
-            var templateUrl = this.generateCreateNewUrl(this.options.rootNodeRef, this.options.itemType);
+            var templateRequestParams = this.generateCreateNewParams(this.options.rootNodeRef, this.options.itemType);
+			templateRequestParams["createNewMessage"] = this.options.createNewMessage;
 
             new Alfresco.module.SimpleDialog("create-new-form-dialog-" + this.eventGroup).setOptions({
                 width:"50em",
-                templateUrl:templateUrl,
+                templateUrl: "lecm/components/form",
+				templateRequestParams: templateRequestParams,
                 actionUrl:null,
                 destroyOnHide:true,
                 doBeforeDialogShow:{
-                    fn:this.setCreateNewFormDialogTitle
+                    fn:this.setCreateNewFormDialogTitle,
+                    scope:this
                 },
                 onSuccess:{
                     fn:function (response) {
@@ -824,15 +829,18 @@ LogicECM.module = LogicECM.module || {};
             // Hook create new item action click events (for Compact mode)
             var fnCreateNewItemHandler = function AssociationTreeViewer__createControls_fnCreateNewItemHandler(layer, args)
             {
-                var templateUrl = me.generateCreateNewUrl(me.currentNode.data.nodeRef, me.options.itemType);
+                var templateRequestParams = me.generateCreateNewParams(me.currentNode.data.nodeRef, me.options.itemType);
+				templateRequestParams["createNewMessage"] = me.options.createNewMessage;
 
                 new Alfresco.module.SimpleDialog("create-form-dialog-" + me.eventGroup).setOptions({
                     width:"50em",
-                    templateUrl:templateUrl,
+                    templateUrl: "lecm/components/form",
+					templateRequestParams: templateRequestParams,
                     actionUrl:null,
                     destroyOnHide:true,
                     doBeforeDialogShow:{
-                        fn:me.setCreateNewFormDialogTitle
+                        fn: me.setCreateNewFormDialogTitle,
+						scope: me
                     },
                     onSuccess:{
                         fn:function (response) {
@@ -847,24 +855,26 @@ LogicECM.module = LogicECM.module || {};
             YAHOO.Bubbling.addDefaultAction("create-new-item-" + this.eventGroup, fnCreateNewItemHandler, true);
         },
 
-        generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef, itemType) {
-            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
-            return YAHOO.lang.substitute(templateUrl, {
+        generateCreateNewParams: function AssociationTreeViewer_generateCreateNewParams(nodeRef, itemType) {
+            return {
                 itemKind: "type",
                 itemId: itemType,
                 destination: nodeRef,
                 mode: "create",
                 submitType: "json",
-                formId: "association-create-new-node-form"
-            });
+                formId: "association-create-new-node-form",
+				showCancelButton: true
+            };
         },
 
         setCreateNewFormDialogTitle: function (p_form, p_dialog) {
-	        var message = this.msg("dialog.createNew.title");
-            var fileSpan = '<span class="light">' + message + '</span>';
-            Alfresco.util.populateHTML(
-                [ p_dialog.id + "-form-container_h", fileSpan]
-            );
+			var message;
+			if ( this.options.createNewMessage ) {
+		        message = this.options.createNewMessage;
+			} else {
+		        message = this.msg("dialog.createNew.title");
+			}
+			p_dialog.dialog.setHeader( message );
         },
 
         /**
@@ -883,7 +893,13 @@ LogicECM.module = LogicECM.module || {};
                 // Create New item cell type
                 if (oRecord.getData("type") == IDENT_CREATE_NEW)
                 {
-                    elCell.innerHTML = '<a href="#" title="' + scope.msg("form.control.object-picker.create-new") + '" class="create-new-item-' + scope.eventGroup + '" >' + scope.msg("form.control.object-picker.create-new") + '</a>';
+					var msg;
+					if ( scope.options.createNewMessage ) {
+						msg = scope.options.createNewMessage;
+					} else {
+						msg = scope.msg("form.control.object-picker.create-new")
+					}
+                    elCell.innerHTML = '<a href="#" title="' + msg + '" class="create-new-item-' + scope.eventGroup + '" >' + msg + '</a>';
                     return;
                 }
 
@@ -1169,7 +1185,7 @@ LogicECM.module = LogicECM.module || {};
 	            } else {
 		            if (this.options.itemType == "lecm-orgstr:employee") {
 			            el.innerHTML
-				            += '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + 
+				            += '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) +
 							(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(this.selectedItems[i].nodeRef) : ' ') + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 		            } else {
 			            el.innerHTML
@@ -1402,7 +1418,7 @@ LogicECM.module = LogicECM.module || {};
 								me.removeNode(null, item);
 							}
 						}
-						
+
 					]
 				});
 			}

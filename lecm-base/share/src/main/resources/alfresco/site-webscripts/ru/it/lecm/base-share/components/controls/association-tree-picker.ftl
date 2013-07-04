@@ -133,6 +133,11 @@
             ignoreNodes: ["${args.ignoreNodes}"],
 	    </#if>
         showCreateNewLink: ${showCreateNewLink?string},
+		<#if field.control.params.createNewMessage??>
+			createNewMessage: "${field.control.params.createNewMessage}",
+		<#elseif field.control.params.createNewMessageId??>
+			createNewMessage: "${msg(field.control.params.createNewMessageId)}",
+	    </#if>
 	    showSearch: ${showSearch?string},
         plane: ${plane?string},
         currentValue: "${field.value!''}",
