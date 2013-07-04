@@ -198,7 +198,7 @@
 					<textElement>
 						<font fontName="DejaVu Sans Mono" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[( ($F{col_Sum} == null) ? "???" : msg("{0,number,currency}", $F{col_Sum}) )
+					<textFieldExpression><![CDATA[( ($F{col_Sum} == null) ? "???" : msg("{0,number}", $F{col_Sum}) )
 + " "+ (($F{col_SumUnits} == null) ? "" : $F{col_SumUnits})]]></textFieldExpression>
 				</textField>
 				<textField>

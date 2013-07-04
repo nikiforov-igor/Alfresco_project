@@ -72,7 +72,7 @@
 				-> target: "lecm-currency:currency
 		  -->
 		<field jrFldName="col_Sum" queryFldName="lecm-contract:totalAmount" displayName="Сумма договора" />
-		<field jrFldName="col_SumUnits" queryFldName="{lecm-currency:currency/cm:name}" displayName="Валюта договора" />
+		<field jrFldName="col_SumUnits" queryFldName="{lecm-contract:currency-assoc/lecm-currency:alphabetic-code}" displayName="Валюта договора" />
 
 		<!-- Данные по "Виду договора" (с типом "lecm-contract-dic:contract-type") -->
 		<field jrFldName="col_DocKind" queryFldName="{lecm-contract:typeContract-assoc/cm:name}" displayName="Вид договора" />
