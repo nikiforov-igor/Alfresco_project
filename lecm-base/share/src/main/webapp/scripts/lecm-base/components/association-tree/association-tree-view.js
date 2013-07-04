@@ -1080,31 +1080,32 @@ LogicECM.module = LogicECM.module || {};
 
             var num = 0;
             for (i in items) {
+	            if (typeof(items[i]) != "function") {
+	                if (this.options.plane || !this.options.showSelectedItemsPath) {
+	                    var displayName = items[i].selectedName;
+	                } else {
+	                    displayName = items[i].displayPath + "/" + items[i].selectedName;
+		                      if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
+	                        var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
+	                        if (rootNodeDisplayName !== "") {
+	                            displayName = displayName.replace(rootNodeDisplayName, "");
+	                        }
+	                    }
+	                }
 
-                if (this.options.plane || !this.options.showSelectedItemsPath) {
-                    var displayName = items[i].selectedName;
-                } else {
-                    displayName = items[i].displayPath + "/" + items[i].selectedName;
-	                      if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
-                        var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
-                        if (rootNodeDisplayName !== "") {
-                            displayName = displayName.replace(rootNodeDisplayName, "");
-                        }
-                    }
-                }
+	                var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
 
-                var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
+		            if (this.options.itemType == "lecm-orgstr:employee") {
+			            Dom.get(fieldId).innerHTML
+				            += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, displayName) +
+							(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(items[i].nodeRef) : ' ') + this.getRemoveButtonHTML(items[i]) + '</div>';
+		            } else {
+			            Dom.get(fieldId).innerHTML
+				            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+		            }
 
-	            if (this.options.itemType == "lecm-orgstr:employee") {
-		            Dom.get(fieldId).innerHTML
-			            += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, displayName) +
-						(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(items[i].nodeRef) : ' ') + this.getRemoveButtonHTML(items[i]) + '</div>';
-	            } else {
-		            Dom.get(fieldId).innerHTML
-			            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+	                YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: ""}, this);
 	            }
-
-                YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: ""}, this);
             }
         },
 
