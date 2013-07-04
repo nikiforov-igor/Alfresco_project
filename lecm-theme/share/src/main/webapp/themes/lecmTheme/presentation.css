@@ -2017,14 +2017,25 @@ div.object-finder .picker-items .addIcon {
     background: transparent url(images/add-item.png) no-repeat center center;
 }
 
+div.object-finder .association-auto-complete-selected-item {
+    position: relative;
+}
+
+div.object-finder .association-auto-complete-selected-item .employee-available,
+div.object-finder .association-auto-complete-selected-item .employee-unavailable {
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;
+    position: absolute;
+    top: 6px;
+}
+
 div.object-finder .association-auto-complete-selected-item .employee-available {
-    background: transparent url(images/employee-available.png) no-repeat center center;
-    padding: 6px;
+    background: url(images/employee-available.png) no-repeat;
 }
 
 div.object-finder .association-auto-complete-selected-item .employee-unavailable {
-    background: transparent url(images/employee-unavailable.png) no-repeat center center;
-	padding: 6px;
+    background: url(images/employee-unavailable.png) no-repeat;
 }
 
 div.orgchart-picker-menu .search-button button {

@@ -1186,9 +1186,11 @@ z-index: 9000;
     white-space: nowrap;
 }
 .yui-skin-lecmTheme .yui-dt-liner {
+    height: 17px;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
     margin: 0;
-    padding: 0;
-    padding: 4px 10px 4px 10px;
+    padding: 4px 10px;
 }
 .yui-skin-lecmTheme .yui-dt-coltarget {
     width: 5px;
