@@ -1,6 +1,6 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 <#assign id = args.htmlid>
-<#assign toolbarId = "${id}-report-editor-toolbar"/>
+<#assign toolbarId = "${id}-reports-editor-navigation-toolbar"/>
 
 <script type="text/javascript">//<![CDATA[
 function init() {

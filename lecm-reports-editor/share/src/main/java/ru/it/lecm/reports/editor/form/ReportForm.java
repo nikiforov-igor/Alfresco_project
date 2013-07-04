@@ -65,8 +65,8 @@ public class ReportForm extends FormUIGet {
         List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
         for (ColumnDescriptor column : columns) {
             ParameterTypedValue typedValue = column.getParameterValue();
-            if(typedValue != null) {
-                Field field = generateFieldModel(column,typedValue);
+            if (typedValue != null) {
+                Field field = generateFieldModel(column, typedValue);
                 if (field != null) {
                     fields.put(column.getColumnName(), field);
                 }
@@ -77,7 +77,6 @@ public class ReportForm extends FormUIGet {
     }
 
     protected Field generateFieldModel(ColumnDescriptor column, ParameterTypedValue typedValue) {
-
         Field field = null;
 
         try {
@@ -91,11 +90,10 @@ public class ReportForm extends FormUIGet {
                 field.setDescription("Название параметра");
 
                 processFieldControl(field, column, typedValue);
-
                 field.setDataKeyName(column.getColumnName());
 
                 //TODO изменить метод!
-                String dataType =  column.getDataType().toString();
+                String dataType = column.getDataType().toString();
                 dataType = dataType.startsWith("d:") ? dataType.replace("d:", "") : dataType;
                 field.setDataType(dataType);
                 field.setType(isNotAssoc(column.getDataType().toString()) ? "property" : "association");
@@ -159,12 +157,11 @@ public class ReportForm extends FormUIGet {
         return null;
     }
 
-    private boolean isNotAssoc(String typeKey){
+    private boolean isNotAssoc(String typeKey) {
         return true;
     }
 
-    public class Field extends Element
-    {
+    public class Field extends Element {
         protected String name;
         protected String configName;
         protected String label;
@@ -182,194 +179,156 @@ public class ReportForm extends FormUIGet {
         protected boolean transitory = false;
         protected boolean repeating = false;
 
-        Field()
-        {
+        Field() {
             this.kind = FIELD;
         }
 
-        public void setId(String id)
-        {
+        public void setId(String id) {
             this.id = id;
         }
 
-        public String getConfigName()
-        {
+        public String getConfigName() {
             return this.configName;
         }
 
-        public void setConfigName(String configName)
-        {
+        public void setConfigName(String configName) {
             this.configName = configName;
         }
 
-        public FieldControl getControl()
-        {
+        public FieldControl getControl() {
             return this.control;
         }
 
-        public void setControl(FieldControl control)
-        {
+        public void setControl(FieldControl control) {
             this.control = control;
         }
 
-        public String getDataKeyName()
-        {
+        public String getDataKeyName() {
             return this.dataKeyName;
         }
 
-        public void setDataKeyName(String dataKeyName)
-        {
+        public void setDataKeyName(String dataKeyName) {
             this.dataKeyName = dataKeyName;
         }
 
-        public String getDataType()
-        {
+        public String getDataType() {
             return this.dataType;
         }
 
-        public void setDataType(String dataType)
-        {
+        public void setDataType(String dataType) {
             this.dataType = dataType;
         }
 
-        public String getDescription()
-        {
+        public String getDescription() {
             return this.description;
         }
 
-        public void setDescription(String description)
-        {
+        public void setDescription(String description) {
             this.description = description;
         }
 
-        public boolean isDisabled()
-        {
+        public boolean isDisabled() {
             return this.disabled;
         }
 
-        public void setDisabled(boolean disabled)
-        {
+        public void setDisabled(boolean disabled) {
             this.disabled = disabled;
         }
 
-        public String getLabel()
-        {
+        public String getLabel() {
             return this.label;
         }
 
-        public void setLabel(String label)
-        {
+        public void setLabel(String label) {
             this.label = label;
         }
 
-        public boolean isMandatory()
-        {
+        public boolean isMandatory() {
             return this.mandatory;
         }
 
-        public void setMandatory(boolean mandatory)
-        {
+        public void setMandatory(boolean mandatory) {
             this.mandatory = mandatory;
         }
 
-        public boolean isTransitory()
-        {
+        public boolean isTransitory() {
             return this.transitory;
         }
 
-        public void setTransitory(boolean transitory)
-        {
+        public void setTransitory(boolean transitory) {
             this.transitory = transitory;
         }
 
-        public String getName()
-        {
+        public String getName() {
             return this.name;
         }
 
-        public void setName(String name)
-        {
+        public void setName(String name) {
             this.name = name;
         }
 
-        public boolean isRepeating()
-        {
+        public boolean isRepeating() {
             return this.repeating;
         }
 
-        public void setRepeating(boolean repeating)
-        {
+        public void setRepeating(boolean repeating) {
             this.repeating = repeating;
         }
 
-        public String getType()
-        {
+        public String getType() {
             return this.type;
         }
 
-        public void setType(String type)
-        {
+        public void setType(String type) {
             this.type = type;
         }
 
-        public Object getValue()
-        {
+        public Object getValue() {
             return this.value;
         }
 
-        public void setValue(Object value)
-        {
+        public void setValue(Object value) {
             this.value = value;
         }
 
-        public String getContent()
-        {
+        public String getContent() {
             return this.content;
         }
 
-        public void setContent(String content)
-        {
+        public void setContent(String content) {
             this.content = content;
         }
 
-        public String getHelp()
-        {
+        public String getHelp() {
             return this.help;
         }
 
-        public void setHelp(String help)
-        {
+        public void setHelp(String help) {
             this.help = help;
         }
 
-        public String getEndpointDirection()
-        {
+        public String getEndpointDirection() {
             return this.endpointDirection;
         }
 
-        public void setEndpointDirection(String endpointDirection)
-        {
+        public void setEndpointDirection(String endpointDirection) {
             this.endpointDirection = endpointDirection;
         }
 
-        public String getEndpointType()
-        {
+        public String getEndpointType() {
             return getDataType();
         }
 
-        public boolean isEndpointMandatory()
-        {
+        public boolean isEndpointMandatory() {
             return this.mandatory;
         }
 
-        public boolean isEndpointMany()
-        {
+        public boolean isEndpointMany() {
             return this.repeating;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             StringBuilder buffer = new StringBuilder();
             buffer.append(this.kind);
             buffer.append("(id=").append(this.id);
@@ -396,35 +355,29 @@ public class ReportForm extends FormUIGet {
     /**
      * Represents the control used by a form field.
      */
-    public class FieldControl
-    {
+    public class FieldControl {
         protected String template;
         protected Map<String, String> params;
 
-        FieldControl(String template)
-        {
+        FieldControl(String template) {
             this.template = template;
             this.params = new HashMap<String, String>(4);
         }
 
-        public String getTemplate()
-        {
+        public String getTemplate() {
             return this.template;
         }
 
-        public void setTemplate(String template)
-        {
+        public void setTemplate(String template) {
             this.template = template;
         }
 
-        public Map<String, String> getParams()
-        {
+        public Map<String, String> getParams() {
             return this.params;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             StringBuilder buffer = new StringBuilder();
             buffer.append("control(template=").append(this.template);
             buffer.append(" params=").append(this.params);
@@ -436,8 +389,7 @@ public class ReportForm extends FormUIGet {
     /**
      * Represents a field constraint.
      */
-    public class Constraint
-    {
+    public class Constraint {
         private String fieldId;
         private String id;
         private String validationHandler;
@@ -445,31 +397,26 @@ public class ReportForm extends FormUIGet {
         private String message;
         private String event;
 
-        Constraint(String fieldId, String id, String handler, JSONObject params)
-        {
+        Constraint(String fieldId, String id, String handler, JSONObject params) {
             this.fieldId = fieldId;
             this.id = id;
             this.validationHandler = handler;
             this.params = params;
         }
 
-        public String getFieldId()
-        {
+        public String getFieldId() {
             return this.fieldId;
         }
 
-        public String getId()
-        {
+        public String getId() {
             return this.id;
         }
 
-        public String getValidationHandler()
-        {
+        public String getValidationHandler() {
             return this.validationHandler;
         }
 
-        public void setValidationHandler(String validationHandler)
-        {
+        public void setValidationHandler(String validationHandler) {
             this.validationHandler = validationHandler;
         }
 
@@ -478,49 +425,40 @@ public class ReportForm extends FormUIGet {
          *
          * @return
          */
-        public String getParams()
-        {
-            if (this.params == null)
-            {
+        public String getParams() {
+            if (this.params == null) {
                 this.params = new JSONObject();
             }
 
             return this.params.toString();
         }
 
-        public JSONObject getJSONParams()
-        {
+        public JSONObject getJSONParams() {
             return this.params;
         }
 
-        public void setJSONParams(JSONObject params)
-        {
+        public void setJSONParams(JSONObject params) {
             this.params = params;
         }
 
-        public String getMessage()
-        {
+        public String getMessage() {
             return this.message;
         }
 
-        public void setMessage(String message)
-        {
+        public void setMessage(String message) {
             this.message = message;
         }
 
-        public String getEvent()
-        {
+        public String getEvent() {
             return this.event;
         }
 
-        public void setEvent(String event)
-        {
+        public void setEvent(String event) {
             this.event = event;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             StringBuilder buffer = new StringBuilder();
             buffer.append("constraint(fieldId=").append(this.fieldId);
             buffer.append(" id=").append(this.id);
@@ -532,24 +470,20 @@ public class ReportForm extends FormUIGet {
         }
     }
 
-    public abstract class Element
-    {
+    public abstract class Element {
         protected String kind;
         protected String id;
 
-        public String getKind()
-        {
+        public String getKind() {
             return this.kind;
         }
 
-        public String getId()
-        {
+        public String getId() {
             return this.id;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             StringBuilder builder = new StringBuilder();
             builder.append(this.kind);
             builder.append("(");
@@ -562,10 +496,8 @@ public class ReportForm extends FormUIGet {
     /**
      * Represents a pointer to a field, used in the form UI model.
      */
-    public class FieldPointer extends Element
-    {
-        FieldPointer(String id)
-        {
+    public class FieldPointer extends Element {
+        FieldPointer(String id) {
             this.kind = FIELD;
             this.id = id;
         }
@@ -574,15 +506,13 @@ public class ReportForm extends FormUIGet {
     /**
      * Represents a set of fields and/or nested sets.
      */
-    public class Set extends Element
-    {
+    public class Set extends Element {
         protected String appearance;
         protected String template;
         protected String label;
         protected List<Element> children;
 
-        Set(FormSet setConfig)
-        {
+        Set(FormSet setConfig) {
             this.kind = SET;
             this.id = setConfig.getSetId();
             this.appearance = setConfig.getAppearance();
@@ -591,42 +521,35 @@ public class ReportForm extends FormUIGet {
             this.children = new ArrayList<Element>(4);
         }
 
-        Set(String id, String label)
-        {
+        Set(String id, String label) {
             this.kind = SET;
             this.id = id;
             this.label = label;
             this.children = new ArrayList<Element>(1);
         }
 
-        public void addChild(Element child)
-        {
+        public void addChild(Element child) {
             this.children.add(child);
         }
 
-        public String getAppearance()
-        {
+        public String getAppearance() {
             return this.appearance;
         }
 
-        public String getTemplate()
-        {
+        public String getTemplate() {
             return this.template;
         }
 
-        public String getLabel()
-        {
+        public String getLabel() {
             return this.label;
         }
 
-        public List<Element> getChildren()
-        {
+        public List<Element> getChildren() {
             return this.children;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             StringBuilder buffer = new StringBuilder();
             buffer.append(this.kind);
             buffer.append("(id=").append(this.id);
@@ -635,8 +558,7 @@ public class ReportForm extends FormUIGet {
             buffer.append(" template=").append(this.template);
             buffer.append(" children=[");
             boolean first = true;
-            for (Element child : this.children)
-            {
+            for (Element child : this.children) {
                 if (first)
                     first = false;
                 else

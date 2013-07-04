@@ -69,3 +69,11 @@ report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
 .datagrid .onActionAdd a {
     background-image: url('/share/res/components/images/plus-16.png');
 }
+
+#bd #lecm-content-main div[id*="reports-editor-toolbar"] {
+    margin:0;
+}
+
+#bd #lecm-content-main div[id*="reports-editor-navigation-toolbar"] .left{
+    float:right;
+}
