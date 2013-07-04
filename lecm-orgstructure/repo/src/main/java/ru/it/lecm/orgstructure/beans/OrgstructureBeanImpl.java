@@ -1386,11 +1386,16 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public List<NodeRef> getEmployeeRoles(NodeRef employeeRef) {
-        return getEmployeeRoles(employeeRef, false);
+        return getEmployeeRoles(employeeRef, false, false);
     }
 
 	@Override
 	public List<NodeRef> getEmployeeRoles(NodeRef employeeRef, boolean includeDelegatedRoles) {
+		return getEmployeeRoles(employeeRef, includeDelegatedRoles, false);
+	}
+
+	@Override
+	public List<NodeRef> getEmployeeRoles(NodeRef employeeRef, boolean includeDelegatedRoles, boolean inheritSubordinatesRoles) {
 		Set<NodeRef> results = new HashSet<NodeRef>();
 		if (isEmployee(employeeRef)){
 			// роли непосредственно имеющиеся у сотрудника
@@ -1437,6 +1442,14 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         if (includeDelegatedRoles) {
             results.addAll(getEmployeeRolesWithDelegation(employeeRef));
         }
+		if (inheritSubordinatesRoles) {
+			List<NodeRef> subordinates = getBossSubordinate(employeeRef, includeDelegatedRoles);
+			if (subordinates != null) {
+				for (NodeRef subordinateEmployee: subordinates) {
+					results.addAll(getEmployeeRoles(subordinateEmployee, includeDelegatedRoles, false));
+				}
+			}
+		}
 		return new ArrayList<NodeRef>(results);
 	}
 
@@ -1629,7 +1642,16 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isEmployeeHasBusinessRole;
 	}
 
-    private boolean checkBusinessRoleUsingDelegationsOpts(NodeRef employeeRef, NodeRef businessRoleNodeRef) {
+	@Override
+	public boolean isEmployeeHasBusinessRole (NodeRef employeeRef, String businessRoleIdentifier, boolean withDelegation, boolean inheritSubordinatesRoles) {
+		List<NodeRef> allEmployeeBusinessRoles = getEmployeeRoles(employeeRef, withDelegation, inheritSubordinatesRoles);
+		NodeRef businessRole = getBusinessRoleByIdentifier(businessRoleIdentifier);
+
+		return allEmployeeBusinessRoles != null && businessRole != null && allEmployeeBusinessRoles.contains(businessRole);
+	}
+
+
+	private boolean checkBusinessRoleUsingDelegationsOpts(NodeRef employeeRef, NodeRef businessRoleNodeRef) {
 
         // Получаем список сотрудников обладающих запрашиваемой бизнес ролью
         List<NodeRef> employeeNodeRefs = getEmployeesByBusinessRole (businessRoleNodeRef);

@@ -44,7 +44,7 @@ public class ExpressionEmployee {
      * @return
      */
     public boolean hasBusinessRole(String businessRole) {
-        return orgstructureBean.isEmployeeHasBusinessRole(employee, businessRole, true);
+        return orgstructureBean.isEmployeeHasBusinessRole(employee, businessRole, true, true);
     }
 
     public NodeRef getEmployee() {

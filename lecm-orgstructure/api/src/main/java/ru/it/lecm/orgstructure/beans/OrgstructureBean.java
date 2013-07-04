@@ -576,6 +576,8 @@ public interface OrgstructureBean {
 
     List<NodeRef> getEmployeeRoles(NodeRef employeeRef, boolean includeDelegatedRoles);
 
+	public List<NodeRef> getEmployeeRoles(NodeRef employeeRef, boolean includeDelegatedRoles, boolean inheritSubordinatesRoles);
+
 	/**
 	 * получить список бизнес ролей сотрудника согласно действующему делегированию
 	 * @param employeeRef ссылка на сотрудника
@@ -617,6 +619,8 @@ public interface OrgstructureBean {
 	 * @return true если сотрудник имеет роль
 	 */
 	boolean isEmployeeHasBusinessRole(NodeRef employeeRef, String businessRoleIdentifier, final boolean withDelegation);
+
+	public boolean isEmployeeHasBusinessRole (NodeRef employeeRef, String businessRoleIdentifier, boolean withDelegation, boolean inheritSubordinatesRoles);
 
     /**
      * Получает список сотрудников оформивших отстутсвие
