@@ -31,7 +31,7 @@
                 <previousButton>false</previousButton>
                 <nextButton>true</nextButton>
                 <!-- Настройки перехода на страницу-->
-                <nextPage>reports-editor-source-add</nextPage>
+                <nextPage>report-source-edit</nextPage>
             </properties>
         </component>
     </components>

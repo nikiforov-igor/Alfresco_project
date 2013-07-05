@@ -2,6 +2,6 @@
 <page>
 	<title>Редактор отчетов - Настройка Набора Данных</title>
 	<description>Настройка Набора Данных</description>
-	<template-instance>reports-editor-source-edit</template-instance>
+	<template-instance>report-source-edit</template-instance>
 	<authentication>user</authentication>
 </page>

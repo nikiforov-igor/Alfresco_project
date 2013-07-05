@@ -2,6 +2,6 @@
 <page>
 	<title>Редактор отчетов - Настройка шаблонов</title>
 	<description>Настройка шаблонов</description>
-	<template-instance>reports-editor-template-edit</template-instance>
+	<template-instance>report-template-edit</template-instance>
 	<authentication>user</authentication>
 </page>

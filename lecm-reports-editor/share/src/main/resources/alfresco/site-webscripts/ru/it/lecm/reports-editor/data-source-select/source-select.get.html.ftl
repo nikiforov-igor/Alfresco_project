@@ -2,25 +2,17 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 <#assign id = "data-source-select"/>
 <div class="yui-t1" id="${id}">
-    <div id="yui-main">
-        <div class="yui-b" id="alf-content">
+    <div id="yui-main" style="width: 55%;">
+        <div id="alf-content">
             <#assign toolbarId = "${id}-columns-toolbar"/>
             <!-- Toolbar Start-->
             <div id="${toolbarId}">
             <@comp.baseToolbar toolbarId true false false>
-                <div class="new-row">
-                    <span id="${toolbarId}-saveButton" class="yui-button yui-push-button">
+                <div class="select-row">
+                    <span id="${toolbarId}-selectColumnsBtn" class="yui-button yui-push-button">
                         <span class="first-child">
                             <button type="button"
-                                    title="${msg("label.save-source.btn")}">${msg("label.save-source.btn")}</button>
-                        </span>
-                    </span>
-                </div>
-                <div class="new-row">
-                    <span id="${toolbarId}-saveAsButton" class="yui-button yui-push-button">
-                        <span class="first-child">
-                            <button type="button"
-                                    title="${msg("label.save-as-source.btn")}">${msg("label.save-as-source.btn")}</button>
+                                    title="${msg("label.select.btn")}">${msg("label.select.btn")}</button>
                         </span>
                     </span>
                 </div>
@@ -79,7 +71,7 @@
                                             }
                                         ],
                                         bubblingLabel: "sourceColumns",
-                                        showCheckboxColumn: false
+                                        showCheckboxColumn: true
                                     }).setMessages(${messages});
 
                             YAHOO.util.Event.onContentReady("${columnsGridId}", function () {
@@ -97,10 +89,6 @@
 
                         function initColumnsDatagrid() {
                             createColumnsDatagrid();
-                            var resizer = new LogicECM.module.Base.Resizer('ReportsEditorAddSourceResizer');
-                            resizer.setOptions({
-                                initialWidth: 500
-                            });
                         }
 
                         YAHOO.util.Event.onDOMReady(initColumnsDatagrid);
@@ -111,22 +99,7 @@
             </div>
         </div>
     </div>
-    <div id="alf-filters">
-    <#assign toolbarId = "${id}-sources-toolbar"/>
-    <!-- Toolbar Start-->
-        <div id="${toolbarId}">
-            <@comp.baseToolbar toolbarId true false false>
-                <div class="new-row">
-                    <span id="${toolbarId}-newSourceButton" class="yui-button yui-push-button">
-                        <span class="first-child">
-                            <button type="button"
-                                    title="${msg("label.create-new-source.btn")}">${msg("label.create-new-source.btn")}</button>
-                        </span>
-                    </span>
-                </div>
-            </@comp.baseToolbar>
-        </div>
-    <!-- Toolbar End-->
+    <div id="alf-filters" style="width:40%">
     <#assign sourceGridId ="${id}-sources-grid">
     <!-- Grid Start-->
         <div class="reports">
@@ -141,6 +114,7 @@
                                     showExtendSearchBlock: false,
                                     showActionColumn: true,
                                     overrideSortingWith: false,
+                                    pageSize:10,
                                     actions: [
                                         {
                                             type: "datagrid-action-link-sourcesList",
@@ -161,11 +135,7 @@
                             YAHOO.Bubbling.fire("activeGridChanged", {
                                 datagridMeta: {
                                     itemType: "lecm-rpeditor:reportDataSource",
-                                    nodeRef: LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer,
-                                    searchConfig: {
-                                        filter: 'PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Наборы_x0020_данных//*"' +
-                                                ' OR PATH:"' + LogicECM.module.ReportsEditor.SETTINGS.REPORT_PATH + '//*"'
-                                    }
+                                    nodeRef: LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer
                                 },
                                 bubblingLabel: "sourcesList"
                             });
@@ -187,7 +157,9 @@
 
     function init() {
         var editor = new LogicECM.module.ReportsEditor.SelectSourceEditor("${id}").setMessages(${messages});
-        editor.setReportId("${page.url.args.reportId}");
+        <#if reportId??>
+            editor.setReportId("${reportId}");
+        </#if>
         editor.setDataSourceId("${activeSourceId!""}");
         editor.markAsNewSource(!${existInRepo?string});
     }

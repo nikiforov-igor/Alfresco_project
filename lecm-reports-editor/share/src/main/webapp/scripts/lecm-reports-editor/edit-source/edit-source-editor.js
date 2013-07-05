@@ -1,4 +1,7 @@
 (function () {
+
+    var Dom = YAHOO.util.Dom;
+
     LogicECM.module.ReportsEditor.EditSourceEditor = function (htmlId) {
         LogicECM.module.ReportsEditor.EditSourceEditor.superclass.constructor.call(
             this,
@@ -6,13 +9,10 @@
             htmlId,
             ["button", "container", "connection"]);
 
+        this.selectSourcePanel = null;
+
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-        /*YAHOO.Bubbling.on("copySourceToReport", this._copySourceToReport, this);
-        YAHOO.Bubbling.on("refreshButtonState", this._onRefreshButtonState, this);
-        YAHOO.Bubbling.on("selectDataSource", this._onSelectDataSource, this);
-        YAHOO.Bubbling.on("onSearchSuccess", this._onSearchComplete, this);
-        YAHOO.Bubbling.on("copyColumnToReportSource", this._onCopyColumn, this);
-        YAHOO.Bubbling.on("updateReportSourceColumns", this._onUpdateSourceColumns, this);*/
+        YAHOO.Bubbling.on("updateReportSourceColumns", this._onUpdateSourceColumns, this);
         return this;
     };
 
@@ -24,10 +24,9 @@
 
         columnsDataGrid: null,
 
-        toolbarButtons: {
-            "defaultActive": []
-        },
+        toolbarButtons: {},
 
+        selectSourcePanel : null,
 
         markAsNewSource: function (isNew) {
             this.isNewSource = isNew;
@@ -51,9 +50,18 @@
         },
 
         onReady: function () {
+            this.createSelectDialog();
             this._initButtons();
-
             Dom.setStyle(this.id + "-columns-toolbar-body", "visibility", "visible");
+        },
+
+        createSelectDialog: function() {
+            this.selectSourcePanel = Alfresco.util.createYUIPanel("selectSourcePanel",
+                {
+                    width: "800px"
+                });
+            YAHOO.Bubbling.on("hidePanel", this._hideSelectDialog);
+            this.widgets.closeButton = Alfresco.util.createYUIButton(this, "searchBlock-search-button", this._onClose, {}, Dom.get("selectSourcePanel-close-button"));
         },
 
         copySource: function (sourceId, from, to, fireCreateEvent) {
@@ -109,13 +117,101 @@
         },
 
         _initButtons: function () {
-            this.toolbarButtons['defaultActive'].push(
-                Alfresco.util.createYUIButton(this, "newColumnButton", this._onNewColumn, {value: "create", disabled: !this.dataSourceId}, this.id + "-columns-toolbar-newColumnButton")
-            );
+            this.toolbarButtons.newColumnButton =
+                Alfresco.util.createYUIButton(this, "newColumnButton", this._onNewColumn, {value: "create", disabled: !this.dataSourceId}, this.id + "-columns-toolbar-newColumnButton");
 
-            this.toolbarButtons['defaultActive'].push(
-                Alfresco.util.createYUIButton(this, "saveAsButton", this._onCopySource, {value: "create", disabled: !this.isNewSource || !this.dataSourceId}, this.id + "-columns-toolbar-saveAsButton")
-            );
+            this.toolbarButtons.saveAsButton =
+                Alfresco.util.createYUIButton(this, "saveAsButton", this._onCopySource, {value: "create", disabled: !this.isNewSource || !this.dataSourceId}, this.id + "-columns-toolbar-saveAsButton");
+
+            this.toolbarButtons.selectSource =
+                Alfresco.util.createYUIButton(this, "selectSource", this._onSelectSource, {disabled: !this.dataSourceId}, this.id + "-columns-toolbar-selectSource");
+        },
+
+        _hideSelectDialog: function(layer, args){
+            var mayHide = false;
+            if (this.selectSourcePanel != null) {
+                if (args == undefined || args == null) {
+                    mayHide = true;
+                } else if (args[1] && args[1].panel && args[1].panel.id == this.selectSourcePanel.id){
+                    mayHide = true
+                }
+                if (mayHide){
+                    if (typeof this.selectSourcePanel.hide == 'function') {
+                        this.selectSourcePanel.hide();
+                    }
+                    Dom.setStyle("selectSourcePanel", "display", "none");
+                    var formDiv = Dom.get("selectSourcePanel-form");
+                    formDiv.innerHTML = "";
+                }
+            }
+        },
+
+        _viewSelectDialog: function () {
+            if (this.selectSourcePanel) {
+                Dom.setStyle("selectSourcePanel", "display", "block");
+                this.selectSourcePanel.show();
+            } else {
+                this.createSelectDialog();
+                this._viewSelectDialog();
+            }
+        },
+
+        _onSelectSource: function () {
+            Alfresco.util.Ajax.request(
+                {
+                    method: "GET",
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/reports-editor/source-select?reportId=" + this.reportId,
+                    successCallback: {
+                        fn: function (response) {
+                            var formDiv = Dom.get("selectSourcePanel-form");
+                            formDiv.innerHTML = response.serverResponse.responseText;
+                            this._viewSelectDialog();
+                        },
+                        scope: this
+                    },
+                    failureCallback: {
+                        fn: function () {
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: "Не удалось скопировать шаблон"
+                            });
+                        }
+                    },
+                    execScripts: true
+                });
+
+            /*var doBeforeDialogShow = function (p_form, p_dialog) {
+                var selectMsg = this.msg("label.select-source.title");
+                Alfresco.util.populateHTML(
+                    [ p_dialog.id + "-form-container_h", selectMsg ]
+                );
+
+                Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
+            };
+
+            var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/reports-editor/source-select?reportId=" + this.reportId);
+
+            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-selectSourceDetails");
+            createDetails.setOptions(
+                {
+                    width: "60em",
+                    templateUrl: templateUrl,
+                    actionUrl: null,
+                    destroyOnHide: true,
+                    doBeforeDialogShow: {
+                        fn: doBeforeDialogShow,
+                        scope: this
+                    },
+                    onSuccess: {
+                        fn: function DataGrid_onActionCreate_success(response) {
+                        },
+                        scope: this
+                    },
+                    onFailure: {
+                        fn: function DataGrid_onActionCreate_failure(response) {
+                        },
+                        scope: this
+                    }
+                }).show();*/
         },
 
         _onNewColumn: function () {
@@ -129,6 +225,10 @@
                     text: "Нет активного набора!"
                 });
             }
+        },
+
+        _onClose: function () {
+            this._hideSelectDialog();
         },
 
         _onCopySource: function () {
@@ -196,6 +296,21 @@
                         scope: this
                     }
                 }).show();
+        },
+
+        _onUpdateSourceColumns: function () {
+            YAHOO.Bubbling.fire("activeGridChanged", {
+                datagridMeta: {
+                    itemType: "lecm-rpeditor:reportDataColumn",
+                    nodeRef: this.dataSourceId,
+                    actionsConfig: {
+                        fullDelete: true,
+                        trash: false
+                    },
+                    sort: "lecm-rpeditor:dataColumnCode|true"
+                },
+                bubblingLabel: "source-columns"
+            });
         }
     });
 })();

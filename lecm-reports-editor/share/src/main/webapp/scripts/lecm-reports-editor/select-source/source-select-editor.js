@@ -8,11 +8,9 @@
 
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
         YAHOO.Bubbling.on("copySourceToReport", this._copySourceToReport, this);
-        YAHOO.Bubbling.on("refreshButtonState", this._onRefreshButtonState, this);
         YAHOO.Bubbling.on("selectDataSource", this._onSelectDataSource, this);
-        YAHOO.Bubbling.on("onSearchSuccess", this._onSearchComplete, this);
         YAHOO.Bubbling.on("copyColumnToReportSource", this._onCopyColumn, this);
-        YAHOO.Bubbling.on("updateReportSourceColumns", this._onUpdateSourceColumns, this);
+        YAHOO.Bubbling.on("selectedItemsChanged", this._onSelectedItemsChanged, this);
         return this;
     };
 
@@ -30,6 +28,7 @@
             "activeSourceIsNew": []
         },
 
+        groupActions: {},
 
         markAsNewSource: function (isNew) {
             this.isNewSource = isNew;
@@ -182,34 +181,13 @@
                 });
         },
 
-        _onSearchComplete: function (layer, args) {
-            var obj = args[1];
-            if ((obj !== null) && (obj.bubblingLabel !== null)) {
-                if (obj.bubblingLabel == "sourcesList" && this.dataSourceId) {
-                    var recordFound = this.sourcesDataGrid._findRecordByParameter(this.dataSourceId, "nodeRef");
-                    if (recordFound !== null) {
-                        this.sourcesDataGrid.widgets.dataTable.unselectAllRows();
-                        this.sourcesDataGrid.widgets.dataTable.selectRow(recordFound);
-                        recordFound.getData().itemData.selected = true;
-
-                        //помечаем запись. откуда был скопирован набор как выбранную
-                        var copiedFrom = recordFound.getData().itemData["prop_cm_name"].value;
-                        var copiedFromRecords = this._findRecordsByParameter(this.sourcesDataGrid, "prop_cm_name", copiedFrom);
-                        if (copiedFromRecords) {
-                            for (var i = 0; i < copiedFromRecords.length; i++) {
-                                copiedFromRecords[i].getData().itemData.selected = true;
-                            }
-
-                        }
-                        //this.sourcesDataGrid.widgets.dataTable.fireEvent("renderEvent", {type: "renderEvent"});
-                        /*YAHOO.Bubbling.fire("activeGridChanged",
-                            {
-                                datagridMeta: {
-                                    itemType: "lecm-rpeditor:reportDataColumn",
-                                    nodeRef: recordFound.getData().nodeRef
-                                },
-                                bubblingLabel: "sourceColumns"
-                            });*/
+        _onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged() {
+            if (this.columnsDataGrid) {
+                var items = this.columnsDataGrid.getSelectedItems();
+                for (var index in this.groupActions) {
+                    if (this.groupActions.hasOwnProperty(index)) {
+                        var action = this.groupActions[index];
+                        action.set("disabled", (items.length === 0));
                     }
                 }
             }
@@ -218,12 +196,36 @@
         _copySourceToReport: function (layer, args) {
             var obj = args[1];
             if ((obj !== null) && (obj.dataSourceId !== null)) {
-                if (obj.dataSourceId != this.dataSourceId) {
-                    this.copySource(obj.dataSourceId, LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer, this.reportId, true);
-                } else {
-                    Alfresco.util.PopupManager.displayMessage({
-                        text: "Данный шаблон уже выбран!"
-                    });
+                if (obj.dataSourceId) {
+                    Alfresco.util.Ajax.request(
+                        {
+                            method: "GET",
+                            dataObj: {
+                                dataSourceId: obj.dataSourceId
+                            },
+                            url: Alfresco.constants.PROXY_URI + "lecm/reports-editor/getDataSourceColumns",
+                            successCallback: {
+                                fn: function (response) {
+                                    var oResults = eval("(" + response.serverResponse.responseText + ")");
+                                    if (oResults) {
+                                        for (var k = 0; k < oResults.length; k++) {
+                                            this.copyColumn(oResults[k].nodeRef, obj.dataSourceId, this.dataSourceId, true);
+                                        }
+                                    }
+                                },
+                                scope: this
+                            },
+                            failureCallback: {
+                                fn: function () {
+                                    Alfresco.util.PopupManager.displayMessage({
+                                        text: "Не удалось получить список столбцов для набора данных"
+                                    });
+                                }
+                            },
+                            execScripts: true,
+                            requestContentType: "application/json",
+                            responseContentType: "application/json"
+                        });
                 }
             }
         },
@@ -236,55 +238,21 @@
         },
 
         _initButtons: function () {
-            this.toolbarButtons['defaultActive'].push(
-                Alfresco.util.createYUIButton(this, "newSourceButton", this._onNewSource, {value: "create"}, this.id + "-sources-toolbar-newSourceButton")
-            );
-
-            this.toolbarButtons['activeSourceIsNew'].push(
-                Alfresco.util.createYUIButton(this, "saveButton", this._onSaveSource, {value: "create", disabled: !this.isNewSource || !this.dataSourceId}, this.id + "-columns-toolbar-saveButton")
-            );
-
-            this.toolbarButtons['activeSourceIsNew'].push(
-                Alfresco.util.createYUIButton(this, "saveAsButton", this._onCopySource, {value: "create", disabled: !this.isNewSource || !this.dataSourceId}, this.id + "-columns-toolbar-saveAsButton")
-            );
-
-            this.toolbarButtons['defaultActive'].push(
-                Alfresco.util.createYUIButton(this, "prevPageButton", this._onPrevPage, {}, this.id + "-columns-toolbar-prevPageButton")
-            );
-
-            this.toolbarButtons['defaultActive'].push(
-                Alfresco.util.createYUIButton(this, "nextPageButton", this._onNextPage, {}, this.id + "-columns-toolbar-nextPageButton")
-            );
+            this.groupActions.selectColumnsBtn = Alfresco.util.createYUIButton(this, "selectColumnsBtn", this._onSelectColumns, {
+                disabled: true
+            }, this.id + "-columns-toolbar-selectColumnsBtn");
         },
 
-        _onNewSource: function () {
-            this._showCreateForm({itemType: "lecm-rpeditor:reportDataSource", nodeRef: this.reportId});
-        },
-
-        _onSaveSource: function () {
-            alert("Не реализовано!");
-        },
-
-        _onCopySource: function () {
-            if (this.dataSourceId) {
-                this.copySource(this.dataSourceId, this.reportId, LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer, false);
+        _onSelectColumns: function () {
+            var selectedItems = this.columnsDataGrid.getSelectedItems();
+            if (selectedItems.length != 0) {
+                var items = YAHOO.lang.isArray(selectedItems) ? selectedItems : [selectedItems];
+                for (var k = 0; k < items.length; k++) {
+                    this.copyColumn(items[k].nodeRef, this.columnsDataGrid.datagridMeta.nodeRef, this.dataSourceId, true);
+                }
             } else {
-                Alfresco.util.PopupManager.displayMessage({
-                    text: "Нет активного набора!"
-                });
+                alert("Не выбран ни один элемент!");
             }
-        },
-
-        _onNextPage: function () {
-            var context = this;
-            window.location.href = window.location.protocol + "//" + window.location.host +
-                Alfresco.constants.URL_PAGECONTEXT + "reports-editor-source-edit?reportId=" + context.reportId;
-        },
-
-        _onPrevPage: function () {
-            var context = this;
-            window.location.href = window.location.protocol + "//" + window.location.host +
-                Alfresco.constants.URL_PAGECONTEXT + "reports-editor?reportId=" + context.reportId;
         },
 
         _onCopyColumn: function (layer, args) {
@@ -302,155 +270,6 @@
 
         _onUpdateSourceColumns: function (layer, args) {
             this.setDataSourceId(this.dataSourceId);
-        },
-
-        _showCreateForm: function (meta) {
-            var doBeforeDialogShow = function (p_form, p_dialog) {
-                var defaultMsg = this.msg("label.create-source.title");
-                Alfresco.util.populateHTML(
-                    [ p_dialog.id + "-form-container_h", defaultMsg ]
-                );
-
-                Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
-            };
-
-            var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-                {
-                    itemKind: "type",
-                    itemId: meta.itemType,
-                    destination: meta.nodeRef,
-                    mode: "create",
-                    submitType: "json"
-                });
-
-            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
-            createDetails.setOptions(
-                {
-                    width: "50em",
-                    templateUrl: templateUrl,
-                    actionUrl: null,
-                    destroyOnHide: true,
-                    doBeforeDialogShow: {
-                        fn: doBeforeDialogShow,
-                        scope: this
-                    },
-                    onSuccess: {
-                        fn: function DataGrid_onActionCreate_success(response) {
-                            Alfresco.util.PopupManager.displayMessage(
-                                {
-                                    text: this.msg("message.save.success")
-                                });
-
-                            // рисуем кнопки
-                            YAHOO.Bubbling.fire("refreshButtonState", {
-                                bubblingLabel: "sourceColumns",
-                                enabledButtons: ["activeSourceIsNew"]
-                            });
-
-                            YAHOO.Bubbling.fire("dataItemCreated",
-                                {
-                                    nodeRef: response.json.persistedObject,
-                                    oldNodeRef: this.dataSourceId,
-                                    bubblingLabel: "sourcesList"
-                                });
-                        },
-                        scope: this
-                    },
-                    onFailure: {
-                        fn: function DataGrid_onActionCreate_failure(response) {
-                            Alfresco.util.PopupManager.displayMessage(
-                                {
-                                    text: this.msg("message.save.failure")
-                                });
-                        },
-                        scope: this
-                    }
-                }).show();
-        },
-
-        _onRefreshButtonState: function Tree_onRefreshButtonsState(layer, args) {
-            var obj = args[1];
-            var flag, buttons, button;
-            if (obj.enabledButtons) {
-                for (var enIndex in obj.enabledButtons) {
-                    if (obj.enabledButtons.hasOwnProperty(enIndex)) {
-                        flag = obj.enabledButtons[enIndex];
-                        if (this.toolbarButtons.hasOwnProperty(flag)) {
-                            buttons = this.toolbarButtons[flag];
-                            for (var btnIndx in buttons) {
-                                if (buttons.hasOwnProperty(btnIndx)) {
-                                    button = buttons[btnIndx];
-                                    if (button != null) {
-                                        button.set("disabled", false);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (obj.disabledButtons) {
-                for (var disIndex in obj.disabledButtons) {
-                    if (obj.disabledButtons.hasOwnProperty(disIndex)) {
-                        flag = obj.disabledButtons[disIndex];
-                        if (this.toolbarButtons.hasOwnProperty(flag)) {
-                            buttons = this.toolbarButtons[flag];
-                            for (var btnIndx in buttons) {
-                                button = buttons[btnIndx];
-                                if (button != null) {
-                                    button.set("disabled", true);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (obj.buttons) {
-                for (var index in obj.buttons) {
-                    if (obj.buttons.hasOwnProperty(index)) {
-                        button = this._findToolbarButton(index);
-                        if (button != null) {
-                            button.set("disabled", obj.buttons[index] == "disabled");
-                        }
-                    }
-                }
-            }
-        },
-
-        _findToolbarButton: function (id) {
-            var button, buttons;
-            for (var index in this.toolbarButtons) {
-                if (this.toolbarButtons.hasOwnProperty(index)) {
-                    buttons = this.toolbarButtons[index];
-                    for (var btnIndx in buttons) {
-                        if (buttons.hasOwnProperty(btnIndx)) {
-                            button = buttons[btnIndx];
-                            if (button != null) {
-                                if (button.get("id").indexOf(id)) {
-                                    return button;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return null;
-        },
-
-        _findRecordsByParameter: function (grid, parameter, value) {
-            var records = [];
-            var recordSet = grid.widgets.dataTable.getRecordSet();
-            var index = 0;
-            if (grid.widgets.paginator) {
-                index = ((grid.widgets.paginator.getCurrentPage() - 1) * grid.options.pageSize);
-            }
-            for (var i = index, j = recordSet.getLength(); i < j; i++) {
-                if (recordSet.getRecord(i).getData().itemData[parameter].value == value) {
-                    records.push(recordSet.getRecord(i));
-                }
-            }
-            return records;
         }
     });
 })();

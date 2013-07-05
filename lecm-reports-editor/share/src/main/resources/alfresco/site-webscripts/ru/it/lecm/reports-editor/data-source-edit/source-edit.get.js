@@ -7,6 +7,19 @@ function getDataSource(){
     return null;
 }
 
+function createReportDataSource(){
+    var connector = remote.connect("alfresco");
+    var postBody = {
+        reportId: page.url.args.reportId
+    };
+    var json = connector.post("/lecm/reports-editor/create-report-source", jsonUtils.toJSONString(postBody), "application/json");
+    if (json.status == 200) {
+        var source = eval ("(" + json + ")");
+        return source;
+    }
+    return null;
+}
+
 function listSources(){
     var sourcesStr = remote.connect("alfresco").get("/lecm/reports-editor/data-sources");
     if (sourcesStr.status == 200) {
@@ -26,7 +39,11 @@ function isExistInRepo(testSourceCode){
 }
 
 var dataSource = getDataSource();
+if (dataSource.nodeRef) {
+    model.existInRepo = dataSource.name ? isExistInRepo(dataSource.name) : false;
+} else {
+    dataSource = createReportDataSource();
+    model.existInRepo = false;
+}
+
 model.activeSourceId = (dataSource && dataSource.nodeRef) ?  dataSource.nodeRef : null;
-
-model.existInRepo = (dataSource && dataSource.name) ? isExistInRepo(dataSource.name) : false;
-

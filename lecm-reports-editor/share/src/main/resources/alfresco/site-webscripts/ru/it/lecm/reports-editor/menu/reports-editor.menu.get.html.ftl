@@ -8,7 +8,6 @@ selected = args.selected!"reportsList"/>
     <@comp.baseMenu>
         <@comp.baseMenuButton "reportsList" msg('lecm.reports-editor.reports.btn') selected/>
         <@comp.baseMenuButton "reportSettings" msg('lecm.reports-editor.report-info.btn') selected/>
-        <@comp.baseMenuButton "addDataSource" msg('lecm.reports-editor.addSource.btn') selected/>
         <@comp.baseMenuButton "editDataSource" msg('lecm.reports-editor.editSource.btn') selected/>
         <@comp.baseMenuButton "editTemplate" msg('lecm.reports-editor.editTemplate.btn') selected/>
     </@comp.baseMenu>

@@ -32,27 +32,22 @@
 
             var onButtonClick2 = function (e) {
                 window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "reports-editor-source-add?reportId=" + context.reportId;
+                    Alfresco.constants.URL_PAGECONTEXT + "report-settings?reportId=" + context.reportId;
             };
-            this.widgets.addDataSourceBtn = Alfresco.util.createYUIButton(this, "addDataSourceBtn", onButtonClick2, {});
+            this.widgets.reportsSettingsBtn = Alfresco.util.createYUIButton(this, "reportSettingsBtn", onButtonClick2, {});
 
             var onButtonClick3 = function (e) {
                 window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "reports-editor-source-edit?reportId=" + context.reportId;
+                    Alfresco.constants.URL_PAGECONTEXT + "report-source-edit?reportId=" + context.reportId;
             };
             this.widgets.editDataSourceBtn = Alfresco.util.createYUIButton(this, "editDataSourceBtn", onButtonClick3, {});
 
             var onButtonClick4 = function (e) {
                 window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "reports-editor-template-edit?reportId=" + context.reportId;
+                    Alfresco.constants.URL_PAGECONTEXT + "report-template-edit?reportId=" + context.reportId;
             };
             this.widgets.editTemplateBtn = Alfresco.util.createYUIButton(this, "editTemplateBtn", onButtonClick4, {});
 
-            var onButtonClick5 = function (e) {
-                window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "report-settings?reportId=" + context.reportId;
-            };
-            this.widgets.reportsListBtn = Alfresco.util.createYUIButton(this, "reportSettingsBtn", onButtonClick5, {});
         }
     });
 })();

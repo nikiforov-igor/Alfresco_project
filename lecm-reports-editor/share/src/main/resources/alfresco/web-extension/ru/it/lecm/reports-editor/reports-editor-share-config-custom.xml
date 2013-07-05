@@ -343,7 +343,6 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-rpeditor:dataSourceCode"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>

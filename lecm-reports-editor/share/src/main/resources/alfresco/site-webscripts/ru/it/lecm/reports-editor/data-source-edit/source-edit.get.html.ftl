@@ -22,7 +22,36 @@
                         </span>
                     </span>
             </div>
+            <div class="select-source">
+                    <span id="${toolbarId}-selectSource" class="yui-button yui-push-button">
+                        <span class="first-child">
+                            <button type="button"
+                                    title="${msg("label.select-source.btn")}">${msg("label.select-source.btn")}</button>
+                        </span>
+                    </span>
+            </div>
         </@comp.baseToolbar>
+    </div>
+    <div id="selectSourcePanel" class="yui-panel" style="visibility:hidden">
+        <div id="selectSourcePanel-select-head" class="hd">Выбрать</div>
+        <div id="selectSourcePanel-select-body" class="bd">
+            <div id="selectSourcePanel-select-content">
+                <div id="selectSourcePanel-content" >
+                    <div id="selectSourcePanel-form" />
+                </div>
+                <div class="bdft">
+                <#-- Кнопка Очистки -->
+                    <div class="yui-u align-right right">
+                            <span id="selectSourcePanel-close-button" class="yui-button yui-push-button search-icon">
+                                <span class="first-child">
+                                    <button type="button">${msg('button.close')}</button>
+                                </span>
+                            </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
     <!-- Toolbar End-->
 <div class="reports">
