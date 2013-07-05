@@ -7,13 +7,22 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.contractors.api.Contractors;
 
-import javax.swing.text.html.parser.ContentModel;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import org.json.JSONArray;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 
 public class ContractorsBean extends BaseBean implements Contractors {
+
+	private DictionaryBean dictionaryService;
+
+	public void setDictionaryService(DictionaryBean dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
 
     @Override
     public NodeRef getServiceRootFolder() {
@@ -32,7 +41,7 @@ public class ContractorsBean extends BaseBean implements Contractors {
         Boolean isPrimaryAssigned = false;
 
         for (ChildAssociationRef representativesAssoc : representativesAssocs) {
-            
+
             NodeRef representative = representativesAssoc.getChildRef();
 
             Boolean isPrimary = (Boolean) nodeService.getProperty(representative, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "link-to-representative-association-is-primary"));
@@ -112,4 +121,19 @@ public class ContractorsBean extends BaseBean implements Contractors {
 
         return representativesList;
     }
+
+	@Override
+	public JSONArray getBusyRepresentatives() {
+		NodeRef representativeDictionary = dictionaryService.getDictionaryByName("Контрагенты Представители");
+		List<ChildAssociationRef> dicValues = nodeService.getChildAssocs(representativeDictionary);
+		Set<String> representatives = new HashSet<String>();
+		for (ChildAssociationRef dicValue : dicValues) {
+			NodeRef representative = dicValue.getChildRef();
+			NodeRef link = findNodeByAssociationRef(representative, ASSOC_LINK_TO_REPRESENTATIVE, TYPE_REPRESENTATIVE_AND_CONTRACTOR, ASSOCIATION_TYPE.SOURCE);
+			if (link != null) {
+				representatives.add(representative.toString());
+			}
+		}
+		return new JSONArray(representatives);
+	}
 }

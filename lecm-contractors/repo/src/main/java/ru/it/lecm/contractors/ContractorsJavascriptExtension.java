@@ -10,6 +10,7 @@ import ru.it.lecm.contractors.api.Contractors;
 
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
 
 public class ContractorsJavascriptExtension extends BaseScopableProcessorExtension {
 
@@ -68,4 +69,8 @@ public class ContractorsJavascriptExtension extends BaseScopableProcessorExtensi
 
         return contractors.getRepresentatives(targetContractor);
     }
+
+	public JSONArray getBusyRepresentatives() {
+		return contractors.getBusyRepresentatives();
+	}
 }

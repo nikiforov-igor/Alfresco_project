@@ -109,37 +109,25 @@
             });
         };
 
-        var _showAddRepresentativeForm = function() {
-
-            var url = "lecm/components/form" +
-                    "?itemKind={itemKind}" +
-                    "&itemId={itemId}" +
-                  //"&formId={formId}" +
-                    "&destination={destination}" +
-                    "&mode={mode}" +
-                    "&submitType={submitType}" +
-                    "&showCancelButton=true";
-
-            var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
-                itemKind: "type",
-                itemId: __itemType__,
-                //formId: "addNewRepresentative",
-                destination: "${contractorRef}",
-                mode: "create",
-                submitType: "json"
-            });
-
-            // Спасаем "тонущие" всплывающие сообщения.
-            Alfresco.util.PopupManager.zIndex = 9000;
-
+		var _showAddRepresentativeDialog = function(response) {
             // Создание формы добавления представителя.
-            var addRepresentativeForm = new Alfresco.module.SimpleDialog("${fieldHtmlId}-add-representative-form");
-
-            var isPrimaryCheckboxChecked;
+            var isPrimaryCheckboxChecked,
+				addRepresentativeForm = new Alfresco.module.SimpleDialog("${fieldHtmlId}-add-representative-form"),
+				templateRequestParams = {
+					itemKind: "type",
+					itemId: __itemType__,
+					//formId: "addNewRepresentative",
+					destination: "${contractorRef}",
+					mode: "create",
+					submitType: "json",
+					ignoreNodes: response.json.join(),
+					showCancelButton: true
+				};
 
             addRepresentativeForm.setOptions({
                 width: "50em",
-                templateUrl: templateUrl,
+                templateUrl: "components/form",
+				templateRequestParams: templateRequestParams,
                 destroyOnHide: true,
                 doBeforeFormSubmit: {
                     fn: function() {
@@ -197,6 +185,31 @@
             });
 
             addRepresentativeForm.show();
+		};
+
+        var _showAddRepresentativeForm = function() {
+			debugger;
+            // Спасаем "тонущие" всплывающие сообщения.
+            Alfresco.util.PopupManager.zIndex = 9000;
+
+			//дергаем сервис который получает список представителей, которые связаны с контрагентом
+			var that = this;
+			Alfresco.util.Ajax.request({
+				method: "GET",
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/representatives/busy",
+				responseContentType: "application/json",
+				successCallback: {
+					fn: _showAddRepresentativeDialog,
+					scope: this
+				},
+				failureCallback: {
+					fn: function () {
+						Alfresco.util.PopupManager.displayMessage({
+							text: "Не удалось получить список представителей, уже привязанных к контрагенту."
+						});
+					}
+				}
+			});
         };
 
         var _initializeAddRepresentativeButton = function() {
