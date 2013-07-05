@@ -2101,7 +2101,8 @@ span.person a {
 	padding-left: 20px;
     background: url(../../components/images/filetypes/generic-user-16.png) no-repeat 0 2px;
 }
-span.person a h3 {
+span.person a h3,
+span.person a div.description:empty {
     display: inline;
 }
 
