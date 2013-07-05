@@ -188,7 +188,6 @@
 		};
 
         var _showAddRepresentativeForm = function() {
-			debugger;
             // Спасаем "тонущие" всплывающие сообщения.
             Alfresco.util.PopupManager.zIndex = 9000;
 

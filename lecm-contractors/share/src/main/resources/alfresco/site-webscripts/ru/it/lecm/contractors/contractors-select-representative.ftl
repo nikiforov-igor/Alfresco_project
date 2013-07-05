@@ -90,41 +90,24 @@
 
             YAHOO.Bubbling.on("${field.control.params.updateOnAction}", this.onUpdateRepresentativesList, this);
 
-            this._showAddRepresentativeForm = function() {
-
-                if( globCurrentContractor === null ) {
-                    window.alert( "Необходимо выбрать контрагента" );
-                    return false;
-                }
-
-                var url = "lecm/components/form" +
-                        "?itemKind={itemKind}" +
-                        "&itemId={itemId}" +
-                        "&destination={destination}" +
-                        "&mode={mode}" +
-                        "&submitType={submitType}" +
-                        "&showCancelButton={showCancelButton}",
-
-                    templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
-                        itemKind: "type",
-                        itemId: "lecm-contractor:link-representative-and-contractor",
-                        destination: globCurrentContractor,
-                        mode: "create",
-                        submitType: "json",
-                        showCancelButton: "true"
-                    });
-
-                // Спасаем "тонущие" всплывающие сообщения.
-                Alfresco.util.PopupManager.zIndex = 9000;
-
-                // Создание формы добавления представителя.
-                var addRepresentativeForm = new Alfresco.module.SimpleDialog("${fieldHtmlId}-add-representative-form");
-
-                var isPrimaryCheckboxChecked;
+			this._showAddRepresentativeDialog = function(response) {
+                var isPrimaryCheckboxChecked,
+					templateRequestParams = {
+						itemKind: "type",
+						itemId: "lecm-contractor:link-representative-and-contractor",
+						destination: globCurrentContractor,
+						mode: "create",
+						submitType: "json",
+						ignoreNodes: response.json.join(),
+						showCancelButton: "true"
+					},
+					// Создание формы добавления представителя.
+					addRepresentativeForm = new Alfresco.module.SimpleDialog("${fieldHtmlId}-add-representative-form");
 
                 addRepresentativeForm.setOptions({
                     width: "50em",
-                    templateUrl: templateUrl,
+                    templateUrl: "components/form",
+					templateRequestParams: templateRequestParams,
                     destroyOnHide: true,
                     doBeforeFormSubmit: {
                         fn: function() {
@@ -183,9 +166,37 @@
                 });
 
                 addRepresentativeForm.show();
+			};
 
+            this._showAddRepresentativeForm = function() {
+                if( globCurrentContractor === null ) {
+                    window.alert( "Необходимо выбрать контрагента" );
+                    return false;
+                }
+
+                // Спасаем "тонущие" всплывающие сообщения.
+                Alfresco.util.PopupManager.zIndex = 9000;
+
+				//дергаем сервис который получает список представителей, которые связаны с контрагентом
+				var that = this;
+				Alfresco.util.Ajax.request({
+					method: "GET",
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/representatives/busy",
+					responseContentType: "application/json",
+					successCallback: {
+						fn: this._showAddRepresentativeDialog,
+						scope: this
+					},
+					failureCallback: {
+						fn: function () {
+							Alfresco.util.PopupManager.displayMessage({
+								text: "Не удалось получить список представителей, уже привязанных к контрагенту."
+							});
+						}
+					}
+				});
                 return true;
-            };
+			};
 
             this.previousSelected = null;
             this._firstSelected = null;
