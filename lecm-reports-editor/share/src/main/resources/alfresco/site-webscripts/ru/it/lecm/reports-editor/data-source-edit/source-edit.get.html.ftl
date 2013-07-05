@@ -2,7 +2,6 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 <#assign id = args.htmlid>
 <#if page.url.args.reportId??>
-<div class="reports">
     <#assign toolbarId = "${id}-columns-toolbar"/>
     <!-- Toolbar Start-->
     <div id="${toolbarId}">
@@ -26,6 +25,7 @@
         </@comp.baseToolbar>
     </div>
     <!-- Toolbar End-->
+<div class="reports">
     <!-- Grid Start -->
     <div class="yui-t1" id="${id}-re-reports-grid">
         <div id="yui-main-2">
@@ -79,6 +79,7 @@
             </div>
         </div>
     </div>
+</div>
     <!-- Grid End -->
     <script type="text/javascript">
         function init() {
@@ -90,7 +91,6 @@
 
         YAHOO.util.Event.onDOMReady(init);
     </script>
-</div>
 <#else>
 <div>${msg("label.unavaiable-page")}</div>
 </#if>

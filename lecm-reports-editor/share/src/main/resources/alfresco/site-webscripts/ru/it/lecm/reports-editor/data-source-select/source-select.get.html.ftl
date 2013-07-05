@@ -28,6 +28,7 @@
             </div>
             <!-- Toolbar End-->
             <#assign columnsGridId = "${id}-columns-grid">
+            <div class="reports">
             <div id="${columnsGridId}" class="columns-right-grid">
                 <div id="${columnsGridId}-alf-content">
                     <@grid.datagrid id=columnsGridId showViewForm=false showArchiveCheckBox=false>
@@ -107,6 +108,7 @@
                     </@grid.datagrid>
                 </div>
             </div>
+            </div>
         </div>
     </div>
     <div id="alf-filters">
@@ -127,6 +129,7 @@
     <!-- Toolbar End-->
     <#assign sourceGridId ="${id}-sources-grid">
     <!-- Grid Start-->
+        <div class="reports">
         <div id="${sourceGridId}" class="sources-left-grid">
             <@grid.datagrid id=sourceGridId showViewForm=false showArchiveCheckBox=false>
                 <script type="text/javascript">//<![CDATA[
@@ -177,7 +180,8 @@
             //]]></script>
             </@grid.datagrid>
         </div>
-    <!-- Grid End-->
+        </div>
+         <!-- Grid End-->
     </div>
     <script type="text/javascript">//<![CDATA[
 
