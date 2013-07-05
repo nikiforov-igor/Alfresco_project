@@ -3,19 +3,15 @@
 }
 
 #lecm-menu #menu-buttons #menu-buttons-reportSettingsBtn span.first-child {
-    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png') no-repeat scroll 4px 4px;
-}
-
-#lecm-menu #menu-buttons #menu-buttons-addDataSourceBtn span.first-child {
-    background: url('/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png') no-repeat 4px 4px;
+    background: url('/share/res/images/lecm-reports-editor/report-settings-32.png') no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-editDataSourceBtn span.first-child {
-    background: url("/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png") no-repeat scroll 4px 4px;
+    background: url("/share/res/images/lecm-reports-editor/data-source-edit-32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-editTemplateBtn span.first-child {
-    background: url("/share/res/images/lecm-orgstructure/icons_alfresco_top-menu-24.png") no-repeat scroll 4px 4px;
+    background: url("/share/res/images/lecm-reports-editor/template-edit-32.png") no-repeat scroll 4px 4px;
 }
 
 #lecm-menu #menu-buttons #menu-buttons-templatesListBtn span.first-child {
