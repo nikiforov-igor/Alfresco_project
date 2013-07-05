@@ -24,7 +24,9 @@
 							var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);
 							var finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";
 							var approvalListRef = execution.getVariable("approvalListRef");
-							approval.logFinalDecision(approvalListRef, finalDecision);
+							if (approvalListRef != null) {
+							    approval.logFinalDecision(approvalListRef, finalDecision);
+							}
 						}
                         ]]></activiti:string>
                 </activiti:field>
