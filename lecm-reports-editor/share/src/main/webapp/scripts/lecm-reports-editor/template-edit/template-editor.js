@@ -15,16 +15,26 @@
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
         YAHOO.Bubbling.on("refreshTemplate", this._onRefreshTemplate, this);
         YAHOO.Bubbling.on("copyTemplateToReport", this._onCopyToReport, this);
-        YAHOO.Bubbling.on("copyTemplateToRepository", this._onCopyToRepository, this);
         return this;
     };
 
     YAHOO.extend(LogicECM.module.ReportsEditor.TemplateEditor, Alfresco.component.Base, {
         reportId: null,
         templateId: null,
+
         options: {},
+
         defaultFilter: {},
+
         mayCopyToRepository: false,
+
+        toolbarButtons: {},
+
+        isNewTemplate: false,
+
+        markAsNewTemplate: function (isNew) {
+            this.isNewTemplate = isNew;
+        },
 
         setReportId: function (reportId) {
             this.reportId = reportId;
@@ -43,6 +53,90 @@
         onInitDataGrid: function () {
             //начальная загрузка грида
             this._populateTemplateList(this.widgets.types.value);
+        },
+
+        showCreateDialog: function (meta, generateReport) {
+            if (generateReport) {
+                Alfresco.util.Ajax.request(
+                    {
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/reports-editor/generateTemplate",
+                        dataObj: {
+                            reportId: this.reportId
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                this._showCreateForm(meta, response);
+                            },
+                            scope: this
+                        },
+                        failureMessage: "message.failure",
+                        execScripts: true
+                    });
+            } else {
+                this._showCreateForm(meta);
+            }
+        },
+
+        _showCreateForm: function (meta, response) {
+            var doBeforeDialogShow = function (p_form, p_dialog) {
+                var defaultMsg = this.msg("label.create-template.title");
+                Alfresco.util.populateHTML(
+                    [ p_dialog.id + "-form-container_h", defaultMsg ]
+                );
+
+                Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
+
+                if (response) {
+                    // обновим форму данными шаблона
+                }
+            };
+
+            var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
+                {
+                    itemKind: "type",
+                    itemId: meta.itemType,
+                    destination: meta.nodeRef,
+                    mode: "create",
+                    submitType: "json"
+                });
+
+            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+            createDetails.setOptions(
+                {
+                    width: "50em",
+                    templateUrl: templateUrl,
+                    actionUrl: null,
+                    destroyOnHide: true,
+                    doBeforeDialogShow: {
+                        fn: doBeforeDialogShow,
+                        scope: this
+                    },
+                    onSuccess: {
+                        fn: function DataGrid_onActionCreate_success(response) {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text: this.msg("message.save.success")
+                                });
+
+                            YAHOO.Bubbling.fire("refreshTemplate",
+                                {
+                                    newTemplateId: response.json.persistedObject
+                                });
+
+                            this.toolbarButtons.newTemplateSaveButton.set("disabled", false);
+                        },
+                        scope: this
+                    },
+                    onFailure: {
+                        fn: function DataGrid_onActionCreate_failure(response) {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text: this.msg("message.save.failure")
+                                });
+                        },
+                        scope: this
+                    }
+                }).show();
         },
 
         _onRefreshTemplate: function (layer, args) {
@@ -92,6 +186,11 @@
                 this.widgets.types.set("label", this.defaultFilter.name);
                 this.widgets.types.value = this.defaultFilter.nodeRef;
             }
+
+            // инициализация кнопок тулбара
+            this._initToolbarButtons();
+
+            Dom.setStyle(this.id + "-toolbar-body", "visibility", "visible");
         },
 
         _onTypeFilterChanged: function (p_sType, p_aArgs) {
@@ -121,29 +220,6 @@
             });
         },
 
-        _onCopyToRepository: function (layer, args) {
-            if (this.templateId) {
-                this.copyTemplate(this.templateId, this.reportId, LogicECM.module.ReportsEditor.SETTINGS.templatesContainer);
-            } else {
-                Alfresco.util.PopupManager.displayMessage({
-                    text: "Нет активного шаблона"
-                });
-            }
-        },
-
-        _onCopyToReport: function (layer, args) {
-            var obj = args[1];
-            if ((obj !== null) && (obj.templateId !== null)) {
-                if (obj.templateId != this.templateId) {
-                    this.copyTemplate(obj.templateId, LogicECM.module.ReportsEditor.SETTINGS.templatesContainer, this.reportId);
-                } else {
-                    Alfresco.util.PopupManager.displayMessage({
-                        text: "Данный шаблон уже выбран!"
-                    });
-                }
-            }
-        },
-
         copyTemplate: function (templateId, from, to) {
             var copyRefs = [];
             copyRefs.push(templateId);
@@ -168,11 +244,7 @@
                                 YAHOO.Bubbling.fire("refreshTemplate", {
                                     newTemplateId: templateId
                                 });
-                                YAHOO.Bubbling.fire("refreshButtonState", {
-                                    buttons: {
-                                        "newTemplateSaveButton": "disabled"
-                                    }
-                                });
+                                this.toolbarButtons.newTemplateSaveButton.set("disabled", true);
                             }
                         },
                         scope: this
@@ -188,6 +260,55 @@
                     requestContentType: "application/json",
                     responseContentType: "application/json"
                 });
+        },
+
+        _initToolbarButtons: function () {
+            this.toolbarButtons.newTemplateButton = Alfresco.util.createYUIButton(this, 'newTemplateButton', this._onNewTemplate,
+                {
+                    value: 'create'
+                }, this.id + "-toolbar-newTemplateButton");
+
+            this.toolbarButtons.newTemplateFromSourceButton = Alfresco.util.createYUIButton(this, 'newTemplateFromSourceButton', this._onNewTemplateFromSource,
+                {
+                    value: 'create'
+                }, this.id + "-toolbar-newTemplateFromSourceButton");
+
+            this.toolbarButtons.newTemplateSaveButton = Alfresco.util.createYUIButton(this, 'newTemplateSaveButton', this._onCopyToRepository,
+                {
+                    disabled: !this.templateId || !this.isNewTemplate
+                }, this.id + "-toolbar-newTemplateSaveButton");
+        },
+
+        _onNewTemplate: function () {
+            this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId}, false);
+        },
+
+        _onNewTemplateFromSource: function () {
+            alert("Не реализовано");
+            //this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId}, true);
+        },
+
+        _onCopyToRepository: function (layer, args) {
+            if (this.templateId) {
+                this.copyTemplate(this.templateId, this.reportId, LogicECM.module.ReportsEditor.SETTINGS.templatesContainer);
+            } else {
+                Alfresco.util.PopupManager.displayMessage({
+                    text: "Нет активного шаблона"
+                });
+            }
+        },
+
+        _onCopyToReport: function (layer, args) {
+            var obj = args[1];
+            if ((obj !== null) && (obj.templateId !== null)) {
+                if (obj.templateId != this.templateId) {
+                    this.copyTemplate(obj.templateId, LogicECM.module.ReportsEditor.SETTINGS.templatesContainer, this.reportId);
+                } else {
+                    Alfresco.util.PopupManager.displayMessage({
+                        text: "Данный шаблон уже выбран!"
+                    });
+                }
+            }
         }
     });
 

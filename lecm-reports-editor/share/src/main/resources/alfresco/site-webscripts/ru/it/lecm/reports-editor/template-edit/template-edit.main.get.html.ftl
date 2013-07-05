@@ -1,8 +1,35 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
-<#assign id = args.htmlid>
+<#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
+<#assign id = args.htmlid>
 <#if page.url.args.reportId??>
-<div class="reports">
+<div id="${id}-toolbar">
+    <@comp.baseToolbar "${id}-toolbar" true false false>
+        <div class="new-row">
+            <span id="${id}-toolbar-newTemplateButton" class="yui-button yui-push-button">
+                   <span class="first-child">
+                      <button type="button" title="Новый">Новый</button>
+                   </span>
+            </span>
+        </div>
+        <div class="new-row">
+            <span id="${id}-toolbar-newTemplateFromSourceButton" class="yui-button yui-push-button">
+                   <span class="first-child">
+                      <button type="button" title="Новый из набора данных">Новый из набора данных</button>
+                   </span>
+            </span>
+        </div>
+        <div class="save-row">
+            <span id="${id}-toolbar-newTemplateSaveButton" class="yui-button yui-push-button">
+                   <span class="first-child">
+                      <button type="button" title="Сохранить как...">Сохранить как...</button>
+                   </span>
+            </span>
+        </div>
+    </div>
+    </@comp.baseToolbar>
+</div>
+<div id="${id}-form" class="reports">
     <div class="title">
         <h3>${msg("label.current-template")}</h3>
     </div>
@@ -36,9 +63,9 @@
                 </div>
             </td>
             <td>
-                <div id="re-templates-grid">
+                <div id="${id}-templates-grid">
                         <div class="yui-b" id="alf-content" style="margin-left: 0;">
-                            <@grid.datagrid id="re-templates-grid" showViewForm=false>
+                            <@grid.datagrid id="${id}-templates-grid" showViewForm=false>
                                 <script type="text/javascript">//<![CDATA[
 
                                 LogicECM.module.ReportsEditor.TemplatesGrid = function (containerId) {
@@ -57,8 +84,9 @@
 
                                 }, true);
 
-                                function createDatagrid() {
-                                    var datagrid = new LogicECM.module.ReportsEditor.TemplatesGrid('re-templates-grid').setOptions(
+
+                                function init() {
+                                    var datagrid = new LogicECM.module.ReportsEditor.TemplatesGrid("${id}-templates-grid").setOptions(
                                             {
                                                 usePagination:true,
                                                 showExtendSearchBlock:false,
@@ -97,10 +125,6 @@
                                     });
                                 }
 
-                                function init() {
-                                    createDatagrid();
-                                }
-
                                 YAHOO.util.Event.onDOMReady(init);
                                 //]]></script>
                             </@grid.datagrid>
@@ -117,6 +141,7 @@
             reportsEditor.setReportId("${page.url.args.reportId}");
             reportsEditor.setTemplateId("${activeTemplateId!""}");
             reportsEditor.setMessages(${messages});
+            reportsEditor.markAsNewTemplate(!${existInRepo?string});
             reportsEditor.setDefaultFilter({
                 name:"${defaultName!""}",
                 nodeRef: "${defaultRef!""}"

@@ -10,11 +10,7 @@
                 <title>page.lecm.reports-editor.edit-template</title>
             </properties>
         </component>
-        <!-- Toolbar -->
-        <component>
-            <region-id>toolbar</region-id>
-            <url>/lecm/reports-editor/template-edit-toolbar</url>
-        </component>
+        <!-- Content = Toolbar + Form -->
         <component>
             <region-id>content</region-id>
             <url>/lecm/reports-editor/template-edit-main</url>
@@ -27,7 +23,7 @@
                 <selected>editTemplate</selected>
             </properties>
         </component>
-        <!-- Report Editor Toolbar -->
+        <!-- Report Editor Navigation Toolbar -->
         <component>
             <region-id>reports-editor-toolbar</region-id>
             <url>/lecm/reports-editor-toolbar</url>
