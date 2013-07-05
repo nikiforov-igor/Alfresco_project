@@ -66,7 +66,9 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
     YAHOO.lang.augmentObject(LogicECM.module.Dictionary.Toolbar.prototype,
         {
 	        options: {
-		        dictionaryName: null
+		        dictionaryName: null,
+		        searchButtonsType: 'defaultActive',
+		        newRowButtonType: 'defaultActive'
 	        },
 
             /**
@@ -82,7 +84,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
             _initButtons: function () {
                 this.toolbarButtons[this.options.newRowButtonType] = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow);
 
-                this.toolbarButtons[this.options.searchButtonsType].searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearch);
+                this.toolbarButtons[this.options.searchButtonsType].searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick);
                 this.toolbarButtons["defaultActive"].importCsvButton = Alfresco.util.createYUIButton(this, "importCsvButton", function () {
                     });
 
