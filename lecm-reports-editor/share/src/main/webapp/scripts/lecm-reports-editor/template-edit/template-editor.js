@@ -32,6 +32,16 @@
 
         isNewTemplate: false,
 
+        isCopy: false,
+
+        formMode: "create",
+
+        itemKind: "type",
+
+        items: [],
+
+        formId: "",
+
         markAsNewTemplate: function (isNew) {
             this.isNewTemplate = isNew;
         },
@@ -89,15 +99,17 @@
                 if (response) {
                     // обновим форму данными шаблона
                 }
+                this.items = p_dialog.form.validations;
             };
 
             var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
                 {
-                    itemKind: "type",
+                    itemKind: this.itemKind,
                     itemId: meta.itemType,
                     destination: meta.nodeRef,
-                    mode: "create",
-                    submitType: "json"
+                    mode: this.formMode,
+                    submitType: "json",
+                    formId: this.formId
                 });
 
             var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
@@ -109,6 +121,33 @@
                     destroyOnHide: true,
                     doBeforeDialogShow: {
                         fn: doBeforeDialogShow,
+                        scope: this
+                    },
+                    doBeforeFormSubmit: {
+                        fn: function InstantAbsence_doBeforeSubmit() {
+                            if (this.isCopy) {
+                                var form = Dom.get(this.id + "-createDetails-form");
+                                form.setAttribute("action", "/share/proxy/alfresco/api/type/lecm-rpeditor%3areportTemplate/formprocessor");
+                                var input = document.createElement('input');
+                                input.setAttribute("id", this.id + "-createDetails-form-destination");
+                                input.setAttribute("type", "hidden");
+                                input.setAttribute("name", "alf_destination");
+                                input.setAttribute("value", LogicECM.module.ReportsEditor.SETTINGS.templatesContainer);
+                                form.appendChild(input);
+                                var items = this.items;
+                                for (var index in items) {
+                                    var htmlItem = Dom.get(items[index].fieldId + "-added");
+                                    if (htmlItem == null) {
+                                        htmlItem = Dom.get(items[index].fieldId + "-cntrl-added");
+                                    }
+                                    var value = Dom.get(items[index].fieldId).value;
+                                    if (htmlItem) {
+                                        htmlItem.setAttribute("value", value);
+                                    }
+                                }
+                            }
+
+                        },
                         scope: this
                     },
                     onSuccess: {
@@ -123,7 +162,7 @@
                                     newTemplateId: response.json.persistedObject
                                 });
 
-                            this.toolbarButtons.newTemplateSaveButton.set("disabled", false);
+                            this.toolbarButtons.newTemplateSaveButton.set("disabled", this.isCopy);
                         },
                         scope: this
                     },
@@ -280,6 +319,10 @@
         },
 
         _onNewTemplate: function () {
+            this.isCopy = false;
+            this.formMode = "create";
+            this.itemKind = "type";
+            this.formId = "";
             this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId}, false);
         },
 
@@ -289,13 +332,11 @@
         },
 
         _onCopyToRepository: function (layer, args) {
-            if (this.templateId) {
-                this.copyTemplate(this.templateId, this.reportId, LogicECM.module.ReportsEditor.SETTINGS.templatesContainer);
-            } else {
-                Alfresco.util.PopupManager.displayMessage({
-                    text: "Нет активного шаблона"
-                });
-            }
+            this.isCopy = true;
+            this.formMode = "edit";
+            this.itemKind = "node";
+            this.formId = "copy-to-repo";
+            this.showCreateDialog({itemType: this.templateId, nodeRef: this.reportId}, false);
         },
 
         _onCopyToReport: function (layer, args) {
