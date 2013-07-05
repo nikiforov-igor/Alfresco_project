@@ -149,7 +149,7 @@ function createDatagrid(attributeForShow) {
 			{
                 bubblingLabel:"${bubblingLabel}",
 				usePagination:true,
-				showExtendSearchBlock:false,
+				showExtendSearchBlock:true,
                 actions: [
                     {
                         type:"datagrid-action-link-${bubblingLabel}",

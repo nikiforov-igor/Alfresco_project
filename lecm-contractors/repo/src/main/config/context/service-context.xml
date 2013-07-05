@@ -164,4 +164,7 @@
             </map>
         </constructor-arg>
     </bean>
+
+	<bean id="contractorsOnCreateAssocsPolicy" class="ru.it.lecm.contractors.policies.ContractorsOnCreateAssocsPolicy"
+	      init-method="init" parent="logicEcmAssociationPolicy"/>
 </beans>

@@ -155,6 +155,16 @@
                     <type>d:text</type>
                 </property>
 
+	            <property name="lecm-contractor:contractor-to-specialization-association-ref">
+		            <title>Specialization Ref</title>
+		            <type>d:text</type>
+		            <index enabled="true">
+			            <atomic>true</atomic>
+			            <stored>false</stored>
+			            <tokenised>both</tokenised>
+		            </index>
+	            </property>
+
             </properties>
 
             <associations>

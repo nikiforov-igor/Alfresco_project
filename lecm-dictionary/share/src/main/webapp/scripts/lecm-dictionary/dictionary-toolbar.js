@@ -85,6 +85,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 this.toolbarButtons[this.options.newRowButtonType] = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow);
 
                 this.toolbarButtons[this.options.searchButtonsType].searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick);
+	            this.toolbarButtons[this.options.searchButtonsType].exSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick);
                 this.toolbarButtons["defaultActive"].importCsvButton = Alfresco.util.createYUIButton(this, "importCsvButton", function () {
                     });
 

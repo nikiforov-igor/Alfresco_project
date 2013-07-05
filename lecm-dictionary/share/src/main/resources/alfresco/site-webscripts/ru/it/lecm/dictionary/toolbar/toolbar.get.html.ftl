@@ -10,7 +10,7 @@ YAHOO.util.Event.onDOMReady(init);
 //]]></script>
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
-<@comp.baseToolbar id true true false>
+<@comp.baseToolbar id true true true>
     <div class="create-row">
             <span id="${id}-newRowButton" class="yui-button yui-push-button">
                 <span class="first-child">
