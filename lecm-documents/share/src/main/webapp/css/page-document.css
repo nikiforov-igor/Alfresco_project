@@ -10,6 +10,11 @@
     padding-top: 20px;
 }
 
+#custom-region div.metadata-form div.lecm-dashlet-actions + div {
+    clear: both;
+    overflow-x: auto;
+}
+
 .yui-gc .yui-u {
     margin-left: 0;
     width: 25%;

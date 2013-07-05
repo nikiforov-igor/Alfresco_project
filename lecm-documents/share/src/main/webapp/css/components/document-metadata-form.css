@@ -13,6 +13,7 @@
 .yui-skin-lecmTheme div.metadata-form div.form-fields,
 .yui-skin-lecmTheme div.metadata-form div.form-fields > div.set {
     width: 70em;
+    padding-right: 0;
 }
 .yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-label,
 .yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-value {
