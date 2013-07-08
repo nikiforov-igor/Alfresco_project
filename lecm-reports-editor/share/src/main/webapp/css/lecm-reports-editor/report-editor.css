@@ -69,6 +69,10 @@ report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
     background-image: url('/share/res/components/images/plus-16.png');
 }
 
+#bd #lecm-content-main div[id*="reports-editor"] .reports {
+    margin: 5px;
+}
+
 #bd #lecm-content-main div[id*="reports-editor-toolbar"], #bd #lecm-content-main div[id*="template-edit"], #bd #lecm-content-main div[id*="source-edit"]{
     margin:0;
 }
@@ -77,12 +81,24 @@ report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
     float:right;
 }
 
-#bd #lecm-content-main div[id*="reports-editor"] .reports {
-    margin: 5px;
-}
-
 div[id*="reports-editor-navigation-toolbar"] .toolbar
 {
     background-color: #F9F9F9;
     border-bottom: 0px solid #E3E3E3;
+}
+
+.select-columns-toolbar {
+    margin-left: -2%;
+    padding-top: 0.5em;
+    margin-right: 2%;
+}
+
+#yui-main div.datalist-toolbar div.header-bar div.select-row span.first-child {
+    background: url('/share/res/components/images/add-icon-16.png') no-repeat 12px 4px;
+    padding-left: 24px;
+}
+
+#yui-main div.datalist-toolbar div.header-bar div.select-source span.first-child {
+    background: url('/share/res/components/images/select-invert-16.png') no-repeat 12px 4px;
+    padding-left: 24px;
 }

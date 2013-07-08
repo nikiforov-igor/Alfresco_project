@@ -6,7 +6,7 @@
         <div id="alf-content">
             <#assign toolbarId = "${id}-columns-toolbar"/>
             <!-- Toolbar Start-->
-            <div id="${toolbarId}">
+            <div id="${toolbarId}" class="select-columns-toolbar">
             <@comp.baseToolbar toolbarId true false false>
                 <div class="select-row">
                     <span id="${toolbarId}-selectColumnsBtn" class="yui-button yui-push-button">
