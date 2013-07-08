@@ -51,23 +51,6 @@
                                                     var code = rowData.itemData["prop_lecm-rpeditor_dataColumnCode"].value;
                                                     return !inArray(code, this.activeSourceColumns);
                                                 }
-                                            },
-                                            {
-                                                type: "datagrid-action-link-sourceColumns",
-                                                id: "onActionRemove",
-                                                permission: "delete",
-                                                label: "${msg("actions.remove")}",
-                                                evaluator: function (rowData) {
-                                                    // удалить можно только те записи, которые есть в списке выбранных
-                                                    var inArray = function(value, array) {
-                                                        for (var i = 0; i < array.length; i++) {
-                                                            if (array[i].nodeRef == value) return true;
-                                                        }
-                                                        return false;
-                                                    };
-
-                                                    return inArray(rowData.nodeRef, this.activeSourceColumns);
-                                                }
                                             }
                                         ],
                                         bubblingLabel: "sourceColumns",
@@ -101,6 +84,8 @@
     </div>
     <div id="alf-filters" style="width:40%">
     <#assign sourceGridId ="${id}-sources-grid">
+    <#assign aDateTime = .now>
+    <#assign sourceListLabel ="sourcesList" + aDateTime?iso_utc>
     <!-- Grid Start-->
         <div class="reports">
         <div id="${sourceGridId}" class="sources-left-grid">
@@ -117,17 +102,13 @@
                                     pageSize:10,
                                     actions: [
                                         {
-                                            type: "datagrid-action-link-sourcesList",
+                                            type: "datagrid-action-link-${sourceListLabel}",
                                             id: "onActionSelect",
                                             permission: "edit",
-                                            label: "${msg("actions.select")}",
-                                            evaluator: function (rowData){
-                                                var itemData = rowData.itemData;
-                                                return !itemData.selected || itemData.selected == false;
-                                            }
+                                            label: "${msg("actions.select")}"
                                         }
                                     ],
-                                    bubblingLabel: "sourcesList",
+                                    bubblingLabel: "${sourceListLabel}",
                                     showCheckboxColumn: false
                                 }).setMessages(${messages});
 
@@ -137,7 +118,7 @@
                                     itemType: "lecm-rpeditor:reportDataSource",
                                     nodeRef: LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer
                                 },
-                                bubblingLabel: "sourcesList"
+                                bubblingLabel: "${sourceListLabel}"
                             });
                         });
                     }

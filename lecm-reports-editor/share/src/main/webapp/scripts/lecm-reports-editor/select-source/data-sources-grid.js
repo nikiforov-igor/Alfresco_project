@@ -17,7 +17,7 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
 
     onRenderEvent: function (){
         YAHOO.Bubbling.fire("GridRendered");
-        if (this._hasEventInterest("sourcesList")) {
+        if (this._hasEventInterest(this.options.bubblingLabel)) {
             for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++) {
                 this.afterDataGridUpdate[i].call(this);
             }
@@ -93,6 +93,7 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
     },
 
     onEventSelectRow: function DataGrid_onEventSelectRow(oArgs) {
+        this.widgets.dataTable.onEventSelectRow(oArgs);
         // Номер строки в таблице
         var numSelectItem = this.widgets.dataTable.getTrIndex(oArgs.target);
         // Выбранный элемент

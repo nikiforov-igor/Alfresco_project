@@ -31,7 +31,7 @@ function listSources(){
 function isExistInRepo(testSourceCode){
     var sourcesList = listSources();
     for (var index in sourcesList) {
-        if (sourcesList[index].name == testSourceCode){
+        if (sourcesList[index].code == testSourceCode){
             return true;
         }
     }
@@ -40,7 +40,7 @@ function isExistInRepo(testSourceCode){
 
 var dataSource = getDataSource();
 if (dataSource.nodeRef) {
-    model.existInRepo = dataSource.name ? isExistInRepo(dataSource.name) : false;
+    model.existInRepo = dataSource.code ? isExistInRepo(dataSource.code) : false;
 } else {
     dataSource = createReportDataSource();
     model.existInRepo = false;

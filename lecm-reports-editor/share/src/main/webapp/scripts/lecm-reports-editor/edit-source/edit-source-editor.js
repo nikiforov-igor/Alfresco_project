@@ -13,11 +13,14 @@
 
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
         YAHOO.Bubbling.on("updateReportSourceColumns", this._onUpdateSourceColumns, this);
+        YAHOO.Bubbling.on("selectedItemsChanged", this._onSelectedItemsChanged, this);
         return this;
     };
 
     YAHOO.extend(LogicECM.module.ReportsEditor.EditSourceEditor, Alfresco.component.Base, {
+
         dataSourceId: null,
+
         isNewSource: false,
 
         reportId: null,
@@ -27,6 +30,8 @@
         toolbarButtons: {},
 
         selectSourcePanel : null,
+
+        groupActions: {},
 
         markAsNewSource: function (isNew) {
             this.isNewSource = isNew;
@@ -44,7 +49,7 @@
 
         onInitDataGrid: function (layer, args) {
             var datagrid = args[1].datagrid;
-            if (datagrid.options.bubblingLabel == "sourceColumns") {
+            if (datagrid.options.bubblingLabel == "source-columns") {
                 this.columnsDataGrid = datagrid;
             }
         },
@@ -83,23 +88,6 @@
                             Alfresco.util.PopupManager.displayMessage({
                                 text: "Набор скопирован"
                             });
-                            if (response.json.overallSuccess) {
-                                /*//блокируем кнопки - Сохранить как - данный набор уже и так сохранен
-                                YAHOO.Bubbling.fire("refreshButtonState", {
-                                    bubblingLabel: "sourceColumns",
-                                    disabledButtons: ["activeSourceIsNew"]
-                                });*/
-                                if (fireCreateEvent) {
-                                    // добаляем запись в таблицу и обновляем данные
-                                    YAHOO.Bubbling.fire("dataItemCreated",
-                                        {
-                                            nodeRef: response.json.results[0].nodeRef,
-                                            oldNodeRef: this.dataSourceId,
-                                            copiedRef: sourceId,
-                                            bubblingLabel: "sourcesList"
-                                        });
-                                }
-                            }
                         },
                         scope: this
                     },
@@ -125,6 +113,17 @@
 
             this.toolbarButtons.selectSource =
                 Alfresco.util.createYUIButton(this, "selectSource", this._onSelectSource, {disabled: !this.dataSourceId}, this.id + "-columns-toolbar-selectSource");
+
+            this.groupActions.deleteColumnsBtn = Alfresco.util.createYUIButton(this, "deleteColumnsBtn", this._onDeleteColumns, {disabled: true}, this.id + "-columns-toolbar-deleteColumnsBtn");
+        },
+
+        _onDeleteColumns: function() {
+            if (this.columnsDataGrid) {
+                var fn = "onActionDelete";
+                if (fn && (typeof this.columnsDataGrid[fn] == "function")) {
+                    this.columnsDataGrid[fn].call(this.columnsDataGrid, this.columnsDataGrid.getSelectedItems(), null, {fullDelete: true, trash: false}, function () {YAHOO.Bubbling.fire("updateReportSourceColumns");});
+                }
+            }
         },
 
         _hideSelectDialog: function(layer, args){
@@ -178,40 +177,6 @@
                     },
                     execScripts: true
                 });
-
-            /*var doBeforeDialogShow = function (p_form, p_dialog) {
-                var selectMsg = this.msg("label.select-source.title");
-                Alfresco.util.populateHTML(
-                    [ p_dialog.id + "-form-container_h", selectMsg ]
-                );
-
-                Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
-            };
-
-            var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/reports-editor/source-select?reportId=" + this.reportId);
-
-            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-selectSourceDetails");
-            createDetails.setOptions(
-                {
-                    width: "60em",
-                    templateUrl: templateUrl,
-                    actionUrl: null,
-                    destroyOnHide: true,
-                    doBeforeDialogShow: {
-                        fn: doBeforeDialogShow,
-                        scope: this
-                    },
-                    onSuccess: {
-                        fn: function DataGrid_onActionCreate_success(response) {
-                        },
-                        scope: this
-                    },
-                    onFailure: {
-                        fn: function DataGrid_onActionCreate_failure(response) {
-                        },
-                        scope: this
-                    }
-                }).show();*/
         },
 
         _onNewColumn: function () {
@@ -311,6 +276,21 @@
                 },
                 bubblingLabel: "source-columns"
             });
+        },
+
+        _onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args) {
+            var obj = args[1];
+            if (this.columnsDataGrid) {
+                if (!obj.bubblingLabel || obj.bubblingLabel == this.columnsDataGrid.options.bubblingLabel) {
+                    var items = this.columnsDataGrid.getSelectedItems();
+                    for (var index in this.groupActions) {
+                        if (this.groupActions.hasOwnProperty(index)) {
+                            var action = this.groupActions[index];
+                            action.set("disabled", (items.length === 0));
+                        }
+                    }
+                }
+            }
         }
     });
 })();

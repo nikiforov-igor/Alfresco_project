@@ -19,7 +19,7 @@
                    </span>
             </span>
         </div>
-        <div class="save-row">
+        <div class="new-row">
             <span id="${id}-toolbar-newTemplateSaveButton" class="yui-button yui-push-button">
                    <span class="first-child">
                       <button type="button" title="Сохранить как...">Сохранить как...</button>

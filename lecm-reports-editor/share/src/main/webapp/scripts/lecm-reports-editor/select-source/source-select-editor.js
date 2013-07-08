@@ -11,6 +11,7 @@
         YAHOO.Bubbling.on("selectDataSource", this._onSelectDataSource, this);
         YAHOO.Bubbling.on("copyColumnToReportSource", this._onCopyColumn, this);
         YAHOO.Bubbling.on("selectedItemsChanged", this._onSelectedItemsChanged, this);
+        YAHOO.Bubbling.on("updateReportSourceColumns", this._onUpdateSourceColumns, this);
         return this;
     };
 
@@ -74,7 +75,7 @@
 
         onInitDataGrid: function (layer, args) {
             var datagrid = args[1].datagrid;
-            if (datagrid.options.bubblingLabel == "sourcesList") {
+            if (datagrid.options.bubblingLabel.indexOf("sourcesList") == 0) {
                 this.sourcesDataGrid = datagrid;
             } else if (datagrid.options.bubblingLabel == "sourceColumns") {
                 this.columnsDataGrid = datagrid;
@@ -120,7 +121,7 @@
                                             nodeRef: response.json.results[0].nodeRef,
                                             oldNodeRef: fromRepo ? this.dataSourceId : null,
                                             copiedRef: sourceId,
-                                            bubblingLabel: "sourcesList"
+                                            bubblingLabel: this.sourcesDataGrid.options.bubblingLabel
                                         });
                                 //}
                             }
@@ -181,13 +182,16 @@
                 });
         },
 
-        _onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged() {
+        _onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args) {
+            var obj = args[1];
             if (this.columnsDataGrid) {
-                var items = this.columnsDataGrid.getSelectedItems();
-                for (var index in this.groupActions) {
-                    if (this.groupActions.hasOwnProperty(index)) {
-                        var action = this.groupActions[index];
-                        action.set("disabled", (items.length === 0));
+                if (!obj.bubblingLabel || obj.bubblingLabel == this.columnsDataGrid.options.bubblingLabel) {
+                    var items = this.columnsDataGrid.getSelectedItems();
+                    for (var index in this.groupActions) {
+                        if (this.groupActions.hasOwnProperty(index)) {
+                            var action = this.groupActions[index];
+                            action.set("disabled", (items.length === 0));
+                        }
                     }
                 }
             }
@@ -209,7 +213,9 @@
                                     var oResults = eval("(" + response.serverResponse.responseText + ")");
                                     if (oResults) {
                                         for (var k = 0; k < oResults.length; k++) {
-                                            this.copyColumn(oResults[k].nodeRef, obj.dataSourceId, this.dataSourceId, true);
+                                            if (!this.existInSource(oResults[k].code)) {
+                                                this.copyColumn(oResults[k].nodeRef, obj.dataSourceId, this.dataSourceId, true);
+                                            }
                                         }
                                     }
                                 },
@@ -248,7 +254,9 @@
             if (selectedItems.length != 0) {
                 var items = YAHOO.lang.isArray(selectedItems) ? selectedItems : [selectedItems];
                 for (var k = 0; k < items.length; k++) {
-                    this.copyColumn(items[k].nodeRef, this.columnsDataGrid.datagridMeta.nodeRef, this.dataSourceId, true);
+                    if (!this.existInSource(items[k].itemData["prop_lecm-rpeditor_dataColumnCode"].value)) {
+                        this.copyColumn(items[k].nodeRef, this.columnsDataGrid.datagridMeta.nodeRef, this.dataSourceId, true);
+                    }
                 }
             } else {
                 alert("Не выбран ни один элемент!");
@@ -270,6 +278,15 @@
 
         _onUpdateSourceColumns: function (layer, args) {
             this.setDataSourceId(this.dataSourceId);
+        },
+
+        existInSource: function (columnCode){
+            for (var k = 0; k < this.columnsDataGrid.activeSourceColumns.length; k++) {
+                if (this.columnsDataGrid.activeSourceColumns[k].code == columnCode){
+                    return true;
+                }
+            }
+            return false;
         }
     });
 })();

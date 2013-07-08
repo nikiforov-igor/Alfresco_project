@@ -30,6 +30,15 @@
                         </span>
                     </span>
             </div>
+            <div class="divider"></div>
+            <div class="delete-row">
+                    <span id="${toolbarId}-deleteColumnsBtn" class="yui-button yui-push-button">
+                        <span class="first-child">
+                            <button type="button"
+                                    title="${msg("label.delete.btn")}">&nbsp;</button>
+                        </span>
+                    </span>
+            </div>
         </@comp.baseToolbar>
     </div>
     <div id="selectSourcePanel" class="yui-panel" style="visibility:hidden">
@@ -83,7 +92,7 @@
                                         }
                                     ],
                                     bubblingLabel: "source-columns",
-                                    showCheckboxColumn: false
+                                    showCheckboxColumn: true
                                 }).setMessages(${messages});
 
                         YAHOO.util.Event.onContentReady('${id}-re-reports-grid', function () {

@@ -19,9 +19,7 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.ColumnsGrid.prototype, {
         });
     },
 
-    onActionRemove: function (p_items, owner) {
-        this.onDelete(p_items, owner, {fullDelete: true, trash: false}, function () {
-            YAHOO.Bubbling.fire("updateReportSourceColumns");
-        }, null);
+    onActionDelete: function (p_items, owner, actionsConfig) {
+        this.onDelete(p_items, owner, actionsConfig, function () {YAHOO.Bubbling.fire("updateReportSourceColumns");}, null);
     }
 }, true);

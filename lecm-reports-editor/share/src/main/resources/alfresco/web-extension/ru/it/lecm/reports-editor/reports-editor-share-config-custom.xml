@@ -257,6 +257,7 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportColumnTypeCode"/>
                     <show id="lecm-rpeditor:reportColumnTypeClass"/>
                 </field-visibility>
                 <appearance>
@@ -296,6 +297,7 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportParameterTypeCode"/>
                     <show id="lecm-rpeditor:reportParameterTypeLabel1"/>
                     <show id="lecm-rpeditor:reportParameterTypeLabel2"/>
                 </field-visibility>

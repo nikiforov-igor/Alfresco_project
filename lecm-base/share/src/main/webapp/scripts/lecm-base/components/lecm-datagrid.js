@@ -1223,7 +1223,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         }
                         Dom.get(this.id + '-select-all-records').checked = allChecked;
 
-                        Bubbling.fire("selectedItemsChanged");
+                        Bubbling.fire("selectedItemsChanged", this.options.bubblingLabel);
                     }, this, true);
                 }
                 // Сортировка. Событие при нажатии на название столбца.
@@ -1706,7 +1706,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 						this.selectedItems[record.getData("nodeRef")] = checks[i].checked = fnCheck(record.getData("type"), checks[i].checked);
 					}
 
-					Bubbling.fire("selectedItemsChanged");
+					Bubbling.fire("selectedItemsChanged", this.options.bubblingLabel);
 				}
             },
 
