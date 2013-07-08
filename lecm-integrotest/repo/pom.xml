@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ru.it.lecm.integrotest</groupId>
 		<artifactId>lecm-integrotest</artifactId>
-		<version>0.1.0</version>
+		<version>0.5.0</version>
 	</parent>
 
 	<artifactId>lecm-integrotest-repo</artifactId>
@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>ru.it.lecm.statemachine</groupId>
 			<artifactId>statemachine-api</artifactId>
-			<version>0.1.0</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->

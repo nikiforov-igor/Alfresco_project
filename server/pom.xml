@@ -7,14 +7,12 @@
     <parent>
         <groupId>ru.it.lecm</groupId>
         <artifactId>platform</artifactId>
-        <version>0.1.0</version>
+        <version>0.5.0</version>
     </parent>
 
     <artifactId>server</artifactId>
     <packaging>pom</packaging>
     <properties>
-        <!--<alfresco.version>4.0.e</alfresco.version>-->
-        <!--<platform.version>0.1.0</platform.version>-->
         <share.script.cient.debug>true</share.script.cient.debug>
     </properties>
 
