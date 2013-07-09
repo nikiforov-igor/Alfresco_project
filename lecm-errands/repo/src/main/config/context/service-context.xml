@@ -18,6 +18,19 @@
 	
 -->
 <beans>
-
-
+	<bean id="errands.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap,
+		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+		  documents.LogicEcmModelsConnectionsBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-errands-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-errands-model</value>
+			</list>
+		</property>
+	</bean>
 </beans>
