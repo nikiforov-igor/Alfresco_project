@@ -44,6 +44,15 @@
                 <linkPage>documents-list</linkPage>
             </properties>
         </component>
+        <!-- Filter -->
+        <component>
+            <region-id>filters</region-id>
+            <url>/lecm/documents/filters</url>
+            <properties>
+                <itemType>{doctype}</itemType>
+                <bubblingLabel>documents-list</bubblingLabel>
+            </properties>
+        </component>
         <!-- Forbidden -->
         <component>
             <region-id>forbidden</region-id>

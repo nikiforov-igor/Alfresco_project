@@ -250,28 +250,31 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var successFilter = args.filter;
                 if (!successFilter) {
                     var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
-                    bookmarkedFilter = bookmarkedFilter || "none|/";
-                    try {
-                        while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+                    if (bookmarkedFilter){
+                        try {
+                            while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+                            }
                         }
-                    }
-                    catch (e) {
-                        // Catch "malformed URI sequence" exception
-                    }
+                        catch (e) {
+                            // Catch "malformed URI sequence" exception
+                        }
+                        var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
+                            var filters = strFilter.split("|"),
+                                filterObj =
+                                {
+                                    filterId: window.unescape(filters[0] || ""),
+                                    filterData: window.unescape(filters[1] || "")
+                                };
+                            return filterObj;
+                        };
 
-                    var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
-                        var filters = strFilter.split("|"),
-                            filterObj =
-                            {
-                                filterId: window.unescape(filters[0] || ""),
-                                filterData: window.unescape(filters[1] || "")
-                            };
-                        return filterObj;
-                    };
-
-                    successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                        successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                    }
                 }
 
+                if (!successFilter) {
+                    successFilter = this.dataGrid.currentFilter;
+                }
                 // вернуть следующие поля для элемента(строки)
                 var reqFields = [];
                 var reqNameSubstituteStrings = [];

@@ -49,19 +49,46 @@ var Filters =
         // Common types and aspects to filter from the UI
         var filterQueryDefaults = ' -TYPE:"' + Filters.IGNORED_TYPES.join('" -TYPE:"') + '"';
 
-        switch (String(filter.filterId))
-        {
+        switch (String(filter.filterId)) {
             case "my":
-                filterParams.query  = " +@cm\\:creator:\"" + person.properties.userName + '"';
+                filterParams.query = " +@cm\\:creator:\"" + person.properties.userName + '"';
                 break;
 
             case "tag":
                 // Remove any trailing "/" character
-                if (filterData.charAt(filterData.length - 1) == "/")
-                {
+                if (filterData.charAt(filterData.length - 1) == "/") {
                     filterData = filterData.slice(0, -1);
                 }
                 filterParams.query += "+PATH:\"/cm:taggable/cm:" + search.ISO9075Encode(filterData) + "/member\"";
+                break;
+
+            case "assign":
+                switch (String(filter.filterData)) {
+                    case "all":
+                        filterParams.query = "";
+                        break;
+                    case "my":
+                        filterParams.query = " @lecm\\-document\\:creator\\-ref:\"" + orgstructure.getCurrentEmployee().getNodeRef().toString() + '"';
+                        break;
+                    case "department": {
+                        var employees = orgstructure.getBossSubordinate(orgstructure.getCurrentEmployee().getNodeRef().toString());
+                        //добавляем самого себя в список сотрудников
+                        var departmentQuery = "";
+                        employees.push(orgstructure.getCurrentEmployee());
+                        for (var i = 0; i < employees.length; ++i) {
+                            var employeeRef = employees[i].nodeRef;
+                            departmentQuery += " @lecm\\-document\\:creator\\-ref:\"" + employeeRef.toString() + '"';
+                        }
+                        filterParams.query = departmentQuery;
+                        break;
+                    }
+                    case "favourite":
+                        filterParams.query = ""; //TODO не реализовано!!!!;
+                        break;
+                    default:
+                        filterParams.query = "";
+                        break;
+                }
                 break;
 
             default:

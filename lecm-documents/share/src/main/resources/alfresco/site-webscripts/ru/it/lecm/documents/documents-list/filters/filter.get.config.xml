@@ -1,0 +1,8 @@
+<config>
+   <filter-assign>
+       <filter type="all" label="all" />
+       <filter type="my" label="my" />
+       <filter type="favourite" label="favourite" />
+       <filter type="department" label="department" />
+   </filter-assign>
+</config>

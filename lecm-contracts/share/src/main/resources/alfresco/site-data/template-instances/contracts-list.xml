@@ -58,6 +58,15 @@
                 <linkPage>contracts-list</linkPage>
             </properties>
         </component>
+        <!-- Filter -->
+        <component>
+            <region-id>filters</region-id>
+            <url>/lecm/documents/filters</url>
+            <properties>
+                <itemType>lecm-contract:document</itemType>
+                <bubblingLabel>contracts</bubblingLabel>
+            </properties>
+        </component>
         <!-- Forbidden -->
         <component>
             <region-id>forbidden</region-id>
