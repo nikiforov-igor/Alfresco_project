@@ -52,8 +52,7 @@
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
-<#assign showToolbar = hasPermisson!false/>
-<@bpage.basePage showToolbar=showToolbar>
+<@bpage.basePage showToolbar=hasPermisson>
     <#if hasPermission>
         <div class="yui-gc">
             <div id="main-region" class="yui-u first">
