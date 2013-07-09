@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>errands menu</shortname>
+    <description>Returns the errands menu.</description>
+    <url>/lecm/errands/menu</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

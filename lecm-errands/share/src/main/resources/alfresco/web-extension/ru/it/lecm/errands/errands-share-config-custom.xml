@@ -1,4 +1,36 @@
 <alfresco-config>
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-errands/errands-const.js" />
+            </dependencies>
+        </forms>
+    </config>
 
-
+    <config evaluator="model-type" condition="lecm-errands:document">
+        <forms>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-errands:initiator-assoc"/>
+                    <show id="lecm-errands:executor-assoc"/>
+                    <show id="lecm-errands:execution-date"/>
+                    <show id="lecm-errands:title"/>
+                    <show id="lecm-statemachine:status"/>
+                    <show id="lecm-errands:number"/>
+                </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-errands:initiator-assoc"/>
+                    <show id="lecm-errands:executor-assoc"/>
+                    <show id="cm:created"/>
+                    <show id="lecm-errands:execution-date"/>
+                    <show id="lecm-errands:number"/>
+                    <show id="lecm-errands:title"/>
+                    <show id="lecm-errands:is-important"/>
+                    <show id="lecm-errands:is-expired"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

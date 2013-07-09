@@ -52,8 +52,8 @@
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
-
-<@bpage.basePage showToolbar=false>
+<#assign showToolbar = hasPermisson!false/>
+<@bpage.basePage showToolbar=showToolbar>
     <#if hasPermission>
         <div class="yui-gc">
             <div id="main-region" class="yui-u first">
@@ -62,7 +62,7 @@
                         <@region id="documents-filter" scope="template" />
                     </div>
                     <div class="yui-u column2">
-                        <@region id="toolbar" scope="template" />
+                        <@region id="filters" scope="template" />
                         <@region id="documents-grid" scope="template" />
                     </div>
                 </div>

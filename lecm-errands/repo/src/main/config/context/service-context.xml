@@ -43,4 +43,45 @@
 			</list>
 		</property>
 	</bean>
+
+    <bean id="errandsStatusesFilter" parent="documentStatusesFilter">
+        <property name="defaultFilters">
+            <map>
+                <entry key="lecm-errands:document" value="Все"/>
+            </map>
+        </property>
+        <property name="filters">
+            <map>
+                <entry key="lecm-errands:document">
+                    <map>
+                        <entry key="Все" value="!Отменено, !Удалено, !Исполнено, !Не исполнено"/>
+                        <entry key="Ожидает исполнения" value="Ожидает исполнения"/>
+                        <entry key="Исполняется" value="Исполняется"/>
+                        <entry key="На утверждении" value="На утверждении, На утверждении Контроллером"/>
+                        <entry key="Неисполненные" value="Не исполнено"/>
+                        <entry key="Исполненные" value="Исполнено"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="errandsAccessPermissions" parent="documentsPermissions">
+        <property name="permissions">
+            <map>
+                <entry key="lecm-errands:document">
+                    <list>
+                        <value>ERRANDS_INITIATOR</value>
+                        <value>ERRANDS_EXECUTOR</value>
+                        <value>ERRANDS_CONTROLLER</value>
+                        <value>ERRANDS_COEXECUTOR</value>
+                        <value>ERRANDS_READER</value>
+                        <value>ERRANDS_CURATOR</value>
+                        <value>ERRANDS_CHOOSING_INITIATOR</value>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
 </beans>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>Поручения</title>
+    <description>Список поручений</description>
+    <template-instance>errands-list</template-instance>
+    <authentication>user</authentication>
+</page>
