@@ -33,4 +33,43 @@
             </form>
         </forms>
     </config>
+
+	<config evaluator="node-type" condition="lecm-errands-dic:errand-titles">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-errands-dic:errand-title-code" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-errands-dic:errand-title-code" read-only="true"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-errands-dic:errand-titles">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-errands-dic:errand-title-code" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-errands-dic:errand-title-code">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-errands-dic:errand-title-code" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>
