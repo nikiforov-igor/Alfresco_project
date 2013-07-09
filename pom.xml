@@ -103,6 +103,7 @@
 		<module>lecm-contracts-fake</module>
 		<module>lecm-approval</module>
         <module>lecm-reports-editor</module>
+        <module>lecm-errands</module>
 	</modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>

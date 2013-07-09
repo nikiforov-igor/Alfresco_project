@@ -284,6 +284,13 @@
             <scope>runtime</scope>
             <type>amp</type>
         </dependency>
+		<dependency>
+            <groupId>ru.it.lecm.errands</groupId>
+            <artifactId>errands-repo</artifactId>
+            <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
 	</dependencies>
 
 	<build>
