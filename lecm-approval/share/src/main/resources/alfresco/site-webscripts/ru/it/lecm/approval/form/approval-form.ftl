@@ -492,29 +492,28 @@
          * Получает ссылку на корневую папку списков согласования
          */
         _getListsFolderRef: function() {
-            function onSuccess( response ) {
-                this.constants.LISTS_FOLDER_REF = response.json.approvalListFolderRef;
+            function onSuccess( result, textStatus, jqXHR ) {
+                this.constants.LISTS_FOLDER_REF = result.approvalListFolderRef;
             }
 
-            function onFailure() {
+            function onFailure( jqXHR, textStatus, errorThrown ) {
                 Alfresco.util.PopupManager.displayMessage({
                     text: "Не удалось получить ссылку на корневую папку списков согласования"
                 });
             }
 
-            Alfresco.util.Ajax.request({
-                method: "POST",
-                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/getCurrentUserApprovalListFolder",
-                requestContentType: "application/json",
-                responseContentType: "application/json",
-                successCallback: {
-                    fn: onSuccess,
-                    scope: this
-                },
-                failureCallback: {
-                    fn: onFailure
-                }
-            });
+			// Yahoo UI не умеет синхронный (блокирующий) AJAX. Придется использовать jQuery
+			jQuery.ajax({
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/getCurrentUserApprovalListFolder",
+				type: "POST",
+				timeout: 60000, // 60 секунд таймаута хватит всем!
+				async: false, // ничего не делаем, пока не отработал запрос
+				dataType: "json",
+				contentType: "application/json",
+				processData: false, // данные не трогать, не кодировать вообще
+				success: onSuccess,
+				error: onFailure
+			});
         },
 
         /**
