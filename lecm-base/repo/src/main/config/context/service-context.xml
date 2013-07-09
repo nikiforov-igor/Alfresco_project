@@ -187,4 +187,18 @@
 			<ref bean="substitudeService" />
 		</property>
 	</bean>
+
+	<bean id="links.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-links-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-links-model</value>
+			</list>
+		</property>
+	</bean>
 </beans>
