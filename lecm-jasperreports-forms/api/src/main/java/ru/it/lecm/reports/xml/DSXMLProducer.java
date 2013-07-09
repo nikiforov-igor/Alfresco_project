@@ -28,15 +28,15 @@ import ru.it.lecm.reports.api.model.ReportFlags;
 import ru.it.lecm.reports.api.model.ReportProviderDescriptor;
 import ru.it.lecm.reports.api.model.ReportTemplate;
 import ru.it.lecm.reports.api.model.ReportType;
-import ru.it.lecm.reports.model.ColumnDescriptorImpl;
-import ru.it.lecm.reports.model.DataSourceDescriptorImpl;
-import ru.it.lecm.reports.model.NamedValueImpl;
-import ru.it.lecm.reports.model.ParameterTypedValueImpl;
-import ru.it.lecm.reports.model.ReportDescriptorImpl;
-import ru.it.lecm.reports.model.ReportFlagsImpl;
-import ru.it.lecm.reports.model.ReportProviderDescriptorImpl;
-import ru.it.lecm.reports.model.ReportTemplateImpl;
-import ru.it.lecm.reports.model.ReportTypeImpl;
+import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
+import ru.it.lecm.reports.model.impl.DataSourceDescriptorImpl;
+import ru.it.lecm.reports.model.impl.NamedValueImpl;
+import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
+import ru.it.lecm.reports.model.impl.ReportDescriptorImpl;
+import ru.it.lecm.reports.model.impl.ReportFlagsImpl;
+import ru.it.lecm.reports.model.impl.ReportProviderDescriptorImpl;
+import ru.it.lecm.reports.model.impl.ReportTemplateImpl;
+import ru.it.lecm.reports.model.impl.ReportTypeImpl;
 
 /**
  * Создание ds-xml с описанием мета-данных полей и запроса.

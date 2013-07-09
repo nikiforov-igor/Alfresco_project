@@ -20,6 +20,7 @@ import ru.it.lecm.reports.api.DsLoader;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportDAO;
+import ru.it.lecm.reports.api.model.share.ModelLoader;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 
@@ -33,7 +34,6 @@ public class ReportsManagerImpl implements ReportsManager {
 	private List<ReportDescriptor> descriptors;
 
 	private ReportDAO reportDAO;
-	private DsLoader dsloader;
 
 	public ReportDAO getReportDAO() {
 		return reportDAO;
@@ -44,11 +44,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	public DsLoader getDsloader() {
-		return dsloader;
-	}
-
-	public void setDsloader(DsLoader dsloader) {
-		this.dsloader = dsloader;
+		return ModelLoader.getInstance();
 	}
 
 	public List<ReportDescriptor> getDescriptors() {

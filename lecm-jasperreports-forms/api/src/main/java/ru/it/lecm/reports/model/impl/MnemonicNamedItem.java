@@ -1,4 +1,4 @@
-package ru.it.lecm.reports.model;
+package ru.it.lecm.reports.model.impl;
 
 import java.util.Map;
 

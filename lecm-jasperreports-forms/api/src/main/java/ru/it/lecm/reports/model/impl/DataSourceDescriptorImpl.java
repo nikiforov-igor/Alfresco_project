@@ -1,4 +1,4 @@
-package ru.it.lecm.reports.model;
+package ru.it.lecm.reports.model.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.L18able;
-import ru.it.lecm.reports.generators.ParameterMapper;
+import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 
 public class DataSourceDescriptorImpl

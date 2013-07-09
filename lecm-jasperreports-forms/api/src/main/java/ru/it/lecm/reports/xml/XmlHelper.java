@@ -38,12 +38,10 @@ import org.w3c.dom.xpath.XPathEvaluator;
 import org.w3c.dom.xpath.XPathResult;
 import org.xml.sax.SAXException;
 
-import com.sun.star.uno.RuntimeException;
-
 import ru.it.lecm.reports.api.model.JavaClassable;
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.Mnemonicable;
-import ru.it.lecm.reports.model.L18Value;
+import ru.it.lecm.reports.model.impl.L18Value;
 import ru.it.lecm.reports.utils.Utils;
 
 

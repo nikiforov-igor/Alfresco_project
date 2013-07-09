@@ -32,6 +32,7 @@ import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
+import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 
 /**

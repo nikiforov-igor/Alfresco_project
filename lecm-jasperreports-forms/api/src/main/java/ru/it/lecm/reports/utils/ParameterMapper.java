@@ -1,4 +1,4 @@
-package ru.it.lecm.reports.generators;
+package ru.it.lecm.reports.utils;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType.Type;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.utils.Utils;
 
 /**
  * Распределитель request-аргументов по параметрам описателя отчёта.

@@ -15,7 +15,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.generators.ParameterMapper;
+import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 
 /**

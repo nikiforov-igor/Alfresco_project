@@ -34,7 +34,6 @@
 	 	init-method="init">
 		<!-- <property name="services" ref="wksKeeper"/> -->
 		<property name="reportDAO" ref="reportDAOBean"/>
-		<property name="dsloader" ref="dsLoader"/>
 		<property name="descriptors[0]" ref="jasperTemplate_DocFlowCounters" />
 	</bean>
 
@@ -52,10 +51,6 @@
 		parent="baseScript">
 		<property name="extensionName" value="reportsMgr"/>
 		<property name="reportsManager" ref="reportsManager"/>
-	</bean>
-
-	<!-- этот бин создаётся и автоматом используется в share-части -->
-	<bean id="dsLoader" class="ru.it.lecm.reports.beans.DsLoaderImpl">
 	</bean>
 
 	<!-- описатель шаблона jasper-отчёта "Сводный отчёт по договорам" -->

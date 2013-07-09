@@ -1,4 +1,4 @@
-package ru.it.lecm.reports.model;
+package ru.it.lecm.reports.model.impl;
 
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.NamedValue;

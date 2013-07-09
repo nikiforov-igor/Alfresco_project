@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.AssocDataFilter.AssocDesc;
 import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
-import ru.it.lecm.reports.jasper.utils.ArgsHelper;
+import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
 /**

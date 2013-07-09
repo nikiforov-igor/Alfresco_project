@@ -1,4 +1,4 @@
-package ru.it.lecm.reports.jasper.utils;
+package ru.it.lecm.reports.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,8 +10,6 @@ import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import ru.it.lecm.reports.utils.Utils;
 
 
 public class ArgsHelper {

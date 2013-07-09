@@ -1,4 +1,4 @@
-package ru.it.lecm.reports.model;
+package ru.it.lecm.reports.model.impl;
 
 import java.util.Set;
 
@@ -8,7 +8,7 @@ import ru.it.lecm.reports.api.model.FlagsExtendable;
 import ru.it.lecm.reports.api.model.JavaDataType;
 import ru.it.lecm.reports.api.model.NamedValue;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
-import ru.it.lecm.reports.model.JavaDataTypeImpl.SupportedTypes;
+import ru.it.lecm.reports.model.impl.JavaDataTypeImpl.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
 
 /**

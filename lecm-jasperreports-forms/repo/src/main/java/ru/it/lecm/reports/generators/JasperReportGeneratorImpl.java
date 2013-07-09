@@ -37,7 +37,7 @@ import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
-import ru.it.lecm.reports.jasper.utils.ArgsHelper;
+import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
 /**

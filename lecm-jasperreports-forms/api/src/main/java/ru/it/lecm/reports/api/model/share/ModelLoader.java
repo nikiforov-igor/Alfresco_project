@@ -1,9 +1,13 @@
 package ru.it.lecm.reports.api.model.share;
 
+import java.io.InputStream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.reports.api.DsLoader;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.xml.DSXMLProducer;
 
 /**
  * Класс для обеспечения загрузки ds-xml из share-модулей
@@ -11,23 +15,30 @@ import ru.it.lecm.reports.api.DsLoader;
  * @author rabdullin
  *
  */
-public class ModelLoader {
+// singletone
+public class ModelLoader implements DsLoader {
 
 	static final transient Logger logger = LoggerFactory.getLogger(ModelLoader.class);
 
+	private static DsLoader instance = null;
+
+	// singletone
+	private ModelLoader() {
+	}
+
 	public static DsLoader getInstance() {
 		if (instance == null) {
-			logger.warn( "DsLoader bean not specified");
+			// logger.warn( "DsLoader bean not specified");
+			instance = new ModelLoader();
 		}
 		return instance;
 	}
 
-	// @NOTE: чтобы не выносить в api-share кучу всякого добра из модельных 
-	// классов, огранизуем такой статический бин
-	public static void setInstance(DsLoader value) { // заполняется в bootstrap нужным бином
-		instance = value;
+	@Override
+	public ReportDescriptor parseXml(InputStream dsXml, String streamName) {
+		if (dsXml == null)
+			return null;
+		return DSXMLProducer.parseDSXML(dsXml, (streamName == null ? "ds-xml" : streamName));
 	}
-
-	private static DsLoader instance = null;
 
 }

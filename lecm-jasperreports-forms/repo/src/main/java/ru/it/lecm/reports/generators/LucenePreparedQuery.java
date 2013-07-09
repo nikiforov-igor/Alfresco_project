@@ -27,7 +27,8 @@ import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
-import ru.it.lecm.reports.model.ColumnDescriptorImpl;
+import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
+import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 
