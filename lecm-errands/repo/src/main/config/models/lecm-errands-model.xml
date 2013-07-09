@@ -39,19 +39,86 @@
 			<parent>lecm-document:base</parent>
 			<properties>
                 <!-- Номер поручения-->
-                <property name="lecm-errands:number">
+                <property name="lecm-errands:title">
                     <type>d:text</type>
-                    <default>Не присвоено</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+				<!-- Заголовок-->
+				<property name="lecm-errands:number">
+					<type>d:text</type>
+					<default>Не присвоено</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Содержание-->
+				<property name="lecm-errands:content">
+					<type>d:text</type>
+				</property>
+				<!-- Важность-->
+				<property name="lecm-errands:is-important">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<!-- Срок поручения-->
+				<property name="lecm-errands:limitation-date">
+					<type>d:date</type>
+				</property>
+				<!-- Дата начала -->
+				<property name="lecm-errands:start-date">
+					<type>d:date</type>
+				</property>
+				<!-- Точно в срок-->
+				<property name="lecm-errands:just-in-time">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<!-- Без утверждения Инициатором-->
+				<property name="lecm-errands:without-initiator-approval">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<!-- Дата завершения поручения -->
+				<property name="lecm-errands:end-date">
+					<type>d:date</type>
+				</property>
+
+				<!-- Атрибуты исполнения поручения-->
+				<!-- Отчет об исполнении -->
+				<property name="lecm-errands:execution-report">
+					<type>d:text</type>
+				</property>
+				<!-- Дата исполнения -->
+				<property name="lecm-errands:execution-date">
+					<type>d:date</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Просрочено-->
+				<property name="lecm-errands:is-expired">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+
+				<!-- Служебные-->
+				<!-- Короткое -->
+				<property name="lecm-errands:is-short">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 			</properties>
 			<associations>
 				<!-- Инициатор -->
-				<association name="lecm-errands:initiator">
+				<association name="lecm-errands:initiator-assoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
@@ -60,6 +127,42 @@
 						<class>lecm-orgstr:employee</class>
 						<mandatory>true</mandatory>
 						<many>false</many>
+					</target>
+				</association>
+				<!-- Исполнитель -->
+				<association name="lecm-errands:executor-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- Контроллер -->
+				<association name="lecm-errands:controller-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- Соисполнители -->
+				<association name="lecm-errands:coexecutors-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>true</many>
 					</target>
 				</association>
 			</associations>
