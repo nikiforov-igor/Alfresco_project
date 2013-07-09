@@ -237,8 +237,6 @@
                 Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
                 if (this.isCopy) {
                     this.items = p_dialog.form.validations;
-                    Dom.get(this.id + "-createColumnDetails-form_prop_cm_name").setAttribute("value", "");
-                    Dom.get(this.id + "-createColumnDetails_prop_lecm-rpeditor_dataSourceCode").setAttribute("value", "");
                 }
             };
 
@@ -268,8 +266,6 @@
                             if (this.isCopy) {
                                 var form = Dom.get(this.id + "-createColumnDetails-form");
                                 form.setAttribute("action", Alfresco.constants.PROXY_URI_RELATIVE + "lecm/reports-editor/copy-report-source");
-                                this._formAddElemet(form, "input", "copyToFile", LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer);
-                                this._formAddElemet(form, "input", "copyRef", this.dataSourceId);
                             }
 
                         },
