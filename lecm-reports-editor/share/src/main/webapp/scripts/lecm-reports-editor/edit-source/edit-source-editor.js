@@ -266,6 +266,8 @@
                             if (this.isCopy) {
                                 var form = Dom.get(this.id + "-createColumnDetails-form");
                                 form.setAttribute("action", Alfresco.constants.PROXY_URI_RELATIVE + "lecm/reports-editor/copy-report-source");
+                                this._formAddElemet(form, "input", "copyToFile", LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer);
+                                this._formAddElemet(form, "input", "copyRef", this.dataSourceId);
                             }
 
                         },
