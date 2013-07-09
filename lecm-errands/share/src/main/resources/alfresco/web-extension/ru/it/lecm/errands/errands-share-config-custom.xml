@@ -15,7 +15,7 @@
                     <show id="lecm-errands:executor-assoc"/>
                     <show id="lecm-errands:execution-date"/>
                     <show id="lecm-errands:title"/>
-                    <show id="lecm-statemachine:status"/>
+                    <show id="lecm-statemachine:status" force="true"/>
                     <show id="lecm-errands:number"/>
                 </field-visibility>
             </form>
