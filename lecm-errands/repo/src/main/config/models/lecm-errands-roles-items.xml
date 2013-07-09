@@ -31,7 +31,6 @@
                 <property name="lecm-orgstr:business-role-identifier">ERRANDS_READER</property>
                 <property name="lecm-orgstr:business-role-is-dynamic">false</property>
                 <property name="lecm-orgstr:business-role-description">Читатель - это статическая бизнес-роль, имеющая доступ на чтение ко поручениям</property>
-                <property name="lecm-dic:active">false</property>
             </item>
             <item name="cm:Поручения. Куратор" type="lecm-orgstr:business-role">
                 <property name="cm:name">Поручения. Куратор</property>

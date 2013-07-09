@@ -717,4 +717,46 @@
             <js src="/scripts/lecm-documents/lecm-doc-tree-overrride.js"/>
         </dependencies>
     </config>
+
+	<config evaluator="node-type" condition="lecm-doc-dic:subjects">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-doc-dic:subject-code" force="true"/>
+					<show id="lecm-doc-dic:subject-description" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-doc-dic:subject-code" read-only="true"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-doc-dic:subjects">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-doc-dic:subject-code" force="true"/>
+					<show id="lecm-doc-dic:subject-description" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-doc-dic:subject-code">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-doc-dic:subject-code" force="true"/>
+					<show id="lecm-doc-dic:subject-description" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

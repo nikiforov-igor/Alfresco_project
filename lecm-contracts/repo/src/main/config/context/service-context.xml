@@ -92,7 +92,6 @@
 		    <list>
 			    <value>alfresco/module/${artifactId}/models/lecm-contracts-types.xml</value>
 			    <value>alfresco/module/${artifactId}/models/lecm-contract-documents-types.xml</value>
-			    <value>alfresco/module/${artifactId}/models/lecm-contract-subjects.xml</value>
 			    <value>alfresco/module/${artifactId}/models/lecm-contract-delete-reasons.xml</value>
 			    <value>alfresco/module/${artifactId}/models/lecm-contracts-reference-data.xml</value>
 		    </list>

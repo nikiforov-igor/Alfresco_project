@@ -829,48 +829,6 @@
 		</forms>
 	</config>
 
-	<config evaluator="node-type" condition="lecm-contract-dic:contract-subjects">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="cm:name" force="true"/>
-					<show id="lecm-contract-dic:contract-subjects-code" force="true"/>
-					<show id="lecm-contract-dic:contract-subjects-description" force="true"/>
-				</field-visibility>
-				<appearance>
-					<field id="lecm-contract-dic:contract-subjects-code" read-only="true"/>
-				</appearance>
-			</form>
-		</forms>
-	</config>
-
-	<config evaluator="model-type" condition="lecm-contract-dic:contract-subjects">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="cm:name" force="true"/>
-					<show id="lecm-contract-dic:contract-subjects-code" force="true"/>
-					<show id="lecm-contract-dic:contract-subjects-description" force="true"/>
-				</field-visibility>
-				<appearance>
-					<field id="lecm-contract-dic:contract-subjects-code">
-						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
-						<constraint-handlers>
-							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
-						</constraint-handlers>
-					</field>
-				</appearance>
-			</form>
-			<form id="datagrid">
-				<field-visibility>
-					<show id="cm:name" force="true"/>
-					<show id="lecm-contract-dic:contract-subjects-code" force="true"/>
-					<show id="lecm-contract-dic:contract-subjects-description" force="true"/>
-				</field-visibility>
-			</form>
-		</forms>
-	</config>
-
 	<config evaluator="node-type" condition="lecm-contract-dic:delete-reason">
 		<forms>
 			<form>
