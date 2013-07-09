@@ -89,4 +89,7 @@
         </property>
     </bean>
 
+	<bean id="errandsOnCreateAssocsPolicy" class="ru.it.lecm.errands.policies.ErrandsOnCreateAssocsPolicy"
+	      parent="logicEcmAssociationPolicy" init-method="init"/>
+
 </beans>
