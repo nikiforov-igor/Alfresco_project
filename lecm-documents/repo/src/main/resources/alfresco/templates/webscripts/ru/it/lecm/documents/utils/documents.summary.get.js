@@ -1,6 +1,6 @@
 var type = args["docType"];
 
-var draftPath = documentScript.getDraftPath(type);
+var draftPath = documentScript.getDraftsPath();
 var documentPath = documentScript.getDocumentsPath();
 
 var paths = [];
