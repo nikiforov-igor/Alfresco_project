@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Copy Report DS</shortname>
+    <description>Copy Report DS</description>
+    <url>/lecm/reports-editor/copy-report-source</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

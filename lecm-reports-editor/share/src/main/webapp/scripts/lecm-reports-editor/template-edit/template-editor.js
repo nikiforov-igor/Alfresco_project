@@ -319,11 +319,17 @@
         },
 
         _onNewTemplate: function () {
-            this.isCopy = false;
-            this.formMode = "create";
-            this.itemKind = "type";
-            this.formId = "";
-            this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId}, false);
+            if (this.templateId) {
+                this.isCopy = false;
+                this.formMode = "create";
+                this.itemKind = "type";
+                this.formId = "";
+                this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId}, false);
+            } else {
+                Alfresco.util.PopupManager.displayMessage({
+                    text: "Нет активного шаблона"
+                });
+            }
         },
 
         _onNewTemplateFromSource: function () {
@@ -335,7 +341,7 @@
             this.isCopy = true;
             this.formMode = "edit";
             this.itemKind = "node";
-            this.formId = "copy-to-repo";
+            this.formId = "copy-to-report";
             this.showCreateDialog({itemType: this.templateId, nodeRef: this.reportId}, false);
         },
 

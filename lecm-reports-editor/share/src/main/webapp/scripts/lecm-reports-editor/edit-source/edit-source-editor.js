@@ -14,6 +14,8 @@
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
         YAHOO.Bubbling.on("updateReportSourceColumns", this._onUpdateSourceColumns, this);
         YAHOO.Bubbling.on("selectedItemsChanged", this._onSelectedItemsChanged, this);
+        YAHOO.Bubbling.on("onSearchSuccess", this._toolbarButtonActivate, this);
+        YAHOO.Bubbling.on("dataItemsDeleted", this._toolbarButtonActivate, this);
         return this;
     };
 
@@ -32,6 +34,16 @@
         selectSourcePanel : null,
 
         groupActions: {},
+
+        isCopy: false,
+
+        formMode: "create",
+
+        itemKind: "type",
+
+        items: [],
+
+        formId: "",
 
         markAsNewSource: function (isNew) {
             this.isNewSource = isNew;
@@ -180,10 +192,13 @@
         },
 
         _onNewColumn: function () {
+            this.isCopy = false;
             if (this.dataSourceId) {
                 this._showCreateForm({
                     itemType: "lecm-rpeditor:reportDataColumn",
-                    nodeRef: this.dataSourceId
+                    nodeRef: this.dataSourceId,
+                    itemKind: "type",
+                    formMode: "create"
                 });
             } else {
                 Alfresco.util.PopupManager.displayMessage({
@@ -198,7 +213,13 @@
 
         _onCopySource: function () {
             if (this.dataSourceId) {
-                this.copySource(this.dataSourceId, this.reportId, LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer, false);
+                this.isCopy = true;
+                this._showCreateForm({
+                    formMode: "edit",
+                    itemKind: "node",
+                    nodeRef: LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer,
+                    itemType: this.dataSourceId
+                })
             } else {
                 Alfresco.util.PopupManager.displayMessage({
                     text: "Нет активного набора!"
@@ -208,21 +229,27 @@
 
         _showCreateForm: function (meta) {
             var doBeforeDialogShow = function (p_form, p_dialog) {
-                var createMsg = this.msg("label.create-column.title");
+                var createMsg = (this.isCopy) ? this.msg("label.save-as-source.title") : this.msg("label.create-column.title");
                 Alfresco.util.populateHTML(
                     [ p_dialog.id + "-form-container_h", createMsg ]
                 );
 
                 Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
+                if (this.isCopy) {
+                    this.items = p_dialog.form.validations;
+                    Dom.get(this.id + "-createColumnDetails-form_prop_cm_name").setAttribute("value", "");
+                    Dom.get(this.id + "-createColumnDetails_prop_lecm-rpeditor_dataSourceCode").setAttribute("value", "");
+                }
             };
 
             var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
                 {
-                    itemKind: "type",
+                    itemKind: meta.itemKind,
                     itemId: meta.itemType,
                     destination: meta.nodeRef,
-                    mode: "create",
-                    submitType: "json"
+                    mode: meta.formMode,
+                    submitType: "json",
+                    formId: meta.formId
                 });
 
             var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createColumnDetails");
@@ -236,18 +263,39 @@
                         fn: doBeforeDialogShow,
                         scope: this
                     },
+                    doBeforeFormSubmit: {
+                        fn: function InstantAbsence_doBeforeSubmit() {
+                            if (this.isCopy) {
+                                var form = Dom.get(this.id + "-createColumnDetails-form");
+                                form.setAttribute("action", Alfresco.constants.PROXY_URI_RELATIVE + "lecm/reports-editor/copy-report-source");
+                                this._formAddElemet(form, "input", "copyToFile", LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer);
+                                this._formAddElemet(form, "input", "copyRef", this.dataSourceId);
+                            }
+
+                        },
+                        scope: this
+                    },
                     onSuccess: {
                         fn: function DataGrid_onActionCreate_success(response) {
-                            Alfresco.util.PopupManager.displayMessage(
-                                {
-                                    text: this.msg("message.save.success")
-                                });
+                            if (this.isCopy) {
+                                var message = (response.json.success) ? this.msg("message.copy.success")  : this.msg("message.copy.failure");
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text: message
+                                    });
+                            } else {
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text: this.msg("message.save.success")
+                                    });
 
-                            YAHOO.Bubbling.fire("dataItemCreated",
-                                {
-                                    nodeRef: response.json.persistedObject,
-                                    bubblingLabel: "source-columns"
-                                });
+                                YAHOO.Bubbling.fire("dataItemCreated",
+                                    {
+                                        nodeRef: response.json.persistedObject,
+                                        bubblingLabel: "source-columns"
+                                    });
+                                this.toolbarButtons.saveAsButton.set("disabled",false);
+                            }
                         },
                         scope: this
                     },
@@ -261,6 +309,14 @@
                         scope: this
                     }
                 }).show();
+        },
+        _formAddElemet: function(form, tag, nameId, value) {
+            input = document.createElement(tag);
+            input.setAttribute("id", this.id + "-createDetails-form-" + nameId);
+            input.setAttribute("type", "hidden");
+            input.setAttribute("name", nameId);
+            input.setAttribute("value", value);
+            form.appendChild(input);
         },
 
         _onUpdateSourceColumns: function () {
@@ -276,6 +332,10 @@
                 },
                 bubblingLabel: "source-columns"
             });
+        },
+
+        _toolbarButtonActivate: function() {
+                this.toolbarButtons.saveAsButton.set("disabled", (this.columnsDataGrid.modules.dataGrid.totalRecords === 0));
         },
 
         _onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args) {

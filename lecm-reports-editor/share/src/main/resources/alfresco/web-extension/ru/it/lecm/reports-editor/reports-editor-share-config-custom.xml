@@ -117,7 +117,7 @@
                     </field>
                 </appearance>
             </form>
-            <form id="copy-to-repo">
+            <form id="copy-to-report">
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportTemplateType" />
