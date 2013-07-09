@@ -5,7 +5,7 @@ import java.util.Date;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
-import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.utils.Utils;
 
 /**
  * Провайдер для построения отчёта «Сроки прохождения маршрута»

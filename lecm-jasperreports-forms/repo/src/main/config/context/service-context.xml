@@ -23,6 +23,7 @@
 	<!-- Генератор Jasper отчётов (версия v2.x lecm-сервиса) -->
 	<bean id="jasperReportGenerator" class="ru.it.lecm.reports.generators.JasperReportGeneratorImpl">
 		<property name="services" ref="wksKeeper"/>
+		<property name="reportsManager" ref="reportsManager"/>
 	</bean>
 
 	<bean id="reportDAOBean" class="ru.it.lecm.reports.model.DAO.ReportDAOImpl">
@@ -33,6 +34,7 @@
 	 	init-method="init">
 		<!-- <property name="services" ref="wksKeeper"/> -->
 		<property name="reportDAO" ref="reportDAOBean"/>
+		<property name="dsloader" ref="dsLoader"/>
 		<property name="descriptors[0]" ref="jasperTemplate_DocFlowCounters" />
 	</bean>
 
@@ -44,6 +46,16 @@
 		<property name="oofficeGenerator" ref="oofficeReportGenerator"/>
 		<property name="cubeGenerator" ref="cubeReportGenerator"/>
 		  -->
+	</bean>
+
+	<bean id="reportsMgrJavaScriptExtension" class="ru.it.lecm.reports.extensions.ReportManagerJavascriptExtension"
+		parent="baseScript">
+		<property name="extensionName" value="reportsMgr"/>
+		<property name="reportsManager" ref="reportsManager"/>
+	</bean>
+
+	<!-- этот бин создаётся и автоматом используется в share-части -->
+	<bean id="dsLoader" class="ru.it.lecm.reports.beans.DsLoaderImpl">
 	</bean>
 
 	<!-- описатель шаблона jasper-отчёта "Сводный отчёт по договорам" -->
@@ -156,7 +168,7 @@
 
 	<!-- описатель шаблона jasper-отчёта "Досье договора" -->
 	<bean id="jasperTemplate_ContractDossier" class="ru.it.lecm.reports.model.ReportDescriptorImpl">
-		<property name="mnem" value="contract-dossier" />
+		<property name="mnem" value="contract-dossier-test" />
 		<property name="l18Name">
 			<bean class="ru.it.lecm.reports.model.L18Value">
 				<property name="l18items[ru]" value="Досье договора" />

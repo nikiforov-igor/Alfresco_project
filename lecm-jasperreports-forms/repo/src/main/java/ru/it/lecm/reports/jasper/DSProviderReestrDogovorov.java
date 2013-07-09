@@ -17,7 +17,7 @@ import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.jasper.utils.ArgsHelper;
-import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.utils.Utils;
 
 /**
  * Отчёт по реестру договоров

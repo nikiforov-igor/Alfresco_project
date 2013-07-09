@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,16 +38,25 @@ import org.w3c.dom.xpath.XPathEvaluator;
 import org.w3c.dom.xpath.XPathResult;
 import org.xml.sax.SAXException;
 
-import ru.it.lecm.reports.jasper.utils.Utils;
+import com.sun.star.uno.RuntimeException;
+
+import ru.it.lecm.reports.api.model.JavaClassable;
+import ru.it.lecm.reports.api.model.L18able;
+import ru.it.lecm.reports.api.model.Mnemonicable;
+import ru.it.lecm.reports.model.L18Value;
+import ru.it.lecm.reports.utils.Utils;
 
 
 /**
- * @author Ruslan
+ * @author rabdullin
+ *
  */
 public class XmlHelper {
 
 	public static final String XML_DEFAULT_ENCODING = "UTF-8";
 	public static String W3C_XML_SCHEMA_NS_URI = "http://www.w3.org/2001/XMLSchema";
+
+	public static final String XMLATTR_MNEM = "mnem";
 
 	final private static Logger logger = LoggerFactory.getLogger(XmlHelper.class);
 
@@ -67,21 +78,21 @@ public class XmlHelper {
 
 	/**
 	 * Найти список узлов с указанным названием и значением атрибута.
-	 * @param doc узел, внутри которого искать
+	 * @param cur узел, внутри которого искать
 	 * @param tag название узла
 	 * @param attr название атрибута для филтрования по значению или Null, чтобы не использовать фильтр
 	 * @param val значение атрибута для отфильтровывания
 	 * @return
 	 */
-	public static List<Node> getNodesList(Node doc, String tag, String attr, String val)
+	public static List<Node> findNodesList(Node cur, String tag, String attr, String val)
 	{
-		if (doc == null) return null;
+		if (cur == null) return null;
 		final XPathEvaluator xpath = new XPathEvaluatorImpl();
 		String query = tag;
 		if (attr != null && val != null)
 			query += "[@" + attr + "='" + val + "']";
 		final XPathResult result = (XPathResult) xpath.evaluate(query,
-				doc, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+				cur, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
 		final List<Node> nodes = new ArrayList<Node>();
 		while (true) {
 			final Node node  = result.iterateNext();
@@ -94,12 +105,41 @@ public class XmlHelper {
 
 	/**
 	 * Найти список узлов с указанным названием и значением атрибута.
-	 * @param doc узел, внутри которого искать
+	 * @param cur узел, внутри которого искать
 	 * @param tag название узла
 	 * @return
 	 */
-	public static List<Node> getNodesList(Node doc, String tag) {
-		return getNodesList( null, tag, null, null);
+	public static List<Node> findNodesList(Node cur, String tag) {
+		return findNodesList( cur, tag, null, null);
+	}
+
+	/**
+	 * Найти именованный узел с указанным названием или вернуть null
+	 * @param cur
+	 * @param tag
+	 * @return вернуть единственный узел или null если нет такого,
+	 * (!) Если узлов с указанным именем окажется более одного поднимается исключение
+	 */
+	public static Element findNodeByName(Node cur, String tag) {
+		return findNodeByName( cur, tag, null, null);
+	}
+
+	/**
+	 * Найти именованный узел с указанным названием и значением атрибута или вернуть null.
+	 * @param cur узел, внутри которого искать
+	 * @param tag название узла
+	 * @param attr
+	 * @param val
+	 * @return вернуть единственный узел или null если нет такого,
+	 * (!) Если узлов с указанным именем окажется более одного поднимается исключение
+	 */
+	public static Element findNodeByName(Node cur, String tag, String attr, String val) {
+		final List<Node> found = findNodesList( cur, tag, attr, val);
+		if (found == null || found.isEmpty())
+			return null;
+		if (found.size() != 1)
+			throw new RuntimeException( String.format( "XML node '%s' must be single but found %d items", tag, found.size()));
+		return (Element) found.get(0);
 	}
 
 
@@ -151,7 +191,7 @@ public class XmlHelper {
 	}
 
 
-	public static Node getTagNode(Node doc, String tag, String attr, String val)
+	public static Node findNodeByAttr(Node doc, String tag, String attr, String val)
 	{
 		final XPathEvaluator xpath = new XPathEvaluatorImpl();
 		String query = tag;
@@ -164,10 +204,8 @@ public class XmlHelper {
 
 	public static boolean getAttributeBoolean(Element elem, String attr)
 	{
-		final XPathEvaluator xpath = new XPathEvaluatorImpl();
-		final XPathResult result = (XPathResult) xpath.evaluate(attr,
-				elem, null, XPathResult.STRING_TYPE, null);
-		return Boolean.valueOf(result.getStringValue()).booleanValue();
+		final String val = getAttributeString(elem, attr);
+		return (val == null) ? null : Boolean.valueOf(val).booleanValue();
 	}
 
 	public static String getAttributeString( final Element elem, final String attrName)
@@ -177,6 +215,60 @@ public class XmlHelper {
 				elem, null, XPathResult.STRING_TYPE, null);
 		return result.getStringValue();
 	}
+
+	public static void xmlAddClassNameAttr( Element result, JavaClassable jclazz
+			, String xmlAttrName, String defaultAttrValue)
+	{
+		if (jclazz != null && jclazz.className() != null) { 
+			if (defaultAttrValue != null && jclazz.className().equals(defaultAttrValue))
+				return; // совпадает со значением по-умолчанию
+			result.setAttribute( xmlAttrName, jclazz.className());
+		}
+	}
+
+	public static String getClassNameAttr( Element src, String xmlAttrName
+			, String defaultClaszz) {
+		String javaClass = defaultClaszz;
+		if (src != null && src.hasAttribute(xmlAttrName)) {
+			javaClass = src.getAttribute(xmlAttrName);
+		}
+		return javaClass;
+	}
+
+	public static boolean getNodeAsBool( Element srcGrpNode, String xmlSubnodeName,
+			boolean vDefault) {
+
+		final String valueText = getNodeAsText(srcGrpNode, xmlSubnodeName, null);
+		if (valueText != null && valueText.length() > 0) 
+			return Boolean.parseBoolean(valueText); // get as integer
+
+		return vDefault;
+	}
+
+
+	public static int getNodeAsInt( Element srcGrpNode, String xmlSubnodeName,
+			int vDefault) {
+
+		final String valueText = getNodeAsText(srcGrpNode, xmlSubnodeName, null);
+		if (valueText != null && valueText.length() > 0) 
+			return Integer.parseInt(valueText.trim()); // get as integer
+		return vDefault;
+	}
+
+	public static String getNodeAsText( Element srcGrpNode, String xmlSubnodeName,
+			String vDefault) {
+
+		final List<Node> nodes = findNodesList( srcGrpNode, xmlSubnodeName);
+		if (nodes != null && nodes.size() > 0) {
+			final Node node  = nodes.get(0);
+			final String valueText = getTagContent(node);
+			if (valueText != null && valueText.length() > 0) 
+				return valueText;
+		}
+
+		return vDefault;
+	}
+
 
 	private static final DateFormat FORMAT_DATE = new SimpleDateFormat("yyyyMMdd");
 
@@ -200,7 +292,7 @@ public class XmlHelper {
 	 * неподдерживаемом стиле или ошибках разбора
 	 * @throws ParseException 
 	 */
-	public static Date getDateValue(Node node) throws ParseException
+	public static Date getNodeAsDate(Node node) throws ParseException
 	{
 		if (node == null)
 			return null;
@@ -399,7 +491,7 @@ public class XmlHelper {
 	 * @param nodeValue значение для узла
 	 * @return
 	 */
-	public static Element createPlainNode(final Document document
+	public static Element xmlCreatePlainNode(final Document document
 			, final Element parentNode, String nodeName, Object nodeValue)
 	{
 		final Element result = document.createElement(nodeName);
@@ -421,7 +513,7 @@ public class XmlHelper {
 	 * @param cdataText текст для CDATA узла
 	 * @return
 	 */
-	public static Element createCDataNode(final Document document
+	public static Element xmlCreateCDataNode(final Document document
 			, final Element parentNode, String nodeName, String cdataText)
 	{
 		final Element result = document.createElement(nodeName);
@@ -434,4 +526,178 @@ public class XmlHelper {
 		return result;
 	}
 
+	final private static String xmlItemName = "item", xmlKeyName = "key", xmlValueName="value";
+
+	/**
+	 * Добавить карту-список как вложенные items-элементы в destRoot в виде:
+	 *    <item key="..." value="..." />
+	 * @param doc
+	 * @param destParent
+	 * @param map
+	 */
+	public static void xmlAddMapItems( Document doc, Element destParent, Map<String, String> map) {
+		if (map == null)
+			return;
+		for (Map.Entry<String, String> e: map.entrySet()) {
+			final Element node = doc.createElement(xmlItemName);
+			node.setAttribute(xmlKeyName, e.getKey());
+			node.setAttribute(xmlValueName, e.getValue());
+			destParent.appendChild(node);
+		}
+	}
+
+	/**
+	 * Загрузить как Map items-узлы среди дочерних для mapNode
+	 * @param mapNode
+	 * @return
+	 */
+	public static Map<String, Object> getNodeAsItemsMap(Node mapNode) {
+		if (mapNode == null)
+			return null;
+		final Map<String, Object> result = new HashMap<String, Object>();
+		final NodeList children = mapNode.getChildNodes();
+		if (children != null) {
+			for (int i = 0; i < children.getLength(); i++) {
+				final Node childNode = children.item(i);
+				if (!xmlItemName.equalsIgnoreCase(childNode.getNodeName()) ) // skip non-item elements
+					continue;
+				final Object value = getNodeAsSmart(childNode);
+
+				final Node keyNode = (childNode.getAttributes() == null) ? null : childNode.getAttributes().getNamedItem(xmlKeyName);
+				if (keyNode == null) {
+					final String info = String.format("XML map-node '%s'::'%s' has no 'key' attribute for item [%s]", mapNode.getNamespaceURI(), mapNode.getNodeName(), i);
+					logger.error(info);
+					throw new RuntimeException( info);
+				}
+
+				result.put( getTagContent(keyNode), value);
+			} // for
+		}
+		return result;
+	}
+
+	public static List<Object> getNodeAsItemsList(Node listNode) {
+		if (listNode == null)
+			return null;
+		final List<Object> result = new ArrayList<Object>();
+		final NodeList children = listNode.getChildNodes();
+		if (children != null) {
+			for (int i = 0; i < children.getLength(); i++) {
+				final Node childNode = children.item(i); 
+				if (!xmlItemName.equalsIgnoreCase(childNode.getNodeName()) ) // skip non-item elements
+					continue;
+				result.add( getNodeAsSmart(childNode));
+			} // for
+		}
+		return result;
+	}
+
+	public static Object getNodeAsSmart(Node node) {
+		Object result = null;
+		if (node != null) {
+			final Element vListNode = (node.hasChildNodes()) 
+					? (Element) XmlHelper.findNodeByAttr(node, "list", null, null)
+					: null;
+			final Element vMapNode = (node.hasChildNodes()) 
+							? (Element) XmlHelper.findNodeByAttr(node, "map", null, null)
+							: null;
+			if (vListNode != null) { // загружаем список ...
+				result = getNodeAsItemsList(vListNode);
+			} else if (vMapNode != null) { // загружаем мапу ...
+				result = getNodeAsItemsMap(vMapNode);
+			} else { // принимаем что узел содержит строку
+				final String data = XmlHelper.getTagContent(node);
+				result = (data == null ? null : data.trim());
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Добавить подузел "l18" с локализацией 
+	 * @param doc xml документ
+	 * @param destParent родительский узел внутри, которого требуется создать новый
+	 * @param srcItem сериализуемый объект
+	 * @return созданный подузел (будет включен внутрь destParent)
+	 */
+	public static Element xmlAddL18Name(Document doc, Element destParent, L18able srcItem) {
+		return xmlAddL18Name(doc, destParent, srcItem, "l18");
+	}
+
+	/**
+	 * Добавить подузел nodeName с локализацией 
+	 * @param doc xml документ
+	 * @param destParent родительский узел внутри, которого требуется создать новый
+	 * @param srcItem сериализуемый объект
+	 * @param nodeName
+	 * @return созданный подузел (будет включен внутрь destParent)
+	 */
+	public static Element xmlAddL18Name(Document doc, Element destParent, L18able srcItem
+			, final String nodeName) {
+		if (srcItem == null || srcItem.getL18items() == null || srcItem.getL18items().isEmpty())
+			return null;
+		final Element result = doc.createElement( nodeName);
+		destParent.appendChild(result);
+
+		xmlAddMapItems( doc, result, srcItem.getL18items());
+
+		return result;
+	}
+
+	public static L18able getNodeAsL18(Element srcRoot) {
+		final L18Value result = new L18Value();
+		parseL18( result, srcRoot, "l18");
+		return result;
+	}
+
+	public static void parseL18(L18able dest, Element srcRoot) {
+		parseL18( dest, srcRoot, "l18");
+	}
+
+	public static void parseL18(L18able dest, Element srcRoot, final String nodeName) {
+		if (srcRoot == null)
+			return;
+
+		final Element src = findNodeByName( srcRoot, nodeName);
+		if (src == null)
+			return;
+
+		final Map<String, Object> found = getNodeAsItemsMap( src);
+		if (found != null) {
+			for(Map.Entry<String, Object> e: found.entrySet())
+				dest.getL18items().put(e.getKey(), Utils.coalesce( e.getValue(), null) );
+		}
+	}
+
+	public static void xmlAddMnemAttr( Element dest, Mnemonicable mnemo) {
+		if (mnemo.getMnem() != null)
+			dest.setAttribute( XMLATTR_MNEM, mnemo.getMnem());
+	}
+
+	public static void parseMnemAttr( Mnemonicable destMnemo, Element src) {
+		if (src != null && src.hasAttribute(XMLATTR_MNEM))
+			destMnemo.setMnem( src.getAttribute( XMLATTR_MNEM));
+	}
+
+	public static Element xmlCreateStdMnemoItem( Document doc,
+			Mnemonicable objMnemo, String xmlNodeName) {
+		if (objMnemo == null)
+			return null;
+		final Element result = doc.createElement(xmlNodeName);
+		xmlAddMnemAttr(result, objMnemo);
+		if (objMnemo instanceof L18able)
+			xmlAddL18Name(doc, result, (L18able) objMnemo);
+		return result;
+	}
+
+	public static void parseStdMnemoItem( Mnemonicable destObjMnemo, Element srcNode) {
+		if (destObjMnemo == null)
+			return;
+		// final Element srcNode = XmlHelper.getNodeByName( rootNode, xmlNodeName);
+		if (srcNode != null) {
+			parseMnemAttr(destObjMnemo, srcNode);
+			if (destObjMnemo instanceof L18able)
+				parseL18( (L18able) destObjMnemo, srcNode);
+		}
+	}
 }

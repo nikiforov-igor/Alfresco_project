@@ -9,6 +9,17 @@ public class QueryDescriptorImpl
 	private String text;
 	private int offset, limit, pgSize;
 	private boolean allVersions = true;
+	private String preferedNodeType;
+
+	@Override
+	public String getPreferedNodeType() {
+		return preferedNodeType;
+	}
+
+	@Override
+	public void setPreferedNodeType(String value) {
+		this.preferedNodeType = value;
+	}
 
 	@Override
 	public String getText() {
@@ -67,6 +78,7 @@ public class QueryDescriptorImpl
 		result = prime * result + limit;
 		result = prime * result + offset;
 		result = prime * result + pgSize;
+		result = prime * result + ((preferedNodeType == null) ? 0 : preferedNodeType.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		return result;
 	}
@@ -86,6 +98,13 @@ public class QueryDescriptorImpl
 			return false;
 		if (pgSize != other.pgSize)
 			return false;
+
+		if (preferedNodeType == null) {
+			if (other.preferedNodeType != null)
+				return false;
+		} else if (!preferedNodeType.equals(other.preferedNodeType))
+			return false;
+
 		if (text == null) {
 			if (other.text != null)
 				return false;
@@ -101,9 +120,9 @@ public class QueryDescriptorImpl
 		builder.append(", offset ").append(offset);
 		builder.append(", limit ").append(limit);
 		builder.append(", pgSize ").append(pgSize);
+		builder.append(", nodeType ").append(preferedNodeType);
 		builder.append( String.format( "\n\t\t\t<text>\n'%s'\n\t\t\t<text>", text) );
 		builder.append("\n\t\t]");
 		return builder.toString();
 	}
-
 }

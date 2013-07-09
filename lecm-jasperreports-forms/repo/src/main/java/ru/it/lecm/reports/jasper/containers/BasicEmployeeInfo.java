@@ -8,7 +8,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.utils.Utils;
 
 /**
  * Контейнер для типизирования данных по Сотрудникам

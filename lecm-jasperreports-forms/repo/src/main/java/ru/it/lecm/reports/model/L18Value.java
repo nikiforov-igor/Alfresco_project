@@ -75,7 +75,7 @@ public class L18Value implements L18able {
 	public static String getNormalizedLocale(String locale) {
 		if (locale == null || locale.length() == 0)
 			return null;
-		if (!locale.contains("-"))
+		if (!locale.contains("-") && !locale.contains("_"))
 			locale += "-"+ locale;
 		return locale.toUpperCase();
 	}

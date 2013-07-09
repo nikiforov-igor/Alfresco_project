@@ -27,7 +27,7 @@
 		<defaultValueExpression><![CDATA["select * from lecm-contract:document as Contract"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String">
-		<defaultValueExpression><![CDATA["ds-contracts.xml"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["ds-contracts-list.xml"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[]]>

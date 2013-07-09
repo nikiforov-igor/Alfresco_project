@@ -16,7 +16,7 @@ import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.generators.ParameterMapper;
-import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.utils.Utils;
 
 /**
  * User: AZinovin
@@ -109,7 +109,7 @@ public class JasperFormProducer extends AbstractWebScript {
 		PropertyCheck.mandatory (this, "reportGenerators", getReportGenerators());
 		PropertyCheck.mandatory(this, "reportsManager", getReportsManager() );
 
-		final ReportDescriptor reportDesc = this.getReportsManager().getReportDescriptor(reportName);
+		final ReportDescriptor reportDesc = this.getReportsManager().getRegisteredReportDescriptor(reportName);
 		if (reportDesc != null) {
 			ParameterMapper.assignParameters( reportDesc, requestParameters);
 		}

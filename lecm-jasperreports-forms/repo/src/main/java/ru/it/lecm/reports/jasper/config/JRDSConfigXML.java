@@ -3,13 +3,8 @@ package ru.it.lecm.reports.jasper.config;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -21,11 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import ru.it.lecm.reports.api.DataFieldColumn;
+import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.jasper.utils.MacrosHelper;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.reports.xml.XmlHelper;
@@ -233,12 +227,7 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 
 			// чтение мета-описаний полей ... 
 			{
-				final Element fieldsNode  = (Element) XmlHelper.getTagNode(rootElem, DSXMLProducer.XMLNODE_LIST_FIELDS, null, null);
-				final List<Node> fieldsNodeList = XmlHelper.getNodesList(fieldsNode, DSXMLProducer.XMLNODE_FIELD, null, null);
-				if (fieldsNodeList == null || fieldsNodeList.isEmpty()) {
-					logger.warn( String.format( "xml %s contains no fields at %s/%s", info, DSXMLProducer.XMLNODE_LIST_FIELDS, DSXMLProducer.XMLNODE_FIELD));
-				} else
-					xmlGetMetaFields( fieldsNodeList);
+				xmlGetMetaFields( rootElem, info);
 			}
 
 			logger.info( "xml loaded successfully from "+ info);
@@ -254,7 +243,7 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 	/**
 	 * Найти вложенный узел по имени и получить из него значение для аргумента.
 	 * (!) XML-списки поддерживаются - списком будет считаться xml-узел, если в нём есть дочерний "<list>" или "<map>"
-	 * Загруженный list или map стновится текущим значением соответствующего this.args(). 
+	 * Загруженный list или map становится текущим значением соответствующего this.args(). 
 	 * (!) Если таких вложенных узлов нет - текущее значение аргумента в this.args() НЕ ИЗМЕНЯЕТСЯ.
 	 * (!) Если узел есть - значение изменяется (даже если оно будет null). 
 	 * @param parentNode родительский xml-узел
@@ -280,7 +269,7 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		Object result = null;
 		Node curNode = parentNode;
 		for (int i = 0; i < simpleNodeTags.length; i++) {
-			curNode = (Element) XmlHelper.getTagNode(curNode, simpleNodeTags[i], null, null);
+			curNode = (Element) XmlHelper.findNodeByAttr(curNode, simpleNodeTags[i], null, null);
 			if (curNode == null) {
 				logger.warn( String.format( "XML did not contain items deeper than '%s' for full path '%s' -> got as NULL"
 						, concat(simpleNodeTags, i)
@@ -290,7 +279,7 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 			}
 		}
 		if (curNode != null) {
-			result = getXmlNodeValue(curNode);
+			result = XmlHelper.getNodeAsSmart(curNode);
 			getArgs().put( destArgName, result);
 		}
 
@@ -305,231 +294,14 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		return result.toString();
 	}
 
-	private Object getXmlNodeValue(Node node) {
-		Object result = null;
-		if (node != null) {
-			final Element vListNode = (node.hasChildNodes()) 
-					? (Element) XmlHelper.getTagNode(node, "list", null, null)
-					: null;
-			final Element vMapNode = (node.hasChildNodes()) 
-							? (Element) XmlHelper.getTagNode(node, "map", null, null)
-							: null;
-			if (vListNode != null) { // загружаем список ...
-				result = getXmlList(vListNode);
-			} else if (vMapNode != null) { // загружаем мапу ...
-				result = getXmlMap(vMapNode);
-			} else { // принимаем что узел содержит строку
-				final String data = XmlHelper.getTagContent(node);
-				result = (data == null ? null : data.trim());
-			}
-		}
-		return result;
-	}
-
-	private List<Object> getXmlList(Node listNode) {
-		if (listNode == null)
-			return null;
-		final List<Object> result = new ArrayList<Object>();
-		final NodeList children = listNode.getChildNodes();
-		if (children != null) {
-			for (int i = 0; i < children.getLength(); i++) {
-				final Node childNode = children.item(i); 
-				if (!"item".equalsIgnoreCase(childNode.getNodeName()) ) // skip non-item elements
-					continue;
-				result.add( getXmlNodeValue(childNode));
-			} // for
-		}
-		return result;
-	}
-
-	private Map<String, Object> getXmlMap(Node mapNode) {
-		if (mapNode == null)
-			return null;
-		final Map<String, Object> result = new HashMap<String, Object>();
-		final NodeList children = mapNode.getChildNodes();
-		if (children != null) {
-			for (int i = 0; i < children.getLength(); i++) {
-				final Node childNode = children.item(i);
-				if (!"item".equalsIgnoreCase(childNode.getNodeName()) ) // skip non-item elements
-					continue;
-				final Object value = getXmlNodeValue(childNode);
-
-				final Node keyNode = (childNode.getAttributes() == null) ? null : childNode.getAttributes().getNamedItem("key");
-				if (keyNode == null) {
-					final String info = String.format("XML map-node '%s'::'%s' has no 'key' attribute for item [%s]", mapNode.getNamespaceURI(), mapNode.getNodeName(), i);
-					logger.error(info);
-					throw new RuntimeException( info);
-				}
-
-				result.put( XmlHelper.getTagContent(keyNode), value);
-			} // for
-		}
-		return result;
-	}
-
-	/** Набор стандартных названий атрибутов */
-	final static Set<String> STD_XML_ARGS = new HashSet<String>( Arrays.asList( 
-			  DSXMLProducer.XMLATTR_JR_FLDNAME
-			, DSXMLProducer.XMLATTR_QUERY_FLDNAME
-			, DSXMLProducer.XMLATTR_DISPLAYNAME
-			, DSXMLProducer.XMLATTR_JAVACLASS 
-		));
-
-	private void xmlGetMetaFields(List<Node> fieldsNodes) {
-		if (fieldsNodes == null || fieldsNodes.isEmpty()) {
-			return;
-		}
-
-		final StringBuilder sb = new StringBuilder();
-		int i = 0;
-		for (Node node: fieldsNodes) {
-			i++;
-			final Element fldNode = (Element) node;
-
-			// FIELD_QUERY_NAME
-			String jrFldname = "COL_"+ i; // default name for any field will be simple "col_nn"
-			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_JR_FLDNAME)) {
-				final String sname = fldNode.getAttribute(DSXMLProducer.XMLATTR_JR_FLDNAME);
-				if (sname != null && sname.length() > 0)
-					jrFldname = sname;
-			}
-			// корректировка названия колонки для гарантии уникальности имени 
-			{
-				String nameUnique = jrFldname;
-				int unique = 0;
-				while(this.getArgs().containsKey(nameUnique)) { // название вида "ABC_n" появится только при неуникальности
-					unique++; // (!) нумерация колонок от единицы
-					nameUnique = jrFldname+ "_"+ unique;
-				}
-				if (unique > 0) 
-					logger.warn( String.format("Unique field name generated as '%s' (for base name '%s')", nameUnique, jrFldname));
-				jrFldname = nameUnique;
-			}
+	private void xmlGetMetaFields( Element rootElem, String info) {
+		final List<ColumnDescriptor> found = new ArrayList<ColumnDescriptor>(5);
+		DSXMLProducer.parseColumns( found, rootElem, info);
+		for(ColumnDescriptor column: found) {
 			// добавление новой jr-колонки
-			final DataFieldColumn fld = this.addField(jrFldname);
-
-			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME)) {
-				final String queryFldName = fldNode.getAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME);
-				if (queryFldName != null && queryFldName.length() > 0)
-					fld.setValueLink( queryFldName);
-			}
-
-			// DISPLAY_NAME
-			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_DISPLAYNAME)) {
-				final String displayName = fldNode.getAttribute(DSXMLProducer.XMLATTR_DISPLAYNAME);
-				fld.setDescription(displayName);
-			}
-
-			// JAVA_CLASS
-			Class<?> javaClass = String.class; // default class
-			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_JAVACLASS)) {
-				final String vClazz = fldNode.getAttribute(DSXMLProducer.XMLATTR_JAVACLASS);
-				javaClass = getJavaClassByName( vClazz, javaClass);
-			}
-			fld.setValueClass(javaClass);
-	
-			// подгрузка остальных атрибутов ...
-			takeAttributes( fld, fldNode.getAttributes(), STD_XML_ARGS);
-
-			// журналирование
-			if (logger.isDebugEnabled())
-				sb.append( String.format( "got column/field %s: %s/%s [%s] '%s'"
-					, i, fld.getName(), fld.getValueLink(), fld.getValueClass(), fld.getDescription())); 
-
-		} //for
-
-		if (logger.isInfoEnabled()) {
-			sb.append( String.format( "found fields: %s", i)); 
-			logger.info( sb.toString());
-		}
-	}
-
-
-	/**
-	 * Получение значений атрибутов в список флагов объекта destFld из мапы src
-	 * @param dest целевой объект
-	 * @param src исходный список атрибутов
-	 * @param stdSkipArgs названия атрибутов, которые надо (!) пропускать
-	 */
-	private void takeAttributes( DataFieldColumn dest, NamedNodeMap src,
-			Set<String> stdSkipArgs) {
-		if (src == null)
-			return;
-		for( int ind = 0; ind < src.getLength(); ind++) {
-			final Node n = src.item(ind);
-			if (n == null) continue;
-			// фильтра нет или значение не фильтруется
-			final boolean isStdName = (stdSkipArgs != null) && stdSkipArgs.contains(n.getNodeName());
-			if (!isStdName)
-				dest.addFlag(n.getNodeName(), n.getNodeValue());
-		}
-	}
-
-	// для возможности задавать типы алиасами
-	private static Map<String, Class<?>> knownTypes = null;
-
-	/**
-	 * По короткому названию класса вернуть известный класс или null, если такого не зарегистрировано.
-	 * @param vClazzAlias проверяемый алиас класса
-	 * @return 
-	 */
-	private static Class<?> findKnownType(String vClazzAlias) {
-		if (vClazzAlias == null)
-			return null;
-
-		if (knownTypes == null) {
-			knownTypes = new HashMap<String, Class<?>>();
-
-			// TODO: (RUSA) вынести всё это в бины
-
-			knownTypes.put("integer", Integer.class);
-			knownTypes.put("int", Integer.class);
-
-			knownTypes.put("bool", Boolean.class);
-			knownTypes.put("boolean", Boolean.class);
-			// knownTypes.put("yesno", Boolean.class);
-			// knownTypes.put("logical", Boolean.class);
-
-			knownTypes.put("long", Long.class);
-			knownTypes.put("longint", Long.class);
-
-			knownTypes.put("id", String.class);
-			knownTypes.put("string", String.class);
-
-			knownTypes.put("date", Date.class);
-
-			knownTypes.put("numeric", Number.class);
-			knownTypes.put("number", Number.class);
-			knownTypes.put("float", Float.class);
-			knownTypes.put("double", Double.class);
-		}
-
-		final String skey = vClazzAlias.toLowerCase();
-		return (knownTypes.containsKey(skey)) ? knownTypes.get(skey) : null;
-	}
-
-	/**
-	 * По  названию класса вернуть известный класс или defaultClass.
-	 * @param vClazzOrAlias проверяемое название класса - полное имя типа или алиас
-	 * @return 
-	 */
-	public static Class<?> getJavaClassByName( final String vClazz, final Class<?> defaultClass)
-	{
-		Class<?> byAlias = findKnownType(vClazz);
-		if (byAlias != null)
-			return byAlias;
-
-		// не найдено синононима -> ищем по полному имени
-		if (vClazz != null) {
-			try {
-				return Class.forName(vClazz);
-			} catch (ClassNotFoundException ex) {
-				// ignore class name fail by default
-				logger.warn( String.format( "Unknown java class '%s' -> used as '%s'", vClazz, defaultClass));
-			}
-		}
-
-		return defaultClass;
+			final DataFieldColumn fld = DataFieldColumn.createDataField(column);
+			addField(fld);
+		} // for
 	}
 
 }

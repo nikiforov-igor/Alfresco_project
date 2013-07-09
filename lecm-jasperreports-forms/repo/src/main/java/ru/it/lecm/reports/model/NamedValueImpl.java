@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.model;
 
 import ru.it.lecm.reports.api.model.L18able;
+import ru.it.lecm.reports.api.model.NamedValue;
 import ru.it.lecm.reports.api.model.Valueable;
 
 /**
@@ -8,7 +9,7 @@ import ru.it.lecm.reports.api.model.Valueable;
  * @author rabdullin
  *
  */
-public class NamedValueImpl extends MnemonicNamedItem implements Valueable {
+public class NamedValueImpl extends MnemonicNamedItem implements NamedValue {
 
 	private Valueable value;
 
@@ -22,6 +23,11 @@ public class NamedValueImpl extends MnemonicNamedItem implements Valueable {
 
 	public NamedValueImpl(String mnem) {
 		super(mnem);
+	}
+
+	public NamedValueImpl(String mnem, String value) {
+		this(mnem);
+		setValue(value);
 	}
 
 /*

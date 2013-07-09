@@ -72,27 +72,37 @@ public class JRUtils {
 	 */
 	public static List<JRField> getJRFields(ReportDescriptor reportDescriptor) {
 		// NOTE: если понадобится, можно сделать список для полей "однажды приготавливаемый" ...
+		final List<JRField> result =
+				(reportDescriptor != null && reportDescriptor.getDsDescriptor() != null) 
+					? getJRFields(reportDescriptor.getDsDescriptor().getColumns())
+					: new ArrayList<JRField>();
+		return result;
+	}
+
+	public static List<JRField> getJRFields(Collection<ColumnDescriptor> columns) {
 		final List<JRField> result = new ArrayList<JRField>();
-		if (	reportDescriptor != null 
-				&& reportDescriptor.getDsDescriptor() != null
-				&& reportDescriptor.getDsDescriptor().getColumns() != null
-				) 
+		if (columns != null) 
 		{
-			for(ColumnDescriptor colDesc: reportDescriptor.getDsDescriptor().getColumns()) {
-				final JRDesignField field = new JRDesignField();
-				field.setName( colDesc.getColumnName());
-				try {
-					field.setValueClass( Class.forName(colDesc.className()) );
-				} catch (ClassNotFoundException ex) {
-					final String msg = String.format( "Column '%s' has invalid value class type: '%s' "
-							, colDesc.getColumnName(), colDesc.className());
-					// logger.error(msg, ex);
-					throw new UnsupportedOperationException( msg, ex);
-				}
+			for(ColumnDescriptor colDesc: columns) {
+				final JRDesignField field = createJRField(colDesc);
 				result.add(field);
 			} // for
 		}
 		return result;
+	}
+
+	public static JRDesignField createJRField(ColumnDescriptor colDesc) {
+		final JRDesignField field = new JRDesignField();
+		field.setName( colDesc.getColumnName());
+		try {
+			field.setValueClass( Class.forName(colDesc.className()) );
+		} catch (ClassNotFoundException ex) {
+			final String msg = String.format( "Column '%s' has invalid value class type: '%s' "
+					, colDesc.getColumnName(), colDesc.className());
+			// logger.error(msg, ex);
+			throw new UnsupportedOperationException( msg, ex);
+		}
+		return field;
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.api.model;
 
+
 /**
  * Тип параметра опредеялется фактически мнемоникой.
  * Предполагается, что bound-значения могут верно отрабатываться провайдером.
@@ -55,6 +56,18 @@ public interface ParameterType extends Mnemonicable, L18able {
 		 */
 		public String getMnemonic() {
 			return mnemonic;
+		}
+
+		public static Type findType(String nameOrMnemonic) {
+			if (nameOrMnemonic != null) {
+				for(Type t: values()) {
+					if ( nameOrMnemonic.equalsIgnoreCase(t.name())
+						|| (t.mnemonic != null && nameOrMnemonic.equalsIgnoreCase(t.mnemonic))
+					)
+						return t; // FOUNDS
+				}
+			}
+			return null; // NOT FOUND
 		}
 	}
 }

@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.reports.jasper.DSProdiverApprovalSummaryByPeriod.ApproveQNameHelper;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
-import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.utils.Utils;
 
 /**
  * Отчёт "Список согласования"

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.stream.XMLStreamReader;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;

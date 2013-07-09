@@ -7,7 +7,7 @@ import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.generators.ParameterMapper;
-import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.utils.Utils;
 
 public class DataSourceDescriptorImpl
 		extends MnemonicNamedItem
@@ -76,7 +76,7 @@ public class DataSourceDescriptorImpl
 			int i = 0;
 			for (ColumnDescriptor c: columns.subList(0, Math.min(columns.size(), maxLen)) ) {
 				++i;
-				builder.append( String.format( "\t%d\t %s \n", i, (c == null ? "NULL" : c.toString()) ));
+				builder.append( String.format( "\t\t[col#%d]\t %s \n", i, (c == null ? "NULL" : c.toString()) ));
 			}
 		}
 		builder.append("]");

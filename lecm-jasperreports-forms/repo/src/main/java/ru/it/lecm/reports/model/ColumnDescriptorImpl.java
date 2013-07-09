@@ -8,8 +8,8 @@ import ru.it.lecm.reports.api.model.FlagsExtendable;
 import ru.it.lecm.reports.api.model.JavaDataType;
 import ru.it.lecm.reports.api.model.NamedValue;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
-import ru.it.lecm.reports.jasper.utils.Utils;
 import ru.it.lecm.reports.model.JavaDataTypeImpl.SupportedTypes;
+import ru.it.lecm.reports.utils.Utils;
 
 /**
  * Описатель колонки.
@@ -125,12 +125,13 @@ public class ColumnDescriptorImpl
 	@Override
 	public String toString() {
 		return "ColumnDescriptorImpl ["
-				+ "mnem '"+ getMnem()+ "'"
+				+ "colname '"+ getColumnName()+ "'"
 				+ ", dataType " + dataType
 				+ (isSpecial() ? ", special": "")
 				+ ", expression '"+ expression+ "'"
 				+ ", parameter " + parameterTypedValue
-				+ ", flagsExtendable " + flagsExtendable
+				+ "\n\t, javaClass " + super.toString()
+				+ "\n\t, flagsExtendable " + flagsExtendable
 				+ "]";
 	}
 
@@ -167,7 +168,20 @@ public class ColumnDescriptorImpl
 
 	@Override
 	public void setDataType(JavaDataType value) {
+		if (Utils.isSafelyEquals(this.dataType, value))
+			return;
 		this.dataType = value;
+		setClassName( (this.dataType == null) ? null : this.dataType.className());
+	}
+
+	@Override
+	public void setClassName(String valueClazz) {
+		if (Utils.isSafelyEquals(className(), valueClazz))
+			return;
+		super.setClassName(valueClazz);
+		// Class<?> javaClass = Utils.getJavaClassByName( valueClazz, defaultClass);
+		final SupportedTypes t = JavaDataTypeImpl.SupportedTypes.findType(className());
+		setDataType( t == null ? null : t.javaDataType() );
 	}
 
 	@Override

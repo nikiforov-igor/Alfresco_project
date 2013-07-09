@@ -4,6 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.design.JRDesignField;
+import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.api.model.NamedValue;
 
 /**
  * DataFieldColumn это jasper-поле + дополнительные поля.
@@ -95,6 +97,30 @@ public class DataFieldColumn extends JRDesignField {
 		return String.format( "%s(link: %s, '%s' %s)", super.getName(), valueLink
 				, super.getDescription(), (attributes == null ? "" : attributes.toString())
 		);
+	}
+
+	public static DataFieldColumn createDataField(ColumnDescriptor colDesc) {
+		if (colDesc == null)
+			return null;
+		final DataFieldColumn result = new DataFieldColumn();
+		result.setName( colDesc.getColumnName());
+		result.setDescription( colDesc.get(null, null));
+		result.setValueLink(colDesc.getExpression());
+		try {
+			result.setValueClass( Class.forName(colDesc.className()) );
+		} catch (ClassNotFoundException ex) {
+			final String msg = String.format( "Column '%s' has invalid value class type: '%s' "
+					, colDesc.getColumnName(), colDesc.className());
+			// logger.error(msg, ex);
+			throw new UnsupportedOperationException( msg, ex);
+		}
+
+		if (colDesc.flags() != null) {
+			for(NamedValue nv: colDesc.flags()) {
+				result.addFlag(nv.getMnem(), nv.getValue());
+			}
+		}
+		return result;
 	}
 }
 

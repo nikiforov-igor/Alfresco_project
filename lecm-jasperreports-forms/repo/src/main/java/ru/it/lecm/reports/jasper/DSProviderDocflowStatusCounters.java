@@ -22,7 +22,7 @@ import ru.it.lecm.reports.api.AssocDataFilter.AssocDesc;
 import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.jasper.utils.ArgsHelper;
-import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.utils.Utils;
 
 /**
  * Провайдер для построения отчёта «Сводный отчет по договорам»

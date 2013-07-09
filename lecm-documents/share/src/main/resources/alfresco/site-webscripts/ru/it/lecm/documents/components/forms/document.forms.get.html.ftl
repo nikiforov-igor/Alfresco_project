@@ -18,7 +18,7 @@
                 </div>
                 -->
                 <div id="experts" class="yui-skin-sam">
-                    <a href="javascript:void(0);" onclick="printNode('${nodeRef}', 'contract-dossier')" class="text-cropped" title="${msg("form.dossier")}">${msg("form.dossier")}</a>
+                    <a href="javascript:void(0);" onclick="printNode('${nodeRef}', 'contract-dossier-byid')" class="text-cropped" title="${msg("form.dossier")}">${msg("form.dossier")}</a>
                 </div>
                 <div id="experts" class="yui-skin-sam">
                     <a href="javascript:void(0);" onclick="printNode('${nodeRef}', 'contract-delta-list-byid')" class="text-cropped" title="${msg("form.contractDelta")}">${msg("form.contractDelta")}</a>

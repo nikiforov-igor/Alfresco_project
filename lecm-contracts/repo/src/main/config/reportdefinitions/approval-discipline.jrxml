@@ -27,7 +27,7 @@
 		<defaultValueExpression><![CDATA["select * from lecm-al:approval-list as approvals"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String">
-		<defaultValueExpression><![CDATA["ds-approval.xml"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["ds-approval-discipline.xml"]]></defaultValueExpression>
 	</parameter>
 	<queryString language="SQL">
 		<![CDATA[select * from cm:documents]]>

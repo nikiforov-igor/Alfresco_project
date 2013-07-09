@@ -32,6 +32,7 @@ public class JavaClassableImpl
 		return this.className;
 	}
 
+	@Override
 	public void setClassName(String value) {
 		this.className = value;
 	}
@@ -65,9 +66,10 @@ public class JavaClassableImpl
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append( String.format( "%s [", this.getClass().getSimpleName() ));
+		builder.append( String.format( "%s [", this.getClass().getName() ));
 		builder.append( String.format( "mnem '%s'", getMnem()));
 		builder.append( String.format( ", className '%s'", className));
+		builder.append( String.format( ", l18 %s", getL18items()));
 		builder.append("]");
 		return builder.toString();
 	}

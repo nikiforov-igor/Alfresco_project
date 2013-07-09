@@ -5,7 +5,7 @@ import java.io.InputStream;
 import ru.it.lecm.reports.api.model.ReportTemplate;
 
 public class ReportTemplateImpl
-		extends L18Value
+		extends MnemonicNamedItem
 		implements ReportTemplate
 {
 
@@ -26,6 +26,7 @@ public class ReportTemplateImpl
 	public ReportTemplateImpl(String fileName) {
 		this( fileName, null);
 	}
+
 
 	@Override
 	public String getFileName() {

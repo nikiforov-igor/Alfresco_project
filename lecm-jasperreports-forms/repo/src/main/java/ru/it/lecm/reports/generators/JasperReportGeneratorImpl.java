@@ -34,10 +34,11 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.forms.jasperforms.AbstractDataSourceProvider;
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
 import ru.it.lecm.reports.api.ReportGenerator;
+import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.jasper.utils.ArgsHelper;
-import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.utils.Utils;
 
 /**
  * Генератор Jasper-отчётов.
@@ -50,6 +51,7 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 	private static final transient Logger log = LoggerFactory.getLogger(JasperReportGeneratorImpl.class);
 
 	private WKServiceKeeper services; 
+	private ReportsManager reportsManager;
 
 	public JasperReportGeneratorImpl() {
 	}
@@ -62,6 +64,14 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 		this.services = services;
 	}
 
+	public ReportsManager getReportsManager() {
+		return reportsManager;
+	}
+
+	public void setReportsManager(ReportsManager reportsManager) {
+		this.reportsManager = reportsManager;
+	}
+
 	@Override
 	public void produceReport(
 			WebScriptResponse webScriptResponse
@@ -71,8 +81,20 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 			) throws IOException 
 	{
 		PropertyCheck.mandatory (this, "services", services);
+		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
 
-		final String reportFileName = "/reportdefinitions/" + reportName + ".jasper";
+		// TODO: debug
+		{
+			final URL url = this.reportsManager.getDsXmlResourceUrl(reportName);
+			log.info( String.format( "ds file at url: '%s'", url));
+		}
+
+		// "/reportdefinitions/" + reportName + ".jasper"
+		final String reportFileName = String.format( "%s/%s.jasper" 
+				, this.reportsManager.getReportTemplateFileDir(reportName)
+				, reportName
+				);
+
 		final URL reportDefinitionURL = JRLoader.getResource(reportFileName);
 		if (reportDefinitionURL == null)
 			throw new IOException( String.format("Report is missed - file not found at '%s'", reportFileName));

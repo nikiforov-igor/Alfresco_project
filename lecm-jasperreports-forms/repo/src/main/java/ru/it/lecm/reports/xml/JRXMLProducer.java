@@ -189,7 +189,7 @@ public class JRXMLProducer {
 			, String xmlName, String attrMakerName, String attrMarkerValue
 			, String attrDestName, String attrDestValue) 
 	{
-		final List<Node> properties = XmlHelper.getNodesList(parentNode, xmlName, attrMakerName, attrMarkerValue);
+		final List<Node> properties = XmlHelper.findNodesList(parentNode, xmlName, attrMakerName, attrMarkerValue);
 
 		final Element dsNode;
 		if (properties != null && !properties.isEmpty()) {
@@ -225,7 +225,7 @@ public class JRXMLProducer {
 			return;
 
 		/* удаление прежнего списка полей ... */
-		final List<Node> fields = XmlHelper.getNodesList(destNode, XMLNODE_FIELD);
+		final List<Node> fields = XmlHelper.findNodesList(destNode, XMLNODE_FIELD);
 		if (fields != null) {
 			int i = 0;
 			for (Node child: fields) {

@@ -1,18 +1,24 @@
-package ru.it.lecm.reports.jasper.utils;
+package ru.it.lecm.reports.utils;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.jasper.utils.ArgsHelper;
 
 
 public class Utils {
+
+	final static Logger logger = LoggerFactory.getLogger(Utils.class);
 
 	private Utils() {
 	}
@@ -324,6 +330,73 @@ public class Utils {
 			return defaultValue;
 		final double duration_ms = (endAt.getTime() - startAt.getTime());
 		return (float) (duration_ms / MILLIS_PER_DAY);
+	}
+
+	/**
+	 * По  названию класса вернуть известный класс или defaultClass.
+	 * @param vClazzOrAlias проверяемое название класса - полное имя типа или алиас
+	 * @return 
+	 */
+	public static Class<?> getJavaClassByName( final String vClazz, final Class<?> defaultClass)
+	{
+		Class<?> byAlias = findKnownType(vClazz);
+		if (byAlias != null)
+			return byAlias;
+
+		// не найдено синононима -> ищем по полному имени
+		if (vClazz != null) {
+			try {
+				return Class.forName(vClazz);
+			} catch (ClassNotFoundException ex) {
+				// ignore class name fail by default
+				logger.warn( String.format( "Unknown java class '%s' -> used as '%s'", vClazz, defaultClass));
+			}
+		}
+
+		return defaultClass;
+	}
+
+	// для возможности задавать типы алиасами
+	private static Map<String, Class<?>> knownTypes = null;
+
+	/**
+	 * По короткому названию класса вернуть известный класс или null, если такого не зарегистрировано.
+	 * @param vClazzAlias проверяемый алиас класса
+	 * @return 
+	 */
+	private static Class<?> findKnownType(String vClazzAlias) {
+		if (vClazzAlias == null)
+			return null;
+
+		if (knownTypes == null) {
+			knownTypes = new HashMap<String, Class<?>>();
+
+			// TODO: (RUSA) вынести всё это в бины
+
+			knownTypes.put("integer", Integer.class);
+			knownTypes.put("int", Integer.class);
+
+			knownTypes.put("bool", Boolean.class);
+			knownTypes.put("boolean", Boolean.class);
+			// knownTypes.put("yesno", Boolean.class);
+			// knownTypes.put("logical", Boolean.class);
+
+			knownTypes.put("long", Long.class);
+			knownTypes.put("longint", Long.class);
+
+			knownTypes.put("id", String.class);
+			knownTypes.put("string", String.class);
+
+			knownTypes.put("date", Date.class);
+
+			knownTypes.put("numeric", Number.class);
+			knownTypes.put("number", Number.class);
+			knownTypes.put("float", Float.class);
+			knownTypes.put("double", Double.class);
+		}
+
+		final String skey = vClazzAlias.toLowerCase();
+		return (knownTypes.containsKey(skey)) ? knownTypes.get(skey) : null;
 	}
 
 }

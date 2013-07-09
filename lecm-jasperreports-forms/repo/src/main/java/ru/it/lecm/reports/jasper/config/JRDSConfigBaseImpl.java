@@ -46,6 +46,16 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 		return result;
 	}
 
+	/**
+	 * Добавить указанное поле
+	 * @param jrFld
+	 * @return
+	 */
+	public void addField(DataFieldColumn jrFld) {
+		if (jrFld != null)
+			this.getMetaFields().put( jrFld.getName(), jrFld);
+	}
+
 	public Map<String, DataFieldColumn> getMetaFields() {
 		if (metaFields == null)
 			metaFields = new HashMap<String, DataFieldColumn>();
@@ -60,7 +70,7 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 	@Override
 	public Map<String, Object> getArgs() {
 		/* 
-		 * такая констуркция сработает даже при вызове виртуальных методов в 
+		 * такая конструкция сработает даже при вызове виртуальных методов в 
 		 * конструкторах в отличии от: 
 		 *    final private T args = new TImpl()
 		 * , которая будет валиться при вызове вирт методов потомков из

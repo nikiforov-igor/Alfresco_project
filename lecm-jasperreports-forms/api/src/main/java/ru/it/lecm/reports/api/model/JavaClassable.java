@@ -11,4 +11,6 @@ public interface JavaClassable {
 	 * @return
 	 */
 	String className();
+
+	void setClassName(String value);
 }

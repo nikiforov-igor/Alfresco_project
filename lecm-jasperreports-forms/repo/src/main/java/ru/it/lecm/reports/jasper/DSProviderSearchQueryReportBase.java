@@ -26,8 +26,9 @@ import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
-import ru.it.lecm.reports.jasper.utils.Utils;
+import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
+import ru.it.lecm.utils.LuceneSearchBuilder;
 
 /**
  * Реализация провайдера с поддержкой lucene-поиска по критериям:
@@ -215,26 +216,25 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 	 * TYPE:"lecm-al:approval-list" AND ID:"workspace://SpacesStore/11a08758-6eb7-450f-9f17-3f168d981629"
 	 */
 	protected String buildQueryText() {
+		// make it as LuceneQueryBuilder: emitType, emmitID, emmitDateInterval, etc ...it
 		if (logger.isDebugEnabled()) {
 			logger.debug( String.format("Quering nodes by type %s and id %s\n"
 					, Utils.coalesce(this.getPreferedType(), "*")
 					, Utils.coalesce(this.getNodeRef(), "*")
 			));
 		}
-		final StringBuilder bquery = new StringBuilder();
+		final LuceneSearchBuilder builder = new LuceneSearchBuilder( this.getServices().getServiceRegistry().getNamespaceService() );
+		// final StringBuilder bquery = new StringBuilder();
 
 		boolean hasData = false;
 
-		if (getPreferedType() != null) {
+		if (builder.emmitTypeCond(getPreferedType(), null)) {
 			hasData = true;
-			final QName qTYPE = QName.createQName( getPreferedType(), this.getServices().getServiceRegistry().getNamespaceService());
-			bquery.append( "TYPE:"+ Utils.quoted(qTYPE.toString()));
 		}
 
-		if (this.getNodeRef() != null)
-			bquery.append( (hasData ? " AND": "")+ " ID:"+ Utils.quoted(Utils.coalesce( this.getNodeRef(), "-1")) );
+		builder.emmitIdCond(this.getNodeRef(), (hasData ? " AND": null));
 
-		return bquery.toString();
+		return builder.getQuery().toString();
 	}
 
 
