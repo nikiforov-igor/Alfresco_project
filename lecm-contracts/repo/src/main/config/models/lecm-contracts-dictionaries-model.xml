@@ -50,6 +50,8 @@
 				</property>
 			</properties>
 		</type>
+
+		<!--todo Нужно будет удалить-->
 		<type name="lecm-contract-dic:contract-subjects">
 			<title>Logic Ecm Dictionary Contract Subjects</title>
 			<parent>lecm-dic:plane_dictionary_values</parent>

@@ -58,7 +58,7 @@
                     </field>
                     <field id="lecm-contract:subjectContract-assoc" set="contract-info">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика_x0020_договора</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
@@ -215,7 +215,7 @@
                     </field>
                     <field id="lecm-contract:subjectContract-assoc" set="contract-info">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика_x0020_договора</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
@@ -713,7 +713,7 @@
                     <field id="lecm-contract:subjectContract-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">
-                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика_x0020_договора
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика
                             </control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
@@ -1071,7 +1071,7 @@
 					</field>
 					<field id="lecm-contract-reports:contracts-list-contract-subject">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика_x0020_договора</control-param>
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
 							<control-param name="notSelectedOptionLabel"> </control-param>
@@ -1146,7 +1146,7 @@
 					</field>
 					<field id="lecm-contract-reports:dft-contract-subject">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика_x0020_договора</control-param>
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
 							<control-param name="notSelectedOptionLabel"> </control-param>
@@ -1224,7 +1224,7 @@
 
 					<field id="lecm-contract-reports:dfc-contract-subject">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика_x0020_договора</control-param>
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="notSelectedOptionShow">true</control-param>
 							<control-param name="notSelectedOptionLabel"> </control-param>

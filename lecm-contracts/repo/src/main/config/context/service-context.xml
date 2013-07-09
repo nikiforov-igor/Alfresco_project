@@ -22,7 +22,8 @@
 	<bean id="contracts.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap,ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
 		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,contracts.LogicEcmContractsDictionariesBootstrap,
-		  dictionary.LogicEcmDictionaryCurrencyModelBootstrap,documents.LogicEcmModelsConnectionsBootstrap">
+		  dictionary.LogicEcmDictionaryCurrencyModelBootstrap,documents.LogicEcmModelsConnectionsBootstrap,
+		  documents.dictionaries.LogicEcmModelsBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>
@@ -295,12 +296,6 @@
                     <list>
                         <value>cm:name</value>
                         <value>lecm-contract-dic:delete-reason-code</value>
-                    </list>
-                </entry>
-                <entry key="lecm-contract-dic:contract-subjects">
-                    <list>
-                        <value>cm:name</value>
-                        <value>lecm-contract-dic:contract-subjects-code</value>
                     </list>
                 </entry>
             </map>

@@ -144,10 +144,10 @@
 		<field jrFldName="col_Contract.RegPlace" queryFldName="lecm-contract:locationRegistration" displayName="Место регистрации договора" />
 
 
-		<!-- Данные по "Тематика договора" (с типом "lecm-contract-dic:contract-subjects") -->
-		<field jrFldName="col_Theme.code" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-code}" displayName="Тематика.Код" />
+		<!-- Данные по "Тематика договора" (с типом "lecm-doc-dic:subjects") -->
+		<field jrFldName="col_Theme.code" queryFldName="{lecm-contract:subjectContract-assoc/lecm-doc-dic:subject-code}" displayName="Тематика.Код" />
 		<field jrFldName="col_Theme.tname" queryFldName="{lecm-contract:subjectContract-assoc/cm:name}" displayName="Тематика.Название" />
-		<field jrFldName="col_Theme.desc" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-description}" displayName="Тематика.Описание" />
+		<field jrFldName="col_Theme.desc" queryFldName="{lecm-contract:subjectContract-assoc/lecm-doc-dic:subject-description}" displayName="Тематика.Описание" />
 
 		<!--
 			<field queryFldName="fmydata" dislayName="" javaValueClass="my.check.type"/>

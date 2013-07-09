@@ -123,7 +123,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	 *           target: lecm-contract-dic:contract-type
 	 * 2) "contractSubject" - Тематика договора
 	 *       association name: "lecm-contract:subjectContract-assoc"
-	 *           target: lecm-contract-dic:contract-subjects
+	 *           target: lecm-doc-dic:subjects
 	 * 3) "contractContractor" - Контрагент
 	 *       association name: "lecm-contract:partner-assoc"
 	 *           target: lecm-contractor:contractor-type
@@ -183,7 +183,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 			}
 
 			if (hasSubject) {
-				final QName qnCSubject = QName.createQName( "lecm-contract-dic:contract-subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
+				final QName qnCSubject = QName.createQName( "lecm-doc-dic:subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
 				result.addAssoc( AssocKind.target, qnAssocCSubject, qnCSubject, contractSubject);
 			}

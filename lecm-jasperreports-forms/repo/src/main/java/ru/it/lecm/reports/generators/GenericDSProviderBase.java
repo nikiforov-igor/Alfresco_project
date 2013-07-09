@@ -239,7 +239,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
 		for(ColumnDescriptor colDesc: this.alfrescoQuery.argsByLinks()) {
 			/*
 			 * Example:
-				final QName qnCSubject = QName.createQName( "lecm-contract-dic:contract-subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
+				final QName qnCSubject = QName.createQName( "lecm-doc-dic:subject-code", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
 				result.addAssoc( qnCSubject, qnAssocCSubject, contractSubject, AssocKind.target);
 			 */

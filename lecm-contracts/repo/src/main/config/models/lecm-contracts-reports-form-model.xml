@@ -14,6 +14,7 @@
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
 		<import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
+		<import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
 	</imports>
 
 	<namespaces>
@@ -88,7 +89,7 @@
 						<many>false</many>
 					</source>
 					<target>
-						<class>lecm-contract-dic:contract-subjects</class>
+						<class>lecm-doc-dic:subjects</class>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</target>
@@ -167,7 +168,7 @@
 						<many>false</many>
 					</source>
 					<target>
-						<class>lecm-contract-dic:contract-subjects</class>
+						<class>lecm-doc-dic:subjects</class>
 						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
@@ -238,7 +239,7 @@
 						<many>false</many>
 					</source>
 					<target>
-						<class>lecm-contract-dic:contract-subjects</class>
+						<class>lecm-doc-dic:subjects</class>
 						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>

@@ -82,7 +82,7 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 			final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
 
 			if (hasSubject) {
-				final QName qnCSubject = QName.createQName( "lecm-contract-dic:contract-subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
+				final QName qnCSubject = QName.createQName( "lecm-doc-dic:subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
 				result.addAssoc( AssocKind.target, qnAssocCSubject, qnCSubject, contractSubject);
 			}
