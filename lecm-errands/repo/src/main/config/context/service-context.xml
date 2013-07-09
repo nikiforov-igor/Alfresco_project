@@ -33,4 +33,14 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="errands.dictionaryBootstrap"
+	      parent="lecmDictionaryBootstrap"
+	      depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap">
+		<property name="createOrUpdateDictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-errands-roles-items.xml</value>
+			</list>
+		</property>
+	</bean>
 </beans>
