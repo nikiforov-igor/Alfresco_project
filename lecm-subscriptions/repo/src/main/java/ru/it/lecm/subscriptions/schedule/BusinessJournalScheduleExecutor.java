@@ -104,8 +104,9 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 
 	//обработка подписок на действия сотрудника/группы/подразделения
 	private Set<NodeRef> findSubscriptionsToInitiator(NodeRef initiator) {
+        Set<NodeRef> subscriptions = new HashSet<NodeRef>();
 		if (initiator == null || !nodeService.exists(initiator)) {
-			return null;
+			return subscriptions;
 		}
 		//заполнение списка возможных объектов подписки по инициатору
 		Set<NodeRef> initiators = new HashSet<NodeRef>();
@@ -124,7 +125,6 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 			}
 		}
 
-		Set<NodeRef> subscriptions = new HashSet<NodeRef>();
 		for (NodeRef initRef : initiators) {
 			subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(initRef));
 		}
