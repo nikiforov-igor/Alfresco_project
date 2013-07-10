@@ -9,6 +9,9 @@ import org.alfresco.service.namespace.QName;
  * Time: 12:09
  */
 public interface ErrandsService {
+	public static final String ERRANDS_ROOT_NAME = "Сервис Поручения";
+	public static final String ERRANDS_ROOT_ID = "ERRANDS_ROOT_ID";
+
 	public static final String ERRANDS_SETTINGS_NODE_NAME = "Settings";
 
 	public static final String ERRANDS_NAMESPACE_URI = "http://www.it.ru/logicECM/errands/1.0";

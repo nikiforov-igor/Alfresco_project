@@ -35,7 +35,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return null;
+		return getFolder(ERRANDS_ROOT_ID);
 	}
 
 	public NodeRef getDraftRoot() {
@@ -43,7 +43,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 	}
 
 	public NodeRef getSettingsNode() {
-		final NodeRef draftRoot = this.getDraftRoot();
+		final NodeRef draftRoot = this.getServiceRootFolder();
 
 		NodeRef settings = nodeService.getChildByName(draftRoot, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
 		if (settings != null) {
