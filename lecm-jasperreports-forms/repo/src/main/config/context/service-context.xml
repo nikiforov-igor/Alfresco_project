@@ -49,7 +49,7 @@
 
 	<bean id="reportsMgrJavaScriptExtension" class="ru.it.lecm.reports.extensions.ReportManagerJavascriptExtension"
 		parent="baseScript">
-		<property name="extensionName" value="reportsMgr"/>
+		<property name="extensionName" value="rptmanager"/>
 		<property name="reportsManager" ref="reportsManager"/>
 	</bean>
 

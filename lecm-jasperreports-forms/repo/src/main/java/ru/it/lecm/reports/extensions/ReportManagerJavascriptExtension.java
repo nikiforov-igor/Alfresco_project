@@ -1,14 +1,20 @@
 package ru.it.lecm.reports.extensions;
 
+import java.util.List;
+
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
 
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ReportsManager;
+import ru.it.lecm.reports.api.ScriptApiReportManager;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 
-public class ReportManagerJavascriptExtension extends BaseWebScript {
+public class ReportManagerJavascriptExtension
+		extends BaseWebScript 
+		implements ScriptApiReportManager
+{
 
 	private ReportsManager reportsManager;
 
@@ -20,25 +26,49 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
 		this.reportsManager = reportsManager;
 	}
 
-	public Scriptable deployReport(final String refReportDesc) {
+	@Override
+	public boolean deployReport(final String reportDescNode) {
 		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
 
-		String result = "nothing";
-		if (NodeRef.isNodeRef (refReportDesc)) {
-			final NodeRef rdId = new NodeRef(refReportDesc);
+		boolean result = false;
+		if (NodeRef.isNodeRef (reportDescNode)) {
+			final NodeRef rdId = new NodeRef(reportDescNode);
 			getReportsManager().registerReportDescriptor(rdId);
-			result = "ok";
+			result = true;
 		}
-		final Scriptable scriptable = Context.getCurrentContext ().newArray (getScope (), new Object[] {result});
-		return scriptable;
+		// final Scriptable scriptable = Context.getCurrentContext ().newArray (getScope (), new Object[] {result});
+		// return scriptable;
+		return result;
 	}
 
-	public Scriptable getDsXmlBytes(final String reportCode) {
+	@Override
+	public byte[] getDsXmlBytes(final String reportCode) {
 		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
 
 		final byte[] result = getReportsManager().loadDsXmlBytes(reportCode);
-		final Scriptable scriptable = Context.getCurrentContext ().newArray (getScope (), new Object[] {result});
-		return scriptable;
+		// final Scriptable scriptable = Context.getCurrentContext ().newArray (getScope (), new Object[] {result});
+		// return scriptable;
+		return result;
 	}
-	
+
+	@Override
+	public ReportInfo[] getRegisteredReports(String docType,
+			String reportType) {
+		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
+
+		final List<ReportDescriptor> found = getReportsManager().getRegisteredReports(docType, reportType);
+		if (found == null || found.isEmpty())
+			return null;
+		final ReportInfo[] result = new ReportInfo[ found.size()];
+		int i = 0;
+		for(ReportDescriptor rd: found) {
+			final ReportInfo ri = new ReportInfo( 
+					rd.getReportType()
+					, rd.getMnem()
+					, (rd.getFlags() != null) ? rd.getFlags().getPreferedNodeType() : null
+			);
+			result[i++] = ri;
+		}
+		return result;
+	}
 }

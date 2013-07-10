@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.api;
 
 import java.net.URL;
+import java.util.List;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 
@@ -23,6 +24,15 @@ public interface ReportsManager {
 	 */
 	ReportDescriptor getRegisteredReportDescriptor(String reportMnemoName);
 
+	/**
+	 * Получить список зарегистрированных редакторов отчётов для указанного типа
+	 * документов и тип отчёта
+	 * @param docType тип документов или null, если для любых типов док-ов
+	 * @param reportType тип отчёта (Jasper, OOffice и т.п.) или null, если для всех типов
+	 * @return список зарегеных отчётов (отчёты с типом документов null, воз-ся
+	 * при любом состоянии параметра docType)
+	 */
+	List<ReportDescriptor> getRegisteredReports(String docType, String reportType);
 
 	/**
 	 * Зарегистрировать указанный описатель отчёта. Создать ds-xml.

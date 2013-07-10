@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Register Reports Service</shortname>
-	<description>Register Reports/get meta data ds-xml files</description>
-	<url>/lecm/reports/manager/{action}?nodeRef={nodeRef}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>required</transaction>
-</webscript>
