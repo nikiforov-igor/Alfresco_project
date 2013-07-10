@@ -1,5 +1,6 @@
 function main() {
     var type = args["itemType"] ? args["itemType"] : null;
+    model.docType = type;
     if (type != null) {
         model.statusesGroups = getFilters(type);
         model.statusesList = getStatuses(type);

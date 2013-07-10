@@ -47,7 +47,7 @@
         <!-- Filter -->
         <component>
             <region-id>filters</region-id>
-            <url>/lecm/documents/filters</url>
+            <url>/lecm/documents/filters/author</url>
             <properties>
                 <itemType>{doctype}</itemType>
                 <bubblingLabel>documents-list</bubblingLabel>

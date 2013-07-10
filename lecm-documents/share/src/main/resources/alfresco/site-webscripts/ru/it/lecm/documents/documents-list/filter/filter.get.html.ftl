@@ -1,4 +1,6 @@
 <#assign id = args.htmlid>
+<#assign statusesFilterKey = '.documents-list-statuses-filter'/>
+
 <#assign f_label = args.filterLabel!'label.documents'>
 <#if args.filterLabel??>
     <#assign f_label = args.filterLabel/>
@@ -29,11 +31,11 @@
             <#list statusesGroups as group>
                 <div class="text-cropped <#if formId?? && formId == group.name>selected</#if>">
                     <#if isDocListPage>
-                        <a href="${url.context}/page/${pageLink}?doctype=${page.url.args.doctype}&query=${group.value}&formId=${group.name}"
-                           class="status-button" title="<#if group.value == "*">Все<#else>${group.value}</#if>">${group.name}</a>
+                        <a href="#"
+                           class="status-button" title="<#if group.value == "*">Все<#else>${group.value}</#if>" onclick="LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=${group.value}&formId=${group.name}', true); return false;">${group.name}</a>
                     <#else>
-                        <a href="${url.context}/page/${pageLink}?query=${group.value}&formId=${group.name}"
-                           class="status-button" title="<#if group.value == "*">Все<#else>${group.value}</#if>">${group.name}</a>
+                        <a href="#"
+                           class="status-button" title="<#if group.value == "*">Все<#else>${group.value}</#if>" onclick="LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=${group.value}&formId=${group.name}', true); return false;">${group.name}</a>
                     </#if>
                     <span class="total-tasks-count-right">${group.count}</span><br/>
                 </div>
@@ -62,11 +64,11 @@
                     <div class="text-cropped <#if formId?? && formId == status>selected</#if>">
 
                         <#if isDocListPage>
-                            <a href="${url.context}/page/${pageLink}?doctype=${page.url.args.doctype}&query=${status}&formId=${status}"
-                               class="status-button text-broken">${status}</a>
+                            <a href="#"
+                               class="status-button text-broken" onclick="LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=${status}&formId=${status}', true); return false;">${status}</a>
                         <#else>
-                            <a href="${url.context}/page/${pageLink}?query=${status}&formId=${status}"
-                               class="status-button text-broken">${status}</a>
+                            <a href="#"
+                               class="status-button text-broken" onclick="LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=${status}&formId=${status}', true); return false;">${status}</a>
                         </#if>
                     </div>
                     <#assign count = count +1 />

@@ -62,7 +62,7 @@ var Filters =
                 filterParams.query += "+PATH:\"/cm:taggable/cm:" + search.ISO9075Encode(filterData) + "/member\"";
                 break;
 
-            case "assign":
+            case "docAuthor":
                 switch (String(filter.filterData)) {
                     case "all":
                         filterParams.query = "";

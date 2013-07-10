@@ -2,7 +2,7 @@
 <template-instance>
     <template-type>ru/it/lecm/documents/documents-list</template-type>
     <properties>
-        <docType>lecm-contract:document</docType>
+        <docType>lecm-additional-document:additionalDocument</docType>
     </properties>
     <components>
         <!-- Title -->

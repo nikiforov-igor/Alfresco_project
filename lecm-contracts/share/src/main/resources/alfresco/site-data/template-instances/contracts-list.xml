@@ -56,12 +56,13 @@
             <properties>
                 <itemType>lecm-contract:document</itemType>
                 <linkPage>contracts-list</linkPage>
+                <bubblingLabel>contracts</bubblingLabel>
             </properties>
         </component>
         <!-- Filter -->
         <component>
             <region-id>filters</region-id>
-            <url>/lecm/documents/filters</url>
+            <url>/lecm/documents/filters/author</url>
             <properties>
                 <itemType>lecm-contract:document</itemType>
                 <bubblingLabel>contracts</bubblingLabel>

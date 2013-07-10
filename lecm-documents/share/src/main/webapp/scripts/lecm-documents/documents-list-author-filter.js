@@ -1,15 +1,7 @@
 (function () {
-    var Dom = YAHOO.util.Dom,
-        Selector = YAHOO.util.Selector;
-
-    var PREFERENCES_CONTRACTS = "ru.it.lecm.documents",
-        PREF_FILTER = ".documents-list-assign-filter";
-
-    LogicECM.module.Documents.Filter = function Contracts_constructor(htmlId) {
-        LogicECM.module.Documents.Filter.superclass.constructor.call(this, "LogicECM.module.Documents.Filter", htmlId, ["button", "container"]);
-
-        // Preferences service
-        this.services.preferences = new Alfresco.service.Preferences();
+    LogicECM.module.Documents.AuthorFilter = function AuthorFilter_constructor(htmlId) {
+        LogicECM.module.Documents.AuthorFilter.superclass.constructor.call(this, "LogicECM.module.Documents.AuthorFilter", htmlId, ["button", "container"]);
+        
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
 
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "initDataGrid"],
@@ -18,44 +10,53 @@
                 scope: this
             });
 
+        this.manager = LogicECM.module.Documents.filtersManager ? LogicECM.module.Documents.filtersManager : new LogicECM.module.Documents.FiltersManager() ; 
+        
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.Documents.Filter, Alfresco.component.Base,
+    YAHOO.extend(LogicECM.module.Documents.AuthorFilter, Alfresco.component.Base,
         {
+            manager: null,
+            
+            PREF_FILTER_ID: ".documents-list-docAuthor-filter",
             options: {
                 docType: "lecm-document:base",
                 gridBubblingLabel: "documents",
-                filterId: "assign"
+                filterId: "docAuthor"
             },
 
             documentList: null,
 
+            deferredListPopulation: {},
+
             onReady: function () {
-                this.widgets.assign = Alfresco.util.createYUIButton(this, "assign", this.onAssignFilterChanged,
+                this.manager.setOptions({docType: this.options.docType});
+                
+                this.widgets.author = Alfresco.util.createYUIButton(this, "author", this.onAuthorFilterChanged,
                     {
                         type: "menu",
-                        menu: "assign-menu",
+                        menu: "author-menu",
                         lazyloadmenu: false
                     });
 
                 // Load preferences to override default filter and range
-                this.widgets.assign.set("label", this.msg("filter.all"));
-                this.widgets.assign.value = "all";
+                this.widgets.author.set("label", this.msg("filter.all"));
+                this.widgets.author.value = "all";
 
-                this.services.preferences.request(this.buildPreferences(),
+                this.manager.preferences.request(this.manager._buildPreferencesKey(),
                     {
                         successCallback: {
                             fn: function (p_oResponse) {
-                                var assignPreference = Alfresco.util.findValueByDotNotation(p_oResponse.json, this.buildPreferences(PREF_FILTER), "all");
-                                if (assignPreference !== null) {
-                                    this.widgets.assign.value = assignPreference;
+                                var authorPreference = Alfresco.util.findValueByDotNotation(p_oResponse.json, this.manager._buildPreferencesKey(this.PREF_FILTER_ID), "all");
+                                if (authorPreference !== null) {
+                                    this.widgets.author.value = authorPreference;
                                     // set the correct menu label
-                                    var menuItems = this.widgets.assign.getMenu().getItems();
+                                    var menuItems = this.widgets.author.getMenu().getItems();
                                     for (index in menuItems) {
                                         if (menuItems.hasOwnProperty(index)) {
-                                            if (menuItems[index].value === assignPreference) {
-                                                this.widgets.assign.set("label", menuItems[index].cfg.getProperty("text"));
+                                            if (menuItems[index].value === authorPreference) {
+                                                this.widgets.author.set("label", menuItems[index].cfg.getProperty("text"));
                                                 break;
                                             }
                                         }
@@ -75,42 +76,49 @@
             },
 
             populateDataGrid: function () {
-                //location.hash = '#filter=' + this.options.filterId + "|" + this.widgets.assign.value;
+                //location.hash = '#filter=' + this.options.filterId + "|" + this.widgets.author.value;
                 var currentFilter = {
                     filterId: this.options.filterId,
-                    filterData:this.widgets.assign.value
+                    filterData:this.widgets.author.value
                 };
                 this.documentList.currentFilter = currentFilter;
-            },
-            /**
-             * @return {string}
-             */
-            buildPreferences: function (suffix) {
-                var opt = this.options;
-                return PREFERENCES_CONTRACTS + "." + opt.docType.split(":").join("_") + (suffix ? suffix : "");
+
+                /*YAHOO.Bubbling.fire("datagridRefresh",
+                    {
+                        filter: currentFilter,
+                        bubblingLabel: this.options.gridBubblingLabel
+                    });*/
             },
 
-            onAssignFilterChanged: function (p_sType, p_aArgs) {
+            onAuthorFilterChanged: function (p_sType, p_aArgs) {
                 var menuItem = p_aArgs[1];
                 if (menuItem) {
-                    this.widgets.assign.set("label", menuItem.cfg.getProperty("text"));
-                    this.widgets.assign.value = menuItem.value;
-                    this.services.preferences.set(this.buildPreferences(PREF_FILTER), this.widgets.assign.value);
+                    this.widgets.author.set("label", menuItem.cfg.getProperty("text"));
+                    this.widgets.author.value = menuItem.value;
                 }
             },
 
             onApplyButtonClick: function () {
-                var currentFilter = {
+/*                var currentFilter = {
                     filterId: this.options.filterId,
-                    filterData:this.widgets.assign.value
+                    filterData:this.widgets.author.value
                 };
-                location.hash = '#filter=' + this.options.filterId + "|" + this.widgets.assign.value;
+                */
+                var success = {
+                    fn: function () {
+                        window.location.reload(true);
+                    }
+                } ;
+                this.manager.preferences.set(this.manager._buildPreferencesKey(this.PREF_FILTER_ID), this.widgets.author.value, {successCallback: success});
+
+
+                /*location.hash = '#filter=' + this.options.filterId + "|" + this.widgets.author.value;
 
                 YAHOO.Bubbling.fire("datagridRefresh",
                     {
                         filter: currentFilter,
                         bubblingLabel: this.options.gridBubblingLabel
-                    });
+                    });*/
             },
 
             // инициализация грида

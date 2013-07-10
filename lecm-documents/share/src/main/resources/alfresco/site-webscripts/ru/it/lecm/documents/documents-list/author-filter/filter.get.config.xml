@@ -1,8 +1,8 @@
 <config>
-   <filter-assign>
+   <filter-author>
        <filter type="all" label="all" />
        <filter type="my" label="my" />
        <filter type="department" label="department" />
        <filter type="favourite" label="favourite" />
-   </filter-assign>
+   </filter-author>
 </config>

@@ -18,5 +18,5 @@ function getFilters(filterType)
 var type = args["itemType"] ? args["itemType"] : null;
 model.type = type;
 
-model.filterAssign = getFilters("filter-assign");
+model.filtersAuthor = getFilters("filter-author");
 
