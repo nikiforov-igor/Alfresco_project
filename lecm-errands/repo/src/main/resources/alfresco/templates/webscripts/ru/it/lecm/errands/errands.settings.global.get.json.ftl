@@ -1,5 +1,5 @@
 <#escape x as x?js_string>
 {
-    nodeRef: "${nodeRef}"
+	nodeRef: "${nodeRef}"
 }
 </#escape>

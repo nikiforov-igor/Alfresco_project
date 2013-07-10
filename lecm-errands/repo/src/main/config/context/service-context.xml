@@ -76,6 +76,7 @@
 		<property name="documentService" ref="documentService"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="authService" ref="authenticationService"/>
+		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
 	<bean id="errandsScript" parent="baseScript" class="ru.it.lecm.errands.scripts.ErrandsWebScriptBean"

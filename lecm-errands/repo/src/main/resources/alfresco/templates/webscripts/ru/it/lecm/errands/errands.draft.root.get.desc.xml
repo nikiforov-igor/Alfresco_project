@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>Errands Module Root Node</shortname>
-    <description>Errands Module Root Node</description>
-    <url>/lecm/errands/getDraftRoot</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-</webscript>

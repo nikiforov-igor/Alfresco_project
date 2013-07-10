@@ -16,7 +16,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 		this.errandsService = errandsService;
 	}
 
-	public ScriptNode getDraftRoot() {
-		return new ScriptNode(errandsService.getDraftRoot(), serviceRegistry, getScope());
+	public ScriptNode getSettingsNode() {
+		return new ScriptNode(errandsService.getSettingsNode(), serviceRegistry, getScope());
 	}
 }

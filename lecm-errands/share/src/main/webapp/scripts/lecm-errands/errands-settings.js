@@ -43,28 +43,24 @@
 
 	YAHOO.extend(LogicECM.ErrandsSettings, Alfresco.ConsoleTool,
 		{
-			destination: null,
-
 			onReady: function ConsoleErrandsSettings_onReady()
 			{
 				// Call super-class onReady() method
 				LogicECM.ErrandsSettings.superclass.onReady.call(this);
 
-				this.getDestination();
+				this.loadSettings();
 			},
 
-			getDestination: function() {
+			loadSettings: function() {
 				var me = this;
 				Alfresco.util.Ajax.request(
 					{
-						url: Alfresco.constants.PROXY_URI + "lecm/errands/getDraftRoot",
+						url: Alfresco.constants.PROXY_URI + "lecm/errands/getGlobalSettings",
 						successCallback: {
 							fn: function (response) {
 								var oResults = eval("(" + response.serverResponse.responseText + ")");
 								if (oResults != null && oResults.nodeRef != null ) {
-									me.destination = oResults.nodeRef;
-
-									me.showEditForn();
+									me.loadForm(oResults.nodeRef);
 								}
 							}
 						},
@@ -72,31 +68,53 @@
 					});
 			},
 
-			showEditForn: function() {
+			loadForm: function(settingsNode) {
 				var me = this;
 				Alfresco.util.Ajax.request(
 					{
 						url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 						dataObj: {
 							htmlid: "errands-settings-edit-form",
-							itemKind:"type",
-							itemId: "lecm-errands:settings",
-							destination: "123",
-							mode: "create",
-							formId: me.id,
+							itemKind:"node",
+							itemId: settingsNode,
+							mode: "edit",
+							formUI: true,
 							submitType:"json",
 							showSubmitButton:"true"
 						},
 						successCallback: {
 							fn: function (response) {
 								var container = Dom.get(me.id + "-settings");
-//								container.innerHTML = response.serverResponse.responseText;
-								container.innerHTML = me.destination;
+								container.innerHTML = response.serverResponse.responseText;
+
+								var form = new Alfresco.forms.Form("errands-settings-edit-form-form");
+								form.setSubmitAsJSON(true);
+								form.setAJAXSubmit(true,
+									{
+										successCallback:
+										{
+											fn: me.onSuccess,
+											scope: this
+										}
+									});
+								form.init();
 							}
 						},
 						failureMessage: "message.failure",
 						execScripts: true
 					});
+			},
+
+			onSuccess: function (response)
+			{
+				if (response && response.json) {
+					window.location.reload(true);
+				} else {
+					Alfresco.util.PopupManager.displayPrompt(
+						{
+							text: Alfresco.util.message("message.failure")
+						});
+				}
 			}
 		});
 })();
