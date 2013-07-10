@@ -31,6 +31,14 @@
                 </list>
             </parameter>
         </constraint>
+	    <constraint name="lecm-errands:settings-mode-choosing-executors-const" type="LIST">
+		    <parameter name="allowedValues">
+			    <list>
+				    <value>ORGANIZATION</value>
+				    <value>UNIT</value>
+			    </list>
+		    </parameter>
+	    </constraint>
     </constraints>
 
     <types>
@@ -280,14 +288,7 @@
 				    <mandatory>true</mandatory>
 				    <default>UNIT</default>
 				    <constraints>
-					    <constraint name="lecm-errands:settings-mode-choosing-executors-constraint" type="LIST">
-						    <parameter name="allowedValues">
-							    <list>
-								    <value>ORGANIZATION</value> <!-- в рамках организации -->
-								    <value>UNIT</value> <!-- по подразделению -->
-							    </list>
-						    </parameter>
-					    </constraint>
+					    <constraint ref="lecm-errands:settings-mode-choosing-executors-const"/>
 				    </constraints>
 			    </property>
 		    </properties>

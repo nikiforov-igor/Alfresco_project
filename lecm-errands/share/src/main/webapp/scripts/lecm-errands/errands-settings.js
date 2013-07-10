@@ -87,6 +87,8 @@
 								var container = Dom.get(me.id + "-settings");
 								container.innerHTML = response.serverResponse.responseText;
 
+								Dom.get("errands-settings-edit-form-form-submit").value = me.msg("label.save");
+
 								var form = new Alfresco.forms.Form("errands-settings-edit-form-form");
 								form.setSubmitAsJSON(true);
 								form.setAJAXSubmit(true,
