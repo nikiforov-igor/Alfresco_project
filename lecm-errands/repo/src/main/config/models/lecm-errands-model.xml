@@ -6,6 +6,7 @@
 	<imports>
 		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
@@ -268,5 +269,28 @@
 				</association>
 			</associations>
 		</type>
+
+	    <type name="lecm-errands:settings">
+		    <title>Logic Ecm Errands Document</title>
+		    <parent>cm:cmobject</parent>
+		    <properties>
+			    <!-- Режим выбора исполнителей  -->
+			    <property name="lecm-errands:settings-mode-choosing-executors">
+				    <type>d:text</type>
+				    <mandatory>true</mandatory>
+				    <default>UNIT</default>
+				    <constraints>
+					    <constraint name="lecm-errands:settings-mode-choosing-executors-constraint" type="LIST">
+						    <parameter name="allowedValues">
+							    <list>
+								    <value>ORGANIZATION</value> <!-- в рамках организации -->
+								    <value>UNIT</value> <!-- по подразделению -->
+							    </list>
+						    </parameter>
+					    </constraint>
+				    </constraints>
+			    </property>
+		    </properties>
+	    </type>
 	</types>
 </model>

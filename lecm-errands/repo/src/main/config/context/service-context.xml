@@ -70,6 +70,22 @@
 		</property>
 	</bean>
 
+	<bean id="errandsService" class="ru.it.lecm.errands.beans.ErrandsServiceImpl" parent="baseBean"
+	      depends-on="nodeService, documentService">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="documentService" ref="documentService"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="authService" ref="authenticationService"/>
+	</bean>
+
+	<bean id="errandsScript" parent="baseScript" class="ru.it.lecm.errands.scripts.ErrandsWebScriptBean"
+	      depends-on="nodeService, errandsService">
+		<property name="extensionName">
+			<value>errands</value>
+		</property>
+		<property name="errandsService" ref="errandsService"/>
+	</bean>
+
     <bean id="errandsStatusesFilter" parent="documentStatusesFilter">
         <property name="defaultFilters">
             <map>

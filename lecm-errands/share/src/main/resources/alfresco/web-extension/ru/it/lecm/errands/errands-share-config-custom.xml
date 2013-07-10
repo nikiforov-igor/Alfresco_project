@@ -117,4 +117,38 @@
 			</form>
 		</forms>
 	</config>
+
+	<config evaluator="node-type" condition="lecm-errands:settings">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-errands:settings-mode-choosing-executors" force="true"/>
+				</field-visibility>
+			</form>
+			<appearance>
+				<field id="lecm-errands:settings-mode-choosing-executors">
+					<control template="/org/alfresco/components/form/controls/selectone.ftl">
+	                   <control-param name="options">UNIT|{label.mode-choosing.unit},ORGANIZATION|{label.mode-choosing.organization}</control-param>
+	                </control>
+				</field>
+			</appearance>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-errands:settings">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-errands:settings-mode-choosing-executors" force="true"/>
+				</field-visibility>
+			</form>
+			<appearance>
+				<field id="lecm-errands:settings-mode-choosing-executors">
+					<control template="/org/alfresco/components/form/controls/selectone.ftl">
+	                   <control-param name="options">UNIT|{label.mode-choosing.unit},ORGANIZATION|{label.mode-choosing.organization}</control-param>
+	                </control>
+				</field>
+			</appearance>
+		</forms>
+	</config>
 </alfresco-config>
