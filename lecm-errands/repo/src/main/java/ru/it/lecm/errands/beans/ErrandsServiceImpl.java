@@ -20,6 +20,11 @@ import java.util.*;
  * Time: 11:43
  */
 public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
+	private static enum ModeChoosingExecutors {
+		ORGANIZATION,
+		UNIT
+	}
+
 	private DocumentService documentService;
 
 	private final Object lock = new Object();
@@ -71,5 +76,16 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 			};
 			return AuthenticationUtil.runAsSystem(raw);
 		}
+	}
+
+	public ModeChoosingExecutors getModeChoosingExecutors() {
+		NodeRef settings = getSettingsNode();
+		if (settings != null) {
+		 	String modeChoosingExecutors = (String) nodeService.getProperty(settings, SETTINGS_PROP_MODE_CHOOSING_EXECUTORS);
+			if (modeChoosingExecutors.equals(SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION)) {
+				return ModeChoosingExecutors.ORGANIZATION;
+			}
+		}
+		return ModeChoosingExecutors.UNIT;
 	}
 }
