@@ -97,13 +97,7 @@
             <map>
                 <entry key="lecm-errands:document">
                     <list>
-                        <value>ERRANDS_INITIATOR</value>
-                        <value>ERRANDS_EXECUTOR</value>
-                        <value>ERRANDS_CONTROLLER</value>
-                        <value>ERRANDS_COEXECUTOR</value>
                         <value>ERRANDS_READER</value>
-                        <value>ERRANDS_CURATOR</value>
-                        <value>ERRANDS_CHOOSING_INITIATOR</value>
                     </list>
                 </entry>
             </map>

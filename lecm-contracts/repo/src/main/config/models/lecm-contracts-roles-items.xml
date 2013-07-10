@@ -26,13 +26,6 @@
                 <property name="lecm-orgstr:business-role-is-dynamic">false</property>
                 <property name="lecm-orgstr:business-role-description">Регистратор договора</property>
             </item>
-            <item name="cm:Договор. Пользователь" type="lecm-orgstr:business-role">
-                <property name="cm:name">Договор. Пользователь</property>
-                <property name="lecm-orgstr:business-role-identifier">CONTRACT_USER</property>
-                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
-                <property name="lecm-orgstr:business-role-description">Пользователь</property>
-                <property name="lecm-dic:active">false</property>
-            </item>
             <item name="cm:Договор. Читатель" type="lecm-orgstr:business-role">
                 <property name="cm:name">Договор. Читатель</property>
                 <property name="lecm-orgstr:business-role-identifier">CONTRACT_READER</property>
