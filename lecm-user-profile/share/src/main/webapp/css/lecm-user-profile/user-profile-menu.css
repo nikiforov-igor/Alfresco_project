@@ -9,3 +9,6 @@
 #lecm-menu #menu-buttons #menu-buttons-userProfileInstantAbsenceBtn span.first-child {
     background: url('/share/res/images/lecm-user-profile/lecm-user-profile_instant-absence-3.png') no-repeat 4px 4px;
 }
+#lecm-menu #menu-buttons #menu-buttons-userProfileErrandsSettingsBtn span.first-child {
+	background: url('/share/res/images/lecm-user-profile/lecm-user-profile_user-settings-3.png') no-repeat 4px 4px;
+}

@@ -18,5 +18,6 @@
     <@comp.baseMenuButton "userProfileAbsence" msg('label.user-profile.menu.absence.btn') selected/>
 	<@comp.baseMenuButton "userProfileDelegation" msg('label.user-profile.menu.delegation.btn') selected/>
 	<@comp.baseMenuButton "userProfileInstantAbsence" msg('label.absence.create-instant-absence.title') selected/>
+	<@comp.baseMenuButton "userProfileErrandsSettings" msg('label.user-profile.menu.errands-settings.btn') selected/>
 </@comp.baseMenu>
 

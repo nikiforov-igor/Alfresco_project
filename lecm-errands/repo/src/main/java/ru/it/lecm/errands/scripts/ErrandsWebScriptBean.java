@@ -19,4 +19,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 	public ScriptNode getSettingsNode() {
 		return new ScriptNode(errandsService.getSettingsNode(), serviceRegistry, getScope());
 	}
+
+	public ScriptNode getCurrentUserSettingsNode() {
+		return new ScriptNode(errandsService.getCurrentUserSettingsNode(), serviceRegistry, getScope());
+	}
 }

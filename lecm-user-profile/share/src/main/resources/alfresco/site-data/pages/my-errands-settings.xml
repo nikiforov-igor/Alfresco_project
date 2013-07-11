@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<title>Настройка поручений</title>
+	<description>Настройка поручений</description>
+	<template-instance>my-errands-settings</template-instance>
+	<authentication>user</authentication>
+</page>
