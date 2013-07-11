@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Errands Module get default without initiator approval</shortname>
+	<description>Errands Module get default without initiator approval</description>
+	<url>/lecm/errands/getDefaultWithoutInitiatorApproval</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

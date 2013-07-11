@@ -125,6 +125,7 @@
 	            <css src="/components/upload/html-upload.css" />
                 <js src="/jquery/jquery-1.6.2.js"/>
                 <js src="/modules/simple-dialog.js"/>
+	            <js src="/scripts/lecm-base/components/lecm-checkbox.js" />
             </dependencies>
 
             <constraint-handlers>
