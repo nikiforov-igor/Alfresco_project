@@ -173,6 +173,56 @@
                     <show id="lecm-errands:is-expired"/>
                 </field-visibility>
             </form>
+            <form id="additional-document">
+                <field-visibility>
+                    <!-- Испольнитель -->
+                    <show id="lecm-errands:executor-assoc"/>
+                    <!--  Заголовок поручения -->
+                    <show id="lecm-errands:title"/>
+                    <!-- Срок исполнения -->
+                    <show id="lecm-errands:limitation-date"/>
+                    <!-- Важное -->
+                    <show id="lecm-errands:is-important"/>
+
+                    <!-- Здесь будут вложения. Добавить файл -->
+
+                    <!-- Тематика -->
+                    <show id="lecm-errands:subject-assoc"/>
+                    <!-- Инициатор -->
+                    <show id="lecm-errands:initiator-assoc"/>
+                    <!-- Без утверждения инициатором -->
+                    <show id="lecm-errands:without-initiator-approval"/>
+                    <!-- Содержание -->
+                    <show id="lecm-errands:content"/>
+                    <!-- Контроллер -->
+                    <show id="lecm-errands:controller-assoc"/>
+                    <!-- Соисполнители -->
+                    <show id="lecm-errands:coexecutors-assoc"/>
+                    <!-- Дата начала -->
+                    <show id="lecm-errands:start-date"/>
+                    <!-- Исполнить точно в срок  -->
+                    <show id="lecm-errands:just-in-time"/>
+                    <!-- Ссылка на документ основание  -->
+                    <show id="lecm-errands:additional-document-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-errands:subject-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:content">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecm-errands:additional-document-assoc">
+                        <control template="/ru/it/lecm/errands/controls/additional-document-assoc.ftl"/>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
