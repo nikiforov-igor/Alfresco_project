@@ -55,4 +55,22 @@ public interface ErrandsService {
 	 * @return список сотрудников
 	 */
 	public List<NodeRef> getAvailableInitiators();
+
+	/**
+	 * Проверяет личные настройки "Без утверждения Инициатором"
+	 * @return true - если в личных настройках выбрано "Без утверждения Инициатором"
+	 */
+	public boolean isDefaultWithoutInitiatorApproval();
+
+	/**
+	 * Получает инициатора по умолчанию из личных настроек
+	 * @return ссылка на сотрудника
+	 */
+	public NodeRef getDefaultInitiator();
+
+	/**
+	 * Получает тематику по умолчанию из личных настроек
+	 * @return ссылка на элеменнт справочника "Тематика"
+	 */
+	public NodeRef getDefaultSubject();
 }

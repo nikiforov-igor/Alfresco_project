@@ -71,6 +71,9 @@
     <#if field.control.params.childrenDataSource??>
 	    childrenDataSource: "${field.control.params.childrenDataSource}",
     </#if>
+    <#if field.control.params.defaultValueDataSource??>
+	    defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
+    </#if>
         nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
         additionalFilter: "${field.control.params.additionalFilter!''}"
     });
@@ -108,6 +111,9 @@
     </#if>
     <#if field.control.params.childrenDataSource??>
 	    childrenDataSource: "${field.control.params.childrenDataSource}",
+    </#if>
+    <#if field.control.params.defaultValueDataSource??>
+	    defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
     </#if>
         showCreateNewLink: ${showCreateNewLink?string},
         showSearch: ${showSearch?string},

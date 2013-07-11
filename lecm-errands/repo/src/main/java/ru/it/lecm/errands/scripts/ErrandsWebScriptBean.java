@@ -30,4 +30,16 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 	public List<NodeRef> getAvailableInitiators() {
 		return  errandsService.getAvailableInitiators();
 	}
+
+	public boolean isDefaultWithoutInitiatorApproval() {
+		return  errandsService.isDefaultWithoutInitiatorApproval();
+	}
+
+	public NodeRef getDefaultInitiator() {
+		return  errandsService.getDefaultInitiator();
+	}
+
+	public NodeRef getDefaultSubject() {
+		return  errandsService.getDefaultSubject();
+	}
 }

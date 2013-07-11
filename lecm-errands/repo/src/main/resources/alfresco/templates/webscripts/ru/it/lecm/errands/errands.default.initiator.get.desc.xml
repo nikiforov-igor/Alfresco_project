@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Errands Module get default initiator</shortname>
+	<description>Errands Module get default initiator</description>
+	<url>/lecm/errands/getDefaultInitiator</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

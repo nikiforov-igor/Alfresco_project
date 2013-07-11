@@ -64,7 +64,9 @@ LogicECM.module = LogicECM.module || {};
 
                 ignoreNodes: [],
 
-	            childrenDataSource: "lecm/forms/picker"
+	            childrenDataSource: "lecm/forms/picker",
+
+	            defaultValueDataSource: null
             },
 
             selectedItems: null,
@@ -83,6 +85,8 @@ LogicECM.module = LogicECM.module || {};
 
             dataSource:null,
 
+            defaultValue: null,
+
             setMessages:function AssociationAutoComplete_setMessages(obj) {
                 LogicECM.module.AssociationAutoComplete.superclass.setMessages.call(this, obj);
                 return this;
@@ -92,7 +96,7 @@ LogicECM.module = LogicECM.module || {};
                 if (!this.options.disabled) {
                     this.populateData();
                 }
-                this.loadSelectedItems();
+	            this.loadDefaultValue();
             },
 
             onRefreshAutocompleteItemList: function AssociationAutoComplete_onRefreshItemList(layer, args)
@@ -118,6 +122,10 @@ LogicECM.module = LogicECM.module || {};
                 {
                     arrItems = this.options.currentValue;
                 }
+
+	            if (arrItems == "" && this.defaultValue != null) {
+		            arrItems += this.defaultValue;
+	            }
 
                 var onSuccess = function AssociationAutoComplete__loadSelectedItems_onSuccess(response)
                 {
@@ -171,6 +179,29 @@ LogicECM.module = LogicECM.module || {};
                         });
                 }
             },
+
+	        loadDefaultValue: function AssociationAutoComplete__loadDefaultValue() {
+		        if (this.options.defaultValueDataSource != null) {
+			        var me = this;
+
+			        Alfresco.util.Ajax.request(
+				        {
+					        url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
+					        successCallback: {
+						        fn: function (response) {
+							        var oResults = eval("(" + response.serverResponse.responseText + ")");
+							        if (oResults != null && oResults.nodeRef != null ) {
+								        me.defaultValue = oResults.nodeRef;
+							        }
+							        me.loadSelectedItems();
+						        }
+					        },
+					        failureMessage: "message.failure"
+				        });
+		        } else {
+			        this.loadSelectedItems();
+		        }
+	        },
 
             makeAutocomplete: function() {
                 var oDS = new YAHOO.util.LocalDataSource(this.dataArray);
