@@ -3,6 +3,7 @@ package ru.it.lecm.documents.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -19,6 +20,7 @@ import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
+import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
@@ -302,7 +304,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     @Override
-    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> inititatorsList, List<NodeRef> docsList) {
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName,List<NodeRef>> initiatorsList, List<NodeRef> docsList) {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
@@ -356,14 +358,23 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         }
 
         // фильтр по сотрудниками-создателям
-        if (inititatorsList != null && !inititatorsList.isEmpty()) {
-            boolean addOR = false;
+        if (initiatorsList != null && !initiatorsList.isEmpty()) {
             String employeesFilter = "";
-            for (NodeRef employeeRef : inititatorsList) {
-                employeesFilter += (addOR ? " OR " : "") + "@lecm-document\\:creator-ref:" + employeeRef.toString().replace(":", "\\:") + "";
-                addOR = true;
+
+            boolean addOR = false;
+
+            for (QName type : docTypes) {
+                String authorProperty = getAuthorProperty(type);
+                authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+                for (NodeRef employeeRef : initiatorsList.get(type)) {
+                    employeesFilter += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+                    addOR = true;
+                }
             }
-            query += " AND (" + employeesFilter + ")";
+
+            if (employeesFilter.length() > 0) {
+                query += " AND (" + employeesFilter + ")";
+            }
         }
 
         // фильтр по конкретным документам (например, тем в которых данный сотрудник - участник)
@@ -390,6 +401,17 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
             }
         }
         return records;
+    }
+
+    public String getAuthorProperty(QName docType) {
+        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(docType.getNamespaceURI(), DocumentService.CONSTRAINT_AUTHOR_PROPERTY));
+        if (constraint != null && constraint.getConstraint() != null && (constraint.getConstraint() instanceof AuthorPropertyConstraint)) {
+            AuthorPropertyConstraint auConstraint = (AuthorPropertyConstraint) constraint.getConstraint();
+            if (auConstraint.getAuthorProperty() != null) {
+                return auConstraint.getAuthorProperty();
+            }
+        }
+        return DocumentService.PROP_DOCUMENT_CREATOR_REF.toPrefixString(namespaceService);
     }
 
     private String getDraftRootLabel(String docType) {

@@ -84,7 +84,7 @@ var Filters =
                             var employees = orgstructure.getBossSubordinate(orgstructure.getCurrentEmployee().getNodeRef().toString());
                             //добавляем самого себя в список сотрудников
                             var departmentQuery = "";
-                            employees.push(orgstructure.getCurrentEmployee());
+                            //employees.push(orgstructure.getCurrentEmployee());
                             for (var i = 0; i < employees.length; ++i) {
                                 var employeeRef = employees[i].nodeRef;
                                 departmentQuery += " @" + authorProperty.split(":").join("\\:").split("-").join("\\-") + ":\"" + employeeRef.toString() + '"';

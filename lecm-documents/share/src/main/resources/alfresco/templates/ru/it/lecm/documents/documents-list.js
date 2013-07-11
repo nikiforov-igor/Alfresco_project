@@ -31,19 +31,14 @@ model.hasPermission = hasRole;
 
 
 if (hasRole) {
-    model.settings = remote.connect("alfresco").get("/lecm/document-type/settings?docType=" + type);
+    var settingsStr = remote.connect("alfresco").get("/lecm/document-type/settings?docType=" + type);
+    if (settingsStr.status == 200) {
+        model.settings = settingsStr;
 
-    var PREFERENCE_DOCUMENTS = "ru.it.lecm.documents.";
-    var PREFERENCE_DOCUMENTS_STATUSES = "ru.it.lecm.documents." + type.split(":").join("_") + ".documents-list-statuses-filter";
-
-    var prefStr = remote.connect("alfresco").get("/api/people/" + encodeURIComponent(user.id) + "/preferences?pf=" + PREFERENCE_DOCUMENTS);
-    model.preferences = prefStr;
-    /*if (prefStr.status == 200) {
-        var prefStr = eval("(" + rolesStr + ")");
-        var preference = findValueByDotNotation(prefStr, PREFERENCE_DOCUMENTS_STATUSES);
-        if (preference != null) {
-            model.prefQuery = preference;
+        var PREFERENCE_DOCUMENTS = "ru.it.lecm.documents.";
+        var prefStr = remote.connect("alfresco").get("/api/people/" + encodeURIComponent(user.id) + "/preferences?pf=" + PREFERENCE_DOCUMENTS);
+        if (prefStr.status == 200) {
+            model.preferences = prefStr;
         }
-    }*/
-
+    }
 }

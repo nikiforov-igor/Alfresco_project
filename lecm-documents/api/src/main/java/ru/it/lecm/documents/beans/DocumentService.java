@@ -42,6 +42,15 @@ public interface DocumentService {
 
     public static final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
+    public static final String PREF_DOCUMENTS = "ru.it.lecm.documents";
+    public static final String PREF_DOC_LIST_AUTHOR = ".documents-list-docAuthor-filter";
+
+    public static enum AuthorEnum {
+        MY,
+        DEPARTMENT,
+        ALL,
+        FAVOURITE
+    }
     /**
      * Метод для получения рейтинга документа
      * documentNodeRef - document nodeRef
@@ -133,11 +142,13 @@ public interface DocumentService {
      * Поиск документов по разным параметрам
      * @return List<NodeRef> - ссылок на документы
      */
-    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> inititatorsList, List<NodeRef> docsList);
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName, List<NodeRef>> inititatorsList, List<NodeRef> docsList);
 
     /**
      * Метод для получения папки с черновиками для заданного типа
      * @return имя папки с черновиками
      */
     public String getDraftRootLabel(QName docType);
+
+    public String getAuthorProperty(QName docType);
 }

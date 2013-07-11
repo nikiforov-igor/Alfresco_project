@@ -1,10 +1,10 @@
 package ru.it.lecm.documents.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ParameterCheck;
@@ -20,9 +20,7 @@ import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentStatusesFilterBean;
 import ru.it.lecm.documents.beans.DocumentsPermissionsBean;
-import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
-import ru.it.lecm.documents.constraints.PresentStringConstraint;
-import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,12 +37,22 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     private DocumentService documentService;
 	private NodeService nodeService;
-    private LecmPermissionService lecmPermissionService;
     private NamespaceService namespaceService;
-    private DictionaryService dictionaryService;
+    private PreferenceService preferenceService;
 
-    public void setDictionaryService(DictionaryService dictionaryService) {
-        this.dictionaryService = dictionaryService;
+    private AuthenticationService authService;
+    private OrgstructureBean orgstructureService;
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
+    public void setPreferenceService(PreferenceService preferenceService) {
+        this.preferenceService = preferenceService;
+    }
+
+    public void setAuthService(AuthenticationService authService) {
+        this.authService = authService;
     }
 
     public void setDocumentService(DocumentService documentService) {
@@ -54,10 +62,6 @@ public class DocumentWebScriptBean extends BaseWebScript {
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
-
-    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
-		this.lecmPermissionService = lecmPermissionService;
-	}
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
@@ -206,13 +210,57 @@ public class DocumentWebScriptBean extends BaseWebScript {
      * Получить количество документов
      * @return количество
      */
-    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses) {
+    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, boolean considerFilter) {
         List<String> docTypes = getElements(Context.getCurrentContext().getElements(types));
         List<QName> qNameTypes = new ArrayList<QName>();
         for (String docType : docTypes) {
             qNameTypes.add(QName.createQName(docType, namespaceService));
         }
-        return documentService.getDocuments(qNameTypes, getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses))).size();
+
+        Map<QName, List<NodeRef>> employeesMap = null;
+        if (considerFilter) {
+            employeesMap = new HashMap<QName, List<NodeRef>>();
+            String username = authService.getCurrentUserName();
+            if (username != null) {
+                NodeRef currentEmployee = orgstructureService.getEmployeeByPerson(username);
+                for (QName type : qNameTypes) {
+                    String typeStr = type.toPrefixString(namespaceService).replace(":","_");
+                    Map<String, Serializable> typePrefs = preferenceService.getPreferences(username, DocumentService.PREF_DOCUMENTS + "." + typeStr);
+                    Serializable key = typePrefs.get(DocumentService.PREF_DOCUMENTS + "." + typeStr + DocumentService.PREF_DOC_LIST_AUTHOR);
+                    String filterKey = key != null ? (String)key : null;
+                    List<NodeRef> employees = new ArrayList<NodeRef>();
+                    if (filterKey != null) {
+                        switch(DocumentService.AuthorEnum.valueOf(filterKey.toUpperCase())) {
+                            case MY : {
+                                employees.add(currentEmployee);
+                                break;
+                            }
+                            case DEPARTMENT: {
+                                List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(currentEmployee);
+                                employees.addAll(departmentEmployees);
+                                //departmentEmployees.add(employee);
+                                break;
+                            }
+                            case FAVOURITE: {
+                                break;
+                            }
+                            case ALL: {
+                                break;
+                            }
+                            default: {
+                                break;
+                            }
+                        }
+                    }
+                    if (employees.size() > 0) {
+                        employeesMap.put(type, employees);
+                    }
+                }
+            }
+
+        }
+        return documentService.getDocumentsByFilter(qNameTypes, null, null, null,
+                getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), employeesMap, null).size();
     }
 
     public List<String> getAccessPermissionsList(String type) {
@@ -235,17 +283,8 @@ public class DocumentWebScriptBean extends BaseWebScript {
     }
 
     public String getAuthorProperty(String docType) {
-        if (docType != null) {
-            QName type = QName.createQName(docType, namespaceService);
-            ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_AUTHOR_PROPERTY));
-            if (constraint != null && constraint.getConstraint() != null && (constraint.getConstraint() instanceof AuthorPropertyConstraint)) {
-                AuthorPropertyConstraint auConstraint = (AuthorPropertyConstraint) constraint.getConstraint();
-                if (auConstraint.getAuthorProperty() != null) {
-                    return auConstraint.getAuthorProperty();
-                }
-            }
-        }
-        return DocumentService.PROP_DOCUMENT_CREATOR_REF.toPrefixString(namespaceService);
+        QName qNameType = QName.createQName(docType, namespaceService);
+        return documentService.getAuthorProperty(qNameType);
     }
 
     private ArrayList<String> getElements(Object[] object){

@@ -1,4 +1,6 @@
 var type = args["docType"];
+var skippedStatuses = args["skippedStatuses"];
+var considerFilter = args["considerFilter"] ? args["considerFilter"] == "true" : false;
 
 var draftPath = documentScript.getDraftsPath();
 var documentPath = documentScript.getDocumentsPath();
@@ -27,16 +29,16 @@ var list = [];
 var members = [];
 
 for (var key in map) {
-    var amountDocs = documentScript.getAmountDocuments(types, paths, map[key].split(","));
+    var amountDocs = documentScript.getAmountDocuments(types, paths, map[key].split(","), considerFilter);
     list.push({
         key: key,
-        skip: args["skippedStatuses"] != null && args["skippedStatuses"].indexOf(key) >= 0,
+        skip: skippedStatuses != null && skippedStatuses.indexOf(key) >= 0,
         amount: amountDocs,
         filter: map[key]
     });
 }
 if (list.length == 0) { //ддобавляем пункт Все, если у нас не заданы фильтры
-    var amountDocs = documentScript.getAmountDocuments(types, paths, ["*"]);
+    var amountDocs = documentScript.getAmountDocuments(types, paths, ["*"], considerFilter);
     list.push({
         key: "Все",
         skip: false,
@@ -47,8 +49,8 @@ if (list.length == 0) { //ддобавляем пункт Все, если у н
 
 var amountMembers = documentScript.getAmountMembers(type);
 members.push({
-    key:"Участники",
-    amountMembers:amountMembers
+    key: "Участники",
+    amountMembers: amountMembers
 });
-model.members=members;
+model.members = members;
 model.list = list;

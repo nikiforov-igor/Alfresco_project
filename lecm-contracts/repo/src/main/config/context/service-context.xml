@@ -81,6 +81,9 @@
         <property name="contractService" ref="contractService"/>
         <property name="businessJournalService" ref="businessJournalService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="preferenceService" ref="preferenceService"/>
+        <property name="authService" ref="authenticationService"/>
+        <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
     <bean id="contract.businessJournalDictionaryBootstrap"

@@ -1,9 +1,12 @@
 package ru.it.lecm.contracts.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
@@ -32,6 +35,9 @@ public class ContractsWebScriptBean extends BaseWebScript {
 	protected NodeService nodeService;
     private BusinessJournalService businessJournalService;
     private OrgstructureBean orgstructureService;
+    private PreferenceService preferenceService;
+    private AuthenticationService authService;
+    private NamespaceService namespaceService;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -41,6 +47,18 @@ public class ContractsWebScriptBean extends BaseWebScript {
         MY,
         DEPARTMENT,
         MEMBER
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
+    public void setAuthService(AuthenticationService authService) {
+        this.authService = authService;
+    }
+
+    public void setPreferenceService(PreferenceService preferenceService) {
+        this.preferenceService = preferenceService;
     }
 
     public void setContractService(ContractsBeanImpl contractService) {
@@ -325,7 +343,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
 		this.contractService.additionalDocumentSigning(document.getNodeRef());
 	}
 
-    public Scriptable getAdditionalDocsByType(String typeFilter){
+    public Scriptable getAdditionalDocsByType(String typeFilter, boolean considerFilter){
         String[] types = typeFilter != null && typeFilter.length() > 0 ? typeFilter.split("\\s*,\\s"): new String[0];
         String filter = "";
         for (String type : types) {
@@ -333,6 +351,56 @@ public class ContractsWebScriptBean extends BaseWebScript {
                 filter += " OR ";
             }
             filter += "@lecm\\-additional\\-document\\:additionalDocumentType-text-content:\"" + type + "\"";
+        }
+        if (considerFilter) {
+            String username = authService.getCurrentUserName();
+            if (username != null) {
+                NodeRef currentEmployee = orgstructureService.getEmployeeByPerson(username);
+                String typeStr = ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT.toPrefixString(namespaceService).replace(":","_");
+                Map<String, Serializable> typePrefs =
+                        preferenceService.getPreferences(username, DocumentService.PREF_DOCUMENTS + "." + typeStr);
+                Serializable key = typePrefs.get(DocumentService.PREF_DOCUMENTS + "." + typeStr + DocumentService.PREF_DOC_LIST_AUTHOR);
+                String filterKey = key != null ? (String)key : null;
+                List<NodeRef> employees = new ArrayList<NodeRef>();
+
+                if (filterKey != null) {
+                    switch(DocumentService.AuthorEnum.valueOf(filterKey.toUpperCase())) {
+                        case MY : {
+                            employees.add(currentEmployee);
+                            break;
+                        }
+                        case DEPARTMENT: {
+                            List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(currentEmployee);
+                            employees.addAll(departmentEmployees);
+                            //departmentEmployees.add(employee);
+                            break;
+                        }
+                        case FAVOURITE: {
+                            break;
+                        }
+                        case ALL: {
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                }
+                if (employees.size() > 0) {
+                    String employeesFilter = "";
+                    boolean addOR = false;
+                    String authorProperty = contractService.getAuthorProperty();
+                    authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+                    for (NodeRef employeeRef : employees) {
+                        employeesFilter += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+                        addOR = true;
+                    }
+                    if (employeesFilter.length() > 0) {
+                        filter += " AND (" + employeesFilter + ")";
+                    }
+                }
+            }
+
         }
         List<NodeRef> additionalDocuments = this.contractService.getAdditionalDocs(filter.length() > 0 ? filter : null);
         return createScriptable(additionalDocuments);

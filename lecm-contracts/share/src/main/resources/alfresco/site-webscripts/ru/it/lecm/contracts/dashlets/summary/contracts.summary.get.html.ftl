@@ -63,7 +63,7 @@
                 drawForm: function Draw_form() {
                     Alfresco.util.Ajax.jsonGet(
                             {
-                                url: Alfresco.constants.PROXY_URI + encodeURI("lecm/documents/summary?docType=lecm-contract:document&skippedStatuses=Корзина"),
+                                url: Alfresco.constants.PROXY_URI + encodeURI("lecm/documents/summary?docType=lecm-contract:document&skippedStatuses=Корзина&considerFilter=false"),
                                 successCallback: {
                                     fn: function (response) {
                                         if (this.container != null) {

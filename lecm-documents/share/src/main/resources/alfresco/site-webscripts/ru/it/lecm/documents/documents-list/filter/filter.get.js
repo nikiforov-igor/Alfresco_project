@@ -26,7 +26,7 @@ function getStatuses(type) {
 function getFilters(type) {
     var filters = [];
 
-    var url = '/lecm/documents/summary?docType=' + type;
+    var url = '/lecm/documents/summary?docType=' + type + "&considerFilter=true";
     var result = remote.connect("alfresco").get(url);
 
     if (result.status == 200) {

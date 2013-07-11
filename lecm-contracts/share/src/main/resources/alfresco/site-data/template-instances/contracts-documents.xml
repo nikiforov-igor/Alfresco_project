@@ -57,7 +57,7 @@
             <region-id>filters</region-id>
             <url>/lecm/documents/filters/author</url>
             <properties>
-                <itemType>{doctype}</itemType>
+                <itemType>lecm-additional-document:additionalDocument</itemType>
                 <bubblingLabel>contracts-documents</bubblingLabel>
             </properties>
         </component>

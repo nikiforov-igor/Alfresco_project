@@ -219,13 +219,22 @@ public class ContractsBeanImpl extends BaseBean {
         nodeService.createAssociation(documentRef, reasonRef, ASSOC_DELETE_REASON);
     }
 
-    public List<NodeRef> getContractsByFilter(QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> inititatorsList, List<NodeRef> docsList, boolean includeAdditional) {
+    public List<NodeRef> getContractsByFilter(QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> initiatorsList, List<NodeRef> docsList, boolean includeAdditional) {
+        Map<QName, List<NodeRef>> initList = new HashMap<QName, List<NodeRef>>();
         List<QName> types = new ArrayList<QName>(2);
         types.add(TYPE_CONTRACTS_DOCUMENT);
+        if (initiatorsList != null) {
+            initList.put(TYPE_CONTRACTS_DOCUMENT, initiatorsList);
+        }
+
         if (includeAdditional) {
             types.add(TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT);
+            if (initiatorsList != null) {
+                initList.put(TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, initiatorsList);
+            }
         }
-        return documentService.getDocumentsByFilter(types, dateProperty,begin, end, paths, statuses,inititatorsList,docsList);
+
+        return documentService.getDocumentsByFilter(types, dateProperty, begin, end, paths, statuses, initList, docsList);
     }
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
@@ -517,4 +526,8 @@ public class ContractsBeanImpl extends BaseBean {
 		}
 		return null;
 	}
+
+    public String getAuthorProperty() {
+        return documentService.getAuthorProperty(TYPE_CONTRACTS_DOCUMENT);
+    }
 }
