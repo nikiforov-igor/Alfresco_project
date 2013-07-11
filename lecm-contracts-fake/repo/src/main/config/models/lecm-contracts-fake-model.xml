@@ -28,6 +28,11 @@
                 </list>
             </parameter>
         </constraint>
+        <constraint name="lecm-contract-fake:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
+            <parameter name="authorProperty">
+                <value>lecm-document:creator-ref</value>
+            </parameter>
+        </constraint>
     </constraints>
 
 	<types>

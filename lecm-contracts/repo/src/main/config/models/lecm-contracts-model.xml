@@ -36,6 +36,11 @@
                 </list>
             </parameter>
         </constraint>
+        <constraint name="lecm-contract:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
+            <parameter name="authorProperty">
+                <value>lecm-document:creator-ref</value>
+            </parameter>
+        </constraint>
     </constraints>
     <types>
 		<type name="lecm-contract:document">

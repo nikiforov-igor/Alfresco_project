@@ -1,6 +1,8 @@
 package ru.it.lecm.documents.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -18,6 +20,8 @@ import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentStatusesFilterBean;
 import ru.it.lecm.documents.beans.DocumentsPermissionsBean;
+import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
+import ru.it.lecm.documents.constraints.PresentStringConstraint;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
@@ -37,10 +41,16 @@ public class DocumentWebScriptBean extends BaseWebScript {
 	private NodeService nodeService;
     private LecmPermissionService lecmPermissionService;
     private NamespaceService namespaceService;
+    private DictionaryService dictionaryService;
+
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
     }
+
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -222,6 +232,20 @@ public class DocumentWebScriptBean extends BaseWebScript {
 	        logger.error(e.getMessage(), e);
         }
         return properties.put(object).toString();
+    }
+
+    public String getAuthorProperty(String docType) {
+        if (docType != null) {
+            QName type = QName.createQName(docType, namespaceService);
+            ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_AUTHOR_PROPERTY));
+            if (constraint != null && constraint.getConstraint() != null && (constraint.getConstraint() instanceof AuthorPropertyConstraint)) {
+                AuthorPropertyConstraint auConstraint = (AuthorPropertyConstraint) constraint.getConstraint();
+                if (auConstraint.getAuthorProperty() != null) {
+                    return auConstraint.getAuthorProperty();
+                }
+            }
+        }
+        return DocumentService.PROP_DOCUMENT_CREATOR_REF.toPrefixString(namespaceService);
     }
 
     private ArrayList<String> getElements(Object[] object){

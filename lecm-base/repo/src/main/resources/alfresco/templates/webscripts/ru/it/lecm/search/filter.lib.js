@@ -46,10 +46,18 @@ var Filters =
         var filterData = String(filter.filterData || ""),
             filterQuery = filterParams.query;
 
-        // Common types and aspects to filter from the UI
-        var filterQueryDefaults = ' -TYPE:"' + Filters.IGNORED_TYPES.join('" -TYPE:"') + '"';
+        var filterId = filter.filterId;
+        var filterIdCommon, filterIdPart;
+        if (filterId.indexOf("/") > 0) {
+            var parts = filterId.split("/");
+            filterIdCommon = parts[0];
+            filterIdPart = parts[1];
+        } else {
+            filterIdCommon = filterId;
+            filterIdPart = null;
+        }
 
-        switch (String(filter.filterId)) {
+        switch (String(filterIdCommon)) {
             case "my":
                 filterParams.query = " +@cm\\:creator:\"" + person.properties.userName + '"';
                 break;
@@ -63,34 +71,38 @@ var Filters =
                 break;
 
             case "docAuthor":
-                switch (String(filter.filterData)) {
-                    case "all":
-                        filterParams.query = "";
-                        break;
-                    case "my":
-                        filterParams.query = " @lecm\\-document\\:creator\\-ref:\"" + orgstructure.getCurrentEmployee().getNodeRef().toString() + '"';
-                        break;
-                    case "department": {
-                        var employees = orgstructure.getBossSubordinate(orgstructure.getCurrentEmployee().getNodeRef().toString());
-                        //добавляем самого себя в список сотрудников
-                        var departmentQuery = "";
-                        employees.push(orgstructure.getCurrentEmployee());
-                        for (var i = 0; i < employees.length; ++i) {
-                            var employeeRef = employees[i].nodeRef;
-                            departmentQuery += " @lecm\\-document\\:creator\\-ref:\"" + employeeRef.toString() + '"';
+                var authorProperty = documentScript.getAuthorProperty(filterIdPart);
+                if (authorProperty) {
+                    switch (String(filter.filterData)) {
+                        case "all":
+                            filterParams.query = "";
+                            break;
+                        case "my":
+                            filterParams.query = " @" + authorProperty.split(":").join("\\:").split("-").join("\\-") + ":\"" + orgstructure.getCurrentEmployee().getNodeRef().toString() + '"';
+                            break;
+                        case "department": {
+                            var employees = orgstructure.getBossSubordinate(orgstructure.getCurrentEmployee().getNodeRef().toString());
+                            //добавляем самого себя в список сотрудников
+                            var departmentQuery = "";
+                            employees.push(orgstructure.getCurrentEmployee());
+                            for (var i = 0; i < employees.length; ++i) {
+                                var employeeRef = employees[i].nodeRef;
+                                departmentQuery += " @" + authorProperty.split(":").join("\\:").split("-").join("\\-") + ":\"" + employeeRef.toString() + '"';
+                            }
+                            filterParams.query = departmentQuery;
+                            break;
                         }
-                        filterParams.query = departmentQuery;
-                        break;
+                        case "favourite":
+                            filterParams.query = ""; //TODO не реализовано!!!!;
+                            break;
+                        default:
+                            filterParams.query = "";
+                            break;
                     }
-                    case "favourite":
-                        filterParams.query = ""; //TODO не реализовано!!!!;
-                        break;
-                    default:
-                        filterParams.query = "";
-                        break;
+                } else {
+                    filterParams.query = "";
                 }
                 break;
-
             default:
                 filterParams.query = filterQuery;
                 break;

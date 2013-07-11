@@ -306,6 +306,7 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
     </bean>
 
     <bean id="documentCommentsService" class="ru.it.lecm.documents.beans.DocumentCommentsServiceImpl"

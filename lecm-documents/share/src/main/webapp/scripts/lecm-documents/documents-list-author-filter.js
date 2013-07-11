@@ -78,7 +78,7 @@
             populateDataGrid: function () {
                 //location.hash = '#filter=' + this.options.filterId + "|" + this.widgets.author.value;
                 var currentFilter = {
-                    filterId: this.options.filterId,
+                    filterId: this.options.filterId + "/" + this.options.docType,
                     filterData:this.widgets.author.value
                 };
                 this.documentList.currentFilter = currentFilter;
