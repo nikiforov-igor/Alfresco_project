@@ -62,7 +62,9 @@ LogicECM.module = LogicECM.module || {};
 
 				additionalFilter: "",
 
-                ignoreNodes: []
+                ignoreNodes: [],
+
+	            childrenDataSource: "lecm/forms/picker"
             },
 
             selectedItems: null,
@@ -236,7 +238,7 @@ LogicECM.module = LogicECM.module || {};
             _createDataSource: function AssociationSelectOne__createDataSource() {
                 var me = this;
 
-                var pickerChildrenUrl = Alfresco.constants.PROXY_URI + "lecm/forms/picker/" + this.options.itemFamily;
+                var pickerChildrenUrl = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/" + this.options.itemFamily;
                 this.dataSource = new YAHOO.util.DataSource(pickerChildrenUrl,
                     {
                         responseType: YAHOO.util.DataSource.TYPE_JSON,

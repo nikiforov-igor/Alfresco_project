@@ -129,7 +129,9 @@ LogicECM.module = LogicECM.module || {};
 
 			additionalFilter: "",
 
-            ignoreNodes: null
+            ignoreNodes: null,
+
+			childrenDataSource: "lecm/forms/picker"
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -686,7 +688,7 @@ LogicECM.module = LogicECM.module || {};
             var me = this;
 
             // DataSource definition
-            var pickerChildrenUrl = Alfresco.constants.PROXY_URI + "lecm/forms/picker/node";
+            var pickerChildrenUrl = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/node";
             this.widgets.dataSource = new YAHOO.util.DataSource(pickerChildrenUrl,
                 {
                     responseType: YAHOO.util.DataSource.TYPE_JSON,

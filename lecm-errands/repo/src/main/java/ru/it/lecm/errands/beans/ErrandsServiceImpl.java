@@ -11,6 +11,7 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
@@ -27,11 +28,16 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 	}
 
 	private DocumentService documentService;
+	private OrgstructureBean orgstructureService;
 
 	private final Object lock = new Object();
 
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
+	}
+
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
 	}
 
 	@Override
@@ -155,5 +161,27 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 			}
 		}
 		return null;
+	}
+
+	public List<NodeRef> getAvailableInitiators() {
+		List<NodeRef> initiatorRoleEmployees = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_ERRANDS_INITIATOR_ID);
+		if (getModeChoosingExecutors() == ModeChoosingExecutors.ORGANIZATION) {
+			return initiatorRoleEmployees;
+		} else {
+			NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+			List<NodeRef> subordinates = orgstructureService.getBossSubordinate(currentEmployee, true);
+
+			List<NodeRef> result = new ArrayList<NodeRef>();
+			if (initiatorRoleEmployees.contains(currentEmployee)) {
+				result.add(currentEmployee);
+			}
+
+			for (NodeRef subordinate: subordinates) {
+				if (initiatorRoleEmployees.contains(subordinate)) {
+					result.add(subordinate);
+				}
+			}
+			return result;
+		}
 	}
 }

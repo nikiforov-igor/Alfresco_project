@@ -3,6 +3,8 @@ package ru.it.lecm.errands;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
+import java.util.List;
+
 /**
  * User: AIvkin
  * Date: 09.07.13
@@ -28,6 +30,8 @@ public interface ErrandsService {
 	public static final QName USER_SETTINGS_ASSOC_DEFAULT_INITIATOR = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings-default-initiator-assoc");
 	public static final QName USER_SETTINGS_ASSOC_DEFAULT_SUBJECT = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings-default-subject-assoc");
 
+	public static final String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
+
 	/**
 	 * Получение папки для черновиков
 	 * @return ссылку на папку с черновиками
@@ -45,4 +49,10 @@ public interface ErrandsService {
 	 * @return ссылка на объект пользовательских настроек поручений
 	 */
 	public NodeRef getCurrentUserSettingsNode();
+
+	/**
+	 * Получение списка сотрудников, доступных текущему пользователю для выбора инициатора
+	 * @return список сотрудников
+	 */
+	public List<NodeRef> getAvailableInitiators();
 }

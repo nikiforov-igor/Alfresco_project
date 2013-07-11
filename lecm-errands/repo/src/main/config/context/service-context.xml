@@ -67,6 +67,7 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="authService" ref="authenticationService"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="folders">
 			<map>
 				<entry key="#{ERRANDS_ROOT_ID}" value="#{ERRANDS_ROOT_NAME}"/>

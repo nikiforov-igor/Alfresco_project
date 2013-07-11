@@ -68,6 +68,9 @@
     <#if field.control.params.selectedItemsNameSubstituteString??>
         selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
     </#if>
+    <#if field.control.params.childrenDataSource??>
+	    childrenDataSource: "${field.control.params.childrenDataSource}",
+    </#if>
         nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
         additionalFilter: "${field.control.params.additionalFilter!''}"
     });
@@ -102,6 +105,9 @@
     </#if>
     <#if args.ignoreNodes??>
         ignoreNodes: "${args.ignoreNodes}".split(","),
+    </#if>
+    <#if field.control.params.childrenDataSource??>
+	    childrenDataSource: "${field.control.params.childrenDataSource}",
     </#if>
         showCreateNewLink: ${showCreateNewLink?string},
         showSearch: ${showSearch?string},

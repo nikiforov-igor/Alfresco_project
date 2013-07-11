@@ -1,8 +1,11 @@
 package ru.it.lecm.errands.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.errands.ErrandsService;
+
+import java.util.List;
 
 /**
  * User: AIvkin
@@ -22,5 +25,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
 	public ScriptNode getCurrentUserSettingsNode() {
 		return new ScriptNode(errandsService.getCurrentUserSettingsNode(), serviceRegistry, getScope());
+	}
+
+	public List<NodeRef> getAvailableInitiators() {
+		return  errandsService.getAvailableInitiators();
 	}
 }
