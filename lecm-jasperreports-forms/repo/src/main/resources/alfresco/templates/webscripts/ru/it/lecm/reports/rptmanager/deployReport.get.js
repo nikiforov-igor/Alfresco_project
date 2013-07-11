@@ -1,2 +1,2 @@
 
-model.data = rptmanager.deployReport( args["nodeRef"] );
+model.success = rptmanager.deployReport( args["reportDescNode"] );
