@@ -165,6 +165,7 @@
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewButton">false</control-param>
+	                        <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:content">

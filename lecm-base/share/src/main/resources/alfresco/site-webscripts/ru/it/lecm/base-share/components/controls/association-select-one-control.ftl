@@ -74,6 +74,9 @@
 	            <#if field.control.params.primaryCascading??>
                     primaryCascading: ${field.control.params.primaryCascading},
 		        </#if>
+	            <#if field.control.params.defaultValueDataSource??>
+		            defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
+	            </#if>
                 fieldId: "${fieldId}"
             });
 })();

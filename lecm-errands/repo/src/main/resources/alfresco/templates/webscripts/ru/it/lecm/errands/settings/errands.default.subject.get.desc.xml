@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Errands Module get default subject</shortname>
+	<description>Errands Module get default subject</description>
+	<url>/lecm/errands/getDefaultSubject</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

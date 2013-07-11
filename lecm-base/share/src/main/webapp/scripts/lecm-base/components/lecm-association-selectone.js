@@ -71,7 +71,9 @@ LogicECM.module = LogicECM.module || {};
 
                 notSelectedText: "",
 
-	            disabled: false
+	            disabled: false,
+
+	            defaultValueDataSource: null
             },
 
             rootNode: null,
@@ -93,6 +95,8 @@ LogicECM.module = LogicECM.module || {};
             currentDisplayValueElement: null,
 
             dataSource: null,
+
+	        defaultValue: null,
 
             setOptions: function AssociationSelectOne_setOptions(obj)
             {
@@ -262,57 +266,83 @@ LogicECM.module = LogicECM.module || {};
                 LogicECM.module.AssociationSelectOne.superclass.destroy.call(this);
             },
 
+	        loadDefaultValue: function AssociationSelectOne__loadDefaultValue() {
+		        if (this.options.defaultValueDataSource != null) {
+			        var me = this;
+
+			        Alfresco.util.Ajax.request(
+				        {
+					        url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
+					        successCallback: {
+						        fn: function (response) {
+							        var oResults = eval("(" + response.serverResponse.responseText + ")");
+							        if (oResults != null && oResults.nodeRef != null ) {
+								        me.defaultValue = oResults.nodeRef;
+							        }
+							        me.fillContent();
+						        }
+					        },
+					        failureMessage: "message.failure"
+				        });
+		        } else {
+			        this.fillContent();
+		        }
+	        },
+
+	        fillContent: function AssociationSelectOne_populateSelect() {
+		        var successHandler = function (sRequest, oResponse, oPayload)
+		        {
+			        if (this.options.notSelectedOptionShow) {
+				        var emptyOption = this.selectItem.options[0];
+				        var emptOpt = document.createElement('option');
+				        emptOpt.innerHTML = emptyOption.innerHTML;
+				        emptOpt.value = emptyOption.value;
+
+				        this.selectItem.innerHTML = "";
+				        this.selectItem.appendChild(emptOpt);
+			        }
+
+			        var results = oResponse.results;
+			        for (var i = 0; i < results.length; i++) {
+				        var node = results[i];
+				        var opt = document.createElement('option');
+				        opt.innerHTML = node.name;
+				        opt.value = node.nodeRef;
+				        if (node.nodeRef == this.options.selectedValueNodeRef || node.nodeRef == this.defaultValue) {
+					        opt.selected = true;
+				        }
+				        this.selectItem.appendChild(opt);
+			        }
+
+			        this.onSelectChange();
+		        }.bind(this);
+
+		        var failureHandler = function (sRequest, oResponse)
+		        {
+			        if (oResponse.status == 401)
+			        {
+				        // Our session has likely timed-out, so refresh to offer the login page
+				        window.location.reload();
+			        }
+			        else
+			        {
+				        //todo show failure message
+			        }
+		        }.bind(this);
+
+		        var url = this._generateChildrenUrlPath(this.options.parentNodeRef) + this._generateChildrenUrlParams("");
+
+		        this.dataSource.sendRequest(url,
+			        {
+				        success: successHandler,
+				        failure: failureHandler,
+				        scope: this
+			        });
+	        },
+
             populateSelect: function AssociationSelectOne_populateSelect() {
                 this._createDataSource();
-
-                var successHandler = function (sRequest, oResponse, oPayload)
-                {
-	                if (this.options.notSelectedOptionShow) {
-	                    var emptyOption = this.selectItem.options[0];
-		                var emptOpt = document.createElement('option');
-		                emptOpt.innerHTML = emptyOption.innerHTML;
-		                emptOpt.value = emptyOption.value;
-
-	                    this.selectItem.innerHTML = "";
-	                    this.selectItem.appendChild(emptOpt);
-	                }
-
-                    var results = oResponse.results;
-                    for (var i = 0; i < results.length; i++) {
-                        var node = results[i];
-                        var opt = document.createElement('option');
-                        opt.innerHTML = node.name;
-                        opt.value = node.nodeRef;
-                        if (node.nodeRef == this.options.selectedValueNodeRef) {
-                            opt.selected = true;
-                        }
-                        this.selectItem.appendChild(opt);
-                    }
-
-	                this.onSelectChange();
-                }.bind(this);
-
-                var failureHandler = function (sRequest, oResponse)
-                {
-                    if (oResponse.status == 401)
-                    {
-                        // Our session has likely timed-out, so refresh to offer the login page
-                        window.location.reload();
-                    }
-                    else
-                    {
-                        //todo show failure message
-                    }
-                }.bind(this);
-
-                var url = this._generateChildrenUrlPath(this.options.parentNodeRef) + this._generateChildrenUrlParams("");
-
-                this.dataSource.sendRequest(url,
-                    {
-                        success: successHandler,
-                        failure: failureHandler,
-                        scope: this
-                    });
+                this.loadDefaultValue();
             },
 
             populateCurrentValue: function AssociationSelectOne_populateCurrentValue() {
