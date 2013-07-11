@@ -3,208 +3,276 @@
 
 <#if !page.url.args.reportId??>
 <div class="yui-t1" id="re-reports-grid">
-    <div id="yui-main-2">
-        <div class="yui-b" id="alf-content" style="margin-left: 0;">
-            <@grid.datagrid id=id showViewForm=false>
-                <script type="text/javascript">//<![CDATA[
-                /**
-                 * Alfresco Slingshot aliases
-                 */
-                var $html = Alfresco.util.encodeHTML,
-                        $links = Alfresco.util.activateLinks,
-                        $combine = Alfresco.util.combinePaths,
-                        $userProfile = Alfresco.util.userProfileLink;
+<div id="yui-main-2">
+<div class="yui-b" id="alf-content" style="margin-left: 0;">
+    <@grid.datagrid id=id showViewForm=false>
+        <script type="text/javascript">//<![CDATA[
+            /**
+             * Alfresco Slingshot aliases
+             */
+            var $html = Alfresco.util.encodeHTML,
+                    $links = Alfresco.util.activateLinks,
+                    $combine = Alfresco.util.combinePaths,
+                    $userProfile = Alfresco.util.userProfileLink;
 
-                LogicECM.module.ReportsEditor.Grid = function (containerId) {
-                    return LogicECM.module.ReportsEditor.Grid.superclass.constructor.call(this, containerId);
-                };
+            LogicECM.module.ReportsEditor.Grid = function (containerId) {
+                return LogicECM.module.ReportsEditor.Grid.superclass.constructor.call(this, containerId);
+            };
 
-                YAHOO.lang.extend (LogicECM.module.ReportsEditor.Grid, LogicECM.module.Base.DataGrid);
+            YAHOO.lang.extend(LogicECM.module.ReportsEditor.Grid, LogicECM.module.Base.DataGrid);
 
-                YAHOO.lang.augmentObject (LogicECM.module.ReportsEditor.Grid.prototype, {
+            YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.Grid.prototype, {
 
-                    onActionEdit: function (item) {
-                        var baseUrl = window.location.protocol + "//" + window.location.host;
-                        var template = "report-settings?reportId={reportId}";
-                        var url = YAHOO.lang.substitute (baseUrl + Alfresco.constants.URL_PAGECONTEXT + template, {
-                            reportId: item.nodeRef
-                        });
-                        window.location.href = url
-                    },
+                splashScreen: null,
 
-                    getCellFormatter: function DataGrid_getCellFormatter()
-                    {
-                        var scope = this;
+                onActionEdit: function (item) {
+                    var baseUrl = window.location.protocol + "//" + window.location.host;
+                    var template = "report-settings?reportId={reportId}";
+                    var url = YAHOO.lang.substitute(baseUrl + Alfresco.constants.URL_PAGECONTEXT + template, {
+                        reportId: item.nodeRef
+                    });
+                    window.location.href = url
+                },
 
-                        /**
-                         * Data Type formatter
-                         *
-                         * @method renderCellDataType
-                         * @param elCell {object}
-                         * @param oRecord {object}
-                         * @param oColumn {object}
-                         * @param oData {object|string}
-                         */
-                        return function DataGrid_renderCellDataType(elCell, oRecord, oColumn, oData) {
-                            var html = "";
-                            var htmlValue = scope.getCustomCellFormatter.call(this, scope, elCell, oRecord, oColumn, oData);
-                            if (htmlValue == null) { // используем стандартный форматтер
-                                // Populate potentially missing parameters
-                                if (!oRecord) {
-                                    oRecord = this.getRecord(elCell);
+                onActionDeploy: function (item) {
+                    var me = this;
+                    Alfresco.util.PopupManager.displayPrompt({
+                        title: "Регистрация отчета",
+                        text: "Вы действительно хотите добавить отчет в систему?",
+                        buttons: [
+                            {
+                                text: "Да",
+                                handler: function () {
+                                    this.destroy();
+                                    var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/deployReport?reportDescNode={reportDescNode}";
+                                    sUrl = YAHOO.lang.substitute(sUrl, {
+                                        reportDescNode: item.nodeRef
+                                    });
+                                    me._showSplash();
+                                    var callback = {
+                                        success: function (oResponse) {
+                                            oResponse.argument.parent._hideSplash();
+                                            Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text: "Отчет зарегистрирован в системе",
+                                                        displayTime: 3
+                                                    });
+                                        },
+                                        failure: function (oResponse) {
+                                            oResponse.argument.parent._hideSplash();
+                                            Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text: "При регистрации отчета произошла ошибка",
+                                                        displayTime: 3
+                                                    });
+                                        },
+                                        argument: {
+                                            parent: me
+                                        },
+                                        timeout: 30000
+                                    };
+                                    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
                                 }
-                                if (!oColumn) {
-                                    oColumn = this.getColumn(elCell.parentNode.cellIndex);
+                            },
+                            {
+                                text: "Нет",
+                                handler: function dlA_onActionDelete_cancel() {
+                                    this.destroy();
+                                },
+                                isDefault: true
+                            }
+                        ]
+                    });
+                },
+
+                _showSplash: function () {
+                    this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+                            {
+                                text: Alfresco.util.message("label.loading"),
+                                spanClass: "wait",
+                                displayTime: 0
+                            });
+                },
+
+                _hideSplash: function () {
+                    YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
+                },
+
+                getCellFormatter: function DataGrid_getCellFormatter() {
+                    var scope = this;
+
+                    /**
+                     * Data Type formatter
+                     *
+                     * @method renderCellDataType
+                     * @param elCell {object}
+                     * @param oRecord {object}
+                     * @param oColumn {object}
+                     * @param oData {object|string}
+                     */
+                    return function DataGrid_renderCellDataType(elCell, oRecord, oColumn, oData) {
+                        var html = "";
+                        var htmlValue = scope.getCustomCellFormatter.call(this, scope, elCell, oRecord, oColumn, oData);
+                        if (htmlValue == null) { // используем стандартный форматтер
+                            // Populate potentially missing parameters
+                            if (!oRecord) {
+                                oRecord = this.getRecord(elCell);
+                            }
+                            if (!oColumn) {
+                                oColumn = this.getColumn(elCell.parentNode.cellIndex);
+                            }
+
+                            if (oRecord && oColumn) {
+                                if (!oData) {
+                                    oData = oRecord.getData("itemData")[oColumn.field];
                                 }
 
-                                if (oRecord && oColumn) {
-                                    if (!oData) {
-                                        oData = oRecord.getData("itemData")[oColumn.field];
-                                    }
+                                if (oData) {
+                                    var datalistColumn = scope.datagridColumns[oColumn.key];
+                                    if (datalistColumn) {
+                                        oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+                                        for (var i = 0, ii = oData.length, data; i < ii; i++) {
+                                            data = oData[i];
 
-                                    if (oData) {
-                                        var datalistColumn = scope.datagridColumns[oColumn.key];
-                                        if (datalistColumn) {
-                                            oData = YAHOO.lang.isArray(oData) ? oData : [oData];
-                                            for (var i = 0, ii = oData.length, data; i < ii; i++) {
-                                                data = oData[i];
+                                            var columnContent = "";
+                                            switch (datalistColumn.dataType.toLowerCase()) {
+                                                case "checkboxtable":
+                                                    columnContent += "<div style='text-align: center'><input type='checkbox' " + (data.displayValue == "true" ? "checked='checked'" : "") + " onClick='changeFieldState(this, \"" + data.value + "\")' /></div>"; //data.displayValue;
+                                                    break;
+                                                case "lecm-orgstr:employee":
+                                                    columnContent += scope.getEmployeeView(data.value, data.displayValue);
+                                                    break;
+                                                case "lecm-orgstr:employee-link":
+                                                    columnContent += scope.getEmployeeViewByLink(data.value, data.displayValue);
+                                                    break;
 
-                                                var columnContent = "";
-                                                switch (datalistColumn.dataType.toLowerCase()) {
-                                                    case "checkboxtable":
-                                                        columnContent += "<div style='text-align: center'><input type='checkbox' " + (data.displayValue == "true" ? "checked='checked'" : "") + " onClick='changeFieldState(this, \"" + data.value + "\")' /></div>"; //data.displayValue;
-                                                        break;
-                                                    case "lecm-orgstr:employee":
-                                                        columnContent += scope.getEmployeeView(data.value, data.displayValue);
-                                                        break;
-                                                    case "lecm-orgstr:employee-link":
-                                                        columnContent += scope.getEmployeeViewByLink(data.value, data.displayValue);
-                                                        break;
+                                                case "cm:person":
+                                                    columnContent += '<span class="person">' + $userProfile(data.metadata, data.displayValue) + '</span>';
+                                                    break;
 
-                                                    case "cm:person":
-                                                        columnContent += '<span class="person">' + $userProfile(data.metadata, data.displayValue) + '</span>';
-                                                        break;
+                                                case "datetime":
+                                                    columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
+                                                    break;
 
-                                                    case "datetime":
-                                                        columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
-                                                        break;
+                                                case "date":
+                                                    columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
+                                                    break;
 
-                                                    case "date":
-                                                        columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
-                                                        break;
+                                                case "text":
+                                                    var hexColorPattern = /^#[0-9a-f]{6}$/i;
+                                                    if (hexColorPattern.test(data.displayValue)) {
+                                                        columnContent += $links(data.displayValue + '<div style="background-color: ' + data.displayValue + '; display: inline; padding: 0px 10px; margin-left: 3px;">&nbsp</div>');
+                                                    } else {
+                                                        columnContent += $links($html(data.displayValue));
+                                                    }
+                                                    break;
 
-                                                    case "text":
-                                                        var hexColorPattern = /^#[0-9a-f]{6}$/i;
-                                                        if (hexColorPattern.test(data.displayValue)) {
-                                                            columnContent += $links(data.displayValue + '<div style="background-color: ' + data.displayValue + '; display: inline; padding: 0px 10px; margin-left: 3px;">&nbsp</div>');
-                                                        } else {
-                                                            columnContent += $links($html(data.displayValue));
-                                                        }
-                                                        break;
+                                                case "boolean":
+                                                    if (data.value) {
+                                                        columnContent += '<div style="text-align: center;">'
+                                                        columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                        columnContent += '</div>'
+                                                    }
+                                                    break;
 
-                                                    case "boolean":
-                                                        if (data.value) {
-                                                            columnContent += '<div style="text-align: center;">'
-                                                            columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
-                                                            columnContent += '</div>'
-                                                        }
-                                                        break;
-
-                                                    default:
-                                                        if (datalistColumn.type == "association") {
+                                                default:
+                                                    if (datalistColumn.type == "association") {
+                                                        columnContent += $html(data.displayValue);
+                                                    } else {
+                                                        if (data.displayValue != "false" && data.displayValue != "true") {
                                                             columnContent += $html(data.displayValue);
                                                         } else {
-                                                            if (data.displayValue != "false" && data.displayValue != "true") {
-                                                                columnContent += $html(data.displayValue);
-                                                            } else {
-                                                                if (data.displayValue == "true") {
-                                                                    columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
-                                                                }
+                                                            if (data.displayValue == "true") {
+                                                                columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
                                                             }
                                                         }
-                                                        break;
-                                                }
+                                                    }
+                                                    break;
+                                            }
 
-                                                if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
-                                                    html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'report-settings?reportId=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
-                                                } else {
-                                                    html += columnContent;
-                                                }
+                                            if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
+                                                html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'report-settings?reportId=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
+                                            } else {
+                                                html += columnContent;
+                                            }
 
-                                                if (i < ii - 1) {
-                                                    html += "<br />";
-                                                }
+                                            if (i < ii - 1) {
+                                                html += "<br />";
                                             }
                                         }
                                     }
                                 }
-                            } else {
-                                html = htmlValue;
                             }
+                        } else {
+                            html = htmlValue;
+                        }
 
-                            if (oRecord && oRecord.getData("itemData")){
-                                if (oRecord.getData("itemData")["prop_lecm-dic_active"] && oRecord.getData("itemData")["prop_lecm-dic_active"].value == false) {
-                                    elCell.className += " archive-record";
-                                }
+                        if (oRecord && oRecord.getData("itemData")) {
+                            if (oRecord.getData("itemData")["prop_lecm-dic_active"] && oRecord.getData("itemData")["prop_lecm-dic_active"].value == false) {
+                                elCell.className += " archive-record";
                             }
-                            elCell.innerHTML = html;
-                        };
-                    }
-                }, true);
+                        }
+                        elCell.innerHTML = html;
+                    };
+                }
+            }, true);
 
-                function createDatagrid() {
-                    var datagrid = new LogicECM.module.ReportsEditor.Grid('${id}').setOptions(
-                            {
-                                usePagination:true,
-                                useDynamicPagination :true,
-                                showExtendSearchBlock:false,
-                                attributeForShow:"cm:name",
-                                actions: [
-                                    {
-                                        type:"datagrid-action-link-reports",
-                                        id:"onActionEdit",
-                                        permission:"edit",
-                                        label:"${msg("actions.edit")}"
-                                    },
-                                    {
-                                        type:"datagrid-action-link-reports",
-                                        id:"onActionDelete",
-                                        permission:"delete",
-                                        label:"${msg("actions.delete-row")}"
-                                    }
-                                ],
-                                bubblingLabel: "reports",
-                                showCheckboxColumn: false
-                            }).setMessages(${messages});
-
-                    YAHOO.util.Event.onContentReady ('${id}', function () {
-                        YAHOO.Bubbling.fire ("activeGridChanged", {
-                            datagridMeta: {
-                                itemType: "lecm-rpeditor:reportDescriptor",
-                                nodeRef: LogicECM.module.ReportsEditor.SETTINGS.reportsContainer,
-                                actionsConfig: {
-                                    fullDelete: true,
-                                    trash: false
+            function createDatagrid() {
+                var datagrid = new LogicECM.module.ReportsEditor.Grid('${id}').setOptions(
+                        {
+                            usePagination: true,
+                            useDynamicPagination: true,
+                            showExtendSearchBlock: false,
+                            attributeForShow: "cm:name",
+                            actions: [
+                                {
+                                    type: "datagrid-action-link-reports",
+                                    id: "onActionEdit",
+                                    permission: "edit",
+                                    label: "${msg("actions.edit")}"
                                 },
-                                sort:"cm:name|true"
-                                /*,searchConfig: {
-                                    filter: '+PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Отчеты/*//*"'
-                                }*/
+                                {
+                                    type: "datagrid-action-link-reports",
+                                    id: "onActionDeploy",
+                                    permission: "edit",
+                                    label: "${msg("actions.deploy")}"
+                                },
+                                {
+                                    type: "datagrid-action-link-reports",
+                                    id: "onActionDelete",
+                                    permission: "delete",
+                                    label: "${msg("actions.delete-row")}"
+                                }
+                            ],
+                            bubblingLabel: "reports",
+                            showCheckboxColumn: false
+                        }).setMessages(${messages});
+
+                YAHOO.util.Event.onContentReady('${id}', function () {
+                    YAHOO.Bubbling.fire("activeGridChanged", {
+                        datagridMeta: {
+                            itemType: "lecm-rpeditor:reportDescriptor",
+                            nodeRef: LogicECM.module.ReportsEditor.SETTINGS.reportsContainer,
+                            actionsConfig: {
+                                fullDelete: true,
+                                trash: false
                             },
-                            bubblingLabel: "reports"
-                        });
+                            sort: "cm:name|true"
+                        },
+                        bubblingLabel: "reports"
                     });
-                }
+                });
+            }
 
-                function init() {
-                    createDatagrid();
-                }
+            function init() {
+                createDatagrid();
+            }
 
-                YAHOO.util.Event.onDOMReady(init);
-                //]]></script>
-            </@grid.datagrid>
-        </div>
-    </div>
+            YAHOO.util.Event.onDOMReady(init);
+        //]]></script>
+    </@grid.datagrid>
+</div>
+</div>
 </div>
 <#else>
 <div id="${id}-reportForm"></div>
@@ -213,19 +281,19 @@
     var reportForm;
     (function () {
         function init() {
-            var htmlId = "${page.url.args.reportId}".replace("workspace://SpacesStore/","").replace("-","");
+            var htmlId = "${page.url.args.reportId}".replace("workspace://SpacesStore/", "").replace("-", "");
             Alfresco.util.Ajax.request(
                     {
-                        url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-                        dataObj:{
-                            htmlid:htmlId,
-                            itemKind:"node",
-                            itemId:"${page.url.args.reportId}",
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                        dataObj: {
+                            htmlid: htmlId,
+                            itemKind: "node",
+                            itemId: "${page.url.args.reportId}",
                             mode: "edit",
-                            submitType:"json",
-                            showSubmitButton:"true"
+                            submitType: "json",
+                            showSubmitButton: "true"
                         },
-                        successCallback:{
+                        successCallback: {
                             fn: function (response) {
                                 var formEl = Dom.get("${id}-reportForm");
                                 formEl.innerHTML = response.serverResponse.responseText;
@@ -259,8 +327,8 @@
                                 form.init();
                             }
                         },
-                        failureMessage:"message.failure",
-                        execScripts:true
+                        failureMessage: "message.failure",
+                        execScripts: true
                     });
         }
 

@@ -102,3 +102,7 @@ div[id*="reports-editor-navigation-toolbar"] .toolbar
     background: url('/share/res/components/images/select-invert-16.png') no-repeat 12px 4px;
     padding-left: 24px;
 }
+
+.datagrid .onActionDeploy a {
+    background-image: url("../../images/lecm-base/components/base/alf_base_osnovnaya_16.png");
+}

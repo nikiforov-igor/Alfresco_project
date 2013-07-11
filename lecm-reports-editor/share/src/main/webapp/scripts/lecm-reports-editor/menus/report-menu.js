@@ -16,6 +16,7 @@
 
     YAHOO.extend(LogicECM.module.ReportsEditor.ReportMenu, Alfresco.component.Base, {
         reportId: null,
+        splashScreen: null,
 
         setReportId: function(reportId){
             this.reportId = reportId;
@@ -48,6 +49,75 @@
             };
             this.widgets.editTemplateBtn = Alfresco.util.createYUIButton(this, "editTemplateBtn", onButtonClick4, {});
 
+            var onButtonClick5 = function (e) {
+                context._deployReport();
+            };
+            this.widgets.deployReportBtn = Alfresco.util.createYUIButton(this, "deployReportBtn", onButtonClick5, {});
+
+        },
+
+        _deployReport: function () {
+            var me = this;
+            Alfresco.util.PopupManager.displayPrompt({
+                title: "Регистрация отчета",
+                text: "Вы действительно хотите добавить отчет в систему?",
+                buttons: [
+                    {
+                        text: "Да",
+                        handler: function dlA_onActionDeploy() {
+                            this.destroy();
+                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/deployReport?reportDescNode={reportDescNode}";
+                            sUrl = YAHOO.lang.substitute(sUrl, {
+                                reportDescNode: me.reportId
+                            });
+                            me._showSplash();
+                            var callback = {
+                                success: function (oResponse) {
+                                    oResponse.argument.parent._hideSplash();
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text: "Отчет зарегистрирован в системе",
+                                            displayTime: 3
+                                        });
+                                },
+                                failure: function (oResponse) {
+                                    oResponse.argument.parent._hideSplash();
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text: "При регистрации отчета произошла ошибка",
+                                            displayTime: 3
+                                        });
+                                },
+                                argument: {
+                                    parent: me
+                                },
+                                timeout: 30000
+                            };
+                            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                        }
+                    },
+                    {
+                        text: "Нет",
+                        handler: function dlA_onActionDelete_cancel() {
+                            this.destroy();
+                        },
+                        isDefault: true
+                    }
+                ]
+            });
+        },
+
+        _showSplash: function() {
+            this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+                {
+                    text: Alfresco.util.message("label.loading"),
+                    spanClass: "wait",
+                    displayTime: 0
+                });
+        },
+
+        _hideSplash: function() {
+            YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
         }
     });
 })();
