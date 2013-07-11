@@ -49,6 +49,7 @@
                 <!-- Заголовок -->
                 <property name="lecm-errands:title">
                     <type>d:text</type>
+	                <mandatory>true</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
@@ -77,6 +78,7 @@
 				<!-- Срок поручения-->
 				<property name="lecm-errands:limitation-date">
 					<type>d:date</type>
+					<mandatory>true</mandatory>
 				</property>
 				<!-- Дата начала -->
 				<property name="lecm-errands:start-date">
@@ -121,6 +123,7 @@
 				<!-- Короткое -->
 				<property name="lecm-errands:is-short">
 					<type>d:boolean</type>
+					<mandatory>true</mandatory>
 					<default>false</default>
 				</property>
 
@@ -199,7 +202,7 @@
 					</source>
 					<target>
 						<class>lecm-orgstr:employee</class>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
 				</association>
@@ -223,7 +226,7 @@
 					</source>
 					<target>
 						<class>lecm-orgstr:employee</class>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
 				</association>
@@ -259,7 +262,7 @@
 					</source>
 					<target>
 						<class>lecm-doc-dic:subjects</class>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
 				</association>
@@ -279,7 +282,7 @@
 		</type>
 
 	    <type name="lecm-errands:settings">
-		    <title>Logic Ecm Errands Document</title>
+		    <title>Logic Ecm Errands Global Settings</title>
 		    <parent>cm:cmobject</parent>
 		    <properties>
 			    <!-- Режим выбора исполнителей  -->
