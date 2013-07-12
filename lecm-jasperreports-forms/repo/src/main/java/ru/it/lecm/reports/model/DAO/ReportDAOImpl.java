@@ -17,6 +17,8 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru.it.lecm.reports.api.model.AlfrescoAssocInfo;
+import ru.it.lecm.reports.api.model.AlfrescoAssocInfo.AssocKind;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.JavaDataType;
@@ -29,6 +31,7 @@ import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.api.model.DAO.ReportDAO;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.generators.LucenePreparedQuery;
+import ru.it.lecm.reports.model.impl.AlfrescoAssocInfoImpl;
 import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
 import ru.it.lecm.reports.model.impl.DataSourceDescriptorImpl;
 import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
@@ -412,6 +415,25 @@ public class ReportDAOImpl implements ReportDAO {
 			}
 			result.setType(atype);
 		}
+
+
+		// TODO: (tag ALF_TYPES) Получение типа ассоциации альфреско и типа данных Альфреско
+		/*
+		const : String АТРИБУТ_С_ТИПОМ_АЛЬФРЕСКО = "", АТРИБУТ_С_ТИПОМ_АССОЦИАЦИИ_АЛЬФРЕСКО = "", АТРИБУТ_С_ВИДОМ_АССОЦИАЦИИ_АЛЬФРЕСКО = "";
+
+		result.setAlfrescoType( getString(map, АТРИБУТ_С_ТИПОМ_АЛЬФРЕСКО)); 
+		
+		{ // тип ассоциации Альфреско ...
+			final String typeOfAssoc = getString(map, АТРИБУТ_С_ТИПОМ_АССОЦИАЦИИ_АЛЬФРЕСКО);
+			if (typeOfAssoc != null) {
+				final AlfrescoAssocInfoImpl assoc = new AlfrescoAssocInfoImpl();
+				assoc.setAssocTypeName( typeOfAssoc );
+
+				final String kindOfAssoc = getString(map, АТРИБУТ_С_ВИДОМ_АССОЦИАЦИИ_АЛЬФРЕСКО); // 11, 1M ...
+				assoc.setAssocKind(AssocKind.findAssocKind(kindOfAssoc));
+			}
+		}
+		 */
 
 		return result;
 	}

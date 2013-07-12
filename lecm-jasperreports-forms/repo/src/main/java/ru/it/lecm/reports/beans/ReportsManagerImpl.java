@@ -356,6 +356,13 @@ public class ReportsManagerImpl implements ReportsManager {
 		final Map<String, ReportDescriptor> list = this.getDescriptors();
 		if (list == null || list.isEmpty())
 			return null;
+
+		if (docType != null && docType.length() == 0)
+			docType = null;
+
+		if (reportType != null && reportType.length() == 0)
+			reportType = null;
+
 		if (docType == null && reportType == null) // не задано фильтрование
 			return new ArrayList<ReportDescriptor>( list.values());
 		final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
