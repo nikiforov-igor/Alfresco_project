@@ -66,5 +66,10 @@
             <region-id>forbidden</region-id>
             <url>/lecm/base/forbidden</url>
         </component>
+        <!-- Dependencies : util component -->
+        <component>
+            <region-id>dependencies</region-id>
+            <url>/lecm/errands/dependencies</url>
+        </component>
     </components>
 </template-instance>

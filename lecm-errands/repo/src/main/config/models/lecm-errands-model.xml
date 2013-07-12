@@ -129,7 +129,7 @@
 				<property name="lecm-errands:is-short">
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
-					<default>false</default>
+					<default>true</default>
 				</property>
 
 				<!-- Поиск/сортировка ассоциаций-->

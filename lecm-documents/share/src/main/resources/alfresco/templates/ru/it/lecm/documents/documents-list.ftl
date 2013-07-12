@@ -114,4 +114,5 @@
     <#else>
         <@region id="forbidden" scope="template"/>
     </#if>
+    <@region id="dependencies" scope="template" />
 </@bpage.basePage>

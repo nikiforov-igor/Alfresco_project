@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>errands dependencies</shortname>
+    <description>Util component for dependencies including</description>
+    <url>/lecm/errands/dependencies</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>
