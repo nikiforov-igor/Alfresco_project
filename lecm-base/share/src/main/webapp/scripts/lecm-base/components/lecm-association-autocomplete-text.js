@@ -92,7 +92,7 @@ LogicECM.module = LogicECM.module || {};
 				var oAC = new YAHOO.widget.AutoComplete(this.currentValueHtmlId, this.controlId + "-autocomplete-container", oDS);
 				oAC.prehighlightClassName = "yui-ac-prehighlight";
 				oAC.useShadow = true;
-				oAC.forceSelection = true;
+				oAC.forceSelection = false;
 				oAC._bFocused = true;
 
 				var selectItemHandler = function (sType, aArgs) {
