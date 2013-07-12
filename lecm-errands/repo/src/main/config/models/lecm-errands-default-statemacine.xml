@@ -3368,36 +3368,6 @@
                                                                 <nodes>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>96633989-e847-4e64-8c31-b730423e49e6
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/4c46bd7b-ef14-4008-8648-e5a38c288023
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>Здесь будет настоящий текст
-                                                                                    ошибки
-                                                                                </value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value>true</value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>Здесь будет - Если чекбокс «Без
-                                                                                    утверждения» = FALSE
-                                                                                </value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
                                                                         <name>6b687c39-69fb-4c9b-bdc3-cec94787c53b
                                                                         </name>
                                                                         <nodeRef>
@@ -3418,6 +3388,36 @@
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     user.currentUser().hasBusinessRole("ERRANDS_CONTROLLER")
+                                                                                </value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>a74f998c-a7c6-4af5-833c-5a5a91e78c87
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/2de3d992-5077-4256-9389-157c68c9aab6
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>Произошла ошибка при проверке
+                                                                                </value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value>true</value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    doc.attr("lecm-errands:without-initiator-approval")
+                                                                                    == false
                                                                                 </value>
                                                                             </property>
                                                                         </properties>
@@ -3609,36 +3609,6 @@
                                                                 <nodes>
                                                                     <node>
                                                                         <type>conditionAccess</type>
-                                                                        <name>0d22e7e4-1107-4705-aa5b-6336029454a5
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/5459b2db-9d3a-4d27-a68f-b6f0756dfbb9
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>Здесь будет настоящий текст
-                                                                                    ошибки
-                                                                                </value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value>true</value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>Здесь будет - Если чекбокс «Без
-                                                                                    утверждения» = TRUE
-                                                                                </value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
                                                                         <name>0a823c21-75e5-4ab5-baf4-c526b3296292
                                                                         </name>
                                                                         <nodeRef>
@@ -3659,6 +3629,36 @@
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     user.currentUser().hasBusinessRole("ERRANDS_CONTROLLER")
+                                                                                </value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>b7328e65-1256-4ac8-a63c-055c64679d9e
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/b14adfb1-0685-45c9-929e-720a45123966
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>Произошла ошибка при проверке
+                                                                                </value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value>true</value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    doc.attr("lecm-errands:without-initiator-approval")
+                                                                                    == true
                                                                                 </value>
                                                                             </property>
                                                                         </properties>
@@ -4331,8 +4331,8 @@
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
