@@ -7,9 +7,11 @@ import ru.it.lecm.reports.api.model.ReportType;
  */
 public class ReportInfo 
 {
+
 	public ReportType rtype; // тип отчёта (Jasper, OOffice ...)
 	public String reportCode; // код отчёта
 	public String documentType; // тип документов, поддерживаемых отчётом
+	public String reportName; // название отчёта
 
 	public ReportInfo() {
 		super();
@@ -25,4 +27,37 @@ public class ReportInfo
 		this.reportCode = reportCode;
 		this.documentType = documentType;
 	}
+
+	public ReportType getRtype() {
+		return rtype;
+	}
+
+	public void setRtype(ReportType rtype) {
+		this.rtype = rtype;
+	}
+
+	public String getReportCode() {
+		return reportCode;
+	}
+
+	public void setReportCode(String reportCode) {
+		this.reportCode = reportCode;
+	}
+
+	public String getDocumentType() {
+		return documentType;
+	}
+
+	public void setDocumentType(String documentType) {
+		this.documentType = documentType;
+	}
+
+	public String getReportName() {
+		return reportName;
+	}
+
+	public void setReportName(String reportName) {
+		this.reportName = reportName;
+	}
+
 }

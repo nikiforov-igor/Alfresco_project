@@ -77,6 +77,7 @@ public class ReportManagerJavascriptExtension
 					, rd.getMnem()
 					, (rd.getFlags() != null) ? rd.getFlags().getPreferedNodeType() : null
 			);
+			ri.setReportName( rd.get(null, rd.getMnem()));
 			result[i++] = ri;
 		}
 		return result;
