@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/requestCancel/1.0">
+    <process id="errandsRequestCancel" name="Запросить отмену поручения">
+        <startEvent id="startRequestCancel" name="Start" activiti:formKey="lecmErrandWf:requestCancel"></startEvent>
+        <endEvent id="endRequestCancel" name="End"></endEvent>
+        <scriptTask id="requestCancel" name="RequestCancel" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            <!--execution.setVariable("requestCancelResult", "changeExecutor");-->
+                            execution.setVariable("requestCancelResult", "cancelErrand");
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startRequestCancel" targetRef="requestCancel"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="requestCancel" targetRef="errandReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endRequestCancel"></sequenceFlow>
+    </process>
+</definitions>

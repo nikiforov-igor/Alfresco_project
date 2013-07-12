@@ -399,4 +399,155 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="string-compare" condition="activiti$errandsRemoveDraft">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsCreateChildErrand">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsRequestDueDateChange">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsChangeDueDate">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsChangeExecutor">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsChangeController">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsRequestCancel">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsInitiatorDecline">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsControllerDecline">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$errandsCancel">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
 </alfresco-config>

@@ -141,4 +141,77 @@
         <property name="documentConnectionService" ref="documentConnectionService"/>
     </bean>
 
+    <bean id="errandsWorkflowBootstrap" parent="workflowDeployer" depends-on="contracts.LogicEcmContractsDictionariesBootstrap, statemachine.aspects.LogicEcmModelsBootstrap">
+        <property name="workflowDefinitions">
+            <list>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-remove-draft.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-create-child-errand.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-request-due-date-change.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-executor.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-controller.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-due-date.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-request-cancel.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-initiator-decline.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-controller-decline.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-cancel.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">true</prop>
+                </props>
+            </list>
+        </property>
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-errands-workflow-model.xml</value>
+            </list>
+        </property>
+        <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
+    </bean>
+
 </beans>

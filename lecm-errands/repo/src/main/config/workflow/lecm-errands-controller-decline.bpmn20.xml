@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/controllerDecline/1.0">
+    <process id="errandsControllerDecline" name="Отправить на доработку">
+        <startEvent id="startControllerDecline" name="Start" activiti:formKey="lecmErrandWf:controllerDecline"></startEvent>
+        <endEvent id="endControllerDecline" name="End"></endEvent>
+        <scriptTask id="controllerDecline" name="Controller Decline" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startControllerDecline" targetRef="controllerDecline"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="controllerDecline" targetRef="errandReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endControllerDecline"></sequenceFlow>
+    </process>
+</definitions>

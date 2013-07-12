@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecmErrandWf:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Logic ECM errands workflow model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+		<import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/errands/workflow/1.0" prefix="lecmErrandWf"/>
+	</namespaces>
+
+	<types>
+		<type name="lecmErrandWf:removeDraft">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmErrandWf:createChildErrand">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmErrandWf:requestDueDateChange">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmErrandWf:changeDueDate">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmErrandWf:changeExecutor">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmErrandWf:changeController">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmErrandWf:requestCancel">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmErrandWf:initiatorDecline">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmErrandWf:controllerDecline">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmErrandWf:cancel">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
+    </types>
+</model>
