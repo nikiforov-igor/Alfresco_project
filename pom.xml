@@ -394,6 +394,7 @@
                         <encoding>UTF-8</encoding>
                         <linebreakpos>500</linebreakpos>
                         <webappDirectory>${project.build.directory}/${project.build.finalName}/web</webappDirectory>
+                        <jswarn>false</jswarn>
                         <excludes>
                             <exclude>**/alfresco/site-webscripts/**/*.js</exclude>
                             <exclude>**/alfresco/templates/**/*.js</exclude>
