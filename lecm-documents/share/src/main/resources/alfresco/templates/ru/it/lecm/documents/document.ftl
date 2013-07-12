@@ -1,7 +1,7 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <@templateHeader>
 	<@script type="text/javascript" src="${page.url.context}/res/components/documentlibrary/actions.js"></@script>
-    <@script type="text/javascript" src="${page.url.context}/yui/resize/resize-min.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/yui/resize/resize.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/res/components/document-details/document-metadata.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
