@@ -1,11 +1,11 @@
 var nodeRef = args["nodeRef"];
 
-var links = documentConnection.getConnectionsWithDocument(nodeRef);
+var links = documentConnection.getConnections(nodeRef);
 var resultLinks = [];
 for each (var link in links) {
     resultLinks.push({
-        label: link.assocs["lecm-connect:primary-document-assoc"][0].properties["lecm-document:present-string"],
-        nodeRef: link.assocs["lecm-connect:primary-document-assoc"][0].nodeRef.toString()
+        label: link.assocs["lecm-connect:connected-document-assoc"][0].properties["lecm-document:present-string"],
+        nodeRef: link.assocs["lecm-connect:connected-document-assoc"][0].nodeRef.toString()
     });
 }
 

@@ -252,6 +252,25 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return null;
 	}
 
+	public List<NodeRef> getConnections(NodeRef documentRef) {
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
+
+		List<NodeRef> results = new ArrayList<NodeRef>();
+
+		List<AssociationRef> connections = nodeService.getSourceAssocs(documentRef, ASSOC_PRIMARY_DOCUMENT);
+		if (connections != null) {
+			for (AssociationRef assocRef: connections) {
+				NodeRef connectionRef = assocRef.getSourceRef();
+
+				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
+					results.add(connectionRef);
+				}
+			}
+		}
+
+		return results;
+	}
+
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 

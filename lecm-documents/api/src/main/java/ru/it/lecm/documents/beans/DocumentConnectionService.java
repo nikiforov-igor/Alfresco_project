@@ -90,6 +90,13 @@ public interface DocumentConnectionService {
     public List<NodeRef> getExistsConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
 
 	/**
+	 * Получение связанных документов
+	 * @param documentRef Ссылка на документ
+	 * @return Список ссылок на связи
+	 */
+	public List<NodeRef> getConnections(NodeRef documentRef);
+
+	/**
 	 * Получение документов, связанных с документом
 	 * @param documentRef Ссылка на документ
 	 * @return Список ссылок на связи
