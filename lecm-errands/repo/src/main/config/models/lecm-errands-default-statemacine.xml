@@ -4309,6 +4309,78 @@
                                                             </subFolder>
                                                         </subFolders>
                                                     </node>
+                                                    <node>
+                                                        <type>transitionWorkflow</type>
+                                                        <name>65ad1c18-d461-4994-8f8d-a547d709ccee</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/5a7a4be6-608f-4c58-83f7-8ad76cad491b
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value>true</value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value>Отменить поручение</value>
+                                                            </property>
+                                                            <property>
+                                                                <name>workflowId</name>
+                                                                <value>activiti$errandsCancel</value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                            <workflowAspect/>
+                                                            <transitionLabelAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/d3baf52a-8326-4b2f-a4fa-c0ced09af954
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>39990658-1853-45ad-b817-68cacf7548db
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/19361501-6009-45af-82e2-f38bde64aa7b
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>Данное действие доступно только
+                                                                                    Инициатору
+                                                                                </value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value>false</value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")
+                                                                                </value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
