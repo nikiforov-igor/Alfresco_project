@@ -145,7 +145,6 @@
            init-method="init" depends-on="documents.LogicEcmModelsBootstrap, errands.dictionaries.LogicEcmModelsBootstrap"
            p:nodeService-ref="nodeService">
         <property name="policyComponent" ref="policyComponent"/>
-        <property name="errandsService" ref="errandsService"/>
         <property name="nodeService" ref="nodeService"/>
     </bean>
 

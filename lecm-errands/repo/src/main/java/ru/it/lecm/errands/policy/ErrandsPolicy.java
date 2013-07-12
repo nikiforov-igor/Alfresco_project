@@ -1,4 +1,3 @@
-
 package ru.it.lecm.errands.policy;
 
 import org.alfresco.repo.node.NodeServicePolicies;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
-import ru.it.lecm.errands.beans.ErrandsServiceImpl;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -28,19 +26,9 @@ public class ErrandsPolicy extends BaseBean
     final static protected Logger logger = LoggerFactory.getLogger(ErrandsPolicy.class);
 
     private PolicyComponent policyComponent;
-//    private DictionaryBean dictionaryService;
-    private ErrandsService errandsService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
-    }
-
-//    public void setDictionaryService(DictionaryBean dictionaryService) {
-//        this.dictionaryService = dictionaryService;
-//    }
-
-    public void setErrandsService(ErrandsServiceImpl errandsService) {
-        this.errandsService = errandsService;
     }
 
     final public void init() {
@@ -52,7 +40,7 @@ public class ErrandsPolicy extends BaseBean
 
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-        // Проверяем что нода только что создана и если не выбран инициатор, дописываем значение по умолчанию (автора)
+        // Проверяем что нода только что создана и если не выбран инициатор, дописываем значение по умолчанию (автор)
         if (before.size() == 0 && (after.get(ErrandsService.TYPE_ERRANDS_INITIATOR_REF) == null)) {
             NodeRef initiator = new NodeRef(after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).toString());
             if (initiator != null) {
