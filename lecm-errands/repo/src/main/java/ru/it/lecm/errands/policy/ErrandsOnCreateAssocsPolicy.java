@@ -1,4 +1,4 @@
-package ru.it.lecm.errands.policies;
+package ru.it.lecm.errands.policy;
 
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -15,9 +15,9 @@ public class ErrandsOnCreateAssocsPolicy extends LogicECMAssociationPolicy {
     public final void init() {
         super.init();
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-		        ErrandsService.TYPE_ERRANDS, new JavaBehaviour(this, "onDeleteAssociation"));
+                ErrandsService.TYPE_ERRANDS, new JavaBehaviour(this, "onDeleteAssociation"));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-		        ErrandsService.TYPE_ERRANDS, new JavaBehaviour(this, "onCreateAssociation"));
+                ErrandsService.TYPE_ERRANDS, new JavaBehaviour(this, "onCreateAssociation"));
     }
 }

@@ -44,6 +44,8 @@ public interface DocumentConnectionService {
     public static final QName PROP_CONNECTIONS_LIST = QName.createQName(DOCUMENT_CONNECTIONS_ASPECT_NAMESPACE_URI, "connections-list");
     public static final QName PROP_CONNECTIONS_WITH_LIST = QName.createQName(DOCUMENT_CONNECTIONS_ASPECT_NAMESPACE_URI, "connections-with-list");
 
+    public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE = "onBasis";
+
 	/**
 	 * Получение папки со связями для документа
 	 * @param documentRef Ссылка на документ

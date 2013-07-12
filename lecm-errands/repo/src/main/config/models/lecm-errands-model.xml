@@ -287,7 +287,7 @@
                 <association name="lecm-errands:additional-document-assoc">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>lecm-errands:document</class>
