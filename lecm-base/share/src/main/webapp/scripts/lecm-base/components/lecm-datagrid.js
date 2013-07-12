@@ -1128,9 +1128,35 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     sort = sortField + "|" + (me.currentSort.sSortDir == YAHOO.widget.DataTable.CLASS_ASC ? "true" : "false");
                 }
 
+                // дополнительный фильтр из адресной строки (или параметров)
+                var successFilter = me.currentFilter;
+                if (!successFilter) {
+                    var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                    if (bookmarkedFilter){
+                        try {
+                            while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+                            }
+                        }
+                        catch (e) {
+                            // Catch "malformed URI sequence" exception
+                        }
+                        var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
+                            var filters = strFilter.split("|"),
+                                filterObj =
+                                {
+                                    filterId: window.unescape(filters[0] || ""),
+                                    filterData: window.unescape(filters[1] || "")
+                                };
+                            return filterObj;
+                        };
+
+                        successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                    }
+                }
+
                 var params = me.search.buildSearchParams(me.datagridMeta.nodeRef,
                     me.datagridMeta.itemType, sort, me.datagridMeta.searchConfig, me.dataRequestFields.join(","),
-                    me.dataRequestNameSubstituteStrings.join(","), me.options.searchShowInactive, oState.pagination.recordOffset);
+                    me.dataRequestNameSubstituteStrings.join(","), me.options.searchShowInactive, oState.pagination.recordOffset, successFilter);
                 return YAHOO.lang.JSON.stringify(params);
             };
 

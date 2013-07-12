@@ -350,7 +350,10 @@ public class ContractsWebScriptBean extends BaseWebScript {
             if (filter.length() > 0) {
                 filter += " OR ";
             }
-            filter += "@lecm\\-additional\\-document\\:additionalDocumentType-text-content:\"" + type + "\"";
+            filter += "@lecm\\-additional\\-document\\:additionalDocumentType\\-text\\-content:\"" + type + "\"";
+        }
+        if (filter.length() > 0) {
+            filter = " AND (" + filter + ")";
         }
         if (considerFilter) {
             String username = authService.getCurrentUserName();

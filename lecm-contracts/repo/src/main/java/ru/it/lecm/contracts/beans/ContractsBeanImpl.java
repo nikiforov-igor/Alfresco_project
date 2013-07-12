@@ -474,7 +474,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 
         if (filter != null && filter.length() > 0) {
-            query += " AND (" + filter + ")";
+            query +=  filter ;
         }
 
         ResultSet results = null;

@@ -40,7 +40,6 @@
                         lazyloadmenu: false
                     });
 
-                // Load preferences to override default filter and range
                 this.widgets.author.set("label", this.msg("filter.all"));
                 this.widgets.author.value = "all";
 
@@ -51,7 +50,6 @@
                                 var authorPreference = Alfresco.util.findValueByDotNotation(p_oResponse.json, this.manager._buildPreferencesKey(this.PREF_FILTER_ID), "all");
                                 if (authorPreference !== null) {
                                     this.widgets.author.value = authorPreference;
-                                    // set the correct menu label
                                     var menuItems = this.widgets.author.getMenu().getItems();
                                     for (index in menuItems) {
                                         if (menuItems.hasOwnProperty(index)) {
@@ -76,18 +74,12 @@
             },
 
             populateDataGrid: function () {
-                //location.hash = '#filter=' + this.options.filterId + "|" + this.widgets.author.value;
                 var currentFilter = {
                     filterId: this.options.filterId + "/" + this.options.docType,
                     filterData:this.widgets.author.value
                 };
                 this.documentList.currentFilter = currentFilter;
-
-                /*YAHOO.Bubbling.fire("datagridRefresh",
-                    {
-                        filter: currentFilter,
-                        bubblingLabel: this.options.gridBubblingLabel
-                    });*/
+                location.hash = '#filter=' + this.options.filterId + "/" + this.options.docType + "|" + this.widgets.author.value;
             },
 
             onAuthorFilterChanged: function (p_sType, p_aArgs) {
@@ -99,29 +91,16 @@
             },
 
             onApplyButtonClick: function () {
-/*                var currentFilter = {
-                    filterId: this.options.filterId,
-                    filterData:this.widgets.author.value
-                };
-                */
+                var context = this;
                 var success = {
                     fn: function () {
+                        location.hash = '#filter=' + context.options.filterId + "/" + context.options.docType + "|" + context.widgets.author.value;
                         window.location.reload(true);
                     }
                 } ;
                 this.manager.preferences.set(this.manager._buildPreferencesKey(this.PREF_FILTER_ID), this.widgets.author.value, {successCallback: success});
-
-
-                /*location.hash = '#filter=' + this.options.filterId + "|" + this.widgets.author.value;
-
-                YAHOO.Bubbling.fire("datagridRefresh",
-                    {
-                        filter: currentFilter,
-                        bubblingLabel: this.options.gridBubblingLabel
-                    });*/
             },
 
-            // инициализация грида
             onInitDataGrid: function BaseToolbar_onInitDataGrid(layer, args) {
                 var datagrid = args[1].datagrid;
                 if ((!this.options.gridBubblingLabel || !datagrid.options.bubblingLabel) || this.options.gridBubblingLabel == datagrid.options.bubblingLabel) {
