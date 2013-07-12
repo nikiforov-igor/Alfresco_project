@@ -1175,7 +1175,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         NodeRef brRef = null;
         for (NodeRef child : children) {
             Serializable id = nodeService.getProperty(child, PROP_BUSINESS_ROLE_IDENTIFIER);
-            if (businessRoleIdentifier.equals(id.toString())) {
+            if (id != null && businessRoleIdentifier.equals(id.toString())) {
                 brRef = child;
                 break;
             }
