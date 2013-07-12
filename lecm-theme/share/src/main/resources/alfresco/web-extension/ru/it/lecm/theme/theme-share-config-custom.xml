@@ -4,7 +4,7 @@
             <!--
                Developer debugging setting to turn on DEBUG mode for client scripts in the browser
             -->
-            <client-debug>true</client-debug>
+            <client-debug>${client.debug}</client-debug>
             <!--
                LOGGING can always be toggled at runtime when in DEBUG mode (Ctrl, Ctrl, Shift, Shift).
                This flag automatically activates logging on page load.
@@ -75,7 +75,7 @@
                 <js src="/modules/create-site.js" />
                 <js src="/modules/header/sites.js" />
                 <js src="/scripts/notifications.js" />
-                <js src="/yui/event-simulate/event-simulate-min.js" />
+                <js src="/yui/event-simulate/event-simulate.js" />
                 <js src="/scripts/lecm_im/lecm_im_config.js" />
                 <js src="/scripts/lecm-im-header.js" />
                 <js src="/scripts/lecm_im/lecm_im.nocache.js" />

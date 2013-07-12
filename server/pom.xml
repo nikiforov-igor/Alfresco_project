@@ -12,9 +12,6 @@
 
     <artifactId>server</artifactId>
     <packaging>pom</packaging>
-    <properties>
-        <share.script.cient.debug>true</share.script.cient.debug>
-    </properties>
 
     <modules>
         <module>alfresco</module>
@@ -109,12 +106,4 @@
             </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>debug</id>
-            <properties>
-                <share.script.cient.debug>true</share.script.cient.debug>
-            </properties>
-        </profile>
-    </profiles>
 </project>

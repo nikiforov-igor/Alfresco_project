@@ -74,6 +74,7 @@
 		<acegisecurity.version>0.8.2</acegisecurity.version>
         <platform.version>${project.version}</platform.version>
         <buildNumber>1</buildNumber>
+        <client.debug>false</client.debug>
     </properties>
 
 	<modules>
@@ -392,8 +393,10 @@
                     <configuration>
                         <encoding>UTF-8</encoding>
                         <linebreakpos>500</linebreakpos>
+                        <webappDirectory>${project.build.directory}/${project.build.finalName}/web</webappDirectory>
                         <excludes>
-                            <exclude>**/site-webscripts/**/*.js</exclude>
+                            <exclude>**/alfresco/site-webscripts/**/*.js</exclude>
+                            <exclude>**/alfresco/templates/**/*.js</exclude>
                         </excludes>
                     </configuration>
                     <dependencies>
@@ -471,6 +474,12 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>share-client-debug</id>
+            <properties>
+                <client.debug>true</client.debug>
+            </properties>
+        </profile>
         <profile>
             <id>lecmIM</id>
             <modules>
