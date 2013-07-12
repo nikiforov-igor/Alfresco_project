@@ -42,6 +42,16 @@ public class ReportManagerJavascriptExtension
 	}
 
 	@Override
+	public boolean undeployReport(final String reportCode) {
+		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
+
+		getReportsManager().unregisterReportDescriptor(reportCode);
+		// final Scriptable scriptable = Context.getCurrentContext ().newArray (getScope (), new Object[] {result});
+		// return scriptable;
+		return true;
+	}
+
+	@Override
 	public byte[] getDsXmlBytes(final String reportCode) {
 		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
 

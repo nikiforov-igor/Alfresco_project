@@ -18,6 +18,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ru.it.lecm.reports.api.model.AlfrescoAssocInfo;
+import ru.it.lecm.reports.api.model.AlfrescoAssocInfo.AssocKind;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.NamedValue;
@@ -28,6 +30,7 @@ import ru.it.lecm.reports.api.model.ReportFlags;
 import ru.it.lecm.reports.api.model.ReportProviderDescriptor;
 import ru.it.lecm.reports.api.model.ReportTemplate;
 import ru.it.lecm.reports.api.model.ReportType;
+import ru.it.lecm.reports.model.impl.AlfrescoAssocInfoImpl;
 import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
 import ru.it.lecm.reports.model.impl.DataSourceDescriptorImpl;
 import ru.it.lecm.reports.model.impl.NamedValueImpl;
@@ -97,6 +100,10 @@ public class DSXMLProducer {
 
 	// public static final String XMLATTR_MNEM = "mnem";
 	public static final String XMLATTR_PARAM_TYPE = "paramType";
+	public static final String XMLATTR_PARAM_ALFRESCO_TYPE = "alfrescoType";
+	public static final String XMLNODE_ALFRESCO_ASSOC = "alfrescoAssoc";
+	public static final String XMLATTR_ALFRESCO_ASSOC_NAME = "assocTypeName";
+	public static final String XMLATTR_ALFRESCO_ASSOC_KIND = "assocKind"; // 11, 1M, M1, MM
 
 	/* Класс по-умолчанию для колонки */
 	private final static String DEFAULT_COLUMN_JAVACLASS = String.class.getName();
@@ -629,9 +636,33 @@ public class DSXMLProducer {
 		if (parameter.getType() != null)
 			result.setAttribute( XMLATTR_PARAM_TYPE, parameter.getType().getMnemonic());
 
+		if (parameter.getAlfrescoType() != null)
+			result.setAttribute( XMLATTR_PARAM_ALFRESCO_TYPE, parameter.getAlfrescoType());
+
+		/* альфресковская ассоциация ... */
+		{
+			final Element nodeAssoc = xmlCreateAssocNode(doc, XMLNODE_ALFRESCO_ASSOC, parameter.getAlfrescoAssoc());
+			if (nodeAssoc != null)
+				result.appendChild(nodeAssoc);
+		}
+
 		XmlHelper.xmlAddL18Name( doc, result, parameter);
 		XmlHelper.xmlAddL18Name( doc, result, parameter.getPrompt1(), XMLATTR_PARAM_LABEL1);
 		XmlHelper.xmlAddL18Name( doc, result, parameter.getPrompt2(), XMLATTR_PARAM_LABEL2);
+
+		return result;
+	}
+
+	private static Element xmlCreateAssocNode(Document doc, String xmlNodeName, AlfrescoAssocInfo assoc) {
+		if (assoc == null)
+			return null;
+
+		final Element result = doc.createElement(xmlNodeName);
+
+		if (assoc.getAssocTypeName() != null)
+			result.setAttribute( XMLATTR_ALFRESCO_ASSOC_NAME, assoc.getAssocTypeName());
+		if (assoc.getAssocKind() != null)
+			result.setAttribute( XMLATTR_ALFRESCO_ASSOC_KIND, assoc.getAssocKind().getMnemonic());
 
 		return result;
 	}
@@ -649,6 +680,15 @@ public class DSXMLProducer {
 		final ParameterTypedValueImpl result = new ParameterTypedValueImpl( );
 		XmlHelper.parseMnemAttr( result, nodeParameter);
 
+		{ /* альфресковский типа и ассоциация параметра */
+			if (nodeParameter.hasAttribute( XMLATTR_PARAM_ALFRESCO_TYPE)) {
+				result.setAlfrescoType( nodeParameter.getAttribute( XMLATTR_PARAM_ALFRESCO_TYPE) );
+			}
+		}
+
+		/* альфресковская ассоциация ... */
+		result.setAlfrescoAssoc( parseAssocNode(nodeParameter, XMLNODE_ALFRESCO_ASSOC));
+
 		{ /* тип параметра */
 			Type parType = null;
 			if (nodeParameter.hasAttribute( XMLATTR_PARAM_TYPE)) {
@@ -660,6 +700,50 @@ public class DSXMLProducer {
 		XmlHelper.parseL18( result, nodeParameter);
 		XmlHelper.parseL18( result.getPrompt1(), nodeParameter, XMLATTR_PARAM_LABEL1);
 		XmlHelper.parseL18( result.getPrompt2(), nodeParameter, XMLATTR_PARAM_LABEL2);
+
+		return result;
+	}
+
+	private static AlfrescoAssocInfoImpl parseAssocNode(Element srcAssocNode,
+			String xmlNodeName) {
+/*
+	private static Element xmlCreateAssocNode(Document doc, String xmlNodeName, AlfrescoAssocInfo assoc) {
+		if (assoc == null)
+			return null;
+
+		final Element result = doc.createElement(xmlNodeName);
+
+		if (assoc.getAssocTypeName() != null)
+			result.setAttribute( XMLATTR_ALFRESCO_ASSOC_NAME, assoc.getAssocTypeName());
+		if (assoc.getAssocKind() != null)
+			result.setAttribute( XMLATTR_ALFRESCO_ASSOC_KIND, assoc.getAssocKind().getMnemonic());
+
+		return result;
+	}
+
+ * */
+		if (srcAssocNode == null)
+			return null;
+
+		final Element nodeAssoc = XmlHelper.findNodeByName( srcAssocNode, xmlNodeName);
+		if (nodeAssoc == null)
+			return null;
+
+		final AlfrescoAssocInfoImpl result = new AlfrescoAssocInfoImpl();
+
+		/* альфресковский ассоциация параметра */
+		if (nodeAssoc.hasAttribute( XMLATTR_ALFRESCO_ASSOC_NAME)) {
+			result.setAssocTypeName( nodeAssoc.getAttribute( XMLATTR_ALFRESCO_ASSOC_NAME) );
+		}
+
+		/* альфресковский ассоциация параметра */
+		{
+			AssocKind kind = null;
+			if (nodeAssoc.hasAttribute( XMLATTR_ALFRESCO_ASSOC_KIND)) {
+				kind = AssocKind.findAssocKind(nodeAssoc.getAttribute( XMLATTR_ALFRESCO_ASSOC_KIND));
+			}
+			result.setAssocKind( kind);
+		}
 
 		return result;
 	}

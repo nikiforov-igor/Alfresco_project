@@ -12,6 +12,12 @@ public interface ScriptApiReportManager {
 	boolean deployReport(final String reportDescNode);
 
 	/**
+	 * Обратная к deploy операция
+	 * @param reportCode
+	 */
+	boolean undeployReport(final String reportCode);
+
+	/**
 	 * Получить данные ds-xml файла, который соответствует указанному отчёту 
 	 * @param reportCode код (мнемоника) отчёта
 	 * @return

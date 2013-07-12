@@ -40,6 +40,22 @@ public class ReportManagerApi
 	}
 
 	@Override
+	public boolean undeployReport(String reportCode) {
+		final String url = "/lecm/reports/rptmanager/undeployReport?reportCode="+ reportCode;
+		final Response response = scriptRemote.connect("alfresco").get(url);
+		final String errmsg = String.format( "Cannot unregister at server report node '%s'", reportCode);
+		try {
+			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
+				// final org.json.JSONObject resultJson = new JSONObject(response.getResponse());
+				return true;
+			}
+		} catch (Exception e) {
+			logger.warn( errmsg, e);
+		}
+		throw new RuntimeException( errmsg);
+	}
+
+	@Override
 	public byte[] getDsXmlBytes(String reportCode) {
 		final String url = "/lecm/reports/rptmanager/dsXmlBytes?reportCode=" + reportCode;
 		final Response response = scriptRemote.connect("alfresco").get(url);
@@ -71,6 +87,6 @@ public class ReportManagerApi
 		}
 		throw new RuntimeException( errmsg);
 	}
-	
+
 }
 

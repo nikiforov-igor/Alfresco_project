@@ -10,7 +10,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -20,7 +22,6 @@ import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import ru.it.lecm.reports.api.DsLoader;
 import ru.it.lecm.reports.api.ReportsManager;
@@ -37,7 +38,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	/**
 	 * Список зарегистрирванных отчётов
 	 */
-	private List<ReportDescriptor> descriptors;
+	private Map<String, ReportDescriptor> descriptors;
 
 	private ReportDAO reportDAO;
 
@@ -53,11 +54,13 @@ public class ReportsManagerImpl implements ReportsManager {
 		return ModelLoader.getInstance();
 	}
 
-	public List<ReportDescriptor> getDescriptors() {
+	public Map<String, ReportDescriptor> getDescriptors() {
 		if (this.descriptors == null) {
-			this.descriptors = new ArrayList<ReportDescriptor>();
+			this.descriptors = new HashMap<String, ReportDescriptor>();
 			scanResources();
 		}
+//		final Collection<ReportDescriptor> col = this.descriptors.values();
+//		return (col != null) ? new ArrayList<ReportDescriptor>(col) : new ArrayList<ReportDescriptor>();
 		return this.descriptors;
 	}
 
@@ -104,7 +107,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		int ifound = 0;
 		if (found != null) {
 			if (this.descriptors == null)
-				this.descriptors = new ArrayList<ReportDescriptor>();
+				this.descriptors = new HashMap<String, ReportDescriptor>();
 			// for (URL u: found) {
 			for (File item: found) {
 				try {
@@ -117,7 +120,7 @@ public class ReportsManagerImpl implements ReportsManager {
 						if (desc.getMnem() == null)
 							desc.setMnem( extractReportName(item.getName()));
 
-						this.descriptors.add(0, desc);
+						this.descriptors.put(desc.getMnem(), desc);
 						ifound++;
 						logger.info( String.format( "Load report '%s' from descriptor from '%s'", desc.getMnem(), item) );
 					} finally {
@@ -133,12 +136,21 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	public void setDescriptors(List<ReportDescriptor> list) {
-		this.descriptors = list;
+		// this.descriptors = list;
+		this.descriptors = null;
+		if (list != null)
+			for (ReportDescriptor desc: list)
+				registerReportDescriptor(desc);
 	}
 
 	public void init() {
+//		{
+//			final File result = new File( getDsConfigDir() + "/test-subdir");
+//			logger.info( String.format( "creating dir '%s'\n\t%s", result, result.mkdirs()) );
+//		}
+
 		logger.info( String.format( " initialized templates count %s\n%s",
-					getDescriptors().size(), Utils.getAsString(getDescriptors()) 
+					getDescriptors().size(), Utils.getAsString(getDescriptors().values()) 
 		));
 	}
 
@@ -151,12 +163,18 @@ public class ReportsManagerImpl implements ReportsManager {
 	@Override
 	public ReportDescriptor getRegisteredReportDescriptor(String reportMnemoName) {
 
-		for(ReportDescriptor d: getDescriptors()) {
-			if (Utils.isSafelyEquals(reportMnemoName, d.getMnem())) {
-				if (logger.isDebugEnabled())
-					logger.debug( String.format( "Found bean report mnem '%s' as:\n%s", reportMnemoName, d));
-				return d; // FOUND by Mnemonic
-			}
+//		for(ReportDescriptor d: getDescriptors()) {
+//			quals(reportMnemoName, d.getMnem())) {
+//				if (logger.isDebugEnabled())
+//					logger.debug( String.format( "Found bean report mnem '%s' as:\n%s", reportMnemoName, d));
+//				return d; // FOUND by Mnemonic
+//			}
+//		}
+		if (getDescriptors().containsKey(reportMnemoName)) {
+			final ReportDescriptor d = this.descriptors.get(reportMnemoName);
+			if (logger.isDebugEnabled())
+				logger.debug( String.format( "Found bean report mnem '%s' as:\n%s", reportMnemoName, d));
+			return d; // FOUND by Mnemonic
 		}
 
 		// попытка загрузить DAO-объект
@@ -186,10 +204,21 @@ public class ReportsManagerImpl implements ReportsManager {
 		if (desc != null) {
 			checkReportDescData(desc);
 
-			getDescriptors().add(0, desc);
+			// getDescriptors().add(0, desc);
+			getDescriptors().put(desc.getMnem(), desc);
 			createDsFile( desc);
 
 			logger.info(String.format( "Report descriptor with name '%s' registered", desc.getMnem()));
+		}
+	}
+
+	@Override
+	public void unregisterReportDescriptor(String reportCode) {
+		if (reportCode != null) {
+			if (this.descriptors != null)
+				this.descriptors.remove(reportCode); // убираем из списка активных
+			removeDsFile( reportCode); // удаляем файл
+			logger.info(String.format( "Report descriptor with name '%s' unregistered", reportCode));
 		}
 	}
 
@@ -202,23 +231,82 @@ public class ReportsManagerImpl implements ReportsManager {
 			return;
 		checkReportDescData(desc);
 
-		// содзание ds-файла ...
+		// создание ds-файла ...
 		final ByteArrayOutputStream dsxml = DSXMLProducer.xmlCreateDSXML(desc.getMnem(), desc);
 		if (dsxml != null) {
-			final URL url = getDsXmlResourceUrl(desc.getMnem());
+			final File fout = new File( makeDsXmlFileName(desc.getMnem()));
 			try {
-				final OutputStream out = new FileOutputStream( url.getFile());
+				final OutputStream out = new FileOutputStream( fout);
 				try {
-					dsxml.writeTo(out);
+					dsxml.writeTo(out); 
+					logger.info( String.format( "report '%s': ds xml created '%s'" , desc.getMnem(), fout) );
 				} finally {
 					IOUtils.closeQuietly(out);
 				}
 			} catch(Throwable ex) {
-				final String msg = String.format( "Report '%s': error saving ds-xml into '%s'" , desc.getMnem(), url);
+				final String msg = String.format( "Report '%s': error saving ds-xml into '%s'" , desc.getMnem(), fout);
 				logger.error( msg, ex);
 				throw new RuntimeException(msg, ex);
 			}
 		}
+	}
+
+	private boolean removeDsFile(String reportCode) {
+		boolean flagDelete = false;
+		File fout = null;
+		try {
+			if (reportCode == null)
+				return false;
+			// удаление ds-файла ...
+			fout = new File( makeDsXmlFileName(reportCode));
+			flagDelete = fout.exists() && fout.delete();
+			return flagDelete;
+		} catch(Throwable ex) {
+			final String msg = String.format( "Report '%s': error deleting ds-xml '%s'" , reportCode, fout);
+			logger.error( msg, ex);
+			throw new RuntimeException(msg, ex);
+		} finally {
+			logger.info( String.format( "ds-xml of report '%s' was%s deleted", reportCode, (flagDelete ? "" : " NOT")));
+		}
+	}
+
+	/**
+	 * Получить название базового каталога в файловой системе (".")
+	 * @return
+	 */
+	private File getBaseDir() {
+		final URL base = JRLoader.getResource( "/"); // получение главного каталога
+		return new File(base.getFile()); // NPE скажет о проблемах, т.к. базовый каталог обязан существовать
+	}
+
+	/**
+	 * Получить имя каталога для хранения dsxml файлов ("/reportdefinitions/ds-config")
+	 * @return
+	 */
+	private File getDsConfigDir() {
+		return new File( getBaseDir().getAbsolutePath() + REPORT_DS_FILES_BASEDIR);
+	}
+
+	/**
+	 * Получить и гарантировать наличие каталога для хранения dsxml файлов
+	 * @return
+	 */
+	private File ensureDsConfigDir() {
+		final File result = getDsConfigDir();
+		result.mkdirs();
+		return result;
+	}
+
+	/**
+	 * Получить название ds-xml файла, в котором может храниться ds-xml описание.
+	 * указанного отчёта.
+	 * Родительские каталоги, при их отсутствии, создаются автоматом.
+	 * @param mnem мнемоника отчёта
+	 * @return полное имя файла.  
+	 */
+	private String makeDsXmlFileName(String mnem) {
+		final File base = ensureDsConfigDir();
+		return String.format( "%s/ds-%s.xml", base.getAbsolutePath(), mnem); 
 	}
 
 	/**
@@ -265,13 +353,13 @@ public class ReportsManagerImpl implements ReportsManager {
 	public List<ReportDescriptor> getRegisteredReports( String docType
 			, String reportType)
 	{
-		final List<ReportDescriptor> list = this.getDescriptors();
+		final Map<String, ReportDescriptor> list = this.getDescriptors();
 		if (list == null || list.isEmpty())
 			return null;
 		if (docType == null && reportType == null) // не задано фильтрование
-			return list;
+			return new ArrayList<ReportDescriptor>( list.values());
 		final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
-		for (ReportDescriptor desc: list) {
+		for (ReportDescriptor desc: list.values()) {
 			final boolean okDocType = 
 					(docType == null)	// не задан фильтр по типам доков 
 					|| ( (desc.getFlags() == null) || desc.getFlags().getPreferedNodeType() == null) // нет флажков у шаблона -> подходит к любому

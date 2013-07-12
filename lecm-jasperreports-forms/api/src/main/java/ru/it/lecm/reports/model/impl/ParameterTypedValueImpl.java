@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.model.impl;
 
+import ru.it.lecm.reports.api.model.AlfrescoAssocInfo;
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 
@@ -17,6 +18,8 @@ public class ParameterTypedValueImpl
 	private Object[] bounds;
 	private Type type = Type.VALUE;
 	private boolean required = false;
+	private String alfrescoType;
+	private AlfrescoAssocInfo alfrescoAssoc;
 
 	public ParameterTypedValueImpl() {
 		super();
@@ -100,6 +103,26 @@ public class ParameterTypedValueImpl
 	@Override
 	public void setBound2(Object value) {
 		this.bounds()[1] = value;
+	}
+
+	@Override
+	public String getAlfrescoType() {
+		return alfrescoType;
+	}
+
+	@Override
+	public void setAlfrescoType(String alfrescoType) {
+		this.alfrescoType = alfrescoType;
+	}
+
+	@Override
+	public AlfrescoAssocInfo getAlfrescoAssoc() {
+		return alfrescoAssoc;
+	}
+
+	@Override
+	public void setAlfrescoAssoc(AlfrescoAssocInfo alfrescoAssoc) {
+		this.alfrescoAssoc = alfrescoAssoc;
 	}
 
 	@Override

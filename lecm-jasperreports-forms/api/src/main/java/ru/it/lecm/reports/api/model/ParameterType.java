@@ -29,6 +29,13 @@ public interface ParameterType extends Mnemonicable, L18able {
 	L18able getPrompt2();
 	void setPrompt2(L18able value);
 
+	/** связанный тип параметра альфреско */
+	String getAlfrescoType();
+	void setAlfrescoType(String alfrescoType);
+
+	AlfrescoAssocInfo getAlfrescoAssoc();
+	void setAlfrescoAssoc(AlfrescoAssocInfo assoc);
+
 	/**
 	 * Тип параметра
 	 * @return
@@ -64,7 +71,7 @@ public interface ParameterType extends Mnemonicable, L18able {
 					if ( nameOrMnemonic.equalsIgnoreCase(t.name())
 						|| (t.mnemonic != null && nameOrMnemonic.equalsIgnoreCase(t.mnemonic))
 					)
-						return t; // FOUNDS
+						return t; // FOUND
 				}
 			}
 			return null; // NOT FOUND

@@ -47,6 +47,12 @@ public interface ReportsManager {
 	 */
 	void registerReportDescriptor(NodeRef rdescId);
 
+	/**
+	 * Обратная к registerReportDescriptor
+	 * @param reportCode
+	 */
+	void unregisterReportDescriptor(String reportCode);
+
 
 	/**
 	 * Получить адрес ресурса с ds-xml файлом, который соот-ет отчёту

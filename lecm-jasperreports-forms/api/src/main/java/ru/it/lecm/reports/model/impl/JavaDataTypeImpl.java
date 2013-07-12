@@ -27,6 +27,7 @@ public class JavaDataTypeImpl
 		NULL(null)
 		, STRING(java.lang.String.class.getName())
 		, DATE(java.util.Date.class.getName())
+		, BOOL(java.lang.Boolean.class.getName())
 
 		, INTEGER(java.lang.Integer.class.getName())
 		, FLOAT(java.lang.Float.class.getName())
