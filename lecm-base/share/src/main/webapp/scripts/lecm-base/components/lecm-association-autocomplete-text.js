@@ -74,14 +74,16 @@ LogicECM.module = LogicECM.module || {};
 
 			onRefreshAutocompleteItemList: function (layer, args)
 			{
-//				this.selectedItems = args[1].selectedItems;
-//
-//				if (!this.options.disabled) {
-//					this.updateSelectedItems();
-//					this.updateInputUI();
-//				} else {
-//					this.updateCurrentDisplayValue();
-//				}
+				var changeValue = "";
+				var selectedItems = args[1].selectedItems;
+				for (var i in selectedItems) {
+					changeValue = selectedItems[i].name;
+					break;
+				}
+
+				if (changeValue != "") {
+					Dom.get(this.currentValueHtmlId).value = changeValue;
+				}
 			},
 
 			makeAutocomplete: function() {

@@ -69,51 +69,52 @@
 		additionalFilter: "${field.control.params.additionalFilter!''}"
 	});
 
-	<#--LogicECM.CurrentModules["${treeViewJsName}"] = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" );-->
-	<#--LogicECM.CurrentModules["${treeViewJsName}"].setOptions({-->
-	<#--<#if form.mode == "view" || field.disabled>-->
-		<#--disabled: true,-->
-	<#--</#if>-->
-	<#--<#if field.control.params.startLocation??>-->
-		<#--rootLocation: "${field.control.params.startLocation}",-->
-	<#--</#if>-->
-	<#--<#if field.mandatory??>-->
-		<#--mandatory: ${field.mandatory?string},-->
-	<#--<#elseif field.endpointMandatory??>-->
-		<#--mandatory: ${field.endpointMandatory?string},-->
-	<#--</#if>-->
-		<#--multipleSelectMode: ${field.endpointMany?string},-->
+	LogicECM.CurrentModules["${treeViewJsName}"] = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" );
+	LogicECM.CurrentModules["${treeViewJsName}"].setOptions({
+	<#if form.mode == "view" || field.disabled>
+		disabled: true,
+	</#if>
+	<#if field.control.params.startLocation??>
+		rootLocation: "${field.control.params.startLocation}",
+	</#if>
+	<#if field.mandatory??>
+		mandatory: ${field.mandatory?string},
+	<#elseif field.endpointMandatory??>
+		mandatory: ${field.endpointMandatory?string},
+	</#if>
+		multipleSelectMode: ${field.endpointMany?string},
 
-	<#--<#if field.control.params.nameSubstituteString??>-->
-		<#--nameSubstituteString: "${field.control.params.nameSubstituteString}",-->
-	<#--</#if>-->
-	<#--<#if field.control.params.selectedItemsNameSubstituteString??>-->
-		<#--selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",-->
-	<#--</#if>-->
-	<#--<#if field.control.params.parentNodeRef??>-->
-		<#--rootNodeRef: "${field.control.params.parentNodeRef}",-->
-	<#--</#if>-->
-	<#--&lt;#&ndash; при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ &ndash;&gt;-->
-	<#--<#if field.control.params.employeeAbsenceMarker??>-->
-		<#--employeeAbsenceMarker: "${field.control.params.employeeAbsenceMarker}",-->
-	<#--</#if>-->
-	<#--<#if args.ignoreNodes??>-->
-		<#--ignoreNodes: "${args.ignoreNodes}".split(","),-->
-	<#--</#if>-->
-	<#--<#if field.control.params.childrenDataSource??>-->
-		<#--childrenDataSource: "${field.control.params.childrenDataSource}",-->
-	<#--</#if>-->
-	<#--<#if field.control.params.defaultValueDataSource??>-->
-		<#--defaultValueDataSource: "${field.control.params.defaultValueDataSource}",-->
-	<#--</#if>-->
-		<#--showCreateNewLink: ${showCreateNewLink?string},-->
-		<#--showSearch: ${showSearch?string},-->
-		<#--changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",-->
-		<#--plane: true,-->
-		<#--currentValue: "${field.value!''}",-->
-		<#--itemType:"${field.control.params.itemType!field.endpointType}",-->
-		<#--additionalFilter: "${field.control.params.additionalFilter!''}"-->
-	<#--}).setMessages( ${messages} );-->
+	<#if field.control.params.nameSubstituteString??>
+		nameSubstituteString: "${field.control.params.nameSubstituteString}",
+	</#if>
+	<#if field.control.params.selectedItemsNameSubstituteString??>
+		selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
+	</#if>
+	<#if field.control.params.parentNodeRef??>
+		rootNodeRef: "${field.control.params.parentNodeRef}",
+	</#if>
+	<#-- при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ -->
+	<#if field.control.params.employeeAbsenceMarker??>
+		employeeAbsenceMarker: "${field.control.params.employeeAbsenceMarker}",
+	</#if>
+	<#if args.ignoreNodes??>
+		ignoreNodes: "${args.ignoreNodes}".split(","),
+	</#if>
+	<#if field.control.params.childrenDataSource??>
+		childrenDataSource: "${field.control.params.childrenDataSource}",
+	</#if>
+	<#if field.control.params.defaultValueDataSource??>
+		defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
+	</#if>
+		showCreateNewLink: ${showCreateNewLink?string},
+		showSearch: ${showSearch?string},
+		changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
+		plane: true,
+		setCurrentValue: false,
+		currentValue: "${field.value!''}",
+		itemType:"${field.control.params.itemType!field.endpointType}",
+		additionalFilter: "${field.control.params.additionalFilter!''}"
+	}).setMessages( ${messages} );
 })();
 //]]></script>
 
@@ -133,19 +134,19 @@
 	<div class="autocomplete-block">
 		<div id="${controlId}-autocomplete">
 			<input id="${fieldHtmlId}" type="text" class="autocomplete-input" name="${field.name}" value="${field.value?html}"/>
-			<#--<div class="show-picker">-->
-                    <#--<span class="tree-picker-button">-->
-                        <#--<input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>-->
-                    <#--</span>-->
-				<#--<#if showCreateNewLink>-->
-					<#--<span class="create-new-button">-->
-                        <#--<input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>-->
-                    <#--</span>-->
-				<#--</#if>-->
-			<#--</div>-->
+			<div class="show-picker">
+                    <span class="tree-picker-button">
+                        <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
+                    </span>
+				<#if showCreateNewLink>
+					<span class="create-new-button">
+                        <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
+                    </span>
+				</#if>
+			</div>
 			<div id="${controlId}-autocomplete-container"></div>
 
-			<#--<@renderTreePickerDialogHTML controlId true showSearch/>-->
+			<@renderTreePickerDialogHTML controlId true showSearch/>
 		</div>
 	</div>
 </#if>

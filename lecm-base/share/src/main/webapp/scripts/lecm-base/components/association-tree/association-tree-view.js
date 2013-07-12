@@ -70,6 +70,8 @@ LogicECM.module = LogicECM.module || {};
 		{
             showCreateNewLink: true,
 
+            setCurrentValue: true,
+
 			createNewMessage: null, //message id по которому будет сформирован заголовок диалогового окна
 
 			showSearch: true,
@@ -500,7 +502,9 @@ LogicECM.module = LogicECM.module || {};
             Dom.setStyle(Dom.get(this.widgets.dialog.id),"display", "block");
             // Show the dialog
             this.widgets.dialog.show();
-            this.options.selectedValue = Dom.get(this.options.controlId + "-selectedItems").value;
+	        if (Dom.get(this.options.controlId + "-selectedItems") != null) {
+                this.options.selectedValue = Dom.get(this.options.controlId + "-selectedItems").value;
+	        }
             this._loadSelectedItems();
 
             Event.preventDefault(e);
@@ -1162,40 +1166,42 @@ LogicECM.module = LogicECM.module || {};
             // Just element
             var el;
             el = Dom.get(this.options.controlId + "-currentValueDisplay");
-            el.innerHTML = '';
-            var num = 0;
-            for (var i in this.selectedItems) {
-                if (this.options.plane || !this.options.showSelectedItemsPath) {
-                    var displayName = this.selectedItems[i].selectedName;
-                } else {
-                    displayName = this.selectedItems[i].displayPath + "/" + this.selectedItems[i].selectedName;
-                    if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
-                        var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
-                        if (rootNodeDisplayName !== "") {
-                            displayName = displayName.replace(rootNodeDisplayName, "");
-                        }
-                    }
-                }
+	        if (el != null) {
+	            el.innerHTML = '';
+	            var num = 0;
+	            for (var i in this.selectedItems) {
+	                if (this.options.plane || !this.options.showSelectedItemsPath) {
+	                    var displayName = this.selectedItems[i].selectedName;
+	                } else {
+	                    displayName = this.selectedItems[i].displayPath + "/" + this.selectedItems[i].selectedName;
+	                    if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
+	                        var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
+	                        if (rootNodeDisplayName !== "") {
+	                            displayName = displayName.replace(rootNodeDisplayName, "");
+	                        }
+	                    }
+	                }
 
-                var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
-	            if(this.options.disabled) {
-		            if (this.options.itemType == "lecm-orgstr:employee") {
-			            el.innerHTML += '<div class="' + divClass + '"> ' +  this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + '</div>';
+	                var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
+		            if(this.options.disabled) {
+			            if (this.options.itemType == "lecm-orgstr:employee") {
+				            el.innerHTML += '<div class="' + divClass + '"> ' +  this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + '</div>';
+			            } else {
+				            el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' ' + '</div>';
+			            }
 		            } else {
-			            el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' ' + '</div>';
+			            if (this.options.itemType == "lecm-orgstr:employee") {
+				            el.innerHTML
+					            += '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) +
+								(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(this.selectedItems[i].nodeRef) : ' ') + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+			            } else {
+				            el.innerHTML
+					            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+			            }
+			            YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c"}, this);
 		            }
-	            } else {
-		            if (this.options.itemType == "lecm-orgstr:employee") {
-			            el.innerHTML
-				            += '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) +
-							(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(this.selectedItems[i].nodeRef) : ' ') + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
-		            } else {
-			            el.innerHTML
-				            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
-		            }
-		            YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c"}, this);
 	            }
-            }
+	        }
 
             if(!this.options.disabled)
             {
@@ -1203,30 +1209,38 @@ LogicECM.module = LogicECM.module || {};
 
                 // Update added fields in main form to be submitted
                 el = Dom.get(this.options.controlId + "-added");
-                el.value = '';
-                for (i in addItems) {
-                    el.value += ( i < addItems.length-1 ? addItems[i] + ',' : addItems[i] );
-                }
+	            if (el != null) {
+	                el.value = '';
+	                for (i in addItems) {
+	                    el.value += ( i < addItems.length-1 ? addItems[i] + ',' : addItems[i] );
+	                }
+	            }
 
                 var removedItems = this.getRemovedItems();
 
                 // Update removed fields in main form to be submitted
                 el = Dom.get(this.options.controlId + "-removed");
-                el.value = '';
-                for (i in removedItems) {
-                    el.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
-                }
+	            if (el != null) {
+	                el.value = '';
+	                for (i in removedItems) {
+	                    el.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
+	                }
+	            }
 
                 var selectedItems = this.getSelectedItems();
 
                 // Update selectedItems fields in main form to pass them between popup and form
                 el = Dom.get(this.options.controlId + "-selectedItems");
-                el.value = '';
-                for (i in selectedItems) {
-                    el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
-                }
+	            if (el != null) {
+	                el.value = '';
+	                for (i in selectedItems) {
+	                    el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
+	                }
+	            }
 
-	            Dom.get(this.eventGroup).value = selectedItems.toString();
+	            if (this.options.setCurrentValue && Dom.get(this.eventGroup) != null) {
+	                Dom.get(this.eventGroup).value = selectedItems.toString();
+	            }
 
 	            if (this.options.mandatory) {
 		            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
