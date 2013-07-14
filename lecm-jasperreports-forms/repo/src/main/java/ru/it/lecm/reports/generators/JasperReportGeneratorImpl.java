@@ -91,7 +91,7 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 
 		// "/reportdefinitions/" + reportName + ".jasper"
 		final String reportFileName = String.format( "%s/%s.jasper" 
-				, this.reportsManager.getReportTemplateFileDir(reportName)
+				, this.reportsManager.getReportTemplateFileDir(reportDesc.getReportType())
 				, reportName
 				);
 

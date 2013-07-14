@@ -6,6 +6,7 @@ import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.ReportType;
 
 /**
  * Биновый интерфейс для работы с шаблонами зарегистрированных отчётов.
@@ -71,12 +72,18 @@ public interface ReportsManager {
 
 
 	/**
-	 * Вернуть каталог, в котором располагается шаблон указанного отчёта
-	 * @param reportCode
+	 * Сформировать jrxml по-умолчанию для НД указанного описания отчёта
+	 * @param reportDesc
 	 * @return
 	 */
-	String getReportTemplateFileDir(String reportCode);
+	byte[] produceDefaultTemplate(ReportDescriptor reportDesc);
 
+	/**
+	 * Вернуть каталог, в котором располагается шаблоны отчётов указанного типа
+	 * @param reportType
+	 * @return
+	 */
+	String getReportTemplateFileDir(ReportType reportType);
 
 	/**
 	 * Вернуть название ds-xml файла, в котором располагается -описание указанного отчёта

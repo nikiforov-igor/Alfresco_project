@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.utils;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -398,4 +399,27 @@ public class Utils {
 		return (knownTypes.containsKey(skey)) ? knownTypes.get(skey) : null;
 	}
 
+	/**
+	 * пример:
+	 * 		final File backupName = findEmptyFile( fout, ".bak%s");
+	 * @param checkFile проверяемый файл
+	 * @param fmtSuffix суффикс, который имеет один параметр (числовой номер), 
+	 * для генерации уникального имени файла
+	 * @return имя несуществующего файла: если checkFile отсутствует, то воз-ся
+	 * именно его имя, иначе "имя + суффикс", с подставленым номером 
+	 */
+	public static File findEmptyFile( final File checkFile, final String fmtSuffix) {
+		if (!checkFile.exists())
+			return checkFile; // файла нет - вернуться сразу
+
+		// поиск уникального имени файла
+		// с ограничением по кол-ву
+		int MAX = 2048;
+		for(int i = 1; i < MAX; i++) {
+			final File newFile = new File( checkFile.getAbsolutePath()+ String.format( fmtSuffix, i));
+			if (!newFile.exists()) // found empty name 
+				return newFile;
+		}
+		throw new RuntimeException( String.format( "Too may files like '%s%s'", checkFile, fmtSuffix));
+	}
 }

@@ -17,8 +17,6 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.it.lecm.reports.api.model.AlfrescoAssocInfo;
-import ru.it.lecm.reports.api.model.AlfrescoAssocInfo.AssocKind;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.JavaDataType;
@@ -31,15 +29,14 @@ import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.api.model.DAO.ReportDAO;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.generators.LucenePreparedQuery;
-import ru.it.lecm.reports.model.impl.AlfrescoAssocInfoImpl;
 import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
 import ru.it.lecm.reports.model.impl.DataSourceDescriptorImpl;
+import ru.it.lecm.reports.model.impl.JavaDataTypeImpl.SupportedTypes;
 import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
 import ru.it.lecm.reports.model.impl.ReportDescriptorImpl;
 import ru.it.lecm.reports.model.impl.ReportProviderDescriptorImpl;
 import ru.it.lecm.reports.model.impl.ReportTemplateImpl;
 import ru.it.lecm.reports.model.impl.ReportTypeImpl;
-import ru.it.lecm.reports.model.impl.JavaDataTypeImpl.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 

@@ -35,6 +35,7 @@
 		<!-- <property name="services" ref="wksKeeper"/> -->
 		<property name="reportDAO" ref="reportDAOBean"/>
 		<property name="descriptors[0]" ref="jasperTemplate_DocFlowCounters" />
+		<property name="defaultTemplate" value="repoGenTemplate.jrxml.gen"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.forms.jasper.form.get" class="ru.it.lecm.forms.jasperforms.JasperFormProducer"

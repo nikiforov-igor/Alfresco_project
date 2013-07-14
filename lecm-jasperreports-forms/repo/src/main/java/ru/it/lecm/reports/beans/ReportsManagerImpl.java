@@ -6,6 +6,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -26,8 +27,11 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.DsLoader;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.ReportTemplate;
+import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.api.model.DAO.ReportDAO;
 import ru.it.lecm.reports.api.model.share.ModelLoader;
+import ru.it.lecm.reports.generators.JRXMLMacroGenerator;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 
@@ -42,7 +46,9 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	private ReportDAO reportDAO;
 
-		public ReportDAO getReportDAO() {
+	private String defaultTemplate; //  шаблон для генерации (jrxml-)шаблона
+
+	public ReportDAO getReportDAO() {
 		return reportDAO;
 	}
 
@@ -62,6 +68,14 @@ public class ReportsManagerImpl implements ReportsManager {
 //		final Collection<ReportDescriptor> col = this.descriptors.values();
 //		return (col != null) ? new ArrayList<ReportDescriptor>(col) : new ArrayList<ReportDescriptor>();
 		return this.descriptors;
+	}
+
+	public String getDefaultTemplate() {
+		return defaultTemplate;
+	}
+
+	public void setDefaultTemplate(String defaultTemplate) {
+		this.defaultTemplate = defaultTemplate;
 	}
 
 	/**
@@ -203,12 +217,54 @@ public class ReportsManagerImpl implements ReportsManager {
 	public void registerReportDescriptor(ReportDescriptor desc) {
 		if (desc != null) {
 			checkReportDescData(desc);
-
-			// getDescriptors().add(0, desc);
 			getDescriptors().put(desc.getMnem(), desc);
-			createDsFile( desc);
-
+			createDsFile( desc); // создание ds-xml
+			saveReportTemplate( desc) ; // создание шаблона отчёта 
 			logger.info(String.format( "Report descriptor with name '%s' registered", desc.getMnem()));
+		}
+	}
+
+	private boolean saveReportTemplate(ReportDescriptor desc) {
+		if (desc.getReportTemplate() == null) {
+			logger.warn(String.format( "Report '%s' has no template", desc.getMnem()));
+			return false;
+		}
+		if (desc.getReportTemplate().getData() == null) {
+			logger.warn(String.format( "Report '%s' has no template data", desc.getMnem()));
+			return false;
+		}
+		if (desc.getReportTemplate().getFileName() == null) {
+			logger.warn(String.format( "Report '%s' has empty template FileName", desc.getMnem()));
+			return false;
+		}
+
+		final String outFullName = makeTemplateFileName(desc.getReportTemplate());
+		{	// гарантируем, что с таким именем данных нет ...
+			final File fout = new File( outFullName);
+			if (fout.exists()) {
+				final File backupName = Utils.findEmptyFile( fout, ".bak%s");
+				logger.warn(String.format( "Report '%s': saving previous template as '%s' ..."
+						, desc.getMnem(), backupName));
+				fout.renameTo(backupName);
+			}
+		}
+
+		// сохранение
+		try {
+			final FileOutputStream wout = new FileOutputStream(outFullName);
+			try {
+				IOUtils.copy(desc.getReportTemplate().getData(), wout);
+			} finally {
+				IOUtils.closeQuietly(wout);
+			}
+			logger.info(String.format( "Report '%s': template file created as '%s'"
+					, desc.getMnem(), outFullName));
+			return true;
+		} catch (IOException ex) {
+			final String msg = String.format( "Report '%s': error creating template file '%s'\n%s"
+				, desc.getMnem(), outFullName, ex.getMessage());
+			logger.error( msg, ex);
+			throw new RuntimeException( msg, ex);
 		}
 	}
 
@@ -280,11 +336,12 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	/**
-	 * Получить имя каталога для хранения dsxml файлов ("/reportdefinitions/ds-config")
+	 * Получить имя конфигурационного каталога (например, для хранения dsxml файлов getConfigDir("/reportdefinitions/ds-config"); )
+	 * @param relativePath суб-каталог внутри рабочего
 	 * @return
 	 */
-	private File getDsConfigDir() {
-		return new File( getBaseDir().getAbsolutePath() + REPORT_DS_FILES_BASEDIR);
+	private File getConfigDir(final String relativePath) {
+		return new File( getBaseDir().getAbsolutePath() + relativePath);
 	}
 
 	/**
@@ -292,21 +349,52 @@ public class ReportsManagerImpl implements ReportsManager {
 	 * @return
 	 */
 	private File ensureDsConfigDir() {
-		final File result = getDsConfigDir();
+		final File result = getConfigDir(REPORT_DS_FILES_BASEDIR);
 		result.mkdirs();
 		return result;
 	}
 
 	/**
-	 * Получить название ds-xml файла, в котором может храниться ds-xml описание.
+	 * Получить и гарантировать наличие каталога для хранения шаблонов
+	 * @return
+	 */
+	private File ensureTemplateConfigDir() {
+		final File result = getConfigDir(REPORT_TEMPLATE_FILES_BASEDIR);
+		result.mkdirs();
+		return result;
+	}
+
+	/**
+	 * Получить полное название ds-xml файла, в котором может храниться ds-xml описание.
 	 * указанного отчёта.
 	 * Родительские каталоги, при их отсутствии, создаются автоматом.
 	 * @param mnem мнемоника отчёта
-	 * @return полное имя файла.  
+	 * @return полное имя файла.
 	 */
 	private String makeDsXmlFileName(String mnem) {
 		final File base = ensureDsConfigDir();
 		return String.format( "%s/ds-%s.xml", base.getAbsolutePath(), mnem); 
+	}
+
+	/**
+	 * Получить полное название файла указанного шаблона.
+	 * Родительские каталоги, при их отсутствии, создаются автоматом.
+	 * @param template  описание отчёта
+	 * @return полное имя файла.
+	 */
+	private String makeTemplateFileName(ReportTemplate template) {
+		return (template == null) ? null : makeTemplateFileName(template.getFileName()); 
+	}
+
+	/**
+	 * Получить полное название файла указанного шаблона.
+	 * Родительские каталоги, при их отсутствии, создаются автоматом.
+	 * @param templateFileName название файла-шаблона
+	 * @return полное имя файла.
+	 */
+	private String makeTemplateFileName(String templateFileName) {
+		final File base = ensureTemplateConfigDir();
+		return String.format( "%s/%s", base.getAbsolutePath(), templateFileName); 
 	}
 
 	/**
@@ -336,6 +424,32 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 	}
 
+	@Override
+	public byte[] produceDefaultTemplate(ReportDescriptor reportDesc) {
+		if (reportDesc == null) return null;
+
+		PropertyCheck.mandatory (this, "defaultTemplate", getDefaultTemplate());
+		// PropertyCheck.mandatory (this, "jrxmlGenerator", getJrxmlGenerator());
+
+		final JRXMLMacroGenerator jrxmlGenerator = new JRXMLMacroGenerator();
+		jrxmlGenerator.setReportDesc(reportDesc);
+
+		final String tname = makeTemplateFileName(this.defaultTemplate); // название файла-шаблона для генерации
+		FileInputStream fin = null; 
+		try {
+			fin = new FileInputStream( tname);
+			final ByteArrayOutputStream result = jrxmlGenerator.xmlGenerateByTemplate( reportDesc.getMnem(), fin);
+			return (result != null) ? result.toByteArray() : null;
+		} catch (FileNotFoundException ex) {
+			final String msg = String.format( "Generator template file not found at '%s'", tname);
+			logger.error(msg, ex);
+			throw new RuntimeException( msg, ex);
+		} finally {
+			if (fin != null)
+				IOUtils.closeQuietly(fin);
+		}
+	}
+
 	final private static String REPORT_TEMPLATE_FILES_BASEDIR = "/reportdefinitions";
 	final private static String REPORT_DS_FILES_BASEDIR = "/reportdefinitions/ds-config";
 
@@ -345,7 +459,8 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	@Override
-	public String getReportTemplateFileDir(final String reportCode) {
+	public String getReportTemplateFileDir(ReportType reportType) {
+		// TODO: задавать каталог надо в зависимости от типа отчёта
 		return REPORT_TEMPLATE_FILES_BASEDIR;
 	}
 
@@ -383,4 +498,5 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 		return (found.isEmpty()) ? null : found;
 	}
+
 }
