@@ -16,7 +16,7 @@ import java.util.Set;
  * Date: 18.06.13
  * Time: 17:45
  */
-public class ReporstEditorService extends BaseBean {
+public class ReportsEditorService extends BaseBean {
 
     public static final String RE_ROOT_NAME = "Сервис Редактор Отчетов";
     public static final String RE_ROOT_ID = "RE_ROOT_ID";

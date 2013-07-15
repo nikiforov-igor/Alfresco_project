@@ -36,25 +36,25 @@
         </property>
     </bean>
 
-    <util:constant id="RE_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_ROOT_ID"/>
-    <util:constant id="RE_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_ROOT_NAME"/>
+    <util:constant id="RE_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_ROOT_ID"/>
+    <util:constant id="RE_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_ROOT_NAME"/>
 
-    <util:constant id="RE_DICTIONARY_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_DICTIONARY_ROOT_ID"/>
-    <util:constant id="RE_DICTIONARY_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_DICTIONARY_ROOT_NAME"/>
+    <util:constant id="RE_DICTIONARY_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_DICTIONARY_ROOT_ID"/>
+    <util:constant id="RE_DICTIONARY_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_DICTIONARY_ROOT_NAME"/>
 
-    <util:constant id="RE_SOURCES_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_SOURCES_ROOT_ID"/>
-    <util:constant id="RE_SOURCES_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_SOURCES_ROOT_NAME"/>
+    <util:constant id="RE_SOURCES_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_SOURCES_ROOT_ID"/>
+    <util:constant id="RE_SOURCES_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_SOURCES_ROOT_NAME"/>
 
-    <util:constant id="RE_TEMPLATES_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_TEMPLATES_ROOT_ID"/>
-    <util:constant id="RE_TEMPLATES_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_TEMPLATES_ROOT_NAME"/>
+    <util:constant id="RE_TEMPLATES_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_TEMPLATES_ROOT_ID"/>
+    <util:constant id="RE_TEMPLATES_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_TEMPLATES_ROOT_NAME"/>
 
-    <util:constant id="RE_TEMPLATES_FILES_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_TEMPLATES_FILES_ROOT_ID"/>
-    <util:constant id="RE_TEMPLATES_FILES_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_TEMPLATES_FILES_ROOT_NAME"/>
+    <util:constant id="RE_TEMPLATES_FILES_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_TEMPLATES_FILES_ROOT_ID"/>
+    <util:constant id="RE_TEMPLATES_FILES_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_TEMPLATES_FILES_ROOT_NAME"/>
 
-    <util:constant id="RE_REPORTS_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_REPORTS_ROOT_ID"/>
-    <util:constant id="RE_REPORTS_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReporstEditorService.RE_REPORTS_ROOT_NAME"/>
+    <util:constant id="RE_REPORTS_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_REPORTS_ROOT_ID"/>
+    <util:constant id="RE_REPORTS_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_REPORTS_ROOT_NAME"/>
 
-    <bean id="reportsEditorService" init-method="init" class="ru.it.lecm.reports.editor.ReporstEditorService" parent="baseBean"
+    <bean id="reportsEditorService" init-method="init" class="ru.it.lecm.reports.editor.ReportsEditorService" parent="baseBean"
           depends-on="reportsEditor.modelBootstrap">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="nodeService" ref="nodeService"/>

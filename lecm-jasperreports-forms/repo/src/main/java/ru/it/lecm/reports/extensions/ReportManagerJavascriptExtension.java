@@ -1,21 +1,18 @@
 package ru.it.lecm.reports.extensions;
 
-import java.util.List;
-
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
-
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.api.ScriptApiReportManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 
-public class ReportManagerJavascriptExtension
-		extends BaseWebScript 
-		implements ScriptApiReportManager
-{
+import java.util.List;
 
+public class ReportManagerJavascriptExtension
+		extends BaseWebScript
+{
 	private ReportsManager reportsManager;
 
 	public ReportsManager getReportsManager() {
@@ -26,7 +23,6 @@ public class ReportManagerJavascriptExtension
 		this.reportsManager = reportsManager;
 	}
 
-	@Override
 	public boolean deployReport(final String reportDescNode) {
 		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
 
@@ -41,7 +37,6 @@ public class ReportManagerJavascriptExtension
 		return result;
 	}
 
-	@Override
 	public boolean undeployReport(final String reportCode) {
 		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
 
@@ -51,7 +46,6 @@ public class ReportManagerJavascriptExtension
 		return true;
 	}
 
-	@Override
 	public byte[] getDsXmlBytes(final String reportCode) {
 		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
 
@@ -61,7 +55,6 @@ public class ReportManagerJavascriptExtension
 		return result;
 	}
 
-	@Override
 	public ReportInfo[] getRegisteredReports(String docType,
 			String reportType) {
 		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
@@ -82,4 +75,26 @@ public class ReportManagerJavascriptExtension
 		}
 		return result;
 	}
+
+    public ScriptNode generateReportTemplate(final String reportRef) {
+        /*ReportDescriptor desc = ((ReportsManagerImpl)getReportsManager()).getReportDAO().getReportDescriptor(new NodeRef(reportRef));
+        byte[] content = getReportsManager().produceDefaultTemplate(desc);
+        NodeRef templateFileRef = serviceRegistry.getNodeService().createNode(templateContainer, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "default"), ContentModel.TYPE_CONTENT, null).getChildRef();
+        ByteArrayInputStream bis = null;
+        try {
+            bis = new ByteArrayInputStream(content);
+            ContentService contentService = serviceRegistry.getContentService();
+            ContentReader reader = contentService.getReader(templateFileRef, ContentModel.PROP_CONTENT);
+            if (reader == null) {
+                ContentWriter writer = contentService.getWriter(templateFileRef, ContentModel.PROP_CONTENT, true);
+                writer.setMimetype("text/xml");
+                writer.setEncoding("UTF-8");
+                writer.putContent(bis);
+            }
+        } finally {
+            IOUtils.closeQuietly(bis);
+        }
+        return new ScriptNode(templateFileRef, serviceRegistry, getScope());*/
+        return null;
+    }
 }

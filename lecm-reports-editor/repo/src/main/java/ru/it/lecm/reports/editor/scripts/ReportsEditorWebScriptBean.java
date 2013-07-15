@@ -4,9 +4,8 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.reports.editor.ReporstEditorService;
+import ru.it.lecm.reports.editor.ReportsEditorService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,9 +15,9 @@ import java.util.List;
  */
 public class ReportsEditorWebScriptBean extends BaseWebScript {
 
-    private ReporstEditorService service;
+    private ReportsEditorService service;
 
-    public void setService(ReporstEditorService service) {
+    public void setService(ReportsEditorService service) {
         this.service = service;
     }
 
