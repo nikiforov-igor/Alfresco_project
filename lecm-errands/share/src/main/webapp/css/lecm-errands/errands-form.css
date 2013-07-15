@@ -18,9 +18,6 @@
 .yui-skin-lecmTheme div.yui-panel div.yui-u div.form-field input[type="checkbox"] {
      margin-left: 0;
 }
-.details-panel {
-    overflow: hidden;
-}
 .collapse-details {
     color: #666;
     font-weight: bold;
