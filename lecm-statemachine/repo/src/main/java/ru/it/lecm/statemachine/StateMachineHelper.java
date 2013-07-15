@@ -1,5 +1,6 @@
 package ru.it.lecm.statemachine;
 
+import org.activiti.engine.ActivitiException;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -280,12 +281,14 @@ public class StateMachineHelper implements StateMachineServiceBean {
         //Выбираем все статусы для всех процессов
         List<WorkflowDefinition> definitions = serviceRegistry.getWorkflowService().getAllDefinitionsByName(ACTIVITI_PREFIX + type);
         for (WorkflowDefinition definition : definitions) {
-            List<WorkflowInstance> instances = serviceRegistry.getWorkflowService().getActiveWorkflows(definition.getId());
-            if (instances.size() > 0) {
-                processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(definition.getId().replace(ACTIVITI_PREFIX, ""));
+//            List<WorkflowInstance> instances = serviceRegistry.getWorkflowService().getActiveWorkflows(definition.getId());
+//            if (instances.size() > 0) {
+            processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(definition.getId().replace(ACTIVITI_PREFIX, ""));
+            if (processDefinitionEntity != null) {
                 HashSet<String> result = getDefinitionStatuses(processDefinitionEntity);
                 statuses.addAll(result);
             }
+//            }
         }
         List<String> statusesList = new ArrayList<String>(statuses);
         Collections.sort(statusesList);
@@ -298,10 +301,16 @@ public class StateMachineHelper implements StateMachineServiceBean {
         String type = documentType.replace(":", "_");
         List<WorkflowDefinition> definitions = serviceRegistry.getWorkflowService().getAllDefinitionsByName(ACTIVITI_PREFIX + type);
         for (WorkflowDefinition definition : definitions) {
-            List<WorkflowInstance> instances = serviceRegistry.getWorkflowService().getWorkflows(definition.getId());
-            if (instances.size() > 0) {
-                ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(definition.getId().replace(ACTIVITI_PREFIX, ""));
-                List<ActivityImpl> activities = processDefinitionEntity.getActivities();
+//            List<WorkflowInstance> instances = serviceRegistry.getWorkflowService().getWorkflows(definition.getId());
+//            if (instances.size() > 0) {
+            ProcessDefinitionEntity processDefinitionEntity;
+            try {
+                processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(definition.getId().replace(ACTIVITI_PREFIX, ""));
+            } catch (ActivitiException e) {
+                continue;
+            }
+            List<ActivityImpl> activities = processDefinitionEntity.getActivities();
+            if (activities != null && !activities.isEmpty()) {
                 for (ActivityImpl activity : activities) {
                     if (activity.getActivityBehavior() instanceof NoneEndEventActivityBehavior) {
                         List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
@@ -309,12 +318,14 @@ public class StateMachineHelper implements StateMachineServiceBean {
                             for (ExecutionListener listener : listeners) {
                                 if (listener instanceof StateMachineHandler.StatemachineTaskListener) {
                                     List<StateMachineAction> result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("end");
-                                    for (StateMachineAction action : result) {
-                                        if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(ArchiveDocumentAction.class))) {
-                                            ArchiveDocumentAction archiveDocumentAction = (ArchiveDocumentAction) action;
-                                            String folder = archiveDocumentAction.getArchiveFolderPath();
-                                            if (folder != null) {
-                                                folders.add(archiveDocumentAction.getArchiveFolderPath());
+                                    if (result != null) {
+                                        for (StateMachineAction action : result) {
+                                            if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(ArchiveDocumentAction.class))) {
+                                                ArchiveDocumentAction archiveDocumentAction = (ArchiveDocumentAction) action;
+                                                String folder = archiveDocumentAction.getArchiveFolderPath();
+                                                if (folder != null) {
+                                                    folders.add(archiveDocumentAction.getArchiveFolderPath());
+                                                }
                                             }
                                         }
                                     }
@@ -324,6 +335,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                     }
                 }
             }
+//            }
         }
         return folders;
     }
