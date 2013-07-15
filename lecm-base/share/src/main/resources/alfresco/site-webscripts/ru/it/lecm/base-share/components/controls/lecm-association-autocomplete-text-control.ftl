@@ -125,8 +125,8 @@
 		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
 		</#if>
 		<span class="viewmode-label">${field.label?html}:</span>
-		<span id="${fieldHtmlId}" class="viewmode-value">${field.value!""}</span>
-		<#--<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />-->
+		<span id="${fieldHtmlId}-currentValueDisplay" class="viewmode-value">${field.value!""}</span>
+		<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
 	</div>
 <#else>
 	<label for="${fieldHtmlId}">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
