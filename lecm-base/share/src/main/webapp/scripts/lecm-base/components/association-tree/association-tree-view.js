@@ -238,7 +238,7 @@ LogicECM.module = LogicECM.module || {};
             {
                 arrItems = this.options.selectedValue;
             }
-            else
+            else if (this.options.currentValue != null && this.isNodeRef(this.options.currentValue))
             {
                 arrItems = this.options.currentValue;
             }
@@ -304,11 +304,21 @@ LogicECM.module = LogicECM.module || {};
 	            if (!this.options.disabled) {
 	                this.updateSelectedItems();
 	                this.updateAddButtons();
-	            } else {
+	            } else if (Dom.get(this.options.controlId + "-currentValueDisplay") != null) {
                     Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
                 }
             }
         },
+
+		isNodeRef: function (value)	{
+			var regexNodeRef = new RegExp(/^[^\:^ ]+\:\/\/[^\:^ ]+\/[^ ]+$/);
+			var result = false;
+			try {
+				result = regexNodeRef.test(String(value));
+			}
+			catch (e){}
+			return result;
+		},
 
         addSelectedItem: function AssociationTreeViewer_addSelectedItems(nodeRef) {
             var onSuccess = function AssociationTreeViewer_addSelectedItems_onSuccess(response)
