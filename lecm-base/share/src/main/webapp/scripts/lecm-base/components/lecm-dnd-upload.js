@@ -1097,13 +1097,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             // Tell the document list to refresh itself if present and to
             // highlight the uploaded file (if multi upload was used display the first file)
             var fileName = null, f;
+	        var files = [];
             for (i in this.fileStore)
             {
                f = this.fileStore[i];
                if (f && f.state === this.STATE_SUCCESS)
                {
                   fileName = f.fileName;
-                  break;
+	              files.push({
+		            name: f.fileName,
+		            nodeRef: f.nodeRef
+	              });
                }
             }
             if (!this.showConfig.suppressRefreshEvent)
@@ -1113,7 +1117,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                   YAHOO.Bubbling.fire("metadataRefresh",
                   {
                      currentPath: this.showConfig.path,
-                     highlightFile: fileName
+                     highlightFile: fileName,
+	                 files: files
                   });
                }
                else

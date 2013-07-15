@@ -226,4 +226,11 @@
         <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
     </bean>
 
+	<bean  id="errandsAttachmentsPolicy" class="ru.it.lecm.errands.policy.ErrandsAttachmentsPolicy"
+	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap, errands.dictionaries.LogicEcmModelsBootstrap">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
 </beans>
