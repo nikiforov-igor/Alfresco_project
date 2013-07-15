@@ -549,30 +549,28 @@ public class XmlHelper {
 	 * @param mapNode
 	 * @return
 	 */
-	public static Map<String, Object> getNodeAsItemsMap(Node mapNode) {
-		if (mapNode == null)
-			return null;
-		final Map<String, Object> result = new HashMap<String, Object>();
-		final NodeList children = mapNode.getChildNodes();
-		if (children != null) {
-			for (int i = 0; i < children.getLength(); i++) {
-				final Node childNode = children.item(i);
-				if (!xmlItemName.equalsIgnoreCase(childNode.getNodeName()) ) // skip non-item elements
-					continue;
-				final Object value = getNodeAsSmart(childNode);
-
-				final Node keyNode = (childNode.getAttributes() == null) ? null : childNode.getAttributes().getNamedItem(xmlKeyName);
-				if (keyNode == null) {
-					final String info = String.format("XML map-node '%s'::'%s' has no 'key' attribute for item [%s]", mapNode.getNamespaceURI(), mapNode.getNodeName(), i);
-					logger.error(info);
-					throw new RuntimeException( info);
-				}
-
-				result.put( getTagContent(keyNode), value);
-			} // for
-		}
-		return result;
-	}
+    public static Map<String, Object> getNodeAsItemsMap(Node mapNode) {
+        if (mapNode == null)
+            return null;
+        final Map<String, Object> result = new HashMap<String, Object>();
+        final NodeList children = mapNode.getChildNodes();
+        if (children != null) {
+            for (int i = 0; i < children.getLength(); i++) {
+                final Node childNode = children.item(i);
+                if (!xmlItemName.equalsIgnoreCase(childNode.getNodeName())) // skip non-item elements
+                    continue;
+                final Node keyNode = (childNode.getAttributes() == null) ? null : childNode.getAttributes().getNamedItem(xmlKeyName);
+                if (keyNode == null) {
+                    final String info = String.format("XML map-node '%s'::'%s' has no 'key' attribute for item [%s]", mapNode.getNamespaceURI(), mapNode.getNodeName(), i);
+                    logger.error(info);
+                    throw new RuntimeException(info);
+                }
+                final Node valueNode = (childNode.getAttributes() == null) ? null : childNode.getAttributes().getNamedItem(xmlValueName);
+                result.put(getTagContent(keyNode), valueNode != null ? valueNode.getNodeValue() : "");
+            } // for
+        }
+        return result;
+    }
 
 	public static List<Object> getNodeAsItemsList(Node listNode) {
 		if (listNode == null)
