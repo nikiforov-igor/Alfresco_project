@@ -267,7 +267,11 @@ LogicECM.control = LogicECM.control || {};
 
 						for (var i = 0; i < files.length; i++) {
 							if (elAttachments != null) {
-								elAttachments.innerHTML += "<li>" + files[i].name + "</li>";
+								var fileName = files[i].name;
+								var icon = Alfresco.util.getFileIcon(fileName, "cm:content", 16);
+								var iconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + icon +"'/>";
+
+								elAttachments.innerHTML += "<li>" + iconHtml + fileName + "</li>";
 							}
 							if (elAdded != null) {
 								elAdded.value += ( i < files.length-1 ? files[i].nodeRef + ',' : files[i].nodeRef );
