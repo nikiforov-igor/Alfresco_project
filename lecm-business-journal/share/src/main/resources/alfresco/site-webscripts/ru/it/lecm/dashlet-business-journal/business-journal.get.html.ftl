@@ -54,10 +54,30 @@
 	        var Dom = YAHOO.util.Dom,
 	            Event = YAHOO.util.Event,
 	            Selector = YAHOO.util.Selector;
-	        var container;
+	        var container,
+                dashletResizer;
 
+            function setMenuHeight(menuId) {
+                if (dashletResizer) {
+                    var height = parseInt(Dom.getStyle(dashletResizer.dashletBody, "height"));
+                    var menu;
+
+                    if (menuId) {
+                        menu = Selector.query("#" + menuId + " div.bd");
+                    } else {
+                        menu = Selector.query("#${id}_controls div.yuimenu div.bd");
+                    }
+                    Dom.setStyle(menu, "max-height", height + "px");
+                }
+            }
 	        function init() {
-	            new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
+	            dashletResizer = new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
+                dashletResizer.onResizeDefault = dashletResizer.onResize;
+                dashletResizer.onResize = function() {
+                    dashletResizer.onResizeDefault();
+                    setMenuHeight();
+                };
+
 	            new Alfresco.widget.DashletTitleBarActions("${id?html}").setOptions({
 	                actions: [
 	                    {
@@ -188,6 +208,11 @@
 	                label: defaultOption.text,
 	                menu: options
 	            });
+
+                selectButton.subscribe("click", function() {
+                    setMenuHeight(selectButton.getMenu().id);
+                });
+
 	            hidden.value = defaultOption.value;
 	            refreshResults();
 	        }

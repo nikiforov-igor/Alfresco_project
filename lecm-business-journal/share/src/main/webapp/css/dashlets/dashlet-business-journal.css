@@ -9,6 +9,10 @@
 .dashlet.business-journal .toolbar {
     white-space: nowrap;
 }
+.dashlet.business-journal .toolbar .yuimenu .bd {
+    max-height: 200px;
+    overflow: auto;
+}
 .dashlet.business-journal .body .row {
 	line-height: 16px;
 	margin: 10px;
