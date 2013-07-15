@@ -181,6 +181,7 @@
 	                <field id="lecm-errands:attachments-temp-assoc" set="main">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
 			                <control-param name="uploadDirectoryPath">/app:company_home/app:user_homes</control-param>
+			                <control-param name="directoryName">label.errands.attachments</control-param>
 		                </control>
 	                </field>
                     <field id="lecm-errands:subject-assoc" set="collapsable">

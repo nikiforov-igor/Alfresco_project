@@ -128,6 +128,7 @@
 	            <js src="/scripts/lecm-base/components/lecm-checkbox.js" />
 	            <js src="/scripts/lecm-base/components/lecm-association-autocomplete-text.js" />
 	            <js src="/scripts/lecm-base/components/lecm-dnd-uploader-control.js" />
+	            <js src="/scripts/lecm-base/components/lecm-dnd-uploader.js" />
 	            <js src="/scripts/lecm-base/components/lecm-dnd-upload.js" />
 	            <css src="/components/upload/dnd-upload.css" />
             </dependencies>
