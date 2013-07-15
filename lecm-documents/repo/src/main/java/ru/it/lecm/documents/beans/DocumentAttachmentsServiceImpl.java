@@ -128,32 +128,36 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
     }
 
     public NodeRef getCategoryFolder(final String category, final NodeRef attachmentRootRef) {
-        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-            @Override
-            public NodeRef doWork() throws Exception {
-                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                    @Override
-                    public NodeRef execute() throws Throwable {
-                        NodeRef categoryFolderRef;
-                        synchronized (lock) {
-                            categoryFolderRef = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
-                            if (categoryFolderRef == null) {
-                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, category);
-                                QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+	    NodeRef result = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
+	    if (result == null) {
+	        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+	            @Override
+	            public NodeRef doWork() throws Exception {
+	                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+	                    @Override
+	                    public NodeRef execute() throws Throwable {
+	                        NodeRef categoryFolderRef;
+	                        synchronized (lock) {
+	                            categoryFolderRef = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
+	                            if (categoryFolderRef == null) {
+	                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+	                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, category);
+	                                QName nodeTypeQName = ContentModel.TYPE_FOLDER;
 
-                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                properties.put(ContentModel.PROP_NAME, category);
-                                ChildAssociationRef associationRef = nodeService.createNode(attachmentRootRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                categoryFolderRef = associationRef.getChildRef();
-                            }
-                        }
-                        return categoryFolderRef;
-                    }
-                });
-            }
-        };
-        return AuthenticationUtil.runAsSystem(raw);
+	                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+	                                properties.put(ContentModel.PROP_NAME, category);
+	                                ChildAssociationRef associationRef = nodeService.createNode(attachmentRootRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+	                                categoryFolderRef = associationRef.getChildRef();
+	                            }
+	                        }
+	                        return categoryFolderRef;
+	                    }
+	                });
+	            }
+	        };
+		    result = AuthenticationUtil.runAsSystem(raw);
+	    }
+	    return result;
     }
 
 	public NodeRef getCategory(final String category, final NodeRef documentRef) {

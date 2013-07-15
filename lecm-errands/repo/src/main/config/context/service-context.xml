@@ -231,6 +231,8 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="nodeService" ref="nodeService"/>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
 </beans>

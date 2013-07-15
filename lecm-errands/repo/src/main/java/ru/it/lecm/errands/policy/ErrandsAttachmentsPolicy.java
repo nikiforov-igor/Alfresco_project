@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.errands.ErrandsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ public class ErrandsAttachmentsPolicy implements NodeServicePolicies.OnCreateAss
 	private PolicyComponent policyComponent;
 	private DocumentAttachmentsService documentAttachmentsService;
 	private NodeService nodeService;
+	private LecmPermissionService lecmPermissionService;
+	private OrgstructureBean orgstructureService;
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -38,6 +42,14 @@ public class ErrandsAttachmentsPolicy implements NodeServicePolicies.OnCreateAss
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
+	}
+
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
+
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
 	}
 
 	final public void init() {
@@ -53,13 +65,32 @@ public class ErrandsAttachmentsPolicy implements NodeServicePolicies.OnCreateAss
 		NodeRef errandRef = associationRef.getSourceRef();
 		NodeRef attachmentRef = associationRef.getTargetRef();
 
-		List<NodeRef> categories = documentAttachmentsService.getCategories(errandRef);
-		if (categories != null && categories.size() > 0) {
-			NodeRef category = categories.get(0);
+		//создание категорий
+		documentAttachmentsService.getCategories(errandRef);
 
+		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+
+		List<AssociationRef> initiatorAssocs = nodeService.getTargetAssocs(errandRef, ErrandsService.ASSOC_ERRANDS_INITIATOR);
+		boolean isInitiator = initiatorAssocs == null || initiatorAssocs.size() == 0 || initiatorAssocs.get(0).getTargetRef().equals(currentEmployee);
+
+		List<AssociationRef> controllerAssocs = nodeService.getTargetAssocs(errandRef, ErrandsService.ASSOC_ERRANDS_CONTROLLER);
+		boolean isController = controllerAssocs != null && controllerAssocs.size() == 1 && controllerAssocs.get(0).getTargetRef().equals(currentEmployee);
+
+		List<AssociationRef> executorAssocs = nodeService.getTargetAssocs(errandRef, ErrandsService.ASSOC_ERRANDS_EXECUTOR);
+		boolean isExecutor = executorAssocs != null && executorAssocs.size() == 1 && executorAssocs.get(0).getTargetRef().equals(currentEmployee);
+
+		String category = "Исполнение";
+		if (isInitiator && !isExecutor) {
+			category = "Поручение";
+		} else if (isController && !isExecutor && !isInitiator) {
+			category = "Контроль";
+		}
+
+		NodeRef categoryRef = documentAttachmentsService.getCategory(category, errandRef);
+		if (categoryRef != null) {
 			String name = nodeService.getProperty (attachmentRef, ContentModel.PROP_NAME).toString ();
 			QName assocQname = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, name);
-			nodeService.moveNode(attachmentRef, category, ContentModel.ASSOC_CONTAINS, assocQname);
+			nodeService.moveNode(attachmentRef, categoryRef, ContentModel.ASSOC_CONTAINS, assocQname);
 
 			nodeService.removeAssociation(errandRef, attachmentRef, associationRef.getTypeQName());
 		}

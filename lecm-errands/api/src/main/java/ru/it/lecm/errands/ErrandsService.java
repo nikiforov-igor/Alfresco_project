@@ -33,6 +33,8 @@ public interface ErrandsService {
 
 	public static final QName ASSOC_ADDITIONAL_ERRANDS_DOCUMENT = QName.createQName(ERRANDS_NAMESPACE_URI, "additional-document-assoc");
 	public static final QName ASSOC_ERRANDS_INITIATOR = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc");
+	public static final QName ASSOC_ERRANDS_CONTROLLER = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc");
+	public static final QName ASSOC_ERRANDS_EXECUTOR = QName.createQName(ERRANDS_NAMESPACE_URI, "executor-assoc");
 	public static final QName ASSOC_TEMP_ATTACHMENTS = QName.createQName(ERRANDS_NAMESPACE_URI, "attachments-temp-assoc");
 
 	public static final String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
