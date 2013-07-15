@@ -93,7 +93,7 @@ public class LuceneSearchBuilder {
 			return false;
 		if (prefix != null)
 			getQuery().append( prefix);
-		getQuery().append( " TYPE:"+ Utils.quoted(qType.toString()));
+		getQuery().append( " +TYPE:"+ Utils.quoted(qType.toString()));
 		return true;
 	}
 
@@ -149,7 +149,7 @@ public class LuceneSearchBuilder {
 		if (prefix != null)
 			getQuery().append( prefix);
 		getQuery()
-			.append(" @")
+			.append(" +@")
 			.append(Utils.luceneEncode(fld))
 			.append(":\"") // bquery.append( " AND @cm\\:creator:\"" + login + "\"");
 			.append( value.toString()) // Utils.luceneEncode(value.toString())

@@ -34,6 +34,63 @@
                     window.location.href = url
                 },
 
+                onActionUnDeploy: function (item) {
+                    var me = this;
+                    Alfresco.util.PopupManager.displayPrompt({
+                        title: "Уадление отчета",
+                        text: "Вы действительно хотите удалить отчет из системы?",
+                        buttons: [
+                            {
+                                text: "Да",
+                                handler: function () {
+                                    this.destroy();
+                                    var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/undeployReport?reportCode={reportCode}";
+                                    sUrl = YAHOO.lang.substitute(sUrl, {
+                                        reportCode: item.itemData["prop_lecm-rpeditor_reportCode"].value
+                                    });
+                                    me._showSplash();
+                                    var callback = {
+                                        success: function (oResponse) {
+                                            oResponse.argument.parent._hideSplash();
+                                            item.itemData["prop_lecm-rpeditor_reportIsDeployed"] = {value: false, displayValue: false};
+                                            YAHOO.Bubbling.fire("dataItemUpdated",
+                                                    {
+                                                        item: item,
+                                                        bubblingLabel: me.options.bubblingLabel
+                                                    });
+                                            Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text: "Отчет удален из системы",
+                                                        displayTime: 3
+                                                    });
+                                        },
+                                        failure: function (oResponse) {
+                                            oResponse.argument.parent._hideSplash();
+                                            Alfresco.util.PopupManager.displayMessage(
+                                                    {
+                                                        text: "При удалении отчета произошла ошибка",
+                                                        displayTime: 3
+                                                    });
+                                        },
+                                        argument: {
+                                            parent: me
+                                        },
+                                        timeout: 30000
+                                    };
+                                    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                                }
+                            },
+                            {
+                                text: "Нет",
+                                handler: function dlA_onActionDelete_cancel() {
+                                    this.destroy();
+                                },
+                                isDefault: true
+                            }
+                        ]
+                    });
+                },
+
                 onActionDeploy: function (item) {
                     var me = this;
                     Alfresco.util.PopupManager.displayPrompt({
@@ -52,6 +109,12 @@
                                     var callback = {
                                         success: function (oResponse) {
                                             oResponse.argument.parent._hideSplash();
+                                            item.itemData["prop_lecm-rpeditor_reportIsDeployed"] =  {value: true, displayValue: true};
+                                            YAHOO.Bubbling.fire("dataItemUpdated",
+                                                    {
+                                                        item: item,
+                                                        bubblingLabel: me.options.bubblingLabel
+                                                    });
                                             Alfresco.util.PopupManager.displayMessage(
                                                     {
                                                         text: "Отчет зарегистрирован в системе",
@@ -168,10 +231,8 @@
                                                     break;
 
                                                 case "boolean":
-                                                    if (data.value) {
-                                                        columnContent += '<div style="text-align: center;">'
+                                                    if (data.value && data.value != "false") {
                                                         columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
-                                                        columnContent += '</div>'
                                                     }
                                                     break;
 
@@ -235,7 +296,21 @@
                                     type: "datagrid-action-link-reports",
                                     id: "onActionDeploy",
                                     permission: "edit",
-                                    label: "${msg("actions.deploy")}"
+                                    label: "${msg("actions.deploy")}",
+                                    evaluator: function (rowData) {
+                                        var itemData = rowData.itemData;
+                                        return !itemData["prop_lecm-rpeditor_reportIsDeployed"].value || itemData["prop_lecm-rpeditor_reportIsDeployed"].value == "false";
+                                    }
+                                },
+                                {
+                                    type: "datagrid-action-link-reports",
+                                    id: "onActionUnDeploy",
+                                    permission: "edit",
+                                    label: "${msg("actions.undeploy")}",
+                                    evaluator: function (rowData) {
+                                        var itemData = rowData.itemData;
+                                        return itemData["prop_lecm-rpeditor_reportIsDeployed"].value || itemData["prop_lecm-rpeditor_reportIsDeployed"].value == "true";
+                                    }
                                 },
                                 {
                                     type: "datagrid-action-link-reports",

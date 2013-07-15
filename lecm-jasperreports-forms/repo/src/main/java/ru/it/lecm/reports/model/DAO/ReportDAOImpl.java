@@ -2,6 +2,7 @@ package ru.it.lecm.reports.model.DAO;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
@@ -44,9 +46,10 @@ public class ReportDAOImpl implements ReportDAO {
 
 	private static final transient Logger log = LoggerFactory.getLogger(ReportDAOImpl.class);
 
-	private WKServiceKeeper services; 
+	private WKServiceKeeper services;
+    private NamespaceService namespaceService;
 
-	public WKServiceKeeper getServices() {
+    public WKServiceKeeper getServices() {
 		return services;
 	}
 
@@ -450,4 +453,20 @@ public class ReportDAOImpl implements ReportDAO {
 		}
 	}
 
+    public NodeRef getReportDescriptorByCode(String rtMnemo) {
+        LuceneSearchBuilder builder = new LuceneSearchBuilder(namespaceService);
+        builder.emmitFieldCond(null, PROP_T_REPORT_CODE, rtMnemo);
+        builder.emmitTypeCond(TYPE_ReportDescriptor, null);
+
+        ResultSet rs = LucenePreparedQuery.execFindQuery(builder, getServices().getServiceRegistry().getSearchService());
+        for (ResultSetRow row : rs) {
+            NodeRef nodeId = row.getNodeRef();
+            return nodeId;
+        }
+        return null;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
 }

@@ -152,6 +152,7 @@ public interface ReportDAO {
 	 */
 	ReportTemplate getReportTemplate(String rtMnemo);
 
+    NodeRef getReportDescriptorByCode(String reportCode);
 	/*
 	 * Набор данных
 	 * "lecm-rpeditor:reportDataSource"

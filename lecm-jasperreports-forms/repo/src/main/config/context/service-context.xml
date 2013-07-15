@@ -28,6 +28,7 @@
 
 	<bean id="reportDAOBean" class="ru.it.lecm.reports.model.DAO.ReportDAOImpl">
 		<property name="services" ref="wksKeeper"/>
+        <property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<bean id="reportsManager" class="ru.it.lecm.reports.beans.ReportsManagerImpl"

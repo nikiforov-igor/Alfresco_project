@@ -500,4 +500,8 @@ public class ReportsManagerImpl implements ReportsManager {
 		return (found.isEmpty()) ? null : found;
 	}
 
+    @Override
+    public List<ReportDescriptor> getRegisteredReports() {
+        return getRegisteredReports(null, null);
+    }
 }

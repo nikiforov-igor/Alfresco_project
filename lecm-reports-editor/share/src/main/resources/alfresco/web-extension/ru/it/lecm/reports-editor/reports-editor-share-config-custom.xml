@@ -81,6 +81,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportTypeAssoc"/>
+                    <show id="lecm-rpeditor:reportIsDeployed"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>

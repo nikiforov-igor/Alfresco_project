@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 
+import ru.it.lecm.reports.api.model.DAO.ReportDAO;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportType;
 
@@ -34,6 +35,13 @@ public interface ReportsManager {
 	 * при любом состоянии параметра docType)
 	 */
 	List<ReportDescriptor> getRegisteredReports(String docType, String reportType);
+
+    /**
+     * Получить список зарегистрированных редакторов отчётов для указанного типа
+     * документов и тип отчёта
+     * @return список зарегеных отчётов
+     */
+    List<ReportDescriptor> getRegisteredReports();
 
 	/**
 	 * Зарегистрировать указанный описатель отчёта. Создать ds-xml.
@@ -91,4 +99,6 @@ public interface ReportsManager {
 	 * @return
 	 */
 	String getDsRelativeFileName(String reportCode);
+
+    ReportDAO getReportDAO();
 }

@@ -185,6 +185,11 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <property name="lecm-rpeditor:reportIsDeployed">
+                    <title>Report Is Deployed</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-rpeditor:reportTypeAssoc">

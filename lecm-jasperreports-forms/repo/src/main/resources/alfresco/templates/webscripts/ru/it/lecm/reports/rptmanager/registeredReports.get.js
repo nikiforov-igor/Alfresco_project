@@ -1,10 +1,10 @@
 var reportsInfos = rptmanager.getRegisteredReports( args["docType"], args["reportType"]);
 var reports = [];
-for (var key in reportsInfos) {
-    var rInfo = reportsInfos[key];
+for (var index= 0; index <= reportsInfos.size()-1; index++) {
+    var report = reportsInfos.get(index);
     reports.push({
-        "reportName":rInfo.reportName,
-        "reportCode":rInfo.reportCode
+        "reportName":report.reportName,
+        "reportCode":report.reportCode
     });
 }
 model.data = reports;
