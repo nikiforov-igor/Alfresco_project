@@ -19,8 +19,6 @@
                     <show id="lecm-errands:limitation-date"/>
                     <!-- Важное -->
                     <show id="lecm-errands:is-important"/>
-                    <!--  Вложения -->
-                    <show id="lecm-errands:attachments-temp-assoc"/>
                     <!-- Тематика -->
                     <show id="lecm-errands:subject-assoc"/>
                     <!-- Инициатор -->
@@ -47,25 +45,19 @@
                     <set id="collapsable" appearance="" template="/ru/it/lecm/base-share/components/collapsable-set.ftl" />
 
                     <field id="lecm-errands:executor-assoc" set="main"/>
-                    <!--<field id="lecm-errands:title" set="main">-->
-                        <!--<control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">-->
-                            <!--<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>-->
-                            <!--<control-param name="itemType">lecm-errands-dic:errand-titles</control-param>-->
-                            <!--<control-param name="nameSubstituteString">{cm:name}</control-param>-->
-                            <!--<control-param name="notSelectedOptionShow">true</control-param>-->
-                            <!--<control-param name="notSelectedOptionLabel"> </control-param>-->
-                            <!--<control-param name="showCreateNewLink">false</control-param>-->
-                            <!--<control-param name="showCreateNewButton">false</control-param>-->
-                        <!--</control>-->
-                    <!--</field>-->
-                    <field id="lecm-errands:limitation-date" set="limitation-date"/>
-                    <field id="lecm-errands:is-important" set="limitation-date"/>
-                    <field id="lecm-errands:attachments-temp-assoc" set="main">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">/app:company_home/app:user_homes</control-param>
-                            <control-param name="directoryName">label.errands.attachments</control-param>
+                    <field id="lecm-errands:title" set="main">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
+                    <field id="lecm-errands:limitation-date" set="limitation-date"/>
+                    <field id="lecm-errands:is-important" set="limitation-date"/>
                     <field id="lecm-errands:subject-assoc" set="collapsable">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
