@@ -1,0 +1,20 @@
+<webapp-structure>
+  <registeredFiles>
+    <entry>
+      <string>currentBuild</string>
+      <path-set>
+        <pathsSet class="linked-hash-set">
+          <string>lib/scaner-repo-0.5.0.jar</string>
+          <string>config/alfresco/module/scaner-repo/context/service-context.xml</string>
+          <string>config/alfresco/module/scaner-repo/log4j.properties</string>
+          <string>config/alfresco/module/scaner-repo/module-context.xml</string>
+          <string>config/alfresco/templates/webscripts/ru/it/lecm/scanUpload/scanUpload.post.desc.xml</string>
+          <string>config/alfresco/templates/webscripts/ru/it/lecm/scanUpload/scanUpload.post.html.ftl</string>
+          <string>config/alfresco/templates/webscripts/ru/it/lecm/scanUpload/scanUpload.post.js</string>
+          <string>web/licenses/README-licenses.txt</string>
+          <string>module.properties</string>
+        </pathsSet>
+      </path-set>
+    </entry>
+  </registeredFiles>
+</webapp-structure>

@@ -103,6 +103,7 @@
 		<module>lecm-contractors</module>
 		<module>lecm-contracts-fake</module>
 		<module>lecm-approval</module>
+                <module>lecm-scaner</module>
         <module>lecm-reports-editor</module>
         <module>lecm-errands</module>
 	</modules>

@@ -29,6 +29,7 @@
                         <item type="link" id="subscriptions">/subscriptions-to-type</item>
                         <item type="link" id="business-journal">/business-journal</item>
                         <item type="link" id="errands-list">/errands-list</item>
+                        <item type="link" id="scaner">/ru/it/lecm/scaner</item>
                     </container-group>
                      <container-group id="alfrescos" label="Standard">
                          <item type="link" id="my-dashboard">{userdashboardpage}</item>

@@ -1,0 +1,25 @@
+<webapp-structure>
+  <registeredFiles>
+    <entry>
+      <string>currentBuild</string>
+      <path-set>
+        <pathsSet class="linked-hash-set">
+          <string>lib/base-repo-api-0.1.0.jar</string>
+          <string>lib/scaner-share-0.5.0.jar</string>
+          <string>config/alfresco/site-webscripts/ru/it/lecm/scaner/scaner.get.desc.xml</string>
+          <string>config/alfresco/site-webscripts/ru/it/lecm/scaner/scaner.get.html.ftl</string>
+          <string>config/alfresco/site-webscripts/ru/it/lecm/scaner/scaner.get.js</string>
+          <string>config/alfresco/web-extension/ru/it/lecm/scaner/form.properties</string>
+          <string>config/alfresco/web-extension/ru/it/lecm/scaner/form_ru.properties</string>
+          <string>config/alfresco/web-extension/ru/it/lecm/scaner/scaner-share-config-custom.xml</string>
+          <string>config/alfresco/web-extension/ru.it.lecm.scaner-share-context.xml</string>
+          <string>web/licenses/README-licenses.txt</string>
+          <string>web/scripts/jai_imageio_windows-i586.jar</string>
+          <string>web/scripts/lecm-scaner/jai_imageio_windows-i586.jar</string>
+          <string>web/scripts/lecm-scaner/scanner-applet.jar</string>
+          <string>module.properties</string>
+        </pathsSet>
+      </path-set>
+    </entry>
+  </registeredFiles>
+</webapp-structure>

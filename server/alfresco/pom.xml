@@ -291,6 +291,13 @@
             <scope>runtime</scope>
             <type>amp</type>
         </dependency>
+	 <dependency>
+	  <groupId>ru.it.lecm.scaner</groupId>
+	  <artifactId>scaner-repo</artifactId>
+	  <version>${platform.version}</version>
+          <type>amp</type>
+            <scope>runtime</scope>
+	 </dependency>
 	</dependencies>
 
 	<build>
