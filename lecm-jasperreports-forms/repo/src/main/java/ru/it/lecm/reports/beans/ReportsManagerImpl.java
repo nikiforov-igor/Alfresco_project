@@ -24,6 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.extensions.surf.util.URLDecoder;
 import ru.it.lecm.reports.api.DsLoader;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
@@ -108,7 +109,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		{
 			final List<URL> base = JRLoader.getResources( REPORT_DS_FILES_BASEDIR); // REPORT_DS_FILES_BASEDIR + "/ds-*.xml"
 			if (base != null && !base.isEmpty()) {
-				final File scanner = new File( base.get(0).getFile());
+				final File scanner = new File(URLDecoder.decode(base.get(0).getFile()));
 				found = scanner.listFiles(new FileFilter() {
 					@Override
 					public boolean accept(File file) {
@@ -332,7 +333,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	 */
 	private File getBaseDir() {
 		final URL base = JRLoader.getResource( "/"); // получение главного каталога
-		return new File(base.getFile()); // NPE скажет о проблемах, т.к. базовый каталог обязан существовать
+		return new File(URLDecoder.decode(base.getFile())); // NPE скажет о проблемах, т.к. базовый каталог обязан существовать
 	}
 
 	/**
