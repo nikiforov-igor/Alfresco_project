@@ -23,6 +23,7 @@ function getRecords(codes) {
         var result = remote.connect("alfresco").get(url);
         if (result.status != 200) {
             AlfrescoUtil.error(result.status, 'Could not get records for the types: ' + refs);
+            return [];
         }
         return eval('(' + result + ')');
     }

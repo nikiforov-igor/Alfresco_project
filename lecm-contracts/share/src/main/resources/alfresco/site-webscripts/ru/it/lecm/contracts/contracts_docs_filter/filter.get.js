@@ -6,7 +6,11 @@ function getFilters(filterType) {
         var type = xmlFilter.@type.toString();
         var value = xmlFilter.@value.toString();
         var url = "/lecm/contracts/additionalDocsCount?type=" + value;
-        var addDocs = eval("(" + remote.connect("alfresco").get(stringUtils.urlEncodeComponent(url)) + ")");
+        var addDocsStr = remote.connect("alfresco").get(stringUtils.urlEncodeComponent(url));
+        var addDocs = [];
+        if (addDocsStr.status == 200) {
+            addDocs = eval("(" + addDocsStr + ")");
+        }
         var count = addDocs.length;
         filters.push(
             {
