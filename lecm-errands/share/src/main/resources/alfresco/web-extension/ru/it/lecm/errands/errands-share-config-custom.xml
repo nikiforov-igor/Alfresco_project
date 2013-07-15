@@ -35,8 +35,6 @@
                     <show id="lecm-errands:start-date"/>
                     <!-- Исполнить точно в срок  -->
                     <show id="lecm-errands:just-in-time"/>
-                    <!-- Свернута ли форма  -->
-                    <show id="lecm-errands:is-short"/>
                 </field-visibility>
                 <appearance>
                     <set id="main" appearance="" />
@@ -91,9 +89,6 @@
                     <field id="lecm-errands:coexecutors-assoc" set="collapsable"/>
                     <field id="lecm-errands:start-date" set="collapsable"/>
                     <field id="lecm-errands:just-in-time" set="collapsable"/>
-                    <field id="lecm-errands:is-short" set="collapsable">
-                        <control template="/org/alfresco/components/form/controls/checkbox.ftl"/>
-                    </field>
                 </appearance>
             </form>
             <form id="document-dashlet">
