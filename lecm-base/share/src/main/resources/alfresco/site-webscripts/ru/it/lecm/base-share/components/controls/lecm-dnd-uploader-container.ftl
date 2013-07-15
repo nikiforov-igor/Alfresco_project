@@ -23,5 +23,6 @@
 
 	<div id="${fieldHtmlId}-uploader-block" style="width: 250px; border: 1px solid; margin-left: 450px; height: 100px; text-align: center;">
 		${msg("label.add-file")}
+		<img id="${fieldHtmlId}-uploader-button" src="/share/res/components/images/add-icon-16.png" alt="" style="cursor: pointer">
 	</div>
 </#macro>

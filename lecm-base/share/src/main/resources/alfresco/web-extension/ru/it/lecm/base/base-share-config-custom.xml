@@ -130,6 +130,7 @@
 	            <js src="/scripts/lecm-base/components/lecm-dnd-uploader-control.js" />
 	            <js src="/scripts/lecm-base/components/lecm-dnd-uploader.js" />
 	            <js src="/scripts/lecm-base/components/lecm-dnd-upload.js" />
+	            <js src="/scripts/lecm-base/components/lecm-uploader-initializer.js" />
 	            <css src="/components/upload/dnd-upload.css" />
             </dependencies>
 

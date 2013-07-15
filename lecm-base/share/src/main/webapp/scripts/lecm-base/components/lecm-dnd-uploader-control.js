@@ -38,11 +38,16 @@ LogicECM.control = LogicECM.control || {};
 				directoryName: true
 			},
 
-			onReady:function () {
+			rootNodeRef: null,
+
+			fileUpload: null,
+
+				onReady:function () {
 				if (!this.options.disabled) {
+					LogicECM.LecmUploaderInitializer.initLecmUploaders();
 					this.loadRootNode();
 
-					YAHOO.Bubbling.on("metadataRefresh", this.onMetadataRefresh, this);
+					Event.on(this.id + "-uploader-button", "click", this.showUploader, null, this);
 				}
 			},
 
@@ -57,7 +62,8 @@ LogicECM.control = LogicECM.control || {};
 							fn: function (response) {
 								var oResults = response.json;
 								if (oResults != null) {
-									this.initUploader(oResults.nodeRef);
+									this.rootNodeRef = oResults.nodeRef;
+									this.initUploader();
 								}
 							},
 							scope: this
@@ -91,35 +97,64 @@ LogicECM.control = LogicECM.control || {};
 				return params;
 			},
 
-			initUploader: function(destination) {
+			showUploader: function () {
+				if (this.rootNodeRef != null) {
+					if (this.fileUpload == null)
+					{
+						this.fileUpload = Alfresco.getFileUploadInstance();
+					}
+
+					var uploadConfig =
+					{
+						destination: this.rootNodeRef,
+						filter: [],
+						mode: this.options.multipleMode ? this.fileUpload.MODE_MULTI_UPLOAD : this.fileUpload.MODE_SINGLE_UPLOAD,
+						thumbnails: "doclib",
+						onFileUploadComplete:
+						{
+							fn: this.fileUploadComplete,
+							scope: this
+						}
+					};
+					this.fileUpload.show(uploadConfig);
+				}
+			},
+
+			initUploader: function() {
 				var uploader = new LogicECM.DndUploader(this.id + "-uploader-block");
 				uploader.initUploader({
 					disabled: this.options.disabled,
 					directoryName: this.options.directoryName,
-					destination: destination,
-					multipleMode: this.options.multipleMode
+					destination: this.rootNodeRef,
+					multipleMode: this.options.multipleMode,
+					onFileUploadComplete:
+					{
+						fn: this.fileUploadComplete,
+						scope: this
+					}
 				});
 			},
 
-			onMetadataRefresh: function(e, obj) {
-				if (obj != null) {
-					if (obj[1] != null && obj[1].files != null) {
-						var files = obj[1].files;
+			fileUploadComplete: function(obj) {
+				if (obj.successful != null && obj.successful.length > 0) {
+					var elAdded = Dom.get(this.id + "-added");
+					var elAttachments = Dom.get(this.id + "-attachments");
 
-						var elAdded = Dom.get(this.id + "-added");
-						var elAttachments = Dom.get(this.id + "-attachments");
+					for (var i = 0; i < obj.successful.length; i++) {
+						var fileName = obj.successful[i].fileName;
+						var nodeRef = obj.successful[i].nodeRef;
 
-						for (var i = 0; i < files.length; i++) {
-							if (elAttachments != null) {
-								var fileName = files[i].name;
-								var icon = Alfresco.util.getFileIcon(fileName, "cm:content", 16);
-								var iconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + icon +"'/>";
+						if (elAttachments != null) {
+							var icon = Alfresco.util.getFileIcon(fileName, "cm:content", 16);
+							var iconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + icon +"'/>";
 
-								elAttachments.innerHTML += "<li>" + iconHtml + fileName + "</li>";
+							elAttachments.innerHTML += "<li>" + iconHtml + fileName + "</li>";
+						}
+						if (elAdded != null) {
+							if (elAdded.value.length > 0) {
+								elAdded.value += ',';
 							}
-							if (elAdded != null) {
-								elAdded.value += ( i < files.length-1 ? files[i].nodeRef + ',' : files[i].nodeRef );
-							}
+							elAdded.value += nodeRef;
 						}
 					}
 				}

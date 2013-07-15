@@ -59,7 +59,7 @@ LogicECM.control = LogicECM.control || {};
 			this.options.controlId = this.id + '-cntrl';
 
 			if (!this.options.disabled) {
-				this.setUploaders();
+				LogicECM.LecmUploaderInitializer.initLecmUploaders();
 				this.loadRootNode();
 
 				this.widgets.uploadButton =  new YAHOO.widget.Button(
@@ -81,43 +81,6 @@ LogicECM.control = LogicECM.control || {};
                     imageContainer.innerHTML = '<span class="'+ className+'-text">' + this.msg('message.upload.not-loaded') + '</span>';
                 }
             }
-		},
-
-		setUploaders: function() {
-			var uploadersContainer = Dom.get("lecm-controls-file-uploaders");
-			if (uploadersContainer == null) {
-				uploadersContainer = document.createElement("div");
-				uploadersContainer.id = "lecm-controls-file-uploaders";
-				document.body.appendChild(uploadersContainer);
-
-				this.setUploader("components/upload/html-upload", "lecm-controls-html-uploader", uploadersContainer);
-				this.setUploader("components/upload/flash-upload", "lecm-controls-flash-uploader", uploadersContainer);
-				this.setUploader("components/upload/file-upload", "lecm-controls-file-uploader", uploadersContainer);
-			}
-		},
-
-		setUploader: function(url, containerId, uploadersContainer) {
-			if (Dom.get(containerId) == null) {
-				var container = document.createElement("div");
-				container.id = containerId;
-				uploadersContainer.appendChild(container);
-			}
-			Alfresco.util.Ajax.request(
-				{
-					url: Alfresco.constants.URL_SERVICECONTEXT + url,
-					dataObj: {
-						htmlid: containerId
-					},
-					successCallback: {
-						fn:function(response){
-							Dom.get(containerId).innerHTML = response.serverResponse.responseText;
-						},
-						scope: this
-					},
-					failureMessage: this.msg("message.failure"),
-					scope: this,
-					execScripts: true
-				});
 		},
 
 		loadRootNode: function () {

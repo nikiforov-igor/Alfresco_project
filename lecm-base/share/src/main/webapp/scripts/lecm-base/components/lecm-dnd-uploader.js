@@ -29,7 +29,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 				destination: null,
 
-				multipleMode: true
+				multipleMode: true,
+
+				onFileUploadComplete: null
 			},
 
 			dragEventRefCount: 0,
@@ -41,39 +43,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				this.container = Dom.get(this.id);
 
 				if (!this.config.disabled) {
-					this.setDndUploader();
+					LogicECM.LecmUploaderInitializer.initLecmDndUploader();
 
 					Event.addListener(this.container, "dragenter", this.onDragEnter, this, true);
 					Event.addListener(this.container, "dragover", this.onDragOver, this, true);
 					Event.addListener(this.container, "dragleave", this.onDragLeave, this, true);
 					Event.addListener(this.container, "drop", this.onDrop, this, true);
-				}
-			},
-
-			setDndUploader: function() {
-				var uploaderContainerId = "lecm-controls-dnd-uploader";
-				var dndUploaderContainer = Dom.get(uploaderContainerId);
-				if (dndUploaderContainer == null) {
-					dndUploaderContainer = document.createElement("div");
-					dndUploaderContainer.id = uploaderContainerId;
-					document.body.appendChild(dndUploaderContainer);
-
-					Alfresco.util.Ajax.request(
-						{
-							url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/dnd-upload",
-							dataObj: {
-								htmlid: uploaderContainerId
-							},
-							successCallback: {
-								fn:function(response){
-									dndUploaderContainer.innerHTML = response.serverResponse.responseText;
-								},
-								scope: this
-							},
-							failureMessage: this.msg("message.failure"),
-							scope: this,
-							execScripts: true
-						});
 				}
 			},
 
@@ -179,7 +154,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								destination: this.config.destination,
 								filter: [],
 								mode: this.config.multipleMode ? progressDialog.MODE_MULTI_UPLOAD : progressDialog.MODE_SINGLE_UPDATE,
-								thumbnails: "doclib"
+								thumbnails: "doclib",
+								onFileUploadComplete: this.config.onFileUploadComplete
 							};
 
 							progressDialog.show(uploadConfig);
