@@ -61,7 +61,7 @@
 
 				<!-- Дата и время начала отсутствия сотрудника -->
 				<property name="lecm-absence:begin">
-					<type>d:date</type>
+					<type>d:datetime</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
@@ -71,7 +71,7 @@
 				</property>
 				<!-- Дата и время окончания отсутствия -->
 				<property name="lecm-absence:end">
-					<type>d:date</type>
+					<type>d:datetime</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
