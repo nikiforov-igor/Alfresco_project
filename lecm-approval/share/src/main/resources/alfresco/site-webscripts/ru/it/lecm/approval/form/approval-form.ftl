@@ -489,34 +489,6 @@
         },
 
         /**
-         * Получает ссылку на корневую папку списков согласования
-         */
-        _getListsFolderRef: function() {
-            function onSuccess( result, textStatus, jqXHR ) {
-                this.constants.LISTS_FOLDER_REF = result.approvalListFolderRef;
-            }
-
-            function onFailure( jqXHR, textStatus, errorThrown ) {
-                Alfresco.util.PopupManager.displayMessage({
-                    text: "Не удалось получить ссылку на корневую папку списков согласования"
-                });
-            }
-
-			// Yahoo UI не умеет синхронный (блокирующий) AJAX. Придется использовать jQuery
-			jQuery.ajax({
-				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/getCurrentUserApprovalListFolder",
-				type: "POST",
-				timeout: 60000, // 60 секунд таймаута хватит всем!
-				async: false, // ничего не делаем, пока не отработал запрос
-				dataType: "json",
-				contentType: "application/json",
-				processData: false, // данные не трогать, не кодировать вообще
-				success: onSuccess,
-				error: onFailure
-			});
-        },
-
-        /**
          * Заполняет dropDownList перечнем сохранённых списков согласования
          *
          * @method fillApprovalListMenu
@@ -910,33 +882,56 @@
         onReady: function approvalForm_onReady() {
             Alfresco.util.PopupManager.zIndex = 9000;
 
-            this._getListsFolderRef();
+            Alfresco.util.Ajax.request({
+                method: "POST",
+                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/getCurrentUserApprovalListFolder",
+                requestContentType: "application/json",
+                responseContentType: "application/json",
+                successCallback: {
+                    fn: onSuccess,
+                    scope: this
+                },
+                failureCallback: {
+                    fn: onFailure,
+                    scope: this
+                }
+            });
 
-            // Подписки через Bubbling
-            this._addBubblingLayers();
+            function onSuccess( response ) {
+                this.constants.LISTS_FOLDER_REF = response.json.approvalListFolderRef;
 
-            // Инициализация кнопок
-            this._initApprovalTypeRadioButtons();
-            this._initAddAssigneeButton();
-            this._initDeleteAssigneesListButton();
-            this._initNewAssigneesListButton();
-            this._initComputeTermsButton();
+                // Подписки через Bubbling
+                this._addBubblingLayers();
 
-            // Инициализация меню выбора списка согласующих
-            this._initSelectApprovalListMenu();
+                // Инициализация кнопок
+                this._initApprovalTypeRadioButtons();
+                this._initAddAssigneeButton();
+                this._initDeleteAssigneesListButton();
+                this._initNewAssigneesListButton();
+                this._initComputeTermsButton();
 
-            // Инициализация таблицы
-            this._initDatagrid();
+                // Инициализация меню выбора списка согласующих
+                this._initSelectApprovalListMenu();
 
-            // Подписки
-            this._initEvents();
-            this._initValidation();
+                // Инициализация таблицы
+                this._initDatagrid();
 
-            // "Деструктор"
-            this._initDestructor();
+                // Подписки
+                this._initEvents();
+                this._initValidation();
 
-            // Заполнение перечня списков согласующих
-            this.fillApprovalListMenu( null );
+                // "Деструктор"
+                this._initDestructor();
+
+                // Заполнение перечня списков согласующих
+                this.fillApprovalListMenu( null );
+            }
+
+            function onFailure() {
+                Alfresco.util.PopupManager.displayMessage({
+                    text: "Не удалось получить ссылку на корневую папку списков согласования, попробуйте переоткрыть форму"
+                });
+            }
         }
     };
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
