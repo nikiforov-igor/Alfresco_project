@@ -1,2 +1,5 @@
 model.hasPermission = true;
-model.settings = remote.connect("alfresco").get("/lecm/contracts/settings");
+var contractsSettings = remote.connect("alfresco").get("/lecm/contracts/settings");
+if (contractsSettings.status == 200) {
+    model.settings = contractsSettings;
+}

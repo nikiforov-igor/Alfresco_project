@@ -15,8 +15,11 @@ function main()
     }
 
     var jsonStr= remote.connect("alfresco").get("/lecm/business-journal/api/getArchiverSettings");
-    var obj = eval("("+ jsonStr + ")");
-    var archDepth = obj["archiverDeep"];
+    var archDepth = 30;
+    if (jsonStr.status == 200) {
+        var obj = eval("("+ jsonStr + ")");
+        archDepth = obj["archiverDeep"];
+    }
 
     var date = new Date();
     date.setDate(date.getDate() - archDepth);

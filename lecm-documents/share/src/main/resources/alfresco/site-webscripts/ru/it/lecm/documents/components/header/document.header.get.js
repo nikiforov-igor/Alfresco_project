@@ -34,8 +34,12 @@ function main() {
         // Get the user name of the person to get
         var login = user.id;
         var url = '/lecm/security/api/isAdmin?login=' + login;
-        var result = eval('('+remote.connect("alfresco").get(url)+')');
-        var isAdmin = result.isAdmin;
+        var isAdmin = false;
+        var isAdminResponse = remote.connect("alfresco").get(url);
+        if (isAdminResponse.status == 200) {
+            var result = eval('(' + isAdminResponse + ')');
+            isAdmin = result.isAdmin;
+        }
         model.isAdmin = isAdmin;
     }
 }
