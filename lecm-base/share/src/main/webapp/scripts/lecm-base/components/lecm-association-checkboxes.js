@@ -151,8 +151,9 @@ LogicECM.module = LogicECM.module || {};
 						var node = results[i];
 						if (node.selectable) {
 							var select = "false";
-							if (node[this.options.defaultSelectProperty] != null) {
-								select = node[this.options.defaultSelectProperty];
+							var defaultSelect = node[this.options.defaultSelectProperty.replace(":", "_")];
+							if (defaultSelect != null) {
+								select = defaultSelect;
 							}
 
 							this.dataArray.push({
