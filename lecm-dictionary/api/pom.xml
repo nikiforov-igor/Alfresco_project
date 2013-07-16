@@ -15,9 +15,6 @@
     <name>Logic ECM Dictionary Repo API</name>
 
     <description>Dictionary Repo project</description>
-    <properties>
-        <module.log.level>debug</module.log.level>
-    </properties>
 
     <dependencies>
         <dependency>

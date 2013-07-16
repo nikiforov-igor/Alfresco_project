@@ -39,9 +39,6 @@
        buildnumber-maven-plugin. This requires a scm connection.
    -->
     <description>OrgStructure Repo project</description>
-    <properties>
-        <module.log.level>debug</module.log.level>
-    </properties>
     <!--
        need to list these as a provided so that Maven doesn't download them
        and include them in the AMP, they are provided by Alfresco
