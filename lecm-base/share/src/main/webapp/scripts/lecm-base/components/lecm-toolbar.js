@@ -170,6 +170,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var datagrid = args[1].datagrid;
                 if ((!this.options.bubblingLabel || !datagrid.options.bubblingLabel) || this.options.bubblingLabel == datagrid.options.bubblingLabel) {
                     this.modules.dataGrid = datagrid;
+                    YAHOO.Bubbling.unsubscribe("initDatagrid", BaseToolbar_onInitDataGrid, this);
                 }
             },
 
