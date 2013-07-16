@@ -1232,7 +1232,9 @@
                                                         <properties>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value>//Здесь будет скрипт</value>
+                                                                <value>//stub if
+                                                                    (doc.hasCategoryAttachment("Исполнение")) {};
+                                                                </value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
