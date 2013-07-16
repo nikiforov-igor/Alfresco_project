@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+	<bean id="br5.semantic.modelBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="br5.integration.DocumentBr5AspectPolicy" class="ru.it.lecm.br5.semantic.policies.DocumentBr5AspectPolicy" init-method="init" depends-on="br5.semantic.modelBootstrap">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
+	<bean id="br5.semantic.Br5IntegrationWebScriptBean" parent="baseScript" class="ru.it.lecm.br5.semantic.webscripts.Br5IntegrationWebScriptBean">
+		<property name="extensionName">
+			<value>integration</value>
+		</property>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
+</beans>
