@@ -241,9 +241,10 @@
             // инициализирует formRuntime и отписываемся от beforeFormRuntimeInit.
             Bubbling.on( "afterFormRuntimeInit", function onAfterFormRuntimeInit( layer, args ) {
                 var eventGroup = args[ 1 ].eventGroup;
-                if( eventGroup === "workflow-form-form" ) {
-                    var workflowForm = ComponentManager.get( "workflow-form" );
-                    that.workflowForm = ComponentManager.get( "workflow-form" ).form;
+                if( eventGroup === "${formId}" ) {
+                    // Документ || My Tasks
+                    var workflowForm = ComponentManager.get( "${htmlId}" ) || ComponentManager.get( "${formId}" );
+                    that.workflowForm = workflowForm.form || workflowForm.formsRuntime;
 
                     YAHOO.Bubbling.unsubscribe( "beforeFormRuntimeInit", workflowForm.onBeforeFormRuntimeInit, workflowForm );
                     YAHOO.Bubbling.unsubscribe( "afterFormRuntimeInit", onAfterFormRuntimeInit );
@@ -290,8 +291,6 @@
                         scope: this
                     }
                 });
-
-                debugger;
 
                 this.widgets.addAssigneesListForm.show();
 
@@ -373,8 +372,6 @@
             _onDeleteAssigneesListButtonClick: function approvalForm_onDeleteAssigneesListButtonClick( event ) {
                 var currentSelectedListRef = this.widgets.$assigneesListSelectElem.attr( "value" );
 
-                debugger;
-
                 if( currentSelectedListRef.indexOf( "workspace://" ) === -1 ) {
                     return false;
                 }
@@ -415,8 +412,6 @@
             _onComputeTermsButtonClick: function approvalForm_onComputeTermsButtonClick() {
                 var currentSelectedListRef = this.widgets.$assigneesListSelectElem.val(),
                         selectedDate = this.widgets.calendar.getSelectedDates()[ 0 ];
-
-                debugger;
 
                 if( currentSelectedListRef.indexOf( "workspace://" ) === -1 ) {
                     return false;
@@ -788,18 +783,19 @@
          */
         _hookCalendar: function approvalForm_hookCalendar( layer, args ) {
             //var i;
+            Bubbling.unsubscribe( "registerValidationHandler", this._hookCalendar, this );
 
             function getYahooDateString( date ) {
                 return ( date.getMonth() + 1 ) + "/" + date.getDate() + "/" + date.getFullYear();
             }
 
-            if( args[ 1 ].fieldId === "workflow-form_prop_bpm_workflowDueDate-cntrl-date" ) {
+            if( args[ 1 ].fieldId === "${htmlId}_prop_bpm_workflowDueDate-cntrl-date" ) {
 
                 var zeroDate = new Date( 0 ),
                         todayDate = new Date(),
                         restrictedRange = getYahooDateString( zeroDate ) + "-" + getYahooDateString( todayDate );
 
-                this.widgets.datepicker = ComponentManager.get( "workflow-form_prop_bpm_workflowDueDate-cntrl" );
+                this.widgets.datepicker = ComponentManager.get( "${htmlId}_prop_bpm_workflowDueDate-cntrl" );
                 this.widgets.calendar = this.widgets.datepicker.widgets.calendar;
 
                 this.widgets.calendar.addRenderer( restrictedRange, this.widgets.calendar.renderCellStyleHighlight3 );
@@ -830,8 +826,14 @@
         _initDestructor: function approvalForm_initDestructor() {
             var that = this,
                     componentsList = ComponentManager.list(),
-                    form = ComponentManager.get( "workflow-form" ),
+                    form = ComponentManager.get( "${htmlId}" ),
                     formIndex = componentsList.indexOf( form ); // IE9+
+
+            // На странице My Tasks будет Memory Leak, так как дестуктор вызываться не будет.
+            // TODO: Универсальный деструктор для разных форм.
+            if( form === null ) {
+                return;
+            }
 
             function Destructor() {
                 var assigneesSet = that.widgets.assigneesDatagrid.widgets.dataTable.getRecordSet(),
