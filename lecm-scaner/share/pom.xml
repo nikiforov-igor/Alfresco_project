@@ -36,7 +36,7 @@
 	 <dependency>
 	  <groupId>ru.it.lecm.base</groupId>
 	  <artifactId>base-repo-api</artifactId>
-	  <version>0.1.0</version>
+	  <version>${platform.version}</version>
 	  <type>jar</type>
 	 </dependency>
 	</dependencies>
