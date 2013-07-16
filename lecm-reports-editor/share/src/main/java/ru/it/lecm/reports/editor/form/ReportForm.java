@@ -29,6 +29,18 @@ import java.util.Map;
 public class ReportForm extends FormUIGet {
     private ReportManagerApi reportManager;
 
+    private enum AlfrescoTypes {
+        d_text,
+        d_int,
+        d_float,
+        d_long,
+        d_boolean,
+        d_date,
+        d_datetime,
+        d_any,
+        d_double
+    }
+
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         return super.executeImpl(req, status, cache);
@@ -68,6 +80,8 @@ public class ReportForm extends FormUIGet {
                 Field field = generateFieldModel(column, typedValue);
                 if (field != null) {
                     fields.put(column.getColumnName(), field);
+                    FieldPointer fieldPointer = new FieldPointer(field.getId());
+                    set.addChild(fieldPointer);
                 }
             }
         }
@@ -84,20 +98,19 @@ public class ReportForm extends FormUIGet {
                 field = new Field();
 
                 field.setId(column.getColumnName());
-                field.setName(column.getColumnName());
-                field.setLabel("Название параметра");
-                field.setDescription("Название параметра");
+                field.setName(column.getL18items().get("RU-RU"));
+                field.setLabel(column.getL18items().get("RU-RU"));
+                field.setDescription(column.getL18items().get("RU-RU"));
 
                 processFieldControl(field, column, typedValue);
                 field.setDataKeyName(column.getColumnName());
 
-                //TODO изменить метод!
-                String dataType = column.getDataType().toString();
+                String dataType = column.getAlfrescoType();
+                field.setType(isNotAssoc(dataType) ? "property" : "association");
+
                 dataType = dataType.startsWith("d:") ? dataType.replace("d:", "") : dataType;
                 field.setDataType(dataType);
-                field.setType(isNotAssoc(column.getDataType().toString()) ? "property" : "association");
-
-                field.setValue(null);
+                field.setValue("");
             }
         } catch (JSONException je) {
             field = null;
@@ -119,16 +132,19 @@ public class ReportForm extends FormUIGet {
         if (defaultControls == null) {
             throw new WebScriptException("Failed to locate default controls configuration");
         }
+        String alfrescoType = column.getAlfrescoType();
 
-        boolean isPropertyField = isNotAssoc(column.getDataType().toString());
+        if (alfrescoType != null && alfrescoType.isEmpty()) {
+            return;
+        }
+        boolean isPropertyField = isNotAssoc(alfrescoType);
 
         Control defaultControlConfig;
         if (isPropertyField) {
-            defaultControlConfig = defaultControls.getItems().get(column.getDataType().toString());
+            defaultControlConfig = defaultControls.getItems().get(alfrescoType);
 
             if (defaultControlConfig == null) {
-                defaultControlConfig = defaultControls.getItems().get(
-                        OLD_DATA_TYPE_PREFIX + column.getDataType().toString());
+                defaultControlConfig = defaultControls.getItems().get(alfrescoType.replace("d:", ""));
             }
         } else {
             defaultControlConfig = defaultControls.getItems().get(
@@ -163,7 +179,7 @@ public class ReportForm extends FormUIGet {
     }
 
     private boolean isNotAssoc(String typeKey) {
-        return true;
+        return typeKey != null && AlfrescoTypes.valueOf(typeKey.replaceAll(":", "_")) != null;
     }
 
     public void setReportManager(ReportManagerApi reportManager) {

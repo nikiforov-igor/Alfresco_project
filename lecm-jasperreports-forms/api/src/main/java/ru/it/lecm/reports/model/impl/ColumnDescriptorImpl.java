@@ -26,8 +26,9 @@ public class ColumnDescriptorImpl
 	private FlagsExtendable flagsExtendable;
 	private String expression;
 	private boolean special = false;
+    private String alfrescoType;
 
-	public ColumnDescriptorImpl() {
+    public ColumnDescriptorImpl() {
 		super();
 	}
 
@@ -194,7 +195,17 @@ public class ColumnDescriptorImpl
 		this.parameterTypedValue = value;
 	}
 
-	@Override
+    @Override
+    public String getAlfrescoType() {
+        return this.alfrescoType;
+    }
+
+    @Override
+    public void setAlfrescoType(String alfrescoType) {
+        this.alfrescoType = alfrescoType;
+    }
+
+    @Override
 	public Set<NamedValue> flags() {
 		return flagsExtendable().flags();
 	}

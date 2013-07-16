@@ -18,7 +18,6 @@ public class ParameterTypedValueImpl
 	private Object[] bounds;
 	private Type type = Type.VALUE;
 	private boolean required = false;
-	private String alfrescoType;
 	private AlfrescoAssocInfo alfrescoAssoc;
 
 	public ParameterTypedValueImpl() {
@@ -103,16 +102,6 @@ public class ParameterTypedValueImpl
 	@Override
 	public void setBound2(Object value) {
 		this.bounds()[1] = value;
-	}
-
-	@Override
-	public String getAlfrescoType() {
-		return alfrescoType;
-	}
-
-	@Override
-	public void setAlfrescoType(String alfrescoType) {
-		this.alfrescoType = alfrescoType;
 	}
 
 	@Override

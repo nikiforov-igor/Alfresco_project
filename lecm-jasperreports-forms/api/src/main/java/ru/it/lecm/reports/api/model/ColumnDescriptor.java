@@ -40,4 +40,7 @@ public interface ColumnDescriptor
 
 	ParameterTypedValue getParameterValue();
 	void setParameterValue(ParameterTypedValue value);
+
+    String getAlfrescoType();
+    void setAlfrescoType(String alfrescoType);
 }

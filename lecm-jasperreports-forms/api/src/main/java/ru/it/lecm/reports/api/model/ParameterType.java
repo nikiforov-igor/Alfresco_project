@@ -29,10 +29,6 @@ public interface ParameterType extends Mnemonicable, L18able {
 	L18able getPrompt2();
 	void setPrompt2(L18able value);
 
-	/** связанный тип параметра альфреско */
-	String getAlfrescoType();
-	void setAlfrescoType(String alfrescoType);
-
 	AlfrescoAssocInfo getAlfrescoAssoc();
 	void setAlfrescoAssoc(AlfrescoAssocInfo assoc);
 

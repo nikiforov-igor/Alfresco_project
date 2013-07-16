@@ -38,6 +38,12 @@
                 scope: this
             },
             ajaxSubmitMethod: "GET",
+            doBeforeAjaxRequest: {
+                fn: function (form) {
+                    form.method = "GET";
+                    return true;
+                }
+            },
             onSuccess: {
                 fn: function ContractReports_onSuccess(response) {
                     window.open(window.location.protocol + "//" + window.location.host + response.serverResponse.responseText, "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");

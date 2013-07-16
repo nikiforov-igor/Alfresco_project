@@ -328,43 +328,42 @@ public class ReportDAOImpl implements ReportDAO {
 		return result;
 	}
 
-	protected void setProps_DataColumn(ColumnDescriptor result, NodeRef node) {
-		if (node == null)
-			return;
+    protected void setProps_DataColumn(ColumnDescriptor result, NodeRef node) {
+        if (node == null)
+            return;
 
-		PropertyCheck.mandatory (this, "services", services);
-		final NodeService nodeSrv =  getServices().getServiceRegistry().getNodeService();
-		final NamespaceService ns =  getServices().getServiceRegistry().getNamespaceService();
+        PropertyCheck.mandatory(this, "services", services);
+        final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
+        final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
 
+        final Map<QName, Serializable> map = nodeSrv.getProperties(node);
 
-		final Map<QName, Serializable> map = nodeSrv.getProperties(node);
+        if (map == null)
+            return;
 
-		if (map == null)
-			return;
+        result.setColumnName(getString(map, PROP_T_RDS_COLUMN_CODE));
+        setL18Name(result, map);
 
-		result.setColumnName( getString( map, PROP_T_RDS_COLUMN_CODE));
-		setL18Name(result, map);
+        result.setExpression(getString(map, PROP_T_RDS_COLUMN_EXPR));
 
-		result.setClassName( getString( map, PROP_T_RDS_COLUMN_CLASS));
-		result.setExpression( getString( map, PROP_T_RDS_COLUMN_EXPR));
+        result.setAlfrescoType(getString(map, PROP_T_RDS_COLUMN_CLASS));
+        // TODO: result.setSpecial( getBool(map, PROP_T_RDS_ISSPECIAL, false));
 
-		// TODO: result.setSpecial( getBool(map, PROP_T_RDS_ISSPECIAL, false));
+        // тип колонки ...
+        {
+            final NodeRef nodeColType = LucenePreparedQuery.getAssocTarget(node, ASSOC_RDS_COLUMN_TYPE, nodeSrv, ns);
+            final JavaDataType jdt = createColDataType(nodeColType);
+            result.setDataType(jdt);
+        }
 
-		// тип колонки ...
-		{
-			final NodeRef nodeColType = LucenePreparedQuery.getAssocTarget(node, ASSOC_RDS_COLUMN_TYPE, nodeSrv, ns);
-			final JavaDataType jdt = createColDataType( nodeColType);
-			result.setDataType(jdt);
-		}
+        // тип параметра для колонки ...
+        {
+            final NodeRef nodeColParType = LucenePreparedQuery.getAssocTarget(node, ASSOC_RDS_COLUMN_PARAMTYPE, nodeSrv, ns);
+            final ParameterTypedValue paramValue = createParameterTypeValue(nodeColParType);
+            result.setParameterValue(paramValue);
+        }
 
-		// тип параметра для колонки ...
-		{
-			final NodeRef nodeColParType = LucenePreparedQuery.getAssocTarget(node, ASSOC_RDS_COLUMN_PARAMTYPE, nodeSrv, ns);
-			final ParameterTypedValue paramValue = createParameterTypeValue( nodeColParType);
-			result.setParameterValue(paramValue);
-		}
-
-	}
+    }
 
 	private JavaDataType createColDataType(NodeRef nodeColType) {
 		if (nodeColType == null)

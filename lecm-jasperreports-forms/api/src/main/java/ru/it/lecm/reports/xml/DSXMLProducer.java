@@ -107,7 +107,7 @@ public class DSXMLProducer {
 
 	/* Класс по-умолчанию для колонки */
 	private final static String DEFAULT_COLUMN_JAVACLASS = String.class.getName();
-
+    private final static String DEFAULT_COLUMN_ALFRESCO_CLASS = "d:text";
 	/**
 	 * Создать контент ds-xml файл.
 	 * Сейчас изменяет секции '<field>' и '<property name="dataSource" value="java-class">'. 
@@ -488,37 +488,36 @@ public class DSXMLProducer {
 	 * @param column
 	 * @return
 	 */
-	private static Element xmlCreateColumnNode( Document doc, String nodeName, ColumnDescriptor column) 
-	{
-		if (column == null)
-			return null;
+    private static Element xmlCreateColumnNode(Document doc, String nodeName, ColumnDescriptor column) {
+        if (column == null)
+            return null;
 
-		final Element result = doc.createElement(nodeName);
+        final Element result = doc.createElement(nodeName);
 
-		result.setAttribute( XMLATTR_JR_FLDNAME, column.getColumnName());
-		result.setAttribute( XMLATTR_QUERY_FLDNAME, column.getExpression());
-		result.setAttribute( XMLATTR_DISPLAYNAME, column.get( "ru", ""));
+        result.setAttribute(XMLATTR_JR_FLDNAME, column.getColumnName());
+        result.setAttribute(XMLATTR_QUERY_FLDNAME, column.getExpression());
+        result.setAttribute(XMLATTR_DISPLAYNAME, column.get("ru", ""));
+        result.setAttribute(XMLATTR_PARAM_ALFRESCO_TYPE, column.getAlfrescoType() != null ? column.getAlfrescoType() : DEFAULT_COLUMN_ALFRESCO_CLASS);
+        // DONE: save map-locale {column.getL18Items} like addL18Name( doc, result, column);
+        XmlHelper.xmlAddL18Name(doc, result, column);
 
-		// DONE: save map-locale {column.getL18Items} like addL18Name( doc, result, column);
-		XmlHelper.xmlAddL18Name(doc, result, column);
+        // тип колонки ...
+        XmlHelper.xmlAddClassNameAttr(result, column, XMLATTR_VALUE_JAVACLASS, DEFAULT_COLUMN_JAVACLASS);
 
-		// тип колонки ...
-		XmlHelper.xmlAddClassNameAttr( result, column, XMLATTR_VALUE_JAVACLASS, DEFAULT_COLUMN_JAVACLASS);
+        // result.setAttribute( XMLATTR_INMAINDOC, column.flags("inMainDoc"));
 
-		// result.setAttribute( XMLATTR_INMAINDOC, column.flags("inMainDoc"));
+        // выгрузка остальных атрибутов ...
+        xmlAddFlagsAttributes(doc, result, column.flags(), STD_XML_FLD_ARGS);
 
-		// выгрузка остальных атрибутов ...
-		xmlAddFlagsAttributes( doc, result, column.flags(), STD_XML_FLD_ARGS);
+        // тип параметра для колонки ...
+        {
+            final Element nodeParameter = xmlCreateParameterNode(doc, XMLNODE_PARAMETER, column.getParameterValue());
+            if (nodeParameter != null)
+                result.appendChild(nodeParameter);
+        }
 
-		// тип параметра для колонки ...
-		{
-			final Element nodeParameter = xmlCreateParameterNode(doc, XMLNODE_PARAMETER, column.getParameterValue());
-			if (nodeParameter != null)
-				result.appendChild(nodeParameter);
-		}
-
-		return result;
-	}
+        return result;
+    }
 
 	/**
 	 * Загрузить список метаописаний полей из указанного документа
@@ -542,86 +541,91 @@ public class DSXMLProducer {
 			destColumns.addAll(newColumns);
 	}
 
-	public static List<ColumnDescriptor> parseColumns(List<Node> fieldsNodes, String info) {
-		if (fieldsNodes == null || fieldsNodes.isEmpty()) {
-			logger.warn( String.format( "ds xml %s does not contains any fields at %s[%s]", info, XMLNODE_LIST_FIELDS, XMLNODE_FIELD));
-			return null;
-		}
+    public static List<ColumnDescriptor> parseColumns(List<Node> fieldsNodes, String info) {
+        if (fieldsNodes == null || fieldsNodes.isEmpty()) {
+            logger.warn(String.format("ds xml %s does not contains any fields at %s[%s]", info, XMLNODE_LIST_FIELDS, XMLNODE_FIELD));
+            return null;
+        }
 
-		final LinkedHashMap<String, ColumnDescriptor> result = new LinkedHashMap<String, ColumnDescriptor>(10);
+        final LinkedHashMap<String, ColumnDescriptor> result = new LinkedHashMap<String, ColumnDescriptor>(10);
 
-		final StringBuilder sb = new StringBuilder();
-		int i = 0;
-		for (Node node: fieldsNodes) {
-			i++;
-			final Element fldNode = (Element) node;
+        final StringBuilder sb = new StringBuilder();
+        int i = 0;
+        for (Node node : fieldsNodes) {
+            i++;
+            final Element fldNode = (Element) node;
 
-			// FIELD_JR_FLDNAME
-			String jrFldname = "COL_"+ i; // default name for any field will be simple "col_nn"
-			if (fldNode.hasAttribute(XMLATTR_JR_FLDNAME)) {
-				final String sname = fldNode.getAttribute(XMLATTR_JR_FLDNAME);
-				if (sname != null && sname.length() > 0)
-					jrFldname = sname;
-			}
+            // FIELD_JR_FLDNAME
+            String jrFldname = "COL_" + i; // default name for any field will be simple "col_nn"
+            if (fldNode.hasAttribute(XMLATTR_JR_FLDNAME)) {
+                final String sname = fldNode.getAttribute(XMLATTR_JR_FLDNAME);
+                if (sname != null && sname.length() > 0)
+                    jrFldname = sname;
+            }
 
-			// корректировка названия колонки для гарантии уникальности имени 
-			{
-				String nameUnique = jrFldname;
-				int unique = 0;
-				while(result.containsKey(nameUnique)) { // название вида "ABC_n" появится только при неуникальности
-					unique++; // (!) нумерация колонок от единицы
-					nameUnique = jrFldname+ "_"+ unique;
-				}
-				if (unique > 0) 
-					logger.warn( String.format("Unique field name generated as '%s' (for base name '%s')", nameUnique, jrFldname));
-				jrFldname = nameUnique;
-			}
-			// добавление новой jr-колонки
-			final ColumnDescriptor column = new ColumnDescriptorImpl(jrFldname);
-			result.put( column.getColumnName(), column);
+            // корректировка названия колонки для гарантии уникальности имени
+            {
+                String nameUnique = jrFldname;
+                int unique = 0;
+                while (result.containsKey(nameUnique)) { // название вида "ABC_n" появится только при неуникальности
+                    unique++; // (!) нумерация колонок от единицы
+                    nameUnique = jrFldname + "_" + unique;
+                }
+                if (unique > 0)
+                    logger.warn(String.format("Unique field name generated as '%s' (for base name '%s')", nameUnique, jrFldname));
+                jrFldname = nameUnique;
+            }
+            // добавление новой jr-колонки
+            final ColumnDescriptor column = new ColumnDescriptorImpl(jrFldname);
+            result.put(column.getColumnName(), column);
 
-			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME)) {
-				final String queryFldName = fldNode.getAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME);
-				if (queryFldName != null && queryFldName.length() > 0)
-					column.setExpression( queryFldName);
-			}
+            if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME)) {
+                final String queryFldName = fldNode.getAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME);
+                if (queryFldName != null && queryFldName.length() > 0)
+                    column.setExpression(queryFldName);
+            }
 
-			// DISPLAY_NAME
-			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_DISPLAYNAME)) {
-				final String displayName = fldNode.getAttribute(DSXMLProducer.XMLATTR_DISPLAYNAME);
-				column.regItem("ru", displayName);
-			}
-			// result.setAttribute( XMLATTR_INMAINDOC, column.flags("inMainDoc"));
+            // DISPLAY_NAME
+            if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_DISPLAYNAME)) {
+                final String displayName = fldNode.getAttribute(DSXMLProducer.XMLATTR_DISPLAYNAME);
+                column.regItem("ru", displayName);
+            }
+            // result.setAttribute( XMLATTR_INMAINDOC, column.flags("inMainDoc"));
 
-			// DONE: restore map-locale
-			XmlHelper.parseL18( column, fldNode);
+            // DONE: restore map-locale
+            XmlHelper.parseL18(column, fldNode);
 
-			// JAVA_CLASS тип колонки ...
-			{
-				final String javaClass = XmlHelper.getClassNameAttr(fldNode, XMLATTR_JAVACLASS, DEFAULT_COLUMN_JAVACLASS);
-				column.setClassName(javaClass);
-			}
+            // JAVA_CLASS тип колонки ...
+            {
+                final String javaClass = XmlHelper.getClassNameAttr(fldNode, XMLATTR_VALUE_JAVACLASS, DEFAULT_COLUMN_JAVACLASS);
+                column.setClassName(javaClass);
+            }
 
-			// подгрузка остальных атрибутов ...
-			parseFlagsAttributes( column.flags(), fldNode.getChildNodes(), STD_XML_FLD_ARGS);
+            {
+                final String alfrescoClass = XmlHelper.getClassNameAttr(fldNode, XMLATTR_PARAM_ALFRESCO_TYPE, DEFAULT_COLUMN_ALFRESCO_CLASS);
+                column.setAlfrescoType(alfrescoClass);
+            }
 
-			// тип параметра для колонки ...
-			column.setParameterValue( parseParameterNode(fldNode, XMLNODE_PARAMETER));
+            // подгрузка остальных атрибутов ...
+            parseFlagsAttributes(column.flags(), fldNode.getChildNodes(), STD_XML_FLD_ARGS);
 
-			// журналирование
-			if (logger.isDebugEnabled())
-				sb.append( String.format( "got column/field %s: %s/%s [%s] '%s'"
-					, i, column.getColumnName(), column.getExpression(), column.className(), column.get(null, null)));
+            // тип параметра для колонки ...
+            column.setParameterValue(parseParameterNode(fldNode, XMLNODE_PARAMETER));
 
-		} //for
+            // журналирование
+            if (logger.isDebugEnabled())
+                sb.append(String.format("got column/field %s: %s/%s [%s] '%s'"
+                        , i, column.getColumnName(), column.getExpression(), column.className(), column.get(null, null)));
 
-		if (logger.isDebugEnabled()) {
-			sb.append( String.format( "load %d fields from %s", i, info)); 
-			logger.info( sb.toString());
-		}
+        } //for
 
-		return new ArrayList<ColumnDescriptor>(result.values());
-	}
+        if (logger.isDebugEnabled()) {
+            sb.append(String.format("load %d fields from %s", i, info));
+            logger.info(sb.toString());
+        }
+
+        return new ArrayList<ColumnDescriptor>(result.values());
+    }
 
 	private static Element xmlCreateParameterNode( Document doc,
 			String xmlNodeName, ParameterTypedValue parameter) 
@@ -635,9 +639,6 @@ public class DSXMLProducer {
 
 		if (parameter.getType() != null)
 			result.setAttribute( XMLATTR_PARAM_TYPE, parameter.getType().getMnemonic());
-
-		if (parameter.getAlfrescoType() != null)
-			result.setAttribute( XMLATTR_PARAM_ALFRESCO_TYPE, parameter.getAlfrescoType());
 
 		/* альфресковская ассоциация ... */
 		{
@@ -679,12 +680,6 @@ public class DSXMLProducer {
 
 		final ParameterTypedValueImpl result = new ParameterTypedValueImpl( );
 		XmlHelper.parseMnemAttr( result, nodeParameter);
-
-		{ /* альфресковский типа и ассоциация параметра */
-			if (nodeParameter.hasAttribute( XMLATTR_PARAM_ALFRESCO_TYPE)) {
-				result.setAlfrescoType( nodeParameter.getAttribute( XMLATTR_PARAM_ALFRESCO_TYPE) );
-			}
-		}
 
 		/* альфресковская ассоциация ... */
 		result.setAlfrescoAssoc( parseAssocNode(nodeParameter, XMLNODE_ALFRESCO_ASSOC));
