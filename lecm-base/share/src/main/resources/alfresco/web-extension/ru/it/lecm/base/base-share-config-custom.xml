@@ -117,6 +117,7 @@
                 <js src="/scripts/lecm-base/components/lecm-datarange.js" />
 	            <css src="/css/lecm-base/components/daterange.css" />
 	            <css src="/css/lecm-base/components/price-control.css" />
+	            <css src="/css/lecm-base/components/dnd-uploader-control.css" />
 	            <js src="/scripts/lecm-base/components/lecm-uploader-control.js" />
 	            <js src="/components/upload/html-upload.js" />
 	            <js src="/components/upload/file-upload.js" />
