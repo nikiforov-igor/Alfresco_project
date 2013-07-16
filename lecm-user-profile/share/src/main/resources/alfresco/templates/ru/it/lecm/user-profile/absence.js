@@ -1,3 +1,5 @@
 //скрипт для получения корневой (корневых) папок
 var absenceContainer = remote.connect("alfresco").get("/lecm/wcalendar/absence/get/container");
-model.absenceContainer = absenceContainer;
+if (absenceContainer.status == 200) {
+	model.absenceContainer = absenceContainer;
+}
