@@ -28,7 +28,10 @@ LogicECM.module.Approval.workflowFormValidator = function( field, args, event, f
         selectedDateString = field.value,
         selectedDate = Alfresco.util.fromISO8601( selectedDateString ), // 1970 for field.value === "", it's OK!
 
-        workflowForm = Alfresco.util.ComponentManager.get( "workflow-form-cntrl" ),
+        formId = form.formId,
+        formCntrlId = formId.slice( 0, formId.lastIndexOf("-form") ) + "-cntrl",
+
+        workflowForm = Alfresco.util.ComponentManager.get( formCntrlId ),
 
         assigneeData = null,
         assigneeDueDateProperty = "prop_lecm-al_assignees-item-due-date",
