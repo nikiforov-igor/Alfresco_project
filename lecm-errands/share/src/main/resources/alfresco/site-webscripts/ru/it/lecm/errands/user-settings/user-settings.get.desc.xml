@@ -1,5 +1,5 @@
 <webscript>
-    <shortname>errands-user0settings</shortname>
+    <shortname>errands-user-settings</shortname>
     <description>Errands user settings</description>
 	<url>/lecm/errands-user-settings/content</url>
 	<format default="html">extension</format>

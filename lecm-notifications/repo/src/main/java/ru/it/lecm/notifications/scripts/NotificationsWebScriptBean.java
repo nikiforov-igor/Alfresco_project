@@ -1,5 +1,6 @@
 package ru.it.lecm.notifications.scripts;
 
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -161,4 +162,8 @@ public class NotificationsWebScriptBean extends BaseWebScript {
         }
         return arrayList;
     }
+
+	public ScriptNode getCurrentUserSettingsNode() {
+		return new ScriptNode(service.getCurrentUserSettingsNode(), serviceRegistry, getScope());
+	}
 }

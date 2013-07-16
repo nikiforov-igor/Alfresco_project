@@ -1,8 +1,11 @@
 package ru.it.lecm.notifications.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
@@ -34,6 +37,8 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private Map<NodeRef, NotificationChannelBeanBase> channels;
 	private Map<String, NodeRef> channelsNodeRefs;
 	private LecmPermissionService lecmPermissionService;
+
+	private final Object lock = new Object();
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -328,5 +333,42 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return notificationsRootRef;
+	}
+
+	public NodeRef getCurrentUserSettingsNode() {
+		final NodeRef rootFolder = this.getServiceRootFolder();
+		final String settingsObjectName = authService.getCurrentUserName() + "_" + NOTIFICATIONS_SETTINGS_NODE_NAME;
+
+		NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+		if (settings != null) {
+			return settings;
+		} else {
+			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+				@Override
+				public NodeRef doWork() throws Exception {
+					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+						@Override
+						public NodeRef execute() throws Throwable {
+							NodeRef settingsRef;
+							synchronized (lock) {
+								settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+								if (settingsRef == null) {
+									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+									QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, settingsObjectName);
+									QName nodeTypeQName = TYPE_NOTIFICATIONS_USER_SETTINGS;
+
+									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+									properties.put(ContentModel.PROP_NAME, settingsObjectName);
+									ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+									settingsRef = associationRef.getChildRef();
+								}
+							}
+							return settingsRef;
+						}
+					});
+				}
+			};
+			return AuthenticationUtil.runAsSystem(raw);
+		}
 	}
 }

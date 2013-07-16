@@ -27,6 +27,20 @@
 		</property>
 	</bean>
 
+	<bean id="${groupId}.${artifactId}.notificationsSettingsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="${groupId}.${artifactId}.notificationsDictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-notifications-settings-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/notifications_settings</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="${groupId}.${artifactId}.notificationsTypesBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="businessJournalLogEventsPolicy,ru.it.lecm.notifications.notifications-repo.notificationsBootstrap">
 		<property name="dictionaries">
@@ -49,6 +63,7 @@
 		<property name="transactionService" ref="transactionService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
+		<property name="authService" ref="authenticationService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

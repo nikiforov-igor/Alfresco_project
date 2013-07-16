@@ -15,6 +15,7 @@ import java.util.List;
 public interface NotificationsService {
 	public static final String NOTIFICATIONS_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/1.0";
 	public static final String NOTIFICATIONS_TYPE_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/types/1.0";
+	public static final String NOTIFICATIONS_SETTINGS_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/settings/1.0";
 
 	public static final String NOTIFICATIONS_ROOT_NAME = "Сервис Уведомления";
 	public static final String NOTIFICATIONS_ROOT_ID = "NOTIFICATIONS_ROOT_ID";
@@ -43,6 +44,10 @@ public interface NotificationsService {
 	public final QName PROP_DESCRIPTION = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "description");
 	public final QName PROP_FORMING_DATE = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "forming-date");
 	public final QName ASSOC_RECIPIENT = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-assoc");
+
+	public static final QName TYPE_NOTIFICATIONS_USER_SETTINGS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "user");
+
+	public static final String NOTIFICATIONS_SETTINGS_NODE_NAME = "Settings";
 
 	/**
 	 * проверяет что объект является типом доставки уведомлений
@@ -79,4 +84,10 @@ public interface NotificationsService {
 	 * @return Ссылка на корневую директорию уведомлений
 	 */
 	public NodeRef getNotificationsRootRef();
+
+	/**
+	 * Получение настроект текущего пользователя
+	 * @return ссылка на объект пользовательских настроек
+	 */
+	public NodeRef getCurrentUserSettingsNode();
 }
