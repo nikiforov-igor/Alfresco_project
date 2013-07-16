@@ -75,6 +75,9 @@
         <platform.version>${project.version}</platform.version>
         <buildNumber>1</buildNumber>
         <client.debug>false</client.debug>
+
+        <module.log.level>info</module.log.level>
+        <repo.jscript.ScriptLogger>info</repo.jscript.ScriptLogger>
     </properties>
 
 	<modules>
@@ -484,6 +487,13 @@
             <modules>
                 <module>lecm-im</module>
             </modules>
+        </profile>
+        <profile>
+            <id>logger-all-debug</id>
+            <properties>
+                <module.log.level>debug</module.log.level>
+                <repo.jscript.ScriptLogger>debug</repo.jscript.ScriptLogger>
+            </properties>
         </profile>
     </profiles>
 
