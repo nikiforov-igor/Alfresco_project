@@ -1,7 +1,7 @@
 <#import "/org/alfresco/components/form/form.lib.ftl" as formLib />
 <#assign id=args.htmlid/>
 
-<div id="${id}-panel" class="details-panel">
+<div id="${id}-${set.id}-panel" class="details-panel">
     <#list set.children as item>
         <#if item.kind == "set">
             <#if item.template??>
@@ -14,18 +14,19 @@
         </#if>
     </#list>
 </div>
-<span id="${id}-title" class="collapse-details">
+<span id="${id}-${set.id}-title" class="collapse-details">
     ${msg("label.hide-details")}
 </span>
 <span></span><#-- Do not remove, it's useful line -->
 
 <script type="text/javascript">//<![CDATA[
+(function() {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event;
     var hideDetails = "${msg("label.hide-details")}",
         showDetails = "${msg("label.show-details")}";
-    var panelId = "${id}-panel";
-    var titleId = "${id}-title";
+    var panelId = "${id}-${set.id}-panel";
+    var titleId = "${id}-${set.id}-title";
 
     function init() {
         var title = Dom.get(titleId);
@@ -52,4 +53,5 @@
     }
 
     Event.onContentReady(panelId, init);
+}) ();
 //]]></script>
