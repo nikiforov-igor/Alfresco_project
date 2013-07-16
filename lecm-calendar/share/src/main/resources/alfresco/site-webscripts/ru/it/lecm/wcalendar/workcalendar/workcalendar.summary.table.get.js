@@ -30,7 +30,12 @@
 		endDate: DateToISO8601(finalDate)
 	};
 	var dataRaw = remote.connect("alfresco").post("/lecm/wcalendar/workCalendar/getSubordinatesWorkingDaysList", jsonUtils.toJSONString(reqBody), "application/json");
-	data = eval("(" + dataRaw + ")");
+
+	if (dataRaw.status == 200) {
+		data = eval("(" + dataRaw + ")");
+	} else {
+		data = [];
+	}
 
 	for (i = 0; i < daysNumber; i++) {
 		var month = today.getMonth();
