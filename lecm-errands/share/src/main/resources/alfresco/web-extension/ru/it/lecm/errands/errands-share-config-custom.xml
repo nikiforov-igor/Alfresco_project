@@ -172,7 +172,6 @@
                     <show id="lecm-errands:just-in-time"/>
                     <!-- Свернута ли форма  -->
                     <show id="lecm-errands:is-short"/>
-                    <show id="lecm-errands:execution-report"/>
                 </field-visibility>
                 <appearance>
                     <set id="main" appearance="" />
