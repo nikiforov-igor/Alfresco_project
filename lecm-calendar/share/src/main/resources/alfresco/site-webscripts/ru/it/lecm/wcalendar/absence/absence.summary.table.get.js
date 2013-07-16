@@ -21,6 +21,9 @@
 	var daysAmount = 30;
 
 	var absenceContainer = remote.connect("alfresco").get("/lecm/wcalendar/absence/get/container");
+	if (absenceContainer.status != 200) {
+		return;
+	}
 	var absenceContainerObj = jsonUtils.toObject(absenceContainer);
 
 	var reqBody = {
@@ -38,7 +41,11 @@
 
 	var dataRaw = remote.connect("alfresco").post("/lecm/wcalendar/absence/get/list/admin", jsonUtils.toJSONString(reqBody), "application/json");
 
-	data = eval("(" + dataRaw + ")");
+	if (dataRaw.status == 200) {
+		data = eval("(" + dataRaw + ")");
+	} else {
+		data = null;
+	}
 
 	if (data != null && data.totalRecords > 0) {
 		var employeesAbsences = {};
@@ -63,8 +70,13 @@
 				nodeRef: reasons[key].nodeRef
 			};
 			var responseRaw = remote.connect("alfresco").post("/lecm/wcalendar/absence/get/absenceReasonColor", jsonUtils.toJSONString(req), "application/json");
-			var response = eval("(" + responseRaw + ")");
-			reasons[key].color = response.color;
+			if (responseRaw.status == 200) {
+				var response = eval("(" + responseRaw + ")");
+				reasons[key].color = response.color;
+			} else {
+				reasons[key].color = "#000000";
+			}
+			
 		}
 
 		var today = new Date();
