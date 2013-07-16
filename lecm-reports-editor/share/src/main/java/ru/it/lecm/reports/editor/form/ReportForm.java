@@ -2,15 +2,20 @@ package ru.it.lecm.reports.editor.form;
 
 import org.alfresco.web.config.forms.*;
 import org.alfresco.web.scripts.forms.FormUIGet;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.extensions.webscripts.*;
+import org.springframework.extensions.webscripts.Cache;
+import org.springframework.extensions.webscripts.Status;
+import org.springframework.extensions.webscripts.WebScriptException;
+import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.manager.ReportManagerApi;
+import ru.it.lecm.reports.xml.DSXMLProducer;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,13 +27,7 @@ import java.util.Map;
  * Time: 15:28
  */
 public class ReportForm extends FormUIGet {
-
-    private static ScriptRemote scriptRemote;
-    private final static Log logger = LogFactory.getLog(ReportForm.class);
-
-    public void setScriptRemote(ScriptRemote scriptRemote) {
-        ReportForm.scriptRemote = scriptRemote;
-    }
+    private ReportManagerApi reportManager;
 
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
@@ -37,7 +36,7 @@ public class ReportForm extends FormUIGet {
 
     @Override
     protected Map<String, Object> generateModel(String itemKind, String itemId, WebScriptRequest request, Status status, Cache cache) {
-        ReportDescriptor descriptor = getReportDescriptor();
+        ReportDescriptor descriptor = getReportDescriptor(itemId);
 
         HashMap<String, Object> model = new HashMap<String, Object>();
         HashMap<String, Object> form = new HashMap<String, Object>();
@@ -153,12 +152,22 @@ public class ReportForm extends FormUIGet {
         field.setControl(control);
     }
 
-    private ReportDescriptor getReportDescriptor() {
-        return null;
+    private ReportDescriptor getReportDescriptor(String reportCode) {
+        InputStream xmlStream = null;
+        try {
+            xmlStream = reportManager.getDsXmlBytes(reportCode);
+            return DSXMLProducer.parseDSXML(xmlStream, reportCode);
+        } finally {
+            IOUtils.closeQuietly(xmlStream);
+        }
     }
 
     private boolean isNotAssoc(String typeKey) {
         return true;
+    }
+
+    public void setReportManager(ReportManagerApi reportManager) {
+        this.reportManager = reportManager;
     }
 
     public class Field extends Element {

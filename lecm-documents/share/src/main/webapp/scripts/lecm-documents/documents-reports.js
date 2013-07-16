@@ -3,7 +3,6 @@
 
     LogicECM.module.Documents.Reports.reportLinkClicked = function(element, param) {
         var reportCode = param.reportCode;
-        alert("Генерация формы в процессе разработки!"); return;
         var doBeforeDialogShow = function (p_form, p_dialog) {
             Alfresco.util.populateHTML(
                 [p_dialog.id + "-form-container_h", Alfresco.component.Base.prototype.msg("contracts.report." + reportCode + ".title")]

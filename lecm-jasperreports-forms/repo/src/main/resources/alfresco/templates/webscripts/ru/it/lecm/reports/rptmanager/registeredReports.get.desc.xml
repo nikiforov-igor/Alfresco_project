@@ -4,6 +4,5 @@
 	<description>Get content from report ds-xml file by report code (mnemonic)</description>
 	<!-- 2 args: docType; reportType -->
 	<url>/lecm/reports/rptmanager/registeredReports</url>
-	<authentication>user</authentication>
 	<format default="json">extension</format>
 </webscript>

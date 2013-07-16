@@ -3,6 +3,5 @@
 	<shortname>Get ds-xml file</shortname>
 	<description>Get content from report ds-xml file by report code (mnemonic)</description>
 	<url>/lecm/reports/rptmanager/dsXmlBytes?reportCode={reportCode}</url>
-	<authentication>user</authentication>
 	<format default="json">extension</format>
 </webscript>

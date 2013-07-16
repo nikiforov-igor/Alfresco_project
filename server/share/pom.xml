@@ -58,6 +58,13 @@
 			<type>war</type>
 		</dependency>
 
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>compile</scope>
+            <version>${slf4j.version}</version>
+        </dependency>
+
 		<dependency>
 			<groupId>ru.it.lecm.base</groupId>
 			<artifactId>base-share</artifactId>

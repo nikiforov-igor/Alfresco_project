@@ -259,4 +259,9 @@
 		  -->
 	</bean>
 
+    <bean id="webscript.ru.it.lecm.reports.rptmanager.dsxmlBytes.get"
+          class="ru.it.lecm.reports.xml.GetXmlConfig"
+          parent="webscript">
+        <property name="reportsManager" ref="reportsManager"/>
+    </bean>
 </beans>

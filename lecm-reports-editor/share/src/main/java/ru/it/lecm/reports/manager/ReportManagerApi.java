@@ -2,6 +2,7 @@ package ru.it.lecm.reports.manager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.ScriptRemote;
@@ -10,6 +11,13 @@ import org.springframework.extensions.webscripts.connector.ResponseStatus;
 
 import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ScriptApiReportManager;
+import ru.it.lecm.reports.api.model.ReportType;
+import ru.it.lecm.reports.model.impl.L18Value;
+import ru.it.lecm.reports.model.impl.ReportTypeImpl;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportManagerApi
 		implements ScriptApiReportManager
@@ -56,37 +64,41 @@ public class ReportManagerApi
 	}
 
 	@Override
-	public byte[] getDsXmlBytes(String reportCode) {
-		final String url = "/lecm/reports/rptmanager/dsXmlBytes?reportCode=" + reportCode;
-		final Response response = scriptRemote.connect("alfresco").get(url);
-		final String errmsg = String.format( "Cannot get ds-file for report '%s' from server", reportCode);
-		try {
-			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
-				final org.json.JSONObject resultJson = new JSONObject(response.getResponse());
-				return (byte[]) resultJson.get("data");
-			}
-		} catch (JSONException e) {
-			logger.warn( errmsg, e);
-		}
-		throw new RuntimeException( errmsg);
-	}
+    public InputStream getDsXmlBytes(String reportCode) {
+        final String url = "/lecm/reports/rptmanager/dsXmlBytes?reportCode=" + reportCode;
+        final Response response = scriptRemote.connect("alfresco").get(url);
+        if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
+            return response.getResponseStream();
+        } else {
+            throw new RuntimeException(String.format("Cannot get ds-file for report '%s' from server", reportCode));
+        }
+    }
 
 	@Override
-	public ReportInfo[] getRegisteredReports(String docType, String reportType) {
-		final String url = "/lecm/reports/rptmanager/registeredReports?docType="+ docType+ "&reportType=" + reportType;
-		final Response response = scriptRemote.connect("alfresco").get(url);
-		final String errmsg = String.format( "Cannot get from server the list or reports: docType '%s', reportType '%s'"
-				, docType, reportType);
-		try {
-			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
-				final org.json.JSONObject resultJson = new JSONObject(response.getResponse());
-				return (ReportInfo[]) resultJson.get("data");
-			}
-		} catch (JSONException e) {
-			logger.warn( errmsg, e);
-		}
-		throw new RuntimeException( errmsg);
-	}
+    public List<ReportInfo> getRegisteredReports(String docType, String reportType) {
+        final String url = "/lecm/reports/rptmanager/registeredReports";//?docType=" + docType + "&reportType=" + reportType;
+        final Response response = scriptRemote.connect("alfresco").get(url);
+        final String errmsg = String.format("Cannot get from server the list or reports: docType '%s', reportType '%s'"
+                , docType, reportType);
+        try {
+            if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
+                List<ReportInfo> results = new ArrayList<ReportInfo>();
+                final JSONObject resultJson = new JSONObject(response.getResponse());
+                JSONArray reportInfoArray = (JSONArray) resultJson.get("list");
+                for (int i = 0; i < reportInfoArray.length(); i++) {
+                    JSONObject ri = (JSONObject) reportInfoArray.get(i);
+                    ReportInfo riFromReq = new ReportInfo(new ReportTypeImpl(ri.getString("reportType"), new L18Value()), ri.getString("code"));
+                    riFromReq.setDocumentType(ri.getString("docType"));
+                    riFromReq.setReportName(ri.getString("name"));
+                    results.add(riFromReq);
+                }
+                return results;
+            }
+        } catch (JSONException e) {
+            logger.warn(errmsg, e);
+        }
+        throw new RuntimeException(errmsg);
+    }
 
 }
 
