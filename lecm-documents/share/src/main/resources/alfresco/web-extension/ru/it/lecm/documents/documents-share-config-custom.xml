@@ -759,4 +759,19 @@
 			</form>
 		</forms>
 	</config>
+
+	<config evaluator="aspect" condition="lecm-document-aspects:parent-document">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-document-aspects:parent-document-assoc" for-mode="view"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-document-aspects:parent-document-assoc">
+						<control template="/ru/it/lecm/documents/controls/parent-document-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

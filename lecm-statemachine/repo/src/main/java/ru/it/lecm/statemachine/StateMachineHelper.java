@@ -468,11 +468,15 @@ public class StateMachineHelper implements StateMachineServiceBean {
     public boolean isReadOnlyCategory(NodeRef document, String category) {
         Set<StateField> categories = getStateCategories(document).getFields();
         boolean result = true;
-        for (StateField categoryItem : categories) {
-            if (categoryItem.getName().equals(category)) {
-                result = !categoryItem.isEditable();
-            }
-        }
+	    if (categories != null && categories.size() > 0) {
+	        for (StateField categoryItem : categories) {
+	            if (categoryItem.getName().equals(category)) {
+	                result = !categoryItem.isEditable();
+	            }
+	        }
+	    } else {
+			return false;
+	    }
         return result;
     }
 

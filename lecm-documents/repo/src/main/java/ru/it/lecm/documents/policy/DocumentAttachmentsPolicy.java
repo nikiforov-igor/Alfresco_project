@@ -125,6 +125,8 @@ public class DocumentAttachmentsPolicy extends BaseBean {
         final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(childAssocRef);
         if (document != null) {
 	        if (!this.isCreatingWorkingCopy) {
+		        NodeRef attachmentRef = childAssocRef.getChildRef();
+
 		        // добавляем пользователя добавившего вложение как участника
 		        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
 			        @Override
@@ -140,8 +142,10 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		        });
 
 		        List<String> objects = new ArrayList<String>(1);
-		        objects.add(childAssocRef.getChildRef().toString());
+		        objects.add(attachmentRef.toString());
 		        businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator добавил(а) вложение #object1 к документу #mainobject", objects);
+
+		        addParentDocumentAspect(document, attachmentRef);
 	        } else {
 	            this.isCreatingWorkingCopy = false;
 	        }
@@ -151,9 +155,25 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	public void onMoveNode(ChildAssociationRef childAssociationRef, ChildAssociationRef childAssociationRef2) {
 		final NodeRef newDocument = this.documentAttachmentsService.getDocumentByAttachment(childAssociationRef2.getChildRef());
 		if (newDocument != null) {
+			NodeRef attachmentRef = childAssociationRef2.getChildRef();
+
 			List<String> objects = new ArrayList<String>(1);
-			objects.add(childAssociationRef2.getChildRef().toString());
+			objects.add(attachmentRef.toString());
 			businessJournalService.log(newDocument, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator добавил(а) вложение #object1 к документу #mainobject", objects);
+
+			addParentDocumentAspect(newDocument, attachmentRef);
+		}
+	}
+
+	/**
+	 * добавляет аспект для ссылки на документ из формы document-details
+	 * @param documentRef
+	 * @param attachmentRef
+	 */
+	public void addParentDocumentAspect(NodeRef documentRef, NodeRef attachmentRef) {
+		if (!nodeService.hasAspect(attachmentRef, DocumentService.ASPECT_PARENT_DOCUMENT)) {
+			nodeService.addAspect(attachmentRef, DocumentService.ASPECT_PARENT_DOCUMENT, null);
+			nodeService.createAssociation(attachmentRef, documentRef, DocumentService.ASSOC_PARENT_DOCUMENT);
 		}
 	}
 

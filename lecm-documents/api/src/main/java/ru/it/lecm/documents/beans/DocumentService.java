@@ -45,6 +45,9 @@ public interface DocumentService {
     public static final String PREF_DOCUMENTS = "ru.it.lecm.documents";
     public static final String PREF_DOC_LIST_AUTHOR = ".documents-list-docAuthor-filter";
 
+	public static final QName ASPECT_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document");
+	public static final QName ASSOC_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document-assoc");
+
     public static enum AuthorEnum {
         MY,
         DEPARTMENT,

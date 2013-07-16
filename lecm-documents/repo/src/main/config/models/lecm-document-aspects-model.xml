@@ -10,6 +10,7 @@
     <imports>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
     </imports>
 
 	<namespaces>
@@ -96,5 +97,21 @@
             </properties>
 		</aspect>
 
+		<!--аспект для отображения документа на странице document-details для вложения-->
+		<aspect name="lecm-document-aspects:parent-document">
+			<associations>
+				<association name="lecm-document-aspects:parent-document-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-document:base</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
 	</aspects>
 </model>
