@@ -882,6 +882,9 @@
         onReady: function approvalForm_onReady() {
             Alfresco.util.PopupManager.zIndex = 9000;
 
+            // Подписки через Bubbling
+            this._addBubblingLayers();
+
             Alfresco.util.Ajax.request({
                 method: "POST",
                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/getCurrentUserApprovalListFolder",
@@ -900,9 +903,6 @@
             function onSuccess( response ) {
                 this.constants.LISTS_FOLDER_REF = response.json.approvalListFolderRef;
 
-                // Подписки через Bubbling
-                this._addBubblingLayers();
-
                 // Инициализация кнопок
                 this._initApprovalTypeRadioButtons();
                 this._initAddAssigneeButton();
@@ -913,12 +913,12 @@
                 // Инициализация меню выбора списка согласующих
                 this._initSelectApprovalListMenu();
 
-                // Инициализация таблицы
-                this._initDatagrid();
-
                 // Подписки
                 this._initEvents();
                 this._initValidation();
+
+                // Инициализация таблицы
+                this._initDatagrid();
 
                 // "Деструктор"
                 this._initDestructor();
