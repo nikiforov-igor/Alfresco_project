@@ -225,7 +225,7 @@ public class ReportsManagerImpl implements ReportsManager {
 			return false;
 		}
 
-		final String outFullName = makeTemplateFileName(desc.getReportTemplate());
+		final String outFullName = makeTemplateFileName(desc.getMnem() + ".jrxml");
 		{	// гарантируем, что с таким именем данных нет ...
 			final File fout = new File( outFullName);
 			if (fout.exists()) {
