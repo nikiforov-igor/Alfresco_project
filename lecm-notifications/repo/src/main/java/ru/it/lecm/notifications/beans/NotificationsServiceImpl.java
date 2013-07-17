@@ -3,6 +3,7 @@ package ru.it.lecm.notifications.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
@@ -335,14 +336,18 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return notificationsRootRef;
 	}
 
-	public NodeRef getCurrentUserSettingsNode() {
+	public NodeRef getCurrentUserSettingsNode(boolean createNewIfNotExist) {
+		return geUserSettingsNode(authService.getCurrentUserName(), createNewIfNotExist);
+	}
+
+	public NodeRef geUserSettingsNode(String userName, boolean createNewIfNotExist) {
 		final NodeRef rootFolder = this.getServiceRootFolder();
-		final String settingsObjectName = authService.getCurrentUserName() + "_" + NOTIFICATIONS_SETTINGS_NODE_NAME;
+		final String settingsObjectName = userName + "_" + NOTIFICATIONS_SETTINGS_NODE_NAME;
 
 		NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
 		if (settings != null) {
 			return settings;
-		} else {
+		} else if (createNewIfNotExist) {
 			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 				@Override
 				public NodeRef doWork() throws Exception {
@@ -359,8 +364,15 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
 									properties.put(ContentModel.PROP_NAME, settingsObjectName);
-									ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+									ChildAssociationRef associationRef = nodeService.createNode(getServiceRootFolder(), assocTypeQName, assocQName, nodeTypeQName, properties);
 									settingsRef = associationRef.getChildRef();
+
+									List<NodeRef> systemDefaulChannels = getSystemDefaultNotificationTypes();
+									if (systemDefaulChannels != null) {
+										for (NodeRef typeRef: systemDefaulChannels) {
+											nodeService.createAssociation(settingsRef, typeRef, ASSOC_DEFAULT_NOTIFICATIONS_TYPES);
+										}
+									}
 								}
 							}
 							return settingsRef;
@@ -369,6 +381,62 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 				}
 			};
 			return AuthenticationUtil.runAsSystem(raw);
+		} else {
+			return null;
 		}
 	}
+
+	public List<NodeRef> getSystemDefaultNotificationTypes() {
+		return dictionaryService.getRecordsByParamValue(NOTIFICATION_TYPE_DICTIONARY_NAME, PROP_DEFAULT_SELECT, true);
+	}
+
+	public List<NodeRef> getEmployeeDefaultNotificationTypes(NodeRef employee) {
+		List<NodeRef> result = new ArrayList<NodeRef>();
+		String userName = orgstructureService.getEmployeeLogin(employee);
+		NodeRef settings = geUserSettingsNode(userName, false);
+
+		if (settings != null) {
+			List<AssociationRef> defaultNotificationTypes = nodeService.getTargetAssocs(settings, ASSOC_DEFAULT_NOTIFICATIONS_TYPES);
+			if (defaultNotificationTypes != null) {
+				for (AssociationRef assocRef: defaultNotificationTypes) {
+					NodeRef typeRef = assocRef.getTargetRef();
+					if (!isArchive(typeRef)) {
+						result.add(typeRef);
+					}
+				}
+			}
+
+		}
+
+		if (result.size() == 0) {
+			result = getSystemDefaultNotificationTypes();
+		}
+
+		return result;
+	}
+
+	public List<NodeRef> getCurrentUserDefaultNotificationTypes() {
+		return getEmployeeDefaultNotificationTypes(orgstructureService.getCurrentEmployee());
+	}
+
+	/**
+	 * Отправка уведомления
+	 * @param autor
+	 * @param mainObject
+	 * @param textFormatString
+	 * @param recipients
+	 * @return
+	 */
+//	public boolean sendNotification(String autor, NodeRef mainObject, String textFormatString, List<NodeRef> recipients) {
+//		List<NodeRef> typeRefs = new ArrayList<NodeRef>();
+//		if (channels != null) {
+//			for (String channel: channels) {
+//				if (getChannelsNodeRefs().containsKey(channel)) {
+//					typeRefs.add(getChannelsNodeRefs().get(channel));
+//				}
+//			}
+//		}
+//		notification.setTypeRefs(typeRefs);
+//		return sendNotification(notification);
+//	}
 }

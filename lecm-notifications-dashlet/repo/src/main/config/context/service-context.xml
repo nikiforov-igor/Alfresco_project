@@ -29,7 +29,7 @@
 
 	<bean id="${groupId}.${artifactId}.notificationsTypeDashletBootstrap" parent="lecmDictionaryBootstrap"
 	      depends-on="ru.it.lecm.notifications.notifications-repo.notificationsTypesBootstrap, businessJournalLogEventsPolicy">
-		<property name="createOrUpdateDictionaries">
+		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-notifications-type-dashlet.xml</value>
 			</list>

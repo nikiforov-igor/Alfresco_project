@@ -59,7 +59,7 @@ LogicECM.module = LogicECM.module || {};
 
 				nameSubstituteString: "{cm:name}",
 
-				defaultSelectProperty: null,
+				defaultValuesDataSource: null,
 
 				mode: null
 			},
@@ -84,6 +84,8 @@ LogicECM.module = LogicECM.module || {};
 
 			selectedItems: null,
 
+			defaultValues: null,
+
 			onReady: function AssociationCheckboxes_onReady()
 			{
 				this.loadSelectedItems();
@@ -105,7 +107,7 @@ LogicECM.module = LogicECM.module || {};
 						this.selectedItems[item.nodeRef] = item;
 					}
 
-					this.loadData();
+					this.loadDefaultValues();
 				};
 
 				var onFailure = function AssociationTreeViewer__loadSelectedItems_onFailure(response)
@@ -137,6 +139,32 @@ LogicECM.module = LogicECM.module || {};
 							}
 						});
 				} else {
+					this.loadDefaultValues();
+				}
+			},
+
+			loadDefaultValues: function () {
+				if (this.options.defaultValuesDataSource != null) {
+					var me = this;
+
+					Alfresco.util.Ajax.request(
+						{
+							url: Alfresco.constants.PROXY_URI + this.options.defaultValuesDataSource,
+							successCallback: {
+								fn: function (response) {
+									var oResults = eval("(" + response.serverResponse.responseText + ")");
+									if (oResults != null) {
+										me.defaultValues = [];
+										for (var i = 0; i < oResults.length; i++) {
+											me.defaultValues.push(oResults[i].nodeRef);
+										}
+									}
+									me.loadData();
+								}
+							},
+							failureMessage: "message.failure"
+						});
+				} else {
 					this.loadData();
 				}
 			},
@@ -150,10 +178,18 @@ LogicECM.module = LogicECM.module || {};
 					for (var i = 0; i < results.length; i++) {
 						var node = results[i];
 						if (node.selectable) {
-							var select = "false";
-							var defaultSelect = node[this.options.defaultSelectProperty.replace(":", "_")];
-							if (defaultSelect != null) {
-								select = defaultSelect;
+							var select = false;
+//							var defaultSelect = node[this.options.defaultSelectProperty.replace(":", "_")];
+//							if (defaultSelect != null) {
+//								select = defaultSelect;
+//							}
+							if (this.defaultValues != null) {
+								for (var j = 0; j < this.defaultValues.length; j++) {
+									if (node.nodeRef == this.defaultValues[j]) {
+										select = true;
+										break;
+									}
+								}
 							}
 
 							this.dataArray.push({
@@ -199,7 +235,7 @@ LogicECM.module = LogicECM.module || {};
 
 						if (this.selectedItems.hasOwnProperty(this.dataArray[i].nodeRef)) {
 							content += 'checked="checked"';
-						} else if (this.dataArray[i].defaultSelect == "true" && this.options.mode == "create") {
+						} else if (this.dataArray[i].defaultSelect && this.options.mode == "create") {
 							content += 'checked="checked"';
 							this.selectedItems[this.dataArray[i].nodeRef] = this.dataArray[i];
 						}
@@ -338,9 +374,6 @@ LogicECM.module = LogicECM.module || {};
 					}
 				}
 
-				if (this.options.defaultSelectProperty != null) {
-					params += "&additionalProperties=" + this.options.defaultSelectProperty;
-				}
 				return params;
 			},
 

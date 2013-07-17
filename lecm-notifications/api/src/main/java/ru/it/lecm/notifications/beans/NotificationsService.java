@@ -39,6 +39,7 @@ public interface NotificationsService {
 	public final String NOTIFICATION_TYPE_DICTIONARY_NAME = "Типы доставки уведомлений";
 	public final QName TYPE_NOTIFICATION_TYPE = QName.createQName(NOTIFICATIONS_TYPE_NAMESPACE_URI, "notification-type");
 	public final QName PROP_SPRING_BEAN_ID = QName.createQName(NOTIFICATIONS_TYPE_NAMESPACE_URI, "spring-bean-id");
+	public final QName PROP_DEFAULT_SELECT = QName.createQName(NOTIFICATIONS_TYPE_NAMESPACE_URI, "default-select");
 
 	public final QName PROP_AUTOR = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "author");
 	public final QName PROP_DESCRIPTION = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "description");
@@ -46,6 +47,7 @@ public interface NotificationsService {
 	public final QName ASSOC_RECIPIENT = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-assoc");
 
 	public static final QName TYPE_NOTIFICATIONS_USER_SETTINGS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "user");
+	public static final QName ASSOC_DEFAULT_NOTIFICATIONS_TYPES = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "default-types-assoc");
 
 	public static final String NOTIFICATIONS_SETTINGS_NODE_NAME = "Settings";
 
@@ -86,8 +88,42 @@ public interface NotificationsService {
 	public NodeRef getNotificationsRootRef();
 
 	/**
+	 * Получение настроект пользователя
+	 * @param userName Логин пользователя
+	 * @param createNewIfNotExist Создавать ли настройки если их нет
+	 * @return Ссылка на объект настроек
+	 */
+	public NodeRef geUserSettingsNode(String userName, boolean createNewIfNotExist);
+
+	/**
 	 * Получение настроект текущего пользователя
+	 * @param createNewIfNotExist Создавать ли настройки если их нет
 	 * @return ссылка на объект пользовательских настроек
 	 */
-	public NodeRef getCurrentUserSettingsNode();
+	public NodeRef getCurrentUserSettingsNode(boolean createNewIfNotExist);
+
+	/**
+	 * Получение типов доставки уведомлений по-умолчанию из справочника
+	 * @return Список ссылок на типы доставки уведомлений
+	 */
+	public List<NodeRef> getSystemDefaultNotificationTypes();
+
+	/**
+	 * Получение типов доставки уведомлений по-умолчанию для пользователя.
+	 * Берутся личные настройки. если их нет, или в них не выбран ни один тип доставки уведомлений,
+	 * то берутся системные настройки из справочника
+	 *
+	 * @param employee Ссылка на сотрудника
+	 * @return Список ссылок на типы доставки уведомлений
+	 */
+	public List<NodeRef> getEmployeeDefaultNotificationTypes(NodeRef employee);
+
+	/**
+	 * Получение типов доставки уведомлений по-умолчанию для текущего пользователя.
+	 * Берутся личные настройки. если их нет, или в них не выбран ни один тип доставки уведомлений,
+	 * то берутся системные настройки из справочника
+	 *
+	 * @return Список ссылок на типы доставки уведомлений
+	 */
+	public List<NodeRef> getCurrentUserDefaultNotificationTypes();
 }

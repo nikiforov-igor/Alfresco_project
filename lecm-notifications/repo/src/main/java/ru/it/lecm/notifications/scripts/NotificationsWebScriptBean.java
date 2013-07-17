@@ -164,6 +164,10 @@ public class NotificationsWebScriptBean extends BaseWebScript {
     }
 
 	public ScriptNode getCurrentUserSettingsNode() {
-		return new ScriptNode(service.getCurrentUserSettingsNode(), serviceRegistry, getScope());
+		return new ScriptNode(service.getCurrentUserSettingsNode(true), serviceRegistry, getScope());
+	}
+
+	public List<NodeRef> getCurrentUserDefaultNotificationTypes() {
+		return  service.getCurrentUserDefaultNotificationTypes();
 	}
 }

@@ -6,7 +6,7 @@
                 <property name="cm:name">Активный канал</property>
                 <property name="lecm-notf-type:code">01</property>
                 <property name="lecm-notf-type:spring-bean-id">notificationActiveChannel</property>
-                <property name="lecm-notf-type:default-select">false</property>
+                <property name="lecm-notf-type:default-select">true</property>
             </item>
         </items>
     </item>

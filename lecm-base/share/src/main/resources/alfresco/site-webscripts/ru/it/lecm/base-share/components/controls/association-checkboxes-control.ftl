@@ -30,8 +30,8 @@
 				itemType: "${field.endpointType}",
 				maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
 				currentValue: "${field.value!''}",
-				<#if field.control.params.defaultSelectProperty??>
-					defaultSelectProperty: "${field.control.params.defaultSelectProperty}",
+				<#if field.control.params.defaultValuesDataSource??>
+					defaultValuesDataSource: "${field.control.params.defaultValuesDataSource}",
 				</#if>
 				nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}"
 			});

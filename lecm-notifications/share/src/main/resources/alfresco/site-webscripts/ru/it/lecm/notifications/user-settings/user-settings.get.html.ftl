@@ -4,5 +4,5 @@
 //]]></script>
 
 <div id="${el}-body" class="notifications-user-settings">
-	<div id="${el}-settings">тест</div>
+	<div id="${el}-settings"></div>
 </div>

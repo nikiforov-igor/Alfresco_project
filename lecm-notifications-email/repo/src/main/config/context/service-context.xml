@@ -20,7 +20,7 @@
 
 	<bean id="${groupId}.${artifactId}.notificationsTypeEmailBootstrap" parent="lecmDictionaryBootstrap"
 	      depends-on="ru.it.lecm.notifications.notifications-repo.notificationsTypesBootstrap, businessJournalLogEventsPolicy">
-		<property name="createOrUpdateDictionaries">
+		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-notifications-type-email.xml</value>
 			</list>
