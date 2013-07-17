@@ -1,7 +1,6 @@
 package ru.it.lecm.security;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-
 import ru.it.lecm.security.Types.SGPosition;
 
 import java.util.Collection;
@@ -181,7 +180,7 @@ public interface LecmPermissionService {
 	 * @param permissionGroup предоставляемый доступ, если null, то будет присвоено право по-умолчанию (конфигурируется бинами)
 	 */
 	void grantDynamicRole( String roleCode, NodeRef nodeRef, String employeeId, LecmPermissionGroup permissionGroup);
-
+    void grantDynamicRole(String roleCode, NodeRef nodeRef, String employeeId, String permission);
 	/**
 	 * Отобрать у Сотрудника динамическую роль в документе/папке
 	 * @param roleCode id Динамической Роли
@@ -231,7 +230,7 @@ public interface LecmPermissionService {
 	 * @return SB со сформированным списком 
 	 */
 	StringBuilder trackAllLecmPermissions( String info, NodeRef nodeRef,
-			String ... userLogins); 
+			String ... userLogins);
 
 	/**
 	 * Именованный security-объект Альфреско, в имено которого содержится префикс
@@ -258,7 +257,7 @@ public interface LecmPermissionService {
 		public String getShortName();
 
 		/**
-		 * @return характерный (для объектов данного типа) префикс внутри названия name. 
+		 * @return характерный (для объектов данного типа) префикс внутри названия name.
 		 */
 		String getPrefix();
 
@@ -275,7 +274,7 @@ public interface LecmPermissionService {
 		public static final String PFX_LECM_ROLE = "LECM_BASIC_PG_";
 
 		/**
-		 * "Well known" permission groups 
+		 * "Well known" permission groups
 		 */
 		public static String PGROLE_Initiator = PFX_LECM_ROLE + "Initiator"; // "LECM_BASIC_PG_Initiator"
 		public static String PGROLE_Reader = PFX_LECM_ROLE + "Reader"; // "LECM_BASIC_PG_Reader"

@@ -1,19 +1,5 @@
 package ru.it.lecm.security.beans;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.naming.AuthenticationException;
-import javax.naming.InvalidNameException;
-
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
@@ -21,24 +7,23 @@ import org.alfresco.repo.security.permissions.PermissionReference;
 import org.alfresco.repo.security.permissions.impl.ModelDAO;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.AccessPermission;
-import org.alfresco.service.cmr.security.AccessStatus;
-import org.alfresco.service.cmr.security.AuthenticationService;
-import org.alfresco.service.cmr.security.AuthorityService;
-import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.cmr.security.*;
 import org.alfresco.util.Pair;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.extensions.surf.util.I18NUtil;
-
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.Types.SGPrivateBusinessRole;
 import ru.it.lecm.security.Types.SGPrivateMeOfUser;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
+
+import javax.naming.AuthenticationException;
+import javax.naming.InvalidNameException;
+import java.util.*;
 
 public class LecmPermissionServiceImpl
 		implements LecmPermissionService, InitializingBean
@@ -428,6 +413,15 @@ public class LecmPermissionServiceImpl
 	@Override
 	public void grantDynamicRole(String roleCode, NodeRef nodeRef,
 			String employeeId, LecmPermissionGroup permissionGroup)
+    {
+        final String permission = findACEPermission(permissionGroup);
+        grantDynamicRole(roleCode, nodeRef, employeeId, permission);
+    }
+
+
+	@Override
+	public void grantDynamicRole(String roleCode, NodeRef nodeRef,
+                                 String employeeId, String permission)
 	{
 		final SGPrivateBusinessRole posBRME = Types.SGKind.getSGMyRolePos(employeeId, roleCode);
 
@@ -440,14 +434,13 @@ public class LecmPermissionServiceImpl
 		// непосредственная нарезка в ACL ...
 		final String authority = sgnm.makeSGName(posBRME); // sgnm.makeFullBRMEAuthName(userId, roleCode);
 		// выдать право по-умолчанию - при смене статуса может (должно будет) выполниться перегенерирование ...
-		final String permission = findACEPermission(permissionGroup);
 		permissionService.setPermission( nodeRef, authority, permission, true);
 		logger.warn(String.format("Dynamic role '%s' for employee '%s' granted as {%s} for document '%s' by security group <%s>", roleCode, employeeId, permission, nodeRef, authority));
 	}
 
 	@Override
 	public void revokeDynamicRole(String roleCode, NodeRef nodeRef,
-			String employeeId) {
+                                  String employeeId) {
 		final String authority = sgnm.makeFullBRMEAuthName(employeeId, roleCode);
 		permissionService.clearPermission( nodeRef, authority);
 		logger.warn(String.format("Dynamic role '%s' for employee '%s' revoked from document '%s'", roleCode, employeeId, nodeRef));
