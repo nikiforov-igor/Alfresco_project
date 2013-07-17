@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ru.it.lecm.semantic</groupId>
+        <groupId>ru.it.lecm.br5.semantic</groupId>
         <artifactId>semantic-assist</artifactId>
         <version>0.5.1</version>
     </parent>
@@ -52,6 +52,43 @@
 		<dependency>
 			<groupId>ru.it.lecm.base</groupId>
 			<artifactId>base-repo-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.br5.semantic</groupId>
+			<artifactId>semantic-assist-api</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+		</dependency>
+        <dependency>
+            <groupId>ru.it.lecm.security</groupId>
+            <artifactId>lecm-security-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-databinding-jaxb</artifactId>
+			<version>2.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>2.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-bindings-soap</artifactId>
+			<version>2.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+			<version>2.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.orgstructure</groupId>
+			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->

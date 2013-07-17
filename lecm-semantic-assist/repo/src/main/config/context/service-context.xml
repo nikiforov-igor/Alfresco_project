@@ -1,14 +1,37 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
 	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:sec="http://cxf.apache.org/configuration/security"
+	   xmlns:http="http://cxf.apache.org/transports/http/configuration"
+	   xmlns:jaxws="http://cxf.apache.org/jaxws"
+	   xmlns:soap="http://cxf.apache.org/bindings/soap"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+						   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+						   http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd
+						   http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
+						   http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+						   http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd">
 
+	<http:conduit name="{http://it.ru/}ItsWebService.http-conduit">
+	    <http:client AutoRedirect="true" Connection="Keep-Alive"/>
+	</http:conduit>
+
+	<jaxws:client id="itsWebService.http"
+				  address="http://127.0.0.1:4466/"
+				  serviceClass="ru.it.soap.ItsWebServiceSoap"
+				  serviceName="s:ItsWebService"
+				  endpointName="s:ItsWebServiceSoap"
+                  xmlns:s="http://it.ru/">
+	</jaxws:client>
 
 	<bean id="br5.semantic.modelBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
 		<property name="models">
 			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-br5-semantic-aspects-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
@@ -22,11 +45,20 @@
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
-	<bean id="br5.semantic.Br5IntegrationWebScriptBean" parent="baseScript" class="ru.it.lecm.br5.semantic.webscripts.Br5IntegrationWebScriptBean">
+	<bean id="br5.semantic.SemanticBeanImpl" parent="baseBean" class="ru.it.lecm.br5.semantic.beans.SemanticBeanImpl">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="itsWebService" ref="itsWebService.http"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
+
+	<bean id="br5.semantic.SemanticWebScriptBean" parent="baseScript" class="ru.it.lecm.br5.semantic.webscripts.SemanticWebScriptBean">
 		<property name="extensionName">
 			<value>integration</value>
 		</property>
 		<property name="nodeService" ref="nodeService"/>
+		<property name="semanticService" ref="br5.semantic.SemanticBeanImpl"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
 </beans>

@@ -87,16 +87,6 @@
                 </association>
             </associations>
         </aspect>
-		<!-- Аспект который показывает, надо ли загружать документ в БР5 или нет -->
-		<aspect name="lecm-document-aspects:br5">
-			<properties>
-                <property name="lecm-document-aspects:loaded">
-                    <type>d:int</type>
-                    <default>0</default>
-                </property>
-            </properties>
-		</aspect>
-
 		<!--аспект для отображения документа на странице document-details для вложения-->
 		<aspect name="lecm-document-aspects:parent-document">
 			<associations>

@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>ru.it.lecm.semantic</groupId>
+        <groupId>ru.it.lecm.br5.semantic</groupId>
         <artifactId>semantic-assist</artifactId>
         <version>0.5.1</version>
     </parent>

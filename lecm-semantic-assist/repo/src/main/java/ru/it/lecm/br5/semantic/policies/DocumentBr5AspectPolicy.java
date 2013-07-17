@@ -9,17 +9,17 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.br5.semantic.api.ConstantsBean;
 
 /**
  *
  * @author snovikov
  */
-public class DocumentBr5AspectPolicy {
+public class DocumentBr5AspectPolicy implements ConstantsBean {
 
 	private final static Logger logger = LoggerFactory.getLogger(DocumentBr5AspectPolicy.class);
 	private PolicyComponent policyComponent;
 	private NodeService nodeService;
-	public static final QName ASPECT_BR5_INTEGRATION = QName.createQName("http://www.it.ru/lecm/document/aspects/1.0","br5");
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -34,7 +34,7 @@ public class DocumentBr5AspectPolicy {
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnAddAspectPolicy.QNAME,
-				ASPECT_BR5_INTEGRATION,
+				ConstantsBean.ASPECT_BR5_INTEGRATION,
 				new JavaBehaviour(this, "onAddAspect"));
 	}
 
