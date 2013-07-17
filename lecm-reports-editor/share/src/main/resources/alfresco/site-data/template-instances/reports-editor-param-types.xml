@@ -17,7 +17,7 @@
             <properties>
                 <bubblingLabel>report-param-type</bubblingLabel>
                 <showSearch>false</showSearch>
-                <showCreateBtn>true</showCreateBtn>
+                <showCreateBtn>false</showCreateBtn>
                 <newRowLabel>label.new-param-type.btn</newRowLabel>
                 <newRowDialogTitle>label.create-param-type.title</newRowDialogTitle>
             </properties>

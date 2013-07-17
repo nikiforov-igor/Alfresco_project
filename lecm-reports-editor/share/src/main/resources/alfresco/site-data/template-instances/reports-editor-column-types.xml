@@ -17,7 +17,7 @@
             <properties>
                 <bubblingLabel>report-column-type</bubblingLabel>
                 <showSearch>false</showSearch>
-                <showCreateBtn>true</showCreateBtn>
+                <showCreateBtn>false</showCreateBtn>
                 <newRowLabel>label.new-column-type.btn</newRowLabel>
                 <newRowDialogTitle>label.create-column-type.title</newRowDialogTitle>
             </properties>
