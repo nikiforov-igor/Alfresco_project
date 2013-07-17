@@ -1,16 +1,21 @@
 package ru.it.lecm.reports.extensions;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.io.IOUtils;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.*;
 
 public class ReportManagerJavascriptExtension extends BaseWebScript {
     public final static String REPORTS_EDITOR_URI = "http://www.it.ru/logicECM/reports/editor/1.0";
@@ -50,12 +55,6 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
         return true;
     }
 
-    public byte[] getDsXmlBytes(final String reportCode) {
-        PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
-        final byte[] result = getReportsManager().loadDsXmlBytes(reportCode);
-        return result;
-    }
-
     public List<ReportInfo> getRegisteredReports(String docType, String reportType) {
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
         List<ReportInfo> reports = new ArrayList<ReportInfo>();
@@ -76,24 +75,28 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
     }
 
     public ScriptNode generateReportTemplate(final String reportRef) {
-        /*ReportDescriptor desc = ((ReportsManagerImpl)getReportsManager()).getReportDAO().getReportDescriptor(new NodeRef(reportRef));
-        byte[] content = getReportsManager().produceDefaultTemplate(desc);
-        NodeRef templateFileRef = serviceRegistry.getNodeService().createNode(templateContainer, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "default"), ContentModel.TYPE_CONTENT, null).getChildRef();
-        ByteArrayInputStream bis = null;
-        try {
-            bis = new ByteArrayInputStream(content);
-            ContentService contentService = serviceRegistry.getContentService();
-            ContentReader reader = contentService.getReader(templateFileRef, ContentModel.PROP_CONTENT);
-            if (reader == null) {
-                ContentWriter writer = contentService.getWriter(templateFileRef, ContentModel.PROP_CONTENT, true);
-                writer.setMimetype("text/xml");
+        NodeRef report = new NodeRef(reportRef);
+        ReportDescriptor desc = (getReportsManager()).getReportDAO().getReportDescriptor(report);
+        if (desc != null) {
+            byte[] content = getReportsManager().produceDefaultTemplate(desc);
+            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
+            final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+            properties.put(ContentModel.PROP_NAME, desc.getMnem() + ".jrxml");
+            ChildAssociationRef child =
+                    serviceRegistry.getNodeService().createNode(new NodeRef(reportRef), ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
+            InputStream is = null;
+            try {
+                ContentService contentService = serviceRegistry.getContentService();
+                is = new ByteArrayInputStream(content);
+                ContentWriter writer = contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
                 writer.setEncoding("UTF-8");
-                writer.putContent(bis);
+                writer.setMimetype("text/xml");
+                writer.putContent(is);
+            } finally {
+                IOUtils.closeQuietly(is);
             }
-        } finally {
-            IOUtils.closeQuietly(bis);
+            return new ScriptNode(child.getChildRef(), serviceRegistry, getScope());
         }
-        return new ScriptNode(templateFileRef, serviceRegistry, getScope());*/
         return null;
     }
 }

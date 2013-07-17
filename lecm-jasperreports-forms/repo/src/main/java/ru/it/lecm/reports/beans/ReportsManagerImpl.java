@@ -37,6 +37,8 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	private String defaultTemplate; //  шаблон для генерации (jrxml-)шаблона
 
+    static final String JRXML_DEFAULT_TEMPLATE_ROOT = "/reportdefinitions/templates";
+
 	public ReportDAO getReportDAO() {
 		return reportDAO;
 	}
@@ -344,7 +346,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	 * @return
 	 */
 	private File ensureTemplateConfigDir() {
-		final File result = getConfigDir(REPORT_TEMPLATE_FILES_BASEDIR);
+		final File result = getConfigDir(JRXML_DEFAULT_TEMPLATE_ROOT);
 		result.mkdirs();
 		return result;
 	}
@@ -368,6 +370,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	 * @return полное имя файла.
 	 */
 	private String makeTemplateFileName(ReportTemplate template) {
+        final File base = ensureTemplateConfigDir();
 		return (template == null) ? null : makeTemplateFileName(template.getFileName()); 
 	}
 
