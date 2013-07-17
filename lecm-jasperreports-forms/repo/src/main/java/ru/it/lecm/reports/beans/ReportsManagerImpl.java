@@ -346,11 +346,16 @@ public class ReportsManagerImpl implements ReportsManager {
 	 * @return
 	 */
 	private File ensureTemplateConfigDir() {
-		final File result = getConfigDir(JRXML_DEFAULT_TEMPLATE_ROOT);
+		final File result = getConfigDir(REPORT_TEMPLATE_FILES_BASEDIR);
 		result.mkdirs();
 		return result;
 	}
 
+    private File ensureDefaultTemplateConfigDir() {
+        final File result = getConfigDir(JRXML_DEFAULT_TEMPLATE_ROOT);
+        result.mkdirs();
+        return result;
+    }
 	/**
 	 * Получить полное название ds-xml файла, в котором может храниться ds-xml описание.
 	 * указанного отчёта.
@@ -420,7 +425,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		final JRXMLMacroGenerator jrxmlGenerator = new JRXMLMacroGenerator();
 		jrxmlGenerator.setReportDesc(reportDesc);
 
-		final String tname = makeTemplateFileName(this.defaultTemplate); // название файла-шаблона для генерации
+		final String tname = makeDefaultTemplateFileName(this.defaultTemplate); // название файла-шаблона для генерации
 		FileInputStream fin = null; 
 		try {
 			fin = new FileInputStream( tname);
@@ -436,7 +441,12 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 	}
 
-	final private static String REPORT_TEMPLATE_FILES_BASEDIR = "/reportdefinitions";
+    private String makeDefaultTemplateFileName(String defaultTemplate) {
+        final File base = ensureDefaultTemplateConfigDir();
+        return String.format( "%s/%s", base.getAbsolutePath(), defaultTemplate);
+    }
+
+    final private static String REPORT_TEMPLATE_FILES_BASEDIR = "/reportdefinitions";
 	final private static String REPORT_DS_FILES_BASEDIR = "/reportdefinitions/ds-config";
 
 	@Override

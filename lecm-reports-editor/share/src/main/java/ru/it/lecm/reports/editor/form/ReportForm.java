@@ -10,6 +10,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.api.model.ParameterType;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.manager.ReportManagerApi;
@@ -41,6 +42,14 @@ public class ReportForm extends FormUIGet {
         d_double
     }
 
+    private enum RangeableTypes {
+        d_int,
+        d_float,
+        d_long,
+        d_date,
+        d_double
+    }
+
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         return super.executeImpl(req, status, cache);
@@ -54,11 +63,9 @@ public class ReportForm extends FormUIGet {
         HashMap<String, Object> form = new HashMap<String, Object>();
         model.put(MODEL_FORM, form);
         form.put(MODEL_MODE, Mode.CREATE);
-        form.put(MODEL_METHOD, "post");
+        form.put(MODEL_METHOD, "GET");
         form.put(MODEL_ENCTYPE, ENCTYPE_JSON);
-        form.put(MODEL_SUBMISSION_URL, "lecm/report/" + descriptor.getMnem());
-        form.put(MODEL_ARGUMENTS, "");
-        form.put(MODEL_DATA, new HashMap<Object, Object>());
+        form.put(MODEL_SUBMISSION_URL, "proxy/alfresco/lecm/report/" + descriptor.getMnem());
         form.put(MODEL_SHOW_CAPTION, false);
         form.put(MODEL_SHOW_CANCEL_BUTTON, true);
         form.put(MODEL_SHOW_RESET_BUTTON, false);
@@ -77,7 +84,7 @@ public class ReportForm extends FormUIGet {
         for (ColumnDescriptor column : columns) {
             ParameterTypedValue typedValue = column.getParameterValue();
             if (typedValue != null) {
-                Field field = generateFieldModel(column, typedValue);
+                Field field = generateFieldModel(column);
                 if (field != null) {
                     fields.put(column.getColumnName(), field);
                     FieldPointer fieldPointer = new FieldPointer(field.getId());
@@ -89,28 +96,26 @@ public class ReportForm extends FormUIGet {
         return model;
     }
 
-    protected Field generateFieldModel(ColumnDescriptor column, ParameterTypedValue typedValue) {
+    protected Field generateFieldModel(ColumnDescriptor column) {
         Field field = null;
-
         try {
             if (column != null) {
                 // create the initial field model
                 field = new Field();
 
                 field.setId(column.getColumnName());
-                field.setName(column.getL18items().get("RU-RU"));
+                field.setName(column.getColumnName());
                 field.setLabel(column.getL18items().get("RU-RU"));
                 field.setDescription(column.getL18items().get("RU-RU"));
 
-                processFieldControl(field, column, typedValue);
                 field.setDataKeyName(column.getColumnName());
 
                 String dataType = column.getAlfrescoType();
-                field.setType(isNotAssoc(dataType) ? "property" : "association");
-
                 dataType = dataType.startsWith("d:") ? dataType.replace("d:", "") : dataType;
                 field.setDataType(dataType);
                 field.setValue("");
+
+                processFieldControl(field, column);
             }
         } catch (JSONException je) {
             field = null;
@@ -119,7 +124,7 @@ public class ReportForm extends FormUIGet {
         return field;
     }
 
-    protected void processFieldControl(Field field, ColumnDescriptor column, ParameterTypedValue typedValue) throws JSONException {
+    protected void processFieldControl(Field field, ColumnDescriptor column) throws JSONException {
         FieldControl control = null;
 
         DefaultControlsConfigElement defaultControls = null;
@@ -132,40 +137,55 @@ public class ReportForm extends FormUIGet {
         if (defaultControls == null) {
             throw new WebScriptException("Failed to locate default controls configuration");
         }
+
         String alfrescoType = column.getAlfrescoType();
-
-        if (alfrescoType != null && alfrescoType.isEmpty()) {
-            return;
-        }
-        boolean isPropertyField = isNotAssoc(alfrescoType);
-
-        Control defaultControlConfig;
-        if (isPropertyField) {
-            defaultControlConfig = defaultControls.getItems().get(alfrescoType);
-
-            if (defaultControlConfig == null) {
-                defaultControlConfig = defaultControls.getItems().get(alfrescoType.replace("d:", ""));
+        if (alfrescoType != null) {
+            if (alfrescoType.isEmpty()) {
+                return;
             }
-        } else {
-            defaultControlConfig = defaultControls.getItems().get(
-                    ASSOCIATION + ":" + column.getDataType().toString());
 
-            if (defaultControlConfig == null) {
-                defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
+            Control defaultControlConfig;
+
+            if (column.getParameterValue().getType().equals(ParameterType.Type.RANGE)
+                    && enumHasValue(RangeableTypes.class, alfrescoType.replaceAll(":", "_"))) {
+
+                String rangedType = alfrescoType.replace(OLD_DATA_TYPE_PREFIX, "").concat("-range");
+                defaultControlConfig = defaultControls.getItems().get(rangedType);
+            } else { // для списка и значения
+                boolean isPropertyField = isNotAssoc(alfrescoType);
+                if (isPropertyField) {
+                    field.setType(PROPERTY);
+
+                    defaultControlConfig = defaultControls.getItems().get(alfrescoType);
+                    if (defaultControlConfig == null) { // попытка получить дефолтный контрол по старой альфресовской схеме
+                        defaultControlConfig = defaultControls.getItems().get(alfrescoType.replace(OLD_DATA_TYPE_PREFIX, ""));
+                        if (defaultControlConfig == null) {
+                            defaultControlConfig = defaultControls.getItems().get(DEFAULT_FIELD_TYPE);
+                        }
+                    }
+                } else {
+                    field.setType(ASSOCIATION);
+                    field.setEndpointDirection("TARGET");
+
+                    defaultControlConfig = defaultControls.getItems().get(ASSOCIATION + ":" + alfrescoType);
+                    if (defaultControlConfig == null) {
+                        defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
+                    }
+                }
             }
-        }
 
-
-        if (defaultControlConfig != null) {
-            control = new FieldControl(defaultControlConfig.getTemplate());
-
-            List<ControlParam> paramsConfig = defaultControlConfig.getParamsAsList();
-            for (ControlParam param : paramsConfig) {
-                control.getParams().put(param.getName(), param.getValue());
+            if (defaultControlConfig != null) {
+                control = new FieldControl(defaultControlConfig.getTemplate());
+                List<ControlParam> paramsConfig = defaultControlConfig.getParamsAsList();
+                for (ControlParam param : paramsConfig) {
+                    control.getParams().put(param.getName(), param.getValue());
+                }
+                // поддерживается ли множественный выбор? Да, если тип Параметра - Список
+                field.setRepeating(column.getParameterValue().getType().equals(ParameterType.Type.LIST));
             }
-        }
 
-        field.setControl(control);
+            field.setControl(control);
+        }
     }
 
     private ReportDescriptor getReportDescriptor(String reportCode) {
@@ -179,11 +199,20 @@ public class ReportForm extends FormUIGet {
     }
 
     private boolean isNotAssoc(String typeKey) {
-        return typeKey != null && AlfrescoTypes.valueOf(typeKey.replaceAll(":", "_")) != null;
+        return typeKey != null && enumHasValue(AlfrescoTypes.class, typeKey.replaceAll(":", "_"));
     }
 
     public void setReportManager(ReportManagerApi reportManager) {
         this.reportManager = reportManager;
+    }
+
+    static public boolean enumHasValue(Class enumClass, String name) {
+        boolean inEnum = false;
+        try {
+            inEnum = Enum.valueOf(enumClass, name) != null;
+        } catch (Exception ex){
+        }
+        return inEnum;
     }
 
     public class Field extends Element {
