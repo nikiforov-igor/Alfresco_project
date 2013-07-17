@@ -7,7 +7,7 @@
         <properties>
             <property>
                 <name>archiveFolder</name>
-                <value>errandsArhive</value>
+                <value>Архив/Поручения</value>
             </property>
             <property>
                 <name>archiveFolderAdditional</name>
