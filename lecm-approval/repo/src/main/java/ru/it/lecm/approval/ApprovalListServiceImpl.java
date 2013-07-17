@@ -346,7 +346,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		String description = String.format("Вам необходимо согласовать документ %s, срок согласования %s", docInfo.getDocumentLink(), dueDatemessage);
 
 		Notification notification = new Notification();
-		notification.setAutor(AuthenticationUtil.getSystemUserName());
+		notification.setAuthor(AuthenticationUtil.getSystemUserName());
 		notification.setDescription(description);
 		notification.setObjectRef(docInfo.getDocumentRef());
 		notification.setRecipientEmployeeRefs(recipients);
@@ -380,7 +380,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		String description = String.format("Принято решение о документе %s: \"%s\"", docInfo.getDocumentLink(), decision);
 
 		Notification notification = new Notification();
-		notification.setAutor(AuthenticationUtil.getSystemUserName());
+		notification.setAuthor(AuthenticationUtil.getSystemUserName());
 		notification.setDescription(description);
 		notification.setObjectRef(docInfo.getDocumentRef());
 		notification.setRecipientEmployeeRefs(recipients);
@@ -402,7 +402,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
 			fakeProps.put(FAKE_PROP_COMINGSOON, "");
 			Notification notification = new Notification();
-			notification.setAutor(AuthenticationUtil.getSystemUserName());
+			notification.setAuthor(AuthenticationUtil.getSystemUserName());
 			String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
 			notification.setDescription(description);
 			notification.setObjectRef(docInfo.getDocumentRef());
@@ -412,7 +412,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
 			fakeProps.put(FAKE_PROP_OVERDUE, "");
 			Notification notification = new Notification();
-			notification.setAutor(AuthenticationUtil.getSystemUserName());
+			notification.setAuthor(AuthenticationUtil.getSystemUserName());
 			String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
 			notification.setDescription(description);
 			notification.setObjectRef(docInfo.getDocumentRef());
@@ -477,7 +477,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 			if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
 				variableScope.setVariable("initiatorComingSoon", "");
 				Notification notification = new Notification();
-				notification.setAutor(AuthenticationUtil.getSystemUserName());
+				notification.setAuthor(AuthenticationUtil.getSystemUserName());
 				String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
 				notification.setDescription(description);
 				notification.setObjectRef(docInfo.getDocumentRef());
@@ -487,7 +487,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 			if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
 				variableScope.setVariable("initiatorOverdue", "");
 				Notification notification = new Notification();
-				notification.setAutor(AuthenticationUtil.getSystemUserName());
+				notification.setAuthor(AuthenticationUtil.getSystemUserName());
 				String people = getIncompleteAssignees(processInstanceId);
 				String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate), people);
 				if (isDocumentApproval) {

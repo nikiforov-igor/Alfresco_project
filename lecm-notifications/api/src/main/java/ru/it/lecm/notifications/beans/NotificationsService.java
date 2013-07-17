@@ -126,4 +126,25 @@ public interface NotificationsService {
 	 * @return Список ссылок на типы доставки уведомлений
 	 */
 	public List<NodeRef> getCurrentUserDefaultNotificationTypes();
+
+	/**
+	 * Отправка уведомления сотрудникам
+	 * @param author Автор уведомления
+	 * @param object Объект уведомления
+	 * @param textFormatString Форматная строка для текста уведомления. Стпроится по основному объекту
+	 * @param recipientEmployees Список сотрудников-получаетлей уведомления
+	 * @param channels каналы уведомления
+	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
+	 */
+	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels);
+
+	/**
+	 * Отправка уведомления сотрудникам по каналам уведомлений из личных настроек сотрудников
+	 * @param author Автор уведомления
+	 * @param object Объект уведомления
+	 * @param textFormatString Форматная строка для текста уведомления. Стпроится по основному объекту
+	 * @param recipientEmployees Список сотрудников-получаетлей уведомления
+	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
+	 */
+	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees);
 }

@@ -268,7 +268,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 			Notification notification = new Notification();
 			notification.setRecipientEmployeeRefs(curators);
-			notification.setAutor(authService.getCurrentUserName());
+			notification.setAuthor(authService.getCurrentUserName());
 			notification.setDescription(notificationText.toString());
 			notification.setObjectRef(contractRef);
 			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
@@ -314,7 +314,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 				Notification notification = new Notification();
 				notification.setRecipientEmployeeRefs(curators);
-				notification.setAutor(authService.getCurrentUserName());
+				notification.setAuthor(authService.getCurrentUserName());
 				notification.setDescription(notificationText.toString());
 				notification.setObjectRef(documentRef);
 				notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
@@ -336,7 +336,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 		Notification notification = new Notification();
 		notification.setRecipientEmployeeRefs(signers);
-		notification.setAutor(authService.getCurrentUserName());
+		notification.setAuthor(authService.getCurrentUserName());
 		notification.setDescription(notificationText.toString());
 		notification.setObjectRef(contractRef);
 		notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
@@ -352,7 +352,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 		Notification notification = new Notification();
 		notification.setRecipientEmployeeRefs(executors);
-		notification.setAutor(authService.getCurrentUserName());
+		notification.setAuthor(authService.getCurrentUserName());
 		notification.setDescription(notificationText.toString());
 		notification.setObjectRef(contractRef);
 		notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
@@ -367,7 +367,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 		Notification recordersNotification = new Notification();
 		recordersNotification.setRecipientEmployeeRefs(recorders);
-		recordersNotification.setAutor(authService.getCurrentUserName());
+		recordersNotification.setAuthor(authService.getCurrentUserName());
 		recordersNotification.setDescription(recordersNotificationText.toString());
 		recordersNotification.setObjectRef(contractRef);
 		recordersNotification.setInitiatorRef(orgstructureService.getCurrentEmployee());
@@ -381,7 +381,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 		Notification executorsNotification = new Notification();
 		executorsNotification.setRecipientEmployeeRefs(executors);
-		executorsNotification.setAutor(authService.getCurrentUserName());
+		executorsNotification.setAuthor(authService.getCurrentUserName());
 		executorsNotification.setDescription(executorsNotificationText.toString());
 		executorsNotification.setObjectRef(contractRef);
 		executorsNotification.setInitiatorRef(orgstructureService.getCurrentEmployee());
@@ -408,7 +408,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 			Notification notification = new Notification();
 			notification.setRecipientEmployeeRefs(signers);
-			notification.setAutor(authService.getCurrentUserName());
+			notification.setAuthor(authService.getCurrentUserName());
 			notification.setDescription(notificationText.toString());
 			notification.setObjectRef(documentRef);
 			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
@@ -431,7 +431,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 			Notification notification = new Notification();
 			notification.setRecipientEmployeeRefs(executors);
-			notification.setAutor(authService.getCurrentUserName());
+			notification.setAuthor(authService.getCurrentUserName());
 			notification.setDescription(notificationText.toString());
 			notification.setObjectRef(documentRef);
 			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());

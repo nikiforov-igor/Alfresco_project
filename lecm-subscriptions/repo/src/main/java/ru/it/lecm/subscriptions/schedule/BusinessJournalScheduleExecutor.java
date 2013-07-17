@@ -141,7 +141,7 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 			List<NodeRef> businessRoles = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_BUSINESS_ROLE);
 			Notification notification = new Notification();
 			notification.setObjectRef(mainObject);
-			notification.setAutor(author);
+			notification.setAuthor(author);
 			notification.setInitiatorRef(initiatorRef);
 			notification.setDescription(description);
 			notification.setFormingDate(date);

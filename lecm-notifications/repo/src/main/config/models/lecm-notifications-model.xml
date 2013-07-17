@@ -64,7 +64,7 @@
 					</source>
 					<target>
 						<class>lecm-notf-type:notification-type</class>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>true</many>
 					</target>
 				</association>

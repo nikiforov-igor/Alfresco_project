@@ -160,7 +160,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
         employeeList.add(employee);
         notification.setRecipientEmployeeRefs(employeeList);
-        notification.setAutor(authService.getCurrentUserName());
+        notification.setAuthor(authService.getCurrentUserName());
         notification.setDescription("Вы приглашены как новый участник в документ " +
                 wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
         notification.setObjectRef(docRef);

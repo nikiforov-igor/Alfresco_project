@@ -12,7 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.notifications.beans.Notification;
-import ru.it.lecm.notifications.beans.NotificationsServiceImpl;
+import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,10 +30,15 @@ import java.util.Set;
 public class NotificationsWebScriptBean extends BaseWebScript {
 	final private static Logger logger = LoggerFactory.getLogger(NotificationsWebScriptBean.class);
 
-	NotificationsServiceImpl service;
+	NotificationsService service;
+	private OrgstructureBean orgstructureService;
 
-    public void setService(NotificationsServiceImpl service) {
+    public void setService(NotificationsService service) {
 		this.service = service;
+	}
+
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
 	}
 
 	/**
@@ -52,9 +58,9 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	 */
 	public boolean sendNotification(JSONObject json) {
 		Notification notf = new Notification();
-		notf.setAutor("WebScript");
+		notf.setAuthor("WebScript");
 		try {
-			notf.setAutor(json.getString("initiator"));
+			notf.setAuthor(json.getString("initiator"));
 
 			notf.setDescription(json.getString("description"));
 			notf.setFormingDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(json.getString("formingDate")));
@@ -65,7 +71,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 
 				for (int i = 0; i < recipientsArray.length(); ++i) {
 					NodeRef nodeRef =  new NodeRef ((String) recipientsArray.get(i));
-					if (nodeRef != null && serviceRegistry.getNodeService().exists(nodeRef) && service.getOrgstructureService().isEmployee(nodeRef)) {
+					if (serviceRegistry.getNodeService().exists(nodeRef) && orgstructureService.isEmployee(nodeRef)) {
 						recipientRefsList.add(nodeRef);
 					}
 				}
@@ -75,7 +81,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 			String objectRef = json.getString("object");
 			if (objectRef != null) {
 				NodeRef nodeRef =  new NodeRef (objectRef);
-				if (nodeRef != null && serviceRegistry.getNodeService().exists(nodeRef)) {
+				if (serviceRegistry.getNodeService().exists(nodeRef)) {
 					notf.setObjectRef(nodeRef);
 				}
 			}
@@ -86,7 +92,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 
 				for (int i = 0; i < typesArray.length(); ++i) {
 					NodeRef nodeRef =  new NodeRef ((String) typesArray.get(i));
-					if (nodeRef != null && serviceRegistry.getNodeService().exists(nodeRef) && service.isNotificationType(nodeRef)) {
+					if (serviceRegistry.getNodeService().exists(nodeRef) && service.isNotificationType(nodeRef)) {
 						typesRefsList.add(nodeRef);
 					}
 				}
@@ -103,19 +109,15 @@ public class NotificationsWebScriptBean extends BaseWebScript {
     /**
      * Отправка уведомлений
      * @param employee Список ссылок на получателей (пользователей).
-     * @param description текст сообщения
+     * @param textFormatString форматная строка для текста сообщения
      * @param channels перечень каналов
-     * @param objectRef
+     * @param objectRef Основной объект уведомления
      * @return true - при успешной отправке иначе false
      */
-    public boolean sendNotification(Scriptable employee, String description, Scriptable channels, String objectRef) {
-        Notification notification = new Notification();
-
+    public boolean sendNotification(Scriptable employee, String textFormatString, Scriptable channels, String objectRef) {
         ArrayList<String> recipientsArray = getArraysList(Context.getCurrentContext().getElements(employee));
-        ArrayList<String> channelsArray = getArraysList(Context.getCurrentContext().getElements(channels));
 
-        notification.setAutor("WebScript");
-
+	    List<NodeRef> employees = null;
         if (recipientsArray != null) {
             Set<NodeRef> recipientRefsList = new HashSet<NodeRef>();
 
@@ -124,31 +126,46 @@ public class NotificationsWebScriptBean extends BaseWebScript {
                 if (NodeRef.isNodeRef(aRecipientsArray)) {
                     nodeRef = new NodeRef(aRecipientsArray);
                     if (serviceRegistry.getNodeService().exists(nodeRef)) {
-                        if (!service.getOrgstructureService().isEmployee(nodeRef)) {
-                            nodeRef = service.getOrgstructureService().getEmployeeByPerson(nodeRef);
+                        if (!orgstructureService.isEmployee(nodeRef)) {
+                            nodeRef = orgstructureService.getEmployeeByPerson(nodeRef);
                         }
                     }
-                } else if (service.getOrgstructureService().isEmployee(service.getOrgstructureService().getEmployeeByPerson(aRecipientsArray))) {
-                    nodeRef = service.getOrgstructureService().getEmployeeByPerson(aRecipientsArray);
+                } else if (orgstructureService.isEmployee(orgstructureService.getEmployeeByPerson(aRecipientsArray))) {
+                    nodeRef = orgstructureService.getEmployeeByPerson(aRecipientsArray);
                 }
                 if (nodeRef != null) {
                     recipientRefsList.add(nodeRef);
                 }
             }
-            notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipientRefsList));
+	        employees = new ArrayList<NodeRef>(recipientRefsList);
         }
 
+	    NodeRef object = null;
         if (objectRef != null) {
             NodeRef nodeRef =  new NodeRef (objectRef);
             if (serviceRegistry.getNodeService().exists(nodeRef)) {
-                notification.setObjectRef(nodeRef);
+	            object = nodeRef;
             }
         }
 
-        notification.setDescription(description);
+	    ArrayList<String> channelsArray = null;
+	    if (channels != null) {
+		    channelsArray = getArraysList(Context.getCurrentContext().getElements(channels));
+	    }
 
-        return service.sendNotification(channelsArray,notification);
+	    return service.sendNotification("WebScript", object, textFormatString, employees, channelsArray);
     }
+
+	/**
+	 * Отправка уведомлений в каналы по умолчанию
+	 * @param employee Список ссылок на получателей (пользователей).
+	 * @param textFormatString форматная строка для текста сообщения
+	 * @param objectRef Основной объект уведомления
+	 * @return true - при успешной отправке иначе false
+	 */
+	public boolean sendNotification(Scriptable employee, String textFormatString, String objectRef) {
+		return sendNotification(employee, textFormatString, null, objectRef);
+	}
 
     private ArrayList<String> getArraysList(Object[] object){
         ArrayList<String> arrayList = new ArrayList<String>();

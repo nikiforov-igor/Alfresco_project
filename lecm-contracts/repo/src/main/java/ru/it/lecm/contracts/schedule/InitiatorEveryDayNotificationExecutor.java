@@ -2,14 +2,11 @@ package ru.it.lecm.contracts.schedule;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
-import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.quartz.CronTrigger;
-import org.quartz.SchedulerException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -17,7 +14,6 @@ import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +53,7 @@ public class InitiatorEveryDayNotificationExecutor extends ActionExecuterAbstrac
         employeeList.add(getInitiator(nodeRef));
         notification.setRecipientEmployeeRefs(employeeList);
 
-        notification.setAutor(AuthenticationUtil.getSystemUserName());
+        notification.setAuthor(AuthenticationUtil.getSystemUserName());
         notification.setDescription(getNotificationDescription(nodeRef));
         notification.setObjectRef(nodeRef);
         notification.setInitiatorRef(null);

@@ -64,6 +64,7 @@
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
 		<property name="authService" ref="authenticationService"/>
+		<property name="substituteService" ref="substitudeService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -80,6 +81,9 @@
 		</property>
 		<property name="service">
 			<ref bean="notificationsService"/>
+		</property>
+		<property name="orgstructureService">
+			<ref bean="serviceOrgstructure"/>
 		</property>
 	</bean>
 

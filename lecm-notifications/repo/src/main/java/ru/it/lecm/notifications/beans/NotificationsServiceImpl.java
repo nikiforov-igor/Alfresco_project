@@ -15,6 +15,7 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
@@ -32,6 +33,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 	private OrgstructureBean orgstructureService;
 	private DictionaryBean dictionaryService;
+	private SubstitudeBean substituteService;
 
 	private NodeRef notificationsRootRef;
 	private NodeRef notificationsGenaralizetionRootRef;
@@ -60,6 +62,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 	public void setDictionaryService(DictionaryBean dictionaryService) {
 		this.dictionaryService = dictionaryService;
+	}
+
+	public void setSubstituteService(SubstitudeBean substituteService) {
+		this.substituteService = substituteService;
 	}
 
 	public Map<NodeRef, NotificationChannelBeanBase> getChannels() {
@@ -131,8 +137,8 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 					typeRefs.add(getChannelsNodeRefs().get(channel));
 				}
 			}
+			notification.setTypeRefs(typeRefs);
 		}
-		notification.setTypeRefs(typeRefs);
 		return sendNotification(notification);
 	}
 
@@ -191,7 +197,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	 */
 	private NodeRef createGeneralizedNotification(Notification notification) {
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
-		properties.put(PROP_GENERAL_AUTOR, notification.getAutor());
+		properties.put(PROP_GENERAL_AUTOR, notification.getAuthor());
 		properties.put(PROP_GENERAL_DESCRIPTION, notification.getDescription());
 		properties.put(PROP_GENERAL_FORMING_DATE, notification.getFormingDate());
 
@@ -279,27 +285,35 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                 }
             }
 
-			for (NodeRef typeRef : generalizedNotification.getTypeRefs()) {
-                addNotificationUnits(generalizedNotification, employeeRefs, typeRef, result);
-            }
+			result.addAll(addNotificationUnits(generalizedNotification, employeeRefs));
 		}
 		return result;
 	}
 
-	private void addNotificationUnits(Notification generalizedNotification, Set<NodeRef> employeeRefs,
-	                                  NodeRef typeRef, Set<NotificationUnit> resultSet) {
+	private Set<NotificationUnit> addNotificationUnits(Notification generalizedNotification, Set<NodeRef> employeeRefs) {
+		Set<NotificationUnit> result = new HashSet<NotificationUnit>();
+
 		for (NodeRef employeeRef: employeeRefs) {
 			if (orgstructureService.isEmployee(employeeRef) && !employeeRef.equals(generalizedNotification.getInitiatorRef())) {
-				NotificationUnit newNotificationUnit = new NotificationUnit();
-				newNotificationUnit.setAutor(generalizedNotification.getAutor());
-				newNotificationUnit.setDescription(generalizedNotification.getDescription());
-				newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
-				newNotificationUnit.setObjectRef(generalizedNotification.getObjectRef());
-				newNotificationUnit.setTypeRef(typeRef);
-				newNotificationUnit.setRecipientRef(employeeRef);
-				resultSet.add(newNotificationUnit);
+				List<NodeRef> typeRefs = generalizedNotification.getTypeRefs();
+				if (typeRefs == null || typeRefs.size() == 0) {
+					typeRefs = getEmployeeDefaultNotificationTypes(employeeRef);
+				}
+
+				for (NodeRef typeRef : typeRefs) {
+					NotificationUnit newNotificationUnit = new NotificationUnit();
+					newNotificationUnit.setAutor(generalizedNotification.getAuthor());
+					newNotificationUnit.setDescription(generalizedNotification.getDescription());
+					newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
+					newNotificationUnit.setObjectRef(generalizedNotification.getObjectRef());
+					newNotificationUnit.setTypeRef(typeRef);
+					newNotificationUnit.setRecipientRef(employeeRef);
+					result.add(newNotificationUnit);
+				}
 			}
 		}
+
+		return result;
 	}
 
 	/**
@@ -312,7 +326,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 			logger.warn("Уведомление null");
 			return false;
 		}
-		if (notification.getAutor() == null) {
+		if (notification.getAuthor() == null) {
 			logger.warn("Автор уведомление null");
 			return false;
 		}
@@ -387,7 +401,11 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	}
 
 	public List<NodeRef> getSystemDefaultNotificationTypes() {
-		return dictionaryService.getRecordsByParamValue(NOTIFICATION_TYPE_DICTIONARY_NAME, PROP_DEFAULT_SELECT, true);
+		List<NodeRef> systemDefaultChannels = dictionaryService.getRecordsByParamValue(NOTIFICATION_TYPE_DICTIONARY_NAME, PROP_DEFAULT_SELECT, true);
+		if (systemDefaultChannels == null || systemDefaultChannels.size() == 0) {
+			logger.warn("Do not select any default notification channel");
+		}
+		return systemDefaultChannels;
 	}
 
 	public List<NodeRef> getEmployeeDefaultNotificationTypes(NodeRef employee) {
@@ -419,24 +437,21 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return getEmployeeDefaultNotificationTypes(orgstructureService.getCurrentEmployee());
 	}
 
-	/**
-	 * Отправка уведомления
-	 * @param autor
-	 * @param mainObject
-	 * @param textFormatString
-	 * @param recipients
-	 * @return
-	 */
-//	public boolean sendNotification(String autor, NodeRef mainObject, String textFormatString, List<NodeRef> recipients) {
-//		List<NodeRef> typeRefs = new ArrayList<NodeRef>();
-//		if (channels != null) {
-//			for (String channel: channels) {
-//				if (getChannelsNodeRefs().containsKey(channel)) {
-//					typeRefs.add(getChannelsNodeRefs().get(channel));
-//				}
-//			}
-//		}
-//		notification.setTypeRefs(typeRefs);
-//		return sendNotification(notification);
-//	}
+	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels) {
+		Notification notification = new Notification();
+		notification.setAuthor(author);
+		notification.setRecipientEmployeeRefs(recipientEmployees);
+		notification.setObjectRef(object);
+		notification.setDescription(substituteService.formatNodeTitle(object, textFormatString));
+		return sendNotification(channels, notification);
+	}
+
+	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees) {
+		Notification notification = new Notification();
+		notification.setAuthor(author);
+		notification.setRecipientEmployeeRefs(recipientEmployees);
+		notification.setObjectRef(object);
+		notification.setDescription(substituteService.formatNodeTitle(object, textFormatString));
+		return sendNotification(notification);
+	}
 }

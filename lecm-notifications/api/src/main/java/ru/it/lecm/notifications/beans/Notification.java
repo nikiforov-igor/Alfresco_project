@@ -17,7 +17,7 @@ public class Notification {
 	 * Инициатор уведомления.
 	 * Берётся из бизнес журнала.
 	 */
-	private String autor;
+	private String author;
 	/**
 	 * Текст уведомления.
 	 * Берётся из бизнес журнала.
@@ -35,6 +35,8 @@ public class Notification {
 	private Date formingDate;
 	/**
 	 * Список ссылок на тип доставки уведомлений.
+	 * Если null, то будут взяты настройки по-умолчанию для конкретного пользователя
+	 *
 	 * Берётся из подписки.
 	 */
 	private List<NodeRef> typeRefs;
@@ -69,12 +71,12 @@ public class Notification {
     public Notification() {
 	}
 
-	public String getAutor() {
-		return autor;
+	public String getAuthor() {
+		return author;
 	}
 
-	public void setAutor(String autor) {
-		this.autor = autor;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 	public String getDescription() {
