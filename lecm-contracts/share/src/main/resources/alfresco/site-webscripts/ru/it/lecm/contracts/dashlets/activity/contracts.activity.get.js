@@ -17,8 +17,8 @@ function getRecords(codes) {
             refs += eval('(' + result + ')').nodeRef;
         }
     }
-
-    if (refs != "") {
+	return refs;
+    /*if (refs != "") {
         var url = '/lecm/business-journal/api/search?type=' + refs + "&days=30&whose=&checkMainObject=true";
         var result = remote.connect("alfresco").get(url);
         if (result.status != 200) {
@@ -26,11 +26,12 @@ function getRecords(codes) {
             return [];
         }
         return eval('(' + result + ')');
-    }
+    }*/
 }
 
 function main() {
-    model.records = jsonUtils.toJSONString(getRecords(TYPE_CODES));
+    //model.records = jsonUtils.toJSONString(getRecords(TYPE_CODES));
+    model.refs = getRecords(TYPE_CODES);
 }
 
 main();

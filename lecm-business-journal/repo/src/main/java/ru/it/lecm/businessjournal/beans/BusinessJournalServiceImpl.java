@@ -526,6 +526,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
     @Override
     public List<NodeRef> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject) {
+        return getRecordsByParams(objectTypeRefs, begin, end, whoseKey, checkMainObject, null, null);
+    }
+
+    @Override
+    public List<NodeRef> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject, Integer skipCount, Integer maxItems) {
         List<NodeRef> records = new ArrayList<NodeRef>(10);
         final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
         final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
@@ -588,6 +593,12 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         }
         sp.addSort("@" + PROP_BR_RECORD_DATE.toString(), false);
         sp.setQuery(query);
+        if (skipCount != null) {
+            sp.setSkipCount(skipCount);
+        }
+        if (maxItems != null) {
+            sp.setMaxItems(maxItems);
+        }
         try {
             results = searchService.query(sp);
             for (ResultSetRow row : results) {

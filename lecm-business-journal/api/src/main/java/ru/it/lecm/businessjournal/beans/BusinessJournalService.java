@@ -232,7 +232,21 @@ public interface BusinessJournalService {
 	 */
     List<NodeRef> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject);
 
-	/**
+    /**
+     * Метод, возвращающий список ссылок на записи заданного типа(типов),
+     * сформированные за заданный период с учетом инициатора
+     * @param objectTypeRefs    - тип объекта (или типы, разделенные запятой)
+     * @param begin             - начальная дата
+     * @param end               - конечная дата
+     * @param whoseKey          - дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
+     * @param checkMainObject   - проверять ли доступность основного объекта
+     * @param skipCount   - пропустить первые skipCount записей
+     * @param maxItems   - ограничить размер выдачи
+     * @return список ссылок
+     */
+    List<NodeRef> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject, Integer skipCount, Integer maxItems);
+
+    /**
 	 * Метод, возвращающий директорию c архивными записями
 	 * @return ссылка
 	 */

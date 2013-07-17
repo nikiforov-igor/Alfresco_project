@@ -58,13 +58,26 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
 	}
 
     public Scriptable getRecordsByParams(String objectTypes, String daysCount, String whoseKey) {
-        return getRecordsByParams(objectTypes, daysCount, whoseKey, null);
+        return getRecordsByParams(objectTypes, daysCount, whoseKey, null, null, null);
     }
 
     public Scriptable getRecordsByParams(String objectTypes, String daysCount, String whoseKey, String checkMainObject) {
+        return getRecordsByParams(objectTypes, daysCount, whoseKey, checkMainObject, null, null);
+    }
+
+    public Scriptable getRecordsByParams(String objectTypes, String daysCount, String whoseKey, String checkMainObject, String skipCount, String maxItems) {
         Date now = new Date();
         Date start = null;
-
+        Integer skipCountInt = null;
+        try {
+            skipCountInt = Integer.parseInt(skipCount);
+        } catch (NumberFormatException ignored) {
+        }
+        Integer maxItemsInt = null;
+        try {
+            maxItemsInt = Integer.parseInt(maxItems);
+        } catch (NumberFormatException ignored) {
+        }
         if (daysCount != null &&  !"".equals(daysCount)) {
             Integer days = Integer.parseInt(daysCount);
 
@@ -79,7 +92,7 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
                 start = calendar.getTime();
             }
         }
-        List<NodeRef> refs = service.getRecordsByParams(objectTypes, start, now, whoseKey, Boolean.parseBoolean(checkMainObject));
+        List<NodeRef> refs = service.getRecordsByParams(objectTypes, start, now, whoseKey, Boolean.parseBoolean(checkMainObject), skipCountInt, maxItemsInt);
         return createScriptable(refs);
     }
 
