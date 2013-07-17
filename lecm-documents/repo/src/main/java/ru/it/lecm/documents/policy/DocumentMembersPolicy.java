@@ -165,7 +165,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
                 wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
         notification.setObjectRef(docRef);
         notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-        notificationService.sendNotification(this.notificationChannels, notification);
+        notificationService.sendNotification(notification);
 
         // Обновляем имя ноды
         String newName = generateMemberNodeName(nodeAssocRef.getSourceRef());

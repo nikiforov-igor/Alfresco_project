@@ -57,7 +57,7 @@ public class InitiatorEveryDayNotificationExecutor extends ActionExecuterAbstrac
         notification.setDescription(getNotificationDescription(nodeRef));
         notification.setObjectRef(nodeRef);
         notification.setInitiatorRef(null);
-        notificationsService.sendNotification(contractsService.getNotificationChannels(), notification);
+        notificationsService.sendNotification(notification);
     }
 
     @Override

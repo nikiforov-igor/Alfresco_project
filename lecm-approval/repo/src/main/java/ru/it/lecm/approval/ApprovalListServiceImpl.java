@@ -350,7 +350,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		notification.setDescription(description);
 		notification.setObjectRef(docInfo.getDocumentRef());
 		notification.setRecipientEmployeeRefs(recipients);
-		notificationsService.sendNotification(notificationChannels, notification);
+		notificationsService.sendNotification(notification);
 	}
 
 	@Override
@@ -384,7 +384,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		notification.setDescription(description);
 		notification.setObjectRef(docInfo.getDocumentRef());
 		notification.setRecipientEmployeeRefs(recipients);
-		notificationsService.sendNotification(notificationChannels, notification);
+		notificationsService.sendNotification(notification);
 	}
 
 	private void notifyAssigneeDeadline(WorkflowTask userTask, final DocumentInfo docInfo) {
@@ -407,7 +407,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 			notification.setDescription(description);
 			notification.setObjectRef(docInfo.getDocumentRef());
 			notification.setRecipientEmployeeRefs(recipients);
-			notificationsService.sendNotification(notificationChannels, notification);
+			notificationsService.sendNotification(notification);
 		}
 		if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
 			fakeProps.put(FAKE_PROP_OVERDUE, "");
@@ -417,7 +417,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 			notification.setDescription(description);
 			notification.setObjectRef(docInfo.getDocumentRef());
 			notification.setRecipientEmployeeRefs(recipients);
-			notificationsService.sendNotification(notificationChannels, notification);
+			notificationsService.sendNotification(notification);
 		}
 		if (!fakeProps.isEmpty()) {
 			workflowService.updateTask(userTask.getId(), fakeProps, null, null);
@@ -482,7 +482,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 				notification.setDescription(description);
 				notification.setObjectRef(docInfo.getDocumentRef());
 				notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
-				notificationsService.sendNotification(notificationChannels, notification);
+				notificationsService.sendNotification(notification);
 			}
 			if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
 				variableScope.setVariable("initiatorOverdue", "");
@@ -497,7 +497,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 				notification.setDescription(description);
 				notification.setObjectRef(docInfo.getDocumentRef());
 				notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
-				notificationsService.sendNotification(notificationChannels, notification);
+				notificationsService.sendNotification(notification);
 			}
 		} catch (Exception ex) {
 			logger.error("Internal error while notifying initiator and curators", ex);

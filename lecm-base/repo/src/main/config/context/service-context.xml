@@ -42,12 +42,6 @@
 
 	<bean id="baseBean" class="ru.it.lecm.base.beans.BaseBean" abstract="true">
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
-		<property name="notificationChannels">
-			<list>
-				<value>notificationActiveChannel</value>
-				<value>notificationDashletChannel</value>
-			</list>
-		</property>
 	</bean>
 
     <bean id="baseScript" class="ru.it.lecm.base.beans.BaseWebScript" abstract="true" parent="baseJavaScriptExtension">

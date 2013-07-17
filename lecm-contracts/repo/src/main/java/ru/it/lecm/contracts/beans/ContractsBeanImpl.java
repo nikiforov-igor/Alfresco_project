@@ -272,7 +272,7 @@ public class ContractsBeanImpl extends BaseBean {
 			notification.setDescription(notificationText.toString());
 			notification.setObjectRef(contractRef);
 			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-			notificationService.sendNotification(this.notificationChannels, notification);
+			notificationService.sendNotification(notification);
 		}
 	}
 
@@ -318,7 +318,7 @@ public class ContractsBeanImpl extends BaseBean {
 				notification.setDescription(notificationText.toString());
 				notification.setObjectRef(documentRef);
 				notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-				notificationService.sendNotification(this.notificationChannels, notification);
+				notificationService.sendNotification(notification);
 			}
 		}
 	}
@@ -340,7 +340,7 @@ public class ContractsBeanImpl extends BaseBean {
 		notification.setDescription(notificationText.toString());
 		notification.setObjectRef(contractRef);
 		notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-		notificationService.sendNotification(this.notificationChannels, notification);
+		notificationService.sendNotification(notification);
 	}
 
 	public void sendingToContragentSign(NodeRef contractRef) {
@@ -356,7 +356,7 @@ public class ContractsBeanImpl extends BaseBean {
 		notification.setDescription(notificationText.toString());
 		notification.setObjectRef(contractRef);
 		notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-		notificationService.sendNotification(this.notificationChannels, notification);
+		notificationService.sendNotification(notification);
 	}
 
 	public void signing(NodeRef contractRef) {
@@ -371,7 +371,7 @@ public class ContractsBeanImpl extends BaseBean {
 		recordersNotification.setDescription(recordersNotificationText.toString());
 		recordersNotification.setObjectRef(contractRef);
 		recordersNotification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-		notificationService.sendNotification(this.notificationChannels, recordersNotification);
+		notificationService.sendNotification(recordersNotification);
 
 		List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID, true);
 		StringBuilder executorsNotificationText = new StringBuilder();
@@ -385,7 +385,7 @@ public class ContractsBeanImpl extends BaseBean {
 		executorsNotification.setDescription(executorsNotificationText.toString());
 		executorsNotification.setObjectRef(contractRef);
 		executorsNotification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-		notificationService.sendNotification(this.notificationChannels, executorsNotification);
+		notificationService.sendNotification(executorsNotification);
 	}
 
 	public void additionalDocumentSendingToSign(NodeRef documentRef) {
@@ -412,7 +412,7 @@ public class ContractsBeanImpl extends BaseBean {
 			notification.setDescription(notificationText.toString());
 			notification.setObjectRef(documentRef);
 			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-			notificationService.sendNotification(this.notificationChannels, notification);
+			notificationService.sendNotification(notification);
 		}
 	}
 
@@ -435,7 +435,7 @@ public class ContractsBeanImpl extends BaseBean {
 			notification.setDescription(notificationText.toString());
 			notification.setObjectRef(documentRef);
 			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-			notificationService.sendNotification(this.notificationChannels, notification);
+			notificationService.sendNotification(notification);
 		}
 	}
 
