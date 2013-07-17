@@ -70,13 +70,42 @@ public class ContractorsBean extends BaseBean implements Contractors {
 
         QName TYPE_CONTRACTOR = QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "contractor-type");
         if(parentContractor != null && TYPE_CONTRACTOR.equals(nodeService.getType(parentContractor))) {
-            result.put("parentContractor", parentContractor.toString());
+            result.put("parentRef", parentContractor.toString());
 
-            String parentContractorName = nodeService.getProperty(parentContractor, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "shortname")).toString();
-            result.put("parentContractorName", parentContractorName);
+            String parentContractorName = nodeService.getProperty(parentContractor, Contractors.PROP_CONTRACTOR_SHORTNAME).toString();
+            result.put("parentName", parentContractorName);
 
-            String childContractorName = nodeService.getProperty(childContractor, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "shortname")).toString();
-            result.put("childContractorName", childContractorName);
+            String childContractorName = nodeService.getProperty(childContractor, Contractors.PROP_CONTRACTOR_SHORTNAME).toString();
+            result.put("childName", childContractorName);
+        }
+
+        return result;
+    }
+
+    @Override
+    public Map<String, String> getContractorForRepresentative(NodeRef representative) {
+
+        Map<String, String> result = new HashMap<String, String>();
+
+        List<AssociationRef> representativeSourceAssocs = nodeService.getSourceAssocs(representative, Contractors.ASSOC_LINK_TO_REPRESENTATIVE);
+
+        if(representativeSourceAssocs == null || representativeSourceAssocs.isEmpty()) {
+            return result;
+        }
+
+        AssociationRef sourceAssocRefToLink = representativeSourceAssocs.get(0);
+        NodeRef linkRef = sourceAssocRefToLink.getSourceRef();
+        NodeRef contractorRef = nodeService.getPrimaryParent(linkRef).getParentRef();
+
+        if(contractorRef != null && TYPE_CONTRACTOR.isMatch(nodeService.getType(contractorRef))) {
+            result.put("parentRef", contractorRef.toString());
+
+            String parentContractorName = nodeService.getProperty(contractorRef, Contractors.PROP_CONTRACTOR_SHORTNAME).toString();
+            result.put("parentName", parentContractorName);
+
+            String representativeSurname = nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_SURNAME).toString();
+            String representativeFirstName = nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_FIRSTNAME).toString();
+            result.put("childName", String.format("%s %s", representativeSurname, representativeFirstName));
         }
 
         return result;

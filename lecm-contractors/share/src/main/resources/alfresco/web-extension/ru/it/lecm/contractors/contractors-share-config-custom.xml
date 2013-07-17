@@ -133,6 +133,7 @@
 	        </form>
         </forms>
     </config>
+
     <config evaluator="node-type" condition="lecm-contractor:contractor-type">
         <forms>
             <!-- Контрагент: Отображение -->
@@ -174,7 +175,12 @@
                     <!-- Вкладка: Контактные данные -->
                     <set id="contacts" label-id="tabs.contractor.contacts" appearance="" />
                         <field id="lecm-contractor:computed-parent" set="contacts">                                     <!-- Наименование материнской компании -->
-                            <control template="/ru/it/lecm/contractors/contractors-parent-control.ftl" />
+                            <control template="/ru/it/lecm/base-share/components/controls/view-link-control.ftl">
+                                <control-param name="formTitle">Просмотр материнской компании для</control-param>
+                                <control-param name="labelText">Материнская компания</control-param>
+                                <control-param name="dataUrl">lecm/contractors/getparent</control-param>
+                                <control-param name="setId">contacts</control-param>
+                            </control>
                         </field>
                         <field id="lecm-contractor:fullname" set="contacts"/>                                           <!-- Полное наименование -->
                         <field id="lecm-contractor:shortname" set="contacts"/>                                          <!-- Сокращенное наименование -->
@@ -302,10 +308,13 @@
             </form>
         </forms>
     </config>
+
     <config evaluator="node-type" condition="lecm-representative:representative-type">
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecm-representative:computed-contractor"/>                                                <!-- Контрагент которого представляет представитель -->
+
                     <show id="lecm-representative:primary-contact"/>                                                    <!-- Основной контакт -->
                     <show id="lecm-representative:surname"/>                                                            <!-- Фамилия -->
                     <show id="lecm-representative:firstname"/>                                                          <!-- Имя -->
@@ -321,6 +330,16 @@
 
                     <show id="lecm-contractor:representative-to-contractor-association"/>                               <!-- FK Контрагент -->
                 </field-visibility>
+
+                <appearance>
+                    <field id="lecm-representative:computed-contractor">
+                        <control template="/ru/it/lecm/base-share/components/controls/view-link-control.ftl">
+                            <control-param name="formTitle">Контрагент представляемый</control-param>
+                            <control-param name="labelText">Представляет</control-param>
+                            <control-param name="dataUrl">lecm/contractors/representatives/getcontractor</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>

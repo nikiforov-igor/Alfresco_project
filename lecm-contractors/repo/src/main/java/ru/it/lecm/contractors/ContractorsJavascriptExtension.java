@@ -40,13 +40,34 @@ public class ContractorsJavascriptExtension extends BaseScopableProcessorExtensi
         NodeRef childContractor;
 
         try {
-            childContractor = new NodeRef(json.getString("childContractor"));
+            childContractor = new NodeRef(json.getString("childRef"));
         }
         catch (JSONException ex) {
             throw new WebScriptException(ex.getMessage(), ex);
         }
 
         Map<String, String> result = contractors.getParentContractor(childContractor);
+
+        if( result.isEmpty() ) {
+            result.put("status", "failure");
+        } else {
+            result.put("status", "success");
+        }
+
+        return new JSONObject(result);
+    }
+
+    public JSONObject getContractorForRepresentative(final JSONObject json) {
+        NodeRef childContractor;
+
+        try {
+            childContractor = new NodeRef(json.getString("childRef"));
+        }
+        catch (JSONException ex) {
+            throw new WebScriptException(ex.getMessage(), ex);
+        }
+
+        Map<String, String> result = contractors.getContractorForRepresentative(childContractor);
 
         if( result.isEmpty() ) {
             result.put("status", "failure");
