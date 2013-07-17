@@ -16,6 +16,7 @@ import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
@@ -29,6 +30,7 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentConnectionServiceImpl;
 import ru.it.lecm.documents.beans.DocumentMembersServiceImpl;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.constraints.PresentStringConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
@@ -62,6 +64,7 @@ public class DocumentPolicy extends BaseBean
     private AuthorityService authorityService;
     private DocumentConnectionServiceImpl documentConnectionService;
     private DocumentMembersServiceImpl documentMembersService;
+    private NamespaceService namespaceService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -113,6 +116,10 @@ public class DocumentPolicy extends BaseBean
         this.documentMembersService = documentMembersService;
     }
 
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
 	final public void init() {
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
         PropertyCheck.mandatory(this, "nodeService", nodeService);
@@ -129,14 +136,16 @@ public class DocumentPolicy extends BaseBean
     /**
      * Метод переназначает документ новому сотруднику и выделяем ему соответствующие права
      */
-    public void documentTransmit(NodeRef documentRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-        NodeRef beforeAuthor = new NodeRef(before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).toString());
+    public void documentTransmit(NodeRef documentRef, Map<QName, Serializable> before, Map<QName, Serializable> after, QName authorPropertyQName) {
+        NodeRef beforeAuthor = new NodeRef(before.get(authorPropertyQName).toString());
         NodeRef afterAuthor = new NodeRef(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF).toString());
         Set<AccessPermission> permissionsDoc = permissionService.getAllSetPermissions(documentRef);
         Set<String> permissionsEmployee = authorityService.getAuthoritiesForUser(orgstructureService.getEmployeeLogin(beforeAuthor));
 
-        nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(afterAuthor));
-        nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_CREATOR_REF, afterAuthor.toString());
+        if (authorPropertyQName.equals(DocumentService.PROP_DOCUMENT_CREATOR_REF)) {
+            nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(afterAuthor));
+        }
+        nodeService.setProperty(documentRef, authorPropertyQName, afterAuthor.toString());
         nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_EMPLOYEE_REF, "");
 
         for (AccessPermission permission : permissionsDoc) {
@@ -198,16 +207,26 @@ public class DocumentPolicy extends BaseBean
 
     }
 
+    private QName getAuthorProperty(NodeRef nodeRef) {
+        QName type = nodeService.getType(nodeRef);
+        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_AUTHOR_PROPERTY));
+        return (constraint == null) ? null : QName.createQName(((AuthorPropertyConstraint)constraint.getConstraint()).getAuthorProperty(), namespaceService);
+    }
+
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
         if (employeeRef != null) {
             nodeService.setProperty(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER, substituteService.getObjectDescription(employeeRef));
             nodeService.setProperty(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF, employeeRef.toString());
         }
-        if (before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF) != null && !before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals("") &&
+        QName authorPropertyQName = getAuthorProperty(nodeRef);
+        if (authorPropertyQName == null) {
+            authorPropertyQName = DocumentService.PROP_DOCUMENT_CREATOR_REF;
+        }
+        if (before.get(authorPropertyQName) != null && !before.get(authorPropertyQName).equals("") &&
 		        after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF) != null && !after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF).equals("")) {
-            if (!before.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).equals(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF))) {
-                documentTransmit(nodeRef, before, after);
+            if (!before.get(authorPropertyQName).equals(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF))) {
+                documentTransmit(nodeRef, before, after, authorPropertyQName);
             }
         }
         if (!changeIgnoredProperties(before, after)) {
