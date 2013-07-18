@@ -115,6 +115,15 @@ public interface DocumentConnectionService {
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef, boolean isSystem);
 
 	/**
+	 * Создание связи
+	 * @param primaryDocumentNodeRef Ссылка на исходный документ
+	 * @param connectedDocumentNodeRef  Ссылка на целевой документ
+	 * @param typeDictionaryElementCode Код элемента справочника для типа связи
+	 * @return Ссылка на созданную связь
+	 */
+	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, String typeDictionaryElementCode, boolean isSystem);
+
+	/**
 	 * Удаление связи
 	 * @param nodeRef Ссылка на связь
 	 */

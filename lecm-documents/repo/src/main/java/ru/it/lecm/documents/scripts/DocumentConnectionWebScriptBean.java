@@ -150,6 +150,11 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	public ScriptNode createConnection(ScriptNode primaryDocument, ScriptNode connectedDocument, String typeDictionaryElementCode, boolean isSystem) {
+		NodeRef connectionsRef = this.documentConnectionService.createConnection(primaryDocument.getNodeRef(), connectedDocument.getNodeRef(), typeDictionaryElementCode, isSystem);
+		return new ScriptNode(connectionsRef, this.serviceRegistry, getScope());
+	}
+
 	public String deleteConnection(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 

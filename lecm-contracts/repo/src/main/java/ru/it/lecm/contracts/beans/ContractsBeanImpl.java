@@ -12,18 +12,10 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.dictionary.beans.DictionaryBean;
-import ru.it.lecm.documents.beans.DocumentConnectionService;
-import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.regnumbers.RegNumbersService;
-import ru.it.lecm.regnumbers.template.TemplateParseException;
-import ru.it.lecm.regnumbers.template.TemplateRunException;
 
 import java.io.Serializable;
 import java.util.*;
@@ -52,7 +44,6 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final QName ASSOC_CONTRACT_REPRESENTATIVE = QName.createQName(CONTRACTS_NAMESPACE_URI, "representative-assoc");
 	public static final QName ASSOC_CONTRACT_CURRENCY = QName.createQName(CONTRACTS_NAMESPACE_URI, "currency-assoc");
 
-	public static final QName ASPECT_CONTRACT_DELETED = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "deleted");
 	public static final QName ASPECT_PRIMARY_DOCUMENT_DELETE = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentDeletedAspect");
 	public static final QName ASPECT_PRIMARY_DOCUMENT_EXECUTED = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentExecutedAspect");
 
@@ -68,15 +59,9 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final String BUSINESS_ROLE_CONTRACT_EXECUTOR_ID = "CONTRACT_EXECUTOR";
 
     private SearchService searchService;
-	private DictionaryBean dictionaryService;
     private DocumentService documentService;
-    private DocumentConnectionService documentConnectionService;
-    private DocumentMembersService documentMembersService;
-    private NamespaceService namespaceService;
     private OrgstructureBean orgstructureService;
-	private RegNumbersService regNumbersService;
 	private NotificationsService notificationService;
-	private BusinessJournalService businessJournalService;
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
@@ -84,22 +69,6 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
-	}
-
-	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
-		this.documentConnectionService = documentConnectionService;
-	}
-
-	public void setDictionaryService(DictionaryBean dictionaryService) {
-		this.dictionaryService = dictionaryService;
-	}
-
-    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
-        this.documentMembersService = documentMembersService;
-    }
-
-	public void setRegNumbersService(RegNumbersService regNumbersService) {
-		this.regNumbersService = regNumbersService;
 	}
 
 	public void setNotificationService(NotificationsService notificationService) {
@@ -110,22 +79,10 @@ public class ContractsBeanImpl extends BaseBean {
         this.orgstructureService = orgstructureService;
     }
 
-    public void setNamespaceService(NamespaceService namespaceService) {
-        this.namespaceService = namespaceService;
-    }
-
-	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
-		this.businessJournalService = businessJournalService;
-	}
-
 	@Override
     public NodeRef getServiceRootFolder() {
         return null;
     }
-
-	public DocumentService getDocumentService() {
-		return documentService;
-	}
 
 	public NodeRef getDraftRoot() {
 		return  documentService.getDraftRootByType(TYPE_CONTRACTS_DOCUMENT);
@@ -174,29 +131,6 @@ public class ContractsBeanImpl extends BaseBean {
             Collections.sort(members, new NodeRefComparator<String>());
         };
         return members;
-    }
-
-	public String createDocumentOnBasis(NodeRef typeRef, NodeRef documentRef) {
-		ChildAssociationRef additionalDocumentAssociationRef = nodeService.createNode(getDraftRoot(),
-				ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
-				GUID.generate()), TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT);
-
-		if (additionalDocumentAssociationRef != null && additionalDocumentAssociationRef.getChildRef() != null) {
-			NodeRef additionalDocumentRef = additionalDocumentAssociationRef.getChildRef();
-			nodeService.createAssociation(additionalDocumentRef, typeRef, ASSOC_ADDITIONAL_DOCUMENT_TYPE);
-			nodeService.createAssociation(additionalDocumentRef, documentRef, ASSOC_DOCUMENT);
-
-			NodeRef connectionType = dictionaryService.getDictionaryValueByParam(
-					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
-					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
-					DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE);
-
-			if (connectionType != null) {
-				documentConnectionService.createConnection(documentRef, additionalDocumentRef, connectionType, true);
-			}
-            return additionalDocumentRef.toString();
-		}
-        return null;
     }
 
     public List<NodeRef> getContractsByFilter(QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> initiatorsList, List<NodeRef> docsList, boolean includeAdditional) {
@@ -335,22 +269,6 @@ public class ContractsBeanImpl extends BaseBean {
 			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
 			notificationService.sendNotification(notification);
 		}
-	}
-
-	public String getContractType(NodeRef contractRef) {
-		NodeRef type = findNodeByAssociationRef(contractRef, ASSOC_CONTRACT_TYPE, null, ASSOCIATION_TYPE.TARGET);
-		if (type != null) {
-			return nodeService.getProperty(type, ContentModel.PROP_NAME).toString();
-		}
-		return null;
-	}
-
-	public String getContractSubject(NodeRef contractRef) {
-		NodeRef subject = findNodeByAssociationRef(contractRef, ASSOC_CONTRACT_SUBJECT, null, ASSOCIATION_TYPE.TARGET);
-		if (subject != null) {
-			return nodeService.getProperty(subject, ContentModel.PROP_NAME).toString();
-		}
-		return null;
 	}
 
 	public NodeRef getContractExecutor(NodeRef contractRef) {

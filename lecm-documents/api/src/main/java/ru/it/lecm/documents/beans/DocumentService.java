@@ -124,12 +124,6 @@ public interface DocumentService {
      */
     NodeRef getDraftRootByType(QName docType);
 
-	/**
-	 * Полечение документа из workflow listener
-	 * @param packageRef Package items nodeRef
-	 * @return Ссылка на документ
-	 */
-	public NodeRef getDocumentFromPackageItems(NodeRef packageRef);
     /**
      * Получение списка участников для данного типа документов
      * @return List<NodeRef> - ссылок на сотрудников

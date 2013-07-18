@@ -16,6 +16,7 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
@@ -32,6 +33,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	private SearchService searchService;
 	private NamespaceService namespaceService;
 	private LecmPermissionService lecmPermissionService;
+	private DictionaryBean dictionaryService;
 
 	private final Object lock = new Object();
 
@@ -45,6 +47,10 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
+	}
+
+	public void setDictionaryService(DictionaryBean dictionaryService) {
+		this.dictionaryService = dictionaryService;
 	}
 
 	public NodeRef getRootFolder(final NodeRef documentRef) {
@@ -309,6 +315,18 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		nodeService.createAssociation(connectionNodeRef, typeNodeRef, ASSOC_CONNECTION_TYPE);
 
 		return connectionNodeRef;
+	}
+
+	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, String typeDictionaryElementCode, boolean isSystem) {
+		NodeRef connectionType = dictionaryService.getDictionaryValueByParam(
+					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+					typeDictionaryElementCode);
+		if (connectionType != null) {
+			return createConnection(primaryDocumentNodeRef, connectedDocumentNodeRef, connectionType, isSystem);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

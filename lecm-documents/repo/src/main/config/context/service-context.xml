@@ -153,6 +153,7 @@
         <property name="searchService" ref="SearchService"/>
         <property name="namespaceService" ref="namespaceService"/>
 	    <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+	    <property name="dictionaryService" ref="serviceDictionary"/>
     </bean>
 
     <bean id="documentConnectionScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentConnectionWebScriptBean"

@@ -273,18 +273,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 		return null;
 	}
 
-	public NodeRef getDocumentFromPackageItems(NodeRef packageRef) {
-		NodeRef documentRef = null;
-		List<ChildAssociationRef> packageAssocs = nodeService.getChildAssocs(packageRef);
-		if (packageAssocs != null && packageAssocs.size() == 1) {
-			documentRef = packageAssocs.get(0).getChildRef();
-		}
-		if (documentRef != null && isDocument(documentRef)) {
-			return documentRef;
-		}
-		return null;
-	}
-
     @Override
     public List<NodeRef> getMembers(QName docType) {
         NodeRef membersUnit = documentMembersService.getMembersUnit(docType);

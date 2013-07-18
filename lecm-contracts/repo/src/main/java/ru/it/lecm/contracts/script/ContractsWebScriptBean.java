@@ -123,20 +123,6 @@ public class ContractsWebScriptBean extends BaseWebScript {
         return arrayList;
     }
 
-	public String createDocumentOnBasis(String typeNodeRef, String packageNodeRef) {
-		if (typeNodeRef != null && packageNodeRef != null) {
-			NodeRef typeRef = new NodeRef(typeNodeRef);
-			NodeRef packageRef = new NodeRef(packageNodeRef);
-			if (nodeService.exists(typeRef) && nodeService.exists(packageRef)) {
-				NodeRef documentRef = contractService.getDocumentService().getDocumentFromPackageItems(packageRef);
-				if (documentRef != null) {
-					return contractService.createDocumentOnBasis(typeRef, documentRef);
-				}
-			}
-		}
-        return null;
-	}
-
     public NodeRef[] getContractsByFilters(String daysCount, String userFilter){
         Date now = new Date();
         Date start = null;

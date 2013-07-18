@@ -10,8 +10,18 @@
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<activiti:string>var nodeRef = contracts.createDocumentOnBasis(lecmContractWf_documentType.nodeRef, bpm_package.nodeRef);
-                        execution.setVariable("lecm_redirect_url", "document?nodeRef=" + nodeRef)</activiti:string>
+						<activiti:string>
+							var document = bpm_package.children[0];
+							var draftRootFolder = contracts.getDraftRoot();
+
+							var newAdditionalDocument = draftRootFolder.createNode(null, "lecm-additional-document:additionalDocument");
+							newAdditionalDocument.createAssociation(lecmContractWf_documentType, "lecm-additional-document:additionalDocumentType");
+							newAdditionalDocument.createAssociation(document, "lecm-additional-document:document-assoc");
+
+							documentConnection.createConnection(document, newAdditionalDocument, "onBasis", true);
+
+							execution.setVariable("lecm_redirect_url", "document?nodeRef=" + newAdditionalDocument.nodeRef)
+						</activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>

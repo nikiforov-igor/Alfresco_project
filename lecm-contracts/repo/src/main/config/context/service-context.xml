@@ -60,16 +60,10 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="searchService" ref="searchService"/>
 	    <property name="documentService" ref="documentService"/>
-	    <property name="documentConnectionService" ref="documentConnectionService"/>
-	    <property name="dictionaryService" ref="serviceDictionary"/>
-        <property name="documentMembersService" ref="documentMembersService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="regNumbersService" ref="regNumbersService"/>
         <property name="notificationService" ref="notificationsService"/>
 	    <property name="serviceRegistry" ref="ServiceRegistry"/>
 	    <property name="authService" ref="authenticationService"/>
-        <property name="namespaceService" ref="namespaceService"/>
-	    <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 
     <bean id="contractsScript" parent="baseScript" class="ru.it.lecm.contracts.script.ContractsWebScriptBean"
