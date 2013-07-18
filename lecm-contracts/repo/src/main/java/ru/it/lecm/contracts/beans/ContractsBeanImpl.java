@@ -61,14 +61,9 @@ public class ContractsBeanImpl extends BaseBean {
     public static final QName PROP_PRIMARY_DOCUMENT_EXECUTED = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentExecuted");
 	public static final QName PROP_REGNUM_PROJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "regNumProject");
 	public static final QName PROP_REGNUM_SYSTEM = QName.createQName(CONTRACTS_NAMESPACE_URI, "regNumSystem");
-	public static final QName PROP_ADDITIONAL_DOCUMENT_NUMBER = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "number");
-	public static final QName PROP_DATE_REG_CONTRACT = QName.createQName(CONTRACTS_NAMESPACE_URI, "dateRegContracts");
 	public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
 	public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
 
-	public static final String ADDITIONAL_DOCUMENT_PROJECT_REGNUM_TEMPLATE_CODE = "CONTRACT_DOCUMENT_PROJECT_REGNUM";
-
-	public static final String BUSINESS_ROLE_CONTRACT_CURATOR_ID = "CONTRACT_CURATOR";
 	public static final String BUSINESS_ROLE_CONTRACT_SIGNER_ID = "CONTRACT_SIGNER";
 	public static final String BUSINESS_ROLE_CONTRACT_RECORDER_ID = "CONTRACT_RECORDER";
 	public static final String BUSINESS_ROLE_CONTRACT_EXECUTOR_ID = "CONTRACT_EXECUTOR";
@@ -235,42 +230,6 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
 		return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
-	}
-
-	public void registrationContractDocumentProject(NodeRef documentRef) throws TemplateParseException, TemplateRunException {
-		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, ADDITIONAL_DOCUMENT_PROJECT_REGNUM_TEMPLATE_CODE);
-		if (templateDictionary != null) {
-			String documentNumber = regNumbersService.getNumber(documentRef, templateDictionary);
-			nodeService.setProperty(documentRef, PROP_ADDITIONAL_DOCUMENT_NUMBER, documentNumber);
-
-			// уведомление
-			List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID, true);
-			NodeRef contract = findNodeByAssociationRef(documentRef, ASSOC_DOCUMENT, null, ASSOCIATION_TYPE.TARGET);
-			if (contract != null) {
-				StringBuilder notificationText = new StringBuilder();
-				notificationText.append("Зарегистрирован проект документ вида ");
-
-				NodeRef documentTypeRef = findNodeByAssociationRef(documentRef, ASSOC_ADDITIONAL_DOCUMENT_TYPE, null, ASSOCIATION_TYPE.TARGET);
-				notificationText.append(wrapperLink(documentRef, nodeService.getProperty(documentTypeRef, ContentModel.PROP_NAME).toString(), DOCUMENT_LINK_URL));
-
-				notificationText.append(" к договору номер ");
-				notificationText.append(wrapperLink(contract, nodeService.getProperty(contract, PROP_REGNUM_SYSTEM).toString(), DOCUMENT_LINK_URL));
-				notificationText.append(", вид договора ").append(getContractType(contract));
-				notificationText.append(", тематика ").append(getContractSubject(contract));
-				notificationText.append(", исполнитель ");
-				NodeRef executor = getContractExecutor(contract);
-				String executorName = nodeService.getProperty(executor, ContentModel.PROP_NAME).toString();
-				notificationText.append(wrapperLink(executor, executorName, LINK_URL));
-
-				Notification notification = new Notification();
-				notification.setRecipientEmployeeRefs(curators);
-				notification.setAuthor(authService.getCurrentUserName());
-				notification.setDescription(notificationText.toString());
-				notification.setObjectRef(documentRef);
-				notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-				notificationService.sendNotification(notification);
-			}
-		}
 	}
 
 	public void sendingToSign(NodeRef contractRef) {
