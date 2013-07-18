@@ -237,6 +237,8 @@
                 Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
                 if (this.isCopy) {
                     this.items = p_dialog.form.validations;
+                    this._setInputValue('-createColumnDetails_prop_cm_name',"");
+                    this._setInputValue('-createColumnDetails_prop_lecm-rpeditor_dataSourceCode',"");
                 }
             };
 
@@ -316,7 +318,12 @@
             input.setAttribute("value", value);
             form.appendChild(input);
         },
-
+        _setInputValue: function(name, value) {
+            var htmlItem = Dom.get(this.id + name);
+            if (htmlItem) {
+                htmlItem.setAttribute("value", value);
+            }
+        },
         _onUpdateSourceColumns: function () {
             YAHOO.Bubbling.fire("activeGridChanged", {
                 datagridMeta: {

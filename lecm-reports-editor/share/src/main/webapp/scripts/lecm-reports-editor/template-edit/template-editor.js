@@ -100,6 +100,12 @@
                     // обновим форму данными шаблона
                 }
                 this.items = p_dialog.form.validations;
+                if (this.isCopy){
+                    var htmlItem = Dom.get(this.id + '-createDetails_prop_cm_name');
+                    if (htmlItem) {
+                        htmlItem.setAttribute("value", "");
+                    }
+                }
             };
 
             var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -176,6 +182,7 @@
                         scope: this
                     }
                 }).show();
+
         },
 
         _onRefreshTemplate: function (layer, args) {
