@@ -320,7 +320,8 @@
                                 }
                             ],
                             bubblingLabel: "reports",
-                            showCheckboxColumn: false
+                            showCheckboxColumn: false,
+                            excludeColumns: ["lecm-rpeditor:reportCode"]
                         }).setMessages(${messages});
 
                 YAHOO.util.Event.onContentReady('${id}', function () {

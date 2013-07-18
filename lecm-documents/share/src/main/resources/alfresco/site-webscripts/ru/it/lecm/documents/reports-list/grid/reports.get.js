@@ -1,7 +1,7 @@
 function getReports(type) {
     var reports = [];
 
-    var url = '/lecm/reports/rptmanager/registeredReports' + (type ? ('?docType=' + type) : "");
+    var url = '/lecm/reports/rptmanager/registeredReports?forCollection=true' + (type ? ('&docType=' + type) : "");
     var result = remote.connect("alfresco").get(url);
 
     if (result.status == 200) {

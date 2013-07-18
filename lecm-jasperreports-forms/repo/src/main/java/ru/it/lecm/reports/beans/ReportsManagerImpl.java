@@ -19,10 +19,7 @@ import ru.it.lecm.reports.xml.DSXMLProducer;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ReportsManagerImpl implements ReportsManager {
 
@@ -43,7 +40,27 @@ public class ReportsManagerImpl implements ReportsManager {
 		return reportDAO;
 	}
 
-	public void setReportDAO(ReportDAO reportDAO) {
+    @Override
+    public List<ReportDescriptor> getRegisteredReports(String[] docTypes, boolean forCollection) {
+        Set<ReportDescriptor> resultedReports = new HashSet<ReportDescriptor>();
+        for (String docType : docTypes) {
+            if (docType != null && docType.length() > 0) {
+                List<ReportDescriptor> reportForType = getRegisteredReports(docType, null);
+                for (ReportDescriptor descriptor : reportForType) {
+                    if (forCollection) {
+                        if (descriptor.getFlags().isMultiRow()){
+                            resultedReports.add(descriptor);
+                        }
+                    } else {
+                        resultedReports.add(descriptor);
+                    }
+                }
+            }
+        }
+        return new ArrayList<ReportDescriptor>(resultedReports);
+    }
+
+    public void setReportDAO(ReportDAO reportDAO) {
 		this.reportDAO = reportDAO;
 	}
 
@@ -461,39 +478,34 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	@Override
-	public List<ReportDescriptor> getRegisteredReports( String docType
-			, String reportType)
-	{
-		final Map<String, ReportDescriptor> list = this.getDescriptors();
-		if (list == null || list.isEmpty())
-			return null;
+    public List<ReportDescriptor> getRegisteredReports(String docType
+            , String reportType) {
+        final Map<String, ReportDescriptor> list = this.getDescriptors();
+        if (list == null || list.isEmpty())
+            return new ArrayList<ReportDescriptor>();
 
-		if (docType != null && docType.length() == 0)
-			docType = null;
+        if (docType != null && docType.length() == 0)
+            docType = null;
 
-		if (reportType != null && reportType.length() == 0)
-			reportType = null;
+        if (reportType != null && reportType.length() == 0)
+            reportType = null;
 
-		if (docType == null && reportType == null) // не задано фильтрование
-			return new ArrayList<ReportDescriptor>( list.values());
-		final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
-		for (ReportDescriptor desc: list.values()) {
-			final boolean okDocType = 
-					(docType == null)	// не задан фильтр по типам доков 
-					|| ( (desc.getFlags() == null) || desc.getFlags().getPreferedNodeType() == null) // нет флажков у шаблона -> подходит к любому
-					|| docType.equalsIgnoreCase(desc.getFlags().getPreferedNodeType()) // совпадение типа
-					;
-			final boolean okRType = 
-					(reportType == null)	// не задан фильтр по типам отчётов 
-					|| ( (desc.getReportType() == null) || desc.getReportType().getMnem() == null) // не задан тип отчёта шаблона -> подходит к любому
-					|| reportType.equalsIgnoreCase(desc.getReportType().getMnem()) // совпадение типа
-					;
-			if (okDocType && okRType) {
-				found.add(desc);
-			}
-		}
-		return (found.isEmpty()) ? null : found;
-	}
+        if (docType == null && reportType == null) // не задано фильтрование
+            return new ArrayList<ReportDescriptor>(list.values());
+        final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
+        for (ReportDescriptor desc : list.values()) {
+            final boolean okDocType =
+                    (docType == null)    // не задан фильтр по типам доков
+                            || ((desc.getFlags() != null) && desc.getFlags().getPreferedNodeType() != null && docType.equalsIgnoreCase(desc.getFlags().getPreferedNodeType()));
+            final boolean okRType =
+                    (reportType == null)    // не задан фильтр по типам отчётов
+                            || ((desc.getReportType() != null) && desc.getReportType().getMnem() != null && reportType.equalsIgnoreCase(desc.getReportType().getMnem()));
+            if (okDocType && okRType) {
+                found.add(desc);
+            }
+        }
+        return (found.isEmpty()) ? new ArrayList<ReportDescriptor>() : found;
+    }
 
     @Override
     public List<ReportDescriptor> getRegisteredReports() {

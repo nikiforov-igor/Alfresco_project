@@ -37,8 +37,7 @@ public interface ReportsManager {
 	List<ReportDescriptor> getRegisteredReports(String docType, String reportType);
 
     /**
-     * Получить список зарегистрированных редакторов отчётов для указанного типа
-     * документов и тип отчёта
+     * Получить список зарегистрированных  отчётов
      * @return список зарегеных отчётов
      */
     List<ReportDescriptor> getRegisteredReports();
@@ -101,4 +100,13 @@ public interface ReportsManager {
 	String getDsRelativeFileName(String reportCode);
 
     ReportDAO getReportDAO();
+
+    /**
+     * Получить список зарегистрированных редакторов отчётов для указанного типа
+     * документов и тип отчёта
+     * @param docTypes массив типов документов  или null, если для любых типов
+     * @param forCollection возвращать отчеты для коллекции или нет?
+     * @return список зарегеных отчётов
+     */
+    List<ReportDescriptor> getRegisteredReports(String[] docTypes, boolean forCollection);
 }
