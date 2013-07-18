@@ -261,7 +261,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         try {
             nodeService.createAssociation(memberUnit, employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);
         } catch (AssociationExistsException ex) {
-            logger.debug("Сотрудник уже сохранен в участниках документооборота для данного типа документов:" + nodeService.getType(document), ex);
+            logger.debug("Сотрудник уже сохранен в участниках документооборота для данного типа документов:" + nodeService.getType(document));
         }
     }
 }
