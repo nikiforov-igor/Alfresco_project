@@ -42,4 +42,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 	public NodeRef getDefaultSubject() {
 		return  errandsService.getDefaultSubject();
 	}
+
+	public void requestDueDateChange() {
+		errandsService.requestDueDateChange();
+	}
 }

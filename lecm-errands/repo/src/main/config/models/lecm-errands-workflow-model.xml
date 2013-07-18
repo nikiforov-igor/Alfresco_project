@@ -12,32 +12,77 @@
 	</imports>
 
 	<namespaces>
-		<namespace uri="http://www.it.ru/logicECM/errands/workflow/1.0" prefix="lecmErrandWf"/>
+		<namespace uri="http://www.it.ru/logicECM/errand/workflow/1.0" prefix="lecmErrandWf"/>
 	</namespaces>
 
 	<types>
 		<type name="lecmErrandWf:removeDraft">
 			<parent>bpm:startTask</parent>
-			<mandatory-aspects>
-				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
-			</mandatory-aspects>
+			<!--<mandatory-aspects>-->
+				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
+			<!--</mandatory-aspects>-->
 		</type>
 
 		<type name="lecmErrandWf:createChildErrand">
 			<parent>bpm:startTask</parent>
-			<mandatory-aspects>
-				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
-			</mandatory-aspects>
+			<!--<mandatory-aspects>-->
+				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
+			<!--</mandatory-aspects>-->
 		</type>
 
 		<type name="lecmErrandWf:requestDueDateChange">
 			<parent>bpm:startTask</parent>
-			<mandatory-aspects>
-				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
-			</mandatory-aspects>
+            <properties>
+                <property name="lecmErrandWf:requestDueDateChangeNewDate">
+                    <type>d:date</type>
+                </property>
+                <property name="lecmErrandWf:requestDueDateChangeReason">
+                    <type>d:text</type>
+                </property>
+            </properties>
+            <!--<mandatory-aspects>-->
+				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
+			<!--</mandatory-aspects>-->
 		</type>
 
-		<type name="lecmErrandWf:changeDueDate">
+        <type name="lecmErrandWf:changeRequestedDueDate">
+            <parent>bpm:activitiOutcomeTask</parent>
+            <properties>
+                <property name="lecmErrandWf:changeRequestedDueDateNewDate">
+                    <type>d:date</type>
+                </property>
+                <property name="lecmErrandWf:changeRequestedDueDateReason">
+                    <type>d:text</type>
+                </property>
+                <property name="lecmErrandWf:changeRequestedDueDateComment">
+                    <type>d:text</type>
+                </property>
+                <property name="lecmErrandWf:changeRequestedDueDateTaskResult">
+                    <type>d:text</type>
+                    <default>REJECTED</default>
+                    <constraints>
+                        <constraint name="lecmErrandWf:changeRequestedDueDateTaskResultConstraint" type="LIST">
+                            <parameter name="allowedValues">
+                                <list>
+                                    <value>APPROVED</value>
+                                    <value>REJECTED</value>
+                                </list>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+            </properties>
+            <!--<overrides>-->
+                <!--<property name="bpm:packageItemActionGroup">-->
+                    <!--<default>edit_package_item_actions</default>-->
+                <!--</property>-->
+                <!--<property name="bpm:outcomePropertyName">-->
+                    <!--<default>{http://www.it.ru/logicECM/errand/change-requested-due-date-task/1.0}changeRequestedDueDateTaskResult</default>-->
+                <!--</property>-->
+            <!--</overrides>-->
+        </type>
+
+        <type name="lecmErrandWf:changeDueDate">
 			<parent>bpm:startTask</parent>
 			<mandatory-aspects>
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
@@ -53,37 +98,37 @@
 
 		<type name="lecmErrandWf:changeController">
 			<parent>bpm:startTask</parent>
-			<mandatory-aspects>
-				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
-			</mandatory-aspects>
+			<!--<mandatory-aspects>-->
+				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
+			<!--</mandatory-aspects>-->
 		</type>
 
 		<type name="lecmErrandWf:requestCancel">
 			<parent>bpm:startTask</parent>
-			<mandatory-aspects>
-				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
-			</mandatory-aspects>
+			<!--<mandatory-aspects>-->
+				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
+			<!--</mandatory-aspects>-->
 		</type>
 
 		<type name="lecmErrandWf:initiatorDecline">
 			<parent>bpm:startTask</parent>
-			<mandatory-aspects>
-				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
-			</mandatory-aspects>
+			<!--<mandatory-aspects>-->
+				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
+			<!--</mandatory-aspects>-->
 		</type>
 
 		<type name="lecmErrandWf:controllerDecline">
 			<parent>bpm:startTask</parent>
-			<mandatory-aspects>
-				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
-			</mandatory-aspects>
+			<!--<mandatory-aspects>-->
+				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
+			<!--</mandatory-aspects>-->
 		</type>
 
 		<type name="lecmErrandWf:cancel">
 			<parent>bpm:startTask</parent>
-			<mandatory-aspects>
-				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
-			</mandatory-aspects>
+			<!--<mandatory-aspects>-->
+				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
+			<!--</mandatory-aspects>-->
 		</type>
     </types>
 </model>

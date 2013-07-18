@@ -4,22 +4,54 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/requestDueDateChange/1.0">
 	<process id="errandsRequestDueDateChange" name="Запросить изменение срока поручения">
-        <startEvent id="startRequestDueDateChange" name="Start" activiti:formKey="lecmErrandWf:requestDueDateChange"></startEvent>
-        <endEvent id="endRequestDueDateChange" name="End"></endEvent>
-        <scriptTask id="requestDueDateChange" name="Request Due Date Change" scriptFormat="javascript">
+
+        <startEvent id="startRequestDueDateChange" name="Запрос переноса срока поручения" activiti:formKey="lecmErrandWf:requestDueDateChange"></startEvent>
+
+        <scriptTask id="requestDueDateChange" scriptFormat="javascript">
             <extensionElements>
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string>
+                            <!--errands.requestDueDateChange();                               //stub!!!-->
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
             <script></script>
         </scriptTask>
-        <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
+
+        <receiveTask id="requestDueDateChangeReceiveTask" name="Receive Task"></receiveTask>
+
+        <userTask id="changeRequestedDueDate" name="Перенести срок поручения" activiti:formKey="lecmErrandWf:changeRequestedDueDate">
+            <extensionElements>
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            task.setAssignee("admin");   //stub!!!
+                            task.setVariable("lecmErrandWf_changeRequestedDueDateNewDate", task.getVariable("lecmErrandWf_requestDueDateChangeNewDate"));
+                            task.setVariable("lecmErrandWf_changeRequestedDueDateReason", task.getVariable("lecmErrandWf_requestDueDateChangeReason"));
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string>
+                            //<![CDATA[
+			            //]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+
+            </extensionElements>
+        </userTask>
+
+        <endEvent id="endRequestDueDateChange" name="End"></endEvent>
+
         <sequenceFlow id="flow1" name="" sourceRef="startRequestDueDateChange" targetRef="requestDueDateChange"></sequenceFlow>
-        <sequenceFlow id="flow2" name="" sourceRef="requestDueDateChange" targetRef="errandReceiveTask"></sequenceFlow>
-        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endRequestDueDateChange"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="requestDueDateChange" targetRef="requestDueDateChangeReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="requestDueDateChangeReceiveTask" targetRef="changeRequestedDueDate"></sequenceFlow>
+        <sequenceFlow id="flow4" name="" sourceRef="changeRequestedDueDate" targetRef="endRequestDueDateChange"></sequenceFlow>
+
     </process>
 </definitions>

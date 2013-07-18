@@ -80,4 +80,6 @@ public interface ErrandsService {
 	 * @return ссылка на элеменнт справочника "Тематика"
 	 */
 	public NodeRef getDefaultSubject();
+
+    void requestDueDateChange();
 }

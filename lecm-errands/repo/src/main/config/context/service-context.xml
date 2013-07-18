@@ -223,6 +223,11 @@
                 <value>alfresco/module/${artifactId}/models/lecm-errands-workflow-model.xml</value>
             </list>
         </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-errands-workflow</value>
+            </list>
+        </property>
         <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
     </bean>
 

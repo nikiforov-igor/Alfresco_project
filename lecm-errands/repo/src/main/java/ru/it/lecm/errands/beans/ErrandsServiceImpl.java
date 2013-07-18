@@ -184,4 +184,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 			return result;
 		}
 	}
+
+    @Override
+    public void requestDueDateChange() {
+    }
 }
