@@ -10,7 +10,12 @@
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<activiti:string>contracts.appendDeleteReason(lecmContractWf_deleteReason.nodeRef, bpm_package.nodeRef);</activiti:string>
+						<activiti:string>
+							var document = bpm_package.children[0];
+
+							document.addAspect("lecm-contract-aspect:deleted");
+							document.createAssociation(lecmContractWf_deleteReason, "lecm-contract-aspect:reasonDelete-assoc");
+						</activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>

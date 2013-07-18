@@ -137,25 +137,6 @@ public class ContractsWebScriptBean extends BaseWebScript {
         return null;
 	}
 
-    /**
-     * Обозначение причины удаления документа
-     *
-     * @param reasonNodeRef - ссылка на запись справочника причин удаления документа
-     * @param packageNodeRef - ссылка на пакет документов процесса
-     */
-	public void appendDeleteReason(String reasonNodeRef, String packageNodeRef) {
-		if (reasonNodeRef != null && packageNodeRef != null) {
-			NodeRef reasonRef = new NodeRef(reasonNodeRef);
-			NodeRef packageRef = new NodeRef(packageNodeRef);
-			if (nodeService.exists(reasonRef) && nodeService.exists(packageRef)) {
-				NodeRef documentRef = contractService.getDocumentService().getDocumentFromPackageItems(packageRef);
-				if (documentRef != null) {
-					contractService.appendDeleteReason(reasonRef, documentRef);
-				}
-			}
-		}
-	}
-
     public NodeRef[] getContractsByFilters(String daysCount, String userFilter){
         Date now = new Date();
         Date start = null;

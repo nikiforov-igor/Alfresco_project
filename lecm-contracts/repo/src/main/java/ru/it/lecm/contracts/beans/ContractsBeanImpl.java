@@ -46,7 +46,6 @@ public class ContractsBeanImpl extends BaseBean {
 
     public static final QName ASSOC_ADDITIONAL_DOCUMENT_TYPE = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocumentType");
     public static final QName ASSOC_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "document-assoc");
-	public static final QName ASSOC_DELETE_REASON = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "reasonDelete-assoc");
 	public static final QName ASSOC_CONTRACT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "typeContract-assoc");
 	public static final QName ASSOC_CONTRACT_SUBJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "subjectContract-assoc");
 	public static final QName ASSOC_CONTRACT_PARTNER = QName.createQName(CONTRACTS_NAMESPACE_URI, "partner-assoc");
@@ -198,16 +197,6 @@ public class ContractsBeanImpl extends BaseBean {
             return additionalDocumentRef.toString();
 		}
         return null;
-    }
-
-    /**
-     * Добавить причину удаления к документу
-     * @param reasonRef ссылка на узел причины удаления в справочнике "Причины удаления"
-     * @param documentRef ссылка на документ
-     */
-    public void appendDeleteReason(NodeRef reasonRef, NodeRef documentRef) {
-	    nodeService.addAspect(documentRef, ASPECT_CONTRACT_DELETED, null);
-        nodeService.createAssociation(documentRef, reasonRef, ASSOC_DELETE_REASON);
     }
 
     public List<NodeRef> getContractsByFilter(QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> initiatorsList, List<NodeRef> docsList, boolean includeAdditional) {
