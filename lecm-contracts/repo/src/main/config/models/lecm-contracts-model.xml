@@ -90,6 +90,7 @@
                 <!-- Подписано контрагентом -->
                 <property name="lecm-contract:signedCounterparty">
                     <type>d:boolean</type>
+	                <default>false</default>
                 </property>
                 <!-- Подписант со стороны контрагента -->
                 <property name="lecm-contract:signatoryCounterparty">

@@ -8502,7 +8502,14 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value>
-                                                                    contracts.registrationContract(bpm_package.children[0]);
+	                                                                var contract = bpm_package.children[0];
+	                                                                regnumbers.setDocumentNumber("CONTRACT_REGNUM", contract, "lecm-contract:regNumSystem");
+	                                                                contract .properties["lecm-contract:dateRegContracts"] = new Date();
+	                                                                contract.save();
+
+	                                                                var logText = "Договор зарегистрирован, присвоен регистрационный номер: ";
+	                                                                logText += contract.properties["lecm-contract:regNumSystem"];
+	                                                                businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);
                                                                 </value>
                                                             </property>
                                                             <property>

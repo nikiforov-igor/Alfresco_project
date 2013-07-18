@@ -274,16 +274,6 @@ public class ContractsWebScriptBean extends BaseWebScript {
 	}
 
 	/**
-	 * Регистрация договора
-	 * @param contract договор
-	 * @throws TemplateParseException
-	 * @throws TemplateRunException
-	 */
-	public void registrationContract(ScriptNode contract) throws TemplateParseException, TemplateRunException {
-	 	this.contractService.registrationContract(contract.getNodeRef());
-	}
-
-	/**
 	 * Регистрация проекта документа к договору
 	 * @param document документ к договору
 	 * @throws TemplateParseException

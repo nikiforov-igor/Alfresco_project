@@ -57,7 +57,8 @@ public class Expression {
 			expression = "true";
 		}
         try {
-            return new SpelExpressionParser().parseExpression(expression).getValue(context, Boolean.class);
+	        Boolean result = new SpelExpressionParser().parseExpression(expression).getValue(context, Boolean.class);
+	        return result != null && result;
         } catch (Exception e) {
             logger.error("Expression: " + expression + " has errors", e);
             return false;

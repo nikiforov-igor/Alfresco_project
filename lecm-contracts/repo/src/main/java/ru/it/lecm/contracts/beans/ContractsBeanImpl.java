@@ -66,7 +66,6 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
 	public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
 
-	public static final String CONTRACT_REGNUM_TEMPLATE_CODE = "CONTRACT_REGNUM";
 	public static final String ADDITIONAL_DOCUMENT_PROJECT_REGNUM_TEMPLATE_CODE = "CONTRACT_DOCUMENT_PROJECT_REGNUM";
 
 	public static final String BUSINESS_ROLE_CONTRACT_CURATOR_ID = "CONTRACT_CURATOR";
@@ -236,17 +235,6 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
 		return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
-	}
-
-	public void registrationContract(NodeRef contractRef) throws TemplateParseException, TemplateRunException {
-		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, CONTRACT_REGNUM_TEMPLATE_CODE);
-		if (templateDictionary != null) {
-			String regNumber = regNumbersService.getNumber(contractRef, templateDictionary);
-			nodeService.setProperty(contractRef, PROP_REGNUM_SYSTEM, regNumber);
-			nodeService.setProperty(contractRef, PROP_DATE_REG_CONTRACT, new Date());
-
-			businessJournalService.log(contractRef, EventCategory.EDIT, "Договор зарегистрирован, присвоен регистрационный номер: " + regNumber);
-		}
 	}
 
 	public void registrationContractDocumentProject(NodeRef documentRef) throws TemplateParseException, TemplateRunException {
