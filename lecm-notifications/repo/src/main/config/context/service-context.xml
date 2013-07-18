@@ -85,6 +85,9 @@
 		<property name="orgstructureService">
 			<ref bean="serviceOrgstructure"/>
 		</property>
+		<property name="authService">
+			<ref bean="authenticationService"/>
+		</property>
 	</bean>
 
     <bean id="notifications.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">

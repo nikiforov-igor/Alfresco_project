@@ -16,6 +16,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.Parser;
 import ru.it.lecm.regnumbers.template.ParserImpl;
@@ -34,6 +35,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	private ApplicationContext applicationContext;
 	private SearchService searchService;
 	private NamespaceService namespaceService;
+	private DictionaryBean dictionaryService;
 
 	public final void init() {
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
@@ -51,6 +53,10 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
+	}
+
+	public void setDictionaryService(DictionaryBean dictionaryService) {
+		this.dictionaryService = dictionaryService;
 	}
 
 	@Override
@@ -129,6 +135,15 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	public void setDocumentNumber(NodeRef documentNode, String documentPropertyPrefix, NodeRef templateNode) throws TemplateParseException, TemplateRunException {
 		setDocumentNumber(documentNode, QName.createQName(documentPropertyPrefix, namespaceService), getTemplateString(templateNode));
 	}
+
+	@Override
+	public void setDocumentNumber(String dictionaryTemplateCode, NodeRef documentNode, String documentPropertyPrefix) throws TemplateParseException, TemplateRunException {
+		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, dictionaryTemplateCode);
+		if (templateDictionary != null) {
+			setDocumentNumber(documentNode, documentPropertyPrefix, templateDictionary);
+		}
+	}
+
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
 	@Override

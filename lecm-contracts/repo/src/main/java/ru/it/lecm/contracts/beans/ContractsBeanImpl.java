@@ -63,12 +63,10 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final QName PROP_REGNUM_SYSTEM = QName.createQName(CONTRACTS_NAMESPACE_URI, "regNumSystem");
 	public static final QName PROP_ADDITIONAL_DOCUMENT_NUMBER = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "number");
 	public static final QName PROP_DATE_REG_CONTRACT = QName.createQName(CONTRACTS_NAMESPACE_URI, "dateRegContracts");
-	public static final QName PROP_DATE_REG_CONTRACT_PROJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "dateRegProjectContracts");
 	public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
 	public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
 
 	public static final String CONTRACT_REGNUM_TEMPLATE_CODE = "CONTRACT_REGNUM";
-	public static final String CONTRACT_PROJECT_REGNUM_TEMPLATE_CODE = "CONTRACT_PROJECT_REGNUM";
 	public static final String ADDITIONAL_DOCUMENT_PROJECT_REGNUM_TEMPLATE_CODE = "CONTRACT_DOCUMENT_PROJECT_REGNUM";
 
 	public static final String BUSINESS_ROLE_CONTRACT_CURATOR_ID = "CONTRACT_CURATOR";
@@ -238,42 +236,6 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
 		return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
-	}
-
-	public void registrationContractProject(NodeRef contractRef) throws TemplateParseException, TemplateRunException {
-		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, CONTRACT_PROJECT_REGNUM_TEMPLATE_CODE);
-		if (templateDictionary != null) {
-			String documentNumber = regNumbersService.getNumber(contractRef, templateDictionary);
-			nodeService.setProperty(contractRef, PROP_REGNUM_PROJECT, documentNumber);
-			nodeService.setProperty(contractRef, PROP_DATE_REG_CONTRACT_PROJECT, new Date());
-
-			// уведомление
-			List<NodeRef> curators = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_CURATOR_ID, true);
-			StringBuilder notificationText = new StringBuilder();
-			notificationText.append("Зарегистрирован проект договора c ");
-
-			NodeRef partner = findNodeByAssociationRef(contractRef, ASSOC_CONTRACT_PARTNER, null, ASSOCIATION_TYPE.TARGET);
-			if (partner != null) {
-				notificationText.append(wrapperLink(partner, nodeService.getProperty(partner, ContentModel.PROP_NAME).toString(), LINK_URL));
-			}
-
-			notificationText.append(", вид договора ").append(getContractType(contractRef));
-			notificationText.append(", тематика ").append(getContractSubject(contractRef));
-			notificationText.append(", исполнитель ");
-			NodeRef executor = getContractExecutor(contractRef);
-			String executorName = nodeService.getProperty(executor, ContentModel.PROP_NAME).toString();
-			notificationText.append(wrapperLink(executor, executorName, LINK_URL));
-			notificationText.append(", номер проекта ");
-			notificationText.append(wrapperLink(contractRef, documentNumber, DOCUMENT_LINK_URL));
-
-			Notification notification = new Notification();
-			notification.setRecipientEmployeeRefs(curators);
-			notification.setAuthor(authService.getCurrentUserName());
-			notification.setDescription(notificationText.toString());
-			notification.setObjectRef(contractRef);
-			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-			notificationService.sendNotification(notification);
-		}
 	}
 
 	public void registrationContract(NodeRef contractRef) throws TemplateParseException, TemplateRunException {

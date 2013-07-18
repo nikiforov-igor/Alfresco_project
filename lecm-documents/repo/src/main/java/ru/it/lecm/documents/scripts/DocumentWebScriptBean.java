@@ -16,6 +16,7 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentStatusesFilterBean;
@@ -299,4 +300,15 @@ public class DocumentWebScriptBean extends BaseWebScript {
         }
         return arrayList;
     }
+
+
+	/**
+	 * Оборачиваем узел в ссылку на document
+	 * @param node
+	 * @param description
+	 * @return
+	 */
+	public String wrapperDocumentLink(ScriptNode node, String description) {
+		return wrapperLink(node.getNodeRef().toString(), description, BaseBean.DOCUMENT_LINK_URL);
+	}
 }

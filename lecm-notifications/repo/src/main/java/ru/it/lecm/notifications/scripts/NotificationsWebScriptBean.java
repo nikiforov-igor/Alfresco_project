@@ -2,6 +2,7 @@ package ru.it.lecm.notifications.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +33,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 
 	NotificationsService service;
 	private OrgstructureBean orgstructureService;
+	protected AuthenticationService authService;
 
     public void setService(NotificationsService service) {
 		this.service = service;
@@ -39,6 +41,10 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+	public void setAuthService(AuthenticationService authService) {
+		this.authService = authService;
 	}
 
 	/**
@@ -111,10 +117,10 @@ public class NotificationsWebScriptBean extends BaseWebScript {
      * @param employee Список ссылок на получателей (пользователей).
      * @param textFormatString форматная строка для текста сообщения
      * @param channels перечень каналов
-     * @param objectRef Основной объект уведомления
+     * @param object Основной объект уведомления
      * @return true - при успешной отправке иначе false
      */
-    public boolean sendNotification(Scriptable employee, String textFormatString, Scriptable channels, String objectRef) {
+    public boolean sendNotification(String author, Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object) {
         ArrayList<String> recipientsArray = getArraysList(Context.getCurrentContext().getElements(employee));
 
 	    List<NodeRef> employees = null;
@@ -140,31 +146,31 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	        employees = new ArrayList<NodeRef>(recipientRefsList);
         }
 
-	    NodeRef object = null;
-        if (objectRef != null) {
-            NodeRef nodeRef =  new NodeRef (objectRef);
-            if (serviceRegistry.getNodeService().exists(nodeRef)) {
-	            object = nodeRef;
-            }
-        }
-
 	    ArrayList<String> channelsArray = null;
 	    if (channels != null) {
 		    channelsArray = getArraysList(Context.getCurrentContext().getElements(channels));
 	    }
 
-	    return service.sendNotification("WebScript", object, textFormatString, employees, channelsArray);
+	    return service.sendNotification(author, object.getNodeRef(), textFormatString, employees, channelsArray);
     }
+
+	public boolean sendNotification(Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object) {
+		return sendNotification("WebScript", employee, textFormatString, null, object);
+	}
 
 	/**
 	 * Отправка уведомлений в каналы по умолчанию
 	 * @param employee Список ссылок на получателей (пользователей).
 	 * @param textFormatString форматная строка для текста сообщения
-	 * @param objectRef Основной объект уведомления
+	 * @param object Основной объект уведомления
 	 * @return true - при успешной отправке иначе false
 	 */
-	public boolean sendNotification(Scriptable employee, String textFormatString, String objectRef) {
-		return sendNotification(employee, textFormatString, null, objectRef);
+	public boolean sendNotification(Scriptable employee, String textFormatString, ScriptNode object) {
+		return sendNotification(employee, textFormatString, null, object);
+	}
+
+	public boolean sendNotificationFromCurrentUser(Scriptable employee, String textFormatString, ScriptNode object) {
+		return sendNotification(authService.getCurrentUserName(), employee, textFormatString, null, object);
 	}
 
     private ArrayList<String> getArraysList(Object[] object){
@@ -175,6 +181,9 @@ public class NotificationsWebScriptBean extends BaseWebScript {
                 arrayList.add((String) element.unwrap());
             } else if (obj instanceof String){
                 arrayList.add(obj.toString());
+            } else if (obj instanceof ScriptNode){
+	            ScriptNode element = (ScriptNode) obj;
+                arrayList.add(element.getNodeRef().toString());
             }
         }
         return arrayList;

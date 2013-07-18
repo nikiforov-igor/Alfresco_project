@@ -1,5 +1,6 @@
 package ru.it.lecm.base.beans;
 
+import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ScriptVersion;
@@ -53,5 +54,39 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 			results[i++] = new ScriptVersion(version, serviceRegistry, getScope());
 		}
 		return Context.getCurrentContext().newArray(getScope(), results);
+	}
+
+	/**
+	 * Оборачиваем узел в ссылку html страницы
+	 * @param nodeRef
+	 * @param description
+	 * @param linkUrl
+	 * @return
+	 */
+	public String wrapperLink(String nodeRef, String description, String linkUrl) {
+		SysAdminParams params = serviceRegistry.getSysAdminParams();
+		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+		return  "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + nodeRef + "\">"
+				+ description + "</a>";
+	}
+
+	/**
+	 * Оборачиваем узел в ссылку на view-metadata
+	 * @param node
+	 * @param description
+	 * @return
+	 */
+	public String wrapperLink(ScriptNode node, String description) {
+	 	return wrapperLink(node.getNodeRef().toString(), description, BaseBean.LINK_URL);
+	}
+
+	/**
+	 * Оборачиваем узел в ссылку на view-metadata
+	 * @param nodeRef
+	 * @param description
+	 * @return
+	 */
+	public String wrapperLink(String nodeRef, String description) {
+		return wrapperLink(nodeRef, description, BaseBean.LINK_URL);
 	}
 }

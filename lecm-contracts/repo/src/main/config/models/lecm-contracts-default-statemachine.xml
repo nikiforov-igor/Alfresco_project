@@ -2037,7 +2037,32 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value>
-                                                                    contracts.registrationContractProject(bpm_package.children[0]);
+	                                                                var contract = bpm_package.children[0];
+	                                                                regnumbers.setDocumentNumber("CONTRACT_PROJECT_REGNUM", contract, "lecm-contract:regNumProject");
+	                                                                contract .properties["lecm-contract:dateRegProjectContracts"] = new Date();
+	                                                                contract.save();
+
+
+	                                                                var curators = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_CURATOR", true);
+	                                                                var notificationText = "Зарегистрирован проект договора c ";
+
+	                                                                var partnerAssocs = contract.assocs["lecm-contract:partner-assoc"];
+	                                                                if (partnerAssocs != null &amp;&amp; partnerAssocs.length == 1)
+	                                                                {
+	                                                                notificationText += documentScript.wrapperLink(partnerAssocs[0], "{lecm-contract:partner-assoc/cm:name}");
+	                                                                }
+
+	                                                                notificationText += ", вид договора {lecm-contract:typeContract-assoc/cm:name}";
+	                                                                notificationText += ", тематика  {lecm-contract:subjectContract-assoc/cm:name}";
+
+	                                                                notificationText += ", исполнитель ";
+	                                                                var executor = contract.properties["lecm-document:creator-ref"];
+	                                                                notificationText += documentScript.wrapperLink(executor, "{lecm-document:creator}");
+
+	                                                                notificationText += ", номер проекта ";
+	                                                                notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-contract:regNumProject}");
+
+	                                                                notifications.sendNotificationFromCurrentUser(curators, notificationText, contract);
                                                                 </value>
                                                             </property>
                                                             <property>
