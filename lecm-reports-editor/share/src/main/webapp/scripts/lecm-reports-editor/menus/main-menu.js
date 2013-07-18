@@ -34,29 +34,12 @@
             };
             this.widgets.sourcesListBtn = Alfresco.util.createYUIButton(this, "sourcesListBtn", onButtonClick3, {});
 
-            var onButtonClick4 = function (e) {
-                window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "reports-editor-report-types";
-            };
-            this.widgets.reportTypesBtn = Alfresco.util.createYUIButton(this, "reportTypesBtn", onButtonClick4, {});
 
             var onButtonClick5 = function (e) {
                 window.location.href = window.location.protocol + "//" + window.location.host +
                     Alfresco.constants.URL_PAGECONTEXT + "reports-editor-providers";
             };
             this.widgets.reportProvidersBtn = Alfresco.util.createYUIButton(this, "reportProvidersBtn", onButtonClick5, {});
-
-            var onButtonClick6 = function (e) {
-                window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "reports-editor-column-types";
-            };
-            this.widgets.reportColumnTypesBtn = Alfresco.util.createYUIButton(this, "reportColumnTypesBtn", onButtonClick6, {});
-
-            var onButtonClick7 = function (e) {
-                window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "reports-editor-param-types";
-            };
-            this.widgets.reportParameterTypesBtn = Alfresco.util.createYUIButton(this, "reportParameterTypesBtn", onButtonClick7, {});
         }
     });
 })();

@@ -70,6 +70,7 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
                 </field-visibility>
                 <appearance>
@@ -79,7 +80,7 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-rpeditor:reportCode"/>
+                    <show id="lecm-rpeditor:reportDocType"/>
                     <show id="lecm-rpeditor:reportTypeAssoc"/>
                     <show id="lecm-rpeditor:reportIsDeployed"/>
                 </field-visibility>

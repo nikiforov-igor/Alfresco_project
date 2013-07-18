@@ -28,10 +28,7 @@ selected = args.selected!"reportsList"/>
         <@comp.baseMenuButton "reportsList" msg('lecm.reports-editor.reports.btn') selected/>
         <@comp.baseMenuButton "templatesList" msg('lecm.reports-editor.templates.btn') selected/>
         <@comp.baseMenuButton "sourcesList" msg('lecm.reports-editor.sources.btn') selected/>
-        <@comp.baseMenuButton "reportTypes" msg('lecm.reports-editor.reportTypes.btn') selected/>
         <@comp.baseMenuButton "reportProviders" msg('lecm.reports-editor.reportProviders.btn') selected/>
-        <@comp.baseMenuButton "reportColumnTypes" msg('lecm.reports-editor.reportColumnTypes.btn') selected/>
-        <@comp.baseMenuButton "reportParameterTypes" msg('lecm.reports-editor.reportParameterTypes.btn') selected/>
     </@comp.baseMenu>
 
 <script type="text/javascript">//<![CDATA[

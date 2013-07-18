@@ -33,6 +33,7 @@
                                         showExtendSearchBlock: false,
                                         showActionColumn: true,
                                         overrideSortingWith: false,
+                                        pageSize:10,
                                         actions: [
                                             {
                                                 type: "datagrid-action-link-sourceColumns",

@@ -75,7 +75,7 @@
         createSelectDialog: function() {
             this.selectSourcePanel = Alfresco.util.createYUIPanel("selectSourcePanel",
                 {
-                    width: "800px"
+                    width: "900px"
                 });
             YAHOO.Bubbling.on("hidePanel", this._hideSelectDialog);
             this.widgets.closeButton = Alfresco.util.createYUIButton(this, "searchBlock-search-button", this._onClose, {}, Dom.get("selectSourcePanel-close-button"));

@@ -157,11 +157,11 @@
                     url: Alfresco.constants.PROXY_URI + "slingshot/doclib/action/copy-to/node/" + copyTo.uri,
                     successCallback: {
                         fn: function (response) {
-                            Alfresco.util.PopupManager.displayMessage({
-                                text: "Столбец добавлен в набор"
-                            });
                             if (response.json.overallSuccess) {
                                 if (fireUpdateEvent) {
+                                    Alfresco.util.PopupManager.displayMessage({
+                                        text: "Столбец добавлен в набор"
+                                    }, Dom.get("selectSourcePanel"));
                                     // обновляем список колонок
                                     YAHOO.Bubbling.fire("updateReportSourceColumns");
                                 }
@@ -216,6 +216,12 @@
                                             if (!this.existInSource(oResults[k].code)) {
                                                 this.copyColumn(oResults[k].nodeRef, obj.dataSourceId, this.dataSourceId, true);
                                             }
+                                            if (k == oResults.length - 1) {
+                                                Alfresco.util.PopupManager.displayMessage({
+                                                        text: "Набор скопирован"
+                                                    }, Dom.get("selectSourcePanel")
+                                                );
+                                            }
                                         }
                                     }
                                 },
@@ -225,7 +231,7 @@
                                 fn: function () {
                                     Alfresco.util.PopupManager.displayMessage({
                                         text: "Не удалось получить список столбцов для набора данных"
-                                    });
+                                    }, Dom.get("selectSourcePanel"));
                                 }
                             },
                             execScripts: true,
