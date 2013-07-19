@@ -13,7 +13,7 @@
 
 <script type="text/javascript">//<![CDATA[
 LogicECM.module.Documents.SETTINGS =
-    <#if settings?? >
+    <#if reportSettings?? >
     ${reportSettings}
     <#else>
     {}

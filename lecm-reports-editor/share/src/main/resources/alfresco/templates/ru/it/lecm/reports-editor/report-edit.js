@@ -1,1 +1,4 @@
-model.settings = remote.connect("alfresco").get("/lecm/reports-editor/settings");
+var settings = remote.connect("alfresco").get("/lecm/reports-editor/settings");
+if (settings.status == 200) {
+    model.settings = settings;
+}

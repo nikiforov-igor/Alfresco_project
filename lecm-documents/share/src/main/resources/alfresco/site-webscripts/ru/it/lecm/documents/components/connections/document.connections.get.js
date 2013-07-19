@@ -4,7 +4,10 @@ function main() {
     AlfrescoUtil.param("nodeRef");
 	var hasPerm = hasPermission(model.nodeRef, PERM_LINKS_VIEW);
 	if (hasPerm) {
-		model.connections = getConnections(model.nodeRef);
+        var conns = getConnections(model.nodeRef);
+        if (conns != null) {
+		    model.connections = conns;
+        }
 	}
 }
 
@@ -15,7 +18,7 @@ function getConnections(nodeRef, defaultValue) {
         if (defaultValue !== undefined) {
             return defaultValue;
         }
-        AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
+        return null;
     }
     return eval('(' + result + ')');
 }

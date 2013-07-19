@@ -19,6 +19,7 @@
 	};
 
 	var daysAmount = 30;
+    model.result = {};
 
 	var absenceContainer = remote.connect("alfresco").get("/lecm/wcalendar/absence/get/container");
 	if (absenceContainer.status != 200) {

@@ -1,4 +1,7 @@
 //скрипт для получения корневой (корневых) папок
+model.calendarContainer = {};
+model.calendarRoles = [];
+model.isEngineer = false;
 var calendarContainer = remote.connect("alfresco").get("/lecm/wcalendar/calendar/get/container");
 if (calendarContainer.status == 200) {
 	var roles = remote.connect("alfresco").get("/lecm/wcalendar/calendar/get/roles");

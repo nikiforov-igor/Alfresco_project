@@ -10,7 +10,10 @@ function main() {
 	model.hasDeleteAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_DELETE);
 	model.hasDeleteOwnAttachmentPerm = hasPermission(model.nodeRef, PERM_OWN_CONTENT_DELETE);
 	if (model.hasViewListPerm) {
-		model.categories = getCategories(model.nodeRef).categories;
+	    var cats = getCategories(model.nodeRef);
+        if (cats != null) {
+            model.categories = cats.categories;
+        }
 	}
 }
 
@@ -21,7 +24,7 @@ function getCategories(nodeRef, defaultValue) {
 		if (defaultValue !== undefined) {
 			return defaultValue;
 		}
-		AlfrescoUtil.error(result.status, 'Could not get attachments for node ' + nodeRef);
+		return null;
 	}
 	return eval('(' + result + ')');
 }

@@ -7,8 +7,14 @@ function main() {
 	model.hasCreatePerm = hasPermission(model.nodeRef, PERM_LINKS_CREATE);
 	model.hasDeletePerm = hasPermission(model.nodeRef, PERM_LINKS_DELETE);
 	if (model.hasViewPerm) {
-		model.connections = getConnections(model.nodeRef);
-		model.connectionsWithDocument = getConnectionsWithDocument(model.nodeRef);
+        var connections = getConnections(model.nodeRef);
+        if (connections != null) {
+		    model.connections = connections;
+        }
+        var connectionsWithDocument = getConnectionsWithDocument(model.nodeRef);
+        if (connectionsWithDocument != null) {
+		    model.connectionsWithDocument = connectionsWithDocument;
+        }
 	}
 }
 
@@ -19,7 +25,7 @@ function getConnections(nodeRef, defaultValue) {
 		if (defaultValue !== undefined) {
 			return defaultValue;
 		}
-		AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
+		return null;
 	}
 	return eval('(' + result + ')');
 }
@@ -31,7 +37,7 @@ function getConnectionsWithDocument(nodeRef, defaultValue) {
 		if (defaultValue !== undefined) {
 			return defaultValue;
 		}
-		AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
+		return null;
 	}
 	return eval('(' + result + ')');
 }

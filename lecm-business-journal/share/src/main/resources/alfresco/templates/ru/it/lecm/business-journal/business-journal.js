@@ -1,6 +1,10 @@
 //скрипт для получения корневой папки
 var jsonStr = remote.connect("alfresco").get("/lecm/business-journal/api/directory");
-model.bjContainer = jsonStr;
+if (jsonStr.status == 200) {
+    model.bjContainer = jsonStr;
+} else {
+    model.bjContainer = {};
+}
 
 var rolesStr = remote.connect("alfresco").get("/lecm/orgstructure/api/getCurrentEmployeeRoles");
 

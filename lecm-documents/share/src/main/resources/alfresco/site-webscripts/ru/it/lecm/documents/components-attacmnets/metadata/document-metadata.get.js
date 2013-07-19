@@ -20,7 +20,7 @@ function getCategoryByAttachments(nodeRef, defaultValue) {
 		if (defaultValue !== undefined) {
 			return defaultValue;
 		}
-		AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
+		return null;
 	}
 	return eval('(' + result + ')');
 }

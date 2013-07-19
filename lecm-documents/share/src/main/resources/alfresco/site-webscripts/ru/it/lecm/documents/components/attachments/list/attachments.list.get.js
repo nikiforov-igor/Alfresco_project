@@ -22,7 +22,10 @@ function main() {
 	];
 
 	if (model.hasViewListPerm) {
-        model.categories = getCategories(model.nodeRef).categories;
+        var cats = getCategories(model.nodeRef);
+        if (cats != null) {
+            model.categories = cats.categories;
+        }
 	}
 
 	if (model.hasViewAttachmentPerm) {
@@ -69,7 +72,7 @@ function getCategories(nodeRef, defaultValue) {
         if (defaultValue !== undefined) {
             return defaultValue;
         }
-        AlfrescoUtil.error(result.status, 'Could not get attachments for node ' + nodeRef);
+        return null;
     }
     return eval('(' + result + ')');
 }

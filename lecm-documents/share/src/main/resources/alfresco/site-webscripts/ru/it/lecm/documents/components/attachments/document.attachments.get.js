@@ -7,7 +7,10 @@ function main()
     AlfrescoUtil.param("view", "");
 	var hasPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	if (hasPerm) {
-		model.attachments = getAttachments(model.nodeRef);
+        var atts = getAttachments(model.nodeRef);
+        if (atts != null) {
+            model.attachments = atts;
+        }
 		model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
 	}
 }
@@ -19,7 +22,7 @@ function getAttachments(nodeRef, defaultValue) {
 		if (defaultValue !== undefined) {
 			return defaultValue;
 		}
-		AlfrescoUtil.error(result.status, 'Could not get connections for node ' + nodeRef);
+		return null;
 	}
 	return eval('(' + result + ')');
 }

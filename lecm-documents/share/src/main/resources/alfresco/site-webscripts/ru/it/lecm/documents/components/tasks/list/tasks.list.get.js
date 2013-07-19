@@ -7,7 +7,10 @@ function main() {
 
     var hasPerm = hasPermission(model.nodeRef, PERM_WF_TASK_LIST);
     if (hasPerm) {
-        model.data = getTasks(model.nodeRef, model.tasksState);
+        var data = getTasks(model.nodeRef, model.tasksState);
+        if (data != null) {
+            model.data = data;
+        }
     }
 }
 
@@ -15,7 +18,7 @@ function getTasks(nodeRef, tasksState) {
     var url = "/lecm/statemachine/api/tasks?nodeRef=" + nodeRef + "&state=" + tasksState + "&addSubordinatesTask=true";
     var result = remote.connect("alfresco").get(url);
     if (result.status != 200) {
-        AlfrescoUtil.error(result.status, 'Could not get tasks for node ' + nodeRef);
+        return null;
     }
     return eval('(' + result + ')');
 }
