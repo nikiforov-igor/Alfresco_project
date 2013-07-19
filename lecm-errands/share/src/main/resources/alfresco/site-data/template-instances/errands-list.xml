@@ -40,7 +40,7 @@
             <properties>
                 <itemType>lecm-errands:document</itemType>
                 <bubblingLabel>errands</bubblingLabel>
-<!--                <attributeForShow>lecm-contract:regNumProject</attributeForShow>-->
+                <attributeForShow>lecm-errands:number</attributeForShow>
                 <!--<excludedColumns>lecm-document:creator-ref</excludedColumns>-->
                 <filterProperty>lecm-statemachine:status</filterProperty>
                 <formId>{formId}</formId>
