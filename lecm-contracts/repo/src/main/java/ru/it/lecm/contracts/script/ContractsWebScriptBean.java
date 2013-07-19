@@ -201,21 +201,6 @@ public class ContractsWebScriptBean extends BaseWebScript {
 		businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator зафиксировал(а) факт расторжения договора #mainobject. Основанием изменения является #object1.", objects);
 	}
 
-    /**
-     * Расторжение договора
-     * @param document - основной документ
-     */
-    public void contractExecuted(ScriptNode document) {
-        List<NodeRef> additionalDocuments = this.contractService.getAllContractDocuments(document.getNodeRef());
-        for (NodeRef additionalDocument : additionalDocuments) {
-            HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-            nodeService.addAspect(additionalDocument, ContractsBeanImpl.ASPECT_PRIMARY_DOCUMENT_EXECUTED, aspectProps);
-            nodeService.setProperty(additionalDocument, ContractsBeanImpl.PROP_PRIMARY_DOCUMENT_EXECUTED, true);
-        }
-
-        businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator зафиксировал(а) факт исполнения договора #mainobject.");
-    }
-
 	public Scriptable getAllContractDocuments(ScriptNode document) {
 		List<NodeRef> additionalDocuments = this.contractService.getAllContractDocuments(document.getNodeRef());
 		return createScriptable(additionalDocuments);

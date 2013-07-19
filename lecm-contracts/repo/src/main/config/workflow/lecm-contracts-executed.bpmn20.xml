@@ -6,12 +6,18 @@
     <process id="contractExecuted" name="Исполнение договора">
         <startEvent id="startСontractExecuted" name="Start" activiti:formKey="lecmContractWf:contractExecuted"></startEvent>
         <endEvent id="endСontractExecuted" name="End"></endEvent>
-        <scriptTask id="executedContract" name="Contract termination" scriptFormat="javascript">
+        <scriptTask id="executedContract" name="Contract execution" scriptFormat="javascript">
             <extensionElements>
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string>
-                            contracts.contractExecuted(bpm_package.children[0]);
+	                        var document = bpm_package.children[0];
+
+	                        document.addAspect("lecm-contract-aspect:primaryDocumentExecutedAspect");
+	                        document.properties["lecm-contract-aspect:primaryDocumentExecuted"] = true;
+	                        document.save();
+
+	                        businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", "#initiator зафиксировал(а) факт исполнения договора #mainobject.", []);
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
