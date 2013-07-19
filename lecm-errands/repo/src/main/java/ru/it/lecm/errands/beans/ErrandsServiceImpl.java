@@ -142,11 +142,13 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 	}
 
 	public NodeRef getDefaultInitiator() {
-		NodeRef settings = getCurrentUserSettingsNode();
-		if (settings != null) {
-			List<AssociationRef> defaultInitiatorAssocs = nodeService.getTargetAssocs(settings, USER_SETTINGS_ASSOC_DEFAULT_INITIATOR);
-			if (defaultInitiatorAssocs.size() > 0) {
-				return defaultInitiatorAssocs.get(0).getTargetRef();
+		if (orgstructureService.isCurrentEmployeeHasBusinessRole(BUSINESS_ROLE_ERRANDS_CHOOSING_INITIATOR)) {
+			NodeRef settings = getCurrentUserSettingsNode();
+			if (settings != null) {
+				List<AssociationRef> defaultInitiatorAssocs = nodeService.getTargetAssocs(settings, USER_SETTINGS_ASSOC_DEFAULT_INITIATOR);
+				if (defaultInitiatorAssocs.size() > 0) {
+					return defaultInitiatorAssocs.get(0).getTargetRef();
+				}
 			}
 		}
 		return null;
