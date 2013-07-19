@@ -13,8 +13,6 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.notifications.beans.Notification;
-import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -36,7 +34,6 @@ public class ContractsBeanImpl extends BaseBean {
     public static final QName PROP_END_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "endDate");
     public static final QName PROP_UNLIMITED = QName.createQName(CONTRACTS_NAMESPACE_URI, "unlimited");
 
-    public static final QName ASSOC_ADDITIONAL_DOCUMENT_TYPE = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocumentType");
     public static final QName ASSOC_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "document-assoc");
 	public static final QName ASSOC_CONTRACT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "typeContract-assoc");
 	public static final QName ASSOC_CONTRACT_SUBJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "subjectContract-assoc");
@@ -49,16 +46,11 @@ public class ContractsBeanImpl extends BaseBean {
 
     public static final QName PROP_PRIMARY_DOCUMENT_DELETE = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentDeleted");
     public static final QName PROP_PRIMARY_DOCUMENT_EXECUTED = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentExecuted");
-	public static final QName PROP_REGNUM_SYSTEM = QName.createQName(CONTRACTS_NAMESPACE_URI, "regNumSystem");
 	public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
 	public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
 
-	public static final String BUSINESS_ROLE_CONTRACT_EXECUTOR_ID = "CONTRACT_EXECUTOR";
-
     private SearchService searchService;
     private DocumentService documentService;
-    private OrgstructureBean orgstructureService;
-	private NotificationsService notificationService;
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
@@ -67,14 +59,6 @@ public class ContractsBeanImpl extends BaseBean {
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
 	}
-
-	public void setNotificationService(NotificationsService notificationService) {
-		this.notificationService = notificationService;
-	}
-
-    public void setOrgstructureService(OrgstructureBean orgstructureService) {
-        this.orgstructureService = orgstructureService;
-    }
 
 	@Override
     public NodeRef getServiceRootFolder() {
@@ -150,29 +134,6 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
 		return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
-	}
-
-	public void additionalDocumentSigning(NodeRef documentRef) {
-		NodeRef contract = findNodeByAssociationRef(documentRef, ASSOC_DOCUMENT, null, ASSOCIATION_TYPE.TARGET);
-		if (contract != null) {
-			List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID, true);
-
-			StringBuilder notificationText = new StringBuilder();
-			notificationText.append("Документ ");
-			NodeRef documentTypeRef = findNodeByAssociationRef(documentRef, ASSOC_ADDITIONAL_DOCUMENT_TYPE, null, ASSOCIATION_TYPE.TARGET);
-			notificationText.append(wrapperLink(documentRef, nodeService.getProperty(documentTypeRef, ContentModel.PROP_NAME).toString(), DOCUMENT_LINK_URL));
-			notificationText.append(" к договору номер ");
-			notificationText.append(wrapperLink(contract, nodeService.getProperty(contract, PROP_REGNUM_SYSTEM).toString(), DOCUMENT_LINK_URL));
-			notificationText.append(" подписан");
-
-			Notification notification = new Notification();
-			notification.setRecipientEmployeeRefs(executors);
-			notification.setAuthor(authService.getCurrentUserName());
-			notification.setDescription(notificationText.toString());
-			notification.setObjectRef(documentRef);
-			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-			notificationService.sendNotification(notification);
-		}
 	}
 
     public List<NodeRef> getAdditionalDocs(String filter) {

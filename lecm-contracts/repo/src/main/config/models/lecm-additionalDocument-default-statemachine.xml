@@ -8326,7 +8326,23 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value>
-                                                                    contracts.additionalDocumentSigning(bpm_package.children[0]);
+	                                                                var additionalDocument = bpm_package.children[0];
+
+	                                                                var contractAssocs = additionalDocument.assocs["lecm-additional-document:document-assoc"];
+	                                                                if (contractAssocs != null &amp;&amp; contractAssocs.length == 1) {
+	                                                                var contract = contractAssocs[0];
+
+	                                                                var notificationText = "Документ ";
+	                                                                notificationText += documentScript.wrapperDocumentLink(additionalDocument, "{lecm-additional-document:additionalDocumentType/cm:name}");
+
+	                                                                notificationText += " к договору номер ";
+	                                                                notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-contract:regNumSystem}");
+
+	                                                                notificationText += " подписан";
+
+	                                                                var executors = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_EXECUTOR", true);
+	                                                                notifications.sendNotificationFromCurrentUser(executors, notificationText, additionalDocument);
+	                                                                }
                                                                 </value>
                                                             </property>
                                                             <property>
