@@ -49,13 +49,11 @@ public class ContractsBeanImpl extends BaseBean {
 
     public static final QName PROP_PRIMARY_DOCUMENT_DELETE = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentDeleted");
     public static final QName PROP_PRIMARY_DOCUMENT_EXECUTED = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentExecuted");
-	public static final QName PROP_REGNUM_PROJECT = QName.createQName(CONTRACTS_NAMESPACE_URI, "regNumProject");
 	public static final QName PROP_REGNUM_SYSTEM = QName.createQName(CONTRACTS_NAMESPACE_URI, "regNumSystem");
 	public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
 	public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
 
 	public static final String BUSINESS_ROLE_CONTRACT_SIGNER_ID = "CONTRACT_SIGNER";
-	public static final String BUSINESS_ROLE_CONTRACT_RECORDER_ID = "CONTRACT_RECORDER";
 	public static final String BUSINESS_ROLE_CONTRACT_EXECUTOR_ID = "CONTRACT_EXECUTOR";
 
     private SearchService searchService;
@@ -153,35 +151,6 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
 		return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
-	}
-
-	public void signing(NodeRef contractRef) {
-		List<NodeRef> recorders = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_RECORDER_ID, true);
-		StringBuilder recordersNotificationText = new StringBuilder();
-		recordersNotificationText.append("Поступил новый договор на регистрации, номер проекта: ");
-		recordersNotificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
-
-		Notification recordersNotification = new Notification();
-		recordersNotification.setRecipientEmployeeRefs(recorders);
-		recordersNotification.setAuthor(authService.getCurrentUserName());
-		recordersNotification.setDescription(recordersNotificationText.toString());
-		recordersNotification.setObjectRef(contractRef);
-		recordersNotification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-		notificationService.sendNotification(recordersNotification);
-
-		List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID, true);
-		StringBuilder executorsNotificationText = new StringBuilder();
-		executorsNotificationText.append("Проект договор номер ");
-		executorsNotificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
-		executorsNotificationText.append(" направлен на регистрацию");
-
-		Notification executorsNotification = new Notification();
-		executorsNotification.setRecipientEmployeeRefs(executors);
-		executorsNotification.setAuthor(authService.getCurrentUserName());
-		executorsNotification.setDescription(executorsNotificationText.toString());
-		executorsNotification.setObjectRef(contractRef);
-		executorsNotification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-		notificationService.sendNotification(executorsNotification);
 	}
 
 	public void additionalDocumentSendingToSign(NodeRef documentRef) {

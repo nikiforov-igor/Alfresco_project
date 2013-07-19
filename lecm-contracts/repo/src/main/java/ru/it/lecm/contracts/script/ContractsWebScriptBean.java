@@ -19,8 +19,6 @@ import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.regnumbers.template.TemplateParseException;
-import ru.it.lecm.regnumbers.template.TemplateRunException;
 
 import java.io.Serializable;
 import java.util.*;
@@ -238,14 +236,6 @@ public class ContractsWebScriptBean extends BaseWebScript {
 	public Scriptable getAllContractDocuments(ScriptNode document) {
 		List<NodeRef> additionalDocuments = this.contractService.getAllContractDocuments(document.getNodeRef());
 		return createScriptable(additionalDocuments);
-	}
-
-	/**
-	 * Подписание договора
-	 * @param contract договор
-	 */
-	public void signing(ScriptNode contract) {
-		this.contractService.signing(contract.getNodeRef());
 	}
 
 	/**
