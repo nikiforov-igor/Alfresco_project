@@ -28,6 +28,12 @@
                         fn: function (response) {
                             if (response.json == false) {
                                 Dom.setStyle(idPanel,"display","none");
+                                var elements = Dom.getElementsBy(function() {return true;},"input", Dom.get(idPanel));
+                                if (elements) {
+                                    for (var index = 0; index < elements.length; ++index) {
+                                        elements[index].setAttribute("disabled","disabled");
+                                    }
+                                }
                             }
                         }
                     },
