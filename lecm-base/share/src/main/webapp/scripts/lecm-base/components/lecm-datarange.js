@@ -60,7 +60,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					if (this.startDateInput != null && !this.startDateInput.disabled) {
 						Event.on(this.options.startDateHtmlId + "-cntrl-date", "change", this.onChangeDates, this, true);
 						this.startDatePicker = Alfresco.util.ComponentManager.get(this.options.startDateHtmlId + "-cntrl");
-						if (this.startDatePicker != null) {
+						if (this.startDatePicker != null && this.startDatePicker.widgets != null) {
 							this.startDatePicker.widgets.calendar.selectEvent.subscribe(this.onChangeDates, this, true);
 						}
 					}
@@ -71,7 +71,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					if (this.endDateInput != null && !this.endDateInput.disabled) {
 						Event.on(this.options.endDateHtmlId + "-cntrl-date", "change", this.onChangeDates, this, true);
 						this.endDatePicker = Alfresco.util.ComponentManager.get(this.options.endDateHtmlId + "-cntrl");
-						if (this.endDatePicker != null) {
+						if (this.endDatePicker != null && this.endDatePicker.widgets != null) {
 							this.endDatePicker.widgets.calendar.selectEvent.subscribe(this.onChangeDates, this, true);
 						}
 					}

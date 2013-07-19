@@ -10,7 +10,19 @@
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
-						<activiti:string>contracts.setContractTime(bpm_package.children[0], lecmContractWf_contractTimeFromDate,lecmContractWf_contractTimeToDate, lecmContractWf_contractTimeUnlimited, lecmContractWf_contractTimeBaseOnDocument);</activiti:string>
+						<activiti:string>
+							var contract = bpm_package.children[0];
+
+							contract.properties["lecm-contract:startDate"] = lecmContractWf_contractTimeFromDate;
+							contract.properties["lecm-contract:endDate"] = lecmContractWf_contractTimeToDate;
+							contract.properties["lecm-contract:unlimited"] = lecmContractWf_contractTimeUnlimited;
+							contract.save();
+
+							var logObjects = [];
+							logObjects.push(lecmContractWf_contractTimeBaseOnDocument);
+							var logText = "#initiator изменил(а) срок действия договора #mainobject. Основанием изменения является документ #object1.";
+							businessJournal.log(contract.nodeRef.toString(), "EXEC_ACTION", logText, logObjects);
+						</activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>
