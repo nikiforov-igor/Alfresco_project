@@ -400,18 +400,17 @@ LogicECM.module = LogicECM.module || {};
 
             updateSelectedItems: function AssociationAutoComplete_updateSelectedItems() {
                 var items = this.selectedItems;
-                var fieldId = this.controlId + "-currentValueDisplay";
-                Dom.get(fieldId).innerHTML = '';
+                var el = Dom.get(this.controlId + "-currentValueDisplay");
+                Dom.addClass(el, "auto-complete");
+                el.innerHTML = '';
 
                 var num = 0;
                 for (var i in items) {
                     var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
 	                if (this.options.itemType == "lecm-orgstr:employee") {
-		                Dom.get(fieldId).innerHTML
-			                += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, items[i].name) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+		                el.innerHTML += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, items[i].name) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
 	                } else {
-		                Dom.get(fieldId).innerHTML
-			                += '<div class="' + divClass + '"> ' + items[i].name + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+		                el.innerHTML += '<div class="' + divClass + '"> ' + items[i].name + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
 	                }
                     YAHOO.util.Event.onAvailable("ac-" + this.controlId + items[i].nodeRef, this.attachRemoveItemClickListener, items[i], this);
                 }
@@ -459,9 +458,8 @@ LogicECM.module = LogicECM.module || {};
             },
 
             updateCurrentDisplayValue: function() {
-                var el;
-
-                el = Dom.get(this.controlId + "-currentValueDisplay");
+                var el = Dom.get(this.controlId + "-currentValueDisplay");
+                Dom.addClass(el, "auto-complete");
                 el.innerHTML = '';
 
                 var num = 0;

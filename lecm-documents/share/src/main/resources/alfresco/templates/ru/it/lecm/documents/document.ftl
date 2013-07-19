@@ -16,6 +16,11 @@
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/document-components-panel.css" />
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/dashlet-components.css" />
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/page-document.css" />
+
+    <#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
+        <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-metadata.css" />
+    </#if>
+
     <@templateHtmlEditorAssets />
     <script type="text/javascript">
         //<![CDATA[

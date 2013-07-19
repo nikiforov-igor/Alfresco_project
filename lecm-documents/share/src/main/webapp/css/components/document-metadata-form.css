@@ -7,7 +7,8 @@
     margin-left: 0;
 }
 .metadata-form .set .viewmode-field .viewmode-value > .association-auto-complete-selected-item  {
-    display: inline;
+    display: inline-block;
+    width: 100%;
 }
 
 .yui-skin-lecmTheme div.metadata-form div.form-fields,
@@ -24,6 +25,10 @@
     vertical-align: middle;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+.yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field.richtext span.viewmode-value,
+.yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-value.auto-complete {
+    height: auto;
 }
 .yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-label {
     width: 200px;

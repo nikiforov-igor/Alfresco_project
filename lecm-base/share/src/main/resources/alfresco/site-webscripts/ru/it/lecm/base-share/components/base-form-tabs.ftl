@@ -28,6 +28,7 @@
 </@>
 
 <script type="text/javascript">//<![CDATA[
+(function() {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Selector = YAHOO.util.Selector;
@@ -61,5 +62,6 @@
     }
 
     Event.onDOMReady(init);
+})();
 //]]></script>
 
