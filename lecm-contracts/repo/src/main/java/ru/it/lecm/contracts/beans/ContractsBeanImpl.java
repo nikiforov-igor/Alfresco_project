@@ -155,26 +155,6 @@ public class ContractsBeanImpl extends BaseBean {
 		return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
 	}
 
-	public void sendingToSign(NodeRef contractRef) {
-		List<NodeRef> signers = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_SIGNER_ID, true);
-		StringBuilder notificationText = new StringBuilder();
-		notificationText.append("Вам поступил проект договора ");
-		notificationText.append(wrapperLink(contractRef, nodeService.getProperty(contractRef, PROP_REGNUM_PROJECT).toString(), DOCUMENT_LINK_URL));
-		notificationText.append(", исполнитель ");
-		NodeRef executor = getContractExecutor(contractRef);
-		String executorName = nodeService.getProperty(executor, ContentModel.PROP_NAME).toString();
-		notificationText.append(wrapperLink(executor, executorName, LINK_URL));
-		notificationText.append(" на подписание");
-
-		Notification notification = new Notification();
-		notification.setRecipientEmployeeRefs(signers);
-		notification.setAuthor(authService.getCurrentUserName());
-		notification.setDescription(notificationText.toString());
-		notification.setObjectRef(contractRef);
-		notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-		notificationService.sendNotification(notification);
-	}
-
 	public void sendingToContragentSign(NodeRef contractRef) {
 		List<NodeRef> executors = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_EXECUTOR_ID, true);
 		StringBuilder notificationText = new StringBuilder();

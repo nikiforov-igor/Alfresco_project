@@ -6507,7 +6507,18 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value>
-                                                                    contracts.sendingToSign(bpm_package.children[0]);
+	                                                                var contract = bpm_package.children[0];
+	                                                                var notificationText = "Вам поступил проект договора ";
+	                                                                notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-contract:regNumProject}");
+
+	                                                                notificationText += ", исполнитель ";
+	                                                                var executor = contract.properties["lecm-document:creator-ref"];
+	                                                                notificationText += documentScript.wrapperLink(executor, "{lecm-document:creator}");
+
+	                                                                notificationText += " на подписание ";
+
+	                                                                var signers = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_SIGNER", true);
+	                                                                notifications.sendNotificationFromCurrentUser(signers, notificationText, contract);
                                                                 </value>
                                                             </property>
                                                             <property>
