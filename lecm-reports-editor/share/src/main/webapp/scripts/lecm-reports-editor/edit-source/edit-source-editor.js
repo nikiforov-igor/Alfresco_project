@@ -255,7 +255,7 @@
             var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createColumnDetails");
             createDetails.setOptions(
                 {
-                    width: "45em",
+                    width: "50em",
                     templateUrl: templateUrl,
                     actionUrl: null,
                     destroyOnHide: true,

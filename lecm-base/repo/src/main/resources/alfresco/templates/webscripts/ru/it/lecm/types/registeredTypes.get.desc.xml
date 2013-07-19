@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Получить список примитивных типов и тех, что используются в документах</shortname>
+	<description>Получить список примитивных типов и тех, чт оиспользуются в документах</description>
+	<url>/lecm/base/types?includeDicValues={includeDicValues}</url>
+	<format default="json">extension</format>
+	<authentication>none</authentication>
+</webscript>

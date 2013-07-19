@@ -73,7 +73,9 @@ LogicECM.module = LogicECM.module || {};
 
 	            disabled: false,
 
-	            defaultValueDataSource: null
+	            defaultValueDataSource: null,
+
+                changeItemsFireAction: null
             },
 
             rootNode: null,
@@ -159,6 +161,12 @@ LogicECM.module = LogicECM.module || {};
 			        });
                 if (this.options.primaryCascading) {
                         YAHOO.Bubbling.fire("changeDropDown",{bubblingLabel: this.options.fieldId});
+                }
+
+                if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
+                    YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
+                        selectedItems: ((selectValue && selectValue.length > 0) ?[selectValue] : [])
+                    });
                 }
 	        },
 

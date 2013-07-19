@@ -33,7 +33,8 @@ LogicECM.module = LogicECM.module || {};
 			webscript: null,
 			mandatory: false,
 			currentNodeRef: null,
-			destination: null
+			destination: null,
+            updateOnAction:null
 		},
 
 		onReady: function SelectOne_onReady() {
@@ -45,10 +46,11 @@ LogicECM.module = LogicECM.module || {};
 				url = Alfresco.constants.URL_SERVICECONTEXT;
 			}
 			url += this.options.webscript;
+            var symbol = url.indexOf("?") > 0 ? "&" : "?";
 			if (this.options.destination != null && this.options.destination != "" && this.options.destination != "{destination}") {
-				url += "?nodeRef=" + this.options.destination + "&type=create";
-			} else if (this.options.currentNodeRef != null) {
-				url += "?nodeRef=" + this.options.currentNodeRef + "&type=edit";
+                url += symbol + "nodeRef=" + this.options.destination + "&type=create";
+            } else if (this.options.currentNodeRef != null) {
+				url += symbol + "nodeRef=" + this.options.currentNodeRef + "&type=edit";
 			}
 			Alfresco.util.Ajax.jsonGet({
 				url: url,
@@ -72,7 +74,30 @@ LogicECM.module = LogicECM.module || {};
 					scope: this
 				}
 			});
+
+            if (this.options.updateOnAction && this.options.updateOnAction.length > 0) {
+                var select = document.getElementById(this.id);
+                if (select) {
+                    select.setAttribute("disabled", "true");
+                }
+                YAHOO.Bubbling.on(this.options.updateOnAction, this.onUpdateSelect, this);
+            }
 		},
+
+        onUpdateSelect: function (layer, args) {
+            var selectedItems = args[1].selectedItems;
+            var control = Dom.get(this.id);
+            if (control) {
+                if (selectedItems && selectedItems.length > 0) {
+                    control.removeAttribute("disabled");
+                } else {
+                    /*control.options[control.selectedIndex].selected = false;
+                    document.getElementById(this.options.controlId + "-removed").value = this.options.selectedValue;
+                    document.getElementById(this.options.controlId + "-added").value = "";*/
+                    control.setAttribute("disabled", "true");
+                }
+            }
+        },
 
 		onSelectChange: function() {
 			var select = document.getElementById(this.id);

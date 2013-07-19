@@ -5,6 +5,7 @@ import org.alfresco.query.PagingResults;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ScriptPagingNodes;
 import org.alfresco.repo.node.getchildren.FilterProp;
+import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -15,11 +16,9 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmObjectsService;
 import ru.it.lecm.base.beans.getchildren.FilterPropLECM;
+import ru.it.lecm.documents.beans.DocumentService;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -31,6 +30,19 @@ public class BaseWebScriptBean extends BaseWebScript {
 	private LecmObjectsService lecmObjectsService;
 
 	final int REQUEST_MAX = 1000;
+
+    private List<TypeMapper> registeredTypes = new ArrayList<TypeMapper>();
+    final private Set<QName> USED_TYPES = new HashSet<QName>() {{
+        add(DataTypeDefinition.TEXT);
+        add(DataTypeDefinition.INT);
+        add(DataTypeDefinition.LONG);
+        add(DataTypeDefinition.FLOAT);
+        add(DataTypeDefinition.DOUBLE);
+        add(DataTypeDefinition.DATE);
+        add(DataTypeDefinition.DATETIME);
+        add(DataTypeDefinition.BOOLEAN);
+        add(DataTypeDefinition.ANY);
+    }};
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
@@ -153,5 +165,87 @@ public class BaseWebScriptBean extends BaseWebScript {
         }
 
         return new ScriptPagingNodes(Context.getCurrentContext().newArray(getScope(), results), pageOfNodeInfos.hasMoreItems(), totalResultCountLower, totalResultCountUpper);
+    }
+
+    public Object[] getRegisteredTypes(boolean includeFromDictionary) {
+        if (registeredTypes == null || registeredTypes.size() == 0) {
+            registeredTypes = new ArrayList<TypeMapper>();
+            Set<TypeMapper> types = new HashSet<TypeMapper>();
+            DictionaryService dicService = serviceRegistry.getDictionaryService();
+            if (includeFromDictionary) {
+                Collection<QName> dataTypes = dicService.getAllDataTypes();
+                for (QName dataType : dataTypes) {
+                    if (USED_TYPES.contains(dataType)) {
+                        DataTypeDefinition dtDef = dicService.getDataType(dataType);
+                        if (dtDef.getTitle() != null && !dtDef.getTitle().isEmpty()) {
+                            types.add(new TypeMapper(dtDef.getName().toPrefixString(namespaceService),
+                                    dtDef.getTitle()));
+                        }
+                    }
+                }
+            }
+
+            Collection<QName> docTypes = dicService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
+            for (QName docType : docTypes) {
+                TypeDefinition def = dicService.getType(docType);
+                Map<QName, AssociationDefinition> docTypeAssocs = def.getAssociations();
+                for (AssociationDefinition associationDefinition : docTypeAssocs.values()) {
+                    ClassDefinition classDef = associationDefinition.getTargetClass();
+                    if (classDef.getTitle() != null && !classDef.getTitle().isEmpty()) {
+                        String name = classDef.getName().toPrefixString(namespaceService);
+                        if (!name.startsWith("sys:")) {
+                            types.add(new TypeMapper(name,
+                                    classDef.getTitle()));
+                        }
+                    }
+                }
+            }
+
+            registeredTypes.addAll(types);
+        }
+        return registeredTypes.toArray();
+    }
+
+    public class TypeMapper {
+        private String name;
+        private String title;
+
+        TypeMapper(String name, String title) {
+            this.name = name;
+            this.title = title;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+        @Override
+        public int hashCode() {
+            int result = name != null ? name.hashCode() : 0;
+            result = 31 * result + (title != null ? title.hashCode() : 0);
+            return result;
+        }
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+
+            TypeMapper that = (TypeMapper) obj;
+
+            if (name != null ? !name.equals(that.name) : that.name != null) return false;
+            if (title != null ? !title.equals(that.title) : that.title != null) return false;
+            return true;
+        }
     }
 }

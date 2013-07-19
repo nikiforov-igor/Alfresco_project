@@ -47,6 +47,7 @@ public class ReportForm extends FormUIGet {
         d_float,
         d_long,
         d_date,
+        d_datetime,
         d_double
     }
 
