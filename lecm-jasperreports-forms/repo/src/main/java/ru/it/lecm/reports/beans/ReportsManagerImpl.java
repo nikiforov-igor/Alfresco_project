@@ -43,18 +43,23 @@ public class ReportsManagerImpl implements ReportsManager {
     @Override
     public List<ReportDescriptor> getRegisteredReports(String[] docTypes, boolean forCollection) {
         Set<ReportDescriptor> resultedReports = new HashSet<ReportDescriptor>();
-        for (String docType : docTypes) {
-            if (docType != null && docType.length() > 0) {
-                List<ReportDescriptor> reportForType = getRegisteredReports(docType, null);
-                for (ReportDescriptor descriptor : reportForType) {
-                    if (forCollection) {
-                        if (descriptor.getFlags().isMultiRow()){
-                            resultedReports.add(descriptor);
-                        }
-                    } else {
-                        resultedReports.add(descriptor);
-                    }
+        Set<ReportDescriptor> unFilteredReports = new HashSet<ReportDescriptor>();
+        if (docTypes != null) {
+            for (String docType : docTypes) {
+                if (docType != null && docType.length() > 0) {
+                    unFilteredReports.addAll(getRegisteredReports(docType, null));
                 }
+            }
+        } else {
+            unFilteredReports.addAll(getRegisteredReports(null, null));
+        }
+        for (ReportDescriptor descriptor : unFilteredReports) {
+            if (forCollection) {
+                if (descriptor.getFlags().isMultiRow()) {
+                    resultedReports.add(descriptor);
+                }
+            } else {
+                resultedReports.add(descriptor);
             }
         }
         return new ArrayList<ReportDescriptor>(resultedReports);

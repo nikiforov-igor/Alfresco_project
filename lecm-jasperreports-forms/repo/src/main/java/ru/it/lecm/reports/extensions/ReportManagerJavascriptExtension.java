@@ -57,14 +57,12 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
 
     public List<ReportInfo> getRegisteredReports(String docTypes, boolean forCollection) {
         List<ReportInfo> reports = new ArrayList<ReportInfo>();
-        String[] types;
+        String[] types = null;
         List<ReportDescriptor> found;
         if (docTypes != null && docTypes.length() > 0) { // задан тип(типы) - значит фильтруем по ним
             types = docTypes.split(",");
-            found = getReportsManager().getRegisteredReports(types, forCollection);
-        } else {
-            found = getReportsManager().getRegisteredReports(); // нет типов - берем все зарегистрированные
         }
+        found = getReportsManager().getRegisteredReports(types, forCollection);
         if (found != null && !found.isEmpty()) {
             for (ReportDescriptor rd : found) {
                 final ReportInfo ri = new ReportInfo(rd.getReportType(), rd.getMnem(), (rd.getFlags() != null) ? rd.getFlags().getPreferedNodeType() : null);
