@@ -12030,7 +12030,14 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value>
-                                                                    contracts.sendingToContragentSign(bpm_package.children[0]);
+	                                                                var contract = bpm_package.children[0];
+	                                                                var notificationText = "Проект договор номер ";
+	                                                                notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-contract:regNumProject}");
+
+	                                                                notificationText += " подписан. Подтвердите подписание Контрагентом";
+
+	                                                                var executors = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_EXECUTOR", true);
+	                                                                notifications.sendNotificationFromCurrentUser(executors, notificationText, contract);
                                                                 </value>
                                                             </property>
                                                             <property>

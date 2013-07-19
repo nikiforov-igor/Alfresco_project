@@ -437,21 +437,23 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return getEmployeeDefaultNotificationTypes(orgstructureService.getCurrentEmployee());
 	}
 
-	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels) {
+	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef) {
 		Notification notification = new Notification();
 		notification.setAuthor(author);
 		notification.setRecipientEmployeeRefs(recipientEmployees);
 		notification.setObjectRef(object);
 		notification.setDescription(substituteService.formatNodeTitle(object, textFormatString));
+		notification.setInitiatorRef(initiatorRef);
 		return sendNotification(channels, notification);
 	}
 
-	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees) {
+	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef) {
 		Notification notification = new Notification();
 		notification.setAuthor(author);
 		notification.setRecipientEmployeeRefs(recipientEmployees);
 		notification.setObjectRef(object);
 		notification.setDescription(substituteService.formatNodeTitle(object, textFormatString));
+		notification.setInitiatorRef(initiatorRef);
 		return sendNotification(notification);
 	}
 }

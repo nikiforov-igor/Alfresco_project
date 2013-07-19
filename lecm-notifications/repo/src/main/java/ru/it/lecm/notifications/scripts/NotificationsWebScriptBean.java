@@ -120,7 +120,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
      * @param object Основной объект уведомления
      * @return true - при успешной отправке иначе false
      */
-    public boolean sendNotification(String author, Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object) {
+    public boolean sendNotification(String author, Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object, NodeRef initiator) {
         ArrayList<String> recipientsArray = getArraysList(Context.getCurrentContext().getElements(employee));
 
 	    List<NodeRef> employees = null;
@@ -151,11 +151,11 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 		    channelsArray = getArraysList(Context.getCurrentContext().getElements(channels));
 	    }
 
-	    return service.sendNotification(author, object.getNodeRef(), textFormatString, employees, channelsArray);
+	    return service.sendNotification(author, object.getNodeRef(), textFormatString, employees, channelsArray, initiator);
     }
 
 	public boolean sendNotification(Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object) {
-		return sendNotification("WebScript", employee, textFormatString, null, object);
+		return sendNotification("WebScript", employee, textFormatString, channels, object, null);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	}
 
 	public boolean sendNotificationFromCurrentUser(Scriptable employee, String textFormatString, ScriptNode object) {
-		return sendNotification(authService.getCurrentUserName(), employee, textFormatString, null, object);
+		return sendNotification(authService.getCurrentUserName(), employee, textFormatString, null, object, orgstructureService.getCurrentEmployee());
 	}
 
     private ArrayList<String> getArraysList(Object[] object){

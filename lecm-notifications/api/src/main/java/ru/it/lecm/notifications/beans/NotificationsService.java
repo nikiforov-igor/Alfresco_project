@@ -134,9 +134,10 @@ public interface NotificationsService {
 	 * @param textFormatString Форматная строка для текста уведомления. Стпроится по основному объекту
 	 * @param recipientEmployees Список сотрудников-получаетлей уведомления
 	 * @param channels каналы уведомления
+	 * @param initiatorRef Ссылка на инициатора. Если он попадает в список получателей, то ему сообщение не будет отправлено
 	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
 	 */
-	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels);
+	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef);
 
 	/**
 	 * Отправка уведомления сотрудникам по каналам уведомлений из личных настроек сотрудников
@@ -144,7 +145,8 @@ public interface NotificationsService {
 	 * @param object Объект уведомления
 	 * @param textFormatString Форматная строка для текста уведомления. Стпроится по основному объекту
 	 * @param recipientEmployees Список сотрудников-получаетлей уведомления
+	 * @param initiatorRef Ссылка на инициатора. Если он попадает в список получателей, то ему сообщение не будет отправлено
 	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
 	 */
-	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees);
+	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef);
 }
