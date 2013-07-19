@@ -11,7 +11,16 @@
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
 						<activiti:string>
-							contracts.terminateContract(bpm_package.children[0], lecmContractWf_contractTerminateBaseOnDocument);
+							var document = bpm_package.children[0];
+
+							document.addAspect("lecm-contract-aspect:primaryDocumentDeletedAspect");
+							document.properties["lecm-contract-aspect:primaryDocumentDeleted"] = true;
+							document.save();
+
+							var logObjects = [];
+							logObjects.push(lecmContractWf_contractTerminateBaseOnDocument);
+							var logText = "#initiator зафиксировал(а) факт расторжения договора #mainobject. Основанием изменения является #object1.";
+							businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", logText, logObjects);
 						</activiti:string>
 					</activiti:field>
 				</activiti:executionListener>

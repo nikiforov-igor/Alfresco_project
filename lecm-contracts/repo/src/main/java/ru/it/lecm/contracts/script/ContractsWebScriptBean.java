@@ -183,24 +183,6 @@ public class ContractsWebScriptBean extends BaseWebScript {
         return refs.toArray(new NodeRef[refs.size()]);
     }
 
-	/**
-	 * Расторжение договора
-	 * @param document - основной документ
-	 * @param reasonDocumentRef - стороковая ссылка на документ основание
-	 */
-	public void terminateContract(ScriptNode document, String reasonDocumentRef) {
-        List<NodeRef> additionalDocuments = this.contractService.getAllContractDocuments(document.getNodeRef());
-        for (NodeRef additionalDocument : additionalDocuments) {
-            HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-            nodeService.addAspect(additionalDocument, ContractsBeanImpl.ASPECT_PRIMARY_DOCUMENT_DELETE, aspectProps);
-            nodeService.setProperty(additionalDocument, ContractsBeanImpl.PROP_PRIMARY_DOCUMENT_DELETE, true);
-        }
-
-        List<String> objects = new ArrayList<String>();
-		objects.add(reasonDocumentRef);
-		businessJournalService.log(document.getNodeRef(), EventCategory.EXEC_ACTION, "#initiator зафиксировал(а) факт расторжения договора #mainobject. Основанием изменения является #object1.", objects);
-	}
-
 	public Scriptable getAllContractDocuments(ScriptNode document) {
 		List<NodeRef> additionalDocuments = this.contractService.getAllContractDocuments(document.getNodeRef());
 		return createScriptable(additionalDocuments);

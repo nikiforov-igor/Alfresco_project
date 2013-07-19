@@ -25,7 +25,6 @@ import java.util.*;
  */
 public class ContractsBeanImpl extends BaseBean {
 	public static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
-	public static final String CONTRACTS_ASPECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/aspects/1.0";
 	public static final String ADDITIONAL_DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/additional-document/1.0";
 
 	public static final QName TYPE_CONTRACTS_DOCUMENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
@@ -40,9 +39,6 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final QName ASSOC_CONTRACT_REPRESENTATIVE = QName.createQName(CONTRACTS_NAMESPACE_URI, "representative-assoc");
 	public static final QName ASSOC_CONTRACT_CURRENCY = QName.createQName(CONTRACTS_NAMESPACE_URI, "currency-assoc");
 
-	public static final QName ASPECT_PRIMARY_DOCUMENT_DELETE = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentDeletedAspect");
-
-    public static final QName PROP_PRIMARY_DOCUMENT_DELETE = QName.createQName(CONTRACTS_ASPECTS_NAMESPACE_URI, "primaryDocumentDeleted");
 	public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
 	public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
 
