@@ -7113,7 +7113,26 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value>
-                                                                    contracts.additionalDocumentSendingToSign(bpm_package.children[0]);
+	                                                                var additionalDocument = bpm_package.children[0];
+
+	                                                                var contractAssocs = additionalDocument.assocs["lecm-additional-document:document-assoc"];
+	                                                                if (contractAssocs != null &amp;&amp; contractAssocs.length == 1) {
+	                                                                var contract = contractAssocs[0];
+
+	                                                                var notificationText = "Вам поступил на подписание ";
+	                                                                notificationText += documentScript.wrapperDocumentLink(additionalDocument, "документ");
+	                                                                notificationText += " {lecm-additional-document:additionalDocumentType/cm:name} ";
+
+	                                                                notificationText += "  к договору номер ";
+	                                                                notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-contract:regNumSystem}");
+
+	                                                                notificationText += ", исполнитель ";
+	                                                                var executor = contract.properties["lecm-document:creator-ref"];
+	                                                                notificationText += documentScript.wrapperLink(executor, "{lecm-additional-document:document-assoc/lecm-document:creator}");
+
+	                                                                var signers = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_SIGNER", true);
+	                                                                notifications.sendNotificationFromCurrentUser(signers, notificationText, additionalDocument);
+	                                                                }
                                                                 </value>
                                                             </property>
                                                             <property>

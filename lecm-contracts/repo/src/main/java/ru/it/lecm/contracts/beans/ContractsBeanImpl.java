@@ -53,7 +53,6 @@ public class ContractsBeanImpl extends BaseBean {
 	public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
 	public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
 
-	public static final String BUSINESS_ROLE_CONTRACT_SIGNER_ID = "CONTRACT_SIGNER";
 	public static final String BUSINESS_ROLE_CONTRACT_EXECUTOR_ID = "CONTRACT_EXECUTOR";
 
     private SearchService searchService;
@@ -153,34 +152,6 @@ public class ContractsBeanImpl extends BaseBean {
 		return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
 	}
 
-	public void additionalDocumentSendingToSign(NodeRef documentRef) {
-		NodeRef contract = findNodeByAssociationRef(documentRef, ASSOC_DOCUMENT, null, ASSOCIATION_TYPE.TARGET);
-		if (contract != null) {
-			List<NodeRef> signers = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_CONTRACT_SIGNER_ID, true);
-
-			StringBuilder notificationText = new StringBuilder();
-			notificationText.append("Вам поступил на подписание ");
-			notificationText.append(wrapperLink(documentRef, "документ", DOCUMENT_LINK_URL));
-			NodeRef documentTypeRef = findNodeByAssociationRef(documentRef, ASSOC_ADDITIONAL_DOCUMENT_TYPE, null, ASSOCIATION_TYPE.TARGET);
-			notificationText.append(" ");
-			notificationText.append(nodeService.getProperty(documentTypeRef, ContentModel.PROP_NAME).toString());
-			notificationText.append(" к договору номер ");
-			notificationText.append(wrapperLink(contract, nodeService.getProperty(contract, PROP_REGNUM_SYSTEM).toString(), DOCUMENT_LINK_URL));
-			notificationText.append(", исполнитель ");
-			NodeRef executor = getContractExecutor(contract);
-			String executorName = nodeService.getProperty(executor, ContentModel.PROP_NAME).toString();
-			notificationText.append(wrapperLink(executor, executorName, LINK_URL));
-
-			Notification notification = new Notification();
-			notification.setRecipientEmployeeRefs(signers);
-			notification.setAuthor(authService.getCurrentUserName());
-			notification.setDescription(notificationText.toString());
-			notification.setObjectRef(documentRef);
-			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-			notificationService.sendNotification(notification);
-		}
-	}
-
 	public void additionalDocumentSigning(NodeRef documentRef) {
 		NodeRef contract = findNodeByAssociationRef(documentRef, ASSOC_DOCUMENT, null, ASSOCIATION_TYPE.TARGET);
 		if (contract != null) {
@@ -202,11 +173,6 @@ public class ContractsBeanImpl extends BaseBean {
 			notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
 			notificationService.sendNotification(notification);
 		}
-	}
-
-	public NodeRef getContractExecutor(NodeRef contractRef) {
-		String creator = (String) nodeService.getProperty(contractRef, ContentModel.PROP_CREATOR);
-		return orgstructureService.getEmployeeByPerson(creator);
 	}
 
     public List<NodeRef> getAdditionalDocs(String filter) {

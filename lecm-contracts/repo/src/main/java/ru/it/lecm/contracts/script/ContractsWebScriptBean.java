@@ -239,14 +239,6 @@ public class ContractsWebScriptBean extends BaseWebScript {
 	}
 
 	/**
-	 * Передача документа к договору на подписание
-	 * @param document документ к договору
-	 */
-	public void additionalDocumentSendingToSign(ScriptNode document) {
-		this.contractService.additionalDocumentSendingToSign(document.getNodeRef());
-	}
-
-	/**
 	 * Подписание документа к договору
 	 * @param document документ к договору
 	 */
