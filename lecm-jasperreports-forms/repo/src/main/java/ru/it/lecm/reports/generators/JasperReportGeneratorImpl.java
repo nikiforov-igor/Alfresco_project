@@ -128,7 +128,10 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 
 					adsp.setServices(this.getServices());
 					adsp.setReportDescriptor(reportDesc);
-				}
+				} else if (dsProvider instanceof GenericDSProviderBase ){
+                    ((GenericDSProviderBase) dsProvider).setServices(this.getServices());
+                    ((GenericDSProviderBase) dsProvider).setReportDescriptor(reportDesc);
+                }
 
 				BeanUtils.populate(dsProvider, parameters);
 

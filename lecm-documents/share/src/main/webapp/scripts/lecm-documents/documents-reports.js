@@ -46,6 +46,21 @@
             ajaxSubmitMethod: "GET",
             doBeforeAjaxRequest: {
                 fn: function (form) {
+                    Object.prototype.renameProperty = function(name) {
+                        if (this.hasOwnProperty(name)) {
+                            if (name.indexOf("_removed") > 0) {
+                                delete this[name];
+                            } else if (name.indexOf("_added") > 0) {
+                                var newName = name.replace("_added", "");
+                                this[newName] = this[name];
+                                delete this[name];
+                            }
+                        }
+                        return this;
+                    };
+                    for (var property in form.dataObj) {
+                        form.dataObj.renameProperty(property);
+                    }
                     form.method = "GET";
                     return true;
                 }
