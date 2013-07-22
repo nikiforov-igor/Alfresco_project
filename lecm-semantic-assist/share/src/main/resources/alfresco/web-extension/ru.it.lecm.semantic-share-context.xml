@@ -11,7 +11,7 @@
 		</property>
 	</bean>
 
-	<bean id="dictionaryResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+	<bean id="semanticAssistResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
 		<property name="resourceBundles">
 			<list>
 				<value>alfresco.web-extension.ru.it.lecm.br5.semantic.form</value>
