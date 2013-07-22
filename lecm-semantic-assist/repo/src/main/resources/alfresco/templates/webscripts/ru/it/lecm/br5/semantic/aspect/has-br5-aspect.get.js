@@ -1,0 +1,1 @@
+model.hasAspect = integration.hasBr5Aspect(args["sDocument"]);

@@ -75,5 +75,32 @@ public class SemanticWebScriptBean extends BaseWebScript implements ConstantsBea
 		}
 	}
 
+	public HashMap<String,Integer> getExpertsTagsBr5OnlyWithFont(String sExpert){
+		if (sExpert!=null && !sExpert.isEmpty() ){
+			NodeRef expertRef = new NodeRef(sExpert);
+			return semanticService.getExpertsTagsBr5OnlyWithFont(expertRef);
+		}
+		else{
+			NodeRef curEmp = orgstructureService.getCurrentEmployee();
+			return semanticService.getExpertsTagsBr5OnlyWithFont(curEmp);
+		}
+	}
+
+	public boolean hasBr5Aspect(String sDocument){
+		if (sDocument!=null && !sDocument.isEmpty() ){
+			NodeRef documentRef = new NodeRef(sDocument);
+			return semanticService.hasBr5Aspect(documentRef);
+		}
+		return false;
+	}
+
+	public HashMap<String,Integer> getDocumentTagsWithFont(String sDocument){
+		if (sDocument!=null && !sDocument.isEmpty() ){
+			NodeRef documentRef = new NodeRef(sDocument);
+			return semanticService.getDocumentTagsWithFont(documentRef);
+		}
+		return null;
+	}
+
 
 }

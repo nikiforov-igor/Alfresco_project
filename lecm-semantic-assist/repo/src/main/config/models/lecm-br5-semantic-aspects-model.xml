@@ -23,6 +23,14 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <property name="lecm-br5-semantic-aspects:version">
+                    <type>d:text</type>
+                    <default>0</default>
+                </property>
+                <property name="lecm-br5-semantic-aspects:tags">
+                    <type>d:any</type>
+                    <default>false</default>
+                </property>
             </properties>
 		</aspect>
 	</aspects>

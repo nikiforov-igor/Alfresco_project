@@ -1,0 +1,1 @@
+model.docTags = integration.getDocumentTagsWithFont(args["sDocument"]);

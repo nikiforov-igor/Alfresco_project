@@ -4,11 +4,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -30,6 +34,7 @@ import ru.it.lecm.br5.semantic.api.ConstantsBean;
 import ru.it.lecm.br5.semantic.api.SemanticBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.soap.ArrayOfDataItem;
+import ru.it.soap.CommunicationLoad;
 import ru.it.soap.DataItem;
 
 /**
@@ -238,10 +243,8 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 
 		// расчитаем вес каждого слова, возьмем шрифт от 8 до 25
 		// посчитаем промежуток с одинаковым шрифтом
-		int kol_eq_font = 3;//(int)Math.round(map2.size()/18.0); // сколько значений ключей будут с одним шрифтом
-		//int cur_kol_eq = 0; // сколько ключей пройдено
 		double B = 25;
-		double A = 8;
+		double A = 10;
 		double C = map2.lastKey();
 		double D = map2.firstKey();
 		double T = (B-A)/(C-D);
@@ -251,10 +254,6 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		HashMap<String, HashMap<Double, Integer>> map3 = new HashMap<String, HashMap<Double, Integer>>();
 		Double key2 = map2.lastKey();
 		while (key2 != null) {
-			/*if (cur_kol_eq == kol_eq_font) {
-				cur_font--;
-				cur_kol_eq = 0;
-			}*/
     		cur_font = (int)(T*key2+(B-C*T));
 			List<String> lst3 = map2.get(key2);
 			int sz = lst3.size();
@@ -264,11 +263,117 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 				map3.put(lst3.get(sz - 1), count_font_map);
 				sz--;
 			}
-			//cur_kol_eq++;
 			key2 = map2.lowerKey(key2);
 		}
 
 		return map3;
 	}
+
+	@Override
+	public HashMap<String,Integer> getExpertsTagsBr5OnlyWithFont(NodeRef expert) {
+		HashMap<String,Double> map1 = new HashMap<String,Double>();
+
+		List<String> expertItems = new ArrayList<String>();
+		if (!nodeService.exists(expert) || !orgstructureService.isEmployee(expert)) {
+			return null;
+		}
+		Integer expertInnerId = loadExpertBr5(expert); // получим id эксперта
+		if (expertInnerId == null) {
+			return null;
+		}
+
+		ArrayOfDataItem itemArray = null;
+		try {
+			itemArray = itsWebService.getPersonSignificItems(expertInnerId);
+		} catch (SOAPFaultException soap_exception) {
+			logger.error("Can't getPersonSignificItems: server is not available. ");
+			soap_exception.printStackTrace();
+			return null;
+		}
+
+		List<DataItem> itemList = itemArray.getDataItem();
+		double value = 0;
+		for (DataItem item : itemList) {
+				String term = item.getSpelling();
+				value = item.getCoef();
+				map1.put(term,value);
+		}
+
+		//определим наименьший и наибольший весовой коэффициент, чтобы распределить шрифты для облака тегов
+		TreeSet<Double> ar = new TreeSet<Double>(map1.values());
+		double minCoef = ar.first();
+		double maxCoef = ar.last();
+		double B = 25;
+		double A = 10;
+		double C = maxCoef;
+		double D = minCoef;
+		double T = (B-A)/(C-D);
+		int cur_font = 25;
+
+		// получим HashMap, в котором значениями уже будут размеры шрифтов
+		HashMap<String,Integer> map2 = new HashMap<String,Integer>();
+		Set<String> set_map1_keys = map1.keySet();
+		int font_size = 0;
+		double coef = 0.0;
+		for (String map1_key : set_map1_keys){
+			coef = map1.get(map1_key);
+			font_size = (int) (T*coef+(B-C*T));
+			map2.put(map1_key,font_size);
+		}
+
+		return map2;
+	}
+
+	@Override
+	public boolean hasBr5Aspect(NodeRef documentRef){
+		if (documentRef!= null){
+			return nodeService.hasAspect(documentRef, ConstantsBean.ASPECT_BR5_INTEGRATION);
+		}
+		return false;
+	}
+
+	@Override
+	public void setDocumentTags(NodeRef documentRef, HashMap<String,Double> tags){
+		HashMap<String,Double> mp = new HashMap<String,Double>();
+		mp.put("Ключ_1", 1.7);
+		mp.put("Ключ_2", 3231.73);
+		nodeService.setProperty(documentRef, ConstantsBean.PROP_BR5_INTEGRATION_TAGS, mp);
+	}
+
+	@Override
+	public HashMap<String,Double> getDocumentTags(NodeRef documentRef){
+		HashMap<String,Double> mp = (HashMap<String,Double>) nodeService.getProperty(documentRef, ConstantsBean.PROP_BR5_INTEGRATION_TAGS);
+		return mp;
+	}
+
+	@Override
+	public HashMap<String,Integer> getDocumentTagsWithFont(NodeRef documentRef){
+		HashMap<String,Double> map1 = getDocumentTags(documentRef);
+		//определим наименьший и наибольший весовой коэффициент, чтобы распределить шрифты для облака тегов
+		TreeSet<Double> ar = new TreeSet<Double>(map1.values());
+		double minCoef = ar.first();
+		double maxCoef = ar.last();
+		double B = 25;
+		double A = 10;
+		double C = maxCoef;
+		double D = minCoef;
+		double T = (B-A)/(C-D);
+		int cur_font = 25;
+
+		// получим HashMap, в котором значениями уже будут размеры шрифтов
+		HashMap<String,Integer> map2 = new HashMap<String,Integer>();
+		Set<String> set_map1_keys = map1.keySet();
+		int font_size = 0;
+		double coef = 0.0;
+		for (String map1_key : set_map1_keys){
+			coef = map1.get(map1_key);
+			font_size = (int) (T*coef+(B-C*T));
+			map2.put(map1_key,font_size);
+		}
+
+		return map2;
+	}
+
+
 
 }

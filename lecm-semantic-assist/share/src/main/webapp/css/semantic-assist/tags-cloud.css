@@ -1,0 +1,9 @@
+a.cloud{
+	color: #5ba6e1;
+}
+
+a.cloud:hover{
+    text-decoration: none;
+    color: #fff;
+    background: #5ba6e1;
+}

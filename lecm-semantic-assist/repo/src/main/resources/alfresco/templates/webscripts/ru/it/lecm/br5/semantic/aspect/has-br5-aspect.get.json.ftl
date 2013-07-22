@@ -1,0 +1,3 @@
+{
+	"hasAspect":"${hasAspect?string}"
+}

@@ -1,4 +1,4 @@
-{
+<#--{
 	<#assign keys = tagsList?keys>
 	<#list keys as key>
 		"${key}":[
@@ -7,6 +7,14 @@
 				"${key2}","${tagsList[key][key2]}" <#if key2_has_next>,</#if>
 		</#list>
 		]
+		<#if key_has_next>,</#if>
+	</#list>
+} -->
+
+{
+	<#assign keys = tagsList?keys>
+	<#list keys as key>
+		"${key}": "${tagsList[key]}"
 		<#if key_has_next>,</#if>
 	</#list>
 }
