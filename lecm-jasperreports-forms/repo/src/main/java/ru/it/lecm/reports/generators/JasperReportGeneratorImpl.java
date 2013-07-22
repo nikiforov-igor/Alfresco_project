@@ -1,5 +1,7 @@
 package ru.it.lecm.reports.generators;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
@@ -16,6 +18,7 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -27,6 +30,8 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -39,6 +44,7 @@ import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
+import ru.it.lecm.reports.xml.JRXMLProducer;
 
 /**
  * Генератор Jasper-отчётов.
@@ -238,6 +244,72 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 		// exporter.setParameter( JRExporterParameter.OUTPUT_FILE_NAME, REPORT_DIRECTORY + "/" + reportName + ".rtf");
 		exporter.setParameter( JRExporterParameter.OUTPUT_STREAM, outputStream);
 		exporter.exportReport();
+	}
+
+	@Override
+	public void onRegister(String templateFileFullName, ReportDescriptor desc) {
+		saveJrxmlTemplate(templateFileFullName, desc);
+		compile( templateFileFullName, desc);
+	}
+
+	private boolean saveJrxmlTemplate(String outFullFileName, ReportDescriptor desc) {
+		if (desc.getReportTemplate() == null) {
+			log.warn(String.format( "Report '%s' has no template", desc.getMnem()));
+			return false;
+		}
+		if (desc.getReportTemplate().getData() == null) {
+			log.warn(String.format( "Report '%s' has no template data", desc.getMnem()));
+			return false;
+		}
+		/*
+		if (desc.getReportTemplate().getFileName() == null) {
+			log.warn(String.format( "Report '%s' has empty template FileName", desc.getMnem()));
+			return false;
+		}
+		 */
+
+		// сохранение шаблона как файла ...
+		try {
+			final FileOutputStream wout = new FileOutputStream(outFullFileName);
+			try {
+				// TODO: NORMAL IOUtils.copy(desc.getReportTemplate().getData(), wout);
+
+				// в шаблоне пишем dataSource и задаём состав полей ...
+				// JRXMLProducer.patchJrxml(inJrxmlFileName, outFullName, desc);
+				final String streamTag = desc.getReportTemplate().getFileName(); 
+				final ByteArrayOutputStream updated = JRXMLProducer.updateJRXML( 
+						desc.getReportTemplate().getData(), streamTag, desc);
+				updated.writeTo(wout);
+
+			} finally {
+				IOUtils.closeQuietly(wout);
+			}
+			log.info(String.format( "Report '%s': template file created as '%s'"
+					, desc.getMnem(), outFullFileName));
+
+		} catch (IOException ex) {
+			final String msg = String.format( "Report '%s': error creating template file '%s'\n%s"
+					, desc.getMnem(), outFullFileName, ex.getMessage());
+			log.error( msg, ex);
+			throw new RuntimeException( msg, ex);
+		}
+
+		return true;
+	}
+
+	private void compile(String templateFileFullName, ReportDescriptor desc) {
+		log.info( String.format( "compiling '%s' ...", templateFileFullName));
+		final String destJasperName = FilenameUtils.removeExtension(templateFileFullName)+".jasper";
+		try {
+			JasperCompileManager.compileReportToFile(templateFileFullName, destJasperName); // context.getRealPath("/reports/WebappReport.jrxml"));
+		}
+		catch (JRException ex)
+		{
+			final String msg = String.format( "Error compiling '%s': %s", templateFileFullName, ex.getMessage());
+			log.error( msg, ex);
+			throw new RuntimeException( msg, ex);
+		}
+		log.info( String.format( "compiled SUCCESSFULLY from '%s' into '%s'", templateFileFullName, destJasperName));
 	}
 
 }

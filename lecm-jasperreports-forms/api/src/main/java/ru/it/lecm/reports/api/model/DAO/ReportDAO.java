@@ -141,6 +141,8 @@ public interface ReportDAO {
 	 */
 	ReportDescriptor getReportDescriptor(String mnemo);
 
+	NodeRef getReportDescriptorNodeByCode(String reportCode);
+
 	/*
 	 * Получить "Шаблон отчета" (файл)
 	 * @param id узел типа <type name="lecm-rpeditor:reportTemplate">
@@ -153,7 +155,6 @@ public interface ReportDAO {
 	 */
 	ReportTemplate getReportTemplate(String rtMnemo);
 
-    NodeRef getReportDescriptorByCode(String reportCode);
 	/*
 	 * Набор данных
 	 * "lecm-rpeditor:reportDataSource"

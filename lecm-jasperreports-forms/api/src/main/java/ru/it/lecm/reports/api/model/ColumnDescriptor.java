@@ -41,8 +41,9 @@ public interface ColumnDescriptor
 	ParameterTypedValue getParameterValue();
 	void setParameterValue(ParameterTypedValue value);
 
-    String getAlfrescoType();
-    void setAlfrescoType(String alfrescoType);
+	/** связанный тип параметра альфреско */
+	String getAlfrescoType();
+	void setAlfrescoType(String alfrescoType);
 
     int getOrder();
     void setOrder(int order);

@@ -26,4 +26,12 @@ public interface ReportGenerator {
 			, Map<String, String[]> parameters
 			, ReportDescriptor reportDesc
 			) throws IOException;
+
+	/**
+	 * Вызывается менеджером при получении нового шаблона, чтобы провайдер среагировал 
+	 * (например, успел построить .jasper для .jrxml)
+	 * @param templateFileFullName полное название шаблона
+	 * @param desc зарегеный описатель
+	 */
+	void onRegister(String templateFileFullName, ReportDescriptor desc);
 }

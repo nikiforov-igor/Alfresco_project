@@ -34,27 +34,7 @@ public class JasperFormProducer extends AbstractWebScript {
 
 	static final transient Logger log = LoggerFactory.getLogger(JasperFormProducer.class);
 
-	// Map<КодТипаОтчёта, Провайдер>
-	private Map< /*ReportType*/String, ReportGenerator> reportGenerators;
-
 	private ReportsManager reportsManager;
-
-	/**
-	 * @return не NULL список [ReportTypeMnemonic -> ReportGenerator]
-	 */
-	public Map</*ReportType*/String, ReportGenerator> getReportGenerators() {
-		if (reportGenerators == null)
-			reportGenerators = new HashMap<String, ReportGenerator>(1);
-		return reportGenerators;
-	}
-
-	/**
-	 * Задать соот-вие типов отчётов и их провайдеров
-	 * @param map список [ReportTypeMnemonic -> ReportGenerator]
-	 */
-	public void setReportGenerators(Map<String, ReportGenerator> map) {
-		this.reportGenerators = map;
-	}
 
 	public ReportsManager getReportsManager() {
 		return reportsManager;
@@ -106,8 +86,8 @@ public class JasperFormProducer extends AbstractWebScript {
 
 		final Map<String, String[]> requestParameters = getRequestParameters(webScriptRequest, String.format("Processing report '%s' with args: \n", reportName));
 
-		PropertyCheck.mandatory (this, "reportGenerators", getReportGenerators());
 		PropertyCheck.mandatory(this, "reportsManager", getReportsManager() );
+		PropertyCheck.mandatory (this, "reportGenerators", getReportsManager().getReportGenerators());
 
 		final ReportDescriptor reportDesc = this.getReportsManager().getRegisteredReportDescriptor(reportName);
 		if (reportDesc != null) {
@@ -115,7 +95,7 @@ public class JasperFormProducer extends AbstractWebScript {
 		}
 
 		// получение провайдера ...
-		final ReportGenerator reporter = this.getReportGenerators().get(rtype);
+		final ReportGenerator reporter = this.getReportsManager().getReportGenerators().get(rtype);
 		if (reporter == null)
 			throw new RuntimeException( String.format("Unsupported report kind '%s': no privider", rtype));
 		reporter.produceReport(webScriptResponse, reportName, requestParameters, reportDesc);

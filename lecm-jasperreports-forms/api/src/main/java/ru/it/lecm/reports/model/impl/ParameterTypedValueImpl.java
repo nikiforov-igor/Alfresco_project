@@ -18,6 +18,7 @@ public class ParameterTypedValueImpl
 	private Object[] bounds;
 	private Type type = Type.VALUE;
 	private boolean required = false;
+	// private String alfrescoType;
 	private AlfrescoAssocInfo alfrescoAssoc;
 
 	public ParameterTypedValueImpl() {

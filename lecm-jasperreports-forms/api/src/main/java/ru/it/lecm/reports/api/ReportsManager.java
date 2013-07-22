@@ -2,12 +2,13 @@ package ru.it.lecm.reports.api;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 
-import ru.it.lecm.reports.api.model.DAO.ReportDAO;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportType;
+import ru.it.lecm.reports.api.model.DAO.ReportDAO;
 
 /**
  * Биновый интерфейс для работы с шаблонами зарегистрированных отчётов.
@@ -36,11 +37,20 @@ public interface ReportsManager {
 	 */
 	List<ReportDescriptor> getRegisteredReports(String docType, String reportType);
 
-    /**
-     * Получить список зарегистрированных  отчётов
-     * @return список зарегеных отчётов
-     */
-    List<ReportDescriptor> getRegisteredReports();
+	/**
+	 * Получить список зарегистрированных редакторов отчётов для указанного типа
+	 * документов и тип отчёта
+	 * @param docTypes массив типов документов  или null, если для любых типов
+	 * @param forCollection возвращать отчеты для коллекции или нет?
+	 * @return список зарегеных отчётов
+	 */
+	List<ReportDescriptor> getRegisteredReports(String[] docTypes, boolean forCollection);
+
+	/**
+	 * Получить список зарегистрированных  отчётов
+	 * @return список зарегеных отчётов
+	 */
+	List<ReportDescriptor> getRegisteredReports();
 
 	/**
 	 * Зарегистрировать указанный описатель отчёта. Создать ds-xml.
@@ -99,14 +109,23 @@ public interface ReportsManager {
 	 */
 	String getDsRelativeFileName(String reportCode);
 
-    ReportDAO getReportDAO();
+	/**
+	 * @return не NULL список [ReportTypeMnemonic -> ReportGenerator]
+	 */
+	Map</*ReportType.Code*/String, ReportGenerator> getReportGenerators();
 
-    /**
-     * Получить список зарегистрированных редакторов отчётов для указанного типа
-     * документов и тип отчёта
-     * @param docTypes массив типов документов  или null, если для любых типов
-     * @param forCollection возвращать отчеты для коллекции или нет?
-     * @return список зарегеных отчётов
-     */
-    List<ReportDescriptor> getRegisteredReports(String[] docTypes, boolean forCollection);
+	/**
+	 * Задать соот-вие типов отчётов и их провайдеров
+	 * @param map список [ReportTypeMnemonic -> ReportGenerator]
+	 */
+	void setReportGenerators(Map<String, ReportGenerator> map);
+
+	/**
+	 * Получить строковое не NULL название
+	 * @param rtype
+	 * @return при rtype != null воз-ся rtype.code, иначе значение по-умолчанию данного менеджера
+	 */
+	String getReportTypeTag(ReportType rtype);
+
+	ReportDAO getReportDAO();
 }

@@ -35,13 +35,13 @@
 	 	init-method="init">
 		<!-- <property name="services" ref="wksKeeper"/> -->
 		<property name="reportDAO" ref="reportDAOBean"/>
+		<property name="reportGenerators[JASPER]" ref="jasperReportGenerator"/>
 		<property name="descriptors[0]" ref="jasperTemplate_DocFlowCounters" />
 		<property name="defaultTemplate" value="repoGenTemplate.jrxml.gen"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.forms.jasper.form.get" class="ru.it.lecm.forms.jasperforms.JasperFormProducer"
 		parent="webscript">
-		<property name="reportGenerators[JASPER]" ref="jasperReportGenerator"/>
 		<property name="reportsManager" ref="reportsManager"/>
 		<!--
 		<property name="oofficeGenerator" ref="oofficeReportGenerator"/>

@@ -1,8 +1,9 @@
 package ru.it.lecm.reports.api;
 
-
 import java.io.InputStream;
 import java.util.List;
+
+
 
 public interface ScriptApiReportManager {
 
@@ -24,17 +25,17 @@ public interface ScriptApiReportManager {
 	 * @param reportCode код (мнемоника) отчёта
 	 * @return
 	 */
-	public InputStream getDsXmlBytes(final String reportCode);
+	// TODO: think it over byte[] getDsXmlBytes(final String reportCode);
+	InputStream getDsXmlBytes(final String reportCode);
 
 	/**
 	 * Получить список зарешистрированных отчётов указанного типа
-	 *
-     * @param docType тип документов или null, если для всех типов
-     * @param reportType тип отчёта или null, если для любого типа
-     * @return список зарегеных отчётов (если отчёт не зависит от типа документа
+	 * @param docType тип документов или null, если для всех типов
+	 * @param reportType тип отчёта или null, если для любого типа
+	 * @return список зарегеных отчётов (если отчёт не зависит от типа документа
 	 * (т.е. у этого отчёта doctype=null), то он воз-ся при любом значении 
 	 * параметра docType)
 	 */
-	public List<ReportInfo> getRegisteredReports(final String docType
-            , final String reportType);
+	List<ReportInfo> getRegisteredReports(final String docType
+			, final String reportType);
 }

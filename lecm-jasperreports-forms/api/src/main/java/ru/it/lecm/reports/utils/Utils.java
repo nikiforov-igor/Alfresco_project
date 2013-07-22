@@ -403,7 +403,7 @@ public class Utils {
 	 * пример:
 	 * 		final File backupName = findEmptyFile( fout, ".bak%s");
 	 * @param checkFile проверяемый файл
-	 * @param fmtSuffix суффикс, который имеет один параметр (числовой номер), 
+	 * @param fmtSuffix суффикс, который имеет один параметр (пустой или числовой номер), 
 	 * для генерации уникального имени файла
 	 * @return имя несуществующего файла: если checkFile отсутствует, то воз-ся
 	 * именно его имя, иначе "имя + суффикс", с подставленым номером 
@@ -412,8 +412,15 @@ public class Utils {
 		if (!checkFile.exists())
 			return checkFile; // файла нет - вернуться сразу
 
-		// поиск уникального имени файла
-		// с ограничением по кол-ву
+		/* поиск уникального имени файла */
+
+		{ // проба самого простого - добавить суффикс ...
+			final File simpleFile = new File( checkFile.getAbsolutePath()+ String.format( fmtSuffix, ""));
+			if (!simpleFile.exists())
+				return simpleFile;
+		}
+
+		// числовой индеск (с ограничением по кол-ву)...
 		int MAX = 2048;
 		for(int i = 1; i < MAX; i++) {
 			final File newFile = new File( checkFile.getAbsolutePath()+ String.format( fmtSuffix, i));
