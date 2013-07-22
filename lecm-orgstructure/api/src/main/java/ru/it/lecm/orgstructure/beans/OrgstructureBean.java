@@ -6,6 +6,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: PMelnikov
@@ -571,8 +573,18 @@ public interface OrgstructureBean {
 	 */
 	boolean isCurrentUserTheSystemUser();
 	String getEmployeeLogin(NodeRef employee);
+        
+        public Set<NodeRef> getEmployeeDirectRoles(NodeRef employeeRef);
+        
+        public Set<NodeRef> getEmployeeUnitRoles(NodeRef employeeRef);
+        
+        public Set<NodeRef> getEmployeeWGRoles(NodeRef employeeRef);
+                
+        public Set<NodeRef> getEmployeeDPRoles(NodeRef employeeRef); 
 
 	List<NodeRef> getEmployeeRoles(NodeRef employeeRef);
+        
+        Map<NodeRef, List<NodeRef>> getEmployeeDelegatedRolesWithOwner(NodeRef employeeRef);
 
     List<NodeRef> getEmployeeRoles(NodeRef employeeRef, boolean includeDelegatedRoles);
 

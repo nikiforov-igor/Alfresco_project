@@ -249,6 +249,13 @@
             <scope>runtime</scope>
             <type>amp</type>
         </dependency>
+	 <dependency>
+	  <groupId>ru.it.lecm.permission-exp</groupId>
+	  <artifactId>permission-exp-share</artifactId>
+	  <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+	 </dependency>
 	</dependencies>
 
 	<build>

@@ -1,0 +1,28 @@
+<webapp-structure>
+  <registeredFiles>
+    <entry>
+      <string>currentBuild</string>
+      <path-set>
+        <pathsSet class="linked-hash-set">
+          <string>lib/permission-exp-share-0.5.1.jar</string>
+          <string>config/alfresco/site-data/pages/detailedRoles.xml</string>
+          <string>config/alfresco/site-data/template-instances/detailedRoles.xml</string>
+          <string>config/alfresco/site-webscripts/ru/it/lecm/BRExp/employees/org.employees.grid.get.desc.xml</string>
+          <string>config/alfresco/site-webscripts/ru/it/lecm/BRExp/employees/org.employees.grid.get.head.ftl</string>
+          <string>config/alfresco/site-webscripts/ru/it/lecm/BRExp/employees/org.employees.grid.get.html.ftl</string>
+          <string>config/alfresco/site-webscripts/ru/it/lecm/BRExp/employees/org.employees.grid.get.js</string>
+          <string>config/alfresco/site-webscripts/ru/it/lecm/BRExp/employees/org.employees.grid.get.properties</string>
+          <string>config/alfresco/site-webscripts/ru/it/lecm/BRExp/employees/org.employees.grid.get_ru.properties</string>
+          <string>config/alfresco/templates/ru/it/lecm/permExp/detailedRoles.ftl</string>
+          <string>config/alfresco/templates/ru/it/lecm/permExp/detailedRoles.js</string>
+          <string>config/alfresco/web-extension/ru/it/lecm/BRExp/BRExp-share-config-custom.xml</string>
+          <string>config/alfresco/web-extension/ru/it/lecm/BRExp/form.properties</string>
+          <string>config/alfresco/web-extension/ru/it/lecm/BRExp/form_ru.properties</string>
+          <string>config/alfresco/web-extension/ru.it.lecm.BRExp-share-context.xml</string>
+          <string>web/licenses/README-licenses.txt</string>
+          <string>module.properties</string>
+        </pathsSet>
+      </path-set>
+    </entry>
+  </registeredFiles>
+</webapp-structure>
