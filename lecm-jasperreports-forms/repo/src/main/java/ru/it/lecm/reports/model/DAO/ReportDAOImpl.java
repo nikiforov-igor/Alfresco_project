@@ -454,7 +454,8 @@ public class ReportDAOImpl implements ReportDAO {
 		}
 	}
 
-    public NodeRef getReportDescriptorByCode(String rtMnemo) {
+    @Override
+    public NodeRef getReportDescriptorNodeByCode(String rtMnemo) {
         LuceneSearchBuilder builder = new LuceneSearchBuilder(namespaceService);
         builder.emmitFieldCond(null, PROP_T_REPORT_CODE, rtMnemo);
         builder.emmitTypeCond(TYPE_ReportDescriptor, null);
