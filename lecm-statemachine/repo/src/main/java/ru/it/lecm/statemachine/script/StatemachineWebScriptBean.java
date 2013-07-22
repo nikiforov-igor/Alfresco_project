@@ -263,4 +263,15 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.getStatemachineVersion(node.getNodeRef());
     }
 
+    /**
+     * Выдача сотруднику динамической роли и привелегии согласно текущему статусу документа
+     * @param document документ
+     * @param employee сотрудник
+     * @param roleName имя роли
+     * @return
+     */
+    public boolean grandDynamicRoleForEmployee(ScriptNode document, ScriptNode employee, String roleName) {
+        return stateMachineHelper.grandDynamicRoleForEmployee(document.getNodeRef(), employee.getNodeRef(), roleName);
+    }
+
 }
