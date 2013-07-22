@@ -564,6 +564,38 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
     }
 
+    /**
+     * Извлекает список переменных и их значений, которые необходимо передать в запускаемый процесс
+     * @param stateMachineExecutionId
+     * @param variables
+     * @return
+     */
+    public Map<String, String> getInputVariablesMap(String stateMachineExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
+        HashMap<String, String> result = new HashMap<String, String>();
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        for (WorkflowVariables.WorkflowVariable variable : variables) {
+            String value = "";
+            if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
+                value = runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue()).toString();
+            } else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
+                NodeService nodeService = serviceRegistry.getNodeService();
+
+                NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+                List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+                if (documents.size() > 0) {
+                    NodeRef document = documents.get(0).getChildRef();
+                    QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
+                    value = nodeService.getProperty(document, propertyName).toString();
+                }
+            } else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
+                value = variable.getFromValue();
+            }
+
+            result.put(variable.getToValue(), value);
+        }
+        return result;
+    }
+
     public void getOutputVariables(String stateMachineExecutionId, Map<String, Object> executionVariables, List<WorkflowVariables.WorkflowVariable> variables) {
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
         for (WorkflowVariables.WorkflowVariable variable : variables) {

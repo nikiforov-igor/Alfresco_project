@@ -15,6 +15,7 @@ import org.springframework.extensions.webscripts.connector.Response;
 import org.springframework.extensions.webscripts.connector.ResponseStatus;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,23 @@ public class Form extends FormUIGet {
 
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
-        return super.executeImpl(req, status, cache);    //To change body of overridden methods use File | Settings | File Templates.
+        Map<String, Object> model = super.executeImpl(req, status, cache);
+        String args = req.getParameter("args");
+        if (args != null) {
+            try {
+                Map arguments = (Map) ((Map) model.get("form")).get("arguments");
+                JSONObject argsObject = new JSONObject(args);
+                Iterator<String> it = argsObject.keys();
+                while(it.hasNext()) {
+                    String key = it.next();
+                    String value = argsObject.getString(key);
+                    arguments.put(key, value);
+                }
+            } catch (JSONException e) {
+                logger.warn("Cannot parse input arguments");
+            }
+        }
+        return model;
     }
 
     protected void processFields(ModelContext context, Map<String, Object> formUIModel) {

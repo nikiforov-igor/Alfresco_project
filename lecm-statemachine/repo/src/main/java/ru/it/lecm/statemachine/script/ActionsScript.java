@@ -120,6 +120,7 @@ public class ActionsScript extends DeclarativeWebScript {
     }
 
     private HashMap<String, Object> getActions(NodeRef nodeRef, String statemachineId) {
+        StateMachineHelper helper = new StateMachineHelper();
         HashMap<String, Object> result = new HashMap<String, Object>();
         ArrayList<HashMap<String, Object>> actionsList = new ArrayList<HashMap<String, Object>>();
         NodeService nodeService = serviceRegistry.getNodeService();
@@ -155,6 +156,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                     }
                                 }
 
+                                Map<String, String> variables = helper.getInputVariablesMap(statemachineId, state.getVariables().getInput());
                                 long count = getActionCount(nodeRef, state.getActionId());
 
                                 if (!hideAction) {
@@ -166,7 +168,9 @@ public class ActionsScript extends DeclarativeWebScript {
                                     resultState.put("errors", messages);
                                     resultState.put("fields", fields);
                                     resultState.put("count", count);
+                                    resultState.put("variables", variables);
                                     actionsList.add(resultState);
+
                                 }
                             }
                         }
@@ -187,6 +191,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                     }
                                 }
 
+                                Map<String, String> variables = helper.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
                                 long count = getActionCount(nodeRef, entity.getId());
 
                                 if (!hideAction) {
@@ -198,6 +203,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                     workflow.put("errors", messages);
                                     workflow.put("fields", fields);
                                     workflow.put("count",count);
+                                    workflow.put("variables", variables);
                                     actionsList.add(workflow);
                                 }
                             }

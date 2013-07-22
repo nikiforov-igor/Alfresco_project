@@ -119,13 +119,14 @@ LogicECM.module = LogicECM.module || {};
 		},
 
         showForm: function showForm_action(action) {
-            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}";
             templateUrl = YAHOO.lang.substitute(templateUrl, {
                 itemKind:"workflow",
                 itemId:action.workflowId,
                 mode:"create",
                 submitType:"json",
-                formId:"workflow-form"
+                formId:"workflow-form",
+                args: JSON.stringify(action.variables)
             });
 
             var me = this;
