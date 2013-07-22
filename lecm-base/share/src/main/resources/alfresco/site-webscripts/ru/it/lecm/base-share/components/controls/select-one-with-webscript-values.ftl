@@ -33,7 +33,7 @@
             mandatory: ${field.mandatory?string},
             currentNodeRef: "${form.arguments.itemId}",
             destination: "${args.destination!""}",
-            updateOnAction: "${field.control.params.updateOnAction}"
+            updateOnAction: "${field.control.params.updateOnAction!""}"
         }).setMessages(${messages});
     //]]></script>
 </div>

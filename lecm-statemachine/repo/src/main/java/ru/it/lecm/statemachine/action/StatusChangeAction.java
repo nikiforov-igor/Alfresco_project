@@ -199,6 +199,10 @@ public class StatusChangeAction extends StateMachineAction {
         return categories;
     }
 
+    public Map<String, LecmPermissionGroup> getDynamicPrivileges() {
+        return dynamicPrivileges;
+    }
+
     /**
      * Инициализирует список ролей из элемента role
      *

@@ -477,6 +477,28 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     @Override
+    public boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName) {
+        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        boolean result = false;
+        if (executionId != null) {
+            String taskId = getCurrentTaskId(executionId);
+            if (taskId != null) {
+                List<StateMachineAction> actions = getStatusChangeActions(document);
+                for (StateMachineAction action : actions) {
+                    StatusChangeAction statusChangeAction = (StatusChangeAction) action;
+                    Map<String, LecmPermissionService.LecmPermissionGroup> privaleges = statusChangeAction.getDynamicPrivileges();
+                    LecmPermissionService.LecmPermissionGroup group = privaleges.get(roleName);
+                    if (group != null) {
+                        lecmPermissionService.grantDynamicRole(roleName, document, employee.getId(), group);
+                        result = true;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
     public boolean isReadOnlyCategory(NodeRef document, String category) {
         Set<StateField> categories = getStateCategories(document).getFields();
         boolean result = true;

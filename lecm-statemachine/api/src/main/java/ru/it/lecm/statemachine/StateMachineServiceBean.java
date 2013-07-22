@@ -106,4 +106,13 @@ public interface StateMachineServiceBean {
      */
     public String getStatemachineVersion(NodeRef document);
 
+    /**
+     * Выдача сотруднику динамической роли и привелегии согласно текущему статусу документа
+     * @param document документ
+     * @param employee сотрудник
+     * @param roleName имя роли
+     * @return
+     */
+    public boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName);
+
 }
