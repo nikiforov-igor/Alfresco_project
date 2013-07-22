@@ -43,4 +43,9 @@ public interface ColumnDescriptor
 
     String getAlfrescoType();
     void setAlfrescoType(String alfrescoType);
+
+    int getOrder();
+    void setOrder(int order);
+
+    public int compareTo(Object obj);
 }

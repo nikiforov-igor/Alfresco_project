@@ -346,6 +346,8 @@ public class ReportDAOImpl implements ReportDAO {
 
         result.setExpression(getString(map, PROP_T_RDS_COLUMN_EXPR));
 
+        result.setOrder(getInt(map, PROP_T_RDS_COLUMN_ORDER, 0));
+
         result.setAlfrescoType(getString(map, PROP_T_RDS_COLUMN_CLASS));
         // TODO: result.setSpecial( getBool(map, PROP_T_RDS_ISSPECIAL, false));
 

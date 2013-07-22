@@ -67,6 +67,7 @@ public interface ReportDAO {
 	final static public String PROP_T_RDS_COLUMN_CODE = "lecm-rpeditor:dataColumnCode";
 	final static public String PROP_T_RDS_COLUMN_EXPR = "lecm-rpeditor:dataColumnExpression";
 	final static public String PROP_T_RDS_COLUMN_CLASS = "lecm-rpeditor:dataColumnClass";
+    final static public String PROP_T_RDS_COLUMN_ORDER = "lecm-rpeditor:dataColumnOrder";
 
 	/* <!-- Тип колонок в отчете--> "lecm-rpeditor:reportDataColumn", parent: "lecm-dic:plane_dictionary_values" */
 	final static public String TYPE_RDS_COLTYPE = "lecm-rpeditor:reportColumnType";

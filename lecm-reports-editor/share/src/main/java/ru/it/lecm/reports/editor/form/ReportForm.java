@@ -17,10 +17,7 @@ import ru.it.lecm.reports.manager.ReportManagerApi;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -82,15 +79,26 @@ public class ReportForm extends FormUIGet {
         form.put(MODEL_FIELDS, fields);
 
         List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
+        List<ColumnDescriptor> params = new ArrayList<ColumnDescriptor>();
         for (ColumnDescriptor column : columns) {
             ParameterTypedValue typedValue = column.getParameterValue();
             if (typedValue != null) {
-                Field field = generateFieldModel(column);
-                if (field != null) {
-                    fields.put(column.getColumnName(), field);
-                    FieldPointer fieldPointer = new FieldPointer(field.getId());
-                    set.addChild(fieldPointer);
-                }
+                params.add(column);
+            }
+        }
+
+        Collections.sort(params, new Comparator<ColumnDescriptor>() {
+            public int compare(ColumnDescriptor o1, ColumnDescriptor o2) {
+                return o1.compareTo(o2);
+            }
+        });
+
+        for (ColumnDescriptor param : params) {
+            Field field = generateFieldModel(param);
+            if (field != null) {
+                fields.put(param.getColumnName(), field);
+                FieldPointer fieldPointer = new FieldPointer(field.getId());
+                set.addChild(fieldPointer);
             }
         }
 

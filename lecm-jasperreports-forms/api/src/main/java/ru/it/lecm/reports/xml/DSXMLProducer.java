@@ -92,6 +92,7 @@ public class DSXMLProducer {
 	public final static String XMLATTR_JR_FLDNAME = "jrFldName";
 	public final static String XMLATTR_QUERY_FLDNAME ="queryFldName";
 	public final static String XMLATTR_DISPLAYNAME = "displayName";
+    public final static String XMLATTR_ORDER = "order";
 
 	public final static String XMLATTR_VALUE_JAVACLASS = "javaValueClass";
 	public final static String XMLATTR_JAVACLASS = "javaClass";
@@ -497,6 +498,7 @@ public class DSXMLProducer {
         result.setAttribute(XMLATTR_JR_FLDNAME, column.getColumnName());
         result.setAttribute(XMLATTR_QUERY_FLDNAME, column.getExpression());
         result.setAttribute(XMLATTR_DISPLAYNAME, column.get("ru", ""));
+        result.setAttribute(XMLATTR_ORDER, String.valueOf(column.getOrder()));
         result.setAttribute(XMLATTR_PARAM_ALFRESCO_TYPE, column.getAlfrescoType() != null ? column.getAlfrescoType() : DEFAULT_COLUMN_ALFRESCO_CLASS);
         // DONE: save map-locale {column.getL18Items} like addL18Name( doc, result, column);
         XmlHelper.xmlAddL18Name(doc, result, column);
@@ -591,6 +593,11 @@ public class DSXMLProducer {
                 column.regItem("ru", displayName);
             }
             // result.setAttribute( XMLATTR_INMAINDOC, column.flags("inMainDoc"));
+
+            if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_ORDER)) {
+                final int order = Integer.parseInt(fldNode.getAttribute(DSXMLProducer.XMLATTR_ORDER));
+                column.setOrder(order);
+            }
 
             // DONE: restore map-locale
             XmlHelper.parseL18(column, fldNode);

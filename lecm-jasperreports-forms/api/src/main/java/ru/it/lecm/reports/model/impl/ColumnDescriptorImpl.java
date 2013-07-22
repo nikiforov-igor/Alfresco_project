@@ -27,6 +27,7 @@ public class ColumnDescriptorImpl
 	private String expression;
 	private boolean special = false;
     private String alfrescoType;
+    private int order = 0;
 
     public ColumnDescriptorImpl() {
 		super();
@@ -72,6 +73,7 @@ public class ColumnDescriptorImpl
 		result = prime * result + ((expression == null) ? 0 : expression.hashCode());
 		result = prime * result
 				+ ((flagsExtendable == null) ? 0 : flagsExtendable.hashCode());
+        result = prime * result + order;
 		return result;
 	}
 
@@ -120,7 +122,10 @@ public class ColumnDescriptorImpl
 		} else if (!flagsExtendable.equals(other.flagsExtendable))
 			return false;
 
-		return true;
+        if (order != other.order) {
+            return false;
+        }
+        return true;
 	}
 
 	@Override
@@ -133,6 +138,7 @@ public class ColumnDescriptorImpl
 				+ ", parameter " + parameterTypedValue
 				+ "\n\t, javaClass " + super.toString()
 				+ "\n\t, flagsExtendable " + flagsExtendable
+                + ", order " + order
 				+ "]";
 	}
 
@@ -220,4 +226,21 @@ public class ColumnDescriptorImpl
 		this.special = flag;		
 	}
 
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public int compareTo(Object obj) {
+        ColumnDescriptor tmp = (ColumnDescriptor) obj;
+        if (this.getOrder() < tmp.getOrder()) {
+            return -1;
+        } else if (this.getOrder() > tmp.getOrder()) {
+            return 1;
+        }
+        return 0;
+    }
 }
