@@ -2,7 +2,7 @@
 <!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 
 <beans>
-	<bean id="dictionary.custom.config" class="org.springframework.extensions.config.ConfigBootstrap" init-method="register">
+	<bean id="semanticAssist.custom.config" class="org.springframework.extensions.config.ConfigBootstrap" init-method="register">
 		<property name="configService" ref="web.config" />
 		<property name="configs">
 			<list>
