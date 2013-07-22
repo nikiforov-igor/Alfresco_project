@@ -59,6 +59,20 @@
                     </span>
                 </div>
             </#if>
+
+	        <script type="text/javascript">//<![CDATA[
+	        (function()
+	        {
+		        YAHOO.util.Event.onDOMReady(function (){
+			        new Alfresco.Favourite("${controlId}-favourite").setOptions(
+					        {
+						        nodeRef: "${nodeRef}",
+						        type: "document"
+					        }).display(${(item.isFavourite!false)?string});
+		        });
+	        })();
+	        //]]></script>
+	        <div class="favorite" id="${controlId}-favourite"></div>
         </div>
 
         <div class="clear"></div>
