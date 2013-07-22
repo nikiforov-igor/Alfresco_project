@@ -261,7 +261,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
         }
         return documentService.getDocumentsByFilter(qNameTypes, null, null, null,
-                getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), employeesMap, null).size();
+                getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), employeesMap, null, null).size();
     }
 
     public List<String> getAccessPermissionsList(String type) {

@@ -288,11 +288,11 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     @Override
     public List<NodeRef> getDocuments(List<QName> docTypes, List<String> paths, ArrayList<String> statuses) {
-        return getDocumentsByFilter(docTypes, null, null, null, paths, statuses, null, null);
+        return getDocumentsByFilter(docTypes, null, null, null, paths, statuses, null, null, null);
     }
 
     @Override
-    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName,List<NodeRef>> initiatorsList, List<NodeRef> docsList) {
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName,List<NodeRef>> initiatorsList, List<NodeRef> docsList, String filter) {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
@@ -374,6 +374,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                 addOR = true;
             }
             query += " AND (" + docsFilter + ")";
+        }
+
+        if (filter != null && filter.length() > 0){
+            query += filter;
         }
 
         ResultSet results = null;

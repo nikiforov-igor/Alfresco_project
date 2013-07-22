@@ -40,6 +40,15 @@ public interface ErrandsService {
 	public static final String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
 	public static final String BUSINESS_ROLE_ERRANDS_CHOOSING_INITIATOR = "ERRANDS_CHOOSING_INITIATOR";
 
+
+    public static enum FilterEnum {
+        ALL,
+        IMPORTANT,
+        OVERDUE,
+        APPROACHING_DEADLINE,
+        OTHER
+    }
+
 	/**
 	 * Получение папки для черновиков
 	 * @return ссылку на папку с черновиками
@@ -83,4 +92,6 @@ public interface ErrandsService {
 	public NodeRef getDefaultSubject();
 
     void requestDueDateChange();
+
+    public List<NodeRef> getErrandsDocumentFilter(List<QName> types, List<String> paths, String filter);
 }

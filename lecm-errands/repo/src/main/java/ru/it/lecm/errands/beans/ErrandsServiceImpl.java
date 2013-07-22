@@ -29,6 +29,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
 	private DocumentService documentService;
 	private OrgstructureBean orgstructureService;
+    private NamespaceService namespaceService;
 
 	private final Object lock = new Object();
 
@@ -39,6 +40,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
 	}
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -189,5 +194,100 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     @Override
     public void requestDueDateChange() {
+    }
+
+    public List<NodeRef> getErrandsDocumentFilter(List<QName> types, List<String> paths, String filterKey){
+        String filter = "";
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        if (filterKey != null) {
+            switch(FilterEnum.valueOf(filterKey.toUpperCase())) {
+                case IMPORTANT : {
+                    // получаем важные поручения
+                    filter += " AND (" + "@lecm\\-errands\\:is\\-important:\"" + "true" + "\""+")";
+                    filter += "";
+                    for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, null, null, null, paths, null, null, null, filter)) {
+                        if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
+                            result.add(nodeRef);
+                        }
+                    }
+                    break;
+                }
+                case OVERDUE: {
+                      // просроченные
+                    Date now = new Date();
+                    filter += " AND NOT (" + "@lecm\\-errands\\:is\\-important:\"" + "true" + "\""+")";
+                    filter += "";
+                    QName dateType = QName.createQName("lecm-errands:limitation-date", namespaceService);
+                    for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, dateType , null, now, paths, null, null, null, filter)) {
+                        if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
+                            result.add(nodeRef);
+                        }
+                    }
+                    break;
+                }
+                case APPROACHING_DEADLINE: {
+                    // с приближающимся сроком
+                    Date now = new Date();
+                    Date end = null;
+                    String daysCount = "2";
+                    if (daysCount != null &&  !"".equals(daysCount)) {
+                        Integer days = Integer.parseInt(daysCount);
+
+                        if (days > 0) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(now);
+                            calendar.add(Calendar.DAY_OF_MONTH, days);
+                            calendar.set(Calendar.HOUR_OF_DAY, 0);
+                            calendar.set(Calendar.MINUTE, 0);
+                            calendar.set(Calendar.SECOND, 0);
+                            end = calendar.getTime();
+                        }
+                    }
+                    filter += " AND NOT (" + "@lecm\\-errands\\:is\\-important:\"" + "true" + "\""+")";
+                    filter += "";
+                    QName dateType = QName.createQName("lecm-errands:limitation-date", namespaceService);
+                    for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, dateType, now, end, paths, null, null, null, filter)) {
+                        if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
+                            result.add(nodeRef);
+                        }
+                    }
+                    break;
+                }
+                case OTHER: {
+                    // Остальные
+                    Date now = new Date();
+                    Date start = null;
+                    String daysCount = "2";
+                    if (daysCount != null &&  !"".equals(daysCount)) {
+                        Integer days = Integer.parseInt(daysCount);
+
+                        if (days > 0) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(now);
+                            calendar.add(Calendar.DAY_OF_MONTH, days);
+                            calendar.set(Calendar.HOUR_OF_DAY, 0);
+                            calendar.set(Calendar.MINUTE, 0);
+                            calendar.set(Calendar.SECOND, 0);
+                            start = calendar.getTime();
+                        }
+                    }
+                    filter += " AND NOT (" + "@lecm\\-errands\\:is\\-important:\"" + "true" + "\""+")";
+                    filter += "";
+                    QName dateType = QName.createQName("lecm-errands:limitation-date", namespaceService);
+                    for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, dateType, start, null, paths, null, null, null, filter)) {
+                        if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
+                            result.add(nodeRef);
+                        }
+                    }
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+//        documentService.getDocumentsByFilter();
+        return result;
     }
 }

@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Errands Module get errands filter</shortname>
+    <description>Отфильтрованный список поручений</description>
+    <url>/lecm/errands/getErrandsFilter</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

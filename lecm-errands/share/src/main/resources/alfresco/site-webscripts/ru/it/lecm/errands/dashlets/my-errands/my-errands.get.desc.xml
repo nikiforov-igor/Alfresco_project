@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Мои поручения</shortname>
+    <description>Dashlet for My Errands</description>
+    <family>user-dashlet</family>
+    <url>/lecm/errands/dashlets/my-errands</url>
+</webscript>

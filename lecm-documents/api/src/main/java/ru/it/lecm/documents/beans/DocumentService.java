@@ -137,9 +137,18 @@ public interface DocumentService {
     public List<NodeRef> getDocuments(List<QName> docTypes, List<String> paths, ArrayList<String> statuses);
     /**
      * Поиск документов по разным параметрам
-     * @return List<NodeRef> - ссылок на документы
+     * @param docTypes - список QName типов на документы
+     * @param dateProperty - QName тип даты
+     * @param begin - от периода даты (начало)
+     * @param end - до периода даты (конец)
+     * @param paths - список путей для поиска, формат: app:company_home/cm:Черновики
+     * @param statuses - список статусов, если null то по статусам не фильтрует
+     * @param inititatorsList - список инициаторов
+     * @param docsList -
+     * @param filter - сформированная строка запроса добавляется в конец запроса
+     * @return List<NodeRef> - ссылки на документы
      */
-    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName, List<NodeRef>> inititatorsList, List<NodeRef> docsList);
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName, List<NodeRef>> inititatorsList, List<NodeRef> docsList, String filter);
 
     /**
      * Метод для получения папки с черновиками для заданного типа

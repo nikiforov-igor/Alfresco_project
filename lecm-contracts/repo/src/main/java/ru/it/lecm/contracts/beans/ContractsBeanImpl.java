@@ -122,7 +122,7 @@ public class ContractsBeanImpl extends BaseBean {
             }
         }
 
-        return documentService.getDocumentsByFilter(types, dateProperty, begin, end, paths, statuses, initList, docsList);
+        return documentService.getDocumentsByFilter(types, dateProperty, begin, end, paths, statuses, initList, docsList, null);
     }
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
