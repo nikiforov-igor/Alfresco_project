@@ -121,7 +121,11 @@ public class LucenePreparedQuery {
 
 		/* создаём базовый запрос:  по ID или TYPE */
 		makeMasterCondition(bquery, reportDescriptor);
-		hasData = true;
+
+        if (bquery.length() > 0) {
+            hasData = true;
+        }
+
 
 		/* 
 		 * проход по параметрам, которые являются простыми - и включение их в 

@@ -22,6 +22,8 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.reports.api.AssocDataFilter;
 import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
@@ -122,7 +124,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
 		}
 
 		{
-			final int foundCount = (alfrescoResult != null && alfrescoResult.hasMore()) ? alfrescoResult.length() : -1;
+			final int foundCount = (alfrescoResult != null) ? alfrescoResult.length() : -1;
 			d.logCtrlDuration(logger, String.format( 
 				"\nQuery in {t} msec: found %d rows, limit %d, offset %d" +
 				"\n>>>%s\n<<<"
@@ -194,7 +196,6 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
 
 	/**
 	 * Получить список имён простых колонок в виде "тип:атрибут" (QName Альфреско).
-	 * @param argsByProps
 	 * @return
 	 */
 	static Set<String> getColumnNames(List<ColumnDescriptor> list, final NamespaceService ns) {
@@ -225,38 +226,43 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
 	 * В потомках позволит менять конретный тип фильтра.
 	 * @return
 	 */
-	protected DataFilter newDataFilter() {
-		// фильтр, который может "заглядывать" по ссылкам
+    protected DataFilter newDataFilter() {
+        // фильтр, который может "заглядывать" по ссылкам
 
-		if (this.alfrescoQuery.argsByLinks() == null || this.alfrescoQuery.argsByLinks().isEmpty() )
-			return null;
+        if (this.alfrescoQuery.argsByLinks() == null || this.alfrescoQuery.argsByLinks().isEmpty()) {
+            return null;
+        }
 
-		// TODO: надо разработать фильтр, который смог бы проверять длинные ссылки (DataFilterByLinks)
-		final AssocDataFilterImpl result = new AssocDataFilterImpl(this.getServices().getServiceRegistry());
+        // TODO: надо разработать фильтр, который смог бы проверять длинные ссылки (DataFilterByLinks)
+        final AssocDataFilterImpl result = new AssocDataFilterImpl(this.getServices().getServiceRegistry());
 
-		final NamespaceService ns = this.getServices().getServiceRegistry().getNamespaceService();
+        final NamespaceService ns = this.getServices().getServiceRegistry().getNamespaceService();
 
-		// добавление всех ссылок как child
-		for(ColumnDescriptor colDesc: this.alfrescoQuery.argsByLinks()) {
-			/*
-			 * Example:
+        for (ColumnDescriptor colDesc : this.alfrescoQuery.argsByLinks()) {
+            /*
+             * Example:
 				final QName qnCSubject = QName.createQName( "lecm-doc-dic:subject-code", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
 				result.addAssoc( qnCSubject, qnAssocCSubject, contractSubject, AssocKind.target);
 			 */
-			final QName qnType = null;
-			final QName qnAssocType = QName.createQName( colDesc.getExpression(), ns);
-			final AssocKind kind = AssocKind.child;
-			// параметр с id параметра - либо как строка, ибо сразу как NodeRef
-			final NodeRef idTarget = ParameterMapper.getArgAsNodeRef(colDesc);
-			if (idTarget == null) {
-				logger.debug( String.format("column '%s' has unassigned filter assoc-value -> skipped", colDesc.getColumnName()));
-				continue; // skip unassigned argument
-			}
-			result.addAssoc( kind, qnType, qnAssocType, idTarget);
-		}
+            final QName qnType = null;
+            try {
+                String expression = colDesc.getExpression();
+                if (expression.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) && expression.endsWith(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL)) {
+                    expression = expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
+                    final QName qnAssocType = QName.createQName(expression, ns);
+                    final List<NodeRef> idsTarget = ParameterMapper.getArgAsNodeRef(colDesc);
+                    if (idsTarget.isEmpty()) {
+                        continue;
+                    }
+                    result.addAssoc(new AssocDataFilter.AssocDesc(AssocKind.target, qnType, qnAssocType, idsTarget));
+                }
+            } catch (Exception ignored) {
+                logger.debug("Some error occured", ignored);
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
 }

@@ -9,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.extensions.surf.util.URLDecoder;
 import ru.it.lecm.reports.api.DsLoader;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
@@ -403,7 +403,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	 */
 	private File getBaseDir() {
 		final URL base = JRLoader.getResource( "/"); // получение главного каталога
-		return new File(base.getFile()); // NPE скажет о проблемах, т.к. базовый каталог обязан существовать
+        return new File(URLDecoder.decode(base.getFile()));// NPE скажет о проблемах, т.к. базовый каталог обязан существовать
 	}
 
 	/**
