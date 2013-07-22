@@ -5,11 +5,7 @@
 {
     new LogicECM.dashlet.Errands("${jsid}").setOptions(
             {
-                maxItems: 50,
-                sorting:
-                {<#list sorting as sort>
-                    "${sort.type?js_string}": "${sort.parameters?js_string}"<#if sort_has_next>,</#if>
-                </#list>}
+                maxItems: 50
             }).setMessages(${messages});
 
     new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
@@ -47,10 +43,6 @@
             <div class="clear"></div>
         </div>
     </div>
-    <#--<div class="toolbar flat-button">-->
-        <#--<div class="align-left" id="${id}-paginator">&nbsp;Здесь будет выводится перечень моих поручений</div>-->
-        <#--<div class="clear"></div>-->
-    <#--</div>-->
     <div class="body scrollableList" <#if args.height??>style="height: ${args.height}px;"</#if>>
         <div id="${id}-errands"></div>
     </div>

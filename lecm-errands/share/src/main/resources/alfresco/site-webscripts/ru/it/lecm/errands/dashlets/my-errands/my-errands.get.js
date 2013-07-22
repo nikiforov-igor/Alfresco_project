@@ -8,8 +8,7 @@ for each(var xmlSort in myConfig..sort)
 {
     sort.push(
         {
-            type: xmlSort.@type.toString(),
-            parameters: xmlSort.@parameters.toString()
+            type: xmlSort.@type.toString()
         });
 }
 model.sorting = sort;

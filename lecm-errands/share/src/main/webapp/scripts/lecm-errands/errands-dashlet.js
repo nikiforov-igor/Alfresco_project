@@ -99,15 +99,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                  * @type int
                  * @default 50
                  */
-                maxItems: 50,
-
-                /**
-                 * Filter look-up: type to display value and query value
-                 *
-                 * @property filters
-                 * @type Object
-                 */
-                sorting: {}
+                maxItems: 50
             },
 
             errandsList: null,
@@ -200,14 +192,6 @@ LogicECM.dashlet = LogicECM.dashlet || {};
             {
                 this.options.activeFilter = p_obj;
                 var html = p_response.serverResponse.responseText;
-//                if (YAHOO.lang.trim(html).length === 0)
-//                {
-//                    this.errandsList.innerHTML = Dom.get(this.id + "-paginator").innerHTML;
-//                }
-//                else
-//                {
-//                    this.errandsList.innerHTML = html;
-//                }
                 if (p_response.json.length > 0) {
                     this.errandsList.innerHTML = "";
                     var results = p_response.json;

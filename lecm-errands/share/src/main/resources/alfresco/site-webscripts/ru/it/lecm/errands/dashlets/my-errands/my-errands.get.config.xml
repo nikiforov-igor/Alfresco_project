@@ -1,18 +1,9 @@
 <config>
     <max-items>50</max-items>
     <sort-menu>
-        <!--
-           The value of the "parameters" attribute will be added to the end of the task-instances webscript url
-
-           Note that it is possible to create dynamic values by using the following keys inside "{}":
-            * {0dt} - resolves to a iso08601 datetime representation of the current date and time
-            * {0d} - resolves to a iso8601 date representation of the current day
-            * {-7d} - resolves to a iso8601 date representation of the current day rolled the given number of days back
-            * {+7d} - resolves to a iso8601 date representation of the current day rolled the given number of days forward
-        -->
-        <sort type="important"                parameters="priority=1"/>
-        <sort type="overdue"                  parameters="dueAfter={-1d}&amp;dueBefore={0d}"/>
-        <sort type="approaching_Deadline"     parameters="pooledTasks=true" />
-        <sort type="other"                    parameters="dueBefore={-1d}"/>
+        <sort type="important"/>
+        <sort type="overdue"/>
+        <sort type="approaching_Deadline"/>
+        <sort type="other"/>
     </sort-menu>
 </config>
