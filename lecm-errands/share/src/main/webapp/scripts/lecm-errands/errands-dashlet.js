@@ -125,6 +125,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 this.widgets.filterMenuButton.value = "important";
                 // Display the toolbar now that we have selected the filter
                 Dom.removeClass(Selector.query(".toolbar div", this.id, true), "hidden");
+                this.populateErrandsList();
             },
 
             /**
@@ -142,13 +143,12 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                     this.widgets.filterMenuButton.set("label", menuItem.cfg.getProperty("text"));
                     this.widgets.filterMenuButton.value = menuItem.value;
 
-//                    var parameters = this.substituteParameters(this.options.filters[menuItem.value], {});
-//                    this.widgets.alfrescoDataTable.loadDataTable(parameters);
                     this.populateErrandsList(this.widgets.filterMenuButton.value);
                     // Save preferences
                     this.services.preferences.set(PREFERENCES_TASKS_DASHLET_FILTER, menuItem.value);
                 }
             },
+
             /**
              * Populate the activity list via Ajax request
              * @method populateContractsList
@@ -199,14 +199,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         var item = results[i];
                         var div = this.createRow();
                         var detail = document.createElement('span');
-
-                        detail.innerHTML = "Поручение: " + "<a href='" + window.location.protocol + "//" + window.location.host +
-                            Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef="+ item.nodeRef + "'>" +
-                            item.title + " № " + item.number + ",</a>" + " исполнитель " +
-                            "<a href='" + window.location.protocol + "//" + window.location.host +
-                            Alfresco.constants.URL_PAGECONTEXT + "view-metadata?nodeRef="+ item.executor + "'>" +
-                            item.executor_name + ",</a>" + " срок: " + item.limit + "<br/>" ;
-                        detail.setAttribute('class', 'detail');
+                        detail.innerHTML = item.record;
                         div.appendChild(detail);
                         this.errandsList.appendChild(div);
                     }
