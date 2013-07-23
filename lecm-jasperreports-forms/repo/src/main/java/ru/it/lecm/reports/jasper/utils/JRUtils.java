@@ -119,7 +119,8 @@ public class JRUtils {
 				final DataFieldColumn item = new DataFieldColumn();
 				item.setName( colDesc.getColumnName());
 				item.setValueLink( colDesc.getExpression());
-				result.add(item);
+                item.setValueClassName(colDesc.className());
+                result.add(item);
 			} // for
 		}
 		return result;

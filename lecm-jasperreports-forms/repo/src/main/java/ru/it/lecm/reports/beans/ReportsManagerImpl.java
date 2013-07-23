@@ -247,8 +247,6 @@ public class ReportsManagerImpl implements ReportsManager {
 //		}
 		if (getDescriptors().containsKey(reportMnemoName)) {
 			final ReportDescriptor d = this.descriptors.get(reportMnemoName);
-			if (logger.isDebugEnabled())
-				logger.debug( String.format( "Found bean report mnem '%s' as:\n%s", reportMnemoName, d));
 			return d; // FOUND by Mnemonic
 		}
 

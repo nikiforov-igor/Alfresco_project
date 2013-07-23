@@ -105,8 +105,6 @@ public class AlfrescoJRDataSource implements JRDataSource
 
 		final NodeService nodeSrv = context.getRegistryService().getNodeService();
 		final Map<QName, Serializable> realProps = nodeSrv.getProperties(id);
-		log_alfreco_data( realProps, String.format("Loaded properties of %s\n\t Filtering fldNames for jasper-report by list: %s"
-				, id, Utils.coalesce(context.getJrSimpleProps(), "*") ));
 		if (realProps != null) { 
 			for (Map.Entry<QName, Serializable> e: realProps.entrySet()) {
 				// переводим название свойства в краткую форму

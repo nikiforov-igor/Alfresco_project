@@ -46,19 +46,6 @@ public class ColumnDescriptorImpl
 		this(colname, (SupportedTypes) null);
 	}
 
-
-	/**
-	 * Проверить является ли мапинг параметра простым - т.е. сразу на атрибут (нет ассоциаций).
-	 * Сейчас такими принимаются любые непустые строки, которые НЕ начинаются с '{'.
-	 * @param column проверяемый описатель
-	 * @return true, если параметр смапирован на простое поле
-	 */
-	public static boolean isMapped2ImmediateProperty(ColumnDescriptor column) {
-		return (column != null)
-				&& !Utils.isStringEmpty(column.getExpression())
-				&& !column.getExpression().startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL);
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -242,5 +229,13 @@ public class ColumnDescriptorImpl
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public String getQNamedExpression() {
+        if (this.expression == null) {
+            return null;
+        }
+        return this.expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
     }
 }

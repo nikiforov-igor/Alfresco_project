@@ -11,6 +11,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperReport;
 
+import org.alfresco.service.cmr.dictionary.AssociationDefinition;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -86,55 +88,55 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
 	 * Формирует alfrescoResult согласно запросу полученному от buildQueryText и
 	 * параметрам limit/offset.
 	 */
-	protected void execQuery() {
-		final DurationLogger d = new DurationLogger();
+    protected ResultSet execQuery() {
+        final DurationLogger d = new DurationLogger();
 
-		clearSearch();
+        clearSearch();
 
-		// scanSimpleFieldsInMetaConf(); // scan in conf.getMetaFields()
+        this.alfrescoQuery = LucenePreparedQuery.prepareQuery(this.reportDescriptor, getServices().getServiceRegistry());
 
-		this.alfrescoQuery = LucenePreparedQuery.prepareQuery(this.reportDescriptor);
-		if (logger.isDebugEnabled()) {
-			logger.debug( String.format("Quering Afresco by:>>>\n%s\n<<<", this.alfrescoQuery.luceneQueryText() ));
-		}
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Quering Afresco by:>>>\n%s\n<<<", this.alfrescoQuery.luceneQueryText()));
+        }
 
-		{
-			final SearchParameters search = new SearchParameters();
-			search.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-			search.setLanguage(SearchService.LANGUAGE_LUCENE);
-			search.setQuery( this.alfrescoQuery.luceneQueryText());
-			this.alfrescoQuery.setAlfrescoSearch( search);
-		}
+        final SearchParameters search = new SearchParameters();
+        search.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        search.setLanguage(SearchService.LANGUAGE_LUCENE);
+        search.setQuery(this.alfrescoQuery.luceneQueryText());
+        this.alfrescoQuery.setAlfrescoSearch(search);
 
-		int skipCountOffset = -1, maxItems = UNLIMITED;
-		if (this.reportDescriptor.getFlags() != null) {
-			// set offset ...
-			skipCountOffset = this.reportDescriptor.getFlags().getOffset();
-			// set limit ...
-			maxItems = this.reportDescriptor.getFlags().getLimit();
-		}
-		if (skipCountOffset > 0)
-			this.alfrescoQuery.alfrescoSearch().setSkipCount(skipCountOffset);
-		if (maxItems != UNLIMITED)
-			this.alfrescoQuery.alfrescoSearch().setMaxItems(maxItems);
+        int skipCountOffset = -1,
+                maxItems = UNLIMITED;
+
+        if (this.reportDescriptor.getFlags() != null) {
+            // set offset ...
+            skipCountOffset = this.reportDescriptor.getFlags().getOffset();
+            // set limit ...
+            maxItems = this.reportDescriptor.getFlags().getLimit();
+        }
+        if (skipCountOffset > 0) {
+            this.alfrescoQuery.alfrescoSearch().setSkipCount(skipCountOffset);
+        }
+        if (maxItems != UNLIMITED) {
+            this.alfrescoQuery.alfrescoSearch().setMaxItems(maxItems);
+        }
 
 		/* (!) момент истины - выполнение ЗАПРОСА */
-		if ( !Utils.isStringEmpty(this.alfrescoQuery.luceneQueryText())) {
-			alfrescoResult = getServices().getServiceRegistry().getSearchService().query(this.alfrescoQuery.alfrescoSearch());
-		}
+        ResultSet rs = null;
+        if (!Utils.isStringEmpty(this.alfrescoQuery.luceneQueryText())) {
+            rs = getServices().getServiceRegistry().getSearchService().query(this.alfrescoQuery.alfrescoSearch());
+        }
 
-		{
-			final int foundCount = (alfrescoResult != null) ? alfrescoResult.length() : -1;
-			d.logCtrlDuration(logger, String.format( 
-				"\nQuery in {t} msec: found %d rows, limit %d, offset %d" +
-				"\n>>>%s\n<<<"
-				, foundCount, maxItems,  skipCountOffset, this.alfrescoQuery.luceneQueryText() ));
-		}
+        final int foundCount = (rs != null) ? rs.length() : -1;
+        d.logCtrlDuration(logger, String.format(
+                "\nQuery in {t} msec: found %d rows, limit %d, offset %d" +
+                        "\n>>>%s\n<<<"
+                , foundCount, maxItems, skipCountOffset, this.alfrescoQuery.luceneQueryText()));
 
-		// return this.alfrescoQuery;
-	}
+        return rs;
+    }
 
-	@Override
+    @Override
 	public boolean supportsGetFieldsOperation() {
 		return true;
 	}
@@ -153,62 +155,54 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
 	}
 
 	@Override
-	public JRDataSource create(JasperReport report) throws JRException {
-		// return new FilteredDataSource( reportDescriptor);
+    public JRDataSource create(JasperReport report) throws JRException {
+        if (alfrescoResult == null) { // выполнение запроса ...
+            alfrescoResult = execQuery();
+            if (alfrescoResult == null) {
+                return null;
+            }
+        }
 
-		// NOTE: здесь можно заполнить параметры отчёта по именам параметров мета-описания
-		/*
-		if (report != null) {
-			// get the data source parameters from the report
-			final Map<String, JRParameter> params = JRUtils.buildParamMap(report.getParameters());
-			conf().setArgsByJRParams(params);
-		}
-		 */
+        // Create a new data source
+        final AlfrescoJRDataSource dataSource = newJRDataSource(alfrescoResult.iterator());
+        fillContext(dataSource.getContext());
 
-		if (alfrescoResult == null) { // выполнение запроса ...
-			execQuery();
-			if (alfrescoResult == null)
-				return null;
-		}
-
-		// Create a new data source
-		final AlfrescoJRDataSource dataSource = newJRDataSource(alfrescoResult.iterator());
-		fillContext( dataSource.getContext());
-
-		return dataSource;
-	}
+        return dataSource;
+    }
 
 	/**
 	 * Заполнение контекста используемыми службами, описанием полей.
 	 * @param context
 	 */
-	protected void fillContext(ReportDSContextImpl context) {
-		if (context != null) {
-			context.setSubstitudeService(getServices().getSubstitudeService());
-			context.setRegistryService(getServices().getServiceRegistry());
-			context.setJrSimpleProps( getColumnNames(this.alfrescoQuery.argsByProps(), this.getServices().getServiceRegistry().getNamespaceService()));
-			context.setMetaFields( JRUtils.getDataFields(this.getReportDescriptor()));
+    protected void fillContext(ReportDSContextImpl context) {
+        if (context != null) {
+            context.setSubstitudeService(getServices().getSubstitudeService());
+            context.setRegistryService(getServices().getServiceRegistry());
+            context.setJrSimpleProps(getColumnNames(this.alfrescoQuery.argsByProps(), this.getServices().getServiceRegistry().getNamespaceService()));
+            context.setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
 
-			// фильтр данных ...
-			context.setFilter( newDataFilter());
-		}
-	}
+            // фильтр данных ...
+            context.setFilter(newDataFilter());
+        }
+    }
 
 	/**
 	 * Получить список имён простых колонок в виде "тип:атрибут" (QName Альфреско).
 	 * @return
 	 */
-	static Set<String> getColumnNames(List<ColumnDescriptor> list, final NamespaceService ns) {
-		if (list == null || list.isEmpty())
-			return null;
-		final Set<String> result = new HashSet<String>();
-		for (ColumnDescriptor col: list) {
-			final QName qname = QName.createQName( col.getExpression(), ns);
-			result.add( qname.toPrefixString(ns)); // (!) регим короткое название
-			result.add( col.getColumnName());
-		}
-		return result;
-	}
+    static Set<String> getColumnNames(List<ColumnDescriptor> list, final NamespaceService ns) {
+        if (list == null || list.isEmpty())
+            return null;
+        final Set<String> result = new HashSet<String>();
+        for (ColumnDescriptor col : list) {
+            final QName qname = QName.createQName(col.getQNamedExpression(), ns);
+            if (qname != null) {
+                result.add(qname.toPrefixString(ns)); // (!) регим короткое название
+                result.add(col.getColumnName());
+            }
+        }
+        return result;
+    }
 
 	/**
 	 * Внутренний метод для создания нужного набора данных.
@@ -228,7 +222,6 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
 	 */
     protected DataFilter newDataFilter() {
         // фильтр, который может "заглядывать" по ссылкам
-
         if (this.alfrescoQuery.argsByLinks() == null || this.alfrescoQuery.argsByLinks().isEmpty()) {
             return null;
         }
@@ -237,6 +230,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
         final AssocDataFilterImpl result = new AssocDataFilterImpl(this.getServices().getServiceRegistry());
 
         final NamespaceService ns = this.getServices().getServiceRegistry().getNamespaceService();
+        final DictionaryService ds = this.getServices().getServiceRegistry().getDictionaryService();
 
         for (ColumnDescriptor colDesc : this.alfrescoQuery.argsByLinks()) {
             /*
@@ -246,16 +240,28 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
 				result.addAssoc( qnCSubject, qnAssocCSubject, contractSubject, AssocKind.target);
 			 */
             try {
-                QName qnType = null;
+                QName targetType = null;
                 String expression = colDesc.getExpression();
                 if (expression.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) && expression.endsWith(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL)) {
-                    expression = expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
-                    final QName qnAssocType = QName.createQName(expression, ns);
-                    final List<NodeRef> idsTarget = ParameterMapper.getArgAsNodeRef(colDesc);
-                    if (idsTarget.isEmpty()) {
-                        continue;
+                    if (!expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL)) {
+                        //TODO добавить обработку parent и source ассоциаций, согласно правилам substitudeService
+                        expression = expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
+                        final QName qnAssocType = QName.createQName(expression, ns);
+                        AssociationDefinition assocDef =  ds.getAssociation(qnAssocType);
+                        if (assocDef != null) {
+                            final List<NodeRef> idsTarget = ParameterMapper.getArgAsNodeRef(colDesc);
+                            if (!idsTarget.isEmpty()) {
+                                targetType = assocDef.getTargetClass().getName();
+                                AssocKind kind = AssocKind.target;
+                                if (assocDef.isChild()) {
+                                    kind = AssocKind.child;
+                                }
+                                result.addAssoc(new AssocDataFilter.AssocDesc(kind, qnAssocType, targetType, idsTarget));
+                            }
+                        }
+                    } else {
+                        //TODO добавить обратку сложных ссылок
                     }
-                    result.addAssoc(new AssocDataFilter.AssocDesc(AssocKind.target, qnAssocType, qnType, idsTarget));
                 }
             } catch (Exception ignored) {
                 logger.debug("Some error occured", ignored);

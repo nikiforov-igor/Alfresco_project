@@ -17,15 +17,14 @@ public interface DataSourceDescriptor extends Mnemonicable, L18able {
 	 * для отчётов, задаваемых типом объектов:
 	 * "type" тип выбираемых объектов
 	 */
-	final static public String COLNAME_TYPE = "type";
+	final static public String COLNAME_TYPE = "TYPE";
 	
 	/**
 	 * для отчётов по одному объекту:
 	 * "id" колонка-параметр отчёта, в которой предполагается задание id объекта альфреско (в виде noderef-текста)
 	 * если его нет, тогда будет просмотрена параметр-колонка "nodeRef" 
 	 */
-	final static public String COLNAME_ID = "id";
-	final static public String COLNAME_NODEREF = "nodeRef";
+	final static public String COLNAME_ID = "ID";
 
 	/**
 	 * Описания колонок данного НД.

@@ -1,22 +1,21 @@
 package ru.it.lecm.reports.jasper;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.ReportDSContext;
+import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ReportDSContextImpl implements ReportDSContext {
 
@@ -149,37 +148,78 @@ public class ReportDSContextImpl implements ReportDSContext {
 	}
 
 	@Override
-	public Object getPropertyValueByJRField(String reportColumnName) {
-		if ( reportColumnName == null)
-			return null;
+    public Object getPropertyValueByJRField(String reportColumnName) {
+        if (reportColumnName == null) {
+            return null;
+        }
 
-		// получаем нативное название данных
-		final DataFieldColumn fld = metaFields.get(reportColumnName);
-		final String fldAlfName = (fld != null && fld.getValueLink() != null)
-						? fld.getValueLink()
-						: reportColumnName;
+        // получаем нативное название данных
+        final DataFieldColumn fld = metaFields.get(reportColumnName);
+        final String fldAlfName = (fld != null && fld.getValueLink() != null) ? fld.getValueLink() : reportColumnName;
 
-		/* если название имеется среди готовых свойств (прогруженных или вычисленных заранее) ... */ 
-		if (curProps != null) {
-			if (curProps.containsKey(fldAlfName))
-				return curProps.get(fldAlfName);
-		}
+		/* если название имеется среди готовых свойств (прогруженных или вычисленных заранее) ... */
+        if (curProps != null) {
+            if (curProps.containsKey(fldAlfName)){
+                return curProps.get(fldAlfName);
+            }
+        }
 
-		// (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
-		// (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
-		if (isCalcField(fldAlfName)) {
-			if (substitudeService != null) {
-				final Object value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
-				if (logger.isDebugEnabled()) {
-					logger.debug(String.format( "\nData: {%s}\nFound as: '%s'", fldAlfName, value));
-				}
-				return value;
-			}
-			logger.warn("(!) substitudeService is NULL -> fld values cannot be loaded");
-		}
+        // (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
+        // (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
+        if (isCalcField(fldAlfName)) {
+            Object value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
+            if ((fld != null ? fld.getValueClass() : null) != null) {
+                final JavaDataTypeImpl.SupportedTypes type = JavaDataTypeImpl.SupportedTypes.findType(fld.getValueClassName());
+                String strValue = value.toString();
+                switch (type) {
+                    case DATE: {
+                        try {
+                            if (strValue.isEmpty()) {
+                                value = null;
+                                break;
+                            }
+                            DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            value = DATE_FORMAT.parse(strValue);
+                        } catch (ParseException ignored) {
+                            logger.error("Cannot parse dateString: '%s'", value);
+                        }
+                        break;
+                    }
+                    case BOOL: {
+                        value = Boolean.valueOf(strValue);
+                        break;
+                    }
+                    case FLOAT: {
+                        if (strValue.isEmpty()) {
+                            value = null;
+                            break;
+                        }
+                        value = Float.valueOf(strValue);
+                        break;
+                    }
+                    case INTEGER: {
+                        if (strValue.isEmpty()) {
+                            value = null;
+                            break;
+                        }
+                        value = Integer.valueOf(strValue);
+                        break;
+                    }
+                    case STRING: {
+                        value = strValue;
+                        break;
+                    }
+                    default: {
+                        value = strValue;
+                        break;
+                    }
+                }
+            }
+            return value;
+        }
 
-		return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
-	}
+        return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
+    }
 
 	/**
 	 * ProxySubstitudeBean cейчас отрабатывет расширеные выражения для функции

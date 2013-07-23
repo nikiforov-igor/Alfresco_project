@@ -49,4 +49,6 @@ public interface ColumnDescriptor
     void setOrder(int order);
 
     public int compareTo(Object obj);
+
+    String getQNamedExpression();
 }
