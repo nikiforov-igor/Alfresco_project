@@ -150,17 +150,12 @@ public class DocumentPolicy extends BaseBean
 
         for (AccessPermission permission : permissionsDoc) {
             if (permissionsEmployee.contains(permission.getAuthority()) && !PermissionService.ALL_AUTHORITIES.equals(permission.getAuthority())) {
-                if (permission.getAuthority().indexOf(Types.SFX_BRME) != -1) {
+                if (permission.getAuthority().indexOf(Types.SFX_BRME) != -1 || permission.getAuthority().indexOf(Types.SFX_SPEC) != -1 || permission.getAuthority().indexOf(Types.SFX_PRIV4USER) != -1) {
                     // удаляем динамическую роль
 //                    lecmPermissionService.revokeDynamicRole(permission.getPermission(), documentRef, beforeAuthor.getId());
                     permissionService.clearPermission(documentRef, permission.getAuthority());
                     // назначаем динамическую роль другому сотруднику
                     lecmPermissionService.grantDynamicRole(permission.getPermission(), documentRef, afterAuthor.getId(), lecmPermissionService.findPermissionGroup(permission.getPermission()));
-                } else {
-                    // удаляем статическую роль
-                    lecmPermissionService.revokeAccess(lecmPermissionService.findPermissionGroup(permission.getPermission()), documentRef, beforeAuthor.getId());
-                    // назначаем статическую роль другому сотруднику
-                    lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(permission.getPermission()), documentRef, afterAuthor.getId());
                 }
             }
         }
@@ -168,7 +163,7 @@ public class DocumentPolicy extends BaseBean
         // добавляем в участники документа нового сотрудника
         documentMembersService.addMember(documentRef, afterAuthor, new HashMap<QName, Serializable>());
         // передаем задачи по документу
-        stateMachineHelper.transferRightTask(orgstructureService.getEmployeeLogin(beforeAuthor), orgstructureService.getEmployeeLogin(afterAuthor));
+        stateMachineHelper.transferRightTask(documentRef, orgstructureService.getEmployeeLogin(beforeAuthor), orgstructureService.getEmployeeLogin(afterAuthor));
 
 
         // Проверяем выбран ли пункт лишать прав автора документа, если нет то добавляем бывшего автора в читатели документа и осталяем в участниках

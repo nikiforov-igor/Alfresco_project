@@ -62,7 +62,7 @@ public interface StateMachineServiceBean {
     /**
      * Передает текущие задачи пользователя другому пользователю
      */
-    public  boolean transferRightTask(String beforeAuthority, String afterAuthority);
+    public  boolean transferRightTask(NodeRef documentRef, String beforeAuthority, String afterAuthority);
 
     /**
      * Возвращает может ли текущий сотрудник создавать документ определенного типа
