@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>orgstructure employees datagrid</shortname>
-    <description>Return orgstructure employees datagrid</description>
-    <url>/lecm/BRExplanation/employees-datagrid</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

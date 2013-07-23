@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Выданные бизнес роли</title>
-	<title-id>page.BR.title</title-id>
-	<description>Выданные бизнес роли</description>
-	<description-id>page.BR.description</description-id>
-	<template-instance>detailedRoles</template-instance>
-	<authentication>user</authentication>
-</page>
