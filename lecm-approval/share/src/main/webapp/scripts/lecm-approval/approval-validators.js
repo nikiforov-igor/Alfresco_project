@@ -1,7 +1,6 @@
-/* JSHint Options */
-/* global Alfresco */
+/* global Alfresco, YAHOO */
 
-if (typeof LogicECM == "undefined" || !LogicECM) {
+if (typeof LogicECM === "undefined" || !LogicECM) {
 	var LogicECM = {};
 }
 
@@ -15,6 +14,8 @@ LogicECM.module.Approval.workflowFormValidator = function( field, args, event, f
     var assignees,
         assigneesLength,
         assigneesTail,
+
+        allowedAssingees,
 
         currentDateString,
         currentDate,
@@ -40,6 +41,7 @@ LogicECM.module.Approval.workflowFormValidator = function( field, args, event, f
 
     try {
         assignees = workflowForm.widgets.assigneesDatagrid.widgets.dataTable.getRecordSet().getRecords();
+        allowedAssingees = workflowForm.widgets.assigneesDatagrid.options.allowedAssigneesList;
     } catch ( error ) {
         return false;
     }
@@ -62,8 +64,18 @@ LogicECM.module.Approval.workflowFormValidator = function( field, args, event, f
         return false;
     }
 
-    if( approvalType === "SEQUENTIAL" ) {
+    // Если в списке есть есть "плохие ребята"
+    if( allowedAssingees && (allowedAssingees.length > 0) ) {
         for( ; i < assigneesLength; i++ ) {
+            assigneeData = assignees[ i ].getData( "itemData" )["assoc_lecm-al_assignees-item-employee-assoc"].value;
+            if( allowedAssingees.indexOf( assigneeData ) < 0 ) { // indexOf: IE9+
+                return false;
+            }
+        }
+    }
+
+    if( approvalType === "SEQUENTIAL" ) {
+        for( i = 0; i < assigneesLength; i++ ) {
             assigneeData = assignees[ i ].getData( "itemData" );
 
             if( assigneeData[ assigneeDueDateProperty ] &&

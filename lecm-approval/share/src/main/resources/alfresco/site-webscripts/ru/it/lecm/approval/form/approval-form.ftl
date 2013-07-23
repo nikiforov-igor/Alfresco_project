@@ -1,5 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
+<#assign allowedBusinessRoleId = (form.arguments.allowedBusinessRoleId)!"">
+
 <#assign htmlId = args.htmlid>
 
 <#assign formId = htmlId + "-form">
@@ -72,7 +74,8 @@
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Bubbling = YAHOO.Bubbling,
-        ComponentManager = Alfresco.util.ComponentManager;
+        ComponentManager = Alfresco.util.ComponentManager,
+        Deferred = Alfresco.util.Deferred;
 
 
 
@@ -95,6 +98,27 @@
     YAHOO.lang.extend( LogicECM.module.AssigneesGrid, LogicECM.module.Base.DataGrid );
 
     YAHOO.lang.augmentObject( LogicECM.module.AssigneesGrid.prototype, {
+
+        getCustomCellFormatter: function DataGrid_getCustomCellFormatter( grid, elCell, oRecord, oColumn, oData ) {
+            // Если у нас нет списка разрешённых согласующих, то ничего не делаем
+            if( grid.options.allowedAssigneesList == null ) { // undefinedOrNull == null
+                return null;
+            }
+
+            var allowedList = grid.options.allowedAssigneesList,
+                currentEmployeeRef = oRecord.getData( "itemData" )[ "assoc_lecm-al_assignees-item-employee-assoc" ].value;
+
+            if( allowedList.indexOf( currentEmployeeRef ) < 0 ) {
+                // Если текущий сотрудник не входит в бизнес-роль
+                elCell.parentElement.parentElement.style.backgroundColor = "#f99";
+            } else {
+                // Если текущий сотрудник входит в бизнес-роль
+                elCell.parentElement.parentElement.style.backgroundColor = "";
+            }
+
+            // Если getCustomCellFormatter возвращает null, то datagrid добавляет свои правила отрисовки
+            return null;
+        },
 
         /**
          * Обновляет таблицу
@@ -132,12 +156,10 @@
                 });
             }
 
-            Alfresco.util.Ajax.request({
+            Alfresco.util.Ajax.jsonRequest({
                 method: "POST",
                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/changeOrder",
                 dataObj: dataObj,
-                requestContentType: "application/json",
-                responseContentType: "application/json",
                 successCallback: {
                     fn: this.refreshDatagrid
                 },
@@ -162,12 +184,10 @@
                 });
             }
 
-            Alfresco.util.Ajax.request({
+            Alfresco.util.Ajax.jsonRequest({
                 method: "POST",
                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/changeOrder",
                 dataObj: dataObj,
-                requestContentType: "application/json",
-                responseContentType: "application/json",
                 successCallback: {
                     fn: this.refreshDatagrid
                 },
@@ -200,7 +220,6 @@
         /* Регистрируем компонент */
         Alfresco.util.ComponentManager.register( this );
 
-        // Инициализация свойств прототипа
         this.widgets = {};
 
         this.options.dates = {
@@ -209,7 +228,12 @@
             restrictedDates: [ new Date( 2013, 5, 8 ), new Date( 2013, 5, 11 ), new Date( 2013, 5, 13 ) ]
         };
 
-        this.init();
+        this._addBubblingLayers();
+
+        this.deferredInit = new Deferred([ "onGetCurrentUserApprovalListFolderSuccess", "onGetEmployeesByBusinessRoleIdSuccess" ], { fn: this.init, scope: this });
+
+        this._getCurrentUserApprovalListFolder();
+        this._getEmployeesByBusinessRoleId();
 
         return this;
     };
@@ -227,7 +251,8 @@
 
         constants: {
             URL_FORM: "lecm/components/form",
-            LISTS_FOLDER_REF: null
+            LISTS_FOLDER_REF: null,
+            ALLOWED_ASSIGNEES: null
         },
 
         _addBubblingLayers: function approvalForm_addBubblingLayers() {
@@ -242,7 +267,7 @@
             Bubbling.on( "afterFormRuntimeInit", function onAfterFormRuntimeInit( layer, args ) {
                 var eventGroup = args[ 1 ].eventGroup;
                 if( eventGroup === "${formId}" ) {
-                    // Документ || My Tasks
+                    // Документ || My Tasks (Мои бизнес-процессы)
                     var workflowForm = ComponentManager.get( "${htmlId}" ) || ComponentManager.get( "${formId}" );
                     that.workflowForm = workflowForm.form || workflowForm.formsRuntime;
 
@@ -250,6 +275,68 @@
                     YAHOO.Bubbling.unsubscribe( "afterFormRuntimeInit", onAfterFormRuntimeInit );
                 }
             });
+        },
+
+        _getCurrentUserApprovalListFolder: function approvalForm_getCurrentUserApprovalListFolder() {
+            Alfresco.util.Ajax.jsonRequest({
+                method: "POST",
+                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/getCurrentUserApprovalListFolder",
+                successCallback: {
+                    fn: onSuccess,
+                    scope: this
+                },
+                failureCallback: {
+                    fn: onFailure,
+                    scope: this
+                }
+            });
+
+            function onSuccess( response ) {
+                this.constants.LISTS_FOLDER_REF = response.json.approvalListFolderRef;
+                this.deferredInit.fulfil( "onGetCurrentUserApprovalListFolderSuccess" );
+            }
+
+            function onFailure() {
+                Alfresco.util.PopupManager.displayMessage({
+                    text: "Не удалось получить ссылку на корневую папку списков согласования"
+                });
+            }
+        },
+
+        _getEmployeesByBusinessRoleId: function approvalForm_getEmployeesByBusinessRoleId() {
+            var businessRoleId = "${allowedBusinessRoleId}";
+
+            if( businessRoleId === "" ) {
+                this.deferredInit.fulfil( "onGetEmployeesByBusinessRoleIdSuccess" );
+                return false;
+            }
+
+            Alfresco.util.Ajax.jsonRequest({
+                method: "POST",
+                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/ds/getEmployeesByBusinessRoleId",
+                dataObj: { "businessRoleId": "${allowedBusinessRoleId}", "withDelegation": true },
+                successCallback: {
+                    fn: onSuccess,
+                    scope: this
+                },
+                failureCallback: {
+                    fn: onFailure,
+                    scope: this
+                }
+            });
+
+            function onSuccess( response ) {
+                this.constants.ALLOWED_ASSIGNEES = response.json.employees; // Array<(String)NodeRef>
+                this.deferredInit.fulfil( "onGetEmployeesByBusinessRoleIdSuccess" );
+            }
+
+            function onFailure() {
+                Alfresco.util.PopupManager.displayMessage({
+                    text: "Не удалось получить перечень прав для сотрудников"
+                });
+            }
+
+            return true;
         },
 
         handlers: {
@@ -339,7 +426,7 @@
                         mode: "create",
                         submitType: "json",
                         showCancelButton: "true",
-                        ignoreNodes: this.getCurrentNodeRefs( "employee" )
+                        ignoreNodes: this.getCurrentNodeRefs().join()
                     },
                     destroyOnHide: true,
                     doBeforeDialogShow:{
@@ -376,12 +463,10 @@
                     return false;
                 }
 
-                Alfresco.util.Ajax.request({
+                Alfresco.util.Ajax.jsonRequest({
                     method: "POST",
                     url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/delete",
                     dataObj: { "nodeRef": currentSelectedListRef },
-                    requestContentType: "application/json",
-                    responseContentType: "application/json",
                     successCallback: {
                         fn: function() {
                             Alfresco.util.PopupManager.displayMessage({
@@ -417,15 +502,13 @@
                     return false;
                 }
 
-                Alfresco.util.Ajax.request({
+                Alfresco.util.Ajax.jsonRequest({
                     method: "POST",
                     url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/setDueDates",
                     dataObj: {
                         assigneeListNodeRef: currentSelectedListRef,
                         workflowDueDate: Alfresco.util.toISO8601( selectedDate )
                     },
-                    requestContentType: "application/json",
-                    responseContentType: "application/json",
                     successCallback: {
                         fn: this.refreshDatagrid,
                         scope: this
@@ -444,27 +527,27 @@
         },
 
         /**
-         * Возвращает nodeRef'ы всех согласующих из текущего списка (datagrid'а) согласующих
+         * Возвращает массив nodeRef'ов всех согласующих из текущего списка (datagrid'а) согласующих
          *
          * @method approvalForm_getCurrentNodeRefs
          */
         getCurrentNodeRefs: function approvalForm_getCurrentNodeRefs() {
             var datagrid = this.widgets.assigneesDatagrid,
                 dataTable = datagrid.widgets.dataTable,
-                recordsSet = dataTable.getRecordSet(),
-                records = recordsSet.getRecords(),
+                employeesSet = dataTable.getRecordSet(),
+                employeesLength = employeesSet.getLength(),
                 result = [],
                 i;
 
-            if( records.length === 0 ) {
+            if( employeesLength === 0 ) {
                 return "";
             }
 
-            for( i = 0; i < records.length; i++ ) {
-                result.push( records[ i ].getData( "itemData" )[ "assoc_lecm-al_assignees-item-employee-assoc" ].value );
+            for( i = 0; i < employeesLength; i++ ) {
+                result.push( employeesSet.getRecord( i ).getData( "itemData" )[ "assoc_lecm-al_assignees-item-employee-assoc" ].value );
             }
 
-            return result.join();
+            return result;
         },
 
         refreshDatagrid: function approvalForm_refreshDatagrid() {
@@ -503,6 +586,7 @@
                         $selectElem = this.widgets.$assigneesListSelectElem,
                         selectElem = this.widgets.assigneesListSelectElem,
 
+                        assigneesList,
                         optionElemAttributes;
 
                 if ( selectElem.get( "options" ).length > 0 ) {
@@ -517,7 +601,7 @@
                             value: assigneesLists[ i ].nodeRef,
                             text: assigneesLists[ i ].listName,
                             selected: true
-                        }
+                        };
                         $( "<option/>", optionElemAttributes ).appendTo( $selectElem );
 
                         assigneesLists.splice( i, 1 );
@@ -526,11 +610,11 @@
                     }
                 }
 
-                for ( i = 0; i < assigneesLists.length; i++ ) {
+                for ( i = 0; assigneesList = assigneesLists[ i ]; i++ ) {
                     optionElemAttributes = {
-                        value: assigneesLists[ i ].nodeRef,
-                        text: assigneesLists[ i ].listName,
-                        selected: assigneesLists[ i ].nodeRef === ( listToSelect || defaultListRef )
+                        value: assigneesList.nodeRef,
+                        text: assigneesList.listName,
+                        selected: assigneesList.nodeRef === ( listToSelect || defaultListRef )
                     };
 
                     $( "<option/>", optionElemAttributes ).appendTo( $selectElem );
@@ -539,11 +623,9 @@
                 this.refreshDatagrid();
             }
 
-            Alfresco.util.Ajax.request({
+            Alfresco.util.Ajax.jsonRequest({
                 method: "POST",
                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/getAllLists",
-                requestContentType: "application/json",
-                responseContentType: "application/json",
                 successCallback: {
                     fn: onGetAllListsSuccess,
                     scope: this
@@ -578,12 +660,10 @@
         _changeSelectedList: function approvalForm_changeSelectedList( event ) {
             var listRefToClear = event.target.value;
 
-            Alfresco.util.Ajax.request({
+            Alfresco.util.Ajax.jsonRequest({
                 method: "POST",
                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/clearDueDates",
                 dataObj: { "listRefToClear": listRefToClear },
-                requestContentType: "application/json",
-                responseContentType: "application/json",
                 successCallback: {
                     fn: this.refreshDatagrid,
                     scope: this
@@ -723,7 +803,6 @@
 
             this.widgets.assigneesDatagrid = new LogicECM.module.AssigneesGrid( "${datagridId}" ).setOptions({
 
-                //allowCreate: true,
                 bubblingLabel: "${datagridId}-label",
                 usePagination: false,
                 showExtendSearchBlock: false,
@@ -731,9 +810,10 @@
                 searchShowInactive: false,
                 forceSubscribing: true,
                 showActionColumn: true,
-                overrideSortingWith: false ,
+                overrideSortingWith: false,
 
                 approvalType: "sequential",
+                allowedAssigneesList: this.constants.ALLOWED_ASSIGNEES,
 
                 actions: [{
                     type: "datagrid-action-link-${datagridId}-label",
@@ -877,68 +957,39 @@
             form.dialog.subscribe( "destroy", Destructor );
         },
 
-        init: function approvalForm_onComponentsLoaded() {
+        init: function approvalForm_init() {
             Event.onContentReady( "${formContainerId}" /*this.currentValueHtmlId*/, this.onReady, this, true );
         },
 
         onReady: function approvalForm_onReady() {
-            Alfresco.util.PopupManager.zIndex = 9000;
+            // Инициализация кнопок
+            this._initApprovalTypeRadioButtons();
+            this._initAddAssigneeButton();
+            this._initDeleteAssigneesListButton();
+            this._initNewAssigneesListButton();
+            this._initComputeTermsButton();
 
-            // Подписки через Bubbling
-            this._addBubblingLayers();
+            // Инициализация меню выбора списка согласующих
+            this._initSelectApprovalListMenu();
 
-            Alfresco.util.Ajax.request({
-                method: "POST",
-                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/getCurrentUserApprovalListFolder",
-                requestContentType: "application/json",
-                responseContentType: "application/json",
-                successCallback: {
-                    fn: onSuccess,
-                    scope: this
-                },
-                failureCallback: {
-                    fn: onFailure,
-                    scope: this
-                }
-            });
+            // Подписки
+            this._initEvents();
+            this._initValidation();
 
-            function onSuccess( response ) {
-                this.constants.LISTS_FOLDER_REF = response.json.approvalListFolderRef;
+            // Инициализация таблицы
+            this._initDatagrid();
 
-                // Инициализация кнопок
-                this._initApprovalTypeRadioButtons();
-                this._initAddAssigneeButton();
-                this._initDeleteAssigneesListButton();
-                this._initNewAssigneesListButton();
-                this._initComputeTermsButton();
+            // "Деструктор"
+            this._initDestructor();
 
-                // Инициализация меню выбора списка согласующих
-                this._initSelectApprovalListMenu();
-
-                // Подписки
-                this._initEvents();
-                this._initValidation();
-
-                // Инициализация таблицы
-                this._initDatagrid();
-
-                // "Деструктор"
-                this._initDestructor();
-
-                // Заполнение перечня списков согласующих
-                this.fillApprovalListMenu( null );
-            }
-
-            function onFailure() {
-                Alfresco.util.PopupManager.displayMessage({
-                    text: "Не удалось получить ссылку на корневую папку списков согласования, попробуйте переоткрыть форму"
-                });
-            }
+            // Заполнение перечня списков согласующих
+            this.fillApprovalListMenu( null );
         }
     };
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ApprovalForm ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Alfresco.util.PopupManager.zIndex = 9000;
 
     new LogicECM.module.ApprovalForm( "${controlId}", "${htmlId}" );
 
