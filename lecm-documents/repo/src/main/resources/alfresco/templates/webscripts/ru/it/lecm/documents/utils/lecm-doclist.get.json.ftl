@@ -40,7 +40,8 @@
 	<#list doclist.items as item>
 	{
 		<@itemLib.itemJSON item=item />,
-		"presentString": "${item.node.properties["lecm-document:present-string"]}"
+		"presentString": "${item.node.properties["lecm-document:present-string"]!""}",
+		"isLecmDocument": ${item.isLecmDocument?string}
 	}<#if item_has_next>,</#if>
 	</#list>
 ]

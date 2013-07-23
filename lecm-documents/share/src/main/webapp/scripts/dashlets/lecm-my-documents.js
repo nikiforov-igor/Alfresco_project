@@ -40,6 +40,9 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 		$siteDashboard = Alfresco.util.siteDashboardLink,
 		$relTime = Alfresco.util.relativeTime;
 
+	var FAVOURITE_EVENTCLASS = Alfresco.util.generateDomId(null, "favourite"),
+		LIKE_EVENTCLASS = Alfresco.util.generateDomId(null, "like");
+
 	/**
 	 * Preferences
 	 */
@@ -59,14 +62,69 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 		return LogicECM.dashlet.MyDocuments.superclass.constructor.call(this, htmlId);
 	};
 
+	Alfresco.component.SimpleDocList.generateFavourite = function SimpleDocList_generateFavourite(scope, record)
+	{
+		var i18n = "favourite." + ((record.getData("isFolder") && !record.getData("isLecmDocument")) ? "folder." : "document."),
+			html = "";
+
+		if (record.getData("isFavourite"))
+		{
+			html = '<a class="favourite-action ' + FAVOURITE_EVENTCLASS + ' enabled" title="' + scope.msg(i18n + "remove.tip") + '" tabindex="0"></a>';
+		}
+		else
+		{
+			html = '<a class="favourite-action ' + FAVOURITE_EVENTCLASS + '" title="' + scope.msg(i18n + "add.tip") + '" tabindex="0">' + scope.msg(i18n + "add.label") + '</a>';
+		}
+
+		return html;
+	};
+
+	Alfresco.component.SimpleDocList.generateLikes = function SimpleDocList_generateLikes(scope, record)
+	{
+		var likes = record.getData("likes"),
+			i18n = "like." + ((record.getData("isFolder") && !record.getData("isLecmDocument")) ? "folder." : "document."),
+			html = "";
+
+		if (likes.isLiked)
+		{
+			html = '<a class="like-action ' + LIKE_EVENTCLASS + ' enabled" title="' + scope.msg(i18n + "remove.tip") + '" tabindex="0"></a>';
+		}
+		else
+		{
+			html = '<a class="like-action ' + LIKE_EVENTCLASS + '" title="' + scope.msg(i18n + "add.tip") + '" tabindex="0">' + scope.msg(i18n + "add.label") + '</a>';
+		}
+
+		html += '<span class="likes-count">' + $html(likes.totalLikes) + '</span>';
+
+		return html;
+	};
+
+	Alfresco.component.SimpleDocList.generateComments = function SimpleDocList_generateComments(scope, record)
+	{
+		var file = record.getData(),
+			url = Alfresco.constants.URL_PAGECONTEXT + "site/" + file.location.site + "/" + (file.isFolder ? "folder" : "document") + "-details?nodeRef=" + file.nodeRef + "#comment",
+			i18n = "comment." + ((file.isFolder && !file.isLecmDocument) ? "folder." : "document.");
+
+		return '<a href="' + url + '" class="comment" title="' + scope.msg(i18n + "tip") + '" tabindex="0">' + scope.msg(i18n + "label") + '</a>';
+	};
+
 	YAHOO.extend(LogicECM.dashlet.MyDocuments, Alfresco.dashlet.MyDocuments,
 		{
 			getWebscriptUrl: function ()
 			{
-				return Alfresco.constants.PROXY_URI + "lecm/doclib/doclist/lecm-documents/node/alfresco/company/home?max=50";
+				return Alfresco.constants.PROXY_URI + "lecm/doclib/doclist/documents/node/alfresco/sites/home?max=50";
 			},
 
-			renderCellThumbnail: function (elCell, oRecord, oColumn, oData)
+			/**
+			 * Thumbnail custom datacell formatter
+			 *
+			 * @method renderCellThumbnail
+			 * @param elCell {object}
+			 * @param oRecord {object}
+			 * @param oColumn {object}
+			 * @param oData {object|string}
+			 */
+			renderCellThumbnail: function SimpleDocList_renderCellThumbnail(elCell, oRecord, oColumn, oData)
 			{
 				var columnWidth = 40,
 					record = oRecord.getData(),
@@ -81,18 +139,35 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 				{
 					var name = record.fileName,
 						extn = name.substring(name.lastIndexOf(".")),
+						locn = record.location,
 						nodeRef = new Alfresco.util.NodeRef(record.nodeRef),
-						docDetailsUrl = Alfresco.constants.URL_PAGECONTEXT + "/document?nodeRef=" + nodeRef.toString();
+						docDetailsUrl = Alfresco.constants.URL_PAGECONTEXT + "site/" + locn.site + "/document-details?nodeRef=" + nodeRef.toString();
 
-					var imageSrc = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + record.nodeType.replace(":", "_") + ".png";
-					var image = '<img src="' + imageSrc + '" alt="' + extn + '" title="' + $html(name) + '" onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"/>';
+					if (record.isLecmDocument) {
+						docDetailsUrl = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + nodeRef.toString();
+						if (record.presentString != null && record.presentString.length > 0) {
+							name = record.presentString;
+						}
+					}
+
+					var lecmDocumentImageSrc = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + record.nodeType.replace(":", "_") + ".png";
+					var lecmDocumentImage = '<img src="' + lecmDocumentImageSrc + '" alt="' + extn + '" title="' + $html(name) + '" onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"/>';
 
 					if (this.options.simpleView)
 					{
 						/**
 						 * Simple View
 						 */
-						desc = '<span class="icon32"><a href="' + docDetailsUrl + '">' + image + '</a></span>';
+
+						if (record.isLecmDocument) {
+							desc = '<span class="icon32"><a href="' + docDetailsUrl + '">' + lecmDocumentImage + '</a></span>';
+						} else {
+							var id = this.id + '-preview-' + oRecord.getId();
+							desc = '<span id="' + id + '" class="icon32"><a href="' + docDetailsUrl + '"><img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/filetypes/' + Alfresco.util.getFileIcon(name) + '" alt="' + extn + '" title="' + $html(name) + '" /></a></span>';
+
+							// Preview tooltip
+							this.previewTooltips.push(id);
+						}
 					}
 					else
 					{
@@ -100,7 +175,11 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 						 * Detailed View
 						 */
 						columnWidth = 100;
-						desc = '<span class="thumbnail"><a href="' + docDetailsUrl + '">' + image + '</a></span>';
+						if (record.isLecmDocument) {
+							desc = '<span class="thumbnail"><a href="' + docDetailsUrl + '">' + lecmDocumentImage + '</a></span>';
+						} else {
+							desc = '<span class="thumbnail"><a href="' + docDetailsUrl + '"><img src="' + Alfresco.constants.PROXY_URI + 'api/node/' + nodeRef.uri + '/content/thumbnails/doclib?c=queue&ph=true" alt="' + extn + '" title="' + $html(name) + '" /></a></span>';
+						}
 					}
 				}
 
@@ -112,7 +191,16 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 				elCell.innerHTML = desc;
 			},
 
-			renderCellDetail: function (elCell, oRecord, oColumn, oData)
+			/**
+			 * Detail custom datacell formatter
+			 *
+			 * @method renderCellDetail
+			 * @param elCell {object}
+			 * @param oRecord {object}
+			 * @param oColumn {object}
+			 * @param oData {object|string}
+			 */
+			renderCellDetail: function SimpleDocList_renderCellDetail(elCell, oRecord, oColumn, oData)
 			{
 				var record = oRecord.getData(),
 					desc = "";
@@ -131,7 +219,11 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 						canComment = record.permissions.userAccess.create,
 						locn = record.location,
 						nodeRef = new Alfresco.util.NodeRef(record.nodeRef),
-						docDetailsUrl = Alfresco.constants.URL_PAGECONTEXT + "/document?nodeRef=" + nodeRef.toString();
+						docDetailsUrl = Alfresco.constants.URL_PAGECONTEXT + "site/" + locn.site + "/document-details?nodeRef=" + nodeRef.toString();
+
+					if (record.isLecmDocument) {
+						docDetailsUrl = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + nodeRef.toString()
+					}
 
 					// Description non-blank?
 					if (record.description && record.description !== "")
@@ -165,20 +257,19 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 						dateLine = this.msg("details." + dateI18N + "-by", $relTime(dateProperty), $userProfile(record.modifiedByUser, record.modifiedBy, 'class="theme-color-1"'));
 					}
 
+					var fileName = record.displayName;
+					if (record.presentString != null && record.presentString.length > 0) {
+						fileName = record.presentString;
+					}
+
 					if (this.options.simpleView)
 					{
-						/**
-						 * Simple View
-						 */
-						desc += '<h3 class="filename simple-view"><a class="theme-color-1" href="' + docDetailsUrl + '">' + $html(record.presentString) + '</a></h3>';
+						desc += '<h3 class="filename simple-view"><a class="theme-color-1" href="' + docDetailsUrl + '">' + $html(fileName) + '</a></h3>';
 						desc += '<div class="detail"><span class="item-simple">' + dateLine + '</span></div>';
 					}
 					else
 					{
-						/**
-						 * Detailed View
-						 */
-						desc += '<h3 class="filename"><a class="theme-color-1" href="' + docDetailsUrl + '">' + $html(record.presentString) + '</a>' + version + '</h3>';
+						desc += '<h3 class="filename"><a class="theme-color-1" href="' + docDetailsUrl + '">' + $html(fileName) + '</a>' + version + '</h3>';
 
 						desc += '<div class="detail">';
 						desc +=    '<span class="item">' + dateLine + '</span>';
