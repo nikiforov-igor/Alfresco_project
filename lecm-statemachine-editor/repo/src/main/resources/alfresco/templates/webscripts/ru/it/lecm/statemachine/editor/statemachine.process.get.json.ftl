@@ -15,7 +15,7 @@
 {
     name: "${status.name}",
     nodeRef: "${status.nodeRef}",
-    isStarted: ${status.isStarted},
+    type: "${status.type}",
     forDraft: ${status.forDraft},
     transitions: [
         <#list status.transitions as transition>

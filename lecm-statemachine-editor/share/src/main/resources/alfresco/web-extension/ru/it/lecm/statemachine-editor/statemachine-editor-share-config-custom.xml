@@ -841,6 +841,22 @@
                     </field>
                 </appearance>
             </form>
+            <form id="alternative-start">
+                <field-visibility>
+                    <show id="lecm-stmeditor:alternativesFolder" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:alternativesFolder" label-id="statemachine.editor.form.label.alternatives">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:alternative</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="height">300</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
 		</forms>
 	</config>
 
@@ -1032,7 +1048,6 @@
                             <control-param name="withEmpty">false</control-param>
                         </control>
                     </field>
-
                 </appearance>
 			</form>
 		</forms>
@@ -1174,6 +1189,48 @@
                     <field id="lecm-stmeditor:version" />
                     <field id="lecm-stmeditor:publishDate" />
                     <field id="lecm-stmeditor:publishComment" />
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-stmeditor:alternative">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:alternativeExpression" force="true"/>
+                    <show id="lecm-stmeditor:alternativeStatus" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:alternativeExpression" />
+                    <field id="lecm-stmeditor:alternativeStatus">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="webscript">/lecm/statemachine/editor/status/alternative</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-stmeditor:alternative">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:alternativeExpression" force="true"/>
+                    <show id="lecm-stmeditor:alternativeStatus" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:alternativeExpression" />
+                    <field id="lecm-stmeditor:alternativeStatus">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="webscript">/lecm/statemachine/editor/status/alternative</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
         </forms>

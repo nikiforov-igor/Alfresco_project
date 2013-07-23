@@ -16,6 +16,7 @@ public interface ExportNamespace {
     String REFERENCE = "reference";
     String NODE = "node";
     String ROLES = "roles";
+    String ALTERNATIVES = "alternatives";
     String STATIC_ROLES = "staticRoles";
     String DYNAMIC_ROLES = "dynamicRoles";
     String SUB_FOLDERS = "subFolders";

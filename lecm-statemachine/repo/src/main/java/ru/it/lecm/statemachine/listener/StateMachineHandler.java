@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.TimerActionHelper;
 import ru.it.lecm.statemachine.action.StateMachineAction;
@@ -36,6 +37,7 @@ public class StateMachineHandler {
 	private BusinessJournalService businessJournalService;
 	private RepositoryStructureHelper repositoryStructureHelper;
 	private LecmPermissionService LecmPermissionService;
+	private OrgstructureBean orgstructureBean;
     private TimerActionHelper timerActionHelper;
 
 	private String processId = "";
@@ -84,7 +86,11 @@ public class StateMachineHandler {
         this.timerActionHelper = timerActionHelper;
     }
 
-	private StateMachineAction getStateMachineAction(final Element actionElement) {
+    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+        this.orgstructureBean = orgstructureBean;
+    }
+
+    private StateMachineAction getStateMachineAction(final Element actionElement) {
 		String actionName = actionElement.attribute("type");
 		StateMachineAction action = null;
 		try {
@@ -100,6 +106,7 @@ public class StateMachineHandler {
 			action.setBusinessJournalService(businessJournalService);
 			action.setRepositoryStructureHelper(repositoryStructureHelper);
 			action.setTimerActionHelper(timerActionHelper);
+            action.setOrgstructureBean(orgstructureBean);
 			final StateMachineAction currentAction = action;
 			try {
 				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {

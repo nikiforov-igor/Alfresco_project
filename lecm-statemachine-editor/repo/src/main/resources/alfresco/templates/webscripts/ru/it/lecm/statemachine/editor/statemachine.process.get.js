@@ -22,7 +22,7 @@ if (statemachineId != null && statemachineId != '') {
 		machine.properties["lecm-stmeditor:rolesFolder"] = roles.nodeRef.toString();
 		machine.save();
 
-		var statuses = machine.createNode("statuses", "lecm-stmeditor:statuses", "cm:contains")
+        var statuses = machine.createNode("statuses", "lecm-stmeditor:statuses", "cm:contains")
 		var startStatus = statuses.createNode("Черновик", "lecm-stmeditor:taskStatus", "cm:contains");
 		startStatus.properties["lecm-stmeditor:forDraft"] = true;
 		startStatus.properties["lecm-stmeditor:startStatus"] = true;
@@ -41,7 +41,15 @@ if (statemachineId != null && statemachineId != '') {
         version.save();
     }
 
-	var statuses = machine.childByNamePath("statuses");
+    //Создание папки с альтернативным началом
+    var alternatives = machine.childByNamePath("alternatives");
+    if (alternatives == null) {
+        alternatives = machine.createNode("alternatives", "cm:folder", "cm:contains")
+        machine.properties["lecm-stmeditor:alternativesFolder"] = alternatives.nodeRef.toString();
+        machine.save();
+    }
+
+    var statuses = machine.childByNamePath("statuses");
 	model.machineNodeRef = machine.nodeRef.toString();
 	model.packageNodeRef = statuses.nodeRef.toString();
 	model.versionsNodeRef = version.nodeRef.toString();
@@ -49,6 +57,34 @@ if (statemachineId != null && statemachineId != '') {
 	var machineStatuses = statuses.getChildren();
 	var statuses = [];
 	var endStatus = null;
+
+    var startTransitions = [];
+
+    var alternative = alternatives.getChildren();
+    for (var i = 0; i < alternative.length; i++) {
+        startTransitions.push({
+            user: "false",
+            exp: alternative[i].properties["lecm-stmeditor:alternativeExpression"],
+            status: alternative[i].assocs["lecm-stmeditor:alternativeStatus"] != null ? alternative[i].assocs["lecm-stmeditor:alternativeStatus"][0].properties["cm:name"] : "",
+            label: "Автоматический переход"
+        });
+    }
+
+    startTransitions.push({
+        user: "false",
+        exp: "По умолчанию",
+        status: machineStatuses[0].properties["cm:name"],
+        label: "Автоматический переход"
+    });
+
+    statuses.push({
+        name: "Начало",
+        nodeRef: "",
+        transitions: startTransitions,
+        type: "start",
+        forDraft: "false"
+    });
+
 	for each (var status in machineStatuses) {
 		var actionsNodes = status.childByNamePath("actions").getChildren();
 		var transitions = [];
@@ -109,7 +145,7 @@ if (statemachineId != null && statemachineId != '') {
 			name: status.properties["cm:name"] + (status.properties["lecm-stmeditor:startStatus"] ? " (S)" : ""),
 			nodeRef: status.nodeRef.toString(),
 			transitions: transitions,
-			isStarted: status.properties["lecm-stmeditor:startStatus"] ? "true" : "false",
+			type: status.properties["lecm-stmeditor:startStatus"] ? "default" : "normal",
 			forDraft: status.properties["lecm-stmeditor:forDraft"] ? "true" : "false"
 		});
 	}
@@ -119,7 +155,7 @@ if (statemachineId != null && statemachineId != '') {
 			name: "Завершено",
 			nodeRef: endStatus.nodeRef.toString(),
 			transitions: [],
-			isStarted: "false",
+			type: "normal",
 			forDraft: "false"
 		});
 	}

@@ -95,11 +95,13 @@ public class BPMNGenerator {
 			NodeRef rolesRef = nodeService.getChildByName(stateMachine, ContentModel.ASSOC_CONTAINS, "roles");
 			List<ChildAssociationRef> roles = nodeService.getChildAssocs(rolesRef);
 
+            Element extention = null;
+
 			if (roles.size() > 0) {
 				Element extentionElements = doc.createElement("extensionElements");
 				startEvent.appendChild(extentionElements);
 
-				Element extention = doc.createElement("lecm:extension");
+				extention = doc.createElement("lecm:extension");
 				extentionElements.appendChild(extention);
 
 				Element take = doc.createElement("lecm:event");
@@ -125,6 +127,46 @@ public class BPMNGenerator {
 
 			}
 
+            //Подготавливаем альтернативные пути старта
+            NodeRef alternativesRef = nodeService.getChildByName(stateMachine, ContentModel.ASSOC_CONTAINS, "alternatives");
+            List<ChildAssociationRef> alternatives = nodeService.getChildAssocs(alternativesRef);
+
+            if (alternatives.size() > 0) {
+
+                if (extention == null) {
+                    Element extentionElements = doc.createElement("extensionElements");
+                    startEvent.appendChild(extentionElements);
+                    extention = doc.createElement("lecm:extension");
+                    extentionElements.appendChild(extention);
+                }
+
+                Element end = doc.createElement("lecm:event");
+                end.setAttribute("on", "end");
+                extention.appendChild(end);
+
+                Element choosePath = doc.createElement("lecm:action");
+                choosePath.setAttribute("type", "ChooseStartPath");
+                end.appendChild(choosePath);
+
+                Element exclusiveGateway = doc.createElement("exclusiveGateway");
+                exclusiveGateway.setAttribute("id", "start_gateway");
+                process.appendChild(exclusiveGateway);
+
+                process.appendChild(createFlow("start", "start_gateway"));
+                for (ChildAssociationRef alternative : alternatives) {
+                    List<AssociationRef> targets = nodeService.getTargetAssocs(alternative.getChildRef(), StatemachineEditorModel.ASSOC_ALTERNATIVE_STATUS);
+                    if (targets.size() > 0) {
+                        String statusVar = "id" + targets.get(0).getTargetRef().getId().replace("-", "");
+                        process.appendChild(createFlow("start_gateway", statusVar, "${lecm_start_direction == \"" + statusVar + "\"}"));
+
+                        Element attribute = doc.createElement("attribute");
+                        attribute.setAttribute("expression", nodeService.getProperty(alternative.getChildRef(), StatemachineEditorModel.PROP_ALTERNATIVE_EXPRESSION).toString());
+                        attribute.setAttribute("value", statusVar);
+                        choosePath.appendChild(attribute);
+                    }
+                }
+            }
+
 			List<ChildAssociationRef> statuses = nodeService.getChildAssocs(statusesRef);
 
             NodeRef statemachines = nodeService.getPrimaryParent(stateMachine).getParentRef();
@@ -142,7 +184,7 @@ public class BPMNGenerator {
 				if (type.equals(StatemachineEditorModel.TYPE_END_EVENT)) {
 					createEndEvent(process, status.getChildRef(), statusName, statusVar, stateMachine);
 				} else if (type.equals(StatemachineEditorModel.TYPE_TASK_STATUS)) {
-					createStateTask(process, status.getChildRef(), statusName, statusVar, version);
+					createStateTask(process, status.getChildRef(), statusName, statusVar, version, alternatives.size() > 0);
 				}
 			}
 
@@ -160,7 +202,7 @@ public class BPMNGenerator {
 		return new ByteArrayInputStream(baos.toByteArray());
 	}
 
-	private void createStateTask(Element process, NodeRef status, String statusName, String statusVar, String version) {
+	private void createStateTask(Element process, NodeRef status, String statusName, String statusVar, String version, boolean withAlternatives) {
 
 		//create status
 		Element statusTask = doc.createElement("userTask");
@@ -194,8 +236,13 @@ public class BPMNGenerator {
 		//setup start transition
 		Boolean startStatus = (Boolean) nodeService.getProperty(status, StatemachineEditorModel.PROP_START_STATUS);
 		if (startStatus != null && startStatus) {
-			Element startFlow = createFlow("start", statusVar);
-			process.appendChild(startFlow);
+            Element startFlow;
+            if (withAlternatives) {
+                startFlow = createFlow("start_gateway", statusVar);
+            } else {
+                startFlow = createFlow("start", statusVar);
+            }
+            process.appendChild(startFlow);
 		}
 
 		//install setStatusAction

@@ -44,6 +44,7 @@ public class XMLImporter {
     private XMLNode newStateMachine;
     private NodeRef statusesNodeRef;
     private NodeRef rolesNodeRef;
+    private NodeRef alternativesNodeRef;
 
     private Map<String, NodeRef> businessRoles = new HashMap<String, NodeRef>();
 
@@ -71,9 +72,11 @@ public class XMLImporter {
 
         this.statusesNodeRef = recreateStatusesFolder();
         this.rolesNodeRef = recreateRolesFolder();
+        this.alternativesNodeRef = recreateAlternativesFolder();
 
         importStatuses();
         importRoles(rolesNodeRef, newStateMachine.getSubFolder(ExportNamespace.ROLES));
+        importAlternatives();
     }
 
     public void close() throws XMLStreamException {
@@ -274,6 +277,13 @@ public class XMLImporter {
         return rolesNodeRef;
     }
 
+    private NodeRef recreateAlternativesFolder() {
+        Map<QName, Serializable> properties = getBaseProperties(StatemachineEditorModel.ALTERNATIVES);
+        NodeRef alternativesRef = recreateNode(stateMachineNodeRef, ContentModel.TYPE_FOLDER, properties);
+        nodeService.setProperty(stateMachineNodeRef, StatemachineEditorModel.PROP_ALTERNATIVES_FOLDER, alternativesRef.toString());
+        return alternativesRef;
+    }
+
     private Map<QName, Serializable> getBaseProperties(String propName) {
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         properties.put(ContentModel.PROP_NAME, propName);
@@ -471,6 +481,15 @@ public class XMLImporter {
                 properties).getChildRef();
 
         return node;
+    }
+
+    private void importAlternatives() {
+        List<XMLNode> alternativesXMLNode = newStateMachine.getSubFolder(ExportNamespace.ALTERNATIVES);
+        for (XMLNode alternativeXMLNode : alternativesXMLNode) {
+            NodeRef alternativeNodeRef = recreateNode(alternativesNodeRef, alternativeXMLNode);
+            alternativeXMLNode.setNewNodeRef(alternativeNodeRef);
+            importAssociation(alternativeXMLNode);
+        }
     }
 
 }

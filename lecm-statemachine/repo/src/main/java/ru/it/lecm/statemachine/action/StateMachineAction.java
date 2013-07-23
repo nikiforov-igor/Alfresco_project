@@ -1,8 +1,5 @@
 package ru.it.lecm.statemachine.action;
 
-import java.io.Serializable;
-import java.util.HashMap;
-
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.model.ContentModel;
@@ -13,12 +10,15 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.TimerActionHelper;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
+
+import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * User: PMelnikov
@@ -40,6 +40,7 @@ abstract public class StateMachineAction {
 	private BusinessJournalService businessJournalService;
 	private RepositoryStructureHelper repositoryStructureHelper;
     private TimerActionHelper timerActionHelper;
+    private OrgstructureBean orgstructureBean;
 
     public TimerActionHelper getTimerActionHelper() {
         return timerActionHelper;
@@ -79,6 +80,14 @@ abstract public class StateMachineAction {
 
     public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
         this.repositoryStructureHelper = repositoryStructureHelper;
+    }
+
+    public OrgstructureBean getOrgstructureBean() {
+        return orgstructureBean;
+    }
+
+    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+        this.orgstructureBean = orgstructureBean;
     }
 
     abstract public void execute(DelegateExecution execution);

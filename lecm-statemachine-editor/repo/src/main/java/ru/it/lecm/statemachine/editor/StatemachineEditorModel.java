@@ -63,8 +63,11 @@ public class StatemachineEditorModel {
 	public final static QName PROP_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "version");
 	public final static QName PROP_PUBLISH_DATE = QName.createQName(STATEMACHINE_EDITOR_URI, "publishDate");
 	public final static QName PROP_PUBLISH_COMMENT = QName.createQName(STATEMACHINE_EDITOR_URI, "publishComment");
+    public final static QName PROP_ALTERNATIVE_EXPRESSION = QName.createQName(STATEMACHINE_EDITOR_URI, "alternativeExpression");
+    public final static QName PROP_ALTERNATIVES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "alternativesFolder");
 
 	public final static QName ASSOC_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatus");
+    public final static QName ASSOC_ALTERNATIVE_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "alternativeStatus");
 	public final static QName ASSOC_ROLE = QName.createQName(STATEMACHINE_EDITOR_URI, "role-assoc");
 
     public final static QName ASPECT_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatusAspect");
@@ -74,6 +77,7 @@ public class StatemachineEditorModel {
     public static final String STATUSES = "statuses";
     public static final String ACTIONS = "actions";
     public static final String ROLES = "roles";
+    public static final String ALTERNATIVES = "alternatives";
     public static final String STATIC_ROLES = "static";
     public static final String DYNAMIC_ROLES = "dynamic";
     public static final String FIELDS = "fields";

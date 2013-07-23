@@ -118,6 +118,11 @@ public class XMLExporter {
         List<XMLNode> xmlRoles = getXmlRoles(rolesNodeRef);
         xmlStateMachine.addSubFolderNodes(ExportNamespace.ROLES, xmlRoles);
 
+        //alternatives
+        NodeRef alternativesNodeRef = nodeService.getChildByName(stateMachineNodeRef, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.ALTERNATIVES);
+        List<XMLNode> xmlAlternatives = getXmlAlternatives(alternativesNodeRef);
+        xmlStateMachine.addSubFolderNodes(ExportNamespace.ALTERNATIVES, xmlAlternatives);
+
         return xmlStateMachine;
     }
 
@@ -135,6 +140,20 @@ public class XMLExporter {
         }
 
         return result;
+    }
+
+    private List<XMLNode> getXmlAlternatives(NodeRef alternativesNodeRef) {
+        List<XMLNode> xmlAlternatives = getFolderChildren(alternativesNodeRef);
+
+        for (XMLNode xmlAlternative : xmlAlternatives) {
+            List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(xmlAlternative.getNodeRef(), StatemachineEditorModel.ASSOC_ALTERNATIVE_STATUS);
+            for (AssociationRef targetAssoc : targetAssocs) {
+                XMLAssociation assoc = new XMLAssociation(targetAssoc.getTypeQName().getLocalName(), targetAssoc.getTargetRef().toString());
+                xmlAlternative.addAssociation(assoc);
+            }
+        }
+
+        return xmlAlternatives;
     }
 
     private List<XMLNode> getXmlRoles(NodeRef rolesNodeRef) {

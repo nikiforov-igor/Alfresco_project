@@ -117,6 +117,7 @@
         <property name="businessJournalService" ref="businessJournalService" />
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
         <property name="timerActionHelper" ref="timerActionHelper"/>
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
     </bean>
 
     <bean id="workflowPolicy" class="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeListenerPolicy"
@@ -221,6 +222,13 @@
 		<property name="action" value="ru.it.lecm.statemachine.action.DocumentPermissionAction" />
 		<property name="type" value="system" />
 		<property name="execution" value="take" />
+	</bean>
+
+    <bean id="chooseStartPath.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+		<property name="name" value="ChooseStartPath"/>
+		<property name="action" value="ru.it.lecm.statemachine.action.ChooseStartPathAction" />
+		<property name="type" value="system" />
+		<property name="execution" value="end" />
 	</bean>
 
 	<bean id="timerAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
