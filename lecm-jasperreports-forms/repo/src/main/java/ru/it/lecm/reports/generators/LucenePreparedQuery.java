@@ -126,6 +126,9 @@ public class LucenePreparedQuery {
             hasData = true;
         }
 
+        if (reportDescriptor.getFlags().getText() != null && !reportDescriptor.getFlags().getText().isEmpty()) {
+            bquery.append((hasData ? " AND" : "") + reportDescriptor.getFlags().getText());
+        }
 
 		/* 
 		 * проход по параметрам, которые являются простыми - и включение их в 

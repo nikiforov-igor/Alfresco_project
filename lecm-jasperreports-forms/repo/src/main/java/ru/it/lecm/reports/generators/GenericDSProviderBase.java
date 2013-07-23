@@ -245,8 +245,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
 				result.addAssoc( qnCSubject, qnAssocCSubject, contractSubject, AssocKind.target);
 			 */
-            final QName qnType = null;
             try {
+                QName qnType = null;
                 String expression = colDesc.getExpression();
                 if (expression.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) && expression.endsWith(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL)) {
                     expression = expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
@@ -255,7 +255,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider {
                     if (idsTarget.isEmpty()) {
                         continue;
                     }
-                    result.addAssoc(new AssocDataFilter.AssocDesc(AssocKind.target, qnType, qnAssocType, idsTarget));
+                    result.addAssoc(new AssocDataFilter.AssocDesc(AssocKind.target, qnAssocType, qnType, idsTarget));
                 }
             } catch (Exception ignored) {
                 logger.debug("Some error occured", ignored);
