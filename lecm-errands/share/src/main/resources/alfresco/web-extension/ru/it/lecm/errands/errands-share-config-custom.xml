@@ -159,6 +159,8 @@
                     <show id="lecm-errands:executor-assoc"/>
                     <!--  Заголовок поручения -->
                     <show id="lecm-errands:title"/>
+                    <!-- Содержание -->
+                    <show id="lecm-errands:content"/>
                     <!-- Срок исполнения -->
                     <show id="lecm-errands:limitation-date"/>
                     <!-- Важное -->
@@ -171,8 +173,6 @@
                     <show id="lecm-errands:initiator-assoc"/>
                     <!-- Без утверждения инициатором -->
                     <show id="lecm-errands:without-initiator-approval"/>
-                    <!-- Содержание -->
-                    <show id="lecm-errands:content"/>
                     <!-- Контроллер -->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Соисполнители -->
@@ -198,6 +198,7 @@
                     <set id="collapsable" appearance="" template="/ru/it/lecm/base-share/components/collapsable-set.ftl" />
                     <set id="exist-bussines-role" parent="collapsable" appearance="ERRANDS_CHOOSING_INITIATOR" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
                     <set id="collapsable-inner" parent="collapsable" appearance=""/>
+                    <set id="start-date-set" parent="collapsable" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
 
                     <field id="lecm-errands:executor-assoc" set="main"/>
                     <field id="lecm-errands:title" set="main">
@@ -211,9 +212,14 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
+                    <field id="lecm-errands:content" set="main">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
                     <field id="lecm-errands:limitation-date" set="limitation-date"/>
-                    <field id="lecm-errands:is-important" set="limitation-date"/>
-	                <field id="lecm-errands:attachments-temp-assoc" set="attachments">
+                    <field id="lecm-errands:is-important" set="limitation-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
+                    <field id="lecm-errands:attachments-temp-assoc" set="attachments">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
 			                <control-param name="uploadDirectoryPath">/app:company_home/app:user_homes</control-param>
 			                <control-param name="directoryName">label.errands.attachments</control-param>
@@ -245,14 +251,13 @@
 	                        <control-param name="defaultValueDataSource">lecm/errands/getDefaultWithoutInitiatorApproval</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:content" set="collapsable-inner">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
-                    </field>
                     <field id="lecm-errands:controller-assoc" set="collapsable-inner"/>
                     <field id="lecm-errands:coexecutors-assoc" set="collapsable-inner"/>
-                    <field id="lecm-errands:start-date" set="collapsable-inner"/>
-                    <field id="lecm-errands:just-in-time" set="collapsable-inner"/>
-                    <field id="lecm-errands:is-short" set="collapsable-inner">
+                    <field id="lecm-errands:start-date" set="start-date-set"/>
+                    <field id="lecm-errands:just-in-time" set="start-date-set">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
+                    <field id="lecm-errands:is-short" set="collapsable">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>

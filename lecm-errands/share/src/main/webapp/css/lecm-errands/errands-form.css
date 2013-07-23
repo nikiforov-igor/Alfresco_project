@@ -15,25 +15,9 @@
 .yui-skin-lecmTheme div.yui-panel div.form-field input[type="checkbox"] {
      margin-left: 200px;
 }
-.yui-skin-lecmTheme div.yui-panel div.yui-u div.form-field input[type="checkbox"] {
+.yui-skin-lecmTheme div.yui-panel div.form-field.checkbox-control {
+     text-align: right;
+}
+.yui-skin-lecmTheme div.yui-panel div.form-field.checkbox-control input[type="checkbox"] {
      margin-left: 0;
 }
-.collapse-details {
-    color: #666;
-    font-weight: bold;
-    position: relative;
-}
-.collapse-details + span {
-    width: 700px;
-    height: 1px;
-    margin-left: 5px;
-    display: inline-block;
-    background: #bbb;
-}
-.collapse-details.alfresco-twister-open {
-    background: url("/share/res/images/lecm-base/components/triangle_up.png") no-repeat scroll 0 50% transparent;
-}
-.collapse-details.alfresco-twister-closed {
-    background: url("/share/res/images/lecm-base/components/triangle_down.png") no-repeat scroll 0 50% transparent;
-}
-

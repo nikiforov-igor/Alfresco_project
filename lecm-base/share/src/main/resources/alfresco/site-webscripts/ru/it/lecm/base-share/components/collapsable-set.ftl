@@ -1,7 +1,7 @@
 <#import "/org/alfresco/components/form/form.lib.ftl" as formLib />
 <#assign id=args.htmlid/>
 
-<div id="${id}-${set.id}-panel" class="details-panel">
+<div id="${id}-${set.id}-panel" class="details-panel" style="display: none;">
     <#list set.children as item>
         <#if item.kind == "set">
             <#if item.template??>
@@ -13,43 +13,57 @@
             <@formLib.renderField field=form.fields[item.id] />
         </#if>
     </#list>
+    <span id="${id}-${set.id}-save-as-draft" class="yui-button yui-push-button">
+        <span class="first-child">
+            <button type="button">${msg("label.save-as-draft")}</button>
+        </span>
+    </span>
 </div>
-<span id="${id}-${set.id}-title" class="collapse-details">
-    ${msg("label.hide-details")}
+<span id="${id}-${set.id}-expand-panel" class="yui-button yui-push-button">
+    <span class="first-child">
+        <button type="button">${msg("label.show-details")}</button>
+    </span>
 </span>
-<span></span><#-- Do not remove, it's useful line -->
 
 <script type="text/javascript">//<![CDATA[
 (function() {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event;
-    var hideDetails = "${msg("label.hide-details")}",
-        showDetails = "${msg("label.show-details")}";
     var panelId = "${id}-${set.id}-panel";
-    var titleId = "${id}-${set.id}-title";
+    var expandButtonId = "${id}-${set.id}-expand-panel";
+    var saveAsDraftButtonId = "${id}-${set.id}-save-as-draft";
+    var okButton;
 
     function init() {
-        var title = Dom.get(titleId);
-        var hidden = Dom.getElementBy(function(el) {
-            return el.name == "prop_lecm-errands_is-short";
-        }, 'input', panelId);
+        var expandPanel = function(e) {
+            var expandButton = Dom.get(expandButtonId);
+            var saveAsDraftButton = Dom.get(saveAsDraftButtonId);
+            var form = Dom.getAncestorByTagName(panelId, "form");
+            var formButtons = Dom.getElementsByClassName("form-buttons", "div", form);
+            okButton = Dom.getElementBy(function(el) {
+                return Dom.hasClass(el, "yui-submit-button");
+            }, "span", formButtons[0]);
 
-        Alfresco.util.createTwister(titleId, "", {
-            panel: panelId
-        });
-        Event.addListener(titleId, "click", function(p_event, p_obj) {
-            // Only expand/collapse if actual twister element is clicked (not for inner elements, i.e. twister actions)
-            if (p_event.target == p_event.currentTarget) {
-                if(Dom.hasClass(titleId, "alfresco-twister-open")){ //opened
-                    title.innerHTML = hideDetails;
-                    hidden.value = "false";
-                } else {
-                    title.innerHTML = showDetails;
-                    hidden.value = "true";
-                }
-            }
-        }, {});
-        title.click(); // Потому что по умолчанию форма должна быть свернута
+            expandButton.parentNode.removeChild(expandButton);
+            Dom.setStyle(panelId, "display", "block");
+            Dom.insertBefore(saveAsDraftButton, okButton);
+        };
+        var saveAsDraft = function() {
+            var hidden = Dom.getElementBy(function(el) {
+                return el.name == "prop_lecm-errands_is-short";
+            }, 'input', panelId);
+
+            hidden.value = "false";
+            okButton.click();
+        };
+
+        Alfresco.util.createYUIButton(this, "", expandPanel, {}, expandButtonId);
+
+        Alfresco.util.createYUIButton(this, "", saveAsDraft,
+                {
+                    type: "submit"
+                }, saveAsDraftButtonId);
+
     }
 
     Event.onContentReady(panelId, init);

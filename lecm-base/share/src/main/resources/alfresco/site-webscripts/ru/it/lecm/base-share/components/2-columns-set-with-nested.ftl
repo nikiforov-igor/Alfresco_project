@@ -1,6 +1,12 @@
 <#import "/org/alfresco/components/form/form.lib.ftl" as formLib />
 
-<@renderSetWithColumns set=set />
+<#if item??>
+    <#assign thisSet = item />
+<#else>
+    <#assign thisSet = set />
+</#if >
+
+<@renderSetWithColumns set=thisSet />
 
 <#macro renderSetWithColumns set>
     <#list set.children as item>

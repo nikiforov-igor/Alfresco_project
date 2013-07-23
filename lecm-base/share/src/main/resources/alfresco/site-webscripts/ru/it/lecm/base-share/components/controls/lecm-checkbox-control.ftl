@@ -27,7 +27,7 @@
 })();
 //]]></script>
 
-<div class="form-field">
+<div class="form-field checkbox-control">
 <#if form.mode == "view">
 	<div class="viewmode-field">
 		<span class="viewmode-label">${field.label?html}:</span>
