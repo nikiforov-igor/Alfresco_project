@@ -79,12 +79,30 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.dictionary</groupId>
-            <artifactId>dictionary-repo-api</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.dictionary</groupId>
+			<artifactId>dictionary-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.calendar</groupId>
+			<artifactId>lecm-calendar-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.notifications</groupId>
+			<artifactId>notifications-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.documents</groupId>
+			<artifactId>documents-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>

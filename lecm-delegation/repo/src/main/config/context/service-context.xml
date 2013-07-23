@@ -45,6 +45,7 @@
 	</bean>
 
 	<util:constant id="delegationFolder" static-field="ru.it.lecm.delegation.beans.DelegationBean.DELEGATION_FOLDER"/>
+	<util:constant id="tasksDelegationFolder" static-field="ru.it.lecm.delegation.beans.DelegationBean.TASKS_DELEGATION_FOLDER"/>
 	<bean id="delegationService" class="ru.it.lecm.delegation.beans.DelegationBean"
 		  parent="baseBean"
 		  depends-on="${groupId}.${artifactId}.delegationBootstrap"
@@ -52,6 +53,7 @@
 		<property name="folders">
 			<map>
 				<entry key="#{delegationFolder}" value="сервис Делегирование полномочий"/>
+				<entry key="#{tasksDelegationFolder}" value="сервис Делегирование полномочий/Делегирование обязанностей"/>
 			</map>
 		</property>
 		<property name="nodeService" ref="nodeService"/>
@@ -61,6 +63,13 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="sgNotifierService" ref="orgstructureSGNotifierBean"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
+		<property name="workflowService" ref="workflowServiceImpl"/>
+		<property name="absenceService" ref="AbsenceService"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="documentMembersService" ref="documentMembersService"/>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+		<property name="dictionaryServiceAlfresco" ref="dictionaryService"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.delegation.DelegationRepoWebScript.post" class="ru.it.lecm.delegation.beans.DelegationRepoWebScript" parent="webscript">

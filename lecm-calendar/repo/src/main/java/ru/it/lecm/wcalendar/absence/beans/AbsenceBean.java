@@ -190,6 +190,10 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 			setAbsenceActivated(node, false);
 			addBusinessJournalRecord(node, CalendarCategory.STOP_NOT_IN_OFFICE);
 			delegationService.stopDelegation(employee);
+			List<NodeRef> delegatedTasksForAssumedExecutor = delegationService.getDelegatedTasksForAssumedExecutor(employee, true);
+			for (NodeRef delegatedTask: delegatedTasksForAssumedExecutor) {
+				delegationService.reassignTaskBackToAssumedExecutor(delegatedTask);
+			}
 			logger.debug(String.format("Absence [%s] ended.", node.toString()));
 		} else {
 			logger.error(String.format("Somehow absence %s has no employee!", node.toString()));

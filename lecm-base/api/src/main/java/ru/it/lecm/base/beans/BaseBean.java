@@ -28,7 +28,9 @@ import org.alfresco.util.ParameterCheck;
  * Time: 15:12
   */
 public abstract class BaseBean implements InitializingBean {
-	public static  final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
+	public static final String DICTIONARY_NAMESPACE = "http://www.it.ru/lecm/dictionary/1.0";
+	public static final QName IS_ACTIVE = QName.createQName(DICTIONARY_NAMESPACE, "active");
+	public static final QName ASPECT_ACTIVE = QName.createQName(DICTIONARY_NAMESPACE, "aspect_active");
 
 	final DateFormat FolderNameFormatYear = new SimpleDateFormat("yyyy");
 	final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");

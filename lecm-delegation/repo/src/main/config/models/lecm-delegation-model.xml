@@ -199,6 +199,39 @@
 				<aspect>lecm-dic:aspect_active</aspect>
 			</mandatory-aspects>
 		</type>
+
+		<type name="lecm-d8n:task-delegation">
+			<parent>cm:content</parent>
+			<properties>
+				<property name="lecm-d8n:task-delegation-task-id">
+					<type>d:text</type>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-d8n:task-delegation-assumed-executor-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="lecm-d8n:task-delegation-effective-executor-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
 	</types>
 </model>
 

@@ -223,4 +223,31 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 		}
 		return result;
 	}
+
+	public ScriptNode getEffectiveExecutor(String assumedExecutorRef) {
+		NodeRef effectiveExecutor = delegationService.getEffectiveExecutor(new NodeRef(assumedExecutorRef));
+		if (effectiveExecutor != null) {
+			return new ScriptNode(effectiveExecutor, serviceRegistry, getScope());
+		} else {
+			return null;
+		}
+	}
+
+	public ScriptNode getEffectiveExecutor(String assumedExecutorRef, String businessRoleStr) {
+		NodeRef effectiveExecutor = delegationService.getEffectiveExecutor(new NodeRef(assumedExecutorRef), businessRoleStr);
+		if (effectiveExecutor != null) {
+			return new ScriptNode(effectiveExecutor, serviceRegistry, getScope());
+		} else {
+			return null;
+		}
+	}
+
+	public ScriptNode assignTaskToEffectiveExecutor(String assumedExecutor, String businessRole, String taskID) {
+		NodeRef result = delegationService.assignTaskToEffectiveExecutor(new NodeRef(assumedExecutor), businessRole, taskID);
+		if (result != null) {
+			return new ScriptNode(result, serviceRegistry, getScope());
+		} else {
+			return null;
+		}
+	}
 }

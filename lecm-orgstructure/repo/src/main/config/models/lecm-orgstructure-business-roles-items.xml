@@ -26,6 +26,12 @@
                 <property name="lecm-orgstr:business-role-is-dynamic">false</property>
                 <property name="lecm-orgstr:business-role-description">Бизнес роль технолога для управления Оргструктурой</property>
             </item>
+			<item name="cm:Другие назначения" type="lecm-orgstr:business-role">
+                <property name="cm:name">Другие назначения</property>
+                <property name="lecm-orgstr:business-role-identifier">BR_OTHER_DESIGNATIONS</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">true</property>
+                <property name="lecm-orgstr:business-role-description">Другие назначения</property>
+            </item>
         </items>
     </item>
 </items>

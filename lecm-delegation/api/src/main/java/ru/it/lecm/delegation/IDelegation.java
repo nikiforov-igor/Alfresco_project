@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Интерфейс для поддержки делегирований.
@@ -77,6 +78,27 @@ public interface IDelegation {
 	 * &lt;child-association name="lecm-d8n:delegation-opts-procuracy-assoc"&gt;
 	 */
 	QName ASSOC_DELEGATION_OPTS_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-procuracy-assoc");
+
+	/*
+	 * <type name="lecm-d8n:task-delegation">
+	 */
+	QName TYPE_TASK_DELEGATION = QName.createQName(DELEGATION_NAMESPACE, "task-delegation");
+	/*
+	 * <property name="lecm-d8n:task-delegation-task-id">
+	 */
+	QName PROP_TASK_DELEGATION_TASK_ID = QName.createQName(DELEGATION_NAMESPACE, "task-delegation-task-id");
+	/*
+	 * <association name="lecm-d8n:task-delegation-assumed-executor-assoc">
+	 */
+	QName ASSOC_TASK_DELEGATION_ASSUMED_EXECUTOR = QName.createQName(DELEGATION_NAMESPACE, "task-delegation-assumed-executor-assoc");
+	/*
+	 * <association name="lecm-d8n:task-delegation-effective-executor-assoc">
+	 */
+	QName ASSOC_TASK_DELEGATION_EFFECTIVE_EXECUTOR = QName.createQName(DELEGATION_NAMESPACE, "task-delegation-effective-executor-assoc");
+	/**
+	 * Бизнес-роль "Другие назначения"
+	 */
+	String BUSINESS_ROLE_OTHER_DESIGNATIONS = "BR_OTHER_DESIGNATIONS";
 
 	/**
 	 * получение ссылки на папку сервиса делегирования
@@ -220,4 +242,99 @@ public interface IDelegation {
 	 * @return NodeRef идентификатор сотрудника или null если ничего не нашел.
 	 */
 	NodeRef getEmployee (final NodeRef nodeRef);
+
+	/**
+	 * Получить из опции делегирования карту вида "NodeRef_на_бизнес-роль -
+	 * NodeRef_на_делегата"
+	 *
+	 * @param delegationOpts NodeRef на опции делегирования
+	 * @param activeOnly только активные делегирования
+	 * @return "NodeRef_на_бизнес-роль - NodeRef_на_делегата"
+	 */
+	Map<NodeRef, NodeRef> getBusinessRoleToTrusteeByDelegationOpts(final NodeRef delegationOpts, final boolean activeOnly);
+
+	/**
+	 * Получить делегата (lecm-orgstr:employee) по экземляру доверенности
+	 * (lecm-d8n:procuracy)
+	 *
+	 * @param procuracy NodeRef на доверенность
+	 * @return NodeRef на сотрудника, которому делегированы полномочия
+	 */
+	NodeRef getTrusteeByProcuracy(final NodeRef procuracy);
+
+	/**
+	 * Получить делегированную бизнес-роль (lecm-orgstr:business-role) по
+	 * экземляру доверенности (lecm-d8n:procuracy)
+	 *
+	 * @param procuracy NodeRef на доверенность
+	 * @return NodeRef на делегированную бизнес-роль
+	 */
+	NodeRef getBusinessRoleByProcuracy(final NodeRef procuracy);
+
+	/**
+	 * Получить "реального исполнителя" бизнес-роли "Другие назначения" с учетом
+	 * возможного делегирования.
+	 *
+	 * @param assumedExecutor "предполагаемый исполнитель"
+	 * (lecm-orgstr:employee)
+	 * @return "реальный исполнитель" (lecm-orgstr:employee); сотрудник,
+	 * которому делегирована бизнес-роль "Другие назначения". Если делегирование
+	 * отсутствует, то возвращается ссылка на "предполагаемого исполнителя"
+	 */
+	NodeRef getEffectiveExecutor(final NodeRef assumedExecutor);
+
+	/**
+	 * Получить "реального исполнителя" заданной бизнес-роли с учетом возможного
+	 * делегирования.
+	 *
+	 * @param assumedExecutor "предполагаемый исполнитель"
+	 * (lecm-orgstr:employee)
+	 * @param businessRole идентификатор бизнес-роли, делегирование которой
+	 * необходимо проверить
+	 * @return "реальный исполнитель" (lecm-orgstr:employee); сотрудник,
+	 * которому делегирована указанная бизнес-роль. Если делегирование
+	 * отсутствует, то возвращается ссылка на "предполагаемого исполнителя"
+	 */
+	NodeRef getEffectiveExecutor(final NodeRef assumedExecutor, final String businessRole);
+
+	/**
+	 * (Пере)назначить задачу "реальному исполнителю" указанной бизнес-роли.
+	 *
+	 * @param assumedExecutor "предполагаемый исполнитель"
+	 * (lecm-orgstr:employee)
+	 * @param businessRole идентификатор бизнес-роли, на которую назначается
+	 * задача.
+	 * @param taskID ID задачи
+	 * @return NodeRef сотрудника, на которого назначена задача. null при
+	 * неудаче
+	 */
+	NodeRef assignTaskToEffectiveExecutor(final NodeRef assumedExecutor, final String businessRole, final String taskID);
+
+	/**
+	 * @return NodeRef на папку, в которой хранятся объекты типа
+	 * lecm-d8n:task-delegation, описывающие, какие задачи кому были
+	 * делегированы.
+	 */
+	NodeRef getTasksDelegationFolder();
+
+	/**
+	 * Получить список задач, которые должны быть назначены на указанного
+	 * сотрудника, но были делегированы.
+	 *
+	 * @param assumedExecutor "предполагаемы исполнитель", сотрудник, на
+	 * которого должна быть назначена задача
+	 * @param activeOnly только активные задачи (находящиеся в статусах "Not Yet
+	 * Started", "In Progress" или "On Hold")
+	 * @return Список NodeRef'ов на объекты типа lecm-d8n:task-delegation
+	 */
+	List<NodeRef> getDelegatedTasksForAssumedExecutor(final NodeRef assumedExecutor, final boolean activeOnly);
+
+	/**
+	 * Переназначить указанную задачу обратно на "предполагаемого исполнителя"
+	 *
+	 * @param delegatedTask
+	 * @return NodeRef сотрудника, на которого назначена задача. null при
+	 * неудаче
+	 */
+	NodeRef reassignTaskBackToAssumedExecutor(final NodeRef delegatedTask);
 }

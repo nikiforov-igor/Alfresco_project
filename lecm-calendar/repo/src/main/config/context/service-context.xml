@@ -43,20 +43,20 @@
 		</property>
 	</bean>
         
-        <!-- Добавление новых категорий событий -->
-        <bean id="${groupId}.${artifactId}.businessJournalDictionaryBootstrap"
-		  parent="lecmDictionaryBootstrap"
-		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">
-        <property name="createOrUpdateDictionaries">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-buisness-journal-eventCategory-items.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-buisness-journal-objectType-items.xml</value>
-            </list>
-        </property>
-        </bean>
+	<!-- Добавление новых категорий событий -->
+	<bean id="${groupId}.${artifactId}.businessJournalDictionaryBootstrap"
+			  parent="lecmDictionaryBootstrap"
+			  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">
+		<property name="createOrUpdateDictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-buisness-journal-eventCategory-items.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-buisness-journal-objectType-items.xml</value>
+			</list>
+		</property>
+	</bean>
         
 	<!-- Настройки прав доступа на каталоги в рамках сервиса -->
-<!--	<bean id="${groupId}.${artifactId}.ScheduleServicePermissions" parent="ServiceFolderPermissionHelper"
+	<!--	<bean id="${groupId}.${artifactId}.ScheduleServicePermissions" parent="ServiceFolderPermissionHelper"
 		  depends-on="${groupId}.${artifactId}.wCalendarBootstrap, ${groupId}.${artifactId}.wCalendarBusinessRolesDicBootstrap" >
 		<property name="serviceBean" ref="ScheduleService"/>
 		<property name="permissionsList">
@@ -107,7 +107,7 @@
 	</bean>
 	<bean id="AbsenceJavascriptExtension" class="ru.it.lecm.wcalendar.absence.extensions.AbsenceJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="nodeService" ref="nodeService"/>
-                <property name="extensionName" value="absence"/>
+		<property name="extensionName" value="absence"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="absenceService" ref="AbsenceService"/>
 	</bean>
@@ -249,7 +249,7 @@
 	<bean id="calendarModifyPolicy" class="ru.it.lecm.wcalendar.calendar.policy.CalendarModifyPolicy" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="wCalendarService" ref="WCalendarService"/>
-                <property name="nodeService" ref="nodeService"/>
+		<property name="nodeService" ref="nodeService"/>
 	</bean>
 	<!-- Полиси для сервиса отсутствий -->
 	<bean id="absenceStartPolicy" class="ru.it.lecm.wcalendar.absence.policy.AbsenceStartPolicy" init-method="init">
@@ -272,17 +272,17 @@
 	</bean>
 	<bean id="scheduleAssociationPolicy" class="ru.it.lecm.wcalendar.schedule.policy.SheduleAssociationPolicy" init-method="init" parent="logicEcmAssociationPolicy"/>
 
-    <bean id="calendar.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
-        <constructor-arg>
-            <map>
-                <entry key="lecm-absence:reason">
-                    <list>
-                        <value>cm:name</value>
-                        <value>lecm-absence:color</value>
-                        <value>lecm-absence:code</value>
-                    </list>
-                </entry>
-            </map>
-        </constructor-arg>
-    </bean>
+	<bean id="calendar.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+		<constructor-arg>
+			<map>
+				<entry key="lecm-absence:reason">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-absence:color</value>
+						<value>lecm-absence:code</value>
+					</list>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
 </beans>

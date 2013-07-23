@@ -25,6 +25,17 @@ import ru.it.lecm.delegation.IDelegationDescriptor;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
+import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.workflow.WorkflowService;
+import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.alfresco.service.namespace.NamespaceService;
+import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.notifications.beans.Notification;
+import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.wcalendar.absence.IAbsence;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -41,12 +52,21 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	final private static Logger logger = LoggerFactory.getLogger (DelegationBean.class);
 	private final static String CONTAINER = "DelegationOptionsContainer";
 	public final static String DELEGATION_FOLDER = "DELEGATION_FOLDER";
+	public final static String TASKS_DELEGATION_FOLDER = "TASKS_DELEGATION_FOLDER";
+	private final String REVIEWER_PERMISSION_GROUP = "LECM_BASIC_PG_Reviewer";
 
 	private OrgstructureBean orgstructureService;
 	private PersonService personService;
 	private BusinessJournalService businessJournalService;
 	private OrgstructureSGNotifierBean sgNotifierService;
     private DictionaryBean dictionaryService;
+	private DictionaryService dictionaryServiceAlfresco;
+	private IAbsence absenceService;
+	private WorkflowService workflowService;
+	private NotificationsService notificationsService;
+	private DocumentMembersService documentMembersService;
+	private LecmPermissionService lecmPermissionService;
+
 
 	public void setOrgstructureService (OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -68,6 +88,30 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
         this.dictionaryService = dictionaryService;
     }
 
+	public void setAbsenceService(IAbsence absenceService) {
+		this.absenceService = absenceService;
+	}
+
+	public void setWorkflowService(WorkflowService workflowService) {
+		this.workflowService = workflowService;
+	}
+
+	public void setNotificationsService(NotificationsService notificationsService) {
+		this.notificationsService = notificationsService;
+	}
+
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
+
+	public void setDictionaryServiceAlfresco(DictionaryService dictionaryServiceAlfresco) {
+		this.dictionaryServiceAlfresco = dictionaryServiceAlfresco;
+	}
+
+	public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+		this.documentMembersService = documentMembersService;
+	}
+
 	public final void init () {
 		PropertyCheck.mandatory (this, "nodeService", nodeService);
 		PropertyCheck.mandatory (this, "transactionService", transactionService);
@@ -75,6 +119,13 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		PropertyCheck.mandatory (this, "businessJournalService", businessJournalService);
 		PropertyCheck.mandatory (this, "orgstructureService", orgstructureService);
 		PropertyCheck.mandatory (this, "sgNotifierService", sgNotifierService);
+		PropertyCheck.mandatory (this, "absenceService", absenceService);
+		PropertyCheck.mandatory (this, "workflowService", workflowService);
+		PropertyCheck.mandatory (this, "notificationsService", notificationsService);
+		PropertyCheck.mandatory (this, "serviceRegistry", serviceRegistry);
+		PropertyCheck.mandatory (this, "dictionaryService", dictionaryServiceAlfresco);
+		PropertyCheck.mandatory (this, "documentMembersService", documentMembersService);
+		PropertyCheck.mandatory (this, "lecmPermissionService", lecmPermissionService);
 
 		//создание контейнера для хранения параметров делегирования
 		AuthenticationUtil.runAsSystem (this);
@@ -565,5 +616,221 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		return getDelegationFolder();
 	}
 
+	@Override
+	public Map<NodeRef, NodeRef> getBusinessRoleToTrusteeByDelegationOpts(final NodeRef delegationOpts, final boolean activeOnly) {
+		Map<NodeRef, NodeRef> result = new HashMap<NodeRef, NodeRef>();
+		List<NodeRef> procuracies = getProcuracies(delegationOpts, activeOnly);
+		if (procuracies == null || procuracies.isEmpty()) {
+			return result;
+		}
+		for (NodeRef procuracy : procuracies) {
+			NodeRef trustee = getTrusteeByProcuracy(procuracy);
+			NodeRef businessRole = getBusinessRoleByProcuracy(procuracy);
+			result.put(businessRole, trustee);
+		}
+		return result;
+	}
 
+	@Override
+	public NodeRef getTrusteeByProcuracy(final NodeRef procuracy) {
+		return findNodeByAssociationRef(procuracy, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+	}
+
+	@Override
+	public NodeRef getBusinessRoleByProcuracy(final NodeRef procuracy) {
+		return findNodeByAssociationRef(procuracy, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+	}
+
+	@Override
+	public NodeRef getEffectiveExecutor(final NodeRef assumedExecutor) {
+		return getEffectiveExecutor(assumedExecutor, BUSINESS_ROLE_OTHER_DESIGNATIONS);
+	}
+
+	@Override
+	public NodeRef getEffectiveExecutor(final NodeRef assumedExecutor, final String businessRoleStr) {
+		boolean employeeAbsentToday = absenceService.isEmployeeAbsentToday(assumedExecutor);
+
+		if (!employeeAbsentToday) {
+			return assumedExecutor;
+		}
+
+		NodeRef delegationOpts = getDelegationOpts(assumedExecutor);
+		if (delegationOpts == null) {
+			return assumedExecutor;
+		}
+		Map<NodeRef, NodeRef> businessRoleToTrustee = getBusinessRoleToTrusteeByDelegationOpts(delegationOpts, true);
+		if (businessRoleToTrustee == null) {
+			return assumedExecutor;
+		}
+
+		NodeRef businessRoleNodeRef = orgstructureService.getBusinessRoleByIdentifier(businessRoleStr);
+		NodeRef result;
+		if (businessRoleToTrustee.containsKey(businessRoleNodeRef) && businessRoleToTrustee.get(businessRoleNodeRef) != null) {
+			result = businessRoleToTrustee.get(businessRoleNodeRef);
+		} else if (!BUSINESS_ROLE_OTHER_DESIGNATIONS.equals(businessRoleStr)) {
+			NodeRef businessRoleOtherDesignations = orgstructureService.getBusinessRoleByIdentifier(BUSINESS_ROLE_OTHER_DESIGNATIONS);
+
+			if (businessRoleToTrustee.containsKey(businessRoleOtherDesignations) && businessRoleToTrustee.get(businessRoleOtherDesignations) != null) {
+				result = businessRoleToTrustee.get(businessRoleOtherDesignations);
+			} else {
+				result = assumedExecutor;
+			}
+		} else {
+			result = assumedExecutor;
+		}
+
+		return result;
+	}
+
+	@Override
+	public NodeRef assignTaskToEffectiveExecutor(final NodeRef assumedExecutor, final String businessRole, final String taskID) {
+		NodeRef result = null;
+		try {
+			if (employeeOwnsTask(assumedExecutor, taskID)) {
+				NodeRef effectiveExecutor = getEffectiveExecutor(assumedExecutor, businessRole);
+
+				if (!assumedExecutor.equals(effectiveExecutor)) {
+					createTaskDelegationItem(assumedExecutor, effectiveExecutor, taskID);
+				}
+
+				assignTaskToEmployee(taskID, effectiveExecutor);
+
+				sendNewTaskNotification(effectiveExecutor, taskID);
+				result = effectiveExecutor;
+			}
+		} catch (Exception ex) {
+			logger.error("Error assigning task", ex);
+		}
+		return result;
+	}
+
+	@Override
+	public NodeRef getTasksDelegationFolder() {
+		return getFolder(TASKS_DELEGATION_FOLDER);
+	}
+
+	private NodeRef createTaskDelegationItem(final NodeRef assumedExecutor, final NodeRef effectiveExecutor, final String taskID) {
+		String itemName = taskID + "-" + UUID.randomUUID().toString();
+		QName assocQName = QName.createQName(DELEGATION_NAMESPACE, itemName);
+		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		properties.put(ContentModel.PROP_NAME, itemName);
+		properties.put(PROP_TASK_DELEGATION_TASK_ID, taskID);
+		ChildAssociationRef taskDelegationItemChildAssoc = nodeService.createNode(getTasksDelegationFolder(), ContentModel.ASSOC_CONTAINS, assocQName, TYPE_TASK_DELEGATION, properties);
+		if (taskDelegationItemChildAssoc != null) {
+			NodeRef taskDelegationItem = taskDelegationItemChildAssoc.getChildRef();
+			nodeService.createAssociation(taskDelegationItem, assumedExecutor, ASSOC_TASK_DELEGATION_ASSUMED_EXECUTOR);
+			nodeService.createAssociation(taskDelegationItem, effectiveExecutor, ASSOC_TASK_DELEGATION_EFFECTIVE_EXECUTOR);
+			return taskDelegationItem;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public List<NodeRef> getDelegatedTasksForAssumedExecutor(final NodeRef assumedExecutor, final boolean activeOnly) {
+		List<NodeRef> result = new ArrayList<NodeRef>();
+		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(getTasksDelegationFolder(), ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+		for (ChildAssociationRef childAssoc : childAssocs) {
+			NodeRef delegatedTask = childAssoc.getChildRef();
+			if (!isArchive(delegatedTask)) {
+				if (assumedExecutor.equals(getAssumedExecutorByDelegatedTask(delegatedTask))) {
+					if (activeOnly) {
+						String taskID = getTaskIDByDelegatedTask(delegatedTask);
+						WorkflowTask task = workflowService.getTaskById(taskID);
+						Map<QName, Serializable> properties = task.getProperties();
+						QName bpmStatus = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "status");
+						String taskStatus = (String) properties.get(bpmStatus);
+						if ("Not Yet Started".equals(taskStatus) || "In Progress".equals(taskStatus) || "On Hold".equals(taskStatus)) {
+							result.add(delegatedTask);
+						}
+					} else {
+						result.add(delegatedTask);
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
+	@Override
+	public NodeRef reassignTaskBackToAssumedExecutor(final NodeRef delegatedTask) {
+		NodeRef result = null;
+		try {
+			NodeRef assumedExecutor = getAssumedExecutorByDelegatedTask(delegatedTask);
+			String taskID = getTaskIDByDelegatedTask(delegatedTask);
+			assignTaskToEmployee(taskID, assumedExecutor);
+			Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+			properties.put(IS_ACTIVE, false);
+			nodeService.addAspect(delegatedTask, ASPECT_ACTIVE, properties);
+
+			sendNewTaskNotification(assumedExecutor, taskID);
+			result = assumedExecutor;
+		} catch (Exception ex) {
+			logger.error("Error reassigning task", ex);
+		}
+		return result;
+	}
+
+	private NodeRef getAssumedExecutorByDelegatedTask(final NodeRef delegatedTask) {
+		return findNodeByAssociationRef(delegatedTask, ASSOC_TASK_DELEGATION_ASSUMED_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET);
+	}
+
+	private NodeRef getEffectiveExecutorByDelegatedTask(final NodeRef delegatedTask) {
+		return findNodeByAssociationRef(delegatedTask, ASSOC_TASK_DELEGATION_EFFECTIVE_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET);
+	}
+
+	private String getTaskIDByDelegatedTask(final NodeRef delegatedTask) {
+		return (String) nodeService.getProperty(delegatedTask, PROP_TASK_DELEGATION_TASK_ID);
+	}
+
+	private void assignTaskToEmployee(String taskID, NodeRef employeeRef) {
+		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		NodeRef personForEmployee = orgstructureService.getPersonForEmployee(employeeRef);
+		String userName = (String) nodeService.getProperty(personForEmployee, ContentModel.PROP_USERNAME);
+		properties.put(ContentModel.PROP_OWNER, userName);
+		workflowService.updateTask(taskID, properties, null, null);
+		grandTaskPermissions(taskID, employeeRef);
+	}
+
+	private void sendNewTaskNotification(final NodeRef employeeRef, final String taskID) {
+		SysAdminParams params = serviceRegistry.getSysAdminParams();
+		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+
+		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
+		recipients.add(employeeRef);
+
+		String description = "Вам назначена новая <a href='" + serverUrl + "/share/page/task-edit?taskId=" + taskID + "'>задача</a>";
+
+		Notification notification = new Notification();
+		notification.setAuthor(AuthenticationUtil.getSystemUserName());
+		notification.setDescription(description);
+		notification.setObjectRef(employeeRef);
+		notification.setRecipientEmployeeRefs(recipients);
+		notificationsService.sendNotification(notification);
+	}
+
+	private void grandTaskPermissions(String taskID, NodeRef employeeNodeRef) {
+		List<NodeRef> packageContents = workflowService.getPackageContents(taskID);
+		for (NodeRef node : packageContents) {
+			if (dictionaryServiceAlfresco.isSubClass(nodeService.getType(node), DocumentService.TYPE_BASE_DOCUMENT)) {
+				NodeRef member = documentMembersService.addMemberWithoutCheckPermission(node, employeeNodeRef, REVIEWER_PERMISSION_GROUP);
+				if (member == null) {
+					LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(REVIEWER_PERMISSION_GROUP);
+					lecmPermissionService.grantAccess(pgGranting, node, employeeNodeRef.getId());
+				}
+			}
+		}
+	}
+
+	private boolean employeeOwnsTask(NodeRef employee, String taskID) {
+		WorkflowTask task = workflowService.getTaskById(taskID);
+		Map<QName, Serializable> taskProperties = task.getProperties();
+		String taskOwner = (String) taskProperties.get(ContentModel.PROP_OWNER);
+
+		NodeRef personForEmployee = orgstructureService.getPersonForEmployee(employee);
+		String employeeUserName = (String) nodeService.getProperty(personForEmployee, ContentModel.PROP_USERNAME);
+
+		return taskOwner.equalsIgnoreCase(employeeUserName);
+	}
 }
