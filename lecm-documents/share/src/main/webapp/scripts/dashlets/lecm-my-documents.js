@@ -105,11 +105,46 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 			url = Alfresco.constants.URL_PAGECONTEXT + "site/" + file.location.site + "/" + (file.isFolder ? "folder" : "document") + "-details?nodeRef=" + file.nodeRef + "#comment",
 			i18n = "comment." + ((file.isFolder && !file.isLecmDocument) ? "folder." : "document.");
 
+		if (file.isLecmDocument) {
+			url = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + file.nodeRef + "#comment";
+		}
+
 		return '<a href="' + url + '" class="comment" title="' + scope.msg(i18n + "tip") + '" tabindex="0">' + scope.msg(i18n + "label") + '</a>';
 	};
 
 	YAHOO.extend(LogicECM.dashlet.MyDocuments, Alfresco.dashlet.MyDocuments,
 		{
+			onReady: function SimpleDocList_onReady()
+			{
+				var me = this;
+
+				// Hook favourite document events
+				var fnFavouriteHandler = function SimpleDocList_fnFavouriteHandler(layer, args)
+				{
+					var owner = YAHOO.Bubbling.getOwnerByTagName(args[1].anchor, "div");
+					if (owner !== null)
+					{
+						me.onFavourite.call(me, args[1].target.offsetParent, owner);
+					}
+					return true;
+				};
+				YAHOO.Bubbling.addDefaultAction(FAVOURITE_EVENTCLASS, fnFavouriteHandler);
+
+				// Hook like/unlike events
+				var fnLikesHandler = function SimpleDocList_fnLikesHandler(layer, args)
+				{
+					var owner = YAHOO.Bubbling.getOwnerByTagName(args[1].anchor, "div");
+					if (owner !== null)
+					{
+						me.onLikes.call(me, args[1].target.offsetParent, owner);
+					}
+					return true;
+				};
+				YAHOO.Bubbling.addDefaultAction(LIKE_EVENTCLASS, fnLikesHandler);
+
+				LogicECM.dashlet.MyDocuments.superclass.onReady.apply(this, arguments);
+			},
+
 			getWebscriptUrl: function ()
 			{
 				return Alfresco.constants.PROXY_URI + "lecm/doclib/doclist/documents/node/alfresco/sites/home?max=50";
@@ -222,7 +257,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 						docDetailsUrl = Alfresco.constants.URL_PAGECONTEXT + "site/" + locn.site + "/document-details?nodeRef=" + nodeRef.toString();
 
 					if (record.isLecmDocument) {
-						docDetailsUrl = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + nodeRef.toString()
+						docDetailsUrl = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + nodeRef.toString();
 					}
 
 					// Description non-blank?
