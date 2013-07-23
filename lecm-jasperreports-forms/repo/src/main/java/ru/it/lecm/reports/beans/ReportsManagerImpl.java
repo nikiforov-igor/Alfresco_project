@@ -320,7 +320,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 		 */
 
-		final String outFullName = makeTemplateFileName(desc.getReportTemplate());
+		final String outFullName = makeTemplateFileName(desc.getMnem() + ".jrxml");
 		// ensureFileNotPresent(outFullName);
 		{	// гарантируем, что с таким именем данных не будет ...
 			final File fout = new File( outFullName);
