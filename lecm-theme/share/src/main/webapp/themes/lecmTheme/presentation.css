@@ -2374,3 +2374,8 @@ span.person a div.description:empty {
 .alfresco-share .fio-and-photo .yui-u.first {
     width: 250px;
 }
+
+.simple-doclist .icon32 img
+{
+	width: 32px;
+}

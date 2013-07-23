@@ -87,8 +87,21 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 					var imageSrc = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + record.nodeType.replace(":", "_") + ".png";
 					var image = '<img src="' + imageSrc + '" alt="' + extn + '" title="' + $html(name) + '" onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"/>';
 
-					columnWidth = 100;
-					desc = '<span class="thumbnail"><a href="' + docDetailsUrl + '">' + image + '</a></span>';
+					if (this.options.simpleView)
+					{
+						/**
+						 * Simple View
+						 */
+						desc = '<span class="icon32"><a href="' + docDetailsUrl + '">' + image + '</a></span>';
+					}
+					else
+					{
+						/**
+						 * Detailed View
+						 */
+						columnWidth = 100;
+						desc = '<span class="thumbnail"><a href="' + docDetailsUrl + '">' + image + '</a></span>';
+					}
 				}
 
 				oColumn.width = columnWidth;
