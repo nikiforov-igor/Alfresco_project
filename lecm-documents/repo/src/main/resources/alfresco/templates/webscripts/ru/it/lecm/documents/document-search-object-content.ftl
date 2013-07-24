@@ -8,10 +8,15 @@
 		<#if properties??>
 			<#list properties?keys as propTitle>
 				<li>
-					<#if properties[propTitle]?is_date>
-						${propTitle}: ${properties[propTitle]?datetime}
-					<#else>
-						${propTitle}: ${properties[propTitle]?string}
+					<#if propTitle??>
+						<#if properties[propTitle]??>
+							<#if properties[propTitle]?is_date>
+								<#assign propValue = properties[propTitle]?datetime>
+							<#else>
+								<#assign propValue = properties[propTitle]?string>
+							</#if>
+						</#if>
+						${propTitle}: <#if propValue??>${propValue}</#if>
 					</#if>
 				</li>
 			</#list>
