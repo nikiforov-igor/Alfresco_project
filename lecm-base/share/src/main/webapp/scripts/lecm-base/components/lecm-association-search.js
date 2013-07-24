@@ -406,6 +406,15 @@ LogicECM.module = LogicECM.module || {};
 							items = tempItems;
 						}
 
+                        var allowedNodes = me.options.allowedNodes;
+                        if(YAHOO.lang.isArray(allowedNodes) && allowedNodes.length > 0) {
+                            for(i = 0; item = items[i]; i++) {
+                                if(allowedNodes.indexOf(item.nodeRef) < 0) {
+                                    items.splice(i, 1);
+                                }
+                            }
+                        }
+
 						// we need to wrap the array inside a JSON object so the DataTable is happy
 						updatedResponse =
 						{

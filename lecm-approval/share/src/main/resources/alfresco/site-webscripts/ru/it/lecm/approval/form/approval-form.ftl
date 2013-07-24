@@ -252,7 +252,7 @@
         constants: {
             URL_FORM: "lecm/components/form",
             LISTS_FOLDER_REF: null,
-            ALLOWED_ASSIGNEES: null
+            ALLOWED_ASSIGNEES: []
         },
 
         _addBubblingLayers: function approvalForm_addBubblingLayers() {
@@ -426,7 +426,8 @@
                         mode: "create",
                         submitType: "json",
                         showCancelButton: "true",
-                        ignoreNodes: this.getCurrentNodeRefs().join()
+                        ignoreNodes: this.getCurrentNodeRefs().join(),
+                        allowedNodes: this.constants.ALLOWED_ASSIGNEES.join()
                     },
                     destroyOnHide: true,
                     doBeforeDialogShow:{

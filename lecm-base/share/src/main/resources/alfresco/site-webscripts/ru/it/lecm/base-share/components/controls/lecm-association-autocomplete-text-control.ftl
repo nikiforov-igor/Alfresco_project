@@ -59,6 +59,9 @@
 	<#if args.ignoreNodes??>
 		ignoreNodes: "${args.ignoreNodes}".split(","),
 	</#if>
+    <#if args.allowedNodes??>
+        allowedNodes: "${args.allowedNodes}".split(","),
+    </#if>
 		itemType: "${field.control.params.itemType!field.endpointType}",
 		itemFamily: "node",
 		maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
@@ -100,6 +103,9 @@
 	<#if args.ignoreNodes??>
 		ignoreNodes: "${args.ignoreNodes}".split(","),
 	</#if>
+    <#if args.allowedNodes??>
+        allowedNodes: "${args.allowedNodes}".split(","),
+    </#if>
 	<#if field.control.params.childrenDataSource??>
 		childrenDataSource: "${field.control.params.childrenDataSource}",
 	</#if>

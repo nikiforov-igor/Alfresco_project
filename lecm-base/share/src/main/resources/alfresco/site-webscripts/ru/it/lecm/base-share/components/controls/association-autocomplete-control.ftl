@@ -59,6 +59,9 @@
     <#if args.ignoreNodes??>
         ignoreNodes: "${args.ignoreNodes}".split(","),
     </#if>
+    <#if args.allowedNodes??>
+        allowedNodes: "${args.allowedNodes}".split(","),
+    </#if>
         multipleSelectMode: ${field.endpointMany?string},
         itemType: "${field.control.params.itemType!field.endpointType}",
         currentValue: "${field.value!''}",
@@ -108,6 +111,9 @@
     </#if>
     <#if args.ignoreNodes??>
         ignoreNodes: "${args.ignoreNodes}".split(","),
+    </#if>
+    <#if args.allowedNodes??>
+        allowedNodes: "${args.allowedNodes}".split(","),
     </#if>
     <#if field.control.params.childrenDataSource??>
 	    childrenDataSource: "${field.control.params.childrenDataSource}",

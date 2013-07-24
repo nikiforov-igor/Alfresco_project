@@ -115,6 +115,9 @@ LogicECM.module.WCalendar.Schedule.drawPicker = function Schedule_DrawPicker(ins
         <#if args.ignoreNodes??>
             ignoreNodes: "${args.ignoreNodes}".split(","),
 	    </#if>
+        <#if args.allowedNodes??>
+            allowedNodes: "${args.allowedNodes}".split(","),
+        </#if>
         showCreateNewLink: ${showCreateNewLink?string},
         currentValue: "${field.value!''}",
         showSelectedItemsPath: ${showSelectedItemsPath?string},
