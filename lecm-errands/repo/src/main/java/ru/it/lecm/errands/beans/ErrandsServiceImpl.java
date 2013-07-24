@@ -6,6 +6,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.search.SearchParameters.SortDefinition;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
@@ -14,7 +15,10 @@ import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: AIvkin
@@ -196,98 +200,23 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     public void requestDueDateChange() {
     }
 
-    public List<NodeRef> getErrandsDocumentFilter(List<QName> types, List<String> paths, String filterKey){
-        String filter = "";
+    public List<NodeRef> getErrandsDocuments(List<String> paths){
+        List<QName> types =  new ArrayList<QName>();
+        types.add(TYPE_ERRANDS);
+
+        List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> result = new ArrayList<NodeRef>();
+
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-        if (filterKey != null) {
-            switch(FilterEnum.valueOf(filterKey.toUpperCase())) {
-                case IMPORTANT : {
-                    // получаем важные поручения
-                    filter += " AND (" + "@lecm\\-errands\\:is\\-important:\"" + "true" + "\""+")";
-                    filter += "";
-                    for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, null, null, null, paths, null, null, null, filter)) {
-                        if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
-                            result.add(nodeRef);
-                        }
-                    }
-                    break;
-                }
-                case OVERDUE: {
-                      // просроченные
-                    Date now = new Date();
-                    filter += " AND NOT (" + "@lecm\\-errands\\:is\\-important:\"" + "true" + "\""+")";
-                    filter += "";
-                    QName dateType = QName.createQName("lecm-errands:limitation-date", namespaceService);
-                    for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, dateType , null, now, paths, null, null, null, filter)) {
-                        if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
-                            result.add(nodeRef);
-                        }
-                    }
-                    break;
-                }
-                case APPROACHING_DEADLINE: {
-                    // с приближающимся сроком
-                    Date now = new Date();
-                    Date end = null;
-                    String daysCount = "2";
-                    if (daysCount != null &&  !"".equals(daysCount)) {
-                        Integer days = Integer.parseInt(daysCount);
+        // сортируем по важности поручения и по сроку исполнения
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + TYPE_ERRANDS_IS_IMPORTANT.toString(),false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + TYPE_ERRANDS_LIMITATION_DATE.toString(),false));
 
-                        if (days > 0) {
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTime(now);
-                            calendar.add(Calendar.DAY_OF_MONTH, days);
-                            calendar.set(Calendar.HOUR_OF_DAY, 0);
-                            calendar.set(Calendar.MINUTE, 0);
-                            calendar.set(Calendar.SECOND, 0);
-                            end = calendar.getTime();
-                        }
-                    }
-                    filter += " AND NOT (" + "@lecm\\-errands\\:is\\-important:\"" + "true" + "\""+")";
-                    filter += "";
-                    QName dateType = QName.createQName("lecm-errands:limitation-date", namespaceService);
-                    for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, dateType, now, end, paths, null, null, null, filter)) {
-                        if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
-                            result.add(nodeRef);
-                        }
-                    }
-                    break;
-                }
-                case OTHER: {
-                    // Остальные
-                    Date now = new Date();
-                    Date start = null;
-                    String daysCount = "2";
-                    if (daysCount != null &&  !"".equals(daysCount)) {
-                        Integer days = Integer.parseInt(daysCount);
-
-                        if (days > 0) {
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTime(now);
-                            calendar.add(Calendar.DAY_OF_MONTH, days);
-                            calendar.set(Calendar.HOUR_OF_DAY, 0);
-                            calendar.set(Calendar.MINUTE, 0);
-                            calendar.set(Calendar.SECOND, 0);
-                            start = calendar.getTime();
-                        }
-                    }
-                    filter += " AND NOT (" + "@lecm\\-errands\\:is\\-important:\"" + "true" + "\""+")";
-                    filter += "";
-                    QName dateType = QName.createQName("lecm-errands:limitation-date", namespaceService);
-                    for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, dateType, start, null, paths, null, null, null, filter)) {
-                        if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
-                            result.add(nodeRef);
-                        }
-                    }
-                    break;
-                }
-                default: {
-                    break;
-                }
+        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, null, null, null, paths, null, null, null, sort)) {
+            if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
+                result.add(nodeRef);
             }
         }
-//        documentService.getDocumentsByFilter();
         return result;
     }
 }

@@ -63,12 +63,6 @@ LogicECM.dashlet = LogicECM.dashlet || {};
      * Extend from Alfresco.component.Base
      */
     YAHOO.extend(LogicECM.dashlet.Errands, Alfresco.component.Base);
-
-    /**
-     * Augment prototype with Common Workflow actions to reuse createFilterURLParameters
-     */
-//    YAHOO.lang.augmentProto(LogicECM.dashlet.Errands, Alfresco.action.WorkflowActions);
-
     /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
@@ -82,16 +76,6 @@ LogicECM.dashlet = LogicECM.dashlet || {};
              */
             options:
             {
-                activeFilter: "important",
-                /**
-                 * Task types not to display
-                 *
-                 * @property hiddenTaskTypes
-                 * @type object
-                 * @default []
-                 */
-                hiddenTaskTypes: [],
-
                 /**
                  * Maximum number of tasks to display in the dashlet.
                  *
@@ -99,7 +83,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                  * @type int
                  * @default 50
                  */
-                maxItems: 50
+                maxItems: 10
             },
 
             errandsList: null,
@@ -110,60 +94,22 @@ LogicECM.dashlet = LogicECM.dashlet || {};
              */
             onReady: function ()
             {
-                // Create filter menu
-                this.widgets.filterMenuButton = Alfresco.util.createYUIButton(this, "sorting", this.onFilterSelected,
-                    {
-                        type: "menu",
-                        menu: "sorting-menu",
-                        lazyloadmenu: true
-                    });
-
                 // The activity list container
                 this.errandsList = Dom.get(this.id + "-errands");
-
-                this.widgets.filterMenuButton.set("label", this.msg("sorting.important"));
-                this.widgets.filterMenuButton.value = "important";
-                // Display the toolbar now that we have selected the filter
-                Dom.removeClass(Selector.query(".toolbar div", this.id, true), "hidden");
                 this.populateErrandsList();
-            },
-
-            /**
-             * Reloads the list with the new filter and updates the filter menu button's label
-             *
-             * @param p_sType {string} The event
-             * @param p_aArgs {array} Event arguments
-             */
-            onFilterSelected: function (p_sType, p_aArgs)
-            {
-                var menuItem = p_aArgs[1];
-
-                if (menuItem)
-                {
-                    this.widgets.filterMenuButton.set("label", menuItem.cfg.getProperty("text"));
-                    this.widgets.filterMenuButton.value = menuItem.value;
-
-                    this.populateErrandsList(this.widgets.filterMenuButton.value);
-                    // Save preferences
-                    this.services.preferences.set(PREFERENCES_TASKS_DASHLET_FILTER, menuItem.value);
-                }
             },
 
             /**
              * Populate the activity list via Ajax request
              * @method populateContractsList
              */
-            populateErrandsList: function Contracts_populateContractsList(filter)
+            populateErrandsList: function Contracts_populateContractsList()
             {
                 var newId = Alfresco.util.generateDomId();
                 // Load the activity list
                 Alfresco.util.Ajax.request(
                     {
                         url: Alfresco.constants.PROXY_URI  + "lecm/errands/getErrandsFilter",
-                        dataObj:
-                        {
-                            filterId: this.widgets.filterMenuButton.value
-                        },
                         successCallback:
                         {
                             fn: this.onListLoaded,

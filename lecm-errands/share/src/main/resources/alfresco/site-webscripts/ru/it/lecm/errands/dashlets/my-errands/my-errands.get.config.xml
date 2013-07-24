@@ -1,9 +1,0 @@
-<config>
-    <max-items>50</max-items>
-    <sort-menu>
-        <sort type="important"/>
-        <sort type="overdue"/>
-        <sort type="approaching_Deadline"/>
-        <sort type="other"/>
-    </sort-menu>
-</config>

@@ -12,6 +12,7 @@ import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchParameters.SortDefinition;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -292,7 +293,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     @Override
-    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName,List<NodeRef>> initiatorsList, List<NodeRef> docsList, String filter) {
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName,List<NodeRef>> initiatorsList, List<NodeRef> docsList, List<SortDefinition> sortDefinition) {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
@@ -376,8 +377,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
             query += " AND (" + docsFilter + ")";
         }
 
-        if (filter != null && filter.length() > 0){
-            query += filter;
+        if (sortDefinition != null && !sortDefinition.isEmpty()){
+            for (SortDefinition sort : sortDefinition) {
+                sp.addSort(sort);
+            }
         }
 
         ResultSet results = null;

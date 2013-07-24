@@ -23,6 +23,10 @@ public interface ErrandsService {
 	public static final QName TYPE_ERRANDS_USER_SETTINGS = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings");
 	public static final QName TYPE_ERRANDS_INITIATOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc-ref");
 
+    public static final QName TYPE_ERRANDS_IS_IMPORTANT = QName.createQName(ERRANDS_NAMESPACE_URI, "is-important");
+    public static final QName TYPE_ERRANDS_LIMITATION_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "limitation-date");
+    public static final QName TYPE_ERRANDS_IS_EXPIRED = QName.createQName(ERRANDS_NAMESPACE_URI, "is-expired");
+
 	public static final QName SETTINGS_PROP_MODE_CHOOSING_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-mode-choosing-executors");
 	public static final String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION = "ORGANIZATION";
 	public static final String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_UNIT = "UNIT";
@@ -93,5 +97,5 @@ public interface ErrandsService {
 
     void requestDueDateChange();
 
-    public List<NodeRef> getErrandsDocumentFilter(List<QName> types, List<String> paths, String filter);
+    public List<NodeRef> getErrandsDocuments(List<String> paths);
 }

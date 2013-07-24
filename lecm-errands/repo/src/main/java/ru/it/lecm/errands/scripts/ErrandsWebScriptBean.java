@@ -3,7 +3,6 @@ package ru.it.lecm.errands.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -79,13 +78,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return arrayList;
     }
 
-    public List<NodeRef> getErrandsDocsByFilter(Scriptable types, Scriptable paths, String filterKey) {
-        List<String> docTypes = getElements(Context.getCurrentContext().getElements(types));
-        List<QName> qNameTypes = new ArrayList<QName>();
-        for (String docType : docTypes) {
-            qNameTypes.add(QName.createQName(docType, namespaceService));
-        }
-        return errandsService.getErrandsDocumentFilter(qNameTypes, getElements(Context.getCurrentContext().getElements(paths)), filterKey);
+    public List<NodeRef> getErrandsDocs(Scriptable paths) {
+        return errandsService.getErrandsDocuments(getElements(Context.getCurrentContext().getElements(paths)));
     }
 
 }

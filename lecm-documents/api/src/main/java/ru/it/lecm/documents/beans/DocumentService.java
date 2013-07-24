@@ -1,6 +1,7 @@
 package ru.it.lecm.documents.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.search.SearchParameters.SortDefinition;
 import org.alfresco.service.namespace.QName;
 
 import java.io.Serializable;
@@ -145,10 +146,10 @@ public interface DocumentService {
      * @param statuses - список статусов, если null то по статусам не фильтрует
      * @param inititatorsList - список инициаторов
      * @param docsList -
-     * @param filter - сформированная строка запроса добавляется в конец запроса
+     * @param sortDefinition - набор полей для сортировки
      * @return List<NodeRef> - ссылки на документы
      */
-    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName, List<NodeRef>> inititatorsList, List<NodeRef> docsList, String filter);
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName, List<NodeRef>> inititatorsList, List<NodeRef> docsList, List<SortDefinition> sortDefinition);
 
     /**
      * Метод для получения папки с черновиками для заданного типа
