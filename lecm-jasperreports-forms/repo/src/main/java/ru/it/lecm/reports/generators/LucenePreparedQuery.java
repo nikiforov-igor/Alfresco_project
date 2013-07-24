@@ -258,7 +258,7 @@ public class LucenePreparedQuery {
             }
 
             if (cond != null && !cond.isEmpty()) {
-                bquery.append((hasData ? " AND " : "") + cond);
+                bquery.append((hasData ? " AND (" : "(") + cond + ")");
                 hasData = true;
 
                 iblog++;

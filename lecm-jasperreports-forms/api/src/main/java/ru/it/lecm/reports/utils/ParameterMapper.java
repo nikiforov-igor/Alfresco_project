@@ -51,7 +51,8 @@ public class ParameterMapper {
                             // для простых значений явно зададим один элемент
                             colDesc.getParameterValue().setBound1(paramValue[0]);
                         } else {
-                            colDesc.getParameterValue().setBound1(paramValue);
+                            String[] paramValues = paramValue[0].split(",");
+                            colDesc.getParameterValue().setBound1(paramValues);
                         }
                     }
                     break;
