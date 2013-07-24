@@ -540,7 +540,7 @@
                 i;
 
             if( employeesLength === 0 ) {
-                return "";
+                return result;
             }
 
             for( i = 0; i < employeesLength; i++ ) {
