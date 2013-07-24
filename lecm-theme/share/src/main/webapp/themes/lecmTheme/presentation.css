@@ -2379,3 +2379,38 @@ span.person a div.description:empty {
 {
 	width: 32px;
 }
+
+/* Поручения: статусы */
+.yui-skin-lecmTheme div.form-fields div.statuses-set {
+    float: right;
+    text-align: right;
+    margin: 0 16px 15px 0;
+}
+.yui-skin-lecmTheme div.form-fields div.statuses-set div.form-field {
+    width: auto;
+    display: inline-block;
+    margin: 0 0 0 30px;
+    padding: 0;
+    position: inherit;
+    float: none;
+}
+
+/* "Important" control */
+.yui-skin-lecmTheme div.form-field.field-important > div.read-only-important {
+    color: #bf420b;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0;
+    margin: 0 !important;
+}
+
+/* "Status" control */
+.yui-skin-lecmTheme div.form-field.field-status > div.read-only-status {
+    color: #2d8a20;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0;
+    margin: 0 !important;
+}

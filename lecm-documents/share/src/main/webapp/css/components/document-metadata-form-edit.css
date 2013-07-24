@@ -19,6 +19,10 @@
     max-width: 200px;
     padding-left: 0;
 }
+.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field div.viewmode-field span.viewmode-value .association-auto-complete-selected-item,
+.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field div.viewmode-field span.viewmode-value .association-auto-complete-selected-item-even {
+    overflow: hidden;
+}
 .yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field input[type=text],
 .yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field div.selectone-control select,
 .yui-skin-lecmTheme .yui-panel .metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
