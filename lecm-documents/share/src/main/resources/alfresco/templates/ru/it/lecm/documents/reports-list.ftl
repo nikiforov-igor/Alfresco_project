@@ -7,7 +7,7 @@
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata-form-edit.css" />
 
     <#assign isDocListPage = false/>
-    <#if page.url.args.doctype?? && page.url.args.doctype != "">
+    <#if (page.url.args.doctype?? && page.url.args.doctype != "") || isDocPage>
         <#assign isDocListPage = true/>
     </#if>
 

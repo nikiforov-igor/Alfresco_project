@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>Поручения - Отчеты</title>
+    <description>Список отчетов по поручениям</description>
+    <template-instance>errands-reports</template-instance>
+    <authentication>user</authentication>
+</page>

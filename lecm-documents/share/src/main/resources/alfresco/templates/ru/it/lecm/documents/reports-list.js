@@ -29,3 +29,5 @@ model.hasPermission = hasRole;
 if (hasRole) {
     model.reportSettings = remote.connect("alfresco").get("/lecm/reports-editor/settings");
 }
+
+model.isDocPage = template.properties.docPage ? template.properties.docPage == "true" : false;
