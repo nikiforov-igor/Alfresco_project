@@ -1,42 +1,30 @@
 package ru.it.lecm.reports.beans;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRLoader;
-
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.extensions.surf.util.URLDecoder;
 import ru.it.lecm.reports.api.DsLoader;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
+import ru.it.lecm.reports.api.model.DAO.ReportDAO;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportTemplate;
 import ru.it.lecm.reports.api.model.ReportType;
-import ru.it.lecm.reports.api.model.DAO.ReportDAO;
 import ru.it.lecm.reports.api.model.share.ModelLoader;
 import ru.it.lecm.reports.generators.JRXMLMacroGenerator;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
+
+import java.io.*;
+import java.net.URL;
+import java.util.*;
 
 public class ReportsManagerImpl implements ReportsManager {
 
@@ -55,6 +43,12 @@ public class ReportsManagerImpl implements ReportsManager {
 	private Map< /*ReportType*/String, ReportGenerator> reportGenerators;
 
 	static final String JRXML_DEFAULT_TEMPLATE_ROOT = "/reportdefinitions/templates";
+
+    private NamespaceService namespaceService;
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
 
 	@Override
 	public ReportDAO getReportDAO() {
@@ -77,6 +71,9 @@ public class ReportsManagerImpl implements ReportsManager {
 		if (docTypes != null) {
 			for (String docType : docTypes) {
 				if (docType != null && docType.length() > 0) {
+                    if (docType.startsWith(String.valueOf(QName.NAMESPACE_BEGIN))) {
+                        docType = QName.createQName(docType).toPrefixString(namespaceService);
+                    }
 					unFilteredReports.addAll( getRegisteredReports(docType, null));
 				}
 			}

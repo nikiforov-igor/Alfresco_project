@@ -129,7 +129,7 @@ public class LucenePreparedQuery {
         }
 
         if (reportDescriptor.getFlags().getText() != null && !reportDescriptor.getFlags().getText().isEmpty()) {
-            bquery.append(hasData ? " AND" : "").append(reportDescriptor.getFlags().getText());
+            bquery.append(hasData ? " AND " : "").append(reportDescriptor.getFlags().getText());
             hasData = true;
         }
 

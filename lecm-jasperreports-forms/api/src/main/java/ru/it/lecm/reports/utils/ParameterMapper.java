@@ -4,14 +4,16 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType.Type;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
+import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -105,6 +107,15 @@ public class ParameterMapper {
                     break;
             }
         }
+        if (args.containsKey(DataSourceDescriptor.COLNAME_ID)){ // нужно добавить колонку с ID
+            ColumnDescriptor idColumn = new ColumnDescriptorImpl();
+            idColumn.setColumnName(DataSourceDescriptor.COLNAME_ID);
+
+            ParameterTypedValueImpl result = new ParameterTypedValueImpl("VALUE");
+            result.setBound1(args.get(DataSourceDescriptor.COLNAME_ID));
+            idColumn.setParameterValue(result);
+            reportDesc.getDsDescriptor().getColumns().add(idColumn);
+        }
     }
 
 
@@ -121,10 +132,7 @@ public class ParameterMapper {
     public static String getArgRootName(final ColumnDescriptor colDesc) {
         if (colDesc == null || colDesc.getParameterValue() == null) // не параметризуется ...
             return null;
-        final String paramRootName = Utils.coalesce(
-                colDesc.getParameterValue().getMnem()
-                , colDesc.getColumnName());
-        return paramRootName;
+        return colDesc.getColumnName();
     }
 
     /**

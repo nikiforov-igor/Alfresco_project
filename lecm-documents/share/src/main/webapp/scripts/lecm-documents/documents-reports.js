@@ -3,6 +3,7 @@
 
     LogicECM.module.Documents.Reports.reportLinkClicked = function(element, param) {
         var reportCode = param.reportCode;
+        var documentRef = param.nodeRef;
         var doBeforeDialogShow = function (p_form, p_dialog) {
             var defaultMsg = Alfresco.component.Base.prototype.msg("documents.report." + reportCode + ".title");
             if (defaultMsg == "documents.report." + reportCode + ".title"){
@@ -59,6 +60,9 @@
                         if (form.dataObj.hasOwnProperty(property)) {
                             renameProperty(form.dataObj, property);
                         }
+                    }
+                    if (documentRef) { // добавляем к параметрам ID - если задано
+                        form.dataObj["ID"] = documentRef;
                     }
                     form.method = "GET";
                     return true;

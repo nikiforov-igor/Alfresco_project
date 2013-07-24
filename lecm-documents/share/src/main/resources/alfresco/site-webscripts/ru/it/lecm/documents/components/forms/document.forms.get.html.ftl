@@ -1,5 +1,4 @@
 
-
 <#assign el=args.htmlid/>
 
 <div class="widget-bordered-panel">
@@ -10,31 +9,23 @@
 
         <div id="${el}-formContainer">
             <div class="form-field">
-
             <#escape x as x?js_string>
-            	<!--
-                <div id="experts" class="yui-skin-sam">
-                    <a href="javascript:void(0);" onclick="printNode('${nodeRef}', 'Simple')" class="text-cropped" title="${msg("form.simple")}">${msg("form.simple")}</a>
-                </div>
-                -->
-                <div id="experts" class="yui-skin-sam">
-                    <a href="javascript:void(0);" onclick="printNode('${nodeRef}', 'contract-dossier-byid')" class="text-cropped" title="${msg("form.dossier")}">${msg("form.dossier")}</a>
-                </div>
-                <div id="experts" class="yui-skin-sam">
-                    <a href="javascript:void(0);" onclick="printNode('${nodeRef}', 'contract-delta-list-byid')" class="text-cropped" title="${msg("form.contractDelta")}">${msg("form.contractDelta")}</a>
-                </div>
+                <#list reportsDescriptors as report>
+                    <div>
+                        <h3>
+                            <a href="#" id="reports-list-report-link" class="theme-color-1" style="font-weight: bold;"
+                               onClick='LogicECM.module.Documents.Reports.reportLinkClicked(this, {"reportCode": "${report.code}", "nodeRef":"${nodeRef}"});'><#if report.name != "">${report.name}<#else>(no name)</#if></a>
+                        </h3>
+                    </div>
+                    <br/>
+                </#list>
             </#escape>
-
             </div>
         </div>
 
         <script type="text/javascript">
             var Dom = YAHOO.util.Dom,
                 Event = YAHOO.util.Event;
-
-            function printNode(nodeRef, reportName) {
-                document.location.href = Alfresco.constants.PROXY_URI + "lecm/report/"+ reportName+ "?nodeRef=" + encodeURI(nodeRef)+ "&exec=1";
-            }
 
             function init() {
                 var forms = Dom.getChildren(Dom.getChildren("${el}-formContainer")[0]);

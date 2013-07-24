@@ -38,6 +38,7 @@
 		<property name="reportGenerators[JASPER]" ref="jasperReportGenerator"/>
 		<property name="descriptors[0]" ref="jasperTemplate_DocFlowCounters" />
 		<property name="defaultTemplate" value="repoGenTemplate.jrxml.gen"/>
+        <property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.forms.jasper.form.get" class="ru.it.lecm.forms.jasperforms.JasperFormProducer"
