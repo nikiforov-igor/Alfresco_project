@@ -157,7 +157,7 @@ public class BPMNGenerator {
                     List<AssociationRef> targets = nodeService.getTargetAssocs(alternative.getChildRef(), StatemachineEditorModel.ASSOC_ALTERNATIVE_STATUS);
                     if (targets.size() > 0) {
                         String statusVar = "id" + targets.get(0).getTargetRef().getId().replace("-", "");
-                        process.appendChild(createFlow("start_gateway", statusVar, "${lecm_start_direction == \"" + statusVar + "\"}"));
+                        process.appendChild(createFlow("start_gateway", statusVar, "${lecmStartDirection == \"" + statusVar + "\"}"));
 
                         Element attribute = doc.createElement("attribute");
                         attribute.setAttribute("expression", nodeService.getProperty(alternative.getChildRef(), StatemachineEditorModel.PROP_ALTERNATIVE_EXPRESSION).toString());

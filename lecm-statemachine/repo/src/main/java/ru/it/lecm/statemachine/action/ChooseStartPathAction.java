@@ -21,7 +21,7 @@ public class ChooseStartPathAction extends StateMachineAction {
 
     private List<StartExpression> expressions = new ArrayList<StartExpression>();
 
-    private static final String DIRECTION_VARIABLE = "lecm_start_direction";
+    private static final String DIRECTION_VARIABLE = "lecmStartDirection";
 
     private static final transient Logger logger = LoggerFactory.getLogger(ChooseStartPathAction.class);
 
