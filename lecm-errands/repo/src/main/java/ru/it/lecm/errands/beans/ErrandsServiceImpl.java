@@ -207,13 +207,18 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
         List<NodeRef> result = new ArrayList<NodeRef>();
+        List<String> status = new ArrayList<String>();
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         // сортируем по важности поручения и по сроку исполнения
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + TYPE_ERRANDS_IS_IMPORTANT.toString(),false));
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + TYPE_ERRANDS_LIMITATION_DATE.toString(),false));
 
-        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, null, null, null, paths, null, null, null, sort)) {
+       status.add("Ожидает исполнения");
+       status.add("В работе");
+       status.add("На доработке");
+
+        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, null, null, null, paths, status, null, null, sort)) {
             if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
                 sortingErrands.add(nodeRef);
             }
