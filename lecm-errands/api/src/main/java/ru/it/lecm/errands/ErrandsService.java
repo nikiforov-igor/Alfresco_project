@@ -97,5 +97,5 @@ public interface ErrandsService {
 
     void requestDueDateChange();
 
-    public List<NodeRef> getErrandsDocuments(List<String> paths);
+    public List<NodeRef> getErrandsDocuments(List<String> paths, int skipCount, int maxItems);
 }

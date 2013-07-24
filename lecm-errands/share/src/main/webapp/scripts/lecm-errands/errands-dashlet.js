@@ -83,10 +83,11 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                  * @type int
                  * @default 50
                  */
-                maxItems: 10
+                maxItems: 50
             },
 
             errandsList: null,
+            skipCount: 0,
 
             /**
              * Fired by YUI when parent element is available for scripting
@@ -97,19 +98,29 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 // The activity list container
                 this.errandsList = Dom.get(this.id + "-errands");
                 this.populateErrandsList();
+                YAHOO.util.Event.addListener(this.id + "-paginator", "scroll", this.onContainerScroll, this);
             },
-
+            onContainerScroll: function (event, scope) {
+                var container = event.currentTarget;
+                if (container.scrollTop + container.clientHeight == container.scrollHeight) {
+                    Dom.setStyle(scope.id + "-loading", "visibility", "visible");
+                    scope.populateErrandsList();
+                }
+            },
             /**
              * Populate the activity list via Ajax request
              * @method populateContractsList
              */
             populateErrandsList: function Contracts_populateContractsList()
             {
-                var newId = Alfresco.util.generateDomId();
                 // Load the activity list
                 Alfresco.util.Ajax.request(
                     {
                         url: Alfresco.constants.PROXY_URI  + "lecm/errands/getErrandsFilter",
+                        dataObj:{
+                            skipCount: this.skipCount,
+                            maxItems: this.options.maxItems
+                        },
                         successCallback:
                         {
                             fn: this.onListLoaded,
@@ -124,7 +135,6 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         execScripts: true
                     });
             },
-
             createRow: function(innerHtml) {
                 var div = document.createElement('div');
 
@@ -137,20 +147,25 @@ LogicECM.dashlet = LogicECM.dashlet || {};
             onListLoaded: function Contracts_onListLoaded(p_response, p_obj)
             {
                 this.options.activeFilter = p_obj;
-                var html = p_response.serverResponse.responseText;
-                if (p_response.json.length > 0) {
-                    this.errandsList.innerHTML = "";
-                    var results = p_response.json;
+                if (p_response.json.data.length > 0) {
+                    this.skipCount = this.skipCount + p_response.json.paging.totalItems;
+                    var results = p_response.json.data;
                     for (var i = 0; i < results.length; i++) { // [].forEach() не работает в IE
                         var item = results[i];
                         var div = this.createRow();
                         var detail = document.createElement('span');
-                        detail.innerHTML = item.record;
+                        if (item.isImportant == "true") {
+                            detail.innerHTML = "("+ this.msg("label.important") +") ";
+                        } else {
+                            detail.innerHTML = "("+ this.msg("label.not-important") +") ";
+                        }
+                        var str = "<a href='" + window.location.protocol + "//" + window.location.host +
+                            Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef="+ item.nodeRef + "'>"+
+                            item.record + "</a>"
+                        detail.innerHTML += item.record.replace(item.record, str);
                         div.appendChild(detail);
                         this.errandsList.appendChild(div);
                     }
-                } else {
-                    this.errandsList.innerHTML = this.msg("label.not-record");
                 }
             },
 

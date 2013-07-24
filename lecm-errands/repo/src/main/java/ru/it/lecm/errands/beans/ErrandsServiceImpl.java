@@ -200,11 +200,12 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     public void requestDueDateChange() {
     }
 
-    public List<NodeRef> getErrandsDocuments(List<String> paths){
+    public List<NodeRef> getErrandsDocuments(List<String> paths, int skipCount, int maxItems){
         List<QName> types =  new ArrayList<QName>();
         types.add(TYPE_ERRANDS);
 
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
+        List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
         List<NodeRef> result = new ArrayList<NodeRef>();
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
@@ -214,8 +215,13 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
         for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, null, null, null, paths, null, null, null, sort)) {
             if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
-                result.add(nodeRef);
+                sortingErrands.add(nodeRef);
             }
+        }
+        int endIndex = (skipCount + maxItems) < sortingErrands.size() ? (skipCount + maxItems) : sortingErrands.size();
+
+        for (int i = skipCount; i < endIndex; i++) {
+            result.add(sortingErrands.get(i));
         }
         return result;
     }

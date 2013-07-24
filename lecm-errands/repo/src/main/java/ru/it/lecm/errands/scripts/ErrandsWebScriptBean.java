@@ -78,8 +78,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return arrayList;
     }
 
-    public List<NodeRef> getErrandsDocs(Scriptable paths) {
-        return errandsService.getErrandsDocuments(getElements(Context.getCurrentContext().getElements(paths)));
+    public List<NodeRef> getErrandsDocs(Scriptable paths,int skipCount, int maxItems) {
+        return errandsService.getErrandsDocuments(getElements(Context.getCurrentContext().getElements(paths)), skipCount, maxItems);
     }
 
 }

@@ -6,7 +6,7 @@
 {
     new LogicECM.dashlet.Errands("${jsid}").setOptions(
             {
-                maxItems: 10
+                maxItems: 50
             }).setMessages(${messages});
 
     new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
@@ -29,7 +29,7 @@
 
 <div class="dashlet errands">
     <div class="title">${msg("label.title")}</div>
-    <div class="body scrollableList" <#if args.height??>style="height: ${args.height}px;"</#if>>
+    <div class="body scrollableList" id="${id}-paginator" <#if args.height??>style="height: ${args.height}px;"</#if>>
         <div id="${id}-errands"></div>
     </div>
 </div>

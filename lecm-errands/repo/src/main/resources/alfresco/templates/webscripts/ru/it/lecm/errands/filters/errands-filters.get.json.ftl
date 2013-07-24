@@ -1,7 +1,9 @@
 <#escape x as jsonUtils.encodeJSONString(x)!''>
-[
+{
+"data": [
     <#list records as record>
     {
+    "nodeRef":     "${record.getNodeRef()?string}",
     "record":      "${record.properties["lecm-document:present-string"]?string}",
     <#if record.properties["lecm-errands:limitation-date"]??>
     "date":        "${record.properties["lecm-errands:limitation-date"]?string("dd/MM/yyyy")}",
@@ -11,5 +13,12 @@
     }
         <#if record_has_next>,</#if>
     </#list>
-]
+],
+"paging":
+    {
+    "totalItems": ${totalItems?string},
+    "maxItems": ${maxItems?string},
+    "skipCount": ${skipCount?string}
+    }
+}
 </#escape>
