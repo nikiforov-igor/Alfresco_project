@@ -396,6 +396,9 @@
         <property name="permissionService" ref="permissionService" />
         <property name="authorityService" ref="authorityService" />
         <property name="namespaceService" ref="namespaceService"/>
+	    <property name="transactionService" ref="transactionService"/>
+	    <property name="serviceRegistry" ref="ServiceRegistry"/>
+	    <property name="templateService" ref="templateService"/>
     </bean>
 
     <bean  id="initiatorDocumentPolicy" class="ru.it.lecm.documents.policy.InitiatorDocumentPolicy"

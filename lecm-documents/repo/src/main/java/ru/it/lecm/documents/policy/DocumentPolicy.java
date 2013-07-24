@@ -2,20 +2,24 @@ package ru.it.lecm.documents.policy;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.model.ForumModel;
+import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.repo.content.MimetypeMap;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
@@ -50,6 +54,8 @@ public class DocumentPolicy extends BaseBean
         implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.OnUpdatePropertiesPolicy {
 
     final static protected Logger logger = LoggerFactory.getLogger(DocumentPolicy.class);
+
+    private static final String DOCUMENT_SEARCH_CONTENT_TEMPLATE = "/alfresco/templates/webscripts/ru/it/lecm/documents/document-search-object-content.ftl";
     final private QName[] IGNORED_PROPERTIES = {DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT, StatemachineModel.PROP_STATUS};
 
     private PolicyComponent policyComponent;
@@ -65,6 +71,9 @@ public class DocumentPolicy extends BaseBean
     private DocumentConnectionServiceImpl documentConnectionService;
     private DocumentMembersServiceImpl documentMembersService;
     private NamespaceService namespaceService;
+	private TemplateService templateService;
+
+	private final Object lock = new Object();
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -119,6 +128,10 @@ public class DocumentPolicy extends BaseBean
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
+
+	public void setTemplateService(TemplateService templateService) {
+		this.templateService = templateService;
+	}
 
 	final public void init() {
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
@@ -242,7 +255,12 @@ public class DocumentPolicy extends BaseBean
             }
         }
 
+	    NodeRef documentSearchObject = getDocumentSearchObject(nodeRef);
         updatePresentString(nodeRef);
+	    if (documentSearchObject != null) {
+		    updateDocumentSearchObject(nodeRef, documentSearchObject);
+	    }
+
         if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
             nodeService.setProperty(nodeRef,DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
             if (stateMachineHelper.isDraft(nodeRef)) {
@@ -309,11 +327,106 @@ public class DocumentPolicy extends BaseBean
         final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
+
+	    NodeRef documentSearchObject = getDocumentSearchObject(childAssocRef.getChildRef());
+	    if (documentSearchObject != null) {
+		    updateDocumentSearchObject(childAssocRef.getChildRef(), documentSearchObject);
+	    }
     }
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
+	}
+
+	public NodeRef getDocumentSearchObject(final NodeRef documentRef) {
+		final String fileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+		NodeRef result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
+		if (result == null) {
+			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+				@Override
+				public NodeRef doWork() throws Exception {
+					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+						@Override
+						public NodeRef execute() throws Throwable {
+							NodeRef result;
+							synchronized (lock) {
+								result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
+								if (result == null) {
+									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+									QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, fileName);
+									QName nodeTypeQName = ContentModel.TYPE_CONTENT;
+
+									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+									properties.put(ContentModel.PROP_NAME, fileName);
+									ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+									result = associationRef.getChildRef();
+								}
+							}
+							return result;
+						}
+					});
+				}
+			};
+			return AuthenticationUtil.runAsSystem(raw);
+		} else {
+			return result;
+		}
+	}
+
+	public void updateDocumentSearchObject(NodeRef documentRef, NodeRef objectRef) {
+		if (objectRef != null) {
+			String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+			nodeService.setProperty(objectRef, ContentModel.PROP_NAME, newFileName);
+
+			ContentService contentService = serviceRegistry.getContentService();
+			ContentWriter writer = contentService.getWriter(objectRef, ContentModel.PROP_CONTENT, true);
+			if (writer != null) {
+				writer.setEncoding("UTF-8");
+				writer.setMimetype(MimetypeMap.MIMETYPE_HTML);
+
+				Map<String, Object> model = new HashMap<String, Object>();
+				model.put("properties", getDocumentSearchProperties(documentRef));
+
+				SysAdminParams params = serviceRegistry.getSysAdminParams();
+				String documentLink = params.getShareProtocol() + "://" + params.getShareHost() + ":" +
+						params.getSharePort() +	DOCUMENT_LINK_URL + "?nodeRef=" + documentRef.toString();
+				model.put("documentLink", documentLink);
+				model.put("documentName", nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+
+				writer.putContent(templateService.processTemplate(DOCUMENT_SEARCH_CONTENT_TEMPLATE, model));
+			}
+		}
+	}
+
+	public Map<String, Serializable> getDocumentSearchProperties(NodeRef documentRef) {
+		Map<String, Serializable> result = new HashMap<String, Serializable>();
+
+		Map<QName, Serializable> doumentProperties = nodeService.getProperties(documentRef);
+		if (doumentProperties != null) {
+			NamespacePrefixResolver namespacePrefixResolver = serviceRegistry.getNamespaceService();
+
+			for (QName prop: doumentProperties.keySet()) {
+				if (!prop.getNamespaceURI().equals(NamespaceService.SYSTEM_MODEL_1_0_URI) && !prop.getLocalName().endsWith("-ref")) {
+					String propTitle = null;
+					if (prop.getLocalName().endsWith("-text-content")) {
+						String assocShortName = prop.toPrefixString(namespacePrefixResolver).replace("-text-content", "");
+						AssociationDefinition assocDefinition = dictionaryService.getAssociation(QName.createQName(assocShortName, namespacePrefixResolver));
+						if (assocDefinition != null) {
+						 	propTitle = assocDefinition.getTitle();
+						}
+					} else {
+						propTitle = dictionaryService.getProperty(prop).getTitle();
+					}
+
+					if (propTitle != null) {
+						result.put(propTitle, doumentProperties.get(prop));
+					}
+				}
+			}
+		}
+
+		return result;
 	}
 }

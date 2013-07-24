@@ -49,20 +49,16 @@
                     </index>
                 </property>
                 <property name="lecm-document:modifier">
-                    <title>LECM Modifier</title>
                     <type>d:text</type>
                     <protected>true</protected>
                 </property>
                 <property name="lecm-document:employee-ref">
-                    <title>LECM Creator Ref</title>
                     <type>d:text</type>
                 </property>
                 <property name="lecm-document:creator-ref">
-                    <title>LECM Creator Ref</title>
                     <type>d:text</type>
                 </property>
                 <property name="lecm-document:modifier-ref">
-                    <title>LECM Modifier Ref</title>
                     <type>d:text</type>
                 </property>
 				<property name="lecm-document:regnum">
@@ -80,13 +76,11 @@
                 </property>
                 <!-- Выполнение передачи прав при передаче документа-->
                 <property name="lecm-document:istransmit">
-                    <title>Is transmit right</title>
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
                 <!-- Лишить текущего владельца прав на передоваемые документы-->
                 <property name="lecm-document:deprive-right">
-                    <title>Deprived of the right to documents</title>
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
