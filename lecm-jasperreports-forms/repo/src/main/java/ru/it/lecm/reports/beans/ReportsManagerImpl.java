@@ -546,39 +546,38 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	@Override
-	public List<ReportDescriptor> getRegisteredReports( String docType
-			, String reportType)
-	{
-		final Map<String, ReportDescriptor> list = this.getDescriptors();
-		if (list == null || list.isEmpty())
-			return new ArrayList<ReportDescriptor>();
+    public List<ReportDescriptor> getRegisteredReports(String docType, String reportType) {
+        final Map<String, ReportDescriptor> list = this.getDescriptors();
+        if (list == null || list.isEmpty())
+            return new ArrayList<ReportDescriptor>();
 
-		if (docType != null && docType.length() == 0)
-			docType = null;
+        if (docType != null && docType.length() == 0) {
+            docType = null;
+        }
 
-		if (reportType != null && reportType.length() == 0)
-			reportType = null;
+        if (reportType != null && reportType.length() == 0) {
+            reportType = null;
+        }
 
-		if (docType == null && reportType == null) // не задано фильтрование
-			return new ArrayList<ReportDescriptor>( list.values());
-		final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
-		for (ReportDescriptor desc: list.values()) {
-			final boolean okDocType = 
-					(docType == null)	// не задан фильтр по типам доков 
-					|| ( (desc.getFlags() == null) || desc.getFlags().getPreferedNodeType() == null) // нет флажков у шаблона -> подходит к любому
-					|| docType.equalsIgnoreCase(desc.getFlags().getPreferedNodeType()) // совпадение типа
-					;
-			final boolean okRType = 
-					(reportType == null)	// не задан фильтр по типам отчётов 
-					|| ( (desc.getReportType() == null) || desc.getReportType().getMnem() == null) // не задан тип отчёта шаблона -> подходит к любому
-					|| reportType.equalsIgnoreCase(desc.getReportType().getMnem()) // совпадение типа
-					;
-			if (okDocType && okRType) {
-				found.add(desc);
-			}
-		}
-		// return (found.isEmpty()) ? null : found;
-		return found;
-	}
+        if (docType == null && reportType == null)  {
+            // не задано фильтрование
+            return new ArrayList<ReportDescriptor>(list.values());
+        }
+
+        final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
+        for (ReportDescriptor desc : list.values()) {
+            final boolean okDocType =
+                    (docType == null)    // не задан фильтр по типам доков
+                            || ((desc.getFlags() != null) && desc.getFlags().getPreferedNodeType() != null && docType.equalsIgnoreCase(desc.getFlags().getPreferedNodeType()));
+            final boolean okRType =
+                    (reportType == null)    // не задан фильтр по типам отчётов
+                            || ((desc.getReportType() != null) && desc.getReportType().getMnem() != null && reportType.equalsIgnoreCase(desc.getReportType().getMnem()));
+            if (okDocType && okRType) {
+                found.add(desc);
+            }
+        }
+        // return (found.isEmpty()) ? null : found;
+        return found;
+    }
 
 }
