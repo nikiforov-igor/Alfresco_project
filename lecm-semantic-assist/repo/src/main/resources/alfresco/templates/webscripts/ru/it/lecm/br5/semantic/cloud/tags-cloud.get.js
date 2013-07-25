@@ -1,2 +1,4 @@
 var nodeRef = args["sExpert"];
-model.tagsList = integration.getExpertsTagsBr5OnlyWithFont(nodeRef);
+var maxFontSize = args["maxFontSize"];
+var minFontSize = args["minFontSize"];
+model.tagsList = integration.getExpertsTagsBr5(nodeRef, maxFontSize, minFontSize);

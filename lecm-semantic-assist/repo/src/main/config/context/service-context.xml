@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:p="http://www.springframework.org/schema/p"
 	   xmlns:util="http://www.springframework.org/schema/util"
 	   xmlns:sec="http://cxf.apache.org/configuration/security"
 	   xmlns:http="http://cxf.apache.org/transports/http/configuration"
@@ -17,7 +17,7 @@
 						   http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd">
 
 	<http:conduit name="{http://it.ru/}ItsWebService.http-conduit">
-	    <http:client AutoRedirect="true" Connection="Keep-Alive"/>
+		<http:client AutoRedirect="true" Connection="Keep-Alive"/>
 	</http:conduit>
 
 	<jaxws:client id="itsWebService.http"
@@ -25,7 +25,7 @@
 				  serviceClass="ru.it.soap.ItsWebServiceSoap"
 				  serviceName="s:ItsWebService"
 				  endpointName="s:ItsWebServiceSoap"
-                  xmlns:s="http://it.ru/">
+				  xmlns:s="http://it.ru/">
 	</jaxws:client>
 
 	<bean id="br5.semantic.modelBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
@@ -62,5 +62,119 @@
 		<property name="semanticService" ref="br5.semantic.SemanticBeanImpl"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
+
+	<bean id="br5.semantic.templateActionModelFactory" class="org.alfresco.repo.action.scheduled.FreeMarkerWithLuceneExtensionsModelFactory">
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+    </bean>
+
+	<bean id="br5.semantic.refreshBR5IndexScheduler" class="org.alfresco.repo.action.scheduled.CronScheduledQueryBasedTemplateActionDefinition">
+		<property name="transactionMode">
+			<value>UNTIL_FIRST_FAILURE</value>
+		</property>
+		<property name="compensatingActionMode">
+			<value>IGNORE</value>
+		</property>
+		<property name="searchService">
+			<ref bean="SearchService"/>
+		</property>
+		<property name="templateService">
+			<ref bean="TemplateService"/>
+		</property>
+		<property name="queryLanguage">
+			<value>lucene</value>
+		</property>
+		<property name="stores">
+			<list>
+				<value>workspace://SpacesStore</value>
+			</list>
+		</property>
+		<!-- Find all nodes that do not have the aspect -->
+		<property name="queryTemplate">
+			<!--<value>ASPECT:"{http://www.alfresco.org/model/exif/1.0}exif"</value>-->
+			<value>ASPECT:"{http://www.it.ru/lecm/br5/semantic/aspects/1.0}br5"</value>
+		</property>
+		<!--		do every minute in debug-->
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+		</property>
+		<property name="jobName">
+			<value>updateIndex</value>
+		</property>
+		<property name="jobGroup">
+			<value>br5Group</value>
+		</property>
+		<property name="triggerName">
+			<value>onceAMinuteTrigger</value>
+		</property>
+		<property name="triggerGroup">
+			<value>triggerGroup</value>
+		</property>
+		<!-- Inject the scheduler - the trigger will be registered with this scheduler -->
+		<property name="scheduler">
+			<ref bean="schedulerFactory"/>
+		</property>
+		<property name="actionService">
+			<ref bean="ActionService"/>
+		</property>
+		<property name="templateActionModelFactory">
+			<ref bean="br5.semantic.templateActionModelFactory"/>
+		</property>
+		<property name="templateActionDefinition">
+			<ref bean="br5.semantic.runUpdateIndexScriptAction"/>
+		</property>
+		<property name="transactionService">
+			<ref bean="TransactionService"/>
+		</property>
+		<property name="runAsUser">
+			<value>System</value>
+		</property>
+	</bean>
+
+	<!--
+	Execute the script /Company Home/Record Management/testscript.js
+	-->
+	<bean id="br5.semantic.runUpdateIndexScriptAction" class="org.alfresco.repo.action.scheduled.SimpleTemplateActionDefinition">
+		<property name="actionName">
+			<value>br5.semantic.updateIndex</value>
+		</property>
+		<property name="parameterTemplates">
+			<map>
+<!--				<entry>
+					<key>
+						<value>script-ref</value>
+					</key>
+					 Note that as of Alfresco 4.0, due to a  Spring upgrade, the FreeMarker ${foo} entries must be escaped  
+					<value>\$\{selectSingleNode('workspace://SpacesStore', 'lucene', 'PATH:"/app:company_home/cm:Record_x0020_Management/cm:testscript.js"' )\}</value>
+				</entry>-->
+			</map>
+		</property>
+		<property name="templateActionModelFactory">
+			<ref bean="br5.semantic.templateActionModelFactory"/>
+		</property>
+		<property name="dictionaryService">
+			<ref bean="DictionaryService"/>
+		</property>
+		<property name="actionService">
+			<ref bean="ActionService"/>
+		</property>
+		<property name="templateService">
+			<ref bean="TemplateService"/>
+		</property>
+	</bean>
+
+	<bean id="br5.semantic.updateIndex" class="ru.it.lecm.br5.semantic.actions.UpdateIndexAction" parent="action-executer">
+        <property name="semanticService">
+            <ref bean="br5.semantic.SemanticBeanImpl" />
+        </property><!--
+        <property name="transactionService">
+            <ref bean="TransactionService" />
+        </property>
+        <property name="ignoreLock">
+            <value>false</value>
+        </property>-->
+    </bean>
+
 
 </beans>

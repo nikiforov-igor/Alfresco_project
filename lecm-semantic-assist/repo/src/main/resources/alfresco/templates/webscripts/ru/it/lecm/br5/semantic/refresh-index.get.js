@@ -1,0 +1,1 @@
+integration.refreshDocument(args["nodeRef"]);

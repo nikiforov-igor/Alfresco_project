@@ -10,6 +10,8 @@ import org.alfresco.model.ContentModel;
 public interface ConstantsBean {
 	public static final String MODEL_SEMANTIC_ASPECTS_NAMESPACE_URI = "http://www.it.ru/lecm/br5/semantic/aspects/1.0";
 	public static final String MODEL_DOCUMENTS_NAMESPACE_URI = "http://www.it.ru/logicECM/document/1.0";
+	public static final int DEFAULT_MAX_FONT_SIZE = 25;
+	public static final int DEFAULT_MIN_FONT_SIZE = 10;
 
 	public static final QName ASPECT_BR5_INTEGRATION = QName.createQName(MODEL_SEMANTIC_ASPECTS_NAMESPACE_URI,"br5");
 	public static final QName PROP_BR5_INTEGRATION_LOADED = QName.createQName(MODEL_SEMANTIC_ASPECTS_NAMESPACE_URI,"loaded");

@@ -1,12 +1,10 @@
 package ru.it.lecm.br5.semantic.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.Map;
+import java.util.SortedMap;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.alfresco.service.cmr.repository.NodeRef;
-import ru.it.soap.DataItem;
 
 /**
  *
@@ -14,16 +12,15 @@ import ru.it.soap.DataItem;
  */
 public interface SemanticBean {
 	public Integer loadExpertBr5(NodeRef expert);
-	public void loadExpertBr5Async(final NodeRef expert);
-	public void loadDocumentBr5Async(NodeRef documentFile) throws DatatypeConfigurationException;
-	public List<DataItem> getExpertsTagsBr5 (NodeRef expert);
-	public HashMap<String, HashMap<Double, Integer>> getExpertsTagsBr5WithCoefAndFont(NodeRef expert);
-	public HashMap<String,Integer> getExpertsTagsBr5OnlyWithFont(NodeRef expert);
+	public Boolean refreshDocumentTagsBr5(NodeRef documentRef) throws DatatypeConfigurationException;
+	public Boolean loadDocumentBr5(NodeRef documentFile) throws DatatypeConfigurationException;
+	public Map<String, Float> getExpertsTagsBr5 (NodeRef expert);
+	public Map<String, Float> getDocumentTagsBr5(NodeRef documentRef);
 	public boolean hasBr5Aspect(NodeRef documentRef);
-	public void setDocumentTags(NodeRef documentRef, HashMap<String,Double> tags);
-	public HashMap<String,Double> getDocumentTags(NodeRef documentRef);
-	public HashMap<String,Integer> getDocumentTagsWithFont(NodeRef documentRef);
-	public TreeMap<Float,ArrayList<HashMap<String,String>>> getDataExpertsByDocument(NodeRef document);
+	public void setDocumentTags(NodeRef documentRef, Map<String,Double> tags);
+	public void refreshDocument(NodeRef documentRef);
+	public SortedMap<Float, List<Map<String, String>>> getDataExpertsByDocument(NodeRef document);
 	public List<NodeRef> getSimilarDocumentByTag(String tag);
 	public List<NodeRef> getSimilarDocumentByDocument(NodeRef document);
+	public Map<String, Integer> normalizeTags(Map<String, Float> tags, Integer maxFontSize, Integer minFontSize);
 }
