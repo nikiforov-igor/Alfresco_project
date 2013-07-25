@@ -45,6 +45,54 @@ public class ParameterMapper {
             // если колонка параметризована ...
             String argRootName = colDesc.getColumnName();
             switch (colDesc.getParameterValue().getType()) {
+                case RANGE:
+                    // проверяем диапозон дат
+                    String dateRangeParam = argRootName + DATE_RANGE;
+                    boolean isDateRange = false;
+                    boolean isNumberRange = false;
+                    if (args.containsKey(dateRangeParam)) {
+                        argRootName = dateRangeParam;
+                        isDateRange = true;
+                        isNumberRange = false;
+                    } else {
+                        // не нашли параметра - пробуем получить диапозон для чисел
+                        String numberRangeParam = argRootName + NUMBER_RANGE;
+                        if (args.containsKey(numberRangeParam)) {
+                            argRootName = numberRangeParam;
+                            isDateRange = false;
+                            isNumberRange = true;
+                        }
+                    }
+                    if ((isDateRange || isNumberRange)){
+                        if (args.containsKey(argRootName)) {
+                            final String[] paramValue = args.get(argRootName)[0].split("\\|");
+                            Object bound1 = null;
+                            Object bound2 = null;
+                            if (isDateRange) {
+                                try {
+                                    bound1 = (paramValue[0] != null && paramValue[0].length() > 0) ? DATE_FORMAT.parse(paramValue[0]) : null;
+                                    if (paramValue.length == 2) {
+                                        bound2 = (paramValue[1] != null && paramValue[1].length() > 0) ? DATE_FORMAT.parse(paramValue[1]) : null;
+                                    }
+                                } catch (ParseException ignored) {
+                                }
+                            } else {
+                                bound1 = (paramValue[0] != null && paramValue[0].length() > 0) ? paramValue[0] : null;
+                                if (bound1 != null) {
+                                    bound1 = bound1.toString().indexOf(".") > 0 ? Double.valueOf((String) bound1) : Long.valueOf((String) bound1);
+                                }
+                                if (paramValue.length == 2) {
+                                    bound2 = (paramValue[1] != null && paramValue[1].length() > 0) ? paramValue[1] : null;
+                                    if (bound2 != null) {
+                                        bound2 = bound2.toString().indexOf(".") > 0 ? Double.valueOf((String) bound2) : Long.valueOf((String) bound2);
+                                    }
+                                }
+                            }
+                            colDesc.getParameterValue().setBound1(bound1);
+                            colDesc.getParameterValue().setBound2(bound2);
+                        }
+                        break;
+                    }
                 case VALUE:
                 case LIST:
                     if (args.containsKey(argRootName)) {
@@ -57,50 +105,6 @@ public class ParameterMapper {
                             colDesc.getParameterValue().setBound1(paramValues);
                         }
                     }
-                    break;
-                case RANGE:
-                    // проверяем диапозон дат
-                    String dateRangeParam = argRootName + DATE_RANGE;
-                    boolean isDateRange = false;
-                    if (args.containsKey(dateRangeParam)) {
-                        argRootName = dateRangeParam;
-                        isDateRange = true;
-                    } else {
-                        // не нашли параметра - пробуем получить диапозон для чисел
-                        String numberRangeParam = argRootName + NUMBER_RANGE;
-                        if (args.containsKey(numberRangeParam)) {
-                            argRootName = numberRangeParam;
-                            isDateRange = false;
-                        }
-                    }
-                    if (args.containsKey(argRootName)) {
-                        final String[] paramValue = args.get(argRootName)[0].split("\\|");
-                        Object bound1 = null;
-                        Object bound2 = null;
-                        if (isDateRange) {
-                            try {
-                                bound1 = (paramValue[0] != null && paramValue[0].length() > 0) ? DATE_FORMAT.parse(paramValue[0]) : null;
-                                if (paramValue.length == 2) {
-                                    bound2 = (paramValue[1] != null && paramValue[1].length() > 0) ? DATE_FORMAT.parse(paramValue[1]) : null;
-                                }
-                            } catch (ParseException ignored) {
-                            }
-                        } else {
-                            bound1 = (paramValue[0] != null && paramValue[0].length() > 0) ? paramValue[0] : null;
-                            if (bound1 != null) {
-                                bound1 = bound1.toString().indexOf(".") > 0 ? Double.valueOf((String) bound1) : Long.valueOf((String) bound1);
-                            }
-                            if (paramValue.length == 2) {
-                                bound2 = (paramValue[1] != null && paramValue[1].length() > 0) ? paramValue[1] : null;
-                                if (bound2 != null) {
-                                    bound2 = bound2.toString().indexOf(".") > 0 ? Double.valueOf((String) bound2) : Long.valueOf((String) bound2);
-                                }
-                            }
-                        }
-                        colDesc.getParameterValue().setBound1(bound1);
-                        colDesc.getParameterValue().setBound2(bound2);
-                    }
-
                     break;
                 default: // непонятный тип - сообщение об ошибке и игнор ...
                     log.error(String.format("Unsupported parameter type '%s' skipped", Utils.coalesce(colDesc.getParameterValue().getType(), "NULL")));

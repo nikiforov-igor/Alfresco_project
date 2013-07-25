@@ -208,9 +208,8 @@ public class LucenePreparedQuery {
 
 			/* генерим условие поиска - одно значение или интервал ... */
             switch (colDesc.getParameterValue().getType()) {
-
 			/*
-			1) экранировка символов в полном имени поля: ':', '-' 
+            1) экранировка символов в полном имени поля: ':', '-'
 			2) кавычки для значения
 			3) (для LIST)  что-то для списка элементов (посмотреть синтаксис люцена)
 
@@ -218,6 +217,22 @@ public class LucenePreparedQuery {
 				если надо чётко указать формат, его можно предусмотреть в 
 				описателе колонки - для самой колонки и для параметра
 			 */
+                case RANGE:
+				/*
+				проверить тип значения фактических значений параметра:
+						для дат вызывать emmitDate
+						для чисел (и строк) emmitNumeric
+				 */
+                    final boolean isArgDate = (bound1 instanceof Date) || (bound2 instanceof Date);
+                    final boolean isArgNumber = (bound1 instanceof Number) || (bound2 instanceof Number);
+                    if (isArgDate || isArgNumber) {
+                        if (isArgDate) {
+                            cond = Utils.emmitDateIntervalCheck(luceneFldName, (Date) bound1, (Date) bound2);
+                        } else {
+                            cond = Utils.emmitNumericIntervalCheck(luceneFldName, (Number) bound1, (Number) bound2);
+                        }
+                        break;
+                    }
                 case VALUE:
                 case LIST: // TODO: сгенерить запрос для списка (LIST) полное условие со всеми значениями
                     // пример формируемой строки: bquery.append( " AND @cm\\:creator:\"" + login + "\"");
@@ -230,27 +245,13 @@ public class LucenePreparedQuery {
 
                     boolean addOR = false;
                     for (String value : values) {
-                        if (value != null && !value.isEmpty()){
+                        if (value != null && !value.isEmpty()) {
                             String quotedValue = Utils.quoted(value);
                             cond += (addOR ? " OR " : "") + "@" + luceneFldName + ":" + quotedValue;
                             addOR = true;
                         }
                     }
                     break;
-                case RANGE:
-				/*
-				проверить тип значения фактических значений параметра: 
-						для дат вызывать emmitDate 
-						для чисел (и строк) emmitNumeric
-				 */
-                    final boolean isArgDate = (bound1 instanceof Date) || (bound2 instanceof Date);
-                    if (isArgDate) {
-                        cond = Utils.emmitDateIntervalCheck(luceneFldName, (Date) bound1, (Date) bound2);
-                    } else {
-                        cond = Utils.emmitNumericIntervalCheck(luceneFldName, (Number) bound1, (Number) bound2);
-                    }
-                    break;
-
                 default: // непонятный тип - сообщение об ошибке и игнор ...
                     cond = null;
                     logger.error(String.format("Unsupported parameter type '%s' skipped", Utils.coalesce(colDesc.getParameterValue().getType(), "NULL")));
