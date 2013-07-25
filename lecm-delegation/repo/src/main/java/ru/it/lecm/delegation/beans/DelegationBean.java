@@ -686,18 +686,16 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	public NodeRef assignTaskToEffectiveExecutor(final NodeRef assumedExecutor, final String businessRole, final String taskID) {
 		NodeRef result = null;
 		try {
-			if (employeeOwnsTask(assumedExecutor, taskID)) {
-				NodeRef effectiveExecutor = getEffectiveExecutor(assumedExecutor, businessRole);
+			NodeRef effectiveExecutor = getEffectiveExecutor(assumedExecutor, businessRole);
 
-				if (!assumedExecutor.equals(effectiveExecutor)) {
-					createTaskDelegationItem(assumedExecutor, effectiveExecutor, taskID);
-				}
-
-				assignTaskToEmployee(taskID, effectiveExecutor);
-
-				sendNewTaskNotification(effectiveExecutor, taskID);
-				result = effectiveExecutor;
+			if (!assumedExecutor.equals(effectiveExecutor)) {
+				createTaskDelegationItem(assumedExecutor, effectiveExecutor, taskID);
 			}
+
+			assignTaskToEmployee(taskID, effectiveExecutor);
+
+			sendNewTaskNotification(effectiveExecutor, taskID);
+			result = effectiveExecutor;
 		} catch (Exception ex) {
 			logger.error("Error assigning task", ex);
 		}
@@ -823,7 +821,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		}
 	}
 
-	private boolean employeeOwnsTask(NodeRef employee, String taskID) {
+	private boolean isEmployeeOwnsTask(NodeRef employee, String taskID) {
 		WorkflowTask task = workflowService.getTaskById(taskID);
 		Map<QName, Serializable> taskProperties = task.getProperties();
 		String taskOwner = (String) taskProperties.get(ContentModel.PROP_OWNER);
