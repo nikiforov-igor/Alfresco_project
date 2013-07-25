@@ -356,7 +356,7 @@ public class DocumentPolicy extends BaseBean
 	}
 
 	public NodeRef getDocumentSearchObject(final NodeRef documentRef) {
-		final String fileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+		final String fileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING)).trim();
 		NodeRef result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
 		if (result == null) {
 			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
@@ -392,7 +392,7 @@ public class DocumentPolicy extends BaseBean
 
 	public void updateDocumentSearchObject(NodeRef documentRef, NodeRef objectRef) {
 		if (objectRef != null) {
-			String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+			String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING)).trim();
 			nodeService.setProperty(objectRef, ContentModel.PROP_NAME, newFileName);
 
 			ContentService contentService = serviceRegistry.getContentService();
