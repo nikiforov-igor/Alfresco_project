@@ -490,6 +490,15 @@
                 <js src="/scripts/documents/members/lecm-document-members.js"/>
                 <js src="/scripts/grids/doc-members-datagrid.js"/>
             </dependencies>
+            <default-controls>
+                <type name="association:lecm-doc-dic:subjects" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+                    <control-param name="showCreateNewLink">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
+                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="itemType">lecm-doc-dic:subjects</control-param>
+                </type>
+            </default-controls>
         </forms>
     </config>
 
