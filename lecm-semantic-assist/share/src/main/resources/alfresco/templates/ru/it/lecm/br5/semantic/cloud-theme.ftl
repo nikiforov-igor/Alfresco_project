@@ -14,7 +14,7 @@
 				<#assign keys = tagsList?keys>
 				<#list keys as key>
 						<#if tagsList[key]??>
-							<a href='documents-by-term?tag=${key}' style='font-size:${tagsList[key]}px;'>${key}</a>
+							<a class="cloud" href='documents-by-term?tag=${key}' style='font-size:${tagsList[key]}px;'>${key}</a>
 						</#if>
 				</#list>
 			</#if>

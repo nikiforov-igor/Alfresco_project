@@ -1,1 +1,1 @@
-integration.loadDocumentBr5(args["sExpert"],args["sDocument"]);
+integration.loadDocumentBr5(args["sDocument"]);

@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="personId" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="maxCount" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,12 +29,14 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "personId"
+    "personId",
+    "maxCount"
 })
 @XmlRootElement(name = "GetPersonSignificItems")
 public class GetPersonSignificItems {
 
     protected int personId;
+    protected int maxCount;
 
     /**
      * Gets the value of the personId property.
@@ -49,6 +52,22 @@ public class GetPersonSignificItems {
      */
     public void setPersonId(int value) {
         this.personId = value;
+    }
+
+    /**
+     * Gets the value of the maxCount property.
+     *
+     */
+    public int getMaxCount() {
+        return maxCount;
+    }
+
+    /**
+     * Sets the value of the maxCount property.
+     *
+     */
+    public void setMaxCount(int value) {
+        this.maxCount = value;
     }
 
 }

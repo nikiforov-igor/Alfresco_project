@@ -18,7 +18,11 @@
 						</#if>
 					</div>
 					<div class="link-info">
-					   <a title="${msg('experts.theme.text')}" class="simple-link" href="#" >${msg('experts.theme.text')}</a>
+						<#if nodeRef??>
+							 <a title="${msg('experts.theme.text')}" class="simple-link" href="experts-by-document?nodeRef=${nodeRef}" >${msg('experts.theme.text')}</a>
+						<#else>
+							 <a title="${msg('experts.theme.text')}" class="simple-link" href="#" >${msg('experts.theme.text')}</a>
+						</#if>
 					</div>
 					<div class="link-info">
 					   <a title="${msg('similar.document.text')}" class="simple-link" href="#" >${msg('similar.document.text')}</a>

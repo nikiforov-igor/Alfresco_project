@@ -29,6 +29,13 @@
                 </property>
                 <property name="lecm-br5-semantic-aspects:tags">
                     <type>d:any</type>
+                </property>
+				<property name="lecm-br5-semantic-aspects:index">
+					<type>d:boolean</type>
+                    <default>true</default>
+                </property>
+				<property name="lecm-br5-semantic-aspects:refresh">
+					<type>d:boolean</type>
                     <default>false</default>
                 </property>
             </properties>

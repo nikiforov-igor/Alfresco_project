@@ -12,9 +12,11 @@
 } -->
 
 {
-	<#assign keys = tagsList?keys>
-	<#list keys as key>
-		"${key}": "${tagsList[key]}"
-		<#if key_has_next>,</#if>
-	</#list>
+	<#if  tagsList??>
+		<#assign keys = tagsList?keys>
+		<#list keys as key>
+			"${key}": "${tagsList[key]}"
+			<#if key_has_next>,</#if>
+		</#list>
+	</#if>
 }

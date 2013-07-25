@@ -50,6 +50,8 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="itsWebService" ref="itsWebService.http"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="documentMembersService" ref="documentMembersService"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 	</bean>
 
 	<bean id="br5.semantic.SemanticWebScriptBean" parent="baseScript" class="ru.it.lecm.br5.semantic.webscripts.SemanticWebScriptBean">

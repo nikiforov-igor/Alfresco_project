@@ -1,8 +1,10 @@
 package ru.it.lecm.br5.semantic.webscripts;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -56,22 +58,21 @@ public class SemanticWebScriptBean extends BaseWebScript implements ConstantsBea
 		}
 	}
 
-	public void loadDocumentBr5(String sExpert,String sDocument) throws DatatypeConfigurationException{
-		if (sExpert!=null && sDocument!= null && !sExpert.isEmpty() && !sDocument.isEmpty()){
-			NodeRef expertRef = new NodeRef(sExpert);
+	public void loadDocumentBr5(String sDocument) throws DatatypeConfigurationException{
+		if (sDocument!= null  && !sDocument.isEmpty()){
 			NodeRef documentRef = new NodeRef(sDocument);
-			semanticService.loadDocumentBr5Async(expertRef,documentRef);
+			semanticService.loadDocumentBr5Async(documentRef);
 		}
 	}
 
-	public HashMap<String, HashMap<Double, Integer>> getExpertsTagsBr5(String sExpert){
+	public HashMap<String, HashMap<Double, Integer>> getExpertsTagsBr5WithCoefAndFont(String sExpert){
 		if (sExpert!=null && !sExpert.isEmpty() ){
 			NodeRef expertRef = new NodeRef(sExpert);
-			return semanticService.getExpertsTagsBr5(expertRef);
+			return semanticService.getExpertsTagsBr5WithCoefAndFont(expertRef);
 		}
 		else{
 			NodeRef curEmp = orgstructureService.getCurrentEmployee();
-			return semanticService.getExpertsTagsBr5(curEmp);
+			return semanticService.getExpertsTagsBr5WithCoefAndFont(curEmp);
 		}
 	}
 
@@ -98,6 +99,14 @@ public class SemanticWebScriptBean extends BaseWebScript implements ConstantsBea
 		if (sDocument!=null && !sDocument.isEmpty() ){
 			NodeRef documentRef = new NodeRef(sDocument);
 			return semanticService.getDocumentTagsWithFont(documentRef);
+		}
+		return null;
+	}
+
+	public TreeMap<Float,ArrayList<HashMap<String,String>>> getDataExpertsByDocument(String sDocument){
+		if (sDocument!=null && !sDocument.isEmpty() ){
+			NodeRef documentRef = new NodeRef(sDocument);
+			return semanticService.getDataExpertsByDocument(documentRef);
 		}
 		return null;
 	}

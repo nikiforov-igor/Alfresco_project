@@ -26,7 +26,7 @@
 				<sub-components>
 				   <sub-component id="semantic-panel" index="2">
 					  <evaluations>
-						 <evaluation id="semantic-panel-eval">
+						 <evaluation id="lecm-semantic-panel-eval">
 							<url>/lecm/components/semantic/semantic-panel</url>
 						 </evaluation>
 					  </evaluations>
