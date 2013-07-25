@@ -2,11 +2,12 @@ package ru.it.lecm.documents.policy;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.model.ForumModel;
+import org.alfresco.model.RenditionModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.content.MimetypeMap;
-import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -42,6 +43,7 @@ import ru.it.lecm.security.Types;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -56,6 +58,7 @@ public class DocumentPolicy extends BaseBean
     final static protected Logger logger = LoggerFactory.getLogger(DocumentPolicy.class);
 
     private static final String DOCUMENT_SEARCH_CONTENT_TEMPLATE = "/alfresco/templates/webscripts/ru/it/lecm/documents/document-search-object-content.ftl";
+    private static final String DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH = "/alfresco/templates/webscripts/ru/it/lecm/documents/icons/";
     final private QName[] IGNORED_PROPERTIES = {DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT, StatemachineModel.PROP_STATUS};
 
     private PolicyComponent policyComponent;
@@ -72,6 +75,7 @@ public class DocumentPolicy extends BaseBean
     private DocumentMembersServiceImpl documentMembersService;
     private NamespaceService namespaceService;
 	private TemplateService templateService;
+	private BehaviourFilter behaviourFilter;
 
 	private final Object lock = new Object();
 
@@ -131,6 +135,10 @@ public class DocumentPolicy extends BaseBean
 
 	public void setTemplateService(TemplateService templateService) {
 		this.templateService = templateService;
+	}
+
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+		this.behaviourFilter = behaviourFilter;
 	}
 
 	final public void init() {
@@ -257,9 +265,16 @@ public class DocumentPolicy extends BaseBean
 
 	    NodeRef documentSearchObject = getDocumentSearchObject(nodeRef);
         updatePresentString(nodeRef);
-	    if (documentSearchObject != null) {
-		    updateDocumentSearchObject(nodeRef, documentSearchObject);
-	    }
+
+	    behaviourFilter.disableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
+	    try{
+		    if (documentSearchObject != null) {
+			    updateDocumentSearchObject(nodeRef, documentSearchObject);
+		    }
+		    createDocumentSearchObjectThumbnail(documentSearchObject, nodeRef);
+	    } finally {
+			behaviourFilter.enableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
+		}
 
         if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
             nodeService.setProperty(nodeRef,DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
@@ -369,10 +384,10 @@ public class DocumentPolicy extends BaseBean
 					});
 				}
 			};
-			return AuthenticationUtil.runAsSystem(raw);
-		} else {
-			return result;
+			result = AuthenticationUtil.runAsSystem(raw);
 		}
+
+		return result;
 	}
 
 	public void updateDocumentSearchObject(NodeRef documentRef, NodeRef objectRef) {
@@ -425,6 +440,60 @@ public class DocumentPolicy extends BaseBean
 					}
 				}
 			}
+		}
+
+		return result;
+	}
+
+	public NodeRef createDocumentSearchObjectThumbnail(final NodeRef objectRef, final NodeRef documentRef) {
+		final String thumbnailName = "doclib";
+
+		NodeRef result = serviceRegistry.getThumbnailService().getThumbnailByName(objectRef, ContentModel.PROP_CONTENT, thumbnailName);
+		if (result == null) {
+			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+				@Override
+				public NodeRef doWork() throws Exception {
+					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+						@Override
+						public NodeRef execute() throws Throwable {
+							NodeRef thumbnail;
+							synchronized (lock) {
+								thumbnail = serviceRegistry.getThumbnailService().getThumbnailByName(objectRef, ContentModel.PROP_CONTENT, thumbnailName);
+								if (thumbnail == null) {
+									QName assocTypeQName = RenditionModel.ASSOC_RENDITION;
+									QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, thumbnailName);
+									QName nodeTypeQName = ContentModel.TYPE_THUMBNAIL;
+
+									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(4);
+									properties.put(ContentModel.PROP_NAME, thumbnailName);
+									properties.put(ContentModel.PROP_THUMBNAIL_NAME, thumbnailName);
+									properties.put(ContentModel.PROP_CONTENT_PROPERTY_NAME, ContentModel.PROP_CONTENT);
+									ChildAssociationRef associationRef = nodeService.createNode(objectRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+									thumbnail = associationRef.getChildRef();
+
+									NamespacePrefixResolver namespacePrefixResolver = serviceRegistry.getNamespaceService();
+									String documentType = nodeService.getType(documentRef).toPrefixString(namespacePrefixResolver).replace(":", "_");
+
+									InputStream stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + documentType + ".png");
+									if (stream == null) {
+										stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + "default_document.png");
+									}
+									if (stream != null){
+										ContentService contentService = serviceRegistry.getContentService();
+										ContentWriter writer = contentService.getWriter(thumbnail, ContentModel.PROP_CONTENT, true);
+										if (writer != null) {
+											writer.setMimetype(MimetypeMap.MIMETYPE_IMAGE_PNG);
+											writer.putContent(stream);
+										}
+									}
+								}
+							}
+							return thumbnail;
+						}
+					});
+				}
+			};
+			result = AuthenticationUtil.runAsSystem(raw);
 		}
 
 		return result;

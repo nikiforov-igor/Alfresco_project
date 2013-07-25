@@ -399,6 +399,7 @@
 	    <property name="transactionService" ref="transactionService"/>
 	    <property name="serviceRegistry" ref="ServiceRegistry"/>
 	    <property name="templateService" ref="templateService"/>
+	    <property name="behaviourFilter" ref="policyBehaviourFilter" />
     </bean>
 
     <bean  id="initiatorDocumentPolicy" class="ru.it.lecm.documents.policy.InitiatorDocumentPolicy"
