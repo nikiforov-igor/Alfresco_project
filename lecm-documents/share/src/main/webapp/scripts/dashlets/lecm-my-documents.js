@@ -185,14 +185,14 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 						}
 					}
 
-					var lecmDocumentImageSrc = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + record.nodeType.replace(":", "_") + ".png";
-					var lecmDocumentImage = '<img src="' + lecmDocumentImageSrc + '" alt="' + extn + '" title="' + $html(name) + '" onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"/>';
-
 					if (this.options.simpleView)
 					{
 						/**
 						 * Simple View
 						 */
+
+						var lecmDocumentImageSrc = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + record.nodeType.replace(":", "_") + "-32.png";
+						var lecmDocumentImage = '<img src="' + lecmDocumentImageSrc + '" alt="' + extn + '" title="' + $html(name) + '" onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document-32.png\';"/>';
 
 						if (record.isLecmDocument) {
 							desc = '<span class="icon32"><a href="' + docDetailsUrl + '">' + lecmDocumentImage + '</a></span>';
@@ -209,6 +209,10 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 						/**
 						 * Detailed View
 						 */
+
+						lecmDocumentImageSrc = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + record.nodeType.replace(":", "_") + ".png";
+						lecmDocumentImage = '<img src="' + lecmDocumentImageSrc + '" alt="' + extn + '" title="' + $html(name) + '" onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"/>';
+
 						columnWidth = 100;
 						if (record.isLecmDocument) {
 							desc = '<span class="thumbnail"><a href="' + docDetailsUrl + '">' + lecmDocumentImage + '</a></span>';

@@ -2375,11 +2375,6 @@ span.person a div.description:empty {
     width: 250px;
 }
 
-.simple-doclist .icon32 img
-{
-	width: 32px;
-}
-
 /* Поручения: статусы */
 .yui-skin-lecmTheme div.form-fields div.statuses-set {
     float: right;
