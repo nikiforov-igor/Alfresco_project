@@ -68,16 +68,6 @@
 <hr/>
 <table cellpadding="0" cellspacing="2" style="margin-bottom: 5px">
     <tr>
-        <td style="padding-right: 26px;"><h3>Статусы</h3></td>
-        <td>
-            <span class="statemachine-menu">
-                <span id="menu-buttons-alternative-start-menu-button" class="yui-button yui-push-button">
-                    <span class="first-child">
-                        <button type="button" title="Альтернативные начальные статусы">&nbsp;</button>
-                    </span>
-                </span>
-            </span>
-        </td>
         <td>
             <span class="statemachine-menu">
                 <span id="menu-buttons-new-status-menu-button" class="yui-button yui-push-button">

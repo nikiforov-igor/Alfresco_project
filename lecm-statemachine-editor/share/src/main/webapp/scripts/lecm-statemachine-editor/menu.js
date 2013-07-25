@@ -115,12 +115,6 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
             }
             Alfresco.util.createYUIButton(this, "versions-menu-button", onClickVersionsMenuButton, {});
 
-            //New AlternativeStart
-            var onClickAlternativeStartMenuButton = function(e) {
-                this.editor.editAlternativeStarts();
-            }
-            Alfresco.util.createYUIButton(this, "alternative-start-menu-button", onClickAlternativeStartMenuButton, {});
-
             //New Status
             var onClickNewStatusMenuButton = function(e) {
                 this.editor._createStatus();

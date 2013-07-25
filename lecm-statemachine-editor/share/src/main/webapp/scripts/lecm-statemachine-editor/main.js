@@ -176,6 +176,19 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			td.style.textAlign = "center";
 
 			var me = this;
+
+            if (model.type == "start") {
+                var edit = document.createElement("a");
+                edit.className = "lecm_tbl_action_edit";
+                edit.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+                td.appendChild(edit);
+
+                YAHOO.util.Event.addListener(edit, "click", function() {
+                    me.editAlternativeStarts();
+                });
+            }
+
+
             if (model.type == "default" || model.type == "normal") {
                 var edit = document.createElement("a");
                 edit.className = "lecm_tbl_action_edit";
