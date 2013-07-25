@@ -53,7 +53,11 @@
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                 </property>
-				<property name="lecm-stmeditor:rolesFolder">
+				<property name="lecm-stmeditor:staticRolesList">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-stmeditor:dynamicRolesList">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -83,7 +87,7 @@
 			<parent>cm:folder</parent>
 		</type>
 
-		<!-- Роль для машины состояний -->
+		<!-- Deprecated: Роль для машины состояний -->
 		<type name="lecm-stmeditor:role">
 			<title>Logic ECM Role</title>
 			<parent>cm:content</parent>
@@ -98,7 +102,31 @@
 			</mandatory-aspects>
 		</type>
 
-		<!-- статичная роль для статуса -->
+        <!-- Список статичных ролей для машины состояний -->
+        <type name="lecm-stmeditor:static-role-item">
+            <title>Logic ECM Static Role Item</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="lecm-stmeditor:isCreator">
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+            <mandatory-aspects>
+                <aspect>lecm-stmeditor:business-role</aspect>
+            </mandatory-aspects>
+        </type>
+
+        <!-- Список динамических ролей для машины состояний -->
+        <type name="lecm-stmeditor:dynamic-role-item">
+            <title>Logic ECM Dynamic Role Item</title>
+            <parent>cm:content</parent>
+            <mandatory-aspects>
+                <aspect>lecm-stmeditor:business-role</aspect>
+            </mandatory-aspects>
+        </type>
+
+        <!-- статичная роль для статуса -->
 		<type name="lecm-stmeditor:static-role">
 			<title>Logic ECM Static Role</title>
 			<parent>cm:content</parent>

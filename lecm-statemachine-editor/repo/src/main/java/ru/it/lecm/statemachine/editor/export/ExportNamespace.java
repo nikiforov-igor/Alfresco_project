@@ -15,7 +15,7 @@ public interface ExportNamespace {
     String ASSOCIATION = "association";
     String REFERENCE = "reference";
     String NODE = "node";
-    String ROLES = "roles";
+    String ROLES = "roles-list";
     String ALTERNATIVES = "alternatives";
     String STATIC_ROLES = "staticRoles";
     String DYNAMIC_ROLES = "dynamicRoles";

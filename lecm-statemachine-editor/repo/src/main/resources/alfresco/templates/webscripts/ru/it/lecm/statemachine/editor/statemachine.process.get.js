@@ -18,9 +18,6 @@ if (statemachineId != null && statemachineId != '') {
 
 	if (machine == null) {
 		machine = machinesFolder.createNode(statemachineId, "lecm-stmeditor:statemachine", "cm:contains");
-		var roles = machine.createNode("roles", "lecm-stmeditor:roles", "cm:contains")
-		machine.properties["lecm-stmeditor:rolesFolder"] = roles.nodeRef.toString();
-		machine.save();
 
         var statuses = machine.createNode("statuses", "lecm-stmeditor:statuses", "cm:contains")
 		var startStatus = statuses.createNode("Черновик", "lecm-stmeditor:taskStatus", "cm:contains");
@@ -28,6 +25,15 @@ if (statemachineId != null && statemachineId != '') {
 		startStatus.properties["lecm-stmeditor:startStatus"] = true;
 		startStatus.save();
 	}
+
+    //Создание папки с ролями
+    var rolesList = machine.childByNamePath("roles-list");
+    if (rolesList == null) {
+        var roles = machine.createNode("roles-list", "cm:folder", "cm:contains")
+        machine.properties["lecm-stmeditor:staticRolesList"] = roles.nodeRef.toString();
+        machine.properties["lecm-stmeditor:dynamicRolesList"] = roles.nodeRef.toString();
+        machine.save();
+    }
 
     //Создание папки с версиями
     var versions = machinesFolder.childByNamePath("versions");

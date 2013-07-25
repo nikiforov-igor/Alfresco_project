@@ -14,7 +14,6 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 
@@ -104,19 +103,6 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "dynamic"),
 				StatemachineEditorModel.TYPE_ROLES,
 				props).getChildRef();
-
-		List<NodeRef> dynamicRoles = serviceDictionary.getRecordsByParamValue(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME, OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC, true);
-		for (NodeRef dynamicRole : dynamicRoles) {
-			HashMap<QName, Serializable> roleProperties = new HashMap<QName, Serializable>();
-			roleProperties.put(StatemachineEditorModel.PROP_PERMISSION_TYPE_VALUE, "LECM_BASIC_PG_Reader");
-			NodeRef roleRef = nodeService.createNode(
-					dynamicRolesFolder,
-					ContentModel.ASSOC_CONTAINS,
-					QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(GUID.generate())),
-					StatemachineEditorModel.TYPE_DYNAMIC_ROLE,
-					roleProperties).getChildRef();
-			nodeService.createAssociation(roleRef, dynamicRole, StatemachineEditorModel.ASSOC_ROLE);
-		}
 
 		nodeService.setProperty(node, StatemachineEditorModel.PROP_STATIC_ROLES, staticRoles.toString());
 		nodeService.setProperty(node, StatemachineEditorModel.PROP_DYNAMIC_ROLES, dynamicRolesFolder.toString());

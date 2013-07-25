@@ -7,23 +7,15 @@ function main() {
 	if (typeof json !== "undefined" && json.has("params")) {
 		var pars = json.get("params");
 
-	var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-	var serviceDictionary = ctx.getBean("serviceDictionary");
+    var roleFolder = search.findNode(pars.get("parent"));
+    var roles = roleFolder.getParent().getParent().getParent().getParent().childByNamePath("roles-list");
 
-	var qname = Packages.org.alfresco.service.namespace.QName.createQName("http://www.it.ru/lecm/org/structure/1.0", "business-role-is-dynamic");
-
-	var value = new Boolean(true);
-	var businessRoles = serviceDictionary.getRecordsByParamValue(
-	Packages.ru.it.lecm.orgstructure.beans.OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME,
-	qname,
-	Packages.java.lang.Boolean.TRUE).toArray();
-
-	var dictionaryRoles = [];
-	for each (var role in businessRoles) {
-	dictionaryRoles[role.toString()] = 1;
+    var dictionaryRoles = [];
+	for each (var role in roles.getChildren()) {
+        if (role.getTypeShort() == "lecm-stmeditor:dynamic-role-item") {
+    	    dictionaryRoles[role.assocs["lecm-stmeditor:role-assoc"][0].nodeRef.toString()] = 1;
+        }
 	};
-
-	var roleFolder = search.findNode(pars.get("parent"));
 
 	var activeRoles = [];
 
@@ -51,7 +43,7 @@ function main() {
 
 	for each (var node in forCreate) {
 		var newRole = roleFolder.createNode(null, "lecm-stmeditor:dynamic-role", "cm:contains");
-		newRole.properties["lecm-stmeditor:permissionTypeValue"] = "full";
+		newRole.properties["lecm-stmeditor:permissionTypeValue"] = "LECM_BASIC_PG_Reader";
 		newRole.save();
 		var dictionaryRole = search.findNode(node);
 		newRole.createAssociation(dictionaryRole, "lecm-stmeditor:role-assoc");

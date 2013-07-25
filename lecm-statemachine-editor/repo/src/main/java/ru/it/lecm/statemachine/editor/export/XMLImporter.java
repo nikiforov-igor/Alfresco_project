@@ -270,10 +270,10 @@ public class XMLImporter {
     }
 
     private NodeRef recreateRolesFolder() {
-        Map<QName, Serializable> properties = getBaseProperties(StatemachineEditorModel.ROLES);
-        NodeRef rolesNodeRef = recreateNode(stateMachineNodeRef, StatemachineEditorModel.TYPE_ROLES, properties);
-        nodeService.setProperty(stateMachineNodeRef, StatemachineEditorModel.PROP_ROLES_FOLDER, rolesNodeRef);
-
+        Map<QName, Serializable> properties = getBaseProperties(StatemachineEditorModel.ROLES_LIST);
+        NodeRef rolesNodeRef = recreateNode(stateMachineNodeRef, ContentModel.TYPE_FOLDER, properties);
+        nodeService.setProperty(stateMachineNodeRef, StatemachineEditorModel.PROP_STATIC_ROLES_FOLDER, rolesNodeRef);
+        nodeService.setProperty(stateMachineNodeRef, StatemachineEditorModel.PROP_DYNAMIC_ROLES_FOLDER, rolesNodeRef);
         return rolesNodeRef;
     }
 

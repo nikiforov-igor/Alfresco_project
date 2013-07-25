@@ -114,7 +114,7 @@ public class XMLExporter {
         }
 
         //roles
-        NodeRef rolesNodeRef = nodeService.getChildByName(stateMachineNodeRef, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.ROLES);
+        NodeRef rolesNodeRef = nodeService.getChildByName(stateMachineNodeRef, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.ROLES_LIST);
         List<XMLNode> xmlRoles = getXmlRoles(rolesNodeRef);
         xmlStateMachine.addSubFolderNodes(ExportNamespace.ROLES, xmlRoles);
 

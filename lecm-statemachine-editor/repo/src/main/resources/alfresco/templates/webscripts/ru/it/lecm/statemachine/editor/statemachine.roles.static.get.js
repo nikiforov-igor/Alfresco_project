@@ -9,7 +9,7 @@ if (nodeRef != null) {
 	} else {
 		node = search.findNode(nodeRef).getParent();
 	}
-	var roles = node.getParent().getParent().getParent().getParent().childByNamePath("roles");
+	var roles = node.getParent().getParent().getParent().getParent().childByNamePath("roles-list");
 
     var initRoles = node.getChildren();
     var initRolesAssocs = [];
@@ -21,12 +21,14 @@ if (nodeRef != null) {
 	var children = roles.getChildren();
 	var result = [];
 	for each (var role in children) {
-        var roleNodeRef = role.assocs["lecm-stmeditor:role-assoc"][0].nodeRef.toString();
-        if (initRolesAssocs[roleNodeRef] == null) {
-            result.push({
-                nodeRef: roleNodeRef,
-                name: role.assocs["lecm-stmeditor:role-assoc"][0].properties["cm:name"]
-            });
+        if (role.getTypeShort() == "lecm-stmeditor:static-role-item") {
+            var roleNodeRef = role.assocs["lecm-stmeditor:role-assoc"][0].nodeRef.toString();
+            if (initRolesAssocs[roleNodeRef] == null) {
+                result.push({
+                    nodeRef: roleNodeRef,
+                    name: role.assocs["lecm-stmeditor:role-assoc"][0].properties["cm:name"]
+                });
+            }
         }
 	}
 	model.roles = result;

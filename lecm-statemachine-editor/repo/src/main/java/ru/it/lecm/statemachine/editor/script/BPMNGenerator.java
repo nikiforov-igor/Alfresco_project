@@ -92,7 +92,7 @@ public class BPMNGenerator {
 			startEvent.setAttribute("activiti:formKey", "lecm-statemachine:startTask");
 			process.appendChild(startEvent);
 
-			NodeRef rolesRef = nodeService.getChildByName(stateMachine, ContentModel.ASSOC_CONTAINS, "roles");
+			NodeRef rolesRef = nodeService.getChildByName(stateMachine, ContentModel.ASSOC_CONTAINS, "roles-list");
 			List<ChildAssociationRef> roles = nodeService.getChildAssocs(rolesRef);
 
             Element extention = null;
@@ -111,7 +111,8 @@ public class BPMNGenerator {
 				Element documentPermissionAction = doc.createElement("lecm:action");
 				documentPermissionAction.setAttribute("type", "DocumentPermissionAction");
 				for (ChildAssociationRef role : roles) {
-					boolean starter =  (Boolean) nodeService.getProperty(role.getChildRef(), StatemachineEditorModel.PROP_CREATION_DOCUMENT);
+                    Object value = nodeService.getProperty(role.getChildRef(), StatemachineEditorModel.PROP_CREATION_DOCUMENT);
+					boolean starter =  value == null ? false : (Boolean) value;
 					if (starter) {
 						Element attribute = doc.createElement("lecm:attribute");
 						attribute.setAttribute("name", "role");

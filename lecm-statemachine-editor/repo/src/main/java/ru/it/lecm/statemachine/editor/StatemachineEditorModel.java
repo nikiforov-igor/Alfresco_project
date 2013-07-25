@@ -52,13 +52,14 @@ public class StatemachineEditorModel {
 	public final static QName PROP_WORKFLOW_LABEL = QName.createQName(STATEMACHINE_EDITOR_URI, "workflowLabel");
 	public final static QName PROP_ARCHIVE_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "archiveFolder");
 	public final static QName PROP_ARCHIVE_FOLDER_ADDITIONAL = QName.createQName(STATEMACHINE_EDITOR_URI, "archiveFolderAdditional");
-	public final static QName PROP_CREATION_DOCUMENT = QName.createQName(STATEMACHINE_EDITOR_URI, "creationDocument");
+	public final static QName PROP_CREATION_DOCUMENT = QName.createQName(STATEMACHINE_EDITOR_URI, "isCreator");
 	public final static QName PROP_PERMISSION_TYPE_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "permissionTypeValue");
 	public final static QName PROP_EDITABLE_FIELD = QName.createQName(STATEMACHINE_EDITOR_URI, "editableField");
     public final static QName PROP_CONDITION = QName.createQName(STATEMACHINE_EDITOR_URI, "condition");
     public final static QName PROP_CONDITION_ERROR_MESSAGE = QName.createQName(STATEMACHINE_EDITOR_URI, "conditionErrorMessage");
     public final static QName PROP_CONDITION_HIDE_ACTION = QName.createQName(STATEMACHINE_EDITOR_URI, "hideAction");
-	public final static QName PROP_ROLES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "rolesFolder");
+	public final static QName PROP_STATIC_ROLES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "staticRolesList");
+	public final static QName PROP_DYNAMIC_ROLES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "dynamicRolesList");
 	public final static QName PROP_LAST_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "last_version");
 	public final static QName PROP_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "version");
 	public final static QName PROP_PUBLISH_DATE = QName.createQName(STATEMACHINE_EDITOR_URI, "publishDate");
@@ -77,6 +78,7 @@ public class StatemachineEditorModel {
     public static final String STATUSES = "statuses";
     public static final String ACTIONS = "actions";
     public static final String ROLES = "roles";
+    public static final String ROLES_LIST = "roles-list";
     public static final String ALTERNATIVES = "alternatives";
     public static final String STATIC_ROLES = "static";
     public static final String DYNAMIC_ROLES = "dynamic";
