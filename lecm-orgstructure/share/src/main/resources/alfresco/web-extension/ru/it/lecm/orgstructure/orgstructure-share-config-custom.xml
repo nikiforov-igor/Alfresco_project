@@ -41,7 +41,7 @@
                     <field id="lecm-orgstr:employee-last-name" set="fioAndPhoto"/>
                     <field id="lecm-orgstr:employee-photo-assoc" set="fioAndPhoto">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">/app:company_home/app:user_homes</control-param>
+                            <control-param name="uploadDirectoryPath">{userhome}</control-param>
                             <control-param name="showImage">true</control-param>
                             <control-param name="hideItem">true</control-param>
                         </control>
@@ -222,7 +222,7 @@
                     <field id="lecm-orgstr:employee-last-name" set="fioAndPhoto"/>
                     <field id="lecm-orgstr:employee-photo-assoc" set="fioAndPhoto">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">/app:company_home/app:user_homes</control-param>
+                            <control-param name="uploadDirectoryPath">{userhome}</control-param>
                             <control-param name="showImage">true</control-param>
                             <control-param name="hideItem">true</control-param>
                         </control>

@@ -6,13 +6,15 @@ function main()
         resultNode = null,
         resultObj = null,
         argsXPathLocation = args['xPathLocation'],
-        argsXPathRoot = args['xPathRoot'];
+        argsXPathRoot = args['xPathRoot'],
+        argsRootNode = args['rootNode'];
 
     if (logger.isLoggingEnabled())
     {
         logger.log("argsXPath = " + argsXPath);
         logger.log("argsXPathLocation = " + argsXPathLocation);
         logger.log("argsXPathRoot = " + argsXPathRoot);
+        logger.log("rootNode = " + argsRootNode);
     }
 
     try
@@ -22,6 +24,9 @@ function main()
 
         // determine if we need to resolve the parent NodeRef
 
+	    if (argsRootNode != null && argsRootNode.length > 0) {
+		    nodeRef = argsRootNode;
+	    }
         if (argsXPath != null)
         {
             // resolve the provided XPath to a NodeRef
