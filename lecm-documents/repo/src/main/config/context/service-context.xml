@@ -473,4 +473,14 @@
             </map>
         </constructor-arg>
     </bean>
+
+    <bean id="documentsFilter" class="ru.it.lecm.documents.beans.DocumentFilter" abstract="true">
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="authService" ref="authenticationService"/>
+    </bean>
+
+    <bean id="documentsAuthorFilter" class="ru.it.lecm.documents.filters.AuthorFilter" parent="documentsFilter" init-method="register"/>
 </beans>

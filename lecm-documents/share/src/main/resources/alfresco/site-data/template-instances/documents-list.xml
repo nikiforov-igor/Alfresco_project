@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
     <template-type>ru/it/lecm/documents/documents-list</template-type>
+    <properties>
+        <preferedFilter>docAuthor</preferedFilter>
+    </properties>
     <components>
         <!-- Title -->
         <component>
@@ -42,6 +45,7 @@
             <properties>
                 <itemType>{doctype}</itemType>
                 <linkPage>documents-list</linkPage>
+                <queryFilter>docAuthor</queryFilter>
             </properties>
         </component>
         <!-- Filter -->

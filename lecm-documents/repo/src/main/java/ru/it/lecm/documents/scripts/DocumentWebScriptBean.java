@@ -18,9 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.documents.beans.DocumentStatusesFilterBean;
-import ru.it.lecm.documents.beans.DocumentsPermissionsBean;
+import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -211,57 +209,28 @@ public class DocumentWebScriptBean extends BaseWebScript {
      * Получить количество документов
      * @return количество
      */
-    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, boolean considerFilter) {
+    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, String queryFilterId) {
         List<String> docTypes = getElements(Context.getCurrentContext().getElements(types));
         List<QName> qNameTypes = new ArrayList<QName>();
+        String currentUser = authService.getCurrentUserName();
+        String employeesFilter = "";
+
         for (String docType : docTypes) {
             qNameTypes.add(QName.createQName(docType, namespaceService));
-        }
 
-        Map<QName, List<NodeRef>> employeesMap = null;
-        if (considerFilter) {
-            employeesMap = new HashMap<QName, List<NodeRef>>();
-            String username = authService.getCurrentUserName();
-            if (username != null) {
-                NodeRef currentEmployee = orgstructureService.getEmployeeByPerson(username);
-                for (QName type : qNameTypes) {
-                    String typeStr = type.toPrefixString(namespaceService).replace(":","_");
-                    Map<String, Serializable> typePrefs = preferenceService.getPreferences(username, DocumentService.PREF_DOCUMENTS + "." + typeStr);
-                    Serializable key = typePrefs.get(DocumentService.PREF_DOCUMENTS + "." + typeStr + DocumentService.PREF_DOC_LIST_AUTHOR);
-                    String filterKey = key != null ? (String)key : null;
-                    List<NodeRef> employees = new ArrayList<NodeRef>();
-                    if (filterKey != null) {
-                        switch(DocumentService.AuthorEnum.valueOf(filterKey.toUpperCase())) {
-                            case MY : {
-                                employees.add(currentEmployee);
-                                break;
-                            }
-                            case DEPARTMENT: {
-                                List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(currentEmployee);
-                                employees.addAll(departmentEmployees);
-                                //departmentEmployees.add(employee);
-                                break;
-                            }
-                            case FAVOURITE: {
-                                break;
-                            }
-                            case ALL: {
-                                break;
-                            }
-                            default: {
-                                break;
-                            }
-                        }
-                    }
-                    if (employees.size() > 0) {
-                        employeesMap.put(type, employees);
-                    }
+            if (queryFilterId != null && !queryFilterId.isEmpty()) {
+                String filterId = DocumentService.PREF_DOCUMENTS + "." + docType.replaceAll(":", "_") + "." + queryFilterId;
+                Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, filterId);
+                String filterData = preferences.get(filterId).toString();
+
+                DocumentFilter docFilter = FiltersManager.getFilterById(queryFilterId);
+                if (docFilter != null && filterData != null) {
+                    employeesFilter = docFilter.getQuery((Object[]) filterData.split("/"));
                 }
             }
-
         }
         return documentService.getDocumentsByFilter(qNameTypes, null, null, null,
-                getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), employeesMap, null, null).size();
+                getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), employeesFilter, null).size();
     }
 
     public List<String> getAccessPermissionsList(String type) {
@@ -285,7 +254,10 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     public String getAuthorProperty(String docType) {
         QName qNameType = QName.createQName(docType, namespaceService);
-        return documentService.getAuthorProperty(qNameType);
+        if (qNameType != null) {
+            return documentService.getAuthorProperty(qNameType);
+        }
+        return null;
     }
 
     private ArrayList<String> getElements(Object[] object){
@@ -311,4 +283,23 @@ public class DocumentWebScriptBean extends BaseWebScript {
 	public String wrapperDocumentLink(ScriptNode node, String description) {
 		return wrapperLink(node.getNodeRef().toString(), description, BaseBean.DOCUMENT_LINK_URL);
 	}
+
+    public String getFilterQuery(String filter) {
+        String[] filterParts = filter.split("\\|");
+        if (filterParts.length > 0) {
+            String filterId = filterParts[0];
+            String filterData = "";
+            if (filterParts.length == 2) {
+                filterData = filterParts[1];
+            }
+
+            DocumentFilter docFilter = FiltersManager.getFilterById(filterId);
+            if (docFilter != null && filterData != null) {
+                return docFilter.getQuery((Object[])filterData.split("/"));
+            }
+        } else {
+            logger.warn("Check filter code!!! Filter=" + filter);
+        }
+        return "";
+    }
 }

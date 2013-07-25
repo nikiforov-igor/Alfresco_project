@@ -23,7 +23,7 @@
 
         _buildPreferencesKey: function (suffix) {
             var opt = this.options;
-            return this.PREFERENCE_DOCUMENTS + "." + opt.docType.split(":").join("_") + (suffix ? suffix : "");
+            return this.PREFERENCE_DOCUMENTS + "." + opt.docType.split(":").join("_") + (suffix ? ("." + suffix): "");
         },
 
         save: function (filter, value, reload) {

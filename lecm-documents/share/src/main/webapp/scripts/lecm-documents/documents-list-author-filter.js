@@ -19,11 +19,10 @@
         {
             manager: null,
             
-            PREF_FILTER_ID: ".documents-list-docAuthor-filter",
+            PREF_FILTER_ID: "docAuthor",
             options: {
                 docType: "lecm-document:base",
-                gridBubblingLabel: "documents",
-                filterId: "docAuthor"
+                gridBubblingLabel: "documents"
             },
 
             documentList: null,
@@ -47,13 +46,14 @@
                     {
                         successCallback: {
                             fn: function (p_oResponse) {
-                                var authorPreference = Alfresco.util.findValueByDotNotation(p_oResponse.json, this.manager._buildPreferencesKey(this.PREF_FILTER_ID), "all");
+                                var authorPreference = Alfresco.util.findValueByDotNotation(p_oResponse.json, this.manager._buildPreferencesKey(this.PREF_FILTER_ID), this.options.docType +"/all");
                                 if (authorPreference !== null) {
                                     this.widgets.author.value = authorPreference;
                                     var menuItems = this.widgets.author.getMenu().getItems();
+                                    var authorTypeKey = authorPreference.replace(this.options.docType + "/", "");
                                     for (index in menuItems) {
                                         if (menuItems.hasOwnProperty(index)) {
-                                            if (menuItems[index].value === authorPreference) {
+                                            if (menuItems[index].value === authorTypeKey) {
                                                 this.widgets.author.set("label", menuItems[index].cfg.getProperty("text"));
                                                 break;
                                             }
@@ -75,11 +75,11 @@
 
             populateDataGrid: function () {
                 var currentFilter = {
-                    filterId: this.options.filterId + "/" + this.options.docType,
-                    filterData:this.widgets.author.value
+                    filterId: this.PREF_FILTER_ID,
+                    filterData: this.options.docType + "/" + this.widgets.author.value
                 };
                 this.documentList.currentFilter = currentFilter;
-                location.hash = '#filter=' + this.options.filterId + "/" + this.options.docType + "|" + this.widgets.author.value;
+                location.hash = '#filter=' + this.PREF_FILTER_ID + "|" + this.widgets.author.value;
             },
 
             onAuthorFilterChanged: function (p_sType, p_aArgs) {
@@ -94,11 +94,11 @@
                 var context = this;
                 var success = {
                     fn: function () {
-                        location.hash = '#filter=' + context.options.filterId + "/" + context.options.docType + "|" + context.widgets.author.value;
+                        location.hash = '#filter=' + context.PREF_FILTER_ID + "|" + context.options.docType + "/" + context.widgets.author.value;
                         window.location.reload(true);
                     }
                 } ;
-                this.manager.preferences.set(this.manager._buildPreferencesKey(this.PREF_FILTER_ID), this.widgets.author.value, {successCallback: success});
+                this.manager.preferences.set(this.manager._buildPreferencesKey(this.PREF_FILTER_ID), context.options.docType + "/" + context.widgets.author.value, {successCallback: success});
             },
 
             onInitDataGrid: function BaseToolbar_onInitDataGrid(layer, args) {

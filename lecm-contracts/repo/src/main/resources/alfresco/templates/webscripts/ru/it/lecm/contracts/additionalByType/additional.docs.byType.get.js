@@ -1,1 +1,1 @@
-model.docs = contracts.getAdditionalDocsByType(args.type, true);
+model.docs = contracts.getAdditionalDocsByType(args.type, args.considerFilter);

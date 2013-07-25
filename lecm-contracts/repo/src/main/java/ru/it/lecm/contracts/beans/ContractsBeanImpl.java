@@ -122,7 +122,40 @@ public class ContractsBeanImpl extends BaseBean {
             }
         }
 
-        return documentService.getDocumentsByFilter(types, dateProperty, begin, end, paths, statuses, initList, docsList, null);
+        String filterQuery = "";
+
+        // фильтр по сотрудниками-создателям
+        if (initiatorsList != null && !initiatorsList.isEmpty()) {
+            String employeesFilter = "";
+
+            boolean addOR = false;
+
+            for (QName type : types) {
+                String authorProperty = documentService.getAuthorProperty(type);
+                authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+                for (NodeRef employeeRef : initList.get(type)) {
+                    employeesFilter += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+                    addOR = true;
+                }
+            }
+
+            if (employeesFilter.length() > 0) {
+                filterQuery += " (" + employeesFilter + ") ";
+            }
+        }
+
+        // фильтр по конкретным документам (например, тем в которых данный сотрудник - участник)
+        if (docsList != null && !docsList.isEmpty()) {
+            boolean addOR = false;
+            String docsFilter = "";
+            for (NodeRef docRef : docsList) {
+                docsFilter += (addOR ? " OR " : "") + "ID:" + docRef.toString().replace(":", "\\:");
+                addOR = true;
+            }
+            filterQuery += " AND (" + docsFilter + ")";
+        }
+
+        return documentService.getDocumentsByFilter(types, dateProperty, begin, end, paths, statuses, filterQuery, null);
     }
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
@@ -134,7 +167,7 @@ public class ContractsBeanImpl extends BaseBean {
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-        String query = "";
+        String query;
 
         // формируем базовый запрос - ищем документы к договорам в папке Черновики и Документы
         query = "TYPE:\"" + TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT + "\" AND " +
@@ -142,7 +175,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 
         if (filter != null && filter.length() > 0) {
-            query +=  filter ;
+            query +=  " AND (" +  filter + ") ";
         }
 
         ResultSet results = null;

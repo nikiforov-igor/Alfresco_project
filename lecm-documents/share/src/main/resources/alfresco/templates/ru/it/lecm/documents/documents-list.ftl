@@ -19,9 +19,15 @@
     <#if page.url.args.formId?? && page.url.args.formId != "">
         <#assign formId = page.url.args.formId/>
     </#if>
+
     <#assign isDocListPage = false/>
     <#if page.url.args.doctype?? && page.url.args.doctype != "">
         <#assign isDocListPage = true/>
+    </#if>
+
+    <#assign queryFilterId = ""/>
+    <#if preferedFilter??>
+        <#assign queryFilterId = preferedFilter?string/>
     </#if>
 
     <script type="text/javascript">//<![CDATA[
@@ -58,6 +64,14 @@
                 });
         </#if>
         LogicECM.module.Documents.filtersManager = documentFilters;
+
+        <#if queryFilterId?? && queryFilterId != "">
+            var PREFERENCE_FILTER = "ru.it.lecm.documents." + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + "." + "${queryFilterId}";
+            var preference = findValueByDotNotation(${preferences}, PREFERENCE_FILTER);
+            if (preference != null && preference != "") {
+                location.hash = '#filter=' + "${queryFilterId}" + "|" + preference;
+            }
+        </#if>
 
         // настройки из repo
         LogicECM.module.Documents.SETTINGS =

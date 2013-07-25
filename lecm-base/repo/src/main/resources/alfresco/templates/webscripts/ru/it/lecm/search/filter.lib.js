@@ -47,17 +47,8 @@ var Filters =
             filterQuery = filterParams.query;
 
         var filterId = filter.filterId;
-        var filterIdCommon, filterIdPart;
-        if (filterId.indexOf("/") > 0) {
-            var parts = filterId.split("/");
-            filterIdCommon = parts[0];
-            filterIdPart = parts[1];
-        } else {
-            filterIdCommon = filterId;
-            filterIdPart = null;
-        }
 
-        switch (String(filterIdCommon)) {
+        switch (String(filterId)) {
             case "my":
                 filterParams.query = " +@cm\\:creator:\"" + person.properties.userName + '"';
                 break;
@@ -70,41 +61,9 @@ var Filters =
                 filterParams.query += "+PATH:\"/cm:taggable/cm:" + search.ISO9075Encode(filterData) + "/member\"";
                 break;
 
-            case "docAuthor":
-                var authorProperty = documentScript.getAuthorProperty(filterIdPart);
-                if (authorProperty) {
-                    switch (String(filter.filterData)) {
-                        case "all":
-                            filterParams.query = "";
-                            break;
-                        case "my":
-                            filterParams.query = " @" + authorProperty.split(":").join("\\:").split("-").join("\\-") + ":\"" + orgstructure.getCurrentEmployee().getNodeRef().toString() + '"';
-                            break;
-                        case "department": {
-                            var employees = orgstructure.getBossSubordinate(orgstructure.getCurrentEmployee().getNodeRef().toString());
-                            //добавляем самого себя в список сотрудников
-                            var departmentQuery = "";
-                            //employees.push(orgstructure.getCurrentEmployee());
-                            for (var i = 0; i < employees.length; ++i) {
-                                var employeeRef = employees[i].nodeRef;
-                                departmentQuery += " @" + authorProperty.split(":").join("\\:").split("-").join("\\-") + ":\"" + employeeRef.toString() + '"';
-                            }
-                            filterParams.query = departmentQuery;
-                            break;
-                        }
-                        case "favourite":
-                            filterParams.query = ""; //TODO не реализовано!!!!;
-                            break;
-                        default:
-                            filterParams.query = "";
-                            break;
-                    }
-                } else {
-                    filterParams.query = "";
-                }
-                break;
             default:
-                filterParams.query = filterQuery;
+                var query = documentScript.getFilterQuery(filterId + "|" + filterData);
+                filterParams.query = (query && query != "") ? query : filterQuery
                 break;
         }
 

@@ -1,11 +1,11 @@
 function getFilters(filterType) {
     var myConfig = new XML(config.script), filters = [];
-
+    var queryFilterId = myConfig["queryFilter"];
     for each(var xmlFilter in myConfig[filterType].filter)
     {
         var type = xmlFilter.@type.toString();
         var value = xmlFilter.@value.toString();
-        var url = "/lecm/contracts/additionalDocsCount?type=" + value;
+        var url = "/lecm/contracts/additionalDocsCount?type=" + value + "&considerFilter=" + queryFilterId;
         var addDocsStr = remote.connect("alfresco").get(stringUtils.urlEncodeComponent(url));
         var addDocs = [];
         if (addDocsStr.status == 200) {

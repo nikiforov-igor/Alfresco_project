@@ -1,9 +1,10 @@
 <config>
-   <filters>
-      <filter type="ALL" value="*" />
-      <filter type="AGREEMENTS" value="Дополнительное соглашение, Соглашение" />
-      <filter type="CHANGES" value="Изменения к договору, Изменение к доп. Соглашению" />
-      <filter type="TERMINATIONS" value="Соглашение о расторжении" />
-      <filter type="CONTROVERSY" value="Протокол разногласий, Протокол согласования разногласий" />
-   </filters>
+    <filters>
+        <filter type="ALL" value="*"/>
+        <filter type="AGREEMENTS" value="Дополнительное соглашение, Соглашение"/>
+        <filter type="CHANGES" value="Изменения к договору, Изменение к доп. Соглашению"/>
+        <filter type="TERMINATIONS" value="Соглашение о расторжении"/>
+        <filter type="CONTROVERSY" value="Протокол разногласий, Протокол согласования разногласий"/>
+    </filters>
+    <queryFilter>docAuthor</queryFilter>
 </config>

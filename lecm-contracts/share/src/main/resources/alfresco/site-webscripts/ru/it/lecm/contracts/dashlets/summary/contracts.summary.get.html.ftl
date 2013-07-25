@@ -6,14 +6,9 @@
 //<![CDATA[
 (function()
 {
-    /**
-     * YUI Library aliases
-     */
-    var Dom = YAHOO.util.Dom,
-            Selector = YAHOO.util.Selector;
+    var Dom = YAHOO.util.Dom;
 
-    LogicECM.module.Contracts.dashlet.Summary = function Contracts_constructor(htmlId)
-    {
+    LogicECM.module.Contracts.dashlet.Summary = function Contracts_constructor(htmlId) {
         LogicECM.module.Contracts.dashlet.Summary.superclass.constructor.call(this, "LogicECM.module.Contracts.dashlet.Summary", htmlId, ["button", "container"]);
 
         return this;
@@ -63,7 +58,7 @@
                 drawForm: function Draw_form() {
                     Alfresco.util.Ajax.jsonGet(
                             {
-                                url: Alfresco.constants.PROXY_URI + encodeURI("lecm/documents/summary?docType=lecm-contract:document&skippedStatuses=Корзина&considerFilter=false"),
+                                url: Alfresco.constants.PROXY_URI + encodeURI("lecm/documents/summary?docType=lecm-contract:document&skippedStatuses=Корзина&considerFilter=" + window.location.hash),
                                 successCallback: {
                                     fn: function (response) {
                                         if (this.container != null) {

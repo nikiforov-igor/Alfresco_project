@@ -49,12 +49,6 @@ public interface DocumentService {
 	public static final QName ASPECT_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document");
 	public static final QName ASSOC_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document-assoc");
 
-    public static enum AuthorEnum {
-        MY,
-        DEPARTMENT,
-        ALL,
-        FAVOURITE
-    }
     /**
      * Метод для получения рейтинга документа
      * documentNodeRef - document nodeRef
@@ -132,11 +126,6 @@ public interface DocumentService {
     public List<NodeRef> getMembers(QName docType);
 
     /**
-     * Поиск документов
-     * @return List<NodeRef> - ссылок на документы
-     */
-    public List<NodeRef> getDocuments(List<QName> docTypes, List<String> paths, ArrayList<String> statuses);
-    /**
      * Поиск документов по разным параметрам
      * @param docTypes - список QName типов на документы
      * @param dateProperty - QName тип даты
@@ -144,12 +133,10 @@ public interface DocumentService {
      * @param end - до периода даты (конец)
      * @param paths - список путей для поиска, формат: app:company_home/cm:Черновики
      * @param statuses - список статусов, если null то по статусам не фильтрует
-     * @param inititatorsList - список инициаторов
-     * @param docsList -
      * @param sortDefinition - набор полей для сортировки
      * @return List<NodeRef> - ссылки на документы
      */
-    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName, List<NodeRef>> inititatorsList, List<NodeRef> docsList, List<SortDefinition> sortDefinition);
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition);
 
     /**
      * Метод для получения папки с черновиками для заданного типа

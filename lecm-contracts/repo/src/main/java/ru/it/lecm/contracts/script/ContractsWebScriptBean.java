@@ -7,17 +7,17 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
+import ru.it.lecm.documents.beans.DocumentFilter;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.beans.FiltersManager;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -188,8 +188,8 @@ public class ContractsWebScriptBean extends BaseWebScript {
 		return createScriptable(additionalDocuments);
 	}
 
-    public Scriptable getAdditionalDocsByType(String typeFilter, boolean considerFilter){
-        String[] types = typeFilter != null && typeFilter.length() > 0 ? typeFilter.split("\\s*,\\s"): new String[0];
+    public Scriptable getAdditionalDocsByType(String typeFilter, String queryFilterId) {
+        String[] types = typeFilter != null && typeFilter.length() > 0 ? typeFilter.split("\\s*,\\s") : new String[0];
         String filter = "";
         for (String type : types) {
             if (filter.length() > 0) {
@@ -197,59 +197,27 @@ public class ContractsWebScriptBean extends BaseWebScript {
             }
             filter += "@lecm\\-additional\\-document\\:additionalDocumentType\\-text\\-content:\"" + type + "\"";
         }
+
         if (filter.length() > 0) {
-            filter = " AND (" + filter + ")";
+            filter = " (" + filter + ") ";
         }
-        if (considerFilter) {
-            String username = authService.getCurrentUserName();
-            if (username != null) {
-                NodeRef currentEmployee = orgstructureService.getEmployeeByPerson(username);
-                String typeStr = ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT.toPrefixString(namespaceService).replace(":","_");
-                Map<String, Serializable> typePrefs =
-                        preferenceService.getPreferences(username, DocumentService.PREF_DOCUMENTS + "." + typeStr);
-                Serializable key = typePrefs.get(DocumentService.PREF_DOCUMENTS + "." + typeStr + DocumentService.PREF_DOC_LIST_AUTHOR);
-                String filterKey = key != null ? (String)key : null;
-                List<NodeRef> employees = new ArrayList<NodeRef>();
 
-                if (filterKey != null) {
-                    switch(DocumentService.AuthorEnum.valueOf(filterKey.toUpperCase())) {
-                        case MY : {
-                            employees.add(currentEmployee);
-                            break;
-                        }
-                        case DEPARTMENT: {
-                            List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(currentEmployee);
-                            employees.addAll(departmentEmployees);
-                            //departmentEmployees.add(employee);
-                            break;
-                        }
-                        case FAVOURITE: {
-                            break;
-                        }
-                        case ALL: {
-                            break;
-                        }
-                        default: {
-                            break;
-                        }
-                    }
-                }
-                if (employees.size() > 0) {
-                    String employeesFilter = "";
-                    boolean addOR = false;
-                    String authorProperty = contractService.getAuthorProperty();
-                    authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-                    for (NodeRef employeeRef : employees) {
-                        employeesFilter += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
-                        addOR = true;
-                    }
-                    if (employeesFilter.length() > 0) {
-                        filter += " AND (" + employeesFilter + ")";
-                    }
-                }
+        if (queryFilterId != null && !queryFilterId.isEmpty()) {
+            String filterId = DocumentService.PREF_DOCUMENTS + "." +
+                    ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT.toPrefixString(namespaceService).replaceAll(":", "_") + "." + queryFilterId;
+            String currentUser = authService.getCurrentUserName();
+            Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, filterId);
+            String filterData = preferences.get(filterId).toString();
+            String employeesFilter = "";
+            DocumentFilter docFilter = FiltersManager.getFilterById(queryFilterId);
+            if (docFilter != null && filterData != null && !filterData.isEmpty()) {
+                employeesFilter = docFilter.getQuery((Object[])filterData.split("/"));
             }
-
+            if (employeesFilter.length() > 0) {
+                filter += " AND (" + employeesFilter + ")";
+            }
         }
+
         List<NodeRef> additionalDocuments = this.contractService.getAdditionalDocs(filter.length() > 0 ? filter : null);
         return createScriptable(additionalDocuments);
     }

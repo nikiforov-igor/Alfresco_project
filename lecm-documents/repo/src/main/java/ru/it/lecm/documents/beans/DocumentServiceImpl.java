@@ -288,12 +288,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     @Override
-    public List<NodeRef> getDocuments(List<QName> docTypes, List<String> paths, ArrayList<String> statuses) {
-        return getDocumentsByFilter(docTypes, null, null, null, paths, statuses, null, null, null);
-    }
-
-    @Override
-    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, Map<QName,List<NodeRef>> initiatorsList, List<NodeRef> docsList, List<SortDefinition> sortDefinition) {
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
@@ -346,35 +341,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                     (!statusesNotFilter.isEmpty() ? (" AND NOT (" + statusesNotFilter  + ")") : "");
         }
 
-        // фильтр по сотрудниками-создателям
-        if (initiatorsList != null && !initiatorsList.isEmpty()) {
-            String employeesFilter = "";
-
-            boolean addOR = false;
-
-            for (QName type : docTypes) {
-                String authorProperty = getAuthorProperty(type);
-                authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-                for (NodeRef employeeRef : initiatorsList.get(type)) {
-                    employeesFilter += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
-                    addOR = true;
-                }
-            }
-
-            if (employeesFilter.length() > 0) {
-                query += " AND (" + employeesFilter + ")";
-            }
-        }
-
-        // фильтр по конкретным документам (например, тем в которых данный сотрудник - участник)
-        if (docsList != null && !docsList.isEmpty()) {
-            boolean addOR = false;
-            String docsFilter = "";
-            for (NodeRef docRef : docsList) {
-                docsFilter += (addOR ? " OR " : "") + "ID:" + docRef.toString().replace(":", "\\:");
-                addOR = true;
-            }
-            query += " AND (" + docsFilter + ")";
+        if (filterQuery != null && filterQuery.length() > 0) {
+            query += " AND (" + filterQuery + ") ";
         }
 
         if (sortDefinition != null && !sortDefinition.isEmpty()){

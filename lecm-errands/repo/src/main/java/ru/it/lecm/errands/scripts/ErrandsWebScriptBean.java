@@ -57,14 +57,6 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         this.namespaceService = namespaceService;
     }
 
-    /**
-     * Получить количество документов
-     * @return количество
-     */
-    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, boolean considerFilter) {
-    return null;
-    }
-
     private ArrayList<String> getElements(Object[] object){
         ArrayList<String> arrayList = new ArrayList<String>();
         for (Object obj : object) {

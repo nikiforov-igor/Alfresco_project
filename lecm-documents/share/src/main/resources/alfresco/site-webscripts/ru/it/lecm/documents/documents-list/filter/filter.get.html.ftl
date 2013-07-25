@@ -1,5 +1,5 @@
 <#assign id = args.htmlid>
-<#assign statusesFilterKey = '.documents-list-statuses-filter'/>
+<#assign statusesFilterKey = 'documents-list-statuses-filter'/>
 
 <#assign f_label = args.filterLabel!'label.documents'>
 <#if args.filterLabel??>

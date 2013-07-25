@@ -1,6 +1,6 @@
 var type = args["docType"];
 var skippedStatuses = args["skippedStatuses"];
-var considerFilter = args["considerFilter"] ? args["considerFilter"] == "true" : false;
+var considerFilter = args["considerFilter"] ? args["considerFilter"]: null;
 
 var draftPath = documentScript.getDraftsPath();
 var documentPath = documentScript.getDocumentsPath();

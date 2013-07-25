@@ -1,5 +1,6 @@
 var type = template.properties.docType ? template.properties.docType : page.url.args.doctype;
 model.docType = type;
+model.preferedFilter = template.properties.preferedFilter;
 
 var hasRole = false;
 var userPermissions = "";

@@ -307,7 +307,7 @@ function getSearchResults(params) {
             ftsQuery = (formJson.datatype != null && formJson.datatype.length > 0 ? 'TYPE:"' + formJson.datatype + '"' : '') +
                 (formQuery.length !== 0 ? ' AND (' + formQuery + ')' : '') +
                 (filter != null && filter.length > 0 ? ' AND (' + filter + ')' : '') +
-                ((filterObj != null && filterObj.query != null && filterObj.query.length > 0)? ' AND (' + filterObj.query + ')' : '') +
+                ((filterObj != null && filterObj.query != null && ('' + filterObj.query).length > 0)? ' AND (' + filterObj.query + ')' : '') +
                 (ftsQuery.length !== 0 ? ' AND (' + ftsQuery + ')' : '') +
                 (fullTextSearchQuery.length !== 0 ? ' AND (' + fullTextSearchQuery + ')' : '');
         }

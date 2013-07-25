@@ -57,6 +57,7 @@
                 <itemType>lecm-contract:document</itemType>
                 <linkPage>contracts-list</linkPage>
                 <bubblingLabel>contracts</bubblingLabel>
+                <queryFilter>docAuthor</queryFilter>
             </properties>
         </component>
         <!-- Filter -->

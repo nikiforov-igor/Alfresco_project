@@ -1,8 +1,10 @@
 function main() {
     var type = args["itemType"] ? args["itemType"] : null;
+    var queryFilter = args["queryFilter"] ? args["queryFilter"] : null;
     model.docType = type;
+
     if (type != null) {
-        model.statusesGroups = getFilters(type);
+        model.statusesGroups = getFilters(type, queryFilter);
         model.statusesList = getStatuses(type);
     }
 }
@@ -23,10 +25,10 @@ function getStatuses(type) {
     return statuses
 }
 
-function getFilters(type) {
+function getFilters(type, filter) {
     var filters = [];
 
-    var url = '/lecm/documents/summary?docType=' + type + "&considerFilter=true";
+    var url = '/lecm/documents/summary?docType=' + type + (filter ? "&considerFilter=" + filter : "");
     var result = remote.connect("alfresco").get(url);
 
     if (result.status == 200) {
