@@ -101,7 +101,7 @@
 
         getCustomCellFormatter: function DataGrid_getCustomCellFormatter( grid, elCell, oRecord, oColumn, oData ) {
             // Если у нас нет списка разрешённых согласующих, то ничего не делаем
-            if( grid.options.allowedAssigneesList == null ) { // undefinedOrNull == null
+            if( grid.options.allowedAssigneesList.length === 0 ) {
                 return null;
             }
 
