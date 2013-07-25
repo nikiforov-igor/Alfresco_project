@@ -156,8 +156,6 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         var detail = document.createElement('span');
                         if (item.isImportant == "true") {
                             detail.innerHTML = "("+ this.msg("label.important") +") ";
-                        } else {
-                            detail.innerHTML = "("+ this.msg("label.not-important") +") ";
                         }
                         var str = "<a href='" + window.location.protocol + "//" + window.location.host +
                             Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef="+ item.nodeRef + "'>"+
