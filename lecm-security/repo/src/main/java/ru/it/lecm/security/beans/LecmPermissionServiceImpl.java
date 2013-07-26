@@ -438,6 +438,21 @@ public class LecmPermissionServiceImpl
 		logger.warn(String.format("Dynamic role '%s' for employee '%s' granted as {%s} for document '%s' by security group <%s>", roleCode, employeeId, permission, nodeRef, authority));
 	}
 
+    public boolean hasEmployeeDynamicRole(NodeRef document, NodeRef employee, String roleName) {
+        boolean result = false;
+        final SGPrivateBusinessRole posBRME = Types.SGKind.getSGMyRolePos(employee.getId(), roleName);
+        String authority = sgnm.makeSGName(posBRME);
+
+        Set<AccessPermission> status = permissionService.getAllSetPermissions(document);
+        for (AccessPermission permission : status) {
+            if (permission.getAuthority().equals(authority) && permission.getAccessStatus() == AccessStatus.ALLOWED) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
 	@Override
 	public void revokeDynamicRole(String roleCode, NodeRef nodeRef,
                                   String employeeId) {

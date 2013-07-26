@@ -293,4 +293,13 @@ public interface LecmPermissionService {
 		public static final String PFX_LECM_PERMISSION = "_lecmPerm_";
 	}
 
+    /**
+     * Проверка наличия прав чтения у документа для сотрудника
+     * @param document документ
+     * @param employee сотрудник
+     * @param roleName имя роли
+     * @return
+     */
+    public boolean hasEmployeeDynamicRole(NodeRef document, NodeRef employee, String roleName);
+
 }

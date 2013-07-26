@@ -43,4 +43,16 @@ public class LecmPermissionWebScript extends BaseScopableProcessorExtension {
 	public boolean isAdmin(String login) {
 		return lecmPermissionService.isAdmin(login);
 	}
+
+    /**
+     * Проверка наличия прав чтения у документа для сотрудника
+     * @param document документ
+     * @param employee сотрудник
+     * @param roleName имя роли
+     * @return
+     */
+    public boolean hasEmployeeDynamicRole(ScriptNode document, ScriptNode employee, String roleName) {
+        return lecmPermissionService.hasEmployeeDynamicRole(document.getNodeRef(), employee.getNodeRef(), roleName);
+    }
+
 }
