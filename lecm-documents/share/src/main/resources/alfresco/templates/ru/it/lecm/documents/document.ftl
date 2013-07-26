@@ -42,16 +42,20 @@
         <div class="yui-gc">
 	        <div id="main-content" class="yui-u first">
 		        <div id="main-region">
-	                <div class="yui-gd grid columnSize2">
-	                    <div class="yui-u first column1">
-	                        <@region id="metadata" scope="template"/>
-	                    <@region id="members" scope="template"/>
-	                    </div>
-	                    <div class="yui-u column2">
-	                        <@region id="attachments" scope="template"/>
+                    <#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
+                        <@region id="errand-form" scope="template"/>
+                    <#else>
+                        <div class="yui-gd grid columnSize2">
+                            <div class="yui-u first column1">
+                                <@region id="metadata" scope="template"/>
+	                            <@region id="members" scope="template"/>
+                            </div>
+                            <div class="yui-u column2">
+                                <@region id="attachments" scope="template"/>
 	                        <@region id="tasks" scope="template"/>
-	                    </div>
-	                </div>
+                            </div>
+                        </div>
+                    </#if>
 	                <@region id="rating" scope="template"/>
 	                <@region id="comments" scope="template"/>
 	            </div>

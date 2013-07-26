@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Errand form</shortname>
+    <description>Errands form</description>
+    <url>/lecm/components/errands/form</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

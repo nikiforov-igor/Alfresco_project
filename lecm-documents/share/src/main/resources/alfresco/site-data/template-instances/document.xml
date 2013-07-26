@@ -254,6 +254,24 @@
          </properties>
       </component>
 
+       <!-- /Компонент для Поручений (рисуется только для типа "поручение" -->
+       <component>
+           <region-id>errand-form</region-id>
+           <sub-components>
+               <sub-component id="default">
+                   <evaluations>
+                       <evaluation>
+                           <url>/lecm/components/errands/form</url>
+                           <properties>
+                               <nodeRef>{nodeRef}</nodeRef>
+                               <formId>default</formId>
+                           </properties>
+                       </evaluation>
+                   </evaluations>
+               </sub-component>
+           </sub-components>
+       </component>
+
 	   <!-- Статусная строка -->
 	   <!--<component>-->
 		   <!--<region-id>document-status-string</region-id>-->
