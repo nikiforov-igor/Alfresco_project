@@ -84,13 +84,13 @@ public class LECMSecurityGroupsBean
 			// пропишем human-oriented данные, если они имеются
 			if (details != null)
 				this.authorityService.setAuthorityDisplayName( sgFullName, details);
-			logger.info(String.format("Alfresco security-group '%s' already exists for object '%s'", sgFullName, simpleName));
+			logger.debug(String.format("Alfresco security-group '%s' already exists for object '%s'", sgFullName, simpleName));
 		} else {
 			// sgFullName = this.authorityService.createAuthority(AuthorityType.GROUP, simpleName, details, null);
 			sgFullName = this.authorityService.createAuthority(AuthorityType.GROUP, simpleName);
 			this.authorityService.setAuthorityDisplayName( sgFullName, details);
 
-			logger.warn(String.format("Alfresco security-group '%s' created for object '%s'\n\t details: %s \n\t zones: %s"
+			logger.debug(String.format("Alfresco security-group '%s' created for object '%s'\n\t details: %s \n\t zones: %s"
 					, sgFullName, simpleName
 					, this.authorityService.getAuthorityDisplayName(sgFullName)
 					, this.authorityService.getAuthorityZones(sgFullName)
@@ -123,16 +123,16 @@ public class LECMSecurityGroupsBean
 		} catch (Throwable t) {
 			logger.error( String.format( "(!?) Ignoring exception at removeAuthority '%s':\n"+ t.getMessage(), fullName), t);
 		}
-		logger.warn(String.format("Alfresco security item '%s' removed", fullName));
+		logger.debug(String.format("Alfresco security item '%s' removed", fullName));
 	}
 
 	private void ensureParentEx(String sgItemFullName, String sgParentFullName, AuthorityType childType) {
 		if (sgnm.hasFullAuthEx(sgItemFullName, sgParentFullName, childType)) {
-			logger.info(String.format("Security item '%s' is already inside security-group '%s'", sgItemFullName, sgParentFullName));
+			logger.debug(String.format("Security item '%s' is already inside security-group '%s'", sgItemFullName, sgParentFullName));
 		} else {
 			// добавление одного security-объекта в другой: sgItem -> sgParent
 			this.authorityService.addAuthority(sgParentFullName, sgItemFullName);
-			logger.warn(String.format("Security item '%s' put inside security-group '%s'", sgItemFullName, sgParentFullName));
+			logger.debug(String.format("Security item '%s' put inside security-group '%s'", sgItemFullName, sgParentFullName));
 		}
 	}
 
@@ -146,10 +146,10 @@ public class LECMSecurityGroupsBean
 
 	private void removeParentEx(String sgFullItemName, String sgParentFullName, AuthorityType childType) {
 		if (!sgnm.hasFullAuthEx(sgFullItemName, sgParentFullName, childType)) {
-			logger.info(String.format("Security item '%s' is not inside security-group '%s'", sgFullItemName, sgParentFullName));
+			logger.debug(String.format("Security item '%s' is not inside security-group '%s'", sgFullItemName, sgParentFullName));
 		} else {
 			this.authorityService.removeAuthority(sgParentFullName, sgFullItemName);
-			logger.warn(String.format("Security item '%s' put out of security-group '%s'", sgFullItemName, sgParentFullName));
+			logger.debug(String.format("Security item '%s' put out of security-group '%s'", sgFullItemName, sgParentFullName));
 		}
 	}
 

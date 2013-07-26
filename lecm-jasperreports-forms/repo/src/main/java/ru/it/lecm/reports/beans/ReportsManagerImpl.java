@@ -194,7 +194,7 @@ public class ReportsManagerImpl implements ReportsManager {
 
 						this.descriptors.put(desc.getMnem(), desc);
 						ifound++;
-						logger.info( String.format( "Load report '%s' from descriptor from '%s'", desc.getMnem(), item) );
+						logger.debug( String.format( "Load report '%s' from descriptor from '%s'", desc.getMnem(), item) );
 					} finally {
 						IOUtils.closeQuietly(in);
 					} // finally
@@ -221,7 +221,7 @@ public class ReportsManagerImpl implements ReportsManager {
 //			logger.info( String.format( "creating dir '%s'\n\t%s", result, result.mkdirs()) );
 //		}
 
-		logger.info( String.format( " initialized templates count %s\n%s",
+		logger.trace( String.format( " initialized templates count %s\n%s",
 					getDescriptors().size(), Utils.getAsString(getDescriptors().values()) 
 		));
 	}
@@ -252,8 +252,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		if (reportDAO != null) {
 			final ReportDescriptor d = reportDAO.getReportDescriptor(reportMnemoName);
 			if (d != null) {
-				if (logger.isDebugEnabled())
-					logger.debug( String.format( "Load template descriptor for mnem '%s' as:\n%s", reportMnemoName, d));
+				logger.debug( String.format( "Load template descriptor for mnem '%s' as:\n%s", reportMnemoName, d));
 				return d; // FOUND by DAO mnemonic
 			}
 		}
@@ -277,7 +276,7 @@ public class ReportsManagerImpl implements ReportsManager {
 			createDsFile( desc); // создание ds-xml
 			saveReportTemplate( desc) ; // создание шаблона отчёта 
 			getDescriptors().put(desc.getMnem(), desc);
-			logger.info(String.format( "Report descriptor with name '%s' registered", desc.getMnem()));
+			logger.debug(String.format( "Report descriptor with name '%s' registered", desc.getMnem()));
 		}
 	}
 
@@ -329,7 +328,7 @@ public class ReportsManagerImpl implements ReportsManager {
 
 		// оповещение соот-го провайдера (компиляция) ...
 		getReportGenerators().get( getReportTypeTag(desc.getReportType())).onRegister(outFullName, desc);
-		logger.info(String.format( "Report '%s': provider notified", desc.getMnem()));
+		logger.debug(String.format( "Report '%s': provider notified", desc.getMnem()));
 
 		return true;
 	}
@@ -340,7 +339,7 @@ public class ReportsManagerImpl implements ReportsManager {
 			if (this.descriptors != null)
 				this.descriptors.remove(reportCode); // убираем из списка активных
 			removeDsFile( reportCode); // удаляем файл
-			logger.info(String.format( "Report descriptor with name '%s' unregistered", reportCode));
+			logger.debug(String.format( "Report descriptor with name '%s' unregistered", reportCode));
 		}
 	}
 
@@ -361,7 +360,7 @@ public class ReportsManagerImpl implements ReportsManager {
 				final OutputStream out = new FileOutputStream( fout);
 				try {
 					dsxml.writeTo(out); 
-					logger.info( String.format( "report '%s': ds xml created '%s'" , desc.getMnem(), fout) );
+					logger.debug( String.format( "report '%s': ds xml created '%s'" , desc.getMnem(), fout) );
 				} finally {
 					IOUtils.closeQuietly(out);
 				}
@@ -388,7 +387,7 @@ public class ReportsManagerImpl implements ReportsManager {
 			logger.error( msg, ex);
 			throw new RuntimeException(msg, ex);
 		} finally {
-			logger.info( String.format( "ds-xml of report '%s' was%s deleted", reportCode, (flagDelete ? "" : " NOT")));
+			logger.debug( String.format( "ds-xml of report '%s' was%s deleted", reportCode, (flagDelete ? "" : " NOT")));
 		}
 	}
 

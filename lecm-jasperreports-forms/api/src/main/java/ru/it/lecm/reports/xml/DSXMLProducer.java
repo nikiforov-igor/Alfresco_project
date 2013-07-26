@@ -164,7 +164,7 @@ public class DSXMLProducer {
 			/* формирование результата */
 			final ByteArrayOutputStream result = XmlHelper.serialize( doc);
 
-			logger.info("produced SUCCESSFULL of ds-xml " + streamName);
+			logger.debug("produced SUCCESSFULL of ds-xml " + streamName);
 
 			return result;
 
@@ -210,7 +210,7 @@ public class DSXMLProducer {
 			/* ListOf<feild> */
 			parseColumns( result.getDsDescriptor().getColumns(), rootElem, streamName);
 
-			logger.info("load SUCCESSFULL from ds-xml " + streamName);
+			logger.debug("load SUCCESSFULL from ds-xml " + streamName);
 
 			return result;
 
@@ -628,7 +628,7 @@ public class DSXMLProducer {
 
         if (logger.isDebugEnabled()) {
             sb.append(String.format("load %d fields from %s", i, info));
-            logger.info(sb.toString());
+            logger.debug(sb.toString());
         }
 
         return new ArrayList<ColumnDescriptor>(result.values());

@@ -212,7 +212,7 @@ public class LecmPermissionServiceImpl
 			sb.append( "\t ============================================================\n" );
 			sb.append( String.format( "\t (*) Selected %s counter: %s\n", subjInfo, result.size() ));
 		}
-		logger.info( sb.toString() );
+		logger.trace( sb.toString() );
 		return result;
 	}
 
@@ -341,10 +341,8 @@ public class LecmPermissionServiceImpl
 				@Override
 				public Boolean doWork() throws Exception {
 					final AccessStatus status = permissionService.hasPermission(node, permission);
-					if (logger.isTraceEnabled()) {
-						logger.debug( String.format( "hasPermission check:\n\t nodeRef: %s\n\t login: %s \n\t permission: %s \n\t found: %s"
+					logger.trace( String.format( "hasPermission check:\n\t nodeRef: %s\n\t login: %s \n\t permission: %s \n\t found: %s"
 								, node, userLogin, permission, status));
-					}
 					return status == AccessStatus.ALLOWED;
 				}
 			};
@@ -384,6 +382,7 @@ public class LecmPermissionServiceImpl
 		return hasReadAccess(nodeRef,  authService.getCurrentUserName());
 	}
 
+	@Override
 	public boolean hasReadAccess(final NodeRef nodeRef, final String userLogin) {
 		boolean result = false;
 
@@ -435,9 +434,10 @@ public class LecmPermissionServiceImpl
 		final String authority = sgnm.makeSGName(posBRME); // sgnm.makeFullBRMEAuthName(userId, roleCode);
 		// выдать право по-умолчанию - при смене статуса может (должно будет) выполниться перегенерирование ...
 		permissionService.setPermission( nodeRef, authority, permission, true);
-		logger.warn(String.format("Dynamic role '%s' for employee '%s' granted as {%s} for document '%s' by security group <%s>", roleCode, employeeId, permission, nodeRef, authority));
+		logger.debug(String.format("Dynamic role '%s' for employee '%s' granted as {%s} for document '%s' by security group <%s>", roleCode, employeeId, permission, nodeRef, authority));
 	}
 
+	@Override
     public boolean hasEmployeeDynamicRole(NodeRef document, NodeRef employee, String roleName) {
         boolean result = false;
         final SGPrivateBusinessRole posBRME = Types.SGKind.getSGMyRolePos(employee.getId(), roleName);
@@ -458,7 +458,7 @@ public class LecmPermissionServiceImpl
                                   String employeeId) {
 		final String authority = sgnm.makeFullBRMEAuthName(employeeId, roleCode);
 		permissionService.clearPermission( nodeRef, authority);
-		logger.warn(String.format("Dynamic role '%s' for employee '%s' revoked from document '%s'", roleCode, employeeId, nodeRef));
+		logger.debug(String.format("Dynamic role '%s' for employee '%s' revoked from document '%s'", roleCode, employeeId, nodeRef));
 	}
 
 	@Override
@@ -491,7 +491,7 @@ public class LecmPermissionServiceImpl
 		// выдать право по-умолчанию - при смене статуса может (должно будет) выполниться перегенерирование ...
 		final String permission = findACEPermission(permissionGroup);
 		permissionService.setPermission( nodeRef, authority, permission, true);
-		logger.warn(String.format("Private role '%s' for '%s'\n\tGRANTED as {%s}\n\t for document '%s'\n\t by security group <%s>", permissionGroup, securityPos, permission, nodeRef, authority));
+		logger.debug(String.format("Private role '%s' for '%s'\n\tGRANTED as {%s}\n\t for document '%s'\n\t by security group <%s>", permissionGroup, securityPos, permission, nodeRef, authority));
 	}
 
 	@Override
@@ -499,7 +499,7 @@ public class LecmPermissionServiceImpl
 			SGPosition securityPos) {
 		final String authority = sgnm.makeSGName(securityPos);
 		permissionService.clearPermission( nodeRef, authority);
-		logger.warn(String.format("Private role '%s' for '%s'\n\tREVOKED from document '%s'", permissionGroup, securityPos, nodeRef));
+		logger.debug(String.format("Private role '%s' for '%s'\n\tREVOKED from document '%s'", permissionGroup, securityPos, nodeRef));
 	}
 
 	@Override
@@ -519,7 +519,7 @@ public class LecmPermissionServiceImpl
 
 			if (accessMap == null || accessMap.isEmpty()) {
 				permissionService.deletePermissions(nodeRef);
-				sb.append("\t Permission list cleared for node "+ nodeRef);
+				sb.append("\t Permission list cleared for node ").append(nodeRef);
 			} else {
 				/* TODO: для правильной работы в ситуациях, когда пользователь имеет несколько бизнес ролей в одном документе
 				 * возможно стоит отсортировать все ACE-права в ACL так, чтобы пишущие шли раньше читающих (!)
@@ -538,17 +538,16 @@ public class LecmPermissionServiceImpl
 					try {
 						setACE(nodeRef, authority, perm, sb);
 					} catch(Throwable t) { // (!) Исключения журналируем, но не поднимаем
-						sb.append( "\n\t (!) exception "+ t.getMessage());
+						sb.append("\n\t (!) exception ").append(t.getMessage());
 						logger.error( String.format("exception in setACE( nodeRef='%s', auth='%s', perm=%s)", nodeRef, authority, perm), t);
 					}
 				}
 			}
 		} catch(Throwable t) {  // (!) Исключения журналируем, но не поднимаем
-			sb.append( "\n\t (!) exception "+ t.getMessage());
+			sb.append("\n\t (!) exception ").append(t.getMessage());
 			logger.error( String.format("exception in rebuildACL( nodeRef='%s', map='%s')", nodeRef, accessMap), t);
 		} finally {
-			if (logger.isInfoEnabled())
-				logger.info( sb.toString());
+			logger.debug( sb.toString());
 		}
 	}
 
@@ -585,16 +584,15 @@ public class LecmPermissionServiceImpl
 				try {
 					setACE(nodeRef, authority, perm, sb);
 				} catch(Throwable t) { // (!) Исключения журналируем, но не поднимаем
-					sb.append( "\n\t (!) exception "+ t.getMessage());
+					sb.append("\n\t (!) exception ").append(t.getMessage());
 					logger.error( String.format("exception in setACE( nodeRef='%s', auth='%s', perm=%s)", nodeRef, authority, perm), t);
 				}
 			}
 		} catch(Throwable t) { // (!) Исключения журналируем, но не поднимаем
-			sb.append( "\n\t (!) exception "+ t.getMessage());
+			sb.append("\n\t (!) exception ").append( t.getMessage());
 			logger.error( String.format("exception in rebuildACL( nodeRef='%s', map='%s')", nodeRef, accessMap), t);
 		} finally {
-			if (logger.isInfoEnabled())
-				logger.info( sb.toString());
+			logger.debug( sb.toString());
 		}
 	}
 
@@ -836,6 +834,7 @@ public class LecmPermissionServiceImpl
 	 * @param nodeRef
 	 * @param userLogins список имён пользователей, относительно которых надо проверить доступ
 	 */
+	@Override
 	public StringBuilder trackAllLecmPermissions(String info, NodeRef nodeRef,
 			String ... userLogins) 
 	{
@@ -870,6 +869,7 @@ public class LecmPermissionServiceImpl
 		return sb;
 	}
 
+	@Override
 	public boolean isAdmin(String login) {
 		return authorityService.isAdminAuthority(login);
 	}
