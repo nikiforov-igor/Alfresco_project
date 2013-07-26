@@ -36,7 +36,7 @@
                 </property>
 				<property name="lecm-br5-semantic-aspects:refresh">
 					<type>d:boolean</type>
-                    <default>false</default>
+                    <default>true</default>
                 </property>
             </properties>
 		</aspect>

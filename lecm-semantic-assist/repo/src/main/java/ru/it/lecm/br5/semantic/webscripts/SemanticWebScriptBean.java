@@ -131,4 +131,12 @@ public class SemanticWebScriptBean extends BaseWebScript implements ConstantsBea
 			throw new RuntimeException("nodeRef parameter is empty");
 		}
 	}
+	public List<NodeRef> getSimilarDocumentsByTag(String tag){
+		if (tag!=null && !tag.isEmpty()){
+			return semanticService.getSimilarDocumentsByTag(tag);
+		}
+		return null;
+	}
+
+
 }

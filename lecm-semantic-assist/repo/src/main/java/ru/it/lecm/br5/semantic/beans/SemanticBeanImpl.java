@@ -21,10 +21,15 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.soap.SOAPFaultException;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +63,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 	protected OrgstructureBean orgstructureService;
 	protected DocumentMembersService documentMembersService;
 	protected DocumentAttachmentsService documentAttachmentsService;
+	private SearchService searchService;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -73,6 +79,10 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 
 	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
 		this.documentAttachmentsService = documentAttachmentsService;
+	}
+
+	public void setSearchService(SearchService searchService) {
+		this.searchService = searchService;
 	}
 
 	@Override
@@ -170,7 +180,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		}
 		ArrayOfDataItem docItems = null;
 		try {
-			if (nodeService.getType(documentRef).equals(ContentModel.PROP_CONTENT)) { // документ alfresco
+			if (nodeService.getType(documentRef).equals(ContentModel.TYPE_CONTENT)) { // документ alfresco
 				String fileName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_NAME);
 				byte[] finalBinaryData = getBinaryFileData(documentRef);
 				// получим список термов для документа и запишем в свойство tags документа lecm
@@ -205,9 +215,9 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		}
 		if (result && docItems != null) {
 			List<DataItem> docItemsLst = docItems.getDataItem();
-			HashMap<String, Double> tags = new HashMap<String, Double>();
+			HashMap<String, Float> tags = new HashMap<String, Float>();
 			for (DataItem docItem : docItemsLst) {
-				tags.put(docItem.getSpelling(), (double) docItem.getSignific());
+				tags.put(docItem.getSpelling(), docItem.getSignific());
 			}
 			nodeService.setProperty(documentRef, ConstantsBean.PROP_BR5_INTEGRATION_TAGS, tags);
 		}
@@ -235,7 +245,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		XMLGregorianCalendar xgregDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 		try {
 			// проверим к какому типу относится документ (Alfresco или LECM)
-			if (nodeService.getType(documentRef).equals(ContentModel.PROP_CONTENT)) { // документ alfresco
+			if (nodeService.getType(documentRef).equals(ContentModel.TYPE_CONTENT)) { // документ alfresco
 				String fileName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_NAME);
 				String authorName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_CREATOR);
 				NodeRef author = orgstructureService.getEmployeeByPerson(authorName);
@@ -319,10 +329,10 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 			maxValue = Math.max(maxValue, value);
 			minValue = Math.min(minValue, value);
 		}
-		float divider = (maxValue - minValue) > 0 ? (maxValue - minValue) : 1;
-		float scaleFactor = (maxFontSize - minFontSize) / (divider);
+		float divider = (maxFS - minFS) > 0 ? (maxFS - minFS) : 1;
+		float scaleFactor = (maxFS - minFS) / (divider);
 		for (String tag : tags.keySet()) {
-			int fontSize = Math.round(scaleFactor * tags.get(tag) + (maxFontSize - maxValue * scaleFactor));
+			int fontSize = Math.round(scaleFactor * tags.get(tag) + (maxFS - maxValue * scaleFactor));
 			result.put(tag, fontSize);
 		}
 		return result;
@@ -365,7 +375,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 	}
 
 	@Override
-	public void setDocumentTags(NodeRef documentRef, Map<String, Double> tags) {
+	public void setDocumentTags(NodeRef documentRef, Map<String, Float> tags) {
 		if (Serializable.class.isInstance(tags)) {
 			nodeService.setProperty(documentRef, ConstantsBean.PROP_BR5_INTEGRATION_TAGS, (Serializable) tags);
 		}
@@ -466,14 +476,56 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 
 	}
 
-	public List<NodeRef> getSimilarDocumentByTag(String tag) {
-		List<NodeRef> documentsList = new ArrayList<NodeRef>();
+	public List<NodeRef> searchNodeRefs(String query){
+		List<NodeRef> nodeRefs = new ArrayList<NodeRef>();
 		SearchParameters sp = new SearchParameters();
+		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+		sp.setQuery(query);
+		ResultSet resultSet = null;
+		try {
+			resultSet = searchService.query(sp);
+			if (resultSet != null) {
+				List<NodeRef> refs = resultSet.getNodeRefs();
+				for (NodeRef ref : refs) {
+					nodeRefs.add(ref);
+				}
+			}
+		} catch (LuceneQueryParserException e) {
+			logger.error("Error while getting exist connection types", e);
+		} catch (Exception e) {
+			logger.error("Error while getting exist connection types", e);
+		} finally {
+			if (resultSet != null) {
+				resultSet.close();
+			}
+		}
+		return nodeRefs;
+	}
+
+	public List<NodeRef> getSimilarDocumentsByTag(String tag){
+        String query = "ASPECT:\"{http://www.it.ru/lecm/br5/semantic/aspects/1.0}br5\" AND "+tag;
+		List<NodeRef> documentsList = searchNodeRefs(query);
 		return documentsList;
 	}
 
-	public List<NodeRef> getSimilarDocumentByDocument(NodeRef document) {
-		List<NodeRef> documentsList = new ArrayList<NodeRef>();
+
+	public List<NodeRef> getSimilarDocumentsByDocument(NodeRef document){
+		// получим список тегов документа
+		Map<String,Float> tags = getDocumentTagsBr5(document);
+		Set<String> tagSet = tags.keySet();
+		//String subSearchString = "";
+		StringBuilder subSearchString = new StringBuilder("ASPECT:\"{http://www.it.ru/lecm/br5/semantic/aspects/1.0}br5\"");
+		if (tagSet.size() != 0){
+			subSearchString.append(" AND (");
+			for (String tag: tagSet){
+				subSearchString.append(tag).append("^").append(tags.get(tag).toString()).append(" OR ");
+				//subSearchString.append(tag).append(" AND ");
+			}
+			subSearchString.delete(subSearchString.length()-4, subSearchString.length());
+		}
+		subSearchString.append(")");
+		List<NodeRef> documentsList = searchNodeRefs(subSearchString.toString());
 		return documentsList;
 	}
 

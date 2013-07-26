@@ -52,6 +52,7 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="documentMembersService" ref="documentMembersService"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="searchService" ref="searchService"/>
 	</bean>
 
 	<bean id="br5.semantic.SemanticWebScriptBean" parent="baseScript" class="ru.it.lecm.br5.semantic.webscripts.SemanticWebScriptBean">
