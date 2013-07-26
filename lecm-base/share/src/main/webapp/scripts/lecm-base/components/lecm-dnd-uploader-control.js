@@ -22,6 +22,7 @@ LogicECM.control = LogicECM.control || {};
 
 	LogicECM.control.DndUploader = function (fieldHtmlId) {
 		LogicECM.control.DndUploader.superclass.constructor.call(this, "LogicECM.control.DndUploader", fieldHtmlId, [ "container"]);
+		this.selectedItems = {};
 
 		return this;
 	};
@@ -42,7 +43,9 @@ LogicECM.control = LogicECM.control || {};
 
 			fileUpload: null,
 
-				onReady:function () {
+			selectedItems: null,
+
+			onReady:function () {
 				if (!this.options.disabled) {
 					LogicECM.LecmUploaderInitializer.initLecmUploaders();
 					this.loadRootNode();
@@ -154,8 +157,9 @@ LogicECM.control = LogicECM.control || {};
 			},
 
 			fileUploadComplete: function(obj) {
+				var me = this;
+
 				if (obj.successful != null && obj.successful.length > 0) {
-					var elAdded = Dom.get(this.id + "-added");
 					var elAttachments = Dom.get(this.id + "-attachments");
 
 					for (var i = 0; i < obj.successful.length; i++) {
@@ -165,7 +169,7 @@ LogicECM.control = LogicECM.control || {};
 						if (elAttachments != null) {
 							var fileIcon = Alfresco.util.getFileIcon(fileName, "cm:content", 16);
 							var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"'/>";
-                            var iconId = this.id + "-attachments-" + i;
+                            var iconId = "attachment-" + nodeRef;
                             var removeIcon = "<img id='" + iconId + "' src='" + Alfresco.constants.URL_RESCONTEXT
                                 + "components/images/delete-16.png' class='remove-icon'/>";
 
@@ -175,6 +179,7 @@ LogicECM.control = LogicECM.control || {};
 
                             Event.onAvailable(iconId, function() {
                                 var iconId = arguments[0].iconId;
+                                var nodeRef = arguments[0].nodeRef;
 
                                 Event.addListener(iconId, "click", function() {
                                     var li = Dom.getAncestorByTagName(iconId, "li");
@@ -182,18 +187,43 @@ LogicECM.control = LogicECM.control || {};
 
                                     ul.removeChild(li);
 
-                                    // todo to AIvkin: remove from "added"
+	                                delete me.selectedItems[nodeRef];
+	                                me.updateFormFields();
                                 });
-                            }, {iconId: iconId});
+                            },
+                            {
+	                            iconId: iconId,
+	                            nodeRef: nodeRef
+                            });
                         }
-						if (elAdded != null) {
-							if (elAdded.value.length > 0) {
-								elAdded.value += ',';
-							}
-							elAdded.value += nodeRef;
-						}
+						this.selectedItems[nodeRef] = nodeRef;
+					}
+
+					me.updateFormFields();
+				}
+			},
+
+			updateFormFields: function() {
+				var elAdded = Dom.get(this.id + "-added");
+				var selectedItems = this.getSelectedItems();
+
+				if (elAdded != null && this.selectedItems != null) {
+					elAdded.value = "";
+					for (var i = 0; i < selectedItems.length; i++) {
+						elAdded.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
 					}
 				}
+			},
+
+			getSelectedItems: function () {
+				var selectedItems = [];
+
+				for (var item in this.selectedItems) {
+					if (this.selectedItems.hasOwnProperty(item)) {
+						selectedItems.push(item);
+					}
+				}
+				return selectedItems;
 			}
 		});
 })();
