@@ -1045,14 +1045,24 @@
 					<show id="lecm-stmeditor:actionScript" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:scriptLabel" />
+                    <field id="lecm-stmeditor:scriptLabel">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl">
+                            <control-param name="style">width: 100%;</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-stmeditor:actionScript" >
 						<control template="/org/alfresco/components/form/controls/textarea.ftl">
-							<control-param name="rows">5</control-param>
+							<control-param name="rows">30</control-param>
+							<control-param name="style">width: 100%; max-height: 300px</control-param>
 						</control>
 					</field>
 				</appearance>
 			</form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-stmeditor:scriptLabel" force="true"/>
+                </field-visibility>
+            </form>
 		</forms>
 	</config>
 
@@ -1064,11 +1074,16 @@
 					<show id="lecm-stmeditor:actionScript" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-stmeditor:scriptLabel" />
+					<field id="lecm-stmeditor:scriptLabel">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl">
+                            <control-param name="style">width: 100%;</control-param>
+                        </control>
+                    </field>
 					<field id="lecm-stmeditor:actionScript" >
 						<control template="/org/alfresco/components/form/controls/textarea.ftl">
-							<control-param name="rows">5</control-param>
-						</control>
+							<control-param name="rows">30</control-param>
+                            <control-param name="style">width: 100%; max-height: 300px</control-param>
+                        </control>
 					</field>
 				</appearance>
 			</form>

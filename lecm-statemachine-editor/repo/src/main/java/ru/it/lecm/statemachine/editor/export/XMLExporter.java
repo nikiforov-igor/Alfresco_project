@@ -210,7 +210,7 @@ public class XMLExporter {
         for (XMLProperty xmlProperty : xmlNode.getProperties()) {
             xmlw.writeStartElement(ExportNamespace.PROPERTY);
             writeElement(ExportNamespace.NAME, xmlProperty.getName());
-            writeElement(ExportNamespace.VALUE, xmlProperty.getValue());
+            writeData(ExportNamespace.VALUE, xmlProperty.getValue());
             xmlw.writeEndElement();
         }
         xmlw.writeEndElement();
@@ -272,4 +272,11 @@ public class XMLExporter {
         xmlw.writeCharacters(value);
         xmlw.writeEndElement();
     }
+
+    private void writeData(String name, String value) throws XMLStreamException {
+        xmlw.writeStartElement(name);
+        xmlw.writeCData(value);
+        xmlw.writeEndElement();
+    }
+
 }
