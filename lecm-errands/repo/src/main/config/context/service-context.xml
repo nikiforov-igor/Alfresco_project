@@ -269,6 +269,59 @@
             <value>true</value>
         </property>
         <property name="jobName">
+            <value>errands-sys-agent-status</value>
+        </property>
+        <property name="jobGroup">
+            <value>errands-status</value>
+        </property>
+        <property name="triggerName">
+            <value>errands-sys-agent-status-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>errands-status-trigger</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="documentService" ref="documentService"/>
+    </bean>
+
+    <bean id="errandsEveryDayNotificationExecutor" class="ru.it.lecm.errands.shedule.EveryDayNotificationExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="errandsEveryDayNotificationSchedule" class="ru.it.lecm.errands.shedule.EveryDayNotificationShedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="cronExpression">
+            <value>0 15 3 */1 * ?</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */15 * * * ?</value>
+        </property>
+        <property name="onServerStart">
+            <value>true</value>
+        </property>
+        <property name="jobName">
             <value>errands-sys-agent-notifier</value>
         </property>
         <property name="jobGroup">
@@ -292,7 +345,6 @@
         <property name="runAsUser">
             <value>System</value>
         </property>
-        <property name="errandsService" ref="errandsService"/>
         <property name="documentService" ref="documentService"/>
     </bean>
 
