@@ -1,5 +1,6 @@
 <#assign id = args.htmlid?js_string>
 <#if data??>
+
 <script type="text/javascript">
     //<![CDATA[
     (function() {
@@ -12,50 +13,62 @@
     //]]>
 </script>
 
+<script type="text/javascript">
+    LogicECM.module.Errands.SETTINGS =
+        <#if errandsDashletSettings?? >
+        ${errandsDashletSettings}
+        <#else>
+        {}
+        </#if>;
+
+    var errands = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
+        {
+            itemType:"lecm-errands:document",
+            destination: LogicECM.module.Errands.SETTINGS.nodeRef
+        }).setMessages(${messages});
+</script>
+
 <div class="dashlet document bordered">
     <div class="title dashlet-title">
         <span>
             <div style="float:left; margin-right: 4px;">${msg("label.title")}</div>
-            <div class="total-tasks-count">${msg("dashlet.tasks.count")}: <span>${data.myTasksTotalCount}</span></div>
+            <div class="total-tasks-count">
+
+            <span class="lecm-dashlet-actions">
+                <a id="${id}-action-add" href="javascript:void(0);" onclick="errands.onAddErrandClick()" class="add" title="${msg("dashlet.add.errand.tooltip")}">${msg("dashlet.add.errand")}</a>
+            </span>
+        </span>
+        </div>
         </span>
         <span class="lecm-dashlet-actions">
             <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentTasksComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
         </span>
     </div>
     <div class="body scrollableList dashlet-body" id="${id}_results">
-        <#if data.myTasks?size == 0>
-            <div style="padding: 10px;">
-                <div style="float: left;width: 52px;height: 100px;">
-                    <img src="${url.context}/res/components/images/help-task-bw-32.png" />
-                </div>
-                <div>
-                    <h3 style="font-weight: bold;padding-bottom: 10px;">${msg("empty.title")}</h3>
-                    ${msg("empty.description")}
-                </div>
-            </div>
-        <#else>
-            <#assign maxMainTextLength = 58>
-            <#list data.myTasks as task>
-                <#assign mainTextLength = task.title?length + task.description?length + 2>
-                <#if mainTextLength < maxMainTextLength>
-                    <#assign description = task.description>
-                <#else>
-                    <#assign descriptionLength = maxMainTextLength - task.title?length - 5>
-                    <#assign description = task.description?substring(0, descriptionLength)?right_pad(descriptionLength + 3, ".")>
-                </#if>
-                <div class="my-task">
-                    <div class="workflow-date">${task.startDate}</div>
-                    <div class="workflow-task-status ${task.type}">${task.typeMessage}</div>
-                    <div style="clear:both;"></div>
-                    <div class="workflow-task-main-text">
-                        <span class="workflow-task-title">
-                            <a href="${url.context}/page/task-edit?taskId=${task.id}">${task.title}:</a>
-                        </span>&nbsp;${task.documentPresentStrings.document!""}
+        <div style="padding: 10px;">
+            <div>
+                <div style="float:left;">${msg("dashlet.my.tasks.assigned.count", data.myTasksTotalCount)}</div>
+
+                <#if data.myLatestTask??>
+                    <div style="float:right;">
+                        <a href="${url.context}/page/task-edit?taskId=${data.myLatestTask.id}" style="padding-right: 30px;">${msg("dashlet.label.last.task")}</a>${data.myLatestTask.startDate}
                     </div>
-                </div>
-            </#list>
-        </#if>
+                </#if>
+            </div>
+
+            <div style="clear: both; padding-top: 10px;">
+               <div style="float:left;">${msg("dashlet.my.errands.assigned.count", errandsData.myErrandsCount)}</div>
+
+                <#if errandsData.latestErrandNoderef??>
+                    <div style="float:right;">
+                        <a href="${url.context}/page/document?nodeRef=${errandsData.latestErrandNoderef}" style="padding-right: 30px;">${msg("dashlet.label.last.errand")}</a>           ${errandsData.latestErrandStartDate}
+                    </div>
+                </#if>
+            </div>
+
+            <div style="clear: both; padding-top: 10px;">${msg("dashlet.my.errands.assigned.by.me.count", errandsData.errandsIssuedByMeCount)}</div>
+
+        </div>
     </div>
 </div>
 </#if>
-

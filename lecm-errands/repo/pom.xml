@@ -103,6 +103,11 @@
             <artifactId>lecm-calendar-repo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.statemachine</groupId>
+            <artifactId>statemachine-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

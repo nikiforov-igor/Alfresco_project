@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Get Document Errands</shortname>
+	<description>Get Document Errands</description>
+	<url>/lecm/errands/api/documentErrands</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>

@@ -9,8 +9,7 @@ import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.errands.ErrandsService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -48,6 +47,18 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 	public NodeRef getDefaultSubject() {
 		return  errandsService.getDefaultSubject();
 	}
+
+    public Scriptable getMyDocumentErrands(ScriptNode document, Scriptable statusesScriptable) {
+        List<String> statuses = getElements(Context.getCurrentContext().getElements(statusesScriptable));
+        List<NodeRef> myErrands = errandsService.getMyDocumentErrands(document.getNodeRef(), statuses);
+        return createScriptable(myErrands);
+    }
+
+    public Scriptable getDocumentErrandsIssuedByMe(ScriptNode document, Scriptable statusesScriptable) {
+        List<String> statuses = getElements(Context.getCurrentContext().getElements(statusesScriptable));
+        List<NodeRef> errandsIssuedByMe = errandsService.getDocumentErrandsIssuedByMe(document.getNodeRef(), statuses);
+        return createScriptable(errandsIssuedByMe);
+    }
 
 	public void requestDueDateChange() {
 		errandsService.requestDueDateChange();

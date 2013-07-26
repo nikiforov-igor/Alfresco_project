@@ -1,15 +1,9 @@
-<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
+<import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
+//<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 function main() {
-    var hasPerm = hasPermission(args["nodeRef"], PERM_WF_TASK_LIST);
-    if (hasPerm) {
-        var url = "/lecm/statemachine/api/tasks?nodeRef=" + args["nodeRef"] + "&state=active";
-        var json = remote.connect("alfresco").get(url);
-        if (json.status == 200) {
-            var obj = eval("(" + json + ")");
-            model.data = obj;
-        }
-    }
+    AlfrescoUtil.param("nodeRef");
+    AlfrescoUtil.param("errandsIssuedByMeState");
 
     var url = "/lecm/errands/api/documentErrands?nodeRef=" + args["nodeRef"];
     var json = remote.connect("alfresco").get(url);
@@ -22,6 +16,10 @@ function main() {
     if (settingsStr.status == 200) {
         model.errandsDashletSettings = settingsStr;
     }
+
+    var today = new Date();
+    model.todayDate = today.getDate() + "/" + today.getMonth() + "/" + today.getFullYear();
+    model.soonDate = new Date();
 }
 
 main();

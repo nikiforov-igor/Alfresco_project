@@ -37,7 +37,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
     YAHOO.lang.augmentObject(LogicECM.DocumentTasks.prototype,
         {
+            htmlid: null,
             tasksState: "active",
+            myErrandsState: "active",
+            errandsIssuedByMeState: "active",
 
             onReady: function DocumentTasks_onReady() {
                 var linkEl = Dom.get(this.id + "-action-expand");
@@ -48,18 +51,98 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.tasksState = value;
             },
 
+            setMyErrandsState: function(value) {
+                this.myErrandsState = value;
+            },
+
+            setErrandsIssuedByMeState: function(value) {
+                this.errandsIssuedByMeState = value;
+            },
+
             onExpand: function () {
+                this.htmlid = this.id + Alfresco.util.generateDomId();
+
                 Alfresco.util.Ajax.request({
-                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/tasks",
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/tasks-errands",
                     dataObj: {
-                        nodeRef: this.options.nodeRef,
-                        htmlid: this.id + Alfresco.util.generateDomId(),
-                        tasksState: this.tasksState
+                        htmlid: this.htmlid
                     },
                     successCallback: {
                         fn: function(response) {
                             var text = response.serverResponse.responseText;
                             this.expandView(text);
+
+                            this.loadTasks();
+
+                            this.loadMyErrands();
+
+                            this.loadErrandsIssuedByMe();
+                        },
+                        scope: this
+                    },
+                    failureMessage: this.msg("message.failure"),
+                    scope: this,
+                    execScripts: true
+                });
+            },
+
+            loadTasks: function () {
+                Alfresco.util.Ajax.request({
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/tasks",
+                    dataObj: {
+                        nodeRef: this.options.nodeRef,
+                        htmlid: this.htmlid,
+                        tasksState: this.tasksState
+                    },
+                    successCallback: {
+                        fn: function(response) {
+                            var text = response.serverResponse.responseText;
+                            var listContainer = Dom.get(this.htmlid + "_tasksList");
+                            listContainer.innerHTML = text;
+                        },
+                        scope: this
+                    },
+                    failureMessage: this.msg("message.failure"),
+                    scope: this,
+                    execScripts: true
+                });
+            },
+
+            loadMyErrands: function () {
+                Alfresco.util.Ajax.request({
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/my-errands",
+                    dataObj: {
+                        nodeRef: this.options.nodeRef,
+                        htmlid: this.htmlid,
+                        myErrandsState: this.myErrandsState
+                    },
+                    successCallback: {
+                        fn: function(response) {
+                            var text = response.serverResponse.responseText;
+                            var listContainer = Dom.get(this.htmlid + "_myErrandsList");
+                            listContainer.innerHTML = text;
+                        },
+                        scope: this
+                    },
+                    failureMessage: this.msg("message.failure"),
+                    scope: this,
+                    execScripts: true
+                });
+            },
+
+            loadErrandsIssuedByMe: function () {
+                Alfresco.util.Ajax.request({
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/errands-issued-by-me",
+                    dataObj: {
+                        nodeRef: this.options.nodeRef,
+                        htmlid: this.htmlid,
+                        errandsIssuedByMeState: this.errandsIssuedByMeState
+                    },
+                    successCallback: {
+                        fn: function(response) {
+                            var text = response.serverResponse.responseText;
+                            var listContainer = Dom.get(this.htmlid + "_errandsIssuedByMeList");
+                            listContainer.innerHTML = text;
                         },
                         scope: this
                     },
@@ -68,5 +151,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     execScripts: true
                 });
             }
+
         }, true);
 })();

@@ -163,6 +163,17 @@
     font-weight: bold;
 }
 
+.dashlet .lecm-dashlet-actions .add {
+    background-image: url("/share/res/images/lecm-contracts/alf_contract_add.png");
+    padding-left: 20px;
+}
+
+.dashlet .lecm-dashlet-actions a,  .dashlet .lecm-dashlet-actions a:hover, .dashlet .lecm-dashlet-actions a:visited {
+    font-weight: normal;
+    font-style: normal;
+    color: #333333;
+}
+
 /******************************************/
 
 .datagrid .action-set .onActionViewContent a {

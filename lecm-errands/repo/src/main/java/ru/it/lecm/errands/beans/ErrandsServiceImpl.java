@@ -13,12 +13,10 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -195,6 +193,52 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 			return result;
 		}
 	}
+
+    private List<NodeRef> getDocumentErrands(NodeRef document, List<String> statuses, List<QName> roles) {
+        if (document == null || statuses == null || roles == null) {
+            return new ArrayList<NodeRef>();
+        }
+
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+
+        List<AssociationRef> documentErrandsAssocs = nodeService.getSourceAssocs(document, ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
+        for (AssociationRef documentErrandsAssoc : documentErrandsAssocs) {
+            NodeRef errand = documentErrandsAssoc.getSourceRef();
+            String status = (String) nodeService.getProperty(errand, StatemachineModel.PROP_STATUS);
+            if (!statuses.contains(status)) {
+                continue;
+            }
+
+            for (QName role : roles) {
+                if (currentEmployee.equals(findNodeByAssociationRef(errand, role, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
+                    result.add(errand);
+                    break;
+                }
+            }
+        }
+
+        Collections.sort(result, new Comparator<NodeRef>() {
+            @Override
+            public int compare(NodeRef o1, NodeRef o2) {
+                Date dateCreated1 = (Date) nodeService.getProperty(o1, ContentModel.PROP_CREATED);
+                Date dateCreated2 = (Date) nodeService.getProperty(o2, ContentModel.PROP_CREATED);
+                return dateCreated1.compareTo(dateCreated2);
+            }
+        });
+
+        return result;
+    }
+
+    @Override
+    public List<NodeRef> getMyDocumentErrands(NodeRef document, List<String> statuses) {
+        return getDocumentErrands(document, statuses, Arrays.asList(ASSOC_ERRANDS_EXECUTOR, ASSOC_ERRANDS_CONTROLLER));
+    }
+
+    @Override
+    public List<NodeRef> getDocumentErrandsIssuedByMe(NodeRef document, List<String> statuses) {
+        return getDocumentErrands(document, statuses, Arrays.asList(ASSOC_ERRANDS_INITIATOR));
+    }
 
     @Override
     public void requestDueDateChange() {

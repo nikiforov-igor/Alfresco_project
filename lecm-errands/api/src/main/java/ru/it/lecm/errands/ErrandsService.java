@@ -100,4 +100,8 @@ public interface ErrandsService {
     void requestDueDateChange();
 
     public List<NodeRef> getErrandsDocuments(List<String> paths, int skipCount, int maxItems);
+
+    List<NodeRef> getMyDocumentErrands(NodeRef document, List<String> statuses);
+
+    List<NodeRef> getDocumentErrandsIssuedByMe(NodeRef document, List<String> statuses);
 }

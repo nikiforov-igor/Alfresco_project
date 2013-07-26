@@ -290,7 +290,7 @@
                         <many>true</many>
                     </source>
                     <target>
-                        <class>lecm-errands:document</class>
+                        <class>lecm-document:base</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>

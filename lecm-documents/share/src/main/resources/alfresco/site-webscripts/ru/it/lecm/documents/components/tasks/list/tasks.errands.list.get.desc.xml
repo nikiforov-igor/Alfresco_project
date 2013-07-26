@@ -1,0 +1,5 @@
+<webscript>
+    <shortname>tasks-errands-list</shortname>
+    <description>Document Tasks and Errands List Component</description>
+    <url>/lecm/components/document/tasks-errands</url>
+</webscript>

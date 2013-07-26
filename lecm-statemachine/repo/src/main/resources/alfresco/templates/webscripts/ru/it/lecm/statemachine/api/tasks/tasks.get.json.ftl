@@ -34,6 +34,16 @@
         }<#if task_has_next>,</#if>
 		</#list>
 	],
+    <#if data.myLatestTask?exists>
+        "myLatestTask" : {
+            "id": "${data.myLatestTask.id}",
+            "startDate": <#if data.myLatestTask.startDate?exists>
+                "${data.myLatestTask.startDate?date}"
+            <#else>
+                ""
+            </#if>
+        },
+    </#if>
 	"subordinateTasks": [
 		<#list data.subordinateTasks as task>
 		{

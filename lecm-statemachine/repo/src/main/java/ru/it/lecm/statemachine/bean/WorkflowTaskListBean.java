@@ -19,6 +19,7 @@ public class WorkflowTaskListBean {
     private List<WorkflowTaskBean> subordinateTasks = new ArrayList<WorkflowTaskBean>();
     private int myTasksTotalCount = 0;
     private boolean showSubordinateTasks = false;
+    private WorkflowTaskBean myLatestTask = null;
 
     public String getShowSubordinateTasks() {
         return String.valueOf(showSubordinateTasks);
@@ -68,6 +69,10 @@ public class WorkflowTaskListBean {
                 return o2.getStartDate().compareTo(o1.getStartDate());
             }
         });
+
+        if (this.myTasks.size() > 0) {
+            this.myLatestTask = this.myTasks.get(0);
+        }
     }
 
     public void setSubordinatesTasks(List<WorkflowTask> subordinatesTasks) {
@@ -82,5 +87,9 @@ public class WorkflowTaskListBean {
 
     public void setShowSubordinateTasks(boolean showSubordinateTasks) {
         this.showSubordinateTasks = showSubordinateTasks;
+    }
+
+    public WorkflowTaskBean getMyLatestTask() {
+        return myLatestTask;
     }
 }
