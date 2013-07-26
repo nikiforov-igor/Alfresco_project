@@ -41,7 +41,7 @@ public class ErrandsPolicy extends BaseBean
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         // Проверяем что нода только что создана и если не выбран инициатор, дописываем значение по умолчанию (автор)
-        if (before.size() == 0 && (after.get(ErrandsService.TYPE_ERRANDS_INITIATOR_REF) == null)) {
+        if (before.size() == 0 && (after.get(ErrandsService.PROP_ERRANDS_INITIATOR_REF) == null)) {
             NodeRef initiator = new NodeRef(after.get(DocumentService.PROP_DOCUMENT_CREATOR_REF).toString());
             if (initiator != null) {
                 nodeService.createAssociation(nodeRef, initiator, ErrandsService.ASSOC_ERRANDS_INITIATOR);

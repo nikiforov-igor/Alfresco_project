@@ -1,0 +1,13 @@
+<config>
+   <filter-assign>
+       <filter type="my" label="my" />
+       <filter type="initiator" label="initiator" />
+       <filter type="all" label="all" />
+       <filter type="department" label="department" />
+   </filter-assign>
+    <filter-date>
+        <filter type="expired" label="expired" />
+        <filter type="deadline" label="deadline" />
+        <filter type="all" label="all" />
+    </filter-date>
+</config>

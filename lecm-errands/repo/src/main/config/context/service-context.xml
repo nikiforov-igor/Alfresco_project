@@ -296,4 +296,7 @@
         <property name="documentService" ref="documentService"/>
     </bean>
 
+    <bean id="errandsFilter" class="ru.it.lecm.errands.beans.ErrandsFilter" depends-on="errandsService" parent="documentsFilter" init-method="register">
+        <property name="workCalendar" ref="WorkCalendarService"/>
+    </bean>
 </beans>

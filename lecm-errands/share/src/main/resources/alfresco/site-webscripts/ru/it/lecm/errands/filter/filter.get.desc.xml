@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Errands filter</shortname>
+    <description>Errands filter</description>
+    <url>/lecm/errands/filters</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

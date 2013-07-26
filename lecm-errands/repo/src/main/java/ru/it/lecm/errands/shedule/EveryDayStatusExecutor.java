@@ -44,7 +44,7 @@ public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
     @Override
     protected void executeImpl(Action action, NodeRef nodeRef) {
         // выставляем атрибут "Просрочен" в значение true
-        nodeService.setProperty(nodeRef, errandsService.TYPE_ERRANDS_IS_EXPIRED, true);
+        nodeService.setProperty(nodeRef, errandsService.PROP_ERRANDS_IS_EXPIRED, true);
 
         // формируем уведомление Исполнителю, Инициатору и Контроллеру:
         Notification notification = new Notification();

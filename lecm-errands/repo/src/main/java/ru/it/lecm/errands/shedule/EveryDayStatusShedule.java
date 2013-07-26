@@ -176,12 +176,12 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
 
         filters = "@lecm\\-errands\\:just\\-in\\-time:\"true\""+ " AND " + "@lecm\\-errands\\:is\\-expired:\"false\"";
 
-        List<NodeRef> errandsDocuments = documentService.getDocumentsByFilter(types, errandsService.TYPE_ERRANDS_LIMITATION_DATE, null, now, paths, statuses, filters, null);
+        List<NodeRef> errandsDocuments = documentService.getDocumentsByFilter(types, errandsService.PROP_ERRANDS_LIMITATION_DATE, null, now, paths, statuses, filters, null);
 
         // в списке подписок у которых дата исполнения меньше текущей
         List<NodeRef> appropErrands = new ArrayList<NodeRef>();
         for (NodeRef errand : errandsDocuments) {
-            Date endDate = (Date) nodeService.getProperty(errand, errandsService.TYPE_ERRANDS_LIMITATION_DATE);
+            Date endDate = (Date) nodeService.getProperty(errand, errandsService.PROP_ERRANDS_LIMITATION_DATE);
             if (endDate != null && endDate.before(now)) {
                 appropErrands.add(errand);
             }

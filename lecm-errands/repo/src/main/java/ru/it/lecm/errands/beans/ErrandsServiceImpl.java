@@ -211,8 +211,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         // сортируем по важности поручения и по сроку исполнения
-        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + TYPE_ERRANDS_IS_IMPORTANT.toString(),false));
-        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + TYPE_ERRANDS_LIMITATION_DATE.toString(),false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + PROP_ERRANDS_IS_IMPORTANT.toString(),false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + PROP_ERRANDS_LIMITATION_DATE.toString(),false));
 
        status.add("Ожидает исполнения");
        status.add("В работе");
