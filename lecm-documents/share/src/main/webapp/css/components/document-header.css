@@ -92,3 +92,14 @@
 .unsubscribe-header {
     float: right;
 }
+
+.document-header .document-action .favorite span.first-child {
+	background: url('/share/res/components/images/star-deselected_16x16.png') no-repeat 5px 5px;
+	padding-left: 7px;
+	border: 1px solid;
+}
+.document-header .document-action .favorite.enabled span.first-child {
+	background: url('/share/res/components/images/star-selected_16x16.png') no-repeat 5px 5px;
+	padding-left: 7px;
+	border: 1px solid;
+}

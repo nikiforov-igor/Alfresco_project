@@ -63,16 +63,20 @@
 	        <script type="text/javascript">//<![CDATA[
 	        (function()
 	        {
-		        YAHOO.util.Event.onDOMReady(function (){
-			        new Alfresco.Favourite("${controlId}-favourite").setOptions(
-					        {
-						        nodeRef: "${nodeRef}",
-						        type: "document"
-					        }).display(${(item.isFavourite!false)?string});
+		        var favorite = new LogicECM.module.DocumentFavourite("${id}").setMessages(${messages});
+		        favorite.setOptions({
+			        documentRef: "${nodeRef}",
+			        isFavourite: ${(item.isFavourite!false)?string}
 		        });
 	        })();
 	        //]]></script>
-	        <div class="favorite" id="${controlId}-favourite"></div>
+	        <div class="favorite" id="${controlId}-favourite">
+		        <span id="${controlId}-favourite-button" class="yui-button yui-push-button">
+                   <span class="first-child">
+                      <button type="button"></button>
+                   </span>
+                </span>
+	        </div>
         </div>
 
         <div class="clear"></div>
