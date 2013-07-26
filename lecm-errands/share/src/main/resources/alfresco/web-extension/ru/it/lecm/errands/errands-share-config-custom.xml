@@ -48,6 +48,8 @@
                     <show id="lecm-document:creator"/>
                     <!-- Тематика -->
                     <show id="lecm-errands:subject-assoc"/>
+                    <!-- Разделительная линия -->
+                    <show id="lecm-errands:line"/>
                     <!-- Дата исполнения -->
                     <show id="lecm-errands:execution-date"/>
                     <!-- Отчет об исполнении -->
@@ -110,6 +112,9 @@
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-errands:line" set="set7">
+                        <control template="/ru/it/lecm/base-share/components/controls/line.ftl"/>
                     </field>
                     <field id="lecm-errands:execution-date" set="set7"/>
                     <field id="lecm-errands:execution-report" set="set7">

@@ -2409,3 +2409,11 @@ span.person a div.description:empty {
     padding: 0;
     margin: 0 !important;
 }
+
+/* Разделительная линия для формы */
+.form-line {
+    width: 100%;
+    height: 1px;
+    margin: 10px 0 20px;
+    background: #aaa;
+}
