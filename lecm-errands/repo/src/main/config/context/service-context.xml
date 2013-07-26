@@ -242,4 +242,58 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
+    <bean id="errandsEveryDayStatusExecutor" class="ru.it.lecm.errands.shedule.EveryDayStatusExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="errandsEveryDayStatusSchedule" class="ru.it.lecm.errands.shedule.EveryDayStatusShedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="cronExpression">
+            <value>0 0 3 */1 * ?</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */15 * * * ?</value>
+        </property>
+        <property name="onServerStart">
+            <value>true</value>
+        </property>
+        <property name="jobName">
+            <value>errands-sys-agent-notifier</value>
+        </property>
+        <property name="jobGroup">
+            <value>errands-notifications</value>
+        </property>
+        <property name="triggerName">
+            <value>errands-sys-agent-notifier-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>errands-notifications-trigger</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="documentService" ref="documentService"/>
+    </bean>
+
 </beans>
