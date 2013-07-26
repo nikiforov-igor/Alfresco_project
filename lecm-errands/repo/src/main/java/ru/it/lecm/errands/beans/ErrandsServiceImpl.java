@@ -205,9 +205,12 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<AssociationRef> documentErrandsAssocs = nodeService.getSourceAssocs(document, ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
         for (AssociationRef documentErrandsAssoc : documentErrandsAssocs) {
             NodeRef errand = documentErrandsAssoc.getSourceRef();
-            String status = (String) nodeService.getProperty(errand, StatemachineModel.PROP_STATUS);
-            if (!statuses.contains(status)) {
-                continue;
+
+            if (statuses != null && statuses.size() > 0) {
+                String status = (String) nodeService.getProperty(errand, StatemachineModel.PROP_STATUS);
+                if (!statuses.contains(status)) {
+                    continue;
+                }
             }
 
             for (QName role : roles) {

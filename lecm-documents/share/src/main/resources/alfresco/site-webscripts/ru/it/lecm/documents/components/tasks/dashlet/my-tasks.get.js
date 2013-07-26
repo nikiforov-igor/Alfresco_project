@@ -11,14 +11,16 @@ function main() {
         }
     }
 
-    var url = "/lecm/errands/api/documentMyErrands?nodeRef=" + args["nodeRef"];
+    var statuses = "В работе,На доработке,На утверждении контролером,На утверждении инициатором";
+
+    var url = "/lecm/errands/api/documentMyErrands?nodeRef=" + args["nodeRef"] + "&statuses=" + statuses;
     var json = remote.connect("alfresco").get(url);
     if (json.status == 200) {
         var obj = eval("(" + json + ")");
         model.myErrandsData = obj;
     }
 
-    var url = "/lecm/errands/api/documentErrandsIssuedByMe?nodeRef=" + args["nodeRef"];
+    var url = "/lecm/errands/api/documentErrandsIssuedByMe?nodeRef=" + args["nodeRef"] + "&statuses=" + statuses;
     var json = remote.connect("alfresco").get(url);
     if (json.status == 200) {
         var obj = eval("(" + json + ")");
