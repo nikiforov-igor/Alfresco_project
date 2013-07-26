@@ -1,19 +1,33 @@
 .dnd-uploader ul.attachments-list {
-    width: 300px;
-    margin-left: 0;
+    width: 270px;
+    min-height: 102px;
+    margin: 0 30px 0 0;
     float: left;
     padding: 0 !important;
+    border: 1px solid #666;
 }
 .dnd-uploader ul.attachments-list li img {
-    margin-right: 10px;
+    margin: 0 5px;
+}
+.dnd-uploader ul.attachments-list li > div {
+    width: 200px;
+    height: 20px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.dnd-uploader ul.attachments-list li img.remove-icon {
+    margin-right: 0;
+    cursor: pointer;
 }
 .dnd-uploader div.uploader-block {
-    float: right;
-    margin: 0 10px 0 0 !important;
+    float: left;
+    margin: -12px 0 0 !important;
 }
 .dnd-uploader div.uploader-block fieldset {
-    width: 350px;
-    height: 120px;
+    width: 150px;
+    height: 90px;
     border: 2px dashed #9d9d9d;
     padding: 10px;
     text-align: center;
@@ -26,9 +40,10 @@
     border: 2px solid #4F94C9;
 }
 .dnd-uploader .uploader-block img.uploader-button {
-    margin: 5px 0 10px;
+    margin: 0 0 5px;
     cursor: pointer;
 }
 .dnd-uploader .uploader-block span.drag-tip {
     color: #a7a7a7;
+    line-height: 16px;
 }

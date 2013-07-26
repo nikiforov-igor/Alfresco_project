@@ -3,7 +3,10 @@
 .yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field div.selectone-control select,
 .yui-skin-lecmTheme div.yui-panel div.form-field div.autocompleteCurrentValueDisplay,
 .yui-skin-lecmTheme div.yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible {
-     width: 639px;
+     width: 600px;
+}
+.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
+     width: 192px;
 }
 .yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field > input.date-entry {
      width: 200px;
@@ -20,4 +23,7 @@
 }
 .yui-skin-lecmTheme div.yui-panel div.form-field.checkbox-control input[type="checkbox"] {
      margin-left: 0;
+}
+.yui-skin-lecmTheme div.yui-panel div.form-field.checkbox-control label {
+     padding-right: 50px;
 }

@@ -171,15 +171,15 @@
                 <field-visibility>
                     <!-- Исполнитель -->
                     <show id="lecm-errands:executor-assoc"/>
+                    <!-- Важное -->
+                    <show id="lecm-errands:is-important"/>
                     <!--  Заголовок поручения -->
                     <show id="lecm-errands:title"/>
                     <!-- Содержание -->
                     <show id="lecm-errands:content"/>
                     <!-- Срок исполнения -->
                     <show id="lecm-errands:limitation-date"/>
-                    <!-- Важное -->
-                    <show id="lecm-errands:is-important"/>
-	                <!--  Вложения -->
+                    <!--  Вложения -->
 	                <show id="lecm-errands:attachments-temp-assoc"/>
                     <!-- Тематика -->
                     <show id="lecm-errands:subject-assoc"/>
@@ -199,15 +199,17 @@
                     <show id="lecm-errands:is-short"/>
                 </field-visibility>
                 <appearance>
+                    <set id="top-set" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="main" appearance="" />
-                    <set id="limitation-date" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="attachments" appearance="" />
                     <set id="collapsable" appearance="" template="/ru/it/lecm/base-share/components/collapsable-set.ftl" />
                     <set id="exist-bussines-role" parent="collapsable" appearance="ERRANDS_CHOOSING_INITIATOR" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
                     <set id="collapsable-inner" parent="collapsable" appearance=""/>
                     <set id="start-date-set" parent="collapsable" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
 
-                    <field id="lecm-errands:executor-assoc" set="main"/>
+                    <field id="lecm-errands:executor-assoc" set="top-set"/>
+                    <field id="lecm-errands:is-important" set="top-set">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
                     <field id="lecm-errands:title" set="main">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -222,11 +224,8 @@
                     <field id="lecm-errands:content" set="main">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="limitation-date"/>
-                    <field id="lecm-errands:is-important" set="limitation-date">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-                    </field>
-                    <field id="lecm-errands:attachments-temp-assoc" set="attachments">
+                    <field id="lecm-errands:limitation-date" set="main"/>
+                    <field id="lecm-errands:attachments-temp-assoc" set="main">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
 			                <control-param name="uploadDirectoryPath">{userhome}</control-param>
 			                <control-param name="directoryName">label.errands.attachments</control-param>

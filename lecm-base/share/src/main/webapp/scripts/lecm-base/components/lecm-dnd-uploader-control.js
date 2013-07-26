@@ -163,11 +163,29 @@ LogicECM.control = LogicECM.control || {};
 						var nodeRef = obj.successful[i].nodeRef;
 
 						if (elAttachments != null) {
-							var icon = Alfresco.util.getFileIcon(fileName, "cm:content", 16);
-							var iconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + icon +"'/>";
+							var fileIcon = Alfresco.util.getFileIcon(fileName, "cm:content", 16);
+							var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"'/>";
+                            var iconId = this.id + "-attachments-" + i;
+                            var removeIcon = "<img id='" + iconId + "' src='" + Alfresco.constants.URL_RESCONTEXT
+                                + "components/images/delete-16.png' class='remove-icon'/>";
 
-							elAttachments.innerHTML += "<li>" + iconHtml + fileName + "</li>";
-						}
+                            fileName = "<div>" + fileName + "</div>"
+							elAttachments.innerHTML += "<li>" + fileIconHtml + fileName + removeIcon + "</li>";
+
+
+                            Event.onAvailable(iconId, function() {
+                                var iconId = arguments[0].iconId;
+
+                                Event.addListener(iconId, "click", function() {
+                                    var li = Dom.getAncestorByTagName(iconId, "li");
+                                    var ul = Dom.getAncestorByTagName(li, "ul");
+
+                                    ul.removeChild(li);
+
+                                    // todo to AIvkin: remove from "added"
+                                });
+                            }, {iconId: iconId});
+                        }
 						if (elAdded != null) {
 							if (elAdded.value.length > 0) {
 								elAdded.value += ',';
