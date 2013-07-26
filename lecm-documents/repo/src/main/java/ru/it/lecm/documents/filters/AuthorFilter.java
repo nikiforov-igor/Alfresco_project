@@ -5,9 +5,12 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentFilter;
+import ru.it.lecm.documents.beans.DocumentService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: DBashmakov
@@ -55,6 +58,18 @@ public class AuthorFilter extends DocumentFilter {
                         break;
                     }
                     case FAVOURITE: {
+                        String favourites = "org.alfresco.share.documents.favourites";
+                        String currentUser = authService.getCurrentUserName();
+                        Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, favourites);
+                        String favouriteDocs = preferences.get(favourites).toString();
+                        if (favouriteDocs != null && favouriteDocs.length() > 0) {
+                            String[] docsRefs = favouriteDocs.split(",");
+                            boolean addOR = false;
+                            for (String docsRef : docsRefs) {
+                                query += (addOR ? " OR " : "") + "ID:" + docsRef.replace(":", "\\:");
+                                addOR = true;
+                            }
+                        }
                         break;
                     }
                     case ALL: {

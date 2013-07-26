@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.beans;
 
+import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -18,6 +19,7 @@ public abstract class DocumentFilter {
     protected NamespaceService namespaceService;
     protected AuthenticationService authService;
     protected NodeService nodeService;
+    protected PreferenceService preferenceService;
 
     public abstract String getId();
 
@@ -30,6 +32,7 @@ public abstract class DocumentFilter {
         PropertyCheck.mandatory(this, "documentService", documentService);
         PropertyCheck.mandatory(this, "authService", authService);
         PropertyCheck.mandatory(this, "nodeService", nodeService);
+        PropertyCheck.mandatory(this, "preferenceService", preferenceService);
         FiltersManager.registerFilter(this);
     }
 
@@ -56,5 +59,9 @@ public abstract class DocumentFilter {
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
+    }
+
+    public void setPreferenceService(PreferenceService preferenceService) {
+        this.preferenceService = preferenceService;
     }
 }
