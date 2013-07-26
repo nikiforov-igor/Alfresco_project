@@ -10,7 +10,3 @@ if (myErrands.length > 0) {
     model.latestErrandNoderef = latestErrand.nodeRef.toString();
     model.latestErrandStartDate = latestErrand.properties["cm:created"];
 }
-
-var errandsIssuedByMe = errands.getDocumentErrandsIssuedByMe(document, ["В работе", "На доработке", "На утверждении контролером", "На утверждении инициатором"]);
-model.errandsIssuedByMe = errandsIssuedByMe;
-model.errandsIssuedByMeCount = errandsIssuedByMe.length;

@@ -11,11 +11,18 @@ function main() {
         }
     }
 
-    var url = "/lecm/errands/api/documentErrands?nodeRef=" + args["nodeRef"];
+    var url = "/lecm/errands/api/documentMyErrands?nodeRef=" + args["nodeRef"];
     var json = remote.connect("alfresco").get(url);
     if (json.status == 200) {
         var obj = eval("(" + json + ")");
-        model.errandsData = obj;
+        model.myErrandsData = obj;
+    }
+
+    var url = "/lecm/errands/api/documentErrandsIssuedByMe?nodeRef=" + args["nodeRef"];
+    var json = remote.connect("alfresco").get(url);
+    if (json.status == 200) {
+        var obj = eval("(" + json + ")");
+        model.errandsIssuedByMeData = obj;
     }
 
     var settingsStr = remote.connect("alfresco").get("/lecm/document-type/settings?docType=lecm-errands:document");

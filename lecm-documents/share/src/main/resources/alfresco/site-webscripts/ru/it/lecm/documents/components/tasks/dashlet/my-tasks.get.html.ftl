@@ -57,16 +57,16 @@
             </div>
 
             <div style="clear: both; padding-top: 10px;">
-               <div style="float:left;">${msg("dashlet.my.errands.assigned.count", errandsData.myErrandsCount)}</div>
+               <div style="float:left;">${msg("dashlet.my.errands.assigned.count", myErrandsData.myErrandsCount)}</div>
 
-                <#if errandsData.latestErrandNoderef??>
+                <#if myErrandsData.latestErrandNoderef??>
                     <div style="float:right;">
-                        <a href="${url.context}/page/document?nodeRef=${errandsData.latestErrandNoderef}" style="padding-right: 30px;">${msg("dashlet.label.last.errand")}</a>           ${errandsData.latestErrandStartDate}
+                        <a href="${url.context}/page/document?nodeRef=${myErrandsData.latestErrandNoderef}" style="padding-right: 30px;">${msg("dashlet.label.last.errand")}</a>${myErrandsData.latestErrandStartDate}
                     </div>
                 </#if>
             </div>
 
-            <div style="clear: both; padding-top: 10px;">${msg("dashlet.my.errands.assigned.by.me.count", errandsData.errandsIssuedByMeCount)}</div>
+            <div style="clear: both; padding-top: 10px;">${msg("dashlet.my.errands.assigned.by.me.count", errandsIssuedByMeData.errandsIssuedByMeCount)}</div>
 
         </div>
     </div>
