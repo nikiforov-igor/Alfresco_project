@@ -11,7 +11,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.errands.beans.ErrandsServiceImpl;
+import ru.it.lecm.errands.ErrandsService;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -40,7 +40,6 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
 
     private Scheduler scheduler;
 
-    private ErrandsServiceImpl errandsService;
     private NodeService nodeService;
     private DocumentService documentService;
 
@@ -54,10 +53,6 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
 
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
-    }
-
-    public void setErrandsService(ErrandsServiceImpl errandsService) {
-        this.errandsService = errandsService;
     }
 
     @Override
@@ -160,12 +155,12 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
 
     private List<NodeRef> getErrandsOnExecution() {
         Date now = new Date();
-        String filters = "";
+        String filters;
         List<QName> types = new ArrayList<QName>();
         List<String> paths = new ArrayList<String>();
         List<String> statuses = new ArrayList<String>();
 
-        types.add(errandsService.TYPE_ERRANDS);
+        types.add(ErrandsService.TYPE_ERRANDS);
 
         paths.add(documentService.getDraftPath());
         paths.add(documentService.getDocumentsFolderPath());
@@ -173,15 +168,16 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
         statuses.add("!Отменено");
         statuses.add("!Не исполнено");
         statuses.add("!Черновик");
+        statuses.add("!Исполнено");
 
         filters = "@lecm\\-errands\\:just\\-in\\-time:\"true\""+ " AND " + "@lecm\\-errands\\:is\\-expired:\"false\"";
 
-        List<NodeRef> errandsDocuments = documentService.getDocumentsByFilter(types, errandsService.PROP_ERRANDS_LIMITATION_DATE, null, now, paths, statuses, filters, null);
+        List<NodeRef> errandsDocuments = documentService.getDocumentsByFilter(types, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, null, now, paths, statuses, filters, null);
 
         // в списке подписок у которых дата исполнения меньше текущей
         List<NodeRef> appropErrands = new ArrayList<NodeRef>();
         for (NodeRef errand : errandsDocuments) {
-            Date endDate = (Date) nodeService.getProperty(errand, errandsService.PROP_ERRANDS_LIMITATION_DATE);
+            Date endDate = (Date) nodeService.getProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
             if (endDate != null && endDate.before(now)) {
                 appropErrands.add(errand);
             }
