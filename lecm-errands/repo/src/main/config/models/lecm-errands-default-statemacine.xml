@@ -1249,7 +1249,7 @@
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[var document = stm_document;
+																<value><![CDATA[var document = bpm_package.children[0];
 regnumbers.setDocumentNumber("ERRAND_NUMBER", document, "lecm-errands:number");
 
 
