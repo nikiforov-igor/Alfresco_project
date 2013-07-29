@@ -30,6 +30,23 @@
 
             <properties>
 
+                <!-- Взаимодействие с контрагентом, ЮЗД -->
+                <property name="lecm-contractor:interaction-type">
+                    <title>Interaction Type</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <constraints>
+                        <constraint name="lecm-contractor:interaction-type-constraint" type="LIST">
+                            <parameter name="allowedValues">
+                                <list>
+                                    <value>SPECOP</value><!-- Спецоператор -->
+                                    <value>EMAIL</value><!-- Email -->
+                                </list>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+
                 <!-- Сокращенное наименование -->
                 <property name="lecm-contractor:shortname">
                     <title>Short Name</title>
