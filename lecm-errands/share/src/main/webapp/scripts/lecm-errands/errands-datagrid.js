@@ -10,7 +10,7 @@
         return this;
     };
 
-    YAHOO.lang.extend(LogicECM.module.Errands.DataGrid, LogicECM.module.Base.DataGrid);
+    YAHOO.lang.extend(LogicECM.module.Errands.DataGrid, LogicECM.module.Documents.DataGrid);
 
     YAHOO.lang.augmentObject(LogicECM.module.Errands.DataGrid.prototype, {
         getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
@@ -186,10 +186,6 @@
                 );
             }
             return columnDefinitions;
-        },
-        onActionEdit: function DataGrid_onActionEdit(item) {
-            window.location.href = window.location.protocol + "//" + window.location.host +
-                Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + item.nodeRef;
         }
     }, true);
 })();

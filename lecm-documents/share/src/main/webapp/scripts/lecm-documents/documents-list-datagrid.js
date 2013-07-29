@@ -155,7 +155,7 @@ var $siteURL = Alfresco.util.siteURL;
                     },
                     webscript:{
                         method: Alfresco.util.Ajax.POST,
-                        stem: Alfresco.constants.PROXY_URI + "lecm/contracts/",
+                        stem: Alfresco.constants.PROXY_URI + "lecm/document/api/",
                         name:"duplicate/node/" + destinationNodeRef.uri
                     },
                     config:{

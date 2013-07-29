@@ -200,32 +200,7 @@ public class ContractsBeanImpl extends BaseBean {
 	}
 
 	public NodeRef dublicateContract(NodeRef nodeRef) {
-		if (isContract(nodeRef)) {
-			Map<QName, Serializable> properties = new HashMap<QName, Serializable> ();
-			properties.put (PROP_SUMMARY_CONTENT, nodeService.getProperty(nodeRef, PROP_SUMMARY_CONTENT));
-			properties.put (PROP_SIGNATORY_COUNTERPARTY, nodeService.getProperty(nodeRef, PROP_SIGNATORY_COUNTERPARTY));
-
-			ChildAssociationRef createdNodeAssoc = nodeService.createNode(getDraftRoot(),
-					ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
-					GUID.generate()), TYPE_CONTRACTS_DOCUMENT, properties);
-
-			if (createdNodeAssoc != null && createdNodeAssoc.getChildRef() != null) {
-				NodeRef createdNode = createdNodeAssoc.getChildRef();
-				nodeService.createAssociation(createdNode, findNodeByAssociationRef(nodeRef, ASSOC_CONTRACT_TYPE, null, ASSOCIATION_TYPE.TARGET), ASSOC_CONTRACT_TYPE);
-				nodeService.createAssociation(createdNode, findNodeByAssociationRef(nodeRef, ASSOC_CONTRACT_PARTNER, null, ASSOCIATION_TYPE.TARGET), ASSOC_CONTRACT_PARTNER);
-				nodeService.createAssociation(createdNode, findNodeByAssociationRef(nodeRef, ASSOC_CONTRACT_SUBJECT, null, ASSOCIATION_TYPE.TARGET), ASSOC_CONTRACT_SUBJECT);
-				NodeRef contractRepresentative = findNodeByAssociationRef(nodeRef, ASSOC_CONTRACT_REPRESENTATIVE, null, ASSOCIATION_TYPE.TARGET);
-				if (contractRepresentative != null) {
-					nodeService.createAssociation(createdNode, contractRepresentative, ASSOC_CONTRACT_REPRESENTATIVE);
-				}
-				NodeRef currency = findNodeByAssociationRef(nodeRef, ASSOC_CONTRACT_CURRENCY, null, ASSOCIATION_TYPE.TARGET);
-				if (currency != null) {
-					nodeService.createAssociation(createdNode, currency, ASSOC_CONTRACT_CURRENCY);
-				}
-				return createdNode;
-			}
-		}
-		return null;
+        return documentService.duplicateDocument(nodeRef);
 	}
 
     public String getAuthorProperty() {

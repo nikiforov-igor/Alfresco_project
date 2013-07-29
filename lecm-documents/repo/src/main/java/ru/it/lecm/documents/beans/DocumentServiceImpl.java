@@ -14,8 +14,12 @@ import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchParameters.SortDefinition;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.InvalidQNameException;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
@@ -36,6 +40,8 @@ import java.util.*;
  * Time: 16:28
  */
 public class DocumentServiceImpl extends BaseBean implements DocumentService {
+    private static final transient Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
+
     private OrgstructureBean orgstructureService;
     private BusinessJournalService businessJournalService;
     private Repository repositoryHelper;
@@ -375,6 +381,56 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
             }
         }
         return DocumentService.PROP_DOCUMENT_CREATOR_REF.toPrefixString(namespaceService);
+    }
+
+    @Override
+    public NodeRef duplicateDocument(NodeRef document) {
+        if (isDocument(document)) {
+            QName docType = nodeService.getType(document);
+            DocumentCopySettings settings = DocumentCopySettingsBean.getSettingsForDocType(docType.toPrefixString(namespaceService));
+
+            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+            if (settings != null) {
+                // копируем свойства
+                List<String> propertiesToCopy = settings.getPropsToCopy();
+                for (String propName : propertiesToCopy) {
+                    try {
+                        QName propQName = QName.createQName(propName, namespaceService);
+                        if (propQName != null) {
+                            properties.put(propQName, nodeService.getProperty(document, propQName));
+                        }
+                    } catch (InvalidQNameException invalid) {
+                        logger.warn("Invalid QName for document property:" + propName);
+                    }
+                }
+            }
+            // создаем ноду
+            ChildAssociationRef createdNodeAssoc = nodeService.createNode(getDraftRootByType(docType),
+                    ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
+                    GUID.generate()), docType, properties);
+
+            if (createdNodeAssoc != null && createdNodeAssoc.getChildRef() != null) {
+                NodeRef createdNode = createdNodeAssoc.getChildRef();
+                if (settings != null) {
+                    // копируем ассоциации
+                    List<String> assocsToCopy = settings.getAssocsToCopy();
+                    for (String assocName : assocsToCopy) {
+                        try {
+                            QName assocQName = QName.createQName(assocName, namespaceService);
+                            if (assocQName != null) {
+                                List<NodeRef> targets = findNodesByAssociationRef(document, assocQName, null, ASSOCIATION_TYPE.TARGET);
+                                nodeService.setAssociations(createdNode, assocQName, targets);
+
+                            }
+                        } catch (InvalidQNameException invalid) {
+                            logger.warn("Invalid QName for document assoc:" + assocName);
+                        }
+                    }
+                }
+                return createdNode;
+            }
+        }
+        return null;
     }
 
     private String getDraftRootLabel(String docType) {

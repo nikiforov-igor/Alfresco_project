@@ -352,4 +352,33 @@
     <bean id="errandsFilter" class="ru.it.lecm.errands.beans.ErrandsFilter" depends-on="errandsService" parent="documentsFilter" init-method="register">
         <property name="workCalendar" ref="WorkCalendarService"/>
     </bean>
+
+    <bean id="errandsCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-errands:title</value>
+                <value>lecm-errands:content</value>
+                <value>lecm-errands:is-important</value>
+                <value>lecm-errands:just-in-time</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-errands:initiator-assoc</value>
+                <value>lecm-errands:executor-assoc</value>
+                <value>lecm-errands:controller-assoc</value>
+                <value>lecm-errands:coexecutors-assoc</value>
+                <value>lecm-errands:links-assoc</value>
+                <value>lecm-errands:subject-assoc</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="errandsCopySettingsBean" parent="documentCopySettingsBean">
+        <property name="settings">
+            <map>
+                <entry key="lecm-errands:document" value-ref="errandsCopySettings"/>
+            </map>
+        </property>
+    </bean>
 </beans>

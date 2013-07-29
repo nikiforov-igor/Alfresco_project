@@ -296,4 +296,30 @@
             </map>
         </constructor-arg>
     </bean>
+
+    <bean id="contractsCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-contract:summaryContent</value>
+                <value>lecm-contract:signatoryCounterparty</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-contract:typeContract-assoc</value>
+                <value>lecm-contract:partner-assoc</value>
+                <value>lecm-contract:subjectContract-assoc</value>
+                <value>lecm-contract:representative-assoc</value>
+                <value>lecm-contract:currency-assoc</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="contractsCopySettingsBean" parent="documentCopySettingsBean">
+        <property name="settings">
+            <map>
+                <entry key="lecm-contract:document" value-ref="contractsCopySettings"/>
+            </map>
+        </property>
+    </bean>
 </beans>

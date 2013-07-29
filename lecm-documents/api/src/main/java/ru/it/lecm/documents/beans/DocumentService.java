@@ -145,4 +145,6 @@ public interface DocumentService {
     public String getDraftRootLabel(QName docType);
 
     public String getAuthorProperty(QName docType);
+
+    public NodeRef duplicateDocument(NodeRef document);
 }

@@ -304,4 +304,16 @@ public class DocumentWebScriptBean extends BaseWebScript {
         }
         return "";
     }
+
+    public ScriptNode dublicateDocument(String nodeRef) {
+        ParameterCheck.mandatory("nodeRef", nodeRef);
+        NodeRef ref = new NodeRef(nodeRef);
+        if (nodeService.exists(ref)) {
+            NodeRef createdNode = documentService.duplicateDocument(ref);
+            if (createdNode != null) {
+                return new ScriptNode(createdNode, serviceRegistry, getScope());
+            }
+        }
+        return null;
+    }
 }
