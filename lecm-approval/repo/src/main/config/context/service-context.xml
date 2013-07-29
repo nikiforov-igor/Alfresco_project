@@ -60,6 +60,7 @@
 
 	<util:constant id="APPROVAL_FOLDER" static-field="ru.it.lecm.approval.ApprovalListServiceImpl.APPROVAL_FOLDER"/>
 	<util:constant id="APPROVAL_LIST_FOLDER" static-field="ru.it.lecm.approval.ApprovalListServiceImpl.APPROVAL_LIST_FOLDER"/>
+	<util:constant id="TEMP_ASSIGNEES_LISTS_FOLDER" static-field="ru.it.lecm.approval.ApprovalListServiceImpl.TEMP_ASSIGNEES_LISTS_FOLDER"/>
 
 	<bean id="lecm.approval.service" class="ru.it.lecm.approval.ApprovalListServiceImpl" parent="baseBean" depends-on="lecm.approval.workflowBootstrap">
 		<property name="nodeService" ref="nodeService"/>
@@ -72,10 +73,13 @@
 		<property name="workflowService" ref="workflowServiceImpl"/>
 		<property name="workCalendar" ref="WorkCalendarService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+		<property name="copyService" ref="copyService"/>
+		<property name="behaviourFilter" ref="policyBehaviourFilter"/>
 		<property name="folders">
 			<map>
 				<entry key="#{APPROVAL_FOLDER}" value="Сервис Согласование документов"/>
 				<entry key="#{APPROVAL_LIST_FOLDER}" value="Сервис Согласование документов/Листы согласования"/>
+				<entry key="#{TEMP_ASSIGNEES_LISTS_FOLDER}" value="Сервис Согласование документов/Временные листы согласующих"/>
 			</map>
 		</property>
 	</bean>

@@ -13,6 +13,7 @@
 							var approvalListRef = execution.getVariable("approvalListRef");
 							approval.logFinalDecision(approvalListRef, finalDecision);
 						}
+						approval.deleteTempAssigneesList(execution);
 					]]></activiti:string>
 				</activiti:field>
 			</activiti:executionListener>
@@ -33,7 +34,7 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-						var assigneesList = approval.createAssigneesList(lecmApprove_assigneesListAssoc);
+						var assigneesList = approval.createAssigneesList(lecmApprove_assigneesListAssoc, execution);
 						execution.setVariableLocal("assigneesList", assigneesList);
 						var approvalListRef = approval.createApprovalList(bpm_package, documentAttachmentCategoryName, lecmApprove_approvalType, assigneesList);
 						execution.setVariable("approvalListRef", approvalListRef);

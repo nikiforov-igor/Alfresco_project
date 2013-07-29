@@ -5,6 +5,7 @@ import org.alfresco.service.namespace.QName;
 
 import java.util.Date;
 import java.util.List;
+import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 
 import org.activiti.engine.delegate.VariableScope;
@@ -112,6 +113,8 @@ public interface ApprovalListService {
 
 	void completeTask(NodeRef assignee, DelegateTask task);
 
-	List<NodeRef> createAssigneesList(NodeRef assigneesListNode);
+	List<NodeRef> createAssigneesList(NodeRef assigneesListNode, DelegateExecution execution);
+
+	void deleteTempAssigneesList(DelegateExecution execution);
 
 }

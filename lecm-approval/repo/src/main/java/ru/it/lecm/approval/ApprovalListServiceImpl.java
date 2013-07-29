@@ -31,9 +31,11 @@ import java.util.Set;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
+import org.alfresco.service.cmr.repository.CopyService;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
@@ -51,6 +53,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	public final static String APPROVAL_FOLDER = "APPROVAL_FOLDER";
 	public final static String APPROVAL_LIST_FOLDER = "APPROVAL_LIST_FOLDER";
+	public final static String TEMP_ASSIGNEES_LISTS_FOLDER = "TEMP_ASSIGNEES_FOLDER";
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceImpl.class);
 	private final static QName FAKE_PROP_COMINGSOON = QName.createQName(NamespaceService.ALFRESCO_URI, "comingSoonNotified");
 	private final static QName FAKE_PROP_OVERDUE = QName.createQName(NamespaceService.ALFRESCO_URI, "overdueNotified");
@@ -62,6 +65,8 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	private WorkflowService workflowService;
 	private IWorkCalendar workCalendar;
 	private LecmPermissionService lecmPermissionService;
+	private CopyService copyService;
+	private BehaviourFilter behaviourFilter;
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
@@ -94,6 +99,14 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	public void setWorkCalendar(IWorkCalendar workCalendar) {
 		this.workCalendar = workCalendar;
+	}
+
+	public void setCopyService(CopyService copyService) {
+		this.copyService = copyService;
+	}
+
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+		this.behaviourFilter = behaviourFilter;
 	}
 
 	/**
@@ -617,8 +630,34 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		return getFolder(APPROVAL_FOLDER);
 	}
 
+	private NodeRef getTempAssigneesListaFolder() {
+		return getFolder(TEMP_ASSIGNEES_LISTS_FOLDER);
+	}
+	
 	@Override
-	public List<NodeRef> createAssigneesList(NodeRef assigneesListNode) {
-		return findNodesByAssociationRef(assigneesListNode, ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM, TYPE_ASSIGNEES_ITEM, ASSOCIATION_TYPE.TARGET);
+	public List<NodeRef> createAssigneesList(NodeRef assigneesListNode, DelegateExecution execution) {
+		NodeRef tempAssigneesList;
+		NodeRef tempAssigneesListsFolder = getTempAssigneesListaFolder();
+		String executionID = execution.getId();
+		QName assocQName = QName.createQName(APPROVAL_LIST_NAMESPACE, executionID);
+		behaviourFilter.disableBehaviour(TYPE_ASSIGNEES_ITEM);
+		try {
+			tempAssigneesList = copyService.copyAndRename(assigneesListNode, tempAssigneesListsFolder, ContentModel.ASSOC_CONTAINS, assocQName, true);
+		} finally {
+			behaviourFilter.enableBehaviour(TYPE_ASSIGNEES_ITEM);
+		}
+		nodeService.setProperty(tempAssigneesList, ContentModel.PROP_NAME, executionID);
+		nodeService.addAspect(tempAssigneesList, ContentModel.ASPECT_TEMPORARY, null);
+		return findNodesByAssociationRef(tempAssigneesList, ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM, TYPE_ASSIGNEES_ITEM, ASSOCIATION_TYPE.TARGET);
+	}
+
+	@Override
+	public void deleteTempAssigneesList(DelegateExecution execution) {
+		String executionID = execution.getId();
+		NodeRef tempAssigneesListsFolder = getTempAssigneesListaFolder();
+		NodeRef tempAssigneesList = nodeService.getChildByName(tempAssigneesListsFolder, ASSOC_ASSIGNEES_LIST_CONTAINS_ASSIGNEES_ITEM, executionID);
+		if (tempAssigneesList != null) {
+			nodeService.deleteNode(tempAssigneesList);
+		}
 	}
 }

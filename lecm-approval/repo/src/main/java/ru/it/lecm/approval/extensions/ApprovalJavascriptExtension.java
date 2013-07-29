@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
@@ -216,12 +217,16 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		approvalListService.completeTask(assignee.getNodeRef(), task);
 	}
 
-	public ActivitiScriptNodeList createAssigneesList(ActivitiScriptNode assigneesListNode) {
-		List<NodeRef> assigneesList = approvalListService.createAssigneesList(assigneesListNode.getNodeRef());
+	public ActivitiScriptNodeList createAssigneesList(ActivitiScriptNode assigneesListNode, DelegateExecution execution) {
+		List<NodeRef> assigneesList = approvalListService.createAssigneesList(assigneesListNode.getNodeRef(), execution);
 		ActivitiScriptNodeList assigneesActivitiList = new ActivitiScriptNodeList();
 		for (NodeRef assigneeNode: assigneesList) {
 			assigneesActivitiList.add(new ActivitiScriptNode(assigneeNode, serviceRegistry));
 		}
 		return assigneesActivitiList;
+	}
+
+	public void deleteTempAssigneesList(DelegateExecution execution) {
+		approvalListService.deleteTempAssigneesList(execution);
 	}
 }
