@@ -39,7 +39,7 @@
                             switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
                                 case "lecm-errands:is-important":
                                     if (data.value && (("" + data.value) != "false")) {
-                                        columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                        columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png' + '" width="16" alt="Важное" title="Важное" />';
                                     }
                                     break;
                                 case "lecm-errands:baseDocString":
