@@ -221,11 +221,13 @@ public class DocumentWebScriptBean extends BaseWebScript {
             if (queryFilterId != null && !queryFilterId.isEmpty()) {
                 String filterId = DocumentService.PREF_DOCUMENTS + "." + docType.replaceAll(":", "_") + "." + queryFilterId;
                 Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, filterId);
-                String filterData = preferences.get(filterId).toString();
+                if (preferences != null && preferences.get(filterId) != null) {
+                    String filterData = preferences.get(filterId).toString();
 
-                DocumentFilter docFilter = FiltersManager.getFilterById(queryFilterId);
-                if (docFilter != null && filterData != null) {
-                    employeesFilter = docFilter.getQuery((Object[]) filterData.split("/"));
+                    DocumentFilter docFilter = FiltersManager.getFilterById(queryFilterId);
+                    if (docFilter != null && filterData != null) {
+                        employeesFilter = docFilter.getQuery((Object[]) filterData.split("/"));
+                    }
                 }
             }
         }
