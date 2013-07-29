@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Errands datagrid</shortname>
+    <description>Return errands datagrid</description>
+    <url>/lecm/errands/errands-grid</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

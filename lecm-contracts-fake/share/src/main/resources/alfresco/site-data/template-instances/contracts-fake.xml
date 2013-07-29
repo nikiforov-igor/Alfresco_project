@@ -53,6 +53,7 @@
             <properties>
                 <itemType>lecm-contract-fake:document</itemType>
                 <linkPage>contracts-fake</linkPage>
+                <queryFilter>docAuthor</queryFilter>
             </properties>
         </component>
         <!-- Forbidden -->

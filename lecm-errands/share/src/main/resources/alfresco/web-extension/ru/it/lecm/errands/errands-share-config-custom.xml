@@ -275,13 +275,25 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-errands:number"/>
+                    <show id="lecm-errands:is-important"/>
+                    <show id="lecm-errands:baseDocString"/>
                     <show id="lecm-errands:initiator-assoc"/>
                     <show id="lecm-errands:executor-assoc"/>
                     <show id="lecm-errands:execution-date"/>
                     <show id="lecm-errands:title"/>
                     <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-errands:number"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-errands:is-important" label=""/>
+                    <field id="lecm-errands:baseDocString" label="" substituteString="{lecm-errands:additional-document-assoc/lecm-document:present-string}"/>
+                    <show id="lecm-errands:initiator-assoc"/>
+                    <show id="lecm-errands:executor-assoc"/>
+                    <show id="lecm-errands:execution-date"/>
+                    <show id="lecm-errands:title"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-errands:number"/>
+                </appearance>
             </form>
             <form id="search">
                 <field-visibility>

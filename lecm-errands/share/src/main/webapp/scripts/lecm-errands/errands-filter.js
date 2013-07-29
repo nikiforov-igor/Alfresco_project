@@ -55,6 +55,8 @@
                 this.widgets.importantCheckBox = YAHOO.util.Dom.get(this.id + "-importantCheck");
                 this.widgets.controlCheckBox = YAHOO.util.Dom.get(this.id + "-controlCheck");
 
+                this.widgets.applyButton = Alfresco.util.createYUIButton(this, "applyButton", this.onApplyButtonClick);
+
                 this.manager.preferences.request(this.manager._buildPreferencesKey(),
                     {
                         successCallback: {

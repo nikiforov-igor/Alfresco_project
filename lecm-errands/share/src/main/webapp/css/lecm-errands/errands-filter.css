@@ -1,6 +1,9 @@
 .errands-filter > div {
     margin: 5px;
+}
+.errands-filter {
     overflow: hidden;
+    padding-bottom: 5px;
 }
 .errands-filter > div > label,
 .errands-filter > div > span {
