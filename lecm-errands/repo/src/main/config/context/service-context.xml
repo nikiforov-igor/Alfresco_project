@@ -141,6 +141,7 @@
         <property name="policyComponent" ref="policyComponent"/>
         <property name="dictionaryService" ref="serviceDictionary"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="nodeService" ref="nodeService"/>
     </bean>
 
     <bean  id="errandsPolicy" class="ru.it.lecm.errands.policy.ErrandsPolicy"

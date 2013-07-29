@@ -33,6 +33,17 @@
 	<#assign showViewIncompleteWarning = true>
 </#if>
 
+<#assign isFieldMandatory = false>
+<#if field.control.params.mandatory??>
+    <#if field.control.params.mandatory == "true">
+        <#assign isFieldMandatory = true>
+    </#if>
+<#elseif field.mandatory??>
+    <#assign isFieldMandatory = field.mandatory>
+<#elseif field.endpointMandatory??>
+    <#assign isFieldMandatory = field.endpointMandatory>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <script type="text/javascript">//<![CDATA[
@@ -51,11 +62,7 @@
     <#if field.control.params.startLocation??>
         startLocation: "${field.control.params.startLocation}",
     </#if>
-    <#if field.mandatory??>
-        mandatory: ${field.mandatory?string},
-    <#elseif field.endpointMandatory??>
-        mandatory: ${field.endpointMandatory?string},
-    </#if>
+        mandatory: ${isFieldMandatory?string},
     <#if args.ignoreNodes??>
         ignoreNodes: "${args.ignoreNodes}".split(","),
     </#if>
@@ -89,11 +96,7 @@
     <#if field.control.params.startLocation??>
         rootLocation: "${field.control.params.startLocation}",
     </#if>
-    <#if field.mandatory??>
-        mandatory: ${field.mandatory?string},
-    <#elseif field.endpointMandatory??>
-        mandatory: ${field.endpointMandatory?string},
-    </#if>
+        mandatory: ${isFieldMandatory?string},
         multipleSelectMode: ${field.endpointMany?string},
 
     <#if field.control.params.nameSubstituteString??>
@@ -135,14 +138,14 @@
 <div class="form-field">
     <#if disabled>
         <div class="viewmode-field">
-            <#if showViewIncompleteWarning && field.mandatory && !(fieldValue?is_number) && fieldValue?string == "">
+            <#if showViewIncompleteWarning && isFieldMandatory && !(fieldValue?is_number) && fieldValue?string == "">
             <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
             </#if>
             <span class="viewmode-label">${field.label?html}:</span>
             <span id="${controlId}-currentValueDisplay" class="viewmode-value"></span>
         </div>
     <#else>
-        <label for="${controlId}-autocomplete-input">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+        <label for="${controlId}-autocomplete-input">${field.label?html}:<#if isFieldMandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
         <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
         <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
         <input type="hidden" id="${controlId}-selectedItems"/>

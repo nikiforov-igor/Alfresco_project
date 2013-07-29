@@ -3,10 +3,19 @@
     <#assign hideValue = true>
 </#if>
 
+<#assign mandatory = false>
+<#if field.control.params.mandatory??>
+    <#if field.control.params.mandatory == "true">
+        <#assign mandatory = true>
+    </#if>
+<#elseif field.mandatory??>
+    <#assign mandatory = field.mandatory>
+</#if>
+
 <div class="form-field">
    <#if form.mode == "view">
       <div class="viewmode-field">
-         <#if field.mandatory && !(field.value?is_number) && field.value == "">
+         <#if mandatory && !(field.value?is_number) && field.value == "">
             <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
          </#if>
          <span class="viewmode-label">${field.label?html}:</span>
@@ -22,7 +31,7 @@
          <span class="viewmode-value"><#if fieldValue == "">${msg("form.control.novalue")}<#else>${fieldValue}</#if></span>
       </div>
    <#else>
-      <label for="${fieldHtmlId}">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+      <label for="${fieldHtmlId}">${field.label?html}:<#if mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
       <input id="${fieldHtmlId}" name="${field.name}" tabindex="0"
              <#if field.control.params.password??>type="password"<#else>type="text"</#if>
              <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>

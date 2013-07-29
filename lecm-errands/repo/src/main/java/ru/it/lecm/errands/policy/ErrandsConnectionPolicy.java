@@ -5,11 +5,13 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 
 /**
@@ -23,6 +25,7 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
     private PolicyComponent policyComponent;
     private DocumentConnectionService documentConnectionService;
     private DictionaryBean dictionaryService;
+    private NodeService nodeService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -34,6 +37,10 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
 
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;
+    }
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
     }
 
     final public void init() {
@@ -57,7 +64,14 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
         if (connectionType != null) {
             documentConnectionService.createConnection(associationRef.getTargetRef(), associationRef.getSourceRef(), connectionType, true);
         }
+
+        //обновление номера документа-основания в поручении
+        NodeRef baseDoc = associationRef.getTargetRef();
+        NodeRef errandDoc = associationRef.getSourceRef();
+
+        Object regNum = nodeService.getProperty(baseDoc, DocumentService.PROP_DOCUMENT_REGNUM);
+        if (regNum != null) {
+            nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, (String)regNum);
+        }
     }
-
-
 }
