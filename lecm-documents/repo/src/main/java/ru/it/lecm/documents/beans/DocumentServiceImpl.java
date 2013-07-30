@@ -298,7 +298,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+        sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
         String query = "";
         if (docTypes != null && !docTypes.isEmpty()) {
@@ -329,7 +329,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
             String property = dateProperty.toPrefixString(namespaceService);
             property = property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-            query += " AND @" + property + ":[" + MIN + " TO " + MAX + "]";
+            query += " AND @" + property + ":\"" + MIN + " \"..\"" + MAX + "\"";
         }
 
         // фильтр по статусам
