@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.CopyService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -50,6 +51,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     private LecmPermissionService lecmPermissionService;
     private DocumentMembersService documentMembersService;
     private SearchService searchService;
+    private DocumentAttachmentsService documentAttachmentsService;
+    private CopyService copyService;
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
         this.lecmPermissionService = lecmPermissionService;
@@ -427,6 +430,20 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                         }
                     }
                 }
+
+                if (settings != null) {
+                    // копируем ассоциации
+                    List<String> categories = settings.getCategoriesToCopy();
+                    for (String category : categories) {
+                        NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
+                        if (categoryRef != null) {
+                            copyService.copy(categoryRef, createdNode, ContentModel.ASSOC_CONTAINS,
+                                    QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), QName.createValidLocalName(category)),
+                                    true);
+                        }
+
+                    }
+                }
                 return createdNode;
             }
         }
@@ -464,4 +481,11 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATING, rating.toString());
     }
 
+    public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+        this.documentAttachmentsService = documentAttachmentsService;
+    }
+
+    public void setCopyService(CopyService copyService) {
+        this.copyService = copyService;
+    }
 }

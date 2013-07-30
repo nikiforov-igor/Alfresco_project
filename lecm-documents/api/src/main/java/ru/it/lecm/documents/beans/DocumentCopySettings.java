@@ -11,6 +11,7 @@ public class DocumentCopySettings {
 
     private List<String> propsToCopy;
     private List<String> assocsToCopy;
+    private List<String> categoriesToCopy;
 
     public List<String> getPropsToCopy() {
         return propsToCopy;
@@ -26,5 +27,13 @@ public class DocumentCopySettings {
 
     public void setAssocsToCopy(List<String> assocsToCopy) {
         this.assocsToCopy = assocsToCopy;
+    }
+
+    public List<String> getCategoriesToCopy() {
+        return categoriesToCopy;
+    }
+
+    public void setCategoriesToCopy(List<String> categoriesToCopy) {
+        this.categoriesToCopy = categoriesToCopy;
     }
 }

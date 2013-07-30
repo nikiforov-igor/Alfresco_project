@@ -104,6 +104,8 @@
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
         <property name="documentMembersService" ref="documentMembersService"/>
         <property name="searchService" ref="searchService"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="copyService" ref="copyService"/>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"

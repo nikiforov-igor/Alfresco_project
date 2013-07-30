@@ -372,6 +372,11 @@
                 <value>lecm-errands:subject-assoc</value>
             </list>
         </property>
+        <property name="categoriesToCopy">
+            <list>
+                <value>Поручение</value>
+            </list>
+        </property>
     </bean>
 
     <bean id="errandsCopySettingsBean" parent="documentCopySettingsBean">
