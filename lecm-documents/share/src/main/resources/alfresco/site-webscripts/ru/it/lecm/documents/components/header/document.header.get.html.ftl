@@ -77,6 +77,23 @@
                    </span>
                 </span>
 	        </div>
+
+            <script type="text/javascript">//<![CDATA[
+            (function()
+            {
+                var copyControl = new LogicECM.module.DocumentCopy("${id}").setMessages(${messages});
+                copyControl.setOptions({
+                    documentRef: "${nodeRef}"
+                });
+            })();
+            //]]></script>
+            <div class="copy" id="${controlId}-copy">
+		        <span id="${controlId}-copy-button" class="yui-button yui-push-button">
+                   <span class="first-child">
+                      <button type="button"></button>
+                   </span>
+                </span>
+            </div>
         </div>
 
         <div class="clear"></div>

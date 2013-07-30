@@ -103,3 +103,17 @@
 	padding-left: 7px;
 	border: 1px solid;
 }
+
+.document-header .document-action .copy span.first-child {
+    background: url('../../images/lecm-documents/copy_document_16.png') no-repeat 5px 5px;
+    padding-left: 7px;
+    border: 1px solid;
+}
+
+.copy {
+    float: right;
+}
+
+.favorite {
+    float: right;
+}
