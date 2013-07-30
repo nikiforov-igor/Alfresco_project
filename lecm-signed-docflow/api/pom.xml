@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+		 xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ru.it.lecm.signed-docflow</groupId>
+		<artifactId>signed-docflow</artifactId>
+		<version>0.5.1</version>
+	</parent>
+
+	<artifactId>signed-docflow-api</artifactId>
+	<name>Logic ECM Signed Docflow API</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-data-model</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>
