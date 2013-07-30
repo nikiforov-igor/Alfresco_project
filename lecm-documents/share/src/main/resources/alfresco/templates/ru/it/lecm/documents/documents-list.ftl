@@ -33,7 +33,7 @@
     <script type="text/javascript">//<![CDATA[
         function findValueByDotNotation(obj, propertyPath, defaultValue) {
             var value = defaultValue ? defaultValue : null;
-            if (propertyPath && obj) {
+            if (propertyPath && obj && obj != "") {
                 var currObj = obj;
                 var props = propertyPath.split(".");
                 for (var i = 0; i < props.length; i++) {
@@ -65,7 +65,7 @@
         </#if>
         LogicECM.module.Documents.filtersManager = documentFilters;
 
-        <#if queryFilterId?? && queryFilterId != "">
+        <#if queryFilterId?? && queryFilterId != "" && preferences??>
             var PREFERENCE_FILTER = "ru.it.lecm.documents." + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + "." + "${queryFilterId}";
             var preference = findValueByDotNotation(${preferences}, PREFERENCE_FILTER);
             if (preference != null && preference != "") {
