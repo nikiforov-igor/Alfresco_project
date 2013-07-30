@@ -51,11 +51,7 @@
                                     break;
                             }
 
-                            if (grid.options.attributeForShow != null && datalistColumn.name == grid.options.attributeForShow) {
-                                html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
-                            } else {
-                                html += columnContent;
-                            }
+                            html += columnContent;
 
                             if (i < ii - 1) {
                                 html += "<br />";

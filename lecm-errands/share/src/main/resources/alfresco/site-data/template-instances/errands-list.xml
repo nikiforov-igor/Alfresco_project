@@ -40,7 +40,7 @@
             <url>/lecm/errands/errands-grid</url>
             <properties>
                 <bubblingLabel>errands</bubblingLabel>
-                <attributeForShow>lecm-errands:number</attributeForShow>
+                <attributeForShow>lecm-errands:title</attributeForShow>
                 <filterProperty>lecm-statemachine:status</filterProperty>
                 <formId>{formId}</formId>
                 <filter>{query}</filter>
