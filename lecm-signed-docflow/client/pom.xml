@@ -18,6 +18,14 @@
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-databinding-xmlbeans</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>
