@@ -24,6 +24,7 @@
                 <showCreateBtn>true</showCreateBtn>
                 <bubblingLabel>errands</bubblingLabel>
                 <showExSearchBtn>true</showExSearchBtn>
+                <createDialogWidth>60em</createDialogWidth>
             </properties>
         </component>
         <!-- Menu -->

@@ -47,7 +47,8 @@ function init() {
 	    bubblingLabel: "${args.bubblingLabel!'documents'}",
         itemType: "${args.itemType!'lecm-document:base'}",
         destination:LogicECM.module.Documents.SETTINGS.nodeRef,
-        newRowDialogTitle:"${newRowTitle}"
+        newRowDialogTitle:"${newRowTitle}",
+        createDialogWidth:"${args.createDialogWidth!"70em"}"
     });
 }
 YAHOO.util.Event.onDOMReady(init);

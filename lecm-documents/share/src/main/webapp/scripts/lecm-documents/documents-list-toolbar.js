@@ -32,7 +32,8 @@
                 itemType: null,
                 newRowDialogTitle: "label.create-row.title",
                 searchButtonsType: 'defaultActive',
-                newRowButtonType: 'defaultActive'
+                newRowButtonType: 'defaultActive',
+                createDialogWidth: "70em"
             },
 
             _initButtons: function() {
@@ -82,7 +83,7 @@
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
                 createDetails.setOptions(
                     {
-                        width: "70em",
+                        width: this.options.createDialogWidth,
                         templateUrl: templateUrl,
                         actionUrl: null,
                         destroyOnHide: true,
