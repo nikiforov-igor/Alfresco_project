@@ -1,0 +1,2155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="GateWcfServiceHttps" targetNamespace="http://tempuri.org/"
+				  xmlns:tns="http://tempuri.org/"
+				  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+				  xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+				  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+				  xmlns:wsa10="http://www.w3.org/2005/08/addressing"
+				  xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+				  xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+				  xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+				  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+				  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+				  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+				  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+				  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+				  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+				  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+	<wsp:Policy wsu:Id="WSHttpBinding_IGateWcfService_policy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+					<wsp:Policy>
+						<sp:TransportToken>
+							<wsp:Policy>
+								<sp:HttpsToken RequireClientCertificate="false"/>
+							</wsp:Policy>
+						</sp:TransportToken>
+						<sp:AlgorithmSuite>
+							<wsp:Policy>
+								<sp:Basic256/>
+							</wsp:Policy>
+						</sp:AlgorithmSuite>
+						<sp:Layout>
+							<wsp:Policy>
+								<sp:Strict/>
+							</wsp:Policy>
+						</sp:Layout>
+					</wsp:Policy>
+				</sp:TransportBinding>
+				<wsaw:UsingAddressing/>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+			<xsd:element name="GetServiceVersion">
+				<xsd:complexType>
+					<xsd:sequence/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetServiceVersionResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GetServiceVersionResult" nillable="true" type="q1:GateResponse" xmlns:q1="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="version" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ClearMailBox">
+				<xsd:complexType>
+					<xsd:sequence/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ClearMailBoxResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="ClearMailBoxResult" nillable="true" type="q2:GateResponse" xmlns:q2="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="AuthenticateByCertificate">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="signature" nillable="true" type="xsd:base64Binary"/>
+						<xsd:element minOccurs="0" name="signedData" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="AuthenticateByCertificateResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="AuthenticateByCertificateResult" nillable="true" type="q3:GateResponse" xmlns:q3="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="token" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="RegisterUserByCertificate">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="partnerKey" type="q4:guid" xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/"/>
+						<xsd:element minOccurs="0" name="organizationInn" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="organizationKpp" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="sign" nillable="true" type="xsd:base64Binary"/>
+						<xsd:element minOccurs="0" name="userId" type="q5:guid" xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="RegisterUserByCertificateResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="RegisterUserByCertificateResult" nillable="true" type="q6:GateResponse" xmlns:q6="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="organizationId" nillable="true" type="q7:guid" xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/"/>
+						<xsd:element minOccurs="0" name="organizationEdoId" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="StartRegisterUserBySms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="mobileNumber" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="inn" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="kpp" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="StartRegisterUserBySmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="StartRegisterUserBySmsResult" nillable="true" type="q8:GateResponse" xmlns:q8="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FinishRegisterUserBySms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="mobileNumber" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="partnerKey" type="q9:guid" xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/"/>
+						<xsd:element minOccurs="0" name="inn" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="kpp" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="userIdByPartnerSystem" type="q10:guid" xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FinishRegisterUserBySmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="FinishRegisterUserBySmsResult" nillable="true" type="q11:GateResponse" xmlns:q11="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="organizationId" nillable="true" type="q12:guid" xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/"/>
+						<xsd:element minOccurs="0" name="organizationEdoId" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SendRegisterRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="requestBinary" nillable="true" type="xsd:base64Binary"/>
+						<xsd:element minOccurs="0" name="signature" nillable="true" type="xsd:base64Binary"/>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SendRegisterRequestResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="SendRegisterRequestResult" nillable="true" type="q13:GateResponse" xmlns:q13="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="requestId" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetRegisterResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="packetId" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetRegisterResponseResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GetRegisterResponseResult" nillable="true" type="q14:GateResponse" xmlns:q14="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="operatorResponse" nillable="true" type="q15:RegisterResponse" xmlns:q15="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Registration"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateRegisterRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="request" nillable="true" type="q16:RegisterRequestForeignCert" xmlns:q16="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Registration"/>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateRegisterRequestResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GenerateRegisterRequestResult" nillable="true" type="q17:GateResponse" xmlns:q17="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="content" nillable="true" type="xsd:base64Binary"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SendDocument">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="doc" nillable="true" type="q18:DocumentToSend" xmlns:q18="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="billingTicket" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SendDocumentResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="SendDocumentResult" nillable="true" type="q19:GateResponse" xmlns:q19="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="documentId" nillable="true" type="q20:guid" xmlns:q20="http://schemas.microsoft.com/2003/10/Serialization/"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocumentTransportData">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="sender" nillable="true" type="q21:CompanyInfo" xmlns:q21="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+						<xsd:element minOccurs="0" name="receiver" nillable="true" type="q22:CompanyInfo" xmlns:q22="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+						<xsd:element minOccurs="0" name="prefferableOperatorCode" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocumentTransportDataResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GetDocumentTransportDataResult" nillable="true" type="q23:GateResponse" xmlns:q23="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="transportData" nillable="true" type="q24:DocumentTransportData" xmlns:q24="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetMutualOperators">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="sender" nillable="true" type="q25:CompanyInfo" xmlns:q25="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+						<xsd:element minOccurs="0" name="receiver" nillable="true" type="q26:CompanyInfo" xmlns:q26="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetMutualOperatorsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GetMutualOperatorsResult" nillable="true" type="q27:GateResponse" xmlns:q27="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="operatorCodes" nillable="true" type="q28:ArrayOfstring" xmlns:q28="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocflowList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="filter" nillable="true" type="q29:WorkspaceFilter" xmlns:q29="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocflowListResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GetDocflowListResult" nillable="true" type="q30:GateResponse" xmlns:q30="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="docflows" nillable="true" type="q31:ArrayOfDocflowInfoBase" xmlns:q31="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="MarkDocflowsAsRead">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="docflowIdArray" nillable="true" type="q32:ArrayOfguid" xmlns:q32="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="MarkDocflowsAsReadResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="MarkDocflowsAsReadResult" nillable="true" type="q33:GateResponse" xmlns:q33="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocumentList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="docflowId" type="q34:guid" xmlns:q34="http://schemas.microsoft.com/2003/10/Serialization/"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocumentListResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GetDocumentListResult" nillable="true" type="q35:GateResponse" xmlns:q35="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="documentInfos" nillable="true" type="q36:ArrayOfDocumentInfo" xmlns:q36="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocumentContent">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="documentId" type="q37:guid" xmlns:q37="http://schemas.microsoft.com/2003/10/Serialization/"/>
+						<xsd:element minOccurs="0" name="getSignaturesOnly" type="xsd:boolean"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetDocumentContentResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GetDocumentContentResult" nillable="true" type="q38:GateResponse" xmlns:q38="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="docContent" nillable="true" type="q39:DocumentContent" xmlns:q39="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetOperators">
+				<xsd:complexType>
+					<xsd:sequence/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetOperatorsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GetOperatorsResult" nillable="true" type="q40:GateResponse" xmlns:q40="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="operatorInfos" nillable="true" type="q41:ArrayOfOperatorInfo" xmlns:q41="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetRegistrationInfo">
+				<xsd:complexType>
+					<xsd:sequence/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetRegistrationInfoResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GetRegistrationInfoResult" nillable="true" type="q42:GateResponse" xmlns:q42="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="registrationInfos" nillable="true" type="q43:ArrayOfRegistrationInfo" xmlns:q43="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateInvoiceXml">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="invoice" nillable="true" type="q44:InvoiceGen" xmlns:q44="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Invoice"/>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateInvoiceXmlResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GenerateInvoiceXmlResult" nillable="true" type="q45:GateResponse" xmlns:q45="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="generatedDoc" nillable="true" type="q46:DocumentToSend" xmlns:q46="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateNotificationXml">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="signer" nillable="true" type="q47:Signer" xmlns:q47="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments"/>
+						<xsd:element minOccurs="0" name="senderCompany" nillable="true" type="q48:ParticipantBase" xmlns:q48="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common"/>
+						<xsd:element minOccurs="0" name="parentDocument" nillable="true" type="q49:ReceivedDocumentInfo" xmlns:q49="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Docflow"/>
+						<xsd:element minOccurs="0" name="generatedDocDate" nillable="true" type="xsd:dateTime"/>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateNotificationXmlResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GenerateNotificationXmlResult" nillable="true" type="q50:GateResponse" xmlns:q50="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="generatedDoc" nillable="true" type="q51:GeneratedDocument" xmlns:q51="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ParseInvoiceCorrectionRequestXml">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="xml" nillable="true" type="xsd:base64Binary"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ParseInvoiceCorrectionRequestXmlResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="ParseInvoiceCorrectionRequestXmlResult" nillable="true" type="q52:GateResponse" xmlns:q52="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="requestText" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateInvoiceCorrectionRequestXml">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="correctionRequest" nillable="true" type="q53:CorrectionRequest" xmlns:q53="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Invoice"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateInvoiceCorrectionRequestXmlResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GenerateInvoiceCorrectionRequestXmlResult" nillable="true" type="q54:GateResponse" xmlns:q54="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="generatedDocument" nillable="true" type="q55:GeneratedDocument" xmlns:q55="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="VerifySignature">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="content" nillable="true" type="xsd:base64Binary"/>
+						<xsd:element minOccurs="0" name="signature" nillable="true" type="xsd:base64Binary"/>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="VerifySignatureResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="VerifySignatureResult" nillable="true" type="q56:GateResponse" xmlns:q56="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="signerInfo" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="isSignatureValid" type="xsd:boolean"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="StartSmsAuthentication">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="StartSmsAuthenticationResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="StartSmsAuthenticationResult" nillable="true" type="q57:GateResponse" xmlns:q57="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FinishSmsAuthentication">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FinishSmsAuthenticationResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="FinishSmsAuthenticationResult" nillable="true" type="q58:GateResponse" xmlns:q58="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="token" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateTorg12XmlForSeller">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="vendorId" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="buyerId" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="opInfo" nillable="true" type="q59:OperatorInfo" xmlns:q59="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+						<xsd:element minOccurs="0" name="date" type="xsd:dateTime"/>
+						<xsd:element minOccurs="0" name="info" nillable="true" type="q60:Torg12SellerTitleInfo" xmlns:q60="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.InvoiceClasses"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateTorg12XmlForSellerResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GenerateTorg12XmlForSellerResult" nillable="true" type="q61:GateResponse" xmlns:q61="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="generatedDoc" nillable="true" type="q62:GeneratedDocument" xmlns:q62="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateTorg12XmlForBuyer">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="vendorId" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="buyerId" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="opInfo" nillable="true" type="q63:OperatorInfo" xmlns:q63="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+						<xsd:element minOccurs="0" name="date" type="xsd:dateTime"/>
+						<xsd:element minOccurs="0" name="info" nillable="true" type="q64:Torg12BuyerTitleInfo" xmlns:q64="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.InvoiceClasses"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerateTorg12XmlForBuyerResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="GenerateTorg12XmlForBuyerResult" nillable="true" type="q65:GateResponse" xmlns:q65="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="generatedDocument" nillable="true" type="q66:GeneratedDocument" xmlns:q66="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SignDocument">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="content" nillable="true" type="xsd:base64Binary"/>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SignDocumentResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="SignDocumentResult" nillable="true" type="q67:GateResponse" xmlns:q67="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="signature" nillable="true" type="xsd:base64Binary"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SetBillingAccountToOrganization">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="signature" nillable="true" type="xsd:base64Binary"/>
+						<xsd:element minOccurs="0" name="billingLogin" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="billingPassword" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="existedAccount" type="xsd:boolean"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SetBillingAccountToOrganizationResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="SetBillingAccountToOrganizationResult" nillable="true" type="q68:GateResponse" xmlns:q68="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CheckIfPersonIsEmployeeByCertificate">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="certificate" nillable="true" type="xsd:base64Binary"/>
+						<xsd:element minOccurs="0" name="operatorCode" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="organizationInn" nillable="true" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="organizationKpp" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CheckIfPersonIsEmployeeByCertificateResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="CheckIfPersonIsEmployeeByCertificateResult" nillable="true" type="q69:GateResponse" xmlns:q69="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions"/>
+						<xsd:element minOccurs="0" name="isEmployee" type="xsd:boolean"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions" xmlns:tns="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Exceptions">
+			<xsd:complexType name="GateResponse">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="AuthorizationErrors" nillable="true" type="q70:ArrayOfAuthorizationError" xmlns:q70="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					<xsd:element minOccurs="0" name="Message" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="OperatorMessage" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ResponseType" type="tns:EResponseType"/>
+					<xsd:element minOccurs="0" name="StackTrace" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GateResponse" nillable="true" type="tns:GateResponse"/>
+			<xsd:simpleType name="EResponseType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="OK">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">200</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="PartnerError">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">400</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="Unauthorized">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">401</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="BillingException">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">402</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="UserError">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">406</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="ServiceError">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">500</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="OperatorException">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">502</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="NotFoundByOperator">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">504</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="EResponseType" nillable="true" type="tns:EResponseType"/>
+		</xsd:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy" xmlns:tns="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/">
+			<xsd:complexType name="ArrayOfAuthorizationError">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="AuthorizationError" nillable="true" type="tns:AuthorizationError"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfAuthorizationError" nillable="true" type="tns:ArrayOfAuthorizationError"/>
+			<xsd:complexType name="AuthorizationError">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="AuthenticationType" type="tns:EOperatorAuthenticationType"/>
+					<xsd:element minOccurs="0" name="CertificateIssuerName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="CertificateThumbprint" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="EncryptedToken" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Message" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="OperatorCode" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="AuthorizationError" nillable="true" type="tns:AuthorizationError"/>
+			<xsd:simpleType name="EOperatorAuthenticationType">
+				<xsd:list>
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:enumeration value="None">
+								<xsd:annotation>
+									<xsd:appinfo>
+										<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">0</EnumerationValue>
+									</xsd:appinfo>
+								</xsd:annotation>
+							</xsd:enumeration>
+							<xsd:enumeration value="Certificate">
+								<xsd:annotation>
+									<xsd:appinfo>
+										<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+									</xsd:appinfo>
+								</xsd:annotation>
+							</xsd:enumeration>
+							<xsd:enumeration value="LoginPassword">
+								<xsd:annotation>
+									<xsd:appinfo>
+										<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+									</xsd:appinfo>
+								</xsd:annotation>
+							</xsd:enumeration>
+							<xsd:enumeration value="SMS">
+								<xsd:annotation>
+									<xsd:appinfo>
+										<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+									</xsd:appinfo>
+								</xsd:annotation>
+							</xsd:enumeration>
+							<xsd:enumeration value="_Unused">
+								<xsd:annotation>
+									<xsd:appinfo>
+										<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
+									</xsd:appinfo>
+								</xsd:annotation>
+							</xsd:enumeration>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:list>
+			</xsd:simpleType>
+			<xsd:element name="EOperatorAuthenticationType" nillable="true" type="tns:EOperatorAuthenticationType"/>
+			<xsd:complexType name="DocumentToSend">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Comment" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Content" nillable="true" type="xsd:base64Binary"/>
+					<xsd:element minOccurs="0" name="DocflowId" nillable="true" type="ser:guid"/>
+					<xsd:element minOccurs="0" name="DocumentType" nillable="true" type="tns:EDocumentType"/>
+					<xsd:element minOccurs="0" name="FileName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Id" nillable="true" type="ser:guid"/>
+					<xsd:element minOccurs="0" name="Receiver" nillable="true" type="tns:CompanyInfo"/>
+					<xsd:element minOccurs="0" name="Signatures" nillable="true" type="q71:ArrayOfbase64Binary" xmlns:q71="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+					<xsd:element minOccurs="0" name="TransactionType" type="q72:EDocflowTransactionType" xmlns:q72="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Docflow"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="DocumentToSend" nillable="true" type="tns:DocumentToSend"/>
+			<xsd:simpleType name="EDocumentType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Unknown"/>
+					<xsd:enumeration value="NonFormalized"/>
+					<xsd:enumeration value="Invoice"/>
+					<xsd:enumeration value="InvoiceReceipt"/>
+					<xsd:enumeration value="InvoiceConfirmation"/>
+					<xsd:enumeration value="InvoiceRevision"/>
+					<xsd:enumeration value="InvoiceCorrection"/>
+					<xsd:enumeration value="InvoiceCorrectionRevision"/>
+					<xsd:enumeration value="Torg12"/>
+					<xsd:enumeration value="Akt"/>
+					<xsd:enumeration value="Torg12BuyerTitle"/>
+					<xsd:enumeration value="AktBuyerTitle"/>
+					<xsd:enumeration value="ReceiptNotification"/>
+					<xsd:enumeration value="CorrectionRequest"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="EDocumentType" nillable="true" type="tns:EDocumentType"/>
+			<xsd:complexType name="CompanyInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Inn" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Kpp" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="CompanyInfo" nillable="true" type="tns:CompanyInfo"/>
+			<xsd:complexType name="DocumentTransportData">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="OperatorInfo" nillable="true" type="tns:OperatorInfo"/>
+					<xsd:element minOccurs="0" name="ReceiversId" nillable="true" type="q73:ArrayOfstring" xmlns:q73="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+					<xsd:element minOccurs="0" name="SenderId" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="DocumentTransportData" nillable="true" type="tns:DocumentTransportData"/>
+			<xsd:complexType name="OperatorInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="AuthenticationType" type="tns:EOperatorAuthenticationType"/>
+					<xsd:element minOccurs="0" name="CertificateIssuerName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Code" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Extension" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Inn" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IsRemoteSignEnabled" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="Name" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="OperatorInfo" nillable="true" type="tns:OperatorInfo"/>
+			<xsd:complexType name="WorkspaceFilter">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="LastFetchTime" type="xsd:dateTime"/>
+					<xsd:element minOccurs="0" name="Relation" type="tns:ERelationFilter"/>
+					<xsd:element minOccurs="0" name="UnreadOnly" type="xsd:boolean"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="WorkspaceFilter" nillable="true" type="tns:WorkspaceFilter"/>
+			<xsd:simpleType name="ERelationFilter">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="All"/>
+					<xsd:enumeration value="Inbound"/>
+					<xsd:enumeration value="Outbound"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="ERelationFilter" nillable="true" type="tns:ERelationFilter"/>
+			<xsd:complexType name="ArrayOfDocflowInfoBase">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="DocflowInfoBase" nillable="true" type="tns:DocflowInfoBase"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfDocflowInfoBase" nillable="true" type="tns:ArrayOfDocflowInfoBase"/>
+			<xsd:complexType name="DocflowInfoBase">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Description" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="DocflowId" type="ser:guid"/>
+					<xsd:element minOccurs="0" name="IsInbound" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="IsUnread" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="OperatorCode" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Receiver" nillable="true" type="tns:CompanyInfo"/>
+					<xsd:element minOccurs="0" name="Sender" nillable="true" type="tns:CompanyInfo"/>
+					<xsd:element minOccurs="0" name="Type" type="tns:EDocflowType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="DocflowInfoBase" nillable="true" type="tns:DocflowInfoBase"/>
+			<xsd:simpleType name="EDocflowType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Unknown"/>
+					<xsd:enumeration value="NonFormalized"/>
+					<xsd:enumeration value="BilateralNonFormalized"/>
+					<xsd:enumeration value="Invoice"/>
+					<xsd:enumeration value="InvoiceCorrection"/>
+					<xsd:enumeration value="Torg12"/>
+					<xsd:enumeration value="Akt"/>
+					<xsd:enumeration value="InvoiceRevision"/>
+					<xsd:enumeration value="InvoiceCorrectionRevision"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="EDocflowType" nillable="true" type="tns:EDocflowType"/>
+			<xsd:simpleType name="ENonformalizedDocumentStatus">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Unknown"/>
+					<xsd:enumeration value="OutboundNoRecipientSignatureRequest">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">10</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="OutboundWaitingForRecipientSignature">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">20</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="OutboundWithRecipientSignature">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">30</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="OutboundRecipientSignatureRequestRejected">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">40</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InboundNoRecipientSignatureRequest">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">50</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InboundWaitingForRecipientSignature">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">60</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InboundWithRecipientSignature">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">70</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InboundRecipientSignatureRequestRejected">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">80</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="ENonformalizedDocumentStatus" nillable="true" type="tns:ENonformalizedDocumentStatus"/>
+			<xsd:simpleType name="EInvoiceCustomerStatus">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Unknown_0"/>
+					<xsd:enumeration value="Invoice_Received_1"/>
+					<xsd:enumeration value="OperatorConfirmationToCustomer_Received_2"/>
+					<xsd:enumeration value="CustomerRN_Sent_3"/>
+					<xsd:enumeration value="CustomerInvoiceRN_Sent_4"/>
+					<xsd:enumeration value="OperatorConfirmationToCustomerInvoiceRN_Received_5"/>
+					<xsd:enumeration value="CustomerRNToOperatorConfirmationToCustomerInvoiceRN_Sent_6"/>
+					<xsd:enumeration value="CustomerCorrection_Sent_7"/>
+					<xsd:enumeration value="VendorRNToCustomerCorrection_Received_8"/>
+					<xsd:enumeration value="Finished">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">100</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="EInvoiceCustomerStatus" nillable="true" type="tns:EInvoiceCustomerStatus"/>
+			<xsd:simpleType name="EInvoiceVendorStatus">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Invoice_Sent_0"/>
+					<xsd:enumeration value="OperatorConfirmationToVendor_Received_1"/>
+					<xsd:enumeration value="VendorRN_Sent_2"/>
+					<xsd:enumeration value="CustomerInvoiceRN_Received_3"/>
+					<xsd:enumeration value="CustomerCorrection_Received_4"/>
+					<xsd:enumeration value="VendorRNToCustomerCorrection_Sent_5"/>
+					<xsd:enumeration value="Finished">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">100</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="EInvoiceVendorStatus" nillable="true" type="tns:EInvoiceVendorStatus"/>
+			<xsd:complexType name="ArrayOfDocumentInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="DocumentInfo" nillable="true" type="tns:DocumentInfo"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfDocumentInfo" nillable="true" type="tns:ArrayOfDocumentInfo"/>
+			<xsd:complexType name="DocumentInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Comment" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="DocflowId" nillable="true" type="ser:guid"/>
+					<xsd:element minOccurs="0" name="DocumentId" nillable="true" type="ser:guid"/>
+					<xsd:element minOccurs="0" name="DocumentIdPartners" nillable="true" type="ser:guid"/>
+					<xsd:element minOccurs="0" name="DocumentType" type="tns:EDocumentType"/>
+					<xsd:element minOccurs="0" name="FileName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IsUnread" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="ParentDocumentId" nillable="true" type="ser:guid"/>
+					<xsd:element minOccurs="0" name="Receiver" nillable="true" type="tns:CompanyInfo"/>
+					<xsd:element minOccurs="0" name="Sender" nillable="true" type="tns:CompanyInfo"/>
+					<xsd:element minOccurs="0" name="TransactionType" type="q74:EDocflowTransactionType" xmlns:q74="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Docflow"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="DocumentInfo" nillable="true" type="tns:DocumentInfo"/>
+			<xsd:complexType name="DocumentContent">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Content" nillable="true" type="xsd:base64Binary"/>
+					<xsd:element minOccurs="0" name="Signatures" nillable="true" type="q75:ArrayOfbase64Binary" xmlns:q75="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="DocumentContent" nillable="true" type="tns:DocumentContent"/>
+			<xsd:complexType name="ArrayOfOperatorInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="OperatorInfo" nillable="true" type="tns:OperatorInfo"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfOperatorInfo" nillable="true" type="tns:ArrayOfOperatorInfo"/>
+			<xsd:complexType name="ArrayOfRegistrationInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="RegistrationInfo" nillable="true" type="tns:RegistrationInfo"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfRegistrationInfo" nillable="true" type="tns:ArrayOfRegistrationInfo"/>
+			<xsd:complexType name="RegistrationInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="IsOrganizationRegistered" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="IsUserRegistered" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="OperatorCode" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="RegistrationInfo" nillable="true" type="tns:RegistrationInfo"/>
+		</xsd:schema>
+		<xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/">
+			<xs:element name="anyType" nillable="true" type="xs:anyType"/>
+			<xs:element name="anyURI" nillable="true" type="xs:anyURI"/>
+			<xs:element name="base64Binary" nillable="true" type="xs:base64Binary"/>
+			<xs:element name="boolean" nillable="true" type="xs:boolean"/>
+			<xs:element name="byte" nillable="true" type="xs:byte"/>
+			<xs:element name="dateTime" nillable="true" type="xs:dateTime"/>
+			<xs:element name="decimal" nillable="true" type="xs:decimal"/>
+			<xs:element name="double" nillable="true" type="xs:double"/>
+			<xs:element name="float" nillable="true" type="xs:float"/>
+			<xs:element name="int" nillable="true" type="xs:int"/>
+			<xs:element name="long" nillable="true" type="xs:long"/>
+			<xs:element name="QName" nillable="true" type="xs:QName"/>
+			<xs:element name="short" nillable="true" type="xs:short"/>
+			<xs:element name="string" nillable="true" type="xs:string"/>
+			<xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte"/>
+			<xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt"/>
+			<xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong"/>
+			<xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort"/>
+			<xs:element name="char" nillable="true" type="tns:char"/>
+			<xs:simpleType name="char">
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+			<xs:element name="duration" nillable="true" type="tns:duration"/>
+			<xs:simpleType name="duration">
+				<xs:restriction base="xs:duration">
+					<xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?"/>
+					<xs:minInclusive value="-P10675199DT2H48M5.4775808S"/>
+					<xs:maxInclusive value="P10675199DT2H48M5.4775807S"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="guid" nillable="true" type="tns:guid"/>
+			<xs:simpleType name="guid">
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:attribute name="FactoryType" type="xs:QName"/>
+			<xs:attribute name="Id" type="xs:ID"/>
+			<xs:attribute name="Ref" type="xs:IDREF"/>
+		</xs:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/">
+			<xsd:complexType name="ArrayOfbase64Binary">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="base64Binary" nillable="true" type="xsd:base64Binary"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfbase64Binary" nillable="true" type="tns:ArrayOfbase64Binary"/>
+			<xsd:complexType name="ArrayOfstring">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfstring" nillable="true" type="tns:ArrayOfstring"/>
+			<xsd:complexType name="ArrayOfguid">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="guid" type="ser:guid"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfguid" nillable="true" type="tns:ArrayOfguid"/>
+		</xsd:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Docflow" xmlns:tns="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Docflow">
+			<xsd:simpleType name="EDocflowTransactionType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Unknown"/>
+					<xsd:enumeration value="InvoiceInvoice">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">10</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InvoiceOperatorConfirmationToVendor">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">20</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InvoiceOperatorConfirmationToCustomer">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">30</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InvoiceVendorRN">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">40</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InvoiceCustomerRN">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">50</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InvoiceCustomerInvoiceRN">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">60</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InvoiceOperatorConfirmationToCustomerInvoiceRN">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">70</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InvoiceCustomerRNToOperatorConfirmationToCustomerInvoiceRN">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">80</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InvoiceCustomerCorrection">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">90</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="InvoiceVendorRNToCustomerCorrection">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">100</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="NoRecipientSignatureRequest">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">110</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="WaitingForRecipientSignature">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">120</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="WithRecipientSignature">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">130</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="SignatureRequestRejected">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">140</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="RecipientReceiveNotification">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">121</EnumerationValue>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="EDocflowTransactionType" nillable="true" type="tns:EDocflowTransactionType"/>
+			<xsd:complexType name="NonformalizedDocflowInfo">
+				<xsd:complexContent mixed="false">
+					<xsd:extension base="q76:DocflowInfoBase" xmlns:q76="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy">
+						<xsd:sequence>
+							<xsd:element minOccurs="0" name="NonformalizedDocumentStatus" type="q76:ENonformalizedDocumentStatus"/>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:element name="NonformalizedDocflowInfo" nillable="true" type="tns:NonformalizedDocflowInfo"/>
+			<xsd:complexType name="InvoiceDocflowInfo">
+				<xsd:complexContent mixed="false">
+					<xsd:extension base="q77:DocflowInfoBase" xmlns:q77="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy">
+						<xsd:sequence>
+							<xsd:element minOccurs="0" name="CustomerStatus" type="q77:EInvoiceCustomerStatus"/>
+							<xsd:element minOccurs="0" name="VendorStatus" type="q77:EInvoiceVendorStatus"/>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:element name="InvoiceDocflowInfo" nillable="true" type="tns:InvoiceDocflowInfo"/>
+			<xsd:complexType name="BilateralDocflowInfo">
+				<xsd:complexContent mixed="false">
+					<xsd:extension base="q78:DocflowInfoBase" xmlns:q78="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy">
+						<xsd:sequence/>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:element name="BilateralDocflowInfo" nillable="true" type="tns:BilateralDocflowInfo"/>
+			<xsd:complexType name="ReceivedDocumentInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Date" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="DocflowType" type="q79:EDocflowType" xmlns:q79="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					<xsd:element minOccurs="0" name="FileName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Number" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ReceiveDateTime" type="xsd:dateTime"/>
+					<xsd:element minOccurs="0" name="Sender" nillable="true" type="q80:ParticipantBase" xmlns:q80="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common"/>
+					<xsd:element minOccurs="0" name="Signatures" nillable="true" type="q81:ArrayOfstring" xmlns:q81="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ReceivedDocumentInfo" nillable="true" type="tns:ReceivedDocumentInfo"/>
+		</xsd:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common" xmlns:tns="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common">
+			<xsd:complexType name="ShipmentParticipant">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="IsSameAsParticipant" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="ParticipantWithAdress" nillable="true" type="tns:ParticipantWithAddress"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ShipmentParticipant" nillable="true" type="tns:ShipmentParticipant"/>
+			<xsd:complexType name="ParticipantWithAddress">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Address" nillable="true" type="q82:Address" xmlns:q82="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Common"/>
+					<xsd:element minOccurs="0" name="Participant" nillable="true" type="tns:ParticipantBase"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ParticipantWithAddress" nillable="true" type="tns:ParticipantWithAddress"/>
+			<xsd:complexType name="ParticipantBase">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Inn" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Kpp" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ParticipantBase" nillable="true" type="tns:ParticipantBase"/>
+			<xsd:complexType name="ParticipantCorporate">
+				<xsd:complexContent mixed="false">
+					<xsd:extension base="tns:ParticipantBase">
+						<xsd:sequence>
+							<xsd:element minOccurs="0" name="Name" nillable="true" type="xsd:string"/>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:element name="ParticipantCorporate" nillable="true" type="tns:ParticipantCorporate"/>
+			<xsd:complexType name="ParticipantCorporateWithOkopf">
+				<xsd:complexContent mixed="false">
+					<xsd:extension base="tns:ParticipantCorporate">
+						<xsd:sequence>
+							<xsd:element minOccurs="0" name="Okopf" nillable="true" type="xsd:string"/>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:element name="ParticipantCorporateWithOkopf" nillable="true" type="tns:ParticipantCorporateWithOkopf"/>
+			<xsd:complexType name="ParticipantIndividual">
+				<xsd:complexContent mixed="false">
+					<xsd:extension base="tns:ParticipantBase">
+						<xsd:sequence>
+							<xsd:element minOccurs="0" name="Fio" nillable="true" type="tns:FioType"/>
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+			<xsd:element name="ParticipantIndividual" nillable="true" type="tns:ParticipantIndividual"/>
+			<xsd:complexType name="FioType">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="FirstName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Patronymic" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Surname" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="FioType" nillable="true" type="tns:FioType"/>
+			<xsd:complexType name="Attorney">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Date" nillable="true" type="xsd:dateTime"/>
+					<xsd:element minOccurs="0" name="IssuerAdditionalInfo" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IssuerOrganizationName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IssuerPerson" nillable="true" type="tns:Official"/>
+					<xsd:element minOccurs="0" name="Number" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="RecipientAdditionalInfo" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="RecipientPerson" nillable="true" type="tns:Official"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Attorney" nillable="true" type="tns:Attorney"/>
+			<xsd:complexType name="Official">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="FirstName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="JobTitle" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Patronymic" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Surname" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Official" nillable="true" type="tns:Official"/>
+		</xsd:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Common" xmlns:tns="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Common">
+			<xsd:complexType name="Address">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Area" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Corpus" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ForeignAddressText" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ForeignCountryCode" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="House" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Index" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IsForeignAddress" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="Locality" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Quarter" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="RegionCode" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Street" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Town" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="UnstructedAddressText" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Address" nillable="true" type="tns:Address"/>
+			<xsd:simpleType name="ETaxRate">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="NoVat"/>
+					<xsd:enumeration value="Percent_0"/>
+					<xsd:enumeration value="Percent_10"/>
+					<xsd:enumeration value="Percent_18"/>
+					<xsd:enumeration value="Percent_20"/>
+					<xsd:enumeration value="Percent_10_110"/>
+					<xsd:enumeration value="Percent_18_118"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="ETaxRate" nillable="true" type="tns:ETaxRate"/>
+		</xsd:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Registration" xmlns:tns="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Registration" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/">
+			<xsd:complexType name="RegisterResponse">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="AbonentIdByOperator" nillable="true" type="ser:guid"/>
+					<xsd:element minOccurs="0" name="Certificate" nillable="true" type="xsd:base64Binary"/>
+					<xsd:element minOccurs="0" name="ResponseDateTime" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ResultCode" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ResultMessage" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="RegisterResponse" nillable="true" type="tns:RegisterResponse"/>
+			<xsd:complexType name="RegisterRequestForeignCert">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Email" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="FullName" nillable="true" type="xsd:string"/>
+					<xsd:element name="Inn" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Kpp" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="LocationAddress" nillable="true" type="tns:AddressForRegistration"/>
+					<xsd:element minOccurs="0" name="Members" nillable="true" type="tns:ArrayOfMember"/>
+					<xsd:element minOccurs="0" name="MobliePhone" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Phone" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="PostalAddress" nillable="true" type="tns:AddressForRegistration"/>
+					<xsd:element name="ShortName" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="RegisterRequestForeignCert" nillable="true" type="tns:RegisterRequestForeignCert"/>
+			<xsd:complexType name="AddressForRegistration">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Apartment" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Area" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Corpus" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="House" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Index" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Locality" nillable="true" type="xsd:string"/>
+					<xsd:element name="RegionCode" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Street" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Town" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="AddressForRegistration" nillable="true" type="tns:AddressForRegistration"/>
+			<xsd:complexType name="ArrayOfMember">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="Member" nillable="true" type="tns:Member"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfMember" nillable="true" type="tns:ArrayOfMember"/>
+			<xsd:complexType name="Member">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Certificate" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Email" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="FirstName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="LastName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="MemberId" type="ser:guid"/>
+					<xsd:element minOccurs="0" name="OrgUnit" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Patronymic" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Post" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Member" nillable="true" type="tns:Member"/>
+		</xsd:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Invoice" xmlns:tns="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Invoice">
+			<xsd:complexType name="InvoiceGen">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Consignee" nillable="true" type="q83:ShipmentParticipant" xmlns:q83="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common"/>
+					<xsd:element minOccurs="0" name="CurrencyCode" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Customer" nillable="true" type="q84:ParticipantWithAddress" xmlns:q84="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common"/>
+					<xsd:element minOccurs="0" name="DocumentDate" nillable="true" type="xsd:dateTime"/>
+					<xsd:element minOccurs="0" name="DocumentNumber" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="GenerateDateTime" type="xsd:dateTime"/>
+					<xsd:element minOccurs="0" name="InformationFieldId" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="InformationText" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="PaymentDocuments" nillable="true" type="tns:ArrayOfPaymentDocumentGen"/>
+					<xsd:element minOccurs="0" name="Products" nillable="true" type="tns:ArrayOfInvoiceProductGen"/>
+					<xsd:element minOccurs="0" name="RevisionDate" nillable="true" type="xsd:dateTime"/>
+					<xsd:element minOccurs="0" name="RevisionNumber" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Shipper" nillable="true" type="q85:ShipmentParticipant" xmlns:q85="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common"/>
+					<xsd:element minOccurs="0" name="Signer" nillable="true" type="q86:Signer" xmlns:q86="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments"/>
+					<xsd:element minOccurs="0" name="TotalSumNoVat" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="TotalSumVat" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="TotalSumWithVat" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Vendor" nillable="true" type="q87:ParticipantWithAddress" xmlns:q87="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="InvoiceGen" nillable="true" type="tns:InvoiceGen"/>
+			<xsd:complexType name="ArrayOfPaymentDocumentGen">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="PaymentDocumentGen" nillable="true" type="tns:PaymentDocumentGen"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfPaymentDocumentGen" nillable="true" type="tns:ArrayOfPaymentDocumentGen"/>
+			<xsd:complexType name="PaymentDocumentGen">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="DocumentDate" nillable="true" type="xsd:dateTime"/>
+					<xsd:element minOccurs="0" name="DocumentNumber" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="PaymentDocumentGen" nillable="true" type="tns:PaymentDocumentGen"/>
+			<xsd:complexType name="ArrayOfInvoiceProductGen">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="InvoiceProductGen" nillable="true" type="tns:InvoiceProductGen"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfInvoiceProductGen" nillable="true" type="tns:ArrayOfInvoiceProductGen"/>
+			<xsd:complexType name="InvoiceProductGen">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="AmountNoVat" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="AmountVat" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="AmountWithVat" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="CountryCodes" nillable="true" type="q88:ArrayOfstring" xmlns:q88="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+					<xsd:element minOccurs="0" name="CustomsDeclarationNumbers" nillable="true" type="q89:ArrayOfstring" xmlns:q89="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+					<xsd:element minOccurs="0" name="ExciseAmount" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Infrormation" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="MeasureUnit" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Name" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Price" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Quantity" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="RowNumber" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="TaxRate" type="q90:ETaxRate" xmlns:q90="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Common"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="InvoiceProductGen" nillable="true" type="tns:InvoiceProductGen"/>
+			<xsd:complexType name="CorrectionRequest">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="OperatorCode" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ReceivedDocument" nillable="true" type="q91:ReceivedDocumentInfo" xmlns:q91="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Docflow"/>
+					<xsd:element minOccurs="0" name="Receiver" nillable="true" type="q92:ParticipantBase" xmlns:q92="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common"/>
+					<xsd:element minOccurs="0" name="RequestMessage" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Sender" nillable="true" type="q93:ParticipantBase" xmlns:q93="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common"/>
+					<xsd:element minOccurs="0" name="Signature" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Signer" nillable="true" type="q94:Signer" xmlns:q94="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="CorrectionRequest" nillable="true" type="tns:CorrectionRequest"/>
+		</xsd:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments" xmlns:tns="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments">
+			<xsd:complexType name="Signer">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="FirstName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IndividualRegistrationInfo" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="JobTitle" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="OrganizationInn" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Patronymic" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Surname" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Signer" nillable="true" type="tns:Signer"/>
+			<xsd:complexType name="GeneratedDocument">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Content" nillable="true" type="xsd:base64Binary"/>
+					<xsd:element minOccurs="0" name="FileName" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="GeneratedDocument" nillable="true" type="tns:GeneratedDocument"/>
+		</xsd:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.InvoiceClasses" xmlns:tns="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.InvoiceClasses">
+			<xsd:complexType name="Torg12SellerTitleInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="AdditionalInfo" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="AttachmentSheetsQuantity" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="BuyerDocflowParticipant" nillable="true" type="q95:CompanyInfo" xmlns:q95="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					<xsd:element minOccurs="0" name="ChiefAccountant" nillable="true" type="tns:Official"/>
+					<xsd:element minOccurs="0" name="Consignee" nillable="true" type="q96:OrganizationInfo" xmlns:q96="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Invoice"/>
+					<xsd:element minOccurs="0" name="DocumentDate" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="DocumentNumber" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="GrossQuantityTotal" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="GrossQuantityTotalInWords" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Grounds" nillable="true" type="tns:Grounds"/>
+					<xsd:element minOccurs="0" name="Items" nillable="true" type="tns:ArrayOfTorg12Item"/>
+					<xsd:element minOccurs="0" name="NetQuantityTotal" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="NetQuantityTotalInWords" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="OperationCode" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ParcelsQuantityTotal" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ParcelsQuantityTotalInWords" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Payer" nillable="true" type="q97:OrganizationInfo" xmlns:q97="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Invoice"/>
+					<xsd:element minOccurs="0" name="QuantityTotal" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="SellerDocflowParticipant" nillable="true" type="q98:CompanyInfo" xmlns:q98="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy"/>
+					<xsd:element minOccurs="0" name="Shipper" nillable="true" type="q99:OrganizationInfo" xmlns:q99="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Invoice"/>
+					<xsd:element minOccurs="0" name="Signer" nillable="true" type="tns:Signer"/>
+					<xsd:element minOccurs="0" name="Supplier" nillable="true" type="q100:OrganizationInfo" xmlns:q100="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Invoice"/>
+					<xsd:element minOccurs="0" name="SupplyAllowedBy" nillable="true" type="tns:Official"/>
+					<xsd:element minOccurs="0" name="SupplyDate" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="SupplyPerformedBy" nillable="true" type="tns:Official"/>
+					<xsd:element minOccurs="0" name="Total" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="TotalInWords" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="TotalWithVatExcluded" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Vat" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="WaybillDate" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="WaybillNumber" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Torg12SellerTitleInfo" nillable="true" type="tns:Torg12SellerTitleInfo"/>
+			<xsd:complexType name="Official">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="FirstName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="JobTitle" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Patronymic" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Surname" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Official" nillable="true" type="tns:Official"/>
+			<xsd:complexType name="Grounds">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="AdditionalInfo" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="DocumentDate" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="DocumentName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="DocumentNumber" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Grounds" nillable="true" type="tns:Grounds"/>
+			<xsd:complexType name="ArrayOfTorg12Item">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="Torg12Item" nillable="true" type="tns:Torg12Item"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ArrayOfTorg12Item" nillable="true" type="tns:ArrayOfTorg12Item"/>
+			<xsd:complexType name="Torg12Item">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="AdditionalInfo" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Code" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Feature" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="GrossQuantity" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Name" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="NomenclatureArticle" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ParcelCapacity" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ParcelType" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ParcelsQuantity" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Price" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Quantity" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Sort" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Subtotal" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="SubtotalWithVatExcluded" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="TaxRate" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="UnitCode" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="UnitName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Vat" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Torg12Item" nillable="true" type="tns:Torg12Item"/>
+			<xsd:complexType name="Signer">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="SignerCertificate" nillable="true" type="xsd:base64Binary"/>
+					<xsd:element minOccurs="0" name="SignerDetails" nillable="true" type="tns:SignerDetails"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Signer" nillable="true" type="tns:Signer"/>
+			<xsd:complexType name="SignerDetails">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="FirstName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Inn" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="JobTitle" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Patronymic" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="SoleProprietorRegistrationCertificate" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Surname" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="SignerDetails" nillable="true" type="tns:SignerDetails"/>
+			<xsd:complexType name="Torg12BuyerTitleInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="AcceptedBy" nillable="true" type="tns:Official"/>
+					<xsd:element minOccurs="0" name="AdditionalInfo" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Attorney" nillable="true" type="q101:Attorney" xmlns:q101="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.GeneratingDocuments.Common"/>
+					<xsd:element minOccurs="0" name="ReceivedBy" nillable="true" type="tns:Official"/>
+					<xsd:element minOccurs="0" name="ShipmentReceiptDate" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Signer" nillable="true" type="tns:Signer"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Torg12BuyerTitleInfo" nillable="true" type="tns:Torg12BuyerTitleInfo"/>
+		</xsd:schema>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Invoice" xmlns:tns="http://schemas.datacontract.org/2004/07/UCloud.Gate.Proxy.Invoice">
+			<xsd:complexType name="OrganizationInfo">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Address" nillable="true" type="tns:Address"/>
+					<xsd:element minOccurs="0" name="BankAccountNumber" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="BankId" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="BankName" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Department" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Fax" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Inn" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IsSoleProprietor" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="Kpp" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Name" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Okdp" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Okopf" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Okpo" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Phone" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="OrganizationInfo" nillable="true" type="tns:OrganizationInfo"/>
+			<xsd:complexType name="Address">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Apartment" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Block" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Building" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="City" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ForeignAddress" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ForeignCountry" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IsRussianAddress" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="Locality" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Region" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Street" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="Territory" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="ZipCode" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="Address" nillable="true" type="tns:Address"/>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="IGateWcfService_GetServiceVersion_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetServiceVersion"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetServiceVersion_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetServiceVersionResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_ClearMailBox_InputMessage">
+		<wsdl:part name="parameters" element="tns:ClearMailBox"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_ClearMailBox_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ClearMailBoxResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_AuthenticateByCertificate_InputMessage">
+		<wsdl:part name="parameters" element="tns:AuthenticateByCertificate"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_AuthenticateByCertificate_OutputMessage">
+		<wsdl:part name="parameters" element="tns:AuthenticateByCertificateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_RegisterUserByCertificate_InputMessage">
+		<wsdl:part name="parameters" element="tns:RegisterUserByCertificate"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_RegisterUserByCertificate_OutputMessage">
+		<wsdl:part name="parameters" element="tns:RegisterUserByCertificateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_StartRegisterUserBySms_InputMessage">
+		<wsdl:part name="parameters" element="tns:StartRegisterUserBySms"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_StartRegisterUserBySms_OutputMessage">
+		<wsdl:part name="parameters" element="tns:StartRegisterUserBySmsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_FinishRegisterUserBySms_InputMessage">
+		<wsdl:part name="parameters" element="tns:FinishRegisterUserBySms"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_FinishRegisterUserBySms_OutputMessage">
+		<wsdl:part name="parameters" element="tns:FinishRegisterUserBySmsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_SendRegisterRequest_InputMessage">
+		<wsdl:part name="parameters" element="tns:SendRegisterRequest"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_SendRegisterRequest_OutputMessage">
+		<wsdl:part name="parameters" element="tns:SendRegisterRequestResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetRegisterResponse_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetRegisterResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetRegisterResponse_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetRegisterResponseResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateRegisterRequest_InputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateRegisterRequest"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateRegisterRequest_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateRegisterRequestResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_SendDocument_InputMessage">
+		<wsdl:part name="parameters" element="tns:SendDocument"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_SendDocument_OutputMessage">
+		<wsdl:part name="parameters" element="tns:SendDocumentResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetDocumentTransportData_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetDocumentTransportData"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetDocumentTransportData_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetDocumentTransportDataResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetMutualOperators_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetMutualOperators"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetMutualOperators_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetMutualOperatorsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetDocflowList_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetDocflowList"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetDocflowList_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetDocflowListResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_MarkDocflowsAsRead_InputMessage">
+		<wsdl:part name="parameters" element="tns:MarkDocflowsAsRead"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_MarkDocflowsAsRead_OutputMessage">
+		<wsdl:part name="parameters" element="tns:MarkDocflowsAsReadResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetDocumentList_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetDocumentList"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetDocumentList_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetDocumentListResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetDocumentContent_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetDocumentContent"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetDocumentContent_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetDocumentContentResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetOperators_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetOperators"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetOperators_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetOperatorsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetRegistrationInfo_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetRegistrationInfo"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GetRegistrationInfo_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetRegistrationInfoResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateInvoiceXml_InputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateInvoiceXml"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateInvoiceXml_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateInvoiceXmlResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateNotificationXml_InputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateNotificationXml"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateNotificationXml_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateNotificationXmlResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_ParseInvoiceCorrectionRequestXml_InputMessage">
+		<wsdl:part name="parameters" element="tns:ParseInvoiceCorrectionRequestXml"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_ParseInvoiceCorrectionRequestXml_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ParseInvoiceCorrectionRequestXmlResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateInvoiceCorrectionRequestXml_InputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateInvoiceCorrectionRequestXml"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateInvoiceCorrectionRequestXml_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateInvoiceCorrectionRequestXmlResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_VerifySignature_InputMessage">
+		<wsdl:part name="parameters" element="tns:VerifySignature"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_VerifySignature_OutputMessage">
+		<wsdl:part name="parameters" element="tns:VerifySignatureResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_StartSmsAuthentication_InputMessage">
+		<wsdl:part name="parameters" element="tns:StartSmsAuthentication"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_StartSmsAuthentication_OutputMessage">
+		<wsdl:part name="parameters" element="tns:StartSmsAuthenticationResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_FinishSmsAuthentication_InputMessage">
+		<wsdl:part name="parameters" element="tns:FinishSmsAuthentication"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_FinishSmsAuthentication_OutputMessage">
+		<wsdl:part name="parameters" element="tns:FinishSmsAuthenticationResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateTorg12XmlForSeller_InputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateTorg12XmlForSeller"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateTorg12XmlForSeller_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateTorg12XmlForSellerResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateTorg12XmlForBuyer_InputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateTorg12XmlForBuyer"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_GenerateTorg12XmlForBuyer_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GenerateTorg12XmlForBuyerResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_SignDocument_InputMessage">
+		<wsdl:part name="parameters" element="tns:SignDocument"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_SignDocument_OutputMessage">
+		<wsdl:part name="parameters" element="tns:SignDocumentResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_SetBillingAccountToOrganization_InputMessage">
+		<wsdl:part name="parameters" element="tns:SetBillingAccountToOrganization"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_SetBillingAccountToOrganization_OutputMessage">
+		<wsdl:part name="parameters" element="tns:SetBillingAccountToOrganizationResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_CheckIfPersonIsEmployeeByCertificate_InputMessage">
+		<wsdl:part name="parameters" element="tns:CheckIfPersonIsEmployeeByCertificate"/>
+	</wsdl:message>
+	<wsdl:message name="IGateWcfService_CheckIfPersonIsEmployeeByCertificate_OutputMessage">
+		<wsdl:part name="parameters" element="tns:CheckIfPersonIsEmployeeByCertificateResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="IGateWcfService">
+		<wsdl:operation name="GetServiceVersion">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GetServiceVersion" message="tns:IGateWcfService_GetServiceVersion_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GetServiceVersionResponse" message="tns:IGateWcfService_GetServiceVersion_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ClearMailBox">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/ClearMailBox" message="tns:IGateWcfService_ClearMailBox_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/ClearMailBoxResponse" message="tns:IGateWcfService_ClearMailBox_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="AuthenticateByCertificate">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/AuthenticateByCertificate" message="tns:IGateWcfService_AuthenticateByCertificate_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/AuthenticateByCertificateResponse" message="tns:IGateWcfService_AuthenticateByCertificate_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="RegisterUserByCertificate">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/RegisterUserByCertificate" message="tns:IGateWcfService_RegisterUserByCertificate_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/RegisterUserByCertificateResponse" message="tns:IGateWcfService_RegisterUserByCertificate_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="StartRegisterUserBySms">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/StartRegisterUserBySms" message="tns:IGateWcfService_StartRegisterUserBySms_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/StartRegisterUserBySmsResponse" message="tns:IGateWcfService_StartRegisterUserBySms_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="FinishRegisterUserBySms">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/FinishRegisterUserBySms" message="tns:IGateWcfService_FinishRegisterUserBySms_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/FinishRegisterUserBySmsResponse" message="tns:IGateWcfService_FinishRegisterUserBySms_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="SendRegisterRequest">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/SendRegisterRequest" message="tns:IGateWcfService_SendRegisterRequest_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/SendRegisterRequestResponse" message="tns:IGateWcfService_SendRegisterRequest_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetRegisterResponse">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GetRegisterResponse" message="tns:IGateWcfService_GetRegisterResponse_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GetRegisterResponseResponse" message="tns:IGateWcfService_GetRegisterResponse_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateRegisterRequest">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GenerateRegisterRequest" message="tns:IGateWcfService_GenerateRegisterRequest_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GenerateRegisterRequestResponse" message="tns:IGateWcfService_GenerateRegisterRequest_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="SendDocument">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/SendDocument" message="tns:IGateWcfService_SendDocument_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/SendDocumentResponse" message="tns:IGateWcfService_SendDocument_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentTransportData">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GetDocumentTransportData" message="tns:IGateWcfService_GetDocumentTransportData_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GetDocumentTransportDataResponse" message="tns:IGateWcfService_GetDocumentTransportData_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetMutualOperators">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GetMutualOperators" message="tns:IGateWcfService_GetMutualOperators_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GetMutualOperatorsResponse" message="tns:IGateWcfService_GetMutualOperators_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocflowList">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GetDocflowList" message="tns:IGateWcfService_GetDocflowList_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GetDocflowListResponse" message="tns:IGateWcfService_GetDocflowList_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="MarkDocflowsAsRead">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/MarkDocflowsAsRead" message="tns:IGateWcfService_MarkDocflowsAsRead_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/MarkDocflowsAsReadResponse" message="tns:IGateWcfService_MarkDocflowsAsRead_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentList">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GetDocumentList" message="tns:IGateWcfService_GetDocumentList_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GetDocumentListResponse" message="tns:IGateWcfService_GetDocumentList_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentContent">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GetDocumentContent" message="tns:IGateWcfService_GetDocumentContent_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GetDocumentContentResponse" message="tns:IGateWcfService_GetDocumentContent_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetOperators">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GetOperators" message="tns:IGateWcfService_GetOperators_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GetOperatorsResponse" message="tns:IGateWcfService_GetOperators_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetRegistrationInfo">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GetRegistrationInfo" message="tns:IGateWcfService_GetRegistrationInfo_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GetRegistrationInfoResponse" message="tns:IGateWcfService_GetRegistrationInfo_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateInvoiceXml">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GenerateInvoiceXml" message="tns:IGateWcfService_GenerateInvoiceXml_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GenerateInvoiceXmlResponse" message="tns:IGateWcfService_GenerateInvoiceXml_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateNotificationXml">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GenerateNotificationXml" message="tns:IGateWcfService_GenerateNotificationXml_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GenerateNotificationXmlResponse" message="tns:IGateWcfService_GenerateNotificationXml_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ParseInvoiceCorrectionRequestXml">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/ParseInvoiceCorrectionRequestXml" message="tns:IGateWcfService_ParseInvoiceCorrectionRequestXml_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/ParseInvoiceCorrectionRequestXmlResponse" message="tns:IGateWcfService_ParseInvoiceCorrectionRequestXml_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateInvoiceCorrectionRequestXml">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GenerateInvoiceCorrectionRequestXml" message="tns:IGateWcfService_GenerateInvoiceCorrectionRequestXml_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GenerateInvoiceCorrectionRequestXmlResponse" message="tns:IGateWcfService_GenerateInvoiceCorrectionRequestXml_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="VerifySignature">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/VerifySignature" message="tns:IGateWcfService_VerifySignature_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/VerifySignatureResponse" message="tns:IGateWcfService_VerifySignature_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="StartSmsAuthentication">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/StartSmsAuthentication" message="tns:IGateWcfService_StartSmsAuthentication_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/StartSmsAuthenticationResponse" message="tns:IGateWcfService_StartSmsAuthentication_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="FinishSmsAuthentication">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/FinishSmsAuthentication" message="tns:IGateWcfService_FinishSmsAuthentication_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/FinishSmsAuthenticationResponse" message="tns:IGateWcfService_FinishSmsAuthentication_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateTorg12XmlForSeller">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GenerateTorg12XmlForSeller" message="tns:IGateWcfService_GenerateTorg12XmlForSeller_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GenerateTorg12XmlForSellerResponse" message="tns:IGateWcfService_GenerateTorg12XmlForSeller_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateTorg12XmlForBuyer">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/GenerateTorg12XmlForBuyer" message="tns:IGateWcfService_GenerateTorg12XmlForBuyer_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/GenerateTorg12XmlForBuyerResponse" message="tns:IGateWcfService_GenerateTorg12XmlForBuyer_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="SignDocument">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/SignDocument" message="tns:IGateWcfService_SignDocument_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/SignDocumentResponse" message="tns:IGateWcfService_SignDocument_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="SetBillingAccountToOrganization">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/SetBillingAccountToOrganization" message="tns:IGateWcfService_SetBillingAccountToOrganization_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/SetBillingAccountToOrganizationResponse" message="tns:IGateWcfService_SetBillingAccountToOrganization_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="CheckIfPersonIsEmployeeByCertificate">
+			<wsdl:input wsaw:Action="http://tempuri.org/IGateWcfService/CheckIfPersonIsEmployeeByCertificate" message="tns:IGateWcfService_CheckIfPersonIsEmployeeByCertificate_InputMessage"/>
+			<wsdl:output wsaw:Action="http://tempuri.org/IGateWcfService/CheckIfPersonIsEmployeeByCertificateResponse" message="tns:IGateWcfService_CheckIfPersonIsEmployeeByCertificate_OutputMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="WSHttpBinding_IGateWcfService" type="tns:IGateWcfService">
+		<wsp:PolicyReference URI="#WSHttpBinding_IGateWcfService_policy"/>
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="GetServiceVersion">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GetServiceVersion" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ClearMailBox">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/ClearMailBox" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="AuthenticateByCertificate">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/AuthenticateByCertificate" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="RegisterUserByCertificate">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/RegisterUserByCertificate" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="StartRegisterUserBySms">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/StartRegisterUserBySms" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FinishRegisterUserBySms">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/FinishRegisterUserBySms" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="SendRegisterRequest">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/SendRegisterRequest" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetRegisterResponse">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GetRegisterResponse" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateRegisterRequest">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GenerateRegisterRequest" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="SendDocument">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/SendDocument" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentTransportData">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GetDocumentTransportData" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetMutualOperators">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GetMutualOperators" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocflowList">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GetDocflowList" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="MarkDocflowsAsRead">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/MarkDocflowsAsRead" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentList">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GetDocumentList" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDocumentContent">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GetDocumentContent" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetOperators">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GetOperators" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetRegistrationInfo">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GetRegistrationInfo" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateInvoiceXml">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GenerateInvoiceXml" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateNotificationXml">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GenerateNotificationXml" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ParseInvoiceCorrectionRequestXml">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/ParseInvoiceCorrectionRequestXml" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateInvoiceCorrectionRequestXml">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GenerateInvoiceCorrectionRequestXml" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="VerifySignature">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/VerifySignature" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="StartSmsAuthentication">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/StartSmsAuthentication" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FinishSmsAuthentication">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/FinishSmsAuthentication" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateTorg12XmlForSeller">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GenerateTorg12XmlForSeller" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenerateTorg12XmlForBuyer">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/GenerateTorg12XmlForBuyer" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="SignDocument">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/SignDocument" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="SetBillingAccountToOrganization">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/SetBillingAccountToOrganization" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CheckIfPersonIsEmployeeByCertificate">
+			<soap12:operation soapAction="http://tempuri.org/IGateWcfService/CheckIfPersonIsEmployeeByCertificate" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="GateWcfServiceHttps">
+		<wsdl:port name="WSHttpBinding_IGateWcfService" binding="tns:WSHttpBinding_IGateWcfService">
+			<soap12:address location="https://94.125.95.8:1111/GateFlat.svc"/>
+			<wsa10:EndpointReference>
+				<wsa10:Address>https://94.125.95.8:1111/GateFlat.svc</wsa10:Address>
+				<Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+					<Dns>localhost</Dns>
+				</Identity>
+			</wsa10:EndpointReference>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
