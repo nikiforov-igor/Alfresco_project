@@ -89,4 +89,14 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	public String wrapperLink(String nodeRef, String description) {
 		return wrapperLink(nodeRef, description, BaseBean.LINK_URL);
 	}
+
+	/**
+	 * Оборачивает узел в span с title
+	 * @param text
+	 * @param title
+	 * @return
+	 */
+	public String wrapperTitle(String text, String title) {
+		return  "<span class=\"wrapper-title\" title=\"" + title + "\">" + text + "</span>";
+	}
 }

@@ -126,5 +126,19 @@
                 </property>
             </properties>
         </type>
+		<type name="lecm-document:documentWorkflowComment">
+			<title>Logic ECM Base Document Workflow Comment</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-document:documentWorkflowCommentText">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
     </types>
 </model>

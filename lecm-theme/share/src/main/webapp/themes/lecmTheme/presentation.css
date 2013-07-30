@@ -12,7 +12,8 @@ ol, ol li {
     padding: 0;
 }
 
-a, a:hover, a:visited {
+a, a:hover, a:visited,
+span.wrapper-title {
     color: #6ca5ce;
     text-decoration: underline;
 }
@@ -2210,7 +2211,8 @@ span.person a div.description:empty {
 }
 #notificationsWindow-body a,
 #notificationsWindow-body a:hover,
-#notificationsWindow-body a:visited {
+#notificationsWindow-body a:visited,
+#notificationsWindow-body span.wrapper-title {
     color: #68a0c8;
     text-decoration: none;
 }

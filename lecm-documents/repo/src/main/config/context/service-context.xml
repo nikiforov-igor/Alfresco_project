@@ -327,6 +327,22 @@
         <property name="documentCommentsService" ref="documentCommentsService"/>
     </bean>
 
+	<bean id="documentWorkflowCommentsService" class="ru.it.lecm.documents.beans.DocumentWorkflowCommentsServiceImpl"
+	      depends-on="transactionService, nodeService">
+		<property name="transactionService" ref="transactionService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
+	<bean id="documentWorkflowCommentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentWorkflowCommentsWebScriptBean"
+	      depends-on="documentWorkflowCommentsService">
+		<property name="extensionName">
+			<value>documentWorkflowComments</value>
+		</property>
+		<property name="documentWorkflowCommentsService">
+			<ref bean="documentWorkflowCommentsService"/>
+		</property>
+	</bean>
+
     <bean id="documentAttachmentsPolicy" parent="baseBean" class="ru.it.lecm.documents.policy.DocumentAttachmentsPolicy"
           init-method="init">
         <property name="policyComponent">

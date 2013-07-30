@@ -103,11 +103,18 @@
 			<!--</mandatory-aspects>-->
 		</type>
 
+		<!--Запрос отмены поручения-->
 		<type name="lecmErrandWf:requestCancel">
 			<parent>bpm:startTask</parent>
-			<!--<mandatory-aspects>-->
-				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
-			<!--</mandatory-aspects>-->
+			<properties>
+				<property name="lecmErrandWf:requestCancelReason">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<type name="lecmErrandWf:initiatorDecline">

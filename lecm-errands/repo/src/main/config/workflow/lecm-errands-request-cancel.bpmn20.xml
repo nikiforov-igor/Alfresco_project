@@ -11,8 +11,38 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string>
+	                        var document = bpm_package.children[0];
+
+	                        documentWorkflowComments.createWorkflowComment(document, lecmErrandWf_requestCancelReason);
+
+	                        var initiator = null;
+	                        var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+	                        if (initiatorAssoc != null &amp;&amp; initiatorAssoc.length == 1) {
+	                            initiator = initiatorAssoc[0];
+	                        }
+
+	                        var currentEmployee = orgstructure.getCurrentEmployee();
+
+	                        var logText = "Сотрудник #initiator запросил ";
+	                        logText += documentScript.wrapperTitle("отмену", lecmErrandWf_requestCancelReason);
+	                        logText += " поручения: #mainobject.";
+	                        businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
+
+	                        if (initiator != null) {
+		                        var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
+		                        notificationText += " запросил(а) ";
+		                        notificationText += documentScript.wrapperTitle(" отмену ", lecmErrandWf_requestCancelReason);
+		                        notificationText += " поручения ";
+		                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+		                        notificationText += " № {lecm-errands:number}";
+
+		                        var recipients = [];
+		                        recipients.push(initiator);
+		                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+	                        }
+
                             <!--execution.setVariable("requestCancelResult", "changeExecutor");-->
-                            execution.setVariable("requestCancelResult", "cancelErrand");
+                            <!--execution.setVariable("requestCancelResult", "cancelErrand");-->
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
