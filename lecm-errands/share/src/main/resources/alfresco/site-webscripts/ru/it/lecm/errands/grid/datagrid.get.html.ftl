@@ -39,7 +39,7 @@
                     showCheckboxColumn: false,
                     bubblingLabel: "${bubblingLabel!"errands"}",
                     attributeForShow:"${attributeForShow!"cm:name"}",
-                    excludeColumns: ["lecm-errands:is-important", "lecm-errands:baseDocString"]
+                    excludeColumns: ["lecm-errands:is-important", "lecm-errands:baseDocString", "lecm-errands:is-expired"]
                 }).setMessages(${messages});
 
                 var query = <#if query?? && (query?length > 0)>"${query}"<#else>""</#if>;

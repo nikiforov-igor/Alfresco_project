@@ -277,6 +277,7 @@
                 <field-visibility>
                     <show id="lecm-errands:is-important"/>
                     <show id="lecm-errands:baseDocString"/>
+                    <show id="lecm-errands:is-expired"/>
                     <show id="lecm-errands:initiator-assoc"/>
                     <show id="lecm-errands:executor-assoc"/>
                     <show id="lecm-errands:execution-date"/>

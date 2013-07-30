@@ -61,17 +61,9 @@
                                 html += "<br />";
                             }
 
-                            if (grid.options.contractsWithMyActiveTasks != null) {
-                                var bold = false;
-                                var nodeRef = oRecord.getData("nodeRef");
-                                for (var j = 0; j < grid.options.contractsWithMyActiveTasks.length; j++) {
-                                    if (grid.options.contractsWithMyActiveTasks[j] == nodeRef) {
-                                        bold = true;
-                                        break;
-                                    }
-                                }
-                                if (bold) {
-                                    html = "<b>" + html + "</b>";
+                            if (oRecord && oRecord.getData("itemData")){
+                                if (oRecord.getData("itemData")["prop_lecm-errands_is-expired"] && ("" + oRecord.getData("itemData")["prop_lecm-errands_is-expired"].value) == "true") {
+                                    elCell.className += " archive-record";
                                 }
                             }
                         }
