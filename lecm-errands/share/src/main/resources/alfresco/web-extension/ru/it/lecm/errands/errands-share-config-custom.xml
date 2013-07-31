@@ -693,6 +693,34 @@
         </forms>
     </config>
 
+	<config evaluator="task-type" condition="lecmErrandWf:requestCancelTask">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecmErrandWf:requestCancelTaskTitle" />
+					<show id="lecmErrandWf:requestCancelTaskReason" />
+					<show id="lecmErrandWf:requestCancelTaskResult" />
+					<show id="lecmErrandWf:requestCancelTaskNewExecutor" />
+				</field-visibility>
+				<appearance>
+					<field id="lecmErrandWf:requestCancelTaskTitle">
+						<control template="/ru/it/lecm/base-share/components/controls/view-text-control.ftl">
+							<control-param name="showLabel">false</control-param>
+						</control>
+					</field>
+					<field id="lecmErrandWf:requestCancelTaskReason" read-only="true">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="rows">7</control-param>
+						</control>
+					</field>
+					<field id="lecmErrandWf:requestCancelTaskResult">
+						<control template="/ru/it/lecm/approval/controls/activiti-transitions-radiobuttons.ftl" />
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
     <config evaluator="string-compare" condition="activiti$errandsInitiatorDecline">
         <forms>
             <form>

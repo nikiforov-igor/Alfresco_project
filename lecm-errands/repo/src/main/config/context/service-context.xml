@@ -157,7 +157,10 @@
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-errands-default-statemacine.xml" />
     </bean>
 
-    <bean id="errandsWorkflowBootstrap" parent="workflowDeployer" depends-on="contracts.LogicEcmContractsDictionariesBootstrap, statemachine.aspects.LogicEcmModelsBootstrap">
+    <bean id="errandsWorkflowBootstrap" parent="workflowDeployer"
+          depends-on="contracts.LogicEcmContractsDictionariesBootstrap,
+				     statemachine.aspects.LogicEcmModelsBootstrap,
+				     ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,">
         <property name="workflowDefinitions">
             <list>
                 <props>

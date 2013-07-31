@@ -29,6 +29,10 @@ public class ExpressionDocument {
 		this.serviceRegistry = serviceRegistry;
 	}
 
+	public NodeRef getNodeRef() {
+		return nodeRef;
+	}
+
 	//Значение аттрибута
 	public Object attr(String attributeName) {
 		QName attribute = QName.createQName(attributeName,serviceRegistry.getNamespaceService());

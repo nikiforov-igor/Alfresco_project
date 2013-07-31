@@ -39,19 +39,93 @@
 		                        var recipients = [];
 		                        recipients.push(initiator);
 		                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
-	                        }
 
-                            <!--execution.setVariable("requestCancelResult", "changeExecutor");-->
-                            <!--execution.setVariable("requestCancelResult", "cancelErrand");-->
+	                            execution.setVariable("requestCancelAssignee", orgstructure.getEmployeeLogin(initiator));
+	                            execution.setVariable("requestCancelTitle", substitude.formatNodeTitle(document, notificationText));
+	                            execution.setVariable("requestCancelReason", lecmErrandWf_requestCancelReason);
+	                        }
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
             <script></script>
         </scriptTask>
+	    <userTask id="requestCancelTask" name="Отменить поручение" activiti:assignee='${requestCancelAssignee}' activiti:formKey="lecmErrandWf:requestCancelTask">
+		    <extensionElements>
+			    <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+				    <activiti:field name="script">
+					    <activiti:string>
+						 	task.setVariableLocal("lecmErrandWf_requestCancelTaskTitle", execution.getVariable("requestCancelTitle"));
+						 	task.setVariableLocal("lecmErrandWf_requestCancelTaskReason", execution.getVariable("requestCancelReason"));
+					    </activiti:string>
+				    </activiti:field>
+			    </activiti:taskListener>
+			    <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+				    <activiti:field name="script">
+					    <activiti:string>
+						    var document = bpm_package.children[0];
+						    if (document != null) {
+							    var executor = null;
+							    var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+							    if (executorAssoc != null &amp;&amp; executorAssoc.length == 1) {
+							        executor = executorAssoc[0];
+						        }
+							    if (executor != null) {
+						            var decision = task.getVariableLocal("lecmErrandWf_requestCancelTaskResult");
+
+						            var recipients = [];
+								    recipients.push(executor);
+
+							        if (decision == "REJECTED") {
+									    var notificationText = "Ваш запрос об отмене поручения ";
+									    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+									    notificationText += " № {lecm-errands:number}";
+									    notificationText += " отменён";
+									    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+								    } else if (decision == "CANCEL_ERRAND") {
+								        execution.setVariable("requestCancelResult", "cancelErrand");
+
+									    var notificationText = "Запрос об отмене поручения  ";
+									    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+									    notificationText += " № {lecm-errands:number}";
+									    notificationText += " принят. Поручение отменено";
+									    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+
+									    var logText = "Сотрудник #initiator отменил поручение: #mainobject.";
+									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
+								    } else if (decision == "CHANGE_EXECUTOR") {
+						                var newExecutor = task.getVariableLocal("lecmErrandWf_requestCancelTaskNewExecutor");
+						                if (newExecutor != null) {
+							                document.removeAssociation(executor, "lecm-errands:executor-assoc");
+							                document.createAssociation(newExecutor, "lecm-errands:executor-assoc");
+
+										    var notificationText = "Запрос об отмене поручения  ";
+										    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+										    notificationText += " № {lecm-errands:number}";
+										    notificationText += " принят. Поручению назначен другой Исполнитель";
+										    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+
+						                    var logObjects = [];
+						                    logObjects.push("" + newExecutor.nodeRef);
+										    var logText = "Сотрудник #initiator сменил Исполнителя поручения: #mainobject. Новый исполнитель: #object1";
+										    businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_EXECUTOR", logText, logObjects);
+
+						                    documentMembers.deleteMember(document, executor);
+
+						                    execution.setVariable("requestCancelResult", "changeExecutor");
+						                }
+								    }
+							    }
+						    }
+					    </activiti:string>
+				    </activiti:field>
+			    </activiti:taskListener>
+		    </extensionElements>
+	    </userTask>
         <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
         <sequenceFlow id="flow1" name="" sourceRef="startRequestCancel" targetRef="requestCancel"></sequenceFlow>
         <sequenceFlow id="flow2" name="" sourceRef="requestCancel" targetRef="errandReceiveTask"></sequenceFlow>
-        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endRequestCancel"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="requestCancelTask"></sequenceFlow>
+        <sequenceFlow id="flow4" name="" sourceRef="requestCancelTask" targetRef="endRequestCancel"></sequenceFlow>
     </process>
 </definitions>

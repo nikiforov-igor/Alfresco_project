@@ -6,6 +6,10 @@
                 <property name="cm:name">Отмена поручения</property>
                 <property name="lecm-busjournal:eventCategory-code">CANCEL_ERRAND</property>
             </item>
+	        <item name="cm:Смена исполнителя поручения" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Смена исполнителя поручения</property>
+                <property name="lecm-busjournal:eventCategory-code">ERRAND_CHANGE_EXECUTOR</property>
+            </item>
         </items>
     </item>
 </items>

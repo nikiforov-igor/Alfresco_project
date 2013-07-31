@@ -959,4 +959,8 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		ParameterCheck.mandatory("roleId", roleId);
 		return orgstructureService.isCurrentEmployeeHasBusinessRole(roleId);
 	}
+
+	public String getEmployeeLogin(ScriptNode employee) {
+		return orgstructureService.getEmployeeLogin(employee.getNodeRef());
+	}
 }

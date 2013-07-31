@@ -257,5 +257,8 @@
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
     </bean>
 
+	<bean id="employeeExpression" class="ru.it.lecm.statemachine.expression.ExpressionEmployee">
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+    </bean>
 
 </beans>

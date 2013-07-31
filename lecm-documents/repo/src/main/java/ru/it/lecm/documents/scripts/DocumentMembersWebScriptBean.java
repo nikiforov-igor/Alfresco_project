@@ -3,11 +3,14 @@ package ru.it.lecm.documents.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,13 +31,48 @@ public class DocumentMembersWebScriptBean extends BaseWebScript {
         this.nodeService = nodeService;
     }
 
-    public ScriptNode add(String documentRef, String employeeRef, String permGroup) {
+    public ScriptNode addMember(String documentRef, String employeeRef, String permGroup) {
         ParameterCheck.mandatory("documentRef", documentRef);
         ParameterCheck.mandatory("employeeRef", employeeRef);
 
-        NodeRef member = documentMembersService.addMember(new NodeRef(documentRef), new NodeRef(employeeRef), permGroup);
+        return addMember(new NodeRef(documentRef), new NodeRef(employeeRef), permGroup);
+    }
+
+	public ScriptNode addMember(NodeRef documentRef, NodeRef employeeRef, String permGroup) {
+        ParameterCheck.mandatory("documentRef", documentRef);
+        ParameterCheck.mandatory("employeeRef", employeeRef);
+
+        NodeRef member = documentMembersService.addMember(documentRef, employeeRef, permGroup);
         return member != null ? new ScriptNode(member, serviceRegistry, getScope()) : null;
     }
+
+	public ScriptNode addMember(ScriptNode document, ScriptNode employee, String permGroup) {
+		ParameterCheck.mandatory("document", document);
+		ParameterCheck.mandatory("employee", employee);
+
+		return addMember(document.getNodeRef(), employee.getNodeRef(), permGroup);
+	}
+
+	public boolean delete(String documentRef, String employeeRef) {
+        ParameterCheck.mandatory("documentRef", documentRef);
+        ParameterCheck.mandatory("employeeRef", employeeRef);
+
+        return delete(new NodeRef(documentRef), new NodeRef(employeeRef));
+    }
+
+	public boolean delete(NodeRef documentRef, NodeRef employeeRef) {
+		ParameterCheck.mandatory("documentRef", documentRef);
+		ParameterCheck.mandatory("employeeRef", employeeRef);
+
+		return documentMembersService.deleteMember(documentRef, employeeRef);
+	}
+
+	public boolean deleteMember(ScriptNode document, ScriptNode employee) {
+		ParameterCheck.mandatory("document", document);
+		ParameterCheck.mandatory("employee", employee);
+
+		return delete(document.getNodeRef(), employee.getNodeRef());
+	}
 
     public Scriptable getMembers(String documentNodeRef, String skipItemsCount, String loadItemsCount) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);

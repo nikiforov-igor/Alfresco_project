@@ -3,7 +3,7 @@ if (typeof json !== "undefined") {
     var employee = json.get("employee");
     var permGroup = json.has("permGroup") ? json.get("permGroup") : "";
     try {
-        var newMember = documentMembers.add(document, employee, permGroup);
+        var newMember = documentMembers.addMember(document, employee, permGroup);
         model.member = newMember;
     } catch (e) {
 
