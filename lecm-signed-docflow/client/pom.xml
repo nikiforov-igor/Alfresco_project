@@ -29,16 +29,16 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.alfresco</groupId>
-			<artifactId>alfresco-data-model</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-databinding-xmlbeans</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
