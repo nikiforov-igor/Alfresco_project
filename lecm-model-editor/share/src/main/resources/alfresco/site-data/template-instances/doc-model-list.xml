@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+	<template-type>ru/it/lecm/docmodel/list</template-type>
+	<components>
+		<component>
+			<region-id>title</region-id>
+			<url>/components/title/simple-title</url>
+			<properties>
+				<title>Редактор моделей</title>
+			</properties>
+		</component>
+
+		<!--Toolbar -->
+
+		<!--Datagrid -->
+		<component>
+			<region-id>datagrid</region-id>
+			<url>/lecm/documentmodel/data-lists/datagrid</url>
+		</component>
+		<!-- Menu -->
+		
+	</components>
+</template-instance>

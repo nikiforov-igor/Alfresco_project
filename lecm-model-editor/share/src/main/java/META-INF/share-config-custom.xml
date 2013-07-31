@@ -1,0 +1,63 @@
+<alfresco-config>
+    
+    <config evaluator="node-type" condition="cm:dictionaryModel">
+        <forms>
+      		<form id="edit-model">
+      		    <edit-form template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
+         		<field-visibility>
+         		    <!--<show id="cm:name" /> -->
+            		<!--<show id="cm:modelName" />-->
+            		<!--<show id="cm:modelDescription" />-->
+            		<!--<show id="cm:modelAuthor" />-->
+            		<!--<show id="cm:modelPublishedDate" />-->
+            		<!--<show id="cm:modelVersion" />-->
+            		<show id="cm:modelActive" />
+            		<show id="cm:content" />
+				</field-visibility>
+				<appearance>
+               		<set id="parameters" label-id="it.model.parameters" />
+               		<set id="content" label-id="it.model.content" />
+
+               		<!--<field id="cm:name" set="parameters">
+               		    <control template="/fdk/controls/autocomplete-beta.ftl">
+                  			<control-param name="ds">/service/ds/autocomplete/google</control-param>
+               			</control>
+               		</field>-->
+               		<!--<field id="cm:modelName" set="parameters" />-->
+               		<!--<field id="cm:modelDescription" set="parameters" />-->
+               		<!--<field id="cm:modelAuthor" set="parameters" />-->
+               		<!--<field id="cm:modelPublishedDate" set="parameters" />-->
+               		<!--<field id="cm:modelVersion" set="parameters" />-->
+               		<field id="cm:modelActive" set="parameters" />
+               		  
+               		<field id="cm:content" set="content">
+                  		<control template="/ru/it/lecm/controls/model-editor.ftl" />
+               		</field>
+               	</appearance>
+			</form>
+   		</forms>
+    </config>
+    
+    <config evaluator="model-type" condition="cm:dictionaryModel">
+        <forms>
+      		<form id="create-model">
+      		    <edit-form template="/fdk/templates/2-column-edit-form.ftl" />
+         		<field-visibility>
+         		    <show id="cm:name" />
+            		<show id="cm:modelActive" />
+            		<show id="cm:content" />
+				</field-visibility>
+				<appearance>
+               		<set id="parameters" label-id="it.model.parameters" />
+               		<set id="content" label-id="it.model.content" />
+               		<field id="cm:name" set="parameters" />
+               		<field id="cm:modelActive" set="parameters" />
+               		<field id="cm:content" set="content">
+                  		<control template="/ru/it/lecm/controls/model-editor.ftl" />
+               		</field>
+               	</appearance>
+			</form>
+   		</forms>
+    </config>
+    
+</alfresco-config>

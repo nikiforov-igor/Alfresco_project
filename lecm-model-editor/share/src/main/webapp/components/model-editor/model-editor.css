@@ -1,0 +1,22 @@
+.models td.yui-dt-last .yui-dt-liner a.delete
+{
+   background-image: url(../images/delete-16.png);
+   cursor: pointer;
+}
+.models td.yui-dt-last .yui-dt-liner a
+{
+   background-position: 0 center;
+   background-repeat: no-repeat;
+   padding-bottom: 0.1em;
+   padding-left: 0.6em;
+   padding-right: 0.7em;
+}
+
+.models td.yui-dt-last .yui-dt-liner
+{
+   text-align: right;
+}
+
+.models .form-container select.yui-dt-dropdown {
+	width:100%;
+}
