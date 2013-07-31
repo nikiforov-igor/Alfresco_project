@@ -11,69 +11,134 @@ public interface SignedDocflowBean {
 
 	String SIGNED_DOCFLOW_PREFIX = "lecm-signed-docflow";
 	String SIGNED_DOCFLOW_NAMESPACE = "http://www.it.ru/lecm/model/signed-docflow/1.0";
-	// <type name="lecm-signed-docflow:sign">
+
+    /**
+     * &lt;type name="lecm-signed-docflow:sign/&gt;
+     */
 	QName TYPE_SIGN = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "sign");
-	// <property name="lecm-signed-docflow:owner">
+	
+    /**
+     * &lt;property name="lecm-signed-docflow:owner/&gt;
+     */
 	QName PROP_OWNER = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "owner");
-	// <property name="lecm-signed-docflow:owner-position">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:owner-position/&gt;
+     */
 	QName PROP_OWNER_POSITION = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "owner-position");
-	// <property name="lecm-signed-docflow:owner-organization">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:owner-organization/&gt;
+     */
 	QName PROP_OWNER_ORGANIZATION = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "owner-organization");
-	// <property name="lecm-signed-docflow:signing-date">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:signing-date/&gt;
+     */
 	QName PROP_SIGNING_DATE = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "signing-date");
-	// <property name="lecm-signed-docflow:serial-number">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:serial-number/&gt;
+     */
 	QName PROP_SERIAL_NUMBER = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "serial-number");
-	// <property name="lecm-signed-docflow:valid-from">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:valid-from/&gt;
+     */
 	QName PROP_VALID_FROM = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "valid-from");
-	// <property name="lecm-signed-docflow:valid-through">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:valid-through/&gt;
+     */
 	QName PROP_VALID_THROUGH = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "valid-through");
-	// <property name="lecm-signed-docflow:ca">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:ca/&gt;
+     */
 	QName PROP_CA = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "ca");
-	// <property name="lecm-signed-docflow:update-date">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:update-date/&gt;
+     */
 	QName PROP_UPDATE_DATE = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "update-date");
-	// <property name="lecm-signed-docflow:is-valid">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:is-valid/&gt;
+     */
 	QName PROP_IS_VALID = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "is-valid");
-	// <property name="lecm-signed-docflow:is-our">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:is-our/&gt;
+     */
 	QName PROP_IS_OUR = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "is-our");
-	// <association name="lecm-signed-docflow:sign-to-content-association">
+
+    /**
+     * &lt;association name="lecm-signed-docflow:sign-to-content-association/&gt;
+     */
 	QName ASSOC_SIGN_TO_CONTENT = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "sign-to-content-association");
-	// <aspect name="lecm-signed-docflow:signable"/>
+
+    /**
+     * &lt;aspect name="lecm-signed-docflow:signable"/&gt;
+     */
 	QName ASPECT_SIGNABLE = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "signable");
-	// <aspect name="lecm-signed-docflow:docflowable"/>
+
+    /**
+     * &lt;aspect name="lecm-signed-docflow:docflowable"/&gt;
+     */
 	QName ASPECT_DOCFLOWABLE = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "docflowable");
-	// <aspect name="lecm-signed-docflow:aspect-document-id">
+
+    /**
+     * &lt;aspect name="lecm-signed-docflow:aspect-document-id/&gt;
+     */
 	QName ASPECT_DOCUMENT_ID = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "aspect-document-id");
-	// <property name="lecm-signed-docflow:document-id">
+
+    /**
+     * &lt;property name="lecm-signed-docflow:document-id/&gt;
+     */
 	QName PROP_DOCUMENT_ID = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "document-id");
 
+
+
+
 	/**
-	 * Проверяет, есть ли у переданной NodeRef'ы аспект
-	 * lecm-signed-docflow:docflowable
+	 * Проверяет, есть ли у NodeRef'ы аспект <strong>docflowable</strong>
+     *
+     * @param nodeRef NodeRef'а у которой следует проверить наличие аспекта <strong>docflowable</strong>
 	 */
 	boolean isDocflowable(NodeRef nodeRef);
 
 	/**
-	 * Проверяет, есть ли у переданной NodeRef'ы аспект
-	 * lecm-signed-docflow:signable
+	 * Проверяет, есть ли у NodeRef'ы аспект <strong>signable</strong>
+     *
+     * @param nodeRef NodeRef'а у которой следует проверить наличие аспекта <strong>signable</strong>
 	 */
 	boolean isSignable(NodeRef nodeRef);
 
 	/**
-	 * Добавить аспект docflowable данной NodeRef'е
+	 * Добавляет аспект <strong>docflowable</strong> к NodeRef'е
+     *
+     * @param nodeRef NodeRef'а, к которой следует добавить аспект <strong>docflowable</strong>
 	 */
 	void addDocflowableAspect(NodeRef nodeRef);
 
 	/**
-	 * Удалить аспект docflowable у данной NodeRef'ы
+	 * Удаляет аспект <strong>docflowable</strong> у NodeRef'ы
+     *
+     * @param nodeRef NodeRef'а, у которой следует удалить аспект <strong>docflowable</strong>
 	 */
 	void removeDocflowableAspect(NodeRef nodeRef);
+
 	/**
-	 * Добавить аспект signable данной NodeRef'е
+	 * Добавляет аспект <strong>signable</strong> к NodeRef'е
+     *
+     * @param nodeRef NodeRef'а, к которой следует добавить аспект <strong>signable</strong>
 	 */
 	void addSignableAspect(NodeRef nodeRef);
 
 	/**
-	 * Удалить аспект signable у данной NodeRef'ы
+	 * Удаляет аспект <strong>signable</strong> у NodeRef'ы
+     *
+     * @param nodeRef NodeRef'а, у которой следует удалить аспект <strong>signable</strong>
 	 */
 	void removeSignableAspect(NodeRef nodeRef);
 }
