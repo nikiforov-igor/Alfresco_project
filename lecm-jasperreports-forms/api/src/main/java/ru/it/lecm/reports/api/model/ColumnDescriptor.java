@@ -13,7 +13,8 @@ package ru.it.lecm.reports.api.model;
  *
  */
 public interface ColumnDescriptor
-		extends JavaClassable, L18able, FlagsExtendable {
+		extends JavaClassable, L18able, FlagsExtendable, Comparable<ColumnDescriptor>
+{
 
 	/**
 	 * Мнемоника колонки - для использования как ссылка на колонку в конфигурации,
@@ -35,20 +36,33 @@ public interface ColumnDescriptor
 	JavaDataType getDataType();
 	void setDataType(JavaDataType value);
 
+	/**
+	 * Выражение в терминах Провайдера НД для получения значения колонки
+	 * @return
+	 */
 	String getExpression();
 	void setExpression(String value);
+
+	/**
+	 * Получение ссылочной qname-строки для выражения expression (удаление '{' и '}')
+	 * @return
+	 */
+	String getQNamedExpression();
 
 	ParameterTypedValue getParameterValue();
 	void setParameterValue(ParameterTypedValue value);
 
+	// TODO: перенести в interface ParameterTyped 
 	/** связанный тип параметра альфреско */
 	String getAlfrescoType();
 	void setAlfrescoType(String alfrescoType);
 
-    int getOrder();
-    void setOrder(int order);
+	// TODO: перенести в interface ParameterTyped 
+	/**
+	 * Порядковый номер в списке выбора параметров (сравнение тоже в порядке order)
+	 * @return
+	 */
+	int getOrder();
+	void setOrder(int order);
 
-    public int compareTo(Object obj);
-
-    String getQNamedExpression();
 }

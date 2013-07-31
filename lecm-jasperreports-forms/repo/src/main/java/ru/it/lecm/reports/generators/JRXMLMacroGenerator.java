@@ -6,14 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
@@ -100,12 +97,21 @@ public class JRXMLMacroGenerator {
 	}
 
 	/**
-	 * Создать xml-документ на основе шаблонного xml
-	 * @param streamName
-	 * @param templateStm
+	 * Создать xml-документ на основе шаблонного xml и текущего описателя reportDesc
+	 * @param templateStm исходный макро-шаблон
 	 * @return поток со сформированным xml
 	 */
-	public ByteArrayOutputStream xmlGenerateByTemplate( String streamName, InputStream templateStm) {
+	public ByteArrayOutputStream xmlGenerateByTemplate( InputStream templateStm) {
+		return xmlGenerateByTemplate(templateStm, Utils.coalesce( getReportDesc().getMnem(), "stream"));
+	}
+
+	/**
+	 * Создать xml-документ на основе шаблонного xml и текущего описателя reportDesc
+	 * @param templateStm исходный макро-шаблон
+	 * @param streamName (информационное) название потока
+	 * @return поток со сформированным xml
+	 */
+	public ByteArrayOutputStream xmlGenerateByTemplate( InputStream templateStm, String streamName) {
 		if (templateStm == null)
 			return null;
 		logger.debug( String.format( "macro expanding template xml '%s' ...", streamName));

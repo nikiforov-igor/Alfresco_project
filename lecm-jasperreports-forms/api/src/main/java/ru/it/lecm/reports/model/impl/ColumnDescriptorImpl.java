@@ -26,10 +26,10 @@ public class ColumnDescriptorImpl
 	private FlagsExtendable flagsExtendable;
 	private String expression;
 	private boolean special = false;
-    private String alfrescoType;
-    private int order = 0;
+	private String alfrescoType;
+	private int order = 0;
 
-    public ColumnDescriptorImpl() {
+	public ColumnDescriptorImpl() {
 		super();
 	}
 
@@ -60,7 +60,7 @@ public class ColumnDescriptorImpl
 		result = prime * result + ((expression == null) ? 0 : expression.hashCode());
 		result = prime * result
 				+ ((flagsExtendable == null) ? 0 : flagsExtendable.hashCode());
-        result = prime * result + order;
+		result = prime * result + order;
 		return result;
 	}
 
@@ -109,10 +109,10 @@ public class ColumnDescriptorImpl
 		} else if (!flagsExtendable.equals(other.flagsExtendable))
 			return false;
 
-        if (order != other.order) {
-            return false;
-        }
-        return true;
+		if (order != other.order) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class ColumnDescriptorImpl
 				+ ", parameter " + parameterTypedValue
 				+ "\n\t, javaClass " + super.toString()
 				+ "\n\t, flagsExtendable " + flagsExtendable
-                + ", order " + order
+				+ ", order " + order
 				+ "]";
 	}
 
@@ -188,17 +188,17 @@ public class ColumnDescriptorImpl
 		this.parameterTypedValue = value;
 	}
 
-    @Override
-    public String getAlfrescoType() {
-        return this.alfrescoType;
-    }
+	@Override
+	public String getAlfrescoType() {
+		return this.alfrescoType;
+	}
 
-    @Override
-    public void setAlfrescoType(String alfrescoType) {
-        this.alfrescoType = alfrescoType;
-    }
+	@Override
+	public void setAlfrescoType(String alfrescoType) {
+		this.alfrescoType = alfrescoType;
+	}
 
-    @Override
+	@Override
 	public Set<NamedValue> flags() {
 		return flagsExtendable().flags();
 	}
@@ -213,29 +213,26 @@ public class ColumnDescriptorImpl
 		this.special = flag;		
 	}
 
-    public int getOrder() {
-        return order;
-    }
+	public int getOrder() {
+		return order;
+	}
 
-    public void setOrder(int order) {
-        this.order = order;
-    }
+	public void setOrder(int order) {
+		this.order = order;
+	}
 
-    public int compareTo(Object obj) {
-        ColumnDescriptor tmp = (ColumnDescriptor) obj;
-        if (this.getOrder() < tmp.getOrder()) {
-            return -1;
-        } else if (this.getOrder() > tmp.getOrder()) {
-            return 1;
-        }
-        return 0;
-    }
+	@Override
+	public int compareTo(ColumnDescriptor other) {
+		// final ColumnDescriptor other = (ColumnDescriptor) obj;
+		return this.getOrder() - other.getOrder();
+	}
 
-    @Override
-    public String getQNamedExpression() {
-        if (this.expression == null) {
-            return null;
-        }
-        return this.expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
-    }
+	@Override
+	public String getQNamedExpression() {
+		if (this.expression == null) {
+			return null;
+		}
+		return this.expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
+	}
+
 }

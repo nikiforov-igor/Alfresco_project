@@ -9,6 +9,7 @@ import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 
 /**
@@ -20,7 +21,7 @@ import ru.it.lecm.reports.beans.WKServiceKeeper;
  * Имеет список jasper-полей и реестр alfresco-служб.
  */
 public abstract class AbstractDataSourceProvider
-		implements JRDataSourceProvider
+		implements JRDataSourceProvider, ReportProviderExt
 {
 
 	protected WKServiceKeeper services;

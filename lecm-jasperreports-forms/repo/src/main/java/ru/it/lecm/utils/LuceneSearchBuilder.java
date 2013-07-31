@@ -74,10 +74,10 @@ public class LuceneSearchBuilder {
 	 * @return true, если условие было добавлено
 	 */
 	public boolean emmitTypeCond(final String typeName, final String prefix) {
-		if (typeName == null)
+		if (typeName == null || typeName.length() == 0)
 			return false;
 		PropertyCheck.mandatory(this, "nameService", getNameService() );
-		final QName qType = QName.createQName( typeName, this.getNameService());
+		final QName qType = QName.createQName( typeName.replace("{", "").replace("}", ""), this.getNameService());
 		return emmitTypeCond(qType, prefix);
 	}
 
@@ -192,6 +192,17 @@ public class LuceneSearchBuilder {
 			getQuery().append( prefix);
 		getQuery().append(" ").append(cond);
 		return true;
+	}
+
+	/**
+	 * Вставить в запрос указанную строку, если она не NULL.
+	 * @param s
+	 * @return
+	 */
+	public LuceneSearchBuilder emmit(String s) {
+		if (s != null)
+			getQuery().append(s);
+		return this;
 	}
 
 }

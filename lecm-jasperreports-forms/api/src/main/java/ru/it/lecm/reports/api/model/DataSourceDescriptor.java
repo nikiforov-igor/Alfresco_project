@@ -25,6 +25,7 @@ public interface DataSourceDescriptor extends Mnemonicable, L18able {
 	 * если его нет, тогда будет просмотрена параметр-колонка "nodeRef" 
 	 */
 	final static public String COLNAME_ID = "ID";
+	// final static public String COLNAME_NODEREF = "nodeRef";
 
 	/**
 	 * Описания колонок данного НД.

@@ -10,6 +10,7 @@ import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.ReportDSContext;
 import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
+import ru.it.lecm.reports.utils.Utils;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -25,9 +26,9 @@ public class ReportDSContextImpl implements ReportDSContext {
 	final private ProxySubstitudeBean substitudeService = new ProxySubstitudeBean();
 
 	private DataFilter filter; // может быть NULL
-	private Map<String, DataFieldColumn> metaFields; // ключ = имя колонки данных в jasper
+	private Map<String, DataFieldColumn> metaFields; // ключ = имя колонки данных в НД
 
-	// список отобранных для Jasper атрибутов Альфреско для активной строки набора данных
+	// список отобранных для отчёта атрибутов Альфреско для активной строки набора данных
 	// ключ = QName.toString() с короткими именами типов (т.е. вида "cm:folder" или "lecm-contract:document")
 	private Map<String, Serializable> curProps; // ключ = нативное Альфреско-имя
 	private NodeRef curNodeRef;
@@ -43,9 +44,9 @@ public class ReportDSContextImpl implements ReportDSContext {
 
 	/**
 	 * список простых gname Альфреско-атрибутов, которые требуются для JR-отчёта, 
-	 * здесь перечислены имена - с короткими префиксами, доступными для Jasper;
+	 * здесь перечислены имена - с короткими префиксами, доступными для отчёта;
 	 * если список null - ограничений на имена не вносятся (и все поля объекта
-	 * Альфреско могут использоваться в самом jasper-шаблоне.
+	 * Альфреско могут использоваться в самом шаблоне отчёта.
 	 */
 	private Set<String> jrSimpleProps;
 
@@ -147,79 +148,93 @@ public class ReportDSContextImpl implements ReportDSContext {
 		return (fldName != null) && fldName.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL);
 	}
 
-	@Override
-    public Object getPropertyValueByJRField(String reportColumnName) {
-        if (reportColumnName == null) {
-            return null;
-        }
+	/**
+	 * Простой ссылкой считаем выражение вида "{abc}"
+	 * @return true, если колонка содержит просто ссылку на поле
+	 */
+	public static boolean isDirectAlfrescoPropertyLink(final String expression) {
+		return (expression != null) && (expression.length() > 0)
+				&& Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) // одна певая "{"
+				&& Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) // одна последняя "}"
+				&& expression.indexOf(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL) == -1 // нету "/"
+				;
+	}
 
-        // получаем нативное название данных
-        final DataFieldColumn fld = metaFields.get(reportColumnName);
-        final String fldAlfName = (fld != null && fld.getValueLink() != null) ? fld.getValueLink() : reportColumnName;
+
+	@Override
+	public Object getPropertyValueByJRField(String reportColumnName) {
+		if (reportColumnName == null) {
+			return null;
+		}
+
+		// получаем нативное название данных
+		final DataFieldColumn fld = metaFields.get(reportColumnName);
+		final String fldAlfName = (fld != null && fld.getValueLink() != null) ? fld.getValueLink() : reportColumnName;
 
 		/* если название имеется среди готовых свойств (прогруженных или вычисленных заранее) ... */
-        if (curProps != null) {
-            if (curProps.containsKey(fldAlfName)){
-                return curProps.get(fldAlfName);
-            }
-        }
+		if (curProps != null) {
+			if (curProps.containsKey(fldAlfName)){
+				return curProps.get(fldAlfName);
+			}
+		}
 
-        // (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
-        // (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
-        if (isCalcField(fldAlfName)) {
-            Object value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
-            if ((fld != null ? fld.getValueClass() : null) != null) {
-                final JavaDataTypeImpl.SupportedTypes type = JavaDataTypeImpl.SupportedTypes.findType(fld.getValueClassName());
-                String strValue = value.toString();
-                switch (type) {
-                    case DATE: {
-                        try {
-                            if (strValue.isEmpty()) {
-                                value = null;
-                                break;
-                            }
-                            DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                            value = DATE_FORMAT.parse(strValue);
-                        } catch (ParseException ignored) {
-                            logger.error("Cannot parse dateString: '%s'", value);
-                        }
-                        break;
-                    }
-                    case BOOL: {
-                        value = Boolean.valueOf(strValue);
-                        break;
-                    }
-                    case FLOAT: {
-                        if (strValue.isEmpty()) {
-                            value = null;
-                            break;
-                        }
-                        value = Float.valueOf(strValue);
-                        break;
-                    }
-                    case INTEGER: {
-                        if (strValue.isEmpty()) {
-                            value = null;
-                            break;
-                        }
-                        value = Integer.valueOf(strValue);
-                        break;
-                    }
-                    case STRING: {
-                        value = strValue;
-                        break;
-                    }
-                    default: {
-                        value = strValue;
-                        break;
-                    }
-                }
-            }
-            return value;
-        }
+		// (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
+		// (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
+		if (isCalcField(fldAlfName)) {
+			Object value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
+			if ((fld != null) && (fld.getValueClass() != null)) {
+				// TODO: метод для восстановления реального типа данных ...
+				final JavaDataTypeImpl.SupportedTypes type = JavaDataTypeImpl.SupportedTypes.findType(fld.getValueClassName());
+				String strValue = value.toString();
+				switch (type) {
+				case DATE: {
+					try {
+						if (strValue.isEmpty()) {
+							value = null;
+							break;
+						}
+						DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+						value = DATE_FORMAT.parse(strValue);
+					} catch (ParseException ignored) {
+						logger.error("Cannot parse dateString: '%s'", value);
+					}
+					break;
+				}
+				case BOOL: {
+					value = Boolean.valueOf(strValue);
+					break;
+				}
+				case FLOAT: {
+					if (strValue.isEmpty()) {
+						value = null;
+						break;
+					}
+					value = Float.valueOf(strValue);
+					break;
+				}
+				case INTEGER: {
+					if (strValue.isEmpty()) {
+						value = null;
+						break;
+					}
+					value = Integer.valueOf(strValue);
+					break;
+				}
+				case STRING: {
+					value = strValue;
+					break;
+				}
+				default: {
+					value = strValue;
+					break;
+				}
+				}
+			}
+			return value;
+		}
 
-        return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
-    }
+		return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
+	}
 
 	/**
 	 * ProxySubstitudeBean cейчас отрабатывет расширеные выражения для функции
@@ -253,9 +268,9 @@ public class ReportDSContextImpl implements ReportDSContext {
 			super();
 		}
 
-//		public SubstitudeBean getRealBean() {
-//			return realBean;
-//		}
+		//		public SubstitudeBean getRealBean() {
+		//			return realBean;
+		//		}
 
 		public void setRealBean(SubstitudeBean realBean) {
 			this.realBean = realBean;

@@ -135,11 +135,23 @@ public class ParameterTypedValueImpl
 		this.required = required;
 	}
 
+	/**
+	 * Проверить является ли граничное значение пустым.
+	 * Здесь принимается что пустыми будет NULL, + для строковых пустая trim() строка. 
+	 * @param value
+	 * @return
+	 */
+	public static boolean isBoundEmpty(Object value) {
+		return (value == null) 
+				|| ( (value instanceof String) && ((String) value).trim().length() == 0)
+		;
+	}
+
 	@Override
 	public boolean isEmpty() {
 		if (this.type == Type.RANGE) // для интервала - проверить обе границы ...
-			return (getBound1() == null) && (getBound2() == null);
+			return isBoundEmpty(getBound1()) && isBoundEmpty(getBound2());
 
-		return (getBound1() == null); // для остальных - только одна граница
+		return isBoundEmpty(getBound1()); // для остальных - проверяется только одна граница ...
 	}
 }

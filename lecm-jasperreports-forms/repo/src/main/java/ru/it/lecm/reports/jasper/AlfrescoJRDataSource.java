@@ -105,6 +105,8 @@ public class AlfrescoJRDataSource implements JRDataSource
 
 		final NodeService nodeSrv = context.getRegistryService().getNodeService();
 		final Map<QName, Serializable> realProps = nodeSrv.getProperties(id);
+		log_alfreco_data( realProps, String.format("Loaded properties of %s\n\t Filtering fldNames for jasper-report by list: %s"
+				, id, Utils.coalesce(context.getJrSimpleProps(), "*") ));
 		if (realProps != null) { 
 			for (Map.Entry<QName, Serializable> e: realProps.entrySet()) {
 				// переводим название свойства в краткую форму
@@ -149,12 +151,11 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 * добавлением мы гарантируем, чтобы curProps содержал всё, что надо для jr.
 	 */
 	private HashMap<String, Serializable> ensureJRProps() {
-		final HashMap<String, Serializable> result;
+		final HashMap<String, Serializable> result = new HashMap<String, Serializable>();
 		final StringBuilder sb = new StringBuilder("Filtering alfresco properties by names: \n"); 
 		if (this.context.getJrSimpleProps() != null){
 			// все свойства включаем в набор с пустыми значениями
 			int i = 0;
-			result = new HashMap<String, Serializable>();
 			for (String fldName: this.context.getJrSimpleProps()) {
 				i++;
 				if (!context.isCalcField(fldName)) { // обычное поле
@@ -165,8 +166,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 					sb.append( String.format( "\t[%d]\t referenced field '%s' detected -> using evaluator for it \n", i, fldName));
 			}
 		} else {
-			sb.append("\t all fields will be included");
-			result = null;
+			sb.append("\t all fields will de includes'");
 		}
 		if (logger.isDebugEnabled()) 
 			logger.debug(sb.toString());

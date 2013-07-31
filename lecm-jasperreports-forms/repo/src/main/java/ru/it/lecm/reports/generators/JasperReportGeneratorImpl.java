@@ -1,6 +1,5 @@
 package ru.it.lecm.reports.generators;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -36,15 +35,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
-import ru.it.lecm.forms.jasperforms.AbstractDataSourceProvider;
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.reports.xml.JRXMLProducer;
 
 /**
  * Генератор Jasper-отчётов.
@@ -129,15 +127,12 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 				}
 
 				// "своих" особо облагородим ...
-				if (dsProvider instanceof AbstractDataSourceProvider) {
-					final AbstractDataSourceProvider adsp = (AbstractDataSourceProvider) dsProvider;
+				if (dsProvider instanceof ReportProviderExt) {
+					final ReportProviderExt adsp = (ReportProviderExt) dsProvider;
 
 					adsp.setServices(this.getServices());
 					adsp.setReportDescriptor(reportDesc);
-				} else if (dsProvider instanceof GenericDSProviderBase ){
-                    ((GenericDSProviderBase) dsProvider).setServices(this.getServices());
-                    ((GenericDSProviderBase) dsProvider).setReportDescriptor(reportDesc);
-                }
+				}
 
 				BeanUtils.populate(dsProvider, parameters);
 
@@ -272,15 +267,19 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 		try {
 			final FileOutputStream wout = new FileOutputStream(outFullFileName);
 			try {
-				// TODO: NORMAL IOUtils.copy(desc.getReportTemplate().getData(), wout);
+				// TODO: NORMAL 
+				IOUtils.copy( desc.getReportTemplate().getData(), wout);
 
+				/*
 				// в шаблоне пишем dataSource и задаём состав полей ...
-				// JRXMLProducer.patchJrxml(inJrxmlFileName, outFullName, desc);
 				final String streamTag = desc.getReportTemplate().getFileName(); 
-				final ByteArrayOutputStream updated = JRXMLProducer.updateJRXML( 
-						desc.getReportTemplate().getData(), streamTag, desc);
-				updated.writeTo(wout);
-
+				final ByteArrayOutputStream updated = JRXMLProducer.updateJRXML( desc.getReportTemplate().getData(), streamTag, desc);
+				try {
+					updated.writeTo(wout);
+				} finally {
+					IOUtils.closeQuietly(updated);
+				}
+				 */
 			} finally {
 				IOUtils.closeQuietly(wout);
 			}

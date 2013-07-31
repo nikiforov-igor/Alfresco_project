@@ -29,7 +29,7 @@ public class GetXmlConfig extends AbstractWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         String reportCode = req.getParameter(REPORT_CODE);
         if (reportCode == null) {
-            log.error("No Report to get DSXmlConfig bytes!");
+            log.error("No Report Code to get DSXmlConfig bytes");
             return;
         }
 
@@ -41,14 +41,7 @@ public class GetXmlConfig extends AbstractWebScript {
             res.setContentEncoding("UTF-8");
             res.setContentType("text/xml");
             resOutputStream = res.getOutputStream();
-
-            byte[] buf = new byte[8 * 1024];
-            int c;
-            int len = 0;
-            while ((c = is.read(buf)) != -1) {
-                resOutputStream.write(buf, 0, c);
-                len += c;
-            }
+            final int len = org.apache.commons.io.IOUtils.copy(is, resOutputStream);
             res.setHeader("Content-length", "" + len);
 
             resOutputStream.flush();

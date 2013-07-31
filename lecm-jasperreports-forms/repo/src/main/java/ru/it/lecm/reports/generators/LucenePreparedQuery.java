@@ -1,9 +1,22 @@
 package ru.it.lecm.reports.generators;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
@@ -13,17 +26,16 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchBuilder;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * Запрос под Lucene Альфреско:
@@ -35,8 +47,8 @@ import java.util.*;
  */
 public class LucenePreparedQuery {
 
-    final public static int QUERYROWS_UNLIMITED = -1; // неограниченое кол-во строк в ответе
-    final public static int QUERYPG_ALL = -1; // без разбивки на страницы
+	final public static int QUERYROWS_UNLIMITED = -1; // неограниченое кол-во строк в ответе
+	final public static int QUERYPG_ALL = -1; // без разбивки на страницы
 
 	/* тип объектов по-умолчанию (когда не указано явно) */
 	public static final String DEFAULT_DOCUMENT_TYPE = "lecm-document:base";
@@ -55,21 +67,21 @@ public class LucenePreparedQuery {
 	// колонки со сложными условиями (доступ к данных через ассоциации)
 	final private List<ColumnDescriptor> argsByLinks = new ArrayList<ColumnDescriptor>();
 
-    /**
-     * колонки со сложными условиями (доступ к данным через ассоциации)
-     */
-    public List<ColumnDescriptor> argsByLinks() {
-        return this.argsByLinks;
-    }
+	/**
+	 * колонки со сложными условиями (доступ к данным через ассоциации)
+	 */
+	public List<ColumnDescriptor> argsByLinks() {
+		return this.argsByLinks;
+	}
 
-    /**
-     * колонки с простыми условиями (доступ к данным непосредственно по именам свойств Альфреско)
-     */
-    public List<ColumnDescriptor> argsByProps() {
-        return this.argsByProps;
-    }
+	/**
+	 * колонки с простыми условиями (доступ к данным непосредственно по именам свойств Альфреско)
+	 */
+	public List<ColumnDescriptor> argsByProps() {
+		return this.argsByProps;
+	}
 
-    /** текущий текст запроса */
+	/** текущий текст запроса */
 	public String luceneQueryText() { return this.luceneQueryText; }
 
 	/** поисковый запрос */
@@ -94,7 +106,7 @@ public class LucenePreparedQuery {
 
 		builder.append("\n\t\t, alfrescoSearch=");
 		builder.append(alfrescoSearch);
-		
+
 		builder.append("\n\t\t, luceneQueryText:");
 		builder.append("\n\t>>>\n").append(luceneQueryText).append("\n\t<<<");
 
@@ -109,186 +121,249 @@ public class LucenePreparedQuery {
 	 * @param reportDescriptor
 	 * @return
 	 */
-    public static LucenePreparedQuery prepareQuery(final ReportDescriptor reportDescriptor, ServiceRegistry service) {
-        final LucenePreparedQuery result = new LucenePreparedQuery();
-        final StringBuilder bquery = new StringBuilder();
-        final StringBuilder blog = new StringBuilder(); // для журналирования
+	public static LucenePreparedQuery prepareQuery(final ReportDescriptor reportDescriptor, ServiceRegistry registry) {
+		final LucenePreparedQuery result = new LucenePreparedQuery();
+		// final StringBuilder bquery = new StringBuilder();
+		final LuceneSearchBuilder bquery = new LuceneSearchBuilder( (registry == null) ? null : registry.getNamespaceService() );
+		final StringBuilder blog = new StringBuilder(); // для журналирования
 
-        int iblog = 0;
+		int iblog = 0;
 
-        boolean hasData = false; // true становится после внесения первого любого условия в bquery
+		boolean hasData = false; // true становится после внесения первого любого условия в bquery
 
-        result.argsByLinks.clear();
-        result.argsByProps.clear();
+		result.argsByLinks.clear();
+		result.argsByProps.clear();
 
-		/* создаём базовый запрос:  по ID или TYPE */
-        makeMasterCondition(bquery, reportDescriptor);
+		/* создаём базовый запрос: по ID или TYPE */
+		makeMasterCondition(bquery, reportDescriptor);
 
-        if (bquery.length() > 0) {
-            hasData = true;
-        }
+		if (!bquery.isEmpty()) {
+			hasData = true;
+		}
 
-        if (reportDescriptor.getFlags().getText() != null && !reportDescriptor.getFlags().getText().isEmpty()) {
-            bquery.append(hasData ? " AND " : "").append(reportDescriptor.getFlags().getText());
-            hasData = true;
-        }
+		if (reportDescriptor.getFlags().getText() != null && !reportDescriptor.getFlags().getText().isEmpty()) {
+			bquery.emmit(hasData ? " AND " : "").emmit(reportDescriptor.getFlags().getText());
+			hasData = true;
+		}
 
-        DictionaryService dictionaryService = service.getDictionaryService();
+		final DictionaryService dictionaryService = registry.getDictionaryService();
 
 		/* 
-         * проход по параметрам, которые являются простыми - и включение их в
+		 * проход по параметрам, которые являются простыми - и включение их в
 		 * выражение поиска, другие параметры надо будет проверять после загрузки
 		 * в фильтре данных
 		 */
-        // TODO: проход по простым параметрам
-        for (ColumnDescriptor colDesc : reportDescriptor.getDsDescriptor().getColumns()) {
-            if (colDesc == null || colDesc.getParameterValue() == null || Utils.isStringEmpty(colDesc.getExpression())) {
-                continue;
-            }
+		for (ColumnDescriptor colDesc : reportDescriptor.getDsDescriptor().getColumns()) {
 
-            if (colDesc.getExpression().startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL)) { //если подходит для сервиса
-                String substitudeExpression = colDesc.getExpression();
-                if (substitudeExpression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL)) {
-                    // у нас ассоциация
-                    result.argsByLinks.add(colDesc); // сложный параметр будем проверять позже - в фильтре данных
-                } else {
-                    // параметр может быть как название свойства, так и названием ассоциации - проверяем
-                    QName expressionQName = null;
-                    try {
-                        expressionQName = QName.createQName(colDesc.getQNamedExpression(), service.getNamespaceService());
-                    } catch (InvalidQNameException ex) {
-                        logger.warn("Unsupported expression '%s' for column '%s'. Column skipped", substitudeExpression, colDesc);
-                    }
-
-                    if (expressionQName != null) {
-                        AssociationDefinition definition = dictionaryService.getAssociation(expressionQName);
-                        if (definition != null) {
-                            /* здесь colDesc содержит ассоциацию ... */
-                            result.argsByLinks.add(colDesc); // сложный параметр будем проверять позже - в фильтре данных
-                        } else {
-                            /* здесь colDesc содержит простой параметр ... */
-                            result.argsByProps.add(colDesc);
-                        }
-                    } else {
-                        continue; // у нас записано нечто непонятное - пропускаем
-                    }
-                }
-            } else {
-                // не подходит для сервиса - пропускаем
-                continue;
-            }
-
-            // параметр пустой?  обязательный ? ...
-            if (colDesc.getParameterValue().isEmpty()) {
-                if (colDesc.getParameterValue().isRequired()) {
-                    // пустой и обязательный - это криминал ...
-                    throw new RuntimeException(String.format(
-                            "Required parameter '%s' must be spesified '%s' (data column '%s')"
-                            , ParameterMapper.getArgRootName(colDesc)
-                            , colDesc.getColumnName()
-                    ));
-                } else {
-                    continue; // Если нет условия для необязательного параметра - просто его пропускаем
-                }
-            }
-
-            // экранированное имя с именем поля для поиска в Lucene
-            String propertyName = colDesc.getExpression().replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
-            final String luceneFldName = Utils.luceneEncode(propertyName);
+			if (colDesc == null || colDesc.getParameterValue() == null) { // не параметр
+				continue;
+			}
 
 			/*
-             *  граничные значения для поиска. По-идее здесь, после проверки
-			 *  isEmpty(), для LIST/VALUE нидняя граница не пустая, а для
-			 *  RANGE - одна из границ точно не пустая
-			*/
-            final Object bound1 = colDesc.getParameterValue().getBound1(),
-                    bound2 = colDesc.getParameterValue().getBound2();
+			 * Здесь у колонки используется:
+			 *   1) getAlfrescoType() ТИП ПОЛЯ АЛЬФРЕСКО, исп-ся для определения является ли ссылка ассоциацией 
+			 *   2) getExpression()  ВЫРАЖЕНИЕ ДЛЯ ПОЛУЧЕНИЯ ЗНАЧЕНИЯ ПОЛЯ - это в терминах провайдера, так что используется метод isDirectAlfrescoPropertyLink
+			 *   (предполагается, что простые ссылки ВСЕГДА имеют вид "{abc:def}")
+			 *   3) bound1/bound2 ИСКОМЫЕ/ПРОВЕРЯЕМЫЕ ЗНАЧЕНИЯ 
+			 */
 
-            String cond = ""; // сгенерированное условие
+			// параметр пустой? обязательный? ...
+			if (colDesc.getParameterValue().isEmpty()) {
+				if (colDesc.getParameterValue().isRequired()) {
+					// пустой и обязательный - это криминал ...
+					throw new RuntimeException(String.format(
+							"Required parameter '%s' must be spesified '%s' (data column '%s')"
+							, ParameterMapper.getArgRootName(colDesc)
+							, colDesc.getColumnName()
+							));
+				}
+				continue; // Если нет условия для необязательного параметра - просто его пропускаем
+			}
+
+			final String substitudeExpression = colDesc.getExpression();
+			if ( Utils.isStringEmpty(substitudeExpression)) {
+				// пустая ссылка ...
+				logger.debug(  String.format( "Column '%s' parameter has empty expression -> skipped", colDesc.getColumnName()) );
+				continue;
+			}
+
+			if (!ReportDSContextImpl.isDirectAlfrescoPropertyLink(substitudeExpression)) {
+				// сложный параметр будем проверять позже - в фильтре данных
+				result.argsByLinks.add(colDesc); 
+				continue;
+			}
+
+
+//			final boolean isForSubstService = substitudeExpression.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL);
+//			if (!isForSubstService)
+//				/* раз не подходит для сервиса -> пропускаем */
+//				continue;
+//
+//			/* если подходит для сервиса */
+//			if (substitudeExpression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL)) {
+//				// для ассоциаций ...
+//				result.argsByLinks.add(colDesc); // сложный параметр будем проверять позже - в фильтре данных
+//			} else {
+//				// параметр может быть как название свойства, так и названием ассоциации - проверяем
+//				QName expressionQName = null;
+//				try {
+//					expressionQName = QName.createQName(colDesc.getQNamedExpression(), registry.getNamespaceService());
+//				} catch (InvalidQNameException ex) {
+//					logger.warn("Unsupported parameter expression '%s' for column '%s'. Column skipped", substitudeExpression, colDesc);
+//				}
+//
+//				if (expressionQName == null)
+//					continue; // у нас записано нечто непонятное - пропускаем
+//
+//				final AssociationDefinition definition = dictionaryService.getAssociation(expressionQName);
+//				if (definition != null) {
+//					/* здесь colDesc содержит ассоциацию ... */
+//					result.argsByLinks.add(colDesc); // сложный параметр будем проверять позже - в фильтре данных
+//				} else {
+//					/* здесь colDesc содержит простой параметр ... */
+//					result.argsByProps.add(colDesc);
+//				}
+//			}
+
+			/* здесь поле задано простой ссылкой */
+
+			// вставляем в список ссылок или простых полей ...
+			{
+				if ( Utils.isStringEmpty(colDesc.getAlfrescoType())) {
+					logger.warn(  String.format( "Column '%s' parameter has empty Alfresco type -> skipped", colDesc.getColumnName()) );
+					continue;
+				}
+
+				// параметр может быть как название свойства, так и названием ассоциации - проверяем
+				QName expressionQName = null;
+				try {
+					expressionQName = QName.createQName(colDesc.getQNamedExpression(), registry.getNamespaceService());
+				} catch (InvalidQNameException ex) {
+					logger.warn( "Unsupported parameter type '%s' for column '%s' -> column condition skipped", colDesc.getAlfrescoType(), colDesc.getColumnName());
+				}
+
+				if (expressionQName == null) {
+					try {
+						expressionQName = QName.createQName(colDesc.getAlfrescoType(), registry.getNamespaceService());
+					} catch (InvalidQNameException ex) {
+						logger.warn( "Unsupported parameter type '%s' for column '%s' -> column condition skipped", colDesc.getAlfrescoType(), colDesc.getColumnName());
+					}
+				}
+
+				if (expressionQName == null)
+					continue; // у нас записано нечто непонятное - пропускаем
+
+				final AssociationDefinition definition = dictionaryService.getAssociation(expressionQName);
+
+				final boolean isLink = (definition != null);
+				if (isLink) { 
+					/* здесь colDesc содержит ассоциацию ... */
+					result.argsByLinks.add(colDesc); // сложный параметр (с ассоциацией) будем проверять позже - в фильтре данных
+					continue;
+				}
+
+				/* здесь colDesc содержит простой параметр и для него надо будет генерировать условие тут ... */
+				result.argsByProps.add(colDesc);
+			}
+
+			// экранированное имя с именем поля для поиска в Lucene
+			final String propertyName = substitudeExpression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
+			final String luceneFldName = Utils.luceneEncode(propertyName);
+
+			/*
+			 *  граничные значения для поиска. По-идее здесь, после проверки
+			 *  isEmpty(), для LIST/VALUE нижняя граница не пустая, а для
+			 *  RANGE - одна из границ точно не пустая
+			 */
+			final Object bound1 = colDesc.getParameterValue().getBound1(),
+					bound2 = colDesc.getParameterValue().getBound2();
+
+			final StringBuilder cond = new StringBuilder(); // сгенерированное условие
 
 			/* генерим условие поиска - одно значение или интервал ... */
-            switch (colDesc.getParameterValue().getType()) {
+			switch (colDesc.getParameterValue().getType()) {
 			/*
-            1) экранировка символов в полном имени поля: ':', '-'
-			2) кавычки для значения
-			3) (для LIST)  что-то для списка элементов (посмотреть синтаксис люцена)
-
-			4) при подстановке дат надо их форматировать
-				если надо чётко указать формат, его можно предусмотреть в 
-				описателе колонки - для самой колонки и для параметра
+				1) экранировка символов в полном имени поля: ':', '-'
+				2) кавычки для значения
+				3) (для LIST)  что-то для списка элементов (посмотреть синтаксис люцена)
+				4) при подстановке дат надо их форматировать
+					если надо чётко указать формат, его можно предусмотреть в 
+					описателе колонки - для самой колонки и для параметра
 			 */
-                case RANGE:
+			case RANGE:
 				/*
 				проверить тип значения фактических значений параметра:
 						для дат вызывать emmitDate
 						для чисел (и строк) emmitNumeric
 				 */
-                    final boolean isArgDate = (bound1 instanceof Date) || (bound2 instanceof Date);
-                    final boolean isArgNumber = (bound1 instanceof Number) || (bound2 instanceof Number);
-                    if (isArgDate || isArgNumber) {
-                        if (isArgDate) {
-                            cond = Utils.emmitDateIntervalCheck(luceneFldName, (Date) bound1, (Date) bound2);
-                        } else {
-                            cond = Utils.emmitNumericIntervalCheck(luceneFldName, (Number) bound1, (Number) bound2);
-                        }
-                        break;
-                    }
-                case VALUE:
-                case LIST: // TODO: сгенерить запрос для списка (LIST) полное условие со всеми значениями
-                    // пример формируемой строки: bquery.append( " AND @cm\\:creator:\"" + login + "\"");
-                    String[] values;
-                    if (bound1 instanceof String[]) {
-                        values = (String[]) bound1;
-                    } else {
-                        values = new String[]{bound1.toString()};
-                    }
+				final boolean isArgDate = (bound1 instanceof Date) || (bound2 instanceof Date);
+				final boolean isArgNumber = (bound1 instanceof Number) || (bound2 instanceof Number);
+				final String condRange;
+				if (isArgDate) {
+					condRange = Utils.emmitDateIntervalCheck(luceneFldName, (Date) bound1, (Date) bound2);
+				} else if (isArgNumber) {
+					condRange = Utils.emmitNumericIntervalCheck(luceneFldName, (Number) bound1, (Number) bound2);
+				} else {
+					throw new RuntimeException( String.format( "Unsupported RANGE values of bounds: %s/%s"
+							, (bound1 == null ? "NULL" : bound1.getClass().getName())
+							, (bound2 == null ? "NULL" : bound2.getClass().getName())
+					)); 
+				}
+				if (condRange != null)
+					cond.append(condRange);
+				break; // case
 
-                    boolean addOR = false;
-                    for (String value : values) {
-                        if (value != null && !value.isEmpty()) {
-                            String quotedValue = Utils.quoted(value);
-                            cond += (addOR ? " OR " : "") + "@" + luceneFldName + ":" + quotedValue;
-                            addOR = true;
-                        }
-                    }
-                    break;
-                default: // непонятный тип - сообщение об ошибке и игнор ...
-                    cond = null;
-                    logger.error(String.format("Unsupported parameter type '%s' skipped", Utils.coalesce(colDesc.getParameterValue().getType(), "NULL")));
-                    break;
-            }
+			case VALUE:
+			case LIST: // DONE: сгенерить запрос для списка (LIST) полное условие со всеми значениями
+				// пример формируемой строки: bquery.append( " AND @cm\\:creator:\"" + login + "\"");
+				final String[] values;
+				if (bound1 == null) {
+					values = null;
+				} else if (bound1 instanceof String[]) {
+					values = (String[]) bound1;
+				} else {
+					values = new String[]{bound1.toString()};
+				}
 
-            if (cond != null && !cond.isEmpty()) {
-                bquery.append((hasData ? " AND (" : "(") + cond + ")");
-                hasData = true;
+				Utils.emmitValuesInsideList(cond, luceneFldName, values);
+				break;
 
-                iblog++;
-                blog.append(String.format("\t[%d]\t%s\n", iblog, cond));
-            }
-        }
+			default: // непонятный тип - сообщение об ошибке и игнор ...
+				logger.error(String.format("Unsupported parameter type '%s' -> condition skipped", Utils.coalesce(colDesc.getParameterValue().getType(), "NULL")));
+				break;
+			}
 
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Quering nodes by Lucene conditions:\n%s\n", blog.toString()));
-        }
+			if (cond.length() > 0) {
+				bquery.emmit( (hasData ? " AND" : "") + " (" + cond + ")");
+				hasData = true;
 
-        result.luceneQueryText = bquery.toString();
-        return result;
-    }
+				iblog++;
+				blog.append(String.format("\t[%d]\t%s\n", iblog, cond));
+			}
+		}
 
-    public static <T> List<T> checkSize(List<T> list, final int minCount, final int maxCount, final String msg) {
-        final int size = (list == null) ? 0 : list.size();
-        if ((size < minCount) || (maxCount < size)) {
-            throw new RuntimeException(String.format("%s counter %s, expecting is [%s..%s]"
-                    , msg
-                    , size
-                    , (minCount < 0 ? "*" : minCount)
-                    , (maxCount < minCount ? "*" : maxCount)
-            ));
-        }
-        return list;
-    }
+		if (logger.isDebugEnabled()) {
+			logger.debug(String.format("Quering nodes by Lucene conditions:\n%s\n", blog.toString()));
+		}
 
-    /**
+		result.luceneQueryText = bquery.toString();
+		return result;
+	}
+
+	public static <T> List<T> checkSize(List<T> list, final int minCount, final int maxCount, final String msg) {
+		final int size = (list == null) ? 0 : list.size();
+		if ((size < minCount) || (maxCount < size)) {
+			throw new RuntimeException(String.format("%s counter %s, expecting is [%s..%s]"
+					, msg
+					, size
+					, (minCount < 0 ? "*" : minCount)
+					, (maxCount < minCount ? "*" : maxCount)
+					));
+		}
+		return list;
+	}
+
+	/**
 	 * Загрузить свойства  узлов, указанных в НД
 	 * @param rset
 	 * @param info название (пояснение) для загружаемых данных
@@ -297,40 +372,40 @@ public class LucenePreparedQuery {
 	 * @param nodeSrv
 	 * @return
 	 */
-    static public List<Map<QName, Serializable>> loadNodeProps(ResultSet rset,
-                                                               String info, int minCount, int maxCount, final NodeService nodeSrv) {
+	static public List<Map<QName, Serializable>> loadNodeProps(ResultSet rset,
+			String info, int minCount, int maxCount, final NodeService nodeSrv) {
 
-        final List<Map<QName, Serializable>> found = loadNodeProps(rset, nodeSrv);
+		final List<Map<QName, Serializable>> found = loadNodeProps(rset, nodeSrv);
 
-        final boolean isUniqueCheck = (minCount <= 1) && (maxCount == 1);
-        final String fmtMsg = (isUniqueCheck)
-                ? "Unique constraint '%s' failed: found"
-                : "Invalid '%s' nodes";
+		final boolean isUniqueCheck = (minCount <= 1) && (maxCount == 1);
+		final String fmtMsg = (isUniqueCheck)
+				? "Unique constraint '%s' failed: found"
+						: "Invalid '%s' nodes";
 
-        return checkSize(found, minCount, maxCount, String.format(fmtMsg, info));
-    }
+		return checkSize(found, minCount, maxCount, String.format(fmtMsg, info));
+	}
 
 	/**
 	 * Загрузить свойства  узлов, указанных в НД
 	 * @param rset
 	 * @return
 	 */
-    static public List<Map<QName, Serializable>> loadNodeProps(ResultSet rset, final NodeService nodeSrv) {
-        if (rset == null) {
-            return null;
-        }
+	static public List<Map<QName, Serializable>> loadNodeProps(ResultSet rset, final NodeService nodeSrv) {
+		if (rset == null) {
+			return null;
+		}
 
-        final List<Map<QName, Serializable>> result = new ArrayList<Map<QName, Serializable>>();
+		final List<Map<QName, Serializable>> result = new ArrayList<Map<QName, Serializable>>();
 
-        for (Iterator<ResultSetRow> iter = rset.iterator(); iter.hasNext(); ) {
-            final ResultSetRow row = iter.next();
-            final NodeRef nodeId = row.getNodeRef(); // id узла
-            result.add(nodeSrv.getProperties(nodeId));
+		for (Iterator<ResultSetRow> iter = rset.iterator(); iter.hasNext(); ) {
+			final ResultSetRow row = iter.next();
+			final NodeRef nodeId = row.getNodeRef(); // id узла
+			result.add(nodeSrv.getProperties(nodeId));
 
-        } // while
+		} // while
 
-        return result.isEmpty() ? null : result;
-    }
+		return result.isEmpty() ? null : result;
+	}
 
 
 	/**
@@ -341,11 +416,11 @@ public class LucenePreparedQuery {
 	 * @param nameSrv
 	 * @return null, одну запись или исключение, если найдено более одной
 	 */
-    public static NodeRef getAssocChild(NodeRef node, String assocType
-            , NodeService nodeSrv, NamespaceService nameSrv) {
-        final List<NodeRef> found = getAssocChildren(node, assocType, 0, 1, nodeSrv, nameSrv);
-        return (found != null) ? found.get(0) : null;
-    }
+	public static NodeRef getAssocChild(NodeRef node, String assocType
+			, NodeService nodeSrv, NamespaceService nameSrv) {
+		final List<NodeRef> found = getAssocChildren(node, assocType, 0, 1, nodeSrv, nameSrv);
+		return (found != null) ? found.get(0) : null;
+	}
 
 	/**
 	 * Загрузить список дочерних записей состоящий из указанного кол-ва элементов
@@ -359,15 +434,15 @@ public class LucenePreparedQuery {
 	 * одного и разрешено minCount = 0 или исключение, если найдено неверное 
 	 * кол-во "детишек"
 	 */
-    public static List<NodeRef> getAssocChildren(NodeRef node
-            , String assocType
-            , final int minCount
-            , final int maxCount
-            , final NodeService nodeSrv
-            , final NamespaceService nameSrv) {
-        final List<NodeRef> found = getAssocChildren(node, assocType, nodeSrv, nameSrv);
-        return checkSize(found, minCount, maxCount, String.format("Node '%s' has invalid child items '%s'", node, assocType));
-    }
+	public static List<NodeRef> getAssocChildren(NodeRef node
+			, String assocType
+			, final int minCount
+			, final int maxCount
+			, final NodeService nodeSrv
+			, final NamespaceService nameSrv) {
+		final List<NodeRef> found = getAssocChildren(node, assocType, nodeSrv, nameSrv);
+		return checkSize(found, minCount, maxCount, String.format("Node '%s' has invalid child items '%s'", node, assocType));
+	}
 
 	/**
 	 * Загрузить список дочерних записей по типу связи
@@ -377,23 +452,23 @@ public class LucenePreparedQuery {
 	 * @param nameSrv
 	 * @return непустой список "детишек" узла нужного типа или NULL
 	 */
-    public static List<NodeRef> getAssocChildren(NodeRef node
-            , String assocType
-            , final NodeService nodeSrv
-            , final NamespaceService nameSrv) {
-        final List<NodeRef> result = new ArrayList<NodeRef>(5);
+	public static List<NodeRef> getAssocChildren(NodeRef node
+			, String assocType
+			, final NodeService nodeSrv
+			, final NamespaceService nameSrv) {
+		final List<NodeRef> result = new ArrayList<NodeRef>(5);
 
-        final List<ChildAssociationRef> links = nodeSrv.getChildAssocs(node);
-        if (links != null && !links.isEmpty()) {
-            final QName qAssocType = QName.createQName(assocType, nameSrv);
-            for (ChildAssociationRef item : links) {
-                if (qAssocType == null || qAssocType.equals(item.getTypeQName())) {
-                    result.add(item.getChildRef());
-                }
-            }
-        }
-        return (result.isEmpty()) ? null : result;
-    }
+		final List<ChildAssociationRef> links = nodeSrv.getChildAssocs(node);
+		if (links != null && !links.isEmpty()) {
+			final QName qAssocType = QName.createQName(assocType, nameSrv);
+			for (ChildAssociationRef item : links) {
+				if (qAssocType == null || qAssocType.equals(item.getTypeQName())) {
+					result.add(item.getChildRef());
+				}
+			}
+		}
+		return (result.isEmpty()) ? null : result;
+	}
 
 	/**
 	 * Загрузить список дочерних записей по типу дочерних узлов
@@ -402,23 +477,23 @@ public class LucenePreparedQuery {
 	 * @param nameSrv
 	 * @return непустой список "детишек" узла нужного типа или NULL
 	 */
-    public static List<NodeRef> getAssocChildrenByType(NodeRef node
-            , String type
-            , final NodeService nodeSrv
-            , final NamespaceService nameSrv) {
-        final List<NodeRef> result = new ArrayList<NodeRef>(5);
+	public static List<NodeRef> getAssocChildrenByType(NodeRef node
+			, String type
+			, final NodeService nodeSrv
+			, final NamespaceService nameSrv) {
+		final List<NodeRef> result = new ArrayList<NodeRef>(5);
 
-        final QName qtype = QName.createQName(type, nameSrv);
-        final List<ChildAssociationRef> links = (qtype != null)
-                ? nodeSrv.getChildAssocs(node, new HashSet<QName>(Arrays.asList(qtype)))
-                : nodeSrv.getChildAssocs(node);
-        if (links != null && !links.isEmpty()) {
-            for (ChildAssociationRef item : links) {
-                result.add(item.getChildRef());
-            }
-        }
-        return (result.isEmpty()) ? null : result;
-    }
+		final QName qtype = QName.createQName(type, nameSrv);
+		final List<ChildAssociationRef> links = (qtype != null)
+				? nodeSrv.getChildAssocs(node, new HashSet<QName>(Arrays.asList(qtype)))
+						: nodeSrv.getChildAssocs(node);
+				if (links != null && !links.isEmpty()) {
+					for (ChildAssociationRef item : links) {
+						result.add(item.getChildRef());
+					}
+				}
+				return (result.isEmpty()) ? null : result;
+	}
 
 
 	/**
@@ -428,15 +503,15 @@ public class LucenePreparedQuery {
 	 * @param nameSrv
 	 * @return null, одну запись или исключение, если найдено более одной
 	 */
-    public static NodeRef getAssocChildByType(NodeRef node, String type
-            , NodeService nodeSrv, NamespaceService nameSrv) {
-        final List<NodeRef> found = getAssocChildrenByType(node, type, nodeSrv, nameSrv);
-        checkSize(found, 0, 1, String.format("Node '%s' has invalid child items '%s'", node, type));
-        return (found != null) ? found.get(0) : null;
-    }
+	public static NodeRef getAssocChildByType(NodeRef node, String type
+			, NodeService nodeSrv, NamespaceService nameSrv) {
+		final List<NodeRef> found = getAssocChildrenByType(node, type, nodeSrv, nameSrv);
+		checkSize(found, 0, 1, String.format("Node '%s' has invalid child items '%s'", node, type));
+		return (found != null) ? found.get(0) : null;
+	}
 
 
-    /**
+	/**
 	 * Загрузить список одну или ноль дочернюю запись
 	 * @param node
 	 * @param assocType заказанный тип связи "детишек", если null -> не ограничено
@@ -444,11 +519,11 @@ public class LucenePreparedQuery {
 	 * @param nameSrv
 	 * @return null, одну запись или исключение, если найдено более одной
 	 */
-    public static NodeRef getAssocTarget(NodeRef node, String assocType
-            , NodeService nodeSrv, NamespaceService nameSrv) {
-        final List<NodeRef> found = getAssocTargets(node, assocType, 0, 1, nodeSrv, nameSrv);
-        return (found != null) ? found.get(0) : null;
-    }
+	public static NodeRef getAssocTarget(NodeRef node, String assocType
+			, NodeService nodeSrv, NamespaceService nameSrv) {
+		final List<NodeRef> found = getAssocTargets(node, assocType, 0, 1, nodeSrv, nameSrv);
+		return (found != null) ? found.get(0) : null;
+	}
 
 	/**
 	 * Загрузить список дочерних записей состоящий из указанного кол-ва элементов
@@ -458,17 +533,17 @@ public class LucenePreparedQuery {
 	 * @param nameSrv
 	 * @return непустой список "детишек" узла нужного типа, NULL если нет ни одного
 	 */
-    public static List<NodeRef> getAssocTargets(NodeRef node
-            , String assocType
-            , final NodeService nodeSrv
-            , final NamespaceService nameSrv) {
-        final List<AssociationRef> found = nodeSrv.getTargetAssocs(node, QName.createQName(assocType, nameSrv));
-        final List<NodeRef> result = new ArrayList<NodeRef>();
-        if (found != null) {
-            for (AssociationRef a : found) result.add(a.getTargetRef());
-        }
-        return (result.isEmpty()) ? null : result;
-    }
+	public static List<NodeRef> getAssocTargets(NodeRef node
+			, String assocType
+			, final NodeService nodeSrv
+			, final NamespaceService nameSrv) {
+		final List<AssociationRef> found = nodeSrv.getTargetAssocs(node, QName.createQName(assocType, nameSrv));
+		final List<NodeRef> result = new ArrayList<NodeRef>();
+		if (found != null) {
+			for (AssociationRef a : found) result.add(a.getTargetRef());
+		}
+		return (result.isEmpty()) ? null : result;
+	}
 
 	/**
 	 * Загрузить список дочерних записей состоящий из указанного кол-ва элементов
@@ -482,19 +557,19 @@ public class LucenePreparedQuery {
 	 * одного и разрешено minCount = 0 или исключение, если найдено неверное 
 	 * кол-во "детишек"
 	 */
-    public static List<NodeRef> getAssocTargets(NodeRef node
-            , String assocType
-            , final int minCount
-            , final int maxCount
-            , final NodeService nodeSrv
-            , final NamespaceService nameSrv) {
-        final List<NodeRef> found = getAssocTargets(node, assocType, nodeSrv, nameSrv);
-        return checkSize(found, minCount, maxCount, String.format("Node '%s' has invalid child items '%s'", node, assocType));
-    }
+	public static List<NodeRef> getAssocTargets(NodeRef node
+			, String assocType
+			, final int minCount
+			, final int maxCount
+			, final NodeService nodeSrv
+			, final NamespaceService nameSrv) {
+		final List<NodeRef> found = getAssocTargets(node, assocType, nodeSrv, nameSrv);
+		return checkSize(found, minCount, maxCount, String.format("Node '%s' has invalid child items '%s'", node, assocType));
+	}
 
-    static public ResultSet execFindQuery(final LuceneSearchBuilder bquery, final SearchService searchService) {
-        return execFindQuery(bquery, 0, QUERYROWS_UNLIMITED, searchService);
-    }
+	static public ResultSet execFindQuery(final LuceneSearchBuilder bquery, final SearchService searchService) {
+		return execFindQuery(bquery, 0, QUERYROWS_UNLIMITED, searchService);
+	}
 
 	/**
 	 * Выполнить поиск по указанному запросу
@@ -504,36 +579,36 @@ public class LucenePreparedQuery {
 	 * @param searchService
 	 * @return
 	 */
-    static public ResultSet execFindQuery(final LuceneSearchBuilder bquery, int skipCountOffset, int queryItemsLimit, final SearchService searchService) {
-        if (bquery == null || bquery.isEmpty()) {
-            return null;
-        }
+	static public ResultSet execFindQuery(final LuceneSearchBuilder bquery, int skipCountOffset, int queryItemsLimit, final SearchService searchService) {
+		if (bquery == null || bquery.isEmpty()) {
+			return null;
+		}
 
-        final DurationLogger d = new DurationLogger();
+		final DurationLogger d = new DurationLogger();
 
-        final SearchParameters search = new SearchParameters();
-        search.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        search.setLanguage(SearchService.LANGUAGE_LUCENE);
-        search.setQuery(bquery.getQuery().toString());
+		final SearchParameters search = new SearchParameters();
+		search.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+		search.setLanguage(SearchService.LANGUAGE_LUCENE);
+		search.setQuery(bquery.getQuery().toString());
 
-        // set offset ...
-        if (skipCountOffset > 0) {
-            search.setSkipCount(skipCountOffset);
-        }
+		// set offset ...
+		if (skipCountOffset > 0) {
+			search.setSkipCount(skipCountOffset);
+		}
 
-        // set limit ...
-        if (queryItemsLimit != QUERYROWS_UNLIMITED) {
-            search.setMaxItems(queryItemsLimit);
-        }
+		// set limit ...
+		if (queryItemsLimit != QUERYROWS_UNLIMITED) {
+			search.setMaxItems(queryItemsLimit);
+		}
 
-        // (!) момент истины - ЗАПРОС
-        final ResultSet alfrescoResult = searchService.query(search);
+		// (!) момент истины - ЗАПРОС
+		final ResultSet alfrescoResult = searchService.query(search);
 
-        final int foundCount = (alfrescoResult != null) ? alfrescoResult.length() : -1;
-        d.logCtrlDuration(logger, String.format("\nQuery in {t} msec: found %d rows, limit %d, offset %d" + "\n>>>%s\n<<<"
-                , foundCount, queryItemsLimit, skipCountOffset, bquery));
-        return alfrescoResult;
-    }
+		final int foundCount = (alfrescoResult != null) ? alfrescoResult.length() : -1;
+		d.logCtrlDuration(logger, String.format("\nQuery in {t} msec: found %d rows, limit %d, offset %d" + "\n>>>%s\n<<<"
+				, foundCount, queryItemsLimit, skipCountOffset, bquery));
+		return alfrescoResult;
+	}
 
 	/**
 	 * Вставить основу запроса this.reportDescriptor: выборку по типу или по ID,
@@ -542,24 +617,48 @@ public class LucenePreparedQuery {
 	 * @param bquery
 	 * @param reportDescriptor 
 	 */
-    private static void makeMasterCondition(final StringBuilder bquery, ReportDescriptor reportDescriptor) {
-        if (reportDescriptor != null && reportDescriptor.getDsDescriptor() != null) {
-            // @NOTE: (reportDescriptor.getFlags().isMultiRow()) не достаточно для определения того что именно долждно проверяться TYPE или ID
-            // так что выбираем оба значения
+	private static void makeMasterCondition(final LuceneSearchBuilder bquery, ReportDescriptor reportDescriptor) {
+		if (reportDescriptor != null && reportDescriptor.getDsDescriptor() != null) {
+			// @NOTE: (reportDescriptor.getFlags().isMultiRow()) не достаточно для определения того что именно долждно проверяться TYPE или ID
+			// так что выбираем оба значения
 
-            // по типу ...
-            ColumnDescriptor colWithType = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_TYPE);
-            final boolean hasType =
-                    Utils.emmitParamCondition(bquery, colWithType, "TYPE:");
-            // по ID/NodeRef ...
-            ColumnDescriptor colWithID = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_ID);
-            final boolean hasId = Utils.emmitParamCondition(bquery, colWithID, "ID:");
+			// по типу - из колонки, если она имеется и заполнена или из preferedNodeType-атрибута шаблона ...
+			boolean hasType = false;
+			{ // пробуем из колонки данных "TYPE" ...
+				final ColumnDescriptor colWithType = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_TYPE);
+				if (colWithType != null && colWithType.getParameterValue() != null) {
+					if (!colWithType.getParameterValue().isEmpty()) {
+						hasType = bquery.emmitTypeCond( colWithType.getParameterValue().getBound1().toString(), null);
+					}
+				}
 
-            if (!(hasType || hasId))
-                logger.warn(String.format("None of main parameteres specified: '%s' nor '%s' ", DataSourceDescriptor.COLNAME_TYPE, DataSourceDescriptor.COLNAME_ID));
-        } else { // если НД не задан - выборка по документам ...
-            bquery.append("TYPE:").append(Utils.quoted(DEFAULT_DOCUMENT_TYPE));
-        }
-    }
+				if ( !hasType ) { // пробуем из атрибута "preferedNodeType" ...
+					if(reportDescriptor.getFlags() != null ) {
+						// bquery.append("TYPE:").append(Utils.quoted(reportDescriptor.getFlags().getPreferedNodeType()));
+						hasType = bquery.emmitTypeCond( reportDescriptor.getFlags().getPreferedNodeType(), null);
+					}
+				}
+			}
+
+			/* по ID/NodeRef ... */
+			boolean hasId = false;
+			{
+				final ColumnDescriptor colWithID = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_ID);
+				// boolean hasId = Utils.emmitParamCondition(bquery, colWithID, "ID:");
+				if (colWithID != null && colWithID.getParameterValue() != null) {
+					if (!colWithID.getParameterValue().isEmpty()) {
+						hasId = bquery.emmitIdCond( colWithID.getParameterValue().getBound1().toString(), null);
+					}
+				}
+			}
+
+			if (!(hasType || hasId))
+				logger.warn(String.format("None of main parameteres specified: '%s' nor '%s' ", DataSourceDescriptor.COLNAME_TYPE, DataSourceDescriptor.COLNAME_ID));
+
+		} else { // если НД не задан - выборка по документам ...
+			// bquery.append("TYPE:").append(Utils.quoted(DEFAULT_DOCUMENT_TYPE));
+			bquery.emmitTypeCond( DEFAULT_DOCUMENT_TYPE, null);
+		}
+	}
 
 }

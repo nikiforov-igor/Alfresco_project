@@ -108,6 +108,50 @@ public class Utils {
 	}
 
 	/**
+	 * @param values
+	 * @return true, если среди values есть хотя бы одно не пустое значение
+	 */
+	public static boolean hasNonEmptyValues( String[] values) {
+		if (values != null) {
+			for (String value : values) {
+				if (value != null && !value.isEmpty())
+					return true; // found
+			}
+		}
+		// not found
+		return false;
+	}
+
+	/**
+	 * Проверить что строка начинается с указанной строки и имеет ровно одно вхождение
+	 * @param s
+	 * @param what
+	 * @return
+	 */
+	public static boolean hasStartOnce( final String s, final String what) {
+		return (s!= null) && (what != null)
+				&& (what.length() > 0)
+				&& (s.length() > what.length())
+				&& s.startsWith(what) // начиается с ...
+				&& (s.indexOf(what, 1) == -1) // больше вхождений нет ...
+				;
+	}
+
+	/**
+	 * Проверить что строка оканчивается указанной строкой и имеет ровно одно такое вхождение
+	 * @param s
+	 * @param what
+	 * @return
+	 */
+	public static boolean hasEndOnce( final String s, final String what) {
+		return (s!= null) && (what != null)
+				&& (what.length() > 0)
+				&& (s.length() > what.length())
+				&& (s.indexOf(what) == s.length() - what.length()) // оканчивается указанной строкой и больше вхождений нет ...
+				;
+	}
+
+	/**
 	 * null-safe проверка объектов на равенство, при этом принимается null == null.
 	 * @param a
 	 * @param b
@@ -274,6 +318,35 @@ public class Utils {
 
 
 	/**
+	 * Сформировать условие для проверки значения на вхождение в список вида:
+	 *    "( fld:value1 OR fld:value2 ...)"
+	 * (!) скобки включаются, операция между значениями "OR"
+	 * @param fldName
+	 * @param values
+	 * @return
+	 */
+	public static boolean emmitValuesInsideList( final StringBuilder result, String fldName, final String[] values) {
+		if (!hasNonEmptyValues(values))
+			return false;
+
+		// final StringBuilder result = new StringBuilder();
+		result.append("( ");
+		boolean addOR = false;
+		for (String value : values) {
+			if (value != null && !value.isEmpty()) {
+				final String quotedValue = Utils.quoted(value);
+				if (addOR)
+					result.append(" OR ");
+				result.append( "@" + fldName + ":" + quotedValue);
+				addOR = true;
+			}
+		}
+		result.append(") ");
+		return true;
+	}
+
+
+	/**
 	 * Сгенерировать условие для единичного параметра (кавыки " добавляются здесь).
 	 * Если параметр не задан (null) - поднимается исключение с сообщением errMsg, если raiseIfNull=true.
 	 * @param bquery текст запроса для добавления
@@ -290,7 +363,7 @@ public class Utils {
 			, final String errMsg
 			, boolean raiseIfNull
 			) {
-		if (column == null || column.getParameterValue().getBound1() == null) {
+		if (column == null || column.getParameterValue().isEmpty()) {
 			if (raiseIfNull)
 				throw new RuntimeException(errMsg);
 			return false;

@@ -79,7 +79,7 @@ public class JasperFormProducer extends AbstractWebScript {
 		}
 
 		final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
-		final String reportName = templateParams.get("report");
+		final String reportName = Utils.coalesce( templateParams.get("report"), templateParams.get("reportCode"));
 
 		// TODO: ТипОтчёта (Jasper/OOffice и пр) надо брать тоже из параметров
 		final String rtype = "JASPER";
@@ -97,7 +97,7 @@ public class JasperFormProducer extends AbstractWebScript {
 		// получение провайдера ...
 		final ReportGenerator reporter = this.getReportsManager().getReportGenerators().get(rtype);
 		if (reporter == null)
-			throw new RuntimeException( String.format("Unsupported report kind '%s': no privider", rtype));
+			throw new RuntimeException( String.format("Unsupported report kind '%s': no provider registered", rtype));
 		reporter.produceReport(webScriptResponse, reportName, requestParameters, reportDesc);
 	}
 
