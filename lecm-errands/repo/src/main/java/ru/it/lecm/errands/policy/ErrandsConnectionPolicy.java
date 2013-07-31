@@ -6,6 +6,7 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
     private DocumentConnectionService documentConnectionService;
     private DictionaryBean dictionaryService;
     private NodeService nodeService;
+    private DocumentService documentService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -41,6 +43,10 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 
     final public void init() {
@@ -69,9 +75,16 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
         NodeRef baseDoc = associationRef.getTargetRef();
         NodeRef errandDoc = associationRef.getSourceRef();
 
-        Object regNum = nodeService.getProperty(baseDoc, DocumentService.PROP_DOCUMENT_REGNUM);
-        if (regNum != null) {
-            nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, (String)regNum);
+        QName[] regNums = documentService.getRegNumbersProperties(nodeService.getType(baseDoc));
+        if (regNums != null && regNums.length > 0) {
+            String regNumberValue = "";
+            for (QName propName : regNums) {
+                Object regNumber = nodeService.getProperty(baseDoc, propName);
+                if (regNumber != null) {
+                    regNumberValue += ((regNumberValue.length() > 0 ? "," : "") + regNumber);
+                }
+            }
+            nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, regNumberValue);
         }
     }
 }

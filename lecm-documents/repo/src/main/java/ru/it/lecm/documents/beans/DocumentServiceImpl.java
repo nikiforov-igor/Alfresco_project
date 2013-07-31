@@ -27,6 +27,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
+import ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
@@ -435,9 +436,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                     // копируем ассоциации
                     List<String> categories = settings.getCategoriesToCopy();
                     for (String category : categories) {
+                        NodeRef errandCategoryFolder = documentAttachmentsService.getRootFolder(createdNode);
                         NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
                         if (categoryRef != null) {
-                            copyService.copy(categoryRef, createdNode, ContentModel.ASSOC_CONTAINS,
+                            copyService.copy(categoryRef, errandCategoryFolder, ContentModel.ASSOC_CONTAINS,
                                     QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), QName.createValidLocalName(category)),
                                     true);
                         }
@@ -487,5 +489,24 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     public void setCopyService(CopyService copyService) {
         this.copyService = copyService;
+    }
+
+    public QName[] getRegNumbersProperties(QName docType) {
+        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(docType.getNamespaceURI(), DocumentService.CONSTRAINT_REG_NUMBERS_PROPERTIES));
+        if (constraint != null && constraint.getConstraint() != null && (constraint.getConstraint() instanceof RegNumberPropertiesConstraint)) {
+            RegNumberPropertiesConstraint rnConstraint = (RegNumberPropertiesConstraint) constraint.getConstraint();
+            String[] props = rnConstraint.getRegNumbersProps();
+            if (props != null) {
+                List<QName> result = new ArrayList<QName>();
+                for (String prop : props) {
+                    if (prop != null && !prop.isEmpty()) {
+                        QName propQName = QName.createQName(prop, namespaceService);
+                        result.add(propQName);
+                    }
+                }
+                return result.toArray(new QName[result.size()]);
+            }
+        }
+        return new QName[]{DocumentService.PROP_DOCUMENT_REGNUM};
     }
 }

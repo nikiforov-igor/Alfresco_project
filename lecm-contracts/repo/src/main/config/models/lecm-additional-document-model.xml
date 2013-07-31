@@ -35,6 +35,11 @@
                 <value>lecm-document:creator-ref</value>
             </parameter>
         </constraint>
+        <constraint name="lecm-additional-document:reg-number-properties-constraint" type="ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint">
+            <parameter name="regNumbersProperties">
+                <value>lecm-additional-document:number</value>
+            </parameter>
+        </constraint>
     </constraints>
 
     <types>

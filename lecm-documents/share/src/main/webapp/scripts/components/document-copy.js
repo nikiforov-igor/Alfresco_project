@@ -17,7 +17,7 @@ LogicECM.module = LogicECM.module || {};
 
 (function () {
     var Dom = YAHOO.util.Dom;
-
+    var $siteURL = Alfresco.util.siteURL;
 
     LogicECM.module.DocumentCopy = function (fieldHtmlId) {
         LogicECM.module.DocumentCopy.superclass.constructor.call(this, "LogicECM.module.DocumentCopy", fieldHtmlId, [ "container", "datasource"]);

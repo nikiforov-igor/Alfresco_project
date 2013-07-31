@@ -28,6 +28,7 @@ public interface DocumentService {
     public static final QName PROP_LIST_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "list-present-string");
     public static final String CONSTRAINT_PRESENT_STRING = "present-string-constraint";
     public static final String CONSTRAINT_AUTHOR_PROPERTY = "author-property-constraint";
+    public static final String CONSTRAINT_REG_NUMBERS_PROPERTIES = "reg-number-properties-constraint";
 
     public static final QName PROP_RATING = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "rating");
     public static final QName PROP_RATED_PERSONS_COUNT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "rated-persons-count");
@@ -147,4 +148,6 @@ public interface DocumentService {
     public String getAuthorProperty(QName docType);
 
     public NodeRef duplicateDocument(NodeRef document);
+
+    public QName[] getRegNumbersProperties(QName docType);
 }

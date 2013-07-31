@@ -44,6 +44,11 @@
                 <value>lecm-errands:initiator-assoc-ref</value>
             </parameter>
         </constraint>
+        <constraint name="lecm-errands:reg-number-properties-constraint" type="ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint">
+            <parameter name="regNumbersProperties">
+                <value>lecm-errands:number</value>
+            </parameter>
+        </constraint>
     </constraints>
 
     <types>

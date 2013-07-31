@@ -233,7 +233,7 @@ function getSearchResults(params) {
                                 }
                             }
                             else {
-                                formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':"' + propValue + '"';
+                                formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':"*' + propValue + '*"';
                                 first = false;
                             }
                         }

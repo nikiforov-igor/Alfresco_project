@@ -306,7 +306,7 @@
                     <show id="lecm-errands:title"/>
                     <show id="lecm-errands:is-important"/>
                     <show id="lecm-errands:is-expired"/>
-                   <!-- <show id="lecm-errands:base-doc-number"/>-->
+                    <show id="lecm-errands:base-doc-number"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:created">
