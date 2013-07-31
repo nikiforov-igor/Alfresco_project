@@ -2,16 +2,31 @@
 <!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 
 <beans>
-    <bean id="${groupId}.${artifactId}.signed-docflow-model-bootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/signed-docflow-model.xml</value>
-            </list>
-        </property>
-        <property name="labels">
-            <list>
-                <value>alfresco/module/${artifactId}/messages/signed-docflow</value>
-            </list>
-        </property>
-    </bean>
+	<bean id="lecm.signed-docflow.model-bootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/signed-docflow-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/signed-docflow</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowBeanImpl" parent="baseBean"
+		  depends-on="lecm.signed-docflow.model-bootstrap">
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
+	<bean id="webscript.ru.it.lecm.signed.docflow.isDocflowable.isDocflowable.get" class="ru.it.lecm.signed.docflow.webscripts.IsDocflowableWebscript"
+		  parent="webscript">
+		<property name="signedDocflowService" ref="signedDocflowService"/>
+	</bean>
+	<bean id="webscript.ru.it.lecm.signed.docflow.isSignable.isSignable.get" class="ru.it.lecm.signed.docflow.webscripts.IsSignableWebscript"
+		  parent="webscript">
+		<property name="signedDocflowService" ref="signedDocflowService"/>
+	</bean>
+
 </beans>
