@@ -272,6 +272,15 @@
            </sub-components>
        </component>
 
+      <!-- Участие в ЮЗД -->
+      <component>
+         <region-id>document-signed-docflow</region-id>
+         <url>/lecm/components/document/document-signed-docflow</url>
+         <properties>
+            <nodeRef>{nodeRef}</nodeRef>
+         </properties>
+      </component>
+
 	   <!-- Статусная строка -->
 	   <!--<component>-->
 		   <!--<region-id>document-status-string</region-id>-->

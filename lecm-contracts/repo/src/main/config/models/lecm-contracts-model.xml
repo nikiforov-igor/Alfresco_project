@@ -13,6 +13,7 @@
         <import uri="http://www.it.ru/logicECM/dictionary/currency/1.0" prefix="lecm-currency"/>
         <import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
 		<import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
+		<import uri="http://www.it.ru/lecm/model/signed-docflow/1.0" prefix="lecm-signed-docflow"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
@@ -256,6 +257,9 @@
                     </target>
                 </association>
             </associations>
+			<mandatory-aspects>
+				<aspect>lecm-signed-docflow:docflowable</aspect>
+			</mandatory-aspects>
 		</type>
 	</types>
 

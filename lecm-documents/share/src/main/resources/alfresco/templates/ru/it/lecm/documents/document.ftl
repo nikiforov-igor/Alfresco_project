@@ -74,6 +74,8 @@
                 <@region id="document-tags" scope="template"/>
                 <@region id="document-history" scope="template"/>
                 <@region id="document-forms" scope="template"/>
+				<#-- Участие в ЮЗД -->
+				<@region id="document-signed-docflow" scope="template"/>
             </div>
         </div>
     </#if>
