@@ -88,6 +88,7 @@
 		<module>lecm-theme</module>
 		<module>lecm-delegation</module>
 		<module>lecm-subscriptions</module>
+		<module>lecm-model-editor</module>
 		<module>lecm-notifications</module>
 		<module>lecm-notifications-email</module>
 		<module>lecm-notifications-dashlet</module>
