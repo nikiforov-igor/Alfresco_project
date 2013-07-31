@@ -7630,27 +7630,17 @@ notifications.sendNotificationFromCurrentUser(signers,notificationText, contract
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var contract = bpm_package.children[0];
 
-                                                                    var notificationText = "Поступил новый договор на
-                                                                    регистрации, номер проекта: ";
-                                                                    notificationText +=
-                                                                    documentScript.wrapperDocumentLink(contract,
-                                                                    "{lecm-contract:regNumProject}");
-                                                                    var recorders =
-                                                                    orgstructure.getEmployeesByBusinessRoleId("CONTRACT_RECORDER",
-                                                                    true);
-                                                                    notifications.sendNotificationFromCurrentUser(recorders,
-                                                                    notificationText, contract);
+var notificationText = "Поступил новый договор на регистрации, номер проекта: ";
+notificationText += documentScript.wrapperDocumentLink(contract,"{lecm-contract:regNumProject}");
+var recorders = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_RECORDER", true);
+notifications.sendNotificationFromCurrentUser(recorders, notificationText, contract);
 
-                                                                    var notificationText = "Проект договор номер ";
-                                                                    notificationText +=
-                                                                    documentScript.wrapperDocumentLink(contract,
-                                                                    "{lecm-contract:regNumProject}");
-                                                                    notificationText += " направлен на регистрацию";
-                                                                    var executors =
-                                                                    orgstructure.getEmployeesByBusinessRoleId("CONTRACT_EXECUTOR",
-                                                                    true);
-                                                                    notifications.sendNotificationFromCurrentUser(executors,
-                                                                    notificationText, contract);]]></value>
+var notificationText = "Проект договор номер ";
+notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-contract:regNumProject}");
+notificationText += " направлен на регистрацию";
+var executors = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_EXECUTOR", true);
+
+notifications.sendNotificationFromCurrentUser(executors,notificationText, contract);]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
@@ -8652,19 +8642,13 @@ notifications.sendNotificationFromCurrentUser(signers,notificationText, contract
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var contract = bpm_package.children[0];
-                                                                    regnumbers.setDocumentNumber("CONTRACT_REGNUM",
-                                                                    contract, "lecm-contract:regNumSystem");
-                                                                    contract
-                                                                    .properties["lecm-contract:dateRegContracts"] = new
-                                                                    Date();
-                                                                    contract.save();
+                                                                    regnumbers.setDocumentNumber("CONTRACT_REGNUM", contract, "lecm-contract:regNumSystem");
+contract.properties["lecm-contract:dateRegContracts"] = new Date();
+contract.save();
 
-                                                                    var logText = "Договор зарегистрирован, присвоен
-                                                                    регистрационный номер: ";
-                                                                    logText +=
-                                                                    contract.properties["lecm-contract:regNumSystem"];
-                                                                    businessJournal.log(contract.nodeRef.toString(),
-                                                                    "EDIT", logText, []);]]></value>
+ var logText = "Договор зарегистрирован, присвоен регистрационный номер: ";
+ logText +=  contract.properties["lecm-contract:regNumSystem"];
+ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
@@ -12290,15 +12274,13 @@ notifications.sendNotificationFromCurrentUser(signers,notificationText, contract
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var contract = bpm_package.children[0];
-                                                                    var notificationText = "Проект договор номер ";
-                                                                    notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-contract:regNumProject}");
+var notificationText = "Проект договор номер ";
+notificationText +=  documentScript.wrapperDocumentLink(contract,"{lecm-contract:regNumProject}");
 
-                                                                    notificationText += " подписан. Подтвердите
-                                                                    подписание Контрагентом";
+notificationText += " подписан. Подтвердите подписание Контрагентом";
 
-                                                                    var executors = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_EXECUTOR", true);
-                                                                    notifications.sendNotificationFromCurrentUser(executors, notificationText, contract);
-                                                                    ]]></value>
+var executors = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_EXECUTOR",true);
+notifications.sendNotificationFromCurrentUser(executors,notificationText, contract);]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
