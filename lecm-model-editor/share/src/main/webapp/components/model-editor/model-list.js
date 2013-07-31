@@ -63,10 +63,7 @@ IT.component = IT.component || {};
       onReady: function BlogPostList_onReady()
       {
          var me = this;
-         //http://localhost:8080/alfresco/service/api/classes/lecm-document_base/subclasses?r=false
-         //var uriDocListList = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "documentmodel/list",
-         //http://localhost:8082/MavenAlfrescoShareModule/service/components/documentlibrary/data/doclist/all/node/alfresco/company/home/%D0%A1%D0%BB%D0%BE%D0%B2%D0%B0%D1%80%D1%8C%20%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/%D0%9C%D0%BE%D0%B4%D0%B5%D0%BB%D0%B8?filter=path&size=50&pos=1&sortAsc=true&sortField=cm%3Aname&libraryRoot=alfresco%3A%2F%2Fcompany%2Fhome&view=browse&noCache=1373271352122
-         var uriDocListList = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/documentlibrary/data/doclist/all/node/alfresco/company/home/%D0%A1%D0%BB%D0%BE%D0%B2%D0%B0%D1%80%D1%8C%20%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/%D0%9C%D0%BE%D0%B4%D0%B5%D0%BB%D0%B8?filter=path",
+         var uriDocListList = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/documentlibrary/data/doclist/all/node/alfresco/company/home/?libraryRoot=/app:company_home/app:dictionary/app:models",
          {
             site: this.options.siteId,
             container: this.options.containerId
