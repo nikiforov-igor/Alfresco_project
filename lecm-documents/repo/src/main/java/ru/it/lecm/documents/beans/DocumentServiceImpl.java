@@ -6,10 +6,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.CopyService;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
@@ -433,15 +430,41 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                 }
 
                 if (settings != null) {
-                    // копируем ассоциации
+                    // копируем категории
                     List<String> categories = settings.getCategoriesToCopy();
                     for (String category : categories) {
-                        NodeRef errandCategoryFolder = documentAttachmentsService.getRootFolder(createdNode);
+                        NodeRef errandAttachmentsFolder = documentAttachmentsService.getRootFolder(createdNode);
                         NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
                         if (categoryRef != null) {
-                            copyService.copy(categoryRef, errandCategoryFolder, ContentModel.ASSOC_CONTAINS,
+                            // код ниже - хак. При копировании ноды - все ассоциации на неё также копируются. У вложений есть ссылка на родительский документ,
+                            // и есть полиси, которые создавает эту же самую ассоциацию при добавлении нового вложения. Полиси и сервис копирования не знаю друг о друге -  возникает конфликт.
+                            //копируем директорию с категорией
+                            NodeRef errandCategoryFolder = copyService.copyAndRename(categoryRef, errandAttachmentsFolder, ContentModel.ASSOC_CONTAINS,
                                     QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), QName.createValidLocalName(category)),
-                                    true);
+                                    false);
+                            // копируем вложения для категории
+                            List<ChildAssociationRef> childs = nodeService.getChildAssocs(categoryRef);
+                            for (ChildAssociationRef child : childs) {
+                                NodeRef childRef = child.getChildRef();
+                                List<AssociationRef> parentDocAssocs = nodeService.getTargetAssocs(childRef, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                for (AssociationRef parentDocAssoc : parentDocAssocs) {
+                                    //для всех вложений получаем ссылку на родительский документ
+                                    NodeRef parentDoc = parentDocAssoc.getTargetRef();
+                                    // временно удаляем ассоциацию
+                                    nodeService.removeAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                    try {
+                                        copyService.copyAndRename(childRef, errandCategoryFolder, ContentModel.ASSOC_CONTAINS,
+                                                QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), QName.createValidLocalName(category)),
+                                                false);
+
+                                    } finally {
+                                        // возвращаем удаленную ассоциацию
+                                        try {
+                                            nodeService.createAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                        } catch (AssociationExistsException ignored) {}
+                                    }
+                                }
+                            }
                         }
 
                     }
