@@ -25,7 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:application-context.xml", "classpath:META-INF/cxf/cxf.xml"})
+@ContextConfiguration(locations = {"classpath:gate-wcf-service-context.xml", "classpath:META-INF/cxf/cxf.xml"})
 public abstract class GateWcfServiceTest {
 
 	private final static Logger logger = LoggerFactory.getLogger(GateWcfServiceTest.class);

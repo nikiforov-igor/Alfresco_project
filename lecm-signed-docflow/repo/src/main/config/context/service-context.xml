@@ -2,6 +2,9 @@
 <!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 
 <beans>
+
+	<import resource="classpath:gate-wcf-service-context.xml"/>
+
 	<bean id="lecm.signed-docflow.model-bootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
 		<property name="models">
 			<list>
@@ -34,5 +37,8 @@
 		<property name="signedDocflowService" ref="signedDocflowService"/>
 	</bean>
 
+	<bean id="unicloudService" class="ru.it.lecm.signed.docflow.UnicloudService" init-method="init">
+		<property name="gateWcfService" ref="gateWcfService.https"/>
+	</bean>
 
 </beans>
