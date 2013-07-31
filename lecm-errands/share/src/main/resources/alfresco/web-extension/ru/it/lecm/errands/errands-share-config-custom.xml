@@ -714,7 +714,7 @@
 						</control>
 					</field>
 					<field id="lecmErrandWf:requestCancelTaskResult">
-						<control template="/ru/it/lecm/approval/controls/activiti-transitions-radiobuttons.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl" />
 					</field>
 				</appearance>
 			</form>

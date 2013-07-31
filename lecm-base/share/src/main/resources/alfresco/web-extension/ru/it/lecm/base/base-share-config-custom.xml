@@ -139,6 +139,7 @@
 	            <js src="/scripts/lecm-base/components/lecm-dnd-upload.js" />
 	            <js src="/scripts/lecm-base/components/lecm-uploader-initializer.js" />
 	            <css src="/components/upload/dnd-upload.css" />
+	            <js src="/scripts/lecm-base/components/activiti-transitions-radiobuttons.js" />
             </dependencies>
 
             <constraint-handlers>

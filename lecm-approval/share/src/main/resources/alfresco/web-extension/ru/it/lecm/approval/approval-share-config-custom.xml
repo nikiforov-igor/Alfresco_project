@@ -3,7 +3,6 @@
 	<config>
 		<forms>
 			<dependencies>
-				<js src="/scripts/lecm-approval/activiti-transitions-radiobuttons.js"/>
 				<js src="/scripts/lecm-approval/approval-validators.js"/>
 				<css src="/css/lecm-approval/sequential-approval-form.css"/>
 			</dependencies>
@@ -163,7 +162,7 @@
 						<control template="/org/alfresco/components/form/controls/info.ftl" />
 					</field>
 					<field id="lecmApprove:approveTaskResult">
-						<control template="/ru/it/lecm/approval/controls/activiti-transitions-radiobuttons.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl" />
 					</field>
 					<field id="lecmApprove:approveTaskCommentAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
@@ -330,7 +329,7 @@
 						<control template="/org/alfresco/components/form/controls/info.ftl" />
 					</field>
 					<field id="lecmCustom:approveTaskResult">
-						<control template="/ru/it/lecm/approval/controls/activiti-transitions-radiobuttons.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl" />
 					</field>
 					<field id="lecmCustom:approveTaskCommentAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
