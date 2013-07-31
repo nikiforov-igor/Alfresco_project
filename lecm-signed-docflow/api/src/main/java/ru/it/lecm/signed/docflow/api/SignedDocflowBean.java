@@ -57,4 +57,23 @@ public interface SignedDocflowBean {
 	 * lecm-signed-docflow:signable
 	 */
 	boolean isSignable(NodeRef nodeRef);
+
+	/**
+	 * Добавить аспект docflowable данной NodeRef'е
+	 */
+	void addDocflowableAspect(NodeRef nodeRef);
+
+	/**
+	 * Удалить аспект docflowable у данной NodeRef'ы
+	 */
+	void removeDocflowableAspect(NodeRef nodeRef);
+	/**
+	 * Добавить аспект signable данной NodeRef'е
+	 */
+	void addSignableAspect(NodeRef nodeRef);
+
+	/**
+	 * Удалить аспект signable у данной NodeRef'ы
+	 */
+	void removeSignableAspect(NodeRef nodeRef);
 }

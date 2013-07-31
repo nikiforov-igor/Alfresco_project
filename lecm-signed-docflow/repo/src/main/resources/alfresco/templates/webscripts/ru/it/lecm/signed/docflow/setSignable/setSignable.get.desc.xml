@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>setSignable</shortname>
+	<description>Adds or removes signable aspect</description>
+	<url>/lecm/signed-docflow/setSignable</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>

@@ -3,9 +3,12 @@ package ru.it.lecm.signed.docflow.webscripts;
 import java.util.HashMap;
 import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
+import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.signed.docflow.api.SignedDocflowBean;
 
@@ -27,7 +30,15 @@ public class IsSignableWebscript extends DeclarativeWebScript {
 		String nodeRefStr = req.getParameter("nodeRef");
 		if (nodeRefStr != null && !nodeRefStr.isEmpty()) {
 			boolean isSignable = signedDocflowService.isSignable(new NodeRef(nodeRefStr));
-			result.put("isSignable", isSignable);
+			JSONObject json = new JSONObject();
+			try {
+				json.put("isSignable", isSignable);
+			} catch (JSONException ex) {
+				throw new WebScriptException("Error forming JSONObject", ex);
+			}
+			result.put("result", json);
+		} else {
+			throw new WebScriptException("nodeRef must be supplied!");
 		}
 		return result;
 	}

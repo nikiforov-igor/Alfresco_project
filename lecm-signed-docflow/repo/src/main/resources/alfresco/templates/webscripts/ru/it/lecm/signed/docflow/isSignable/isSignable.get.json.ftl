@@ -1,5 +1,1 @@
-{
-	<#if isSignable??>
-	"isSignable": ${isSignable?string}
-	</#if>
-}
+${result.toString()}

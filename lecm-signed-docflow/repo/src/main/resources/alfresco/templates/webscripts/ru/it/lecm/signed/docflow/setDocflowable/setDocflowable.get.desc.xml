@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>setDocflowable</shortname>
+	<description>Adds or removes docflowable aspect</description>
+	<url>/lecm/signed-docflow/setDocflowable</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>

@@ -15,7 +15,7 @@ public class SignedDocflowBeanImpl extends BaseBean implements SignedDocflowBean
 
 	public void init() {
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
-//		PropertyCheck.mandatory(this, "transactionService", transactionService);
+		PropertyCheck.mandatory(this, "transactionService", transactionService);
 	}
 
 	@Override
@@ -33,5 +33,25 @@ public class SignedDocflowBeanImpl extends BaseBean implements SignedDocflowBean
 	public boolean isSignable(NodeRef nodeRef) {
 		Set<QName> aspects = nodeService.getAspects(nodeRef);
 		return aspects.contains(ASPECT_SIGNABLE);
+	}
+
+	@Override
+	public void addDocflowableAspect(NodeRef nodeRef) {
+		nodeService.addAspect(nodeRef, ASPECT_DOCFLOWABLE, null);
+	}
+
+	@Override
+	public void removeDocflowableAspect(NodeRef nodeRef) {
+		nodeService.removeAspect(nodeRef, ASPECT_DOCFLOWABLE);
+	}
+
+	@Override
+	public void addSignableAspect(NodeRef nodeRef) {
+		nodeService.addAspect(nodeRef, ASPECT_SIGNABLE, null);
+	}
+
+	@Override
+	public void removeSignableAspect(NodeRef nodeRef) {
+		nodeService.removeAspect(nodeRef, ASPECT_SIGNABLE);
 	}
 }
