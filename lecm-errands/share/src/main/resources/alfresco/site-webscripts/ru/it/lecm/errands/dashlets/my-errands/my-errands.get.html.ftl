@@ -4,7 +4,7 @@
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-    new LogicECM.dashlet.Errands("${jsid}").setOptions(
+    new LogicECM.dashlet.MyErrands("${jsid}").setOptions(
             {
                 maxItems: 50
             }).setMessages(${messages});

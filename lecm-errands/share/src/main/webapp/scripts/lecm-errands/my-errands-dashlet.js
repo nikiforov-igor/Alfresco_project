@@ -49,9 +49,9 @@ LogicECM.dashlet = LogicECM.dashlet || {};
      * @return {LogicECM.dashlet.TasksSubordinates} The new component instance
      * @constructor
      */
-    LogicECM.dashlet.Errands = function (htmlId)
+    LogicECM.dashlet.MyErrands = function (htmlId)
     {
-        LogicECM.dashlet.Errands.superclass.constructor.call(this, "LogicECM.dashlet.Errands", htmlId, ["button", "container", "datasource", "datatable", "paginator", "history", "animation"]);
+        LogicECM.dashlet.MyErrands.superclass.constructor.call(this, "LogicECM.dashlet.MyErrands", htmlId, ["button", "container", "datasource", "datatable", "paginator", "history", "animation"]);
 
         // Services
         this.services.preferences = new Alfresco.service.Preferences();
@@ -62,11 +62,11 @@ LogicECM.dashlet = LogicECM.dashlet || {};
     /**
      * Extend from Alfresco.component.Base
      */
-    YAHOO.extend(LogicECM.dashlet.Errands, Alfresco.component.Base);
+    YAHOO.extend(LogicECM.dashlet.MyErrands, Alfresco.component.Base);
     /**
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
-    YAHOO.lang.augmentObject(LogicECM.dashlet.Errands.prototype,
+    YAHOO.lang.augmentObject(LogicECM.dashlet.MyErrands.prototype,
         {
             /**
              * Object container for initialization options
