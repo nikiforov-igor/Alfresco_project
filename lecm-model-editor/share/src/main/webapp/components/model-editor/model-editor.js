@@ -183,7 +183,7 @@ IT.component = IT.component || {};
 					if(c._name.indexOf(":present-string-constraint")!==-1) {
 						if(YAHOO.lang.isArray(c.parameter)) {
 							for(var p in c.parameter) {
-								if(c[i].parameter[p]._name==="presentString") {
+								if(c.parameter[p]._name==="presentString") {
 									if(YAHOO.lang.isString(c.parameter[p].value)){
 										this.presentString = c.parameter[p].value;
 									}
@@ -191,7 +191,7 @@ IT.component = IT.component || {};
 							}
 						}
 						if(YAHOO.lang.isObject(c.parameter)) {
-							if(c[i].parameter._name==="presentString") {
+							if(c.parameter._name==="presentString") {
 								if(YAHOO.lang.isString(c.parameter.value)){
 									this.presentString = c.parameter.value;
 								}
@@ -209,7 +209,7 @@ IT.component = IT.component || {};
 												tmpCategoryArray.push( {"name":c.parameter[p].list.value[v]} );
 											}
 										}
-										if(YAHOO.lang.isString(c[i].parameter[p].list.value)){
+										if(YAHOO.lang.isString(c.parameter[p].list.value)){
 											tmpCategoryArray.push( {"name":c.parameter[p].list.value} );
 										}
 									}
@@ -440,6 +440,10 @@ IT.component = IT.component || {};
 					assoc = {};
 					assoc._name = namespace+":"+(rec.getData("class")||"").replace(":","_");
 					assoc.title = (rec.getData("title")||"");
+					assoc.source = {
+						"mandatory":"false",
+						"many":"true"
+					};
 					assoc.target = {
 						"class":(rec.getData("class")||""),
 						"mandatory":(rec.getData("mandatory")||""),
