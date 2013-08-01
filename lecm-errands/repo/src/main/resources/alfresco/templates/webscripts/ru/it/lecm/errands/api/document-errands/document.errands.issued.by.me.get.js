@@ -1,9 +1,8 @@
 var nodeRef = args['nodeRef'];
 var document = search.findNode(nodeRef);
 
-var statusesParam = args['statuses'];
-var statuses = (statusesParam != null) ? statusesParam.split(",") : [];
+var filter = args['filter'];
 
-var errandsIssuedByMe = errands.getDocumentErrandsIssuedByMe(document, statuses);
+var errandsIssuedByMe = errands.getDocumentErrandsIssuedByMe(document, filter);
 model.errandsIssuedByMe = errandsIssuedByMe;
 model.errandsIssuedByMeCount = errandsIssuedByMe.length;

@@ -49,15 +49,6 @@ public interface ErrandsService {
 	public static final String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
 	public static final String BUSINESS_ROLE_ERRANDS_CHOOSING_INITIATOR = "ERRANDS_CHOOSING_INITIATOR";
 
-
-    public static enum FilterEnum {
-        ALL,
-        IMPORTANT,
-        OVERDUE,
-        APPROACHING_DEADLINE,
-        OTHER
-    }
-
 	/**
 	 * Получение папки для черновиков
 	 * @return ссылку на папку с черновиками
@@ -104,7 +95,12 @@ public interface ErrandsService {
 
     public List<NodeRef> getErrandsDocuments(List<String> paths, int skipCount, int maxItems);
 
-    List<NodeRef> getMyDocumentErrands(NodeRef document, List<String> statuses);
-
-    List<NodeRef> getDocumentErrandsIssuedByMe(NodeRef document, List<String> statuses);
+    /**
+     * Получить поручения, связанные с документом и находящиеся в статусах для выбранных бизнес ролей
+     * @param document ссылка на документ
+     * @param filter фильтр
+     * @param roles роли
+     * @return
+     */
+    List<NodeRef> getFilterDocumentErrands(NodeRef document, String filter, List<QName> roles);
 }

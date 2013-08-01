@@ -1,12 +1,6 @@
 <#escape x as x?js_string>
 {
-    "myErrandsCount": ${myErrandsCount}
-    <#if latestErrandNoderef?exists>
-        ,
-        "latestErrandNoderef": "${latestErrandNoderef}",
-        "latestErrandStartDate": "${latestErrandStartDate?date}"
-    </#if>
-    ,
+    "myErrandsCount": "${myErrandsCount}",
     "myErrands": [
         <#list myErrands as errand>
         {

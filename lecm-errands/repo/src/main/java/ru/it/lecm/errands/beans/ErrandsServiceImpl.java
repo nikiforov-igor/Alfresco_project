@@ -28,10 +28,13 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 		ORGANIZATION,
 		UNIT
 	}
-
+    private static enum FilterEnum {
+        ALL,
+        ACTIVE,
+        COMPLETE
+    }
 	private DocumentService documentService;
 	private OrgstructureBean orgstructureService;
-    private NamespaceService namespaceService;
 
 	private final Object lock = new Object();
 
@@ -42,10 +45,6 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
 	}
-
-    public void setNamespaceService(NamespaceService namespaceService) {
-        this.namespaceService = namespaceService;
-    }
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -195,9 +194,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 	}
 
     private List<NodeRef> getDocumentErrands(NodeRef document, List<String> statuses, List<QName> roles) {
-        if (document == null || statuses == null || roles == null) {
+        if (document == null) {
             return new ArrayList<NodeRef>();
         }
+
 
         List<NodeRef> result = new ArrayList<NodeRef>();
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
@@ -234,13 +234,31 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 
     @Override
-    public List<NodeRef> getMyDocumentErrands(NodeRef document, List<String> statuses) {
-        return getDocumentErrands(document, statuses, Arrays.asList(ASSOC_ERRANDS_EXECUTOR, ASSOC_ERRANDS_CONTROLLER));
-    }
+    public List<NodeRef> getFilterDocumentErrands(NodeRef document, String filter, List<QName> roles) {
+        List<String> statuses = new ArrayList<String>();
 
-    @Override
-    public List<NodeRef> getDocumentErrandsIssuedByMe(NodeRef document, List<String> statuses) {
-        return getDocumentErrands(document, statuses, Arrays.asList(ASSOC_ERRANDS_INITIATOR));
+        if (filter != null && !filter.equals("")) {
+            switch (FilterEnum.valueOf(filter.toUpperCase())){
+                case ALL: {
+                    return getDocumentErrands(document, null, roles);
+                }
+                case ACTIVE : {
+                    statuses.add("В работе");
+                    statuses.add("На доработке");
+                    statuses.add("На утверждении контролером");
+                    statuses.add("На утверждении инициатором");
+                    return getDocumentErrands(document, statuses, roles);
+                }
+                case COMPLETE: {
+                    statuses.add("Отменено");
+                    statuses.add("Исполнено");
+                    statuses.add("Неисполнено");
+                    statuses.add("Удалено");
+                    return getDocumentErrands(document, statuses, roles);
+                }
+            }
+        }
+        return getDocumentErrands(document, null, roles);
     }
 
     @Override

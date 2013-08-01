@@ -4,6 +4,7 @@ function main() {
     AlfrescoUtil.param("nodeRef");
     AlfrescoUtil.param("errandsIssuedByMeState");
 
+    // поручения выданные мною
     var url = "/lecm/errands/api/documentErrandsIssuedByMe?nodeRef=" + args["nodeRef"];
     var json = remote.connect("alfresco").get(url);
     if (json.status == 200) {

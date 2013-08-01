@@ -114,7 +114,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     dataObj: {
                         nodeRef: this.options.nodeRef,
                         htmlid: this.htmlid,
-                        myErrandsState: this.myErrandsState
+                        filter: this.myErrandsState
                     },
                     successCallback: {
                         fn: function(response) {

@@ -3,82 +3,107 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 }
 
 LogicECM.module = LogicECM.module || {};
-LogicECM.module.Errands = LogicECM.module.Errands || {};
-LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
 
-(function()
-{
-    LogicECM.module.Errands.dashlet.Errands = function Errands_constructor(htmlId)
-    {
-        LogicECM.module.Errands.dashlet.Errands.superclass.constructor.call(this, "LogicECM.module.Errands.dashlet.Errands", htmlId, ["button", "container"]);
+LogicECM.module.Errands = LogicECM.module.Errands|| {};
+
+(function () {
+    /**
+     * YUI Library aliases
+     */
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event;
+
+    LogicECM.module.Errands.Tasks = function ErrandsTasks_constructor(htmlId) {
+        LogicECM.module.Errands.Tasks.superclass.constructor.call(this, "LogicECM.module.Errands.Tasks", htmlId, ["button", "container"]);
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.Errands.dashlet.Errands, Alfresco.component.Base,
+    YAHOO.extend(LogicECM.module.Errands.Tasks, Alfresco.component.Base,
         {
-            options:
-            {
-                itemType:"lecm-errands:document",
-                destination: null
+            options: {
+                itemType: "lecm-errands:document",
+                nodeRef: null,
+                containerId: "",
+                errandsUrl: ""
+            },
+            listContainer: null,
+            selected: null,
+            /**
+             * html элемент в котрый помещаем результат
+             */
+            onReady: function () {
+                this.listContainer = Dom.get(this.options.containerId);
+                this.selected = Dom.get(this.id + "-errands-filter");
+                if (this.selected) {
+                    this.loadMyErrands();
+                }
+                Event.on(this.id + "-errands-filter", "change", this.loadMyErrands, this, true);
             },
 
-            onAddErrandClick: function Errands_onAddErrandsClick() {
-                var destination = this.options.destination,
-                    itemType = this.options.itemType;
-
-                // Intercept before dialog show
-                var doBeforeDialogShow = function (p_form, p_dialog) {
-                    Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-form-container_h", this.msg("label.create-row.title") ]
-                    );
-                    Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
-                };
-
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-                    {
-                        itemKind: "type",
-                        itemId: itemType,
-                        destination: destination,
-                        mode: "create",
-                        formId: "additional-document",
-                        submitType: "json"
-                    });
-
-                // Using Forms Service, so always create new instance
-                var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createErrandDetails");
-                createDetails.setOptions(
-                    {
-                        width: "70em",
-                        templateUrl: templateUrl,
-                        actionUrl: null,
-                        destroyOnHide: true,
-                        doBeforeDialogShow: {
-                            fn: doBeforeDialogShow,
-                            scope: this
+            loadMyErrands: function () {
+                Alfresco.util.Ajax.request({
+                    url: Alfresco.constants.PROXY_URI + this.options.errandsUrl,
+                    dataObj: {
+                        nodeRef: this.options.nodeRef,
+                        filter: (this.selected != null) ? this.selected.value : ""
+                    },
+                    successCallback: {
+                        fn: function (response) {
+                            this.showErrands(response);
                         },
-                        onSuccess: {
-                            fn: function DataGrid_onActionCreate_success(response) {
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text: this.msg("message.save.success")
-                                    });
-                                window.location.href = window.location.protocol + "//" + window.location.host +
-                                    Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + response.json.persistedObject;
-                            },
-                            scope: this
-                        },
-                        onFailure: {
-                            fn: function DataGrid_onActionCreate_failure(response) {
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text: this.msg("message.save.failure")
-                                    });
-                            },
-                            scope: this
+                        scope: this
+                    },
+                    failureMessage: this.msg("message.failure"),
+                    scope: this,
+                    execScripts: true
+                });
+            },
+
+            showErrands: function(response) {
+                this.listContainer.innerHTML = "";
+                if (response.json.myErrands.length > 0) {
+                    var results = response.json.myErrands;
+                    for (var i = 0; i < results.length; i++) {
+                        var errand = results[i];
+                        var title = "";
+                        if (errand.isExpired == "true") {
+                            title = this.msg("errandslist.label.overdue");
+                        } else {
+                            var today = new Date();
+                            var endDate = Date.parse(errand.dueDate);
+                            var difference = (endDate.getTime()-today.getTime())/1000/60/24;
+                            if (difference > 5) {
+                                title = this.msg("errandslist.label.new");
+                            } else {
+                                title = this.msg("errandslist.label.after");
+                            }
                         }
-                    }).show();
-            }
+                        var isImportant = (errand.isImportant == "false") ? "WORKFLOWTASKPRIORITY_LOW" : "WORKFLOWTASKPRIORITY_HIGH";
 
+                        var detail = "<div class=\"workflow-task-item\">";
+                        detail += "<div class=\"workflow-task-list-picture " + isImportant + "\" title=\"" + this.msg("errandslist.label.important") + "\">&nbsp;</div>";
+                        detail += "<div style=\"float: left;\">";
+                        detail += "<div>";
+                        detail += "<div class=\"workflow-task-title workflow-task-list-left-column\" style=\"font-size: 16px;\">";
+                        detail += "<a href=\"${url.context}/page/document?nodeRef="+ errand.nodeRef +"\">" + errand.title + ":</a>";
+                        detail += "</div>";
+                        detail += "<span class=\"workflow-task-status\">" + title + "</span>";
+                        detail += "</div>";
+                        detail += "<div style=\"clear: both;\"></div>";
+                        detail += "<div class=\"workflow-task-description\">" + errand.description + "</div>";
+                        detail += "<div>";
+                        detail += "<div class=\"workflow-task-list-left-column\">";
+                        detail += "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": " + errand.dueDate + "</span>";
+                        detail += "</div>";
+                        detail += "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": " + errand.statusMessage + "</span>";
+                        detail += "</div>";
+                        detail += "</div>";
+                        detail += "<div style=\"clear: both;\"></div>";
+                        detail += "</div>";
+                        this.listContainer.innerHTML += detail;
+                    }
+                }
+            }
 
         });
 })();

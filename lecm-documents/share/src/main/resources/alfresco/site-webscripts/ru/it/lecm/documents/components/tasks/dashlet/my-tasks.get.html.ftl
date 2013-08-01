@@ -6,26 +6,23 @@
     (function() {
         function init() {
             new Alfresco.widget.DashletResizer("${id}", "document.tasks.dashlet");
+            LogicECM.module.Errands.SETTINGS =
+                <#if errandsDashletSettings?? >
+                ${errandsDashletSettings}
+                <#else>
+                {}
+                </#if>;
+
+            var errands = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
+                    {
+                        itemType:"lecm-errands:document",
+                        destination: LogicECM.module.Errands.SETTINGS.nodeRef
+                    }).setMessages(${messages});
         }
 
         YAHOO.util.Event.onDOMReady(init);
     })();
     //]]>
-</script>
-
-<script type="text/javascript">
-    LogicECM.module.Errands.SETTINGS =
-        <#if errandsDashletSettings?? >
-        ${errandsDashletSettings}
-        <#else>
-        {}
-        </#if>;
-
-    var errands = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
-        {
-            itemType:"lecm-errands:document",
-            destination: LogicECM.module.Errands.SETTINGS.nodeRef
-        }).setMessages(${messages});
 </script>
 
 <div class="dashlet document bordered">
@@ -56,6 +53,7 @@
                 </#if>
             </div>
 
+            <#if myErrandsData??>
             <div style="clear: both; padding-top: 10px;">
                <div style="float:left;">${msg("dashlet.my.errands.assigned.count", myErrandsData.myErrandsCount)}</div>
 
@@ -65,6 +63,7 @@
                     </div>
                 </#if>
             </div>
+            </#if>
 
             <div style="clear: both; padding-top: 10px;">${msg("dashlet.my.errands.assigned.by.me.count", errandsIssuedByMeData.errandsIssuedByMeCount)}</div>
 

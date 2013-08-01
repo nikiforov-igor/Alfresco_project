@@ -9,7 +9,9 @@ import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.errands.ErrandsService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: AIvkin
@@ -48,15 +50,15 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 		return  errandsService.getDefaultSubject();
 	}
 
-    public Scriptable getMyDocumentErrands(ScriptNode document, Scriptable statusesScriptable) {
-        List<String> statuses = getElements(Context.getCurrentContext().getElements(statusesScriptable));
-        List<NodeRef> myErrands = errandsService.getMyDocumentErrands(document.getNodeRef(), statuses);
+    public Scriptable getMyDocumentErrands(ScriptNode document, String filter) {
+        List<NodeRef> myErrands = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter,
+                Arrays.asList(ErrandsService.ASSOC_ERRANDS_EXECUTOR,ErrandsService.ASSOC_ERRANDS_CONTROLLER));
         return createScriptable(myErrands);
     }
 
-    public Scriptable getDocumentErrandsIssuedByMe(ScriptNode document, Scriptable statusesScriptable) {
-        List<String> statuses = getElements(Context.getCurrentContext().getElements(statusesScriptable));
-        List<NodeRef> errandsIssuedByMe = errandsService.getDocumentErrandsIssuedByMe(document.getNodeRef(), statuses);
+    public Scriptable getDocumentErrandsIssuedByMe(ScriptNode document, String filter) {
+        List<NodeRef> errandsIssuedByMe = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter,
+                Arrays.asList(ErrandsService.ASSOC_ERRANDS_INITIATOR));
         return createScriptable(errandsIssuedByMe);
     }
 
