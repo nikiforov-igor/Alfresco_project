@@ -2,3 +2,39 @@
     line-height: 16px;
     margin: 10px;
 }
+
+.yui-u .dashlet.issued-errands .body.dashlet-body {
+    padding: 0;
+}
+.dashlet.issued-errands .body .row.summary {
+    line-height: 16px;
+    margin: 0;
+    padding: 10px 1em;
+    border-bottom: 1px solid #d7d7d7;
+    overflow: hidden;
+}
+.dashlet.issued-errands .body .row .column {
+    margin: 0;
+}
+.dashlet.issued-errands .body .row .column.first {
+    width: auto;
+    margin-left: 10px;
+}
+.dashlet.issued-errands .body .row .column.first.bold {
+    font-weight: bold;
+    margin-left: 0;
+}
+.dashlet.issued-errands .body .row .column.second {
+    margin: 0 0 0 10px;
+}
+.dashlet.issued-errands .body .row .column.third {
+    margin: 0 0 0 5px;
+    color: red;
+}
+
+.grid .dashlet.issued-errands .body .row .column.second a,
+.grid .dashlet.issued-errands .body .row .column.second a:hover,
+.grid .dashlet.issued-errands .body .row .column.second a:visited {
+    color: #68a0c8;
+    font-weight: bold;
+}

@@ -15,6 +15,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.AuthenticationService;
@@ -432,7 +433,10 @@ public class DocumentPolicy extends BaseBean
 						 	propTitle = assocDefinition.getTitle();
 						}
 					} else {
-						propTitle = dictionaryService.getProperty(prop).getTitle();
+                        PropertyDefinition propDef = dictionaryService.getProperty(prop);
+                        if (propDef != null) {
+                            propTitle = propDef.getTitle();
+                        }
 					}
 
 					if (propTitle != null) {
