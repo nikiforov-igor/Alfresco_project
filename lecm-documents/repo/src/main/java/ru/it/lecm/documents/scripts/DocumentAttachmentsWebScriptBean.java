@@ -135,4 +135,18 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		}
 		return "Failure: node not found";
 	}
+
+	public Scriptable getAttachmentsByCategory(String documentRef, String categoryName) {
+		ParameterCheck.mandatory("documentRef", documentRef);
+		ParameterCheck.mandatory("categoryName", categoryName);
+
+		NodeRef ref = new NodeRef(documentRef);
+		if (this.nodeService.exists(ref)) {
+			List<NodeRef> attachments = this.documentAttachmentsService.getAttachmentsByCategory(ref, categoryName);
+			if (attachments != null) {
+				return createScriptable(attachments);
+			}
+		}
+		return null;
+	}
 }
