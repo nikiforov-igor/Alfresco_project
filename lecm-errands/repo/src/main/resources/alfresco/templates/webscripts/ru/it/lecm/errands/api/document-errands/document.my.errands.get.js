@@ -5,4 +5,10 @@ var filter = args['filter'];
 
 var myErrands = errands.getMyDocumentErrands(document, filter);
 model.myErrands = myErrands;
-model.myErrandsCount = myErrands.length;
+model.errandsCount = myErrands.length;
+
+if (myErrands.length > 0) {
+    var latestErrand = myErrands[myErrands.length - 1];
+    model.latestErrandNodeRef = latestErrand.nodeRef.toString();
+    model.latestErrandStartDate = latestErrand.properties["cm:created"];
+}

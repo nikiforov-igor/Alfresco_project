@@ -1,7 +1,7 @@
 <#escape x as x?js_string>
 {
-    "errandsIssuedByMeCount": ${errandsIssuedByMeCount},
-    "errandsIssuedByMe": [
+    "errandsCount": ${errandsCount},
+    "errands": [
         <#list errandsIssuedByMe as errand>
         {
             "nodeRef": "${errand.getNodeRef().toString()}",

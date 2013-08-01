@@ -3,6 +3,7 @@
 
 <script type="text/javascript">
     //<![CDATA[
+    var errands;
     (function() {
         function init() {
             new Alfresco.widget.DashletResizer("${id}", "document.tasks.dashlet");
@@ -13,7 +14,7 @@
                 {}
                 </#if>;
 
-            var errands = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
+            errands = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
                     {
                         itemType:"lecm-errands:document",
                         destination: LogicECM.module.Errands.SETTINGS.nodeRef
@@ -55,17 +56,17 @@
 
             <#if myErrandsData??>
             <div style="clear: both; padding-top: 10px;">
-               <div style="float:left;">${msg("dashlet.my.errands.assigned.count", myErrandsData.myErrandsCount)}</div>
+               <div style="float:left;">${msg("dashlet.my.errands.assigned.count", myErrandsData.errandsCount)}</div>
 
-                <#if myErrandsData.latestErrandNoderef??>
+                <#if myErrandsData.latestErrandNodeRef??>
                     <div style="float:right;">
-                        <a href="${url.context}/page/document?nodeRef=${myErrandsData.latestErrandNoderef}" style="padding-right: 30px;">${msg("dashlet.label.last.errand")}</a>${myErrandsData.latestErrandStartDate}
+                        <a href="${url.context}/page/document?nodeRef=${myErrandsData.latestErrandNodeRef}" style="padding-right: 30px;">${msg("dashlet.label.last.errand")}</a>${myErrandsData.latestErrandStartDate}
                     </div>
                 </#if>
             </div>
             </#if>
 
-            <div style="clear: both; padding-top: 10px;">${msg("dashlet.my.errands.assigned.by.me.count", errandsIssuedByMeData.errandsIssuedByMeCount)}</div>
+            <div style="clear: both; padding-top: 10px;">${msg("dashlet.my.errands.assigned.by.me.count", errandsIssuedByMeData.errandsCount)}</div>
 
         </div>
     </div>

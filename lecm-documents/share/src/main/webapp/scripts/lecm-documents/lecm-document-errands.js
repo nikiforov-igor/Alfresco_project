@@ -61,8 +61,8 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
 
             showErrands: function(response) {
                 this.listContainer.innerHTML = "";
-                if (response.json.myErrands.length > 0) {
-                    var results = response.json.myErrands;
+                if (response.json.errands.length > 0) {
+                    var results = response.json.errands;
                     for (var i = 0; i < results.length; i++) {
                         var errand = results[i];
                         var title = "";
@@ -79,9 +79,10 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                             }
                         }
                         var isImportant = (errand.isImportant == "false") ? "WORKFLOWTASKPRIORITY_LOW" : "WORKFLOWTASKPRIORITY_HIGH";
+                        var isImportantTitle = (errand.isImportant == "true") ? this.msg("errandslist.label.important") : "";
 
                         var detail = "<div class=\"workflow-task-item\">";
-                        detail += "<div class=\"workflow-task-list-picture " + isImportant + "\" title=\"" + this.msg("errandslist.label.important") + "\">&nbsp;</div>";
+                        detail += "<div class=\"workflow-task-list-picture " + isImportant + "\" title=\"" + isImportantTitle + "\">&nbsp;</div>";
                         detail += "<div style=\"float: left;\">";
                         detail += "<div>";
                         detail += "<div class=\"workflow-task-title workflow-task-list-left-column\" style=\"font-size: 16px;\">";

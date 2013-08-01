@@ -113,8 +113,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/my-errands",
                     dataObj: {
                         nodeRef: this.options.nodeRef,
+                        errandsUrl: "/lecm/errands/api/documentMyErrands",
+                        createButton: false,
                         htmlid: this.htmlid,
-                        filter: this.myErrandsState
+                        label: "my.errands"
                     },
                     successCallback: {
                         fn: function(response) {
@@ -132,11 +134,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             loadErrandsIssuedByMe: function () {
                 Alfresco.util.Ajax.request({
-                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/errands-issued-by-me",
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/my-errands",
                     dataObj: {
                         nodeRef: this.options.nodeRef,
-                        htmlid: this.htmlid,
-                        errandsIssuedByMeState: this.errandsIssuedByMeState
+                        errandsUrl: "/lecm/errands/api/documentErrandsIssuedByMe",
+                        createButton: true,
+                        htmlid: this.htmlid+"issued-by-me",
+                        label: "issued.by.me"
                     },
                     successCallback: {
                         fn: function(response) {

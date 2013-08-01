@@ -20,14 +20,19 @@
 </script>
 
 <div class="list-category">
-    <div class="list-category-title">${msg("errandslist.label.my.errands")}</div>
-    <div class="tasks-list-filter">
-    <#--Выводить список из настроек-->
-        <select id="${id}-errands-filter" style="margin-left: 13px;">
+    <div class="list-category-title">${msg("errandslist.label.${label}")}</div>
+    <div class="tasks-list-filter">        <select id="${id}-errands-filter" style="margin-left: 13px;">
             <option selected value="all">${msg("errandslist.option.all")}</option>
             <option value="active">${msg("errandslist.option.active")}</option>
             <option value="complete">${msg("errandslist.option.completed")}</option>
         </select>
+       <#if createButton??>
+        <#if createButton == "true">
+            <span class="lecm-dashlet-actions">
+                <a id="${id}-action-add" href="javascript:void(0);" onclick="errands.onAddErrandClick()" class="add" title="${msg("errandslist.add.errand.tooltip")}">${msg("errandslist.add.errand")}</a>
+            </span>
+        </#if>
+       </#if>
     </div>
     <div class="items" id="${id}-my-errands"></div>
 </div>
