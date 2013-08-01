@@ -154,10 +154,13 @@ LogicECM.module = LogicECM.module || {};
             if(!this.options.disabled)
             {
                 // Create picker button
+	            var buttonName = Dom.get(this.id + "-cntrl-tree-picker-button").name;
                 this.widgets.pickerButton =  new YAHOO.widget.Button(
                             this.id + "-cntrl-tree-picker-button",
                             { onclick: { fn: this.showTreePicker, obj: null, scope: this } }
                     );
+	            Dom.get(this.id + "-cntrl-tree-picker-button-button").name = buttonName;
+
                 if (this.options.showCreateNewLink) {
                     this.widgets.createNewButton =  new YAHOO.widget.Button(
                         this.id + "-cntrl-tree-picker-create-new-button",

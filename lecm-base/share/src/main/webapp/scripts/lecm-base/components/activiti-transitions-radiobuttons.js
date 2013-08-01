@@ -69,6 +69,8 @@ LogicECM.module = LogicECM.module || {};
 			// generate the hidden transitions field
 			this._generateTransitionsHiddenField();
 
+			YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+
 			// attempt to submit the form
 //			Alfresco.util.submitForm(p_obj.getForm());
 		}

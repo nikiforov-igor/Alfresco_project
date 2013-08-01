@@ -152,10 +152,10 @@
 
         <div class="autocomplete-block">
             <div id="${controlId}-autocomplete">
-                <input id="${controlId}-autocomplete-input" type="text" class="autocomplete-input"/>
+                <input id="${controlId}-autocomplete-input" name="${field.name}-autocomplete-input" type="text" class="autocomplete-input"/>
                 <div class="show-picker">
                     <span class="tree-picker-button">
-                        <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
+                        <input type="button" id="${controlId}-tree-picker-button" name="${field.name}-tree-picker-button" value="..."/>
                     </span>
                     <#if showCreateNewLink>
                     <span class="create-new-button">
