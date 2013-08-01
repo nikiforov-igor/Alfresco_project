@@ -181,6 +181,18 @@
 .WORKFLOWTASKPRIORITY_HIGH {
     background-image: url("/share/res/components/images/priority-high-16.png");
 }
+
+.errands-after {
+    color: #cd853f;
+}
+.errands-new {
+    color: #008000;
+}
+.errands-overdue {
+     color: red;
+ }
+
+
 .workflow-date {
     font-size: 12px;
     font-weight: bold;

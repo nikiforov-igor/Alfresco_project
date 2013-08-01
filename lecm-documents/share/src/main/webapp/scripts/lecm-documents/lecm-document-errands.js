@@ -65,17 +65,20 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                     var results = response.json.errands;
                     for (var i = 0; i < results.length; i++) {
                         var errand = results[i];
-                        var title = "";
+                        var status, statusClass;
                         if (errand.isExpired == "true") {
-                            title = this.msg("errandslist.label.overdue");
+                            status = this.msg("errandslist.label.overdue");
+                            statusClass = "errands-overdue";
                         } else {
                             var today = new Date();
                             var endDate = Date.parse(errand.dueDate);
                             var difference = (endDate.getTime()-today.getTime())/1000/60/24;
                             if (difference > 5) {
-                                title = this.msg("errandslist.label.new");
+                                status = this.msg("errandslist.label.new");
+                                statusClass = "errands-new";
                             } else {
-                                title = this.msg("errandslist.label.after");
+                                status = this.msg("errandslist.label.after");
+                                statusClass = "errands-after";
                             }
                         }
                         var isImportant = (errand.isImportant == "false") ? "WORKFLOWTASKPRIORITY_LOW" : "WORKFLOWTASKPRIORITY_HIGH";
@@ -88,7 +91,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         detail += "<div class=\"workflow-task-title workflow-task-list-left-column\" style=\"font-size: 16px;\">";
                         detail += "<a href=\"${url.context}/page/document?nodeRef="+ errand.nodeRef +"\">" + errand.title + ":</a>";
                         detail += "</div>";
-                        detail += "<span class=\"workflow-task-status\">" + title + "</span>";
+                        detail += "<span class=\"workflow-task-status "+ statusClass +"\">" + status + "</span>";
                         detail += "</div>";
                         detail += "<div style=\"clear: both;\"></div>";
                         detail += "<div class=\"workflow-task-description\">" + errand.description + "</div>";

@@ -21,7 +21,8 @@
 
 <div class="list-category">
     <div class="list-category-title">${msg("errandslist.label.${label}")}</div>
-    <div class="tasks-list-filter">        <select id="${id}-errands-filter" style="margin-left: 13px;">
+    <div class="tasks-list-filter">
+        <select id="${id}-errands-filter" style="margin-left: 13px;">
             <option selected value="all">${msg("errandslist.option.all")}</option>
             <option value="active">${msg("errandslist.option.active")}</option>
             <option value="complete">${msg("errandslist.option.completed")}</option>

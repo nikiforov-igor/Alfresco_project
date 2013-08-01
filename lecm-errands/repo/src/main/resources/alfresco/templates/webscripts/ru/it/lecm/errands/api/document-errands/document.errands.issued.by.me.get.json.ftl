@@ -1,12 +1,12 @@
-<#escape x as x?js_string>
+<#escape x as jsonUtils.encodeJSONString(x)!''>
 {
     "errandsCount": ${errandsCount},
     "errands": [
         <#list errandsIssuedByMe as errand>
         {
             "nodeRef": "${errand.getNodeRef().toString()}",
-            "description": "${errand.properties["lecm-errands:content"]}",
-            "title": "${errand.properties["lecm-errands:title"]}",
+            "description": "${errand.properties["lecm-errands:content"]?js_string}",
+            "title": "${errand.properties["lecm-errands:title"]?js_string}",
             "statusMessage": "${errand.properties["lecm-statemachine:status"]}",
             "dueDate": "${errand.properties["lecm-errands:limitation-date"]?string("dd/MM/yyyy")}",
             "startDate": "${errand.properties["cm:created"]?string("dd/MM/yyyy")}",
