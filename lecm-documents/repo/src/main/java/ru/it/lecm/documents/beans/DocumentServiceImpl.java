@@ -295,7 +295,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     @Override
-    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
+    public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
         List<NodeRef> records = new ArrayList<NodeRef>();
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
@@ -320,17 +320,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                 pathsFilter += (addOR ? " OR " : "") + "PATH:\"" + path + "//*\"";
                 addOR = true;
             }
-            query += " AND (" + pathsFilter + ")";
-        }
-
-        // Фильтр по датам
-        if (dateProperty != null) {
-            final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
-            final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
-
-            String property = dateProperty.toPrefixString(namespaceService);
-            property = property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-            query += " AND @" + property + ":\"" + MIN + " \"..\"" + MAX + "\"";
+            query += (query.length() > 0 ? " AND (": "(") + pathsFilter + ")";
         }
 
         // фильтр по статусам
@@ -344,12 +334,12 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                     statusesNotFilter += " @lecm\\-statemachine\\:status:\"" + status.replace("!", "").trim() + "\"";
                 }
             }
-            query += (!statusesFilter.isEmpty() ? (" AND (" + statusesFilter + ")") : "")  +
+            query += (!statusesFilter.isEmpty() ? (query.length() > 0 ? " AND (": "(") + ("" + statusesFilter + ")") : "")  +
                     (!statusesNotFilter.isEmpty() ? (" AND NOT (" + statusesNotFilter  + ")") : "");
         }
 
         if (filterQuery != null && filterQuery.length() > 0) {
-            query += " AND (" + filterQuery + ") ";
+            query += (query.length() > 0 ? " AND (": "(") + filterQuery + ") ";
         }
 
         if (sortDefinition != null && !sortDefinition.isEmpty()){

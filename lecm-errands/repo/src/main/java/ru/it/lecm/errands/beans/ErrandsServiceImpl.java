@@ -283,7 +283,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
        status.add("В работе");
        status.add("На доработке");
 
-        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, null, null, null, paths, status, null, sort)) {
+        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
             if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
                 sortingErrands.add(nodeRef);
             }

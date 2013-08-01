@@ -1,7 +1,5 @@
 package ru.it.lecm.contracts.beans;
 
-import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -10,7 +8,6 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -44,6 +41,7 @@ public class ContractsBeanImpl extends BaseBean {
 
     private SearchService searchService;
     private DocumentService documentService;
+    private NamespaceService namespaceService;
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
@@ -140,7 +138,7 @@ public class ContractsBeanImpl extends BaseBean {
             }
 
             if (employeesFilter.length() > 0) {
-                filterQuery += " (" + employeesFilter + ") ";
+                filterQuery +=  employeesFilter;
             }
         }
 
@@ -152,10 +150,19 @@ public class ContractsBeanImpl extends BaseBean {
                 docsFilter += (addOR ? " OR " : "") + "ID:" + docRef.toString().replace(":", "\\:");
                 addOR = true;
             }
-            filterQuery += " AND (" + docsFilter + ")";
+            filterQuery += (filterQuery.length() > 0 ? " AND (" : "(") + docsFilter + ")";
         }
 
-        return documentService.getDocumentsByFilter(types, dateProperty, begin, end, paths, statuses, filterQuery, null);
+        // Фильтр по датам
+        if (dateProperty != null) {
+            final String MIN = begin != null ? DocumentService.DateFormatISO8601.format(begin) : "MIN";
+            final String MAX = end != null ? DocumentService.DateFormatISO8601.format(end) : "MAX";
+
+            String property = dateProperty.toPrefixString(namespaceService);
+            property = property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+            filterQuery += (filterQuery.length() > 0 ? " AND " : "") + "@" + property + ":\"" + MIN + " \"..\"" + MAX + "\"";
+        }
+        return documentService.getDocumentsByFilter(types, paths, statuses, filterQuery, null);
     }
 
 	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
@@ -205,5 +212,9 @@ public class ContractsBeanImpl extends BaseBean {
 
     public String getAuthorProperty() {
         return documentService.getAuthorProperty(TYPE_CONTRACTS_DOCUMENT);
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
     }
 }

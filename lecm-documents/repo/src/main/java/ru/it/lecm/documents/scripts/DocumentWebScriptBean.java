@@ -231,7 +231,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
                 }
             }
         }
-        return documentService.getDocumentsByFilter(qNameTypes, null, null, null,
+        return documentService.getDocumentsByFilter(qNameTypes,
                 getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), employeesFilter, null).size();
     }
 

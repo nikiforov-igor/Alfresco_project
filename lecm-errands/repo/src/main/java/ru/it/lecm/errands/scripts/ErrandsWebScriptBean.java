@@ -1,7 +1,6 @@
 package ru.it.lecm.errands.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.namespace.NamespaceService;
@@ -10,15 +9,12 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.errands.beans.ErrandsServiceImpl;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -32,8 +28,6 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     private OrgstructureBean orgstructureService;
     private DocumentService documentService;
     private IWorkCalendar workCalendar;
-
-    public static final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -146,12 +140,12 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         final String PROP_EXEC_DATE =
                 ErrandsServiceImpl.PROP_ERRANDS_LIMITATION_DATE.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
 
-        String issuedFilterQuery = "(@" + PROP_ITINITATOR + ":\"" + currentEmployee.toString().replace(":", "\\:") + "\")";
+        String issuedFilterQuery = "@" + PROP_ITINITATOR + ":\"" + currentEmployee.toString().replace(":", "\\:") + "\"";
 
         if (filterType != null && !"".equals(filterType)) {
                 switch (IssuedByMeEnum.valueOf(filterType.toUpperCase())) {
                     case EXPIRED: {
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " (@" + PROP_EXPIRED + ":true) ";
+                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_EXPIRED + ":true ";
                         break;
                     }
                     case EXECUTION: {
@@ -171,10 +165,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
                         Date end = calendar.getTime();
 
-                        final String MIN = DateFormatISO8601.format(now);
-                        final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
+                        final String MIN = DocumentService.DateFormatISO8601.format(now);
+                        final String MAX = end != null ? DocumentService.DateFormatISO8601.format(end) : "MAX";
 
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " (@" + PROP_EXEC_DATE + ":\"" + MIN + " \"..\"" + MAX + "\")";
+                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_EXEC_DATE + ":\"" + MIN + " \"..\"" + MAX + "\"";
 
                         break;
                     }
@@ -187,7 +181,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                 }
         }
 
-        List<NodeRef> refs = documentService.getDocumentsByFilter(types, null, null, null, paths, statuses, issuedFilterQuery, sort);
+        List<NodeRef> refs = documentService.getDocumentsByFilter(types, paths, statuses, issuedFilterQuery, sort);
         return createScriptable(refs);
     }
 }

@@ -5,6 +5,7 @@ import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
@@ -42,6 +43,7 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
 
     private NodeService nodeService;
     private DocumentService documentService;
+    private NamespaceService namespaceService;
 
     public EveryDayStatusShedule() {
         super();
@@ -172,7 +174,16 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
 
         filters = "@lecm\\-errands\\:just\\-in\\-time:\"true\""+ " AND " + "@lecm\\-errands\\:is\\-expired:\"false\"";
 
-        List<NodeRef> errandsDocuments = documentService.getDocumentsByFilter(types, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, null, now, paths, statuses, filters, null);
+        // Фильтр по датам
+        QName dateProperty = ErrandsService.PROP_ERRANDS_LIMITATION_DATE;
+        final String MIN = "MIN";
+        final String MAX = DocumentService.DateFormatISO8601.format(now);
+
+        String property = dateProperty.toPrefixString(namespaceService);
+        property = property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+        filters += " AND @" + property + ":\"" + MIN + " \"..\"" + MAX + "\"";
+
+        List<NodeRef> errandsDocuments = documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
 
         // в списке подписок у которых дата исполнения меньше текущей
         List<NodeRef> appropErrands = new ArrayList<NodeRef>();
@@ -183,5 +194,9 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
             }
         }
         return appropErrands;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
     }
 }

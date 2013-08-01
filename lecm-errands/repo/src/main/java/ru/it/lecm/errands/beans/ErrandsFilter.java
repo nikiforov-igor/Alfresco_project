@@ -1,14 +1,12 @@
 package ru.it.lecm.errands.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentFilter;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,8 +19,6 @@ import java.util.List;
  */
 public class ErrandsFilter extends DocumentFilter {
     final private static Logger logger = LoggerFactory.getLogger(ErrandsFilter.class);
-
-    public static final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
     private IWorkCalendar workCalendar;
 
@@ -134,8 +130,8 @@ public class ErrandsFilter extends DocumentFilter {
 
                         Date end = calendar.getTime();
 
-                        final String MIN = DateFormatISO8601.format(now);
-                        final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
+                        final String MIN = DocumentService.DateFormatISO8601.format(now);
+                        final String MAX = end != null ? DocumentService.DateFormatISO8601.format(end) : "MAX";
 
                         query += (query.length() > 0 ? " AND " : "") + " (@" + PROP_EXEC_DATE + ":\"" + MIN + " \"..\"" + MAX + "\")";
                         break;

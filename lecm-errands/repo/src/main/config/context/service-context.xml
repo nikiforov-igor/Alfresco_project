@@ -299,6 +299,7 @@
         <property name="runAsUser">
             <value>System</value>
         </property>
+        <property name="namespaceService" ref="namespaceService"/>
         <property name="documentService" ref="documentService"/>
     </bean>
 

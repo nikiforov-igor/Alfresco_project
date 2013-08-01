@@ -62,6 +62,7 @@
 	    <property name="documentService" ref="documentService"/>
 	    <property name="serviceRegistry" ref="ServiceRegistry"/>
 	    <property name="authService" ref="authenticationService"/>
+        <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
     <bean id="contractsScript" parent="baseScript" class="ru.it.lecm.contracts.script.ContractsWebScriptBean"
