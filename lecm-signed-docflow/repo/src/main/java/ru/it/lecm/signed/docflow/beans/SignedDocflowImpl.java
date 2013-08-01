@@ -5,13 +5,13 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.signed.docflow.api.SignedDocflowBean;
+import ru.it.lecm.signed.docflow.api.SignedDocflow;
 
 /**
  *
  * @author vlevin
  */
-public class SignedDocflowBeanImpl extends BaseBean implements SignedDocflowBean {
+public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 	public void init() {
 		PropertyCheck.mandatory(this, "nodeService", nodeService);

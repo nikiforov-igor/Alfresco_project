@@ -10,7 +10,7 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.signed.docflow.api.SignedDocflowBean;
+import ru.it.lecm.signed.docflow.api.SignedDocflow;
 
 /**
  *
@@ -18,9 +18,9 @@ import ru.it.lecm.signed.docflow.api.SignedDocflowBean;
  */
 public class IsDocflowableWebscript extends DeclarativeWebScript {
 
-	private SignedDocflowBean signedDocflowService;
+	private SignedDocflow signedDocflowService;
 
-	public void setSignedDocflowService(SignedDocflowBean signedDocflowService) {
+	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
 		this.signedDocflowService = signedDocflowService;
 	}
 

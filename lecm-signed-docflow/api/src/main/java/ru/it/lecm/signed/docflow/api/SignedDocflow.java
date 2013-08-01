@@ -7,7 +7,7 @@ import org.alfresco.service.namespace.QName;
  *
  * @author vlevin
  */
-public interface SignedDocflowBean {
+public interface SignedDocflow {
 
 	String SIGNED_DOCFLOW_PREFIX = "lecm-signed-docflow";
 	String SIGNED_DOCFLOW_NAMESPACE = "http://www.it.ru/lecm/model/signed-docflow/1.0";

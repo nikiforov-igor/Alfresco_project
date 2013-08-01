@@ -18,7 +18,7 @@
 		</property>
 	</bean>
 
-	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowBeanImpl" parent="baseBean"
+	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean"
 		  depends-on="lecm.signed-docflow.model-bootstrap" init-method="init">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
