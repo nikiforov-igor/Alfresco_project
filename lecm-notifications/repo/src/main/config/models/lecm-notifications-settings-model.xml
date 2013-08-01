@@ -16,8 +16,8 @@
 	</namespaces>
 
 	<types>
-		<type name="lecm-notf-settings:base">
-			<title>Base notification settings</title>
+		<type name="lecm-notf-settings:user">
+			<title>Notifications user settings</title>
 			<parent>cm:cmobject</parent>
 			<associations>
 				<!-- Ссылка на каналы доставки-->
@@ -33,16 +33,6 @@
 					</target>
 				</association>
 			</associations>
-		</type>
-
-		<type name="lecm-notf-settings:global">
-			<title>Notifications global settings</title>
-			<parent>lecm-notf-settings:base</parent>
-		</type>
-
-		<type name="lecm-notf-settings:user">
-			<title>Notifications user settings</title>
-			<parent>lecm-notf-settings:base</parent>
 		</type>
 	</types>
 </model>
