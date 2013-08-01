@@ -12,6 +12,7 @@ import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.datacontract.schemas.x2004.x07.uCloudGateProxy.ArrayOfOperatorInfo;
 import org.datacontract.schemas.x2004.x07.uCloudGateProxy.OperatorInfo;
 import org.datacontract.schemas.x2004.x07.uCloudGateProxyExceptions.GateResponse;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.unicloud.gate.IGateWcfService;
@@ -100,6 +101,8 @@ public class UnicloudService {
 		}
 	}
 
-	public void AuthenticateByCertificate(final String regData, final String regSign, final String authData, final String authSign) {
+	public JSONObject authenticateByCertificate(final JSONObject json) {
+		logger.debug("authenticateByCertificate");
+		return json;
 	}
 }
