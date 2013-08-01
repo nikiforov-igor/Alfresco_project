@@ -4,3 +4,4 @@
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata.css" />
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata-form.css" />
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata-form-edit.css" />
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-main-form.css" />

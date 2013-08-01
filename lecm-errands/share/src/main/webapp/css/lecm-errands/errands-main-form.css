@@ -1,0 +1,87 @@
+.errands-main-form {
+    width: 93%;
+    margin: 20px 0 0 3.99%;
+}
+.yui-skin-lecmTheme div.metadata-form.errands-main-form .form-fields {
+    width: auto;
+    padding-left: 0;
+    color: #333;
+    font-size: 14px;
+    font-weight: normal;
+    border: none;
+}
+.errands-main-form .form-fields .title {
+    float: left;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.errands-main-form .form-fields .statuses {
+    float: right;
+}
+.errands-main-form .form-fields .statuses > div.form-field {
+    margin-left: 30px;
+}
+.errands-main-form .form-fields .main-info {
+    line-height: 2;
+}
+.errands-main-form .form-fields .errand-content {
+    border: 1px solid #888;
+    border-width: 1px 0;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 7px 0 20px 20px;
+    padding: 5px 0;
+}
+.errands-main-form .form-fields .times {
+    color: #999;
+}
+.errands-main-form .form-fields .times span {
+    color: #333;
+    font-weight: bold;
+}
+.errands-main-form .form-fields .data-list-block {
+    margin: 10px;
+}
+.errands-main-form .form-fields .data-list-block span.heading {
+    font-size: 16px;
+}
+.errands-main-form .form-fields .data-list-block span.yui-button {
+    margin: 0 0 -5px 30px;
+}
+.errands-main-form .form-fields .data-list-block ul.data-list {
+    margin: 5px 0 0 30px;
+}
+.errands-main-form .form-fields .data-list-block ul.data-list li {
+    line-height: 30px;
+}
+.errands-main-form .form-fields .data-list-block ul.data-list li span {
+    margin-left: 10px;
+    color: #999;
+}
+.errands-main-form .line {
+    width: 100%;
+    height: 2px;
+    background: #898989;
+    margin: 20px 0;
+}
+.errands-main-form .form-fields .block .title {
+    float: none;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.errands-main-form .form-fields {
+
+}
+.errands-main-form .form-fields {
+
+}
+.errands-main-form .form-fields {
+
+}
+.errands-main-form {
+
+}
+.errands-main-form {
+
+}
