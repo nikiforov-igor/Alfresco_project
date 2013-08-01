@@ -130,6 +130,15 @@
 			</properties>
 		</component>
 
+		<!-- Digital signing -->
+		<component>
+			<region-id>document-signing</region-id>
+			<url>/lecm/components/document/attachment/signing</url>
+			<properties>
+				<nodeRef>{nodeRef}</nodeRef>
+			</properties>
+		</component>
+
 		<!-- Uploaders -->
 		<component>
 			<region-id>html-upload</region-id>

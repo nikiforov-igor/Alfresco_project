@@ -26,6 +26,7 @@
 		</div>
 		<div id="doc-attach-right" class="yui-u bordered-panel">
 			<@region id="document-actions" scope="template"/>
+			<@region id="document-signing" scope="template"/>
             <@region id="document-tags" scope="template"/>
             <@region id="document-metadata" scope="template"/>
             <@region id="document-versions" scope="template"/>
