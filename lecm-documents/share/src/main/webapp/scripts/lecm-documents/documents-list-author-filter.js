@@ -42,6 +42,8 @@
                 this.widgets.author.set("label", this.msg("filter.all"));
                 this.widgets.author.value = "all";
 
+                this.widgets.applyButton = Alfresco.util.createYUIButton(this, "applyButton", this.onApplyButtonClick);
+
                 this.manager.preferences.request(this.manager._buildPreferencesKey(),
                     {
                         successCallback: {
@@ -92,13 +94,24 @@
 
             onApplyButtonClick: function () {
                 var context = this;
+
+                this._showSplash();
+
+
                 var success = {
                     fn: function () {
                         location.hash = '#filter=' + context.PREF_FILTER_ID + "|" + context.options.docType + "/" + context.widgets.author.value;
                         window.location.reload(true);
                     }
                 } ;
-                this.manager.preferences.set(this.manager._buildPreferencesKey(this.PREF_FILTER_ID), context.options.docType + "/" + context.widgets.author.value, {successCallback: success});
+
+                var failure = {
+                    fn: function () {
+                        context._hideSplash();
+                    }
+                } ;
+
+                this.manager.preferences.set(this.manager._buildPreferencesKey(this.PREF_FILTER_ID), context.options.docType + "/" + context.widgets.author.value, {successCallback: success, failureCallback: failure});
             },
 
             onInitDataGrid: function BaseToolbar_onInitDataGrid(layer, args) {
@@ -107,6 +120,19 @@
                     this.documentList = datagrid;
                     this.deferredListPopulation.fulfil("initDataGrid");
                 }
+            },
+
+            _showSplash: function () {
+                this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+                    {
+                        text: Alfresco.util.message("label.loading"),
+                        spanClass: "wait",
+                        displayTime: 0
+                    });
+            } ,
+
+            _hideSplash: function () {
+                YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
             }
         });
 })();

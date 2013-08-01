@@ -27,6 +27,8 @@
 
             errandsList: null,
 
+            splashScreen: null,
+
             deferredListPopulation: {},
 
             onReady: function () {
@@ -124,6 +126,7 @@
             onApplyButtonClick: function () {
                 var context = this;
                 var newValue = this.widgets.assign.value + "/" + this.widgets.date.value + "/" + this.widgets.importantCheckBox.checked + "/" + this.widgets.controlCheckBox.checked;
+                this._showSplash();
 
                 var success = {
                     fn: function () {
@@ -131,7 +134,13 @@
                         window.location.reload(true);
                     }
                 } ;
-                this.manager.preferences.set(this.manager._buildPreferencesKey(this.PREF_FILTER_ID), newValue, {successCallback: success});
+
+                var failure = {
+                    fn: function () {
+                        context._hideSplash();
+                    }
+                } ;
+                this.manager.preferences.set(this.manager._buildPreferencesKey(this.PREF_FILTER_ID), newValue, {successCallback: success, failureCallback: failure});
             },
 
             onInitDataGrid: function BaseToolbar_onInitDataGrid(layer, args) {
@@ -140,6 +149,19 @@
                     this.errandsList = datagrid;
                     this.deferredListPopulation.fulfil("initDataGrid");
                 }
+            } ,
+
+            _showSplash: function () {
+                this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+                    {
+                        text: Alfresco.util.message("label.loading"),
+                        spanClass: "wait",
+                        displayTime: 0
+                    });
+            } ,
+
+            _hideSplash: function () {
+                YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
             }
         });
 })();
