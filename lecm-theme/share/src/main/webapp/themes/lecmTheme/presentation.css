@@ -2419,3 +2419,10 @@ span.person a div.description:empty {
     margin: 10px 0 20px;
     background: #aaa;
 }
+
+/* Текст, обрезанный многоточием */
+.text-cropped {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

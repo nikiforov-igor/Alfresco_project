@@ -1,3 +1,6 @@
+<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
+<#include "/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-container.ftl">
+
 <#assign id = args.htmlid?js_string>
 
 <#if node??>
@@ -157,19 +160,43 @@
                             <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                 ${link.name!""}
                             </a>
-                            <span>Описание какое-то, пока одно для всех</span>
+                            <span class="descr">Описание какое-то, пока одно для всех</span>
                         </li>
                     </#list>
                 </#if>
             </ul>
         </div>
         <div id="${id}-coexecs" class="data-list-block">
-            <span class="heading">Соисполнители<span class="count"></span></span>
-            <ul class="data-list"></ul>
+            <#assign coexecList = []/>
+            <#if coexecs?? && coexecs.items??>
+                <#assign coexecList = coexecs.items/>
+            </#if>
+            <span class="heading">Соисполнители<span class="count"> (${coexecList?size})</span></span>
+            <ul class="data-list persons-list">
+                <#if linksList?size gt 0>
+                    <#list coexecList as coexec>
+                        <li>
+                            <div class="avatar">
+                                <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${coexec.employeeRef}" alt="Avatar" />
+                            </div>
+                            <div class="person">
+                                <div>${view.showViewLink(coexec.employeeName, coexec.employeeRef, "logicecm.employee.view")}</div>
+                                <div class="position">${coexec.employeePosition}</div>
+                                <div class="coexec-ref" style="display: none">${coexec.employeeRef}</div>
+                            </div>
+                        </li>
+                    </#list>
+                </#if>
+            </ul>
         </div>
         <div class="line"></div>
         <#-- РАБОТА НАД ПОРУЧЕНИЕМ -->
         <div id="${id}-exec" class="block">
+            <div class="dnd-uploader">
+                <#assign uploadDirectoryPath = "">
+                <#assign directoryName = "1">
+                <@renderDndUploaderContainerHTML "fieldHtmlId" uploadDirectoryPath directoryName/>
+            </div>
             <div class="title">Работа над поручением</div>
             <div id="${id}-exec-attachments" class="data-list-block">
                 <#assign attsList = []/>
@@ -185,7 +212,7 @@
                             <li title="${attachment.name!""}">
                                 <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
-                                ${attachment.name!""}
+                                    ${attachment.name!""}
                                 </a>
                             </li>
                         </#list>
@@ -214,13 +241,67 @@
                                 <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                     ${link.name!""}
                                 </a>
-                                <span>Описание какое-то, пока одно для всех</span>
+                                <span class="descr">Описание какое-то, пока одно для всех</span>
                             </li>
                         </#list>
                     </#if>
                 </ul>
             </div>
-
+            <div id="${id}-exec-child-errands" class="data-list-block">
+                <#assign coexecList = []/>
+                <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ДОЧЕРНИЕ ПОРУЧЕНИЯ! (участники временно) -->
+                <#if coexecs?? && coexecs.items??>
+                    <#assign coexecList = coexecs.items/>
+                </#if>
+                <span class="heading">Дочерние поручения<span class="count"> (${coexecList?size})</span></span>
+                <span id="${id}-exec-child-errands-add" class="yui-button yui-push-button">
+                    <span class="first-child">
+                        <button type="button">Добавить поручение</button>
+                    </span>
+                </span>
+                <ul class="data-list persons-list">
+                    <#if linksList?size gt 0>
+                        <#list coexecList as coexec>
+                            <li>
+                                <div class="avatar">
+                                    <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${coexec.employeeRef}" alt="Avatar" />
+                                </div>
+                                <div class="person">
+                                    <div>
+                                        ${view.showViewLink(coexec.employeeName, coexec.employeeRef, "logicecm.employee.view")}
+                                        получил поручение
+                                        <span class="text-cropped"><a href="javascript:void(0);">Некое очень важное поручение</a></span>
+                                    </div>
+                                    <div class="descr">
+                                        Срок исполнения <span>5 июня 2013г.</span>
+                                    </div>
+                                </div>
+                            </li>
+                        </#list>
+                    </#if>
+                </ul>
+            </div>
+            <div id="${id}-exec-report" class="exec-report">
+                <form>
+                    <span class="heading">Отчет об исполнении</span> <br/>
+                    <div>
+                        <textarea rows="" cols=""></textarea>
+                    </div>
+                    <div>
+                        <span id="${id}-exec-child-errands-add" class="yui-button yui-push-button">
+                            <span class="first-child">
+                                <button type="submit">Сохранить</button>
+                            </span>
+                        </span>
+                        <br/>
+                        <span id="${id}-exec-child-errands-add" class="yui-button yui-push-button">
+                            <span class="first-child">
+                                <button type="reset">Очистить</button>
+                            </span>
+                        </span>
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="line"></div>
         <#-- КОНТРОЛЬ ИСПОЛНЕНИЯ -->
@@ -240,7 +321,7 @@
                             <li title="${attachment.name!""}">
                                 <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
-                                ${attachment.name!""}
+                                    ${attachment.name!""}
                                 </a>
                             </li>
                         </#list>

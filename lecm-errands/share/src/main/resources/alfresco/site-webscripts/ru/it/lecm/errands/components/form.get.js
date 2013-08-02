@@ -14,6 +14,11 @@ function main() {
         model.attachments = atts;
     }
 
+    var coexecs = getCoexecutors(model.nodeRef);
+    if (coexecs != null) {
+        model.coexecs = coexecs;
+    }
+
     model.limitDate = new Date(nodeDetails.item.node.properties["lecm-errands:limitation-date"]["value"]);
 }
 
@@ -24,6 +29,16 @@ function getAttachments(nodeRef, defaultValue) {
         if (defaultValue !== undefined) {
             return defaultValue;
         }
+        return null;
+    }
+    return eval('(' + result + ')');
+}
+function getCoexecutors(nodeRef) {
+    //todo: change members to coexecutors
+    var url = '/lecm/document/api/getMembers?nodeRef=' + nodeRef + "&skipCount=0&loadCount=10";
+    var result = remote.connect("alfresco").get(url);
+
+    if (result.status != 200) {
         return null;
     }
     return eval('(' + result + ')');
