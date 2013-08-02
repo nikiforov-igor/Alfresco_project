@@ -109,7 +109,6 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                     }
                 }
                 if (this.options.anchorId != "") {
-//                    this.scrollTo(Dom.get(this.options.anchorId),true);
                     Dom.get(this.options.anchorId).scrollIntoView();
                 }
             }
