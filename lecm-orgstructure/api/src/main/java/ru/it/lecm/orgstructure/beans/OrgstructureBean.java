@@ -85,6 +85,11 @@ public interface OrgstructureBean {
 
 	QName TYPE_POSITION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "position");
 	QName TYPE_ORGANIZATION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "organization");
+
+	/**
+	 * &lt;property name="lecm-orgstr:org-tin"&gt;
+	 */
+	QName PROP_ORG_TIN = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-tin");
 	/**
 	 * Получение директории Организация.
 	 * Если такой узел отсутствует - он НЕ создаётся.
@@ -573,17 +578,17 @@ public interface OrgstructureBean {
 	 */
 	boolean isCurrentUserTheSystemUser();
 	String getEmployeeLogin(NodeRef employee);
-        
+
         public Set<NodeRef> getEmployeeDirectRoles(NodeRef employeeRef);
-        
+
         public Set<NodeRef> getEmployeeUnitRoles(NodeRef employeeRef);
-        
+
         public Set<NodeRef> getEmployeeWGRoles(NodeRef employeeRef);
-                
-        public Set<NodeRef> getEmployeeDPRoles(NodeRef employeeRef); 
+
+        public Set<NodeRef> getEmployeeDPRoles(NodeRef employeeRef);
 
 	List<NodeRef> getEmployeeRoles(NodeRef employeeRef);
-        
+
         Map<NodeRef, List<NodeRef>> getEmployeeDelegatedRolesWithOwner(NodeRef employeeRef);
 
     List<NodeRef> getEmployeeRoles(NodeRef employeeRef, boolean includeDelegatedRoles);
