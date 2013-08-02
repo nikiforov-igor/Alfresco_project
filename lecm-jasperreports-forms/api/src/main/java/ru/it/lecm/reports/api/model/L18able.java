@@ -32,7 +32,7 @@ public interface L18able {
 	 * @param locale локаль (будет нормирована: см. getNormalizedLocale)
 	 * @return перевевёденное значение для локали, если не найдено локали в l18items - поднимается исключение.
 	 */
-	public String getStrict(String locale);
+	String getStrict(String locale);
 
 
 	/**
@@ -43,6 +43,7 @@ public interface L18able {
 	 * @param locale
 	 * @return перевевёденное значение для указанной локали
 	 */
-	public String get(String locale, String l18default);
+	String get(String locale, String l18default);
 
+	String getDefault(); // тоже что и get(null, "");
 }

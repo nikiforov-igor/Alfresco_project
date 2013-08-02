@@ -26,6 +26,11 @@ public class FlagsExtendableImpl implements FlagsExtendable {
 		return this.flags;
 	}
 
+	/** @NOTE: for reflection */
+	public Set<NamedValue> getFlags() {
+		return flags();
+	}
+
 	public void setFlags(Set<NamedValue> flags) {
 		this.flags = flags;
 	}

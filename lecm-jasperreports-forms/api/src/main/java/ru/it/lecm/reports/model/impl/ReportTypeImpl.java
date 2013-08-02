@@ -3,7 +3,7 @@ package ru.it.lecm.reports.model.impl;
 import ru.it.lecm.reports.api.model.ReportType;
 
 /**
- * Тип отчёта. Файктически на 07/2013 их два: Jasper и OOffice.
+ * Тип отчёта. Фактически на 07/2013 их два: Jasper и OOffice.
  * @author rabdullin
  *
  */

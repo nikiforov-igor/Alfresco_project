@@ -85,12 +85,19 @@ public class XmlHelper {
 	public static List<Node> findNodesList(Node cur, String tag, String attr, String val)
 	{
 		if (cur == null) return null;
+
+		/* были проблемы с поиском: ничего не находит (!?) внутри любых узлов не верхнего уровня
 		final XPathEvaluator xpath = new XPathEvaluatorImpl();
+		// v1:
 		String query = tag;
 		if (attr != null && val != null)
 			query += "[@" + attr + "='" + val + "']";
+		// v2:
+		// String query = String.format( "//target[@name='%s']", tag);
+		// if (attr != null && val != null)
+		// 	query += "/property[@" + attr + "='" + val + "']";
 		final XPathResult result = (XPathResult) xpath.evaluate(query,
-				cur, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
+				cur, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 		final List<Node> nodes = new ArrayList<Node>();
 		while (true) {
 			final Node node  = result.iterateNext();
@@ -98,6 +105,48 @@ public class XmlHelper {
 			nodes.add(node);
 		}
 		return (!nodes.isEmpty()) ? nodes : null;
+		*/
+
+		final List<Node> result = new ArrayList<Node>();
+		// почленный поиск ...
+		if (cur.getChildNodes() != null) {
+			for( int i = 0; i < cur.getChildNodes().getLength(); i++) {
+				final Node item = cur.getChildNodes().item(i);
+				if ( tag == null || tag.equals(item.getNodeName())) {
+					// по названию подходит - проверим атрибут ...
+					if (hasAttribute(item, attr, val)) {
+						result.add(item); // FOUND
+					}
+				}
+			}
+		}
+		return (result.isEmpty()) ? null : result;
+	}
+
+
+	/**
+	 * Проверить содержит ли узел указанный атрибут
+	 * @param item
+	 * @param attr искомое название атрибута, если NULL, то всегда подходит.
+	 * @param val значение атрибута (пустая строка эквивалентна null и наоборот)
+	 * @return true, если содержит и false иначе, для искомого атрибута NULL, результат TRUE.
+	 */
+	public static boolean hasAttribute(Node item, String attr, String val) {
+		if (item == null) 
+			return false; // NOT FOUND
+
+		if (attr == null)
+			return true; // OK
+
+		if (!item.hasAttributes()) 
+			return false; // NOT FOUND
+
+		final Node attrNode = item.getAttributes().getNamedItem(attr);
+		if (attrNode != null) { // проверка значения ...
+			if ( Utils.coalesce(val, "").equals( Utils.coalesce( attrNode.getNodeValue(), "")) )
+				return true; // FOUND
+		}
+		return false; // NOT FOUND
 	}
 
 
@@ -119,7 +168,31 @@ public class XmlHelper {
 	 * (!) Если узлов с указанным именем окажется более одного поднимается исключение
 	 */
 	public static Element findNodeByName(Node cur, String tag) {
-		return findNodeByName( cur, tag, null, null);
+		// return findNodeByName( cur, tag, null, null);
+		final Element result = findNodeByName( cur, tag, null, null);
+
+//		// NOTE: DEBUG CHECK
+//		{ // сравнение с почленным поиском ...
+//			final Node r2 = findNodeByName2(cur, tag);
+//			if (r2 != result)
+//				throw new RuntimeException( String.format( "Invalid XML scan routine: fail to find '%s' at node '%s'", tag, cur));
+//		}
+
+		return result;
+	}
+
+	/** альтернативный поиск */
+	static Node findNodeByName2(Node cur, String tag) {
+		// почленный поиск ...
+		if (cur != null && cur.getChildNodes() != null) {
+			for( int i = 0; i < cur.getChildNodes().getLength(); i++) {
+				final Node item = cur.getChildNodes().item(i);
+				if ( tag == null || tag.equals(item.getNodeName())) {
+					return item; // FOUND
+				}
+			}
+		}
+		return null; // NOT FOUND
 	}
 
 	/**
@@ -405,7 +478,7 @@ public class XmlHelper {
 		return out;
 	}
 
-	public static Document createDOMDocument(InputStream inputStream) {
+	public static Document parseDOMDocument(InputStream inputStream) {
 		Document document = null;
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -439,9 +512,9 @@ public class XmlHelper {
 	 * @param source source file according to that <code>Document</code> will be created
 	 * @return Document instance
 	 */
-	public static Document createDOMDocument(ByteArrayOutputStream source) {
-		InputStream inputStream = new ByteArrayInputStream(source.toByteArray());
-		return createDOMDocument(inputStream);
+	public static Document parseDOMDocument(ByteArrayOutputStream source) {
+		final InputStream inputStream = new ByteArrayInputStream(source.toByteArray());
+		return parseDOMDocument(inputStream);
 	}
 
 	/**

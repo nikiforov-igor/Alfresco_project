@@ -28,7 +28,7 @@
 
 	<bean id="reportDAOBean" class="ru.it.lecm.reports.model.DAO.ReportDAOImpl">
 		<property name="services" ref="wksKeeper"/>
-        <property name="namespaceService" ref="namespaceService"/>
+		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<bean id="reportsManager" class="ru.it.lecm.reports.beans.ReportsManagerImpl"
@@ -37,8 +37,9 @@
 		<property name="reportDAO" ref="reportDAOBean"/>
 		<property name="reportGenerators[JASPER]" ref="jasperReportGenerator"/>
 		<property name="descriptors[0]" ref="jasperTemplate_DocFlowCounters" />
-		<property name="defaultTemplate" value="repoGenTemplate.jrxml.gen"/>
-        <property name="namespaceService" ref="namespaceService"/>
+		<property name="defaultGenTemplate" value="jreportCommonTemplate.jrxml.gen"/>
+		<property name="defaultGenReportType" value="JASPER"/>
+		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.forms.jasper.form.get" class="ru.it.lecm.forms.jasperforms.JasperFormProducer"
@@ -260,9 +261,9 @@
 		  -->
 	</bean>
 
-    <bean id="webscript.ru.it.lecm.reports.rptmanager.dsxmlBytes.get"
-          class="ru.it.lecm.reports.xml.GetXmlConfig"
-          parent="webscript">
-        <property name="reportsManager" ref="reportsManager"/>
-    </bean>
+	<bean id="webscript.ru.it.lecm.reports.rptmanager.dsxmlBytes.get"
+			class="ru.it.lecm.reports.xml.GetXmlConfig"
+			parent="webscript">
+		<property name="reportsManager" ref="reportsManager"/>
+	</bean>
 </beans>

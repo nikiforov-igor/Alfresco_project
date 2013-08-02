@@ -76,7 +76,7 @@ public class L18Value implements L18able {
 		if (locale == null || locale.length() == 0)
 			return null;
 		if (!locale.contains("-") && !locale.contains("_"))
-			locale += "-"+ locale;
+			locale = locale.toLowerCase() + "_"+ locale.toUpperCase();
 		return locale.toUpperCase();
 	}
 
@@ -89,10 +89,15 @@ public class L18Value implements L18able {
 	 * Единственное значение в l18items (с любым ключом-локалью) - тоже будет приниматься как значение по-умолчанию.
 	 * @return
 	 */
+	@Override
 	public Map<String, String> getL18items() {
 		return l18items;
 	}
 
+	@Override
+	public String getDefault() {
+		return get( null, null);
+	}
 
 	/**
 	 * Зарегистрировать перевод для указанной локали.
@@ -110,6 +115,7 @@ public class L18Value implements L18able {
 	 * @param locale локаль (будет нормирована: см. getNormalizedLocale)
 	 * @return перевевёденное значение для локали, если не найдено локали в l18items - поднимается исключение.
 	 */
+	@Override
 	public String getStrict(String locale) {
 		final String result = findTranslated(locale);
 		if (result == null)
@@ -126,6 +132,7 @@ public class L18Value implements L18able {
 	 * @param locale
 	 * @return перевевёденное значение для указанной локали
 	 */
+	@Override
 	public String get(String locale, String l18default) {
 		String result = findTranslated(locale);
 		if (result == null) { // выработаем значение по-умолчанию ...
@@ -160,6 +167,11 @@ public class L18Value implements L18able {
 	 * @return перевевёденное значение для локали, если не найдено воз-ся null.
 	 */
 	protected String findTranslated(String locale) {
+		// try "as is" ...
+		if (l18items.containsKey(locale)) 
+			return l18items.get(locale);
+
+		// try normalized to "xx-YY"
 		final String key = getNormalizedLocale(locale);
 		return (l18items.containsKey(key)) ? l18items.get(key) : null; 
 	}

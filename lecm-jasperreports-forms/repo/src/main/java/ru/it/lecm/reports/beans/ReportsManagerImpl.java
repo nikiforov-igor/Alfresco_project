@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.beans;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -37,13 +38,20 @@ import ru.it.lecm.reports.api.model.ReportTemplate;
 import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.api.model.DAO.ReportDAO;
 import ru.it.lecm.reports.api.model.share.ModelLoader;
-import ru.it.lecm.reports.generators.JRXMLMacroGenerator;
+import ru.it.lecm.reports.generators.XMLMacroGenerator;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 
 public class ReportsManagerImpl implements ReportsManager {
 
 	static final transient Logger logger = LoggerFactory.getLogger(ReportsManagerImpl.class);
+
+	final static String REPORT_TEMPLATE_FILES_BASEDIR = "/reportdefinitions";
+	final static String REPORT_DS_FILES_BASEDIR = REPORT_TEMPLATE_FILES_BASEDIR + "/ds-config";
+
+	final static String DEFAULT_GENXMLTEMPLATE_BASEDIR = REPORT_TEMPLATE_FILES_BASEDIR + "/templates";
+	final static String DEFAULT_JRXMLFILENAME = "jreportCommonTemplate.jrxml.gen";
+	final static String DEFAULT_JRXML_TYPE = "JASPER";
 
 	/**
 	 * Список зарегистрирванных отчётов
@@ -52,12 +60,11 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	private ReportDAO reportDAO;
 
-	private String defaultTemplate; //  шаблон для генерации (jrxml-)шаблона
+	private String defaultGenTemplate = DEFAULT_JRXMLFILENAME; // шаблон для генерации xml-шаблона отчёта
+	private String defaultGenReportType = DEFAULT_JRXML_TYPE; // тип отчёта по-умолчанию
 
 	// Map<КодТипаОтчёта, Провайдер>
 	private Map< /*ReportType*/String, ReportGenerator> reportGenerators;
-
-	static final String JRXML_DEFAULT_TEMPLATE_ROOT = "/reportdefinitions/templates";
 
 	private NamespaceService namespaceService;
 
@@ -117,12 +124,20 @@ public class ReportsManagerImpl implements ReportsManager {
 		return this.descriptors;
 	}
 
-	public String getDefaultTemplate() {
-		return defaultTemplate;
+	public String getDefaultGenTemplate() {
+		return defaultGenTemplate;
 	}
 
-	public void setDefaultTemplate(String defaultTemplate) {
-		this.defaultTemplate = defaultTemplate;
+	public void setDefaultGenTemplate(String defaultGenTemplate) {
+		this.defaultGenTemplate = defaultGenTemplate;
+	}
+
+	public String getDefaultGenReportType() {
+		return defaultGenReportType;
+	}
+
+	public void setDefaultGenReportType(String defaultGenReportType) {
+		this.defaultGenReportType = defaultGenReportType;
 	}
 
 	/**
@@ -299,25 +314,25 @@ public class ReportsManagerImpl implements ReportsManager {
 			createDsFile( desc); // создание ds-xml
 			saveReportTemplate( desc) ; // сохранение шаблона отчёта 
 			getDescriptors().put(desc.getMnem(), desc);
-			logger.debug(String.format( "Report descriptor with name '%s' registered", desc.getMnem()));
+			logger.info(String.format( "Report descriptor with name '%s' registered", desc.getMnem()));
 		}
 	}
 
-	private final static String DEFAULT_JRXMLFILENAME = "jreportCommonTemplate.jrxml";
 	private void setDefaults(ReportDescriptor desc) {
+		if ( Utils.isStringEmpty(desc.getReportType().getMnem())) {
+			desc.getReportType().setMnem( this.getDefaultGenReportType() );
+			logger.warn(String.format( "Report '%s' has empty reeport type -> set to '%s'", desc.getMnem(), desc.getReportType().getMnem()) );
+		}
 		// TODO: ввести зависимость от типа очёта
 		if (desc.getReportTemplate().getFileName() == null) { // задать default-название файла
 			desc.getReportTemplate().setFileName( desc.getMnem() + ".jrxml");
 			logger.warn(String.format( "Report '%s' has empty template FileName -> set to '%s'", desc.getMnem(), desc.getReportTemplate().getFileName()) );
 		}
-		if (desc.getReportTemplate().getData() == null) { // задать данные из default-шаблона
-			final String fullName = makeTemplateFileName(DEFAULT_JRXMLFILENAME); // TODO: параметризовать
-			try {
-				desc.getReportTemplate().setData(new java.io.FileInputStream(fullName));
-				logger.warn(String.format( "Report '%s' has no template data -> loaded from '%s'", desc.getMnem(), fullName));
-			} catch (FileNotFoundException ex) {
-				logger.error(String.format( "Report '%s' has no template data and fail to load from '%s'", desc.getMnem(), fullName), ex);
-			}
+		if (desc.getReportTemplate().getData() == null) {
+			// сгенерировать xml отчёта по gen-шаблону ...
+			final ByteArrayOutputStream stm = this.generateReportTemplate(desc); // stm.writeTo( new java.io.FileOutputStream("x.jrxml"));
+			desc.getReportTemplate().setData( (stm == null) ? null : new ByteArrayInputStream(stm.toByteArray()));
+			logger.warn(String.format( "Report '%s' has empty template data -> generated from '%s'", desc.getMnem(), makeGenTemplateFileName(this.getDefaultGenTemplate())) );
 		}
 	}
 
@@ -339,7 +354,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		 */
 
 		// @NOTE: название шаблона существенно зависит от типа отчёта и известно только описателю
-		final String outFullName = makeTemplateFileName(desc);
+		final String outFullName = makeReportTemplateFileName(desc);
 		// ensureFileNotPresent(outFullName);
 		{	// гарантируем, что с таким именем данных не будет ...
 			final File fout = new File( outFullName);
@@ -444,17 +459,21 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	/**
-	 * Получить и гарантировать наличие каталога для хранения шаблонов
+	 * Получить и гарантировать наличие каталога для хранения ГОТОВЫХ шаблонов отчётов (*.jrxml файлы)
 	 * @return
 	 */
-	private File ensureTemplateConfigDir() {
+	private File ensureReportTemplateConfigDir() {
 		final File result = getConfigDir(REPORT_TEMPLATE_FILES_BASEDIR);
 		result.mkdirs();
 		return result;
 	}
 
-	private File ensureDefaultTemplateConfigDir() {
-		final File result = getConfigDir(JRXML_DEFAULT_TEMPLATE_ROOT);
+	/**
+	 * Гарантировать каталог шаблонов для генератора (*.gen файлы)
+	 * @return
+	 */
+	private File ensureGenTemplateConfigDir() {
+		final File result = getConfigDir(DEFAULT_GENXMLTEMPLATE_BASEDIR);
 		result.mkdirs();
 		return result;
 	}
@@ -472,31 +491,31 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	/**
-	 * Получить полное название файла шаблона для указанного описателя.
+	 * Получить полное название файла шаблона для указанного описателя (наример, для jasper-отчётов это будет файл с расширением "*.jrxml").
 	 * Родительские каталоги, при их отсутствии, создаются автоматом.
-	 * @param template  описание отчёта
+	 * @param template описание отчёта
 	 * @return полное имя файла (мнемоника шаблона . расширение)
 	 */
-	private String makeTemplateFileName(ReportDescriptor desc) {
+	private String makeReportTemplateFileName(ReportDescriptor desc) {
 		if (desc == null || desc.getReportTemplate() == null)
 			return null;
 		final ReportTemplate template = desc.getReportTemplate();
-		ensureTemplateConfigDir(); 
-		return makeTemplateFileName( desc.getMnem()
+		ensureReportTemplateConfigDir(); 
+		return makeReportTemplateFileName( desc.getMnem()
 				+ "." + FilenameUtils.getExtension(Utils.coalesce( template.getFileName(), "template")) );
 	}
 
 	/**
 	 * Получить полное название файла указанного шаблона.
 	 * Родительские каталоги, при их отсутствии, создаются автоматом.
-	 * @param templateFileName название файла-шаблона
+	 * @param xmlFileName название файла-шаблона
 	 * @return полное имя файла.
 	 */
-	private String makeTemplateFileName(String templateFileName) {
-		if (templateFileName == null)
+	private String makeReportTemplateFileName(String xmlFileName) {
+		if (xmlFileName == null)
 			return null;
-		final File base = ensureTemplateConfigDir();
-		return String.format( "%s/%s", base.getAbsolutePath(), templateFileName); 
+		final File base = ensureReportTemplateConfigDir();
+		return String.format( "%s/%s", base.getAbsolutePath(), xmlFileName); 
 	}
 
 	/**
@@ -528,20 +547,30 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	@Override
 	public byte[] produceDefaultTemplate(ReportDescriptor reportDesc) {
+		final ByteArrayOutputStream result = generateReportTemplate(reportDesc);
+		return (result != null) ? result.toByteArray() : null;
+	}
+
+	/**
+	 * Сгенерировать для указанного описателя файл с шаблоном отчёта.
+	 * Используется сконфигурированное имя gen-шаблона.
+	 * @param reportDesc
+	 * @return
+	 */
+	public ByteArrayOutputStream generateReportTemplate(ReportDescriptor reportDesc) {
 		if (reportDesc == null) return null;
 
-		PropertyCheck.mandatory (this, "defaultTemplate", getDefaultTemplate());
+		PropertyCheck.mandatory (this, "defaultGenTemplate", getDefaultGenTemplate());
 		// PropertyCheck.mandatory (this, "jrxmlGenerator", getJrxmlGenerator());
 
-		final JRXMLMacroGenerator jrxmlGenerator = new JRXMLMacroGenerator();
-		jrxmlGenerator.setReportDesc(reportDesc);
+		final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(reportDesc);
 
-		final String tname = makeDefaultTemplateFileName(this.defaultTemplate); // название файла-шаблона для генерации
-		FileInputStream fin = null; 
+		final String tname = makeGenTemplateFileName(this.getDefaultGenTemplate()); // название файла-шаблона для генерации
+		FileInputStream fin = null;
 		try {
 			fin = new FileInputStream( tname);
-			final ByteArrayOutputStream result = jrxmlGenerator.xmlGenerateByTemplate(fin);
-			return (result != null) ? result.toByteArray() : null;
+			final ByteArrayOutputStream result = xmlGenerator.xmlGenerateByTemplate( tname, fin);
+			return result;
 		} catch (FileNotFoundException ex) {
 			final String msg = String.format( "Generator template file not found at '%s'", tname);
 			logger.error(msg, ex);
@@ -553,17 +582,14 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	/**
-	 * Получить полный файловый путь с названием шаблона 
+	 * Получить полный файловый путь с названием gen-шаблона 
 	 * @param defaultTemplate
 	 * @return
 	 */
-	private String makeDefaultTemplateFileName(String defaultTemplate) {
-		final File base = ensureDefaultTemplateConfigDir();
+	private String makeGenTemplateFileName(String defaultTemplate) {
+		final File base = ensureGenTemplateConfigDir();
 		return String.format( "%s/%s", base.getAbsolutePath(), defaultTemplate);
 	}
-
-	final private static String REPORT_TEMPLATE_FILES_BASEDIR = "/reportdefinitions";
-	final private static String REPORT_DS_FILES_BASEDIR = "/reportdefinitions/ds-config";
 
 	@Override
 	public String getDsRelativeFileName(String reportCode) {

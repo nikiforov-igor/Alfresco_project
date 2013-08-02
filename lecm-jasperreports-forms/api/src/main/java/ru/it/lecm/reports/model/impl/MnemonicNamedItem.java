@@ -41,6 +41,11 @@ public class MnemonicNamedItem implements Mnemonicable, L18able {
 	}
 
 	@Override
+	public String getDefault() {
+		return get( "ru", null);
+	}
+
+	@Override
 	public String getMnem() {
 		return mnem;
 	}
