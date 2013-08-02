@@ -1053,7 +1053,7 @@
 					<field id="lecm-stmeditor:actionScript" >
 						<control template="/org/alfresco/components/form/controls/textarea.ftl">
 							<control-param name="rows">30</control-param>
-							<control-param name="style">width: 100%; max-height: 300px</control-param>
+							<control-param name="style">width: 100%; max-height: 300px; white-space: nowrap;</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -1082,7 +1082,7 @@
 					<field id="lecm-stmeditor:actionScript" >
 						<control template="/org/alfresco/components/form/controls/textarea.ftl">
 							<control-param name="rows">30</control-param>
-                            <control-param name="style">width: 100%; max-height: 300px</control-param>
+                            <control-param name="style">width: 100%; max-height: 300px; white-space: nowrap;</control-param>
                         </control>
 					</field>
 				</appearance>
