@@ -49,7 +49,13 @@
                                     }
                                     break;
                                 case "lecm-errands:number":
-                                    columnContent += $links($html(data.displayValue));
+                                    columnContent += '<div style="text-align: center;">'
+                                    var value = data.displayValue;
+                                    if (value == "Не присвоено") {
+                                        value = " - ";
+                                    }
+                                    columnContent += $links($html(value));
+                                    columnContent += '</div>'
                                     break;
                                 default:
                                     break;
@@ -59,7 +65,7 @@
                                 html += "<br />";
                             }
 
-                            if (datalistColumn.name == "lecm-errands:number") {
+                            if (datalistColumn.name == "lecm-errands:number" && data.displayValue != "Не присвоено") {
                                 html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                             } else {
                                 html += columnContent;
