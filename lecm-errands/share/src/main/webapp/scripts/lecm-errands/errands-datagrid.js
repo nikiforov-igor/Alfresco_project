@@ -4,6 +4,7 @@
     var Dom = YAHOO.util.Dom;
 
     var $html = Alfresco.util.encodeHTML;
+    var $links = Alfresco.util.activateLinks;
 
     LogicECM.module.Errands.DataGrid = function (containerId) {
         LogicECM.module.Errands.DataGrid.superclass.constructor.call(this, containerId);
@@ -47,14 +48,21 @@
                                         columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/base_doc_16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
                                     }
                                     break;
+                                case "lecm-errands:number":
+                                    columnContent += $links($html(data.displayValue));
+                                    break;
                                 default:
                                     break;
                             }
 
-                            html += columnContent;
-
                             if (i < ii - 1) {
                                 html += "<br />";
+                            }
+
+                            if (datalistColumn.name == "lecm-errands:number") {
+                                html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
+                            } else {
+                                html += columnContent;
                             }
 
                             if (oRecord && oRecord.getData("itemData")){
