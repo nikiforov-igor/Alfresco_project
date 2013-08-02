@@ -5,6 +5,11 @@
             <defaults>
                 <theme>lecmTheme</theme>
             </defaults>
+			<module-deployment>
+			   <mode>manual</mode>
+			   <enable-auto-deploy-modules>true</enable-auto-deploy-modules>
+			</module-deployment>
         </web-framework>
     </config>
+
 </alfresco-config>

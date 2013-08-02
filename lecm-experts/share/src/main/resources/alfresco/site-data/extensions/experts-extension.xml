@@ -3,7 +3,7 @@
         <module>
             <id>Experts On Document Details Page</id>
             <evaluator type="default.extensibility.evaluator"/>
-            <auto-deploy>true</auto-deploy>
+            <auto-deploy>false</auto-deploy>
             <components>
                 <component>
                     <scope>template</scope>
