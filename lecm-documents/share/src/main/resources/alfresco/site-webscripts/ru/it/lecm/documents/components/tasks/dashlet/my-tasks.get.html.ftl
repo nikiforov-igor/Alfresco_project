@@ -45,7 +45,7 @@
     <div class="body scrollableList dashlet-body" id="${id}_results">
         <div style="padding: 10px;">
             <div>
-                <div style="float:left;">${msg("dashlet.my.tasks.assigned.count", data.myTasksTotalCount)}</div>
+                <div style="float:left;">${msg("dashlet.my.tasks.assigned.count", "<a href='javascript:void(0);' onclick='documentTasksComponent.onExpand(\"tasksList\")'>"+  data.myTasksTotalCount +"</a>")}</div>
 
                 <#if data.myLatestTask??>
                     <div style="float:right;">
@@ -56,7 +56,7 @@
 
             <#if myErrandsData??>
             <div style="clear: both; padding-top: 10px;">
-               <div style="float:left;">${msg("dashlet.my.errands.assigned.count", myErrandsData.errandsCount)}</div>
+               <div style="float:left;">${msg("dashlet.my.errands.assigned.count", "<a href='javascript:void(0);' onclick='documentTasksComponent.onExpand(\"myErrandsList\")'>"+myErrandsData.errandsCount+"</a>")}</div>
 
                 <#if myErrandsData.latestErrandNodeRef??>
                     <div style="float:right;">
@@ -66,7 +66,7 @@
             </div>
             </#if>
 
-            <div style="clear: both; padding-top: 10px;">${msg("dashlet.my.errands.assigned.by.me.count", errandsIssuedByMeData.errandsCount)}</div>
+            <div style="clear: both; padding-top: 10px;">${msg("dashlet.my.errands.assigned.by.me.count","<a href='javascript:void(0);' onclick='documentTasksComponent.onExpand(\"errandsIssuedByMeList\")'>"+ errandsIssuedByMeData.errandsCount +"</a>")}</div>
 
         </div>
     </div>

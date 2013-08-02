@@ -247,12 +247,13 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                     statuses.add("На доработке");
                     statuses.add("На утверждении контролером");
                     statuses.add("На утверждении инициатором");
+                    statuses.add("Ожидает исполнения");
                     return getDocumentErrands(document, statuses, roles);
                 }
                 case COMPLETE: {
                     statuses.add("Отменено");
                     statuses.add("Исполнено");
-                    statuses.add("Неисполнено");
+                    statuses.add("Не исполнено");
                     statuses.add("Удалено");
                     return getDocumentErrands(document, statuses, roles);
                 }

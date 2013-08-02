@@ -5,6 +5,7 @@ function main() {
     AlfrescoUtil.param("errandsUrl");
     AlfrescoUtil.param("createButton");
     AlfrescoUtil.param("label");
+    AlfrescoUtil.param("isAnchor");
 }
 
 main();

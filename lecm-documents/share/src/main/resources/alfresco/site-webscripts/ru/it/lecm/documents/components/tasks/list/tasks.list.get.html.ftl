@@ -89,6 +89,9 @@
 (function () {
     YAHOO.util.Event.onDOMReady(function (){
         YAHOO.util.Event.on("${id}-tasks-states", "change", onTasksStatesSelectChange, this, true);
+        <#if isAnchor == "true">
+            YAHOO.util.Dom.get("${id}").scrollIntoView();
+        </#if>
     });
 
     function onTasksStatesSelectChange() {

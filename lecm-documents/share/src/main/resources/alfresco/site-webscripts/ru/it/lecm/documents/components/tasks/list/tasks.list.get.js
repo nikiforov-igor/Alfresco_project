@@ -4,6 +4,7 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
     AlfrescoUtil.param("tasksState");
+    AlfrescoUtil.param("isAnchor");
 
     var hasPerm = hasPermission(model.nodeRef, PERM_WF_TASK_LIST);
     if (hasPerm) {

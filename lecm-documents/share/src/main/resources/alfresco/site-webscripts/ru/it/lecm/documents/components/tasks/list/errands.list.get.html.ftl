@@ -8,12 +8,15 @@
                 {
                     itemType: "lecm-errands:document",
                     nodeRef: "${nodeRef}",
-                    containerId: "${id}-my-errands",
-                    errandsUrl: "${errandsUrl}"
+                    containerId: "${id}-errands",
+                    errandsUrl: "${errandsUrl}",
+                    <#if isAnchor == "true">
+                    anchorId: "${id}"
+                    </#if>
                 }).setMessages(${messages});
             errandTasks.onReady();
         }
-        YAHOO.util.Event.onContentReady("${id}-my-errands",init);
+        YAHOO.util.Event.onContentReady("${id}-errands",init);
     })();
 
     //]]>
@@ -23,8 +26,8 @@
     <div class="list-category-title">${msg("errandslist.label.${label}")}</div>
     <div class="tasks-list-filter">
         <select id="${id}-errands-filter" style="margin-left: 13px;">
-            <option selected value="all">${msg("errandslist.option.all")}</option>
-            <option value="active">${msg("errandslist.option.active")}</option>
+            <option value="all">${msg("errandslist.option.all")}</option>
+            <option selected value="active">${msg("errandslist.option.active")}</option>
             <option value="complete">${msg("errandslist.option.completed")}</option>
         </select>
        <#if createButton??>
@@ -35,5 +38,5 @@
         </#if>
        </#if>
     </div>
-    <div class="items" id="${id}-my-errands"></div>
+    <div class="items" id="${id}-errands"></div>
 </div>

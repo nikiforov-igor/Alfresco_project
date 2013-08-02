@@ -24,7 +24,8 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                 itemType: "lecm-errands:document",
                 nodeRef: null,
                 containerId: "",
-                errandsUrl: ""
+                errandsUrl: "",
+                anchorId: ""
             },
             listContainer: null,
             selected: null,
@@ -89,7 +90,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         detail += "<div style=\"float: left;\">";
                         detail += "<div>";
                         detail += "<div class=\"workflow-task-title workflow-task-list-left-column\" style=\"font-size: 16px;\">";
-                        detail += "<a href=\"${url.context}/page/document?nodeRef="+ errand.nodeRef +"\">" + errand.title + ":</a>";
+                        detail += "<a href=\""+window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT+"document?nodeRef="+ errand.nodeRef +"\">" + errand.title + ":</a>";
                         detail += "</div>";
                         detail += "<span class=\"workflow-task-status "+ statusClass +"\">" + status + "</span>";
                         detail += "</div>";
@@ -97,15 +98,19 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         detail += "<div class=\"workflow-task-description\">" + errand.description + "</div>";
                         detail += "<div>";
                         detail += "<div class=\"workflow-task-list-left-column\">";
-                        detail += "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": " + errand.dueDate + "</span>";
+                        detail += "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": </span>" + errand.dueDate;
                         detail += "</div>";
-                        detail += "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": " + errand.statusMessage + "</span>";
+                        detail += "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </span>" + errand.statusMessage;
                         detail += "</div>";
                         detail += "</div>";
                         detail += "<div style=\"clear: both;\"></div>";
                         detail += "</div>";
                         this.listContainer.innerHTML += detail;
                     }
+                }
+                if (this.options.anchorId != "") {
+//                    this.scrollTo(Dom.get(this.options.anchorId),true);
+                    Dom.get(this.options.anchorId).scrollIntoView();
                 }
             }
 

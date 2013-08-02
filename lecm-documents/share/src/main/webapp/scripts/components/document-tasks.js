@@ -59,7 +59,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.errandsIssuedByMeState = value;
             },
 
-            onExpand: function () {
+            onExpand: function (anchor) {
                 this.htmlid = this.id + Alfresco.util.generateDomId();
 
                 Alfresco.util.Ajax.request({
@@ -72,11 +72,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             var text = response.serverResponse.responseText;
                             this.expandView(text);
 
-                            this.loadTasks();
+                            this.loadTasks(anchor);
 
-                            this.loadMyErrands();
+                            this.loadMyErrands(anchor);
 
-                            this.loadErrandsIssuedByMe();
+                            this.loadErrandsIssuedByMe(anchor);
                         },
                         scope: this
                     },
@@ -86,13 +86,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 });
             },
 
-            loadTasks: function () {
+            loadTasks: function (anchor) {
                 Alfresco.util.Ajax.request({
                     url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/tasks",
                     dataObj: {
                         nodeRef: this.options.nodeRef,
                         htmlid: this.htmlid,
-                        tasksState: this.tasksState
+                        tasksState: this.tasksState,
+                        isAnchor: (anchor !=null && anchor == "tasksList") ? "true" : "false"
                     },
                     successCallback: {
                         fn: function(response) {
@@ -108,15 +109,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 });
             },
 
-            loadMyErrands: function () {
+            loadMyErrands: function (anchor) {
                 Alfresco.util.Ajax.request({
                     url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/my-errands",
                     dataObj: {
                         nodeRef: this.options.nodeRef,
                         errandsUrl: "/lecm/errands/api/documentMyErrands",
                         createButton: false,
-                        htmlid: this.htmlid,
-                        label: "my.errands"
+                        htmlid: this.htmlid+"_myErrandsList",
+                        label: "my-errands",
+                        isAnchor: (anchor !=null && anchor == "myErrandsList") ? "true" : "false"
+
+
                     },
                     successCallback: {
                         fn: function(response) {
@@ -132,15 +136,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 });
             },
 
-            loadErrandsIssuedByMe: function () {
+            loadErrandsIssuedByMe: function (anchor) {
                 Alfresco.util.Ajax.request({
                     url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/my-errands",
                     dataObj: {
                         nodeRef: this.options.nodeRef,
                         errandsUrl: "/lecm/errands/api/documentErrandsIssuedByMe",
                         createButton: true,
-                        htmlid: this.htmlid+"issued-by-me",
-                        label: "issued.by.me"
+                        htmlid: this.htmlid+"_errandsIssuedByMeList",
+                        label: "issued-by-me",
+                        isAnchor: (anchor !=null && anchor == "errandsIssuedByMeList") ? "true" : "false"
                     },
                     successCallback: {
                         fn: function(response) {
