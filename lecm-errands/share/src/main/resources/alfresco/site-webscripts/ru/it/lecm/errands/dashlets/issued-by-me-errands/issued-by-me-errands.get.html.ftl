@@ -2,6 +2,13 @@
 <#assign containerId = id + "-container">
 <script type="text/javascript">
     //<![CDATA[
+    if (typeof LogicECM == "undefined" || !LogicECM) {
+        var LogicECM = {};
+    }
+
+    LogicECM.module = LogicECM.module || {};
+
+    LogicECM.module.Errands = LogicECM.module.Errands|| {};
 
     LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
 
