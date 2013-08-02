@@ -153,6 +153,23 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
             logger.error("Не удалось выдать права новому участнику!", ex);
         }
+        try {
+            // сохранение ссылки на сотрудника-участника в документе
+            QName propertyRefQName = DocumentMembersService.PROP_DOC_MEMBERS;
+
+            Serializable oldValue = nodeService.getProperty(docRef, propertyRefQName);
+            String strOldValue = oldValue != null ? oldValue.toString() : "";
+            String refValue = employee.toString();
+            if (!strOldValue.contains(refValue)) {
+                if (!strOldValue.isEmpty()) {
+                    strOldValue += ";";
+                }
+                strOldValue += refValue;
+            }
+            nodeService.setProperty(docRef, propertyRefQName, strOldValue);
+        } catch (Throwable ex) {
+            logger.error("Не удалось сохранить ссылку на участника!", ex);
+        }
         documentMembersService.addMemberToUnit(employee, docRef);
 
         // уведомление

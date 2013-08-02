@@ -77,6 +77,7 @@
         <property name="preferenceService" ref="preferenceService"/>
         <property name="authService" ref="authenticationService"/>
         <property name="namespaceService" ref="namespaceService"/>
+        <property name="documentService" ref="documentService"/>
     </bean>
 
     <bean id="contract.businessJournalDictionaryBootstrap"
