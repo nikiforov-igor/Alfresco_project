@@ -422,41 +422,43 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
                 if (settings != null) {
                     // копируем категории
                     List<String> categories = settings.getCategoriesToCopy();
-                    for (String category : categories) {
-                        NodeRef errandAttachmentsFolder = documentAttachmentsService.getRootFolder(createdNode);
-                        NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
-                        if (categoryRef != null) {
-                            // код ниже - хак. При копировании ноды - все ассоциации на неё также копируются. У вложений есть ссылка на родительский документ,
-                            // и есть полиси, которые создавает эту же самую ассоциацию при добавлении нового вложения. Полиси и сервис копирования не знаю друг о друге -  возникает конфликт.
-                            //копируем директорию с категорией
-                            NodeRef errandCategoryFolder = copyService.copyAndRename(categoryRef, errandAttachmentsFolder, ContentModel.ASSOC_CONTAINS,
-                                    QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), QName.createValidLocalName(category)),
-                                    false);
-                            // копируем вложения для категории
-                            List<ChildAssociationRef> childs = nodeService.getChildAssocs(categoryRef);
-                            for (ChildAssociationRef child : childs) {
-                                NodeRef childRef = child.getChildRef();
-                                List<AssociationRef> parentDocAssocs = nodeService.getTargetAssocs(childRef, DocumentService.ASSOC_PARENT_DOCUMENT);
-                                for (AssociationRef parentDocAssoc : parentDocAssocs) {
-                                    //для всех вложений получаем ссылку на родительский документ
-                                    NodeRef parentDoc = parentDocAssoc.getTargetRef();
-                                    // временно удаляем ассоциацию
-                                    nodeService.removeAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
-                                    try {
-                                        copyService.copyAndRename(childRef, errandCategoryFolder, ContentModel.ASSOC_CONTAINS,
-                                                QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), QName.createValidLocalName(category)),
-                                                false);
-
-                                    } finally {
-                                        // возвращаем удаленную ассоциацию
+                    if (categories != null) {
+                        for (String category : categories) {
+                            NodeRef errandAttachmentsFolder = documentAttachmentsService.getRootFolder(createdNode);
+                            NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
+                            if (categoryRef != null) {
+                                // код ниже - хак. При копировании ноды - все ассоциации на неё также копируются. У вложений есть ссылка на родительский документ,
+                                // и есть полиси, которые создавает эту же самую ассоциацию при добавлении нового вложения. Полиси и сервис копирования не знаю друг о друге -  возникает конфликт.
+                                //копируем директорию с категорией
+                                NodeRef errandCategoryFolder = copyService.copyAndRename(categoryRef, errandAttachmentsFolder, ContentModel.ASSOC_CONTAINS,
+                                        QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), QName.createValidLocalName(category)),
+                                        false);
+                                // копируем вложения для категории
+                                List<ChildAssociationRef> childs = nodeService.getChildAssocs(categoryRef);
+                                for (ChildAssociationRef child : childs) {
+                                    NodeRef childRef = child.getChildRef();
+                                    List<AssociationRef> parentDocAssocs = nodeService.getTargetAssocs(childRef, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                    for (AssociationRef parentDocAssoc : parentDocAssocs) {
+                                        //для всех вложений получаем ссылку на родительский документ
+                                        NodeRef parentDoc = parentDocAssoc.getTargetRef();
+                                        // временно удаляем ассоциацию
+                                        nodeService.removeAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
                                         try {
-                                            nodeService.createAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
-                                        } catch (AssociationExistsException ignored) {}
+                                            copyService.copyAndRename(childRef, errandCategoryFolder, ContentModel.ASSOC_CONTAINS,
+                                                    QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), QName.createValidLocalName(category)),
+                                                    false);
+
+                                        } finally {
+                                            // возвращаем удаленную ассоциацию
+                                            try {
+                                                nodeService.createAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
+                                            } catch (AssociationExistsException ignored) {}
+                                        }
                                     }
                                 }
                             }
-                        }
 
+                        }
                     }
                 }
                 return createdNode;
