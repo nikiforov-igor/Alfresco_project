@@ -140,5 +140,55 @@
                 </property>
             </properties>
         </aspect>
+
+		<!-- аспект расширяющий lecm-orgstr:organization атрибутами для работы с ЭП  -->
+		<aspect name="lecm-signed-docflow:organization-attrs-aspect">
+			<properties>
+				<!-- код спецоператора ЭДО, например 2АЕ - калуга астрал -->
+				<property name="lecm-signed-docflow:operator-code">
+					<type>d:text</type>
+				</property>
+				<!-- идентификатор партнерско системы, получаемый у unicloud -->
+				<property name="lecm-signed-docflow:partner-key">
+					<type>d:text</type>
+				</property>
+				<!-- внутренний, служебный идентификатор в сервисе unicloud -->
+				<property name="lecm-signed-docflow:organization-id">
+					<type>d:text</type>
+				</property>
+				<!-- ID организации в Астрале. Он глобальный с точки зрения ЭДО, содержится в документах. -->
+				<property name="lecm-signed-docflow:organization-edo-id">
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+
+		<!-- аспект расширяющий lecm-orgstr:personal-data атрибутами для работы с ЭП -->
+		<aspect name="lecm-signed-docflow:personal-data-attrs-aspect">
+			<properties>
+				<!-- пользовательский токен авторизации в сервисе юниклауд, действует 15мин -->
+				<property name="lecm-signed-docflow:auth-token">
+					<type>d:text</type>
+				</property>
+				<!-- отпечаток сертификата, используемого для подписания -->
+				<property name="lecm-signed-docflow:cert-thumbprint">
+					<type>d:text</type>
+				</property>
+				<!-- способ аутентификации, с помощью локального сертификата, или через смс -->
+				<property name="lecm-signed-docflow:auth-type">
+					<type>d:text</type>
+					<constraints>
+						<constraint name="lecm-signed-docflow:auth-type-constraint" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>LOCAL_CERT</value> <!-- авторизация с локальным сертификатом -->
+									<value>REMOTE_CERT</value> <!-- авторизация через смс -->
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
     </aspects>
 </model>

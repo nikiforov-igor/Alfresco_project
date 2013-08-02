@@ -16,7 +16,7 @@ public interface SignedDocflow {
      * &lt;type name="lecm-signed-docflow:sign/&gt;
      */
 	QName TYPE_SIGN = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "sign");
-	
+
     /**
      * &lt;property name="lecm-signed-docflow:owner/&gt;
      */
@@ -97,8 +97,50 @@ public interface SignedDocflow {
      */
 	QName PROP_DOCUMENT_ID = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "document-id");
 
+	/**
+	 * &lt;aspect name="lecm-signed-docflow:organization-attrs-aspect"&gt;
+	 */
+	QName ASPECT_ORGANIZATION_ATTRS = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "organization-attrs-aspect");
 
+	/**
+	 * &lt;property name="lecm-signed-docflow:operator-code"&gt;
+	 */
+	QName PROP_OPERATOR_CODE = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "operator-code");
 
+	/**
+	 * &lt;property name="lecm-signed-docflow:partner-key"&gt;
+	 */
+	QName PROP_PARTNER_KEY = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "partner-key");
+
+	/**
+	 * &lt;property name="lecm-signed-docflow:organization-id"&gt;
+	 */
+	QName PROP_ORGANIZATION_ID = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "organization-id");
+
+	/**
+	 * &lt;property name="lecm-signed-docflow:organization-edo-id"&gt;
+	 */
+	QName PROP_ORGANIZATION_EDO_ID = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "organization-edo-id");
+
+	/**
+	 * &lt;aspect name="lecm-signed-docflow:personal-data-attrs-aspect"&gt;
+	 */
+	QName ASPECT_PERSONAL_DATA_ATTRS = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "personal-data-attrs-aspect");
+
+	/**
+	 * &lt;property name="lecm-signed-docflow:auth-token"&gt;
+	 */
+	QName PROP_AUTH_TOKEN = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "auth-token");
+
+	/**
+	 * &lt;property name="lecm-signed-docflow:cert-thumbprint"&gt;
+	 */
+	QName PROP_CERT_THUMBPRINT = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "cert-thumbprint");
+
+	/**
+	 * &lt;property name="lecm-signed-docflow:auth-type"&gt;
+	 */
+	QName PROP_AUTH_TYPE = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "auth-type");
 
 	/**
 	 * Проверяет, есть ли у NodeRef'ы аспект <strong>docflowable</strong>

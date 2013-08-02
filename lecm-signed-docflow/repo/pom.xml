@@ -58,6 +58,12 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.orgstructure</groupId>
+			<artifactId>orgstructure-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<!--
 	   The scm is required for the buildnumber-maven-plugin which is required
@@ -96,9 +102,6 @@
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/resources</directory>
-				<excludes>
-					<exclude>**README-*</exclude>
-				</excludes>
 			</resource>
 			<!--
 			  Copies and filters AMP config in the proper package
@@ -109,9 +112,6 @@
 				<filtering>true</filtering>
 				<directory>src/main/config</directory>
 				<targetPath>alfresco/module/${project.artifactId}</targetPath>
-				<excludes>
-					<exclude>**README-*</exclude>
-				</excludes>
 			</resource>
 		</resources>
 	</build>

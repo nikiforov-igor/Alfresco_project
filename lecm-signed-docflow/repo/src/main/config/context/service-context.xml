@@ -1,7 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
-
-<beans>
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<import resource="classpath:gate-wcf-service-context.xml"/>
 
@@ -9,7 +11,7 @@
 		<property name="gateWcfService" ref="gateWcfService.https"/>
 	</bean>
 
-	<bean id="lecm.signed-docflow.model-bootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+	<bean id="lecm.signed-docflow.model-bootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/signed-docflow-model.xml</value>
@@ -22,10 +24,17 @@
 		</property>
 	</bean>
 
+	<util:constant id="signedDocflowFolder" static-field="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl.SIGNED_DOCFLOW_FOLDER"/>
 	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean"
 		  depends-on="lecm.signed-docflow.model-bootstrap" init-method="init">
+		<property name="folders">
+			<map>
+				<entry key="#{signedDocflowFolder}" value="Сервис ЮЗД"/>
+			</map>
+		</property>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.isDocflowable.isDocflowable.get" class="ru.it.lecm.signed.docflow.webscripts.IsDocflowableWebscript"
@@ -47,6 +56,9 @@
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.unicloud.api.post" class="ru.it.lecm.signed.docflow.webscripts.UnicloudWebscript" parent="webscript">
 		<property name="unicloudService" ref="unicloudService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
 </beans>
