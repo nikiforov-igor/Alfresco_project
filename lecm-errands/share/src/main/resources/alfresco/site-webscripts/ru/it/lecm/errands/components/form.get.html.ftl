@@ -29,6 +29,25 @@
                 });
             }
             <#-- Make twisters - end -->
+
+            <#-- Remove-icons init - start -->
+            var removeIcons = Dom.getElementsByClassName("remove-icon", "img", "${id}_metadata");
+
+            for (var j = 0; j < removeIcons.length; j++) {
+                removeIcons[j].onclick = function() {
+                    var icon = this;
+                    var li = Dom.getAncestorByTagName(icon, "li");
+                    var ul = Dom.getAncestorByTagName(li, "ul");
+                    var block = Dom.getAncestorByTagName(ul, "div");
+                    var countSpan = Dom.getElementsByClassName("count", "span", block)[0];
+
+                    ul.removeChild(li);
+                    countSpan.innerHTML = " (" + Dom.getChildren(ul).length + ")";
+
+                    <#-- todo: Удалить из поручения! -->
+                };
+            }
+            <#-- Remove-icons init - end -->
         }
 
         Event.onDOMReady(init);
@@ -107,8 +126,9 @@
                 <#if attsList?size gt 0>
                     <#list attsList as attachment>
                         <li title="${attachment.name!""}">
+                            <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                             <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
-                            ${attachment.name!""}
+                                ${attachment.name!""}
                             </a>
                         </li>
                     </#list>
@@ -133,6 +153,7 @@
                 <#if linksList?size gt 0>
                     <#list linksList as link>
                         <li title="${link.name!""}">
+                            <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                             <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                 ${link.name!""}
                             </a>
@@ -162,6 +183,7 @@
                     <#if attsList?size gt 0>
                         <#list attsList as attachment>
                             <li title="${attachment.name!""}">
+                                <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
                                 ${attachment.name!""}
                                 </a>
@@ -188,6 +210,7 @@
                     <#if linksList?size gt 0>
                         <#list linksList as link>
                             <li title="${link.name!""}">
+                                <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                     ${link.name!""}
                                 </a>
@@ -215,6 +238,7 @@
                     <#if attsList?size gt 0>
                         <#list attsList as attachment>
                             <li title="${attachment.name!""}">
+                                <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
                                 ${attachment.name!""}
                                 </a>

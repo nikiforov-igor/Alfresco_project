@@ -55,6 +55,10 @@
 .errands-main-form .form-fields .data-list-block ul.data-list li {
     line-height: 30px;
 }
+.errands-main-form .form-fields .data-list-block ul.data-list li img.remove-icon {
+    margin: 0 4px -4px 0;
+    cursor: pointer;
+}
 .errands-main-form .form-fields .data-list-block ul.data-list li span {
     margin-left: 10px;
     color: #999;
