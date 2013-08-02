@@ -6,7 +6,8 @@
         <span>${msg("label.title")}</span>
         <span class="lecm-dashlet-actions">
             <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMembersComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
-         </span>
+			<a id="${id}-action-experts-doc" href="${url.context}/page/experts-by-document?nodeRef=${nodeRef}" class="semantic-list"  target="_blank" title="${msg('dashlet.semantic.experts.tooltip')}">&nbsp</a>
+		</span>
     </div>
     <div class="body scrollableList dashlet-body" id="${id}_results">
         <#if members?? && members.items??>
@@ -25,3 +26,18 @@
         </#if>
     </div>
 </div>
+
+<script type="text/javascript">//<![CDATA[
+	(function(){
+		function init(){
+			var semanticEl = YAHOO.util.Dom.get("semantic-mudule-active-htmlid");
+			if (!semanticEl){
+				var dashletAction = YAHOO.util.Dom.get("${id}-action-experts-doc");
+				if (dashletAction){
+					YAHOO.util.Dom.setStyle(dashletAction, 'display', 'none');
+				}
+			}
+		}
+		YAHOO.util.Event.onDOMReady(init);
+	})();
+//]]></script>

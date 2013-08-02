@@ -131,11 +131,39 @@ public class SemanticWebScriptBean extends BaseWebScript implements ConstantsBea
 			throw new RuntimeException("nodeRef parameter is empty");
 		}
 	}
-	public List<NodeRef> getSimilarDocumentsByTag(String tag){
+	public List<String> getSimilarDocumentsByTag(String tag,String docType){
 		if (tag!=null && !tag.isEmpty()){
-			return semanticService.getSimilarDocumentsByTag(tag);
+			return semanticService.getSimilarDocumentsByTagStr(tag,docType);
 		}
 		return null;
+	}
+
+	public boolean hasDocumentTags(String sDocument){
+		if (sDocument != null && !sDocument.isEmpty()) {
+			NodeRef documentRef = new NodeRef(sDocument);
+			return semanticService.hasDocumentTags(documentRef);
+		}
+		return false;
+	}
+
+	public List<String> getSimilarDocumentsByDocument(String sDocument,String docType){
+		if (sDocument != null && !sDocument.isEmpty()) {
+			NodeRef documentRef = new NodeRef(sDocument);
+			return semanticService.getSimilarDocumentsByDocumentStr(documentRef,docType);
+		}
+		return null;
+	}
+
+	public String getQueryByTag(String tag, String docType){
+		return semanticService.getQueryByTag(tag,docType);
+	}
+
+	public String getQueryByDocument(String sDocument,String docType){
+		if (sDocument != null && !sDocument.isEmpty()) {
+			NodeRef documentRef = new NodeRef(sDocument);
+			return semanticService.getQueryByDocument(documentRef,docType);
+		}
+		return "";
 	}
 
 

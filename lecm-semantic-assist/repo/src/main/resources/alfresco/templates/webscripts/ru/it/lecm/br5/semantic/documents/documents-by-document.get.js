@@ -1,0 +1,1 @@
+model.docList = integration.getSimilarDocumentsByDocument(args["nodeRef"],args["docType"]);

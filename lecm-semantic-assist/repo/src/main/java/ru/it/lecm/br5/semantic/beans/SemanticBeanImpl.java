@@ -324,16 +324,18 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		int minFS = (null == minFontSize) ? DEFAULT_MIN_FONT_SIZE : minFontSize;
 		float maxValue = 0;
 		float minValue = 0;
-		List<Float> values = new ArrayList<Float>(tags.values());
-		for (Float value : values) {
-			maxValue = Math.max(maxValue, value);
-			minValue = Math.min(minValue, value);
-		}
-		float divider = (maxFS - minFS) > 0 ? (maxFS - minFS) : 1;
-		float scaleFactor = (maxFS - minFS) / (divider);
-		for (String tag : tags.keySet()) {
-			int fontSize = Math.round(scaleFactor * tags.get(tag) + (maxFS - maxValue * scaleFactor));
-			result.put(tag, fontSize);
+		if (tags != null){
+			List<Float> values = new ArrayList<Float>(tags.values());
+			for (Float value : values) {
+				maxValue = Math.max(maxValue, value);
+				minValue = Math.min(minValue, value);
+			}
+			float divider = (maxFS - minFS) > 0 ? (maxFS - minFS) : 1;
+			float scaleFactor = (maxFS - minFS) / (divider);
+			for (String tag : tags.keySet()) {
+				int fontSize = Math.round(scaleFactor * tags.get(tag) + (maxFS - maxValue * scaleFactor));
+				result.put(tag, fontSize);
+			}
 		}
 		return result;
 	}
@@ -503,14 +505,41 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		return nodeRefs;
 	}
 
-	public List<NodeRef> getSimilarDocumentsByTag(String tag){
-        String query = "ASPECT:\"{http://www.it.ru/lecm/br5/semantic/aspects/1.0}br5\" AND "+tag;
+	@Override
+	public String getQueryByTag(String tag, String docType){
+		String ntag = (tag!=null)?tag:"";
+		String query = "";
+		if (docType.equals("alfresco")){
+			query = "TYPE:\"cm:content\" AND ASPECT:\"{http://www.it.ru/lecm/br5/semantic/aspects/1.0}br5\" AND "+"\""+ntag+"\"";
+		}
+		if (docType.equals("lecm")){
+			query = "ASPECT:\"{http://www.it.ru/lecm/br5/semantic/aspects/1.0}br5\" AND "+ntag;
+		}
+		return query;
+	}
+
+	@Override
+	public List<NodeRef> getSimilarDocumentsByTag(String tag,String docType){
+        String query = getQueryByTag(tag,docType);
 		List<NodeRef> documentsList = searchNodeRefs(query);
 		return documentsList;
 	}
 
+	@Override
+	public List<String> getSimilarDocumentsByTagStr(String tag, String docType){
+		List<NodeRef> documentsList = getSimilarDocumentsByTag(tag, docType);
+		List<String> sDocumentList = new ArrayList<String>();
+		for (NodeRef document : documentsList){
+			sDocumentList.add(document.toString());
+		}
+		return sDocumentList;
+	}
 
-	public List<NodeRef> getSimilarDocumentsByDocument(NodeRef document){
+	@Override
+	public String getQueryByDocument(NodeRef document,String docType){
+		if (document == null){
+			return "";
+		}
 		// получим список тегов документа
 		Map<String,Float> tags = getDocumentTagsBr5(document);
 		Set<String> tagSet = tags.keySet();
@@ -519,14 +548,32 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		if (tagSet.size() != 0){
 			subSearchString.append(" AND (");
 			for (String tag: tagSet){
-				subSearchString.append(tag).append("^").append(tags.get(tag).toString()).append(" OR ");
+				subSearchString.append("\"").append(tag).append("\"").append("^").append(tags.get(tag).toString()).append(" OR ");
 				//subSearchString.append(tag).append(" AND ");
 			}
 			subSearchString.delete(subSearchString.length()-4, subSearchString.length());
 		}
 		subSearchString.append(")");
-		List<NodeRef> documentsList = searchNodeRefs(subSearchString.toString());
+
+		String query = subSearchString.toString();
+		return query;
+	}
+
+	@Override
+	public List<NodeRef> getSimilarDocumentsByDocument(NodeRef document,String docType){
+		String query = getQueryByDocument(document,docType);
+		List<NodeRef> documentsList = searchNodeRefs(query);
 		return documentsList;
+	}
+
+	@Override
+	public List<String> getSimilarDocumentsByDocumentStr(NodeRef document,String docType){
+		List<NodeRef> documentsList = getSimilarDocumentsByDocument(document,docType);
+		List<String> sDocumentList = new ArrayList<String>();
+		for (NodeRef documentRef : documentsList){
+			sDocumentList.add(documentRef.toString());
+		}
+		return sDocumentList;
 	}
 
 	@Override
@@ -537,5 +584,17 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		} catch (DatatypeConfigurationException ex) {
 			logger.error(ex.getMessage());
 		}
+	}
+
+	@Override
+	public boolean hasDocumentTags(NodeRef documentRef) {
+		if (documentRef != null) {
+			Map<String,Float> tags = getDocumentTagsBr5(documentRef);
+			if (tags != null && tags.size() > 0  && hasBr5Aspect(documentRef))
+				return true;
+			else
+				return false;
+		}
+		return false;
 	}
 }

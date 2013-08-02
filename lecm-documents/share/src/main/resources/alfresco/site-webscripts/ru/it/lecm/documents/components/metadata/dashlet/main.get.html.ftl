@@ -42,6 +42,14 @@
                     documentMetadataComponent.onExpand();
                 }
             }
+
+			var semanticEl = YAHOO.util.Dom.get("semantic-mudule-active-htmlid");
+			if (!semanticEl){
+				var dashletAction = YAHOO.util.Dom.get("${id}-action-similar-doc");
+				if (dashletAction){
+					YAHOO.util.Dom.setStyle(dashletAction, 'display', 'none');
+				}
+			}
         }
         Event.onDOMReady(init);
     })();
@@ -53,7 +61,8 @@
         <span>${msg("label.title")}</span>
         <span class="lecm-dashlet-actions">
             <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMetadataComponent.onExpand()" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
-        </span>
+			<a id="${id}-action-similar-doc" href="documents-by-term?nodeRef=${nodeRef}&type=lecm" class="semantic-list" target="_blank"  title="${msg('dashlet.semantic.documents.tooltip')}">&nbsp</a>
+		</span>
     </div>
     <div class="body scrollableList dashlet-body" id="${id}_results">
         <#if mayAdd!false>

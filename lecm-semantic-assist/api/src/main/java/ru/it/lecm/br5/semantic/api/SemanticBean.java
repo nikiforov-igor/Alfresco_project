@@ -20,7 +20,12 @@ public interface SemanticBean {
 	public void setDocumentTags(NodeRef documentRef, Map<String,Float> tags);
 	public void refreshDocument(NodeRef documentRef);
 	public SortedMap<Float, List<Map<String, String>>> getDataExpertsByDocument(NodeRef document);
-	public List<NodeRef> getSimilarDocumentsByTag(String tag);
-	public List<NodeRef> getSimilarDocumentsByDocument(NodeRef document);
+	public List<NodeRef> getSimilarDocumentsByTag(String tag,String docType);
+	public List<String> getSimilarDocumentsByTagStr(String tag,String docType);
+	public List<NodeRef> getSimilarDocumentsByDocument(NodeRef document,String docType);
+	public List<String> getSimilarDocumentsByDocumentStr(NodeRef document,String docType);
 	public Map<String, Integer> normalizeTags(Map<String, Float> tags, Integer maxFontSize, Integer minFontSize);
+	public boolean hasDocumentTags(NodeRef documentRef);
+	public String getQueryByTag(String tag,String docType);
+	public String getQueryByDocument(NodeRef document,String docType);
 }

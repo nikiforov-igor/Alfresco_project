@@ -6,6 +6,9 @@
 <div class="document-metadata-header document-components-panel document-tags">
     <h2 id="${el}-heading" class="dark">
         ${msg("document.tags")}
+        <span class="alfresco-twister-actions">
+			<a id="${el}-action-cloud" href="javascript:void(0);" onclick="" class="expand" title="${msg("label.expand")}">&nbsp</a>
+        </span>
     </h2>
 
     <div class="panel-body">
@@ -107,6 +110,25 @@
                 obj: record
             });
     }
+
+	function initTags() {
+		var semanticEl = YAHOO.util.Dom.get("semantic-mudule-active-htmlid");
+		if (!semanticEl){
+			var tagAction = YAHOO.util.Dom.get("${el}-action-cloud");
+			if (tagAction){
+				YAHOO.util.Dom.setStyle(tagAction, 'display', 'none');
+			}
+		}
+		else{
+			documentTagsComponent =new LogicECM.DocumentTags("${el}").setOptions(
+			{
+				nodeRef: "${nodeRef}",
+				title: "${msg('label.terms.document.cloud')}",
+				showAfterReady: ${(view?? && view == "tags")?string}
+			}).setMessages(${messages});
+		}
+	}
+	YAHOO.util.Event.onDOMReady(initTags);
     //]]></script>
 </div>
 </div>
