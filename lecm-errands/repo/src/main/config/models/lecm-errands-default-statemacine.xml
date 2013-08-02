@@ -1286,7 +1286,7 @@
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[var document = bpm_package.children[0];
+																<value><![CDATA[var document = stm_document;
 if (document.properties["lecm-errands:number"] == null || document.properties["lecm-errands:number"] == "Не присвоено") {
 	regnumbers.setDocumentNumber("ERRAND_NUMBER", document, "lecm-errands:number");
 }

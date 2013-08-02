@@ -11,6 +11,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowDefinition;
 import org.alfresco.service.cmr.workflow.WorkflowPath;
@@ -87,6 +88,10 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 
 			workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
 			workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
+
+			workflowProps.put(QName.createQName("{}stm_document"), docRef);
+			serviceRegistry.getPermissionService().setPermission(docRef, "workflow",
+					PermissionService.ALL_PERMISSIONS, true);
 
 			// get the moderated workflow
 			WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
