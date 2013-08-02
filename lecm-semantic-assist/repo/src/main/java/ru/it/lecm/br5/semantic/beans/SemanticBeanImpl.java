@@ -236,9 +236,13 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 			logger.info("loadDocumentBr5: documentFile has no aspect \"BR5 Integration\"!");
 			return loadOk;
 		}
-		if (((Boolean) nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_LOADED))
-			&& nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_VERSION).toString().equals(nodeService.getProperty(documentRef, ContentModel.PROP_VERSION_LABEL).toString())) {
-			return true;
+		if  ( nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_VERSION)!= null && nodeService.getProperty(documentRef, ContentModel.PROP_VERSION_LABEL)!=null){
+			if (((Boolean) nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_LOADED))
+				&& nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_VERSION).toString().equals(nodeService.getProperty(documentRef, ContentModel.PROP_VERSION_LABEL).toString())) {
+				return true;
+			}
+		}else{
+			return false;
 		}
 		GregorianCalendar c = new GregorianCalendar();
 		c.setTime(new Date());
