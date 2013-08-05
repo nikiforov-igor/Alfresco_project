@@ -267,7 +267,6 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 		try {
 			final FileOutputStream wout = new FileOutputStream(outFullFileName);
 			try {
-				// TODO: NORMAL 
 				IOUtils.copy( desc.getReportTemplate().getData(), wout);
 
 				/*

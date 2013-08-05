@@ -4,7 +4,6 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="dataSource" value="ru.it.lecm.reports.jasper.DSProviderApprovalById"/>
-	<property name="dataSource2" value="org.nm.jr.extension.datasource.provider.JRCMISDataSourceProvider"/>
 	<style name="styleOdd" mode="Opaque" backcolor="#F4F5F5">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[($V{REPORT_COUNT}%2 == 0) && false]]></conditionExpression>
@@ -27,7 +26,7 @@
 		<defaultValueExpression><![CDATA["select * from lecm-al:approval-list as approvals"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String">
-		<defaultValueExpression><![CDATA["ds-approval-list-byid.xml"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["ds-approval-list.xml"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select * from cm:documents]]>

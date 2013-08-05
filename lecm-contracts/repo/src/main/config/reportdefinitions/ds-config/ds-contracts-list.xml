@@ -24,22 +24,39 @@
   -->
 
 <ds.config>
+    <report.descriptor mnem="contracts-list">
+        <type mnem="JASPER"/>
+        <l18>
+            <item key="RU_RU" value="Договорная деятельность"/>
+        </l18>
+        <provider mnem="DSProviderReestrDogovorov" javaClass="ru.it.lecm.reports.jasper.DSProviderReestrDogovorov" >
+           <l18>
+               <item key="RU_RU" value="Провайдер Jasper отчётов: Договорная деятельность"/>
+           </l18>
+        </provider>
+        <template filename="contracts-list.jrxml"/>
+        <datasource.descriptor mnem="datasource-approval">
+            <l18>
+                <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
+            </l18>
+        </datasource.descriptor>
+    </report.descriptor>
 
 	<query.descriptor>
 		<offset>0</offset>
 		<limit>-1</limit>
 		<pgsize>-1</pgsize>
 		<allVersions>true</allVersions>
+		<preferedType></preferedType>
+		<isMultiRow>true</isMultiRow>
 		<!--
 			select * from lecm:documents
+			select * from lecm-contract:document as Contract
 		  -->
-		<queryText>
-			<![CDATA[
-				select * from lecm-contract:document as Contract
-			]]>
-		</queryText>
+		<queryText>	<![CDATA[]]> </queryText>
 	</query.descriptor>
 
+	<!-- параметры соединения с Альфреско (пока не используются) -->
 	<cmis.connection>
 		<url>http://localhost:8080/alfresco/service/cmis</url>
 		<username>admin</username>

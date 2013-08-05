@@ -151,7 +151,7 @@ public class XMLMacroGenerator {
 	}
 
 	public XMLMacroGenerator(ReportDescriptor rdesc) {
-		this.reportDesc = rdesc;
+		setReportDesc( rdesc);
 	}
 
 	/** активный описатель отчёта */

@@ -51,7 +51,7 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	final static String DEFAULT_GENXMLTEMPLATE_BASEDIR = REPORT_TEMPLATE_FILES_BASEDIR + "/templates";
 	final static String DEFAULT_JRXMLFILENAME = "jreportCommonTemplate.jrxml.gen";
-	final static String DEFAULT_JRXML_TYPE = "JASPER";
+	final public static String DEFAULT_REPORT_TYPE = "JASPER";
 
 	/**
 	 * Список зарегистрирванных отчётов
@@ -61,7 +61,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	private ReportDAO reportDAO;
 
 	private String defaultGenTemplate = DEFAULT_JRXMLFILENAME; // шаблон для генерации xml-шаблона отчёта
-	private String defaultGenReportType = DEFAULT_JRXML_TYPE; // тип отчёта по-умолчанию
+	private String defaultGenReportType = DEFAULT_REPORT_TYPE; // тип отчёта по-умолчанию
 
 	// Map<КодТипаОтчёта, Провайдер>
 	private Map< /*ReportType*/String, ReportGenerator> reportGenerators;
@@ -159,28 +159,9 @@ public class ReportsManagerImpl implements ReportsManager {
 		this.reportGenerators = map;
 	}
 
-	final static private String DEFAULT_RTYPE = "JASPER";
 	@Override
 	public String getReportTypeTag(ReportType rtype) {
-		return (rtype != null && rtype.getMnem() != null) ? rtype.getMnem() : DEFAULT_RTYPE;
-	}
-
-	/**
-	 * Выбираем название отчёта из описателя вида "xxx\ds-reportname.xml" 
-	 * @param filename
-	 * @return
-	 */
-	private static String extractReportName( String filename) {
-		if (filename == null)
-			return null;
-		int start = filename.indexOf("ds-");
-		if (start < 0) 
-			start = 0; // если нет "ds-", то с начала строки
-		else // иначе с смивола после "ds-"
-			start+=3;
-		int end = filename.lastIndexOf(".");
-		if (end < 0) end = filename.length(); // если нет точки - до конца строки
-		return filename.substring(start, end);
+		return (rtype != null && rtype.getMnem() != null) ? rtype.getMnem() : DEFAULT_REPORT_TYPE;
 	}
 
 	/**
@@ -219,13 +200,17 @@ public class ReportsManagerImpl implements ReportsManager {
 					final InputStream in = new FileInputStream(item);
 					try {
 						// загружаем описатеть из файла
-						final ReportDescriptor desc = DSXMLProducer.parseDSXML(in, reportName);
-						if (desc == null) continue;
-						if (desc.getMnem() == null)
-							desc.setMnem( extractReportName(item.getName()));
-						this.descriptors.put(desc.getMnem(), desc);
-						ifound++;
-						logger.debug( String.format( "... loaded report descriptor '%s' from '%s'", desc.getMnem(), item) );
+						try { // try-catch wraping
+							final ReportDescriptor desc = DSXMLProducer.parseDSXML(in, reportName);
+							if (desc == null) continue;
+							if (desc.getMnem() == null) // задать название название шаблона по-умолчанию ...
+								desc.setMnem( DSXMLProducer.extractReportName(item.getName()));
+							this.descriptors.put(desc.getMnem(), desc);
+							ifound++;
+							logger.debug( String.format( "... loaded report descriptor '%s' from '%s'", desc.getMnem(), item));
+						} catch (Throwable ex) {
+							logger.error( String.format( "Problem parsing xml file at '%s' -> ignored\n%s", item, ex.getMessage()), ex);
+						}
 					} finally {
 						IOUtils.closeQuietly(in);
 					} // finally
@@ -487,7 +472,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	 */
 	private String makeDsXmlFileName(String mnem) {
 		final File base = ensureDsConfigDir();
-		return String.format( "%s/ds-%s.xml", base.getAbsolutePath(), mnem); 
+		return String.format( "%s/%s%s.xml", base.getAbsolutePath(), DSXMLProducer.PFX_DS, mnem); 
 	}
 
 	/**
@@ -537,6 +522,9 @@ public class ReportsManagerImpl implements ReportsManager {
 	public byte[] loadDsXmlBytes(String reportCode) {
 		PropertyCheck.mandatory (this, "dsloader", getDsloader());
 		final URL url = getDsXmlResourceUrl(reportCode);
+		if (url == null) {
+			logger.warn( String.format("ds-xml for report '%s' is not found", reportCode));
+		}
 		try {
 			return url != null ? JRLoader.loadBytes(url) : null;
 		} catch (JRException ex) {
@@ -593,7 +581,7 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	@Override
 	public String getDsRelativeFileName(String reportCode) {
-		return String.format( "%s/ds-%s.xml", REPORT_DS_FILES_BASEDIR, reportCode);
+		return String.format( "%s/%s%s.xml", REPORT_DS_FILES_BASEDIR, DSXMLProducer.PFX_DS, reportCode);
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.beans.ReportsManagerImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -82,10 +83,10 @@ public class JasperFormProducer extends AbstractWebScript {
 		final String reportName = Utils.coalesce( templateParams.get("report"), templateParams.get("reportCode"));
 
 		// TODO: ТипОтчёта (Jasper/OOffice и пр) надо брать тоже из параметров
-		final String rtype = "JASPER";
+		final String rtype = Utils.coalesce( templateParams.get("reporType"), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
 
 		final Map<String, String[]> requestParameters = getRequestParameters(webScriptRequest, String.format("Processing report '%s' with args: \n", reportName));
-
+ 
 		PropertyCheck.mandatory(this, "reportsManager", getReportsManager() );
 		PropertyCheck.mandatory (this, "reportGenerators", getReportsManager().getReportGenerators());
 

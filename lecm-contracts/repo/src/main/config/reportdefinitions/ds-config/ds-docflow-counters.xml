@@ -38,6 +38,23 @@
 	-->
 
 <ds.config>
+    <report.descriptor mnem="docflow-counters">
+        <type mnem="JASPER"/>
+        <l18>
+            <item key="RU_RU" value="Сводный отчет по договорам"/>
+        </l18>
+        <provider mnem="DSProviderDocflowStatusCounters" javaClass="ru.it.lecm.reports.jasper.DSProviderDocflowStatusCounters" >
+           <l18>
+               <item key="RU_RU" value="Провайдер Jasper отчётов: Сводный отчет по договорам"/>
+           </l18>
+        </provider>
+        <template filename="docflow-counters.jrxml"/>
+        <datasource.descriptor mnem="datasource-approval">
+            <l18>
+                <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
+            </l18>
+        </datasource.descriptor>
+    </report.descriptor>
 
 	<!-- Ограничения основной выборки -->
 	<query.descriptor>
@@ -45,14 +62,13 @@
 		<limit>-1</limit>
 		<pgsize>-1</pgsize>
 		<allVersions>true</allVersions>
+		<preferedType></preferedType>
+		<isMultiRow>true</isMultiRow>
 		<!--
 			select * from lecm:documents
+			select * from lecm-contract:document as Contract
 		  -->
-		<queryText>
-			<![CDATA[
-				select * from lecm-contract:document as Contract
-			]]>
-		</queryText>
+		<queryText>	<![CDATA[]]> </queryText>
 	</query.descriptor>
 
 	<!-- параметры соединения с Альфреско (пока не используются) -->
@@ -61,7 +77,6 @@
 		<username>admin</username>
 		<password>111</password>
 	</cmis.connection>
-
 
 	<!--
 		Описания для группирования строк из НД, полученного после сбора всех договоров.

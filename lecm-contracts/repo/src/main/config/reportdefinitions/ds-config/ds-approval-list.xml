@@ -68,20 +68,36 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				на <target>
   -->
 <ds.config>
+    <report.descriptor mnem="approval-list">
+        <type mnem="JASPER"/>
+        <l18>
+            <item key="RU_RU" value="Лист согласования"/>
+        </l18>
+        <provider mnem="DSProviderApprovalById" javaClass="ru.it.lecm.reports.jasper.DSProviderApprovalById" >
+           <l18>
+               <item key="RU_RU" value="Провайдер Jasper отчётов: Лист согласования"/>
+           </l18>
+        </provider>
+        <template filename="approval-list.jrxml"/>
+        <datasource.descriptor mnem="datasource-approval">
+            <l18>
+                <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
+            </l18>
+        </datasource.descriptor>
+    </report.descriptor>
 
 	<query.descriptor>
 		<offset>0</offset>
 		<limit>-1</limit>
 		<pgsize>-1</pgsize>
 		<allVersions>true</allVersions>
+		<preferedType></preferedType>
+		<isMultiRow>false</isMultiRow>
 		<!--
 			select * from lecm:documents
+			select * from lecm-al:approval-list as approvals
 		  -->
-		<queryText>
-			<![CDATA[
-				select * from lecm-al:approval-list as approvals
-			]]>
-		</queryText>
+		<queryText>	<![CDATA[]]></queryText>
 	</query.descriptor>
 
 	<cmis.connection>
