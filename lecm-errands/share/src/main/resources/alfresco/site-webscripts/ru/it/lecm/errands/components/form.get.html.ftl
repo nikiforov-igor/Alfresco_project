@@ -118,16 +118,10 @@
             </#if>
         </div>
         <div id="${id}-attachments" class="data-list-block">
-            <#assign attsList = []/>
-            <#if attachments?? && attachments.items?? && attachments.items?size gt 0>
-                <#if attachments.items[0].attachments??>
-                    <#assign attsList = attachments.items[0].attachments/>
-                </#if>
-            </#if>
-            <span class="heading">Вложения<span class="count"> (${attsList?size})</span></span>
+            <span class="heading">Вложения<span class="count"> (${(attachments![])?size})</span></span>
             <ul class="data-list">
-                <#if attsList?size gt 0>
-                    <#list attsList as attachment>
+                <#if attachments?? && attachments?size gt 0>
+                    <#list attachments as attachment>
                         <li title="${attachment.name!""}">
                             <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                             <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
@@ -139,22 +133,17 @@
             </ul>
         </div>
         <div id="${id}-links" class="data-list-block">
-            <#assign linksList = []/>
             <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ССЫЛКИ! (вложения временно) -->
-            <#if attachments?? && attachments.items?? && attachments.items?size gt 0>
-                <#if attachments.items[0].attachments??>
-                    <#assign linksList = attachments.items[0].attachments/>
-                </#if>
-            </#if>
-            <span class="heading">Ссылки<span class="count"> (${linksList?size})</span></span>
+            <#assign links = attachments/>
+            <span class="heading">Ссылки<span class="count"> (${(links![])?size})</span></span>
             <span id="${id}-links-add" class="yui-button yui-push-button">
                 <span class="first-child">
                     <button type="button">Добавить ссылку</button>
                 </span>
             </span>
             <ul class="data-list">
-                <#if linksList?size gt 0>
-                    <#list linksList as link>
+                <#if links?? && links?size gt 0>
+                    <#list links as link>
                         <li title="${link.name!""}">
                             <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                             <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
@@ -173,7 +162,7 @@
             </#if>
             <span class="heading">Соисполнители<span class="count"> (${coexecList?size})</span></span>
             <ul class="data-list persons-list">
-                <#if linksList?size gt 0>
+                <#if coexecList?size gt 0>
                     <#list coexecList as coexec>
                         <li>
                             <div class="avatar">
@@ -199,16 +188,10 @@
             </div>
             <div class="title">Работа над поручением</div>
             <div id="${id}-exec-attachments" class="data-list-block">
-                <#assign attsList = []/>
-                <#if attachments?? && attachments.items?? && attachments.items?size gt 0>
-                    <#if attachments.items[0].attachments??>
-                        <#assign attsList = attachments.items[0].attachments/>
-                    </#if>
-                </#if>
-                <span class="heading">Вложения<span class="count"> (${attsList?size})</span></span>
+                <span class="heading">Вложения<span class="count"> (${(attachmentsExec![])?size})</span></span>
                 <ul class="data-list">
-                    <#if attsList?size gt 0>
-                        <#list attsList as attachment>
+                    <#if attachmentsExec?? && attachmentsExec?size gt 0>
+                        <#list attachmentsExec as attachment>
                             <li title="${attachment.name!""}">
                                 <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
@@ -220,22 +203,17 @@
                 </ul>
             </div>
             <div id="${id}-exec-links" class="data-list-block">
-                <#assign linksList = []/>
                 <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ССЫЛКИ! (вложения временно) -->
-                <#if attachments?? && attachments.items?? && attachments.items?size gt 0>
-                    <#if attachments.items[0].attachments??>
-                        <#assign linksList = attachments.items[0].attachments/>
-                    </#if>
-                </#if>
-                <span class="heading">Ссылки<span class="count"> (${linksList?size})</span></span>
+                <#assign links = attachments/>
+                <span class="heading">Ссылки<span class="count"> (${(links![])?size})</span></span>
                 <span id="${id}-exec-links-add" class="yui-button yui-push-button">
                     <span class="first-child">
                         <button type="button">Добавить ссылку</button>
                     </span>
                 </span>
                 <ul class="data-list">
-                    <#if linksList?size gt 0>
-                        <#list linksList as link>
+                    <#if links?? && links?size gt 0>
+                        <#list links as link>
                             <li title="${link.name!""}">
                                 <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
@@ -260,7 +238,7 @@
                     </span>
                 </span>
                 <ul class="data-list persons-list">
-                    <#if linksList?size gt 0>
+                    <#if coexecList?size gt 0>
                         <#list coexecList as coexec>
                             <li>
                                 <div class="avatar">
@@ -308,16 +286,10 @@
         <div id="${id}-contr" class="block">
             <div class="title">Контроль исполнения</div>
             <div id="${id}-contr-attachments" class="data-list-block">
-                <#assign attsList = []/>
-                <#if attachments?? && attachments.items?? && attachments.items?size gt 0>
-                    <#if attachments.items[0].attachments??>
-                        <#assign attsList = attachments.items[0].attachments/>
-                    </#if>
-                </#if>
-                <span class="heading">Вложения<span class="count"> (${attsList?size})</span></span>
+                <span class="heading">Вложения<span class="count"> (${(attachmentsControl![])?size})</span></span>
                 <ul class="data-list">
-                    <#if attsList?size gt 0>
-                        <#list attsList as attachment>
+                    <#if attachmentsControl?? && attachmentsControl?size gt 0>
+                        <#list attachmentsControl as attachment>
                             <li title="${attachment.name!""}">
                                 <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">

@@ -9,9 +9,17 @@ function main() {
         model.node = nodeDetails.item.node;
     }
 
-    var atts = getAttachments(model.nodeRef);
+    var atts = getAttachments(model.nodeRef, "Поручение");
     if (atts != null) {
         model.attachments = atts;
+    }
+    atts = getAttachments(model.nodeRef, "Исполнение");
+    if (atts != null) {
+        model.attachmentsExec = atts;
+    }
+    atts = getAttachments(model.nodeRef, "Контроль");
+    if (atts != null) {
+        model.attachmentsControl = atts;
     }
 
     var coexecs = getCoexecutors(model.nodeRef);
@@ -22,13 +30,10 @@ function main() {
     model.limitDate = new Date(nodeDetails.item.node.properties["lecm-errands:limitation-date"]["value"]);
 }
 
-function getAttachments(nodeRef, defaultValue) {
-    var url = '/lecm/document/attachments/api/get?documentNodeRef=' + nodeRef + "&count=10";
+function getAttachments(nodeRef, categoryName) {
+    var url = '/lecm/document/attachments/api/getAttachmentsByCategory?documentNodeRef=' + nodeRef + '&category=' + encodeURIComponent(categoryName);
     var result = remote.connect("alfresco").get(url);
     if (result.status != 200) {
-        if (defaultValue !== undefined) {
-            return defaultValue;
-        }
         return null;
     }
     return eval('(' + result + ')');
