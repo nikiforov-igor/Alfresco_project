@@ -11,8 +11,7 @@
 		<property name="gateWcfService" ref="gateWcfService.https"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="nodeService" ref="nodeService"/>
-		<property name="signedDocflowService" ref="signedDocflowService"/>
-		<property name="transactionService" ref="transactionService"/>
+		<property name="contentService" ref="contentService"/>
 	</bean>
 
 	<bean id="lecm.signed-docflow.model-bootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">

@@ -99,27 +99,42 @@ public class UnicloudWebscript extends DeclarativeWebScript {
 						}
 						return null;
 					}
-				});
+				}, false, true);
 			}
 		});
 	}
 
-	private JSONObject authenticateByCertificate(final JSONObject json) {
-		String guidSignBase64;
+	public JSONObject authenticateByCertificate(final JSONObject json) {
+		String guidSign;
 		String timestamp;
-		String timestampSignBase64;
+		String timestampSign;
 
 		try {
-			guidSignBase64 = json.getString("guidSign");
+			guidSign = json.getString("guidSign");
 			timestamp = json.getString("timestamp");
-			timestampSignBase64 = json.getString("timestampSign");
+			timestampSign = json.getString("timestampSign");
 		} catch (JSONException ex) {
 			String msg = "Can't parse incoming json";
 			logger.error("{}. Caused by: {}", msg, ex.getMessage());
 			throw new IllegalArgumentException(msg, ex);
 		}
-		Map<String, Object> properties = unicloudService.authenticateByCertificate(guidSignBase64, timestamp, timestampSignBase64);
-		return new JSONObject(properties);
+		Map<String, Object> result = unicloudService.authenticateByCertificate(guidSign, timestamp, timestampSign);
+		return new JSONObject(result);
+	}
+
+	public JSONObject verifySignature(final JSONObject json) {
+		String contentRef;
+		String signature;
+		try {
+			contentRef = json.getString("contentRef");
+			signature = json.getString("signature");
+		} catch (JSONException ex) {
+			String msg = "Can't parse incoming json";
+			logger.error("{}. Caused by: {}", msg, ex.getMessage());
+			throw new IllegalArgumentException(msg, ex);
+		}
+		Map<String, Object> result = unicloudService.verifySignature(contentRef, signature);
+		return new JSONObject(result);
 	}
 
 	@Override

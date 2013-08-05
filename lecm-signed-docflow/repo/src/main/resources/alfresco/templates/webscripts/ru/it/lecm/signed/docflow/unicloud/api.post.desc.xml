@@ -5,5 +5,5 @@
 	<url>/lecm/signed-docflow/unicloud/api/{action}</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>none</transaction>
+	<transaction>required</transaction>
 </webscript>
