@@ -39,16 +39,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	YAHOO.lang.augmentObject(LogicECM.ContentSigning.prototype,
 			{
 				newId: null,
-				signingContainer: null,
-				exchangeContainer: null,
 				onReady: function() {
 					var id = this.newId ? this.newId : this.id;
 
 					Alfresco.util.createTwister(id + "-signing-heading", "ContentSigning");
 					Alfresco.util.createTwister(id + "-exchange-heading", "DocumentAttachmentExchange");
 
-					this.signingContainer = Dom.get(id + "-signing-container");
-					this.exchangeContainer = Dom.get(id + "-exchange-container");
 				},
 				onViewSignature: function(layer, args) {
 					alert("onViewSignature");
@@ -61,37 +57,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				},
 				onUploadSignature: function(layer, args) {
 					alert("onUploadSignature");
-				},
-				onSignableSwitch: function(layer, args) {
-					var checkbox = args.checkbox;
-
-					Alfresco.util.Ajax.request({
-						method: "GET",
-						url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/setSignable?nodeRef=" + this.options.nodeRef + "&action=" + checkbox.checked,
-						requestContentType: "application/json",
-						responseContentType: "application/json",
-						failureCallback: {
-							fn: function(response) {
-								Alfresco.util.PopupManager.displayMessage({
-									text: msg("message.setting.signable.failure")
-								});
-							},
-							scope: this
-						},
-						successCallback: {
-							fn: function(response) {
-								if (checkbox.checked) {
-									this.signingContainer.style.display = "block";
-									this.exchangeContainer.style.display = "block";
-								} else {
-									this.signingContainer.style.display = "none"
-									this.exchangeContainer.style.display = "none";
-								}
-							},
-							scope: this
-						}
-					});
-
 				},
 				onSendDocument: function(layer, args) {
 					alert("onSendDocument");

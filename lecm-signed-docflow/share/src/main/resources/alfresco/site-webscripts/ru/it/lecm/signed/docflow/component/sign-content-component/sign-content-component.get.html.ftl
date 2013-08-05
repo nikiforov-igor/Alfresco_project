@@ -1,3 +1,5 @@
+<#if isSignable?? && isSignable>
+
 <!-- Parameters and libs -->
 <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
 <#assign el=args.htmlid/>
@@ -8,14 +10,8 @@
 <script type="text/javascript">
     var contentAtachmentSigningComponent = null;
 </script>
-<div class="document-details-panel">
-	<h2 id="${el}-checkbox-heading" class="thin dark">
-		${msg("label.signable")}&nbsp;
-		<input type="checkbox" onclick="contentAtachmentSigningComponent.onSignableSwitch(null, { checkbox: this } )" <#if isSignable>checked</#if> style="vertical-align: middle;">
-	</h2>
-</div>
 
-<div class="document-details-panel document-actions" id="${el}-signing-container" <#if !isSignable>style="display: none;"</#if>>
+<div class="document-details-panel document-actions" id="${el}-signing-container">
 	<h2 id="${el}-signing-heading" class="thin dark">
 			${msg("label.signing")}
 			<span class="alfresco-twister-actions">
@@ -31,7 +27,7 @@
 	</div>
 </div>
 
-<div class="document-details-panel document-actions" id="${el}-exchange-container" <#if !isSignable>style="display: none;"</#if>>
+<div class="document-details-panel document-actions" id="${el}-exchange-container">
 	<h2 id="${el}-exchange-heading" class="thin dark">
 		${msg("label.exchange")}
 		<span class="alfresco-twister-actions">
@@ -53,8 +49,7 @@
 		if (contentAtachmentSigningComponent == null) {
 			contentAtachmentSigningComponent = new LogicECM.ContentSigning("${el}").setOptions({
 						nodeRef: "${nodeRef}",
-						title: "${msg('heading')}",
-						signable: ${isSignable?string}
+						title: "${msg('heading')}"
 					}).setMessages(${messages});
 		}
 	}
@@ -63,3 +58,4 @@
 })();
 //]]>
 </script>
+</#if>
