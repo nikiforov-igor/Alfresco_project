@@ -1,10 +1,12 @@
 function main() {
     var type = args["itemType"] ? args["itemType"] : null;
-    var queryFilter = args["queryFilter"] ? args["queryFilter"] : null;
     model.docType = type;
 
+    var queryFilter = args["queryFilter"] ? args["queryFilter"] : null; // из настроек в шаблоне страницы
+    var filterOver = page.url.args.filterOver; // если параметр пришел - значит, перегрузим прописанный в настройках фильтр
+
     if (type != null) {
-        model.statusesGroups = getFilters(type, queryFilter);
+        model.statusesGroups = getFilters(type, (filterOver != null && filterOver.length > 0 )? filterOver : queryFilter);
         model.statusesList = getStatuses(type);
     }
 }

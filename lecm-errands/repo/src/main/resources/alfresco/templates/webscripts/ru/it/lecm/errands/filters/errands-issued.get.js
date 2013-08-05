@@ -7,7 +7,9 @@ function addToList(list, key) {
     list.push({
         key: key,
         allCount: allCount,
-        importantCount: importantCount
+        importantCount: importantCount,
+        filter: errands.getIssuedFilter(key),
+        importantFilter: errands.getIssuedFilter(key + "_important")
     });
 }
 
@@ -25,10 +27,10 @@ function getImportantCount(list) {
 function main() {
     var list = [];
 
-    addToList(list, "ALL");
-    addToList(list, "EXECUTION");
-    addToList(list, "EXPIRED");
-    addToList(list, "DEADLINE");
+    addToList(list, "issued_errands_all");
+    addToList(list, "issued_errands_execution");
+    addToList(list, "issued_errands_expired");
+    addToList(list, "issued_errands_deadline");
 
     model.items = list;
 }

@@ -213,26 +213,36 @@ public class DocumentWebScriptBean extends BaseWebScript {
         List<String> docTypes = getElements(Context.getCurrentContext().getElements(types));
         List<QName> qNameTypes = new ArrayList<QName>();
         String currentUser = authService.getCurrentUserName();
-        String employeesFilter = "";
+        String queryFilter = "";
 
         for (String docType : docTypes) {
             qNameTypes.add(QName.createQName(docType, namespaceService));
 
             if (queryFilterId != null && !queryFilterId.isEmpty()) {
-                String filterId = DocumentService.PREF_DOCUMENTS + "." + docType.replaceAll(":", "_") + "." + queryFilterId;
-                Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, filterId);
-                if (preferences != null && preferences.get(filterId) != null) {
-                    String filterData = preferences.get(filterId).toString();
-
-                    DocumentFilter docFilter = FiltersManager.getFilterById(queryFilterId);
-                    if (docFilter != null && filterData != null) {
-                        employeesFilter = docFilter.getQuery((Object[]) filterData.split("/"));
+                DocumentFilter docFilter = FiltersManager.getFilterById(queryFilterId);
+                if (docFilter != null) {
+                    //пробуем получить сохраненные параметры
+                    String filterId = DocumentService.PREF_DOCUMENTS + "." + docType.replaceAll(":", "_") + "." + queryFilterId;
+                    Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, filterId);
+                    if (preferences != null && preferences.get(filterId) != null) {
+                        String filterData = preferences.get(filterId).toString();
+                        if (filterData != null) {
+                            queryFilter = docFilter.getQuery((Object[]) filterData.split("/"));
+                        }
+                    } else {
+                        // сохраненных параметров нет - пытаемся вытащить их из настройки самого фильтра
+                        String filterParams = docFilter.getParamStr();
+                        if (filterParams != null && !filterParams.isEmpty()) {
+                            queryFilter = docFilter.getQuery((Object[]) filterParams.split("/"));
+                        } else {
+                            queryFilter = docFilter.getQuery(); // вызов фильтра без параметров
+                        }
                     }
                 }
             }
         }
         return documentService.getDocumentsByFilter(qNameTypes,
-                getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), employeesFilter, null).size();
+                getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), queryFilter, null).size();
     }
 
     public List<String> getAccessPermissionsList(String type) {
@@ -296,8 +306,12 @@ public class DocumentWebScriptBean extends BaseWebScript {
             }
 
             DocumentFilter docFilter = FiltersManager.getFilterById(filterId);
-            if (docFilter != null && filterData != null) {
-                return docFilter.getQuery((Object[])filterData.split("/"));
+            if (docFilter != null) {
+                if (filterData.isEmpty()){
+                    filterData = docFilter.getParamStr();
+                }
+                Object[] params = filterData != null ? filterData.split("/") : new Object[]{};
+                return docFilter.getQuery(params);
             }
         } else {
             logger.warn("Check filter code!!! Filter=" + filter);

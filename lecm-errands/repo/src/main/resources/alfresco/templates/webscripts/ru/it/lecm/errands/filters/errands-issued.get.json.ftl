@@ -5,7 +5,9 @@
     {
         "key":  "${item.key}",
         "allCount": "${item.allCount}",
-        "importantCount": "${item.importantCount}"
+        "importantCount": "${item.importantCount}",
+        "filter": "${item.filter}",
+        "importantFilter": "${item.importantFilter}"
     }
         <#if item_has_next>,</#if>
     </#list>

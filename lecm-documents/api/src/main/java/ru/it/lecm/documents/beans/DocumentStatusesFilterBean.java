@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class DocumentStatusesFilterBean {
 
-    protected static final String DEFAULT_FILTER = "Все";
+    public static final String DEFAULT_FILTER = "Все";
 
     protected static Map<String, Map> filters = new HashMap<String, Map>();
 

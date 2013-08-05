@@ -20,6 +20,8 @@ import java.util.List;
 public class ErrandsFilter extends DocumentFilter {
     final private static Logger logger = LoggerFactory.getLogger(ErrandsFilter.class);
 
+    final public static String ID = "errandsFilter";
+
     private IWorkCalendar workCalendar;
 
     public void setWorkCalendar(IWorkCalendar workCalendar) {
@@ -41,7 +43,7 @@ public class ErrandsFilter extends DocumentFilter {
 
     @Override
     public String getId() {
-        return "errandsFilter";
+        return ID;
     }
 
     @Override
@@ -158,5 +160,10 @@ public class ErrandsFilter extends DocumentFilter {
             logger.warn("Incorrect filter! Filter args:" + args);
         }
         return query;
+    }
+
+    @Override
+    public String getParamStr() {
+        return "all/all/false/false";
     }
 }

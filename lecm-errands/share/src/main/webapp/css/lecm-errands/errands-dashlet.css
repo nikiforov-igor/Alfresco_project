@@ -38,3 +38,7 @@
     color: #68a0c8;
     font-weight: bold;
 }
+
+.dashlet .titleBarActions .arm {
+    background-image: url('/share/res/images/lecm-errands/arm.png');
+}

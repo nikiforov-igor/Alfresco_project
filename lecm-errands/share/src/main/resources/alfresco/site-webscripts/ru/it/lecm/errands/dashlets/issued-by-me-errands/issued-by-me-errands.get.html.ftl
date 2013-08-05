@@ -28,10 +28,10 @@
                     },
 
                     message: {
-                        "ALL": "${msg("label.info.allErrands")?js_string}",
-                        "EXPIRED": "${msg("label.info.expiredErrands")?js_string}",
-                        "DEADLINE": "${msg("label.info.comingSoonErrands")?js_string}",
-                        "EXECUTION": "${msg("label.info.onExecutionErrands")?js_string}"
+                        "issued_errands_all": "${msg("label.info.allErrands")?js_string}",
+                        "issued_errands_expired": "${msg("label.info.expiredErrands")?js_string}",
+                        "issued_errands_deadline": "${msg("label.info.comingSoonErrands")?js_string}",
+                        "issued_errands_execution": "${msg("label.info.onExecutionErrands")?js_string}"
                     },
 
                     container: null,
@@ -63,10 +63,12 @@
                                                 if (response.json != null) {
                                                     var list = response.json.list;
                                                     for (var index in list) {
-                                                            var innerHtml = "<div class='column first'>" + this.message[list[index].key] + ":" + "</div>" +
-                                                                    "<div class='column second'>" + list[index].allCount + "</div>" +
-                                                                    "<div class='column third'>" + "(" + list[index].importantCount + ")"+ "</div>";
-                                                            this.createRow(innerHtml);
+                                                        var innerHtml = "<div class='column first'>" + this.message[list[index].key] + ":" + "</div>" +
+                                                                "<div class='column second'><a class=\"status-button text-cropped\" " +
+                                                                "href=\"/share/page/errands-list?" + list[index].filter + "\">" + list[index].allCount + "</a></div>" +
+                                                                "<div class='column third'><a style=\"color:red;\" class=\"status-button text-cropped\" " +
+                                                                "href=\"/share/page/errands-list?" + list[index].importantFilter + "\">(" + list[index].importantCount + ")</a></div>";
+                                                        this.createRow(innerHtml);
                                                     }
                                                 }
                                             }
@@ -92,6 +94,11 @@
                                     message: "${msg("dashlet.help")?js_string}"
                                 },
                                 tooltip: "${msg("dashlet.help.tooltip")?js_string}"
+                            },
+                            {
+                                cssClass: "arm",
+                                linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "errands-list",
+                                tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
                             }
                         ]
             });

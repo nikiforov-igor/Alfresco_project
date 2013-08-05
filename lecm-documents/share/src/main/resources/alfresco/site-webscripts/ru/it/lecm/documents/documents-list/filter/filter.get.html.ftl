@@ -24,6 +24,11 @@
     <#assign formId = page.url.args.formId/>
 </#if>
 
+<#assign filterOver = false/>
+<#if page.url.args.filterOver??>
+    <#assign filterOver = true/>
+</#if>
+
 <div id="documents-filter" class="documents-filter-panel">
     <div class="documents-filter-block">
         <div id="filter-groups-set" class="filterBlock">

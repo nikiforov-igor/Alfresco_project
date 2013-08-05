@@ -21,6 +21,8 @@ public abstract class DocumentFilter {
     protected NodeService nodeService;
     protected PreferenceService preferenceService;
 
+    protected String paramStr;
+
     public abstract String getId();
 
     /**
@@ -40,6 +42,10 @@ public abstract class DocumentFilter {
      Метод для регистрации фильтра в системе
      */
     abstract public String getQuery(Object... args);
+
+    public String getParamStr() {
+        return this.paramStr;
+    }
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -63,5 +69,9 @@ public abstract class DocumentFilter {
 
     public void setPreferenceService(PreferenceService preferenceService) {
         this.preferenceService = preferenceService;
+    }
+
+    public void setParamStr(String paramStr) {
+        this.paramStr = paramStr;
     }
 }

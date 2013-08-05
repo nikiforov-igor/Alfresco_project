@@ -22,7 +22,8 @@
             PREF_FILTER_ID: "errandsFilter",
             options: {
                 docType: "lecm-errands:document",
-                gridBubblingLabel: "errands"
+                gridBubblingLabel: "errands",
+                filterOver: false
             },
 
             errandsList: null,
@@ -59,42 +60,27 @@
 
                 this.widgets.applyButton = Alfresco.util.createYUIButton(this, "applyButton", this.onApplyButtonClick);
 
-                this.manager.preferences.request(this.manager._buildPreferencesKey(),
-                    {
-                        successCallback: {
-                            fn: function (p_oResponse) {
-                                var preferences = Alfresco.util.findValueByDotNotation(p_oResponse.json, this.manager._buildPreferencesKey(this.PREF_FILTER_ID), "all/all/false/false");
-                                if (preferences !== null) {
-                                    var prefs = preferences.split("/");
-                                    this.widgets.assign.value = prefs[0];
-                                    var menuItems = this.widgets.assign.getMenu().getItems();
-                                    for (index in menuItems) {
-                                        if (menuItems.hasOwnProperty(index)) {
-                                            if (menuItems[index].value === prefs[0]) {
-                                                this.widgets.assign.set("label", menuItems[index].cfg.getProperty("text"));
-                                                break;
-                                            }
-                                        }
+                if (!this.options.filterOver || this.options.filterOver == "false") {
+                    this.manager.preferences.request(this.manager._buildPreferencesKey(),
+                        {
+                            successCallback: {
+                                fn: function (p_oResponse) {
+                                    var preferences = Alfresco.util.findValueByDotNotation(p_oResponse.json, this.manager._buildPreferencesKey(this.PREF_FILTER_ID), "all/all/false/false");
+                                    if (preferences !== null) {
+                                        this._updateWidgets(preferences);
                                     }
-                                    this.widgets.date.value = prefs[1];
-                                    menuItems = this.widgets.date.getMenu().getItems();
-                                    for (index in menuItems) {
-                                        if (menuItems.hasOwnProperty(index)) {
-                                            if (menuItems[index].value === prefs[1]) {
-                                                this.widgets.date.set("label", menuItems[index].cfg.getProperty("text"));
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    this.widgets.importantCheckBox.checked = (prefs[2] == "true");
-                                    this.widgets.controlCheckBox.checked = (prefs[3] == "true");
-
-                                    this.deferredListPopulation.fulfil("onReady");
-                                }
-                            },
-                            scope: this
-                        }
-                    });
+                                },
+                                scope: this
+                            }
+                        });
+                } else {
+                    var filter = location.hash;
+                    if (filter && filter != ""){
+                        var re = /#(\w+)=(\w+)\|/;
+                        filter.replace(re, "")
+                        this._updateWidgets(filter);
+                    }
+                }
             },
 
             populateDataGrid: function () {
@@ -104,7 +90,7 @@
                     filterData: filterData
                 };
                 this.errandsList.currentFilter = currentFilter;
-                location.hash = '#filter=' + this.PREF_FILTER_ID + "|" + filterData;
+                //location.hash = '#filter=' + this.PREF_FILTER_ID + "|" + filterData;
             },
 
             onAssignFilterChanged: function (p_sType, p_aArgs) {
@@ -162,6 +148,39 @@
 
             _hideSplash: function () {
                 YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
+            },
+
+            _updateWidgets: function (preferences) {
+                var prefs = preferences.split("/");
+                if (prefs[0]) {
+                    this.widgets.assign.value = prefs[0];
+                    var menuItems = this.widgets.assign.getMenu().getItems();
+                    for (index in menuItems) {
+                        if (menuItems.hasOwnProperty(index)) {
+                            if (menuItems[index].value === prefs[0]) {
+                                this.widgets.assign.set("label", menuItems[index].cfg.getProperty("text"));
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (prefs[1]){
+                    this.widgets.date.value = prefs[1];
+                    menuItems = this.widgets.date.getMenu().getItems();
+                    for (index in menuItems) {
+                        if (menuItems.hasOwnProperty(index)) {
+                            if (menuItems[index].value === prefs[1]) {
+                                this.widgets.date.set("label", menuItems[index].cfg.getProperty("text"));
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                this.widgets.importantCheckBox.checked = (prefs[2] == "true");
+                this.widgets.controlCheckBox.checked = (prefs[3] == "true");
+
+                this.deferredListPopulation.fulfil("onReady");
             }
         });
 })();

@@ -9,7 +9,10 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.documents.beans.DocumentFilter;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.beans.DocumentStatusesFilterBean;
+import ru.it.lecm.documents.beans.FiltersManager;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.errands.beans.ErrandsServiceImpl;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -23,7 +26,9 @@ import java.util.*;
  * Time: 11:56
  */
 public class ErrandsWebScriptBean extends BaseWebScript {
-	ErrandsService errandsService;
+    public static final String EXECUTION_KEY = "Ожидает исполнения";
+    public static final int DEADLINE_DAY_COUNT = 5;
+    ErrandsService errandsService;
 
     private OrgstructureBean orgstructureService;
     private DocumentService documentService;
@@ -42,10 +47,14 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     }
 
     public static enum IssuedByMeEnum {
-        ALL,
-        EXECUTION,
-        EXPIRED,
-        DEADLINE
+        ISSUED_ERRANDS_ALL,
+        ISSUED_ERRANDS_EXECUTION,
+        ISSUED_ERRANDS_EXPIRED,
+        ISSUED_ERRANDS_DEADLINE,
+        ISSUED_ERRANDS_ALL_IMPORTANT,
+        ISSUED_ERRANDS_EXECUTION_IMPORTANT,
+        ISSUED_ERRANDS_EXPIRED_IMPORTANT,
+        ISSUED_ERRANDS_DEADLINE_IMPORTANT
     }
 
     private NamespaceService namespaceService;
@@ -111,17 +120,27 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return errandsService.getErrandsDocuments(getElements(Context.getCurrentContext().getElements(paths)), skipCount, maxItems);
     }
 
+    /**
+     * Получить список выданных текущим пользователем поручений по ключу (все, на исполнении, просроченные, с приближающимся сроком)
+     * @return список поручений
+     */
     public Scriptable getIssuedErrands(String filterType) {
         List<QName> types = new ArrayList<QName>(1);
         types.add(ErrandsService.TYPE_ERRANDS);
 
+        Map<String, String> filters = DocumentStatusesFilterBean.getFilterForType(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService));
+
         List<String> paths = Arrays.asList(documentService.getDraftPathByType(ErrandsService.TYPE_ERRANDS), documentService.getDocumentsFolderPath());
 
         List<String> statuses = new ArrayList<String>();
-        statuses.add("!Отменено");
-        statuses.add("!Удалено");
-        statuses.add("!Исполнено");
-        statuses.add("!Не исполнено");
+
+        String defFilter = DocumentStatusesFilterBean.getDefaultFilter(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService));
+        String sts = DocumentStatusesFilterBean.getFilterForType(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService)).get(defFilter);
+        for (String status : sts.split(",")) {
+            if (status != null && !status.isEmpty()) {
+                statuses.add(status.trim());
+            }
+        }
 
         List<SearchParameters.SortDefinition> sort = new ArrayList<SearchParameters.SortDefinition>();
         sort.add(new SearchParameters.SortDefinition(SearchParameters.SortDefinition.SortType.FIELD, "@" + ErrandsService.PROP_ERRANDS_IS_IMPORTANT.toString(), false));
@@ -133,6 +152,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                 ErrandsService.PROP_ERRANDS_INITIATOR_REF.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         final String PROP_EXPIRED =
                 ErrandsServiceImpl.PROP_ERRANDS_IS_EXPIRED.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+        final String PROP_IMPORTANT =
+                ErrandsServiceImpl.PROP_ERRANDS_IS_IMPORTANT.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         final String PROP_EXEC_DATE =
                 ErrandsServiceImpl.PROP_ERRANDS_LIMITATION_DATE.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
 
@@ -140,19 +161,38 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
         if (filterType != null && !"".equals(filterType)) {
                 switch (IssuedByMeEnum.valueOf(filterType.toUpperCase())) {
-                    case EXPIRED: {
+                    //просроченные
+                    case ISSUED_ERRANDS_EXPIRED_IMPORTANT: {
+                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                    }
+                    case ISSUED_ERRANDS_EXPIRED: {
                         issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_EXPIRED + ":true ";
                         break;
                     }
-                    case EXECUTION: {
+                    // на исполнении
+                    case ISSUED_ERRANDS_EXECUTION_IMPORTANT: {
+                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                    }
+                    case ISSUED_ERRANDS_EXECUTION: {
                         statuses = new ArrayList<String>();
-                        statuses.add("Ожидает исполнения");
+                        String filtersStr = filters.get(EXECUTION_KEY);
+                        String[] statusesArray = filtersStr.split(",");
+                        for (String st:statusesArray){
+                            if (st != null && !st.isEmpty()){
+                                statuses.add(st.trim());
+                            }
+                        }
+
                         break;
                     }
-                    case DEADLINE: {
+                    //с приближающимся сроком
+                    case ISSUED_ERRANDS_DEADLINE_IMPORTANT: {
+                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                    }
+                    case ISSUED_ERRANDS_DEADLINE: {
                         Date now = new Date();
 
-                        Date deadlineDate = workCalendar.getNextWorkingDate(now, 5);
+                        Date deadlineDate = workCalendar.getNextWorkingDate(now, DEADLINE_DAY_COUNT);
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(deadlineDate);
                         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -168,7 +208,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
                         break;
                     }
-                    case ALL: {
+                    // все
+                    case ISSUED_ERRANDS_ALL_IMPORTANT: {
+                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_IMPORTANT + ":true ";
+                    }
+                    case ISSUED_ERRANDS_ALL: {
                         break;
                     }
                     default: {
@@ -179,5 +223,49 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
         List<NodeRef> refs = documentService.getDocumentsByFilter(types, paths, statuses, issuedFilterQuery, sort);
         return createScriptable(refs);
+    }
+
+    /**
+     * Получить строку с параметрами для списка поручений. Метод используется в дашлете "Выданные мною поручения" для формирования адреса перехода по ссылкам
+     * @return строка с параметрами (query=[query]&formId=[formId]&filterOver=[filterOver]#filter=[filter]
+     */
+    public String getIssuedFilter(String filterType) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("query=");
+        Map<String, String> filters = DocumentStatusesFilterBean.getFilterForType(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService));
+        String defFilter = DocumentStatusesFilterBean.getDefaultFilter(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService));
+
+        // список фильтров - по умолчанию, Все (не финальные)
+        String statusesStr = filters.get(defFilter);
+        String form = defFilter;
+
+        switch (IssuedByMeEnum.valueOf(filterType.toUpperCase())) {
+            // на исполнении - подменяем строку со статусами
+            case ISSUED_ERRANDS_EXECUTION_IMPORTANT: {
+            }
+            case ISSUED_ERRANDS_EXECUTION: {
+                String status = EXECUTION_KEY;
+                statusesStr = filters.get(status);
+                form = status;
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+
+        builder.append(statusesStr);
+        builder.append("&formId=");
+        builder.append(form);
+
+        DocumentFilter docFilter = FiltersManager.getFilterById(filterType);
+        if (docFilter != null) {
+            builder.append("&filterOver=").append(docFilter.getId());
+            builder.append("#filter=")
+                    .append(docFilter.getId())
+                    .append("|")
+                    .append(docFilter.getParamStr() != null ? docFilter.getParamStr() : "");
+        }
+        return builder.toString();
     }
 }

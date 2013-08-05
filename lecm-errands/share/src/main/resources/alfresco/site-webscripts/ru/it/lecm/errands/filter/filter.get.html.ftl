@@ -1,7 +1,13 @@
 <#assign id = args.htmlid>
 
+<#assign over = false/>
+<#if page.url.args.filterOver??>
+    <#assign over = true/>
+</#if>
 <script type="text/javascript">//<![CDATA[
-    var errandsFilter = new LogicECM.module.Errands.Filter("${id}").setMessages(${messages});
+    var errandsFilter = new LogicECM.module.Errands.Filter("${id}").setOptions({
+        filterOver: "${over?string}"
+    }).setMessages(${messages});
 //]]></script>
 
 <div id="${id}-filters" class="toolbar errands-filter">

@@ -68,7 +68,7 @@
         <#if queryFilterId?? && queryFilterId != "" && preferences??>
             var PREFERENCE_FILTER = "ru.it.lecm.documents." + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + "." + "${queryFilterId}";
             var preference = findValueByDotNotation(${preferences}, PREFERENCE_FILTER);
-            if (preference != null && preference != "") {
+            if (preference != null && preference != "" && location.hash == "") {
                 location.hash = '#filter=' + "${queryFilterId}" + "|" + preference;
             }
         </#if>

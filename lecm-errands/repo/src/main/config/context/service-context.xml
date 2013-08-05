@@ -405,4 +405,38 @@
 			</list>
 		</property>
 	</bean>
+
+    <!-- фильтры для дашлета Выданные мною поручения -->
+
+    <bean id="issuedErrandsAll" class="ru.it.lecm.errands.beans.IssuedByMeAll" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/all/false/false"/>
+    </bean>
+
+    <bean id="issuedErrandsAllImportant" class="ru.it.lecm.errands.beans.IssuedByMeAllImportant" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/all/true/false"/>
+    </bean>
+
+    <bean id="issuedErrandsExecution" class="ru.it.lecm.errands.beans.IssuedByMeExecution" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/all/false/false"/>
+    </bean>
+
+    <bean id="issuedErrandsExecutionImportant" class="ru.it.lecm.errands.beans.IssuedByMeExecutionImportant" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/all/true/false"/>
+    </bean>
+
+    <bean id="issuedErrandsExpired" class="ru.it.lecm.errands.beans.IssuedByMeExpired" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/expired/false/false"/>
+    </bean>
+
+    <bean id="issuedErrandsExpiredImportant" class="ru.it.lecm.errands.beans.IssuedByMeExpiredImportant" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/expired/true/false"/>
+    </bean>
+
+    <bean id="issuedErrandsDeadline" class="ru.it.lecm.errands.beans.IssuedByMeDeadline" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/deadline/false/false"/>
+    </bean>
+
+    <bean id="issuedErrandsDeadlineImportant" class="ru.it.lecm.errands.beans.IssuedByMeDeadlineImportant" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/deadline/true/false"/>
+    </bean>
 </beans>
