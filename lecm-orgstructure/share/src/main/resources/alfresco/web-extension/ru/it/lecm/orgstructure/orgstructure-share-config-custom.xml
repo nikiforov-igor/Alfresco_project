@@ -320,7 +320,7 @@
                     </field>
                     <field id="lecm-orgstr:org-tin" set="other">
                         <control template="/org/alfresco/components/form/controls/textfield.ftl">
-                            <control-param name="maxLength">10</control-param>
+                            <!--<control-param name="maxLength">10</control-param>-->
                         </control>
                     </field>
                     <field id="lecm-orgstr:org-ownership-type" set="other"/>

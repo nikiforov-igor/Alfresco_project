@@ -169,7 +169,7 @@
                     <type>d:text</type>
                     <constraints>
                         <constraint type="REGEX">
-                            <parameter name="expression"><value>^[0-9]{10,10}$</value></parameter>
+                            <parameter name="expression"><value>^([\d])+$</value></parameter>
                             <parameter name="requiresMatch"><value>true</value></parameter>
                         </constraint>
                     </constraints>
