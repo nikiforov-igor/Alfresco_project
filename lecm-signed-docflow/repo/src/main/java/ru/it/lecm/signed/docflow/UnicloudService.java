@@ -139,20 +139,7 @@ public class UnicloudService {
 		return properties;
 	}
 
-	public JSONObject authenticateByCertificate(final JSONObject json) throws Exception {
-		String guidSignBase64;
-		String timestamp;
-		String timestampSignBase64;
-
-		try {
-			guidSignBase64 = json.getString("guidSign");
-			timestamp = json.getString("timestamp");
-			timestampSignBase64 = json.getString("timestampSign");
-		} catch (JSONException ex) {
-			String msg = "Can't parse incoming json";
-			logger.error("{}. Caused by: {}", msg, ex.getMessage());
-			throw new IllegalArgumentException(msg, ex);
-		}
+	public Map<String, Object> authenticateByCertificate(final String guidSignBase64, final String timestamp, final String timestampSignBase64) {
 
 		byte[] guidSign = Base64.decodeBase64(guidSignBase64);
 		byte[] timestampSign = Base64.decodeBase64(timestampSignBase64);
@@ -200,6 +187,6 @@ public class UnicloudService {
 			throw new IllegalStateException(msg);
 		}
 
-		return new JSONObject(properties);
+		return properties;
 	}
 }

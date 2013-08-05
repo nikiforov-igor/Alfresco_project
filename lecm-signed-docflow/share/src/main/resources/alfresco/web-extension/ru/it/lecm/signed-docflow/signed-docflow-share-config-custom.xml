@@ -1,10 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <alfresco-config>
-<config evaluator="string-compare" condition="DocumentLibrary">
-        <aspects>
-            <visible>          
-                <aspect name="lecm-signed-docflow:signable"/>       
-            </visible>  
-        </aspects>
-    </config>
+	
+	<config evaluator="string-compare" condition="DocumentLibrary">
+		<aspects>
+			<visible>          
+				<aspect name="lecm-signed-docflow:signable"/>       
+			</visible>  
+		</aspects>
+	</config>
+
+	<!-- Custom Aspects forms-->
+	<config evaluator="aspect" condition="lecm-signed-docflow:organization-attrs-aspect">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-signed-docflow:operator-code" for-mode="view,edit,create"/>
+					<show id="lecm-signed-docflow:partner-key" for-mode="view,edit,create"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-signed-docflow:operator-code" set="other"/>
+					<field id="lecm-signed-docflow:partner-key" set="other"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
 </alfresco-config>

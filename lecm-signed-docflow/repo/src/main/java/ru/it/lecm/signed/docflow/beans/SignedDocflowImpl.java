@@ -39,8 +39,8 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 						Set<QName> aspects = nodeService.getAspects(organizationRef);
 						if(!aspects.contains(ASPECT_ORGANIZATION_ATTRS)) {
 							Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-							properties.put(PROP_OPERATOR_CODE, "2AE"); //временно для тестов
-							properties.put(PROP_PARTNER_KEY, "C570E2AB-C55F-49BE-B56A-233046F829A8"); //временно для тестов
+							properties.put(PROP_OPERATOR_CODE, "");
+							properties.put(PROP_PARTNER_KEY, "");
 							properties.put(PROP_ORGANIZATION_ID, "");
 							properties.put(PROP_ORGANIZATION_EDO_ID, "");
 							nodeService.addAspect(organizationRef, ASPECT_ORGANIZATION_ATTRS, properties);

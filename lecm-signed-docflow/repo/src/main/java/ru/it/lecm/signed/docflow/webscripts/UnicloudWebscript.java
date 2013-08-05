@@ -104,6 +104,24 @@ public class UnicloudWebscript extends DeclarativeWebScript {
 		});
 	}
 
+	private JSONObject authenticateByCertificate(final JSONObject json) {
+		String guidSignBase64;
+		String timestamp;
+		String timestampSignBase64;
+
+		try {
+			guidSignBase64 = json.getString("guidSign");
+			timestamp = json.getString("timestamp");
+			timestampSignBase64 = json.getString("timestampSign");
+		} catch (JSONException ex) {
+			String msg = "Can't parse incoming json";
+			logger.error("{}. Caused by: {}", msg, ex.getMessage());
+			throw new IllegalArgumentException(msg, ex);
+		}
+		Map<String, Object> properties = unicloudService.authenticateByCertificate(guidSignBase64, timestamp, timestampSignBase64);
+		return new JSONObject(properties);
+	}
+
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 
@@ -121,10 +139,10 @@ public class UnicloudWebscript extends DeclarativeWebScript {
 		JSONObject responseJSON;
 
 		try {
-			Method actionMethod = ReflectionUtils.findMethod(unicloudService.getClass(), action, JSONObject.class);
+			Method actionMethod = ReflectionUtils.findMethod(getClass(), action, JSONObject.class);
 			if (actionMethod != null) {
 				addAttriburesToPersonalData();
-				responseJSON = (JSONObject) ReflectionUtils.invokeMethod(actionMethod, unicloudService, requestJSON);
+				responseJSON = (JSONObject) ReflectionUtils.invokeMethod(actionMethod, this, requestJSON);
 			} else {
 				throw new WebScriptException(String.format("There is no method %s(JSONObject json) in UnicloudService class", action));
 			}
