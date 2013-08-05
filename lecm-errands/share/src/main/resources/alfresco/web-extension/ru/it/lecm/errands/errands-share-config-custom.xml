@@ -169,6 +169,21 @@
                     <field id="lecm-document:deprive-right" label-id="contract.deprive.right" />
                 </appearance>
             </form>
+            <form id="errands-dnd">
+                <field-visibility>
+                    <show id="lecm-errands:attachments-temp-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-errands:attachments-temp-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">{userhome}</control-param>
+                            <control-param name="directoryName">label.errands.attachments</control-param>
+                            <control-param name="showAttsLabel">false</control-param>
+                            <control-param name="showAttsList">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 

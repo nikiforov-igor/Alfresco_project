@@ -113,6 +113,9 @@
 .errands-main-form .form-fields .dnd-uploader div.uploader-block {
     margin: 0 !important;
 }
+.yui-skin-lecmTheme div.metadata-form.errands-main-form div.dnd-uploader div.form-fields > div.set {
+    width: auto;
+}
 .errands-main-form .form-fields .exec-report {
     overflow: hidden;
 }

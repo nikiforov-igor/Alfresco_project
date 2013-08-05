@@ -2,17 +2,29 @@
 <#include "lecm-dnd-uploader-container.ftl">
 
 <#assign disabled = form.mode == "view">
+<#assign params = field.control.params/>
 
 <div class="form-field dnd-uploader">
 	<input id="${fieldHtmlId}" type="hidden" class="autocomplete-input" name="${field.name}" value="${field.value?html}"/>
 	<input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
 	<input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
 
-	<label>${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+    <#assign showAttsLabel = true,
+        showAttsList = true/>
+    <#if params.showAttsLabel?? && params.showAttsLabel == "false">
+        <#assign showAttsLabel = false/>
+    </#if>
+    <#if params.showAttsList?? && params.showAttsList == "false">
+        <#assign showAttsList = false/>
+    </#if>
+    <#if showAttsLabel>
+        <label>${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+    </#if>
+    <#if showAttsList>
+        <ul id="${fieldHtmlId}-attachments" class="attachments-list"></ul>
+    </#if>
 
-	<ul id="${fieldHtmlId}-attachments" class="attachments-list"></ul>
-
-	<#assign uploadDirectoryPath = field.control.params.uploadDirectoryPath>
-	<#assign directoryName = msg(field.control.params.directoryNameCode)>
+	<#assign uploadDirectoryPath = params.uploadDirectoryPath>
+	<#assign directoryName = msg(params.directoryNameCode)>
 	<@renderDndUploaderContainerHTML fieldHtmlId uploadDirectoryPath directoryName disabled field.endpointMany/>
 </div>

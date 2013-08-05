@@ -51,6 +51,38 @@
                 };
             }
             <#-- Remove-icons init - end -->
+
+            <#-- Dnd uploader form - start -->
+            drawDndForm("${nodeRef}", '${id}');
+            <#-- Dnd uploader form - end -->
+        }
+
+        function drawDndForm(nodeRef, htmlId) {
+            Alfresco.util.Ajax.request(
+                    {
+                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                        dataObj: {
+                            htmlid: htmlId,
+                            itemKind: "node",
+                            itemId: nodeRef,
+                            formId: "errands-dnd",
+                            mode: "edit",
+                            showSubmitButton: false,
+                            showResetButton: false,
+                            showCancelButton: false
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                var container = Dom.get('${id}-dnd');
+                                if (container != null) {
+                                    container.innerHTML = response.serverResponse.responseText;
+                                }
+                            }
+                        },
+                        failureMessage: "message.failure",
+                        execScripts: true,
+                        htmlId: htmlId + nodeRef
+                    });
         }
 
         Event.onDOMReady(init);
@@ -134,7 +166,7 @@
         </div>
         <div id="${id}-links" class="data-list-block">
             <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ССЫЛКИ! (вложения временно) -->
-            <#assign links = attachments/>
+            <#assign links = attachments![]/>
             <span class="heading">Ссылки<span class="count"> (${(links![])?size})</span></span>
             <span id="${id}-links-add" class="yui-button yui-push-button">
                 <span class="first-child">
@@ -181,11 +213,7 @@
         <div class="line"></div>
         <#-- РАБОТА НАД ПОРУЧЕНИЕМ -->
         <div id="${id}-exec" class="block">
-            <div class="dnd-uploader">
-                <#assign uploadDirectoryPath = "">
-                <#assign directoryName = "1">
-                <@renderDndUploaderContainerHTML "fieldHtmlId" uploadDirectoryPath directoryName/>
-            </div>
+            <div id="${id}-dnd" class="dnd-uploader"></div>
             <div class="title">Работа над поручением</div>
             <div id="${id}-exec-attachments" class="data-list-block">
                 <span class="heading">Вложения<span class="count"> (${(attachmentsExec![])?size})</span></span>
@@ -204,7 +232,7 @@
             </div>
             <div id="${id}-exec-links" class="data-list-block">
                 <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ССЫЛКИ! (вложения временно) -->
-                <#assign links = attachments/>
+                <#assign links = attachments![]/>
                 <span class="heading">Ссылки<span class="count"> (${(links![])?size})</span></span>
                 <span id="${id}-exec-links-add" class="yui-button yui-push-button">
                     <span class="first-child">
