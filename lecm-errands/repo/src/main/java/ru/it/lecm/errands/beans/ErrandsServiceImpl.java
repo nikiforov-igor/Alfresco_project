@@ -13,7 +13,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.statemachine.StatemachineModel;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
@@ -24,7 +24,7 @@ import java.util.*;
  * Time: 11:43
  */
 public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
-	private static enum ModeChoosingExecutors {
+    private static enum ModeChoosingExecutors {
 		ORGANIZATION,
 		UNIT
 	}
@@ -35,6 +35,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 	private DocumentService documentService;
 	private OrgstructureBean orgstructureService;
+    private StateMachineServiceBean stateMachineBean;
 
 	private final Object lock = new Object();
 
@@ -45,6 +46,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
 	}
+
+    public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
+        this.stateMachineBean = stateMachineBean;
+    }
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -193,7 +198,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 		}
 	}
 
-    private List<NodeRef> getDocumentErrands(NodeRef document, List<String> statuses, List<QName> roles) {
+    private List<NodeRef> getDocumentErrands(NodeRef document, Boolean active, List<QName> roles) {
         if (document == null) {
             return new ArrayList<NodeRef>();
         }
@@ -206,10 +211,19 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         for (AssociationRef documentErrandsAssoc : documentErrandsAssocs) {
             NodeRef errand = documentErrandsAssoc.getSourceRef();
 
-            if (statuses != null && statuses.size() > 0) {
-                String status = (String) nodeService.getProperty(errand, StatemachineModel.PROP_STATUS);
-                if (!statuses.contains(status)) {
-                    continue;
+            if (active != null) {
+                if (active) {
+                    if (stateMachineBean.hasActiveStatemachine(errand)) {
+                        if (stateMachineBean.isDraft(errand)) {
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
+                } else {
+                    if (!stateMachineBean.isFinal(errand)) {
+                        continue;
+                    }
                 }
             }
 
@@ -243,19 +257,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                     return getDocumentErrands(document, null, roles);
                 }
                 case ACTIVE : {
-                    statuses.add("В работе");
-                    statuses.add("На доработке");
-                    statuses.add("На утверждении контролером");
-                    statuses.add("На утверждении инициатором");
-                    statuses.add("Ожидает исполнения");
-                    return getDocumentErrands(document, statuses, roles);
+                    return getDocumentErrands(document, true, roles);
                 }
                 case COMPLETE: {
-                    statuses.add("Отменено");
-                    statuses.add("Исполнено");
-                    statuses.add("Не исполнено");
-                    statuses.add("Удалено");
-                    return getDocumentErrands(document, statuses, roles);
+                    return getDocumentErrands(document, false, roles);
                 }
             }
         }

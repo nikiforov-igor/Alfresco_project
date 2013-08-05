@@ -64,6 +64,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                 this.listContainer.innerHTML = "";
                 if (response.json.errands.length > 0) {
                     var results = response.json.errands;
+                    var template = "view-metadata?nodeRef={nodeRef}";
                     for (var i = 0; i < results.length; i++) {
                         var errand = results[i];
                         var status, statusClass;
@@ -84,26 +85,41 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         }
                         var isImportant = (errand.isImportant == "false") ? "WORKFLOWTASKPRIORITY_LOW" : "WORKFLOWTASKPRIORITY_HIGH";
                         var isImportantTitle = (errand.isImportant == "true") ? this.msg("errandslist.label.important") : "";
+                        // Generate the link
+                        var url = "";
+                        var detail = "";
+                        detail = "<div class=\"workflow-task-item\">";
+                        detail +=   "<div class=\"workflow-task-list-picture " + isImportant + "\" title=\"" + isImportantTitle + "\">&nbsp;</div>";
+                        detail +=   "<div style=\"float: left;\">";
+                        detail +=       "<div>";
+                        detail +=           "<div class=\"workflow-task-title workflow-task-list-left-column\" style=\"font-size: 16px;\">";
+                        detail +=           "<a href=\""+window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT+"document?nodeRef="+ errand.nodeRef +"\">" + errand.title + ":</a>";
+                        detail +=           "</div>";
+                        detail +=           "<span class=\"workflow-task-status "+ statusClass +"\">" + status + "</span>";
+                        detail +=       "</div>";
+                        detail +=       "<div style=\"clear: both;\"></div>";
+                        detail +=       "<div class=\"workflow-task-description\">" + errand.description + "</div>";
+                        detail +=       "<div>";
+                        detail +=           "<div class=\"workflow-task-list-left-column\">";
+                        detail +=               "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": </span>" + errand.dueDate;
+                        detail +=           "</div>";
+                        detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </span>" + errand.statusMessage+"<br/>";
+                        url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
+                            {
+                                nodeRef: errand.executor
+                            });
+                        detail +=           "<div class=\"workflow-task-list-left-column\">";
+                        detail +=               "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.executor") + ": </span>" + '<a href="' + url + '">' + errand.executorName + '</a>';
+                        detail +=           "</div>";
+                        url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
+                            {
+                                nodeRef: errand.initiator
+                            });
+                        detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.initiator") + ": </span>" +  '<a href="' + url + '">' + errand.initiatorName + '</a>';
 
-                        var detail = "<div class=\"workflow-task-item\">";
-                        detail += "<div class=\"workflow-task-list-picture " + isImportant + "\" title=\"" + isImportantTitle + "\">&nbsp;</div>";
-                        detail += "<div style=\"float: left;\">";
-                        detail += "<div>";
-                        detail += "<div class=\"workflow-task-title workflow-task-list-left-column\" style=\"font-size: 16px;\">";
-                        detail += "<a href=\""+window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT+"document?nodeRef="+ errand.nodeRef +"\">" + errand.title + ":</a>";
-                        detail += "</div>";
-                        detail += "<span class=\"workflow-task-status "+ statusClass +"\">" + status + "</span>";
-                        detail += "</div>";
-                        detail += "<div style=\"clear: both;\"></div>";
-                        detail += "<div class=\"workflow-task-description\">" + errand.description + "</div>";
-                        detail += "<div>";
-                        detail += "<div class=\"workflow-task-list-left-column\">";
-                        detail += "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": </span>" + errand.dueDate;
-                        detail += "</div>";
-                        detail += "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </span>" + errand.statusMessage;
-                        detail += "</div>";
-                        detail += "</div>";
-                        detail += "<div style=\"clear: both;\"></div>";
+                        detail +=       "</div>";
+                        detail +=   "</div>";
+                        detail +=   "<div style=\"clear: both;\"></div>";
                         detail += "</div>";
                         this.listContainer.innerHTML += detail;
                     }

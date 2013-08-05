@@ -13,7 +13,6 @@ function main() {
 
     var statuses = "В работе,На доработке,На утверждении контролером,На утверждении инициатором";
 
-//    var url = "/lecm/errands/api/documentMyErrands?nodeRef=" + args["nodeRef"] + "&statuses=" + statuses;
     var url = "/lecm/errands/api/documentMyErrands?nodeRef=" + args["nodeRef"];
     var json = remote.connect("alfresco").get(url);
     if (json.status == 200) {
@@ -21,7 +20,6 @@ function main() {
         model.myErrandsData = obj;
     }
 
-//    var url = "/lecm/errands/api/documentErrandsIssuedByMe?nodeRef=" + args["nodeRef"] + "&statuses=" + statuses;
     var url = "/lecm/errands/api/documentErrandsIssuedByMe?nodeRef=" + args["nodeRef"];
     var json = remote.connect("alfresco").get(url);
     if (json.status == 200) {

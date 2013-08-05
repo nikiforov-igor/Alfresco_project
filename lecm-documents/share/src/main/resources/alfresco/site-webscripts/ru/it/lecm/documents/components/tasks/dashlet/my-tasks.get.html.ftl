@@ -80,9 +80,9 @@
                 </#if>
             </div>
         </#if>
-
+        <#if errandsIssuedByMeData??>
         <div style="clear: both; padding-top: 10px;">${msg("dashlet.my.errands.assigned.by.me.count","<a href='javascript:void(0);' onclick='documentTasksComponent.onExpand(\"errandsIssuedByMeList\")'>"+ errandsIssuedByMeData.errandsCount +"</a>","${declOfNum(errandsIssuedByMeData.errandsCount?number, ['е','я','й'])}")}</div>
-
+        </#if>
     </div>
 </div>
 </div>
