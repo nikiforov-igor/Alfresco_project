@@ -40,6 +40,10 @@ public class LecmPermissionWebScript extends BaseScopableProcessorExtension {
         lecmPermissionService.revokeDynamicRole(roleCode, new NodeRef(docRef), new NodeRef(employeeRef).getId());
     }
 
+	public void revokeDynamicRole(ScriptNode document, ScriptNode employee, String roleCode) {
+        lecmPermissionService.revokeDynamicRole(roleCode, document.getNodeRef(), employee.getNodeRef().getId());
+    }
+
 	public boolean isAdmin(String login) {
 		return lecmPermissionService.isAdmin(login);
 	}

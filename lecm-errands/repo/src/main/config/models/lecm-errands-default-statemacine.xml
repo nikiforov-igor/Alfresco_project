@@ -1460,16 +1460,16 @@ if (soExecutors != null) {
 																<nodes>
 																	<node>
 																		<type>conditionAccess</type>
-																		<name>87ed9926-a829-4ec0-b96c-46f031b9329e
+																		<name>aea0e4b1-78c4-4942-be52-4e8b13a00888
 																		</name>
 																		<nodeRef>
-																			workspace://SpacesStore/884b3511-df11-4c09-8d2a-31cc3543eb71
+																			workspace://SpacesStore/7288e434-705c-4a49-826c-3180310a4643
 																		</nodeRef>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -1478,7 +1478,7 @@ if (soExecutors != null) {
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -1530,16 +1530,16 @@ if (soExecutors != null) {
 																<nodes>
 																	<node>
 																		<type>conditionAccess</type>
-																		<name>46248385-63e0-44f8-8cd1-fa5ff5f5a66c
+																		<name>d1ba25e4-632b-4961-9400-580593be30df
 																		</name>
 																		<nodeRef>
-																			workspace://SpacesStore/8ff86dc4-db75-49d0-a69d-5adff1a5d244
+																			workspace://SpacesStore/f0246725-1e03-42c6-b626-4e5b096667b7
 																		</nodeRef>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -1548,7 +1548,7 @@ if (soExecutors != null) {
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2447,16 +2447,16 @@ if (soExecutors != null) {
 																<nodes>
 																	<node>
 																		<type>conditionAccess</type>
-																		<name>0fa0428e-859c-4b20-b156-d69d8c205110
+																		<name>4693ba87-8baa-4dac-b795-13d6612b8248
 																		</name>
 																		<nodeRef>
-																			workspace://SpacesStore/7db8d61f-3d5c-4d21-bd1a-20f41240efd3
+																			workspace://SpacesStore/253e1d50-8c72-491c-aa09-7db34196733a
 																		</nodeRef>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -2465,7 +2465,7 @@ if (soExecutors != null) {
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2517,16 +2517,16 @@ if (soExecutors != null) {
 																<nodes>
 																	<node>
 																		<type>conditionAccess</type>
-																		<name>02cc20ae-6410-4a8f-a6d6-546d5ad75067
+																		<name>93023cba-f98f-4d94-88bd-9745d4acdad1
 																		</name>
 																		<nodeRef>
-																			workspace://SpacesStore/0b190b2e-2c21-46a9-9152-cc077250dbdc
+																			workspace://SpacesStore/2aa4b99d-3742-4cae-90bd-a3899b9633e1
 																		</nodeRef>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -2535,7 +2535,7 @@ if (soExecutors != null) {
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -3943,16 +3943,16 @@ if (soExecutors != null) {
 																<nodes>
 																	<node>
 																		<type>conditionAccess</type>
-																		<name>e62de894-8bef-4457-9e2b-589fdf6717d2
+																		<name>bba459cf-516b-4fb6-a4fd-f3bd409d3009
 																		</name>
 																		<nodeRef>
-																			workspace://SpacesStore/5e2ca18b-9ec4-44cb-9bf3-ac43ac3fbf27
+																			workspace://SpacesStore/d569d700-0e65-4f7a-8f2d-673f2420777e
 																		</nodeRef>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -3961,7 +3961,7 @@ if (soExecutors != null) {
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -4013,16 +4013,16 @@ if (soExecutors != null) {
 																<nodes>
 																	<node>
 																		<type>conditionAccess</type>
-																		<name>cb161ab1-4276-4971-94a2-6349a5ea0e42
+																		<name>b07f1ec1-d221-489d-b2d9-e1d615578fa7
 																		</name>
 																		<nodeRef>
-																			workspace://SpacesStore/167ba933-d14e-4938-bbdf-1e679841226a
+																			workspace://SpacesStore/71ef2f50-5d4a-4e28-bb28-a233cc950a15
 																		</nodeRef>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -4031,7 +4031,7 @@ if (soExecutors != null) {
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -4345,7 +4345,7 @@ if (soExecutors != null) {
 																			</property>
 																			<property>
 																				<name>condition</name>
-																				<value><![CDATA[doc.assocAttr("lecm-errands:controller-assoc",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+																				<value><![CDATA[doc.assocAttr("lecm-errands:controller-assoc",
                                                                                     "cm:name") == null AND
                                                                                     doc.attr("lecm-errands:without-initiator-approval")
                                                                                     == true]]></value>
@@ -5532,16 +5532,16 @@ if (soExecutors != null) {
 																<nodes>
 																	<node>
 																		<type>conditionAccess</type>
-																		<name>89c5f194-3892-493c-85cb-bd0bf541ddc2
+																		<name>c213f649-af0d-4b7a-9a3c-76d5b6dce7e5
 																		</name>
 																		<nodeRef>
-																			workspace://SpacesStore/3fe1d52b-d34d-43aa-88bb-a5ed1dfba8b0
+																			workspace://SpacesStore/52321f1e-1568-4603-9cef-6df38ee9e82c
 																		</nodeRef>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -5550,7 +5550,7 @@ if (soExecutors != null) {
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5602,16 +5602,16 @@ if (soExecutors != null) {
 																<nodes>
 																	<node>
 																		<type>conditionAccess</type>
-																		<name>bf60b237-54c7-4b47-ba94-d0ea0998d818
+																		<name>22dbe1b5-0671-4fb6-b1a8-e069f9f2dab5
 																		</name>
 																		<nodeRef>
-																			workspace://SpacesStore/044a4812-c93d-4c8b-b2f4-bd285818490b
+																			workspace://SpacesStore/65c12d66-f623-4c04-bfa1-15dca90ece24
 																		</nodeRef>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -5620,7 +5620,7 @@ if (soExecutors != null) {
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>

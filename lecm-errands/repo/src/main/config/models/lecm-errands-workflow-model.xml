@@ -84,6 +84,25 @@
 
 		<type name="lecmErrandWf:changeExecutor">
 			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmErrandWf:changeExecutorReason">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecmErrandWf:changeExecutorNewExecutor">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
 			<mandatory-aspects>
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>

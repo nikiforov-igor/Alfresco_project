@@ -690,11 +690,20 @@
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
+	                <!--<show id="lecmErrandWf:changeExecutorCurrentExecutor" />-->
+	                <show id="lecmErrandWf:changeExecutorNewExecutor"/>
+	                <show id="lecmErrandWf:changeExecutorReason"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
+	                <!--<field id="lecmErrandWf:changeExecutorCurrentExecutor" read-only="true"/>-->
+	                <field id="lecmErrandWf:changeExecutorReason">
+		                <control template="/org/alfresco/components/form/controls/textarea.ftl">
+			                <control-param name="rows">7</control-param>
+		                </control>
+	                </field>
                 </appearance>
             </form>
         </forms>
