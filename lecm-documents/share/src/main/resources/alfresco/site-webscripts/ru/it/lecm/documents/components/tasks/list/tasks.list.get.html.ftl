@@ -12,11 +12,16 @@
     <#assign completedSeleted = "selected">
 </#if>
 
+<#assign allSeleted = "">
+<#if tasksState == "all" || (completedSeleted == "" && activeSeleted == "")>
+    <#assign allSeleted = "selected">
+</#if>
+
     <div class="list-category">
         <div class="list-category-title">${msg("tasklist.label.mytasks")}</div>
         <div class="tasks-list-filter">
             <select id="${id}-tasks-states" style="margin-left: 13px;">
-                <option selected value="all">${msg("tasklist.option.all")}</option>
+                <option ${allSeleted} value="all">${msg("tasklist.option.all")}</option>
                 <option ${activeSeleted} value="active">${msg("tasklist.option.active")}</option>
                 <option ${completedSeleted} value="completed">${msg("tasklist.option.completed")}</option>
             </select>
@@ -87,10 +92,10 @@
 
 <script type="text/javascript">//<![CDATA[
 (function () {
-    YAHOO.util.Event.onDOMReady(function (){
+    YAHOO.util.Event.onContentReady("${id}-tasks-states",function (){
         YAHOO.util.Event.on("${id}-tasks-states", "change", onTasksStatesSelectChange, this, true);
         <#if isAnchor == "true">
-            YAHOO.util.Dom.get("${id}").scrollIntoView();
+            YAHOO.util.Dom.get("${id}_tasksList").scrollIntoView();
         </#if>
     });
 

@@ -4,7 +4,7 @@
     //<![CDATA[
     (function () {
         function init() {
-            var errandTasks = new LogicECM.module.Errands.Tasks("${id}").setOptions(
+            var errandTasks = new LogicECM.module.Errands.Lists("${id}").setOptions(
                 {
                     itemType: "lecm-errands:document",
                     nodeRef: "${nodeRef}",

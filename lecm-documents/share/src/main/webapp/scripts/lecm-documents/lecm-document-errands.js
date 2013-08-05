@@ -13,12 +13,12 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event;
 
-    LogicECM.module.Errands.Tasks = function ErrandsTasks_constructor(htmlId) {
-        LogicECM.module.Errands.Tasks.superclass.constructor.call(this, "LogicECM.module.Errands.Tasks", htmlId, ["button", "container"]);
+    LogicECM.module.Errands.Lists = function ErrandsTasks_constructor(htmlId) {
+        LogicECM.module.Errands.Lists.superclass.constructor.call(this, "LogicECM.module.Errands.Lists", htmlId, ["button", "container"]);
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.Errands.Tasks, Alfresco.component.Base,
+    YAHOO.extend(LogicECM.module.Errands.Lists, Alfresco.component.Base,
         {
             options: {
                 itemType: "lecm-errands:document",
