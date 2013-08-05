@@ -63,6 +63,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		this.orgstructureService = orgstructureService;
 	}
 
+	@Override
 	public NodeRef getSignedDocflowFolder() {
 		return getFolder(SIGNED_DOCFLOW_FOLDER);
 	}

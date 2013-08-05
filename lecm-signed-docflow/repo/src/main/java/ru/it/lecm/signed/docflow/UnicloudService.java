@@ -39,6 +39,7 @@ public class UnicloudService {
 	private IGateWcfService gateWcfService;
 	private NodeService nodeService;
 	private OrgstructureBean orgstructureService;
+	private SignedDocflow signedDocflowService;
 	private TransactionService transactionService;
 
 	public void setGateWcfService(IGateWcfService gateWcfService) {
@@ -51,6 +52,10 @@ public class UnicloudService {
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
+		this.signedDocflowService = signedDocflowService;
 	}
 
 	public void setTransactionService(TransactionService transactionService) {

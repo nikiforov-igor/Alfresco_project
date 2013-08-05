@@ -183,4 +183,6 @@ public interface SignedDocflow {
      * @param nodeRef NodeRef'а, у которой следует удалить аспект <strong>signable</strong>
 	 */
 	void removeSignableAspect(NodeRef nodeRef);
+
+	NodeRef getSignedDocflowFolder();
 }

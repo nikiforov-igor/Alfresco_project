@@ -96,11 +96,12 @@ public class SendReceiveDocumentTest extends GateWcfServiceTest {
 			List<DocflowInfoBase> docflowInfoBaseList = docflows.value.getDocflowInfoBaseList();
 			for (DocflowInfoBase docflowInfoBase : docflowInfoBaseList) {
 				logger.info("docflowId = {}, sender = {}, receiver = {}, type = {}, description = {}",
+							new Object[] {
 							docflowInfoBase.getDocflowId(),
 							docflowInfoBase.getSender().getInn(),
 							docflowInfoBase.getReceiver().getInn(),
 							docflowInfoBase.getType().toString(),
-							docflowInfoBase.getDescription());
+							docflowInfoBase.getDescription()});
 
 		        gateResponse = new Holder<GateResponse>();
 				Holder<ArrayOfDocumentInfo> documentInfos = new Holder<ArrayOfDocumentInfo>();
@@ -109,10 +110,11 @@ public class SendReceiveDocumentTest extends GateWcfServiceTest {
 					List<DocumentInfo> documentInfoList = documentInfos.value.getDocumentInfoList();
 					for (DocumentInfo documentInfo : documentInfoList) {
 						logger.info("\tdocumentId = {}, documentType = {}, filename = {}, transactionType = {}",
+									new Object[] {
 									documentInfo.getDocumentId(),
 									documentInfo.getDocumentType().toString(),
 									documentInfo.getFileName(),
-									documentInfo.getTransactionType().toString());
+									documentInfo.getTransactionType().toString()});
 					}
 				}
 			}
