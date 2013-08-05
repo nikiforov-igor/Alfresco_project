@@ -38,6 +38,7 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="unicloudService" ref="unicloudService"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.isDocflowable.isDocflowable.get" class="ru.it.lecm.signed.docflow.webscripts.IsDocflowableWebscript"
@@ -53,6 +54,10 @@
 		<property name="signedDocflowService" ref="signedDocflowService"/>
 	</bean>
 	<bean id="webscript.ru.it.lecm.signed.docflow.isSignable.isSignable.get" class="ru.it.lecm.signed.docflow.webscripts.IsSignableWebscript"
+		  parent="webscript">
+		<property name="signedDocflowService" ref="signedDocflowService"/>
+	</bean>
+	<bean id="webscript.ru.it.lecm.signed.docflow.signContent.signContent.post" class="ru.it.lecm.signed.docflow.webscripts.SignContentWebscript"
 		  parent="webscript">
 		<property name="signedDocflowService" ref="signedDocflowService"/>
 	</bean>

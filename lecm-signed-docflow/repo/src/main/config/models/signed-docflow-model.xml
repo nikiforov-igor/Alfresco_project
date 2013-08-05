@@ -101,6 +101,13 @@
                     <mandatory>true</mandatory>
                 </property>
 
+				<!-- Непосредственно подпись в виде строки Base64 -->
+				 <property name="lecm-signed-docflow:signature-content">
+                    <title>Signature content</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
             </properties>
 
             <associations>

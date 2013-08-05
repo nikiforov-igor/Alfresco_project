@@ -1,6 +1,5 @@
 package ru.it.lecm.signed.docflow.webscripts;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -25,6 +24,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.util.ReflectionUtils;
+import ru.it.lecm.base.DeclarativeWebScriptHelper;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signed.docflow.UnicloudService;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
@@ -59,22 +59,6 @@ public class UnicloudWebscript extends DeclarativeWebScript {
 
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
-	}
-
-	private JSONObject getJsonContent(final Content content) {
-		JSONObject json;
-		try {
-			json = new JSONObject(content.getContent());
-		} catch(IOException ex) {
-			String msg = "Can't read request content as json string";
-			logger.error("{}. Caused by: {}", msg, ex.getMessage());
-			throw new WebScriptException(msg, ex);
-		} catch(JSONException ex) {
-			String msg = "Can't marshall request content as json object";
-			logger.error("{}. Caused by: {}", msg, ex.getMessage());
-			throw new WebScriptException(msg, ex);
-		}
-		return json;
 	}
 
 	private void addAttriburesToPersonalData() {
@@ -150,7 +134,7 @@ public class UnicloudWebscript extends DeclarativeWebScript {
 			throw new WebScriptException(String.format("%s. Executed action: %s", msg, action));
 		}
 
-		JSONObject requestJSON = getJsonContent(content);
+		JSONObject requestJSON = DeclarativeWebScriptHelper.getJsonContent(content);
 		JSONObject responseJSON;
 
 		try {

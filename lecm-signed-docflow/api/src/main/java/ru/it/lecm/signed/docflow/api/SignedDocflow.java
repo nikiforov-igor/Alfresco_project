@@ -1,5 +1,7 @@
 package ru.it.lecm.signed.docflow.api;
 
+import java.io.Serializable;
+import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
@@ -71,6 +73,11 @@ public interface SignedDocflow {
      * &lt;property name="lecm-signed-docflow:is-our/&gt;
      */
 	QName PROP_IS_OUR = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "is-our");
+
+	/**
+	 * &lt;property name="lecm-signed-docflow:signature-content"/&gt;
+	 */
+	QName PROP_SIGNATURE_CONTENT = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "signature-content");
 
     /**
      * &lt;association name="lecm-signed-docflow:sign-to-content-association/&gt;
@@ -185,4 +192,6 @@ public interface SignedDocflow {
 	void removeSignableAspect(NodeRef nodeRef);
 
 	NodeRef getSignedDocflowFolder();
+
+	Map<String, Object> signContent(Map<QName, Serializable> signatureProperties);
 }
