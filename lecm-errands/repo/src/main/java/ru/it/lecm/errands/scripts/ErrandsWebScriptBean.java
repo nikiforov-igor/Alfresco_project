@@ -90,10 +90,6 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return createScriptable(errandsIssuedByMe);
     }
 
-	public void requestDueDateChange() {
-		errandsService.requestDueDateChange();
-	}
-
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }

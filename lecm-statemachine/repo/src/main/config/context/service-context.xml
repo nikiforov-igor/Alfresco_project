@@ -24,6 +24,7 @@
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-statemachine-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/stm-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">

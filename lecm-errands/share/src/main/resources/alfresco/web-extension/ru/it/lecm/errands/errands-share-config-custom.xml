@@ -623,10 +623,43 @@
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
+	                <field id="lecmErrandWf:requestDueDateChangeReason">
+		                <control template="/org/alfresco/components/form/controls/textarea.ftl">
+			                <control-param name="rows">7</control-param>
+		                </control>
+	                </field>
                 </appearance>
             </form>
         </forms>
     </config>
+
+	<config evaluator="task-type" condition="lecmErrandWf:requestDueDateChangeTask">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecmErrandWf:requestDueDateChangeTaskNewDate"/>
+					<show id="lecmErrandWf:requestDueDateChangeTaskDateReason"/>
+					<show id="lecmErrandWf:requestDueDateChangeTaskComment"/>
+					<show id="lecmErrandWf:requestDueDateChangeTaskResult"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecmErrandWf:requestDueDateChangeTaskDateReason" read-only="true">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="rows">7</control-param>
+						</control>
+					</field>
+					<field id="lecmErrandWf:requestDueDateChangeTaskComment">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="rows">7</control-param>
+						</control>
+					</field>
+					<field id="lecmErrandWf:requestDueDateChangeTaskResult">
+						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl" />
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 
     <config evaluator="string-compare" condition="activiti$errandsChangeDueDate">
         <forms>
@@ -781,26 +814,4 @@
             </form>
         </forms>
     </config>
-
-    <config evaluator="task-type" condition="lecmErrandWf:changeRequestedDueDate">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="lecmErrandWf:changeRequestedDueDateNewDate"/>
-                    <show id="lecmErrandWf:changeRequestedDueDateReason"/>
-                    <show id="lecmErrandWf:changeRequestedDueDateComment"/>
-                    <show id="lecmErrandWf:changeRequestedDueDateTaskResult"/>
-                </field-visibility>
-                <appearance>
-                    <field id="lecmErrandWf:changeRequestedDueDateNewDate">
-                        <control template="/org/alfresco/components/form/controls/readonly.ftl"/>
-                    </field>
-                    <field id="lecmErrandWf:changeRequestedDueDateReason">
-                        <control template="/org/alfresco/components/form/controls/readonly.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
 </alfresco-config>

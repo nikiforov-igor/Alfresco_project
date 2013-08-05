@@ -56,7 +56,7 @@
 				    <activiti:field name="script">
 					    <activiti:string>
 						 	task.setVariableLocal("lecmErrandWf_requestCancelTaskTitle", execution.getVariable("requestCancelTitle"));
-						 	task.setVariableLocal("lecmErrandWf_requestCancelTaskReason", execution.getVariable("requestCancelReason"));
+						    task.setVariable("lecmErrandWf_requestCancelTaskReason", task.getVariable("lecmErrandWf_requestCancelReason"));
 					    </activiti:string>
 				    </activiti:field>
 			    </activiti:taskListener>

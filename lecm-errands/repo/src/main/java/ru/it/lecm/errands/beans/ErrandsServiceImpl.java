@@ -267,10 +267,6 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return getDocumentErrands(document, null, roles);
     }
 
-    @Override
-    public void requestDueDateChange() {
-    }
-
     public List<NodeRef> getErrandsDocuments(List<String> paths, int skipCount, int maxItems){
         List<QName> types =  new ArrayList<QName>();
         types.add(TYPE_ERRANDS);

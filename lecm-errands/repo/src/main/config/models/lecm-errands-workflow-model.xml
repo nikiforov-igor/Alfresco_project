@@ -41,28 +41,28 @@
                     <type>d:text</type>
                 </property>
             </properties>
-            <!--<mandatory-aspects>-->
-				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
-			<!--</mandatory-aspects>-->
+            <mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
 		</type>
 
-        <type name="lecmErrandWf:changeRequestedDueDate">
+        <type name="lecmErrandWf:requestDueDateChangeTask">
             <parent>bpm:activitiOutcomeTask</parent>
             <properties>
-                <property name="lecmErrandWf:changeRequestedDueDateNewDate">
+                <property name="lecmErrandWf:requestDueDateChangeTaskNewDate">
                     <type>d:date</type>
                 </property>
-                <property name="lecmErrandWf:changeRequestedDueDateReason">
+                <property name="lecmErrandWf:requestDueDateChangeTaskDateReason">
                     <type>d:text</type>
                 </property>
-                <property name="lecmErrandWf:changeRequestedDueDateComment">
+                <property name="lecmErrandWf:requestDueDateChangeTaskComment">
                     <type>d:text</type>
                 </property>
-                <property name="lecmErrandWf:changeRequestedDueDateTaskResult">
+                <property name="lecmErrandWf:requestDueDateChangeTaskResult">
                     <type>d:text</type>
                     <default>REJECTED</default>
                     <constraints>
-                        <constraint name="lecmErrandWf:changeRequestedDueDateTaskResultConstraint" type="LIST">
+                        <constraint name="lecmErrandWf:requestDueDateChangeTaskResultConstraint" type="LIST">
                             <parameter name="allowedValues">
                                 <list>
                                     <value>APPROVED</value>
@@ -73,14 +73,6 @@
                     </constraints>
                 </property>
             </properties>
-            <!--<overrides>-->
-                <!--<property name="bpm:packageItemActionGroup">-->
-                    <!--<default>edit_package_item_actions</default>-->
-                <!--</property>-->
-                <!--<property name="bpm:outcomePropertyName">-->
-                    <!--<default>{http://www.it.ru/logicECM/errand/change-requested-due-date-task/1.0}changeRequestedDueDateTaskResult</default>-->
-                <!--</property>-->
-            <!--</overrides>-->
         </type>
 
         <type name="lecmErrandWf:changeDueDate">
