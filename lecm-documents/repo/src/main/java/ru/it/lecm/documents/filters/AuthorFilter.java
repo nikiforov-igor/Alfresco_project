@@ -34,65 +34,67 @@ public class AuthorFilter extends DocumentFilter {
 
     @Override
     public String getQuery(Object... args) {
-        String docType = (String) args[0];
-        String filterValue = (String) args[1];
-        if (docType == null || filterValue == null) {
-            return "";
-        }
-
         String query = "";
-        List<NodeRef> employees = new ArrayList<NodeRef>();
-        try {
-            String username = authService.getCurrentUserName();
-            if (username != null) {
-                NodeRef currentEmployee = orgstructureService.getEmployeeByPerson(username);
-
-                switch (AuthorEnum.valueOf(filterValue.toUpperCase())) {
-                    case MY: {
-                        employees.add(currentEmployee);
-                        break;
-                    }
-                    case DEPARTMENT: {
-                        List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(currentEmployee);
-                        employees.addAll(departmentEmployees);
-                        break;
-                    }
-                    case FAVOURITE: {
-                        String favourites = "org.alfresco.share.documents.favourites";
-                        String currentUser = authService.getCurrentUserName();
-                        Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, favourites);
-                        String favouriteDocs = preferences.get(favourites).toString();
-                        if (favouriteDocs != null && favouriteDocs.length() > 0) {
-                            String[] docsRefs = favouriteDocs.split(",");
-                            boolean addOR = false;
-                            for (String docsRef : docsRefs) {
-                                query += (addOR ? " OR " : "") + "ID:" + docsRef.replace(":", "\\:");
-                                addOR = true;
-                            }
-                        }
-                        break;
-                    }
-                    case ALL: {
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
-                }
-                if (employees.size() > 0) {
-                    boolean addOR = false;
-                    QName type = QName.createQName(docType, namespaceService);
-                    String authorProperty = documentService.getAuthorProperty(type);
-                    authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-
-                    for (NodeRef employeeRef : employees) {
-                        query += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
-                        addOR = true;
-                    }
-                }
+        if (args != null && args.length > 0) {
+            String docType = (String) args[0];
+            String filterValue = (String) args[1];
+            if (docType == null || filterValue == null) {
+                return "";
             }
-        } catch (Exception ignored) {
-            logger.warn("Incorrect filter! Filter args:" + args);
+
+            List<NodeRef> employees = new ArrayList<NodeRef>();
+            try {
+                String username = authService.getCurrentUserName();
+                if (username != null) {
+                    NodeRef currentEmployee = orgstructureService.getEmployeeByPerson(username);
+
+                    switch (AuthorEnum.valueOf(filterValue.toUpperCase())) {
+                        case MY: {
+                            employees.add(currentEmployee);
+                            break;
+                        }
+                        case DEPARTMENT: {
+                            List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(currentEmployee);
+                            employees.addAll(departmentEmployees);
+                            break;
+                        }
+                        case FAVOURITE: {
+                            String favourites = "org.alfresco.share.documents.favourites";
+                            String currentUser = authService.getCurrentUserName();
+                            Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, favourites);
+                            String favouriteDocs = preferences.get(favourites).toString();
+                            if (favouriteDocs != null && favouriteDocs.length() > 0) {
+                                String[] docsRefs = favouriteDocs.split(",");
+                                boolean addOR = false;
+                                for (String docsRef : docsRefs) {
+                                    query += (addOR ? " OR " : "") + "ID:" + docsRef.replace(":", "\\:");
+                                    addOR = true;
+                                }
+                            }
+                            break;
+                        }
+                        case ALL: {
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                    if (employees.size() > 0) {
+                        boolean addOR = false;
+                        QName type = QName.createQName(docType, namespaceService);
+                        String authorProperty = documentService.getAuthorProperty(type);
+                        authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+
+                        for (NodeRef employeeRef : employees) {
+                            query += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+                            addOR = true;
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+                logger.warn("Incorrect filter! Filter args:" + args);
+            }
         }
         return query;
     }
