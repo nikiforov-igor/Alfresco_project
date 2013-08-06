@@ -185,9 +185,14 @@
 
 		<type name="lecmErrandWf:cancel">
 			<parent>bpm:startTask</parent>
-			<!--<mandatory-aspects>-->
-				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
-			<!--</mandatory-aspects>-->
+			<properties>
+				<property name="lecmErrandWf:cancelReason">
+					<type>d:text</type>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
 		</type>
     </types>
 </model>

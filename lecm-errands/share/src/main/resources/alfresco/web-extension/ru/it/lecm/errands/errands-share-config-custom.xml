@@ -856,14 +856,20 @@
     <config evaluator="string-compare" condition="activiti$errandsCancel">
         <forms>
             <form>
-                <field-visibility>
-                    <show id="packageItems"/>
-                </field-visibility>
-                <appearance>
-                    <field id="packageItems">
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
-                    </field>
-                </appearance>
+	            <field-visibility>
+		            <show id="packageItems"/>
+		            <show id="lecmErrandWf:cancelReason"/>
+	            </field-visibility>
+	            <appearance>
+		            <field id="packageItems">
+			            <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+		            </field>
+		            <field id="lecmErrandWf:cancelReason">
+			            <control template="/org/alfresco/components/form/controls/textarea.ftl">
+				            <control-param name="rows">7</control-param>
+			            </control>
+		            </field>
+	            </appearance>
             </form>
         </forms>
     </config>

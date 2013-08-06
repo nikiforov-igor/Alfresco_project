@@ -11,6 +11,35 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string>
+	                        var document = bpm_package.children[0];
+	                        if (document != null) {
+		                        document.properties["lecm-errands:end-date"] = new Date();
+		                        document.save();
+
+		                        var logText = "Сотрудник #initiator отменил поручение: #mainobject.";
+		                        businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
+
+		                        var initiator = null;
+		                        var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+		                        if (initiatorAssoc != null &amp;&amp; initiatorAssoc.length == 1) {
+		                            initiator = initiatorAssoc[0];
+		                        }
+
+		                        var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+		                        if (executorAssoc != null &amp;&amp; executorAssoc.length == 1 &amp;&amp; initiator != null) {
+		                            var executor = executorAssoc[0];
+			                        var recipients = [];
+			                        recipients.push(executor);
+
+			                        var notificationText = "Поручение ";
+			                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+			                        notificationText += " назначенное вам сотрудником ";
+			                        notificationText += documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
+	                                notificationText += " ";
+	                                notificationText += documentScript.wrapperTitle("отменено", lecmErrandWf_cancelReason);
+			                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+		                        }
+	                        }
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
