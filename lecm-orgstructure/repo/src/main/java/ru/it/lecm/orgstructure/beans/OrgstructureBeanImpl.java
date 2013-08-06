@@ -857,6 +857,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         return null;
     }
 
+	@Override
     public List<NodeRef> getEmployeesByBusinessRole(NodeRef businessRoleRef) {
         return getEmployeesByBusinessRole(businessRoleRef, false);
     }
@@ -979,7 +980,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
     @Override
     public NodeRef getEmployeeByPerson(String personName) {
         if (personName != null) {
-            NodeRef personNodeRef = null;
+            NodeRef personNodeRef;
             try {
                 personNodeRef = personService.getPerson(personName, false);
             } catch (NoSuchPersonException e) {
@@ -1820,6 +1821,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         return getFolder(ORGANIZATION_ROOT_ID);
     }
 
+	@Override
     public NodeRef getPrimaryOrgUnit(NodeRef employeeRef) {
         NodeRef unit = null;
         if (nodeService.exists(employeeRef)) {
@@ -1835,8 +1837,9 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         return unit;
     }
 
+	@Override
     public boolean isBossOf(NodeRef bossRef, NodeRef subordinateRef, boolean checkPrimary) {
-        NodeRef unit = null;
+        NodeRef unit;
         Set<NodeRef> employees = new HashSet<NodeRef>();
 
         if (checkPrimary) {
@@ -1866,6 +1869,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         }
     }
 
+	@Override
     public List<NodeRef> getAllEmployees() {
         List<NodeRef> employees = new ArrayList<NodeRef>();
 
@@ -1879,4 +1883,16 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
         return employees;
     }
+
+	@Override
+	public String getOrganizationShortName() {
+		Serializable shortName = nodeService.getProperty(getOrganization(), PROP_ORG_ELEMENT_SHORT_NAME);
+		return shortName != null ? (String) shortName : null;
+	}
+
+	@Override
+	public String getOrganizationFullName() {
+		Serializable fullName = nodeService.getProperty(getOrganization(), PROP_ORG_ELEMENT_FULL_NAME);
+		return fullName != null ? (String) fullName : null;
+	}
 }

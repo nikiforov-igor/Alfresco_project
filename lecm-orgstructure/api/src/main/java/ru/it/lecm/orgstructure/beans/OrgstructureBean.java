@@ -97,6 +97,16 @@ public interface OrgstructureBean {
 	NodeRef getOrganization();
 
 	/**
+	 * Получение сокращенного название организации.
+	 */
+	String getOrganizationShortName();
+
+	/**
+	 * Получение полного название организации.
+	 */
+	String getOrganizationFullName();
+
+	/**
 	 * Получение руководителя Организации
 	 *
 	 * @return NodeRef или NULL если руководитель не задан

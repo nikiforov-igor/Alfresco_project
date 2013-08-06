@@ -3,7 +3,6 @@ package ru.it.lecm.signed.docflow.webscripts;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ISO8601DateFormat;
 import org.json.JSONException;
@@ -29,7 +28,7 @@ public class SignContentWebscript extends DeclarativeWebScript {
 	private final static Logger logger = LoggerFactory.getLogger(SignContentWebscript.class);
 	private final static QName[] propertiesToParse = {SignedDocflow.PROP_OWNER, SignedDocflow.PROP_OWNER_POSITION, SignedDocflow.PROP_OWNER_ORGANIZATION,
 		SignedDocflow.PROP_SIGNING_DATE, SignedDocflow.PROP_SERIAL_NUMBER, SignedDocflow.PROP_VALID_FROM, SignedDocflow.PROP_VALID_THROUGH, SignedDocflow.PROP_CA,
-		SignedDocflow.PROP_SIGNATURE_CONTENT, SignedDocflow.ASSOC_SIGN_TO_CONTENT, SignedDocflow.PROP_CERT_FINGERPRINT};
+		SignedDocflow.PROP_SIGNATURE_CONTENT, SignedDocflow.ASSOC_SIGN_TO_CONTENT, SignedDocflow.PROP_CERT_FINGERPRINT, SignedDocflow.PROP_CERT_FINGERPRINT};
 
 	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
 		this.signedDocflowService = signedDocflowService;
@@ -49,9 +48,9 @@ public class SignContentWebscript extends DeclarativeWebScript {
 		for (QName property : propertiesToParse) {
 			try {
 				Serializable value;
-				if (SignedDocflow.PROP_VALID_FROM.equals(property) ||
-						SignedDocflow.PROP_VALID_THROUGH.equals(property) ||
-						SignedDocflow.PROP_SIGNING_DATE.equals(property)) {
+				if (SignedDocflow.PROP_VALID_FROM.equals(property)
+						|| SignedDocflow.PROP_VALID_THROUGH.equals(property)
+						|| SignedDocflow.PROP_SIGNING_DATE.equals(property)) {
 					value = ISO8601DateFormat.parse(jsonRequest.getString(property.getPrefixString()));
 				} else {
 					value = jsonRequest.getString(property.getPrefixString());

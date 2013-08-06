@@ -27,6 +27,18 @@
 		</property>
 	</bean>
 
+	<bean id="lecm.signed-docflow.business-journal-dictionary-bootstrap"
+		  parent="lecmDictionaryBootstrap"
+		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+						ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">
+        <property name="createOrUpdateDictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory-items.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
+            </list>
+        </property>
+    </bean>
+
 	<util:constant id="signedDocflowFolder" static-field="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl.SIGNED_DOCFLOW_FOLDER"/>
 	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean"
 		  depends-on="lecm.signed-docflow.model-bootstrap" init-method="init">
@@ -39,6 +51,9 @@
 		<property name="transactionService" ref="transactionService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="unicloudService" ref="unicloudService"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="authService" ref="authenticationService"/>
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.isDocflowable.isDocflowable.get" class="ru.it.lecm.signed.docflow.webscripts.IsDocflowableWebscript"
