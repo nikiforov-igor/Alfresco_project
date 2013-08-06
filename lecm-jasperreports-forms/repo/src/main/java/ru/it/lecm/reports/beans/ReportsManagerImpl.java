@@ -88,8 +88,7 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	@Override
 	public List<ReportDescriptor> getRegisteredReports(String[] docTypes, boolean forCollection) {
-		Set<ReportDescriptor> resultedReports = new HashSet<ReportDescriptor>();
-		Set<ReportDescriptor> unFilteredReports = new HashSet<ReportDescriptor>();
+		final Set<ReportDescriptor> unFilteredReports = new HashSet<ReportDescriptor>();
 		if (docTypes != null) {
 			for (String docType : docTypes) {
 				if (docType != null && docType.length() > 0) {
@@ -102,12 +101,16 @@ public class ReportsManagerImpl implements ReportsManager {
 		} else {
 			unFilteredReports.addAll( getRegisteredReports(null, null));
 		}
+
+		final List<ReportDescriptor> resultedReports = new ArrayList<ReportDescriptor>();
 		for (ReportDescriptor descriptor : unFilteredReports) {
+			if (descriptor.getFlags().isCustom() && forCollection) // пропускаем кастомизированные для многострочных отчётов ... 
+				continue;
 			if (forCollection == descriptor.getFlags().isMultiRow()) {
 				resultedReports.add(descriptor);
 			}
 		}
-		return new ArrayList<ReportDescriptor>(resultedReports);
+		return resultedReports;
 	}
 
 	public DsLoader getDsloader() {
@@ -236,7 +239,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		//			final File result = new File( getDsConfigDir() + "/test-subdir");
 		//			logger.info( String.format( "creating dir '%s'\n\t%s", result, result.mkdirs()) );
 		//		}
-
+		// logger.info( Utils.dumpAlfData( System.getProperties(),  "System.getProperties():\n").toString() );
 		if (getDescriptors() != null && getDescriptors().size() > 0) {
 			if (logger.isInfoEnabled()) // только названия шаблонов ...
 				logger.info( String.format( " initialized templates count %s\n\t%s"

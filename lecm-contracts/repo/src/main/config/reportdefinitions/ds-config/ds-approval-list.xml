@@ -93,6 +93,7 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 		<allVersions>true</allVersions>
 		<preferedType></preferedType>
 		<isMultiRow>false</isMultiRow>
+		<isCustom>true</isCustom>
 		<!--
 			select * from lecm:documents
 			select * from lecm-al:approval-list as approvals

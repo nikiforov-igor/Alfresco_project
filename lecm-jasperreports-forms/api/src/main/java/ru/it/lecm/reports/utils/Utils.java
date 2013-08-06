@@ -167,7 +167,7 @@ public class Utils {
 	 * @param props список свойств для журналирования
 	 * @param info сообщение, выводится в журнал если не null
 	 */
-	public static StringBuilder dumpAlfData( final StringBuilder dest, final Map<QName, Serializable> props, final String info) {
+	public static StringBuilder dumpAlfData( final StringBuilder dest, final Map<?, ?> props, final String info) {
 		final StringBuilder result = (dest != null) ? dest : new StringBuilder();
 		if (info != null)
 			result.append(info);
@@ -175,7 +175,7 @@ public class Utils {
 		if (props != null) {
 			result.append( String.format( "\t[%s]\t %25s\t %s\n", 'n', "fldName", "value"));
 			int i = 0;
-			for (Map.Entry<QName, Serializable> e: props.entrySet()) {
+			for (@SuppressWarnings("rawtypes") Map.Entry e: props.entrySet()) {
 				i++;
 				result.append( String.format( "\t[%d]\t %25s\t '%s'\n", i, e.getKey(), nvl(e.getValue(), "NULL")));
 			}
@@ -183,7 +183,7 @@ public class Utils {
 		return result;
 	}
 
-	public static StringBuilder dumpAlfData( final Map<QName, Serializable> props, final String info) {
+	public static StringBuilder dumpAlfData( final Map<?, ?> props, final String info) {
 		return dumpAlfData( new StringBuilder(), props, info);
 	}
 

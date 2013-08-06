@@ -39,6 +39,7 @@
 		<allVersions>true</allVersions>
 		<preferedType></preferedType>
 		<isMultiRow>true</isMultiRow>
+		<isCustom>true</isCustom>
 		<!--
 			select * from lecm:documents
 			select * from lecm-al:approval-list as approvals

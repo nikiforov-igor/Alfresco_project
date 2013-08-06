@@ -49,6 +49,7 @@
 		<allVersions>true</allVersions>
 		<preferedType></preferedType>
 		<isMultiRow>true</isMultiRow>
+		<isCustom>true</isCustom>
 		<!--
 			select * from lecm:documents
 			select * from lecm-contract:document as Contract

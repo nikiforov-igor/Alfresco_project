@@ -12,6 +12,7 @@ public class ReportFlagsImpl
 {
 	private QueryDescriptor queryDesc;
 	private boolean isMultiRow = false;
+	private boolean custom = false;
 
 	public ReportFlagsImpl() {
 		super();
@@ -119,6 +120,16 @@ public class ReportFlagsImpl
 	@Override
 	public void setMultiRow(boolean value) {
 		this.isMultiRow = value;
+	}
+
+	@Override
+	public boolean isCustom() {
+		return this.custom;
+	}
+
+	@Override
+	public void setCustom(boolean flag) {
+		this.custom = flag;
 	}
 
 	@Override

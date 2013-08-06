@@ -76,6 +76,7 @@ public class DSXMLProducer {
 	public static final String XMLNODE_QUERY_TEXT = "queryText";
 	public static final String XMLNODE_QUERY_ALLVERSIONS = "allVersions";
 	public static final String XMLNODE_QUERY_MULTIROW = "isMultiRow";
+	public static final String XMLNODE_QUERY_ISCUSTOM = "isCustom";
 	public static final String XMLNODE_QUERY_PREFEREDTYPE = "preferedType";
 
 
@@ -778,6 +779,7 @@ public class DSXMLProducer {
 		XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_PREFEREDTYPE, flags.getPreferedNodeType());
 
 		XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_MULTIROW, flags.isMultiRow());
+		XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_ISCUSTOM, flags.isCustom());
 
 		/* включение атрибутов */
 		{
@@ -805,6 +807,7 @@ public class DSXMLProducer {
 		result.setPreferedNodeType( XmlHelper.getNodeAsText( curNode, XMLNODE_QUERY_PREFEREDTYPE, result.getPreferedNodeType()) );
 
 		result.setMultiRow( XmlHelper.getNodeAsBool( curNode, XMLNODE_QUERY_MULTIROW, result.isMultiRow()) );
+		result.setCustom( XmlHelper.getNodeAsBool( curNode, XMLNODE_QUERY_ISCUSTOM, result.isCustom()) );
 
 		/* включение атрибутов */
 		{
