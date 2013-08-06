@@ -415,13 +415,19 @@ LogicECM.module = LogicECM.module || {};
 
                 var num = 0;
                 for (var i in items) {
+                    var item = items[i];
+                    var itemName = item.name;
                     var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
+
+                    if (item.selectedName && item.selectedName != "") {
+                        itemName = item.selectedName;
+                    }
 	                if (this.options.itemType == "lecm-orgstr:employee") {
-		                el.innerHTML += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, items[i].name) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+		                el.innerHTML += '<div class="' + divClass + '"> ' + this.getEmployeeView(item.nodeRef, itemName) + ' ' + this.getRemoveButtonHTML(item) + '</div>';
 	                } else {
-		                el.innerHTML += '<div class="' + divClass + '"> ' + items[i].name + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+		                el.innerHTML += '<div class="' + divClass + '"> ' + itemName + ' ' + this.getRemoveButtonHTML(item) + '</div>';
 	                }
-                    YAHOO.util.Event.onAvailable("ac-" + this.controlId + items[i].nodeRef, this.attachRemoveItemClickListener, items[i], this);
+                    YAHOO.util.Event.onAvailable("ac-" + this.controlId + item.nodeRef, this.attachRemoveItemClickListener, item, this);
                 }
             },
 

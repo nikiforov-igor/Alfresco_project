@@ -62,7 +62,7 @@
 }
 .yui-skin-lecmTheme .yui-panel .metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.association-auto-complete-selected-item span.person > a,
 .yui-skin-lecmTheme .yui-panel .metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.association-auto-complete-selected-item-even span.person > a {
-    max-width: 180px;
+    max-width: 178px;
     text-overflow: ellipsis;
 }
 .yui-skin-lecmTheme .yui-panel .metadata-form-edit div.set > div.form-field > div > select {
