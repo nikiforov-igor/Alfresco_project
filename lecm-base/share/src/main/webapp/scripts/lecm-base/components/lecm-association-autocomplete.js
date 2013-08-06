@@ -205,7 +205,7 @@ LogicECM.module = LogicECM.module || {};
 
             makeAutocomplete: function() {
                 var oDS = new YAHOO.util.LocalDataSource(this.dataArray);
-                oDS.responseSchema = {fields:["name", "nodeRef"]};
+                oDS.responseSchema = {fields:["name", "selectedName", "nodeRef"]};
                 var oAC = new YAHOO.widget.AutoComplete(this.controlId + "-autocomplete-input", this.controlId + "-autocomplete-container", oDS);
                 oAC.prehighlightClassName = "yui-ac-prehighlight";
                 oAC.useShadow = true;
@@ -215,7 +215,8 @@ LogicECM.module = LogicECM.module || {};
                 var selectItemHandler = function (sType, aArgs) {
                     var node = {
                         name: aArgs[2][0],
-                        nodeRef: aArgs[2][1]
+	                    selectedName: aArgs[2][1],
+                        nodeRef: aArgs[2][2]
                     };
                     this.selectedItems[node.nodeRef] = node;
                     this.updateSelectedItems();
@@ -236,6 +237,7 @@ LogicECM.module = LogicECM.module || {};
                         if (node.selectable) {
                             this.dataArray.push({
                                 name: node.name,
+	                            selectedName: node.selectedName,
                                 nodeRef: node.nodeRef
                             });
                         }
