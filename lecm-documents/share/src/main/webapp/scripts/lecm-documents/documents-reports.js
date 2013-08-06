@@ -13,6 +13,41 @@
                 [ p_dialog.id + "-form-container_h", defaultMsg ]
             );
 
+            var formElement = Dom.get(p_form.formId);
+            if (formElement) {
+                var actionUrl = formElement.action;
+                if (actionUrl && actionUrl.indexOf("autoSubmit") > 0) {
+                    var data = {};
+                    if (documentRef) { // добавляем к параметрам ID - если задано
+                        data["ID"] = documentRef;
+                    }
+                    p_dialog.dialog.hide();
+                    Alfresco.util.Ajax.request({
+                        method: "GET",
+                        url: actionUrl,
+                        dataObj: data,
+                        responseContentType: "text/html",
+                        successCallback: {
+                            fn: function _onSuccess(response) {
+                                p_dialog.dialog.hide();
+                                window.open(window.location.protocol + "//" + window.location.host + response.serverResponse.responseText, "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+                                Alfresco.util.PopupManager.displayMessage({
+                                    text: Alfresco.component.Base.prototype.msg("documents.report.success")
+                                });
+                            },
+                            scope: this
+                        },
+                        failureCallback: {
+                            fn: function _onFailure(response) {
+                                p_dialog.dialog.hide();
+                                Alfresco.util.PopupManager.displayMessage({
+                                    text: Alfresco.component.Base.prototype.msg("documents.report.failure")
+                                });
+                            }
+                        }
+                    });
+                }
+            }
             //YAHOO.util.Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
         };
 

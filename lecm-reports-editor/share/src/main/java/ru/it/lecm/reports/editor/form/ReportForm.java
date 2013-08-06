@@ -60,14 +60,7 @@ public class ReportForm extends FormUIGet {
         HashMap<String, Object> model = new HashMap<String, Object>();
         HashMap<String, Object> form = new HashMap<String, Object>();
         model.put(MODEL_FORM, form);
-        form.put(MODEL_MODE, Mode.CREATE);
-        form.put(MODEL_METHOD, "GET");
-        form.put(MODEL_ENCTYPE, ENCTYPE_JSON);
-        form.put(MODEL_SUBMISSION_URL, "proxy/alfresco/lecm/report/" + descriptor.getMnem());
-        form.put(MODEL_SHOW_CAPTION, false);
-        form.put(MODEL_SHOW_CANCEL_BUTTON, true);
-        form.put(MODEL_SHOW_RESET_BUTTON, false);
-        form.put(MODEL_SHOW_SUBMIT_BUTTON, true);
+
         form.put(MODEL_CONSTRAINTS, new ArrayList<Object>());
 
         ArrayList<Set> sets = new ArrayList<Set>();
@@ -102,6 +95,14 @@ public class ReportForm extends FormUIGet {
             }
         }
 
+        form.put(MODEL_MODE, Mode.CREATE);
+        form.put(MODEL_METHOD, "GET");
+        form.put(MODEL_ENCTYPE, ENCTYPE_JSON);
+        form.put(MODEL_SUBMISSION_URL, "proxy/alfresco/lecm/report/" + descriptor.getMnem() + (params.isEmpty() ? "?autoSubmit=true" : ""));
+        form.put(MODEL_SHOW_CAPTION, false);
+        form.put(MODEL_SHOW_CANCEL_BUTTON, true);
+        form.put(MODEL_SHOW_RESET_BUTTON, false);
+        form.put(MODEL_SHOW_SUBMIT_BUTTON, true);
         return model;
     }
 
