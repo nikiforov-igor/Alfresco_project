@@ -6,7 +6,7 @@
 		<property name="configService" ref="web.config" />
 		<property name="configs">
 			<list>
-				<value>classpath:alfresco/web-extension/ru/it/lecm/signed/docflow/signed-docflow-share-config-custom.xml</value>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/signed-docflow/signed-docflow-share-config-custom.xml</value>
 			</list>
 		</property>
 	</bean>
