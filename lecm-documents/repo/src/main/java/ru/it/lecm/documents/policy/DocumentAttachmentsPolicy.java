@@ -219,8 +219,10 @@ public class DocumentAttachmentsPolicy extends BaseBean {
                 QName propName = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName());
                 QName propRef = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName() + "-ref");
                 NodeRef employeeRef = orgstructureService.getCurrentEmployee();
-                nodeService.setProperty(nodeRef, propName, substituteService.getObjectDescription(employeeRef));
-                nodeService.setProperty(nodeRef, propRef, employeeRef.toString());
+				if (null != employeeRef) {
+					nodeService.setProperty(nodeRef, propName, substituteService.getObjectDescription(employeeRef));
+					nodeService.setProperty(nodeRef, propRef, employeeRef.toString());
+				}
             }
         }
 

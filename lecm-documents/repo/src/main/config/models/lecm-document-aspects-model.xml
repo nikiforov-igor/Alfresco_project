@@ -103,5 +103,13 @@
 				</association>
 			</associations>
 		</aspect>
+		<aspect name="lecm-document-aspects:semanticAssistAspect">
+			<properties>
+				<property name="lecm-document-aspects:indexInBR5">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>

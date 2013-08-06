@@ -14,12 +14,12 @@ public interface SemanticBean {
 	public Integer loadExpertBr5(NodeRef expert);
 	public Boolean refreshDocumentTagsBr5(NodeRef documentRef) throws DatatypeConfigurationException;
 	public Boolean loadDocumentBr5(NodeRef documentFile) throws DatatypeConfigurationException;
-	public Map<String, Float> getExpertsTagsBr5 (NodeRef expert);
-	public Map<String, Float> getDocumentTagsBr5(NodeRef documentRef);
+	public Map<String, Float> getExpertsTagsBr5 (NodeRef expert, Integer maxCount);
+	public Map<String, Float> getDocumentTagsBr5(NodeRef documentRef, Integer maxCount);
 	public boolean hasBr5Aspect(NodeRef documentRef);
 	public void setDocumentTags(NodeRef documentRef, Map<String,Float> tags);
 	public void refreshDocument(NodeRef documentRef);
-	public SortedMap<Float, List<Map<String, String>>> getDataExpertsByDocument(NodeRef document);
+	public SortedMap<Float, List<Map<String, String>>> getDataExpertsByDocument(NodeRef document, Integer maxCount);
 	public List<NodeRef> getSimilarDocumentsByTag(String tag,String docType);
 	public List<String> getSimilarDocumentsByTagStr(String tag,String docType);
 	public List<NodeRef> getSimilarDocumentsByDocument(NodeRef document,String docType);
@@ -28,4 +28,6 @@ public interface SemanticBean {
 	public boolean hasDocumentTags(NodeRef documentRef);
 	public String getQueryByTag(String tag,String docType);
 	public String getQueryByDocument(NodeRef document,String docType);
+	public Boolean refreshAlfDocumentTagsBr5(NodeRef documentRef) throws DatatypeConfigurationException;
+	public Boolean refreshLECMDocumentTagsBr5(NodeRef documentRef) throws DatatypeConfigurationException;
 }

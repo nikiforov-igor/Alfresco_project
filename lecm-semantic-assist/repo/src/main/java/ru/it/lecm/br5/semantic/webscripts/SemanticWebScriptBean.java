@@ -68,11 +68,11 @@ public class SemanticWebScriptBean extends BaseWebScript implements ConstantsBea
 	public void loadDocumentBr5(String sDocument) throws DatatypeConfigurationException {
 		if (sDocument != null && !sDocument.isEmpty()) {
 			NodeRef documentRef = new NodeRef(sDocument);
-			semanticService.loadDocumentBr5(documentRef);
+			semanticService.refreshDocument(documentRef);
 		}
 	}
 
-	public Map<String, Integer> getExpertsTagsBr5(String sExpert, String maxFont, String minFont) {
+	public Map<String, Integer> getExpertsTagsBr5(String sExpert, String maxFont, String minFont, String maxCount) {
 		NodeRef expertRef;
 		if (sExpert != null && !sExpert.isEmpty()) {
 			expertRef = new NodeRef(sExpert);
@@ -81,6 +81,7 @@ public class SemanticWebScriptBean extends BaseWebScript implements ConstantsBea
 		}
 		Integer maxFontSize;
 		Integer minFontSize;
+		Integer maxCountTags;
 		try {
 			maxFontSize = Integer.parseInt(maxFont);
 			minFontSize = Integer.parseInt(minFont);
@@ -88,7 +89,13 @@ public class SemanticWebScriptBean extends BaseWebScript implements ConstantsBea
 			maxFontSize = null;
 			minFontSize = null;
 		}
-		return semanticService.normalizeTags(semanticService.getExpertsTagsBr5(expertRef), maxFontSize, minFontSize);
+
+		try{
+			maxCountTags = Integer.parseInt(maxCount);
+		}catch (NumberFormatException e){
+			maxCountTags = null;
+		}
+		return semanticService.normalizeTags(semanticService.getExpertsTagsBr5(expertRef,maxCountTags), maxFontSize, minFontSize);
 	}
 
 	public boolean hasBr5Aspect(String sDocument) {
@@ -99,11 +106,12 @@ public class SemanticWebScriptBean extends BaseWebScript implements ConstantsBea
 		return false;
 	}
 
-	public Map<String, Integer> getDocumentTagsBr5(String sDocument, String maxFont, String minFont) {
+	public Map<String, Integer> getDocumentTagsBr5(String sDocument, String maxFont, String minFont, String maxCount) {
 		if (sDocument != null && !sDocument.isEmpty()) {
 			NodeRef documentRef = new NodeRef(sDocument);
 			Integer maxFontSize;
 			Integer minFontSize;
+			Integer maxTermCount;
 			try {
 				maxFontSize = Integer.parseInt(maxFont);
 				minFontSize = Integer.parseInt(minFont);
@@ -111,15 +119,27 @@ public class SemanticWebScriptBean extends BaseWebScript implements ConstantsBea
 				maxFontSize = null;
 				minFontSize = null;
 			}
-			return semanticService.normalizeTags(semanticService.getDocumentTagsBr5(documentRef),maxFontSize, minFontSize);
+			try{
+				maxTermCount = Integer.parseInt(maxCount);
+			}
+			catch(NumberFormatException e){
+				maxTermCount = null;
+			}
+			return semanticService.normalizeTags(semanticService.getDocumentTagsBr5(documentRef,maxTermCount),maxFontSize, minFontSize);
 		}
 		return null;
 	}
 
-	public SortedMap<Float, List<Map<String, String>>> getDataExpertsByDocument(String sDocument) {
+	public SortedMap<Float, List<Map<String, String>>> getDataExpertsByDocument(String sDocument, String maxCount) {
 		if (sDocument != null && !sDocument.isEmpty()) {
 			NodeRef documentRef = new NodeRef(sDocument);
-			return semanticService.getDataExpertsByDocument(documentRef);
+			Integer maxCountExperts;
+			try{
+				maxCountExperts = Integer.parseInt(maxCount);
+			}catch(NumberFormatException e){
+				maxCountExperts = null;
+			}
+			return semanticService.getDataExpertsByDocument(documentRef,maxCountExperts);
 		}
 		return null;
 	}

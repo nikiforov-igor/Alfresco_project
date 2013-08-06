@@ -10,6 +10,7 @@
         <import uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
         <import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
         <import uri="http://www.it.ru/lecm/org/connection/1.0" prefix="lecm-connect"/>
+		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/contract/additional-document/1.0" prefix="lecm-additional-document"/>
@@ -104,6 +105,9 @@
                     </target>
                 </association>
             </associations>
+			<mandatory-aspects>
+				<aspect>lecm-document-aspects:semanticAssistAspect</aspect>
+			</mandatory-aspects>
         </type>
     </types>
 

@@ -22,11 +22,11 @@
 		</#if>
 
 		<#if aspect.hasTags == "true">
-			<div class="panel-body" style="display: block;">
+			<div class="panel-body" style="display: block; padding-top:0;">
 					<div class="link-info">
 						<#if nodeRef??>
 							<#if page.id == "document">
-								<a  id = "cloud-term-ref" title="${msg('cloud.text')}" class="simple-link" href="javascript:void(0)" >${msg('cloud.text')}</a>
+								<a  id = "cloud-term-ref" title="${msg('cloud.text')}" class="semantic-button-grey text-cropped" href="javascript:void(0)" >${msg('cloud.text')}</a>
 							<#else>
 								<a id = "cloud-term-ref" title="${msg('cloud.text')}" class="simple-link" target="_blank" href="cloud-theme?nodeRef=${nodeRef}" >${msg('cloud.text')}</a>
 							</#if>
@@ -37,7 +37,7 @@
 					<div class="link-info">
 						<#if nodeRef??>
 							<#if page.id == "document">
-								<a id = "experts-by-document-ref" title="${msg('experts.theme.text')}" class="simple-link" href="javascript:void(0)" >${msg('experts.theme.text')}</a>
+								<a id = "experts-by-document-ref" title="${msg('experts.theme.text')}" class="semantic-button-grey text-cropped" href="javascript:void(0)" >${msg('experts.theme.text')}</a>
 							<#else>
 								<a title="${msg('experts.theme.text')}" class="simple-link" target="_blank" href="experts-by-document?nodeRef=${nodeRef}" >${msg('experts.theme.text')}</a>
 							</#if>
@@ -48,7 +48,7 @@
 					<div class="link-info">
 						<#if nodeRef??>
 							<#if page.id == "document">
-								<a id = "documents-by-document-ref" title="${msg('similar.document.text')}" class="simple-link" href="#" >${msg('similar.document.text')}</a>
+								<a id = "documents-by-document-ref" title="${msg('similar.document.text')}" class="semantic-button-grey text-cropped" href="javascript:void(0)" >${msg('similar.document.text')}</a>
 							<#else>
 								<a title="${msg('similar.document.text')}" class="simple-link" target="_blank" href="documents-by-term?nodeRef=${nodeRef}&type=alfresco" >${msg('similar.document.text')}</a>
 							</#if>

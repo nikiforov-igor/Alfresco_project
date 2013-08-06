@@ -22,6 +22,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.soap.SOAPFaultException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
@@ -33,6 +34,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xmlsoap.schemas.soap.encoding.Base64Binary;
 import ru.it.soap.ArrayOfPersonAttrs;
 import ru.it.soap.ItsWebServiceSoap;
 import ru.it.soap.PersonAttrs;
@@ -44,6 +46,7 @@ import static ru.it.lecm.br5.semantic.api.ConstantsBean.PROP_BR5_INTEGRATION_VER
 import ru.it.lecm.br5.semantic.api.SemanticBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.soap.ArrayOfBase64Binary;
 import ru.it.soap.ArrayOfDataItem;
@@ -64,6 +67,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 	protected DocumentMembersService documentMembersService;
 	protected DocumentAttachmentsService documentAttachmentsService;
 	private SearchService searchService;
+	private DictionaryService dictionaryService;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -83,6 +87,10 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
+	}
+
+	public void setDictionaryService(DictionaryService dictionaryService) {
+		this.dictionaryService = dictionaryService;
 	}
 
 	@Override
@@ -128,8 +136,8 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 			try {
 				res = itsWebService.loadPerson(pLoad);
 			} catch (SOAPFaultException soap_exception) {
-				logger.error("Can't loadPerson: server is not available. ");
-				soap_exception.printStackTrace();
+				logger.debug("Can't loadPerson: server is not available. ");
+				logger.debug(soap_exception.getMessage());
 				return null;
 			}
 			return res;
@@ -175,11 +183,24 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 	@Override
 	public Boolean refreshDocumentTagsBr5(NodeRef documentRef) throws DatatypeConfigurationException {
 		Boolean result = false;
+			if (nodeService.getType(documentRef).equals(ContentModel.TYPE_CONTENT)) { // документ alfresco
+				result = refreshAlfDocumentTagsBr5(documentRef);
+			}
+
+			if (dictionaryService.isSubClass(nodeService.getType(documentRef), DocumentService.TYPE_BASE_DOCUMENT)) {
+				result = refreshLECMDocumentTagsBr5(documentRef);
+			}
+		return result;
+	}
+
+	@Override
+	public Boolean refreshAlfDocumentTagsBr5(NodeRef documentRef) throws DatatypeConfigurationException {
+		Boolean result = false;
 		if (!hasBr5Aspect(documentRef)) {
 			return result;
 		}
 		ArrayOfDataItem docItems = null;
-		try {
+		try{
 			if (nodeService.getType(documentRef).equals(ContentModel.TYPE_CONTENT)) { // документ alfresco
 				String fileName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_NAME);
 				byte[] finalBinaryData = getBinaryFileData(documentRef);
@@ -188,8 +209,35 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 				ArrayOfBase64Binary finalFilesContent = new ArrayOfBase64Binary();
 				finalFilesNames.getString().add(fileName);
 				finalFilesContent.getBase64Binary().add(finalBinaryData);
-				docItems = itsWebService.getTextItems("", finalFilesNames, finalFilesContent, 50);
-			} else {
+				docItems = itsWebService.getTextItems("", finalFilesNames, finalFilesContent, 0);
+				result = true;
+			}
+		} catch (SOAPFaultException soap_exception) {
+			logger.debug("Can't refreshAlfDocumentTagsBr5: server is unavailable. ");
+			logger.debug(soap_exception.getMessage());
+		}
+
+		if (result && docItems != null) {
+			List<DataItem> docItemsLst = docItems.getDataItem();
+			HashMap<String, Float> tags = new HashMap<String, Float>();
+			for (DataItem docItem : docItemsLst) {
+				tags.put(docItem.getSpelling(), docItem.getSignific());
+			}
+			nodeService.setProperty(documentRef, ConstantsBean.PROP_BR5_INTEGRATION_TAGS, tags);
+		}
+		return result;
+	}
+
+	@Override
+	public Boolean refreshLECMDocumentTagsBr5(NodeRef documentRef) throws DatatypeConfigurationException {
+		Boolean result = false;
+		Boolean success = true;
+		if (!hasBr5Aspect(documentRef)) {
+			return result;
+		}
+		ArrayOfDataItem docItems = null;
+		try{
+			if (dictionaryService.isSubClass(nodeService.getType(documentRef), DocumentService.TYPE_BASE_DOCUMENT)) {
 				//документ Lecm
 				//запишем в массивы имена и содержимое всех файлов вложений
 				ArrayOfString filesNames = new ArrayOfString();
@@ -199,6 +247,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 					String categoryName = (String) nodeService.getProperty(category, ContentModel.PROP_NAME);
 					List<NodeRef> categoryAttachments = documentAttachmentsService.getAttachmentsByCategory(documentRef, categoryName);
 					for (NodeRef categoryAttachment : categoryAttachments) {
+						success = success && refreshAlfDocumentTagsBr5(categoryAttachment);//обновим теги у всех вложений
 						filesNames.getString().add((String) nodeService.getProperty(categoryAttachment, ContentModel.PROP_NAME));
 						filesContent.getBase64Binary().add(getBinaryFileData(categoryAttachment));
 					}
@@ -206,14 +255,15 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 				ArrayOfString finalFilesNames = filesNames;
 				ArrayOfBase64Binary finalFilesContent = filesContent;
 				// получим список термов для документа и запишем в свойство tags документа lecm
-				docItems = itsWebService.getTextItems("", finalFilesNames, finalFilesContent, 50);
+				docItems = itsWebService.getTextItems("", finalFilesNames, finalFilesContent, 0);
+				result = true;
 			}
-			result = true;
 		} catch (SOAPFaultException soap_exception) {
-			logger.error("Can't loadDocumentBr5: server is unvailable. ");
-			soap_exception.printStackTrace();
+			logger.debug("Can't refreshAlfDocumentTagsBr5: server is unvailable. ");
+			logger.debug(soap_exception.getMessage());
 		}
-		if (result && docItems != null) {
+
+		if (result && success && docItems != null) {
 			List<DataItem> docItemsLst = docItems.getDataItem();
 			HashMap<String, Float> tags = new HashMap<String, Float>();
 			for (DataItem docItem : docItemsLst) {
@@ -228,22 +278,24 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 	private Boolean loadAlfDocumentBr5(NodeRef documentRef, String extMembers) throws DatatypeConfigurationException {
 		boolean loadOk = false;
 		if (documentRef == null) {
-			logger.info("loadDocumentBr5: documentFile is null!");
 			return loadOk;
 		}
 		//check aspect exist
 		if (!hasBr5Aspect(documentRef)) {
-			logger.info("loadDocumentBr5: documentFile has no aspect \"BR5 Integration\"!");
 			return loadOk;
 		}
-		if  ( nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_VERSION)!= null && nodeService.getProperty(documentRef, ContentModel.PROP_VERSION_LABEL)!=null){
-			if (((Boolean) nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_LOADED))
-				&& nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_VERSION).toString().equals(nodeService.getProperty(documentRef, ContentModel.PROP_VERSION_LABEL).toString())) {
+
+		if ((Boolean) nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_LOADED)){
+			if (nodeService.getProperty(documentRef, ContentModel.PROP_VERSION_LABEL)!=null && nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_VERSION)!= null){
+				if ( nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_VERSION).toString().equals(nodeService.getProperty(documentRef, ContentModel.PROP_VERSION_LABEL).toString())  ){
+					return true;
+				}
+			}
+			if ( null == nodeService.getProperty(documentRef, PROP_BR5_INTEGRATION_VERSION)){
 				return true;
 			}
-		}else{
-			return false;
 		}
+
 		GregorianCalendar c = new GregorianCalendar();
 		c.setTime(new Date());
 		XMLGregorianCalendar xgregDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
@@ -254,7 +306,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 				String authorName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_CREATOR);
 				NodeRef author = orgstructureService.getEmployeeByPerson(authorName);
 				if (author == null) {
-					logger.info("loadDocumentBr5: author of document " + documentRef.toString() + " is not employee. Load document fail");
+					logger.debug("loadDocumentBr5: author of document " + documentRef.toString() + " is not employee. Load document fail");
 					return loadOk;
 				}
 				String expLogin = orgstructureService.getEmployeeLogin(author);
@@ -268,8 +320,8 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 				loadOk = itsWebService.loadMail(expLogin, members, xgregDate, "", filesNames, filesContent);
 			}
 		} catch (SOAPFaultException soap_exception) {
-			logger.error("Can't loadDocumentBr5: server is unvailable.");
-			soap_exception.printStackTrace();
+			logger.debug("Can't loadDocumentBr5: server is unvailable.");
+			logger.debug(soap_exception.getMessage());
 		}
 		if (loadOk) {
 			nodeService.setProperty(documentRef, PROP_BR5_INTEGRATION_LOADED, true);
@@ -282,12 +334,12 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		Boolean loadOk = false;
 		Boolean success = true;
 		if (documentRef == null) {
-			logger.info("loadDocumentBr5: documentFile is null!");
+			logger.debug("loadDocumentBr5: documentFile is null!");
 			return loadOk;
 		}
 		//check aspect exist
 		if (!hasBr5Aspect(documentRef)) {
-			logger.info("loadDocumentBr5: documentFile has no aspect \"BR5 Integration\"!");
+			logger.debug("loadDocumentBr5: documentFile has no aspect \"BR5 Integration\"!");
 			return loadOk;
 		}
 		List<NodeRef> members = documentMembersService.getDocumentMembers(documentRef);
@@ -345,7 +397,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 	}
 
 	@Override
-	public Map<String, Float> getExpertsTagsBr5(NodeRef expert) {
+	public Map<String, Float> getExpertsTagsBr5(NodeRef expert, Integer maxCount) {
 		Map<String, Float> result = new HashMap<String, Float>();
 		if (!nodeService.exists(expert) || !orgstructureService.isEmployee(expert)) {
 			return result;
@@ -358,10 +410,11 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 
 		ArrayOfDataItem itemArray = null;
 		try {
-			itemArray = itsWebService.getPersonSignificItems(expertInnerId, 0);
+			Integer mc = maxCount!=null ? maxCount : 50;
+			itemArray = itsWebService.getPersonSignificItems(expertInnerId, mc);
 		} catch (SOAPFaultException soap_exception) {
-			logger.error("getExpertsTagsBr5: server is not available. ");
-			soap_exception.printStackTrace();
+			logger.debug("getExpertsTagsBr5: server is not available. ");
+			logger.debug(soap_exception.getMessage());
 			return result;
 		}
 
@@ -388,17 +441,60 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 	}
 
 	@Override
-	public Map<String, Float> getDocumentTagsBr5(NodeRef documentRef) {
-		Map<String, Float> mp = (Map<String,Float>) nodeService.getProperty(documentRef, ConstantsBean.PROP_BR5_INTEGRATION_TAGS);
-		return mp;
+	public Map<String, Float> getDocumentTagsBr5(NodeRef documentRef, Integer maxCount) {
+		Map<String, Float> tags = (Map<String,Float>) nodeService.getProperty(documentRef, ConstantsBean.PROP_BR5_INTEGRATION_TAGS);
+		if (tags == null){
+			return null;
+		}
+
+		if ( maxCount==null || maxCount < 0 ){
+			return tags;
+		}
+		int size = tags.size();
+		int cnt = size > maxCount ? maxCount : size;
+		if (cnt==size){
+			return tags;
+		}
+
+
+		//отсортируем по наиболее важным тегам
+		TreeMap<Float,List<String>> mweight = new TreeMap<Float,List<String>>();
+		Set<String> terms = tags.keySet();
+		for (String term : terms){
+			float wg = tags.get(term);
+			if (mweight.containsKey(wg)){
+				mweight.get(wg).add(term);
+			}
+			else{
+				List<String> lst = new ArrayList<String>();
+				lst.add(term);
+				mweight.put(wg,lst);
+			}
+		}
+		//а теперь вытащим первые cnt тегов
+		tags = new HashMap<String, Float>();
+		int i = 0;
+		Float mkey = mweight.lastKey();
+		while (mweight.containsKey(mkey) ){
+			List<String> termsLst = mweight.get(mkey);
+			for (String term : termsLst) {
+				if (i<cnt){
+					tags.put(term,mkey);
+					i++;
+				}
+			}
+			if (mkey == 0) break;
+			mkey = mweight.lowerKey(mkey);
+		}
+		return tags;
 	}
 
-	public List<Person> getExpertsByDocument(NodeRef document) {
+	public List<Person> getExpertsByDocument(NodeRef document,Integer maxCount) {
 		if (document == null) {
-			logger.info("getExpertsByDocument: document is null!");
+			logger.debug("getExpertsByDocument: document is null!");
 			return new ArrayList<Person>();
 		}
-		Map<String, Float> tags = getDocumentTagsBr5(document);
+		Map<String, Float> tags = getDocumentTagsBr5(document,null);
 		StringBuilder searchString = new StringBuilder();
 		Iterator<String> it = tags.keySet().iterator();
 		if (it.hasNext()) {
@@ -411,8 +507,8 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		try {
 			arrPersons = itsWebService.searchExperts(searchString.toString());
 		} catch (SOAPFaultException soap_exception) {
-			logger.error("Can't getExpertsByDocument: server is not available. ");
-			soap_exception.printStackTrace();
+			logger.debug("Can't getExpertsByDocument: server is not available. ");
+			logger.debug(soap_exception.getMessage());
 			return new ArrayList<Person>();
 		}
 
@@ -420,19 +516,28 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		if (arrPersons != null) {
 			persons = arrPersons.getPerson();
 		}
+
+		Integer mc = maxCount!=null ? maxCount : 50;
+		int cnt = 0;
+		int size = persons.size();
+		if (size > 0){
+			mc = size >=mc ? mc : size;
+			persons = persons.subList(0, mc);
+		}
+
 		return persons;
 	}
 
 	@Override
-	public SortedMap<Float, List<Map<String, String>>> getDataExpertsByDocument(NodeRef document) {
+	public SortedMap<Float, List<Map<String, String>>> getDataExpertsByDocument(NodeRef document, Integer maxCount) {
 		if (document == null) {
-			logger.info("getDataExpertsByDocument: document is null!");
+			logger.debug("getDataExpertsByDocument: document is null!");
 			return new TreeMap<Float, List<Map<String, String>>>();
 		}
 
 		TreeMap<Float, List<Map<String, String>>> mapResult = new TreeMap<Float, List<Map<String, String>>>();
 
-		List<Person> persons = getExpertsByDocument(document);
+		List<Person> persons = getExpertsByDocument(document, maxCount);
 		for (Person person : persons) {
 			HashMap<String, String> attrList = new HashMap<String, String>();
 			String personLogin = "";
@@ -545,7 +650,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 			return "";
 		}
 		// получим список тегов документа
-		Map<String,Float> tags = getDocumentTagsBr5(document);
+		Map<String,Float> tags = getDocumentTagsBr5(document,50); // ограничено 50 чтобы влезло в строку запроса
 		Set<String> tagSet = tags.keySet();
 		//String subSearchString = "";
 		StringBuilder subSearchString = new StringBuilder("ASPECT:\"{http://www.it.ru/lecm/br5/semantic/aspects/1.0}br5\"");
@@ -593,7 +698,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 	@Override
 	public boolean hasDocumentTags(NodeRef documentRef) {
 		if (documentRef != null) {
-			Map<String,Float> tags = getDocumentTagsBr5(documentRef);
+			Map<String,Float> tags = getDocumentTagsBr5(documentRef,null);
 			if (tags != null && tags.size() > 0  && hasBr5Aspect(documentRef))
 				return true;
 			else

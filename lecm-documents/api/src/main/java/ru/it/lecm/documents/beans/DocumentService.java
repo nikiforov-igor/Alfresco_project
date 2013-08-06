@@ -50,6 +50,8 @@ public interface DocumentService {
 	public static final QName ASPECT_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document");
 	public static final QName ASSOC_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document-assoc");
 
+	public static final QName ASPECT_SEMANTIC_ASSIST = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "semanticAssistAspect");
+
     /**
      * Метод для получения рейтинга документа
      * documentNodeRef - document nodeRef
@@ -101,7 +103,7 @@ public interface DocumentService {
      * @return xpath до директории
      */
     String getDraftPathByType(QName docType);
-    
+
     /**
      * Получение пути для папки Documents
      * @return xpath до директории
