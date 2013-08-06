@@ -749,10 +749,29 @@
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
+                    <show id="lecmErrandWf:changeControllerCurrentController" />
+                    <show id="lecmErrandWf:changeControllerNewController"/>
+                    <show id="lecmErrandWf:changeControllerReason"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:changeControllerCurrentController" label-id="field.changeControllerCurrentController.title">
+                        <control template="/ru/it/lecm/documents/controls/workflow/format-packageItems-document.ftl">
+                            <control-param name="substituteString">
+                                <![CDATA[
+					                <a href='/share/page/view-metadata?nodeRef={lecm-errands:controller-assoc/nodeRef}'>
+					                    {lecm-errands:controller-assoc/lecm-orgstr:employee-short-name} {lecm-errands:controller-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}
+					                </a>
+				                ]]>
+                            </control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:changeControllerReason">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">7</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>

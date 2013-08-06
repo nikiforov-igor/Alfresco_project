@@ -11,6 +11,53 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string>
+                            var document = bpm_package.children[0];
+                            if (document != null) {
+                                var controller = null;
+                                var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+                                if (controllerAssoc != null &amp;&amp; controllerAssoc.length == 1) {
+                                    controller = controllerAssoc[0];
+                                }
+                                if (controller != null) {
+                                    var logObjects = [];
+                                    logObjects.push("" + lecmErrandWf_changeControllerNewController.nodeRef);
+                                    var logText = "Сотрудник #initiator ";
+                                    logText += documentScript.wrapperTitle("назначил", lecmErrandWf_changeControllerReason);
+                                    logText += " сотрудника #object1 контроллером по поручению: #mainobject";
+                                    businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_CONTROLLER", logText, logObjects);
+
+                                    var currentEmployee = orgstructure.getCurrentEmployee();
+
+                                    if (lecmErrandWf_changeControllerNewController != null) {
+                                        document.removeAssociation(controller, "lecm-errands:controller-assoc");
+                                        document.createAssociation(lecmErrandWf_changeControllerNewController, "lecm-errands:controller-assoc");
+
+                                        lecmPermission.revokeDynamicRole(document, controller, "ERRANDS_CONTROLLER");
+
+                                        var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
+                                        notificationText += "отменил(а) назначение вас контроллером по поручению ";
+                                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+                                        notificationText += " № {lecm-errands:number}";
+
+                                        var recipients = [];
+                                        recipients.push(controller);
+                                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+
+                                        var documentStatus = document.properties["lecm-statemachine:status"];
+                                        var groupPermission = (documentStatus == "На утверждении инициатором" ? "LECM_BASIC_PG_Reviewer" : "LECM_BASIC_PG_Reader");
+                                        lecmPermission.grantDynamicRole(document, lecmErrandWf_changeControllerNewController, "ERRANDS_CONTROLLER", groupPermission);
+
+                                        var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
+                                        notificationText +=  "назначил(а) вас контроллером по поручению ";
+                                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+                                        notificationText += " № {lecm-errands:number}";
+
+                                        var recipients = [];
+                                        recipients.push(lecmErrandWf_changeControllerNewController);
+                                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+                                    }
+                                }
+                            }
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>

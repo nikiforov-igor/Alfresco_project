@@ -108,12 +108,31 @@
 			</mandatory-aspects>
 		</type>
 
-		<type name="lecmErrandWf:changeController">
-			<parent>bpm:startTask</parent>
-			<!--<mandatory-aspects>-->
-				<!--<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>-->
-			<!--</mandatory-aspects>-->
-		</type>
+        <type name="lecmErrandWf:changeController">
+            <parent>bpm:startTask</parent>
+            <properties>
+                <property name="lecmErrandWf:changeControllerReason">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecmErrandWf:changeControllerNewController">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+            <mandatory-aspects>
+                <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+            </mandatory-aspects>
+        </type>
 
 		<!--Запрос отмены поручения-->
 		<type name="lecmErrandWf:requestCancel">
