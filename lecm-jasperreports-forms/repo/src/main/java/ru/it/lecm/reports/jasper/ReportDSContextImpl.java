@@ -1,22 +1,25 @@
 package ru.it.lecm.reports.jasper;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.ReportDSContext;
 import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
+import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
-
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 public class ReportDSContextImpl implements ReportDSContext {
 
@@ -180,58 +183,51 @@ public class ReportDSContextImpl implements ReportDSContext {
 
 		// (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
 		// (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
+		Object value = null;
 		if (isCalcField(fldAlfName)) {
-			Object value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
-			if ((fld != null) && (fld.getValueClass() != null)) {
+			value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
+		} else {
+			value = fldAlfName;
+		}
+
+		if (value == null)
+			return null;
+
+		// типизация value согласно описанию ...
+		if ((fld != null) && (fld.getValueClass() != null)) {
 				// TODO: метод для восстановления реального типа данных ...
 				final JavaDataTypeImpl.SupportedTypes type = JavaDataTypeImpl.SupportedTypes.findType(fld.getValueClassName());
 				String strValue = value.toString();
 				switch (type) {
-				case DATE: {
-					try {
+					case DATE: {
 						if (strValue.isEmpty()) {
 							value = null;
-							break;
+						} else {
+							value = ArgsHelper.tryMakeDate(strValue, null);
 						}
-						DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-						value = DATE_FORMAT.parse(strValue);
-					} catch (ParseException ignored) {
-						logger.error("Cannot parse dateString: '%s'", value);
-					}
-					break;
-				}
-				case BOOL: {
-					value = Boolean.valueOf(strValue);
-					break;
-				}
-				case FLOAT: {
-					if (strValue.isEmpty()) {
-						value = null;
 						break;
 					}
-					value = Float.valueOf(strValue);
-					break;
-				}
-				case INTEGER: {
-					if (strValue.isEmpty()) {
-						value = null;
+					case BOOL: {
+						value = Boolean.valueOf(strValue);
 						break;
 					}
-					value = Integer.valueOf(strValue);
-					break;
-				}
-				case STRING: {
-					value = strValue;
-					break;
-				}
-				default: {
-					value = strValue;
-					break;
-				}
-				}
-			}
-			return value;
+					case FLOAT: {
+						value = (strValue.isEmpty()) ? null : Float.valueOf(strValue);
+						break;
+					}
+					case INTEGER: {
+						value = (strValue.isEmpty()) ? null : Integer.valueOf(strValue);
+						break;
+					}
+					default: // case STRING:
+					{
+						value = strValue;
+						break;
+					}
+				} // switch
 		}
+		if (value != null)
+			return value;
 
 		return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
 	}

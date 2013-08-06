@@ -335,7 +335,7 @@
 
         _onNewTemplateFromSource: function () {
             alert("Не реализовано");
-            //this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId}, true);
+            // this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId}, true);
         },
 
         _onCopyToRepository: function (layer, args) {

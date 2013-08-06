@@ -210,7 +210,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	 * @param value
 	 */
 	public void setDateRegAfter( final String value) {
-		filter.dateRegAfter = ArgsHelper.makeDate(value, "dateRegAfter");
+		filter.dateRegAfter = ArgsHelper.tryMakeDate(value, "dateRegAfter");
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	 * @param value
 	 */
 	public void setDateRegBefore( final String value) {
-		filter.dateRegBefore = ArgsHelper.makeDate(value, "dateStartBefore");
+		filter.dateRegBefore = ArgsHelper.tryMakeDate(value, "dateStartBefore");
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	 * @param value
 	 */
 	public void setDateContractStartAfter( final String value) {
-		filter.dateContractStartAfter = ArgsHelper.makeDate(value, "dateContractStartAfter");
+		filter.dateContractStartAfter = ArgsHelper.tryMakeDate(value, "dateContractStartAfter");
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	 * @param value
 	 */
 	public void setDateContractStartBefore( final String value) {
-		filter.dateContractStartBefore = ArgsHelper.makeDate(value, "dateContractStartBefore");
+		filter.dateContractStartBefore = ArgsHelper.tryMakeDate(value, "dateContractStartBefore");
 	}
 
 	public void setContractSubject(String value) {

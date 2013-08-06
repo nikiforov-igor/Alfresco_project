@@ -25,8 +25,16 @@ public interface ScriptApiReportManager {
 	 * @param reportCode код (мнемоника) отчёта
 	 * @return
 	 */
-	// TODO: think it over byte[] getDsXmlBytes(final String reportCode);
 	InputStream getDsXmlBytes(final String reportCode);
+
+	/**
+	 * Сгенерировать шаблон для текущего состояния отчёта
+	 * <url>/lecm/reports/rptmanager/generateReportTemplate?reportRef={reportRef}</url>
+	 * 
+	 * @param reportCode
+	 * @return
+	 */
+	InputStream  generateReportTemplate(final String reportCode);
 
 	/**
 	 * Получить список зарешистрированных отчётов указанного типа

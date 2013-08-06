@@ -1,6 +1,19 @@
 package ru.it.lecm.reports.editor.form;
 
-import org.alfresco.web.config.forms.*;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.alfresco.web.config.forms.Control;
+import org.alfresco.web.config.forms.ControlParam;
+import org.alfresco.web.config.forms.DefaultControlsConfigElement;
+import org.alfresco.web.config.forms.FormSet;
+import org.alfresco.web.config.forms.FormsConfigElement;
+import org.alfresco.web.config.forms.Mode;
 import org.alfresco.web.scripts.forms.FormUIGet;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -9,15 +22,13 @@ import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.manager.ReportManagerApi;
 import ru.it.lecm.reports.xml.DSXMLProducer;
-
-import java.io.InputStream;
-import java.util.*;
 
 /**
  * User: dbashmakov
@@ -86,8 +97,10 @@ public class ReportForm extends FormUIGet {
             }
         });
 
+        int colnum = 0;
         for (ColumnDescriptor param : params) {
-            Field field = generateFieldModel(param);
+        	colnum++;
+            Field field = generateFieldModel(param, colnum);
             if (field != null) {
                 fields.put(param.getColumnName(), field);
                 FieldPointer fieldPointer = new FieldPointer(field.getId());
@@ -106,17 +119,25 @@ public class ReportForm extends FormUIGet {
         return model;
     }
 
-    protected Field generateFieldModel(ColumnDescriptor column) {
+    static String nonBlank(String s, String sDefault) {
+    	return (s != null && s.trim().length() > 0) ? s : sDefault;
+    }
+
+    protected Field generateFieldModel(ColumnDescriptor column, int colnum) {
         Field field = null;
         try {
             if (column != null) {
                 // create the initial field model
                 field = new Field();
 
-                field.setId(column.getColumnName());
-                field.setName(column.getColumnName());
-                field.setLabel(column.getL18items().get("RU-RU"));
-                field.setDescription(column.getL18items().get("RU-RU"));
+                // т.к. пустые метки могут уронить диалог, сделаем их всегда заполненными ...
+                final String colMnem = nonBlank( column.getColumnName(), String.format("Column_%d", colnum) );
+                final String colCaption = nonBlank( column.getDefault(), colMnem);
+
+                field.setId(colMnem);
+                field.setName(colMnem);
+                field.setLabel(colCaption);
+                field.setDescription(colCaption);
 
                 field.setDataKeyName(column.getColumnName());
 

@@ -23,9 +23,18 @@ public class ArgsHelper {
 	final static String DATE_FMTWEBSCRIPT = "yyyy-MM-dd'T'HH:mm:ss.SSSz"; // like "2013-04-03T00:00:00.000GMT+06:00"
 	final static SimpleDateFormat DateFormatWebScript = new SimpleDateFormat(DATE_FMTWEBSCRIPT);
 
-	final static SimpleDateFormat[] FORMATS = { DateFormatISO8601, DateFormatWebScript}; 
+	final static String DATE_FMT_YMD_HM = "yyyy-MM-dd HH:mm";
+	final static SimpleDateFormat DateFormatYMD_HM = new SimpleDateFormat(DATE_FMT_YMD_HM);
 
-	public static Date makeDate(final String value, String info) {
+	final static String DATE_FMT_YMD_HMS = "yyyy-MM-dd HH:mm:ss";
+	final static SimpleDateFormat DateFormat_YMD_HMS = new SimpleDateFormat(DATE_FMT_YMD_HMS);
+
+	final static String DATE_FMT_YMD = "yyyy-MM-dd";
+	final static SimpleDateFormat DateFormat_YMD = new SimpleDateFormat(DATE_FMT_YMD);
+
+	final static SimpleDateFormat[] FORMATS = { DateFormatISO8601, DateFormatWebScript, DateFormatYMD_HM, DateFormat_YMD_HMS, DateFormat_YMD }; 
+
+	public static Date tryMakeDate(final String value, String info) {
 		if (Utils.isStringEmpty(value))
 			return null;
 

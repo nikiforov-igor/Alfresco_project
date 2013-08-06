@@ -1,5 +1,9 @@
 package ru.it.lecm.reports.manager;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
@@ -11,18 +15,13 @@ import org.springframework.extensions.webscripts.connector.ResponseStatus;
 
 import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ScriptApiReportManager;
-import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.model.impl.L18Value;
 import ru.it.lecm.reports.model.impl.ReportTypeImpl;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
 public class ReportManagerApi
-		implements ScriptApiReportManager
+implements ScriptApiReportManager
 {
-	
+
 	private final static Log logger = LogFactory.getLog(ReportManagerApi.class);
 
 	private ScriptRemote scriptRemote;
@@ -64,41 +63,52 @@ public class ReportManagerApi
 	}
 
 	@Override
-    public InputStream getDsXmlBytes(String reportCode) {
-        final String url = "/lecm/reports/rptmanager/dsXmlBytes?reportCode=" + reportCode;
-        final Response response = scriptRemote.connect("alfresco").get(url);
-        if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
-            return response.getResponseStream();
-        } else {
-            throw new RuntimeException(String.format("Cannot get ds-file for report '%s' from server", reportCode));
-        }
-    }
+	public InputStream getDsXmlBytes(String reportCode) {
+		final String url = "/lecm/reports/rptmanager/dsXmlBytes?reportCode=" + reportCode;
+		final Response response = scriptRemote.connect("alfresco").get(url);
+		if (response.getStatus().getCode() != ResponseStatus.STATUS_OK) {
+			throw new RuntimeException(String.format("Cannot get ds-file for report '%s' from server", reportCode));
+		}
+		return response.getResponseStream();
+	}
 
 	@Override
-    public List<ReportInfo> getRegisteredReports(String docType, String reportType) {
-        final String url = "/lecm/reports/rptmanager/registeredReports";//?docType=" + docType + "&reportType=" + reportType;
-        final Response response = scriptRemote.connect("alfresco").get(url);
-        final String errmsg = String.format("Cannot get from server the list or reports: docType '%s', reportType '%s'"
-                , docType, reportType);
-        try {
-            if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
-                List<ReportInfo> results = new ArrayList<ReportInfo>();
-                final JSONObject resultJson = new JSONObject(response.getResponse());
-                JSONArray reportInfoArray = (JSONArray) resultJson.get("list");
-                for (int i = 0; i < reportInfoArray.length(); i++) {
-                    JSONObject ri = (JSONObject) reportInfoArray.get(i);
-                    ReportInfo riFromReq = new ReportInfo(new ReportTypeImpl(ri.getString("reportType"), new L18Value()), ri.getString("code"));
-                    riFromReq.setDocumentType(ri.getString("docType"));
-                    riFromReq.setReportName(ri.getString("name"));
-                    results.add(riFromReq);
-                }
-                return results;
-            }
-        } catch (JSONException e) {
-            logger.warn(errmsg, e);
-        }
-        throw new RuntimeException(errmsg);
-    }
+	public InputStream generateReportTemplate(String reportRef) {
+		final String url = "/lecm/reports/rptmanager/generateReportTemplate?reportRef=" + reportRef;
+
+		final Response response = scriptRemote.connect("alfresco").get(url);
+		if (response.getStatus().getCode() != ResponseStatus.STATUS_OK) {
+			throw new RuntimeException(String.format("Cannot generate report template for descriptor '%s'", reportRef));
+		}
+		return response.getResponseStream();
+	}
+
+
+	@Override
+	public List<ReportInfo> getRegisteredReports(String docType, String reportType) {
+		final String url = "/lecm/reports/rptmanager/registeredReports";//?docType=" + docType + "&reportType=" + reportType;
+		final Response response = scriptRemote.connect("alfresco").get(url);
+		final String errmsg = String.format("Cannot get from server the list or reports: docType '%s', reportType '%s'"
+				, docType, reportType);
+		try {
+			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
+				List<ReportInfo> results = new ArrayList<ReportInfo>();
+				final JSONObject resultJson = new JSONObject(response.getResponse());
+				JSONArray reportInfoArray = (JSONArray) resultJson.get("list");
+				for (int i = 0; i < reportInfoArray.length(); i++) {
+					JSONObject ri = (JSONObject) reportInfoArray.get(i);
+					ReportInfo riFromReq = new ReportInfo(new ReportTypeImpl(ri.getString("reportType"), new L18Value()), ri.getString("code"));
+					riFromReq.setDocumentType(ri.getString("docType"));
+					riFromReq.setReportName(ri.getString("name"));
+					results.add(riFromReq);
+				}
+				return results;
+			}
+		} catch (JSONException e) {
+			logger.warn(errmsg, e);
+		}
+		throw new RuntimeException(errmsg);
+	}
 
 }
 

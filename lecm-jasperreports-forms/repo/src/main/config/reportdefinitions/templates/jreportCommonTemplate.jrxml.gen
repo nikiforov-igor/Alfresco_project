@@ -4,6 +4,7 @@
 		xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
 		name="@RDesc.mnem"
 		orientation="Landscape"
+		whenNoDataType="AllSectionsNoDetail"
 		pageWidth="842" pageHeight="595"
 		columnWidth="802"
 		leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
@@ -18,10 +19,10 @@
 	  -->
 	<property name="dataSource" value="@RDesc.providerDescriptor.className" />
 
-	<style name="styleOdd" mode="Opaque" backcolor="#F4F5F5">
+	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
-			<style backcolor="#E2DFD6"/>
+			<style backcolor="#DCDCDC"/>
 		</conditionalStyle>
 	</style>
 	<parameter name="CMIS_URL" class="java.lang.String" isForPrompting="false">
@@ -81,7 +82,7 @@
 				<textElement>
 					<font fontName="DejaVu Sans" size="20" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<text><![CDATA[Отчёт/Template]]></text>
+				<text><![CDATA[@RDesc.default]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -103,7 +104,7 @@
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" x="1" y="1" width="800" height="29" backcolor="#949E99"/>
+				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" x="1" y="1" width="800" height="29" backcolor="#DCDCDC"/>
 			</rectangle>
 
 				<textField pattern= "" isBlankWhenNull="true">

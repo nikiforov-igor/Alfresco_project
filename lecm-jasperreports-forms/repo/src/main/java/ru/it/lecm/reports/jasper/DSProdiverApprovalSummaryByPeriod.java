@@ -65,7 +65,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 	}
 
 	public void setPeriodStart( final String value) {
-		periodStartDate = ArgsHelper.makeDate(value, "periodStart");
+		periodStartDate = ArgsHelper.tryMakeDate(value, "periodStart");
 	}
 
 	public Date getPeriodEndDate() {
@@ -81,7 +81,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 	}
 
 	public void setPeriodEnd( final String value) {
-		periodEndDate = ArgsHelper.makeDate(value, "periodEnd");
+		periodEndDate = ArgsHelper.tryMakeDate(value, "periodEnd");
 	}
 
 	final static String VALUE_STATUS_NOTREADY = "NO_DECISION";

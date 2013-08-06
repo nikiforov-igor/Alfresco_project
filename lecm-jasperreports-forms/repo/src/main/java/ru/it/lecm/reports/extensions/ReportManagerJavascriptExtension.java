@@ -88,28 +88,27 @@ public class ReportManagerJavascriptExtension
 
 	public ScriptNode generateReportTemplate(final String reportRef) {
 		NodeRef report = new NodeRef(reportRef);
-		ReportDescriptor desc = (getReportsManager()).getReportDAO().getReportDescriptor(report);
-		if (desc != null) {
-			byte[] content = getReportsManager().produceDefaultTemplate(desc);
-			QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
-			final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-			properties.put(ContentModel.PROP_NAME, desc.getMnem() + ".jrxml");
-			ChildAssociationRef child =
-					serviceRegistry.getNodeService().createNode(new NodeRef(reportRef), ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
-			InputStream is = null;
-			try {
-				ContentService contentService = serviceRegistry.getContentService();
-				is = new ByteArrayInputStream(content);
-				ContentWriter writer = contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
-				writer.setEncoding("UTF-8");
-				writer.setMimetype("text/xml");
-				writer.putContent(is);
-			} finally {
-				IOUtils.closeQuietly(is);
-			}
-			return new ScriptNode(child.getChildRef(), serviceRegistry, getScope());
+		ReportDescriptor desc = getReportsManager().getReportDAO().getReportDescriptor(report);
+		if (desc == null)
+			return null;
+		byte[] content = getReportsManager().produceDefaultTemplate(desc);
+		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
+		final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		properties.put(ContentModel.PROP_NAME, desc.getMnem() + ".jrxml");
+		ChildAssociationRef child =
+				serviceRegistry.getNodeService().createNode(new NodeRef(reportRef), ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
+		InputStream is = null;
+		try {
+			ContentService contentService = serviceRegistry.getContentService();
+			is = new ByteArrayInputStream(content);
+			ContentWriter writer = contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
+			writer.setEncoding("UTF-8");
+			writer.setMimetype("text/xml");
+			writer.putContent(is);
+		} finally {
+			IOUtils.closeQuietly(is);
 		}
-		return null;
+		return new ScriptNode(child.getChildRef(), serviceRegistry, getScope());
 	}
 
 }

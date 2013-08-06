@@ -104,7 +104,7 @@ public class DataFieldColumn extends JRDesignField {
 			return null;
 		final DataFieldColumn result = new DataFieldColumn();
 		result.setName( colDesc.getColumnName());
-		result.setDescription( colDesc.get(null, null));
+		result.setDescription( colDesc.getDefault());
 		result.setValueLink(colDesc.getExpression());
 		try {
 			result.setValueClass( Class.forName(colDesc.className()) );

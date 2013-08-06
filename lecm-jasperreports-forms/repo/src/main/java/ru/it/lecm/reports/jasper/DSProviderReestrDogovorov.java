@@ -107,19 +107,19 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	private final SearchFilter filter = new SearchFilter();
 
 	public void setStartAfter( final String value) {
-		filter.dateStartAfter = ArgsHelper.makeDate(value, "dateStartAfter");
+		filter.dateStartAfter = ArgsHelper.tryMakeDate(value, "dateStartAfter");
 	}
 
 	public void setStartBefore( final String value) {
-		filter.dateStartBefore = ArgsHelper.makeDate(value, "dateStartBefore");
+		filter.dateStartBefore = ArgsHelper.tryMakeDate(value, "dateStartBefore");
 	}
 
 	public void setEndAfter( final String value) {
-		filter.dateEndAfter = ArgsHelper.makeDate(value, "dateEndAfter");
+		filter.dateEndAfter = ArgsHelper.tryMakeDate(value, "dateEndAfter");
 	}
 
 	public void setEndBefore( final String value) {
-		filter.dateEndBefore = ArgsHelper.makeDate(value, "dateEndBefore");
+		filter.dateEndBefore = ArgsHelper.tryMakeDate(value, "dateEndBefore");
 	}
 
 	public void setContractSubject(String value) {
