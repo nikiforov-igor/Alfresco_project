@@ -26,7 +26,11 @@
                 <option ${completedSeleted} value="completed">${msg("tasklist.option.completed")}</option>
             </select>
         </div>
-
+        <#if data.myTasks?size == 0>
+            <div class="workflow-task-line">
+                ${msg("tasklist.label.no-tasks")}
+            </div>
+        </#if>
         <#list data.myTasks as task>
             <div class="workflow-task-item">
                 <div class="workflow-task-list-picture ${task.workflowTaskPriority}" title="${task.priorityMessage}">&nbsp;</div>
@@ -58,7 +62,13 @@
 
     <#if data.showSubordinateTasks == "true">
         <div class="list-category">
-            <div class="list-category-title">${msg("tasklist.label.subordinatestasks")}</div>
+            <div class="list-category-title-subordinate">${msg("tasklist.label.subordinatestasks")}</div>
+
+            <#if data.subordinateTasks?size == 0>
+                <div class="workflow-task-line">
+                ${msg("tasklist.label.no-tasks")}
+                </div>
+            </#if>
 
             <#list data.subordinateTasks as task>
                 <div class="workflow-task-item">

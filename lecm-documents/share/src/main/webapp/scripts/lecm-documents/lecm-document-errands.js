@@ -62,6 +62,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
 
             showErrands: function(response) {
                 this.listContainer.innerHTML = "";
+                var detail = "";
                 if (response.json.errands.length > 0) {
                     var results = response.json.errands;
                     var template = "view-metadata?nodeRef={nodeRef}";
@@ -87,7 +88,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         var isImportantTitle = (errand.isImportant == "true") ? this.msg("errandslist.label.important") : "";
                         // Generate the link
                         var url = "";
-                        var detail = "";
+
                         detail = "<div class=\"workflow-task-item\">";
                         detail +=   "<div class=\"workflow-task-list-picture " + isImportant + "\" title=\"" + isImportantTitle + "\">&nbsp;</div>";
                         detail +=   "<div style=\"float: left;\">";
@@ -123,6 +124,9 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         detail += "</div>";
                         this.listContainer.innerHTML += detail;
                     }
+                } else {
+                    detail = "<div class=\"workflow-task-line\">" + this.msg("errandslist.label.no-errands") + "</div>"
+                    this.listContainer.innerHTML += detail
                 }
                 if (this.options.anchorId != "") {
                     Dom.get(this.options.anchorId).scrollIntoView();
