@@ -1,15 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <alfresco-config>
-	
+
+	<config>
+		<forms>
+			<form id="signs-info-short">
+				<create-form template="/ru/it/lecm/signed/docflow/signs-short-form.ftl"/>
+			</form>
+		</forms>
+	</config>
+
 	<config evaluator="string-compare" condition="DocumentLibrary">
 		<aspects>
-			<visible>          
-				<aspect name="lecm-signed-docflow:signable"/>       
-			</visible>  
+			<visible>
+				<aspect name="lecm-signed-docflow:signable"/>
+			</visible>
 		</aspects>
 	</config>
 
-	<!-- Custom Aspects forms-->
 	<config evaluator="aspect" condition="lecm-signed-docflow:organization-attrs-aspect">
 		<forms>
 			<form>
