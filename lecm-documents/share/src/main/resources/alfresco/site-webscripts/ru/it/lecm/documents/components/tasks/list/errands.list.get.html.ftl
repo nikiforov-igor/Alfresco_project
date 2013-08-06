@@ -2,8 +2,14 @@
 
 <script type="text/javascript">
     //<![CDATA[
+    var errands;
     (function () {
         function init() {
+            errands = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
+                    {
+                        itemType: "lecm-errands:document",
+                        destination: "${nodeRef}"
+                    }).setMessages(${messages});
             var errandTasks = new LogicECM.module.Errands.Lists("${id}").setOptions(
                 {
                     itemType: "lecm-errands:document",

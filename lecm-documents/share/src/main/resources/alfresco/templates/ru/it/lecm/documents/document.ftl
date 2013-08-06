@@ -4,6 +4,8 @@
     <@script type="text/javascript" src="${page.url.context}/yui/resize/resize.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/res/components/document-details/document-metadata.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/scripts/dashlets/lecm-errands-dashlet.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/lecm-document-errands.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/modules/editors/tiny_mce/themes/advanced/skins/default/ui.css" />
