@@ -38,10 +38,7 @@ public abstract class DocumentFilter {
         FiltersManager.registerFilter(this);
     }
 
-    /**
-     Метод для регистрации фильтра в системе
-     */
-    abstract public String getQuery(Object... args);
+    abstract public String getQuery(Object[] args);
 
     public String getParamStr() {
         return this.paramStr;

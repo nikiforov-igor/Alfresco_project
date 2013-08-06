@@ -2,14 +2,6 @@
     LogicECM.module.Errands.Filter = function ErrandsFilter_constructor(htmlId) {
         LogicECM.module.Errands.Filter.superclass.constructor.call(this, "LogicECM.module.Errands.Filter", htmlId, ["button", "container"]);
 
-        YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-
-        this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "initDataGrid"],
-            {
-                fn: this.populateDataGrid,
-                scope: this
-            });
-
         this.manager = LogicECM.module.Documents.filtersManager ? LogicECM.module.Documents.filtersManager : new LogicECM.module.Documents.FiltersManager() ;
 
         return this;
@@ -26,11 +18,7 @@
                 filterOver: false
             },
 
-            errandsList: null,
-
             splashScreen: null,
-
-            deferredListPopulation: {},
 
             onReady: function () {
                 this.manager.setOptions({docType: this.options.docType}); // явно прописываем тип
@@ -83,16 +71,6 @@
                 }
             },
 
-            populateDataGrid: function () {
-                var filterData = this.widgets.assign.value + "/" + this.widgets.date.value + "/" + this.widgets.importantCheckBox.checked + "/" + this.widgets.controlCheckBox.checked;
-                var currentFilter = {
-                    filterId: this.PREF_FILTER_ID,
-                    filterData: filterData
-                };
-                this.errandsList.currentFilter = currentFilter;
-                //location.hash = '#filter=' + this.PREF_FILTER_ID + "|" + filterData;
-            },
-
             onAssignFilterChanged: function (p_sType, p_aArgs) {
                 var menuItem = p_aArgs[1];
                 if (menuItem) {
@@ -128,14 +106,6 @@
                 } ;
                 this.manager.preferences.set(this.manager._buildPreferencesKey(this.PREF_FILTER_ID), newValue, {successCallback: success, failureCallback: failure});
             },
-
-            onInitDataGrid: function BaseToolbar_onInitDataGrid(layer, args) {
-                var datagrid = args[1].datagrid;
-                if ((!this.options.gridBubblingLabel || !datagrid.options.bubblingLabel) || this.options.gridBubblingLabel == datagrid.options.bubblingLabel) {
-                    this.errandsList = datagrid;
-                    this.deferredListPopulation.fulfil("initDataGrid");
-                }
-            } ,
 
             _showSplash: function () {
                 this.splashScreen = Alfresco.util.PopupManager.displayMessage(
@@ -179,8 +149,6 @@
 
                 this.widgets.importantCheckBox.checked = (prefs[2] == "true");
                 this.widgets.controlCheckBox.checked = (prefs[3] == "true");
-
-                this.deferredListPopulation.fulfil("onReady");
             }
         });
 })();

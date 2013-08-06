@@ -15,7 +15,7 @@ public abstract class IssuedByMeErrands extends DocumentFilter{
     final private static Logger logger = LoggerFactory.getLogger(IssuedByMeErrands.class);
 
     @Override
-    public String getQuery(Object... args) {
+    public String getQuery(Object[] args) {
         // фильтр работает через ErrandsFilter, c параметрами, заданными в service-context
         DocumentFilter errandsFilter = FiltersManager.getFilterById(ErrandsFilter.ID);
         if (errandsFilter != null) {

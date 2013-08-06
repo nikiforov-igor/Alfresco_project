@@ -21,9 +21,9 @@
             return this;
         },
 
-        _buildPreferencesKey: function (suffix) {
+        _buildPreferencesKey: function (filterId) {
             var opt = this.options;
-            return this.PREFERENCE_DOCUMENTS + "." + opt.docType.split(":").join("_") + (suffix ? ("." + suffix): "");
+            return this.PREFERENCE_DOCUMENTS + "." + opt.docType.split(":").join("_") + (filterId ? ("." + filterId): "");
         },
 
         save: function (filter, value, reload) {

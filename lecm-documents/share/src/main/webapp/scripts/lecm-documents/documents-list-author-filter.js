@@ -1,14 +1,6 @@
 (function () {
     LogicECM.module.Documents.AuthorFilter = function AuthorFilter_constructor(htmlId) {
         LogicECM.module.Documents.AuthorFilter.superclass.constructor.call(this, "LogicECM.module.Documents.AuthorFilter", htmlId, ["button", "container"]);
-        
-        YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-
-        this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "initDataGrid"],
-            {
-                fn: this.populateDataGrid,
-                scope: this
-            });
 
         this.manager = LogicECM.module.Documents.filtersManager ? LogicECM.module.Documents.filtersManager : new LogicECM.module.Documents.FiltersManager() ; 
         
@@ -24,10 +16,6 @@
                 docType: "lecm-document:base",
                 gridBubblingLabel: "documents"
             },
-
-            documentList: null,
-
-            deferredListPopulation: {},
 
             onReady: function () {
                 this.manager.setOptions({docType: this.options.docType});
@@ -62,26 +50,10 @@
                                         }
                                     }
                                 }
-                                this.deferredListPopulation.fulfil("onReady");
-                            },
-                            scope: this
-                        },
-                        failureCallback: {
-                            fn: function () {
-                                this.deferredListPopulation.fulfil("onReady");
                             },
                             scope: this
                         }
                     });
-            },
-
-            populateDataGrid: function () {
-                var currentFilter = {
-                    filterId: this.PREF_FILTER_ID,
-                    filterData: this.widgets.author.value
-                };
-                this.documentList.currentFilter = currentFilter;
-                location.hash = '#filter=' + this.PREF_FILTER_ID + "|" + this.widgets.author.value;
             },
 
             onAuthorFilterChanged: function (p_sType, p_aArgs) {
@@ -97,7 +69,6 @@
 
                 this._showSplash();
 
-
                 var success = {
                     fn: function () {
                         location.hash = '#filter=' + context.PREF_FILTER_ID + "|" + context.options.docType + "/" + context.widgets.author.value;
@@ -112,14 +83,6 @@
                 } ;
 
                 this.manager.preferences.set(this.manager._buildPreferencesKey(this.PREF_FILTER_ID), context.options.docType + "/" + context.widgets.author.value, {successCallback: success, failureCallback: failure});
-            },
-
-            onInitDataGrid: function BaseToolbar_onInitDataGrid(layer, args) {
-                var datagrid = args[1].datagrid;
-                if ((!this.options.gridBubblingLabel || !datagrid.options.bubblingLabel) || this.options.gridBubblingLabel == datagrid.options.bubblingLabel) {
-                    this.documentList = datagrid;
-                    this.deferredListPopulation.fulfil("initDataGrid");
-                }
             },
 
             _showSplash: function () {

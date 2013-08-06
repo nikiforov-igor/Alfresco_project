@@ -235,7 +235,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
                         if (filterParams != null && !filterParams.isEmpty()) {
                             queryFilter = docFilter.getQuery((Object[]) filterParams.split("/"));
                         } else {
-                            queryFilter = docFilter.getQuery(); // вызов фильтра без параметров
+                            queryFilter = docFilter.getQuery(new Object[0]); // вызов фильтра без параметров
                         }
                     }
                 }

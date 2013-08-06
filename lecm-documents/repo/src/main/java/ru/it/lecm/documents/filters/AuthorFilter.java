@@ -5,7 +5,6 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentFilter;
-import ru.it.lecm.documents.beans.DocumentService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class AuthorFilter extends DocumentFilter {
     }
 
     @Override
-    public String getQuery(Object... args) {
+    public String getQuery(Object[] args) {
         String query = "";
         if (args != null && args.length > 0) {
             String docType = (String) args[0];

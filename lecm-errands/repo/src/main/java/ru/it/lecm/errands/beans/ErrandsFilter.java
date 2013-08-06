@@ -47,7 +47,7 @@ public class ErrandsFilter extends DocumentFilter {
     }
 
     @Override
-    public String getQuery(Object... args) {
+    public String getQuery(Object[] args) {
         String query = "";
         try {
 
