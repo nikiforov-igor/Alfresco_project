@@ -29,7 +29,7 @@ public class SignContentWebscript extends DeclarativeWebScript {
 	private final static Logger logger = LoggerFactory.getLogger(SignContentWebscript.class);
 	private final static QName[] propertiesToParse = {SignedDocflow.PROP_OWNER, SignedDocflow.PROP_OWNER_POSITION, SignedDocflow.PROP_OWNER_ORGANIZATION,
 		SignedDocflow.PROP_SIGNING_DATE, SignedDocflow.PROP_SERIAL_NUMBER, SignedDocflow.PROP_VALID_FROM, SignedDocflow.PROP_VALID_THROUGH, SignedDocflow.PROP_CA,
-		SignedDocflow.PROP_SIGNATURE_CONTENT, SignedDocflow.ASSOC_SIGN_TO_CONTENT};
+		SignedDocflow.PROP_SIGNATURE_CONTENT, SignedDocflow.ASSOC_SIGN_TO_CONTENT, SignedDocflow.PROP_CERT_FINGERPRINT};
 
 	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
 		this.signedDocflowService = signedDocflowService;

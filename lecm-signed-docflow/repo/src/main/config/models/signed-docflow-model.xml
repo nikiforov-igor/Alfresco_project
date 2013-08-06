@@ -109,6 +109,13 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
+				
+				<!-- фингерпринт сертификата -->
+				<property name="lecm-signed-docflow:fingerprint">
+					<title>Fingerprint</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
 
 			</properties>
 
@@ -167,6 +174,18 @@
 				</property>
 				<!-- ID организации в Астрале. Он глобальный с точки зрения ЭДО, содержится в документах. -->
 				<property name="lecm-signed-docflow:organization-edo-id">
+					<type>d:text</type>
+				</property>
+				<!-- Ключ лицензии для крипто апплета -->
+				<property name="lecm-signed-docflow:applet-key">
+					<type>d:text</type>
+				</property>
+				<!-- Сертификат выдавшего лицезнию для апплета -->
+				<property name="lecm-signed-docflow:applet-cert">
+					<type>d:text</type>
+				</property>
+				<!-- Имя контейнера, где лежит сертификат, на который оформлена лицензия -->
+				<property name="lecm-signed-docflow:applet-container">
 					<type>d:text</type>
 				</property>
 			</properties>

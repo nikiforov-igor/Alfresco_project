@@ -78,6 +78,11 @@ public interface SignedDocflow {
 	 * &lt;property name="lecm-signed-docflow:signature-content"/&gt;
 	 */
 	QName PROP_SIGNATURE_CONTENT = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "signature-content");
+	
+	/**
+	 * &lt;property name="lecm-signed-docflow:fingerprint"/&gt;
+	 */
+	QName PROP_CERT_FINGERPRINT = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "fingerprint");
 
     /**
      * &lt;association name="lecm-signed-docflow:sign-to-content-association/&gt;
@@ -149,6 +154,21 @@ public interface SignedDocflow {
 	 */
 	QName PROP_AUTH_TYPE = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "auth-type");
 
+	/**
+	 * &lt;property name="lecm-signed-docflow:applet-key"&gt;
+	 */
+	QName PROP_APPLET_LIC_KEY = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "applet-key");
+	
+	/**
+	 * &lt;property name="lecm-signed-docflow:applet-cert"&gt;
+	 */
+	QName PROP_APPLET_CERT = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "applet-cert");
+	
+	/**
+	 * &lt;property name="lecm-signed-docflow:applet-container"&gt;
+	 */
+	QName PROP_APPLET_CONTAINER = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "applet-container");
+	
 	/**
 	 * Проверяет, есть ли у NodeRef'ы аспект <strong>docflowable</strong>
      *
