@@ -23,13 +23,30 @@
 				<field-visibility>
 					<show id="lecm-signed-docflow:operator-code" for-mode="view,edit,create"/>
 					<show id="lecm-signed-docflow:partner-key" for-mode="view,edit,create"/>
+					<show id="lecm-signed-docflow:applet-key" for-mode="view,edit,create"/>
+					<show id="lecm-signed-docflow:applet-cert" for-mode="view,edit,create"/>
+					<show id="lecm-signed-docflow:applet-container" for-mode="view,edit,create"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-signed-docflow:operator-code" set="other"/>
 					<field id="lecm-signed-docflow:partner-key" set="other"/>
+					<field id="lecm-signed-docflow:applet-key" set="other"/>
+					<field id="lecm-signed-docflow:applet-cert" set="other"/>
+					<field id="lecm-signed-docflow:applet-container" set="other"/>
 				</appearance>
 			</form>
 		</forms>
 	</config>
+	<!--конфиг для апплета АйТиШтамп-->
+	<config>
+        <forms>
+            <form id="auth-form">
+                <create-form template="/ru/it/lecm/signed-docflow/form/auth-form.ftl" />
+            </form>
+            <dependencies>
+                <js src="/scripts/signed-docflow/signApplet.js" />               
+            </dependencies>
+        </forms>
+    </config>
 
 </alfresco-config>

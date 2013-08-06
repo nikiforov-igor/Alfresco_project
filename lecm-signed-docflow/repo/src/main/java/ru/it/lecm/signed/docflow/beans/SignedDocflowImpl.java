@@ -51,6 +51,9 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 							properties.put(PROP_PARTNER_KEY, "");
 							properties.put(PROP_ORGANIZATION_ID, "");
 							properties.put(PROP_ORGANIZATION_EDO_ID, "");
+							properties.put(PROP_APPLET_LIC_KEY, "");
+							properties.put(PROP_APPLET_CERT, "");
+							properties.put(PROP_APPLET_CONTAINER, "");
 							nodeService.addAspect(organizationRef, ASPECT_ORGANIZATION_ATTRS, properties);
 						}
 						return null;

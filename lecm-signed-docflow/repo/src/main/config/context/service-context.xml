@@ -61,6 +61,12 @@
 		  parent="webscript">
 		<property name="signedDocflowService" ref="signedDocflowService"/>
 	</bean>
+	<bean id="webscript.ru.it.lecm.signed.docflow.getAppletConfig.getAppletConfig.get" class="ru.it.lecm.signed.docflow.webscripts.getAppletConfig"
+		  parent="webscript">
+		<property name="signedDocflowService" ref="signedDocflowService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+	</bean>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.unicloud.api.post" class="ru.it.lecm.signed.docflow.webscripts.UnicloudWebscript" parent="webscript">
 		<property name="unicloudService" ref="unicloudService"/>
