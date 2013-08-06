@@ -226,23 +226,27 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 
 		if (showNode != null) {
             if (!fieldName.contains("~")) {
-                Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
-                if (property != null) {
-                    result = result.toString().isEmpty() ? property : result;
-                    if (result instanceof Date) {
-	                    if (timeZoneOffset != null) {
-		                    Calendar cal = Calendar.getInstance();
-		                    cal.setTime((Date) result);
-		                    cal.add(Calendar.MILLISECOND, timeZoneOffset - TimeZone.getDefault().getRawOffset());
-		                    result = cal.getTime();
-	                    }
+	            if (fieldName.equals("nodeRef")) {
+		            result = showNode.toString();
+	            } else {
+		            Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
+		            if (property != null) {
+			            result = result.toString().isEmpty() ? property : result;
+			            if (result instanceof Date) {
+				            if (timeZoneOffset != null) {
+					            Calendar cal = Calendar.getInstance();
+					            cal.setTime((Date) result);
+					            cal.add(Calendar.MILLISECOND, timeZoneOffset - TimeZone.getDefault().getRawOffset());
+					            result = cal.getTime();
+				            }
 
-                        DateFormat dFormat = new SimpleDateFormat(dateFormat);
-                        result = dFormat.format(result);
-                    }
-                } else {
-                    result = "";
-                }
+				            DateFormat dFormat = new SimpleDateFormat(dateFormat);
+				            result = dFormat.format(result);
+			            }
+		            } else {
+			            result = "";
+		            }
+	            }
             }
             if (wrapAsLink && !result.toString().isEmpty()) {
                 SysAdminParams params = serviceRegistry.getSysAdminParams();
