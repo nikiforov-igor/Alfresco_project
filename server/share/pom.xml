@@ -236,12 +236,19 @@
             <type>amp</type>
         </dependency>
 		<dependency>
-		 <groupId>ru.it.lecm.scaner</groupId>
-		 <artifactId>scaner-share</artifactId>
-		 <version>${platform.version}</version>
-			 <type>amp</type>
-			   <scope>runtime</scope>
+			<groupId>ru.it.lecm.scaner</groupId>
+			<artifactId>scaner-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.signed-docflow</groupId>
+			<artifactId>signed-docflow-share</artifactId>
+            <version>${platform.version}</version>
+            <type>amp</type>
+            <scope>runtime</scope>
+        </dependency>
 		<dependency>
             <groupId>ru.it.lecm.br5.semantic</groupId>
             <artifactId>semantic-assist-share</artifactId>
