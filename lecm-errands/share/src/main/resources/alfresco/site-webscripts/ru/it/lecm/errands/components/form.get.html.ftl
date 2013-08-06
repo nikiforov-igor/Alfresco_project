@@ -58,16 +58,18 @@
         }
 
         function drawDndForm(nodeRef, htmlId) {
+	        var formId = htmlId + "-attachemnts";
             Alfresco.util.Ajax.request(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
                         dataObj: {
-                            htmlid: htmlId,
+                            htmlid: formId,
                             itemKind: "node",
                             itemId: nodeRef,
                             formId: "errands-dnd",
                             mode: "edit",
-                            showSubmitButton: false,
+	                        submitType:"json",
+                            showSubmitButton: true,
                             showResetButton: false,
                             showCancelButton: false
                         },
@@ -76,12 +78,27 @@
                                 var container = Dom.get('${id}-dnd');
                                 if (container != null) {
                                     container.innerHTML = response.serverResponse.responseText;
+
+	                                var form = new Alfresco.forms.Form(formId + '-form');
+	                                form.setSubmitAsJSON(true);
+	                                form.setAJAXSubmit(true,
+			                                {
+				                                successCallback:
+				                                {
+					                                fn: function(response) {
+						                                window.location.reload(true);
+					                                },
+					                                scope: this
+				                                }
+			                                });
+	                                form.init();
+
+	                                Dom.setStyle(formId + "-form-buttons", "visibility", "hidden");
                                 }
                             }
                         },
                         failureMessage: "message.failure",
                         execScripts: true,
-                        htmlId: htmlId + nodeRef
                     });
         }
 

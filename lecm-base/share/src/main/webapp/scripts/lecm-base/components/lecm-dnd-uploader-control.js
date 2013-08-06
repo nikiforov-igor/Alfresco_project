@@ -36,7 +36,9 @@ LogicECM.control = LogicECM.control || {};
 
 				multipleMode: true,
 
-				directoryName: true
+				directoryName: true,
+
+				autoSubmit: false
 			},
 
 			rootNodeRef: null,
@@ -200,6 +202,16 @@ LogicECM.control = LogicECM.control || {};
 					}
 
 					me.updateFormFields();
+
+					if (this.options.autoSubmit) {
+						var formElem  = Dom.get(this.id).form;
+						if (formElem != null) {
+							var submitButton = Dom.get(formElem.id + "-submit-button");
+							if (submitButton != null) {
+								submitButton.click();
+							}
+						}
+					}
 				}
 			},
 

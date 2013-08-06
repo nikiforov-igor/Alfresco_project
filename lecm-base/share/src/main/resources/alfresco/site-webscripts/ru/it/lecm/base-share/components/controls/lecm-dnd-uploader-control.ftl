@@ -10,9 +10,13 @@
 	<input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
 
     <#assign showAttsLabel = true,
-        showAttsList = true/>
+        showAttsList = true,
+		autoSubmit = false/>
     <#if params.showAttsLabel?? && params.showAttsLabel == "false">
         <#assign showAttsLabel = false/>
+    </#if>
+	<#if params.autoSubmit?? && params.autoSubmit == "true">
+        <#assign autoSubmit = true/>
     </#if>
     <#if params.showAttsList?? && params.showAttsList == "false">
         <#assign showAttsList = false/>
@@ -26,5 +30,5 @@
 
 	<#assign uploadDirectoryPath = params.uploadDirectoryPath>
 	<#assign directoryName = msg(params.directoryNameCode)>
-	<@renderDndUploaderContainerHTML fieldHtmlId uploadDirectoryPath directoryName disabled field.endpointMany/>
+	<@renderDndUploaderContainerHTML fieldHtmlId uploadDirectoryPath directoryName disabled field.endpointMany autoSubmit/>
 </div>

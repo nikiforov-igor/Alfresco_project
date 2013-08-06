@@ -180,6 +180,7 @@
                             <control-param name="directoryName">label.errands.attachments</control-param>
                             <control-param name="showAttsLabel">false</control-param>
                             <control-param name="showAttsList">false</control-param>
+                            <control-param name="autoSubmit">true</control-param>
                         </control>
                     </field>
                 </appearance>

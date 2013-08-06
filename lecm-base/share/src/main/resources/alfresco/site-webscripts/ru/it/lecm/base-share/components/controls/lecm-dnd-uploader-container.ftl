@@ -1,4 +1,4 @@
-<#macro renderDndUploaderContainerHTML fieldHtmlId uploadDirectoryPath directoryName disabled=false multiple=true>
+<#macro renderDndUploaderContainerHTML fieldHtmlId uploadDirectoryPath directoryName disabled=false multiple=true autoSubmit=false>
 	<script type="text/javascript">//<![CDATA[
 	(function() {
 		var control = new LogicECM.control.DndUploader("${fieldHtmlId}").setMessages(${messages});
@@ -7,6 +7,7 @@
 					uploadDirectoryPath: "${uploadDirectoryPath}",
 					disabled: ${disabled?string},
 					multipleMode: ${multiple?string},
+					autoSubmit: ${autoSubmit?string},
 					directoryName: "${directoryName}"
 				});
 	})();
