@@ -3,7 +3,7 @@
 <#assign signedContentRef = args.signedContentRef>
 
 <@formLib.renderFormContainer formId = formId>
-<div id="${htmlId}" class="signs">
+<div id="${htmlId}" class="signs-wrapper">
 	<div id="${htmlId}-signs-header" class="signs-header"></div>
 	<div id="${htmlId}-signs-container" class="signs-container">
 		<div>

@@ -2430,6 +2430,12 @@ span.person a div.description:empty {
 /************/
 /* УЗД и ЭП */
 /************/
+.signs-wrapper {
+	max-height: 450px;
+	overflow-y: scroll;
+	margin-bottom: 10px;
+}
+
 .signs-header {
 	font-weight: bold;
 	margin-bottom: 10px;
