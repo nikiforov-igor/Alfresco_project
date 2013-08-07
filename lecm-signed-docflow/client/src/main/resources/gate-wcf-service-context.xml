@@ -37,12 +37,12 @@
 
 	<jaxws:client id="gateWcfService.https"
 				  address="https://gate.business365.ru:1111/GateFlat.svc"
-				  serviceClass="ru.unicloud.gate.IGateWcfService"
+				  serviceClass="org.tempuri.IGateWcfService"
 				  serviceName="s:GateWcfServiceHttps"
 				  endpointName="s:WSHttpBinding_IGateWcfService"
-                  xmlns:s="http://tempuri.org">
+                  xmlns:s="http://tempuri.org/">
 		<jaxws:dataBinding>
-			<bean class="org.apache.cxf.xmlbeans.XmlBeansDataBinding" />
+			<bean class="org.apache.cxf.jaxb.JAXBDataBinding" />
 		</jaxws:dataBinding>
 		<jaxws:binding>
 			<soap:soapBinding version="1.2"/>

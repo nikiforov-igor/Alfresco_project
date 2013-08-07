@@ -12,21 +12,20 @@ import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.jaxb.JAXBDataBinding;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxy.ArrayOfOperatorInfo;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxy.OperatorInfo;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxyExceptions.GateResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tempuri.IGateWcfService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
-import ru.unicloud.gate.IGateWcfService;
+import ucloud.gate.proxy.ArrayOfOperatorInfo;
+import ucloud.gate.proxy.OperatorInfo;
+import ucloud.gate.proxy.exceptions.GateResponse;
 
 /**
  * высокоуровневый сервис, обертка для SOAP-клиента
@@ -75,14 +74,14 @@ public class UnicloudService {
 				Holder<ArrayOfOperatorInfo> operatorsHolder = new Holder<ArrayOfOperatorInfo>();
 				gateWcfService.getOperators(gateResponse, operatorsHolder);
 				if (operatorsHolder.value != null) {
-				List<OperatorInfo> operators = operatorsHolder.value.getOperatorInfoList();
+				List<OperatorInfo> operators = operatorsHolder.value.getOperatorInfos();
 					for (OperatorInfo operator : operators) {
 						logger.debug("AuthenticationType = {}", operator.getAuthenticationType());
 						logger.debug("CertificateIssuerName = {}", operator.getCertificateIssuerName());
 						logger.debug("Code = {}", operator.getCode());
 						logger.debug("Extension = {}", operator.getExtension());
 						logger.debug("Inn = {}", operator.getInn());
-						logger.debug("IsRemoteSignEnabled = {}", operator.getIsRemoteSignEnabled());
+						logger.debug("IsRemoteSignEnabled = {}", operator.isIsRemoteSignEnabled());
 						logger.debug("Name = {}", operator.getName());
 					}
 				} else {

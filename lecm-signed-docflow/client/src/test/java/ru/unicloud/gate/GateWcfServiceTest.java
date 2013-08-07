@@ -9,7 +9,6 @@ import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.jaxb.JAXBDataBinding;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxyExceptions.GateResponse;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.tempuri.IGateWcfService;
+import ucloud.gate.proxy.exceptions.GateResponse;
 
 /**
  * Базовый класс для тестовов различных сценариев работы с сервисом Unicloud Gate

@@ -1,10 +1,10 @@
 package ru.unicloud.gate;
 
 import javax.xml.ws.Holder;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxyExceptions.GateResponse;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxyRegistration.ArrayOfMember;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxyRegistration.RegisterRequestForeignCert;
 import org.junit.Test;
+import ucloud.gate.proxy.exceptions.GateResponse;
+import ucloud.gate.proxy.registration.ArrayOfMember;
+import ucloud.gate.proxy.registration.RegisterRequestForeignCert;
 
 /**
  * Регистрация у спецоператора ЭДО через сервис Unicloud Gate
@@ -18,9 +18,9 @@ public class RegisterSpecOperatorTest extends GateWcfServiceTest {
         Holder<GateResponse> gateResponse = new Holder<GateResponse>();
 		Holder<byte[]> content = new Holder<byte[]>();
 
-		ArrayOfMember members = ArrayOfMember.Factory.newInstance();
+		ArrayOfMember members = new ArrayOfMember();
 
-		RegisterRequestForeignCert registerRequest = RegisterRequestForeignCert.Factory.newInstance();
+		RegisterRequestForeignCert registerRequest = new RegisterRequestForeignCert();
 		registerRequest.setInn("700000004075");
 		registerRequest.setMembers(members);
 		service.generateRegisterRequest(null, OPERATOR_CODE, gateResponse, content);

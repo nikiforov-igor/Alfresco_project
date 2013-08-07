@@ -30,7 +30,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-databinding-xmlbeans</artifactId>
+			<artifactId>cxf-rt-databinding-jaxb</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>

@@ -4,18 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Holder;
-import org.apache.cxf.databinding.source.SourceDataBinding;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.jaxb.JAXBDataBinding;
-import org.apache.cxf.xmlbeans.XmlBeansDataBinding;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxy.ArrayOfOperatorInfo;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxy.OperatorInfo;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxyExceptions.GateResponse;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ucloud.gate.proxy.ArrayOfOperatorInfo;
+import ucloud.gate.proxy.OperatorInfo;
+import ucloud.gate.proxy.exceptions.GateResponse;
 
 /**
  * Тест для простых методов сервиса Unicloud Gate
@@ -65,14 +63,14 @@ public class SimpleTest extends GateWcfServiceTest {
 		Holder<GateResponse> gateResponce = new Holder<GateResponse>();
 		Holder<ArrayOfOperatorInfo> operatorsHolder = new Holder<ArrayOfOperatorInfo>();
 		service.getOperators(gateResponce, operatorsHolder);
-		List<OperatorInfo> operators = operatorsHolder.value.getOperatorInfoList();
+		List<OperatorInfo> operators = operatorsHolder.value.getOperatorInfos();
 		for (OperatorInfo operator : operators) {
 			logger.info("AuthenticationType = {}", operator.getAuthenticationType());
 			logger.info("CertificateIssuerName = {}", operator.getCertificateIssuerName());
 			logger.info("Code = {}", operator.getCode());
 			logger.info("Extension = {}", operator.getExtension());
 			logger.info("Inn = {}", operator.getInn());
-			logger.info("IsRemoteSignEnabled = {}", operator.getIsRemoteSignEnabled());
+			logger.info("IsRemoteSignEnabled = {}", operator.isIsRemoteSignEnabled());
 			logger.info("Name = {}", operator.getName());
 		}
 	}

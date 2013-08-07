@@ -3,11 +3,11 @@ package ru.unicloud.gate;
 import javax.xml.ws.Holder;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
-import org.datacontract.schemas.x2004.x07.uCloudGateProxyExceptions.GateResponse;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
+import ucloud.gate.proxy.exceptions.GateResponse;
 
 /**
  * Аутентификация в сервисе Unicloud Gate с локальным сертификатом

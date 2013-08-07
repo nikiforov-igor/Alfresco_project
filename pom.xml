@@ -156,6 +156,12 @@
 				<artifactId>spring-surf</artifactId>
 				<version>${spring.surf.version}</version>
 				<scope>provided</scope>
+				<exclusions>
+					<exclusion>
+						<artifactId>aopalliance</artifactId>
+						<groupId>aopalliance</groupId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.extensions.surf</groupId>
@@ -323,11 +329,6 @@
 				<artifactId>quartz</artifactId>
 				<version>1.8.3-alfresco-patched</version>
 				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-databinding-xmlbeans</artifactId>
-				<version>${apache.cxf.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
