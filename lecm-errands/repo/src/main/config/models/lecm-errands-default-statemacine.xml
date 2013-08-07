@@ -2547,382 +2547,6 @@ if (soExecutors != null) {
 															</subFolder>
 														</subFolders>
 													</node>
-													<node>
-														<type>userTransition</type>
-														<name>21815de3-90e9-4cdc-9c04-50db4433868c</name>
-														<nodeRef>
-															workspace://SpacesStore/57daded2-3d26-45f6-92e0-b2ddffb78691
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Исполнить поручение]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/d4f39d8f-665d-4fec-8240-c883bfb6a7fe
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>b25cd6f1-2c6b-498e-937c-80ae045ba8d8
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/28cd2011-a19a-401a-8498-c2e555d33721
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Произошла ошибка при проверке
-                                                                                    условий перехода]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.assocAttr("lecm-errands:controller-assoc",
-                                                                                    "cm:name") != null]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>a022348b-9a7f-4b4b-a9f9-7d786f2d0901
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/837db705-ae5b-4540-a115-1067dd9d8961
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Не заполнено поле «Отчет об
-                                                                                    исполнении».]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.attr("lecm-errands:execution-report")
-                                                                                    != null AND
-                                                                                    doc.attr("lecm-errands:execution-report")
-                                                                                    != ""]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>80bba31a-9ff6-4671-a76c-358ad210818f
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/b92234e9-7b2e-444e-9300-14e2f8680038
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Для совершения этого действия
-                                                                                    необходимо добавить вложение в
-                                                                                    категорию "Исполнение".]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[doc.hasCategoryAttachment("Исполнение")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-													<node>
-														<type>userTransition</type>
-														<name>478c8a4e-1d75-4672-beac-38f0b171e69a</name>
-														<nodeRef>
-															workspace://SpacesStore/6679ebe9-9c2f-48eb-83aa-6f175ea46f65
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Исполнить поручение]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/aebbb52c-6259-4ec2-9fcb-09e9fdd772df
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>049e4366-fbe8-4b1b-9cc0-42b17b0b9338
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/40924381-8c67-4d88-bb86-43f255108d0a
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Произошла ошибка при проверке
-                                                                                    условий перехода]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.assocAttr("lecm-errands:controller-assoc",
-                                                                                    "cm:name") == null AND
-                                                                                    doc.attr("lecm-errands:without-initiator-approval")
-                                                                                    == false]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>1207ab6f-11ba-4287-8430-1a5c29f03553
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/94460449-d5a1-44e1-bf06-356fdb4c5dcb
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Не заполнено поле «Отчет об
-                                                                                    исполнении».]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.attr("lecm-errands:execution-report")
-                                                                                    != null AND
-                                                                                    doc.attr("lecm-errands:execution-report")
-                                                                                    != ""]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>f7ffe1f4-dff0-4935-bd2e-c5839c33e32c
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/c1d2d0d4-847d-4b6a-84a1-c650e95bd3de
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Для совершения этого действия
-                                                                                    необходимо добавить вложение в
-                                                                                    категорию "Исполнение".]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[doc.hasCategoryAttachment("Исполнение")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-													<node>
-														<type>userTransition</type>
-														<name>758356ac-01a0-42d3-8b99-7c86d48f9370</name>
-														<nodeRef>
-															workspace://SpacesStore/7b4c3109-f6e3-474b-ac30-370a23eb703a
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Исполнить поручение]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/b7892903-4ebc-4eae-b0a7-245517111736
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>b44df360-36c3-4271-b30e-5b71e57b248c
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/c0a5888d-2767-4706-80b9-3e4cdc029dfe
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Произошла ошибка при проверке
-                                                                                    условий перехода]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.assocAttr("lecm-errands:controller-assoc",
-                                                                                    "cm:name") == null AND
-                                                                                    doc.attr("lecm-errands:without-initiator-approval")
-                                                                                    == true]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>8f1097a7-7390-4f21-9d73-01567877888f
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/a99a2e9e-7733-4746-bd43-6d099ceb349f
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Не заполнено поле «Отчет об
-                                                                                    исполнении».]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.attr("lecm-errands:execution-report")
-                                                                                    != null AND
-                                                                                    doc.attr("lecm-errands:execution-report")
-                                                                                    != ""]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>6a777358-1d1b-471f-a98f-524093c6e732
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/e61c62b7-82e0-4f79-ba81-7dd0bc77126d
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Для совершения этого действия
-                                                                                    необходимо добавить вложение в
-                                                                                    категорию "Исполнение".]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[doc.hasCategoryAttachment("Исполнение")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
 												</nodes>
 											</subFolder>
 										</subFolders>
@@ -3235,6 +2859,121 @@ if (soExecutors != null) {
 															</subFolder>
 														</subFolders>
 													</node>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>f067846e-ae71-4b10-a8d2-f3be5a1721cd</name>
+														<nodeRef>
+															workspace://SpacesStore/df14a86b-9d25-455c-bc3c-a1d68d4a183a
+														</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value><![CDATA[activiti$errandsExecute]]></value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value><![CDATA[Исполнить поручение]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>db41067a-24d4-4aef-9c41-87ab70299a36
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/6f16dcaa-a10c-465e-afd6-592a0cf1d67d
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Действие доступно только исполнителю поручения.]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>outputVariable</type>
+																		<name>67f3a078-8453-4586-b321-5816beb7377f
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/5de3f32e-89e2-4dbe-8896-2b5f0f9ba752
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>outputFromType</name>
+																				<value><![CDATA[VARIABLE]]></value>
+																			</property>
+																			<property>
+																				<name>outputToValue</name>
+																				<value><![CDATA[executeResult]]></value>
+																			</property>
+																			<property>
+																				<name>outputToType</name>
+																				<value><![CDATA[VARIABLE]]></value>
+																			</property>
+																			<property>
+																				<name>outputFromValue</name>
+																				<value><![CDATA[executeResult]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>b9721f91-936e-48b6-a601-007328938346
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/e6a92e83-2a35-4161-93c2-d75fe3bd3d5c
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исполнение" или заполнить поле «Отчет об исполнении».]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[doc.hasCategoryAttachment("Исполнение") OR (doc.attr("lecm-errands:execution-report") != null AND doc.attr("lecm-errands:execution-report")!= "")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
+													</node>
 												</nodes>
 											</subFolder>
 										</subFolders>
@@ -3335,6 +3074,99 @@ if (soExecutors != null) {
 																<type>transitionStatus</type>
 																<reference>
 																	workspace://SpacesStore/55b82e9f-2002-4849-8ffc-35a425d404f3
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>0b3959e7-cccc-4ae9-9255-e56685739c5e</name>
+														<nodeRef>
+															workspace://SpacesStore/75c3a4e8-c9b5-4b12-a4f6-2f0e6e5c6f9e
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[state("executeResult") == "executed"]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/b7892903-4ebc-4eae-b0a7-245517111736
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>cdf41ff2-8e79-4bf1-86f9-c379fdd062a8</name>
+														<nodeRef>
+															workspace://SpacesStore/cf4892ef-ab70-444e-b5a8-219901396582
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[state("executeResult") == "approveController"]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/d4f39d8f-665d-4fec-8240-c883bfb6a7fe
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>c35441e3-0ac0-405d-a04d-da76a5f1f86f</name>
+														<nodeRef>
+															workspace://SpacesStore/c4a012b2-a2e6-4af1-a0b4-4b238d2d4641
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[state("executeResult") == "approveInitiator"]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/aebbb52c-6259-4ec2-9fcb-09e9fdd772df
 																</reference>
 															</association>
 														</associations>
@@ -4043,382 +3875,6 @@ if (soExecutors != null) {
 															</subFolder>
 														</subFolders>
 													</node>
-													<node>
-														<type>userTransition</type>
-														<name>4518a56b-53d7-4c3d-871e-991280e50029</name>
-														<nodeRef>
-															workspace://SpacesStore/9f60aad6-f1cc-4a2e-924a-47cbd5b03e7e
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Исполнить поручение]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/d4f39d8f-665d-4fec-8240-c883bfb6a7fe
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>c2090e58-6d32-46ad-853a-49d741fd368e
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/47b5ed37-6dd4-4ee3-bb9f-51b3a3aa4db7
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Произошла ошибка при проверке
-                                                                                    условий перехода]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.assocAttr("lecm-errands:controller-assoc",
-                                                                                    "cm:name") != null]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>6d81f149-3b8e-49d4-9442-a79e0de09670
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/f31f3c06-a0b2-4b93-bba0-83fc29bc982c
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Не заполнено поле «Отчет об
-                                                                                    исполнении».]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.attr("lecm-errands:execution-report")
-                                                                                    != null AND
-                                                                                    doc.attr("lecm-errands:execution-report")
-                                                                                    != ""]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>75e1d78f-6301-478f-b8b5-5aec26a89707
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/dd6dd5bb-e2b4-4159-be55-8103ca4d3c9f
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Для совершения этого действия
-                                                                                    необходимо добавить вложение в
-                                                                                    категорию "Исполнение".]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[doc.hasCategoryAttachment("Исполнение")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-													<node>
-														<type>userTransition</type>
-														<name>8a11c07d-8b2d-4004-8f4a-6f24e37df2c0</name>
-														<nodeRef>
-															workspace://SpacesStore/cd3ee60a-4ab8-4634-9e80-9e95fb0e9be2
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Исполнить поручение]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/aebbb52c-6259-4ec2-9fcb-09e9fdd772df
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>eca766fe-6610-43d8-981e-8396ad83ce8d
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/2fe3f8f2-d4e0-4af2-a7f6-18ab817cfc63
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Произошла ошибка при проверке
-                                                                                    условий перехода]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.assocAttr("lecm-errands:controller-assoc",
-                                                                                    "cm:name") == null AND
-                                                                                    doc.attr("lecm-errands:without-initiator-approval")
-                                                                                    == false]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>bf75d5fb-c0d3-4745-86f2-b463c345ce30
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/057cc922-1d33-440e-8377-959a87af19e5
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Не заполнено поле «Отчет об
-                                                                                    исполнении».]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.attr("lecm-errands:execution-report")
-                                                                                    != null AND
-                                                                                    doc.attr("lecm-errands:execution-report")
-                                                                                    != ""]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>e88c7a00-bdb0-413a-964a-87eb91719e73
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/e30617ee-7c01-4717-bb1b-f7e40bea7fb0
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Для совершения этого действия
-                                                                                    необходимо добавить вложение в
-                                                                                    категорию "Исполнение".]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[doc.hasCategoryAttachment("Исполнение")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-													<node>
-														<type>userTransition</type>
-														<name>ebd01f04-4240-4bfb-a8b1-ba88c971a96e</name>
-														<nodeRef>
-															workspace://SpacesStore/52941d6b-2eed-48fa-96e4-eb3e76bcbc95
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Исполнить поручение]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/b7892903-4ebc-4eae-b0a7-245517111736
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>8545fc68-1fb7-47b4-88e9-75200d1d131f
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/9cea976c-f74e-4cb7-a52b-9f105d091cc2
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Произошла ошибка при проверке
-                                                                                    условий перехода]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.assocAttr("lecm-errands:controller-assoc",
-                                                                                    "cm:name") == null AND
-                                                                                    doc.attr("lecm-errands:without-initiator-approval")
-                                                                                    == true]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>42eed82c-90b9-45ce-a52c-e80eae69b422
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/9722c7d6-9063-4789-8241-8a87564ec93d
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Не заполнено поле «Отчет об
-                                                                                    исполнении».]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.attr("lecm-errands:execution-report")
-                                                                                    != null AND
-                                                                                    doc.attr("lecm-errands:execution-report")
-                                                                                    != ""]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>60c9b8d7-b578-4f4e-8663-055b1a673ddf
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/fa9c5537-9647-47c5-9976-344eb83c390a
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Для совершения этого действия
-                                                                                    необходимо добавить вложение в
-                                                                                    категорию "Исполнение".]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[doc.hasCategoryAttachment("Исполнение")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
 												</nodes>
 											</subFolder>
 										</subFolders>
@@ -4731,6 +4187,121 @@ if (soExecutors != null) {
 															</subFolder>
 														</subFolders>
 													</node>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>d4cca69b-71a9-4b49-bd9c-d9626e1950b6</name>
+														<nodeRef>
+															workspace://SpacesStore/4a28087f-78df-4d01-bf17-8afef5bc8edc
+														</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value><![CDATA[activiti$errandsExecute]]></value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value><![CDATA[Исполнить поручение]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>68610b9b-3614-48bb-91ff-eeccd89d5094
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/dc69fe82-db00-4cc2-be24-448482da562d
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Действие доступно только исполнителю поручения.]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>bbc704a5-5bf8-4cdc-a102-96b1a3f83bbe
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/a65a5924-2277-4199-a68e-e0c3f66e1f92
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исполнение" или заполнить поле «Отчет об исполнении».]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[doc.hasCategoryAttachment("Исполнение") OR (doc.attr("lecm-errands:execution-report") != null AND doc.attr("lecm-errands:execution-report")!= "")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>outputVariable</type>
+																		<name>dacbc9c0-3fa0-41da-a2a8-186f5d1ec486
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/5a1f1635-051d-4eb2-9041-4bfb675b7100
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>outputFromType</name>
+																				<value><![CDATA[VARIABLE]]></value>
+																			</property>
+																			<property>
+																				<name>outputToValue</name>
+																				<value><![CDATA[executeResult]]></value>
+																			</property>
+																			<property>
+																				<name>outputToType</name>
+																				<value><![CDATA[VARIABLE]]></value>
+																			</property>
+																			<property>
+																				<name>outputFromValue</name>
+																				<value><![CDATA[executeResult]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
+													</node>
 												</nodes>
 											</subFolder>
 										</subFolders>
@@ -4831,6 +4402,99 @@ if (soExecutors != null) {
 																<type>transitionStatus</type>
 																<reference>
 																	workspace://SpacesStore/55b82e9f-2002-4849-8ffc-35a425d404f3
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>19b9f5c8-1563-4a5f-a7d8-3b5e744a7769</name>
+														<nodeRef>
+															workspace://SpacesStore/4ac93301-2872-4099-be72-8dac4941f216
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[state("executeResult") == "executed"]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/b7892903-4ebc-4eae-b0a7-245517111736
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>ec7b1ee0-9aaf-42db-ad77-6f2461bfa776</name>
+														<nodeRef>
+															workspace://SpacesStore/d2ca28c6-b0a0-4c61-8bf2-e33e5d7f11de
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[state("executeResult") == "approveController"]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/d4f39d8f-665d-4fec-8240-c883bfb6a7fe
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>3bed641a-cc33-444e-a9b4-c28b18397075</name>
+														<nodeRef>
+															workspace://SpacesStore/8662a4c6-2f65-493a-ab0a-8ac40ee2755a
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[state("executeResult") == "approveInitiator"]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/aebbb52c-6259-4ec2-9fcb-09e9fdd772df
 																</reference>
 															</association>
 														</associations>
@@ -7357,7 +7021,39 @@ if (soExecutors != null) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>d63485a6-6c4e-4704-b81c-a1a40e59252a</name>
+														<nodeRef>
+															workspace://SpacesStore/d0e3288c-9b60-4113-bab9-631c576bed3d
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[var document = bpm_package.children[0];
+if (document != null) {
+   document.properties["lecm-errands:end-date"] = new Date();
+   document.save();
+}]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>
+																	<![CDATA[Сохранение даты завершения поручения]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 								</nodes>
 							</subFolder>
@@ -7657,7 +7353,39 @@ if (soExecutors != null) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>2123c803-d0d8-41fc-91f3-13b645235d81</name>
+														<nodeRef>
+															workspace://SpacesStore/1d6c3f38-bc1d-427c-90ad-bf4597a5648b
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[var document = bpm_package.children[0];
+if (document != null) {
+   document.properties["lecm-errands:end-date"] = new Date();
+   document.save();
+}]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>
+																	<![CDATA[Сохранение даты завершения поручения]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 								</nodes>
 							</subFolder>

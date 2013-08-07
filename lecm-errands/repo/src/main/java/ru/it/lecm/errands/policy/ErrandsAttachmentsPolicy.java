@@ -2,6 +2,7 @@ package ru.it.lecm.errands.policy;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -54,7 +55,7 @@ public class ErrandsAttachmentsPolicy implements NodeServicePolicies.OnCreateAss
 
 	final public void init() {
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_TEMP_ATTACHMENTS, new JavaBehaviour(this, "onCreateAssociation"));
+				ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_TEMP_ATTACHMENTS, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	/**

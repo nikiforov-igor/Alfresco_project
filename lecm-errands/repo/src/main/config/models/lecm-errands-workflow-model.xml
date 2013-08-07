@@ -213,5 +213,12 @@
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>
 		</type>
+
+		<type name="lecmErrandWf:execute">
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
     </types>
 </model>

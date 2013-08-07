@@ -13,9 +13,6 @@
                         <activiti:string>
 	                        var document = bpm_package.children[0];
 	                        if (document != null) {
-		                        document.properties["lecm-errands:end-date"] = new Date();
-		                        document.save();
-
 		                        var logText = "Сотрудник #initiator отменил поручение: #mainobject.";
 		                        businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 

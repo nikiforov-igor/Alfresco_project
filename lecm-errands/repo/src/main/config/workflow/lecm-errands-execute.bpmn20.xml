@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/execute/1.0">
+	<process id="errandsExecute" name="Исполнить поручение">
+		<startEvent id="startExecute" name="Start" activiti:formKey="lecmErrandWf:execute"></startEvent>
+		<endEvent id="endExecute" name="End"></endEvent>
+		<scriptTask id="executeErrand" name="Errand execute" scriptFormat="javascript">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="script">
+						<activiti:string>
+							var document = bpm_package.children[0];
+							if (document != null) {
+								document.properties["lecm-errands:execution-date"] = new Date();
+								document.save();
+
+								var controller = null;
+								var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+								if (controllerAssoc != null &amp;&amp; controllerAssoc.length == 1) {
+									controller = controllerAssoc[0];
+								}
+
+								var executor = null;
+								var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+								if (executorAssoc != null &amp;&amp; executorAssoc.length == 1) {
+									executor = executorAssoc[0];
+								}
+
+								if (controller != null) {
+									var recipients = [];
+									recipients.push(controller);
+									var notificationText = documentScript.wrapperLink(executor, "{lecm-errands:executor-assoc/lecm-orgstr:employee-short-name}");
+									notificationText += " исполнил поручение: ";
+									notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+									notificationText += " № {lecm-errands:number}";
+									notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+
+									execution.setVariable("executeResult", "approveController");
+								} else {
+									var initiator = null;
+									var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+									if (initiatorAssoc != null &amp;&amp; initiatorAssoc.length == 1) {
+										initiator = initiatorAssoc[0];
+									}
+
+									var recipients = [];
+									recipients.push(initiator);
+									var notificationText = documentScript.wrapperLink(executor, "{lecm-errands:executor-assoc/lecm-orgstr:employee-short-name}");
+									notificationText += " исполнил ваше поручение: ";
+									notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+									notificationText += " № {lecm-errands:number}";
+									notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+
+									if (document.properties["lecm-errands:without-initiator-approval"]) {
+										execution.setVariable("executeResult", "executed");
+									} else {
+										execution.setVariable("executeResult", "approveInitiator");
+									}
+								}
+							}
+						</activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+			<script></script>
+		</scriptTask>
+		<receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
+		<sequenceFlow id="flow1" name="" sourceRef="startExecute" targetRef="executeErrand"></sequenceFlow>
+		<sequenceFlow id="flow2" name="" sourceRef="executeErrand" targetRef="errandReceiveTask"></sequenceFlow>
+		<sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endExecute"></sequenceFlow>
+	</process>
+</definitions>
