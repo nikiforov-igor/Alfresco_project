@@ -89,14 +89,21 @@ public class ReportManagerJavascriptExtension
 	public ScriptNode generateReportTemplate(final String reportRef) {
 		NodeRef report = new NodeRef(reportRef);
 		ReportDescriptor desc = getReportsManager().getReportDAO().getReportDescriptor(report);
-		if (desc == null)
-			return null;
-		byte[] content = getReportsManager().produceDefaultTemplate(desc);
+		if (desc == null) {
+            return null;
+        }
+
+		byte[] content = getReportsManager().produceDefaultTemplate(desc); // TODO очему-то шаблон по умолчанию не зависит от типа отчета - он всегда jrxml
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
 		final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-		properties.put(ContentModel.PROP_NAME, desc.getMnem() + ".jrxml");
+        String reportTemplateName =  desc.getMnem() + ".jrxml"; // см TODO выше
+		properties.put(ContentModel.PROP_NAME, reportTemplateName);
+        NodeRef templateFile = serviceRegistry.getNodeService().getChildByName(report, ContentModel.ASSOC_CONTAINS, reportTemplateName);
+        if (templateFile != null) {
+            serviceRegistry.getNodeService().deleteNode(templateFile); // удаляем старый файл
+        }
 		ChildAssociationRef child =
-				serviceRegistry.getNodeService().createNode(new NodeRef(reportRef), ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
+				serviceRegistry.getNodeService().createNode(report, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
 		InputStream is = null;
 		try {
 			ContentService contentService = serviceRegistry.getContentService();

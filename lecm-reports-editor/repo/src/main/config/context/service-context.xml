@@ -132,4 +132,12 @@
             <ref bean="dictionaryService"/>
         </property>
     </bean>
+
+    <bean id="webscript.ru.it.lecm.reports-editor.report.export-template.get"
+          class="ru.it.lecm.reports.editor.export.ExportTemplate"
+          parent="webscript">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="contentService" ref="contentService"/>
+    </bean>
+
 </beans>

@@ -110,3 +110,8 @@ div[id*="reports-editor-navigation-toolbar"] .toolbar
 .datagrid .onActionUnDeploy a {
     background-image: url("/share/res/components/images/header/trashcan.png");
 }
+
+.datalist-toolbar .export-template button {
+    background: url("../../images/lecm-dictionary/xml-file-16.png") no-repeat scroll 5px 5px transparent;
+    cursor: pointer;
+}

@@ -69,9 +69,9 @@
             if (generateReport) {
                 Alfresco.util.Ajax.request(
                     {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/reports-editor/generateTemplate",
+                        url: Alfresco.constants.PROXY_URI + "lecm/reports/rptmanager/generateReportTemplate",
                         dataObj: {
-                            reportId: this.reportId
+                            reportRef: meta.nodeRef
                         },
                         successCallback: {
                             fn: function (response) {
@@ -98,6 +98,16 @@
 
                 if (response) {
                     // обновим форму данными шаблона
+                    var generatedTemplate = response.json.templateRef;
+
+                    var added = p_dialog.dialog.form['assoc_lecm-rpeditor_reportTemplateFile_added'];
+                    if (added != null) {
+                        added.value = generatedTemplate;
+                    }
+                    var current = p_dialog.dialog.form['assoc_lecm-rpeditor_reportTemplateFile'];
+                    if (current != null) {
+                        current.value = generatedTemplate;
+                    }
                 }
                 this.items = p_dialog.form.validations;
                 if (this.isCopy){
@@ -323,6 +333,9 @@
                 {
                     disabled: !this.templateId || !this.isNewTemplate
                 }, this.id + "-toolbar-newTemplateSaveButton");
+
+            // Export Template
+            this.toolbarButtons.exportTemplateButton = Alfresco.util.createYUIButton(this, "exportTemplateButton", this._onExportTemplate, {});
         },
 
         _onNewTemplate: function () {
@@ -334,8 +347,7 @@
         },
 
         _onNewTemplateFromSource: function () {
-            alert("Не реализовано");
-            // this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId}, true);
+            this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId}, true);
         },
 
         _onCopyToRepository: function (layer, args) {
@@ -357,6 +369,10 @@
                     });
                 }
             }
+        },
+
+        _onExportTemplate: function () {
+            document.location.href = Alfresco.constants.PROXY_URI + "/lecm/reports-editor/exportReportTemplate?reportRef=" + this.reportId;
         }
     });
 

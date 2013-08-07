@@ -26,6 +26,16 @@
                    </span>
             </span>
         </div>
+        <div class="divider"></div>
+        <div>
+            <div id="${id}-export-template" class="export-template" title="${msg('button.export-template')}">
+                    <span id="${id}-exportTemplateButton" class="yui-button yui-push-button">
+                        <span class="first-child">
+                            <button type="button" title="${msg('button.export-template')}">&nbsp;</button>
+                        </span>
+                    </span>
+            </div>
+        </div>
     </div>
     </@comp.baseToolbar>
 </div>
