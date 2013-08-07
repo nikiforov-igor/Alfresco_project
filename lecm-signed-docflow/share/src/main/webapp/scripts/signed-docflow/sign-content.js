@@ -65,6 +65,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						doBeforeDialogShow:{
 							fn: function( p_form, p_dialog ) {
 								p_dialog.dialog.setHeader("Просмотр информации о подписях");
+								p_form.doBeforeFormSubmit = {
+									fn: function() {
+										this.setAJAXSubmit(false);
+									},
+									scope: p_form
+								};
 							}
 						},
 						onFailure: {
