@@ -46,4 +46,5 @@
 .dnd-uploader .uploader-block span.drag-tip {
     color: #a7a7a7;
     line-height: 16px;
+    display: inline-block;
 }

@@ -1,45 +1,47 @@
 /* Диалоговое окно создания поручения */
-.yui-skin-lecmTheme .yui-panel form.metadata-form-edit div.form-fields .yui-g .yui-u {
+.yui-skin-lecmTheme .yui-panel form.errands-form-edit div.form-fields .yui-g .yui-u {
     width: 44.1%;
 }
-.yui-skin-lecmTheme .yui-panel form.metadata-form-edit div.form-fields .yui-g .yui-u.first {
+.yui-skin-lecmTheme .yui-panel form.errands-form-edit div.form-fields .yui-g .yui-u.first {
     width: 54.1%;
 }
-.yui-skin-lecmTheme .yui-panel form.metadata-form-edit div.form-field > label {
+.yui-skin-lecmTheme .yui-panel form.errands-form-edit div.form-field > label {
     width: 130px;
 }
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field input[type="text"],
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field div.selectone-control select,
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field div.autocompleteCurrentValueDisplay,
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field div.autocompleteCurrentValueDisplayInvisible {
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field input[type="text"],
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field div.selectone-control select,
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field div.autocompleteCurrentValueDisplay,
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field div.autocompleteCurrentValueDisplayInvisible {
     width: 500px;
 }
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input,
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplay,
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
     width: 192px;
 }
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field > input.date-entry {
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field > input.date-entry {
     width: 200px;
 }
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field > input.date-entry + a {
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field > input.date-entry + a {
     margin-top: 5px;
 }
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field > div.autocomplete-block:not(.datagrid):not(.viewmode-field):not(.subscribe),
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe),
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field input[type="checkbox"],
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-fields div.set > span.yui-button {
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field > div.autocomplete-block:not(.datagrid):not(.viewmode-field):not(.subscribe),
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe),
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field input[type="checkbox"],
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-fields div.set > span.yui-button {
     margin-left: 140px;
 }
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field.checkbox-control {
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field.checkbox-control {
     text-align: right;
 }
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field.checkbox-control input[type="checkbox"] {
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field.checkbox-control input[type="checkbox"] {
     margin-left: 0;
 }
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field.checkbox-control label {
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field.checkbox-control label {
     padding-right: 15px;
 }
 
-.yui-skin-lecmTheme div.yui-panel form.metadata-form-edit div.form-field span.mceEditor iframe {
+.yui-skin-lecmTheme div.yui-panel form.errands-form-edit div.form-field span.mceEditor iframe {
     width: 532px !important;
     max-width: 532px;
 }

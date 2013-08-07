@@ -33,7 +33,8 @@
                 newRowDialogTitle: "label.create-row.title",
                 searchButtonsType: 'defaultActive',
                 newRowButtonType: 'defaultActive',
-                createDialogWidth: "70em"
+                createDialogWidth: "70em",
+                createDialogClass: "metadata-form-edit"
             },
 
             _initButtons: function() {
@@ -66,7 +67,7 @@
                         [ p_dialog.id + "-form-container_h", addMsg ? addMsg : defaultMsg ]
                     );
 
-                    Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
+                    Dom.addClass(p_dialog.id + "-form", me.options.createDialogClass);
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",

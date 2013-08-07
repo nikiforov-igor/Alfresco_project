@@ -21,6 +21,7 @@
 
     <#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
         <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-metadata.css" />
+        <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-form.css" />
     </#if>
 
     <@templateHtmlEditorAssets />
