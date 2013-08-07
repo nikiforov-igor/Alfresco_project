@@ -229,4 +229,8 @@ public interface SignedDocflow {
 	 * @return действительна ли данная подпись
 	 */
 	boolean isSignatureValid(NodeRef signatureRef);
+
+	void addAttributesToOrganization();
+
+	void addAttributesToPersonalData();
 }

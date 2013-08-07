@@ -85,9 +85,7 @@
 	
 	<bean id="webscript.ru.it.lecm.signed.docflow.unicloud.api.post" class="ru.it.lecm.signed.docflow.webscripts.UnicloudWebscript" parent="webscript">
 		<property name="unicloudService" ref="unicloudService"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="transactionService" ref="transactionService"/>
+		<property name="signedDocflowService" ref="signedDocflowService"/>
 	</bean>
 
 </beans>

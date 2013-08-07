@@ -51,7 +51,8 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		this.documentAttachmentsService = documentAttachmentsService;
 	}
 
-	private void addAttributesToOrganization() {
+	@Override
+	public void addAttributesToOrganization() {
 		AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
 			@Override
 			public Void doWork() throws Exception {
@@ -74,7 +75,35 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 						}
 						return null;
 					}
-				});
+				}, false, true);
+			}
+		});
+	}
+
+	@Override
+	public void addAttributesToPersonalData() {
+		AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
+
+			@Override
+			public Void doWork() throws Exception {
+				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+				return transactionHelper.doInTransaction(new RetryingTransactionCallback<Void>() {
+
+					@Override
+					public Void execute() throws Throwable {
+						NodeRef currentEmployeeRef = orgstructureService.getCurrentEmployee();
+						NodeRef personalDataRef = orgstructureService.getEmployeePersonalData(currentEmployeeRef);
+						Set<QName> aspects = nodeService.getAspects(personalDataRef);
+						if(!aspects.contains(SignedDocflow.ASPECT_PERSONAL_DATA_ATTRS)) {
+							Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+//							properties.put(SignedDocflow.PROP_AUTH_TOKEN, "");
+//							properties.put(SignedDocflow.PROP_CERT_THUMBPRINT, "");
+//							properties.put(SignedDocflow.PROP_AUTH_TYPE, "");
+							nodeService.addAspect(personalDataRef, SignedDocflow.ASPECT_PERSONAL_DATA_ATTRS, properties);
+						}
+						return null;
+					}
+				}, false, true);
 			}
 		});
 	}
