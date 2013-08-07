@@ -33,25 +33,6 @@
             }
             <#-- Make twisters - end -->
 
-            <#-- Remove-icons init - start -->
-            var removeIcons = Dom.getElementsByClassName("remove-icon", "img", "${id}_metadata");
-
-            for (var j = 0; j < removeIcons.length; j++) {
-                removeIcons[j].onclick = function() {
-                    var icon = this;
-                    var li = Dom.getAncestorByTagName(icon, "li");
-                    var ul = Dom.getAncestorByTagName(li, "ul");
-                    var block = Dom.getAncestorByTagName(ul, "div");
-                    var countSpan = Dom.getElementsByClassName("count", "span", block)[0];
-
-                    ul.removeChild(li);
-                    countSpan.innerHTML = " (" + Dom.getChildren(ul).length + ")";
-
-                    <#-- todo: Удалить из поручения! -->
-                };
-            }
-            <#-- Remove-icons init - end -->
-
             <#-- Dnd uploader form - start -->
             drawDndForm("${nodeRef}", '${id}');
             <#-- Dnd uploader form - end -->
@@ -98,7 +79,7 @@
                             }
                         },
                         failureMessage: "message.failure",
-                        execScripts: true,
+                        execScripts: true
                     });
         }
 
@@ -172,7 +153,7 @@
                 <#if attachments?? && attachments?size gt 0>
                     <#list attachments as attachment>
                         <li title="${attachment.name!""}">
-                            <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
+                            <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
                             <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
                                 ${attachment.name!""}
                             </a>
@@ -194,7 +175,7 @@
                 <#if links?? && links?size gt 0>
                     <#list links as link>
                         <li title="${link.name!""}">
-                            <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
+                            <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
                             <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                 ${link.name!""}
                             </a>
@@ -238,7 +219,7 @@
                     <#if attachmentsExec?? && attachmentsExec?size gt 0>
                         <#list attachmentsExec as attachment>
                             <li title="${attachment.name!""}">
-                                <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
+                                <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
                                     ${attachment.name!""}
                                 </a>
@@ -260,7 +241,7 @@
                     <#if links?? && links?size gt 0>
                         <#list links as link>
                             <li title="${link.name!""}">
-                                <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
+                                <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                     ${link.name!""}
                                 </a>
@@ -336,7 +317,7 @@
                     <#if attachmentsControl?? && attachmentsControl?size gt 0>
                         <#list attachmentsControl as attachment>
                             <li title="${attachment.name!""}">
-                                <img src="${url.context}/res/components/images/delete-16.png" class="remove-icon"/>
+                                <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
                                     ${attachment.name!""}
                                 </a>
