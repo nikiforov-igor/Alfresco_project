@@ -148,13 +148,6 @@
         <property name="documentService" ref="documentService"/>
     </bean>
 
-    <bean  id="errandsPolicy" class="ru.it.lecm.errands.policy.ErrandsPolicy"
-           init-method="init" depends-on="documents.LogicEcmModelsBootstrap, errands.dictionaries.LogicEcmModelsBootstrap"
-           p:nodeService-ref="nodeService">
-        <property name="policyComponent" ref="policyComponent"/>
-        <property name="nodeService" ref="nodeService"/>
-    </bean>
-
     <bean id="errands.defaultStatemachine" parent="defaultStatemachines">
         <property name="statemachineName" value="lecm-errands:document" />
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-errands-default-statemacine.xml" />

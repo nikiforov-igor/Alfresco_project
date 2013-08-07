@@ -27,13 +27,24 @@
                     successCallback: {
                         fn: function (response) {
                             if (response.json == false) {
-                                Dom.setStyle(idPanel,"display","none");
-                                var elements = Dom.getElementsBy(function() {return true;},"input", Dom.get(idPanel));
-                                if (elements) {
-                                    for (var index = 0; index < elements.length; ++index) {
-                                        elements[index].setAttribute("disabled","disabled");
+                                Dom.setStyle(idPanel,"visibility","hidden");
+                                Dom.setStyle(idPanel,"position","absolute");
+
+                                var inputs = Dom.getElementsBy(function() {return true;},"input", Dom.get(idPanel));
+                                if (inputs) {
+                                    for (var index = 0; index < inputs.length; ++index) {
+	                                    if (inputs[index].type == "text" || inputs[index].type == "button") {
+		                                    inputs[index].setAttribute("disabled","disabled");
+	                                    }
                                     }
                                 }
+
+	                            var buttons = Dom.getElementsBy(function() {return true;},"button", Dom.get(idPanel));
+	                            if (buttons) {
+		                            for (var index = 0; index < buttons.length; ++index) {
+			                            buttons[index].setAttribute("disabled","disabled");
+		                            }
+	                            }
                             }
                         }
                     },
