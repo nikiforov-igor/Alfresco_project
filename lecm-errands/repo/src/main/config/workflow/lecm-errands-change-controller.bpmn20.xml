@@ -43,17 +43,20 @@
                                         recipients.push(controller);
                                         notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
 
-                                        var documentStatus = document.properties["lecm-statemachine:status"];
-                                        var groupPermission = (documentStatus == "На утверждении инициатором" ? "LECM_BASIC_PG_Reviewer" : "LECM_BASIC_PG_Reader");
-                                        lecmPermission.grantDynamicRole(document, lecmErrandWf_changeControllerNewController, "ERRANDS_CONTROLLER", groupPermission);
+                                        statemachine.grandDynamicRoleForEmployee(document, lecmErrandWf_changeControllerNewController, "ERRANDS_CONTROLLER");
 
                                         var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
                                         notificationText +=  "назначил(а) вас контроллером по поручению ";
                                         notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
                                         notificationText += " № {lecm-errands:number}";
 
+                                        var newController = null;
+                                        var newControllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+                                        if (newControllerAssoc != null &amp;&amp; newControllerAssoc.length == 1) {
+                                            newController = newControllerAssoc[0];
+                                        }
                                         var recipients = [];
-                                        recipients.push(lecmErrandWf_changeControllerNewController);
+                                        recipients.push(newController);
                                         notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
                                     }
                                 }
