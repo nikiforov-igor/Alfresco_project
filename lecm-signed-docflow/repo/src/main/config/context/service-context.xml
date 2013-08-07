@@ -31,13 +31,13 @@
 		  parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
 						ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">
-        <property name="createOrUpdateDictionaries">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory-items.xml</value>
+		<property name="createOrUpdateDictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory-items.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
-            </list>
-        </property>
-    </bean>
+			</list>
+		</property>
+	</bean>
 
 	<util:constant id="signedDocflowFolder" static-field="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl.SIGNED_DOCFLOW_FOLDER"/>
 	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean"
@@ -72,6 +72,17 @@
 		  parent="webscript">
 		<property name="signedDocflowService" ref="signedDocflowService"/>
 	</bean>
+	<bean id="webscript.ru.it.lecm.signed.docflow.testSignsInfo.testSignsInfo.post" class="ru.it.lecm.signed.docflow.webscripts._TestSignsInfoWebscript"
+		  parent="webscript">
+		<property name="signedDocflowService" ref="signedDocflowService"/>
+	</bean>
+
+	<bean id="webscript.ru.it.lecm.signed.docflow.getSignsInfo.getSignsInfo.get" class="ru.it.lecm.signed.docflow.webscripts.GetSignsInfo"
+		  parent="webscript">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="signedDocflowService" ref="signedDocflowService"/>
+	</bean>
+
 	<bean id="webscript.ru.it.lecm.signed.docflow.signContent.signContent.post" class="ru.it.lecm.signed.docflow.webscripts.SignContentWebscript"
 		  parent="webscript">
 		<property name="signedDocflowService" ref="signedDocflowService"/>

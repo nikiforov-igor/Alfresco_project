@@ -47,7 +47,37 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 				},
 				onViewSignature: function(layer, args) {
-					alert("onViewSignature");
+					var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
+
+					form.setOptions({
+						width: "50em",
+						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+						templateRequestParams: {
+							itemKind: "type",
+							itemId: "lecm-signed-docflow:sign",
+							mode: "create",
+							submitType: "json",
+							showCancelButton: "true",
+							formId: "signs-info-short",
+							signedContentRef: this.options.nodeRef
+						},
+						destroyOnHide: true,
+						doBeforeDialogShow:{
+							fn: function( p_form, p_dialog ) {
+								p_dialog.dialog.setHeader("Просмотр информации о подписях");
+							}
+						},
+						onFailure: {
+							fn: function() {
+								Alfresco.util.PopupManager.displayMessage({
+									text: "Не удалось получить информацию о подписях"
+								});
+							},
+							scope: this
+						}
+					});
+
+					form.show();
 				},
 				onSignDocument: function(layer, args) {
 					alert("onSignDocument");

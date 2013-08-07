@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Generate Test Strings</shortname>
+	<description>Generate Test Strings</description>
+	<url>/lecm/signed-docflow/generateTestSigns</url>
+    <authentication>user</authentication>
+	<format default="json"/>
+    <transaction>none</transaction>
+</webscript>

@@ -1,29 +1,29 @@
 package ru.it.lecm.signed.docflow.beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.GUID;
+import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.signed.docflow.api.Signature;
 import ru.it.lecm.signed.docflow.SignedDocflowEventCategory;
 import ru.it.lecm.signed.docflow.UnicloudService;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
-import static ru.it.lecm.signed.docflow.api.SignedDocflow.ASSOC_SIGN_TO_CONTENT;
 
 /**
  *
@@ -115,6 +115,136 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
 
 		addAttributesToOrganization();
+	}
+
+	public List<Signature> getSignatures(NodeRef signedContentRef) {
+		List<AssociationRef> signAssocs = nodeService.getSourceAssocs(signedContentRef, ASSOC_SIGN_TO_CONTENT);
+
+		List<Signature> signs = new ArrayList<Signature>();
+
+		for(AssociationRef signAssoc : signAssocs) {
+			Signature sign = new Signature();
+
+			NodeRef signRef = signAssoc.getSourceRef();
+			NodeRef contentRef = signAssoc.getTargetRef();
+
+			Map<QName, Serializable> signProperties = nodeService.getProperties(signRef);
+
+			sign.setNodeRef(signRef.toString());
+			sign.setSignedContentName(nodeService.getProperty(contentRef, ContentModel.PROP_NAME).toString());
+
+			sign.setOwner((String) signProperties.get(PROP_OWNER));
+			sign.setOwnerPosition((String) signProperties.get(PROP_OWNER_POSITION));
+			sign.setOwnerOrganization((String) signProperties.get(PROP_OWNER_ORGANIZATION));
+
+			Date signingDate = (Date) signProperties.get(PROP_SIGNING_DATE);
+			sign.setSigningDate(signingDate);
+			sign.setSigningDateString(ISO8601DateFormat.format(signingDate));
+
+			Date validFrom = (Date) signProperties.get(PROP_VALID_FROM);
+			sign.setValidFrom(validFrom);
+			sign.setValidFromString(ISO8601DateFormat.format(signingDate));
+
+			Date validThrough = (Date) signProperties.get(PROP_VALID_THROUGH);
+			sign.setValidThrough(validThrough);
+			sign.setValidThroughString(ISO8601DateFormat.format(validThrough));
+
+			Date updateDate = (Date) signProperties.get(PROP_UPDATE_DATE);
+			sign.setUpdateDate(updateDate);
+			sign.setUpdateDateString(ISO8601DateFormat.format(updateDate));
+
+			sign.setSerialNumber((String) signProperties.get(PROP_SERIAL_NUMBER));
+			sign.setCa((String) signProperties.get(PROP_CA));
+			sign.setValid((Boolean) signProperties.get(PROP_IS_VALID));
+			sign.setOur((Boolean) signProperties.get(PROP_IS_OUR));
+
+			signs.add(sign);
+		}
+
+		return signs;
+	}
+
+	public void generateTestSigns(final NodeRef contentToSignRef) {
+
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		transactionHelper.doInTransaction(new RetryingTransactionCallback<Void>() {
+
+			@Override
+			public Void execute() throws Throwable {
+
+				Map<QName, Serializable> signProperties = new HashMap<QName, Serializable>();
+
+				Calendar calendar = Calendar.getInstance();
+
+				calendar.set(2011, Calendar.JANUARY, 1); // ????????? ? 2011
+				Date signingDate = calendar.getTime();
+
+				calendar.set(2012, Calendar.JANUARY, 1); // ????? ??????????? ? 2012
+				Date validFrom = calendar.getTime();
+
+				calendar.set(2013, Calendar.JANUARY, 1); // ????????????? ?? 2013
+				Date validThrough = calendar.getTime();
+
+				signProperties.put(PROP_OWNER, "Владелец Подписи");
+				signProperties.put(PROP_OWNER_POSITION, "Директор");
+				signProperties.put(PROP_OWNER_ORGANIZATION, "Организация");
+				signProperties.put(PROP_SIGNING_DATE, signingDate);
+				signProperties.put(PROP_SERIAL_NUMBER, "41155");
+				signProperties.put(PROP_VALID_FROM, validFrom);
+				signProperties.put(PROP_VALID_THROUGH, validThrough);
+				signProperties.put(PROP_CA, "Центр Хороший");
+				signProperties.put(PROP_UPDATE_DATE, new Date());
+				signProperties.put(PROP_IS_VALID, true);
+				signProperties.put(PROP_IS_OUR, false);
+
+				ChildAssociationRef folderToSignChildAssoc = nodeService.createNode(getSignedDocflowFolder(), // ????
+						ContentModel.ASSOC_CONTAINS, // ????
+						QName.createQName(SIGNED_DOCFLOW_NAMESPACE, GUID.generate()), // ????
+						TYPE_SIGN, signProperties); // ????
+
+				nodeService.createAssociation(folderToSignChildAssoc.getChildRef(), contentToSignRef, ASSOC_SIGN_TO_CONTENT);
+
+				signProperties.put(PROP_OWNER, "Иван Иванов");
+				signProperties.put(PROP_OWNER_POSITION, "Работник Компании");
+				signProperties.put(PROP_OWNER_ORGANIZATION, "Молоко и Продукты");
+				signProperties.put(PROP_SIGNING_DATE, signingDate);
+				signProperties.put(PROP_SERIAL_NUMBER, "911");
+				signProperties.put(PROP_VALID_FROM, validFrom);
+				signProperties.put(PROP_VALID_THROUGH, validThrough);
+				signProperties.put(PROP_CA, "Центр Плохой");
+				signProperties.put(PROP_UPDATE_DATE, new Date());
+				signProperties.put(PROP_IS_VALID, true);
+				signProperties.put(PROP_IS_OUR, true);
+
+				folderToSignChildAssoc = nodeService.createNode(getSignedDocflowFolder(), // ????
+						ContentModel.ASSOC_CONTAINS, // ????
+						QName.createQName(SIGNED_DOCFLOW_NAMESPACE, GUID.generate()), // ????
+						TYPE_SIGN, signProperties); // ????
+
+				nodeService.createAssociation(folderToSignChildAssoc.getChildRef(), contentToSignRef, ASSOC_SIGN_TO_CONTENT);
+
+				signProperties.put(PROP_OWNER, "Абдурахман Ибн Джальхад Хариди");
+				signProperties.put(PROP_OWNER_POSITION, "Главный Жулик");
+				signProperties.put(PROP_OWNER_ORGANIZATION, "Вечерние новости");
+				signProperties.put(PROP_SIGNING_DATE, signingDate);
+				signProperties.put(PROP_SERIAL_NUMBER, "8875");
+				signProperties.put(PROP_VALID_FROM, validFrom);
+				signProperties.put(PROP_VALID_THROUGH, validThrough);
+				signProperties.put(PROP_CA, "Центр средней степени паршивости");
+				signProperties.put(PROP_UPDATE_DATE, new Date());
+				signProperties.put(PROP_IS_VALID, true);
+				signProperties.put(PROP_IS_OUR, false);
+
+				folderToSignChildAssoc = nodeService.createNode(getSignedDocflowFolder(), // ????
+						ContentModel.ASSOC_CONTAINS, // ????
+						QName.createQName(SIGNED_DOCFLOW_NAMESPACE, GUID.generate()), // ????
+						TYPE_SIGN, signProperties); // ????
+
+				nodeService.createAssociation(folderToSignChildAssoc.getChildRef(), contentToSignRef, ASSOC_SIGN_TO_CONTENT);
+
+				return null;
+			}
+		});
 	}
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {

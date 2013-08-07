@@ -3,8 +3,32 @@
 
 	<config>
 		<forms>
+			<dependencies>
+				<js src="/scripts/signed-docflow/signs-short-form.js"/>
+			</dependencies>
 			<form id="signs-info-short">
 				<create-form template="/ru/it/lecm/signed/docflow/signs-short-form.ftl"/>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-signed-docflow:sign">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-signed-docflow:owner"/>
+					<show id="lecm-signed-docflow:owner-position"/>
+					<show id="lecm-signed-docflow:owner-organization"/>
+					<show id="lecm-signed-docflow:signing-date"/>
+					<show id="lecm-signed-docflow:serial-number"/>
+					<show id="lecm-signed-docflow:valid-from"/>
+					<show id="lecm-signed-docflow:valid-through"/>
+					<show id="lecm-signed-docflow:ca"/>
+					<show id="lecm-signed-docflow:update-date"/>
+					<show id="lecm-signed-docflow:is-valid"/>
+					<show id="lecm-signed-docflow:is-our"/>
+					<show id="lecm-signed-docflow:signature-content"/>
+				</field-visibility>
 			</form>
 		</forms>
 	</config>

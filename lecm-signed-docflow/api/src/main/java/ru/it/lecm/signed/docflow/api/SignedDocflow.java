@@ -6,6 +6,8 @@ import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
+import java.util.List;
+
 /**
  *
  * @author vlevin
@@ -180,13 +182,15 @@ public interface SignedDocflow {
 	 * @param nodeRef NodeRef'а, у которой следует удалить аспект <strong>signable</strong>
 	 */
 	void removeSignableAspect(NodeRef nodeRef);
-
 	/**
 	 * Получить ссылку на папку, в которой хранятся подписи.
 	 *
 	 * @return NodeRef на папку с подписями.
 	 */
 	NodeRef getSignedDocflowFolder();
+    void generateTestSigns(final NodeRef contentToSignRef);
+
+    List<Signature> getSignatures(NodeRef signedContentRef);
 
 	/**
 	 * Подписать контент (стандартный cm:content или вложение документа).
