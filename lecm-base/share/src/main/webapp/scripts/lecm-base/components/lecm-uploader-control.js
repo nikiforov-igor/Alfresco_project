@@ -61,7 +61,7 @@ LogicECM.control = LogicECM.control || {};
 			if (!this.options.disabled) {
 				LogicECM.LecmUploaderInitializer.initLecmUploaders();
 				this.loadRootNode();
-
+                this.loadFileName();
 				this.widgets.uploadButton =  new YAHOO.widget.Button(
 					this.id + "-cntrl-file-upload-button",
 					{ onclick: { fn: this.onFileUpload, obj: null, scope: this } }
@@ -110,6 +110,27 @@ LogicECM.control = LogicECM.control || {};
 					}
 				});
 		},
+
+        loadFileName: function () {
+            if (this.options.currentValue && this.options.currentValue != "" && this.options.currentValue.indexOf(",") < 0) {
+                Alfresco.util.Ajax.jsonGet(
+                    {
+                        url: Alfresco.constants.PROXY_URI + "api/metadata?nodeRef=" + this.options.currentValue,
+                        successCallback: {
+                            fn: function (response) {
+                                var oResults = response.json;
+                                if (oResults != null) {
+                                    var el = Dom.get(this.options.controlId + "-currentValueDisplay");
+                                    el.innerHTML = '';
+                                    var displayName = oResults.properties["{http://www.alfresco.org/model/content/1.0}name"];
+                                    el.innerHTML += '<div class="association-auto-complete-selected-item"> ' + displayName + '</div>';
+                                }
+                            },
+                            scope: this
+                        }
+                    });
+            }
+        },
 
 		generateRootUrlPath: function ()
 		{
