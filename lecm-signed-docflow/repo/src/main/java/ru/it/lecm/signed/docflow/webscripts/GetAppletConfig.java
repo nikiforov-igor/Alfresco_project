@@ -25,9 +25,9 @@ import ru.it.lecm.signed.docflow.api.SignedDocflow;
  *
  * @author ikhalikov
  */
-public class getAppletConfig extends DeclarativeWebScript {
+public class GetAppletConfig extends DeclarativeWebScript {
 
-	private final static Logger logger = LoggerFactory.getLogger(getAppletConfig.class);
+	private final static Logger logger = LoggerFactory.getLogger(GetAppletConfig.class);
 	private SignedDocflow signedDocflowService;
 	private OrgstructureBean orgstructureService;
 	private NodeService nodeService;

@@ -244,7 +244,7 @@ var cryptoAppletModule = (function () {
 			onSuccess: {
                         fn: function(response) {
 						var resText = '';
-						if (response.json.isSignatureValid)
+						if (response.json.success)
 							resText = 'Документ успешно подписан';
 						else
 							resText = 'Произошла ошибка при отправке подписи';
