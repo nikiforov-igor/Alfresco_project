@@ -1179,6 +1179,57 @@
 								</nodes>
 							</subFolder>
 							<subFolder>
+								<name>staticRoles</name>
+								<nodes>
+									<node>
+										<type>static-role</type>
+										<name>d9ace2fb-758f-4dc3-8610-06123c87e7f2</name>
+										<nodeRef>workspace://SpacesStore/871a637d-c31c-492d-b5f0-96e214cba333</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>ERRANDS_CURATOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>static-role</type>
+										<name>23e868c4-b71b-429c-8de9-5e9a781599f0</name>
+										<nodeRef>workspace://SpacesStore/5c445939-9442-4c33-a67f-b2d56a52bea9</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>ERRANDS_READER</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+							<subFolder>
 								<name>actions</name>
 								<nodes>
 									<node>
@@ -1289,6 +1340,12 @@
 																<value><![CDATA[var document = stm_document;
 if (document.properties["lecm-errands:number"] == null || document.properties["lecm-errands:number"] == "Не присвоено") {
 	regnumbers.setDocumentNumber("ERRAND_NUMBER", document, "lecm-errands:number");
+}
+
+var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+if (controllerAssoc != null && controllerAssoc.length == 1) {
+   var controller = controllerAssoc[0];
+   lecmPermission.grantDynamicRole(document, controller , "ERRANDS_CONTROLLER", "LECM_BASIC_PG_Reader");
 }
 
 var initiator = null;
@@ -2265,6 +2322,57 @@ if (soExecutors != null) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+							<subFolder>
+								<name>staticRoles</name>
+								<nodes>
+									<node>
+										<type>static-role</type>
+										<name>c7bc011b-c706-4457-8c98-3edce52d029b</name>
+										<nodeRef>workspace://SpacesStore/a5e444b0-27bf-42de-8a43-0ed649abf68b</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>ERRANDS_CURATOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>static-role</type>
+										<name>becdfbd8-e307-4641-90d4-cb7f7bddac63</name>
+										<nodeRef>workspace://SpacesStore/5bfabca3-164c-497d-a8b9-c396f226eec4</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>ERRANDS_READER</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
 										<subFolders/>
 									</node>
 								</nodes>
@@ -3598,6 +3706,57 @@ if (soExecutors != null) {
 								</nodes>
 							</subFolder>
 							<subFolder>
+								<name>staticRoles</name>
+								<nodes>
+									<node>
+										<type>static-role</type>
+										<name>912e0b32-6d3f-4450-a8fc-11a80901714b</name>
+										<nodeRef>workspace://SpacesStore/0b63c0f9-12eb-44f2-a09f-331e2583e4c1</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>ERRANDS_CURATOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>static-role</type>
+										<name>d76a2bf0-2335-4dff-884f-98b69af5c90b</name>
+										<nodeRef>workspace://SpacesStore/8559de72-cb52-43b5-90f0-dc3ac389d4d2</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>ERRANDS_READER</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+							<subFolder>
 								<name>actions</name>
 								<nodes>
 									<node>
@@ -4770,7 +4929,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -4793,7 +4952,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -4839,7 +4998,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -4921,6 +5080,57 @@ if (soExecutors != null) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+							<subFolder>
+								<name>staticRoles</name>
+								<nodes>
+									<node>
+										<type>static-role</type>
+										<name>86da3a8b-2f8a-40b0-b297-7981137f47dc</name>
+										<nodeRef>workspace://SpacesStore/1defc4c1-7168-4f5b-9324-d4466bba5426</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>ERRANDS_CURATOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>static-role</type>
+										<name>3344e085-7510-47c1-ac3c-d144abc83fa8</name>
+										<nodeRef>workspace://SpacesStore/ae9ae583-103f-4a55-84f5-d9c9e1e0bff4</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>ERRANDS_READER</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
 										<subFolders/>
 									</node>
 								</nodes>
@@ -5908,7 +6118,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -5931,7 +6141,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -5954,7 +6164,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Employee]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -5977,7 +6187,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -6059,6 +6269,57 @@ if (soExecutors != null) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+							<subFolder>
+								<name>staticRoles</name>
+								<nodes>
+									<node>
+										<type>static-role</type>
+										<name>d4c2b57d-dc0d-4d13-9e5b-223f5440376c</name>
+										<nodeRef>workspace://SpacesStore/678fb87d-5276-4cd4-af40-5f705dbeec06</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>ERRANDS_CURATOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>static-role</type>
+										<name>a5c9aaf9-ff34-445a-b363-d1e0a0f18d08</name>
+										<nodeRef>workspace://SpacesStore/0ca4cdbc-415d-49f3-9f3b-efe9ba93fb51</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>ERRANDS_READER</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
 										<subFolders/>
 									</node>
 								</nodes>
@@ -6853,7 +7114,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -6876,7 +7137,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -6899,7 +7160,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -6922,7 +7183,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
 											</property>
 										</properties>
 										<aspects>
