@@ -3,7 +3,8 @@
 "success": ${success?string}
     <#if templateRef??>
     ,
-    "templateRef": "${templateRef}"
+    "templateRef": "${templateRef}",
+    "templateName": "${templateName}"
     </#if>
 }
 </#escape>

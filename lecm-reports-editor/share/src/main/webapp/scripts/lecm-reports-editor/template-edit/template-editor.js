@@ -99,6 +99,7 @@
                 if (response) {
                     // обновим форму данными шаблона
                     var generatedTemplate = response.json.templateRef;
+                    var generatedTemplateName = response.json.templateName;
 
                     var added = p_dialog.dialog.form['assoc_lecm-rpeditor_reportTemplateFile_added'];
                     if (added != null) {
@@ -107,6 +108,13 @@
                     var current = p_dialog.dialog.form['assoc_lecm-rpeditor_reportTemplateFile'];
                     if (current != null) {
                         current.value = generatedTemplate;
+                    }
+
+                    var displayFileName = Dom.get(this.id + '-createDetails_assoc_lecm-rpeditor_reportTemplateFile-cntrl-currentValueDisplay');
+                    if (displayFileName != null) {
+                        displayFileName.innerHTML = '<div>' + generatedTemplateName + '</div>';
+
+                        YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
                     }
                 }
                 this.items = p_dialog.form.validations;
