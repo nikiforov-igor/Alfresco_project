@@ -851,26 +851,16 @@ public class BPMNGenerator {
     private void createScriptAction(Element extensions, Element eventElement, ChildAssociationRef action) {
         List<ChildAssociationRef> scripts = nodeService.getChildAssocs(action.getChildRef());
         for (ChildAssociationRef script : scripts) {
-            String on = eventElement.getAttribute("on");
-            String eventType = "create";
-            if (on.equals("start")) {
-                eventType = "create";
-            } else if (on.equals("end")) {
-                eventType = "complete";
-            }
-            Element extension = doc.createElement("activiti:taskListener");
-            extension.setAttribute("event", eventType);
-            extension.setAttribute("class", "org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener");
-            extensions.appendChild(extension);
+            Element attribute;
+            Element actionElement = doc.createElement("lecm:action");
+            actionElement.setAttribute("type", StatemachineEditorModel.ACTION_SCRIPT_ACTION);
+            eventElement.appendChild(actionElement);
 
-            Element activitiField = doc.createElement("activiti:field");
-			activitiField.setAttribute("name", "script");
-            Element activitiString = doc.createElement("activiti:string");
+            Element scriptElement = doc.createElement("script");
             String data = (String) nodeService.getProperty(script.getChildRef(), StatemachineEditorModel.PROP_ACTION_SCRIPT);
             CDATASection cdata = doc.createCDATASection(data);
-            activitiString.appendChild(cdata);
-            activitiField.appendChild(activitiString);
-            extension.appendChild(activitiField);
+            scriptElement.appendChild(cdata);
+            actionElement.appendChild(scriptElement);
         }
     }
 
