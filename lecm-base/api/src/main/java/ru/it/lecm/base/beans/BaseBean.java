@@ -10,7 +10,9 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
+import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.service.transaction.TransactionService;
+import org.alfresco.util.ParameterCheck;
 import org.springframework.beans.factory.InitializingBean;
 import ru.it.lecm.base.ServiceFolder;
 
@@ -19,8 +21,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
-import org.alfresco.service.namespace.RegexQNamePattern;
-import org.alfresco.util.ParameterCheck;
 
 /**
  * User: AIvkin
@@ -29,6 +29,7 @@ import org.alfresco.util.ParameterCheck;
   */
 public abstract class BaseBean implements InitializingBean {
 	public static final String DICTIONARY_NAMESPACE = "http://www.it.ru/lecm/dictionary/1.0";
+	public static final String LINKS_NAMESPACE = "http://www.it.ru/logicECM/links/1.0";
 	public static final QName IS_ACTIVE = QName.createQName(DICTIONARY_NAMESPACE, "active");
 	public static final QName ASPECT_ACTIVE = QName.createQName(DICTIONARY_NAMESPACE, "aspect_active");
 
@@ -42,6 +43,9 @@ public abstract class BaseBean implements InitializingBean {
 	public static final String DOCUMENT_LINK_URL = "/share/page/document";
 	public static final String WORKFLOW_LINK_URL = "/share/page/workflow-details";
 	public static final String DOCUMENT_ATTACHMENT_LINK_URL = "/share/page/document-attachment";
+
+    public static final QName TYPE_BASE_LINK = QName.createQName(LINKS_NAMESPACE , "link");
+    public static final QName PROP_BASE_LINK_URL = QName.createQName(LINKS_NAMESPACE , "url");
 
 	/**
 	 * карта с папками из декларативного описания бина

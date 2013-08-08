@@ -13,6 +13,7 @@ import java.util.List;
 public interface ErrandsService {
 	public static final String ERRANDS_ROOT_NAME = "Сервис Поручения";
 	public static final String ERRANDS_ROOT_ID = "ERRANDS_ROOT_ID";
+    public static final String ERRANDS_LINK_FOLDER_NAME = "Ссылки";
 
 	public static final String ERRANDS_SETTINGS_NODE_NAME = "Settings";
 
@@ -45,6 +46,8 @@ public interface ErrandsService {
 	public static final QName ASSOC_ERRANDS_CONTROLLER = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc");
 	public static final QName ASSOC_ERRANDS_EXECUTOR = QName.createQName(ERRANDS_NAMESPACE_URI, "executor-assoc");
 	public static final QName ASSOC_TEMP_ATTACHMENTS = QName.createQName(ERRANDS_NAMESPACE_URI, "attachments-temp-assoc");
+	public static final QName ASSOC_ERRANDS_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "links-assoc");
+	public static final QName ASSOC_ERRANDS_EXECUTION_LINKS = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-links-assoc");
 
 	public static final String BUSINESS_ROLE_ERRANDS_INITIATOR_ID = "ERRANDS_INITIATOR";
 	public static final String BUSINESS_ROLE_ERRANDS_CHOOSING_INITIATOR = "ERRANDS_CHOOSING_INITIATOR";
@@ -101,6 +104,33 @@ public interface ErrandsService {
      * @return
      */
     List<NodeRef> getFilterDocumentErrands(NodeRef document, String filter, List<QName> roles);
+
+    /**
+     * Возвращает директорию Ссылок для конкретного документа
+     * @param document - ссылка на документ
+     * @return ссылка на ноду
+     */
+    NodeRef getLinksFolderRef(final NodeRef document);
+
+    /**
+     * Возвращает ссылки на внутренние и внешние объекты системы из формы поручения.
+     * @param document - (nodeRef) ссылка на документ
+     * @return список ссылок на ссылки
+     */
+    List<NodeRef> getLinks(NodeRef document);
+
+    /**
+     * Возвращает ссылки на внутренние и внешние объекты системы из формы поручения.
+     * @param document - ссылка на документ
+     * @param skipCount - сколько результатов надо пропустить
+     * @param maxItems - максимальное число результатов
+     * @return список ссылок на ссылки
+     */
+    List<NodeRef> getLinks(NodeRef document, int skipCount, int maxItems);
+
+    List<NodeRef> getLinksByAssociation(NodeRef document, String association);
+
+    NodeRef createLinks(NodeRef document, String name, String url, String description, boolean isExecute);
 
     /**
      * Получить ссылку на документ-основание для поручения

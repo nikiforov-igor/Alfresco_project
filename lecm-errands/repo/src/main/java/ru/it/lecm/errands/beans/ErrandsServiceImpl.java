@@ -1,6 +1,9 @@
 package ru.it.lecm.errands.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.query.PagingRequest;
+import org.alfresco.query.PagingResults;
+import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -9,7 +12,10 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.SearchParameters.SortDefinition;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.FileFilterMode;
+import org.alfresco.util.Pair;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.LecmObjectsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -24,6 +30,8 @@ import java.util.*;
  * Time: 11:43
  */
 public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
+
+
     private static enum ModeChoosingExecutors {
 		ORGANIZATION,
 		UNIT
@@ -33,9 +41,14 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         ACTIVE,
         COMPLETE
     }
+
+    public static final int MAX_ITEMS = 1000;
+
 	private DocumentService documentService;
 	private OrgstructureBean orgstructureService;
     private StateMachineServiceBean stateMachineBean;
+    private LecmObjectsService lecmObjectsService;
+    private NamespaceService namespaceService;
 
 	private final Object lock = new Object();
 
@@ -51,7 +64,15 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         this.stateMachineBean = stateMachineBean;
     }
 
-	@Override
+    public void setLecmObjectsService(LecmObjectsService lecmObjectsService) {
+        this.lecmObjectsService = lecmObjectsService;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
+    @Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(ERRANDS_ROOT_ID);
 	}
@@ -297,6 +318,85 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
             result.add(sortingErrands.get(i));
         }
         return result;
+    }
+
+    @Override
+    public synchronized NodeRef getLinksFolderRef(final NodeRef document) {
+        NodeRef linkFolder = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, ERRANDS_LINK_FOLDER_NAME);
+        if (linkFolder == null) {
+            linkFolder = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+                @Override
+                public NodeRef doWork() throws Exception {
+                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_LINK_FOLDER_NAME);
+                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+                            properties.put(ContentModel.PROP_NAME, ERRANDS_LINK_FOLDER_NAME);
+                            ChildAssociationRef childAssoc = nodeService.createNode(document, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+                            return childAssoc.getChildRef();
+                        }
+                    });
+                }
+            });
+        }
+        return linkFolder;
+    }
+
+    @Override
+    public List<NodeRef> getLinks(NodeRef document) {
+        return getLinks(document, 0, MAX_ITEMS);
+    }
+
+    @Override
+    public List<NodeRef> getLinks(NodeRef document, int skipCount, int maxItems) {
+        List<NodeRef> results = new ArrayList<NodeRef>();
+            List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
+            sortProps.add(new Pair<QName, Boolean>(ContentModel.PROP_MODIFIED, false));
+
+            PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
+            pageRequest.setRequestTotalCountMax(MAX_ITEMS);
+
+            PagingResults<NodeRef> pageOfNodeInfos = null;
+            FileFilterMode.setClient(FileFilterMode.Client.script);
+            try {
+                pageOfNodeInfos = lecmObjectsService.list(getLinksFolderRef(document), TYPE_BASE_LINK, new ArrayList<FilterProp>(), sortProps, pageRequest);
+            } finally {
+                FileFilterMode.clearClient();
+            }
+
+            List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
+            for (NodeRef ref : nodeInfos) {
+                results.add(ref);
+            }
+        return results;
+    }
+
+    @Override
+    public List<NodeRef> getLinksByAssociation(NodeRef document, String association) {
+        QName assoc = QName.createQName(association, namespaceService);
+        return findNodesByAssociationRef(document, assoc, BaseBean.TYPE_BASE_LINK, ASSOCIATION_TYPE.TARGET);
+    }
+
+    public NodeRef createLinks(NodeRef document, String name, String url, String description, boolean isExecute) {
+        NodeRef linkFolder = getLinksFolderRef(document);
+
+        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
+        Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+
+        properties.put(ContentModel.PROP_NAME, name);
+        properties.put(ContentModel.PROP_DESCRIPTION, description);
+        properties.put(BaseBean.PROP_BASE_LINK_URL, url);
+
+        ChildAssociationRef childAssoc = nodeService.createNode(linkFolder, ContentModel.ASSOC_CONTAINS, assocQName, BaseBean.TYPE_BASE_LINK, properties);
+        if (isExecute) {
+            nodeService.createAssociation(document, childAssoc.getChildRef(), ASSOC_ERRANDS_EXECUTION_LINKS);
+        } else {
+            nodeService.createAssociation(document, childAssoc.getChildRef(), ASSOC_ERRANDS_LINKS);
+        }
+
+        return childAssoc.getChildRef();
     }
 
     public NodeRef getAdditionalDocumentNode(NodeRef errand) {

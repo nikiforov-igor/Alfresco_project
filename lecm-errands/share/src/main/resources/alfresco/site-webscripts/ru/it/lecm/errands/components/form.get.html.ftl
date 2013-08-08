@@ -14,6 +14,14 @@
             Event = YAHOO.util.Event;
 
         function init() {
+
+            var links = new LogicECM.module.Errands.Links("${id}").setOptions(
+                    {
+                        destination: "${nodeRef}",
+                        totalLinks: ${links.links?size},
+                        totalExecuteLinks:${executeLinks.links?size}
+                    }).setMessages(${messages});
+
             <#-- "time ago"  - start -->
             var date = "${props["cm:created"]["iso8601"]}";
 
@@ -57,7 +65,7 @@
                         },
                         successCallback: {
                             fn: function (response) {
-                                var container = Dom.get('${id}-dnd');
+                                var container = Dom.get(this.id + '-dnd');
                                 if (container != null) {
                                     container.innerHTML = response.serverResponse.responseText;
 
@@ -170,22 +178,21 @@
         </div>
         <div id="${id}-links" class="data-list-block">
             <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ССЫЛКИ! (вложения временно) -->
-            <#assign links = attachments![]/>
-            <span class="heading">Ссылки<span class="count"> (${(links![])?size})</span></span>
+            <span class="heading">Ссылки<span class="count" id="${id}-links-count"> (${links.links?size})</span></span>
             <span id="${id}-links-add" class="yui-button yui-push-button">
                 <span class="first-child">
                     <button type="button">Добавить ссылку</button>
                 </span>
             </span>
-            <ul class="data-list">
-                <#if links?? && links?size gt 0>
-                    <#list links as link>
+            <ul class="data-list" id="${id}-links-list">
+                <#if links.links?? && (links.links?size > 0)>
+                    <#list links.links as link>
                         <li title="${link.name!""}">
                             <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
                             <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                 ${link.name!""}
                             </a>
-                            <span class="descr">Описание какое-то, пока одно для всех</span>
+                            <#--<span class="descr">Описание какое-то, пока одно для всех</span>-->
                         </li>
                     </#list>
                 </#if>
@@ -236,22 +243,21 @@
             </div>
             <div id="${id}-exec-links" class="data-list-block">
                 <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ССЫЛКИ! (вложения временно) -->
-                <#assign links = attachments![]/>
-                <span class="heading">Ссылки<span class="count"> (${(links![])?size})</span></span>
+                <span class="heading">Ссылки<span class="count" id="${id}-execute-links-count"> (${(executeLinks.links)?size})</span></span>
                 <span id="${id}-exec-links-add" class="yui-button yui-push-button">
                     <span class="first-child">
                         <button type="button">Добавить ссылку</button>
                     </span>
                 </span>
-                <ul class="data-list">
-                    <#if links?? && links?size gt 0>
-                        <#list links as link>
+                <ul class="data-list" id="${id}-execute-links-list">
+                    <#if executeLinks.links?? && (executeLinks.links?size > 0)>
+                        <#list executeLinks.links as link>
                             <li title="${link.name!""}">
                                 <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
                                 <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                     ${link.name!""}
                                 </a>
-                                <span class="descr">Описание какое-то, пока одно для всех</span>
+                                <#--<span class="descr">Описание какое-то, пока одно для всех</span>-->
                             </li>
                         </#list>
                     </#if>

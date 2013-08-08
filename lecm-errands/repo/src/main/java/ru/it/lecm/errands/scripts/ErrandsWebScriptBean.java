@@ -5,10 +5,10 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
-import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentFilter;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -281,5 +281,30 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
         return null;
     }
+
+
+    public ScriptNode getLinkFolder(String documentRef){
+        ParameterCheck.mandatory("documentRef", documentRef);
+        return new ScriptNode(errandsService.getLinksFolderRef(new NodeRef(documentRef)), serviceRegistry, getScope());
+    }
+
+    public Scriptable getLinks(String documentRef) {
+        ParameterCheck.mandatory("documentRef", documentRef);
+        NodeRef document = new NodeRef(documentRef);
+        List<NodeRef> links = errandsService.getLinks(document);
+        return createScriptable(links);
+    }
+
+    public Scriptable getLinksByAssociation(String documentRef, String association) {
+        ParameterCheck.mandatory("documentRef", documentRef);
+        NodeRef document = new NodeRef(documentRef);
+        List<NodeRef> links = errandsService.getLinksByAssociation(document, association);
+        return createScriptable(links);
+    }
+
+    public NodeRef createLinks(String nodeRef, String name, String url, String description, boolean isExecute){
+        return errandsService.createLinks(new NodeRef(nodeRef), name, url, description, isExecute);
+    }
+
 
 }

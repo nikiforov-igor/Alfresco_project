@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Create links</shortname>
+    <description>Create links</description>
+    <url>/lecm/errands/api/createLinks</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

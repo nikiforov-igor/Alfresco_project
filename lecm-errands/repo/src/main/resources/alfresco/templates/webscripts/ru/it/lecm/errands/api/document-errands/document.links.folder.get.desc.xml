@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Get Folder Links</shortname>
+    <description>Get NodeRef Folder Links</description>
+    <url>/lecm/errands/api/getFolderLinks</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>

@@ -633,12 +633,20 @@
         </forms>
     </config>
 
-
-
-
-
-
-
+    <config evaluator="model-type" condition="lecm-links:link">
+        <forms>
+            <form>
+                <field-visibility>
+                    <!-- Название ссылки -->
+                    <show id="cm:name"/>
+                    <!-- Описание -->
+                    <show id="cm:description"/>
+                    <!-- Ссылка -->
+                    <show id="lecm-links:url"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 
 
     <config evaluator="string-compare" condition="activiti$errandsRequestDueDateChange">
