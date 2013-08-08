@@ -302,8 +302,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return createScriptable(links);
     }
 
-    public NodeRef createLinks(String nodeRef, String name, String url, String description, boolean isExecute){
-        return errandsService.createLinks(new NodeRef(nodeRef), name, url, description, isExecute);
+    public NodeRef createLinks(String nodeRef, String name, String url, boolean isExecute){
+        return errandsService.createLinks(new NodeRef(nodeRef), name, url, isExecute);
     }
 
 

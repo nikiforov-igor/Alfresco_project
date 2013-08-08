@@ -94,6 +94,15 @@ public interface ErrandsService {
 	 */
 	public NodeRef getDefaultSubject();
 
+    /**
+     * Поиск подписок находит все подписки в активном статусе. Игнорируются подписки в статусе черновик и в финальном
+     * статусе. Осуществлена сортировка в следующем порядке Важные, Просроченные, С приближающимся сроком, Остальные.
+     * Данный метод применяется в Дашлете "Мои поручения"
+     * @param paths пути поиска
+     * @param skipCount - сколько результатов надо пропустить
+     * @param maxItems - максимальное число результатов
+     * @return
+     */
     public List<NodeRef> getErrandsDocuments(List<String> paths, int skipCount, int maxItems);
 
     /**
@@ -128,9 +137,24 @@ public interface ErrandsService {
      */
     List<NodeRef> getLinks(NodeRef document, int skipCount, int maxItems);
 
+    /**
+     * Возвращает ссылки на внутренние и внешние объекты системы из формы поручения.
+     * @param document - ссылка на документ
+     * @param association - ассоциация, например: "lecm-errands:links-assoc", "lecm-errands:execution-links-assoc"
+     * @return список ссылок на ссылки
+     */
     List<NodeRef> getLinksByAssociation(NodeRef document, String association);
 
-    NodeRef createLinks(NodeRef document, String name, String url, String description, boolean isExecute);
+    /**
+     * Создание ссылки lecm-links:link
+     * @param document ссылка на документ
+     * @param name - название ссылки
+     * @param url - ссылка например: http://www.test
+     * @param isExecute - true создание "lecm-errands:links-assoc" ассоциации
+     *                    false создание "lecm-errands:execution-links-assoc" оссоциации
+     * @return ссылка
+     */
+    NodeRef createLinks(NodeRef document, String name, String url, boolean isExecute);
 
     /**
      * Получить ссылку на документ-основание для поручения

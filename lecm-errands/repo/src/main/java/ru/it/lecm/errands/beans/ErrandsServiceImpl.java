@@ -393,14 +393,13 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     }
 
-    public NodeRef createLinks(NodeRef document, String name, String url, String description, boolean isExecute) {
+    public NodeRef createLinks(NodeRef document, String name, String url, boolean isExecute) {
         NodeRef linkFolder = getLinksFolderRef(document);
 
         QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 
         properties.put(ContentModel.PROP_NAME, name);
-        properties.put(ContentModel.PROP_DESCRIPTION, description);
         properties.put(BaseBean.PROP_BASE_LINK_URL, url);
 
         ChildAssociationRef childAssoc = nodeService.createNode(linkFolder, ContentModel.ASSOC_CONTAINS, assocQName, BaseBean.TYPE_BASE_LINK, properties);
