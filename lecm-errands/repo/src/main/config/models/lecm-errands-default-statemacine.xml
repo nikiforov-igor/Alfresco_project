@@ -76,7 +76,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -106,7 +106,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -264,17 +264,17 @@
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только                                                                                    Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -329,17 +329,17 @@
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -462,7 +462,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -477,7 +477,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -552,7 +552,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -597,7 +597,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -627,7 +627,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -657,7 +657,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -1138,7 +1138,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -1168,7 +1168,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -1474,7 +1474,41 @@ if (soExecutors != null) {
 															</association>
 														</associations>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>b21dd483-6cb4-4c05-bdf4-848d0f6ed89b
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/380b2102-3f87-43a3-905a-99e6430a6309
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Данное действие доступно только исполнителю]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 													<node>
 														<type>transitionWorkflow</type>
@@ -1530,7 +1564,7 @@ if (soExecutors != null) {
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -1600,77 +1634,12 @@ if (soExecutors != null) {
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
 																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-													<node>
-														<type>userTransition</type>
-														<name>6ad2af6c-05cd-4225-8643-a601fe872276</name>
-														<nodeRef>
-															workspace://SpacesStore/c6c5ea87-8d27-4e67-9104-d02711776397
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Направить поручение]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/ba2bf2d3-bdb2-48a8-a26e-df8e027f300f
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>a1a06430-d6d5-426d-a0e4-7a6aa6ff8412
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/79f037c9-6386-401a-9e6f-b3d2e3abca69
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -1779,7 +1748,7 @@ if (soExecutors != null) {
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -1984,7 +1953,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -1999,7 +1968,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -2074,7 +2043,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -2089,7 +2058,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -2119,7 +2088,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -2149,7 +2118,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -2179,7 +2148,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -2314,7 +2283,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -2596,7 +2565,7 @@ if (soExecutors != null) {
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2666,7 +2635,7 @@ if (soExecutors != null) {
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2730,7 +2699,41 @@ if (soExecutors != null) {
 														</aspects>
 														<associations/>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>10181e5a-a20e-491e-a3e8-d23834e8543c
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/7eab0b62-3b02-409d-baaf-0a30aba5e31f
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Данное действие доступно только Исполнителю]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 													<node>
 														<type>UserWorkflowEntity</type>
@@ -2774,7 +2777,7 @@ if (soExecutors != null) {
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2826,17 +2829,17 @@ if (soExecutors != null) {
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2920,7 +2923,7 @@ if (soExecutors != null) {
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2974,16 +2977,16 @@ if (soExecutors != null) {
 																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
-																					<![CDATA[Данное действие доступно только                                                                                    Инициатору и Контролеру]]></value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR") OR user.currentUser().hasBusinessRole("ERRANDS_CONTROLLER")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -3035,7 +3038,7 @@ if (soExecutors != null) {
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -3436,7 +3439,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -3466,7 +3469,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -3496,7 +3499,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -3736,7 +3739,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -4003,7 +4006,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -4073,7 +4076,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -4187,7 +4190,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -4226,7 +4229,41 @@ execution.setVariable("requestCancelResult", "");]]></value>
 														</aspects>
 														<associations/>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>12f63583-80e5-418f-8309-ece27e6de067
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/c41f30e6-9841-4b53-b190-9994a7be1e92
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Данное действие доступно только Исполнителю]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 													<node>
 														<type>UserWorkflowEntity</type>
@@ -4270,7 +4307,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -4322,17 +4359,17 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -4381,16 +4418,16 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
-																					<![CDATA[Данное действие доступно только                                                                                    Инициатору и Контролеру]]></value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR") OR user.currentUser().hasBusinessRole("ERRANDS_CONTROLLER")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -4442,7 +4479,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -4843,7 +4880,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -4873,7 +4910,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -4903,7 +4940,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -5143,7 +5180,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -5410,7 +5447,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -5480,7 +5517,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -5551,7 +5588,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -5631,16 +5668,16 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
-																					<![CDATA[Это действие доступно только исполнителю поручения]]></value>
+																					<![CDATA[Данное действие доступно только Контролёру]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5687,17 +5724,17 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5750,7 +5787,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6032,7 +6069,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -6599,82 +6636,12 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
 																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-													<node>
-														<type>transitionWorkflow</type>
-														<name>65ad1c18-d461-4994-8f8d-a547d709ccee</name>
-														<nodeRef>
-															workspace://SpacesStore/3c450835-d21e-4a28-913a-0c3853ae7f6f
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[true]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Отменить поручение]]></value>
-															</property>
-															<property>
-																<name>workflowId</name>
-																<value><![CDATA[activiti$errandsCancel]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<workflowAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/55b82e9f-2002-4849-8ffc-35a425d404f3
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>39990658-1853-45ad-b817-68cacf7548db
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/ec07001b-6eed-4514-aaf2-21711313589b
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -6740,7 +6707,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6817,17 +6784,17 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -6876,16 +6843,16 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
-																					<![CDATA[Данное действие доступно только                                                                                    Инициатору и Контролеру]]></value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR") OR user.currentUser().hasBusinessRole("ERRANDS_CONTROLLER")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -7034,7 +7001,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
