@@ -271,8 +271,6 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     @Override
     public List<NodeRef> getFilterDocumentErrands(NodeRef document, String filter, List<QName> roles) {
-        List<String> statuses = new ArrayList<String>();
-
         if (filter != null && !filter.equals("")) {
             switch (FilterEnum.valueOf(filter.toUpperCase())){
                 case ALL: {
@@ -296,22 +294,25 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
         List<NodeRef> result = new ArrayList<NodeRef>();
-        List<String> status = new ArrayList<String>();
+        List<String> status = stateMachineBean.getStatuses("lecm-errands:document");
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         // сортируем по важности поручения и по сроку исполнения
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + PROP_ERRANDS_IS_IMPORTANT.toString(),false));
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + PROP_ERRANDS_LIMITATION_DATE.toString(),false));
 
-       status.add("Ожидает исполнения");
-       status.add("В работе");
-       status.add("На доработке");
-
         for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
-            if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))){
+            if (stateMachineBean.isDraft(nodeRef)) {
+                continue;
+            }
+            if (stateMachineBean.isFinal(nodeRef)) {
+                continue;
+            }
+            if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
                 sortingErrands.add(nodeRef);
             }
         }
+
         int endIndex = (skipCount + maxItems) < sortingErrands.size() ? (skipCount + maxItems) : sortingErrands.size();
 
         for (int i = skipCount; i < endIndex; i++) {
@@ -376,7 +377,20 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     @Override
     public List<NodeRef> getLinksByAssociation(NodeRef document, String association) {
         QName assoc = QName.createQName(association, namespaceService);
-        return findNodesByAssociationRef(document, assoc, BaseBean.TYPE_BASE_LINK, ASSOCIATION_TYPE.TARGET);
+
+        List<NodeRef> result = findNodesByAssociationRef(document, assoc, BaseBean.TYPE_BASE_LINK, ASSOCIATION_TYPE.TARGET);
+
+        Collections.sort(result, new Comparator<NodeRef>() {
+            @Override
+            public int compare(NodeRef o1, NodeRef o2) {
+                String name1 = nodeService.getProperty(o1, ContentModel.PROP_SYS_NAME).toString();
+                String name2 = nodeService.getProperty(o2, ContentModel.PROP_SYS_NAME).toString();
+                return name1.compareTo(name2);
+            }
+        });
+
+        return result;
+
     }
 
     public NodeRef createLinks(NodeRef document, String name, String url, String description, boolean isExecute) {
