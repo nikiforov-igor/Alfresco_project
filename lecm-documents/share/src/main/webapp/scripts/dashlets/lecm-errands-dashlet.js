@@ -34,13 +34,13 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                     Dom.addClass(p_dialog.id + "-form", "errands-form-edit");
                 };
 
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
+                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&maxLimit={maxLimit}",
                     {
                         itemKind: "type",
                         itemId: itemType,
                         destination: destination,
                         mode: "create",
-                        formId: "additional-document",
+                        formId: "created-on-base",
                         submitType: "json"
                     });
 

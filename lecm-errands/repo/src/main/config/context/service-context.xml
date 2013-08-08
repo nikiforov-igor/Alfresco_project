@@ -146,6 +146,7 @@
         <property name="documentConnectionService" ref="documentConnectionService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="documentService" ref="documentService"/>
+        <property name="documentMembersService" ref="documentMembersService" />
     </bean>
 
     <bean id="errands.defaultStatemachine" parent="defaultStatemachines">

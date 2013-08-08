@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 
@@ -28,6 +29,7 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
     private DictionaryBean dictionaryService;
     private NodeService nodeService;
     private DocumentService documentService;
+    private DocumentMembersService documentMembersService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -75,6 +77,12 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
         NodeRef baseDoc = associationRef.getTargetRef();
         NodeRef errandDoc = associationRef.getSourceRef();
 
+        QName type = nodeService.getType(baseDoc);
+        if (type.equals(ErrandsService.TYPE_ERRANDS)){
+            NodeRef initiatorRef = nodeService.getTargetAssocs(baseDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
+            documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, "LECM_BASIC_PG_Reader");
+        }
+
         QName[] regNums = documentService.getRegNumbersProperties(nodeService.getType(baseDoc));
         if (regNums != null && regNums.length > 0) {
             String regNumberValue = "";
@@ -86,5 +94,9 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
             }
             nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, regNumberValue);
         }
+    }
+
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
     }
 }

@@ -365,7 +365,7 @@
                     </field>
                 </appearance>
             </form>
-            <form id="additional-document">
+            <form id="created-on-base">
                 <field-visibility>
                     <!-- Исполнитель -->
                     <show id="lecm-errands:executor-assoc"/>
@@ -424,7 +424,11 @@
                     <field id="lecm-errands:content" set="main">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="main"/>
+                    <field id="lecm-errands:limitation-date" set="main">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="maxLimitArg">maxLimit</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-errands:attachments-temp-assoc" set="main">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">{userhome}</control-param>
