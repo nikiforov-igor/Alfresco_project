@@ -1,4 +1,5 @@
 <#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
+<#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
 <#include "/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-container.ftl">
 
 <#assign id = args.htmlid?js_string>
@@ -126,9 +127,14 @@
             &nbsp;
             сотруднику <a href="javascript:void(0);" onclick="viewAttributes('${props["lecm-errands:executor-assoc-ref"]}', null, 'logicecm.employee.view')">${props["lecm-errands:executor-assoc-text-content"]}</a>
             <br/>
-            На основании документа <a href="javascript:void(0);">todo:документ-основание</a>
+            <#if additionalDoc?? && additionalDoc.name??>
+                На основании документа <a href="${siteURL("document?nodeRef=" + additionalDoc.nodeRef)}">${additionalDoc.name}</a>
+            </#if>
         </div>
-        <div class="errand-content">${props["lecm-errands:content"]}</div>
+        <#assign content = props["lecm-errands:content"]/>
+        <#if content?? && content != "">
+            <div class="errand-content">${content}</div>
+        </#if>
         <div class="times">
             <#assign viewFormat>${msg("form.control.date-picker.view.date.format")}</#assign>
 

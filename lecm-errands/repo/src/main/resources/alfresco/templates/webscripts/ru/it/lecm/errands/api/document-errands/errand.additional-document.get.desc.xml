@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get additional document for the errand</shortname>
+    <description>Errand additional document</description>
+    <url>/lecm/errands/api/getAdditionalDoc?nodeRef={nodeRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

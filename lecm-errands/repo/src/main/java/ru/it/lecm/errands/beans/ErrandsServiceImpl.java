@@ -298,4 +298,9 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         }
         return result;
     }
+
+    public NodeRef getAdditionalDocumentNode(NodeRef errand) {
+        return findNodeByAssociationRef(errand, ASSOC_ADDITIONAL_ERRANDS_DOCUMENT, null, BaseBean.ASSOCIATION_TYPE.TARGET);
+    }
+
 }

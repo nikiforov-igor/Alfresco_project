@@ -101,4 +101,11 @@ public interface ErrandsService {
      * @return
      */
     List<NodeRef> getFilterDocumentErrands(NodeRef document, String filter, List<QName> roles);
+
+    /**
+     * Получить ссылку на документ-основание для поручения
+     * @param errand Ссылка на поручение
+     * @return Ссылка на документ-основание
+     */
+    public NodeRef getAdditionalDocumentNode(NodeRef errand);
 }

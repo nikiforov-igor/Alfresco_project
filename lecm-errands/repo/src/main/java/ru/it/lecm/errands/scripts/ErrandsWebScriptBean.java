@@ -8,6 +8,7 @@ import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
+import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentFilter;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -268,4 +269,17 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         }
         return builder.toString();
     }
+
+    public ScriptNode getAdditionalDocument(String errandNodeRef) {
+        ParameterCheck.mandatory("errandNodeRef", errandNodeRef);
+        NodeRef errandRef = new NodeRef(errandNodeRef);
+        NodeRef additionalDocRef = errandsService.getAdditionalDocumentNode(errandRef);
+
+        if (additionalDocRef != null) {
+            return new ScriptNode(additionalDocRef, serviceRegistry, getScope());
+        }
+
+        return null;
+    }
+
 }
