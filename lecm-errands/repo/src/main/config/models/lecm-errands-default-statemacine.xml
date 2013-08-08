@@ -1923,7 +1923,35 @@ if (soExecutors != null) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>180f248b-9a55-4c73-b64a-dd86b7a6fcbc</name>
+														<nodeRef>
+															workspace://SpacesStore/34792b40-f5b0-4676-9513-b24b7d5b685a
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>
+																	<![CDATA[execution.setVariable("requestCancelResult", "");]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Очистка переменных]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>
@@ -3302,7 +3330,35 @@ if (soExecutors != null) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>68fdbaf3-aea0-49ad-bfd0-80fe878dc415</name>
+														<nodeRef>
+															workspace://SpacesStore/26062899-d5ad-49b0-9272-df3bb587d77b
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[execution.setVariable("executeResult", "");
+execution.setVariable("requestCancelResult", "");]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Очистка переменных]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>
@@ -4681,7 +4737,35 @@ if (soExecutors != null) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>395842e0-01d0-41f9-9b8a-1a3430bd332d</name>
+														<nodeRef>
+															workspace://SpacesStore/8e15ea6f-8c51-4743-b406-c07cd9fb8b6a
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[execution.setVariable("executeResult", "");
+execution.setVariable("requestCancelResult", "");]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Очистка переменных]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>
@@ -4952,7 +5036,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Employee]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -5273,99 +5357,6 @@ if (soExecutors != null) {
 												<name>transitions</name>
 												<nodes>
 													<node>
-														<type>userTransition</type>
-														<name>a51c2e6e-3559-4520-97c9-a586124205a2</name>
-														<nodeRef>
-															workspace://SpacesStore/bd61ac2f-f669-4711-9241-bf16c02cfe46
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Утвердить]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/aebbb52c-6259-4ec2-9fcb-09e9fdd772df
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>6b687c39-69fb-4c9b-bdc3-cec94787c53b
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/acfaa24e-98b4-4576-bc57-a728b196356a
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Контролёру]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_CONTROLLER")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>a74f998c-a7c6-4af5-833c-5a5a91e78c87
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/a444c57b-22db-49ec-8b38-46a0079e45f7
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value>
-																					<![CDATA[Произошла ошибка при проверке]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.attr("lecm-errands:without-initiator-approval")
-                                                                                    == false]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-													<node>
 														<type>transitionWorkflow</type>
 														<name>7ae37d3c-a8a5-40cd-a8cf-f454c6e46db4</name>
 														<nodeRef>
@@ -5507,99 +5498,6 @@ if (soExecutors != null) {
 														</subFolders>
 													</node>
 													<node>
-														<type>userTransition</type>
-														<name>6481b990-6057-4fff-9f82-ea4165f2428c</name>
-														<nodeRef>
-															workspace://SpacesStore/aa8c9560-3658-4346-87cf-969eed3d6743
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Утвердить]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/b7892903-4ebc-4eae-b0a7-245517111736
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>0a823c21-75e5-4ab5-baf4-c526b3296292
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/c8cbfbe9-12ab-4248-9ebe-a821da5e641e
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Контролёру]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_CONTROLLER")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>b7328e65-1256-4ac8-a63c-055c64679d9e
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/4054b284-6d73-47d8-b4da-fd406a881467
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value>
-																					<![CDATA[Произошла ошибка при проверке]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.attr("lecm-errands:without-initiator-approval")
-                                                                                    == true]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-													<node>
 														<type>transitionWorkflow</type>
 														<name>ffc88d10-0514-4053-8bcc-65f337ea673a</name>
 														<nodeRef>
@@ -5648,8 +5546,8 @@ if (soExecutors != null) {
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Контролёру]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Контролёру]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -5658,7 +5556,7 @@ if (soExecutors != null) {
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_CONTROLLER")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5811,6 +5709,96 @@ if (soExecutors != null) {
 															</subFolder>
 														</subFolders>
 													</node>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>9ec6c1b1-052a-4b87-873b-56858a04b688</name>
+														<nodeRef>
+															workspace://SpacesStore/37c8636a-79a8-40e8-a2d2-afeaf3eba361
+														</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value>
+																	<![CDATA[activiti$errandsControllerApprove]]></value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value><![CDATA[Утвердить]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>491ad39d-236f-4986-9b99-b93194228f02
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/c9bbe263-85cb-429a-933c-9a3da9b9a39f
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Данное действие доступно только Контролёру]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>outputVariable</type>
+																		<name>2d71605d-b0e1-4c69-9e63-97b235c0e81a
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/43c1dac7-6bf9-45d9-bcfb-06bf43eb3aeb
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>outputFromType</name>
+																				<value><![CDATA[VARIABLE]]></value>
+																			</property>
+																			<property>
+																				<name>outputToValue</name>
+																				<value>
+																					<![CDATA[controllerApproveResult]]></value>
+																			</property>
+																			<property>
+																				<name>outputToType</name>
+																				<value><![CDATA[VARIABLE]]></value>
+																			</property>
+																			<property>
+																				<name>outputFromValue</name>
+																				<value>
+																					<![CDATA[controllerApproveResult]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
+													</node>
 												</nodes>
 											</subFolder>
 										</subFolders>
@@ -5851,7 +5839,75 @@ if (soExecutors != null) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>transition</type>
+														<name>96107f03-b3e1-4b18-935a-c1cecfaa1855</name>
+														<nodeRef>
+															workspace://SpacesStore/4c167a53-7bbe-4f5f-b7e3-7058412a0956
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[state("controllerApproveResult") == "executed"]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/b7892903-4ebc-4eae-b0a7-245517111736
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>a254d973-6d88-4621-b88c-b8358d3f6295</name>
+														<nodeRef>
+															workspace://SpacesStore/c33d1be3-4b8e-452e-80e8-8776fde9ca02
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[state("controllerApproveResult") == "approveInitiator"]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/aebbb52c-6259-4ec2-9fcb-09e9fdd772df
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>ScriptAction</type>
@@ -5870,7 +5926,35 @@ if (soExecutors != null) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>82609393-6cf5-42a7-b8a7-45031eec63ce</name>
+														<nodeRef>
+															workspace://SpacesStore/2bf2ffa1-7ef9-4613-9aaa-622638b0c6d5
+														</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>
+																	<![CDATA[execution.setVariable("controllerApproveResult", "");]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Очистка переменных]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>
@@ -6462,71 +6546,6 @@ if (soExecutors != null) {
 												<name>transitions</name>
 												<nodes>
 													<node>
-														<type>userTransition</type>
-														<name>7caaf809-761d-4d51-bda4-a361877b3a71</name>
-														<nodeRef>
-															workspace://SpacesStore/351c1f99-c507-4354-aea1-6efa48670574
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Подтвердить исполнение]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/b7892903-4ebc-4eae-b0a7-245517111736
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>9ec039a7-1195-4cb9-89ec-e91f3773634b
-																		</name>
-																		<nodeRef>
-																			workspace://SpacesStore/86029792-864d-44a4-b0e6-65c2ad85d375
-																		</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-													<node>
 														<type>transitionWorkflow</type>
 														<name>49b87237-84d2-45d8-96e9-8d4b4785bd43</name>
 														<nodeRef>
@@ -6575,8 +6594,8 @@ if (soExecutors != null) {
 																		<properties>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Данное действие доступно только
-                                                                                    Инициатору]]></value>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -6585,7 +6604,7 @@ if (soExecutors != null) {
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -6656,6 +6675,77 @@ if (soExecutors != null) {
 																				<name>condition</name>
 																				<value>
 																					<![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
+													</node>
+													<node>
+														<type>transitionWorkflow</type>
+														<name>ad451453-ee06-4e90-b177-4727a6ebb018</name>
+														<nodeRef>
+															workspace://SpacesStore/40535742-6a3a-4876-956c-c8dd0570ecca
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Подтвердить исполнение]]></value>
+															</property>
+															<property>
+																<name>workflowId</name>
+																<value>
+																	<![CDATA[activiti$errandsInitiatorApprove]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+															<workflowAspect/>
+															<transitionLabelAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/b7892903-4ebc-4eae-b0a7-245517111736
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>83da66a3-2e88-420e-b8fc-6ed962cc8695
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/ef10201a-b76b-4847-895c-b1d6580a1e9e
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Данное действие доступно только Инициатору]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>

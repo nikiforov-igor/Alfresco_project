@@ -2,27 +2,27 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:activiti="http://activiti.org/bpmn"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
-             targetNamespace="http://www.it.ru/logicECM/errands/workflow/initiatorDecline/1.0">
-    <process id="errandsInitiatorDecline" name="Инициатор: Отправить на доработку">
-        <startEvent id="startInitiatorDecline" name="Start" activiti:formKey="lecmErrandWf:initiatorDecline"></startEvent>
-        <endEvent id="endInitiatorDecline" name="End"></endEvent>
-        <scriptTask id="initiatorDecline" name="Initiator Decline" scriptFormat="javascript">
+             targetNamespace="http://www.it.ru/logicECM/errands/workflow/initiatorApprove/1.0">
+    <process id="errandsInitiatorApprove" name="Иниуиатор: Подтвердить исполнение">
+        <startEvent id="startInitiatorApprove" name="Start" activiti:formKey="lecmErrandWf:initiatorApprove"></startEvent>
+        <endEvent id="endInitiatorApprove" name="End"></endEvent>
+        <scriptTask id="initiatorApprove" name="Initiator Approve" scriptFormat="javascript">
             <extensionElements>
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string>
 	                        var document = bpm_package.children[0];
 	                        if (document != null) {
-	                            var recipients = [];
+		                        var recipients = [];
 		                        var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
 		                        if (controllerAssoc != null &amp;&amp; controllerAssoc.length == 1) {
-	                                recipients.push(controllerAssoc[0]);
+		                            recipients.push(controllerAssoc[0]);
 		                        }
 
 		                        var executor = null;
 		                        var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
 		                        if (executorAssoc != null &amp;&amp; executorAssoc.length == 1) {
-	                                recipients.push(executorAssoc[0]);
+		                            recipients.push(executorAssoc[0]);
 		                        }
 
 		                        var initiator = null;
@@ -32,16 +32,10 @@
 		                        }
 
 		                        var notificationText = documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
-		                        notificationText += documentScript.wrapperTitle(" отклонил ", lecmErrandWf_initiatorDeclineReason);;
-		                        notificationText += "исполнение поручения: ";
+		                        notificationText += " принял исполнение поручения:  ";
 		                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
 		                        notificationText += " № {lecm-errands:number}";
 		                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
-
-		                        var logText = "#initiator ";
-		                        logText += documentScript.wrapperTitle("отклонил", lecmErrandWf_initiatorDeclineReason);
-		                        logText += " исполнение поручения: #mainobject.";
-		                        businessJournal.log(document.nodeRef.toString(), "ERRAND_DECLINE", logText, []);
 	                        }
                         </activiti:string>
                     </activiti:field>
@@ -50,8 +44,8 @@
             <script></script>
         </scriptTask>
         <receiveTask id="errandReceiveTask" name="Receive Task"></receiveTask>
-        <sequenceFlow id="flow1" name="" sourceRef="startInitiatorDecline" targetRef="initiatorDecline"></sequenceFlow>
-        <sequenceFlow id="flow2" name="" sourceRef="initiatorDecline" targetRef="errandReceiveTask"></sequenceFlow>
-        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endInitiatorDecline"></sequenceFlow>
+        <sequenceFlow id="flow1" name="" sourceRef="startInitiatorApprove" targetRef="initiatorApprove"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="initiatorApprove" targetRef="errandReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="errandReceiveTask" targetRef="endInitiatorApprove"></sequenceFlow>
     </process>
 </definitions>

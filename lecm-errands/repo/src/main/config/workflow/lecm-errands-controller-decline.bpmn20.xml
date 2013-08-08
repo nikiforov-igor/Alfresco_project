@@ -3,7 +3,7 @@
              xmlns:activiti="http://activiti.org/bpmn"
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/controllerDecline/1.0">
-    <process id="errandsControllerDecline" name="Отправить на доработку">
+    <process id="errandsControllerDecline" name="Контролер: Отправить на доработку">
         <startEvent id="startControllerDecline" name="Start" activiti:formKey="lecmErrandWf:controllerDecline"></startEvent>
         <endEvent id="endControllerDecline" name="End"></endEvent>
         <scriptTask id="controllerDecline" name="Controller Decline" scriptFormat="javascript">
@@ -11,6 +11,32 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string>
+	                        var document = bpm_package.children[0];
+	                        if (document != null) {
+		                        var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+		                        if (executorAssoc != null &amp;&amp; executorAssoc.length == 1) {
+		                            var executor = executorAssoc[0];
+
+			                        var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+			                        if (controllerAssoc != null &amp;&amp; controllerAssoc.length == 1) {
+	                                    var controller = controllerAssoc[0];
+
+				                        var recipients = [];
+				                        recipients.push(executor);
+				                        var notificationText = documentScript.wrapperLink(controller, "{lecm-errands:controller-assoc/lecm-orgstr:employee-short-name}");
+				                        notificationText += documentScript.wrapperTitle(" отменил ", lecmErrandWf_controllerDeclineReason);;
+				                        notificationText += "исполнение вам поручения: ";
+				                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+				                        notificationText += " № {lecm-errands:number}";
+				                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+
+				                        var logText = "#initiator ";
+				                        logText += documentScript.wrapperTitle("отклонил", lecmErrandWf_controllerDeclineReason);
+				                        logText += " выполнение поручения: #mainobject.";
+				                        businessJournal.log(document.nodeRef.toString(), "ERRAND_DECLINE", logText, []);
+			                        }
+		                        }
+	                        }
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>

@@ -847,30 +847,84 @@
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
+                    <show id="lecmErrandWf:initiatorDeclineReason"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
+	                <field id="lecmErrandWf:initiatorDeclineReason">
+		                <control template="/org/alfresco/components/form/controls/textarea.ftl">
+			                <control-param name="rows">7</control-param>
+		                </control>
+	                </field>
                 </appearance>
             </form>
         </forms>
     </config>
+
+	<config evaluator="string-compare" condition="activiti$errandsInitiatorApprove">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="packageItems"/>
+					<show id="lecmErrandWf:errandInitiatorApproveMessage" />
+				</field-visibility>
+				<appearance>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+					<field id="lecmErrandWf:errandInitiatorApproveMessage">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">ru.it.errand.initiatorApprove.message</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 
     <config evaluator="string-compare" condition="activiti$errandsControllerDecline">
         <forms>
             <form>
                 <field-visibility>
                     <show id="packageItems"/>
+	                <show id="lecmErrandWf:controllerDeclineReason"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
                     </field>
+	                <field id="lecmErrandWf:controllerDeclineReason">
+		                <control template="/org/alfresco/components/form/controls/textarea.ftl">
+			                <control-param name="rows">7</control-param>
+		                </control>
+	                </field>
                 </appearance>
             </form>
         </forms>
     </config>
+
+	<config evaluator="string-compare" condition="activiti$errandsControllerApprove">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="packageItems"/>
+					<show id="lecmErrandWf:errandControllerApproveMessage" />
+				</field-visibility>
+				<appearance>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+					<field id="lecmErrandWf:errandControllerApproveMessage">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">ru.it.errand.controllerApprove.message</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 
     <config evaluator="string-compare" condition="activiti$errandsCancel">
         <forms>
