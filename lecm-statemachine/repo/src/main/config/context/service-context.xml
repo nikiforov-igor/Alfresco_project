@@ -158,6 +158,7 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="frequencyAnalysisService" ref="frequencyAnalysisService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="documentService" ref="documentService"/>
 	</bean>
 
 	<bean id="stateMachineActions" class="ru.it.lecm.statemachine.bean.StateMachineActions" />

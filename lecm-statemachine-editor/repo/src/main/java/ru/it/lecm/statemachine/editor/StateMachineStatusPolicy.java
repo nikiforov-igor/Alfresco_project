@@ -162,6 +162,8 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 			if (action.equals(StateMachineActions.getActionName(FinishStateWithTransitionAction.class))) {
 				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action + "User"), childAssocRef.getChildRef().toString());
 				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action + "Workflow"), childAssocRef.getChildRef().toString());
+				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action + "Form"), childAssocRef.getChildRef().toString());
+				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action + "FormTrans"), childAssocRef.getChildRef().toString());
 			} else {
 				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action), childAssocRef.getChildRef().toString());
 			}

@@ -730,19 +730,41 @@ public class BPMNGenerator {
 
 			elementCount++;
 
-			AssociationRef statusRef = nodeService.getTargetAssocs(transition.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS).get(0);
-			String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
+            Element parameter;
+			List<AssociationRef> statusRef = nodeService.getTargetAssocs(transition.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
+            if (statusRef.size() > 0) {
+                String target = "id" + statusRef.get(0).getTargetRef().getId().replace("-", "");
 
-			Element parameter = doc.createElement("lecm:parameter");
-			parameter.setAttribute("name", "variableValue");
-			parameter.setAttribute("value", target);
-			attribute.appendChild(parameter);
+                parameter = doc.createElement("lecm:parameter");
+                parameter.setAttribute("name", "variableValue");
+                parameter.setAttribute("value", target);
+                attribute.appendChild(parameter);
+
+                String var = "var" + actionVar;
+                flows.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));
+            }
 
 			String labelId = (String) nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_LABEL);
 			parameter = doc.createElement("lecm:parameter");
 			parameter.setAttribute("name", "labelId");
 			parameter.setAttribute("value", labelId);
 			attribute.appendChild(parameter);
+
+            Object formType = nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_FORM_TYPE);
+            if (formType != null) {
+                parameter = doc.createElement("lecm:parameter");
+                parameter.setAttribute("name", "formType");
+                parameter.setAttribute("value", formType.toString());
+                attribute.appendChild(parameter);
+            }
+
+            Object formFolder = nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_FORM_FOLDER);
+            if (formFolder != null) {
+                parameter = doc.createElement("lecm:parameter");
+                parameter.setAttribute("name", "formFolder");
+                parameter.setAttribute("value", formFolder.toString());
+                attribute.appendChild(parameter);
+            }
 
             Boolean stopSubWorkflows = getStopSubWorkflowsProperty(transition.getChildRef());
             parameter = doc.createElement("lecm:parameter");
@@ -752,17 +774,14 @@ public class BPMNGenerator {
 
             appendConditionsElement(attribute, transition.getChildRef());
 
-			String var = "var" + actionVar;
-			flows.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));
-
 			if (StatemachineEditorModel.TYPE_WORKFLOW_TRANSITION.equals(type)) {
 				String workflowId = (String) nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_WORKFLOW_ID);
 				parameter = doc.createElement("lecm:parameter");
 				parameter.setAttribute("name", "workflowId");
 				parameter.setAttribute("value", workflowId);
 				attribute.appendChild(parameter);
-				appendWorkflowVariables(attribute, transition.getChildRef());
 			}
+            appendWorkflowVariables(attribute, transition.getChildRef());
 		}
 		return flows;
 	}

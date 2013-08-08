@@ -104,7 +104,7 @@ LogicECM.module = LogicECM.module || {};
                         viewDialog.show(parent.options.nodeRef, action.label, oResults.errors, oResults.fields);
                         return;
                     }
-                    if (action.workflowId != null && action.workflowId != 'null') {
+                    if ((action.workflowId != null && action.workflowId != 'null') || action.isForm) {
                         parent.showForm(action);
                     } else {
                         parent.showPromt(action);
@@ -120,14 +120,26 @@ LogicECM.module = LogicECM.module || {};
 
         showForm: function showForm_action(action) {
             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}";
-            templateUrl = YAHOO.lang.substitute(templateUrl, {
-                itemKind:"workflow",
-                itemId:action.workflowId,
-                mode:"create",
-                submitType:"json",
-                formId:"workflow-form",
-                args: JSON.stringify(action.variables)
-            });
+            if (action.isForm) {
+                templateUrl = YAHOO.lang.substitute(templateUrl, {
+                    itemKind: "type",
+                    itemId: action.formType,
+                    destination: action.formFolder,
+                    mode:"create",
+                    submitType:"json",
+                    formId:"workflow-form",
+                    args: JSON.stringify(action.variables)
+                });
+            } else {
+                templateUrl = YAHOO.lang.substitute(templateUrl, {
+                    itemKind:"workflow",
+                    itemId:action.workflowId,
+                    mode:"create",
+                    submitType:"json",
+                    formId:"workflow-form",
+                    args: JSON.stringify(action.variables)
+                });
+            }
 
             var me = this;
             LogicECM.CurrentModules = {};

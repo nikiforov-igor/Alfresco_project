@@ -16,6 +16,7 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
@@ -39,9 +40,14 @@ public class ActionsScript extends DeclarativeWebScript {
     private static ServiceRegistry serviceRegistry;
     private static DocumentFrequencyAnalysisService frequencyAnalysisService;
     private static OrgstructureBean orgstructureService;
+    private static DocumentService documentService;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         ActionsScript.orgstructureService = orgstructureService;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        ActionsScript.documentService = documentService;
     }
 
     public void setFrequencyAnalysisService(DocumentFrequencyAnalysisService frequencyAnalysisService) {
@@ -169,6 +175,11 @@ public class ActionsScript extends DeclarativeWebScript {
                                     resultState.put("fields", fields);
                                     resultState.put("count", count);
                                     resultState.put("variables", variables);
+                                    resultState.put("isForm", state.isForm());
+                                    if (state.isForm()) {
+                                        resultState.put("formType", state.getFormType());
+                                        resultState.put("formFolder", documentService.getDraftRoot().toString());
+                                    }
                                     actionsList.add(resultState);
 
                                 }
@@ -204,6 +215,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                     workflow.put("fields", fields);
                                     workflow.put("count",count);
                                     workflow.put("variables", variables);
+                                    workflow.put("isForm", false);
                                     actionsList.add(workflow);
                                 }
                             }

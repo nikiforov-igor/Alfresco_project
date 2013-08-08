@@ -587,7 +587,12 @@ public class StateMachineHelper implements StateMachineServiceBean {
         for (WorkflowVariables.WorkflowVariable variable : variables) {
             String value = "";
             if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
-                value = runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue()).toString();
+                Object varObject = runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue());
+                if (varObject instanceof ActivitiScriptNode) {
+                    value = ((ActivitiScriptNode) varObject).getNodeRef().toString();
+                } else {
+                    value = runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue()).toString();
+                }
             } else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
                 NodeService nodeService = serviceRegistry.getNodeService();
 
@@ -872,7 +877,11 @@ public class StateMachineHelper implements StateMachineServiceBean {
         int start = persistedResponse.indexOf("=") + 1;
         int end = persistedResponse.indexOf(",");
 
-        return persistedResponse.substring(start, end);
+        try {
+            return persistedResponse.substring(start, end);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<WorkflowTask> filterTasksByAssignees(List<WorkflowTask> tasks, List<NodeRef> assigneesEmployees) {
@@ -1185,39 +1194,41 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 }
                 nextTransition(taskId);
 
-                String dependencyExecution = parseExecutionId(persistedResponse);
-                if (dependencyExecution != null) {
-                    WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, nextState.getWorkflowId(), taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
-                    new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
-                    setInputVariables(statemachineId, dependencyExecution, nextState.getVariables().getInput());
+                if (!nextState.isForm()) {
+                    String dependencyExecution = parseExecutionId(persistedResponse);
+                    if (dependencyExecution != null) {
+                        WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, nextState.getWorkflowId(), taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
+                        new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
+                        setInputVariables(statemachineId, dependencyExecution, nextState.getVariables().getInput());
 
-                    //Добавляем участников к документу.
-                    List<NodeRef> assignees = getAssigneesForWorkflow(dependencyExecution);
-                    for (final NodeRef assignee : assignees) {
-                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-                            @Override
-                            public NodeRef doWork() throws Exception {
-                                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                                    @Override
-                                    public NodeRef execute() throws Throwable {
-                                        return documentMembersService.addMember(document, assignee, new HashMap<QName, Serializable>());
-                                    }
-                                });
-                            }
-                        });
+                        //Добавляем участников к документу.
+                        List<NodeRef> assignees = getAssigneesForWorkflow(dependencyExecution);
+                        for (final NodeRef assignee : assignees) {
+                            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+                                @Override
+                                public NodeRef doWork() throws Exception {
+                                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                                        @Override
+                                        public NodeRef execute() throws Throwable {
+                                            return documentMembersService.addMember(document, assignee, new HashMap<QName, Serializable>());
+                                        }
+                                    });
+                                }
+                            });
+                        }
+
+                        //Берем адрес переадресации
+                        Object redirect = activitiProcessEngineConfiguration.getRuntimeService().getVariable(dependencyExecution.replace(ACTIVITI_PREFIX, ""), StateMachineServiceBean.REDIRECT_VARIABLE);
+                        if (redirect != null) {
+                            response.setRedirect(redirect.toString());
+                        }
+                        //Посылаем сигнал, если процесс с ожиданием
+                        sendSignal(dependencyExecution);
+
+                    } else {
+                        errors.add("Переход осуществлен, но дочерний процесс не был запущен");
                     }
-
-                    //Берем адрес переадресации
-                    Object redirect = activitiProcessEngineConfiguration.getRuntimeService().getVariable(dependencyExecution.replace(ACTIVITI_PREFIX, ""), StateMachineServiceBean.REDIRECT_VARIABLE);
-                    if (redirect != null) {
-                        response.setRedirect(redirect.toString());
-                    }
-                    //Посылаем сигнал, если процесс с ожиданием
-                    sendSignal(dependencyExecution);
-
-                } else {
-                    errors.add("Переход осуществлен, но дочерний процесс не был запущен");
                 }
             }
         } else {

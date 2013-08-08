@@ -37,6 +37,8 @@ public class StatemachineEditorModel {
 	public final static QName PROP_TIMER_DURATION = QName.createQName(STATEMACHINE_EDITOR_URI, "timerDuration");
 	public final static QName PROP_STOP_SUB_WORKFLOWS = QName.createQName(STATEMACHINE_EDITOR_URI, "stopSubWorkflows");
 	public final static QName PROP_TRANSITION_LABEL = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionLabel");
+	public final static QName PROP_TRANSITION_FORM_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionFormType");
+	public final static QName PROP_TRANSITION_FORM_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionFormFolder");
 	public final static QName PROP_WORKFLOW_ID = QName.createQName(STATEMACHINE_EDITOR_URI, "workflowId");
 	public final static QName PROP_ASSIGNEE = QName.createQName(STATEMACHINE_EDITOR_URI, "assignee");
 	public final static QName PROP_INPUT_TO_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "inputToType");

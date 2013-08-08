@@ -59,9 +59,11 @@ public class StartWorkflowScript extends DeclarativeWebScript {
             if (transitionResponse.getErrors().size() == 0) {
                 updateActionCount(document, actionId);
                 String newWorkflowId = helper.parseExecutionId(persistedResponse);
-                helper.logStartWorkflowEvent(document, newWorkflowId);
-                if (transitionResponse.getRedirect() != null) {
-                    result.put("redirect", transitionResponse.getRedirect());
+                if (newWorkflowId != null) {
+                    helper.logStartWorkflowEvent(document, newWorkflowId);
+                    if (transitionResponse.getRedirect() != null) {
+                        result.put("redirect", transitionResponse.getRedirect());
+                    }
                 }
             }
 		} else if ("user".equals(actionType)){

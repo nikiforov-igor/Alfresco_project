@@ -8,6 +8,8 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-stmeditor:takeFinishStateWithTransitionUser" force="true"/>
 					<show id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" force="true"/>
+                    <show id="lecm-stmeditor:takeFinishStateWithTransitionForm" force="true"/>
+                    <show id="lecm-stmeditor:takeFinishStateWithTransitionFormTrans" force="true"/>
 					<show id="lecm-stmeditor:startWaitForDocumentChange" force="true"/>
 					<show id="lecm-stmeditor:takeUserWorkflow" force="true"/>
 					<show id="lecm-stmeditor:endTransitionAction" force="true"/>
@@ -82,7 +84,27 @@
 						</control>
 					</field>
 
-					<field id="lecm-stmeditor:takeUserWorkflow" set="actions">
+                    <field id="lecm-stmeditor:takeFinishStateWithTransitionForm" set="actions">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:transitionForm</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-stmeditor:takeFinishStateWithTransitionFormTrans" set="actions">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:transitionFormTrans</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-stmeditor:takeUserWorkflow" set="actions">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
@@ -164,7 +186,9 @@
 					<show id="lecm-stmeditor:forDraft" force="true"/>
 					<show id="lecm-stmeditor:takeFinishStateWithTransitionUser" force="true"/>
 					<show id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" force="true"/>
-					<show id="lecm-stmeditor:startWaitForDocumentChange" force="true"/>
+                    <show id="lecm-stmeditor:takeFinishStateWithTransitionForm" force="true"/>
+                    <show id="lecm-stmeditor:takeFinishStateWithTransitionFormTrans" force="true"/>
+                    <show id="lecm-stmeditor:startWaitForDocumentChange" force="true"/>
 					<show id="lecm-stmeditor:takeUserWorkflow" force="true"/>
 					<show id="lecm-stmeditor:endTransitionAction" force="true"/>
 					<show id="lecm-stmeditor:startScriptAction" force="true"/>
@@ -222,7 +246,37 @@
 						</control>
 					</field>
 
-					<field id="lecm-stmeditor:takeUserWorkflow" set="actions">
+                    <field id="lecm-stmeditor:takeFinishStateWithTransitionForm" set="actions">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:transitionForm</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-stmeditor:takeFinishStateWithTransitionFormTrans" set="actions">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:transitionFormTrans</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-stmeditor:takeUserWorkflow" set="actions">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-stmeditor:takeUserWorkflow" set="actions">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:UserWorkflowEntity</control-param>
 							<control-param name="allowCreate">true</control-param>
@@ -281,7 +335,9 @@
 					<show id="lecm-stmeditor:forDraft" force="true"/>
 					<show id="lecm-stmeditor:takeFinishStateWithTransitionUser" force="true"/>
 					<show id="lecm-stmeditor:takeFinishStateWithTransitionWorkflow" force="true"/>
-					<show id="lecm-stmeditor:startWaitForDocumentChange" force="true"/>
+                    <show id="lecm-stmeditor:takeFinishStateWithTransitionForm" force="true"/>
+                    <show id="lecm-stmeditor:takeFinishStateWithTransitionFormTrans" force="true"/>
+                    <show id="lecm-stmeditor:startWaitForDocumentChange" force="true"/>
 					<show id="lecm-stmeditor:takeUserWorkflow" force="true"/>
 					<show id="lecm-stmeditor:endTransitionAction" force="true"/>
 					<show id="lecm-stmeditor:startScriptAction" force="true"/>
@@ -341,6 +397,26 @@
                             <control-param name="height">100</control-param>
 						</control>
 					</field>
+
+                    <field id="lecm-stmeditor:takeFinishStateWithTransitionForm" set="actions">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:transitionForm</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-stmeditor:takeFinishStateWithTransitionFormTrans" set="actions">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:transitionFormTrans</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
+                        </control>
+                    </field>
 
 					<field id="lecm-stmeditor:takeUserWorkflow" set="actions">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
@@ -738,8 +814,7 @@
 		</forms>
 	</config>
 
-
-	<config evaluator="model-type" condition="lecm-stmeditor:transition">
+    <config evaluator="model-type" condition="lecm-stmeditor:transition">
 		<forms>
 			<form>
 				<field-visibility>
@@ -1300,7 +1375,141 @@
         </forms>
     </config>
 
-	<config evaluator="string-compare" condition="Workflow">
+    <config evaluator="model-type" condition="lecm-stmeditor:transitionForm">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:transitionLabel" force="true"/>
+                    <show id="lecm-stmeditor:transitionFormType" force="true"/>
+                    <show id="lecm-stmeditor:transitionFormFolder" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:transitionLabel" />
+                    <field id="lecm-stmeditor:transitionFormType" />
+                    <field id="lecm-stmeditor:transitionFormFolder" />
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-stmeditor:transitionLabel" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-stmeditor:transitionForm">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:transitionLabel" force="true"/>
+                    <show id="lecm-stmeditor:transitionFormType" force="true"/>
+                    <show id="lecm-stmeditor:transitionFormFolder" force="true"/>
+                    <show id="lecm-stmeditor:conditionAccessField" force="true"/>
+                    <show id="lecm-stmeditor:inputWorkflowData" force="true"/>
+                    <show id="lecm-stmeditor:outputWorkflowData" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:transitionLabel" />
+                    <field id="lecm-stmeditor:transitionFormType" />
+                    <field id="lecm-stmeditor:transitionFormFolder" />
+                    <field id="lecm-stmeditor:conditionAccessField" label-id="statemachine.editor.form.label.conditionAccessField">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:conditionAccess</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputFormData">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-stmeditor:transitionFormTrans">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:transitionLabel" force="true"/>
+                    <show id="lecm-stmeditor:transitionFormType" force="true"/>
+                    <show id="lecm-stmeditor:transitionFormFolder" force="true"/>
+                    <show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:transitionLabel" />
+                    <field id="lecm-stmeditor:transitionFormType" />
+                    <field id="lecm-stmeditor:transitionFormFolder" />
+                    <field id="lecm-stmeditor:transitionStatus">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="webscript">/lecm/statemachine/editor/status</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-stmeditor:stopSubWorkflows" />
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-stmeditor:transitionLabel" force="true"/>
+                    <show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-stmeditor:transitionFormTrans">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:transitionLabel" force="true"/>
+                    <show id="lecm-stmeditor:transitionFormType" force="true"/>
+                    <show id="lecm-stmeditor:transitionFormFolder" force="true"/>
+                    <show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
+                    <show id="lecm-stmeditor:conditionAccessField" force="true"/>
+                    <show id="lecm-stmeditor:inputWorkflowData" force="true"/>
+                    <show id="lecm-stmeditor:outputWorkflowData" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:transitionLabel" />
+                    <field id="lecm-stmeditor:transitionFormType" />
+                    <field id="lecm-stmeditor:transitionFormFolder" />
+                    <field id="lecm-stmeditor:transitionStatus">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="webscript">/lecm/statemachine/editor/status</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-stmeditor:stopSubWorkflows" />
+                    <field id="lecm-stmeditor:conditionAccessField" label-id="statemachine.editor.form.label.conditionAccessField">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:conditionAccess</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputFormData">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="Workflow">
 		<hidden-workflows>
 			<workflow name="activiti$default_statemachine"/>
 		</hidden-workflows>

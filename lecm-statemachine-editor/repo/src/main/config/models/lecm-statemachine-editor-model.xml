@@ -192,7 +192,17 @@
 					<mandatory>false</mandatory>
 				</property>
 
-				<property name="lecm-stmeditor:startStartWorkflow">
+                <property name="lecm-stmeditor:takeFinishStateWithTransitionForm">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+
+                <property name="lecm-stmeditor:takeFinishStateWithTransitionFormTrans">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+
+                <property name="lecm-stmeditor:startStartWorkflow">
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 				</property>
@@ -406,7 +416,29 @@
 			</mandatory-aspects>
 		</type>
 
-		<!--          Workflow Variables         -->
+        <!-- transition form -->
+        <type name="lecm-stmeditor:transitionForm">
+            <title>Logic ECM Statemachine Form Action Object</title>
+            <parent>cm:folder</parent>
+            <mandatory-aspects>
+                <aspect>lecm-stmeditor:transitionLabelAspect</aspect>
+                <aspect>lecm-stmeditor:transitionFormAspect</aspect>
+            </mandatory-aspects>
+        </type>
+
+        <!-- transition form -->
+        <type name="lecm-stmeditor:transitionFormTrans">
+            <title>Logic ECM Statemachine Form Action Object</title>
+            <parent>cm:folder</parent>
+            <mandatory-aspects>
+                <aspect>lecm-stmeditor:transitionLabelAspect</aspect>
+                <aspect>lecm-stmeditor:transitionFormAspect</aspect>
+                <aspect>lecm-stmeditor:transitionStatusAspect</aspect>
+            </mandatory-aspects>
+        </type>
+
+
+        <!--          Workflow Variables         -->
 		<type name="lecm-stmeditor:workflowVariableData">
 			<title>Logic ECM Statemachine Workflow Variable</title>
 			<parent>cm:content</parent>
@@ -593,7 +625,21 @@
 			</properties>
 		</aspect>
 
-		<aspect name="lecm-stmeditor:workflowAspect">
+        <aspect name="lecm-stmeditor:transitionFormAspect">
+            <title>Transition Label Form</title>
+            <properties>
+                <property name="lecm-stmeditor:transitionFormType">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-stmeditor:transitionFormFolder">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+            </properties>
+        </aspect>
+
+        <aspect name="lecm-stmeditor:workflowAspect">
 			<title>Workflow Aspect</title>
 			<properties>
 				<property name="lecm-stmeditor:workflowId">
