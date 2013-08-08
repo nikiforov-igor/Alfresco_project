@@ -256,6 +256,8 @@
 
     <bean id="documentExpression" class="ru.it.lecm.statemachine.expression.ExpressionDocument">
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="stateMachineHelper" ref="stateMachineHelper"/>
     </bean>
 
 	<bean id="employeeExpression" class="ru.it.lecm.statemachine.expression.ExpressionEmployee">

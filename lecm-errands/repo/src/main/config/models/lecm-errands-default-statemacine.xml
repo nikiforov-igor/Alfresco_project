@@ -1577,6 +1577,34 @@ if (soExecutors != null) {
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>5318522b-ed67-4443-8bcf-a6ee6a527b3f
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/34fe9757-eb9b-4f04-9754-a8797e23730c
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[!doc.hasConnectionDocuments("onBasis", "lecm-errands:document")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -2571,6 +2599,34 @@ if (soExecutors != null) {
 																				<name>condition</name>
 																				<value>
 																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>ab3d6748-04fb-4415-8286-e8c5d6fd3f4e
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/62fa03a7-9729-41c4-ba47-9b9efae9b27d
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[!doc.hasConnectionDocuments("onBasis", "lecm-errands:document")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -4019,6 +4075,34 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>60750dab-5276-43ce-ab37-31fe9af43c17
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/a6c68faf-8a14-47b6-8fda-43d9e284a684
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[!doc.hasConnectionDocuments("onBasis", "lecm-errands:document")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -5453,6 +5537,34 @@ execution.setVariable("requestCancelResult", "");]]></value>
 																				<name>condition</name>
 																				<value>
 																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>94a8c961-449c-4a08-a38c-4d9b0af286bd
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/454341e9-fa14-4f46-ba8d-2da46227bc90
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[!doc.hasConnectionDocuments("onBasis", "lecm-errands:document")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>

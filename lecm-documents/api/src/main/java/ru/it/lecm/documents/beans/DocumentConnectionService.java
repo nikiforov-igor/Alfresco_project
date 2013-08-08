@@ -124,6 +124,15 @@ public interface DocumentConnectionService {
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, String typeDictionaryElementCode, boolean isSystem);
 
 	/**
+	 * Получение связанных документов
+	 * @param documentRef Ссылка на документ
+	 * @param connectionTypeCode Код типа связи
+	 * @param connectedDocumentType Тип связанного документа
+	 * @return Связанные документы
+	 */
+	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType);
+
+	/**
 	 * Удаление связи
 	 * @param nodeRef Ссылка на связь
 	 */

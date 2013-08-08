@@ -5,6 +5,8 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.statemachine.StateMachineHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,8 @@ public class ExpressionDocument {
 	private NodeRef nodeRef;
 	private ServiceRegistry serviceRegistry;
     private static DocumentAttachmentsService documentAttachmentsService;
+    private static DocumentConnectionService documentConnectionService;
+    private static StateMachineHelper stateMachineHelper;
 
     public ExpressionDocument() {
 
@@ -85,7 +89,29 @@ public class ExpressionDocument {
 		return true;
 	}
 
+	//Наличие вложения с определенным типом
+	public boolean hasConnectionDocuments(String connectionType, String documentType) {
+		QName documentTypeQName = QName.createQName(documentType, serviceRegistry.getNamespaceService());
+		List<NodeRef> connectedDocuments = documentConnectionService.getConnectedDocuments(nodeRef, connectionType, documentTypeQName);
+		if (connectedDocuments != null) {
+			for (NodeRef document: connectedDocuments) {
+				if (!stateMachineHelper.isFinal(document)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
         ExpressionDocument.documentAttachmentsService = documentAttachmentsService;
     }
+
+	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+		ExpressionDocument.documentConnectionService = documentConnectionService;
+	}
+
+	public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+		ExpressionDocument.stateMachineHelper = stateMachineHelper;
+	}
 }
