@@ -383,8 +383,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         Collections.sort(result, new Comparator<NodeRef>() {
             @Override
             public int compare(NodeRef o1, NodeRef o2) {
-                String name1 = nodeService.getProperty(o1, ContentModel.PROP_SYS_NAME).toString();
-                String name2 = nodeService.getProperty(o2, ContentModel.PROP_SYS_NAME).toString();
+                String name1 = nodeService.getProperty(o1, ContentModel.PROP_NAME).toString();
+                String name2 = nodeService.getProperty(o2, ContentModel.PROP_NAME).toString();
                 return name1.compareTo(name2);
             }
         });
