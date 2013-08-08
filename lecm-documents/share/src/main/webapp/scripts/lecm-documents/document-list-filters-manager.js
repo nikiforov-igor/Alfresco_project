@@ -33,7 +33,7 @@
             if (reload){
                 success = {
                     fn: function () {
-                        window.location.href = window.location.protocol + "//" + window.location.host + window.location.pathname + (isDocListPage ? "?doctype=" + type + "&" : "?") + value;
+                        window.location.href = window.location.protocol + "//" + window.location.host + window.location.pathname + (isDocListPage ? "?doctype=" + type + "&" : "?") + value + location.hash;
                     }
                 } ;
             }
