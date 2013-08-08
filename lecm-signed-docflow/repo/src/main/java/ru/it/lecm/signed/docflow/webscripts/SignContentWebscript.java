@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ISO8601DateFormat;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -38,35 +39,38 @@ public class SignContentWebscript extends DeclarativeWebScript {
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		JSONObject jsonResponse;
+		JSONArray jsonResponseArray = new JSONArray();
 		final Content content = req.getContent();
 		if (content == null) {
 			logger.error("SignContentWebscript was called with empty json content");
 			throw new WebScriptException("SignContentWebscript was called with empty json content");
 		}
-		JSONObject jsonRequest = DeclarativeWebScriptHelper.getJsonContent(content);
-		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-		for (QName property : propertiesToParse) {
-			try {
-				Serializable value;
-				if (SignedDocflow.PROP_VALID_FROM.equals(property)
-						|| SignedDocflow.PROP_VALID_THROUGH.equals(property)
-						|| SignedDocflow.PROP_SIGNING_DATE.equals(property)) {
-					value = ISO8601DateFormat.parse(jsonRequest.getString(property.getPrefixString()));
-				} else {
-					value = jsonRequest.getString(property.getPrefixString());
+		JSONArray jsonRequest = DeclarativeWebScriptHelper.getJsonArrayContent(content);
+		for (int i = 0; i < jsonRequest.length(); i++) {
+			Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+			for (QName property : propertiesToParse) {
+				try {
+					Serializable value;
+					if (SignedDocflow.PROP_VALID_FROM.equals(property)
+							|| SignedDocflow.PROP_VALID_THROUGH.equals(property)
+							|| SignedDocflow.PROP_SIGNING_DATE.equals(property)) {
+						value = ISO8601DateFormat.parse(jsonRequest.getJSONObject(i).getString(property.getPrefixString()));
+					} else {
+						value = jsonRequest.getJSONObject(i).getString(property.getPrefixString());
+					}
+					properties.put(property, value);
+				} catch (JSONException ex) {
+					String errorMessage = String.format("Error getting property %s from JSON request", property.getPrefixString());
+					logger.error(errorMessage);
+					throw new WebScriptException(errorMessage, ex);
 				}
-				properties.put(property, value);
-			} catch (JSONException ex) {
-				String errorMessage = String.format("Error getting property %s from JSON request", property.getPrefixString());
-				logger.error(errorMessage);
-				throw new WebScriptException(errorMessage, ex);
 			}
+
+			Map<String, Object> signContentResult = signedDocflowService.signContent(properties);
+			jsonResponse = new JSONObject(signContentResult);
+			jsonResponseArray.put(jsonResponse);
 		}
-
-		Map<String, Object> signContentResult = signedDocflowService.signContent(properties);
-		jsonResponse = new JSONObject(signContentResult);
-
-		result.put("result", jsonResponse);
+		result.put("result", jsonResponseArray);
 		return result;
 	}
 }

@@ -31,6 +31,7 @@ var cryptoAppletModule = (function () {
 	
 	var certContainer = 'container';
 	
+	var CURRENT_CONTAINER = '';
 	
 	function loadConfig(){
 		Alfresco.util.Ajax.jsonRequest({
@@ -57,22 +58,22 @@ var cryptoAppletModule = (function () {
 		if (tmp) 
 			result.owner = tmp[1];
 		else
-			result.owner = null;
+			result.owner = ' ';
 		tmp = certIssued.match(' O=(.+?)(?=,)'); //Организация
 		if (tmp) 
 			result.organization = tmp[1];
 		else
-			result.organization = null;
+			result.organization = ' ';
 		tmp = certIssued.match(' OU=(.+?)(?=,)'); //Подразделение
 		if (tmp) 
 			result.OrgUnit = tmp[1];
 		else
-			result.OrgUnit = null;
+			result.OrgUnit = ' ';
 		tmp = certIssued.match(' T=(.+?)(?=,)'); //Должность
 		if (tmp) 
 			result.position = tmp[1];
 		else
-			result.position = null;
+			result.position = ' ';
 		
 		result.certSN = Info.certSN; //Серийный номер
 		result.certValidBefore = Info.certValidBefore;
@@ -83,7 +84,7 @@ var cryptoAppletModule = (function () {
 		if (tmp)
 			result.issuer = tmp[1];
 		else
-			result.issuer = null;
+			result.issuer = '';
 		
 		
 		return {
@@ -98,7 +99,116 @@ var cryptoAppletModule = (function () {
 		};
 	}
 	
+	var SignMultiple = function (response) {
+		var templateUrl = "lecm/components/form"
+                + "?itemKind={itemKind}"
+                + "&itemId={itemId}"
+                + "&mode={mode}"
+                + "&submitType={submitType}"
+                + "&showCancelButton=true"
+                + "&formId={formId}";
+            var url = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + templateUrl, {
+                itemKind: "type",
+                itemId: "lecm-orgstr:employees",
+                mode: "create",
+                submitType: "json",
+                formId: "multiple-sign-form"
+            });
+			var sd = new Alfresco.module.SimpleDialog("multiple-sign");
+			sd.setOptions({
+			width: "30em",
+			templateUrl: url,
+			actionUrl: Alfresco.constants.PROXY_URI + "lecm/signed-docflow/signContent",
+			templateRequestParams: {
+				obj : JSON.stringify(response.json)
+			},
+			destroyOnHide: true,
+			doBeforeDialogShow: { 
+				fn: function ( p_form, p_dialog ) {
+					p_dialog.dialog.setHeader( "Документы на подпись" );
+				}},
+			doBeforeAjaxRequest : {
+				fn: function(form) {
+					var nodeRefList = [];
+					var fields = document.forms["multiple-sign-form"].getElementsByTagName("input");
+					
+					for(var i = 0; i < fields.length; i++) {
+						if(fields[i].checked) nodeRefList.push(fields[i].value);
+					}
+					if(!nodeRefList.length){
+						Alfresco.util.PopupManager.displayMessage({
+							text: 'Необходимо выбрать хотя бы один документ для подписи'
+						});
+						return false;
+					}
+					cryptoAppletModule.Sign(nodeRefList);
+				}
+			}
+			}).show();
+	}
+	
+	var multipleSign = function(form) {
+	
+		var templateUrl = "lecm/components/form"
+                + "?itemKind={itemKind}"
+                + "&itemId={itemId}"
+                + "&mode={mode}"
+                + "&submitType={submitType}"
+                + "&showCancelButton=true"
+                + "&formId={formId}";
+		var url = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + templateUrl, {
+			itemKind: "type",
+			itemId: "lecm-orgstr:employees",
+			mode: "create",
+			submitType: "json",
+			formId: "auth-form"
+		});
+		var sd = new Alfresco.module.SimpleDialog("dialog");
+		sd.setOptions({
+		width: "20em",
+		templateUrl: url,
+		destroyOnHide: true,
+		doBeforeDialogShow: { 
+			fn: function ( p_form, p_dialog ) {
+				p_dialog.dialog.setHeader( "Выбор сертификата" );
+			}},             
+		}).show();
+		
+		var container = cryptoAppletModule.getCurrentContainer();
+		
+		var fields = document.forms["multiple-sign-form"].getElementsByTagName("input");
+		for(var i = 0; i < fields.length; i++) {
+			var dataObj = {};
+			var signDate = Alfresco.util.toISO8601(new Date());
+			var contentURI = new Alfresco.util.NodeRef(nodeRef).uri;
+			var attachSign = signApplet.sign(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL");
+			var signObj = {  
+				"sign-to-content-association" : nodeRef, 
+				"signature-content" : attachSign, 
+				"signing-date" : signDate
+				};
+			var certInfo = getCertInfo(container);
+			dataObj = YAHOO.lang.merge(signObj, certInfo);
+			
+			Alfresco.util.Ajax.jsonRequest({
+                method: "POST",
+                url: Alfresco.constants.PROXY_URI + "lecm/signed-docflow/signContent",
+                dataObj: dataObj,
+            });
+			
+		}
+	}
+	
 	return {
+	
+		setCurrentContainer : function(container) {
+			CURRENT_CONTAINER = container;
+		},
+			
+		getCurrentContainer : function() {
+			return CURRENT_CONTAINER;
+		},
+		
 		currentContainer : certContainer,
 		startApplet : function() {
 			loadConfig();
@@ -126,7 +236,9 @@ var cryptoAppletModule = (function () {
 			}
 			document.getElementById(selectId).innerHTML = options;
 		},
-		
+		getConfig : function() {
+			return config;
+		},
 		getCertsInfo : function() {
 			var result = [];
 			var containers = signApplet.getService().getKeyStoreList().split('###');
@@ -199,9 +311,22 @@ var cryptoAppletModule = (function () {
                 }).show();
 		},
 		
+		MultipleSignFormShow : function(docNodeRef) {
+			Alfresco.util.Ajax.jsonRequest({
+                method: "GET",
+                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/getSignableContent?nodeRef=" + docNodeRef,
+                successCallback: {
+                    fn: SignMultiple,
+					scope:this
+                }
+            });
+		},
 		
-		Sign : function (nodeRef) {
-			var signObj = {};
+		Sign : function (nodeRefList) {
+			if(!(nodeRefList instanceof Array)) {
+				nodeRefList = [nodeRefList];
+			}
+			var signObj = [];
 			var templateUrl = "lecm/components/form"
                 + "?itemKind={itemKind}"
                 + "&itemId={itemId}"
@@ -228,27 +353,42 @@ var cryptoAppletModule = (function () {
 				}},             
 			doBeforeAjaxRequest: {
 				fn : function(form, obj) {
-					var signDate = Alfresco.util.toISO8601(new Date());
-					var contentURI = new Alfresco.util.NodeRef(nodeRef).uri;
-					var attachSign = signApplet.sign(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL");
-					var signObj = {  
-						"sign-to-content-association" : nodeRef, 
-						"signature-content" : attachSign, 
-						"signing-date" : signDate
-						};
-					var certInfo = getCertInfo(CurrentContainer);
-					form.dataObj = YAHOO.lang.merge(signObj, certInfo);
+					if(!CurrentContainer) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: 'Необходимо выбрать сертификат!'
+						});
+						return;
+					}
+					form.dataObj = [];
+					for(var i = 0; i < nodeRefList.length; i++){
+						var signDate = Alfresco.util.toISO8601(new Date());
+						var contentURI = new Alfresco.util.NodeRef(nodeRefList[i]).uri;
+						var attachSign = signApplet.sign(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL");
+						var signObj = {  
+							"sign-to-content-association" : nodeRefList[i], 
+							"signature-content" : attachSign, 
+							"signing-date" : signDate
+							};
+						var certInfo = getCertInfo(CurrentContainer);
+						var res = YAHOO.lang.merge(signObj, certInfo);
+						form.dataObj.push(res);
+					}
 					return true;
 				}
 			},
 			onSuccess: {
                         fn: function(response) {
 						var resText = '';
-						if (response.json.success)
-							resText = 'Документ успешно подписан';
-						else
-							resText = 'Произошла ошибка при отправке подписи';
-							
+						var badResult = '';
+						for(var i = 0;  i < response.json.length; i++){
+							if (!response.json[i].success)
+								badResult += response.json[i].name + ', ';
+						}
+						if(badResult){
+							resText = 'Следующие документы подписать не удалось:' + badResult;
+						} else {
+							resText = 'Все документы были успешно подписаны';
+						}
 						Alfresco.util.PopupManager.displayMessage({
 							text: resText
 						});

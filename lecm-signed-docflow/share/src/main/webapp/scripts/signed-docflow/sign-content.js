@@ -86,7 +86,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					form.show();
 				},
 				onSignDocument: function(layer, args) {
-					alert("onSignDocument");
+					cryptoAppletModule.Sign(this.options.nodeRef);
 				},
 				onRefreshSignatures: function(layer, args) {
 					alert("onRefreshSignatures");

@@ -27,7 +27,7 @@
 					<show id="lecm-signed-docflow:update-date"/>
 					<show id="lecm-signed-docflow:is-valid"/>
 					<show id="lecm-signed-docflow:is-our"/>
-					<show id="lecm-signed-docflow:signature-content"/>
+					<!--<show id="lecm-signed-docflow:signature-content"/>-->
 				</field-visibility>
 			</form>
 		</forms>
@@ -67,10 +67,13 @@
             <form id="auth-form">
                 <create-form template="/ru/it/lecm/signed-docflow/form/auth-form.ftl" />
             </form>
+			<form id="multiple-sign-form">
+				<create-form template="/ru/it/lecm/signed-docflow/form/multiple-sign-form.ftl" />
+			</form>
             <dependencies>
                 <js src="/scripts/signed-docflow/signApplet.js" />               
             </dependencies>
         </forms>
     </config>
-
+	
 </alfresco-config>

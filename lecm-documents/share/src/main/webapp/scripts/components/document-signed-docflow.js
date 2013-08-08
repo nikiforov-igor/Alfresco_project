@@ -54,7 +54,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				alert("SUDDENLY, REFRESH!");
 			},
 			onSignDocuments:  function (layer, args) {
-				alert("onSignDocuments");
+				cryptoAppletModule.MultipleSignFormShow(this.options.nodeRef);
 			},
 			onSendDocuments: function (layer, args) {
 				alert("onSendDocuments");

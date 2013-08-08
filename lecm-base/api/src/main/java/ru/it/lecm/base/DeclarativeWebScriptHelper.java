@@ -1,6 +1,7 @@
 package ru.it.lecm.base;
 
 import java.io.IOException;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -23,6 +24,22 @@ public final class DeclarativeWebScriptHelper {
 		JSONObject json;
 		try {
 			json = new JSONObject(content.getContent());
+		} catch (IOException ex) {
+			String msg = "Can't read request content as json string";
+			logger.error("{}. Caused by: {}", msg, ex.getMessage());
+			throw new WebScriptException(msg, ex);
+		} catch (JSONException ex) {
+			String msg = "Can't marshall request content as json object";
+			logger.error("{}. Caused by: {}", msg, ex.getMessage());
+			throw new WebScriptException(msg, ex);
+		}
+		return json;
+	}
+	
+	public static JSONArray getJsonArrayContent(final Content content) {
+		JSONArray json;
+		try {
+			json = new JSONArray(content.getContent());
 		} catch (IOException ex) {
 			String msg = "Can't read request content as json string";
 			logger.error("{}. Caused by: {}", msg, ex.getMessage());
