@@ -17,6 +17,7 @@ import org.springframework.util.ReflectionUtils;
 import ru.it.lecm.base.DeclarativeWebScriptHelper;
 import ru.it.lecm.signed.docflow.UnicloudService;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
+import ru.it.lecm.signed.docflow.model.UnicloudData;
 
 /**
  *
@@ -54,8 +55,8 @@ public class UnicloudWebscript extends DeclarativeWebScript {
 			logger.error("{}. Caused by: {}", msg, ex.getMessage());
 			throw new IllegalArgumentException(msg, ex);
 		}
-		Map<String, Object> result = unicloudService.authenticateByCertificate(guidSign, timestamp, timestampSign);
-		return new JSONObject(result);
+		UnicloudData result = unicloudService.authenticateByCertificate(guidSign, timestamp, timestampSign);
+		return new JSONObject(result.getProperties());
 	}
 
 	public JSONObject verifySignature(final JSONObject json) {
@@ -69,8 +70,8 @@ public class UnicloudWebscript extends DeclarativeWebScript {
 			logger.error("{}. Caused by: {}", msg, ex.getMessage());
 			throw new IllegalArgumentException(msg, ex);
 		}
-		Map<String, Object> result = unicloudService.verifySignature(contentRef, signature);
-		return new JSONObject(result);
+		UnicloudData result = unicloudService.verifySignature(contentRef, signature);
+		return new JSONObject(result.getProperties());
 	}
 
 	@Override

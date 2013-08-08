@@ -1,9 +1,7 @@
 package ru.it.lecm.signed.docflow;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Holder;
@@ -23,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.tempuri.IGateWcfService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
+import ru.it.lecm.signed.docflow.model.AuthenticationData;
+import ru.it.lecm.signed.docflow.model.SignatureData;
 import ucloud.gate.proxy.ArrayOfOperatorInfo;
 import ucloud.gate.proxy.OperatorInfo;
 import ucloud.gate.proxy.exceptions.GateResponse;
@@ -119,23 +119,14 @@ public class UnicloudService {
 
 	private void logGateResponse(final Holder<GateResponse> gateResponse) {
 		if (gateResponse.value != null) {
-			logger.error("message = {}", gateResponse.value.getMessage());
-			logger.error("operatorMessage = {}", gateResponse.value.getOperatorMessage());
-			logger.error("responseType = {}", gateResponse.value.getResponseType());
-			logger.error("stackTrace = {}", gateResponse.value.getStackTrace());
+			logger.debug("message = {}", gateResponse.value.getMessage());
+			logger.debug("operatorMessage = {}", gateResponse.value.getOperatorMessage());
+			logger.debug("responseType = {}", gateResponse.value.getResponseType());
+			logger.debug("stackTrace = {}", gateResponse.value.getStackTrace());
 		}
 	}
 
-	private Map<String, Object> gateResponseToMap(GateResponse gateResponse) {
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put("message", gateResponse.getMessage());
-		properties.put("operatorMessage", gateResponse.getOperatorMessage());
-		properties.put("responseType", gateResponse.getResponseType());
-		properties.put("stackTrace", gateResponse.getStackTrace());
-		return properties;
-	}
-
-	public Map<String, Object> authenticateByCertificate(final String guidSignBase64, final String timestamp, final String timestampSignBase64) {
+	public AuthenticationData authenticateByCertificate(final String guidSignBase64, final String timestamp, final String timestampSignBase64) {
 
 		byte[] guidSign = Base64.decodeBase64(guidSignBase64);
 		byte[] timestampSign = Base64.decodeBase64(timestampSignBase64);
@@ -153,21 +144,23 @@ public class UnicloudService {
 		Holder<String> organizationEdoId = new Holder<String>();
 		gateWcfService.registerUserByCertificate(operatorCode, partnerKey, inn, kpp, guidSign, employeeId, gateResponse, organizationId, organizationEdoId);
 
-		Map<String, Object> result  = new HashMap<String, Object>();
+		AuthenticationData authentication = new AuthenticationData();
 		if (gateResponse.value != null) {
+			authentication.setGateResponse(gateResponse.value);
 			String responseType = gateResponse.value.getResponseType().toString();
 			if ("OK".equals(responseType)) {
-				result.put("organizationId", organizationId.value);
-				result.put("organizationEdoId", organizationEdoId.value);
+				authentication.setOrganizationId(organizationId.value);
+				authentication.setOrganizationEdoId(organizationEdoId.value);
 				gateResponse = new Holder<GateResponse>();
 				Holder<String> token = new Holder<String>();
 				gateWcfService.authenticateByCertificate(operatorCode, timestampSign, timestamp, gateResponse, token);
 				if (gateResponse.value != null) {
+					authentication.setGateResponse(gateResponse.value);
 					responseType = gateResponse.value.getResponseType().toString();
 					if ("OK".equals(responseType)) {
-						result.put("token", token.value);
+						authentication.setToken(token.value);
 					} else {
-						result = gateResponseToMap(gateResponse.value);
+						logGateResponse(gateResponse);
 					}
 				} else {
 					String msg = "Error invoking unicloud gate. GateResponse can't be null!";
@@ -175,7 +168,7 @@ public class UnicloudService {
 					throw new IllegalStateException(msg);
 				}
 			} else {
-				result = gateResponseToMap(gateResponse.value);
+				logGateResponse(gateResponse);
 			}
 		} else {
 			String msg = "Error invoking unicloud gate. GateResponse can't be null!";
@@ -183,10 +176,10 @@ public class UnicloudService {
 			throw new IllegalStateException(msg);
 		}
 
-		return result;
+		return authentication;
 	}
 
-	public Map<String, Object> verifySignature(String contentRef, String signature) {
+	public SignatureData verifySignature(String contentRef, String signature) {
 		NodeRef organizationRef = orgstructureService.getOrganization();
 		String operatorCode = (String)nodeService.getProperty(organizationRef, SignedDocflow.PROP_OPERATOR_CODE);
 
@@ -205,19 +198,20 @@ public class UnicloudService {
 			throw new IllegalStateException("Content can't be null.");
 		}
 
-		Map<String, Object> result  = new HashMap<String, Object>();
+		SignatureData signatureData = new SignatureData();
 
         Holder<GateResponse> gateResponse = new Holder<GateResponse>();
 		Holder<String> signerInfo = new Holder<String>();
 		Holder<Boolean> isSignatureValid = new Holder<Boolean>();
 		gateWcfService.verifySignature(content, sign, operatorCode, gateResponse, signerInfo, isSignatureValid);
 		if (gateResponse.value != null) {
+			signatureData.setGateResponse(gateResponse.value);
 			String responseType = gateResponse.value.getResponseType().toString();
 			if ("OK".equals(responseType)) {
-				result.put("signerInfo", signerInfo.value);
-				result.put("isSignatureValid", isSignatureValid.value);
+				signatureData.setSignerInfo(signerInfo.value);
+				signatureData.setIsSignatureValid(isSignatureValid.value);
 			} else {
-				result = gateResponseToMap(gateResponse.value);
+				logGateResponse(gateResponse);
 			}
 		} else {
 			String msg = "Error invoking unicloud gate. GateResponse can't be null!";
@@ -225,6 +219,6 @@ public class UnicloudService {
 			throw new IllegalStateException(msg);
 		}
 
-		return result;
+		return signatureData;
 	}
 }
