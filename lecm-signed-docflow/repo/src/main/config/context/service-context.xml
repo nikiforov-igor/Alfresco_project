@@ -99,6 +99,12 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 	</bean>
+	<bean id="webscript.ru.it.lecm.signed.docflow.getDocumentSignsInfo.getDocumentSignsInfo.get" class="ru.it.lecm.signed.docflow.webscripts.GetDocumentSignsInfoWebscript"
+		  parent="webscript">
+		<property name="signedDocflowService" ref="signedDocflowService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+	</bean>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.unicloud.api.post" class="ru.it.lecm.signed.docflow.webscripts.UnicloudWebscript" parent="webscript">
 		<property name="unicloudService" ref="unicloudService"/>

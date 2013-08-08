@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>getDOcumentSignsInfo</shortname>
+	<description>Gets JSON array, containg document signable attachments by categoris</description>
+	<url>/lecm/signed-docflow/getDocumentSignsInfo</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+</webscript>
