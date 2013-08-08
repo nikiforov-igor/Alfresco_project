@@ -69,9 +69,7 @@ function loadDictionary() {
         success: function (oResponse) {
             var oResults = eval("(" + oResponse.responseText + ")");
             if (oResults != null) {
-                <#if plane>
                     createDatagrid(oResults);
-                </#if>
             }
         },
         failure: function (oResponse) {
