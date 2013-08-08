@@ -11,7 +11,7 @@
 <@formLib.renderFormContainer formId = formId>
 
    <applet code="ru.businesslogic.crypto.userinterface.CryptoApplet.class"  
-	archive="${url.server}${url.context}/scripts/cryptoApplet/ITStampApplet.jar" 
+	archive="${url.server}${url.context}/scripts/signed-docflow/ITStampApplet.jar" 
 	width="1" height="1" name="signApplet">
         <param name="signOnLoad" value="false"/>
         <param name="debug" value="true"/>
@@ -40,6 +40,7 @@
     var onSelectedMenuItemChange = function(event) {
         var oMenuItem = event.newValue;
         CurrentContainer = event.newValue.value;
+		cryptoAppletModule.setCurrentContainer(event.newValue.value);
         cryptoAppletModule.reConfigCert(CurrentContainer);
         this.set("label", (oMenuItem.cfg.getProperty("text")));
     };
