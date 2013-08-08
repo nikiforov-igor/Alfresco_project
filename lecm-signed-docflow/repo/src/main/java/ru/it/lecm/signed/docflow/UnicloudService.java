@@ -25,6 +25,7 @@ import ru.it.lecm.signed.docflow.model.AuthenticationData;
 import ru.it.lecm.signed.docflow.model.SignatureData;
 import ucloud.gate.proxy.ArrayOfOperatorInfo;
 import ucloud.gate.proxy.OperatorInfo;
+import ucloud.gate.proxy.exceptions.EResponseType;
 import ucloud.gate.proxy.exceptions.GateResponse;
 
 /**
@@ -147,8 +148,7 @@ public class UnicloudService {
 		AuthenticationData authentication = new AuthenticationData();
 		if (gateResponse.value != null) {
 			authentication.setGateResponse(gateResponse.value);
-			String responseType = gateResponse.value.getResponseType().toString();
-			if ("OK".equals(responseType)) {
+			if (EResponseType.OK == gateResponse.value.getResponseType()) {
 				authentication.setOrganizationId(organizationId.value);
 				authentication.setOrganizationEdoId(organizationEdoId.value);
 				gateResponse = new Holder<GateResponse>();
@@ -156,8 +156,7 @@ public class UnicloudService {
 				gateWcfService.authenticateByCertificate(operatorCode, timestampSign, timestamp, gateResponse, token);
 				if (gateResponse.value != null) {
 					authentication.setGateResponse(gateResponse.value);
-					responseType = gateResponse.value.getResponseType().toString();
-					if ("OK".equals(responseType)) {
+					if (EResponseType.OK == gateResponse.value.getResponseType()) {
 						authentication.setToken(token.value);
 					} else {
 						logGateResponse(gateResponse);
@@ -206,8 +205,7 @@ public class UnicloudService {
 		gateWcfService.verifySignature(content, sign, operatorCode, gateResponse, signerInfo, isSignatureValid);
 		if (gateResponse.value != null) {
 			signatureData.setGateResponse(gateResponse.value);
-			String responseType = gateResponse.value.getResponseType().toString();
-			if ("OK".equals(responseType)) {
+			if (EResponseType.OK == gateResponse.value.getResponseType()) {
 				signatureData.setSignerInfo(signerInfo.value);
 				signatureData.setIsSignatureValid(isSignatureValid.value);
 			} else {
