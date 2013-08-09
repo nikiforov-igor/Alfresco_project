@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>isDocflowable</shortname>
-	<description>Checks, if document has docflowable aspect</description>
-	<url>/lecm/signed-docflow/isDocflowable</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>none</transaction>
-</webscript>

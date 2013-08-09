@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>isSignable</shortname>
-	<description>Checks, if content has signable aspect</description>
-	<url>/lecm/signed-docflow/isSignable</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-	<transaction>none</transaction>
-</webscript>

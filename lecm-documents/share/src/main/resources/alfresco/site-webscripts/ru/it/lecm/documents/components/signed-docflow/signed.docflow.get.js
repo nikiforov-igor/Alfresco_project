@@ -1,6 +1,7 @@
 function main() {
-	var nodeRef = args["nodeRef"];
-	var isDocflowable = checkDocflowable(nodeRef);
+	var nodeRef = args["nodeRef"],
+		isDocflowable = checkDocflowable(nodeRef);
+
 	model.isDocflowable = isDocflowable;
 	if (isDocflowable) {
 		model.nodeRef = nodeRef;
@@ -8,12 +9,20 @@ function main() {
 }
 
 function checkDocflowable(nodeRef) {
-	var result = false;
-	var url = "/lecm/signed-docflow/isDocflowable?nodeRef=" + nodeRef;
-	var response = remote.connect("alfresco").get(url);
+	var response,
+		responseNative,
+		result = false,
+		url = "/lecm/signed-docflow/config/aspect",
+		dataObj = {
+			action: "get",
+			node: nodeRef,
+			aspect: "{http://www.it.ru/lecm/model/signed-docflow/1.0}docflowable"
+		};
+
+	response = remote.connect("alfresco").post(url, jsonUtils.toJSONString(dataObj), "application/json");
 	if (response.status == 200) {
-		var responseNative = eval('(' + response + ')');
-		result = responseNative.isDocflowable;
+		responseNative = eval('(' + response + ')');
+		result = responseNative.enabled;
 	}
 	return result;
 }

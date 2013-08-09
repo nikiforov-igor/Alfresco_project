@@ -1,7 +1,6 @@
 package ru.it.lecm.signed.docflow.api;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
@@ -155,33 +154,6 @@ public interface SignedDocflow {
 	 */
 	boolean isSignable(NodeRef nodeRef);
 
-	/**
-	 * Добавляет аспект <strong>docflowable</strong> к NodeRef'е
-	 *
-	 * @param nodeRef NodeRef'а, к которой следует добавить аспект <strong>docflowable</strong>
-	 */
-	void addDocflowableAspect(NodeRef nodeRef);
-
-	/**
-	 * Удаляет аспект <strong>docflowable</strong> у NodeRef'ы
-	 *
-	 * @param nodeRef NodeRef'а, у которой следует удалить аспект <strong>docflowable</strong>
-	 */
-	void removeDocflowableAspect(NodeRef nodeRef);
-
-	/**
-	 * Добавляет аспект <strong>signable</strong> к NodeRef'е
-	 *
-	 * @param nodeRef NodeRef'а, к которой следует добавить аспект <strong>signable</strong>
-	 */
-	void addSignableAspect(NodeRef nodeRef);
-
-	/**
-	 * Удаляет аспект <strong>signable</strong> у NodeRef'ы
-	 *
-	 * @param nodeRef NodeRef'а, у которой следует удалить аспект <strong>signable</strong>
-	 */
-	void removeSignableAspect(NodeRef nodeRef);
 	/**
 	 * Получить ссылку на папку, в которой хранятся подписи.
 	 *

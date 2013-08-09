@@ -36,67 +36,70 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	YAHOO.extend(LogicECM.DocumentSignedDocflow, LogicECM.DocumentComponentBase);
 
-	YAHOO.lang.augmentObject(LogicECM.DocumentSignedDocflow.prototype,
-		{
-			newId: null,
+	YAHOO.lang.augmentObject(LogicECM.DocumentSignedDocflow.prototype, {
+		newId: null,
 
-			onReady: function DocumentSignedDocflow_onReady() {
-				var id = this.newId ? this.newId : this.id;
+		onReady: function DocumentSignedDocflow_onReady() {
+			var id = this.newId ? this.newId : this.id;
 
-				var refreshEl = Dom.get(id + "-action-refresh");
-				if (refreshEl != null) {
-					refreshEl.onclick = this.onRefresh.bind(this);
-				}
-
-				Alfresco.util.createTwister(id + "-heading", "DocumentSignedDocflow");
-			},
-			onRefresh: function (layer, args) {
-				alert("SUDDENLY, REFRESH!");
-			},
-			onSignDocuments:  function (layer, args) {
-				cryptoAppletModule.MultipleSignFormShow(this.options.nodeRef);
-			},
-			onSendDocuments: function (layer, args) {
-				alert("onSendDocuments");
-			},
-			onViewSignatures: function (layer, args) {
-				var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
-
-				form.setOptions({
-					width: "50em",
-					templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-					templateRequestParams: {
-						itemKind: "type",
-						itemId: "lecm-signed-docflow:sign",
-						mode: "create",
-						submitType: "json",
-						showCancelButton: "true",
-						formId: "signs-info-short",
-						signedContentRef: this.options.nodeRef
-					},
-					destroyOnHide: true,
-					doBeforeDialogShow:{
-						fn: function( p_form, p_dialog ) {
-							p_dialog.dialog.setHeader("Просмотр информации о подписях");
-							p_form.doBeforeFormSubmit = {
-								fn: function() {
-									this.setAJAXSubmit(false);
-								},
-								scope: p_form
-							};
-						}
-					},
-					onFailure: {
-						fn: function() {
-							Alfresco.util.PopupManager.displayMessage({
-								text: "Не удалось получить информацию о подписях"
-							});
-						},
-						scope: this
-					}
-				});
-
-				form.show();
+			var refreshEl = Dom.get(id + "-action-refresh");
+			if (refreshEl) {
+				refreshEl.onclick = this.onRefresh.bind(this);
 			}
-		}, true);
+
+			Alfresco.util.createTwister(id + "-heading", "DocumentSignedDocflow");
+		},
+
+		onRefresh: function (layer, args) {
+			alert("SUDDENLY, REFRESH!");
+		},
+
+		onSignDocuments:  function (layer, args) {
+			cryptoAppletModule.MultipleSignFormShow(this.options.nodeRef);
+		},
+
+		onSendDocuments: function (layer, args) {
+			alert("onSendDocuments");
+		},
+
+		onViewSignatures: function (layer, args) {
+			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
+
+			form.setOptions({
+				width: "50em",
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+				templateRequestParams: {
+					itemKind: "type",
+					itemId: "lecm-signed-docflow:sign",
+					mode: "create",
+					submitType: "json",
+					showCancelButton: "true",
+					formId: "signs-info-short",
+					signedContentRef: this.options.nodeRef
+				},
+				destroyOnHide: true,
+				doBeforeDialogShow:{
+					fn: function( p_form, p_dialog ) {
+						p_dialog.dialog.setHeader("Просмотр информации о подписях");
+						p_form.doBeforeFormSubmit = {
+							fn: function() {
+								this.setAJAXSubmit(false);
+							},
+							scope: p_form
+						};
+					}
+				},
+				onFailure: {
+					fn: function() {
+						Alfresco.util.PopupManager.displayMessage({
+							text: "Не удалось получить информацию о подписях"
+						});
+					},
+					scope: this
+				}
+			});
+
+			form.show();
+		}
+	}, true);
 })();

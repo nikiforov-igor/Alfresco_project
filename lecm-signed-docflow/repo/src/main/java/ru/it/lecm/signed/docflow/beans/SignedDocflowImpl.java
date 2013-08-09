@@ -117,6 +117,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		addAttributesToOrganization();
 	}
 
+	@Override
 	public List<Signature> getSignatures(NodeRef signedContentRef) {
 		List<AssociationRef> signAssocs = nodeService.getSourceAssocs(signedContentRef, ASSOC_SIGN_TO_CONTENT);
 
@@ -167,6 +168,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		return signs;
 	}
 
+	@Override
 	public void generateTestSigns(final NodeRef contentToSignRef) {
 
 		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
@@ -274,26 +276,6 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	public boolean isSignable(NodeRef nodeRef) {
 		Set<QName> aspects = nodeService.getAspects(nodeRef);
 		return aspects.contains(ASPECT_SIGNABLE);
-	}
-
-	@Override
-	public void addDocflowableAspect(NodeRef nodeRef) {
-		nodeService.addAspect(nodeRef, ASPECT_DOCFLOWABLE, null);
-	}
-
-	@Override
-	public void removeDocflowableAspect(NodeRef nodeRef) {
-		nodeService.removeAspect(nodeRef, ASPECT_DOCFLOWABLE);
-	}
-
-	@Override
-	public void addSignableAspect(NodeRef nodeRef) {
-		nodeService.addAspect(nodeRef, ASPECT_SIGNABLE, null);
-	}
-
-	@Override
-	public void removeSignableAspect(NodeRef nodeRef) {
-		nodeService.removeAspect(nodeRef, ASPECT_SIGNABLE);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	 * YUI Library aliases
 	 */
 	var Dom = YAHOO.util.Dom,
-			Event = YAHOO.util.Event;
+		Event = YAHOO.util.Event;
 
 	/**
 	 * DocumentHistory constructor.
@@ -36,72 +36,79 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	YAHOO.extend(LogicECM.ContentSigning, LogicECM.DocumentComponentBase);
 
-	YAHOO.lang.augmentObject(LogicECM.ContentSigning.prototype,
-			{
-				newId: null,
-				onReady: function() {
-					var id = this.newId ? this.newId : this.id;
+	YAHOO.lang.augmentObject(LogicECM.ContentSigning.prototype, {
+		newId: null,
 
-					Alfresco.util.createTwister(id + "-signing-heading", "ContentSigning");
-					Alfresco.util.createTwister(id + "-exchange-heading", "DocumentAttachmentExchange");
+		onReady: function() {
+			var id = this.newId ? this.newId : this.id;
 
+			Alfresco.util.createTwister(id + "-signing-heading", "ContentSigning");
+			Alfresco.util.createTwister(id + "-exchange-heading", "DocumentAttachmentExchange");
+
+		},
+
+		onViewSignature: function(layer, args) {
+			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
+
+			form.setOptions({
+				width: "50em",
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+				templateRequestParams: {
+					itemKind: "type",
+					itemId: "lecm-signed-docflow:sign",
+					mode: "create",
+					submitType: "json",
+					showCancelButton: "true",
+					formId: "signs-info-short",
+					signedContentRef: this.options.nodeRef
 				},
-				onViewSignature: function(layer, args) {
-					var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
-
-					form.setOptions({
-						width: "50em",
-						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-						templateRequestParams: {
-							itemKind: "type",
-							itemId: "lecm-signed-docflow:sign",
-							mode: "create",
-							submitType: "json",
-							showCancelButton: "true",
-							formId: "signs-info-short",
-							signedContentRef: this.options.nodeRef
-						},
-						destroyOnHide: true,
-						doBeforeDialogShow:{
-							fn: function( p_form, p_dialog ) {
-								p_dialog.dialog.setHeader("Просмотр информации о подписях");
-								p_form.doBeforeFormSubmit = {
-									fn: function() {
-										this.setAJAXSubmit(false);
-									},
-									scope: p_form
-								};
-							}
-						},
-						onFailure: {
+				destroyOnHide: true,
+				doBeforeDialogShow:{
+					fn: function( p_form, p_dialog ) {
+						p_dialog.dialog.setHeader("Просмотр информации о подписях");
+						p_form.doBeforeFormSubmit = {
 							fn: function() {
-								Alfresco.util.PopupManager.displayMessage({
-									text: "Не удалось получить информацию о подписях"
-								});
+								this.setAJAXSubmit(false);
 							},
-							scope: this
-						}
-					});
-
-					form.show();
+							scope: p_form
+						};
+					}
 				},
-				onSignDocument: function(layer, args) {
-					cryptoAppletModule.Sign(this.options.nodeRef);
-				},
-				onRefreshSignatures: function(layer, args) {
-					alert("onRefreshSignatures");
-				},
-				onUploadSignature: function(layer, args) {
-					alert("onUploadSignature");
-				},
-				onSendDocument: function(layer, args) {
-					alert("onSendDocument");
-				},
-				onSignaturesReceived: function(layer, args) {
-					alert("onSignaturesReceived");
-				},
-				onRefreshSentDocuments: function(layer, args) {
-					alert("onRefreshSentDocuments");
+				onFailure: {
+					fn: function() {
+						Alfresco.util.PopupManager.displayMessage({
+							text: "Не удалось получить информацию о подписях"
+						});
+					},
+					scope: this
 				}
-			}, true);
+			});
+
+			form.show();
+		},
+
+		onSignDocument: function(layer, args) {
+			cryptoAppletModule.Sign(this.options.nodeRef);
+		},
+
+		onRefreshSignatures: function(layer, args) {
+			alert("onRefreshSignatures");
+		},
+
+		onUploadSignature: function(layer, args) {
+			alert("onUploadSignature");
+		},
+
+		onSendDocument: function(layer, args) {
+			alert("onSendDocument");
+		},
+
+		onSignaturesReceived: function(layer, args) {
+			alert("onSignaturesReceived");
+		},
+
+		onRefreshSentDocuments: function(layer, args) {
+			alert("onRefreshSentDocuments");
+		}
+	}, true);
 })();

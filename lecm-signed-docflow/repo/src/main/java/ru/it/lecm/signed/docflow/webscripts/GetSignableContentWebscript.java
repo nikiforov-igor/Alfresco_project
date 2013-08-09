@@ -11,10 +11,8 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
@@ -50,14 +48,14 @@ public class GetSignableContentWebscript extends DeclarativeWebScript {
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		JSONArray JSONres = new JSONArray();
-		
+
 		final NodeRef docNodeRef = new NodeRef(req.getParameter("nodeRef"));
 		if(!nodeService.exists(docNodeRef)){
 			String errorMsg = String.format("NodeRef %s does not exist", docNodeRef.toString());
 			logger.error(errorMsg);
 			throw new WebScriptException(errorMsg);
 		}
-		
+
 		List<NodeRef> categories = documentAttachmentsService.getCategories(docNodeRef);
 		for (NodeRef nodeRef : categories) {
 			Map<String, Object> resultObject = new HashMap<String, Object>();
@@ -78,7 +76,7 @@ public class GetSignableContentWebscript extends DeclarativeWebScript {
 				JSONres.put(resultObject);
 			}
 		}
-		
+
 		result.put("result", JSONres);
 		return result;
 	}

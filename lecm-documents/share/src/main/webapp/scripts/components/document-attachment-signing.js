@@ -19,7 +19,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	 * YUI Library aliases
 	 */
 	var Dom = YAHOO.util.Dom,
-			Event = YAHOO.util.Event;
+		Event = YAHOO.util.Event;
 
 	/**
 	 * DocumentHistory constructor.
@@ -36,107 +36,154 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	YAHOO.extend(LogicECM.DocumentAttachmentSigning, LogicECM.DocumentComponentBase);
 
-	YAHOO.lang.augmentObject(LogicECM.DocumentAttachmentSigning.prototype,
-			{
-				newId: null,
-				signingContainer: null,
-				exchangeContainer: null,
-				onReady: function() {
-					var id = this.newId ? this.newId : this.id;
+	YAHOO.lang.augmentObject(LogicECM.DocumentAttachmentSigning.prototype, {
+		newId: null,
+		signingContainer: null,
+		exchangeContainer: null,
+		onReady: function() {
+			var id = this.newId ? this.newId : this.id;
 
-					Alfresco.util.createTwister(id + "-signing-heading", "DocumentAttachmentSigning");
-					Alfresco.util.createTwister(id + "-exchange-heading", "DocumentAttachmentExchange");
+			Alfresco.util.createTwister(id + "-signing-heading", "DocumentAttachmentSigning");
+			Alfresco.util.createTwister(id + "-exchange-heading", "DocumentAttachmentExchange");
 
-					this.signingContainer = Dom.get(id + "-signing-container");
-					this.exchangeContainer = Dom.get(id + "-exchange-container");
+			this.signingContainer = Dom.get(id + "-signing-container");
+			this.exchangeContainer = Dom.get(id + "-exchange-container");
+		},
+
+		onViewSignature: function(layer, args) {
+			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
+
+			form.setOptions({
+				width: "50em",
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+				templateRequestParams: {
+					itemKind: "type",
+					itemId: "lecm-signed-docflow:sign",
+					mode: "create",
+					submitType: "json",
+					showCancelButton: "true",
+					formId: "signs-info-short",
+					signedContentRef: this.options.nodeRef
 				},
-				onViewSignature: function(layer, args) {
-					var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
-
-					form.setOptions({
-						width: "50em",
-						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-						templateRequestParams: {
-							itemKind: "type",
-							itemId: "lecm-signed-docflow:sign",
-							mode: "create",
-							submitType: "json",
-							showCancelButton: "true",
-							formId: "signs-info-short",
-							signedContentRef: this.options.nodeRef
-						},
-						destroyOnHide: true,
-						doBeforeDialogShow:{
-							fn: function( p_form, p_dialog ) {
-								p_dialog.dialog.setHeader("Просмотр информации о подписях");
-								p_form.doBeforeFormSubmit = {
-									fn: function() {
-										this.setAJAXSubmit(false);
-									},
-									scope: p_form
-								};
-							}
-						},
-						onFailure: {
+				destroyOnHide: true,
+				doBeforeDialogShow:{
+					fn: function( p_form, p_dialog ) {
+						p_dialog.dialog.setHeader("Просмотр информации о подписях");
+						p_form.doBeforeFormSubmit = {
 							fn: function() {
-								Alfresco.util.PopupManager.displayMessage({
-									text: "Не удалось получить информацию о подписях"
-								});
+								this.setAJAXSubmit(false);
 							},
-							scope: this
-						}
-					});
-
-					form.show();
+							scope: p_form
+						};
+					}
 				},
-				onSignDocument: function(layer, args) {
-					cryptoAppletModule.Sign(this.options.nodeRef);
-				},
-				onRefreshSignatures: function(layer, args) {
-					alert("onRefreshSignatures");
-				},
-				onUploadSignature: function(layer, args) {
-					alert("onUploadSignature");
-				},
-				onSignableSwitch: function(layer, args) {
-					var checkbox = args.checkbox;
-
-					Alfresco.util.Ajax.request({
-						method: "GET",
-						url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/setSignable?nodeRef=" + this.options.nodeRef + "&action=" + checkbox.checked,
-						requestContentType: "application/json",
-						responseContentType: "application/json",
-						failureCallback: {
-							fn: function(response) {
-								Alfresco.util.PopupManager.displayMessage({
-									text: msg("message.setting.signable.failure")
-								});
-							},
-							scope: this
-						},
-						successCallback: {
-							fn: function(response) {
-								if (checkbox.checked) {
-									this.signingContainer.style.display = "block";
-									this.exchangeContainer.style.display = "block";
-								} else {
-									this.signingContainer.style.display = "none"
-									this.exchangeContainer.style.display = "none";
-								}
-							},
-							scope: this
-						}
-					});
-
-				},
-				onSendDocument: function(layer, args) {
-					alert("onSendDocument");
-				},
-				onSignaturesReceived: function(layer, args) {
-					alert("onSignaturesReceived");
-				},
-				onRefreshSentDocuments: function(layer, args) {
-					alert("onRefreshSentDocuments");
+				onFailure: {
+					fn: function() {
+						Alfresco.util.PopupManager.displayMessage({
+							text: "Не удалось получить информацию о подписях"
+						});
+					},
+					scope: this
 				}
-			}, true);
+			});
+
+			form.show();
+		},
+
+		onSignDocument: function(layer, args) {
+			cryptoAppletModule.Sign(this.options.nodeRef);
+		},
+
+		onRefreshSignatures: function(layer, args) {
+			alert("onRefreshSignatures");
+		},
+
+		onUploadSignature: function(layer, args) {
+			alert("onUploadSignature");
+		},
+
+		onSignableSwitch: function(layer, args) {
+			var checkbox = args.checkbox;
+
+			Alfresco.util.Ajax.request({
+				method: "POST",
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/config/aspect",
+				dataObj: {
+					action: "set",
+					node: this.options.nodeRef,
+					aspect: "{http://www.it.ru/lecm/model/signed-docflow/1.0}signable",
+					enabled: checkbox.checked
+				},
+				requestContentType: "application/json",
+				responseContentType: "application/json",
+				failureCallback: {
+					fn: function(response) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: msg("message.setting.signable.failure")
+						});
+					},
+					scope: this
+				},
+				successCallback: {
+					fn: function(response) {
+						if (checkbox.checked) {
+							this.signingContainer.style.display = "block";
+							this.exchangeContainer.style.display = "block";
+						} else {
+							this.signingContainer.style.display = "none";
+							this.exchangeContainer.style.display = "none";
+						}
+					},
+					scope: this
+				}
+			});
+
+		},
+
+		onSendDocument: function(layer, args) {
+			Alfresco.util.PopupManager.displayMessage({
+				text: "Отправка документа контрагенту"
+			});
+			//проверка всех наших подписей на валидность
+			//если хоть одна из наших подписей невалидна
+			//то ничего никуда не отправляем
+
+			//вызываем сервис, который отправит документ контрагенту
+			//this.options.nodeRef это NodeRef на наше вложение
+			Alfresco.util.Ajax.request({
+				method: "POST",
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/notImplementedYet",
+				requestContentType: "application/json",
+				responseContentType: "application/json",
+				dataObj: {
+					content:[this.options.nodeRef]
+				},
+				failureCallback: {
+					fn: function(response) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: msg("message.sending.attachment.failure")
+						});
+					},
+					scope: this
+				},
+				successCallback: {
+					fn: function(response) {
+						//смотрим какой ответ пришел нам с сервера
+						//если все хорошо, то выводим сообщение что все хорошо
+						//если response.json.gateResponse.responseType != OK то надо пойти в сценарий повторной авторизации
+						//и выполнить действие заново
+					},
+					scope: this
+				}
+			});
+		},
+
+		onSignaturesReceived: function(layer, args) {
+			alert("onSignaturesReceived");
+		},
+
+		onRefreshSentDocuments: function(layer, args) {
+			alert("onRefreshSentDocuments");
+		}
+	}, true);
 })();

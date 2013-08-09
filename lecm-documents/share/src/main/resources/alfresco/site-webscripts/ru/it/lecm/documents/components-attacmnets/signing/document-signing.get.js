@@ -1,49 +1,69 @@
 function main() {
-	var isSignable = false;
-	var nodeRef = args["nodeRef"];
-	var documentNodeRef = getDocument(nodeRef);
+	var isSignable = false,
+		isDocflowable,
+		nodeRef = args["nodeRef"],
+		documentNodeRef = getDocument(nodeRef);
+
 	if (documentNodeRef == null) {
 		return;
 	}
-	var isDocflowable = checkDocflowable(documentNodeRef);
+
+	isDocflowable = checkDocflowable(documentNodeRef);
 	model.isDocflowable = isDocflowable;
 	if (isDocflowable) {
 		isSignable = checkSignable(nodeRef);
 	}
 	model.isSignable = isSignable;
 	model.nodeRef = nodeRef;
-
 }
 
 function getDocument(nodeRef) {
-	var result = null;
-	var url = "/lecm/document/attachments/api/getDocumentByAttachment?nodeRef=" + nodeRef;
-	var response = remote.connect("alfresco").get(url);
+	var result = null,
+		responseNative,
+		url = "/lecm/document/attachments/api/getDocumentByAttachment?nodeRef=" + nodeRef,
+		response = remote.connect("alfresco").get(url);
+
 	if (response.status == 200) {
-		var responseNative = eval('(' + response + ')');
+		responseNative = eval('(' + response + ')');
 		result = responseNative.nodeRef;
 	}
 	return result;
 }
 
 function checkDocflowable(nodeRef) {
-	var result = false;
-	var url = "/lecm/signed-docflow/isDocflowable?nodeRef=" + nodeRef;
-	var response = remote.connect("alfresco").get(url);
+	var response,
+		responseNative,
+		result = false,
+		url = "/lecm/signed-docflow/config/aspect",
+		dataObj = {
+			action: "get",
+			node: nodeRef,
+			aspect: "{http://www.it.ru/lecm/model/signed-docflow/1.0}docflowable"
+		};
+
+	response = remote.connect("alfresco").post(url, jsonUtils.toJSONString(dataObj), "application/json");
 	if (response.status == 200) {
-		var responseNative = eval('(' + response + ')');
-		result = responseNative.isDocflowable;
+		responseNative = eval('(' + response + ')');
+		result = responseNative.enabled;
 	}
 	return result;
 }
 
 function checkSignable(nodeRef) {
-	var result = false;
-	var url = "/lecm/signed-docflow/isSignable?nodeRef=" + nodeRef;
-	var response = remote.connect("alfresco").get(url);
+	var result = false,
+		response,
+		responseNative,
+		url = "/lecm/signed-docflow/config/aspect",
+		dataObj = {
+			action: "get",
+			node: nodeRef,
+			aspect: "{http://www.it.ru/lecm/model/signed-docflow/1.0}signable"
+		}
+
+	response = remote.connect("alfresco").post(url, jsonUtils.toJSONString(dataObj), "application/json");
 	if (response.status == 200) {
-		var responseNative = eval('(' + response + ')');
-		result = responseNative.isSignable;
+		responseNative = eval('(' + response + ')');
+		result = responseNative.enabled;
 	}
 	return result;
 }
