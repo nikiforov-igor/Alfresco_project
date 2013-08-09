@@ -158,6 +158,9 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 			sign.setValid((Boolean) signProperties.get(PROP_IS_VALID));
 			sign.setOur((Boolean) signProperties.get(PROP_IS_OUR));
 
+			sign.setSignatureContent((String) signProperties.get(PROP_SIGNATURE_CONTENT));
+			sign.setFingerprint((String) signProperties.get(PROP_CERT_FINGERPRINT));
+
 			signs.add(sign);
 		}
 

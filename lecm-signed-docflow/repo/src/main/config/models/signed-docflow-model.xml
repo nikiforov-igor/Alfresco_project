@@ -110,7 +110,7 @@
 					<mandatory>true</mandatory>
 				</property>
 				
-				<!-- фингерпринт сертификата -->
+				<!-- Фингерпринт сертификата -->
 				<property name="lecm-signed-docflow:fingerprint">
 					<title>Fingerprint</title>
 					<type>d:text</type>
@@ -160,19 +160,19 @@
 		<!-- Аспект расширяющий lecm-orgstr:organization атрибутами для работы с ЭП -->
 		<aspect name="lecm-signed-docflow:organization-attrs-aspect">
 			<properties>
-				<!-- код спецоператора ЭДО, например 2АЕ - калуга астрал -->
+				<!-- Код спецоператора ЭДО, например 2АЕ - Калуга Астрал -->
 				<property name="lecm-signed-docflow:operator-code">
 					<type>d:text</type>
 				</property>
-				<!-- идентификатор партнерско системы, получаемый у unicloud -->
+				<!-- Идентификатор партнерско системы, получаемый у Unicloud -->
 				<property name="lecm-signed-docflow:partner-key">
 					<type>d:text</type>
 				</property>
-				<!-- внутренний, служебный идентификатор в сервисе unicloud -->
+				<!-- Внутренний, служебный идентификатор в сервисе Unicloud -->
 				<property name="lecm-signed-docflow:organization-id">
 					<type>d:text</type>
 				</property>
-				<!-- ID организации в Астрале. Он глобальный с точки зрения ЭДО, содержится в документах. -->
+				<!-- ID организации в Астрале. Он глобальный с точки зрения ЭДО, содержится в документах -->
 				<property name="lecm-signed-docflow:organization-edo-id">
 					<type>d:text</type>
 				</property>
@@ -194,23 +194,23 @@
 		<!-- Аспект расширяющий lecm-orgstr:personal-data атрибутами для работы с ЭП -->
 		<aspect name="lecm-signed-docflow:personal-data-attrs-aspect">
 			<properties>
-				<!-- пользовательский токен авторизации в сервисе юниклауд, действует 15мин -->
+				<!-- Пользовательский токен авторизации в сервисе Unicloud, действует 15 мин. -->
 				<property name="lecm-signed-docflow:auth-token">
 					<type>d:text</type>
 				</property>
-				<!-- отпечаток сертификата, используемого для подписания -->
+				<!-- Отпечаток сертификата, используемого для подписания -->
 				<property name="lecm-signed-docflow:cert-thumbprint">
 					<type>d:text</type>
 				</property>
-				<!-- способ аутентификации, с помощью локального сертификата, или через смс -->
+				<!-- Способ аутентификации, с помощью локального сертификата, или через СМС -->
 				<property name="lecm-signed-docflow:auth-type">
 					<type>d:text</type>
 					<constraints>
 						<constraint name="lecm-signed-docflow:auth-type-constraint" type="LIST">
 							<parameter name="allowedValues">
 								<list>
-									<value>LOCAL_CERT</value> <!-- авторизация с локальным сертификатом -->
-									<value>REMOTE_CERT</value> <!-- авторизация через смс -->
+									<value>LOCAL_CERT</value><!-- Авторизация с локальным сертификатом -->
+									<value>REMOTE_CERT</value><!-- Авторизация через СМС -->
 								</list>
 							</parameter>
 						</constraint>

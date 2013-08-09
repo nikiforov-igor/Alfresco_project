@@ -29,6 +29,9 @@ public class Signature {
 	private Date updateDate;
 	private String updateDateString;
 
+	private String signatureContent;
+	private String fingerprint;
+
 	public String getNodeRef() {
 		return nodeRef;
 	}
@@ -163,5 +166,21 @@ public class Signature {
 
 	public void setUpdateDateString(String updateDateString) {
 		this.updateDateString = updateDateString;
+	}
+
+	public String getSignatureContent() {
+		return signatureContent;
+	}
+
+	public void setSignatureContent(String signatureContent) {
+		this.signatureContent = signatureContent;
+	}
+
+	public String getFingerprint() {
+		return fingerprint;
+	}
+
+	public void setFingerprint(String fingerprint) {
+		this.fingerprint = fingerprint;
 	}
 }
