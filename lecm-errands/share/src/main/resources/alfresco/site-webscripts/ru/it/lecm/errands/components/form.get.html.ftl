@@ -65,7 +65,7 @@
                         },
                         successCallback: {
                             fn: function (response) {
-                                var container = Dom.get(this.id + '-dnd');
+                                var container = Dom.get('${id}-dnd');
                                 if (container != null) {
                                     container.innerHTML = response.serverResponse.responseText;
 
