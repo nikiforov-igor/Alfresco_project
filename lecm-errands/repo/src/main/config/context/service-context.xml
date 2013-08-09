@@ -87,6 +87,7 @@
         <property name="namespaceService" ref="namespaceService"/>
         <property name="documentService" ref="documentService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="nodeService" ref="nodeService"/>
         <property name="workCalendar" ref="WorkCalendarService"/>
 	</bean>
 

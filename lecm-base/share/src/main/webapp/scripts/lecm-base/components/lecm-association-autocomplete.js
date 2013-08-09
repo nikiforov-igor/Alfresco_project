@@ -29,7 +29,8 @@ LogicECM.module = LogicECM.module || {};
 	    this.currentValueHtmlId = fieldHtmlId;
         this.dataArray = [];
         this.selectedItems = {};
-
+        this.allowedNodes = null;
+        this.allowedNodesScript = null;
         return this;
     };
 
@@ -66,7 +67,11 @@ LogicECM.module = LogicECM.module || {};
 
 	            childrenDataSource: "lecm/forms/picker",
 
-	            defaultValueDataSource: null
+	            defaultValueDataSource: null,
+
+                allowedNodes:null,
+
+                allowedNodesScript: null
             },
 
             selectedItems: null,
@@ -94,7 +99,7 @@ LogicECM.module = LogicECM.module || {};
 
             onReady:function AssociationAutoComplete_onReady() {
                 if (!this.options.disabled) {
-                    this.populateData();
+                    this.populateDataWithAllowedScript();
                 }
 	            this.loadDefaultValue();
             },
@@ -334,12 +339,23 @@ LogicECM.module = LogicECM.module || {};
                         }
 
                         var allowedNodes = me.options.allowedNodes;
-                        if(YAHOO.lang.isArray(allowedNodes) && (allowedNodes.length > 0) && allowedNodes[0]) {
-                            for(i = 0; item = items[i]; i++) {
-                                if(allowedNodes.indexOf(item.nodeRef) < 0) {
-                                    items.splice(i, 1);
+                        if(YAHOO.lang.isArray(allowedNodes)) {
+                            tempItems = [];
+                            k = 0;
+                            for (index in items) {
+                                item = items[index];
+                                var allowed = false;
+                                for (var j = 0; j < allowedNodes.length; j++) {
+                                    if (allowedNodes[j] == item.nodeRef) {
+                                        allowed = true;
+                                    }
+                                }
+                                if (allowed) {
+                                    tempItems[k] = item;
+                                    k++;
                                 }
                             }
+                            items = tempItems;
                         }
 
                         updatedResponse =
@@ -597,6 +613,34 @@ LogicECM.module = LogicECM.module || {};
 			        result = this.options.selectedItemsNameSubstituteString;
 		        }
 		        return result;
-	        }
+	        },
+
+            populateDataWithAllowedScript: function AssociationSelectOne_populateSelect() {
+                var context = this;
+                if (this.options.allowedNodesScript && this.options.allowedNodesScript != "") {
+                    Alfresco.util.Ajax.request({
+                        method: "GET",
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.allowedNodesScript,
+                        successCallback: {
+                            fn: function (response) {
+                                context.options.allowedNodes = response.json.nodes;
+                                context.populateData();
+                            },
+                            scope: this
+                        },
+                        failureCallback: {
+                            fn: function onFailure(response) {
+                                context.options.allowedNodes = null;
+                                context.populateData();
+                            },
+                            scope: this
+                        },
+                        execScripts: true
+                    });
+
+                } else {
+                    context.populateData();
+                }
+            }
         });
 })();

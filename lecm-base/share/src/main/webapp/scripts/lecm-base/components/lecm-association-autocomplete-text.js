@@ -28,7 +28,8 @@ LogicECM.module = LogicECM.module || {};
 		this.controlId = fieldHtmlId + "-cntrl";
 		this.currentValueHtmlId = fieldHtmlId;
 		this.dataArray = [];
-
+        this.allowedNodes = null;
+        this.allowedNodesScript = null;
 		return this;
 	};
 
@@ -55,7 +56,11 @@ LogicECM.module = LogicECM.module || {};
 
 				ignoreNodes: [],
 
-				childrenDataSource: "lecm/forms/picker"
+				childrenDataSource: "lecm/forms/picker",
+
+                allowedNodes:null,
+
+                allowedNodesScript: null
 			},
 
 			dataArray: null,
@@ -68,7 +73,7 @@ LogicECM.module = LogicECM.module || {};
 
 			onReady:function () {
 				if (!this.options.disabled) {
-					this.populateData();
+					this.populateDataWithAllowedScript();
 				}
 			},
 
@@ -210,12 +215,23 @@ LogicECM.module = LogicECM.module || {};
 						}
 
                         var allowedNodes = me.options.allowedNodes;
-                        if(YAHOO.lang.isArray(allowedNodes) && (allowedNodes.length > 0) && allowedNodes[0]) {
-                            for(i = 0; item = items[i]; i++) {
-                                if(allowedNodes.indexOf(item.nodeRef) < 0) {
-                                    items.splice(i, 1);
+                        if(YAHOO.lang.isArray(allowedNodes)) {
+                            tempItems = [];
+                            k = 0;
+                            for (index in items) {
+                                item = items[index];
+                                var allowed = false;
+                                for (var j = 0; j < allowedNodes.length; j++) {
+                                    if (allowedNodes[j] == item.nodeRef) {
+                                        allowed = true;
+                                    }
+                                }
+                                if (allowed) {
+                                    tempItems[k] = item;
+                                    k++;
                                 }
                             }
+                            items = tempItems;
                         }
 
 						updatedResponse =
@@ -234,58 +250,76 @@ LogicECM.module = LogicECM.module || {};
 				return $combine("/", nodeRef.replace("://", "/"), "children");
 			},
 
-			_generateChildrenUrlParams: function (searchTerm)
-			{
-				var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
-					"&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
-					"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
+            _generateChildrenUrlParams: function (searchTerm) {
+                var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
+                    "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+                    "&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
 
-				if (this.options.startLocation && this.options.startLocation.charAt(0) == "/")
-				{
-					params += "&xpath=" + encodeURIComponent(this.options.startLocation);
-				} else if (this.options.xPathLocation)
-				{
-					params += "&xPathLocation=" + encodeURIComponent(this.options.xPathLocation);
-					if (this.options.xPathLocationRoot != null) {
-						params += "&xPathRoot=" + encodeURIComponent(this.options.xPathLocationRoot);
-					}
-				}
-				// has a rootNode been specified?
-				if (this.options.rootNode)
-				{
-					var rootNode = null;
+                if (this.options.startLocation && this.options.startLocation.charAt(0) == "/") {
+                    params += "&xpath=" + encodeURIComponent(this.options.startLocation);
+                } else if (this.options.xPathLocation) {
+                    params += "&xPathLocation=" + encodeURIComponent(this.options.xPathLocation);
+                    if (this.options.xPathLocationRoot != null) {
+                        params += "&xPathRoot=" + encodeURIComponent(this.options.xPathLocationRoot);
+                    }
+                }
+                // has a rootNode been specified?
+                if (this.options.rootNode) {
+                    var rootNode = null;
 
-					if (this.options.rootNode.charAt(0) == "{")
-					{
-						if (this.options.rootNode == "{companyhome}")
-						{
-							rootNode = "alfresco://company/home";
-						}
-						else if (this.options.rootNode == "{userhome}")
-						{
-							rootNode = "alfresco://user/home";
-						}
-						else if (this.options.rootNode == "{siteshome}")
-						{
-							rootNode = "alfresco://sites/home";
-						}
-					}
-					else
-					{
-						// rootNode is either an xPath expression or a nodeRef
-						rootNode = this.options.rootNode;
-					}
-					if (rootNode !== null)
-					{
-						params += "&rootNode=" + encodeURIComponent(rootNode);
-					}
-				}
+                    if (this.options.rootNode.charAt(0) == "{") {
+                        if (this.options.rootNode == "{companyhome}") {
+                            rootNode = "alfresco://company/home";
+                        }
+                        else if (this.options.rootNode == "{userhome}") {
+                            rootNode = "alfresco://user/home";
+                        }
+                        else if (this.options.rootNode == "{siteshome}") {
+                            rootNode = "alfresco://sites/home";
+                        }
+                    }
+                    else {
+                        // rootNode is either an xPath expression or a nodeRef
+                        rootNode = this.options.rootNode;
+                    }
+                    if (rootNode !== null) {
+                        params += "&rootNode=" + encodeURIComponent(rootNode);
+                    }
+                }
 
-				return params;
-			},
+                return params;
+            },
 
-			destroy:function () {
-				LogicECM.module.AssociationAutoCompleteText.superclass.destroy.call(this);
-			}
-		});
+            destroy: function () {
+                LogicECM.module.AssociationAutoCompleteText.superclass.destroy.call(this);
+            },
+
+            populateDataWithAllowedScript: function AssociationSelectOne_populateSelect() {
+                var context = this;
+                if (this.options.allowedNodesScript && this.options.allowedNodesScript != "") {
+                    Alfresco.util.Ajax.request({
+                        method: "GET",
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.allowedNodesScript,
+                        successCallback: {
+                            fn: function (response) {
+                                context.options.allowedNodes = response.json.nodes;
+                                context.populateData();
+                            },
+                            scope: this
+                        },
+                        failureCallback: {
+                            fn: function onFailure(response) {
+                                context.options.allowedNodes = null;
+                                context.populateData();
+                            },
+                            scope: this
+                        },
+                        execScripts: true
+                    });
+
+                } else {
+                    context.populateData();
+                }
+            }
+        });
 })();

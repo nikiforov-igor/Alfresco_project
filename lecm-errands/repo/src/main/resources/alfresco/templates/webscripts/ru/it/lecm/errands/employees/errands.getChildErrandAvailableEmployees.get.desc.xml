@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get available employees for create child errand</shortname>
+    <description>Get available employees for create child errand</description>
+    <url>/lecm/errands/getAvailableEmployeesForChildErrand</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>

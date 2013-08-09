@@ -27,6 +27,8 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.dictionary.AspectDefinition;
+import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
+import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -48,6 +50,7 @@ import ru.it.lecm.statemachine.expression.Expression;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -601,7 +604,15 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 if (documents.size() > 0) {
                     NodeRef document = documents.get(0).getChildRef();
                     QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
-                    value = nodeService.getProperty(document, propertyName).toString();
+                    PropertyDefinition propDef = serviceRegistry.getDictionaryService().getProperty(propertyName);
+                    if (propDef != null) {
+                        if (propDef.getDataType().getName().equals(DataTypeDefinition.DATE) || propDef.getDataType().getName().equals(DataTypeDefinition.DATETIME) ) {
+                            SimpleDateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+                            value = DateFormatISO8601.format(nodeService.getProperty(document, propertyName));
+                        } else {
+                            value = nodeService.getProperty(document, propertyName).toString();
+                        }
+                    }
                 }
             } else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
                 value = variable.getFromValue();
@@ -1186,13 +1197,16 @@ public class StateMachineHelper implements StateMachineServiceBean {
             }
 
             if (access) {
-                HashMap<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
-                setExecutionParamentersByTaskId(taskId, parameters);
+                if (nextState.getOutputVariableValue() != "") {
+                    HashMap<String, Object> parameters = new HashMap<String, Object>();
+                    parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
+                    setExecutionParamentersByTaskId(taskId, parameters);
+                    nextTransition(taskId);
+                }
+
                 if (nextState.isStopSubWorkflows()) {
                     new StateMachineHelper().stopDocumentSubWorkflows(statemachineId);
                 }
-                nextTransition(taskId);
 
                 if (!nextState.isForm()) {
                     String dependencyExecution = parseExecutionId(persistedResponse);

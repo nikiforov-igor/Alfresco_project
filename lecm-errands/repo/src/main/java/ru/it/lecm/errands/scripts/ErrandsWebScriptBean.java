@@ -1,7 +1,9 @@
 package ru.it.lecm.errands.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -34,6 +36,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     private OrgstructureBean orgstructureService;
     private DocumentService documentService;
     private IWorkCalendar workCalendar;
+    private NodeService nodeService;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -45,6 +48,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     public void setWorkCalendar(IWorkCalendar workCalendar) {
         this.workCalendar = workCalendar;
+    }
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
     }
 
     public static enum IssuedByMeEnum {
@@ -268,6 +275,29 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                     .append(docFilter.getParamStr() != null ? docFilter.getParamStr() : "");
         }
         return builder.toString();
+    }
+
+    public Scriptable getAvailableEmployeesForChildErrand(String parent) {
+        if (NodeRef.isNodeRef(parent)) {
+            NodeRef parentRef = new NodeRef(parent);
+            QName type = nodeService.getType(parentRef);
+            if (type.equals(ErrandsService.TYPE_ERRANDS)) {
+                Set<NodeRef> employees = new HashSet<NodeRef>();
+                //соисполнители - подходят!
+                List<AssociationRef> empRefs = nodeService.getTargetAssocs(parentRef, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
+                for (AssociationRef empRef : empRefs) {
+                    employees.add(empRef.getTargetRef());
+                }
+                // подчиненые исполнителя - подходят!
+                List<AssociationRef> bossRef = nodeService.getTargetAssocs(parentRef, ErrandsService.ASSOC_ERRANDS_EXECUTOR);
+                if (bossRef != null && !bossRef.isEmpty()) {
+                    List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(bossRef.get(0).getTargetRef());
+                    employees.addAll(departmentEmployees);
+                }
+                return createScriptable(new ArrayList<NodeRef>(employees));
+            }
+        }
+        return null;
     }
 
     public ScriptNode getAdditionalDocument(String errandNodeRef) {

@@ -45,6 +45,24 @@
 </#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
+<#assign allowedScript = ""/>
+<#if (field.control.params.allowedNodesScript?? && field.control.params.allowedNodesScript != "")>
+    <#assign allowedScript = field.control.params.allowedNodesScript/>
+    <#if (allowedScript?index_of("?") > 0)>
+        <#assign res = allowedScript?matches("(\\{\\w+\\})")/>
+        <#list res as m>
+            <#assign paramName = "${m?replace('{','')?replace('}','')}"/>
+            <#if field.control.params["param_" + "${paramName}"]??>
+                <#assign paramCode = field.control.params["param_" + "${paramName}"]/>
+                    <#if form.arguments[paramCode]??>
+                       <#assign allowedScript = allowedScript?replace(m, form.arguments[paramCode])/>
+                    <#else>
+                        <#assign allowedScript = ""/>
+                    </#if>
+            </#if>
+        </#list>
+    </#if>
+</#if>
 
 <script type="text/javascript">//<![CDATA[
 (function() {
@@ -68,6 +86,9 @@
     </#if>
     <#if args.allowedNodes??>
         allowedNodes: "${args.allowedNodes}".split(","),
+    </#if>
+    <#if (allowedScript?? && allowedScript != "")>
+        allowedNodesScript: "${allowedScript}",
     </#if>
         multipleSelectMode: ${field.endpointMany?string},
         itemType: "${field.control.params.itemType!field.endpointType}",
@@ -117,6 +138,9 @@
     </#if>
     <#if args.allowedNodes??>
         allowedNodes: "${args.allowedNodes}".split(","),
+    </#if>
+    <#if allowedScript??>
+        allowedNodesScript: "${allowedScript}",
     </#if>
     <#if field.control.params.childrenDataSource??>
 	    childrenDataSource: "${field.control.params.childrenDataSource}",

@@ -11,24 +11,14 @@
     <#assign multiValued=true>
 </#if>
 
-<#--<#assign minLimit = ""/>
-<#if field.control.params.minLimitArg??>
-    <#assign minLimit = form.arguments[field.control.params.minLimitArg] />
-</#if>
-
-<#assign maxLimit = ""/>
-<#if field.control.params.maxLimitArg??>
-    <#assign maxLimit = form.arguments[field.control.params.maxLimitArg] />
-</#if>-->
-
 <#assign minLimit = ""/>
 <#if field.control.params.minLimitArg??>
-    <#assign minLimit = args[field.control.params.minLimitArg] />
+    <#assign minLimit = form.arguments[field.control.params.minLimitArg]!"" />
 </#if>
 
 <#assign maxLimit = ""/>
 <#if field.control.params.maxLimitArg??>
-    <#assign maxLimit = args[field.control.params.maxLimitArg] />
+    <#assign maxLimit = form.arguments[field.control.params.maxLimitArg]!"" />
 </#if>
 
 <#if form.capabilities?? && form.capabilities.javascript?? && form.capabilities.javascript == false><#assign jsDisabled=true><#else><#assign jsDisabled=false></#if>

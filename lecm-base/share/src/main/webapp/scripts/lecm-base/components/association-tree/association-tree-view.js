@@ -42,7 +42,8 @@ LogicECM.module = LogicECM.module || {};
         this.rootNode = null;
         this.tree = null;
         this.isSearch = false;
-
+        this.allowedNodes = null;
+        this.allowedNodesScript = null;
 		return this;
 	};
 
@@ -133,7 +134,11 @@ LogicECM.module = LogicECM.module || {};
 
             ignoreNodes: null,
 
-			childrenDataSource: "lecm/forms/picker"
+			childrenDataSource: "lecm/forms/picker",
+
+            allowedNodes: null,
+
+            allowedNodesScript: null
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -168,7 +173,7 @@ LogicECM.module = LogicECM.module || {};
                         );
                 }
 
-                this._createSelectedControls();
+                this.populateDataWithAllowedScript();
                 this.createPickerDialog();
                 this._loadSearchProperties();
             } else {
@@ -777,12 +782,23 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     var allowedNodes = me.options.allowedNodes;
-                    if(YAHOO.lang.isArray(allowedNodes) && (allowedNodes.length > 0) && allowedNodes[0]) {
-                        for(i = 0; item = items[i]; i++) {
-                            if(allowedNodes.indexOf(item.nodeRef) < 0) {
-                                items.splice(i, 1);
+                    if(YAHOO.lang.isArray(allowedNodes)) {
+                        tempItems = [];
+                        k = 0;
+                        for (index in items) {
+                            item = items[index];
+                            var allowed = false;
+                            for (var j = 0; j < allowedNodes.length; j++) {
+                                if (allowedNodes[j] == item.nodeRef) {
+                                    allowed = true;
+                                }
+                            }
+                            if (allowed) {
+                                tempItems[k] = item;
+                                k++;
                             }
                         }
+                        items = tempItems;
                     }
 
 					if (me.options.employeeAbsenceMarker) {
@@ -1460,6 +1476,34 @@ LogicECM.module = LogicECM.module || {};
 					]
 				});
 			}
-		}
+		},
+
+        populateDataWithAllowedScript: function AssociationSelectOne_populateSelect() {
+            var context = this;
+            if (this.options.allowedNodesScript && this.options.allowedNodesScript != "") {
+                Alfresco.util.Ajax.request({
+                    method: "GET",
+                    url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.allowedNodesScript,
+                    successCallback: {
+                        fn: function (response) {
+                            context.options.allowedNodes = response.json.nodes;
+                            context._createSelectedControls();
+                        },
+                        scope: this
+                    },
+                    failureCallback: {
+                        fn: function onFailure(response) {
+                            context.options.allowedNodes = null;
+                            context._createSelectedControls();
+                        },
+                        scope: this
+                    },
+                    execScripts: true
+                });
+
+            } else {
+                context._createSelectedControls();
+            }
+        }
 	});
 })();

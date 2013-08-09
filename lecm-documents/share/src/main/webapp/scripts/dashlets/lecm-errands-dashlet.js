@@ -6,20 +6,18 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.Errands = LogicECM.module.Errands || {};
 LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
 
-(function()
-{
-    LogicECM.module.Errands.dashlet.Errands = function Errands_constructor(htmlId)
-    {
+(function () {
+    LogicECM.module.Errands.dashlet.Errands = function Errands_constructor(htmlId) {
         LogicECM.module.Errands.dashlet.Errands.superclass.constructor.call(this, "LogicECM.module.Errands.dashlet.Errands", htmlId, ["button", "container"]);
         return this;
     };
 
     YAHOO.extend(LogicECM.module.Errands.dashlet.Errands, Alfresco.component.Base,
         {
-            options:
-            {
-                itemType:"lecm-errands:document",
-                destination: null
+            options: {
+                itemType: "lecm-errands:document",
+                destination: null,
+                parentDoc: null
             },
 
             onAddErrandClick: function Errands_onAddErrandsClick() {
@@ -40,7 +38,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                         itemId: itemType,
                         destination: destination,
                         mode: "create",
-                        formId: "created-on-base",
+                        formId: "workflow-form",
                         submitType: "json"
                     });
 
@@ -77,8 +75,33 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                             scope: this
                         }
                     }).show();
+            },
+
+            createChildErrand: function Errands_onAddErrandsClick() {
+                Alfresco.util.Ajax.request({
+                    method: "GET",
+                    url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/errands/getAvailableEmployeesForChildErrand",
+                    dataObj: {
+                        parentDoc: this.options.parentDoc
+                    },
+                    successCallback: {
+                        fn: onSuccess,
+                        scope: this
+                    },
+                    failureCallback: {
+                        fn: onFailure,
+                        scope: this
+                    },
+                    execScripts: true
+                });
+
+                function onSuccess(response) {
+                    this.onAddErrandClick(response.json.employees);
+                }
+
+                function onFailure(response) {
+                    this.onAddErrandClick(null);
+                }
             }
-
-
         });
 })();
