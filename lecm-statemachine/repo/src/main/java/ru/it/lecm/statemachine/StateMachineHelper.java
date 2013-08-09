@@ -605,12 +605,13 @@ public class StateMachineHelper implements StateMachineServiceBean {
                     NodeRef document = documents.get(0).getChildRef();
                     QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
                     PropertyDefinition propDef = serviceRegistry.getDictionaryService().getProperty(propertyName);
+                    Object pv = nodeService.getProperty(document, propertyName);
                     if (propDef != null) {
                         if (propDef.getDataType().getName().equals(DataTypeDefinition.DATE) || propDef.getDataType().getName().equals(DataTypeDefinition.DATETIME) ) {
                             SimpleDateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-                            value = DateFormatISO8601.format(nodeService.getProperty(document, propertyName));
+                            value = pv != null ? DateFormatISO8601.format(pv) : "";
                         } else {
-                            value = nodeService.getProperty(document, propertyName).toString();
+                            value = pv != null ? pv.toString() : "";
                         }
                     }
                 }
