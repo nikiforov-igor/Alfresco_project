@@ -47,16 +47,17 @@
 				<field-visibility>
 					<show id="lecm-signed-docflow:operator-code" for-mode="view,edit,create"/>
 					<show id="lecm-signed-docflow:partner-key" for-mode="view,edit,create"/>
-					<show id="lecm-signed-docflow:applet-key" for-mode="view,edit,create"/>
-					<show id="lecm-signed-docflow:applet-cert" for-mode="view,edit,create"/>
-					<show id="lecm-signed-docflow:applet-container" for-mode="view,edit,create"/>
+					<show id="lecm-signed-docflow:applet-key" for-mode="edit,create"/>
+					<show id="lecm-signed-docflow:applet-cert" for-mode="edit,create"/>
+					<show id="lecm-signed-docflow:applet-container" for-mode="edit,create"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-signed-docflow:operator-code" set="other"/>
-					<field id="lecm-signed-docflow:partner-key" set="other"/>
-					<field id="lecm-signed-docflow:applet-key" set="other"/>
-					<field id="lecm-signed-docflow:applet-cert" set="other"/>
-					<field id="lecm-signed-docflow:applet-container" set="other"/>
+					<set id="sign" appearance="" label-id="info.sign" />
+					<field id="lecm-signed-docflow:operator-code" set="sign"/>
+					<field id="lecm-signed-docflow:partner-key" set="sign"/>
+					<field id="lecm-signed-docflow:applet-key" set="sign"/>
+					<field id="lecm-signed-docflow:applet-cert" set="sign"/>
+					<field id="lecm-signed-docflow:applet-container" set="sign"/>
 				</appearance>
 			</form>
 		</forms>
@@ -71,9 +72,9 @@
 				<create-form template="/ru/it/lecm/signed-docflow/form/multiple-sign-form.ftl" />
 			</form>
             <dependencies>
-                <js src="/scripts/signed-docflow/signApplet.js" />               
+                <js src="/scripts/signed-docflow/signApplet.js" />
             </dependencies>
         </forms>
     </config>
-	
+
 </alfresco-config>
