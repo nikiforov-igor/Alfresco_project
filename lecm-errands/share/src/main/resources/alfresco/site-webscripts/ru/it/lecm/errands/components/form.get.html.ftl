@@ -18,7 +18,6 @@
             Event = YAHOO.util.Event;
 
         function init() {
-
             var links = new LogicECM.module.Errands.Links("${id}").setOptions(
                     {
                         destination: "${nodeRef}",
@@ -196,20 +195,17 @@
                             <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                 ${link.name!""}
                             </a>
+                            <#--<span class="descr">Описание какое-то, пока одно для всех</span>-->
                         </li>
                     </#list>
                 </#if>
             </ul>
         </div>
         <div id="${id}-coexecs" class="data-list-block">
-            <#assign coexecList = []/>
-            <#if coexecs?? && coexecs.items??>
-                <#assign coexecList = coexecs.items/>
-            </#if>
-            <span class="heading">Соисполнители<span class="count"> (${coexecList?size})</span></span>
+            <span class="heading">Соисполнители<span class="count"> (${(coexecs![])?size})</span></span>
             <ul class="data-list persons-list">
-                <#if coexecList?size gt 0>
-                    <#list coexecList as coexec>
+                <#if coexecs?? && coexecs?size gt 0>
+                    <#list coexecs as coexec>
                         <li>
                             <div class="avatar">
                                 <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${coexec.employeeRef}" alt="Avatar" />
@@ -265,20 +261,16 @@
                 </ul>
             </div>
             <div id="${id}-exec-child-errands" class="data-list-block">
-                <#assign coexecList = []/>
-                <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ДОЧЕРНИЕ ПОРУЧЕНИЯ! (участники временно) -->
-                <#if coexecs?? && coexecs.items??>
-                    <#assign coexecList = coexecs.items/>
-                </#if>
-                <span class="heading">Дочерние поручения<span class="count"> (${coexecList?size})</span></span>
+                <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ДОЧЕРНИЕ ПОРУЧЕНИЯ! (соисполнители временно) -->
+                <span class="heading">Дочерние поручения<span class="count"> (${(coexecs![])?size})</span></span>
                 <span id="${id}-exec-child-errands-add" class="yui-button yui-push-button">
                     <span class="first-child">
                         <button type="button">Добавить поручение</button>
                     </span>
                 </span>
                 <ul class="data-list persons-list">
-                    <#if coexecList?size gt 0>
-                        <#list coexecList as coexec>
+                    <#if coexecs?? && coexecs?size gt 0>
+                        <#list coexecs as coexec>
                             <li>
                                 <div class="avatar">
                                     <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${coexec.employeeRef}" alt="Avatar" />

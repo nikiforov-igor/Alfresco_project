@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Get coexecutors for the errand</shortname>
+    <description>Errand coexecutors</description>
+    <url>/lecm/errands/api/getCoexecutors?nodeRef={nodeRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+</webscript>
