@@ -1,8 +1,12 @@
 <#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
+<#import "/ru/it/lecm/documents/controls/history/status-history.lib.ftl" as historyStatus/>
 <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
 <#include "/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-container.ftl">
 
 <#assign id = args.htmlid?js_string>
+<#assign controlId = id + "-cntrl">
+<#assign containerId = id + "-container">
+<#assign viewFormId = id+ "-view">
 
 <#if node??>
 <#assign props = node.properties/>
@@ -123,9 +127,10 @@
 
             <div class="form-field field-status">
                 <div class="read-only-status">
-                    ${props["lecm-statemachine:status"]}
+                    <a onclick="showViewStatusDialog();" href="javascript:void(0);">${props["lecm-statemachine:status"]}</a>
                 </div>
             </div>
+            <@historyStatus.showDialog formId="form-errans-history-status" nodeRef="${nodeRef}" />
         </div>
         <div class="clear"></div>
         <div class="main-info">
@@ -177,11 +182,10 @@
             </ul>
         </div>
         <div id="${id}-links" class="data-list-block">
-            <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ССЫЛКИ! (вложения временно) -->
-            <span class="heading">Ссылки<span class="count" id="${id}-links-count"> (${links.links?size})</span></span>
+            <span class="heading">${msg("label.links.head")}<span class="count" id="${id}-links-count"> (${links.links?size})</span></span>
             <span id="${id}-links-add" class="yui-button yui-push-button">
                 <span class="first-child">
-                    <button type="button">Добавить ссылку</button>
+                    <button type="button">${msg("label.links.button")}</button>
                 </span>
             </span>
             <ul class="data-list" id="${id}-links-list">
@@ -192,7 +196,6 @@
                             <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                 ${link.name!""}
                             </a>
-                            <#--<span class="descr">Описание какое-то, пока одно для всех</span>-->
                         </li>
                     </#list>
                 </#if>
@@ -242,11 +245,10 @@
                 </ul>
             </div>
             <div id="${id}-exec-links" class="data-list-block">
-                <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ССЫЛКИ! (вложения временно) -->
-                <span class="heading">Ссылки<span class="count" id="${id}-execute-links-count"> (${(executeLinks.links)?size})</span></span>
+                <span class="heading">${msg("label.links.head")}<span class="count" id="${id}-execute-links-count"> (${(executeLinks.links)?size})</span></span>
                 <span id="${id}-exec-links-add" class="yui-button yui-push-button">
                     <span class="first-child">
-                        <button type="button">Добавить ссылку</button>
+                        <button type="button">${msg("label.links.button")}</button>
                     </span>
                 </span>
                 <ul class="data-list" id="${id}-execute-links-list">
@@ -257,7 +259,6 @@
                                 <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                     ${link.name!""}
                                 </a>
-                                <#--<span class="descr">Описание какое-то, пока одно для всех</span>-->
                             </li>
                         </#list>
                     </#if>
