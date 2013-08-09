@@ -11,6 +11,8 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransacti
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.version.VersionHistory;
+import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.alfresco.util.ISO8601DateFormat;
@@ -38,6 +40,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	private UnicloudService unicloudService;
 	private BusinessJournalService businessJournalService;
 	private DocumentAttachmentsService documentAttachmentsService;
+	private VersionService versionService;
 
 	public void setUnicloudService(UnicloudService unicloudService) {
 		this.unicloudService = unicloudService;
@@ -49,6 +52,10 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
 		this.documentAttachmentsService = documentAttachmentsService;
+	}
+
+	public void setVersionService(VersionService versionService) {
+		this.versionService = versionService;
 	}
 
 	@Override
@@ -167,7 +174,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 		return signs;
 	}
-	
+
 	public Map<NodeRef, List<Signature>> getSignaturesInfo(List<NodeRef> nodeRefList) {
 		Map<NodeRef, List<Signature>> result = new HashMap<NodeRef, List<Signature>>();
 		for (NodeRef nodeRef : nodeRefList) {
@@ -325,6 +332,12 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 			signatureProperties.put(PROP_IS_VALID, true);
 			signatureProperties.put(PROP_UPDATE_DATE, signatureProperties.get(PROP_SIGNING_DATE));
 			signatureProperties.put(PROP_IS_OUR, isOurSignature);
+			signatureProperties.put(ContentModel.PROP_NAME, createSignatureName(contentRef));
+			signatureProperties.put(PROP_CONTENT_REF, contentRef);
+			NodeRef documentRef = getDocumentRef(contentRef);
+			if (documentRef != null) {
+				signatureProperties.put(PROP_DOCUMENT_REF, getDocumentRef(contentRef));
+			}
 			NodeRef signaturesFolder = getSignedDocflowFolder();
 			QName assocQName = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, UUID.randomUUID().toString());
 			NodeRef signatureNode = nodeService.createNode(signaturesFolder, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_SIGN, signatureProperties).getChildRef();
@@ -342,8 +355,19 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		return result;
 	}
 
+	private String createSignatureName(final NodeRef contentRef) {
+		String contentName = (String)nodeService.getProperty(contentRef, ContentModel.PROP_NAME);
+		VersionHistory history = versionService.getVersionHistory(contentRef);
+		String version = (history != null) ? history.getHeadVersion().getVersionLabel() : "1.0";
+		return String.format("подпись контента %s версии %s", contentName, version);
+	}
+
+	private NodeRef getDocumentRef(final NodeRef contentRef) {
+		return documentAttachmentsService.getDocumentByAttachment(contentRef);
+	}
+
 	private void addBusinessJournalRecord(NodeRef contentRef, NodeRef signatureRef) {
-		final NodeRef baseDocumentRef = documentAttachmentsService.getDocumentByAttachment(contentRef);
+		final NodeRef baseDocumentRef = getDocumentRef(contentRef);
 		final String messageTemplate;
 		final List<String> objects = new ArrayList<String>();
 

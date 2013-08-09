@@ -141,6 +141,16 @@ public interface SignedDocflow {
 	QName PROP_APPLET_CONTAINER = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "applet-container");
 
 	/**
+	 * &lt;property name="lecm-signed-docflow:content-ref"&gt;
+	 */
+	QName PROP_CONTENT_REF = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "content-ref");
+
+	/**
+	 * &lt;property name="lecm-signed-docflow:document-ref"&gt;
+	 */
+	QName PROP_DOCUMENT_REF = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "document-ref");
+
+	/**
 	 * Проверяет, есть ли у NodeRef'ы аспект <strong>docflowable</strong>
 	 *
 	 * @param nodeRef NodeRef'а у которой следует проверить наличие аспекта <strong>docflowable</strong>

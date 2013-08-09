@@ -109,12 +109,23 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
-				
+
 				<!-- Фингерпринт сертификата -->
 				<property name="lecm-signed-docflow:fingerprint">
 					<title>Fingerprint</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+				</property>
+
+				<!-- NodeRef на тот cm:content, к которому относится эта подпись -->
+				<property name="lecm-signed-docflow:content-ref">
+					<type>d:noderef</type>
+					<mandatory>false</mandatory>
+				</property>
+
+				<property name="lecm-signed-docflow:document-ref">
+					<type>d:noderef</type>
+					<mandatory>false</mandatory>
 				</property>
 
 			</properties>
@@ -129,7 +140,7 @@
 					</source>
 					<target>
 						<class>cm:content</class>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
 				</association>
