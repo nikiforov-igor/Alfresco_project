@@ -11,6 +11,7 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string>
+	                        <![CDATA[
 	                        var document = bpm_package.children[0];
 	                        if (document != null) {
 		                        var logText = "Сотрудник #initiator отменил поручение: #mainobject.";
@@ -18,12 +19,12 @@
 
 		                        var initiator = null;
 		                        var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
-		                        if (initiatorAssoc != null &amp;&amp; initiatorAssoc.length == 1) {
+		                        if (initiatorAssoc != null && initiatorAssoc.length == 1) {
 		                            initiator = initiatorAssoc[0];
 		                        }
 
 		                        var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-		                        if (executorAssoc != null &amp;&amp; executorAssoc.length == 1 &amp;&amp; initiator != null) {
+		                        if (executorAssoc != null && executorAssoc.length == 1 && initiator != null) {
 		                            var executor = executorAssoc[0];
 			                        var recipients = [];
 			                        recipients.push(executor);
@@ -34,9 +35,25 @@
 			                        notificationText += documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
 	                                notificationText += " ";
 	                                notificationText += documentScript.wrapperTitle("отменено", lecmErrandWf_cancelReason);
+
+									var countChildErrands = 0;
+									var connectedDocuments = documentConnection.getConnectedDocuments(document, "onBasis", "lecm-errands:document");
+									if (connectedDocuments != null) {
+										countChildErrands = connectedDocuments.length;
+									}
+									notificationText += ". Внимание: На основании этого поручения Вами было создано ";
+									var documentRefLink = document.nodeRef.toString().replace("://", "/");
+									var url = "/share/page/errands-list?query=" + encodeURIComponent("!Отменено, !Удалено, !Исполнено, !Не исполнено");
+									url += "&formId=" + encodeURIComponent("Все");
+									url += "#filter=errandsChildFilter|" + documentRefLink;
+									notificationText += "<a href='" + url + "'>";
+									notificationText += countChildErrands;
+									notificationText += "</a>";
+
 			                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
 		                        }
 	                        }
+	                        ]]>
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>

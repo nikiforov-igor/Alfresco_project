@@ -453,4 +453,8 @@
     <bean id="issuedErrandsDeadlineImportant" class="ru.it.lecm.errands.beans.IssuedByMeDeadlineImportant" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
         <property name="paramStr" value="initiator/deadline/true/false"/>
     </bean>
+
+	<bean id="errandsChildFilter" class="ru.it.lecm.errands.beans.ErrandsChildFilter" depends-on="errandsService" parent="documentsFilter" init-method="register">
+
+	</bean>
 </beans>

@@ -4,6 +4,7 @@ package ru.it.lecm.documents.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -164,5 +165,17 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 			return "Success delete";
 		}
 		return "Failure: node not found";
+	}
+
+	public Scriptable getConnectedDocuments(ScriptNode document, String connectionTypeCode, String connectedDocumentType) {
+		ParameterCheck.mandatory("document", document);
+		ParameterCheck.mandatory("connectionTypeCode", connectionTypeCode);
+
+		QName documentTypeQName = QName.createQName(connectedDocumentType, serviceRegistry.getNamespaceService());
+		List<NodeRef> connectedDocuments = this.documentConnectionService.getConnectedDocuments(document.getNodeRef(), connectionTypeCode, documentTypeQName);
+		if (connectedDocuments != null) {
+			return createScriptable(connectedDocuments);
+		}
+		return null;
 	}
 }

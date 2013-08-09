@@ -25,6 +25,7 @@ public interface ErrandsService {
 	public static final QName PROP_ERRANDS_INITIATOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc-ref");
     public static final QName PROP_ERRANDS_EXECUTOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "executor-assoc-ref");
     public static final QName PROP_ERRANDS_CONTROLLER_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "controller-assoc-ref");
+    public static final QName PROP_ERRANDS_ADDITIONAL_DOCUMENT_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "additional-document-assoc-ref");
 
     public static final QName PROP_ERRANDS_IS_IMPORTANT = QName.createQName(ERRANDS_NAMESPACE_URI, "is-important");
     public static final QName PROP_ERRANDS_LIMITATION_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "limitation-date");
