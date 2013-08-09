@@ -2501,9 +2501,14 @@ span.person a div.description:empty {
 	cursor: pointer;
 	opacity: 1;
 
-	-webkit-transform: rotate(-90deg);  /* Chrome, Safari 3.1+ */
-	-moz-transform: rotate(-90deg);  /* Firefox 3.5-15 */
-	-ms-transform: rotate(-90deg);  /* IE 9 */
-	-o-transform: rotate(-90deg);  /* Opera 10.50-12.00 */
-	transform: rotate(-90deg);  /* Firefox 16+, IE 10+, Opera 12.10+ */
+	-webkit-transform: rotate(90deg);  /* Chrome, Safari 3.1+ */
+	-moz-transform: rotate(90deg);  /* Firefox 3.5-15 */
+	-ms-transform: rotate(90deg);  /* IE 9 */
+	-o-transform: rotate(90deg);  /* Opera 10.50-12.00 */
+	transform: rotate(90deg);  /* Firefox 16+, IE 10+, Opera 12.10+ */
 }
+
+.signs-category-header {}
+.signs-file-header {}
+.signs-items-table {}
+.signs-items-separator {}

@@ -2,9 +2,9 @@
 (function () {
 	"use strict";
 
-	LogicECM.module.SignsInfoForm = function LogicECM_module_SignsInfoForm(htmlId) {
+	LogicECM.module.SignsShortForm = function LogicECM_module_SignsInfoForm(htmlId) {
 
-		LogicECM.module.SignsInfoForm.superclass.constructor.call(this, "LogicECM.module.SignsInfoForm", htmlId, null);
+		LogicECM.module.SignsShortForm.superclass.constructor.call(this, "LogicECM.module.SignsInfoForm", htmlId, null);
 
 		this.ids = {
 			divSignsHeader:     "signs-header",
@@ -21,7 +21,7 @@
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.module.SignsInfoForm, Alfresco.component.Base, {
+	YAHOO.extend(LogicECM.module.SignsShortForm, Alfresco.component.Base, {
 
 		_generateIds: function() {
 			var id;
@@ -97,7 +97,7 @@
 				}
 
 				var i, sign, signContainer, signRow, signLink,
-					signsInfo = response.json,
+					signsInfo = response.json[0], // [{}, ...]
 					signs = signsInfo.signatures,
 					signsLength = signs.length;
 

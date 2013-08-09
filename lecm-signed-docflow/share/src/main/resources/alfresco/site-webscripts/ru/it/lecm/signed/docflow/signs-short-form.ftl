@@ -22,5 +22,5 @@
 <@formLib.renderFormsRuntime formId = formId />
 
 <script type="text/javascript">
-	new LogicECM.module.SignsInfoForm("${htmlId}").setOptions({ "signedContentRef": "${signedContentRef}" });
+	new LogicECM.module.SignsShortForm("${htmlId}").setOptions({ "signedContentRef": "${signedContentRef}" });
 </script>
