@@ -167,6 +167,14 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 		return signs;
 	}
+	
+	public Map<NodeRef, List<Signature>> getSignaturesInfo(List<NodeRef> nodeRefList) {
+		Map<NodeRef, List<Signature>> result = new HashMap<NodeRef, List<Signature>>();
+		for (NodeRef nodeRef : nodeRefList) {
+			result.put(nodeRef, getSignatures(nodeRef));
+		}
+		return result;
+	}
 
 	@Override
 	public void generateTestSigns(final NodeRef contentToSignRef) {

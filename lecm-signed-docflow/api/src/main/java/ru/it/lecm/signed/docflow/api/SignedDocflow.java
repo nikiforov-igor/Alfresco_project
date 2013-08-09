@@ -163,6 +163,13 @@ public interface SignedDocflow {
     void generateTestSigns(final NodeRef contentToSignRef);
 
     List<Signature> getSignatures(NodeRef signedContentRef);
+	
+	/**
+	 * Получает подписи для каждого вложения
+	 * @param nodeRefList
+	 * @return 
+	 */
+	Map<NodeRef, List<Signature>> getSignaturesInfo(List<NodeRef> nodeRefList);
 
 	/**
 	 * Подписать контент (стандартный cm:content или вложение документа).

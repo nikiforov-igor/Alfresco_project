@@ -1,5 +1,8 @@
 package ru.it.lecm.signed.docflow.webscripts;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -19,7 +22,6 @@ import java.util.Map;
 public class GetSignsInfo extends DeclarativeWebScript {
 
 	private NodeService nodeService;
-
 	private SignedDocflow signedDocflowService;
 
 	public void setNodeService(NodeService nodeService) {
@@ -40,27 +42,40 @@ public class GetSignsInfo extends DeclarativeWebScript {
 		}
 
 		JSONObject jsonResult;
-
+		JSONArray jsonArrayResult;
 		try {
 			String signedContentRefString = req.getParameter("signedContentRef");
-			NodeRef signedContentRef = new NodeRef(signedContentRefString);
-
-			jsonResult = new JSONObject();
-			jsonResult.put("signedContentName", nodeService.getProperty(signedContentRef, ContentModel.PROP_NAME));
-
-			List<Signature> signatures = signedDocflowService.getSignatures(signedContentRef);
-			JSONArray signaturesJsonArray = new JSONArray();
-
-			for(Signature signature : signatures) {
-				signaturesJsonArray.put(new JSONObject(signature));
+			List<String> signedContentStringList = Arrays.asList(signedContentRefString.split("!!!"));
+			List<NodeRef> signedContentList = new ArrayList<NodeRef>();
+			for (String string : signedContentStringList) {
+				signedContentList.add(new NodeRef(string));
 			}
 
-			jsonResult.put("signatures", signaturesJsonArray);
+			jsonArrayResult = new JSONArray();
+
+			Map<NodeRef, List<Signature>> signatures = signedDocflowService.getSignaturesInfo(signedContentList);
+			
+			for (Map.Entry<NodeRef, List<Signature>> entry : signatures.entrySet()) {
+				JSONArray signaturesJsonArray = new JSONArray();
+				jsonResult = new JSONObject();
+				NodeRef nodeRef = entry.getKey();
+				List<Signature> signaturesList = entry.getValue();
+				jsonResult.put("signedContentNodeRef", nodeRef);
+				jsonResult.put("signedContentName", nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
+
+				for (Signature signature : signaturesList) {
+					signaturesJsonArray.put(new JSONObject(signature));
+				}
+				jsonResult.put("signatures", signaturesJsonArray);
+				jsonArrayResult.put(jsonResult);
+			}
+
+			
 		} catch (JSONException e) {
 			throw new WebScriptException(">>> >>> GetSignsInfo <<< <<<");
 		}
 
-		result.put("result", jsonResult);
+		result.put("result", jsonArrayResult);
 		return result;
 	}
 }
