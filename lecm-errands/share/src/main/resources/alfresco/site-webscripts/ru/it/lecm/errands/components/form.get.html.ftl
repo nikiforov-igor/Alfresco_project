@@ -157,14 +157,13 @@
         </div>
         <div class="clear"></div>
         <div class="main-info">
-            Поручение дал <a href="javascript:void(0);" onclick="viewAttributes('${props["lecm-errands:initiator-assoc-ref"]}', null, 'logicecm.employee.view')">${props["lecm-errands:initiator-assoc-text-content"]}</a>
+            ${msg("message.eddand.fromEmployee")} <a href="javascript:void(0);" onclick="viewAttributes('${props["lecm-errands:initiator-assoc-ref"]}', null, 'logicecm.employee.view')">${props["lecm-errands:initiator-assoc-text-content"]}</a>
             &nbsp;
             <span id="${id}-time-ago"></span>
-            &nbsp;
-            сотруднику <a href="javascript:void(0);" onclick="viewAttributes('${props["lecm-errands:executor-assoc-ref"]}', null, 'logicecm.employee.view')">${props["lecm-errands:executor-assoc-text-content"]}</a>
+            &nbsp;${msg("message.eddand.toEmployee")} <a href="javascript:void(0);" onclick="viewAttributes('${props["lecm-errands:executor-assoc-ref"]}', null, 'logicecm.employee.view')">${props["lecm-errands:executor-assoc-text-content"]}</a>
             <br/>
             <#if additionalDoc?? && additionalDoc.name??>
-                На основании документа <a href="${siteURL("document?nodeRef=" + additionalDoc.nodeRef)}">${additionalDoc.name}</a>
+                ${msg("message.eddand.onBasis")} <a href="${siteURL("document?nodeRef=" + additionalDoc.nodeRef)}">${additionalDoc.name}</a>
             </#if>
         </div>
         <#assign content = props["lecm-errands:content"]/>
@@ -184,13 +183,13 @@
                 </#if>
             </#if>
 
-            Срок исполнения <span>${limitDate?string("d MMM yyyy")}</span>
+            ${msg("message.eddand.limitationDate")} <span>${limitDate?string("d MMM yyyy")}</span>
             <#if justInTime>
-                &nbsp;исполнить <span>Точно в срок</span>
+                &nbsp;${msg("message.eddand.justInTime")}
             </#if>
         </div>
         <div id="${id}-attachments" class="data-list-block">
-            <span class="heading">Вложения<span class="count"> (${(attachments![])?size})</span></span>
+            <span class="heading">${msg("message.eddand.attachments")}<span class="count"> (${(attachments![])?size})</span></span>
             <ul class="data-list">
                 <#if attachments?? && attachments?size gt 0>
                     <#list attachments as attachment>
@@ -219,14 +218,13 @@
                             <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
                                 ${link.name!""}
                             </a>
-                            <#--<span class="descr">Описание какое-то, пока одно для всех</span>-->
                         </li>
                     </#list>
                 </#if>
             </ul>
         </div>
         <div id="${id}-coexecs" class="data-list-block">
-            <span class="heading">Соисполнители<span class="count"> (${(coexecs![])?size})</span></span>
+            <span class="heading">${msg("message.eddand.coexecutors")}<span class="count"> (${(coexecs![])?size})</span></span>
             <ul class="data-list persons-list">
                 <#if coexecs?? && coexecs?size gt 0>
                     <#list coexecs as coexec>
@@ -248,9 +246,9 @@
         <#-- РАБОТА НАД ПОРУЧЕНИЕМ -->
         <div id="${id}-exec" class="block">
             <div id="${id}-dnd" class="dnd-uploader"></div>
-            <div class="title">Работа над поручением</div>
+            <div class="title">${msg("message.eddand.work")}</div>
             <div id="${id}-exec-attachments" class="data-list-block">
-                <span class="heading">Вложения<span class="count"> (${(attachmentsExec![])?size})</span></span>
+                <span class="heading">${msg("message.eddand.attachments")}<span class="count"> (${(attachmentsExec![])?size})</span></span>
                 <ul class="data-list">
                     <#if attachmentsExec?? && attachmentsExec?size gt 0>
                         <#list attachmentsExec as attachment>
@@ -286,10 +284,10 @@
             </div>
             <div id="${id}-exec-child-errands" class="data-list-block">
                 <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ДОЧЕРНИЕ ПОРУЧЕНИЯ! (соисполнители временно) -->
-                <span class="heading">Дочерние поручения<span class="count"> (${(coexecs![])?size})</span></span>
+                <span class="heading">${msg("message.eddand.childErrands")}<span class="count"> (${(coexecs![])?size})</span></span>
                 <span id="${id}-exec-child-errands-add" class="yui-button yui-push-button">
                     <span class="first-child">
-                        <button type="button">Добавить поручение</button>
+                        <button type="button">${msg("message.eddand.addChildErrands")}</button>
                     </span>
                 </span>
                 <ul class="data-list persons-list">
@@ -337,9 +335,9 @@
         <div class="line"></div>
         <#-- КОНТРОЛЬ ИСПОЛНЕНИЯ -->
         <div id="${id}-contr" class="block">
-            <div class="title">Контроль исполнения</div>
+            <div class="title">${msg("message.eddand.work")}</div>
             <div id="${id}-contr-attachments" class="data-list-block">
-                <span class="heading">Вложения<span class="count"> (${(attachmentsControl![])?size})</span></span>
+                <span class="heading">${msg("message.eddand.executionControl")}<span class="count"> (${(attachmentsControl![])?size})</span></span>
                 <ul class="data-list">
                     <#if attachmentsControl?? && attachmentsControl?size gt 0>
                         <#list attachmentsControl as attachment>
