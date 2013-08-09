@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Set execution report</shortname>
+	<description>Set execution report</description>
+	<url>/lecm/errands/api/setExecutionReport</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

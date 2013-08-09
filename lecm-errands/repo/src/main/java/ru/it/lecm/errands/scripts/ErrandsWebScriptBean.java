@@ -306,5 +306,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return errandsService.createLinks(new NodeRef(nodeRef), name, url, isExecute);
     }
 
+	public void setExecutionReport(String documentRef, String report) {
+		ParameterCheck.mandatory("documentRef", documentRef);
+		ParameterCheck.mandatory("report", report);
 
+		errandsService.setExecutionReport(new NodeRef(documentRef), report);
+	}
 }

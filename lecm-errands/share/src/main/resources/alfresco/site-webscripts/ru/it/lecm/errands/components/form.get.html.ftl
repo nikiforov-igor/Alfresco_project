@@ -47,6 +47,7 @@
 
             <#-- Dnd uploader form - start -->
             drawDndForm("${nodeRef}", '${id}');
+	        initSetExecutionReportForm('${id}');
             <#-- Dnd uploader form - end -->
         }
 
@@ -94,6 +95,29 @@
                         execScripts: true
                     });
         }
+
+	    function initSetExecutionReportForm(htmlId) {
+		    var execReportElement = YAHOO.util.Dom.get(htmlId + "-setExecutionReport-textarea");
+		    if (execReportElement != null) {
+			    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-report-set", function() {
+				    Alfresco.util.Ajax.jsonRequest(
+						    {
+							    method: "POST",
+							    url: Alfresco.constants.PROXY_URI + "lecm/errands/api/setExecutionReport",
+							    dataObj: {
+								    nodeRef: "${nodeRef}",
+								    executionReport: execReportElement.value
+							    },
+							    successMessage: "${msg("message.setExecutionReport.success")}",
+							    failureMessage: "${msg("message.setExecutionReport.failure")}"
+						    });
+			    });
+
+			    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-report-reset", function() {
+				    execReportElement.value = "";
+			    });
+		    }
+	    }
 
         Event.onDOMReady(init);
     })();
@@ -291,25 +315,23 @@
                 </ul>
             </div>
             <div id="${id}-exec-report" class="exec-report">
-                <form>
-                    <span class="heading">Отчет об исполнении</span> <br/>
-                    <div>
-                        <textarea rows="" cols=""></textarea>
-                    </div>
-                    <div>
-                        <span id="${id}-exec-child-errands-add" class="yui-button yui-push-button">
-                            <span class="first-child">
-                                <button type="submit">Сохранить</button>
-                            </span>
+                <span class="heading">${msg("message.errands.executionReport")}</span> <br/>
+                <div>
+                    <textarea id="${id}-setExecutionReport-textarea" rows="" cols="">${props["lecm-errands:execution-report"]!""}</textarea>
+                </div>
+                <div>
+                    <span id="${id}-exec-report-set" class="yui-button yui-push-button">
+                        <span class="first-child">
+                            <button>${msg("message.errands.executionReport.save")}</button>
                         </span>
-                        <br/>
-                        <span id="${id}-exec-child-errands-add" class="yui-button yui-push-button">
-                            <span class="first-child">
-                                <button type="reset">Очистить</button>
-                            </span>
+                    </span>
+                    <br/>
+                    <span id="${id}-exec-report-reset" class="yui-button yui-push-button">
+                        <span class="first-child">
+                            <button>${msg("message.errands.executionReport.clear")}</button>
                         </span>
-                    </div>
-                </form>
+                    </span>
+                </div>
             </div>
         </div>
         <div class="line"></div>

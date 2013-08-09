@@ -32,6 +32,7 @@ public interface ErrandsService {
     public static final QName PROP_ERRANDS_IS_EXPIRED = QName.createQName(ERRANDS_NAMESPACE_URI, "is-expired");
     public static final QName PROP_ERRANDS_TITLE = QName.createQName(ERRANDS_NAMESPACE_URI, "title");
     public static final QName PROP_ERRANDS_START_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "start-date");
+    public static final QName PROP_ERRANDS_EXECUTION_REPORT = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-report");
 
 	public static final QName SETTINGS_PROP_MODE_CHOOSING_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-mode-choosing-executors");
 	public static final String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION = "ORGANIZATION";
@@ -163,4 +164,11 @@ public interface ErrandsService {
      * @return Ссылка на документ-основание
      */
     public NodeRef getAdditionalDocumentNode(NodeRef errand);
+
+	/**
+	 * Сохранение отчёта об исполнении
+	 * @param errandRef Ссылка на поручение
+	 * @param report Отчёт об исполнении
+	 */
+	public void setExecutionReport(NodeRef errandRef, String report);
 }

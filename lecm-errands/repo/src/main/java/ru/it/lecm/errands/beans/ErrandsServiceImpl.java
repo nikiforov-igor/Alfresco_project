@@ -416,4 +416,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return findNodeByAssociationRef(errand, ASSOC_ADDITIONAL_ERRANDS_DOCUMENT, null, BaseBean.ASSOCIATION_TYPE.TARGET);
     }
 
+	public void setExecutionReport(NodeRef errandRef, String report) {
+		nodeService.setProperty(errandRef, PROP_ERRANDS_EXECUTION_REPORT, report);
+	}
 }
