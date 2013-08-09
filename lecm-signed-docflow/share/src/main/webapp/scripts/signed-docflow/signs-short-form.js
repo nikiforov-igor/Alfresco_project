@@ -10,7 +10,8 @@
 			divSignsHeader:     "signs-header",
 			divSignsContractor: "signs-contractor",
 			divSignsOur:        "signs-our",
-			divSignsContainer:  "signs-container"
+			divSignsContainer:  "signs-container",
+			divRefreshButton:   "refresh"
 		};
 
 		this.options = {
@@ -51,6 +52,33 @@
 					this.elements[id] = Get(this.ids[id]);
 				}
 			}
+		},
+
+		_initRefreshButton: function() {
+			var divRefreshButton = new YAHOO.util.Element(this.elements.divRefreshButton);
+			divRefreshButton.on("click", this.refreshSigns);
+		},
+
+		refreshSigns: function() {
+			console.log(">>> refreshSigns was executed!"); // TODO: remove this console.log line, uncomment ajax-lines
+
+//			var Ajax = Alfresco.util.Ajax;
+//
+//			Ajax.jsonRequest({
+//				method: "POST",
+//				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/###__YOUR_SERVICE_URL__###",
+//				dataObj: { "signedContentRef": this.options.signedContentRef },
+//				successCallback: { fn: this.getSignsInfo, scope: this },
+//				failureCallback: {
+//					fn: function() {
+//						Alfresco.util.PopupManager.displayMessage({
+//							text: "Не удалось обновить информацию о подписях, попробуйте ещё раз"
+//						});
+//					}
+//				}
+//			});
+//
+//			this.getSignsInfo();
 		},
 
 		getSignsInfo: function() {
@@ -134,6 +162,7 @@
 		{
 			this._generateIds();
 			this._findElements();
+			this._initRefreshButton();
 
 			this.getSignsInfo();
 		}
