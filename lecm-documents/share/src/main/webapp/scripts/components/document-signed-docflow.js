@@ -63,7 +63,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onViewSignatures: function (layer, args) {
-			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
+			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-all-form");
 
 			form.setOptions({
 				width: "50em",
@@ -74,7 +74,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					mode: "create",
 					submitType: "json",
 					showCancelButton: "true",
-					formId: "signs-info-short",
+					formId: "signs-info-all",
 					signedContentRef: this.options.nodeRef
 				},
 				destroyOnHide: true,

@@ -4,7 +4,7 @@
 
 	LogicECM.module.SignsShortForm = function LogicECM_module_SignsInfoForm(htmlId) {
 
-		LogicECM.module.SignsShortForm.superclass.constructor.call(this, "LogicECM.module.SignsInfoForm", htmlId, null);
+		LogicECM.module.SignsShortForm.superclass.constructor.call(this, "LogicECM.module.SignsShortForm", htmlId, null);
 
 		this.ids = {
 			divSignsHeader:     "signs-header",
@@ -158,7 +158,7 @@
 			});
 		},
 
-		onReady: function SignsInfoForm_onReady()
+		onReady: function()
 		{
 			this._generateIds();
 			this._findElements();
