@@ -371,7 +371,7 @@ public class DocumentPolicy extends BaseBean
 								result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
 								if (result == null) {
 									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-									QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, fileName);
+									QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
 									QName nodeTypeQName = ContentModel.TYPE_CONTENT;
 
 									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
