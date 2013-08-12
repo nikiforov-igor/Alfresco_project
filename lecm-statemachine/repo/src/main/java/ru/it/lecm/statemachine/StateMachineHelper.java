@@ -1202,7 +1202,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                     new StateMachineHelper().stopDocumentSubWorkflows(statemachineId);
                 }
 
-                if (nextState.getOutputVariableValue() != "") {
+                if ("".equals(nextState.getOutputVariableValue())) {
                     HashMap<String, Object> parameters = new HashMap<String, Object>();
                     parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
                     setExecutionParamentersByTaskId(taskId, parameters);
