@@ -363,44 +363,9 @@ var cryptoAppletModule = (function () {
                 }
             });
 		},
-		CheckDocumentSignatures : function(docNodeRef){
-			jQuery.ajax({
-			url:  Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/getDocumentSignsInfo?nodeRef=" + docNodeRef,
-			async: false,
-			dataType: "JSON",
-			type: "GET",
-			success: function(data) {
-				var checkResult = [];
-				for(var i = 0; i < data.length; i++){
-					for(var j = 0; j < data[i].signedContent.length; j++){
-						for(var k = 0; k < data[i].signedContent[j].signsInfo.length; k++){
-							var contentURI = new Alfresco.util.NodeRef(data[i].signedContent[j].nodeRef).uri;
-							var check = signApplet.check(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL", data[i].signedContent[j].signsInfo[k].signature).getResult();
-							checkResult.push({
-												"signatureNodeRef" : data[i].signedContent[j].signsInfo[k].nodeRef,
-												"updateDate" : Alfresco.util.toISO8601(new Date()),
-												"contentNodeRef" : data[i].signedContent[j].nodeRef,
-												"isValid" : check
-											 }
-											);
-						}
-					}
-					
-				}
-				jQuery.ajax({
-					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/signing/update",
-					async: false,
-					data: JSON.stringify(checkResult),
-					dataType: "json",
-					contentType: "application/json",
-					type: "POST"
-					
-				});
-			}
-			});
-		},
+		
 		CheckContentSignature : function(nodeRefList) {
-			//cryptoAppletModule.deployApplet();
+			cryptoAppletModule.deployApplet();
 			if(!(nodeRefList instanceof Array)) {
 				nodeRefList = [nodeRefList];
 			}
@@ -487,10 +452,10 @@ var cryptoAppletModule = (function () {
 						var attachSign = signApplet.sign(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL");
 						var signObj = {  
 							"sign-to-content-association" : nodeRefList[i], 
-							"content" : attachSign, 
+							"signature-content" : attachSign, 
 							"signing-date" : signDate
 							};
-						var certInfo = getCertInfo(CurrentContainer); // изменить для получения данных из созданной подписи
+						var certInfo = getCertInfo(CurrentContainer);
 						var res = YAHOO.lang.merge(signObj, certInfo);
 						form.dataObj.push(res);
 					}

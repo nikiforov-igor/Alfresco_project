@@ -82,6 +82,7 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 						signInfo.put("isValid", sign.getValid());
 						signInfo.put("lastValidate", sign.getUpdateDateString());
 						signInfo.put("nodeRef", sign.getNodeRef());
+						signInfo.put("signature", sign.getSignatureContent());
 						signsInfoJSON.put(signInfo);
 					}
 					attachmentObject.put("fileName", (String) nodeService.getProperty(attachRef, ContentModel.PROP_NAME));

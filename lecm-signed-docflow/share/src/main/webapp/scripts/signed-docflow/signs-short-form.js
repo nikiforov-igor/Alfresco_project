@@ -56,12 +56,20 @@
 
 		_initRefreshButton: function() {
 			var divRefreshButton = new YAHOO.util.Element(this.elements.divRefreshButton);
-			divRefreshButton.on("click", this.refreshSigns);
+			divRefreshButton.on("click", this.refreshSigns, null, this);
 		},
 
 		refreshSigns: function() {
-			console.log(">>> refreshSigns was executed!"); // TODO: remove this console.log line, uncomment ajax-lines
-
+			//console.log(">>> refreshSigns was executed!"); // TODO: remove this console.log line, uncomment ajax-lines
+			
+			this.elements.divSignsContractor.innerHTML = "";
+			this.elements.divSignsOur.innerHTML = "";
+			
+			cryptoAppletModule.CheckContentSignature(this.options.signedContentRef);
+			
+			
+			
+			this.getSignsInfo();
 //			var Ajax = Alfresco.util.Ajax;
 //
 //			Ajax.jsonRequest({

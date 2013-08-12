@@ -2,6 +2,8 @@ package ru.it.lecm.signed.docflow.beans;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -13,6 +15,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
+import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.VersionHistory;
 import org.alfresco.service.cmr.version.VersionService;
@@ -21,6 +24,8 @@ import org.alfresco.util.GUID;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
@@ -99,12 +104,10 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	@Override
 	public void addAttributesToPersonalData() {
 		AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
-
 			@Override
 			public Void doWork() throws Exception {
 				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
 				return transactionHelper.doInTransaction(new RetryingTransactionCallback<Void>() {
-
 					@Override
 					public Void execute() throws Throwable {
 						NodeRef currentEmployeeRef = orgstructureService.getCurrentEmployee();
@@ -139,7 +142,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 		List<Signature> signs = new ArrayList<Signature>();
 
-		for(AssociationRef signAssoc : signAssocs) {
+		for (AssociationRef signAssoc : signAssocs) {
 			Signature sign = new Signature();
 
 			NodeRef signRef = signAssoc.getSourceRef();
@@ -200,7 +203,6 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
 		transactionHelper.doInTransaction(new RetryingTransactionCallback<Void>() {
-
 			@Override
 			public Void execute() throws Throwable {
 
@@ -423,4 +425,35 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	public boolean isSignatureValid(NodeRef signatureRef) {
 		return (Boolean) nodeService.getProperty(signatureRef, SignedDocflowModel.PROP_IS_VALID);
 	}
+
+	@Override
+	public boolean updateSignature(NodeRef signatureRef, String updateDate, boolean isValid) {
+		try {
+			nodeService.setProperty(signatureRef, SignedDocflowModel.PROP_IS_VALID, isValid);
+			nodeService.setProperty(signatureRef, SignedDocflowModel.PROP_UPDATE_DATE, updateDate);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Map<String, String> updateSignatures(JSONArray json) {
+		Map<String, String> result = new HashMap<String, String>();
+		for(int i = 0; i < json.length(); i++){
+			try {
+				NodeRef signRef = new NodeRef(json.getJSONObject(i).getString("signatureNodeRef"));
+				String signingDate = json.getJSONObject(i).getString("updateDate");
+				String isValid = json.getJSONObject(i).getString("isValid");
+				boolean res = updateSignature(signRef, signingDate, Boolean.parseBoolean(isValid));				
+				result.put(signRef.toString(), String.valueOf(res));
+			} catch (JSONException ex) {
+				Logger.getLogger(SignedDocflowImpl.class.getName()).log(Level.SEVERE, null, ex);
+				result.put("ERROR", "Somethig goes bad");
+			}
+		}
+		return result;
+	}
+	
+	
 }

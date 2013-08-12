@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.List;
+import org.json.JSONArray;
 
 /**
  *
@@ -85,7 +86,21 @@ public interface SignedDocflow {
 	 * @return действительна ли данная подпись
 	 */
 	boolean isSignatureValid(NodeRef signatureRef);
-
+	
+	/**
+	 * Обновление данных о подписи
+	 * @param signatureRef
+	 * @return 
+	 */
+	boolean updateSignature(NodeRef signatureRef, String singingDate, boolean isValid);
+	
+	/**
+	 * Обновление данных о подписях
+	 * @param json
+	 * @return 
+	 */
+	Map<String, String> updateSignatures(JSONArray json);
+	
 	void addAttributesToOrganization();
 
 	void addAttributesToPersonalData();
