@@ -47,7 +47,7 @@ public class SignContentWebscript extends DeclarativeWebScript {
 	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
 		this.signedDocflowService = signedDocflowService;
 	}
-
+	
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		Map<String, Object> result = new HashMap<String, Object>();

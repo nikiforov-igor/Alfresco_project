@@ -21,7 +21,12 @@
 		},
 
 		refreshSigns: function() {
-			console.log(">>> refreshSigns was executed!"); // TODO: remove this console.log line, uncomment ajax-lines
+			
+			
+			//cryptoAppletModule.CheckContentSignature(this.options.signedContentRef);
+			
+			//this.getSignsInfo();
+			
 
 //			var Ajax = Alfresco.util.Ajax;
 //

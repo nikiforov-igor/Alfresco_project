@@ -96,7 +96,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onUploadSignature: function(layer, args) {
-			alert("onUploadSignature");
+			cryptoAppletModule.loadSign(this.options.nodeRef);
 		},
 
 		onSendDocument: function(layer, args) {

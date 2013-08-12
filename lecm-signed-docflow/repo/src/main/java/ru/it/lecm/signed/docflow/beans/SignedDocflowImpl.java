@@ -46,6 +46,8 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	public final static String SIGNED_DOCFLOW_FOLDER = "SIGNED_DOCFLOW_FOLDER";
 	private final static String BJ_MESSAGE_DOCUMENT_ATTACHMENT_SIGN = "#initiator подписал файл #mainobject к документу #object1.";
 	private final static String BJ_MESSAGE_CONTENT_SIGN = "#initiator подписал ЭП вложение #mainobject.";
+	private final static String BJ_MESSAGE_DOCUMENT_SIGN_LOAD = "#initiator загрузил подпись для файла: #mainobject к документу #object1.";
+	private final static String BJ_MESSAGE_CONTENT_SIGN_LOAD = "#initiator загрузил подпись для файла: #mainobject.";
 	private OrgstructureBean orgstructureService;
 	private UnicloudService unicloudService;
 	private BusinessJournalService businessJournalService;
@@ -114,7 +116,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 						NodeRef currentEmployeeRef = orgstructureService.getCurrentEmployee();
 						NodeRef personalDataRef = orgstructureService.getEmployeePersonalData(currentEmployeeRef);
 						Set<QName> aspects = nodeService.getAspects(personalDataRef);
-						if(!aspects.contains(SignedDocflowModel.ASPECT_PERSONAL_DATA_ATTRS)) {
+						if (!aspects.contains(SignedDocflowModel.ASPECT_PERSONAL_DATA_ATTRS)) {
 							Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 //							properties.put(SignedDocflowModel.PROP_AUTH_TOKEN, "");
 //							properties.put(SignedDocflowModel.PROP_CERT_THUMBPRINT, "");
@@ -308,8 +310,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		return aspects.contains(SignedDocflowModel.ASPECT_SIGNABLE);
 	}
 
-	@Override
-	public Map<String, Object> signContent(final Map<QName, Serializable> signatureProperties) {
+	private Map<String, Object> sign(final Map<QName, Serializable> signatureProperties) {
 		final String signatureContent = (String) signatureProperties.remove(ContentModel.PROP_CONTENT);
 		final String contentRefStr = (String) signatureProperties.remove(SignedDocflowModel.ASSOC_SIGN_TO_CONTENT);
 		final NodeRef contentRef = new NodeRef(contentRefStr);
@@ -317,6 +318,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		String serialNumber = (String)signatureProperties.get(SignedDocflowModel.PROP_SERIAL_NUMBER);
 		String signatureName = createSignatureName(serialNumber, contentRef);
 		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("contentRef", contentRef);
 		result.put("name", nodeService.getProperty(contentRef, ContentModel.PROP_NAME));
 //		Map<String, Object> verifySignatureResponse = unicloudService.verifySignature(contentRefStr, signatureContent);
 //		if (verifySignatureResponse.containsKey("isSignatureValid")) {
@@ -363,16 +365,31 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 			contentWriter.putContent(signatureContent);
 
 			nodeService.createAssociation(signatureNode, contentRef, SignedDocflowModel.ASSOC_SIGN_TO_CONTENT);
-			addBusinessJournalRecord(contentRef, signatureNode);
+			result.put("signatureNode", signatureNode);
 			result.put("success", true);
 		} else {
 			result.put("success", false);
 		}
-//			} else {
-//				throw new WebScriptException(String.format("Error verifying signature: pair document [%s] signature was corrupted on the way to server", contentRefStr));
-//			}
-//		}
 
+		return result;
+
+	}
+
+	@Override
+	public Map<String, Object> signContent(final Map<QName, Serializable> signatureProperties) {
+		Map<String, Object> result = sign(signatureProperties);
+		final NodeRef contentRef = (NodeRef) result.remove("contentRef");
+		final NodeRef signatureNode = (NodeRef) result.remove("signatureNode");
+		addBusinessJournalRecord(contentRef, signatureNode, false);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> loadSign(Map<QName, Serializable> signatureProperties) {
+		Map<String, Object> result = sign(signatureProperties);
+		final NodeRef contentRef = (NodeRef) result.remove("contentRef");
+		final NodeRef signatureNode = (NodeRef) result.remove("signatureNode");
+		addBusinessJournalRecord(contentRef, signatureNode, true);
 		return result;
 	}
 
@@ -383,7 +400,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	 * @return имя подписи, в виде "Подпись ${serialNumber} для контента ${content.name} версии ${content.version}"
 	 */
 	private String createSignatureName(final String serialNumber, final NodeRef contentRef) {
-		String contentName = (String)nodeService.getProperty(contentRef, ContentModel.PROP_NAME);
+		String contentName = (String) nodeService.getProperty(contentRef, ContentModel.PROP_NAME);
 		VersionHistory history = versionService.getVersionHistory(contentRef);
 		String version = (history != null) ? history.getHeadVersion().getVersionLabel() : "1.0";
 		return String.format("Подпись %s для контента %s версии %s", serialNumber, contentName, version);
@@ -393,23 +410,36 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		return documentAttachmentsService.getDocumentByAttachment(contentRef);
 	}
 
-	private void addBusinessJournalRecord(NodeRef contentRef, NodeRef signatureRef) {
+	private void addBusinessJournalRecord(NodeRef contentRef, NodeRef signatureRef, boolean loadSign) {
 		final NodeRef baseDocumentRef = getDocumentRef(contentRef);
 		final String messageTemplate;
 		final List<String> objects = new ArrayList<String>();
 
-		if (baseDocumentRef != null) {
-			messageTemplate = BJ_MESSAGE_DOCUMENT_ATTACHMENT_SIGN;
-			objects.add(baseDocumentRef.toString());
+		if (!loadSign) {
+			if (baseDocumentRef != null) {
+				messageTemplate = BJ_MESSAGE_DOCUMENT_ATTACHMENT_SIGN;
+				objects.add(baseDocumentRef.toString());
+			} else {
+				messageTemplate = BJ_MESSAGE_CONTENT_SIGN;
+			}
+
+			objects.add(signatureRef.toString());
+
+			businessJournalService.log(authService.getCurrentUserName(), contentRef, SignedDocflowEventCategory.SIGNATURE, messageTemplate, objects);
 		} else {
-			messageTemplate = BJ_MESSAGE_CONTENT_SIGN;
+			if (baseDocumentRef != null) {
+				messageTemplate = BJ_MESSAGE_DOCUMENT_SIGN_LOAD;
+				objects.add(baseDocumentRef.toString());
+			} else {
+				messageTemplate = BJ_MESSAGE_CONTENT_SIGN_LOAD;
+			}
+
+			objects.add(signatureRef.toString());
+
+			businessJournalService.log(authService.getCurrentUserName(), contentRef, SignedDocflowEventCategory.SIGNATURE, messageTemplate, objects);
 		}
-
-		objects.add(signatureRef.toString());
-
-		businessJournalService.log(authService.getCurrentUserName(), contentRef, SignedDocflowEventCategory.SIGNATURE, messageTemplate, objects);
 	}
-
+	
 	@Override
 	public List<NodeRef> getSignaturesByContent(NodeRef contentRef) {
 		return findNodesByAssociationRef(contentRef, SignedDocflowModel.ASSOC_SIGN_TO_CONTENT, SignedDocflowModel.TYPE_SIGN, BaseBean.ASSOCIATION_TYPE.SOURCE);
@@ -449,7 +479,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	@Override
 	public Map<String, String> updateSignatures(JSONArray json) {
 		Map<String, String> result = new HashMap<String, String>();
-		for(int i = 0; i < json.length(); i++){
+		for (int i = 0; i < json.length(); i++) {
 			try {
 				NodeRef signRef = new NodeRef(json.getJSONObject(i).getString("signatureNodeRef"));
 				String signingDate = json.getJSONObject(i).getString("updateDate");
@@ -463,6 +493,4 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		}
 		return result;
 	}
-
-
 }

@@ -52,7 +52,14 @@ public interface SignedDocflow {
 	 * @return На данный момент - карта типа "success": true
 	 */
 	Map<String, Object> signContent(Map<QName, Serializable> signatureProperties);
-
+	
+	/**
+	 * Загрузка подписи к коненту
+	 * 
+	 * @param signatureProperties
+	 * @return 
+	 */
+	Map<String, Object> loadSign(Map<QName, Serializable> signatureProperties);
 	/**
 	 * Получить подписи, привязанные к вложению документа или cm:content.
 	 *
