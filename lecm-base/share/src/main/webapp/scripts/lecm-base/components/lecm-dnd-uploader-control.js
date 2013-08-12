@@ -78,7 +78,7 @@ LogicECM.control = LogicECM.control || {};
 							fn: function (oResponse) {
 								Alfresco.util.PopupManager.displayPrompt(
 									{
-										text: this.msg("message.load-root-node.failure")
+										text: this.msg("message.load.dnd-uploader.failure")
 									});
 							},
 							scope: this
