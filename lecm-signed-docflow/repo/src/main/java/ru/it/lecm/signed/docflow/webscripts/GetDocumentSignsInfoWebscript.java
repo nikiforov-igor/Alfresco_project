@@ -71,9 +71,7 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 					
 					JSONArray signsInfoJSON = new JSONArray();
 					List<Signature> signs = signedDocflowService.getSignatures(attachRef);
-					if(signs.isEmpty()){
-						break;
-					}
+					
 					for (Signature sign : signs) {
 						Map<String, Object> signInfo = new HashMap<String, Object>();
 						signInfo.put("isOur", sign.getOur());
@@ -83,6 +81,7 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 						signInfo.put("signDate", sign.getSigningDateString());
 						signInfo.put("isValid", sign.getValid());
 						signInfo.put("lastValidate", sign.getUpdateDateString());
+						signInfo.put("nodeRef", sign.getNodeRef());
 						signsInfoJSON.put(signInfo);
 					}
 					attachmentObject.put("fileName", (String) nodeService.getProperty(attachRef, ContentModel.PROP_NAME));
@@ -91,11 +90,11 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 					contentArray.put(attachmentObject);
 				}
 			}
-			if(contentArray.length() != 0){
+			
 				jsonResponse.put("categoryName", categoryName);
 				jsonResponse.put("signedContent", contentArray);
 				JSONres.put(jsonResponse);
-			}
+			
 		}
 		result.put("result", JSONres);
 		return result;
