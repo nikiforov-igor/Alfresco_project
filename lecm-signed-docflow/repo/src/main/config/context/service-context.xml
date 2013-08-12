@@ -6,8 +6,8 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<import resource="classpath:gate-wcf-service-context.xml"/>
-
-    <import resource="classpath:alfresco/module/${artifactId}/context/webscript-context.xml" />
+	<import resource="classpath:alfresco/module/${artifactId}/context/webscript-context.xml" />
+	<import resource="classpath:alfresco/module/${artifactId}/context/policy-context.xml" />
 
 	<bean id="unicloudService" class="ru.it.lecm.signed.docflow.UnicloudService" init-method="init">
 		<property name="gateWcfService" ref="gateWcfService.https"/>
@@ -58,11 +58,6 @@
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="versionService" ref="versionService"/>
 		<property name="contentService" ref="contentService"/>
-	</bean>
-
-	<bean id="signingContentVersionChangePolicy" class="ru.it.lecm.signed.docflow.policies.SigningContentVersionChangePolicy" init-method="init">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
 </beans>
