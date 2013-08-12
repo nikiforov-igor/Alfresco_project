@@ -1198,15 +1198,15 @@ public class StateMachineHelper implements StateMachineServiceBean {
             }
 
             if (access) {
+                if (nextState.isStopSubWorkflows()) {
+                    new StateMachineHelper().stopDocumentSubWorkflows(statemachineId);
+                }
+
                 if (nextState.getOutputVariableValue() != "") {
                     HashMap<String, Object> parameters = new HashMap<String, Object>();
                     parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
                     setExecutionParamentersByTaskId(taskId, parameters);
                     nextTransition(taskId);
-                }
-
-                if (nextState.isStopSubWorkflows()) {
-                    new StateMachineHelper().stopDocumentSubWorkflows(statemachineId);
                 }
 
                 if (!nextState.isForm()) {
