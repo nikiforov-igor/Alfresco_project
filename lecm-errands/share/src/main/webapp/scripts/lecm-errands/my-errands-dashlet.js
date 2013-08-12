@@ -155,12 +155,15 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         var div = this.createRow();
                         var detail = document.createElement('span');
                         if (item.isImportant == "true") {
-                            detail.innerHTML = "("+ this.msg("label.important") +") ";
+                            detail.innerHTML = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png' + '" width="16" alt="' + this.msg("label.important") + '" title="' + this.msg("label.important") + '" />';
                         }
                         var str = "<a href='" + window.location.protocol + "//" + window.location.host +
                             Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef="+ item.nodeRef + "'>"+
-                            item.record + "</a>"
+                            item.record + "</a> ";
                         detail.innerHTML += item.record.replace(item.record, str);
+                        if (item.isExpired == "true") {
+                            detail.innerHTML += "<div class='expired'>" + this.msg("label.is-expired") + "</div>" ;
+                        }
                         div.appendChild(detail);
                         this.errandsList.appendChild(div);
                     }

@@ -21,6 +21,11 @@
                                     message: "${msg("dashlet.help")?js_string}"
                                 },
                                 tooltip: "${msg("dashlet.help.tooltip")?js_string}"
+                            },
+                            {
+                                cssClass: "arm",
+                                linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "errands-list",
+                                tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
                             }
                         ]
             });
