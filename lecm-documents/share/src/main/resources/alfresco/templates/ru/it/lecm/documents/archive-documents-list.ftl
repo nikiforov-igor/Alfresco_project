@@ -47,8 +47,9 @@
             return value;
         };
 
+        var ARCHIVE_DOCS = "ru.it.lecm.documents.archive.";
         <#if filter == "" && preferences??>
-            var PREFERENCE_DOCUMENTS_STATUSES = "ru.it.lecm.documents." + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + ".documents-list-statuses-filter";
+            var PREFERENCE_DOCUMENTS_STATUSES = ARCHIVE_DOCS + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + ".documents-list-statuses-filter";
                 var preference = findValueByDotNotation(${preferences}, PREFERENCE_DOCUMENTS_STATUSES);
                 if (preference != null) {
                         window.location = window.location + <#if isDocListPage>"&"<#else>"?"</#if> + preference;
@@ -61,13 +62,13 @@
                 documentFilters.setOptions({
                     docType: ("${docType}" != "") ? "${docType}" : "lecm-base:document",
                     isDocListPage: ${isDocListPage?string},
-                    archiveDocs: false
+                    archiveDocs: true
                 });
         </#if>
         LogicECM.module.Documents.filtersManager = documentFilters;
 
         <#if queryFilterId?? && queryFilterId != "" && preferences??>
-            var PREFERENCE_FILTER = "ru.it.lecm.documents." + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + "." + "${queryFilterId}";
+            var PREFERENCE_FILTER = ARCHIVE_DOCS + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + "." + "${queryFilterId}";
             var preference = findValueByDotNotation(${preferences}, PREFERENCE_FILTER);
             if (preference != null && preference != "" && location.hash == "") {
                 location.hash = '#filter=' + "${queryFilterId}" + "|" + preference;

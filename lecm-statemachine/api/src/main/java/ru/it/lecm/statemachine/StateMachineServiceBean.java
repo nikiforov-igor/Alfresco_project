@@ -84,7 +84,7 @@ public interface StateMachineServiceBean {
      * @param documentType - тип документа
      * @return
      */
-    public List<String> getStatuses(String documentType);
+    public List<String> getStatuses(String documentType, boolean includeActive, boolean includeFinal);
 
     public boolean isFinal(NodeRef document);
 

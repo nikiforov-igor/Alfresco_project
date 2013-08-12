@@ -6,15 +6,15 @@ function main() {
     var filterOver = page.url.args.filterOver; // если параметр пришел - значит, перегрузим прописанный в настройках фильтр
 
     if (type != null) {
-        model.statusesGroups = getFilters(type, (filterOver != null && filterOver.length > 0 )? filterOver : queryFilter);
-        model.statusesList = getStatuses(type);
+        model.statusesGroups = getArchiveFilters(type, (filterOver != null && filterOver.length > 0 )? filterOver : queryFilter);
+        model.statusesList = getArchiveStatuses(type);
     }
 }
 
-function getStatuses(type) {
+function getArchiveStatuses(type) {
     var statuses = [];
 
-    var url = '/lecm/statemachine/getStatuses?docType=' + type + "&active=true&final=false";
+    var url = '/lecm/statemachine/getStatuses?docType=' + type + "&active=false&final=true";
     var result = remote.connect("alfresco").get(url);
 
     if (result.status == 200) {
@@ -27,10 +27,10 @@ function getStatuses(type) {
     return statuses
 }
 
-function getFilters(type, filter) {
+function getArchiveFilters(type, filter) {
     var filters = [];
 
-    var url = '/lecm/documents/summary?docType=' + type + "&archive=false" + (filter ? "&considerFilter=" + filter : "");
+    var url = '/lecm/documents/summary?docType=' + type + "&archive=true" + (filter ? "&considerFilter=" + filter : "");
     var result = remote.connect("alfresco").get(url);
 
     if (result.status == 200) {

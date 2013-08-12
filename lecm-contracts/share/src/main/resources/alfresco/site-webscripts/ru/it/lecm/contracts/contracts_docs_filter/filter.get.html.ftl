@@ -2,7 +2,7 @@
 <#if page.url.args.query?? && page.url.args.query != "">
     <#assign query = page.url.args.query/>
 </#if>
-<#assign statusesFilterKey = '.documents-list-statuses-filter'/>
+<#assign statusesFilterKey = 'documents-list-statuses-filter'/>
 
 <div id="contracts-filters" class="contracts-filter-panel">
     <div class="contracts-filters-block">

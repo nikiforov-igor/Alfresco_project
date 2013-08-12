@@ -14,6 +14,8 @@ public class DocumentStatusesFilterBean {
 
     protected static Map<String, Map> filters = new HashMap<String, Map>();
 
+    private static Map<String, Map> archiveFilters = new HashMap<String, Map>();
+
     protected static Map<String, String> defaultFilters = new HashMap<String, String>();
 
     public static Map<String, Map> getFilters() {
@@ -22,6 +24,16 @@ public class DocumentStatusesFilterBean {
 
     public static Map<String, String> getDefaultFilters() {
         return defaultFilters;
+    }
+
+    public static Map<String, Map> getArchiveFilters() {
+        return archiveFilters;
+    }
+
+    public void setArchiveFilters(Map<String, Map> archiveFilters) {
+        if(archiveFilters != null) {
+            DocumentStatusesFilterBean.archiveFilters.putAll(archiveFilters);
+        }
     }
 
     public void setDefaultFilters(Map<String, String> defaultFilters) {
@@ -43,5 +55,9 @@ public class DocumentStatusesFilterBean {
     public static String getDefaultFilter(String type){
         String defaultFilter = getDefaultFilters().get(type);
         return defaultFilter != null ? defaultFilter : DEFAULT_FILTER;
+    }
+
+    public static Map<String, String> getArchiveFilterForType(String type){
+        return getArchiveFilters().get(type);
     }
 }

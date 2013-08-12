@@ -219,8 +219,8 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.executeActionByName(document.getNodeRef(), actionName);
     }
 
-    public String[] getStatuses(String documentType) {
-        List<String> statuses = stateMachineHelper.getStatuses(documentType);
+    public String[] getStatuses(String documentType, boolean includeActive, boolean includeFinal) {
+        List<String> statuses = stateMachineHelper.getStatuses(documentType, includeActive, includeFinal);
         return statuses.toArray(new String[statuses.size()]);
     }
 

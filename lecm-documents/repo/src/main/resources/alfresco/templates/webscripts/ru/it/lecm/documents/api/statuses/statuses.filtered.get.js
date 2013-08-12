@@ -1,1 +1,0 @@
-model.filters = documentScript.getFilters(args["docType"]);

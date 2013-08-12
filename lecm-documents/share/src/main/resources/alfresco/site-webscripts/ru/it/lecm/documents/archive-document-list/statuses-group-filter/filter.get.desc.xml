@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Archive Documents filter</shortname>
+    <description>Return archive documents filter</description>
+    <url>/lecm/documents/archive-documents-list-filter</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

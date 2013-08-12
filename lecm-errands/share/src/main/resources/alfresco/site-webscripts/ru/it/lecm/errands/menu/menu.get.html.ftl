@@ -6,6 +6,7 @@ selected = args.selected/>
     <@comp.baseMenuButton "list" msg('lecm.errands.list.btn') selected true />
     <@comp.baseMenuButton "reports" msg('lecm.errands.reports.btn') selected true true />
     <@comp.baseMenuButton "tasks" msg('lecm.errands.tasks.btn') selected true true />
+    <@comp.baseMenuButton "archive" msg('lecm.errands.archive.btn') selected true true />
 </@comp.baseMenu>
 
 <script type="text/javascript">//<![CDATA[

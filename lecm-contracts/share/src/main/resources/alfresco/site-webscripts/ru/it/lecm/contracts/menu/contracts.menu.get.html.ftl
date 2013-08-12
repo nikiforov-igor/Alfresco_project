@@ -9,6 +9,7 @@
         <#if hasPermission>
             <@comp.baseMenuButton "reports" msg('lecm.contracts.reports.btn') selected true />
         </#if>
+        <@comp.baseMenuButton "archive" msg('lecm.contracts.archive.btn') selected true true />
     </@comp.baseMenu>
 
 <script type="text/javascript">//<![CDATA[

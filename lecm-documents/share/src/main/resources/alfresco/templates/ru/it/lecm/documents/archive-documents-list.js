@@ -1,6 +1,6 @@
 var type = template.properties.docType ? template.properties.docType : page.url.args.doctype;
 model.docType = type;
-model.preferedFilter = template.properties.preferedFilter ? template.properties.preferedFilter : "docAuthor";
+model.preferedFilter = template.properties.preferedFilter;
 
 var hasRole = false;
 var userPermissions = "";
@@ -36,7 +36,7 @@ if (hasRole) {
     if (settingsStr.status == 200) {
         model.settings = settingsStr;
 
-        var PREFERENCE_DOCUMENTS = "ru.it.lecm.documents.";
+        var PREFERENCE_DOCUMENTS = "ru.it.lecm.documents.archive.";
         var prefStr = remote.connect("alfresco").get("/api/people/" + encodeURIComponent(user.id) + "/preferences?pf=" + PREFERENCE_DOCUMENTS);
         if (prefStr.status == 200) {
             model.preferences = prefStr;

@@ -294,7 +294,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
         List<NodeRef> result = new ArrayList<NodeRef>();
-        List<String> status = stateMachineBean.getStatuses("lecm-errands:document");
+        List<String> status = stateMachineBean.getStatuses("lecm-errands:document", true, false);
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         // сортируем по важности поручения и по сроку исполнения

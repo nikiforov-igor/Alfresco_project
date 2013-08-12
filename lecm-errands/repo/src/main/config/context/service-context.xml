@@ -106,6 +106,14 @@
                         <entry key="Ожидает исполнения" value="Ожидает исполнения"/>
                         <entry key="Исполняется" value="Исполняется"/>
                         <entry key="На утверждении" value="На утверждении, На утверждении Контроллером"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+        <property name="archiveFilters">
+            <map>
+                <entry key="lecm-errands:document">
+                    <map>
                         <entry key="Неисполненные" value="Не исполнено"/>
                         <entry key="Исполненные" value="Исполнено"/>
                     </map>

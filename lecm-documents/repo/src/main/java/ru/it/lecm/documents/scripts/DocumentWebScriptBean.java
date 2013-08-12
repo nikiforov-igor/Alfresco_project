@@ -178,12 +178,16 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return map;
     }
 
-    public Map<String, String> getFilters(String type){
-        return DocumentStatusesFilterBean.getFilterForType(type);
+    public Map<String, String> getFilters(String type, boolean forArchive){
+        if (!forArchive) {
+            return DocumentStatusesFilterBean.getFilterForType(type);
+        } else {
+            return DocumentStatusesFilterBean.getArchiveFilterForType(type);
+        }
     }
 
     public Map<String, String> getDefaultFilter(String type) {
-        Map<String, String> filters = getFilters(type);
+        Map<String, String> filters = getFilters(type, false);
         HashMap<String, String> defaultFilter = new HashMap<String, String>();
         String defaultKey = DocumentStatusesFilterBean.getDefaultFilter(type);
         if (filters != null) {
@@ -209,7 +213,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
      * Получить количество документов
      * @return количество
      */
-    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, String queryFilterId) {
+    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, String queryFilterId, boolean fromArchive) {
         List<String> docTypes = getElements(Context.getCurrentContext().getElements(types));
         List<QName> qNameTypes = new ArrayList<QName>();
         String currentUser = authService.getCurrentUserName();
@@ -222,7 +226,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
                 DocumentFilter docFilter = FiltersManager.getFilterById(queryFilterId);
                 if (docFilter != null) {
                     //пробуем получить сохраненные параметры
-                    String filterId = DocumentService.PREF_DOCUMENTS + "." + docType.replaceAll(":", "_") + "." + queryFilterId;
+                    String filterId = (!fromArchive ? DocumentService.PREF_DOCUMENTS : DocumentService.PREF_ARCHIVE_DOCUMENTS) + "." + docType.replaceAll(":", "_") + "." + queryFilterId;
                     Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, filterId);
                     if (preferences != null && preferences.get(filterId) != null) {
                         String filterData = preferences.get(filterId).toString();

@@ -28,6 +28,12 @@
                     Alfresco.constants.URL_PAGECONTEXT + "contracts-reports";
             };
             this.widgets.contractsReportsButton = Alfresco.util.createYUIButton(this, "reportsBtn", onRecordsClick4, {});
+
+            var onRecordsClick5 = function (e) {
+                window.location.href = window.location.protocol + "//" + window.location.host +
+                    Alfresco.constants.URL_PAGECONTEXT + "contracts-archive-list";
+            };
+            this.widgets.archiveListButton = Alfresco.util.createYUIButton(this, "archiveBtn", onRecordsClick5, {});
         }
     });
 })();

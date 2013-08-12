@@ -1,4 +1,5 @@
 var type = args["docType"];
+var archive = ("" + args["archive"] == "true");
 var skippedStatuses = args["skippedStatuses"];
 var considerFilter = args["considerFilter"] ? args["considerFilter"]: null;
 
@@ -20,7 +21,7 @@ for (var index in archDirectories) {
     paths.push(archDirectories[index]);
 }
 
-var map = documentScript.getFilters(type);
+var map = documentScript.getFilters(type, archive);
 
 var types = [];
 types.push(type);
@@ -29,7 +30,7 @@ var list = [];
 var members = [];
 
 for (var key in map) {
-    var amountDocs = documentScript.getAmountDocuments(types, paths, map[key].split(","), considerFilter);
+    var amountDocs = documentScript.getAmountDocuments(types, paths, map[key].split(","), considerFilter, archive);
     list.push({
         key: key,
         skip: skippedStatuses != null && skippedStatuses.indexOf(key) >= 0,
@@ -38,7 +39,7 @@ for (var key in map) {
     });
 }
 if (list.length == 0) { //ддобавляем пункт Все, если у нас не заданы фильтры
-    var amountDocs = documentScript.getAmountDocuments(types, paths, ["*"], considerFilter);
+    var amountDocs = documentScript.getAmountDocuments(types, paths, ["*"], considerFilter, archive);
     list.push({
         key: "Все",
         skip: false,

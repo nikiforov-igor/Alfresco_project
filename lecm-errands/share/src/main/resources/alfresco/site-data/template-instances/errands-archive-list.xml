@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/documents/archive-documents-list</template-type>
+    <properties>
+        <docType>lecm-errands:document</docType>
+        <preferedFilter>errandsFilter</preferedFilter>
+    </properties>
+    <components>
+        <!-- Title -->
+        <component>
+            <region-id>title</region-id>
+            <url>/lecm/base/title-with-filter-label</url>
+            <properties>
+                <itemType>lecm-errands:document</itemType>
+                <filteredLabel>page.errands.filter.label</filteredLabel>
+            </properties>
+        </component>
+        <!-- Toolbar -->
+        <!--<component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/documents/documents-list-toolbar</url>
+            <properties>
+                <itemType>lecm-errands:document</itemType>
+                <showCreateBtn>true</showCreateBtn>
+                <bubblingLabel>errands</bubblingLabel>
+                <showExSearchBtn>true</showExSearchBtn>
+                <createDialogWidth>55em</createDialogWidth>
+                <createDialogClass>errands-form-edit</createDialogClass>
+            </properties>
+        </component>-->
+        <!-- Menu -->
+        <component>
+            <region-id>menu</region-id>
+            <url>/lecm/errands/menu</url>
+            <properties>
+                <selected>archive</selected>
+            </properties>
+        </component>
+        <!-- Datagrid -->
+        <component>
+            <region-id>documents-grid</region-id>
+            <url>/lecm/errands/errands-grid</url>
+            <properties>
+                <bubblingLabel>errands</bubblingLabel>
+                <attributeForShow>lecm-errands:title</attributeForShow>
+                <filterProperty>lecm-statemachine:status</filterProperty>
+                <formId>{formId}</formId>
+                <filter>{query}</filter>
+            </properties>
+        </component>
+        <!-- Statuses Filter -->
+        <component>
+            <region-id>documents-filter</region-id>
+            <url>/lecm/documents/archive-documents-list-filter</url>
+            <properties>
+                <itemType>lecm-errands:document</itemType>
+                <linkPage>errands-archive-list</linkPage>
+                <queryFilter>errandsFilter</queryFilter>
+            </properties>
+        </component>
+        <!-- Filters -->
+        <component>
+            <region-id>filters</region-id>
+            <url>/lecm/errands/filters</url>
+        </component>
+        <!-- Forbidden -->
+        <component>
+            <region-id>forbidden</region-id>
+            <url>/lecm/base/forbidden</url>
+        </component>
+        <!-- Dependencies : util component -->
+        <component>
+            <region-id>dependencies</region-id>
+            <url>/lecm/errands/dependencies</url>
+        </component>
+    </components>
+</template-instance>

@@ -9,19 +9,25 @@
                 window.location.href = window.location.protocol + "//" + window.location.host +
                     Alfresco.constants.URL_PAGECONTEXT + "errands-list";
             };
-            this.widgets.contractsMainButton = Alfresco.util.createYUIButton(this, "listBtn", onRecordsClick1, {});
+            this.widgets.errandsListnButton = Alfresco.util.createYUIButton(this, "listBtn", onRecordsClick1, {});
 
             var onRecordsClick2 = function (e) {
                 window.location.href = window.location.protocol + "//" + window.location.host +
                     Alfresco.constants.URL_PAGECONTEXT + "errands-reports";
             };
-            this.widgets.contractsListButton = Alfresco.util.createYUIButton(this, "reportsBtn", onRecordsClick2, {});
+            this.widgets.errandsReportsButton = Alfresco.util.createYUIButton(this, "reportsBtn", onRecordsClick2, {});
 
             var onRecordsClick3 = function (e) {
                 window.location.href = window.location.protocol + "//" + window.location.host +
                     Alfresco.constants.URL_PAGECONTEXT + "errands-tasks";
             };
-            this.widgets.contractsDocumentButton = Alfresco.util.createYUIButton(this, "tasksBtn", onRecordsClick3, {});
+            this.widgets.errandsTasksButton = Alfresco.util.createYUIButton(this, "tasksBtn", onRecordsClick3, {});
+
+            var onRecordsClick4 = function (e) {
+                window.location.href = window.location.protocol + "//" + window.location.host +
+                    Alfresco.constants.URL_PAGECONTEXT + "errands-archive-list";
+            };
+            this.widgets.errandsArchiveListButton = Alfresco.util.createYUIButton(this, "archiveBtn", onRecordsClick4, {});
         }
     });
 })();

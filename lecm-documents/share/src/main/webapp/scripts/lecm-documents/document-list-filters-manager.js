@@ -9,11 +9,13 @@
 
     YAHOO.lang.augmentObject(LogicECM.module.Documents.FiltersManager.prototype, {
         PREFERENCE_DOCUMENTS: "ru.it.lecm.documents",
+        PREFERENCE_ARCHIVE_DOCUMENTS: "ru.it.lecm.documents.archive",
         preferences: null,
 
         options: {
             docType: "lecm-document:base",
-            isDocListPage: false
+            isDocListPage: false,
+            archiveDocs: false
         },
 
         setOptions: function (obj) {
@@ -23,7 +25,7 @@
 
         _buildPreferencesKey: function (filterId) {
             var opt = this.options;
-            return this.PREFERENCE_DOCUMENTS + "." + opt.docType.split(":").join("_") + (filterId ? ("." + filterId): "");
+            return (this.options.archiveDocs ? this.PREFERENCE_ARCHIVE_DOCUMENTS : this.PREFERENCE_DOCUMENTS)+ "." + opt.docType.split(":").join("_") + (filterId ? ("." + filterId): "");
         },
 
         save: function (filter, value, reload) {

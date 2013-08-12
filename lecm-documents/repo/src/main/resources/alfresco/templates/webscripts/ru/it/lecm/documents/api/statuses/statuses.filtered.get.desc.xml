@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Список фильтров статусов</shortname>
-	<description>Вовзращает список фильтров по статусам для заданного типа документа</description>
-	<url>/lecm/document/getFilteredStatuses?docType={docType}</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-</webscript>

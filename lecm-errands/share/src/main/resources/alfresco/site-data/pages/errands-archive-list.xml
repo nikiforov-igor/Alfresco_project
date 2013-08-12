@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>Поручения - Архив</title>
+    <description>Список архивных поручений</description>
+    <template-instance>errands-archive-list</template-instance>
+    <authentication>user</authentication>
+</page>
