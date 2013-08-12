@@ -1,7 +1,12 @@
 package ru.it.lecm.signed.docflow.webscripts;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +17,8 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.DeclarativeWebScriptHelper;
+import ru.it.lecm.signed.docflow.SendContentToPartnerService;
+import ru.it.lecm.signed.docflow.model.ContentToSendData;
 
 /**
  *
@@ -23,6 +30,39 @@ public class SendContentToPartnerWebscript extends DeclarativeWebScript {
 
 	private final static Logger logger = LoggerFactory.getLogger(SendContentToPartnerWebscript.class);
 
+	private SendContentToPartnerService sendContentToPartnerService;
+
+	public void setSendContentToPartnerService(SendContentToPartnerService sendContentToPartnerService) {
+		this.sendContentToPartnerService = sendContentToPartnerService;
+	}
+
+	private ContentToSendData getContentToSendFromJSON(JSONObject json) {
+		ContentToSendData contentToSend = new ContentToSendData();
+		try {
+			JSONArray contentArray = json.getJSONArray("content");
+			List<NodeRef> content = new ArrayList<NodeRef>(contentArray.length());
+			for (int i = 0; i < contentArray.length(); ++i) {
+				content.add(new NodeRef(contentArray.getString(i)));
+			}
+			contentToSend.setContent(content);
+
+			if (json.has("partner")) {
+				contentToSend.setPartner(new NodeRef(json.getString("partner")));
+			}
+			if (json.has("email")) {
+				contentToSend.setEmail(json.getString("email"));
+			}
+			if (json.has("interactionType")) {
+				contentToSend.setInteractionType("interactionType");
+			}
+		} catch(JSONException ex) {
+			String msg = "Can't parse incoming json";
+			logger.error("{}. Caused by: {}", msg, ex.getMessage());
+			throw new IllegalArgumentException(msg, ex);
+		}
+		return contentToSend;
+	}
+
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		final Content content = req.getContent();
@@ -33,7 +73,10 @@ public class SendContentToPartnerWebscript extends DeclarativeWebScript {
 		}
 
 		JSONObject requestJSON = DeclarativeWebScriptHelper.getJsonContent(content);
-		JSONObject responseJSON = new JSONObject();
+		JSONObject responseJSON = requestJSON;
+
+		ContentToSendData contentToSend = getContentToSendFromJSON(requestJSON);
+		sendContentToPartnerService.send(contentToSend);
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", responseJSON);

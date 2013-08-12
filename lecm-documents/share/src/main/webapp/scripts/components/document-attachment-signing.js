@@ -152,7 +152,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			//this.options.nodeRef это NodeRef на наше вложение
 			Alfresco.util.Ajax.jsonRequest({
 				method: "POST",
-				url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/notImplementedYet",
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/sendContentToPartner",
 				dataObj: {
 					content:[this.options.nodeRef]
 				},

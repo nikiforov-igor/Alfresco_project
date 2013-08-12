@@ -60,4 +60,10 @@
 		<property name="contentService" ref="contentService"/>
 	</bean>
 
+	<bean id="sendContentToPartnerService" class="ru.it.lecm.signed.docflow.SendContentToPartnerService">
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="unicloudService" ref="unicloudService"/>
+	</bean>
+
 </beans>

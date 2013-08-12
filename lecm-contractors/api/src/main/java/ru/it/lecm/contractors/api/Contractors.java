@@ -20,6 +20,8 @@ public interface Contractors {
     QName PROP_REPRESENTATIVE_FIRSTNAME = QName.createQName(REPRESENTATIVE_NAMESPACE, "firstname");
     QName PROP_REPRESENTATIVE_MIDDLENAME = QName.createQName(REPRESENTATIVE_NAMESPACE, "middlename");
 	QName ASSOC_LINK_TO_REPRESENTATIVE = QName.createQName(CONTRACTOR_NAMESPACE, "link-to-representative-association");
+	QName PROP_CONTRACTOR_INTERACTION_TYPE = QName.createQName(CONTRACTOR_NAMESPACE, "interaction-type");
+	QName PROP_CONTRACTOR_EMAIL = QName.createQName(CONTRACTOR_NAMESPACE, "email");
 
     void assignAsPrimaryRepresentative(NodeRef representativeToAssignAsPrimary);
     Map<String, String> getContractorForRepresentative(NodeRef childContractor);
