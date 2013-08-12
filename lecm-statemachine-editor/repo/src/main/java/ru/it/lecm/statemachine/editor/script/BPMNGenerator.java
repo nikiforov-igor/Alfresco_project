@@ -460,7 +460,7 @@ public class BPMNGenerator {
 		for (ChildAssociationRef action : endActions) {
 			String actionId = (String) nodeService.getProperty(action.getChildRef(), StatemachineEditorModel.PROP_ACTION_ID);
 			String actionVar = "id" + action.getChildRef().getId().replace("-", "");
-			createEvent(extentionElements, end, statusVar, action, actionId, actionVar);
+			createEvent(extentionElements, start, statusVar, action, actionId, actionVar);
 		}
 
 		//install ArchiveDocumentAction
