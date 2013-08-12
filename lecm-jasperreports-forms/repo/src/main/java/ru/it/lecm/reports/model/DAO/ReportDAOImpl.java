@@ -1,5 +1,7 @@
 package ru.it.lecm.reports.model.DAO;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -294,7 +297,13 @@ public class ReportDAOImpl implements ReportEditorDAO {
 			result.setFileName( getString(mapCntntFile, "cm:name"));
 
 			final ContentReader reader = services.getServiceRegistry().getContentService().getReader(nodeCntntFile, ContentModel.PROP_CONTENT);
-			result.setData( (reader == null) ? null : reader.getContentInputStream());
+			try {
+				final byte[] data = (reader != null && reader.getSize() > 0) ? IOUtils.toByteArray(reader.getContentInputStream()) : null;
+				result.setData( (data == null) ? null : new ByteArrayInputStream(data) );
+			} catch(IOException ex) {
+				final String msg = String.format( "Error getting file content of node {%s}", node);
+				throw new RuntimeException( msg, ex);
+			}
 		}
 	}
 

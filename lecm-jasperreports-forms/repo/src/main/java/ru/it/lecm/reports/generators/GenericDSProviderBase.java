@@ -109,6 +109,7 @@ public class GenericDSProviderBase
 
 		clearSearch();
 
+		/* формирование запроса */
 		this.alfrescoQuery = LucenePreparedQuery.prepareQuery(this.reportDescriptor, getServices().getServiceRegistry());
 
 		if (logger.isDebugEnabled()) {
@@ -194,7 +195,7 @@ public class GenericDSProviderBase
 		if (context != null) {
 			context.setSubstitudeService(getServices().getSubstitudeService());
 			context.setRegistryService(getServices().getServiceRegistry());
-			context.setJrSimpleProps(getColumnNames(this.alfrescoQuery.argsByProps(), this.getServices().getServiceRegistry().getNamespaceService()));
+			context.setJrSimpleProps( getColumnNames(this.alfrescoQuery.argsByProps(), this.getServices().getServiceRegistry().getNamespaceService()));
 			context.setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
 
 			// фильтр данных ...
@@ -203,7 +204,7 @@ public class GenericDSProviderBase
 	}
 
 	/**
-	 * Получить список имён простых колонок в виде "тип:атрибут" (QName Альфреско).
+	 * Получить список имён простых колонок в виде последовательности пар "тип", "атрибут" (QName Альфреско).
 	 * @param list список колонок, в которых выражение является ссылкой на атрибут
 	 * @param ns
 	 * @return

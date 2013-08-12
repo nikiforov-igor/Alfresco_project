@@ -283,24 +283,24 @@ public class DSXMLProducer {
 		XmlHelper.parseStdMnemoItem(dest, srcNode);
 
 		{ // тип отчёта
-			final Element nodeRType = XmlHelper.findNodeByName( srcRootElem, XMLNODE_REPORT_TYPE);
+			final Element nodeRType = XmlHelper.findNodeByName( srcNode, XMLNODE_REPORT_TYPE);
 			dest.setReportType( parseReportType(nodeRType) );
 		}
 
 		{ // провайдер
-			final Element nodeProvider = XmlHelper.findNodeByName( srcRootElem, XMLNODE_REPORT_PROVIDER);
+			final Element nodeProvider = XmlHelper.findNodeByName( srcNode, XMLNODE_REPORT_PROVIDER);
 			dest.setProviderDescriptor( parseProviderDescriptor(nodeProvider));
 		}
 
 
 		{ // нативный шаблон отчёта
-			final Element nodeTemplate = XmlHelper.findNodeByName( srcRootElem, XMLNODE_REPORT_TEMPLATE);
+			final Element nodeTemplate = XmlHelper.findNodeByName( srcNode, XMLNODE_REPORT_TEMPLATE);
 			dest.setReportTemplate( parseReportTemplate(nodeTemplate));
 		}
 
 
 		{ // набор данных ...
-			final Element nodeDS = XmlHelper.findNodeByName( srcRootElem, XMLNODE_REPORT_DS);
+			final Element nodeDS = XmlHelper.findNodeByName( srcNode, XMLNODE_REPORT_DS);
 			dest.setDSDescriptor( parseDSDescriptor(nodeDS));
 		}
 	}

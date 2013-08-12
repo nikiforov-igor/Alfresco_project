@@ -312,6 +312,8 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 							continue;
 
 						result ++;
+
+						/* Обратный вызов для каждого файла ... */
 						if (enumerator != null) {
 							final String rFileName =  file.getName();
 							final IdRContent id = IdRContent.createId(rtype, rmnem, rFileName);

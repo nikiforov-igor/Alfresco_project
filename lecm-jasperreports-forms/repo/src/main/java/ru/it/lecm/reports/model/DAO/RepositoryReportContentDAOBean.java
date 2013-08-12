@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
@@ -257,7 +258,16 @@ public class RepositoryReportContentDAOBean
 									names[i] = Utils.coalesce( getNodeService().getProperty(refs[i], ContentModel.PROP_NAME), "");
 								}
 							}
-							final IdRContent id = new IdRContent( new ReportTypeImpl(names[0]), names[1], names[2]);
+							final String nameNode = Utils.coalesce( getNodeService().getProperty( node, ContentModel.PROP_NAME), "");
+							if (logger.isDebugEnabled()) {
+								logger.debug( String.format( 
+										"Scanning reports at:\n{%s} %s\n\t{%s} %s\n\t\t{%s} %s\n\t\t\t{%s} %s"
+										, refs[0], names[0], refs[1], names[1], refs[2], names[2]
+										, node, nameNode 
+								));
+							}
+
+							final IdRContent id = new IdRContent( new ReportTypeImpl(names[1]), names[2], nameNode);
 							enumerator.lookAtItem(id);
 						}
 					}
@@ -288,9 +298,16 @@ public class RepositoryReportContentDAOBean
 			return null; // NOT FOUND
 
 		// выдираем контент из узла типа "cm:content" ...
-		final ContentService contentService = serviceRegistry.getContentService();
-		final ContentReader reader = contentService.getReader( nodeFile, ContentModel.PROP_CONTENT);
-		return reader.getReader();
+		final ContentReader reader = AuthenticationUtil.runAsSystem( new AuthenticationUtil.RunAsWork<ContentReader>() {
+			@Override
+			public ContentReader doWork() throws Exception {
+				final ContentService contentService = serviceRegistry.getContentService();
+				final ContentReader creader = contentService.getReader( nodeFile, ContentModel.PROP_CONTENT);
+				return creader;
+			}
+		});
+
+		return reader;
 	}
 
 	@Override

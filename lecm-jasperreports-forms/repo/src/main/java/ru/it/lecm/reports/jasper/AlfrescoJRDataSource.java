@@ -128,9 +128,11 @@ public class AlfrescoJRDataSource implements JRDataSource
 	}
 
 	/**
-	 * Получить название поля (в списке атрибутов объекта после вызова getReportContextProps), 
-	 * соот-щее jasper-названию колонки  
-	 * @param jrFldName название колонки для Jasper (оно упрощено относительно "полного" названия в curProps)
+	 * Получить название поля соот-щее jasper-названию колонки.
+	 * Т.е. по "короткому имени" получить полное ссылочное. 
+	 *
+	 * @param jrFldName название колонки для Jasper (оно упрощено относительно "полного" названия в curProps).
+	 * Соот-ет члючам в списке атрибутов после вызова getReportContextProps. 
 	 * @return
 	 */
 	protected String getAlfAttrNameByJRKey(String jrFldName) {

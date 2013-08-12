@@ -98,6 +98,9 @@ public class ReportDSContextImpl implements ReportDSContext {
 	}
 
 	@Override
+	/**
+	 * Вернуть список описаний полей, где ключ = имя колонки данных в НД ("короткое имя")
+	 */
 	public Map<String, DataFieldColumn> getMetaFields() {
 		return metaFields;
 	}
