@@ -89,6 +89,7 @@
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="workCalendar" ref="WorkCalendarService"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
 	</bean>
 
     <bean id="errandsStatusesFilter" parent="documentStatusesFilter">

@@ -37,7 +37,7 @@
 	                                notificationText += documentScript.wrapperTitle("отменено", lecmErrandWf_cancelReason);
 
 									var countChildErrands = 0;
-									var connectedDocuments = documentConnection.getConnectedDocuments(document, "onBasis", "lecm-errands:document");
+									var connectedDocuments = errands.getChildErrands(document.nodeRef.toString());
 									if (connectedDocuments != null) {
 										countChildErrands = connectedDocuments.length;
 									}

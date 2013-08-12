@@ -27,6 +27,9 @@ function main() {
     uri = addParamToUrl('/lecm/errands/api/getCoexecutors', 'nodeRef', model.nodeRef);
     model.coexecs = doGetCall(uri);
 
+	uri = addParamToUrl('/lecm/errands/api/getChildErrands', 'nodeRef', model.nodeRef);
+	model.childErrands = doGetCall(uri);
+
     uri = addParamToUrl('/lecm/errands/api/getAdditionalDoc', 'nodeRef', model.nodeRef);
     model.additionalDoc = doGetCall(uri);
 

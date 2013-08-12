@@ -12,10 +12,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.documents.beans.DocumentFilter;
-import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.documents.beans.DocumentStatusesFilterBean;
-import ru.it.lecm.documents.beans.FiltersManager;
+import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.errands.beans.ErrandsServiceImpl;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -37,6 +34,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     private DocumentService documentService;
     private IWorkCalendar workCalendar;
     private NodeService nodeService;
+    private DocumentConnectionService documentConnectionService;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -54,7 +52,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         this.nodeService = nodeService;
     }
 
-    public static enum IssuedByMeEnum {
+	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+		this.documentConnectionService = documentConnectionService;
+	}
+
+	public static enum IssuedByMeEnum {
         ISSUED_ERRANDS_ALL,
         ISSUED_ERRANDS_EXECUTION,
         ISSUED_ERRANDS_EXPIRED,
@@ -341,5 +343,15 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 		ParameterCheck.mandatory("report", report);
 
 		errandsService.setExecutionReport(new NodeRef(documentRef), report);
+	}
+
+	public Scriptable getChildErrands(String documentRef) {
+		ParameterCheck.mandatory("documentRef", documentRef);
+		NodeRef document = new NodeRef(documentRef);
+		if (nodeService.exists(document)) {
+			List<NodeRef> childErrands = documentConnectionService.getConnectedDocuments(document, DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE, ErrandsService.TYPE_ERRANDS);
+			return createScriptable(childErrands);
+		}
+		return null;
 	}
 }

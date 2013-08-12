@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Get child errands</shortname>
+	<description>Child errand</description>
+	<url>/lecm/errands/api/getChildErrands?nodeRef={nodeRef}</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

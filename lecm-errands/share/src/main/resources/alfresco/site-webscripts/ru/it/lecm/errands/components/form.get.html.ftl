@@ -13,6 +13,7 @@
 
 <script type="text/javascript">
     //<![CDATA[
+    var errands;
     (function () {
         var Dom = YAHOO.util.Dom,
             Event = YAHOO.util.Event;
@@ -45,10 +46,9 @@
             }
             <#-- Make twisters - end -->
 
-            <#-- Dnd uploader form - start -->
             drawDndForm("${nodeRef}", '${id}');
 	        initSetExecutionReportForm('${id}');
-            <#-- Dnd uploader form - end -->
+	        initChildErrands('${id}');
         }
 
         function drawDndForm(nodeRef, htmlId) {
@@ -117,6 +117,18 @@
 				    execReportElement.value = "";
 			    });
 		    }
+	    }
+
+	    function initChildErrands(htmlId) {
+		    errands = new LogicECM.module.Errands.dashlet.Errands(htmlId + "-exec-child-errands").setOptions(
+				    {
+					    itemType: "lecm-errands:document",
+					    destination: "${nodeRef}"
+				    }).setMessages(${messages});
+
+		    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-child-errands-add", function() {
+			    errands.onAddErrandClick()
+		    });
 	    }
 
         Event.onDOMReady(init);
@@ -279,28 +291,27 @@
                 </ul>
             </div>
             <div id="${id}-exec-child-errands" class="data-list-block">
-                <#-- ЗДЕСЬ ДОЛЖНЫ БЫТЬ ДОЧЕРНИЕ ПОРУЧЕНИЯ! (соисполнители временно) -->
-                <span class="heading">${msg("message.eddand.childErrands")}<span class="count"> (${(coexecs![])?size})</span></span>
+                <span class="heading">${msg("message.eddand.childErrands")}<span class="count"> (${(childErrands![])?size})</span></span>
                 <span id="${id}-exec-child-errands-add" class="yui-button yui-push-button">
                     <span class="first-child">
                         <button type="button">${msg("message.eddand.addChildErrands")}</button>
                     </span>
                 </span>
                 <ul class="data-list persons-list">
-                    <#if coexecs?? && coexecs?size gt 0>
-                        <#list coexecs as coexec>
+                    <#if childErrands?? && childErrands?size gt 0>
+                        <#list childErrands as childErrand>
                             <li>
                                 <div class="avatar">
-                                    <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${coexec.employeeRef}" alt="Avatar" />
+                                    <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${childErrand.executorNodeRef}" alt="Avatar" />
                                 </div>
                                 <div class="person">
                                     <div>
-                                        ${view.showViewLink(coexec.employeeName, coexec.employeeRef, "logicecm.employee.view")}
-                                        получил поручение
-                                        <span class="text-cropped"><a href="javascript:void(0);">Некое очень важное поручение</a></span>
+                                        ${view.showViewLink(childErrand.executorName, childErrand.executorNodeRef, "logicecm.employee.view")}
+                                        ${msg("message.eddand.employee.get")}
+                                        <span class="text-cropped"><a href="${siteURL("document?nodeRef=" + childErrand.nodeRef)}">${childErrand.name}</a></span>
                                     </div>
                                     <div class="descr">
-                                        Срок исполнения <span>5 июня 2013г.</span>
+                                        ${msg("message.eddand.limitationDate")} <span>${childErrand.limitationDate}</span>
                                     </div>
                                 </div>
                             </li>
