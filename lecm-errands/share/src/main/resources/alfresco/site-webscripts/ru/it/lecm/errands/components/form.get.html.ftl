@@ -215,9 +215,7 @@
                     <#list links.links as link>
                         <li title="${link.name!""}">
                             <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
-                            <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
-                                ${link.name!""}
-                            </a>
+                            <a href="${link.url}">${link.name!""}</a>
                         </li>
                     </#list>
                 </#if>
@@ -274,9 +272,7 @@
                         <#list executeLinks.links as link>
                             <li title="${link.name!""}">
                                 <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
-                                <a href="${url.context}/page/document-attachment?nodeRef=${link.nodeRef}">
-                                    ${link.name!""}
-                                </a>
+                                <a href="${link.url}">${link.name!""}</a>
                             </li>
                         </#list>
                     </#if>
