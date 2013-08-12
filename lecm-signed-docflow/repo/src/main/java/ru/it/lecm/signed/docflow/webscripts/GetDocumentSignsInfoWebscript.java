@@ -90,11 +90,11 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 					contentArray.put(attachmentObject);
 				}
 			}
-			
+			if(contentArray.length() != 0){
 				jsonResponse.put("categoryName", categoryName);
 				jsonResponse.put("signedContent", contentArray);
 				JSONres.put(jsonResponse);
-			
+			}
 		}
 		result.put("result", JSONres);
 		return result;
