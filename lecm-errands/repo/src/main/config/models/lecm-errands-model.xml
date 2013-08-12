@@ -136,6 +136,16 @@
 					<mandatory>true</mandatory>
 					<default>true</default>
 				</property>
+				<!-- Признак того, что поручение было когда-либо отклонено -->
+				<property name="lecm-errands:was-rejected">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<default>false</default>
+				</property>
+				<!-- Фактическая дата начала работы с поручением -->
+				<property name="lecm-errands:work-start-date">
+					<type>d:date</type>
+				</property>
 
 				<!-- Поиск/сортировка ассоциаций-->
 				<property name="lecm-errands:initiator-assoc-ref">
