@@ -16,5 +16,9 @@ public interface DocumentEventCategory extends EventCategory {
      * Присвоение рейтинга
      */
     String SET_RATING = "SET_RATING";
+    /**
+     * Добавление ссылки
+     */
+    String LINK_ADDED = "LINK_ADDED";
 
 }

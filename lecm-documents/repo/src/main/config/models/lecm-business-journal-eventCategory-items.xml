@@ -46,6 +46,10 @@
 		        <property name="cm:name">Передача документа</property>
 		        <property name="lecm-busjournal:eventCategory-code">TRANSMIT_DOCUMENT</property>
 	        </item>
+            <item name="cm:Добавление ссылки" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Добавление ссылки</property>
+                <property name="lecm-busjournal:eventCategory-code">LINK_ADDED</property>
+            </item>
         </items>
     </item>
 </items>

@@ -16,6 +16,8 @@ import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmObjectsService;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -49,6 +51,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     private StateMachineServiceBean stateMachineBean;
     private LecmObjectsService lecmObjectsService;
     private NamespaceService namespaceService;
+    private BusinessJournalService businessJournalService;
 
 	private final Object lock = new Object();
 
@@ -70,6 +73,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
+    }
+
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
     }
 
     @Override
@@ -407,6 +414,9 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
             nodeService.createAssociation(document, childAssoc.getChildRef(), ASSOC_ERRANDS_EXECUTION_LINKS);
         } else {
             nodeService.createAssociation(document, childAssoc.getChildRef(), ASSOC_ERRANDS_LINKS);
+        }
+        if (childAssoc != null) {
+            businessJournalService.log(document, DocumentEventCategory.LINK_ADDED, "#initiator добавил(а) ссылку #object1 к документу \"#mainobject\"", Arrays.asList(childAssoc.getChildRef().toString()));
         }
 
         return childAssoc.getChildRef();
