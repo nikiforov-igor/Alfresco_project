@@ -46,11 +46,22 @@ public class JavaDataTypeImpl
 
 		public static SupportedTypes findType(String clazzName) {
 			if (clazzName != null) {
+
+				// поиск точного соот-вия
 				for(SupportedTypes t: values()) {
-					if ( clazzName.equalsIgnoreCase(t.name())
-							||
-						(
-						t.javaDataType != null && clazzName.equalsIgnoreCase(t.javaDataType.className())
+					if ( clazzName.equalsIgnoreCase(t.name()) // X совпадает с name полностью
+						|| ( t.javaDataType != null 
+							 && clazzName.equalsIgnoreCase(t.javaDataType.className()) // X совпадает с "длинным типом" ...
+						)
+					)
+						return t; // FOUNDS
+				}
+
+				// поиск как подстрок ...
+				for(SupportedTypes t: values()) {
+					if ( t.name().toLowerCase().startsWith( clazzName.toLowerCase()) // name начинается с X ...
+						|| ( t.javaDataType != null 
+							&& t.javaDataType.className().toLowerCase().contains( ("."+ clazzName).toLowerCase() ) // "длинный тип" содержит ".X" 
 						)
 					)
 						return t; // FOUNDS

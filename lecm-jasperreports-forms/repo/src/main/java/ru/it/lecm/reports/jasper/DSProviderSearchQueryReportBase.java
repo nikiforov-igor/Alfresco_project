@@ -18,11 +18,14 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.forms.jasperforms.AbstractDataSourceProvider;
 import ru.it.lecm.reports.api.DataFieldColumn;
+import ru.it.lecm.reports.api.ReportsManager;
+import ru.it.lecm.reports.beans.ReportBeansLocator;
 import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
@@ -70,6 +73,7 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 
 	/** XML-конфигурация */
 	private JRDSConfigXML xmlConfig = createXmlConfig();
+	private ReportsManager reportManager;
 
 	public DSProviderSearchQueryReportBase() {
 		logger.debug( "created "+ this.getClass().getSimpleName());
@@ -105,18 +109,38 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 		return xmlConfig;
 	}
 
+	private class ConfigXMLOfDsProviderSearchQuery 
+			extends JRDSConfigXML
+	{
+		public ConfigXMLOfDsProviderSearchQuery(ReportsManager mgr) {
+			super(mgr);
+		}
+
+		@Override
+		protected void setDefaults(Map<String, Object> defaults) {
+			super.setDefaults(defaults);
+			setXMLDefaults( defaults);
+		}
+	}
+
+	public ReportsManager getReportManager() {
+		if (this.reportManager == null) {
+			this.reportManager = ReportBeansLocator.getReportsManager();
+		}
+		return this.reportManager;
+	}
+
+	public void setReportManager(ReportsManager reportManager) {
+		this.reportManager = reportManager;
+	}
+
 	/**
 	 * Вернуть объект конфигуратор
 	 * @return
 	 */
 	protected JRDSConfigXML createXmlConfig() {
-		return new JRDSConfigXML() {
-			@Override
-			protected void setDefaults(Map<String, Object> defaults) {
-				super.setDefaults(defaults);
-				setXMLDefaults( defaults);
-			}
-		};	
+		PropertyCheck.mandatory(this, "reportManager", getReportManager());
+		return new ConfigXMLOfDsProviderSearchQuery( this.getReportManager());
 	}
 
 	/**

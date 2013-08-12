@@ -224,6 +224,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 			final File fDirReport = makeAbsFilePath(id.getReportType(), id.getReportMnemo(), "");
 			try {
 				FileUtils.deleteDirectory(fDirReport);
+				logger.info( String.format( "Delete directory by id=[%s]:\n\t directory deleted: '%s'", id, fDirReport.getAbsolutePath()));
 			} catch (IOException ex) {
 				final String msg = String.format( "Fail to delete template file directory\n\t by id='%s'\n\t %s", id, ex.getMessage());
 				logger.error( msg, ex);

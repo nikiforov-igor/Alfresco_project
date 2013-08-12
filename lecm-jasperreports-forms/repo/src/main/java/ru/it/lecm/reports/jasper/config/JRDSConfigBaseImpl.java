@@ -12,7 +12,7 @@ import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.jasper.utils.MacrosHelper;
 
 /**
- * Реализация для хранения конфы.
+ * Реализация для хранения параметров в виде конфы (см args).
  * 
  * @author rabdullin
  */

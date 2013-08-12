@@ -28,6 +28,7 @@ import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.AssocDataFilter;
 import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.api.DataFilter;
+import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.ReportProviderExt;
@@ -55,6 +56,7 @@ public class GenericDSProviderBase
 
 	private WKServiceKeeper services;
 	private ReportDescriptor reportDescriptor;
+	private ReportsManager reportManager;
 
 	/**
 	 * Запрос и НД, полученный после запроса к Альфреско
@@ -66,6 +68,7 @@ public class GenericDSProviderBase
 		return services;
 	}
 
+	@Override
 	public void setServices(WKServiceKeeper services) {
 		this.services = services;
 	}
@@ -74,8 +77,18 @@ public class GenericDSProviderBase
 		return reportDescriptor;
 	}
 
+	@Override
 	public void setReportDescriptor(ReportDescriptor reportDescriptor) {
 		this.reportDescriptor = reportDescriptor;
+	}
+
+	@Override
+	public void setReportManager(ReportsManager reportMgr) {
+		this.reportManager = reportMgr;
+	}
+
+	public ReportsManager getReportManager() {
+		return reportManager;
 	}
 
 	protected void clearSearch() {

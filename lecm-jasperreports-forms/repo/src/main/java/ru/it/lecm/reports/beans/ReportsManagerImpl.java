@@ -288,11 +288,9 @@ public class ReportsManagerImpl implements ReportsManager {
 			@Override
 			public void lookAtItem(IdRContent id) {
 				try { // try-catch wraping
-					final boolean isDsXml = (id.getFileName() != null)
-								&& id.getFileName().startsWith("ds-")
-								&& id.getFileName().endsWith(".xml");
-					if (!isDsXml)
-						return; // skip none-descriptor
+					final boolean isDsXml = DSXMLProducer.isDsConfigFileName(id.getFileName());
+					if (!isDsXml) // skip none-descriptor files ...
+						return;
 
 					found.add(id);
 					logger.debug(String.format( "loading report descriptor from '%s' ...", id));
@@ -564,7 +562,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		// создание ds-файла ...
 		final ByteArrayOutputStream dsxml = DSXMLProducer.xmlCreateDSXML(desc.getMnem(), desc);
 		if (dsxml != null) {
-			final IdRContent idds = makeDsXmlId(desc);
+			final IdRContent idds = DSXMLProducer.makeDsXmlId(desc);
 			try {
 				// файл создадим только в репозитории (но не в файловом хранилище) ...
 				this.contentRepositoryDAO.storeContent(idds, new ByteArrayInputStream(dsxml.toByteArray()));
@@ -575,32 +573,6 @@ public class ReportsManagerImpl implements ReportsManager {
 				throw new RuntimeException(msg, ex);
 			}
 		}
-	}
-
-	/**
-	 * Получить id указанного файла.
-	 * @param desc
-	 * @param fileName
-	 * @return
-	 */
-	final static IdRContent makeFileId(ReportDescriptor desc, final String fileName) {
-		return new IdRContent(desc.getReportType(), desc.getMnem(), fileName);
-	}
-
-	/**
-	 * Получить id названия ds-xml файла, в котором может храниться мета-
-	 * описание указанного отчёта.
-	 * @param desc дескриптор отчёта
-	 * @return полное имя файла.
-	 */
-	final static IdRContent makeDsXmlId(ReportDescriptor desc) {
-		/*
-		final IdRContent id = IdRContent.createId(
-				desc.getReportType(),
-				desc.getMnem(),
-				String.format("ds-%s.xml", desc.getMnem()));
-		 */
-		return makeFileId(desc, String.format("%s%s.xml", DSXMLProducer.PFX_DS, desc.getMnem() ));
 	}
 
 	/**
@@ -621,7 +593,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		PropertyCheck.mandatory(this, "contentRepositoryDAO", getContentRepositoryDAO());
 
 		final ReportDescriptor desc = this.getRegisteredReportDescriptor(reportCode);
-		final IdRContent idDS = makeDsXmlId(desc);
+		final IdRContent idDS = DSXMLProducer.makeDsXmlId(desc);
 		ContentReader result = null;
 		if (contentRepositoryDAO.exists(idDS)) {
 			// описатеть имеется в репозитории продеплоенных ...
@@ -742,7 +714,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		if (desc == null)
 			return null;
 
-		final IdRContent idDS = makeDsXmlId(desc);
+		final IdRContent idDS = DSXMLProducer.makeDsXmlId(desc);
 		ReportContentDAO result = null;
 		if (contentRepositoryDAO.exists(idDS)) {
 			// описатеть имеется в репозитории продеплоенных ...

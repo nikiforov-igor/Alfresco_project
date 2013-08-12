@@ -639,9 +639,11 @@ public class XmlHelper {
 					logger.error(info);
 					throw new RuntimeException( info);
 				}
-				// TODO: final Object value = getNodeAsSmart(childNode);
+				// получение данных чтобы не пропустить значение для такой конструкции: 
+				//    <item key="rowSum.show">true</item>
+				// т.е. когда значение задано внутри
 				final Node valueNode = (childNode.getAttributes() == null) ? null : childNode.getAttributes().getNamedItem(xmlValueName);
-				final Object value = valueNode != null ? valueNode.getNodeValue() : "";
+				final Object value = (valueNode != null) ? valueNode.getNodeValue() : getNodeAsSmart(childNode); // getTagContent(childNode);
 				result.put( getTagContent(keyNode), value);
 			} // for
 		}
@@ -678,7 +680,7 @@ public class XmlHelper {
 			} else if (vMapNode != null) { // загружаем мапу ...
 				result = getNodeAsItemsMap(vMapNode);
 			} else { // принимаем что узел содержит строку
-				final String data = XmlHelper.getTagContent(node);
+				final String data = getTagContent(node);
 				result = (data == null ? null : data.trim());
 			}
 		}

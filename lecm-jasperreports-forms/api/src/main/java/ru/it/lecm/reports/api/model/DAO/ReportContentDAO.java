@@ -79,19 +79,42 @@ public interface ReportContentDAO {
 	 */
 	String getRoot();
 
-	/** IdContent: id для определения положения файлв в иерархии хранения */
+	/** IdContent: id для определения положения файлов в иерархии хранения */
 	public static class IdRContent {
+
+		/**
+		 * Используется для fileName, когда надо обозначить независимость от имени файла,
+		 * например, чтобы обозначить целиком весь каталог /reportMnemo 
+		 */
+		final public static String FILENAME_WILDCARD_ANYFILE = "*";
 
 		private ReportType reportType;
 		private String reportMnemo;
 		private String fileName;
 
+		/**
+		 * Создание id по трём его составляющим
+		 * @param reportType
+		 * @param reportMnemo
+		 * @param fileName имя файла, если пустое или null, то вместо него используется маска "*"
+		 * @return
+		 */
 		public static IdRContent createId( ReportType reportType, String reportMnemo, String fileName) {
-			return new IdRContent(reportType, reportMnemo, fileName);
+			if (fileName == null || fileName.trim().length() == 0)
+				fileName = FILENAME_WILDCARD_ANYFILE;
+			return new IdRContent(reportType, reportMnemo, fileName.trim());
 		}
 
+		/**
+		 * Создать id указанного файла отчёта
+		 * @param desc описатель, если null, воз-ся Null
+		 * @param fileName имя файла, если пустое или null, то вместо него используется маска "*"
+		 * @return
+		 */
 		public static IdRContent createId( ReportDescriptor desc, String fileName) {
-			return (desc != null) ? createId(desc.getReportType(), desc.getMnem(), fileName) : null;
+			return (desc == null) 
+						? null 
+						: createId(desc.getReportType(), desc.getMnem(), fileName);
 		}
 
 		public IdRContent(ReportType reportType, String reportMnemo, String fileName)

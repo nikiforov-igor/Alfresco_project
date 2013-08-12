@@ -1,7 +1,7 @@
 package ru.it.lecm.reports.jasper.config;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +9,8 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.util.JRLoader;
 
+import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +19,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import ru.it.lecm.reports.api.DataFieldColumn;
+import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.jasper.utils.MacrosHelper;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.reports.xml.XmlHelper;
 
 /**
- * Реализация для чтения конфы из XML.
+ * Реализация для чтения конфы args из XML.
  * (!) При загрузке XML автоматом читаются:
  * 		1) Аргументы, перечисленные в getArgs (список задётся в setDefaults или может быть расширен провайдером)
  * 		2) Список метаописаний "fields.jasper", элементы "field", + атрибуты в каждом field.
@@ -37,9 +38,19 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 
 	final static Logger logger = LoggerFactory.getLogger(JRDSConfigXML.class);
 
-
-	// параметр с названием файла XML конфигурации
+	// параметр в this.args с названием файла XML конфигурации
 	final static public String TAG_CONFIGNAME = "xmlconfigName";
+
+	private ReportsManager reportManager;
+
+	/**
+	 * Создание конфигуратора, с загрузкой необходимых конфигурационных файлов из указанного хранилища 
+	 * @param contentDAO
+	 */
+	public JRDSConfigXML(ReportsManager mgr) {
+		super();
+		this.reportManager = mgr;
+	}
 
 	/* Fields Descriptors - look at DSXMLProducer */
 	/*
@@ -97,8 +108,16 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		getArgs().put( TAG_CONFIGNAME, value);
 	}
 
+	public ReportsManager getReportManager() {
+		return reportManager;
+	}
+
+	public void setReportManager(ReportsManager reportMgr) {
+		this.reportManager = reportMgr;
+	}
+
 	static final String PARAM_CMIS_XMLCONFIG = "CMIS_XMLCONFIG";
-	static final String JRDS_CONFIG_ROOT = "/reportdefinitions/ds-config/";
+	// static final String JRDS_CONFIG_ROOT = "/reportdefinitions/ds-config/";
 
 	/**
 	 * Задать параметры из params.
@@ -126,23 +145,24 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		}
 
 	public boolean loadConfig() throws JRException {
+		PropertyCheck.mandatory(this, "reportManager", getReportManager());
+
 		// setConfigName(configName); // boolean loadConfigByName( String configName);
 		final String configName = this.getConfigName();
 		if (configName == null || configName.length() == 0) { 
 			return true; // empty config is ok 
 		}
 		try {
-			final String confLocation = JRDS_CONFIG_ROOT + configName;
-			//				final File f = new File(confLocation);
-			//				if (!f.exists())
-			//					throw new FileNotFoundException( String.format( "xml config '%s'", f.getAbsolutePath()));
-			//				logger.info( String.format( "Loading xml config [%s] from file '%s'", configName, f.getAbsolutePath()));
-			//				final InputStream fin = new FileInputStream(f);
-			final URL reportDefinitionURL = JRLoader.getResource(confLocation);
-			if (reportDefinitionURL == null)
-				throw new JRException( String.format("Report config missed - file not found at '%s'", confLocation));
-			final InputStream fin = JRLoader.getInputStream(reportDefinitionURL);
-			if (fin == null) throw new JRException( String.format( "Config not found at '%s'", reportDefinitionURL));
+// 			final String confLocation = JRDS_CONFIG_ROOT + configName;
+//			final URL reportDefinitionURL = JRLoader.getResource(confLocation);
+//			if (reportDefinitionURL == null)
+//				throw new JRException( String.format("Report config missed - file not found at '%s'", confLocation));
+//			final InputStream fin = JRLoader.getInputStream(reportDefinitionURL);
+//			if (fin == null) throw new JRException( String.format( "Config not found at '%s'", confLocation));
+			final byte[] data = this.getReportManager().loadDsXmlBytes( DSXMLProducer.extractReportName(configName));
+			if (data == null)
+				throw new JRException( String.format( "DS-config not found for report '%s'", configName));
+			final InputStream fin = new ByteArrayInputStream(data);
 			try {
 				xmlRead( fin, String.format( "config from '%s'", configName) );
 				return true; // ONLY HERE IS OK

@@ -8,6 +8,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
@@ -27,6 +28,7 @@ public abstract class AbstractDataSourceProvider
 	protected WKServiceKeeper services;
 	private List<JRField> fieldsList;
 	private ReportDescriptor reportDescriptor;
+	private ReportsManager reportManager;
 
 	public AbstractDataSourceProvider() {
 		initFields();
@@ -46,6 +48,7 @@ public abstract class AbstractDataSourceProvider
 		return services;
 	}
 
+	@Override
 	public void setServices(WKServiceKeeper services) {
 		this.services = services;
 	}
@@ -54,8 +57,18 @@ public abstract class AbstractDataSourceProvider
 		return reportDescriptor;
 	}
 
+	@Override
 	public void setReportDescriptor(ReportDescriptor reportDesc) {
 		this.reportDescriptor = reportDesc;
+	}
+
+	public ReportsManager getReportManager() {
+		return reportManager;
+	}
+
+	@Override
+	public void setReportManager(ReportsManager reportManager) {
+		this.reportManager = reportManager;
 	}
 
 	/**

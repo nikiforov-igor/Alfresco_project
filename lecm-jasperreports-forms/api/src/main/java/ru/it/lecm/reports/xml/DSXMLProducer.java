@@ -30,6 +30,7 @@ import ru.it.lecm.reports.api.model.ReportFlags;
 import ru.it.lecm.reports.api.model.ReportProviderDescriptor;
 import ru.it.lecm.reports.api.model.ReportTemplate;
 import ru.it.lecm.reports.api.model.ReportType;
+import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.model.impl.AlfrescoAssocInfoImpl;
 import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
 import ru.it.lecm.reports.model.impl.DataSourceDescriptorImpl;
@@ -844,6 +845,39 @@ public class DSXMLProducer {
 			end = dsFileName.length();
 
 		return dsFileName.substring(start, end);
+	}
+
+	/**
+	 * Проверить является ли указанное имя файла назвнаием мета-описания вида "ds-*.xml" 
+	 * @param testFileName имя файла (без путей)
+	 * @return
+	 */
+	public static boolean isDsConfigFileName(final String testFileName) {
+		final boolean isDsXml = (testFileName != null)
+				&& testFileName.startsWith(PFX_DS) // начинается с "ds-"
+				&& testFileName.endsWith(".xml"); //расширение "xml"
+		return isDsXml;
+	}
+
+	/**
+	 * Получение названия стандартного файла с мета-описанием ("ds-xxx.xml"), 
+	 * который соот-ет указанному отчёту 
+	 * @param reportCode код (мнемоника) отчёт
+	 * @return название вида "ds-reportCode.xml"
+	 */
+	public static String makeDsConfigFileName(final String reportCode) {
+		// return PFX_DS + reportCode + ".xml";
+		return  String.format("%s%s.xml", PFX_DS, reportCode);
+	}
+
+	/**
+	 * Получить id названия ds-xml файла, в котором может храниться мета-
+	 * описание указанного отчёта.
+	 * @param desc дескриптор отчёта
+	 * @return полное имя файла.
+	 */
+	public static IdRContent makeDsXmlId(ReportDescriptor desc) {
+		return IdRContent.createId( desc, makeDsConfigFileName(desc.getMnem()) );
 	}
 
 }

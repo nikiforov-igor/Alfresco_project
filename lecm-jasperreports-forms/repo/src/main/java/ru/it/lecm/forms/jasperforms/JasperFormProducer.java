@@ -16,6 +16,7 @@ import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
+import ru.it.lecm.reports.beans.ReportBeansLocator;
 import ru.it.lecm.reports.beans.ReportsManagerImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
@@ -90,6 +91,9 @@ public class JasperFormProducer extends AbstractWebScript {
  
 		PropertyCheck.mandatory(this, "reportsManager", getReportsManager() );
 		PropertyCheck.mandatory (this, "reportGenerators", getReportsManager().getReportGenerators());
+
+		// локатору закинем текущее значение менеджера ...
+		ReportBeansLocator.setReportsManager(this.getReportsManager());
 
 		final ReportDescriptor reportDesc = this.getReportsManager().getRegisteredReportDescriptor(reportName);
 		final ReportContentDAO storage = this.getReportsManager().findContentDAO(reportDesc); 

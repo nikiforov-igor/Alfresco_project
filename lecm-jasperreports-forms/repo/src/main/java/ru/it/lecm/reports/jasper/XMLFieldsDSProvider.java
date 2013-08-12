@@ -12,6 +12,7 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import ru.it.lecm.reports.api.DataFieldColumn;
+import ru.it.lecm.reports.beans.ReportBeansLocator;
 import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
 
@@ -59,7 +60,7 @@ public class XMLFieldsDSProvider implements JRDataSourceProvider {
 
 	@Override
 	public JRDataSource create(JasperReport report) throws JRException {
-		final JRDSConfigXML conf = new JRDSConfigXML();
+		final JRDSConfigXML conf = new JRDSConfigXML(ReportBeansLocator.getReportsManager());
 
 		if (report != null) {
 			// get the data source parameters from the report

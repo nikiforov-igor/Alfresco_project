@@ -107,7 +107,11 @@ public class DataFieldColumn extends JRDesignField {
 		result.setDescription( colDesc.getDefault());
 		result.setValueLink(colDesc.getExpression());
 		try {
-			result.setValueClass( Class.forName(colDesc.className()) );
+			if (colDesc.getDataType() != null && colDesc.getDataType().className() != null) {
+				result.setValueClass( Class.forName(colDesc.getDataType().className()) );
+			} else {
+				result.setValueClass( Class.forName(colDesc.className()) );
+			}
 		} catch (ClassNotFoundException ex) {
 			final String msg = String.format( "Column '%s' has invalid value class type: '%s' "
 					, colDesc.getColumnName(), colDesc.className());

@@ -93,8 +93,9 @@
 		<property name="storeStructurePathFmt" value="/@reporType/@reportMnemo/@fileName" />
 	</bean>
 
-	<!-- Хранилище шаблогов файлов отчётов -->
-	<!-- Хранение файлов для отчётов в файловой системе (xml-шаблоны, jasper и прнепосредлственно из поставки) -->
+	<!-- Хранилище шаблонов файлов отчётов в файловой системе
+		(xml-шаблоны, jasper и пр непосредственно в поставке Lecm)
+	  -->
 	<bean id="fileReportTemplatesBean"
 			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
 			init-method="init">
@@ -111,7 +112,8 @@
 					@reportMnemo	название отчёта (тут не используется)
 					@fileName		название файла (только имя с расширением)
 					// @{root}		корневой каталог не разрешается
-		
+
+			(!) Здесь зависимости от "кода отчёта" в форматной строке нет, т.к. это шаблоны
 		  -->
 		<property name="storeStructurePathFmt" value="/@reporType/@fileName" />
 	</bean>

@@ -31,6 +31,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -107,12 +108,6 @@ public class JasperReportGeneratorImpl
 //	}
 
 	@Override
-//	public void produceReport(
-//			WebScriptResponse webScriptResponse
-//			, String reportName
-//			, Map<String, String[]> parameters
-//			, ReportDescriptor reportDesc
-//			) throws IOException 
 	public void produceReport( WebScriptResponse webScriptResponse
 			, ReportDescriptor reportDesc
 			, Map<String, String[]> parameters
@@ -131,17 +126,20 @@ public class JasperReportGeneratorImpl
 				String.format( "%s.jasper", reportDesc.getMnem());
 
 		final ContentReader reader = rptContent.loadContent( IdRContent.createId(reportDesc, reportFileName));
-		final InputStream stm = (reader != null) ? reader.getContentInputStream() : null;
-		if (reader == null)
-			throw new IOException( String.format("Report is missed - file '%s' not found", reportFileName ));
-
-		// DONE: параметризовать выходной формат
-		final JasperReportTargetFileType target = findTargetArg(parameters);
 
 		OutputStream outputStream = null;
+		InputStream stm = (reader != null) ? reader.getContentInputStream() : null;
 		try {
+			if (reader == null)
+				throw new IOException( String.format("Report is missed - file '%s' not found", reportFileName ));
+
+			// DONE: параметризовать выходной формат
+			final JasperReportTargetFileType target = findTargetArg(parameters);
+
 			// final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportDefinitionURL);// catch message NullPoiterException for ...
 			final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(stm);
+			IOUtils.closeQuietly(stm); stm = null; // сразу закроем поток отчёта
+
 			webScriptResponse.setContentType( String.format("%s;charset=UTF-8;filename=%s"
 							, target.getMimeType()
 							, generateReportResultFileName( reportDesc.getMnem(), target.getExtension()) 
@@ -168,6 +166,7 @@ public class JasperReportGeneratorImpl
 
 					adsp.setServices(this.getServices());
 					adsp.setReportDescriptor(reportDesc);
+					adsp.setReportManager(this.reportsMgr);
 				}
 
 				BeanUtils.populate(dsProvider, parameters);
@@ -191,6 +190,10 @@ public class JasperReportGeneratorImpl
 			log.error( msg, e);
 			throw new IOException(msg, e);
 		} finally {
+			if (stm != null) {
+				IOUtils.closeQuietly(stm);
+			}
+		
 			if (outputStream != null) {
 				outputStream.flush();
 				outputStream.close();
