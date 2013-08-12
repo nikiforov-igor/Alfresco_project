@@ -107,7 +107,8 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 	public Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset) {
 		NodeRef showNode = node;
 		List<NodeRef> showNodes = new ArrayList<NodeRef>();
-		String fieldName = null;
+		String fieldName;
+		String fieldFormat = null;
 		List<String> transitions = new ArrayList<String>();
 
         Object result = "";
@@ -133,6 +134,13 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             } else {
                 fieldName = field;
             }
+
+	        if (fieldName.contains(STRING_FORMAT_SYMBOL)) {
+		        String fieldValue = fieldName;
+		    	fieldName = fieldValue.substring(0, field.indexOf(STRING_FORMAT_SYMBOL));
+		    	fieldFormat = fieldValue.substring(field.indexOf(STRING_FORMAT_SYMBOL) + 1, field.length());
+	        }
+
             for (String el : transitions) {
 	            showNodes.clear();
                 Map<String, String> expressions = getExpression(el);
@@ -240,7 +248,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 					            result = cal.getTime();
 				            }
 
-				            DateFormat dFormat = new SimpleDateFormat(dateFormat);
+				            DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
 				            result = dFormat.format(result);
 			            }
 		            } else {

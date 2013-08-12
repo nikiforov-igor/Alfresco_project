@@ -58,6 +58,11 @@ public interface SubstitudeBean {
 	final String WRAP_AS_LINK_SYMBOL = "!";
 
 	/**
+	 * Символ разделяющий название аттрибута от его формата (используется для дат)
+	 */
+	final String STRING_FORMAT_SYMBOL = "?";
+
+	/**
 	 * Символ, указывающий что далее следует псевдо-свойство
 	 */
 	final String PSEUDO_PROPERTY_SYMBOL = "~";
