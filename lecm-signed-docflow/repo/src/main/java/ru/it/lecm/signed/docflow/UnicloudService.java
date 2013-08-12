@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tempuri.IGateWcfService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.signed.docflow.api.SignedDocflow;
+import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
 import ru.it.lecm.signed.docflow.model.AuthenticationData;
 import ru.it.lecm.signed.docflow.model.SignatureData;
 import ucloud.gate.proxy.ArrayOfOperatorInfo;
@@ -134,8 +134,8 @@ public class UnicloudService {
 
 
 		NodeRef organizationRef = orgstructureService.getOrganization();
-		String operatorCode = (String)nodeService.getProperty(organizationRef, SignedDocflow.PROP_OPERATOR_CODE);
-		String partnerKey = (String)nodeService.getProperty(organizationRef, SignedDocflow.PROP_PARTNER_KEY);
+		String operatorCode = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_OPERATOR_CODE);
+		String partnerKey = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_PARTNER_KEY);
 		String inn = (String)nodeService.getProperty(organizationRef, OrgstructureBean.PROP_ORG_TIN);
 		String kpp = null;
 		String employeeId = orgstructureService.getCurrentEmployee().getId();
@@ -180,7 +180,7 @@ public class UnicloudService {
 
 	public SignatureData verifySignature(String contentRef, String signature) {
 		NodeRef organizationRef = orgstructureService.getOrganization();
-		String operatorCode = (String)nodeService.getProperty(organizationRef, SignedDocflow.PROP_OPERATOR_CODE);
+		String operatorCode = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_OPERATOR_CODE);
 
 		ContentReader reader = contentService.getReader(new NodeRef(contentRef), ContentModel.PROP_CONTENT);
 		byte[] sign = Base64.decodeBase64(signature);

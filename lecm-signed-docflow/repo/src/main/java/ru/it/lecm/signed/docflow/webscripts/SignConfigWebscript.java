@@ -17,6 +17,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.DeclarativeWebScriptHelper;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
+import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
 
 /**
  * Конфигурационный вебскрипт
@@ -70,9 +71,9 @@ public class SignConfigWebscript extends DeclarativeWebScript {
 		String action = json.getString("action");
 		if("get".equals(action)) {
 			NodeRef orgRef = orgstructureService.getOrganization();
-			String licKey = (String) nodeService.getProperty(orgRef, SignedDocflow.PROP_APPLET_LIC_KEY);
-			String licCert = (String) nodeService.getProperty(orgRef, SignedDocflow.PROP_APPLET_CERT);
-			String licContainer = (String) nodeService.getProperty(orgRef, SignedDocflow.PROP_APPLET_CONTAINER);
+			String licKey = (String) nodeService.getProperty(orgRef, SignedDocflowModel.PROP_APPLET_LIC_KEY);
+			String licCert = (String) nodeService.getProperty(orgRef, SignedDocflowModel.PROP_APPLET_CERT);
+			String licContainer = (String) nodeService.getProperty(orgRef, SignedDocflowModel.PROP_APPLET_CONTAINER);
 			result.put("licKey", licKey);
 			result.put("licCert", licCert);
 			result.put("storeName", licContainer);

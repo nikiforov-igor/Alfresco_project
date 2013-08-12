@@ -3,6 +3,7 @@ package ru.it.lecm.signed.docflow.webscripts;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ISO8601DateFormat;
 import org.json.JSONArray;
@@ -18,6 +19,7 @@ import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.DeclarativeWebScriptHelper;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
+import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
 
 /**
  *
@@ -27,9 +29,20 @@ public class SignContentWebscript extends DeclarativeWebScript {
 
 	private SignedDocflow signedDocflowService;
 	private final static Logger logger = LoggerFactory.getLogger(SignContentWebscript.class);
-	private final static QName[] propertiesToParse = {SignedDocflow.PROP_OWNER, SignedDocflow.PROP_OWNER_POSITION, SignedDocflow.PROP_OWNER_ORGANIZATION,
-		SignedDocflow.PROP_SIGNING_DATE, SignedDocflow.PROP_SERIAL_NUMBER, SignedDocflow.PROP_VALID_FROM, SignedDocflow.PROP_VALID_THROUGH, SignedDocflow.PROP_CA,
-		SignedDocflow.PROP_SIGNATURE_CONTENT, SignedDocflow.ASSOC_SIGN_TO_CONTENT, SignedDocflow.PROP_CERT_FINGERPRINT, SignedDocflow.PROP_CERT_FINGERPRINT};
+	private final static QName[] propertiesToParse = {
+		SignedDocflowModel.PROP_OWNER,
+		SignedDocflowModel.PROP_OWNER_POSITION,
+		SignedDocflowModel.PROP_OWNER_ORGANIZATION,
+		SignedDocflowModel.PROP_SIGNING_DATE,
+		SignedDocflowModel.PROP_SERIAL_NUMBER,
+		SignedDocflowModel.PROP_VALID_FROM,
+		SignedDocflowModel.PROP_VALID_THROUGH,
+		SignedDocflowModel.PROP_CA,
+		ContentModel.PROP_CONTENT,
+		SignedDocflowModel.ASSOC_SIGN_TO_CONTENT,
+		SignedDocflowModel.PROP_CERT_FINGERPRINT,
+		SignedDocflowModel.PROP_CERT_FINGERPRINT
+	};
 
 	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
 		this.signedDocflowService = signedDocflowService;
@@ -51,9 +64,9 @@ public class SignContentWebscript extends DeclarativeWebScript {
 			for (QName property : propertiesToParse) {
 				try {
 					Serializable value;
-					if (SignedDocflow.PROP_VALID_FROM.equals(property)
-							|| SignedDocflow.PROP_VALID_THROUGH.equals(property)
-							|| SignedDocflow.PROP_SIGNING_DATE.equals(property)) {
+					if (SignedDocflowModel.PROP_VALID_FROM.equals(property)
+							|| SignedDocflowModel.PROP_VALID_THROUGH.equals(property)
+							|| SignedDocflowModel.PROP_SIGNING_DATE.equals(property)) {
 						value = ISO8601DateFormat.parse(jsonRequest.getJSONObject(i).getString(property.getPrefixString()));
 					} else {
 						value = jsonRequest.getJSONObject(i).getString(property.getPrefixString());

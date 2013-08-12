@@ -103,13 +103,6 @@
 					<mandatory>true</mandatory>
 				</property>
 
-				<!-- Непосредственно подпись в виде строки Base64 -->
-				<property name="lecm-signed-docflow:signature-content">
-					<title>Signature Content</title>
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-				</property>
-
 				<!-- Фингерпринт сертификата -->
 				<property name="lecm-signed-docflow:fingerprint">
 					<title>Fingerprint</title>

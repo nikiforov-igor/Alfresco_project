@@ -10,7 +10,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
-import ru.it.lecm.signed.docflow.api.SignedDocflow;
+import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
 
 /**
  *
@@ -41,10 +41,10 @@ public class SigningContentVersionChangePolicy implements BeforeCreateVersionPol
 	public void beforeCreateVersion(final NodeRef versionableNode) {
 		//проверяем есть ли у ноды ассоциация на подпись
 		//если ассоциация есть, то разрываем ее
-		List<AssociationRef> assocs = nodeService.getSourceAssocs(versionableNode, SignedDocflow.ASSOC_SIGN_TO_CONTENT);
+		List<AssociationRef> assocs = nodeService.getSourceAssocs(versionableNode, SignedDocflowModel.ASSOC_SIGN_TO_CONTENT);
 		if (assocs != null) {
 			for (AssociationRef assoc : assocs) {
-				nodeService.removeAssociation(assoc.getSourceRef(), assoc.getTargetRef(), SignedDocflow.ASSOC_SIGN_TO_CONTENT);
+				nodeService.removeAssociation(assoc.getSourceRef(), assoc.getTargetRef(), SignedDocflowModel.ASSOC_SIGN_TO_CONTENT);
 			}
 		}
 	}
