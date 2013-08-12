@@ -10,7 +10,6 @@ import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ISO8601DateFormat;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -21,7 +20,6 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.CryptoPro.Crypto.CryptoProvider;
 import ru.it.lecm.base.DeclarativeWebScriptHelper;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
 import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
@@ -51,7 +49,7 @@ public class LoadSignWebscript extends DeclarativeWebScript{
 	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
 		this.signedDocflowService = signedDocflowService;
 	}
-	
+
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -80,7 +78,7 @@ public class LoadSignWebscript extends DeclarativeWebScript{
 					throw new WebScriptException(errorMessage, ex);
 				}
 			}
-			
+
 			Map<String, Object> signContentResult = signedDocflowService.loadSign(properties);
 			jsonResponse = new JSONObject(signContentResult);
 
