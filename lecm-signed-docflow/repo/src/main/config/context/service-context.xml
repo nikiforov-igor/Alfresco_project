@@ -95,4 +95,9 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
+	<bean id="foobarPolicy" class="ru.it.lecm.signed.docflow.policies.SigningContentVersionChangePolicy" init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
 </beans>
