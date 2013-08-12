@@ -212,7 +212,8 @@ public class LecmPermissionServiceImpl
 			sb.append( "\t ============================================================\n" );
 			sb.append( String.format( "\t (*) Selected %s counter: %s\n", subjInfo, result.size() ));
 		}
-		logger.trace( sb.toString() );
+		if (logger.isDebugEnabled())
+				logger.debug( sb.toString() );
 		return result;
 	}
 
@@ -341,8 +342,10 @@ public class LecmPermissionServiceImpl
 				@Override
 				public Boolean doWork() throws Exception {
 					final AccessStatus status = permissionService.hasPermission(node, permission);
-					logger.trace( String.format( "hasPermission check:\n\t nodeRef: %s\n\t login: %s \n\t permission: %s \n\t found: %s"
+					if (logger.isTraceEnabled()) {
+						logger.trace( String.format( "hasPermission check:\n\t nodeRef: %s\n\t login: %s \n\t permission: %s \n\t found: %s"
 								, node, userLogin, permission, status));
+					}
 					return status == AccessStatus.ALLOWED;
 				}
 			};

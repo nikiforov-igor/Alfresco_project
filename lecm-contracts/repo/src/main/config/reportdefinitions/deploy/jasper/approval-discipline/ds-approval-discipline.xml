@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Фильтры отчета по 10.5.2 "Исполнительская дисциплина по согласованиям за период":
+Входные параметры:
+•	Период 
+
+Выходные данные отчета:
+•	ФИО Сотрудника
+•	Должность сотрудника
+•	Отдел
+	Количество просроченных согласований
+•	Средний срок согласования
+•	Ср просрочка
+  -->
+
+<ds.config>
+    <report.descriptor mnem="approval-discipline">
+        <type mnem="JASPER"/>
+        <l18>
+            <item key="RU_RU" value="Исполнительская дисциплина по согласованиям"/>
+        </l18>
+        <provider mnem="DSProdiverApprovalSummaryByPeriod" javaClass="ru.it.lecm.reports.jasper.DSProdiverApprovalSummaryByPeriod" >
+           <l18>
+               <item key="RU_RU" value="Провайдер Jasper отчётов: Дисциплина согласований за период"/>
+           </l18>
+        </provider>
+        <template filename="approval-discipline.jrxml"/>
+        <datasource.descriptor mnem="datasource-approval">
+            <l18>
+                <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
+            </l18>
+        </datasource.descriptor>
+    </report.descriptor>
+
+	<query.descriptor>
+		<offset>0</offset>
+		<limit>-1</limit>
+		<pgsize>-1</pgsize>
+		<allVersions>true</allVersions>
+		<preferedType></preferedType>
+		<isMultiRow>true</isMultiRow>
+		<isCustom>true</isCustom>
+		<!--
+			select * from lecm:documents
+			select * from lecm-al:approval-list as approvals
+		  -->
+		<queryText>	<![CDATA[]]></queryText>
+	</query.descriptor>
+
+	<cmis.connection>
+		<url>http://localhost:8080/alfresco/service/cmis</url>
+		<username>admin</username>
+	</cmis.connection>
+
+	<fields>
+		<!-- Период - начало и конец -->
+		<field queryFldName="{period.start}" jrFldName="col_Period.Start" displayName="Начало периода" javaValueClass="Date">
+            <parameter mnem="PARAM_TYPE_VALUE" paramType="PARAM_TYPE_VALUE">
+                <l18><item key="RU_RU" value="Значение"/></l18>
+                <label1><item key="RU_RU" value="С"/></label1>
+            </parameter>
+        </field>
+		<field queryFldName="{period.end}" jrFldName="col_Period.End" displayName="Конец периода" javaValueClass="Date">
+            <parameter mnem="PARAM_TYPE_VALUE" paramType="PARAM_TYPE_VALUE">
+                <l18><item key="RU_RU" value="Значение"/></l18>
+                <label1><item key="RU_RU" value="С"/></label1>
+            </parameter>
+        </field>
+
+		<!-- Фамилия Имя Отчество Сотрудника-->
+		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-first-name}"
+				jrFldName="col_Employee.FirstName"
+				displayName="Фамилия Сотрудника" javaValueClass="String"/>
+
+		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-middle-name}"
+				jrFldName="col_Employee.MiddleName"
+				displayName="Имя Сотрудника" javaValueClass="String"/>
+
+		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-last-name}"
+				jrFldName="col_Employee.LastName"
+				displayName="Отчество Сотрудника" javaValueClass="String"/>
+
+		<!-- Должность Сотрудника (!) вычисляемое -->
+		<field queryFldName="{Employee.StaffPosition{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
+				jrFldName="col_Employee.StaffPosition"
+				displayName="Должность Сотрудника" javaValueClass="String"/>
+
+		<!-- Отдел Сотрудника (!) вычисляемое -->
+		<field queryFldName="{Employee.Unit{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
+				jrFldName="col_Employee.Unit"
+				displayName="Отдел Сотрудника" javaValueClass="String"/>
+
+		<!-- Кол-во просроченных согласований (!) вычисляемое -->
+		<field queryFldName="{Employee.MissedApproves{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
+				jrFldName="col_Employee.MissedApproves"
+				displayName="Кол-во просроченных согласований" javaValueClass="int"/>
+
+		<!-- Средний срок согласований, дней (!) вычисляемое -->
+		<field queryFldName="{Employee.AvgApproved{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
+				jrFldName="col_Employee.AvgApproved"
+				displayName="Средний срок согласований, дней" javaValueClass="float"/>
+
+		<!-- Средний срок просрочки, дней (!) вычисляемое -->
+		<field queryFldName="{Employee.AvgMissed{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
+				jrFldName="col_Employee.AvgMissed"
+				displayName="Средний срок просрочки, дней" javaValueClass="float"/>
+
+	</fields>
+
+</ds.config>

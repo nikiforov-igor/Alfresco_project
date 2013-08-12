@@ -2,7 +2,6 @@ package ru.it.lecm.reports.model.DAO;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +27,7 @@ import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFlags;
 import ru.it.lecm.reports.api.model.ReportTemplate;
 import ru.it.lecm.reports.api.model.ReportType;
-import ru.it.lecm.reports.api.model.DAO.ReportDAO;
+import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
@@ -42,14 +41,18 @@ import ru.it.lecm.reports.model.impl.ReportTypeImpl;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 
-public class ReportDAOImpl implements ReportDAO {
+public class ReportDAOImpl implements ReportEditorDAO {
 
 	private static final transient Logger log = LoggerFactory.getLogger(ReportDAOImpl.class);
 
 	private WKServiceKeeper services;
-    private NamespaceService namespaceService;
+	private NamespaceService namespaceService;
 
-    public WKServiceKeeper getServices() {
+	public void init() {
+		log.info("initialized "+ this.getClass());
+	}
+
+	public WKServiceKeeper getServices() {
 		return services;
 	}
 

@@ -57,7 +57,7 @@ public class LECMSecurityGroupsBean
 	 */
 	public void setSafeMode(boolean safeModeFlag) {
 		this.safeMode = safeModeFlag;
-		logger.debug("sageMode set to "+ this.safeMode);
+		logger.info("sageMode set to "+ this.safeMode);
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class LECMSecurityGroupsBean
 			sgFullName = this.authorityService.createAuthority(AuthorityType.GROUP, simpleName);
 			this.authorityService.setAuthorityDisplayName( sgFullName, details);
 
-			logger.debug(String.format("Alfresco security-group '%s' created for object '%s'\n\t details: %s \n\t zones: %s"
+			logger.info(String.format("Alfresco security-group '%s' created for object '%s'\n\t details: %s \n\t zones: %s"
 					, sgFullName, simpleName
 					, this.authorityService.getAuthorityDisplayName(sgFullName)
 					, this.authorityService.getAuthorityZones(sgFullName)
@@ -123,7 +123,7 @@ public class LECMSecurityGroupsBean
 		} catch (Throwable t) {
 			logger.error( String.format( "(!?) Ignoring exception at removeAuthority '%s':\n"+ t.getMessage(), fullName), t);
 		}
-		logger.debug(String.format("Alfresco security item '%s' removed", fullName));
+		logger.info(String.format("Alfresco security item '%s' removed", fullName));
 	}
 
 	private void ensureParentEx(String sgItemFullName, String sgParentFullName, AuthorityType childType) {

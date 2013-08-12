@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
 	<!-- Registration of pentaho forms models -->
 	<bean id="${groupId}.${artifactId}.modelBootstrap" parent="dictionaryModelBootstrap"
 		depends-on="dictionaryBootstrap">
@@ -23,23 +27,124 @@
 	<!-- Генератор Jasper отчётов (версия v2.x lecm-сервиса) -->
 	<bean id="jasperReportGenerator" class="ru.it.lecm.reports.generators.JasperReportGeneratorImpl">
 		<property name="services" ref="wksKeeper"/>
-		<property name="reportsManager" ref="reportsManager"/>
+		<property name="reportsManagerBeanName" value="reportsManager"/>
 	</bean>
 
-	<bean id="reportDAOBean" class="ru.it.lecm.reports.model.DAO.ReportDAOImpl">
+	<bean id="reportDAOBean" class="ru.it.lecm.reports.model.DAO.ReportDAOImpl" init-method="init">
 		<property name="services" ref="wksKeeper"/>
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
-	<bean id="reportsManager" class="ru.it.lecm.reports.beans.ReportsManagerImpl"
-	 	init-method="init">
+	<!--  RSF == Report Service Folder -->
+	<util:constant id="RSF_ROOT_ID" static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_ID"/>
+	<util:constant id="RSF_ROOT_NAME" static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_NAME"/>
+
+	<util:constant id="RSF_REPORT_TYPES_ID" static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.RS_FOLDER_REPORT_TYPES_ID"/>
+	<util:constant id="RSF_REPORT_TYPES_NAME" static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.RS_FOLDER_REPORT_TYPES_NAME"/>
+
+	<util:constant id="RSF_RTYPE_JASPER_ID" static-field="ru.it.lecm.reports.api.model.ReportType.RTYPE_MNEMO_JASPER"/>
+	<util:constant id="RSF_RTYPE_OOFFICE_ID" static-field="ru.it.lecm.reports.api.model.ReportType.RTYPE_MNEMO_OOFFICE"/>
+
+
+	<!-- Хранение в репозитории файлов для отчётов (xml-шаблоны, jasper и пр) -->
+	<bean id="repositoryReportContentBean"
+			class="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean"
+			init-method="init"
+			parent="baseBean" >
+		<property name="nodeService" ref="nodeService"/>
+		<property name="transactionService" ref="transactionService"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<!-- Автоматическое создание каталогов. -->
+		<property name="folders">
+			<map>
+				<entry key="#{RSF_ROOT_ID}" value="#{RSF_ROOT_NAME}"/>
+				<entry key="#{RSF_REPORT_TYPES_ID}" value="#{RSF_ROOT_NAME}/#{RSF_REPORT_TYPES_NAME}"/>
+				<entry key="#{RSF_RTYPE_JASPER_ID}" value="#{RSF_ROOT_NAME}/#{RSF_REPORT_TYPES_NAME}/#{RSF_RTYPE_JASPER_ID}"/>
+				<entry key="#{RSF_RTYPE_OOFFICE_ID}" value="#{RSF_ROOT_NAME}/#{RSF_REPORT_TYPES_NAME}/#{RSF_RTYPE_OOFFICE_ID}"/>
+			</map>
+		</property>
+	</bean>
+
+
+	<!--
+		Хранилище файлов отчётов:
+		FRC_DAO_DIR == File Report Content DAO Directories
+	  -->
+	<!-- Хранение файлов для отчётов в файловой системе (xml-шаблоны, jasper и прнепосредлственно из поставки) -->
+	<bean id="fileReportContentBean"
+			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+			init-method="init">
+		<!-- для надёжности - запрещаем запись -->
+		<property name="readonly" value="true"/>
+
+		<!-- Расположение каталогов на серваке относительно ./classes -->
+		<property name="rootDir" value="/reportdefinitions/deploy" />
+
+		<!--
+			Форматная строка относительно rootDir для получения полного пути к файлу
+			(положение программно задаётся как id : IdContent, фактически используются его одноимённые атрибуты)
+			Именованные параметры обозначаются как "@{abc}":
+					@reportType		тип отчёта
+					@reportMnemo	название отчёта
+					@fileName		название файла (только имя с расширением)
+					// @{root}		корневой каталог не разрешается
+		
+		  -->
+		<property name="storeStructurePathFmt" value="/@reporType/@reportMnemo/@fileName" />
+	</bean>
+
+	<!-- Хранилище шаблогов файлов отчётов -->
+	<!-- Хранение файлов для отчётов в файловой системе (xml-шаблоны, jasper и прнепосредлственно из поставки) -->
+	<bean id="fileReportTemplatesBean"
+			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+			init-method="init">
+		<!-- для надёжности - запрещаем запись -->
+		<property name="readonly" value="true"/>
+
+		<!-- Расположение каталогов на серваке относительно ./classes -->
+		<property name="rootDir" value="/reportdefinitions/templates" />
+
+		<!--
+			Форматная строка относительно rootDir для получения полного пути к файлу
+			Именованные параметры обозначаются как "@{abc}":
+					@reportType		тип отчёта
+					@reportMnemo	название отчёта (тут не используется)
+					@fileName		название файла (только имя с расширением)
+					// @{root}		корневой каталог не разрешается
+		
+		  -->
+		<property name="storeStructurePathFmt" value="/@reporType/@fileName" />
+	</bean>
+
+	<!-- 
+			Менеджер шаблонов отчёта
+	  -->
+	<bean id="reportsManager"
+			class="ru.it.lecm.reports.beans.ReportsManagerImpl"
+	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportDAOBean, jasperTemplate_DocFlowCounters, jasperReportGenerator"
+	 		init-method="init">
 		<!-- <property name="services" ref="wksKeeper"/> -->
+		<property name="namespaceService" ref="namespaceService"/>
+
 		<property name="reportDAO" ref="reportDAOBean"/>
+
+		<property name="contentRepositoryDAO" ref="repositoryReportContentBean" />
+		<property name="contentFileDAO" ref="fileReportContentBean" />
+		<property name="templateFileDAO" ref="fileReportTemplatesBean" />
+
 		<property name="reportGenerators[JASPER]" ref="jasperReportGenerator"/>
-		<property name="descriptors[0]" ref="jasperTemplate_DocFlowCounters" />
+		<property name="beanDescriptors[0]" ref="jasperTemplate_DocFlowCounters" />
+
+		<property name="reportDefaults[JASPER]">
+			<bean class="ru.it.lecm.reports.beans.ReportsManagerImpl$ReportDefaultsDesc">
+				<property name="fileExtension" value=".jrxml" />
+				<property name="generationTemplate" value="jreportCommonTemplate.jrxml.gen" />
+			</bean>
+		</property>
+		<!-- 
 		<property name="defaultGenTemplate" value="jreportCommonTemplate.jrxml.gen"/>
 		<property name="defaultGenReportType" value="JASPER"/>
-		<property name="namespaceService" ref="namespaceService"/>
+		  -->
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.forms.jasper.form.get" class="ru.it.lecm.forms.jasperforms.JasperFormProducer"

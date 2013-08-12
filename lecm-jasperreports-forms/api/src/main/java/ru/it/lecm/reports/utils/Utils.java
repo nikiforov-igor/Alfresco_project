@@ -108,6 +108,21 @@ public class Utils {
 	}
 
 	/**
+	 * Вернуть строку без пробелов в начале и конце.
+	 * @param s исходное значение (могут быть пробелы в начале/конце, может быть null)
+	 * @param sDefault значение по-умолчанию, исопльзуется если исходная строка пустая (null или из одних пробелов)
+	 * @return
+	 */
+	public static String nonblank(String s, String sDefault) {
+		if (s != null) {
+			s = s.trim();
+			if (s.length() > 0) 
+				return s;
+		}
+		return (sDefault != null) ? sDefault.trim() : null;
+	}
+
+	/**
 	 * @param values
 	 * @return true, если среди values есть хотя бы одно не пустое значение
 	 */

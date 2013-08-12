@@ -2,14 +2,7 @@ package ru.it.lecm.reports.beans;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,27 +10,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.util.JRLoader;
-
+import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.extensions.surf.util.URLDecoder;
 
-import ru.it.lecm.reports.api.DsLoader;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.ReportTemplate;
 import ru.it.lecm.reports.api.model.ReportType;
-import ru.it.lecm.reports.api.model.DAO.ReportDAO;
-import ru.it.lecm.reports.api.model.share.ModelLoader;
+import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
+import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.ContentEnumerator;
+import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
+import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.generators.XMLMacroGenerator;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
@@ -46,25 +35,79 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	static final transient Logger logger = LoggerFactory.getLogger(ReportsManagerImpl.class);
 
-	final static String REPORT_TEMPLATE_FILES_BASEDIR = "/reportdefinitions";
-	final static String REPORT_DS_FILES_BASEDIR = REPORT_TEMPLATE_FILES_BASEDIR + "/ds-config";
+	// final static String REPORT_TEMPLATE_FILES_BASEDIR = "/reportdefinitions";
+	// final static String REPORT_DS_FILES_BASEDIR = REPORT_TEMPLATE_FILES_BASEDIR+ "/ds-config";
 
-	final static String DEFAULT_GENXMLTEMPLATE_BASEDIR = REPORT_TEMPLATE_FILES_BASEDIR + "/templates";
-	final static String DEFAULT_JRXMLFILENAME = "jreportCommonTemplate.jrxml.gen";
-	final public static String DEFAULT_REPORT_TYPE = "JASPER";
+	// final static String DEFAULT_GENXMLTEMPLATE_BASEDIR = REPORT_TEMPLATE_FILES_BASEDIR + "/templates";
+
+	final public static String DEFAULT_REPORT_TYPE = ReportType.RTYPE_MNEMO_JASPER;
+	final public static String DEFAULT_REPORT_EXTENSION = ".jrxml";
+	final public static String DEFAULT_REPORT_TEMPLATE = "jreportCommonTemplate.jrxml.gen";
+
+	/**
+	 * Описатеть умолчаний для типа отчёта.
+	 */
+	public static class ReportDefaultsDesc {
+
+		private String generationTemplate, fileExtension;
+
+		public ReportDefaultsDesc() {
+			super();
+		}
+
+		public ReportDefaultsDesc(String fileExtension, String generationTemplate) {
+			super();
+			this.fileExtension = fileExtension;
+			this.generationTemplate = generationTemplate;
+		}
+
+		/**
+		 * Расширение шаблона отчёта (с точкой в начале). Например, для Jasper это ".jrxml"
+		 * @return
+		 */
+		public String getFileExtension() {
+			return fileExtension;
+		}
+
+		public void setFileExtension(String fileExtension) {
+			this.fileExtension = fileExtension;
+		}
+
+		/**
+		 * Шаблон для генерации шаблона отчёта ("шаблон шаблона")
+		 * @return
+		 */
+		public String getGenerationTemplate() {
+			return generationTemplate;
+		}
+
+		public void setGenerationTemplate(String template) {
+			this.generationTemplate = template;
+		}
+	}
 
 	/**
 	 * Список зарегистрирванных отчётов
 	 */
 	private Map<String, ReportDescriptor> descriptors;
 
-	private ReportDAO reportDAO;
+	/** список дескрипторов явно заданных бинами */
+	private Map<String, ReportDescriptor> beanDescriptors;
 
-	private String defaultGenTemplate = DEFAULT_JRXMLFILENAME; // шаблон для генерации xml-шаблона отчёта
-	private String defaultGenReportType = DEFAULT_REPORT_TYPE; // тип отчёта по-умолчанию
+	private ReportEditorDAO reportDAO;
+	private ReportContentDAO contentRepositoryDAO; // файлы как "cm:content" в репозитории
+	private ReportContentDAO contentFileDAO; // файлы в файловой системе (поставка)
+	private ReportContentDAO templateFileDAO; // файлы шаблонов для генерации шаблонов отчётов
 
-	// Map<КодТипаОтчёта, Провайдер>
-	private Map< /*ReportType*/String, ReportGenerator> reportGenerators;
+	// private String defaultGenTemplate = DEFAULT_JRXMLFILENAME; // шаблон для генерации xml-шаблона отчёта
+	// private String defaultGenReportType = DEFAULT_REPORT_TYPE; // тип отчёта по-умолчанию
+	// private Map< /*ReportType*/ String, String> defaultTemplates; // список шаблонов по-умолчанию
+
+	// генераторы отчётов по типам
+	private Map< /*ReportType*/ String, ReportGenerator> reportGenerators;
+
+	// Map<КодТипаОтчёта, [Провайдер,Расширение,Шаблон]>
+	private Map< /*ReportType*/ String, ReportDefaultsDesc> reportDefaults;
 
 	private NamespaceService namespaceService;
 
@@ -73,12 +116,49 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	@Override
-	public ReportDAO getReportDAO() {
+	public ReportEditorDAO getReportDAO() {
 		return reportDAO;
 	}
 
-	public void setReportDAO(ReportDAO reportDAO) {
+	public void setReportDAO(ReportEditorDAO reportDAO) {
 		this.reportDAO = reportDAO;
+	}
+
+	/**
+	 * @return хранилище файлов в репозитории
+	 */
+	public ReportContentDAO getContentRepositoryDAO() {
+		return contentRepositoryDAO;
+	}
+
+	public void setContentRepositoryDAO(ReportContentDAO value) {
+		logger.debug(String.format( "contentRepositoryDAO assigned: %s", value));
+		this.contentRepositoryDAO = value;
+	}
+
+	/**
+	 * @return хранилище в виде файлов (для отчётов, идущих с поставкой)
+	 */
+	public ReportContentDAO getContentFileDAO() {
+		return contentFileDAO;
+	}
+
+	public void setContentFileDAO(ReportContentDAO value) {
+		logger.debug(String.format( "contentFileDAO assigned: %s", value));
+		this.contentFileDAO = value;
+	}
+
+	/**
+	 * Файлы шаблонов для генерации шаблонов отчётов
+	 * @return
+	 */
+	public ReportContentDAO getTemplateFileDAO() {
+		return templateFileDAO;
+	}
+
+	public void setTemplateFileDAO(ReportContentDAO value) {
+		logger.debug(String.format( "templateFileDAO assigned: %s", value));
+		this.templateFileDAO = value;
 	}
 
 	@Override
@@ -87,24 +167,27 @@ public class ReportsManagerImpl implements ReportsManager {
 	}
 
 	@Override
-	public List<ReportDescriptor> getRegisteredReports(String[] docTypes, boolean forCollection) {
+	public List<ReportDescriptor> getRegisteredReports(String[] docTypes,
+			boolean forCollection) {
 		final Set<ReportDescriptor> unFilteredReports = new HashSet<ReportDescriptor>();
 		if (docTypes != null) {
+			// указаны типы отчётов
 			for (String docType : docTypes) {
 				if (docType != null && docType.length() > 0) {
 					if (docType.startsWith(String.valueOf(QName.NAMESPACE_BEGIN))) {
 						docType = QName.createQName(docType).toPrefixString(namespaceService);
 					}
-					unFilteredReports.addAll( getRegisteredReports(docType, null));
+					unFilteredReports.addAll(getRegisteredReports(docType, null));
 				}
 			}
 		} else {
-			unFilteredReports.addAll( getRegisteredReports(null, null));
+			unFilteredReports.addAll(getRegisteredReports(null, null));
 		}
 
 		final List<ReportDescriptor> resultedReports = new ArrayList<ReportDescriptor>();
 		for (ReportDescriptor descriptor : unFilteredReports) {
-			if (descriptor.getFlags().isCustom() && forCollection) // пропускаем кастомизированные для многострочных отчётов ... 
+			if (descriptor.getFlags().isCustom() && forCollection)
+				// пропускаем кастомизированные для многострочных отчётов ...
 				continue;
 			if (forCollection == descriptor.getFlags().isMultiRow()) {
 				resultedReports.add(descriptor);
@@ -113,41 +196,58 @@ public class ReportsManagerImpl implements ReportsManager {
 		return resultedReports;
 	}
 
-	public DsLoader getDsloader() {
-		return ModelLoader.getInstance();
-	}
+//	public DsLoader getDsloader() {
+//		return ModelLoader.getInstance();
+//	}
 
-	public Map<String, ReportDescriptor> getDescriptors() {
-		if (this.descriptors == null) {
-			this.descriptors = new HashMap<String, ReportDescriptor>();
-			scanResources();
+	/**
+	 * Дескрипторы, заданные бинами
+	 * @return
+	 */
+	public Map<String, ReportDescriptor> getBeanDescriptors() {
+		if (this.beanDescriptors == null) {
+			this.beanDescriptors = new HashMap<String, ReportDescriptor>();
 		}
-		//		final Collection<ReportDescriptor> col = this.descriptors.values();
-		//		return (col != null) ? new ArrayList<ReportDescriptor>(col) : new ArrayList<ReportDescriptor>();
-		return this.descriptors;
-	}
-
-	public String getDefaultGenTemplate() {
-		return defaultGenTemplate;
-	}
-
-	public void setDefaultGenTemplate(String defaultGenTemplate) {
-		this.defaultGenTemplate = defaultGenTemplate;
-	}
-
-	public String getDefaultGenReportType() {
-		return defaultGenReportType;
-	}
-
-	public void setDefaultGenReportType(String defaultGenReportType) {
-		this.defaultGenReportType = defaultGenReportType;
+		return this.beanDescriptors; 
 	}
 
 	/**
-	 * @return не NULL список [ReportTypeMnemonic -> ReportGenerator]
+	 * Получить список продеплоенных дескрипторов.
+	 * В него входят:
+	 *    1) дискрипторы, заданные бмнами,
+	 *    2) дескрипторы, имеющиеся в виде файлов,
+	 *    3) продеплоенные в хранилище дескрипторы.
+	 * (в этом списке чем ниже тем приоритетнее)
+	 * @return
+	 */
+	public Map<String, ReportDescriptor> getDescriptors() {
+		if (this.descriptors == null) {
+			this.descriptors = new HashMap<String, ReportDescriptor>();
+			this.descriptors.putAll(this.getBeanDescriptors());
+			scanResources();
+		}
+		return this.descriptors;
+	}
+
+	/**
+	 * @return не NULL список [ReportType.Mnem -> File Extension+Template+Generator]
+	 */
+	public Map<String, ReportDefaultsDesc> getReportDefaults() {
+		if (this.reportDefaults == null) {
+			this.reportDefaults = new HashMap<String, ReportDefaultsDesc>();
+			{
+				final ReportDefaultsDesc jdesc = new ReportDefaultsDesc(DEFAULT_REPORT_EXTENSION, DEFAULT_REPORT_TEMPLATE);
+				// this.reportDefaults.put(DEFAULT_REPORT_TYPE, jdesc);
+			}
+		}
+		return this.reportDefaults;
+	}
+
+	/**
+	 * @return не NULL список [ReportType.Mnem -> ReportGenerator]
 	 */
 	@Override
-	public Map</*ReportType*/String, ReportGenerator> getReportGenerators() {
+	public Map</* ReportType */String, ReportGenerator> getReportGenerators() {
 		if (reportGenerators == null)
 			reportGenerators = new HashMap<String, ReportGenerator>(1);
 		return reportGenerators;
@@ -155,7 +255,7 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	/**
 	 * Задать соот-вие типов отчётов и их провайдеров
-	 * @param map список [ReportTypeMnemonic -> ReportGenerator]
+	 * @param map список [ReportType.Mnem -> ReportGenerator]
 	 */
 	@Override
 	public void setReportGenerators(Map<String, ReportGenerator> map) {
@@ -164,65 +264,94 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	@Override
 	public String getReportTypeTag(ReportType rtype) {
-		return (rtype != null && rtype.getMnem() != null) ? rtype.getMnem() : DEFAULT_REPORT_TYPE;
+		return (	rtype != null
+					&& rtype.getMnem() != null
+					&& rtype.getMnem().trim().length() > 0) 
+				? rtype.getMnem().trim() 
+				: DEFAULT_REPORT_TYPE;
 	}
 
 	/**
-	 * Выполнить сканирование и загрузку описателей существующих отчётов ...
-	 * @return кол-во найденных файлов отчётов 
+	 * Просканировать указанное хранилище на наличие дескрипторов отчётов и загрузить их
+	 * @param destMap целевой список
+	 * @param repos
+	 * @return кол-во загруженных описаний
 	 */
-	private int scanResources() {
+	private static int scanRepository( final Map<String, ReportDescriptor> destMap
+			, final ReportContentDAO repos)
+	{
+		if (repos == null)
+			return 0;
 
-		// final List<URL> found = JRLoader.getResources( getDsRelativeFileName("*")); // REPORT_DS_FILES_BASEDIR + "/ds-*.xml"
+		final List<IdRContent> found = new ArrayList<IdRContent>();
+		final ContentEnumerator doEnum = new ReportContentDAO.ContentEnumerator() {
+			@Override
+			public void lookAtItem(IdRContent id) {
+				try { // try-catch wraping
+					final boolean isDsXml = (id.getFileName() != null)
+								&& id.getFileName().startsWith("ds-")
+								&& id.getFileName().endsWith(".xml");
+					if (!isDsXml)
+						return; // skip none-descriptor
 
-		logger.info( String.format( "Auto scanning reports at path '%s' ...", REPORT_DS_FILES_BASEDIR));
-		File[] found = null;
-		{
-			final List<URL> base = JRLoader.getResources( REPORT_DS_FILES_BASEDIR); // REPORT_DS_FILES_BASEDIR + "/ds-*.xml"
-			if (base != null && !base.isEmpty()) {
-				final File scanner = new File(URLDecoder.decode(base.get(0).getFile()));
-				logger.debug( String.format( " ... path found as '%s' ...", scanner));
-				found = scanner.listFiles(new FileFilter() {
-					@Override
-					public boolean accept(File file) {
-						return (file != null) && file.isFile() && file.getName().endsWith(".xml");
-					}
-				});
-			}
-		}
-
-		int ifound = 0;
-		if (found != null) {
-			if (this.descriptors == null)
-				this.descriptors = new HashMap<String, ReportDescriptor>();
-			// for (URL u: found) {
-			for (File item: found) {
-				logger.debug( String.format( "loading report descriptor from file '%s' ...", item) );
-				try {
-					final String reportName = item.getName(); // StringUtils.getFilename(item.getFile());
-					final InputStream in = new FileInputStream(item);
+					found.add(id);
+					logger.debug(String.format( "loading report descriptor from '%s' ...", id));
+					final InputStream in = repos.loadContent(id).getContentInputStream();
 					try {
 						// загружаем описатеть из файла
 						try { // try-catch wraping
-							final ReportDescriptor desc = DSXMLProducer.parseDSXML(in, reportName);
-							if (desc == null) continue;
-							if (desc.getMnem() == null) // задать название название шаблона по-умолчанию ...
-								desc.setMnem( DSXMLProducer.extractReportName(item.getName()));
-							this.descriptors.put(desc.getMnem(), desc);
-							ifound++;
-							logger.debug( String.format( "... loaded report descriptor '%s' from '%s'", desc.getMnem(), item));
+							final ReportDescriptor desc = DSXMLProducer.parseDSXML(in, id.getFileName());
+							if (desc == null)
+								return;
+							if (desc.getMnem() == null || desc.getMnem().trim().length() == 0)
+								// задать название название шаблона по-умолчанию как в Id...
+								desc.setMnem(id.getReportMnemo());
+							else if (!id.getReportMnemo().equalsIgnoreCase(desc.getMnem()))
+								logger.warn(String.format(
+										"Loaded report has custom mnemonic:\n\t by id '%s'\n\t loaded with mnem '%s'"
+										, id, desc.getMnem()
+								));
+							destMap.put(desc.getMnem(), desc);
+
+							logger.debug(String.format("... loaded deployed report descriptor '%s' from '%s'", desc.getMnem(), id));
 						} catch (Throwable ex) {
-							logger.error( String.format( "Problem parsing xml file at '%s' -> ignored\n%s", item, ex.getMessage()), ex);
+							logger.error( String.format( 
+									"Problem parsing deployed ds-xml by id='%s' -> report ignored\n%s"
+									, id, ex.getMessage()), ex);
 						}
 					} finally {
 						IOUtils.closeQuietly(in);
 					} // finally
-				} catch(FileNotFoundException ex) {
+				} catch (Throwable ex) {
 					// log and skip it
-					logger.error( String.format( "Fail to find file at '%s' -> ignored", item) );
+					logger.error(String.format("Fail to load ds-xml file from '%s'\n\t %s\n\t -> ignored", id, ex.getMessage()) );
 				}
 			}
+		};
+
+		logger.info(String.format("Auto scanning reports at root '%s' ...", repos.getRoot()));
+		repos.scanContent( doEnum);
+
+		return found.size();
+	}
+
+	/**
+	 * Выполнить сканирование и загрузку описателей существующих отчётов ...
+	 * 
+	 * @return кол-во найденных файлов отчётов
+	 */
+	private int scanResources() {
+
+		// @NOTE: (!) здесь вызов getDescriptors(); зациклит 
+		if (this.descriptors == null) {
+			this.descriptors = new HashMap<String, ReportDescriptor>();
+			this.descriptors.putAll(this.getBeanDescriptors());
 		}
+
+		// final List<URL> found = JRLoader.getResources( getDsRelativeFileName("*")); // REPORT_DS_FILES_BASEDIR + "/ds-*.xml"
+		int ifound = 0;
+		ifound += scanRepository(this.descriptors, this.contentFileDAO);
+		ifound += scanRepository(this.descriptors, this.contentRepositoryDAO);
 		return ifound;
 	}
 
@@ -230,44 +359,39 @@ public class ReportsManagerImpl implements ReportsManager {
 		// this.descriptors = list;
 		this.descriptors = null;
 		if (list != null)
-			for (ReportDescriptor desc: list)
+			for (ReportDescriptor desc : list)
 				registerReportDescriptor(desc);
 	}
 
 	public void init() {
-		//		{
-		//			final File result = new File( getDsConfigDir() + "/test-subdir");
-		//			logger.info( String.format( "creating dir '%s'\n\t%s", result, result.mkdirs()) );
-		//		}
-		// logger.info( Utils.dumpAlfData( System.getProperties(),  "System.getProperties():\n").toString() );
+		// {
+		// 	final File result = new File( getDsConfigDir() + "/test-subdir");
+		// 	logger.info( String.format( "creating dir '%s'\n\t%s", result, result.mkdirs()) );
+		// }
+		// logger.info( Utils.dumpAlfData( System.getProperties(), "System.getProperties():\n").toString() );
 		if (getDescriptors() != null && getDescriptors().size() > 0) {
-			if (logger.isInfoEnabled()) // только названия шаблонов ...
-				logger.info( String.format( " initialized templates count %s\n\t%s"
-						, getDescriptors().size(), Utils.getAsString(getDescriptors().keySet(), "\n\t")
-				)); 
+			if (logger.isInfoEnabled()) // отобразить только названия шаблонов ...
+				logger.info(String.format(
+						" initialized templates count %s\n\t%s",
+						getDescriptors().size(),
+						Utils.getAsString(getDescriptors().keySet(), "\n\t")));
 			else if (logger.isDebugEnabled()) // целиком загруженные шаблоны ...
-				logger.debug( String.format( " initialized templates count %s\n\t%s"
-						, getDescriptors().size(), Utils.getAsString(getDescriptors().values(), "\n\t") 
-				));
+				logger.debug(String.format(
+						" initialized templates count %s\n\t%s",
+						getDescriptors().size(),
+						Utils.getAsString(getDescriptors().values(), "\n\t")));
 		}
 	}
 
 	/**
-	 * Получить дексриптор отчёта по его мнемонике или вернуть null.
-	 * Поиск ведётся по зарегистрированным отчётам в this.descriptors и в БД.
+	 * Получить дексриптор отчёта по его мнемонике или вернуть null. Поиск
+	 * ведётся по зарегистрированным отчётам в this.descriptors и в БД.
 	 * @param reportMnemoName дескриптор
 	 * @return описатеть отчёта или null, если не найден
 	 */
 	@Override
 	public ReportDescriptor getRegisteredReportDescriptor(String reportMnemoName) {
 
-		//		for(ReportDescriptor d: getDescriptors()) {
-		//			quals(reportMnemoName, d.getMnem())) {
-		//				if (logger.isDebugEnabled())
-		//					logger.debug( String.format( "Found bean report mnem '%s' as:\n%s", reportMnemoName, d));
-		//				return d; // FOUND by Mnemonic
-		//			}
-		//		}
 		if (getDescriptors().containsKey(reportMnemoName)) {
 			final ReportDescriptor d = this.descriptors.get(reportMnemoName);
 			return d; // FOUND by Mnemonic
@@ -278,7 +402,15 @@ public class ReportsManagerImpl implements ReportsManager {
 		if (reportDAO != null) {
 			final ReportDescriptor d = reportDAO.getReportDescriptor(reportMnemoName);
 			if (d != null) {
-				logger.debug( String.format( "Load template descriptor for mnem '%s' as:\n%s", reportMnemoName, d));
+				if (logger.isDebugEnabled()) {
+					logger.debug(String.format(
+						"Load Report Editor template descriptor with mnem '%s' as:\n%s",
+						reportMnemoName, d));
+				} else {
+					logger.info( String.format(
+							"Load Report Editor template descriptor with mnem '%s'",
+							reportMnemoName));
+				}
 				return d; // FOUND by DAO mnemonic
 			}
 		}
@@ -289,9 +421,10 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	@Override
 	public void registerReportDescriptor(NodeRef rdescId) {
-		PropertyCheck.mandatory (this, "reportDAO", getReportDAO());
-		final ReportDescriptor rdesc = getReportDAO().getReportDescriptor( rdescId);
-		registerReportDescriptor(rdesc); 
+		PropertyCheck.mandatory(this, "reportDAO", getReportDAO());
+		final ReportDescriptor rdesc =
+				getReportDAO().getReportDescriptor(rdescId);
+		registerReportDescriptor(rdesc);
 	}
 
 	@Override
@@ -299,28 +432,42 @@ public class ReportsManagerImpl implements ReportsManager {
 		if (desc != null) {
 			checkReportDescData(desc);
 			setDefaults(desc);
-			createDsFile( desc); // создание ds-xml
-			saveReportTemplate( desc) ; // сохранение шаблона отчёта 
+			createDsFile(desc); // создание ds-xml
+			saveReportTemplate(desc); // сохранение шаблона отчёта
 			getDescriptors().put(desc.getMnem(), desc);
-			logger.info(String.format( "Report descriptor with name '%s' registered", desc.getMnem()));
+			logger.info( String.format(
+					"Report descriptor with name '%s' registered",
+					desc.getMnem()));
 		}
 	}
 
 	private void setDefaults(ReportDescriptor desc) {
-		if ( Utils.isStringEmpty(desc.getReportType().getMnem())) {
-			desc.getReportType().setMnem( this.getDefaultGenReportType() );
-			logger.warn(String.format( "Report '%s' has empty reeport type -> set to '%s'", desc.getMnem(), desc.getReportType().getMnem()) );
+		if (Utils.isStringEmpty(desc.getReportType().getMnem())) {
+			desc.getReportType().setMnem( DEFAULT_REPORT_TYPE);
+			logger.warn(String.format(
+					"Report '%s' has empty report type -> set to '%s'",
+					desc.getMnem(), desc.getReportType().getMnem()));
 		}
 		// TODO: ввести зависимость от типа очёта
+		final ReportDefaultsDesc def = this.getReportDefaults().get(desc.getMnem());
+
 		if (desc.getReportTemplate().getFileName() == null) { // задать default-название файла
-			desc.getReportTemplate().setFileName( desc.getMnem() + ".jrxml");
-			logger.warn(String.format( "Report '%s' has empty template FileName -> set to '%s'", desc.getMnem(), desc.getReportTemplate().getFileName()) );
+			final String ext = (def != null) ? def.getFileExtension() : DEFAULT_REPORT_EXTENSION;
+			desc.getReportTemplate().setFileName(desc.getMnem() + ext);
+			logger.warn(String.format(
+					"Report '%s' has empty template FileName -> set to '%s'",
+					desc.getMnem(), desc.getReportTemplate().getFileName()));
 		}
 		if (desc.getReportTemplate().getData() == null) {
 			// сгенерировать xml отчёта по gen-шаблону ...
-			final ByteArrayOutputStream stm = this.generateReportTemplate(desc); // stm.writeTo( new java.io.FileOutputStream("x.jrxml"));
-			desc.getReportTemplate().setData( (stm == null) ? null : new ByteArrayInputStream(stm.toByteArray()));
-			logger.warn(String.format( "Report '%s' has empty template data -> generated from '%s'", desc.getMnem(), makeGenTemplateFileName(this.getDefaultGenTemplate())) );
+			final ByteArrayOutputStream stm = this.generateReportTemplate(desc);
+			desc.getReportTemplate().setData(
+					(stm == null) ? null : new ByteArrayInputStream(stm.toByteArray()));
+			logger.warn(String.format(
+						"Report '%s' has empty template data -> generated from '%s'"
+						, desc.getMnem()
+						, (def != null) ? def.getGenerationTemplate() : DEFAULT_REPORT_TEMPLATE // // makeGenTemplateFileName(...)
+			));
 		}
 	}
 
@@ -330,32 +477,57 @@ public class ReportsManagerImpl implements ReportsManager {
 			return false;
 		}
 
-		/* NOTE: если требуется жёсткая проверка наличия данных
-		if (desc.getReportTemplate().getData() == null) {
-			logger.warn(String.format( "Report '%s' has no template data", desc.getMnem()));
-			return false;
-		}
-		if (desc.getReportTemplate().getFileName() == null) {
-			logger.warn(String.format( "Report '%s' has empty template FileName", desc.getMnem()));
-			return false;
-		}
+		/*
+		 * NOTE: если требуется жёсткая проверка наличия данных:
+		 * if (desc.getReportTemplate().getData() == null) {
+		 * 		logger.warn(String.format( "Report '%s' has no template data", desc.getMnem()));
+		 * 		return false; 
+		 * }
+		 * if (desc.getReportTemplate().getFileName() == null) {
+		 * 		logger.warn(String.format( "Report '%s' has empty template FileName", desc.getMnem())); 
+		 * 		return false;
+		 * }
 		 */
 
-		// @NOTE: название шаблона существенно зависит от типа отчёта и известно только описателю
-		final String outFullName = makeReportTemplateFileName(desc);
-		// ensureFileNotPresent(outFullName);
-		{	// гарантируем, что с таким именем данных не будет ...
-			final File fout = new File( outFullName);
-			if (fout.exists()) {
-				final File backupName = Utils.findEmptyFile( fout, ".bak%s");
-				logger.warn(String.format( "Report '%s': saving previous template as '%s' ...", desc.getMnem(), backupName));
-				fout.renameTo(backupName); // переименование
-			}
-		}
+		final String rtag = getReportTypeTag(desc.getReportType());
+		final ReportDefaultsDesc def = getReportDefaults().get(rtag);
 
-		// оповещение соот-го провайдера (компиляция) ...
-		getReportGenerators().get( getReportTypeTag(desc.getReportType())).onRegister(outFullName, desc);
-		logger.debug(String.format( "Report '%s': provider notified", desc.getMnem()));
+		/* сохранение в репозиторий "шаблона отчёта"... */
+		try {
+			final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+
+			if (desc.getReportTemplate() != null) {
+				final InputStream stm = desc.getReportTemplate().getData();
+				if (stm != null) {
+					stm.reset();
+					IOUtils.copy(stm, byteStream);
+
+					final String ext = (def != null) ? def.getFileExtension() : DEFAULT_REPORT_EXTENSION;
+					final IdRContent id = IdRContent.createId(
+								desc, String.format("%s%s", desc.getMnem(), ext)
+						);
+
+					this.contentRepositoryDAO.storeContent(id, new ByteArrayInputStream(byteStream.toByteArray()));
+				}
+			}
+
+			/*
+			 * оповещение соот-го провайдера (компиляция) ...
+			 * т.к. деплоить можно только отчёты в репозиторий, здесь указываем 
+			 * именно его (не требуется определять откуда получен описатель - из 
+			 * файлового хранилища или из репозитория)
+			 */
+			// getReportGenerators().get(rtag).onRegister(outFullName, desc);
+			getReportGenerators().get(rtag).onRegister(desc, byteStream.toByteArray(), this.contentRepositoryDAO);
+			logger.debug(String.format("Report '%s': provider notified", desc.getMnem()));
+
+		} catch (Throwable ex) {
+			final String msg = String.format(
+					"Error saving template content for Report Descriptor %s"
+					, desc.getMnem());
+			logger.warn( msg, ex);
+			throw new RuntimeException( msg, ex);
+		}
 
 		return true;
 	}
@@ -363,10 +535,20 @@ public class ReportsManagerImpl implements ReportsManager {
 	@Override
 	public void unregisterReportDescriptor(String reportCode) {
 		if (reportCode != null) {
-			if (this.descriptors != null)
-				this.descriptors.remove(reportCode); // убираем из списка активных
-			removeDsFile( reportCode); // удаляем файл
-			logger.debug(String.format( "Report descriptor with name '%s' unregistered", reportCode));
+			if (this.descriptors != null && this.descriptors.containsKey(reportCode)) {
+				final ReportDescriptor desc = this.descriptors.get(reportCode);
+
+				// удаляем из репозитория contentRepositoryDAO
+				// (!) из файловых не убираем никогда
+				this.contentRepositoryDAO.delete( new IdRContent( desc.getReportType(), reportCode, "*"));
+				// removeDsFile(reportCode); // удаляем файл
+
+				// убираем из списка активных ...
+				this.descriptors.remove(reportCode);
+
+				logger.debug( String.format( "Report descriptor with name '%s' unregistered", reportCode));
+			} else
+				logger.warn( String.format( "Report descriptor with code '%s' NOT exists", reportCode));
 		}
 	}
 
@@ -382,158 +564,84 @@ public class ReportsManagerImpl implements ReportsManager {
 		// создание ds-файла ...
 		final ByteArrayOutputStream dsxml = DSXMLProducer.xmlCreateDSXML(desc.getMnem(), desc);
 		if (dsxml != null) {
-			final File fout = new File( makeDsXmlFileName(desc.getMnem()));
+			final IdRContent idds = makeDsXmlId(desc);
 			try {
-				final OutputStream out = new FileOutputStream( fout);
-				try {
-					dsxml.writeTo(out); 
-					logger.debug( String.format( "report '%s': ds xml created '%s'" , desc.getMnem(), fout) );
-				} finally {
-					IOUtils.closeQuietly(out);
-				}
-			} catch(Throwable ex) {
-				final String msg = String.format( "Report '%s': error saving ds-xml into '%s'" , desc.getMnem(), fout);
-				logger.error( msg, ex);
+				// файл создадим только в репозитории (но не в файловом хранилище) ...
+				this.contentRepositoryDAO.storeContent(idds, new ByteArrayInputStream(dsxml.toByteArray()));
+			} catch (Throwable ex) {
+				final String msg = String.format(
+						"Report '%s': error saving ds-xml into storage by id '%s'", desc.getMnem(), idds);
+				logger.error(msg, ex);
 				throw new RuntimeException(msg, ex);
 			}
 		}
 	}
 
-	private boolean removeDsFile(String reportCode) {
-		boolean flagDelete = false;
-		File fout = null;
-		try {
-			if (reportCode == null)
-				return false;
-			// удаление ds-файла ...
-			fout = new File( makeDsXmlFileName(reportCode));
-			flagDelete = fout.exists() && fout.delete();
-			return flagDelete;
-		} catch(Throwable ex) {
-			final String msg = String.format( "Report '%s': error deleting ds-xml '%s'" , reportCode, fout);
-			logger.error( msg, ex);
-			throw new RuntimeException(msg, ex);
-		} finally {
-			logger.debug( String.format( "ds-xml of report '%s' was%s deleted", reportCode, (flagDelete ? "" : " NOT")));
-		}
-	}
-
 	/**
-	 * Получить название базового каталога в файловой системе (".")
+	 * Получить id указанного файла.
+	 * @param desc
+	 * @param fileName
 	 * @return
 	 */
-	private File getBaseDir() {
-		final URL base = JRLoader.getResource( "/"); // получение главного каталога
-		return new File(URLDecoder.decode(base.getFile()));// NPE скажет о проблемах, т.к. базовый каталог обязан существовать
+	final static IdRContent makeFileId(ReportDescriptor desc, final String fileName) {
+		return new IdRContent(desc.getReportType(), desc.getMnem(), fileName);
 	}
 
 	/**
-	 * Получить имя конфигурационного каталога (например, для хранения dsxml файлов getConfigDir("/reportdefinitions/ds-config"); )
-	 * @param relativePath суб-каталог внутри рабочего
-	 * @return
-	 */
-	private File getConfigDir(final String relativePath) {
-		return new File( getBaseDir().getAbsolutePath() + relativePath);
-	}
-
-	/**
-	 * Получить и гарантировать наличие каталога для хранения dsxml файлов
-	 * @return
-	 */
-	private File ensureDsConfigDir() {
-		final File result = getConfigDir(REPORT_DS_FILES_BASEDIR);
-		result.mkdirs();
-		return result;
-	}
-
-	/**
-	 * Получить и гарантировать наличие каталога для хранения ГОТОВЫХ шаблонов отчётов (*.jrxml файлы)
-	 * @return
-	 */
-	private File ensureReportTemplateConfigDir() {
-		final File result = getConfigDir(REPORT_TEMPLATE_FILES_BASEDIR);
-		result.mkdirs();
-		return result;
-	}
-
-	/**
-	 * Гарантировать каталог шаблонов для генератора (*.gen файлы)
-	 * @return
-	 */
-	private File ensureGenTemplateConfigDir() {
-		final File result = getConfigDir(DEFAULT_GENXMLTEMPLATE_BASEDIR);
-		result.mkdirs();
-		return result;
-	}
-
-	/**
-	 * Получить полное название ds-xml файла, в котором может храниться ds-xml описание.
-	 * указанного отчёта.
-	 * Родительские каталоги, при их отсутствии, создаются автоматом.
-	 * @param mnem мнемоника отчёта
+	 * Получить id названия ds-xml файла, в котором может храниться мета-
+	 * описание указанного отчёта.
+	 * @param desc дескриптор отчёта
 	 * @return полное имя файла.
 	 */
-	private String makeDsXmlFileName(String mnem) {
-		final File base = ensureDsConfigDir();
-		return String.format( "%s/%s%s.xml", base.getAbsolutePath(), DSXMLProducer.PFX_DS, mnem); 
+	final static IdRContent makeDsXmlId(ReportDescriptor desc) {
+		/*
+		final IdRContent id = IdRContent.createId(
+				desc.getReportType(),
+				desc.getMnem(),
+				String.format("ds-%s.xml", desc.getMnem()));
+		 */
+		return makeFileId(desc, String.format("%s%s.xml", DSXMLProducer.PFX_DS, desc.getMnem() ));
 	}
 
 	/**
-	 * Получить полное название файла шаблона для указанного описателя (наример, для jasper-отчётов это будет файл с расширением "*.jrxml").
-	 * Родительские каталоги, при их отсутствии, создаются автоматом.
-	 * @param template описание отчёта
-	 * @return полное имя файла (мнемоника шаблона . расширение)
-	 */
-	private String makeReportTemplateFileName(ReportDescriptor desc) {
-		if (desc == null || desc.getReportTemplate() == null)
-			return null;
-		final ReportTemplate template = desc.getReportTemplate();
-		ensureReportTemplateConfigDir(); 
-		return makeReportTemplateFileName( desc.getMnem()
-				+ "." + FilenameUtils.getExtension(Utils.coalesce( template.getFileName(), "template")) );
-	}
-
-	/**
-	 * Получить полное название файла указанного шаблона.
-	 * Родительские каталоги, при их отсутствии, создаются автоматом.
-	 * @param xmlFileName название файла-шаблона
-	 * @return полное имя файла.
-	 */
-	private String makeReportTemplateFileName(String xmlFileName) {
-		if (xmlFileName == null)
-			return null;
-		final File base = ensureReportTemplateConfigDir();
-		return String.format( "%s/%s", base.getAbsolutePath(), xmlFileName); 
-	}
-
-	/**
-	 * Выполнить проверку данных. Поднять исключения при неверном/недостаточном заполнении.
+	 * Выполнить проверку данных. Поднять исключения при неверном/недостаточном
+	 * заполнении.
 	 * @param desc
 	 */
 	private void checkReportDescData(ReportDescriptor desc) {
 		if (desc.getMnem() == null || desc.getMnem().trim().length() == 0)
-			throw new RuntimeException( String.format( "Report descriptor must have mnemo code"));
-	}
-
-	@Override
-	public URL getDsXmlResourceUrl(String reportCode) {
-		PropertyCheck.mandatory (this, "dsloader", getDsloader());
-		return reportCode != null ? JRLoader.getResource(getDsRelativeFileName(reportCode)) : null;
+			throw new RuntimeException(
+					String.format("Report descriptor must have mnemo code"));
 	}
 
 	@Override
 	public byte[] loadDsXmlBytes(String reportCode) {
-		PropertyCheck.mandatory (this, "dsloader", getDsloader());
-		final URL url = getDsXmlResourceUrl(reportCode);
-		if (url == null) {
-			logger.warn( String.format("ds-xml for report '%s' is not found", reportCode));
+		// PropertyCheck.mandatory(this, "dsloader", getDsloader());
+		PropertyCheck.mandatory(this, "contentFileDAO", getContentFileDAO());
+		PropertyCheck.mandatory(this, "contentRepositoryDAO", getContentRepositoryDAO());
+
+		final ReportDescriptor desc = this.getRegisteredReportDescriptor(reportCode);
+		final IdRContent idDS = makeDsXmlId(desc);
+		ContentReader result = null;
+		if (contentRepositoryDAO.exists(idDS)) {
+			// описатеть имеется в репозитории продеплоенных ...
+			result = contentRepositoryDAO.loadContent(idDS);
+		} else if (contentFileDAO.exists(idDS)) {
+			// описатель имеется в стд файловом хранении ...
+			result = contentFileDAO.loadContent(idDS);
+		} else { 
+			// непонятно где хранится ...
+			final String msg = String.format( "ds-xml cannot be loaded for report '%s': not found at repository storage nor file storage", reportCode);
+			logger.error(msg);
+			throw new RuntimeException(msg);
 		}
-		try {
-			return url != null ? JRLoader.loadBytes(url) : null;
-		} catch (JRException ex) {
-			logger.error( String.format( "Error for report '%s' reading ds file from '%s'", reportCode, url), ex);
+
+		if (result == null)
 			return null;
-		}
+
+		final ByteArrayOutputStream os = new ByteArrayOutputStream( (int) result.getSize());
+		result.getContent(os);
+		return os.toByteArray();
 	}
 
 	@Override
@@ -548,53 +656,49 @@ public class ReportsManagerImpl implements ReportsManager {
 	 * @param reportDesc
 	 * @return
 	 */
-	public ByteArrayOutputStream generateReportTemplate(ReportDescriptor reportDesc) {
-		if (reportDesc == null) return null;
+	public ByteArrayOutputStream generateReportTemplate(ReportDescriptor reportDesc)
+	{
+		if (reportDesc == null)
+			return null;
 
-		PropertyCheck.mandatory (this, "defaultGenTemplate", getDefaultGenTemplate());
-		// PropertyCheck.mandatory (this, "jrxmlGenerator", getJrxmlGenerator());
+		PropertyCheck.mandatory(this, "templateFileDAO", getTemplateFileDAO());
+		PropertyCheck.mandatory(this, "reportDefaults", getReportDefaults());
+
+		final IdRContent id = IdRContent.createId(reportDesc, null);
+		{
+			final String reportTypeTag = getReportTypeTag(reportDesc.getReportType());
+			final ReportDefaultsDesc defaults
+					= this.getReportDefaults().get( reportTypeTag);
+
+			// название файла-шаблона для генерации
+			final String templateFileName = (defaults != null)
+							? defaults.getGenerationTemplate()
+							: DEFAULT_REPORT_TEMPLATE;
+			id.setFileName(templateFileName);
+		}
 
 		final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(reportDesc);
-
-		final String tname = makeGenTemplateFileName(this.getDefaultGenTemplate()); // название файла-шаблона для генерации
-		FileInputStream fin = null;
+		final ContentReader reader = this.getTemplateFileDAO().loadContent(id);
+		InputStream fin = null;
 		try {
-			fin = new FileInputStream( tname);
-			final ByteArrayOutputStream result = xmlGenerator.xmlGenerateByTemplate( tname, fin);
+			fin = reader.getContentInputStream();
+			final ByteArrayOutputStream result = xmlGenerator.xmlGenerateByTemplate(id.getFileName(), fin);
 			return result;
-		} catch (FileNotFoundException ex) {
-			final String msg = String.format( "Generator template file not found at '%s'", tname);
+		} catch (Throwable ex) {
+			final String msg = String.format( "Report '%s': get generated template '%s' problem\n\t%s"
+					, reportDesc.getMnem(), id.getFileName(), ex.getMessage());
 			logger.error(msg, ex);
-			throw new RuntimeException( msg, ex);
+			throw new RuntimeException(msg, ex);
 		} finally {
 			if (fin != null)
 				IOUtils.closeQuietly(fin);
 		}
 	}
 
-	/**
-	 * Получить полный файловый путь с названием gen-шаблона 
-	 * @param defaultTemplate
-	 * @return
-	 */
-	private String makeGenTemplateFileName(String defaultTemplate) {
-		final File base = ensureGenTemplateConfigDir();
-		return String.format( "%s/%s", base.getAbsolutePath(), defaultTemplate);
-	}
-
 	@Override
-	public String getDsRelativeFileName(String reportCode) {
-		return String.format( "%s/%s%s.xml", REPORT_DS_FILES_BASEDIR, DSXMLProducer.PFX_DS, reportCode);
-	}
-
-	@Override
-	public String getReportTemplateFileDir(ReportType reportType) {
-		// TODO: задавать каталог надо в зависимости от типа отчёта
-		return REPORT_TEMPLATE_FILES_BASEDIR;
-	}
-
-	@Override
-	public List<ReportDescriptor> getRegisteredReports(String docType, String reportType) {
+	public List<ReportDescriptor> getRegisteredReports( String docType,
+			String reportType)
+	{
 		final Map<String, ReportDescriptor> list = this.getDescriptors();
 		if (list == null || list.isEmpty())
 			return new ArrayList<ReportDescriptor>();
@@ -607,30 +711,47 @@ public class ReportsManagerImpl implements ReportsManager {
 			reportType = null;
 		}
 
-		if (docType == null && reportType == null)  {
-			// не задано фильтрование
+		if (docType == null && reportType == null) {
+			// не задано фильтрование -> вернуть всё целиком
 			return new ArrayList<ReportDescriptor>(list.values());
 		}
 
 		final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
 		for (ReportDescriptor desc : list.values()) {
-			final boolean okDocType = 
-					(docType == null)	// не задан фильтр по типам доков 
-					|| ( (desc.getFlags() == null) || desc.getFlags().getPreferedNodeType() == null) // нет флажков у шаблона -> подходит к любому
+			final boolean okDocType = (docType == null) // не задан фильтр по типам доков
+					|| ((desc.getFlags() == null)
+					|| desc.getFlags().getPreferedNodeType() == null) // нет флажков у шаблона -> подходит к любому
 					|| docType.equalsIgnoreCase(desc.getFlags().getPreferedNodeType()) // совпадение типа (если заданы искомый тип и флажки)
-					;
+			;
 
-			final boolean okRType = 
-					(reportType == null)	// не задан фильтр по типам отчётов 
-					|| ( (desc.getReportType() == null) || desc.getReportType().getMnem() == null) // не задан тип отчёта шаблона -> подходит к любому
+			final boolean okRType = (reportType == null) // не задан фильтр по типам отчётов
+					|| ((desc.getReportType() == null)
+					|| desc.getReportType().getMnem() == null) // не задан тип отчёта шаблона -> подходит к любому
 					|| reportType.equalsIgnoreCase(desc.getReportType().getMnem()) // совпадение типа
-					;
+			;
 			if (okDocType && okRType) {
 				found.add(desc);
 			}
 		}
 		// return (found.isEmpty()) ? null : found;
 		return found;
+	}
+
+	@Override
+	public ReportContentDAO findContentDAO(ReportDescriptor desc) {
+		if (desc == null)
+			return null;
+
+		final IdRContent idDS = makeDsXmlId(desc);
+		ReportContentDAO result = null;
+		if (contentRepositoryDAO.exists(idDS)) {
+			// описатеть имеется в репозитории продеплоенных ...
+			result = contentRepositoryDAO;
+		} else if (contentFileDAO.exists(idDS)) {
+			// описатель имеется в стд файловом хранении ...
+			result = contentFileDAO;
+		}
+		return result;
 	}
 
 }

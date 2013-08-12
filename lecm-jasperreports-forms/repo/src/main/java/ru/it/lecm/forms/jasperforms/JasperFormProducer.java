@@ -15,6 +15,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.beans.ReportsManagerImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
@@ -91,6 +92,7 @@ public class JasperFormProducer extends AbstractWebScript {
 		PropertyCheck.mandatory (this, "reportGenerators", getReportsManager().getReportGenerators());
 
 		final ReportDescriptor reportDesc = this.getReportsManager().getRegisteredReportDescriptor(reportName);
+		final ReportContentDAO storage = this.getReportsManager().findContentDAO(reportDesc); 
 		if (reportDesc != null) {
 			ParameterMapper.assignParameters( reportDesc, requestParameters);
 		}
@@ -99,7 +101,7 @@ public class JasperFormProducer extends AbstractWebScript {
 		final ReportGenerator reporter = this.getReportsManager().getReportGenerators().get(rtype);
 		if (reporter == null)
 			throw new RuntimeException( String.format("Unsupported report kind '%s': no provider registered", rtype));
-		reporter.produceReport(webScriptResponse, reportName, requestParameters, reportDesc);
+		reporter.produceReport( webScriptResponse, reportDesc, requestParameters, storage);
 	}
 
 	/**

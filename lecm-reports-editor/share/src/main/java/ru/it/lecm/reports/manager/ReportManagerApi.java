@@ -1,9 +1,5 @@
 package ru.it.lecm.reports.manager;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
@@ -15,8 +11,13 @@ import org.springframework.extensions.webscripts.connector.ResponseStatus;
 
 import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ScriptApiReportManager;
+import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.model.impl.L18Value;
 import ru.it.lecm.reports.model.impl.ReportTypeImpl;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportManagerApi
 implements ScriptApiReportManager
@@ -82,7 +83,6 @@ implements ScriptApiReportManager
 		}
 		return response.getResponseStream();
 	}
-
 
 	@Override
 	public List<ReportInfo> getRegisteredReports(String docType, String reportType) {

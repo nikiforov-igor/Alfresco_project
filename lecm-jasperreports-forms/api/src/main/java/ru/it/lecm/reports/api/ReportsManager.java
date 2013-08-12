@@ -1,6 +1,5 @@
 package ru.it.lecm.reports.api;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +7,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportType;
-import ru.it.lecm.reports.api.model.DAO.ReportDAO;
+import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
+import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 
 /**
  * Биновый интерфейс для работы с шаблонами зарегистрированных отчётов.
@@ -73,14 +73,6 @@ public interface ReportsManager {
 
 
 	/**
-	 * Получить адрес ресурса с ds-xml файлом, который соот-ет отчёту
-	 * @param reportCode
-	 * @return
-	 */
-	URL getDsXmlResourceUrl(String reportCode);
-
-
-	/**
 	 * Загрузить данные ds-файла указанного шаблона
 	 * @param reportCode
 	 * @return
@@ -100,14 +92,14 @@ public interface ReportsManager {
 	 * @param reportType
 	 * @return
 	 */
-	String getReportTemplateFileDir(ReportType reportType);
+	// String getReportTemplateFileDir(ReportType reportType);
 
 	/**
 	 * Вернуть название ds-xml файла, в котором располагается -описание указанного отчёта
 	 * @param reportCode
 	 * @return
 	 */
-	String getDsRelativeFileName(String reportCode);
+	// String getDsRelativeFileName(String reportCode);
 
 	/**
 	 * @return не NULL список [ReportTypeMnemonic -> ReportGenerator]
@@ -127,5 +119,12 @@ public interface ReportsManager {
 	 */
 	String getReportTypeTag(ReportType rtype);
 
-	ReportDAO getReportDAO();
+	ReportEditorDAO getReportDAO();
+
+	/**
+	 * Вернуть хранилище, которое содержит указанный описатель или NULL
+	 * @param reportDesc
+	 * @return
+	 */
+	ReportContentDAO findContentDAO(ReportDescriptor reportDesc);
 }

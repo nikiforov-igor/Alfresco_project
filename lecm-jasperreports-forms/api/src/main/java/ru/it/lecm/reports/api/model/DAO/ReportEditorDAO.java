@@ -6,12 +6,12 @@ import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportTemplate;
 
 /**
- * Служба получения дексрипторов отчётов из Альфреско
+ * Служба получения дексрипторов отчётов lecm-редактора отчётов из Альфреско
  * 
  * @author rabdullin
  *
  */
-public interface ReportDAO {
+public interface ReportEditorDAO {
 
 	final public String TYPE_ReportDescriptor = "lecm-rpeditor:reportDescriptor";
 
@@ -185,6 +185,4 @@ public interface ReportDAO {
 	 * <type name="lecm-rpeditor:reportParameterType">
 	 */
 
-	/*
-	 */
 }

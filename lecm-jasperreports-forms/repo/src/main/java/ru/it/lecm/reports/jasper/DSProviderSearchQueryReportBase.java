@@ -68,6 +68,9 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 	protected NodeRef nodeRef;
 	protected String preferedType;
 
+	/** XML-конфигурация */
+	private JRDSConfigXML xmlConfig = createXmlConfig();
+
 	public DSProviderSearchQueryReportBase() {
 		logger.debug( "created "+ this.getClass().getSimpleName());
 	}
@@ -92,11 +95,6 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 	public void setPreferedType(String preferedType) {
 		this.preferedType = preferedType;
 	}
-
-	/**
-	 * XML-конфигурация
-	 */
-	private JRDSConfigXML xmlConfig = createXmlConfig();
 
 	/**
 	 * XML-конфигурация

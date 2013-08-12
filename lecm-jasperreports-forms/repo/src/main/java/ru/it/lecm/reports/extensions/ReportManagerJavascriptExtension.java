@@ -93,7 +93,7 @@ public class ReportManagerJavascriptExtension
             return null;
         }
 
-		byte[] content = getReportsManager().produceDefaultTemplate(desc); // TODO очему-то шаблон по умолчанию не зависит от типа отчета - он всегда jrxml
+		byte[] content = getReportsManager().produceDefaultTemplate(desc); // TODO почему-то шаблон по умолчанию не зависит от типа отчета - он всегда jrxml
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
 		final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         String reportTemplateName =  desc.getMnem() + ".jrxml"; // см TODO выше

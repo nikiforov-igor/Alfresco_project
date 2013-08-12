@@ -54,7 +54,7 @@ public abstract class BaseBean implements InitializingBean {
 	/**
 	 * карта с папками для конкретного сервиса
 	 */
-	private final Map<String, ServiceFolder> serviceFolders = new HashMap<String, ServiceFolder> ();
+	final protected Map<String, ServiceFolder> serviceFolders = new HashMap<String, ServiceFolder> ();
 
 	protected RepositoryStructureHelper repositoryStructureHelper;
 	protected NodeService nodeService;
@@ -362,6 +362,8 @@ public abstract class BaseBean implements InitializingBean {
 	protected NodeRef createFolder(final NodeRef parentRef, final String folder) {
 		ParameterCheck.mandatory("parentRef", parentRef);
 		ParameterCheck.mandatory("folder", folder);
+		ParameterCheck.mandatory("transactionService", transactionService);
+		ParameterCheck.mandatory("nodeService", nodeService);
 		NodeRef folderRef = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {

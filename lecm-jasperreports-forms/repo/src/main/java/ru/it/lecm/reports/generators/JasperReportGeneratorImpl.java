@@ -1,11 +1,12 @@
 package ru.it.lecm.reports.generators;
 
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,18 +28,22 @@ import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
+import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.utils.ArgsHelper;
@@ -50,14 +55,24 @@ import ru.it.lecm.reports.utils.Utils;
  * @author rabdullin
  *
  */
-public class JasperReportGeneratorImpl implements ReportGenerator {
+public class JasperReportGeneratorImpl
+		implements ReportGenerator, ApplicationContextAware
+{
 
 	private static final transient Logger log = LoggerFactory.getLogger(JasperReportGeneratorImpl.class);
 
 	private WKServiceKeeper services; 
-	private ReportsManager reportsManager;
+	private ReportsManager reportsMgr;
+	private String reportsManagerBeanName;
+	private ApplicationContext context;
 
 	public JasperReportGeneratorImpl() {
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext ctx)
+			throws BeansException {
+		this.context = ctx;
 	}
 
 	public WKServiceKeeper getServices() {
@@ -68,48 +83,69 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 		this.services = services;
 	}
 
-	public ReportsManager getReportsManager() {
-		return reportsManager;
+	public String getReportsManagerBeanName() {
+		return reportsManagerBeanName;
 	}
 
-	public void setReportsManager(ReportsManager reportsManager) {
-		this.reportsManager = reportsManager;
+	public void setReportsManagerBeanName(String beanName) {
+		if ( Utils.isSafelyEquals(beanName, reportsManagerBeanName) )
+			return;
+		log.debug(String.format("ReportsManagerBeanName assigned: %s", beanName));
+		this.reportsManagerBeanName = beanName;
+		this.reportsMgr = null; // очистка
 	}
+
+	public ReportsManager getReportsManager() {
+		if (this.reportsMgr == null && this.reportsManagerBeanName != null) {
+			this.reportsMgr = (ReportsManager) this.context.getBean(this.reportsManagerBeanName);
+		}
+		return this.reportsMgr;
+	}
+
+//	public void setReportsManager(ReportsManager reportsManager) {
+//		this.reportsManager = reportsManager;
+//	}
 
 	@Override
-	public void produceReport(
-			WebScriptResponse webScriptResponse
-			, String reportName
-			, Map<String, String[]> parameters
+//	public void produceReport(
+//			WebScriptResponse webScriptResponse
+//			, String reportName
+//			, Map<String, String[]> parameters
+//			, ReportDescriptor reportDesc
+//			) throws IOException 
+	public void produceReport( WebScriptResponse webScriptResponse
 			, ReportDescriptor reportDesc
-			) throws IOException 
+			, Map<String, String[]> parameters
+			, ReportContentDAO rptContent
+	) throws IOException
 	{
 		PropertyCheck.mandatory (this, "services", services);
 		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
 
-		// TODO: debug
-		{
-			final URL url = this.reportsManager.getDsXmlResourceUrl(reportName);
-			log.info( String.format( "ds file at url: '%s'", url));
-		}
-
 		// "/reportdefinitions/" + reportName + ".jasper"
-		final String reportFileName = String.format( "%s/%s.jasper" 
-				, this.reportsManager.getReportTemplateFileDir(reportDesc.getReportType())
-				, reportName
-				);
+		final String reportFileName = 
+//				String.format( "%s/%s.jasper" 
+//				, this.getReportsManager().getReportTemplateFileDir(reportDesc.getReportType())
+//				, reportName
+//				);
+				String.format( "%s.jasper", reportDesc.getMnem());
 
-		final URL reportDefinitionURL = JRLoader.getResource(reportFileName);
-		if (reportDefinitionURL == null)
-			throw new IOException( String.format("Report is missed - file not found at '%s'", reportFileName));
+		final ContentReader reader = rptContent.loadContent( IdRContent.createId(reportDesc, reportFileName));
+		final InputStream stm = (reader != null) ? reader.getContentInputStream() : null;
+		if (reader == null)
+			throw new IOException( String.format("Report is missed - file '%s' not found", reportFileName ));
 
 		// DONE: параметризовать выходной формат
 		final JasperReportTargetFileType target = findTargetArg(parameters);
 
 		OutputStream outputStream = null;
 		try {
-			final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportDefinitionURL);// catch message NullPoiterException for ...
-			webScriptResponse.setContentType( String.format("%s;charset=UTF-8;filename=%s", target.getMimeType(), generateFileName( reportName, target.getExtension()) ));
+			// final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportDefinitionURL);// catch message NullPoiterException for ...
+			final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(stm);
+			webScriptResponse.setContentType( String.format("%s;charset=UTF-8;filename=%s"
+							, target.getMimeType()
+							, generateReportResultFileName( reportDesc.getMnem(), target.getExtension()) 
+			));
 			outputStream = webScriptResponse.getOutputStream();
 
 			final String dataSourceClass = jasperReport.getProperty("dataSource");
@@ -147,13 +183,13 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 			} catch (IllegalAccessException e) {
 				throw new IOException(failMsg, e);
 			}
-
 			/* построение отчёта */ 
 			generateReport(target, outputStream, jasperReport, dsProvider, parameters);
 
-		} catch (JRException e) {
-			log.error( "Fail to execute report at path "+ reportDefinitionURL , e);
-			throw new IOException("Can not fill report", e);
+		} catch (Throwable e) { // (JRException e) {
+			final String msg = String.format( "Fail to execute report '%s':\n\t%s", reportDesc.getMnem(), e);
+			log.error( msg, e);
+			throw new IOException(msg, e);
 		} finally {
 			if (outputStream != null) {
 				outputStream.flush();
@@ -183,8 +219,11 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 	 * @param extension расширения файла (с точкой): ".rtf"
 	 * @return уникальной имя файла (добавляется дата и время)
 	 */
-	static Object generateFileName(String name, String extension) {
-		return String.format( "%s-%s%s", name, new SimpleDateFormat(DEFAULT_FILENAME_DATE_SUFFIX).format(new Date()), extension);
+	static Object generateReportResultFileName(String name, String extension) {
+		return String.format( "%s-%s%s"
+				, name
+				, new SimpleDateFormat(DEFAULT_FILENAME_DATE_SUFFIX).format(new Date())
+				, extension);
 	}
 
 	private void generateReport(JasperReportTargetFileType target, OutputStream outputStream, JasperReport report
@@ -242,72 +281,34 @@ public class JasperReportGeneratorImpl implements ReportGenerator {
 	}
 
 	@Override
-	public void onRegister(String templateFileFullName, ReportDescriptor desc) {
-		saveJrxmlTemplate(templateFileFullName, desc);
-		compile( templateFileFullName, desc);
+	public void onRegister(ReportDescriptor desc, byte[] templateData, ReportContentDAO storage) {
+		// final ContentReader jrxmlContent = saveJrxmlTemplate(desc, storage);
+		compileJrxml(desc, templateData,  storage);
 	}
 
-	private boolean saveJrxmlTemplate(String outFullFileName, ReportDescriptor desc) {
-		if (desc.getReportTemplate() == null) {
-			log.warn(String.format( "Report '%s' has no template", desc.getMnem()));
-			return false;
-		}
-		if (desc.getReportTemplate().getData() == null) {
-			log.warn(String.format( "Report '%s' has no template data", desc.getMnem()));
-			return false;
-		}
-		/*
-		if (desc.getReportTemplate().getFileName() == null) {
-			log.warn(String.format( "Report '%s' has empty template FileName", desc.getMnem()));
-			return false;
-		}
-		 */
+	private void compileJrxml(ReportDescriptor desc, byte[] templateData
+			, ReportContentDAO storage)
+	{
+		if (templateData == null)
+			return;
 
-		// сохранение шаблона как файла ...
+		log.info( String.format( "compiling report '%s' ...", desc.getMnem()));
+
+		final ByteArrayInputStream inData = new ByteArrayInputStream(templateData);
+		final ByteArrayOutputStream outData = new ByteArrayOutputStream();
+
+		// final String destJasperName = FilenameUtils.removeExtension(templateFileFullName)+".jasper";
 		try {
-			final FileOutputStream wout = new FileOutputStream(outFullFileName);
-			try {
-				IOUtils.copy( desc.getReportTemplate().getData(), wout);
-
-				/*
-				// в шаблоне пишем dataSource и задаём состав полей ...
-				final String streamTag = desc.getReportTemplate().getFileName(); 
-				final ByteArrayOutputStream updated = JRXMLProducer.updateJRXML( desc.getReportTemplate().getData(), streamTag, desc);
-				try {
-					updated.writeTo(wout);
-				} finally {
-					IOUtils.closeQuietly(updated);
-				}
-				 */
-			} finally {
-				IOUtils.closeQuietly(wout);
-			}
-			log.info(String.format( "Report '%s': template file created as '%s'"
-					, desc.getMnem(), outFullFileName));
-
-		} catch (IOException ex) {
-			final String msg = String.format( "Report '%s': error creating template file '%s'\n%s"
-					, desc.getMnem(), outFullFileName, ex.getMessage());
+			// JasperCompileManager.compileReportToFile(templateFileFullName, destJasperName); // context.getRealPath("/reports/WebappReport.jrxml"));
+			JasperCompileManager.compileReportToStream(inData, outData);
+			final IdRContent id = IdRContent.createId(desc, desc.getMnem() + ".jasper");
+			storage.storeContent(id, new ByteArrayInputStream(outData.toByteArray()));
+		} catch (JRException ex) {
+			final String msg = String.format( "Error compiling report '%s':\n\t%s", desc.getMnem(), ex.getMessage());
 			log.error( msg, ex);
 			throw new RuntimeException( msg, ex);
 		}
-
-		return true;
-	}
-
-	private void compile(String templateFileFullName, ReportDescriptor desc) {
-		log.info( String.format( "compiling '%s' ...", templateFileFullName));
-		final String destJasperName = FilenameUtils.removeExtension(templateFileFullName)+".jasper";
-		try {
-			JasperCompileManager.compileReportToFile(templateFileFullName, destJasperName); // context.getRealPath("/reports/WebappReport.jrxml"));
-		}
-		catch (JRException ex)
-		{
-			final String msg = String.format( "Error compiling '%s': %s", templateFileFullName, ex.getMessage());
-			log.error( msg, ex);
-			throw new RuntimeException( msg, ex);
-		}
-		log.info( String.format( "compiled SUCCESSFULLY from '%s' into '%s'", templateFileFullName, destJasperName));
+		log.info( String.format( "Jasper report '%s' compiled SUCCESSFULLY into %s bytes", desc.getMnem(), outData.size()));
 	}
 
 }
