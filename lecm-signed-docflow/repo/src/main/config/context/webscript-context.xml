@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.testSignsInfo.testSignsInfo.post"
+		  class="ru.it.lecm.signed.docflow.webscripts._TestSignsInfoWebscript"
+		  p:signedDocflowService-ref="signedDocflowService"/>
+
+	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.getSignsInfo.getSignsInfo.get"
+		  class="ru.it.lecm.signed.docflow.webscripts.GetSignsInfo"
+		  p:nodeService-ref="nodeService"
+		  p:signedDocflowService-ref="signedDocflowService"/>
+
+	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.signContent.signContent.post"
+		  class="ru.it.lecm.signed.docflow.webscripts.SignContentWebscript"
+		  p:signedDocflowService-ref="signedDocflowService"/>
+
+	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.getSignableContent.getSignableContent.get"
+		  class="ru.it.lecm.signed.docflow.webscripts.GetSignableContentWebscript"
+		  p:signedDocflowService-ref="signedDocflowService"
+		  p:nodeService-ref="nodeService"
+		  p:documentAttachmentsService-ref="documentAttachmentsService"/>
+
+	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.getDocumentSignsInfo.getDocumentSignsInfo.get"
+		  class="ru.it.lecm.signed.docflow.webscripts.GetDocumentSignsInfoWebscript"
+		  p:signedDocflowService-ref="signedDocflowService"
+		  p:nodeService-ref="nodeService"
+		  p:documentAttachmentsService-ref="documentAttachmentsService"/>
+
+	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.unicloud.api.post"
+		  class="ru.it.lecm.signed.docflow.webscripts.UnicloudWebscript"
+		  p:unicloudService-ref="unicloudService"
+		  p:signedDocflowService-ref="signedDocflowService"/>
+
+	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.config.api.post"
+		  class="ru.it.lecm.signed.docflow.webscripts.SignConfigWebscript"
+		  p:nodeService-ref="nodeService"
+		  p:orgstructureService-ref="serviceOrgstructure"/>
+
+	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.signing.api.post"
+		  class="ru.it.lecm.signed.docflow.webscripts.SigningWebscript"
+		  p:signedDocflowService-ref="signedDocflowService"/>
+
+	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.sendContentToPartner.sendContentToPartner.post"
+		  class="ru.it.lecm.signed.docflow.webscripts.SendContentToPartnerWebscript"/>
+
+</beans>

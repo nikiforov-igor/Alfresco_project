@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Send signed content to partner</shortname>
+	<description>Send signed content to partner</description>
+	<url>/lecm/signed-docflow/sendContentToPartner</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>required</transaction>
+</webscript>

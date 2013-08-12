@@ -150,22 +150,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			//вызываем сервис, который отправит документ контрагенту
 			//this.options.nodeRef это NodeRef на наше вложение
-			Alfresco.util.Ajax.request({
+			Alfresco.util.Ajax.jsonRequest({
 				method: "POST",
 				url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/notImplementedYet",
-				requestContentType: "application/json",
-				responseContentType: "application/json",
 				dataObj: {
 					content:[this.options.nodeRef]
 				},
-				failureCallback: {
-					fn: function(response) {
-						Alfresco.util.PopupManager.displayMessage({
-							text: msg("message.sending.attachment.failure")
-						});
-					},
-					scope: this
-				},
+				failureMessage: this.msg("message.sending.attachment.failure"),
 				successCallback: {
 					fn: function(response) {
 						//смотрим какой ответ пришел нам с сервера

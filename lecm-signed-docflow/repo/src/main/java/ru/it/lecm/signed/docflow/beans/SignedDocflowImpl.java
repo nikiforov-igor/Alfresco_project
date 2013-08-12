@@ -2,8 +2,6 @@ package ru.it.lecm.signed.docflow.beans;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -15,7 +13,6 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
-import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.VersionHistory;
 import org.alfresco.service.cmr.version.VersionService;
@@ -26,6 +23,8 @@ import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
@@ -41,6 +40,8 @@ import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
  * @author vlevin
  */
 public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
+
+	private final static Logger logger = LoggerFactory.getLogger(SignedDocflowImpl.class);
 
 	public final static String SIGNED_DOCFLOW_FOLDER = "SIGNED_DOCFLOW_FOLDER";
 	private final static String BJ_MESSAGE_DOCUMENT_ATTACHMENT_SIGN = "#initiator подписал файл #mainobject к документу #object1.";
@@ -313,6 +314,8 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		final String contentRefStr = (String) signatureProperties.remove(SignedDocflowModel.ASSOC_SIGN_TO_CONTENT);
 		final NodeRef contentRef = new NodeRef(contentRefStr);
 
+		String serialNumber = (String)signatureProperties.get(SignedDocflowModel.PROP_SERIAL_NUMBER);
+		String signatureName = createSignatureName(serialNumber, contentRef);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("name", nodeService.getProperty(contentRef, ContentModel.PROP_NAME));
 //		Map<String, Object> verifySignatureResponse = unicloudService.verifySignature(contentRefStr, signatureContent);
@@ -346,7 +349,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 			signatureProperties.put(SignedDocflowModel.PROP_IS_VALID, true);
 			signatureProperties.put(SignedDocflowModel.PROP_UPDATE_DATE, signatureProperties.get(SignedDocflowModel.PROP_SIGNING_DATE));
 			signatureProperties.put(SignedDocflowModel.PROP_IS_OUR, isOurSignature);
-			signatureProperties.put(ContentModel.PROP_NAME, createSignatureName(contentRef));
+			signatureProperties.put(ContentModel.PROP_NAME, signatureName);
 			signatureProperties.put(SignedDocflowModel.PROP_CONTENT_REF, contentRef);
 			NodeRef documentRef = getDocumentRef(contentRef);
 			if (documentRef != null) {
@@ -373,11 +376,17 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		return result;
 	}
 
-	private String createSignatureName(final NodeRef contentRef) {
+	/**
+	 * построить уникальное, человекочитабельное имя для подписи
+	 * @param serialNumber уникальный ID, который генерит при создании сертификата удостоверяющий центр.
+	 * @param contentRef контент, к которому эта подпись относится
+	 * @return имя подписи, в виде "Подпись ${serialNumber} для контента ${content.name} версии ${content.version}"
+	 */
+	private String createSignatureName(final String serialNumber, final NodeRef contentRef) {
 		String contentName = (String)nodeService.getProperty(contentRef, ContentModel.PROP_NAME);
 		VersionHistory history = versionService.getVersionHistory(contentRef);
 		String version = (history != null) ? history.getHeadVersion().getVersionLabel() : "1.0";
-		return String.format("подпись контента %s версии %s", contentName, version);
+		return String.format("Подпись %s для контента %s версии %s", serialNumber, contentName, version);
 	}
 
 	private NodeRef getDocumentRef(final NodeRef contentRef) {
@@ -445,15 +454,15 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 				NodeRef signRef = new NodeRef(json.getJSONObject(i).getString("signatureNodeRef"));
 				String signingDate = json.getJSONObject(i).getString("updateDate");
 				String isValid = json.getJSONObject(i).getString("isValid");
-				boolean res = updateSignature(signRef, signingDate, Boolean.parseBoolean(isValid));				
+				boolean res = updateSignature(signRef, signingDate, Boolean.parseBoolean(isValid));
 				result.put(signRef.toString(), String.valueOf(res));
 			} catch (JSONException ex) {
-				Logger.getLogger(SignedDocflowImpl.class.getName()).log(Level.SEVERE, null, ex);
+				logger.error("Error parsing json", ex);
 				result.put("ERROR", "Somethig goes bad");
 			}
 		}
 		return result;
 	}
-	
-	
+
+
 }
