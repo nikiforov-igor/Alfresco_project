@@ -271,8 +271,6 @@
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="nodeService" ref="nodeService"/>
-		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
     <bean id="errandsEveryDayStatusExecutor" class="ru.it.lecm.errands.shedule.EveryDayStatusExecutor" parent="action-executer">
