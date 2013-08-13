@@ -60,33 +60,12 @@
 		},
 
 		refreshSigns: function() {
-			//console.log(">>> refreshSigns was executed!"); // TODO: remove this console.log line, uncomment ajax-lines
-			
 			this.elements.divSignsContractor.innerHTML = "";
 			this.elements.divSignsOur.innerHTML = "";
-			
+
 			cryptoAppletModule.CheckContentSignature(this.options.signedContentRef);
-			
-			
-			
+
 			this.getSignsInfo();
-//			var Ajax = Alfresco.util.Ajax;
-//
-//			Ajax.jsonRequest({
-//				method: "POST",
-//				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/###__YOUR_SERVICE_URL__###",
-//				dataObj: { "signedContentRef": this.options.signedContentRef },
-//				successCallback: { fn: this.getSignsInfo, scope: this },
-//				failureCallback: {
-//					fn: function() {
-//						Alfresco.util.PopupManager.displayMessage({
-//							text: "Не удалось обновить информацию о подписях, попробуйте ещё раз"
-//						});
-//					}
-//				}
-//			});
-//
-//			this.getSignsInfo();
 		},
 
 		getSignsInfo: function() {

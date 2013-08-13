@@ -2438,8 +2438,9 @@ span.person a div.description:empty {
 /* УЗД и ЭП */
 /************/
 .signs-wrapper {
-	max-height: 450px;
-	overflow-y: scroll;
+	max-height: 500px;
+	padding-right: 10px;
+	overflow-y: auto;
 	margin-bottom: 10px;
 }
 
@@ -2468,8 +2469,8 @@ span.person a div.description:empty {
 
 .signs-row .chain-link {
 	background: url(images/chain-link.png) no-repeat center center;
-	width: 38px;
-	height: 16px;
+	width: 28px;
+	height: 12px;
 	position: absolute;
 	right: 15px;
 	top: 50%;
@@ -2482,12 +2483,24 @@ span.person a div.description:empty {
 	opacity: 1;
 }
 
+.signs-chain-link {
+	background: url(images/chain-link.png) no-repeat center center;
+	width: 28px;
+	height: 12px;
+	opacity: 0.5;
+	display: block;
+}
+
+.signs-chain-link:hover {
+	cursor: pointer;
+	opacity: 1;
+}
+
 .signs-refresh {
 	background: url(images/refresh.png) no-repeat center center;
-	width: 38px;
-	height: 38px;
+	width: 24px;
+	height: 24px;
 	float: right;
-	margin-right: 15px;
 
 	opacity: 0.5;
 
@@ -2508,7 +2521,42 @@ span.person a div.description:empty {
 	transform: rotate(90deg);  /* Firefox 16+, IE 10+, Opera 12.10+ */
 }
 
-.signs-category-header {}
-.signs-file-header {}
-.signs-items-table {}
-.signs-items-separator {}
+/* Signs Table */
+.signs-table {
+	width: 100%;
+	border-spacing: 0;
+}
+
+.signs-table tr > td:first-child { padding-left: 10px; }
+.signs-table tr > td:last-child { padding-right: 10px; }
+
+.signs-table td > div:first-child { margin-top: 5px; }
+.signs-table td > div:last-child { margin-bottom: 5px; }
+
+.signs-table tr:hover { background-color: #eee; }
+.signs-table tr:hover td:first-child {
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
+
+.signs-table tr:hover td:last-child {
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+/* /Signs Table */
+
+.signs-category-header,
+.signs-file-header {
+	margin-top: 5px;
+}
+
+.signs-category-header {
+	border-bottom: 2px solid #333;
+}
+
+.signs-file-header {
+	font-style: italic;
+	font-weight: bold;
+	border-bottom: 1px solid #333;
+	margin-bottom: 5px;
+}

@@ -1,54 +1,66 @@
 <#assign htmlId = args.htmlid>
 <#assign formId = args.htmlid + "-form">
+<#assign controlId = args.htmlid + "-control">
 <#assign signedContentRef = args.signedContentRef>
 
 <@formLib.renderFormContainer formId = formId>
-<div id="${htmlId}" class="signs-wrapper">
-	<div id="${htmlId}-refresh" class="signs-refresh"></div>
-	<div data-bind="foreach: signs">
+<div id="${controlId}" class="signs-wrapper">
+	<div id="${controlId}-refresh" class="signs-refresh"></div>
 
-		<h1 class="separator" data-bind="text: categoryName"></h1>
+	<div style="display: none;" data-bind="visible: $root.singsIsEmpty()">
+		<p>Вложения участвующие в юридически значимом документообороте (ЮЗД) отсутствуют.</p>
+		<p>Чтобы добавить документ/вложение в ЮЗД:</p>
+		<div>
+			<div>1. Перейдите на карточку документа/вложения, которое Вы хотите добавить;</div>
+			<div>2. В правой части карточки поставьте галочку напротив "На подпись".</div>
+		</div>
+	</div>
+
+	<!-- ko ifnot: $root.singsIsEmpty() -->
+	<div style="display: none;" data-bind="visible: $root.singsIsNotEmpty(), foreach: signs">
+		<h1 class="signs-category-header" data-bind="text: categoryName"></h1>
 
 		<div data-bind="foreach: signedContent">
-			<p data-bind="text: fileName"></p>
+			<p class="signs-file-header" data-bind="text: fileName"></p>
 
-			<!-- ko if: $root.singsIsEmpty() -->
-			<p>Никто не подписывал</p>
+			<!-- ko if: $root.signsInfoIsEmpty($context) -->
+			<p>Вложение не подписывалось.</p>
 			<!-- /ko -->
 
-			<!-- ko ifnot: $root.singsIsEmpty() -->
-			<table>
+			<!-- ko ifnot: $root.signsInfoIsEmpty($context) -->
+			<table class="signs-table">
 				<tbody>
 				<!-- ko foreach: signsInfo -->
 				<!-- ko ifnot: isOur -->
 				<tr>
 					<td data-bind="text: $root.getSignOwner($context)"></td>
-					<td data-bind="text: $root.getSignDescription($context)"></td>
-					<td><a href="#" data-bind="attr: { onclick: $root.getViewAttributes($context) }">View</a></td>
+					<td data-bind="html: $root.getSignDescription($context)"></td>
+					<td><a href="#" class="signs-chain-link" data-bind="attr: { onclick: $root.getViewAttributes($context) }"></a></td>
 				</tr>
 				<!-- /ko -->
 				<!-- /ko -->
 
 				<!-- ko foreach: signsInfo -->
 				<!-- ko if: isOur -->
-				<tr>
+				<tr class="signs-table">
 					<td data-bind="text: $root.getSignOwner($context)"></td>
-					<td data-bind="text: $root.getSignDescription($context)"></td>
-					<td><a href="#" data-bind="attr: { onclick: $root.getViewAttributes($context) }">View</a></td>
+					<td data-bind="html: $root.getSignDescription($context)"></td>
+					<td><a href="#" class="signs-chain-link" data-bind="attr: { onclick: $root.getViewAttributes($context) }"></a></td>
 				</tr>
 				<!-- /ko -->
 				<!-- /ko -->
 				</tbody>
 			</table>
 			<!-- /ko -->
-
 		</div>
+
 	</div>
+	<!-- /ko -->
 </div>
 </@formLib.renderFormContainer>
 
 <@formLib.renderFormsRuntime formId = formId />
 
 <script type="text/javascript">
-	new LogicECM.module.SignsAllForm("${htmlId}").setOptions({ "signedContentRef": "${signedContentRef}" });
+	new LogicECM.module.SignsAllForm("${htmlId}", "${controlId}").setOptions({ "signedContentRef": "${signedContentRef}" });
 </script>

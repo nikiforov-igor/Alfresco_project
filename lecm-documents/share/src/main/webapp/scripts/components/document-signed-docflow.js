@@ -66,7 +66,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-all-form");
 
 			form.setOptions({
-				width: "50em",
+				width: "55em",
 				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 				templateRequestParams: {
 					itemKind: "type",
