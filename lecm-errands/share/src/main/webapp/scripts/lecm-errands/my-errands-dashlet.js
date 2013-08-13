@@ -157,6 +157,9 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         if (item.isImportant == "true") {
                             detail.innerHTML = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png' + '" width="16" alt="' + this.msg("label.important") + '" title="' + this.msg("label.important") + '" />';
                         }
+                        if (item.baseDocString != undefined) {
+                            detail.innerHTML += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/base_doc_16.png' + '" width="16" alt="' + item.baseDocString + '" title="' + item.baseDocString + '" />';
+                        }
                         var str = "<a href='" + window.location.protocol + "//" + window.location.host +
                             Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef="+ item.nodeRef + "'>"+
                             item.record + "</a> ";
