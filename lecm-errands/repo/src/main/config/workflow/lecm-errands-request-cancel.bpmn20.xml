@@ -62,12 +62,12 @@
 			    </activiti:taskListener>
 			    <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 				    <activiti:field name="script">
-					    <activiti:string>
+					    <activiti:string><![CDATA[
 						    var document = bpm_package.children[0];
 						    if (document != null) {
 							    var executor = null;
 							    var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-							    if (executorAssoc != null &amp;&amp; executorAssoc.length == 1) {
+							    if (executorAssoc != null && executorAssoc.length == 1) {
 							        executor = executorAssoc[0];
 						        }
 							    if (executor != null) {
@@ -84,6 +84,18 @@
 									    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
 								    } else if (decision == "CANCEL_ERRAND") {
 								        execution.setVariable("requestCancelResult", "cancelErrand");
+
+									    var soExecutors = document.assocs["lecm-errands:coexecutors-assoc"];
+									    if (soExecutors != null) {
+										    for (var i = 0; i < soExecutors.length; i++) {
+										        recipients.push(soExecutors[i]);
+										    }
+						                }
+
+						                var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+				                        if (controllerAssoc != null && controllerAssoc.length == 1) {
+				                            recipients.push(controllerAssoc[0]);
+				                        }
 
 									    var notificationText = "Запрос об отмене поручения  ";
 									    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
@@ -117,7 +129,7 @@
 								    }
 							    }
 						    }
-					    </activiti:string>
+					    ]]></activiti:string>
 				    </activiti:field>
 			    </activiti:taskListener>
 		    </extensionElements>
