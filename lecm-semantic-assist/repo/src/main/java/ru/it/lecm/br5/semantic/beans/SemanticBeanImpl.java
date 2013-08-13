@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.logging.Level;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -23,7 +21,6 @@ import javax.xml.ws.soap.SOAPFaultException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -34,7 +31,6 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xmlsoap.schemas.soap.encoding.Base64Binary;
 import ru.it.soap.ArrayOfPersonAttrs;
 import ru.it.soap.ItsWebServiceSoap;
 import ru.it.soap.PersonAttrs;
@@ -136,8 +132,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 			try {
 				res = itsWebService.loadPerson(pLoad);
 			} catch (SOAPFaultException soap_exception) {
-				logger.debug("Can't loadPerson: server is not available. ");
-				logger.debug(soap_exception.getMessage());
+				logger.trace("Can't loadPerson: server is not available. ",soap_exception);
 				return null;
 			}
 			return res;
@@ -213,8 +208,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 				result = true;
 			}
 		} catch (SOAPFaultException soap_exception) {
-			logger.debug("Can't refreshAlfDocumentTagsBr5: server is unavailable. ");
-			logger.debug(soap_exception.getMessage());
+			logger.trace("Can't refreshAlfDocumentTagsBr5: server is unavailable. ", soap_exception);
 		}
 
 		if (result && docItems != null) {
@@ -259,8 +253,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 				result = true;
 			}
 		} catch (SOAPFaultException soap_exception) {
-			logger.debug("Can't refreshAlfDocumentTagsBr5: server is unvailable. ");
-			logger.debug(soap_exception.getMessage());
+			logger.trace("Can't refreshAlfDocumentTagsBr5: server is unvailable. ");
 		}
 
 		if (result && success && docItems != null) {
@@ -320,8 +313,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 				loadOk = itsWebService.loadMail(expLogin, members, xgregDate, "", filesNames, filesContent);
 			}
 		} catch (SOAPFaultException soap_exception) {
-			logger.debug("Can't loadDocumentBr5: server is unvailable.");
-			logger.debug(soap_exception.getMessage());
+			logger.trace("Can't loadDocumentBr5: server is unvailable.", soap_exception);
 		}
 		if (loadOk) {
 			nodeService.setProperty(documentRef, PROP_BR5_INTEGRATION_LOADED, true);
@@ -413,8 +405,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 			Integer mc = maxCount!=null ? maxCount : 50;
 			itemArray = itsWebService.getPersonSignificItems(expertInnerId, mc);
 		} catch (SOAPFaultException soap_exception) {
-			logger.debug("getExpertsTagsBr5: server is not available. ");
-			logger.debug(soap_exception.getMessage());
+			logger.trace("getExpertsTagsBr5: server is not available. ", soap_exception);
 			return result;
 		}
 
@@ -507,8 +498,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 		try {
 			arrPersons = itsWebService.searchExperts(searchString.toString());
 		} catch (SOAPFaultException soap_exception) {
-			logger.debug("Can't getExpertsByDocument: server is not available. ");
-			logger.debug(soap_exception.getMessage());
+			logger.trace("Can't getExpertsByDocument: server is not available. ", soap_exception);
 			return new ArrayList<Person>();
 		}
 
