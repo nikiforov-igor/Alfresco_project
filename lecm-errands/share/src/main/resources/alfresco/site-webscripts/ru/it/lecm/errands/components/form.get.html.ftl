@@ -19,12 +19,14 @@
             Event = YAHOO.util.Event;
 
         function init() {
-            var links = new LogicECM.module.Errands.Links("${id}").setOptions(
-                    {
-                        destination: "${nodeRef}",
-                        totalLinks: ${links.links?size},
-                        totalExecuteLinks:${executeLinks.links?size}
-                    }).setMessages(${messages});
+			<#if hasAttrEditPerm>
+	            new LogicECM.module.Errands.Links("${id}").setOptions(
+	                    {
+	                        destination: "${nodeRef}",
+	                        totalLinks: ${links.links?size},
+	                        totalExecuteLinks:${executeLinks.links?size}
+	                    }).setMessages(${messages});
+			</#if>
 
             <#-- "time ago"  - start -->
             var date = "${props["cm:created"]["iso8601"]}";
@@ -49,7 +51,9 @@
 			<#if hasAddAttachmentPerm>
                 drawDndForm("${nodeRef}", '${id}');
 			</#if>
-	        initSetExecutionReportForm('${id}');
+			<#if hasAttrEditPerm>
+	            initSetExecutionReportForm('${id}');
+			</#if>
 	        initChildErrands('${id}');
         }
 
@@ -100,28 +104,30 @@
 	        }
 		</#if>
 
-	    function initSetExecutionReportForm(htmlId) {
-		    var execReportElement = YAHOO.util.Dom.get(htmlId + "-setExecutionReport-textarea");
-		    if (execReportElement != null) {
-			    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-report-set", function() {
-				    Alfresco.util.Ajax.jsonRequest(
-						    {
-							    method: "POST",
-							    url: Alfresco.constants.PROXY_URI + "lecm/errands/api/setExecutionReport",
-							    dataObj: {
-								    nodeRef: "${nodeRef}",
-								    executionReport: execReportElement.value
-							    },
-							    successMessage: "${msg("message.setExecutionReport.success")}",
-							    failureMessage: "${msg("message.setExecutionReport.failure")}"
-						    });
-			    });
+		<#if hasAttrEditPerm>
+		    function initSetExecutionReportForm(htmlId) {
+			    var execReportElement = YAHOO.util.Dom.get(htmlId + "-setExecutionReport-textarea");
+			    if (execReportElement != null) {
+				    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-report-set", function() {
+					    Alfresco.util.Ajax.jsonRequest(
+							    {
+								    method: "POST",
+								    url: Alfresco.constants.PROXY_URI + "lecm/errands/api/setExecutionReport",
+								    dataObj: {
+									    nodeRef: "${nodeRef}",
+									    executionReport: execReportElement.value
+								    },
+								    successMessage: "${msg("message.setExecutionReport.success")}",
+								    failureMessage: "${msg("message.setExecutionReport.failure")}"
+							    });
+				    });
 
-			    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-report-reset", function() {
-				    execReportElement.value = "";
-			    });
+				    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-report-reset", function() {
+					    execReportElement.value = "";
+				    });
+			    }
 		    }
-	    }
+		</#if>
 
 	    function initChildErrands(htmlId) {
 		    errands = new LogicECM.module.Errands.dashlet.Errands(htmlId + "-exec-child-errands").setOptions(
@@ -227,11 +233,13 @@
         </#if>
         <div id="${id}-links" class="data-list-block">
             <span class="heading">${msg("label.links.head")}<span class="count" id="${id}-links-count"> (${links.links?size})</span></span>
-            <span id="${id}-links-add" class="yui-button yui-push-button">
-                <span class="first-child">
-                    <button type="button">${msg("label.links.button")}</button>
-                </span>
-            </span>
+            <#if hasAttrEditPerm>
+		        <span id="${id}-links-add" class="yui-button yui-push-button">
+	                <span class="first-child">
+	                    <button type="button">${msg("label.links.button")}</button>
+	                </span>
+	            </span>
+            </#if>
             <ul class="data-list" id="${id}-links-list">
                 <#if links.links?? && (links.links?size > 0)>
                     <#list links.links as link>
@@ -292,11 +300,13 @@
 			</#if>
             <div id="${id}-exec-links" class="data-list-block">
                 <span class="heading">${msg("label.links.head")}<span class="count" id="${id}-execute-links-count"> (${(executeLinks.links)?size})</span></span>
-                <span id="${id}-exec-links-add" class="yui-button yui-push-button">
-                    <span class="first-child">
-                        <button type="button">${msg("label.links.button")}</button>
-                    </span>
-                </span>
+				<#if hasAttrEditPerm>
+		            <span id="${id}-exec-links-add" class="yui-button yui-push-button">
+	                    <span class="first-child">
+	                        <button type="button">${msg("label.links.button")}</button>
+	                    </span>
+	                </span>
+				</#if>
                 <ul class="data-list" id="${id}-execute-links-list">
                     <#if executeLinks.links?? && (executeLinks.links?size > 0)>
                         <#list executeLinks.links as link>
@@ -340,21 +350,23 @@
             <div id="${id}-exec-report" class="exec-report">
                 <span class="heading">${msg("message.errands.executionReport")}</span> <br/>
                 <div>
-                    <textarea id="${id}-setExecutionReport-textarea" rows="" cols="">${props["lecm-errands:execution-report"]!""}</textarea>
+                    <textarea id="${id}-setExecutionReport-textarea" rows="" cols="" <#if !hasAttrEditPerm>disabled="disabled" </#if>>${props["lecm-errands:execution-report"]!""}</textarea>
                 </div>
-                <div>
-                    <span id="${id}-exec-report-set" class="yui-button yui-push-button">
-                        <span class="first-child">
-                            <button>${msg("message.errands.executionReport.save")}</button>
-                        </span>
-                    </span>
-                    <br/>
-                    <span id="${id}-exec-report-reset" class="yui-button yui-push-button">
-                        <span class="first-child">
-                            <button>${msg("message.errands.executionReport.clear")}</button>
-                        </span>
-                    </span>
-                </div>
+				<#if hasAttrEditPerm>
+	                <div>
+	                    <span id="${id}-exec-report-set" class="yui-button yui-push-button">
+	                        <span class="first-child">
+	                            <button>${msg("message.errands.executionReport.save")}</button>
+	                        </span>
+	                    </span>
+	                    <br/>
+	                    <span id="${id}-exec-report-reset" class="yui-button yui-push-button">
+	                        <span class="first-child">
+	                            <button>${msg("message.errands.executionReport.clear")}</button>
+	                        </span>
+	                    </span>
+	                </div>
+				</#if>
             </div>
         </div>
         <div class="line"></div>
