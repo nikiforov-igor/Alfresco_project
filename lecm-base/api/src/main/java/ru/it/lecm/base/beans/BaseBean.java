@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 
 /**
  * User: AIvkin
@@ -62,7 +63,7 @@ public abstract class BaseBean implements InitializingBean {
     protected ServiceRegistry serviceRegistry;
 	protected AuthenticationService authService;
 
-	private final static Object lock = new Object();
+	private final Object lock = new Object();
 
 	protected static enum ASSOCIATION_TYPE {
 		SOURCE,
@@ -273,39 +274,33 @@ public abstract class BaseBean implements InitializingBean {
 	 * @return ссылка на директорию
 	 */
     public NodeRef getFolder(final String nameSpace, final NodeRef root, final List<String> directoryPaths) {
-        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+        final AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
             @Override
             public NodeRef doWork() throws Exception {
-                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+				final RetryingTransactionCallback<NodeRef> cb = new RetryingTransactionCallback<NodeRef>() {
                     @Override
                     public NodeRef execute() throws Throwable {
                         // имя директории "Корень/Тип Объекта/Категория события/ГГГГ/ММ/ДД"
-                        NodeRef directoryRef;
-                        directoryRef = root;
-                        for (String pathString : directoryPaths) {
-                            NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
-                            if (pathDir == null) {
-                                synchronized (lock) {
-                                    pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
-                                    if (pathDir == null) {
-                                        QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                        QName assocQName = QName.createQName(nameSpace, pathString);
-                                        QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-                                        Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                        properties.put(ContentModel.PROP_NAME, pathString);
-                                        ChildAssociationRef result = nodeService.createNode(directoryRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                        directoryRef = result.getChildRef();
-                                    } else {
-                                        directoryRef = pathDir;
-                                    }
-                                }
-                            } else {
-                                directoryRef = pathDir;
-                            }
-                        }
+						NodeRef directoryRef = root;
+						for (String pathString : directoryPaths) {
+							final NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
+							if (pathDir == null) {
+								QName assocQName = QName.createQName(nameSpace, pathString);
+								Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+								properties.put(ContentModel.PROP_NAME, pathString);
+								directoryRef = nodeService.createNode(directoryRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties).getChildRef();
+							} else {
+								directoryRef = pathDir;
+							}
+						}
                         return directoryRef;
                     }
-                });
+				};
+				final NodeRef result;
+				synchronized (lock) {
+					result = transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);
+				}
+                return result;
             }
         };
         return AuthenticationUtil.runAsSystem(raw);
