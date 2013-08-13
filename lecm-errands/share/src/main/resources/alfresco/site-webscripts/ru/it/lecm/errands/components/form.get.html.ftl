@@ -46,55 +46,59 @@
             }
             <#-- Make twisters - end -->
 
-            drawDndForm("${nodeRef}", '${id}');
+			<#if hasAddAttachmentPerm>
+                drawDndForm("${nodeRef}", '${id}');
+			</#if>
 	        initSetExecutionReportForm('${id}');
 	        initChildErrands('${id}');
         }
 
-        function drawDndForm(nodeRef, htmlId) {
-	        var formId = htmlId + "-attachemnts";
-            Alfresco.util.Ajax.request(
-                    {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-                        dataObj: {
-                            htmlid: formId,
-                            itemKind: "node",
-                            itemId: nodeRef,
-                            formId: "errands-dnd",
-                            mode: "edit",
-	                        submitType:"json",
-                            showSubmitButton: true,
-                            showResetButton: false,
-                            showCancelButton: false
-                        },
-                        successCallback: {
-                            fn: function (response) {
-                                var container = Dom.get('${id}-dnd');
-                                if (container != null) {
-                                    container.innerHTML = response.serverResponse.responseText;
+		<#if hasAddAttachmentPerm>
+	        function drawDndForm(nodeRef, htmlId) {
+		        var formId = htmlId + "-attachemnts";
+	            Alfresco.util.Ajax.request(
+	                    {
+	                        url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+	                        dataObj: {
+	                            htmlid: formId,
+	                            itemKind: "node",
+	                            itemId: nodeRef,
+	                            formId: "errands-dnd",
+	                            mode: "edit",
+		                        submitType:"json",
+	                            showSubmitButton: true,
+	                            showResetButton: false,
+	                            showCancelButton: false
+	                        },
+	                        successCallback: {
+	                            fn: function (response) {
+	                                var container = Dom.get('${id}-dnd');
+	                                if (container != null) {
+	                                    container.innerHTML = response.serverResponse.responseText;
 
-	                                var form = new Alfresco.forms.Form(formId + '-form');
-	                                form.setSubmitAsJSON(true);
-	                                form.setAJAXSubmit(true,
-			                                {
-				                                successCallback:
+		                                var form = new Alfresco.forms.Form(formId + '-form');
+		                                form.setSubmitAsJSON(true);
+		                                form.setAJAXSubmit(true,
 				                                {
-					                                fn: function(response) {
-						                                window.location.reload(true);
-					                                },
-					                                scope: this
-				                                }
-			                                });
-	                                form.init();
+					                                successCallback:
+					                                {
+						                                fn: function(response) {
+							                                window.location.reload(true);
+						                                },
+						                                scope: this
+					                                }
+				                                });
+		                                form.init();
 
-	                                Dom.setStyle(formId + "-form-buttons", "visibility", "hidden");
-                                }
-                            }
-                        },
-                        failureMessage: "message.failure",
-                        execScripts: true
-                    });
-        }
+		                                Dom.setStyle(formId + "-form-buttons", "visibility", "hidden");
+	                                }
+	                            }
+	                        },
+	                        failureMessage: "message.failure",
+	                        execScripts: true
+	                    });
+	        }
+		</#if>
 
 	    function initSetExecutionReportForm(htmlId) {
 		    var execReportElement = YAHOO.util.Dom.get(htmlId + "-setExecutionReport-textarea");
@@ -200,21 +204,27 @@
                 &nbsp;${msg("message.eddand.justInTime")}
             </#if>
         </div>
-        <div id="${id}-attachments" class="data-list-block">
-            <span class="heading">${msg("message.eddand.attachments")}<span class="count"> (${(attachments![])?size})</span></span>
-            <ul class="data-list">
-                <#if attachments?? && attachments?size gt 0>
-                    <#list attachments as attachment>
-                        <li title="${attachment.name!""}">
-                            <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
-                            <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
-                                ${attachment.name!""}
-                            </a>
-                        </li>
-                    </#list>
-                </#if>
-            </ul>
-        </div>
+        <#if hasViewContentListPerm>
+	        <div id="${id}-attachments" class="data-list-block">
+	            <span class="heading">${msg("message.eddand.attachments")}<span class="count"> (${(attachments![])?size})</span></span>
+	            <ul class="data-list">
+	                <#if attachments?? && attachments?size gt 0>
+	                    <#list attachments as attachment>
+	                        <li title="${attachment.name!""}">
+	                            <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
+		                        <#if hasViewAttachmentPerm>
+		                            <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
+		                                ${attachment.name!""}
+		                            </a>
+		                        <#else>
+		                            ${attachment.name!""}
+		                        </#if>
+	                        </li>
+	                    </#list>
+	                </#if>
+	            </ul>
+	        </div>
+        </#if>
         <div id="${id}-links" class="data-list-block">
             <span class="heading">${msg("label.links.head")}<span class="count" id="${id}-links-count"> (${links.links?size})</span></span>
             <span id="${id}-links-add" class="yui-button yui-push-button">
@@ -255,23 +265,31 @@
         <div class="line"></div>
         <#-- РАБОТА НАД ПОРУЧЕНИЕМ -->
         <div id="${id}-exec" class="block">
-            <div id="${id}-dnd" class="dnd-uploader"></div>
+	        <#if hasAddAttachmentPerm>
+		        <div id="${id}-dnd" class="dnd-uploader"></div>
+	        </#if>
             <div class="title">${msg("message.eddand.work")}</div>
-            <div id="${id}-exec-attachments" class="data-list-block">
-                <span class="heading">${msg("message.eddand.attachments")}<span class="count"> (${(attachmentsExec![])?size})</span></span>
-                <ul class="data-list">
-                    <#if attachmentsExec?? && attachmentsExec?size gt 0>
-                        <#list attachmentsExec as attachment>
-                            <li title="${attachment.name!""}">
-                                <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
-                                <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
-                                    ${attachment.name!""}
-                                </a>
-                            </li>
-                        </#list>
-                    </#if>
-                </ul>
-            </div>
+			<#if hasViewContentListPerm>
+	            <div id="${id}-exec-attachments" class="data-list-block">
+	                <span class="heading">${msg("message.eddand.attachments")}<span class="count"> (${(attachmentsExec![])?size})</span></span>
+	                <ul class="data-list">
+	                    <#if attachmentsExec?? && attachmentsExec?size gt 0>
+	                        <#list attachmentsExec as attachment>
+	                            <li title="${attachment.name!""}">
+	                                <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
+		                            <#if hasViewAttachmentPerm>
+			                            <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
+			                                ${attachment.name!""}
+			                            </a>
+		                            <#else>
+		                                ${attachment.name!""}
+		                            </#if>
+	                            </li>
+	                        </#list>
+	                    </#if>
+	                </ul>
+	            </div>
+			</#if>
             <div id="${id}-exec-links" class="data-list-block">
                 <span class="heading">${msg("label.links.head")}<span class="count" id="${id}-execute-links-count"> (${(executeLinks.links)?size})</span></span>
                 <span id="${id}-exec-links-add" class="yui-button yui-push-button">
@@ -342,22 +360,28 @@
         <div class="line"></div>
         <#-- КОНТРОЛЬ ИСПОЛНЕНИЯ -->
         <div id="${id}-contr" class="block">
-            <div class="title">${msg("message.eddand.work")}</div>
-            <div id="${id}-contr-attachments" class="data-list-block">
-                <span class="heading">${msg("message.eddand.executionControl")}<span class="count"> (${(attachmentsControl![])?size})</span></span>
-                <ul class="data-list">
-                    <#if attachmentsControl?? && attachmentsControl?size gt 0>
-                        <#list attachmentsControl as attachment>
-                            <li title="${attachment.name!""}">
-                                <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
-                                <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
-                                    ${attachment.name!""}
-                                </a>
-                            </li>
-                        </#list>
-                    </#if>
-                </ul>
-            </div>
+            <div class="title">${msg("message.eddand.executionControl")}</div>
+			<#if hasViewContentListPerm>
+	            <div id="${id}-contr-attachments" class="data-list-block">
+	                <span class="heading">${msg("message.eddand.attachments")}<span class="count"> (${(attachmentsControl![])?size})</span></span>
+	                <ul class="data-list">
+	                    <#if attachmentsControl?? && attachmentsControl?size gt 0>
+	                        <#list attachmentsControl as attachment>
+	                            <li title="${attachment.name!""}">
+	                                <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
+		                            <#if hasViewAttachmentPerm>
+			                            <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
+			                                ${attachment.name!""}
+			                            </a>
+		                            <#else>
+		                                ${attachment.name!""}
+		                            </#if>
+	                            </li>
+	                        </#list>
+	                    </#if>
+	                </ul>
+	            </div>
+			</#if>
         </div>
         <div class="line"></div>
     </div>

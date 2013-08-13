@@ -1,6 +1,7 @@
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
 <import resource="classpath:alfresco/site-webscripts/org/alfresco/callutils.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 function main() {
     AlfrescoUtil.param("formId");
@@ -42,6 +43,10 @@ function main() {
     model.executeLinks = doGetCall(uri);
 
     model.limitDate = new Date(nodeDetails.item.node.properties["lecm-errands:limitation-date"]["value"]);
+
+	model.hasViewContentListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
+	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
+	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD);
 }
 
 main();
