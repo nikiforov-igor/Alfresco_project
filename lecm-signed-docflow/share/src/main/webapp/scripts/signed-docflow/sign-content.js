@@ -92,7 +92,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onRefreshSignatures: function(layer, args) {
-			alert("onRefreshSignatures");
+			cryptoAppletModule.CheckContentSignature(this.options.nodeRef);
 		},
 
 		onUploadSignature: function(layer, args) {
@@ -100,7 +100,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onSendDocument: function(layer, args) {
-			alert("onSendDocument");
+			Alfresco.util.PopupManager.displayMessage({
+				text: "Отправка документа контрагенту"
+			});
+			cryptoAppletModule.SendToContragent(this.options.nodeRef);
 		},
 
 		onSignaturesReceived: function(layer, args) {

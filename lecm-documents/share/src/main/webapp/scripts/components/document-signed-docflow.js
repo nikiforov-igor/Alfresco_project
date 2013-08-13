@@ -51,15 +51,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onRefresh: function (layer, args) {
-			alert("SUDDENLY, REFRESH!");
+			cryptoAppletModule.CheckDocumentSignatures(this.options.nodeRef);
 		},
 
 		onSignDocuments:  function (layer, args) {
-			cryptoAppletModule.MultipleSignFormShow(this.options.nodeRef);
+			cryptoAppletModule.MultipleSignFormShow(this.options.nodeRef, cryptoAppletModule.SignMultiple);
 		},
 
 		onSendDocuments: function (layer, args) {
-			alert("onSendDocuments");
+			cryptoAppletModule.MultipleSignFormShow(this.options.nodeRef, cryptoAppletModule.SendMultiple);
 		},
 
 		onViewSignatures: function (layer, args) {

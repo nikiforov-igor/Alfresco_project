@@ -43,7 +43,7 @@ public class SigningWebscript extends DeclarativeWebScript {
 		jsonResult.put(result);
 		return jsonResult;
 	}
-
+	
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		final Map<String, String> templateArgs = req.getServiceMatch().getTemplateVars();

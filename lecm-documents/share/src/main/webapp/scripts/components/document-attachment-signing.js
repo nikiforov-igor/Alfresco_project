@@ -95,7 +95,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onRefreshSignatures: function(layer, args) {
-			alert("onRefreshSignatures");
+			cryptoAppletModule.CheckContentSignature(this.options.nodeRef);
 		},
 
 		onUploadSignature: function(layer, args) {
@@ -144,29 +144,30 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			Alfresco.util.PopupManager.displayMessage({
 				text: "Отправка документа контрагенту"
 			});
+			cryptoAppletModule.SendToContragent(this.options.nodeRef);
 			//проверка всех наших подписей на валидность
 			//если хоть одна из наших подписей невалидна
 			//то ничего никуда не отправляем
 
 			//вызываем сервис, который отправит документ контрагенту
 			//this.options.nodeRef это NodeRef на наше вложение
-			Alfresco.util.Ajax.jsonRequest({
-				method: "POST",
-				url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/sendContentToPartner",
-				dataObj: {
-					content:[this.options.nodeRef]
-				},
-				failureMessage: this.msg("message.sending.attachment.failure"),
-				successCallback: {
-					fn: function(response) {
-						//смотрим какой ответ пришел нам с сервера
-						//если все хорошо, то выводим сообщение что все хорошо
-						//если response.json.gateResponse.responseType != OK то надо пойти в сценарий повторной авторизации
-						//и выполнить действие заново
-					},
-					scope: this
-				}
-			});
+			// Alfresco.util.Ajax.jsonRequest({
+			// 	method: "POST",
+			// 	url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/sendContentToPartner",
+			// 	dataObj: {
+			// 		content:[this.options.nodeRef]
+			// 	},
+			// 	failureMessage: this.msg("message.sending.attachment.failure"),
+			// 	successCallback: {
+			// 		fn: function(response) {
+			// 			//смотрим какой ответ пришел нам с сервера
+			// 			//если все хорошо, то выводим сообщение что все хорошо
+			// 			//если response.json.gateResponse.responseType != OK то надо пойти в сценарий повторной авторизации
+			// 			//и выполнить действие заново
+			// 		},
+			// 		scope: this
+			// 	}
+			// });
 		},
 
 		onSignaturesReceived: function(layer, args) {

@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signed.docflow.api.Signature;
 import ru.it.lecm.signed.docflow.SignedDocflowEventCategory;
@@ -479,13 +480,16 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	@Override
 	public Map<String, String> updateSignatures(JSONArray json) {
 		Map<String, String> result = new HashMap<String, String>();
+		result.put("result", "success");
 		for (int i = 0; i < json.length(); i++) {
 			try {
 				NodeRef signRef = new NodeRef(json.getJSONObject(i).getString("signatureNodeRef"));
 				String signingDate = json.getJSONObject(i).getString("updateDate");
 				String isValid = json.getJSONObject(i).getString("isValid");
-				boolean res = updateSignature(signRef, signingDate, Boolean.parseBoolean(isValid));
-				result.put(signRef.toString(), String.valueOf(res));
+				if(!updateSignature(signRef, signingDate, Boolean.parseBoolean(isValid))){
+					result.put("result", "failure");
+				}
+				
 			} catch (JSONException ex) {
 				logger.error("Error parsing json", ex);
 				result.put("ERROR", "Somethig goes bad");
@@ -493,4 +497,6 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		}
 		return result;
 	}
+
+	
 }
