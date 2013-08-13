@@ -19,20 +19,20 @@ var cryptoAppletModule = (function () {
         "provType": "CSP_CRYPTOPRO",
         "userName": "1",
         "enableTS" : "false",
-        "issuerCert": "MIICQzCCAfCgAwIBAgIQaYQDKGqmWbpGNWItSd5fdd0zAKBgYqhQMCAgMFADBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wHhcNMDkwNDA3MTIwMjE1WhcNMTQxMDA0MDcwOTQxWjBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wYzAcBgYqhQMCAhMwEgYHKoUDAgIjAQYHKoUDAgIeAQNDAARAAuT/0ab2nICa2ux/SnjBzC3T5Zbqy+0iMnmyAuLGfDXmdGQbCXcRjGc/D9DoI6Z+bTt/xMQo/SscaAEgoFzYeaN4MHYwCwYDVR0PBAQDAgHGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFG2PXgXZX6yRF5QelZoFMDg3ehAqMBIGCSsGAQQBgjcVAQQFAgMCAAIwIwYJKwYBBAGCNxUCBBYEFHrJxwnbIByWlC/8Rq1tk9BeaRIOMAoGBiqFAwICAwUAA0EAWHPSk7xjIbEOc3Lu8XK1G4u7yTsIu0xa8uGlNU+ZxNVSUnAm3a7QqSfptlt9b0T9Jk39oWN0XHTYSXMKd3djTQ==", 
+        "issuerCert": "MIICQzCCAfCgAwIBAgIQaYQDKGqmWbpGNWItSd5fdd0zAKBgYqhQMCAgMFADBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wHhcNMDkwNDA3MTIwMjE1WhcNMTQxMDA0MDcwOTQxWjBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wYzAcBgYqhQMCAhMwEgYHKoUDAgIjAQYHKoUDAgIeAQNDAARAAuT/0ab2nICa2ux/SnjBzC3T5Zbqy+0iMnmyAuLGfDXmdGQbCXcRjGc/D9DoI6Z+bTt/xMQo/SscaAEgoFzYeaN4MHYwCwYDVR0PBAQDAgHGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFG2PXgXZX6yRF5QelZoFMDg3ehAqMBIGCSsGAQQBgjcVAQQFAgMCAAIwIwYJKwYBBAGCNxUCBBYEFHrJxwnbIByWlC/8Rq1tk9BeaRIOMAoGBiqFAwICAwUAA0EAWHPSk7xjIbEOc3Lu8XK1G4u7yTsIu0xa8uGlNU+ZxNVSUnAm3a7QqSfptlt9b0T9Jk39oWN0XHTYSXMKd3djTQ==",
         //"issuerCert" : null,
-        "licCert" : "MIICQzCCAfCgAwIBAgddIQaYQDKGqmWbpGNWItSd5f0zAKBgYqhQMCAgMFADBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wHhcNMDkwNDA3MTIwMjE1WhcNMTQxMDA0MDcwOTQxWjBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wYzAcBgYqhQMCAhMwEgYHKoUDAgIjAQYHKoUDAgIeAQNDAARAAuT/0ab2nICa2ux/SnjBzC3T5Zbqy+0iMnmyAuLGfDXmdGQbCXcRjGc/D9DoI6Z+bTt/xMQo/SscaAEgoFzYeaN4MHYwCwYDVR0PBAQDAgHGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFG2PXgXZX6yRF5QelZoFMDg3ehAqMBIGCSsGAQQBgjcVAQQFAgMCAAIwIwYJKwYBBAGCNxUCBBYEFHrJxwnbIByWlC/8Rq1tk9BeaRIOMAoGBiqFAwICAwUAA0EAWHPSk7xjIbEOc3Lu8XK1G4u7yTsIu0xa8uGlNU+ZxNVSUnAm3a7QqSfptlt9b0T9Jk39oWN0XHTYSXMKd3djTQ==", 
-        "storeName" : "123", 
-        "validatorType" : "NONE", 
-        "tmpPath" : "c\:\\tmp", 
-        "storeType" : "HDImageStore", 
+        "licCert" : "MIICQzCCAfCgAwIBAgddIQaYQDKGqmWbpGNWItSd5f0zAKBgYqhQMCAgMFADBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wHhcNMDkwNDA3MTIwMjE1WhcNMTQxMDA0MDcwOTQxWjBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wYzAcBgYqhQMCAhMwEgYHKoUDAgIjAQYHKoUDAgIeAQNDAARAAuT/0ab2nICa2ux/SnjBzC3T5Zbqy+0iMnmyAuLGfDXmdGQbCXcRjGc/D9DoI6Z+bTt/xMQo/SscaAEgoFzYeaN4MHYwCwYDVR0PBAQDAgHGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFG2PXgXZX6yRF5QelZoFMDg3ehAqMBIGCSsGAQQBgjcVAQQFAgMCAAIwIwYJKwYBBAGCNxUCBBYEFHrJxwnbIByWlC/8Rq1tk9BeaRIOMAoGBiqFAwICAwUAA0EAWHPSk7xjIbEOc3Lu8XK1G4u7yTsIu0xa8uGlNU+ZxNVSUnAm3a7QqSfptlt9b0T9Jk39oWN0XHTYSXMKd3djTQ==",
+        "storeName" : "123",
+        "validatorType" : "NONE",
+        "tmpPath" : "c\:\\tmp",
+        "storeType" : "HDImageStore",
         "certB64" : "1"
     };
-	
+
 	var certContainer = 'container';
-	
+
 	var CURRENT_CONTAINER = '';
-	
+
 	function loadConfig(){
 		Alfresco.util.Ajax.jsonRequest({
                 method: "POST",
@@ -47,7 +47,7 @@ var cryptoAppletModule = (function () {
 						config.issuerCert = configRes.licCert;
                     }
                 }
-                
+
             });
 	}
 	function getCertInfo(container, base64cert) {
@@ -61,38 +61,38 @@ var cryptoAppletModule = (function () {
 		var certIssued = Info.certIssued;
 		result.container = container;
 		var tmp = certIssued.match('CN=(.+?)(?=,)'); //ФИО владельца
-		if (tmp) 
+		if (tmp)
 			result.owner = tmp[1];
 		else
 			result.owner = ' ';
 		tmp = certIssued.match(' O=(.+?)(?=,)'); //Организация
-		if (tmp) 
+		if (tmp)
 			result.organization = tmp[1];
 		else
 			result.organization = ' ';
 		tmp = certIssued.match(' OU=(.+?)(?=,)'); //Подразделение
-		if (tmp) 
+		if (tmp)
 			result.OrgUnit = tmp[1];
 		else
 			result.OrgUnit = ' ';
 		tmp = certIssued.match(' T=(.+?)(?=,)'); //Должность
-		if (tmp) 
+		if (tmp)
 			result.position = tmp[1];
 		else
 			result.position = ' ';
-		
+
 		result.certSN = Info.certSN; //Серийный номер
 		result.certValidBefore = Info.certValidBefore;
 		result.certValidAfter = Info.certValidAfter;
 		result.fingerprint = Info.certFingerPrint;
-		
+
 		tmp = Info.certIssuer.match(' O=(.+?)(?=,)'); //УЦ
 		if (tmp)
 			result.issuer = tmp[1];
 		else
 			result.issuer = '';
-		
-		
+
+
 		return {
 			"owner" : result.owner,
 			"owner-position" : result.position,
@@ -104,7 +104,7 @@ var cryptoAppletModule = (function () {
 			"fingerprint" : result.fingerprint
 		};
 	}
-	
+
 	var SignMultiple = function (response) {
 		var templateUrl = "lecm/components/form"
                 + "?itemKind={itemKind}"
@@ -129,7 +129,7 @@ var cryptoAppletModule = (function () {
 				obj : JSON.stringify(response.json)
 			},
 			destroyOnHide: true,
-			doBeforeDialogShow: { 
+			doBeforeDialogShow: {
 				fn: function ( p_form, p_dialog ) {
 					p_dialog.dialog.setHeader( "Документы на подпись" );
 				}},
@@ -137,7 +137,7 @@ var cryptoAppletModule = (function () {
 				fn: function(form) {
 					var nodeRefList = [];
 					var fields = document.forms["multiple-sign-form"].getElementsByTagName("input");
-					
+
 					for(var i = 0; i < fields.length; i++) {
 						if(fields[i].checked) nodeRefList.push(fields[i].value);
 					}
@@ -151,10 +151,10 @@ var cryptoAppletModule = (function () {
 				}
 			}
 			}).show();
-	}
-	
+	};
+
 	var multipleSign = function(form) {
-	
+
 		var templateUrl = "lecm/components/form"
                 + "?itemKind={itemKind}"
                 + "&itemId={itemId}"
@@ -174,39 +174,39 @@ var cryptoAppletModule = (function () {
 		width: "20em",
 		templateUrl: url,
 		destroyOnHide: true,
-		doBeforeDialogShow: { 
+		doBeforeDialogShow: {
 			fn: function ( p_form, p_dialog ) {
 				p_dialog.dialog.setHeader( "Выбор сертификата" );
-			}},             
+			}}
 		}).show();
-		
+
 		var container = cryptoAppletModule.getCurrentContainer();
-		
+
 		var fields = document.forms["multiple-sign-form"].getElementsByTagName("input");
 		for(var i = 0; i < fields.length; i++) {
 			var dataObj = {};
 			var signDate = Alfresco.util.toISO8601(new Date());
 			var contentURI = new Alfresco.util.NodeRef(nodeRef).uri;
 			var attachSign = signApplet.sign(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL");
-			var signObj = {  
-				"sign-to-content-association" : nodeRef, 
-				"signature-content" : attachSign, 
+			var signObj = {
+				"sign-to-content-association" : nodeRef,
+				"signature-content" : attachSign,
 				"signing-date" : signDate
 				};
 			var certInfo = getCertInfo(container);
 			dataObj = YAHOO.lang.merge(signObj, certInfo);
-			
+
 			Alfresco.util.Ajax.jsonRequest({
                 method: "POST",
                 url: Alfresco.constants.PROXY_URI + "lecm/signed-docflow/signContent",
-                dataObj: dataObj,
+                dataObj: dataObj
             });
-			
+
 		}
-	}
-	
+	};
+
 	return {
-		
+
 		deployApplet : function(afterLoad) {
 			if(document.getElementById('signApplet')){
 				cryptoAppletModule.startApplet();
@@ -223,36 +223,36 @@ var cryptoAppletModule = (function () {
 							'<param name="providerType" value="CSP_CRYPTOPRO"/>' +
                             '<param name="doAfterLoad" value="' + afterLoad + '"/>';
 			document.getElementsByTagName('body')[0].appendChild(app);
-			
+
 			cryptoAppletModule.startApplet();
 		},
-		
+
 		setCurrentContainer : function(container) {
 			CURRENT_CONTAINER = container;
 		},
-			
+
 		getCurrentContainer : function() {
 			return CURRENT_CONTAINER;
 		},
-		
+
 		currentContainer : certContainer,
 		startApplet : function() {
 			loadConfig();
 			signApplet.setConfig(config);
 		},
-		
+
 		reConfig : function(config) {
 			certContainer = config.storeName;
 			signApplet.setConfig(config);
 		},
-		
+
 		reConfigCert : function(certContainer) {
 			//config.storeName = certContainer;
 			config.certB64 = signApplet.getService().bytesToBase64(signApplet.getService().getCertFromStore('', certContainer));
 			signApplet.setConfig(config);
-			return 
+			return;
 		},
-		
+
 		getCerts : function(selectId) {
 			var options='';
 			var containers = signApplet.getService().getKeyStoreList().split('###');
@@ -273,7 +273,7 @@ var cryptoAppletModule = (function () {
 				var Info = JSON.parse(signApplet.getService().certInfo(signApplet.getService().bytesToBase64(signApplet.getService().getCertFromStore('', containers[i]))));
 				var certIssued = Info.certIssued;
 				result[i].container = containers[i];
-				var tmp = certIssued.match('CN=(.+?)(?=,)'); 
+				var tmp = certIssued.match('CN=(.+?)(?=,)');
 				if (tmp) result[i].SubjectName = tmp[1];
 				tmp = certIssued.match('O=(.+?)(?=,)');
 				if (tmp) result[i].Organization = tmp[1];
@@ -283,14 +283,14 @@ var cryptoAppletModule = (function () {
 			}
 			return result;
 		},
-		
-		signGTS : function(container) {			
+
+		signGTS : function(container) {
 			var GUIDsign = signApplet.sign("GUID", "String");
 			var TS = new Date();
 			var TSsign = signApplet.sign(TS.toString('yyyy-MM-dd hh:mm'), "String");
 			return {"guidSign" : GUIDsign, "timestamp" : TS.toString('yyyy-MM-dd hh:mm'), "timestampSign" : TSsign};
 		},
-		
+
 		unicloudAuth : function(container) {
 			var GUIDsign = signApplet.sign("GUID", "String");
 			var TS = new Date();
@@ -305,10 +305,10 @@ var cryptoAppletModule = (function () {
                         alert(response.json.timestamp);
                     }
                 }
-                
+
             });
-		},		
-		
+		},
+
 		Bang : function() {
 			var templateUrl = "lecm/components/form"
                 + "?itemKind={itemKind}"
@@ -330,13 +330,13 @@ var cryptoAppletModule = (function () {
                 templateUrl: url,
                 actionUrl: null,
                 destroyOnHide: true,
-                doBeforeDialogShow: {                
-                    },             
+                doBeforeDialogShow: {
+                    },
                 doBeforeAjaxRequest: {
                 }
                 }).show();
 		},
-		
+
 		MultipleSignFormShow : function(docNodeRef) {
 			Alfresco.util.Ajax.jsonRequest({
                 method: "GET",
@@ -347,7 +347,7 @@ var cryptoAppletModule = (function () {
                 }
             });
 		},
-		
+
 		loadSign : function(nodeRef){
 			var signature = signApplet.getService().getCertFromFileUI();
 			var signDate = Alfresco.util.toISO8601(new Date());
@@ -360,15 +360,15 @@ var cryptoAppletModule = (function () {
 							text: 'Подпись недействительна, загрузка не состоялась'
 						});
 			}
-			var signObj = {  
-				"sign-to-content-association" : nodeRef, 
-				"content" : signature, 
+			var signObj = {
+				"sign-to-content-association" : nodeRef,
+				"content" : signature,
 				"signing-date" : signDate
 				};
-			
+
 			var certInfo = getCertInfo(null, certB64);
 			var res = YAHOO.lang.merge(signObj, certInfo);
-			
+
 			Alfresco.util.Ajax.jsonRequest({
                 method: "POST",
                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/loadSign",
@@ -384,7 +384,7 @@ var cryptoAppletModule = (function () {
 							Alfresco.util.PopupManager.displayMessage({
 							text: text
 						});
-						
+
 					}
                 },
 				onFailure: {
@@ -395,11 +395,11 @@ var cryptoAppletModule = (function () {
 						}
 				}
             });
-			
+
 		},
-		
+
 		CheckDocumentContent : function(docNodeRef) {
-			
+
 			var harvestNodes = function(response, nodeRefList){
 				var nodeRefList = [];
 				for(var i = 0; i < response.json.length; i++){
@@ -409,7 +409,7 @@ var cryptoAppletModule = (function () {
 				}
 				cryptoAppletModule.CheckContentSignature(nodeRefList);
 			};
-			
+
 			Alfresco.util.Ajax.jsonRequest({
                 method: "GET",
                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/getSignableContent?nodeRef=" + docNodeRef,
@@ -418,9 +418,9 @@ var cryptoAppletModule = (function () {
                 }
             });
 		},
-		
-		
-		
+
+
+
 		CheckDocumentSignatures : function(docNodeRef){
 			jQuery.ajax({
 			url:  Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/getDocumentSignsInfo?nodeRef=" + docNodeRef,
@@ -443,7 +443,7 @@ var cryptoAppletModule = (function () {
 											);
 						}
 					}
-					
+
 				}
 				jQuery.ajax({
 					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/signing/update",
@@ -452,7 +452,7 @@ var cryptoAppletModule = (function () {
 					dataType: "json",
 					contentType: "application/json",
 					type: "POST"
-					
+
 				});
 			}
 			});
@@ -486,7 +486,7 @@ var cryptoAppletModule = (function () {
 										 }
 										);
 					}
-					
+
 				}
 				jQuery.ajax({
 					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/signing/update",
@@ -495,12 +495,12 @@ var cryptoAppletModule = (function () {
 					dataType: "json",
 					contentType: "application/json",
 					type: "POST"
-					
+
 				});
 			}
 			});
 		},
-		
+
 		Sign : function (nodeRefList) {
 			if(!(nodeRefList instanceof Array)) {
 				nodeRefList = [nodeRefList];
@@ -526,10 +526,10 @@ var cryptoAppletModule = (function () {
 			templateUrl: url,
 			actionUrl: Alfresco.constants.PROXY_URI + "lecm/signed-docflow/signContent",
 			destroyOnHide: true,
-			doBeforeDialogShow: { 
+			doBeforeDialogShow: {
 				fn: function ( p_form, p_dialog ) {
 					p_dialog.dialog.setHeader( "Подпись вложения" );
-				}},             
+				}},
 			doBeforeAjaxRequest: {
 				fn : function(form, obj) {
 					if(!CurrentContainer) {
@@ -543,9 +543,9 @@ var cryptoAppletModule = (function () {
 						var signDate = Alfresco.util.toISO8601(new Date());
 						var contentURI = new Alfresco.util.NodeRef(nodeRefList[i]).uri;
 						var attachSign = signApplet.sign(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL");
-						var signObj = {  
-							"sign-to-content-association" : nodeRefList[i], 
-							"content" : attachSign, 
+						var signObj = {
+							"sign-to-content-association" : nodeRefList[i],
+							"content" : attachSign,
 							"signing-date" : signDate
 							};
 						var certInfo = getCertInfo(CurrentContainer); // изменить для получения данных из созданной подписи
@@ -584,33 +584,32 @@ var cryptoAppletModule = (function () {
 			}).show();
 		}
 	}
-})();	
+})();
 //YAHOO.util.Event.onDOMReady(cryptoAppletModule.deployApplet(false), "The onDOMReady event fired.  The DOM is now safe to modify via script.");
 YAHOO.util.Event.onDOMReady(function() {
 	if(document.getElementById('signApplet')){
 				cryptoAppletModule.startApplet();
 				return;
 			}
-			
+
 	var app = document.createElement('applet');
 	app.id= 'signApplet';
 	app.archive= '/share/scripts/signed-docflow/ITStampApplet.jar';
 	app.code= 'ru.businesslogic.crypto.userinterface.CryptoApplet.class';
 	app.width = '1';
 	app.height = '1';
-	app.innerHTML = '<param name="signOnLoad" value="false"/>' +
-					'<param name="debug" value="true"/>' +
-					'<param name="providerType" value="CSP_CRYPTOPRO"/>' +
-					'<param name="doAfterLoad" value="false"/>' +
-					'<param name="Permissions" value="sandbox" />' +
-					'<param name="Codebase" value="*" />';
+	app.innerHTML = '<param name="signOnLoad" value="false"/>'
+					+ '<param name="debug" value="true"/>'
+					+ '<param name="providerType" value="CSP_CRYPTOPRO"/>'
+					+ '<param name="doAfterLoad" value="false"/>'
+					+ '';
 	document.getElementsByTagName('body')[0].appendChild(app);
-	
+
 	try {
 		cryptoAppletModule.startApplet();
 	} catch(ex) {
 		console.log(ex);
 	}
-	
+
 });
 
