@@ -217,7 +217,7 @@
 	                <#if attachments?? && attachments?size gt 0>
 	                    <#list attachments as attachment>
 	                        <li title="${attachment.name!""}">
-	                            <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
+	                            <img src="${url.context}/res/components/images/filetypes/${fileIcon(attachment.name, 16)}" class="file-icon"/>
 		                        <#if hasViewAttachmentPerm>
 		                            <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
 		                                ${attachment.name!""}
@@ -284,7 +284,7 @@
 	                    <#if attachmentsExec?? && attachmentsExec?size gt 0>
 	                        <#list attachmentsExec as attachment>
 	                            <li title="${attachment.name!""}">
-	                                <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
+	                                <img src="${url.context}/res/components/images/filetypes/${fileIcon(attachment.name, 16)}" class="file-icon"/>
 		                            <#if hasViewAttachmentPerm>
 			                            <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
 			                                ${attachment.name!""}
@@ -380,7 +380,7 @@
 	                    <#if attachmentsControl?? && attachmentsControl?size gt 0>
 	                        <#list attachmentsControl as attachment>
 	                            <li title="${attachment.name!""}">
-	                                <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
+	                                <img src="${url.context}/res/components/images/filetypes/${fileIcon(attachment.name, 16)}" class="file-icon"/>
 		                            <#if hasViewAttachmentPerm>
 			                            <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}">
 			                                ${attachment.name!""}
