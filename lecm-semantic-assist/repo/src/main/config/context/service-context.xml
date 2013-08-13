@@ -96,12 +96,11 @@
 		</property>
 		<!-- Find all nodes that do not have the aspect -->
 		<property name="queryTemplate">
-			<!--<value>ASPECT:"{http://www.alfresco.org/model/exif/1.0}exif"</value>-->
 			<value>ASPECT:"{http://www.it.ru/lecm/br5/semantic/aspects/1.0}br5"</value>
 		</property>
 		<!--		do every minute in debug-->
 		<property name="cronExpression">
-			<value>0 0/1 * * * ?</value>
+			<value>0 0 2 * * ?</value>
 		</property>
 		<property name="jobName">
 			<value>updateIndex</value>
@@ -136,9 +135,7 @@
 		</property>
 	</bean>
 
-	<!--
-	Execute the script /Company Home/Record Management/testscript.js
-	-->
+	
 	<bean id="br5.semantic.runUpdateIndexScriptAction" class="org.alfresco.repo.action.scheduled.SimpleTemplateActionDefinition">
 		<property name="actionName">
 			<value>br5.semantic.updateIndex</value>
