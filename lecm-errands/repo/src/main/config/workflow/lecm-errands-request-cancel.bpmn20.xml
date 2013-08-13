@@ -82,6 +82,9 @@
 									    notificationText += " № {lecm-errands:number}";
 									    notificationText += " отклонён";
 									    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+
+	                                    var logText = "#initiator отклонил запрос на отмену поручения: #mainobject.";
+									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 								    } else if (decision == "CANCEL_ERRAND") {
 								        execution.setVariable("requestCancelResult", "cancelErrand");
 
@@ -123,6 +126,7 @@
 										    businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_EXECUTOR", logText, logObjects);
 
 						                    documentMembers.deleteMember(document, executor);
+						                    lecmPermission.revokeDynamicRole(document, executor, "ERRANDS_EXECUTOR")
 
 						                    execution.setVariable("requestCancelResult", "changeExecutor");
 						                }
