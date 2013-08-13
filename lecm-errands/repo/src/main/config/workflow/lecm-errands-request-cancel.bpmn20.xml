@@ -50,7 +50,7 @@
             </extensionElements>
             <script></script>
         </scriptTask>
-	    <userTask id="requestCancelTask" name="Отменить поручение" activiti:assignee='${requestCancelAssignee}' activiti:formKey="lecmErrandWf:requestCancelTask">
+	    <userTask id="requestCancelTask" name="Запрос на отмену" activiti:assignee='${requestCancelAssignee}' activiti:formKey="lecmErrandWf:requestCancelTask">
 		    <extensionElements>
 			    <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 				    <activiti:field name="script">
@@ -80,7 +80,7 @@
 									    var notificationText = "Ваш запрос об отмене поручения ";
 									    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
 									    notificationText += " № {lecm-errands:number}";
-									    notificationText += " отменён";
+									    notificationText += " отклонён";
 									    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
 								    } else if (decision == "CANCEL_ERRAND") {
 								        execution.setVariable("requestCancelResult", "cancelErrand");
