@@ -2311,7 +2311,7 @@ if (soExecutors != null) {
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -3865,7 +3865,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -5419,7 +5419,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -6717,7 +6717,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -6732,7 +6732,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[true]]></value>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
