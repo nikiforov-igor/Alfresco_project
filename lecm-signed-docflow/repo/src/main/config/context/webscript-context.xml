@@ -27,8 +27,9 @@
 		  class="ru.it.lecm.signed.docflow.webscripts.GetDocumentSignsInfoWebscript"
 		  p:signedDocflowService-ref="signedDocflowService"
 		  p:nodeService-ref="nodeService"
-		  p:documentAttachmentsService-ref="documentAttachmentsService"/>
-
+		  p:documentAttachmentsService-ref="documentAttachmentsService"
+		  p:dictionaryService-ref="dictionaryService"/>
+	
 	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.unicloud.api.post"
 		  class="ru.it.lecm.signed.docflow.webscripts.UnicloudWebscript"
 		  p:unicloudService-ref="unicloudService"

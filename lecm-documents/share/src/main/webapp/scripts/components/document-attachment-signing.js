@@ -96,6 +96,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 		onRefreshSignatures: function(layer, args) {
 			cryptoAppletModule.CheckContentSignature(this.options.nodeRef);
+			this.onViewSignature(layer, args);
 		},
 
 		onUploadSignature: function(layer, args) {

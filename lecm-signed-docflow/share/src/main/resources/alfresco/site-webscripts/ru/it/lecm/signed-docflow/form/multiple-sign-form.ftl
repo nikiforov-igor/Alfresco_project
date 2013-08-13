@@ -8,7 +8,9 @@
 <#if formUI == "true">
     <@formLib.renderFormsRuntime formId = formId />
 </#if>
-
+<#if t == '[]'>
+	<br/><strong>Нет подписываемых вложений</strong>
+</#if>
 <@formLib.renderFormContainer formId = formId>
 <#list data as group>
 	<p>

@@ -4,11 +4,13 @@
  */
 package ru.it.lecm.signed.docflow.webscripts;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.json.JSONArray;
@@ -21,6 +23,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.signed.docflow.api.Signature;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
 
@@ -32,6 +35,11 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 	private DocumentAttachmentsService documentAttachmentsService;
 	private NodeService nodeService;
 	private SignedDocflow signedDocflowService;
+	private DictionaryService dictionaryService;
+
+	public void setDictionaryService(DictionaryService dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
 
 	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
 		this.signedDocflowService = signedDocflowService;
@@ -49,22 +57,33 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		JSONArray JSONres = new JSONArray();
+		boolean isDocument;
 		Map<String, Object> result = new HashMap<String, Object>();
+		List<NodeRef> categories = new ArrayList<NodeRef>();
 		String nodeRef = req.getParameter("nodeRef");
 		final NodeRef docNodeRef = new NodeRef(nodeRef);
 		if (nodeRef == null) {
 			logger.error("GetDocumentSignsInfoWebscript was called with empty parameter");
 			throw new WebScriptException("GetDocumentSignsInfoWebscript was called with empty parameter");
 		}
-		
-		List<NodeRef> categories = documentAttachmentsService.getCategories(docNodeRef);
-		
+		if(dictionaryService.isSubClass(nodeService.getType(docNodeRef), DocumentService.TYPE_BASE_DOCUMENT)){
+			categories = documentAttachmentsService.getCategories(docNodeRef);
+			isDocument = true;
+		} else {
+			categories.add(documentAttachmentsService.getCategoryByAttachment(docNodeRef));
+			isDocument = false;
+		}
 		for (NodeRef categoryRef : categories) {
 			Map<String, Object> jsonResponse = new HashMap<String, Object>();
 			Map<String, Object> resultObject = new HashMap<String, Object>();
 			JSONArray contentArray = new JSONArray();
 			String categoryName = (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);
-			List<NodeRef> attachments = documentAttachmentsService.getAttachmentsByCategory(docNodeRef, categoryName);
+			List<NodeRef> attachments = new ArrayList<NodeRef>();
+			if(isDocument){
+				attachments = documentAttachmentsService.getAttachmentsByCategory(docNodeRef, categoryName);
+			} else {
+				attachments.add(docNodeRef);
+			}
 			for (NodeRef attachRef : attachments) {
 				if (signedDocflowService.isSignable(attachRef)) {
 					Map<String, Object> attachmentObject = new HashMap<String, Object>();
