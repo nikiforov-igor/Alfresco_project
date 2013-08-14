@@ -1,7 +1,7 @@
 <#assign id = args.htmlid>
 
 <#assign over = false/>
-<#if page.url.args.filterOver??>
+<#if page.url.args.filterOver?? && page.url.args.filterOver == "true">
     <#assign over = true/>
 </#if>
 <script type="text/javascript">//<![CDATA[
