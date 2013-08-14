@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Get current employee roles in errands</shortname>
+	<description>Get current employee roles in errands</description>
+	<url>/lecm/errands/api/getCurrentEmployeeRoles?errandNodeRef={errandNodeRef}</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>

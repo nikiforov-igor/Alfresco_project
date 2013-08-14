@@ -44,6 +44,9 @@ function main() {
 
     model.limitDate = new Date(nodeDetails.item.node.properties["lecm-errands:limitation-date"]["value"]);
 
+	uri = addParamToUrl('/lecm/errands/api/getCurrentEmployeeRoles', 'errandNodeRef', model.nodeRef);
+	model.roles = doGetCall(uri);
+
 	model.hasViewContentListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
 	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD);
