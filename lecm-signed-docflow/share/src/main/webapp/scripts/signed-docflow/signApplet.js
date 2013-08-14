@@ -638,7 +638,6 @@ var cryptoAppletModule = (function () {
 				console.log(ex);
 				return;
 			}
-			var signature = signApplet.getService().getCertFromFileUI();
 			var signDate = Alfresco.util.toISO8601(new Date());
 			var contentURI = new Alfresco.util.NodeRef(nodeRef).uri;
 			var Result = signApplet.check(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL", signature);

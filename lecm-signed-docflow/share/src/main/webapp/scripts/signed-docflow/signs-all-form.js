@@ -173,7 +173,7 @@
 		},
 
 		refreshSigns: function() {
-			cryptoAppletModule.CheckContentSignature(this.options.signedContentRef);
+			cryptoAppletModule.CheckDocumentSignatures(this.options.signedContentRef);
 		},
 
 		getSignsInfo: function() {
