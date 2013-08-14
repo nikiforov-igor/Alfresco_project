@@ -1,9 +1,13 @@
 <#assign id = args.htmlid>
-
+<#assign over = false/>
+<#if page.url.args.filterOver??>
+    <#assign over = true/>
+</#if>
 <script type="text/javascript">//<![CDATA[
 var authorFilter = new LogicECM.module.Documents.AuthorFilter("${id}").setOptions(
         {
             docType: ("${type}" != "") ? "${type}" : "lecm-base:document",
+            filterOver: "${over?string}",
             gridBubblingLabel: "${args.bubblingLabel!"documents"}"
         }).setMessages(${messages});
 //]]></script>

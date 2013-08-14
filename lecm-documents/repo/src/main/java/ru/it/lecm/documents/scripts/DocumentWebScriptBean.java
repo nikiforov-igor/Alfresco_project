@@ -213,37 +213,17 @@ public class DocumentWebScriptBean extends BaseWebScript {
      * Получить количество документов
      * @return количество
      */
-    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, String queryFilterId, boolean fromArchive) {
+    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, String filterStr) {
         List<String> docTypes = getElements(Context.getCurrentContext().getElements(types));
         List<QName> qNameTypes = new ArrayList<QName>();
-        String currentUser = authService.getCurrentUserName();
         String queryFilter = "";
+
+        if (filterStr != null && !filterStr.isEmpty()) {
+            queryFilter = getFilterQuery(filterStr);
+        }
 
         for (String docType : docTypes) {
             qNameTypes.add(QName.createQName(docType, namespaceService));
-
-            if (queryFilterId != null && !queryFilterId.isEmpty()) {
-                DocumentFilter docFilter = FiltersManager.getFilterById(queryFilterId);
-                if (docFilter != null) {
-                    //пробуем получить сохраненные параметры
-                    String filterId = (!fromArchive ? DocumentService.PREF_DOCUMENTS : DocumentService.PREF_ARCHIVE_DOCUMENTS) + "." + docType.replaceAll(":", "_") + "." + queryFilterId;
-                    Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, filterId);
-                    if (preferences != null && preferences.get(filterId) != null) {
-                        String filterData = preferences.get(filterId).toString();
-                        if (filterData != null) {
-                            queryFilter = docFilter.getQuery((Object[]) filterData.split("/"));
-                        }
-                    } else {
-                        // сохраненных параметров нет - пытаемся вытащить их из настройки самого фильтра
-                        String filterParams = docFilter.getParamStr();
-                        if (filterParams != null && !filterParams.isEmpty()) {
-                            queryFilter = docFilter.getQuery((Object[]) filterParams.split("/"));
-                        } else {
-                            queryFilter = docFilter.getQuery(new Object[0]); // вызов фильтра без параметров
-                        }
-                    }
-                }
-            }
         }
         return documentService.getDocumentsByFilter(qNameTypes,
                 getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), queryFilter, null).size();

@@ -14,7 +14,8 @@
             PREF_FILTER_ID: "docAuthor",
             options: {
                 docType: "lecm-document:base",
-                gridBubblingLabel: "documents"
+                gridBubblingLabel: "documents",
+                filterOver: false
             },
 
             onReady: function () {
@@ -32,28 +33,27 @@
 
                 this.widgets.applyButton = Alfresco.util.createYUIButton(this, "applyButton", this.onApplyButtonClick);
 
+                if (!this.options.filterOver || this.options.filterOver == "false") {
                 this.manager.preferences.request(this.manager._buildPreferencesKey(),
                     {
                         successCallback: {
                             fn: function (p_oResponse) {
                                 var authorPreference = Alfresco.util.findValueByDotNotation(p_oResponse.json, this.manager._buildPreferencesKey(this.PREF_FILTER_ID), this.options.docType +"/all");
                                 if (authorPreference !== null) {
-                                    this.widgets.author.value = authorPreference;
-                                    var menuItems = this.widgets.author.getMenu().getItems();
-                                    var authorTypeKey = authorPreference.replace(this.options.docType + "/", "");
-                                    for (index in menuItems) {
-                                        if (menuItems.hasOwnProperty(index)) {
-                                            if (menuItems[index].value === authorTypeKey) {
-                                                this.widgets.author.set("label", menuItems[index].cfg.getProperty("text"));
-                                                break;
-                                            }
-                                        }
-                                    }
+                                    this._updateWidgets(authorPreference);
                                 }
                             },
                             scope: this
                         }
                     });
+                } else {
+                    var filter = location.hash;
+                    if (filter && filter != ""){
+                        var re = /#(\w+)=(\w+)\|/;
+                        filter = filter.replace(re, "");
+                        this._updateWidgets(filter);
+                    }
+                }
             },
 
             onAuthorFilterChanged: function (p_sType, p_aArgs) {
@@ -96,6 +96,20 @@
 
             _hideSplash: function () {
                 YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
+            },
+
+            _updateWidgets: function (authorPreference) {
+                this.widgets.author.value = authorPreference;
+                var menuItems = this.widgets.author.getMenu().getItems();
+                var authorTypeKey = authorPreference.replace(this.options.docType + "/", "");
+                for (index in menuItems) {
+                    if (menuItems.hasOwnProperty(index)) {
+                        if (menuItems[index].value === authorTypeKey) {
+                            this.widgets.author.set("label", menuItems[index].cfg.getProperty("text"));
+                            break;
+                        }
+                    }
+                }
             }
         });
 })();

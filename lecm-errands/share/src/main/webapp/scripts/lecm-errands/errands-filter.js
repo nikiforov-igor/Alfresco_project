@@ -65,7 +65,7 @@
                     var filter = location.hash;
                     if (filter && filter != ""){
                         var re = /#(\w+)=(\w+)\|/;
-                        filter.replace(re, "")
+                        filter = filter.replace(re, "");
                         this._updateWidgets(filter);
                     }
                 }

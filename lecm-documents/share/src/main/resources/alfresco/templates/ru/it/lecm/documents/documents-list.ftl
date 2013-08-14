@@ -45,7 +45,7 @@
                 return currObj;
             }
             return value;
-        };
+        }
 
         <#if filter == "" && preferences??>
             var PREFERENCE_DOCUMENTS_STATUSES = "ru.it.lecm.documents." + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + ".documents-list-statuses-filter";
@@ -58,12 +58,18 @@
         // инициализуруем менеджер предустановок фильтров для списка документов
         var documentFilters = new LogicECM.module.Documents.FiltersManager();
         <#if docType?? && docType != "" >
-                documentFilters.setOptions({
-                    docType: ("${docType}" != "") ? "${docType}" : "lecm-base:document",
-                    isDocListPage: ${isDocListPage?string},
-                    archiveDocs: false
-                });
+            documentFilters.setOptions({
+                docType: "${docType}"
+            });
+        <#else>
+            documentFilters.setOptions({
+                docType: "lecm-base:document"
+            });
         </#if>
+        documentFilters.setOptions({
+            isDocListPage: ${isDocListPage?string},
+            archiveDocs: false
+        });
         LogicECM.module.Documents.filtersManager = documentFilters;
 
         <#if queryFilterId?? && queryFilterId != "" && preferences??>

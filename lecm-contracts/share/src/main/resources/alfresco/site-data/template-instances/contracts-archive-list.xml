@@ -15,19 +15,6 @@
                 <filteredLabel>page.contracts.filter</filteredLabel>
             </properties>
         </component>
-        <!-- Toolbar -->
-        <!--<component>
-            <region-id>toolbar</region-id>
-            <url>/lecm/documents/documents-list-toolbar</url>
-            <properties>
-                <itemType>lecm-contract:document</itemType>
-                <showCreateBtn>true</showCreateBtn>
-                <bubblingLabel>contracts</bubblingLabel>
-                <showExSearchBtn>true</showExSearchBtn>
-                <newRowLabel>label.create-lecm-contract_document</newRowLabel>
-                <newRowDialogTitle>label.create-lecm-contract_document</newRowDialogTitle>
-            </properties>
-        </component>-->
         <!-- Menu -->
         <component>
             <region-id>menu</region-id>
@@ -58,7 +45,6 @@
                 <itemType>lecm-contract:document</itemType>
                 <linkPage>contracts-archive-list</linkPage>
                 <bubblingLabel>contracts</bubblingLabel>
-                <queryFilter>docAuthor</queryFilter>
             </properties>
         </component>
         <!-- Filter -->

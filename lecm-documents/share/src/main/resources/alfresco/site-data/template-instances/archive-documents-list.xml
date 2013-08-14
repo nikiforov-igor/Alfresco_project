@@ -45,7 +45,6 @@
             <properties>
                 <itemType>{doctype}</itemType>
                 <linkPage>archive-documents-list</linkPage>
-                <queryFilter>docAuthor</queryFilter>
             </properties>
         </component>
         <!-- Filter -->

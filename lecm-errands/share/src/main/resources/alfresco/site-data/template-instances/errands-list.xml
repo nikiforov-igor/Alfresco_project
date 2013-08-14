@@ -55,7 +55,6 @@
             <properties>
                 <itemType>lecm-errands:document</itemType>
                 <linkPage>errands-list</linkPage>
-                <queryFilter>errandsFilter</queryFilter>
             </properties>
         </component>
         <!-- Filters -->

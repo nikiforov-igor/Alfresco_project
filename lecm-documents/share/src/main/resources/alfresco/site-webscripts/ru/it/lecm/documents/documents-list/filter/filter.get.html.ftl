@@ -24,38 +24,9 @@
     <#assign formId = page.url.args.formId/>
 </#if>
 
-<#assign filterOver = false/>
-<#if page.url.args.filterOver??>
-    <#assign filterOver = true/>
-</#if>
-
 <div id="documents-filter" class="documents-filter-panel">
     <div class="documents-filter-block">
         <div id="filter-groups-set" class="filterBlock">
-        <#if statusesGroups??>
-            <#list statusesGroups as group>
-                <div class="text-cropped <#if formId?? && formId == group.name>selected</#if>">
-                    <#if isDocListPage>
-                        <a href="#"
-                           class="status-button" title="<#if group.value == "*">Все<#else>${group.value}</#if>" onclick="LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=${group.value}&formId=${group.name}', true); return false;">${group.name}</a>
-                    <#else>
-                        <a href="#"
-                           class="status-button" title="<#if group.value == "*">Все<#else>${group.value}</#if>" onclick="LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=${group.value}&formId=${group.name}', true); return false;">${group.name}</a>
-                    </#if>
-                    <span class="total-tasks-count-right">${group.count}</span><br/>
-                </div>
-            </#list>
-        <#--<#else>-->
-            <#--<div class="text-cropped">-->
-                <#--<#if isDocListPage>-->
-                    <#--<a href="${url.context}/page/${pageLink}?doctype=${page.url.args.doctype}&query=*&formId=Все" class="status-button"-->
-                       <#--title="Все"</#if>">Все</a>-->
-                <#--<#else>-->
-                    <#--<a href="${url.context}/page/${pageLink}?query=*&formId=Все" class="status-button" title="Все">Все</a>-->
-                <#--</#if>-->
-                <#--<span class="total-tasks-count-right">-</span><br/>-->
-            <#--</div>-->
-        </#if>
         </div>
         <hr/>
     </div>
@@ -63,33 +34,120 @@
         <h2 id="${id}-heading" class="thin">${msg("label.byStatus")}</h2>
         <div>
             <div id="filter-statuses-set" class="filterBlock">
-            <#if statusesList??>
-                <#assign count = 0/>
-                <#list statusesList as status>
-                    <div class="text-cropped <#if formId?? && formId == status>selected</#if>">
-
-                        <#if isDocListPage>
-                            <a href="#"
-                               class="status-button text-broken" onclick="LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=${status}&formId=${status}', true); return false;">${status}</a>
-                        <#else>
-                            <a href="#"
-                               class="status-button text-broken" onclick="LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=${status}&formId=${status}', true); return false;">${status}</a>
-                        </#if>
-                    </div>
-                    <#assign count = count +1 />
-                </#list>
-            </#if>
             </div>
         </div>
     </div>
 
     <script type="text/javascript">//<![CDATA[
     (function () {
+
+        function createRow(group) {
+            var div = document.createElement('div');
+            div.setAttribute('class', 'text-cropped');
+
+            if ("${formId!""}" == group.key || "${formId!""}" == group.id) {
+                Dom.addClass(div, "selected");
+            }
+            return div;
+        }
+
+        function getFilters(){
+            Alfresco.util.Ajax.request(
+                    {
+                        url:Alfresco.constants.PROXY_URI_RELATIVE  + "lecm/documents/summary",
+                        dataObj:{
+                            docType:"${args.itemType}",
+                            archive: false,
+                            considerFilter: location.hash.replace(/#(\w+)=/, "")
+                        },
+                        successCallback:{
+                            fn:function(response){
+                                var filtersGroups = response.json;
+                                if (filtersGroups){
+                                    var filters = filtersGroups.list;
+                                    var container = Dom.get('filter-groups-set');
+                                    container.innerHTML = '';
+                                    if (filters.length > 0) {
+                                        for (var i = 0; i < filters.length; i++) {
+                                            var filter = filters[i];
+
+                                            var div = createRow(filter);
+
+                                            var ref = document.createElement('a');
+                                            ref.hfef="#";
+                                            ref.title = filter.filter == "*" ? "Все" : filter.filter;
+                                            ref.innerHTML = filter.key;
+                                            ref.setAttribute('class', 'status-button');
+                                            YAHOO.util.Event.on(ref, 'click', function(ev) {
+                                                LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=' + String(this.filter) + '&formId=' + this.key, true);
+                                            }.bind(filter));
+
+                                            div.appendChild(ref);
+                                            var count = document.createElement('span');
+                                            count.innerHTML = filter.amount;
+                                            count.setAttribute('class', 'total-tasks-count-right');
+                                            div.appendChild(count);
+
+                                            container.appendChild(div);
+                                        }
+                                        container.appendChild(document.createElement('br'));
+                                    }
+                                }
+
+                            }
+                        },
+                        failureMessage:"message.failure",
+                        execScripts:true
+                    });
+        }
+
+        function getStatuses(){
+            Alfresco.util.Ajax.request(
+                    {
+                        url:Alfresco.constants.PROXY_URI_RELATIVE + "lecm/statemachine/getStatuses",
+                        dataObj:{
+                            docType:"${args.itemType}",
+                            active: true,
+                            final: false
+                        },
+                        successCallback:{
+                            fn:function(response){
+                                var statuses = response.json;
+                                var container = Dom.get('filter-statuses-set');
+                                container.innerHTML = '';
+                                if (statuses.length > 0) {
+                                    for (var i = 0; i < statuses.length; i++) {
+                                        var status = statuses[i];
+
+                                        var div = createRow(status);
+
+                                        var ref = document.createElement('a');
+                                        ref.hfef="#";
+                                        ref.innerHTML = status.id;
+                                        ref.setAttribute('class', 'status-button text-broken');
+                                        YAHOO.util.Event.on(ref, 'click', function(ev) {
+                                            LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=' + this.id + '&formId=' + this.id, true);
+                                        }.bind(status));
+
+                                        div.appendChild(ref);
+                                        container.appendChild(div);
+                                    }
+                                }
+                            }
+                        },
+                        failureMessage:"message.failure",
+                        execScripts:true
+                    });
+        }
+
         function init() {
             Alfresco.util.createTwister("${id}-heading", "documentsStatuses");
             setTimeout(function () {
                 LogicECM.module.Base.Util.setHeight();
             }, 10);
+
+            getFilters();
+            getStatuses();
         }
 
         YAHOO.util.Event.onDOMReady(init);

@@ -30,7 +30,7 @@ var list = [];
 var members = [];
 
 for (var key in map) {
-    var amountDocs = documentScript.getAmountDocuments(types, paths, map[key].split(","), considerFilter, archive);
+    var amountDocs = documentScript.getAmountDocuments(types, paths, map[key].split(","), considerFilter);
     list.push({
         key: key,
         skip: skippedStatuses != null && skippedStatuses.indexOf(key) >= 0,
@@ -39,7 +39,7 @@ for (var key in map) {
     });
 }
 if (list.length == 0) { //ддобавляем пункт Все, если у нас не заданы фильтры
-    var amountDocs = documentScript.getAmountDocuments(types, paths, ["*"], considerFilter, archive);
+    var amountDocs = documentScript.getAmountDocuments(types, paths, ["*"], considerFilter);
     list.push({
         key: "Все",
         skip: false,

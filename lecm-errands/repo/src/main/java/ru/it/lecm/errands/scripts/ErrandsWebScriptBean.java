@@ -140,7 +140,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
         Map<String, String> filters = DocumentStatusesFilterBean.getFilterForType(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService));
 
-        List<String> paths = Arrays.asList(documentService.getDraftPathByType(ErrandsService.TYPE_ERRANDS), documentService.getDocumentsFolderPath());
+        List<String> paths = Arrays.asList(documentService.getDraftPath(), documentService.getDocumentsFolderPath());
 
         List<String> statuses = new ArrayList<String>();
 
@@ -270,7 +270,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
         DocumentFilter docFilter = FiltersManager.getFilterById(filterType);
         if (docFilter != null) {
-            builder.append("&filterOver=").append(docFilter.getId());
+            builder.append("&filterOver=true");
             builder.append("#filter=")
                     .append(docFilter.getId())
                     .append("|")
