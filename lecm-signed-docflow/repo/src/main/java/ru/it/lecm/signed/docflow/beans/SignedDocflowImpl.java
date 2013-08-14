@@ -1,6 +1,7 @@
 package ru.it.lecm.signed.docflow.beans;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.alfresco.model.ContentModel;
@@ -17,6 +18,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.VersionHistory;
 import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.GUID;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.PropertyCheck;
@@ -28,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
-import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signed.docflow.api.Signature;
 import ru.it.lecm.signed.docflow.SignedDocflowEventCategory;
@@ -404,7 +405,9 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		String contentName = (String) nodeService.getProperty(contentRef, ContentModel.PROP_NAME);
 		VersionHistory history = versionService.getVersionHistory(contentRef);
 		String version = (history != null) ? history.getHeadVersion().getVersionLabel() : "1.0";
-		return String.format("Подпись %s для контента %s версии %s", serialNumber, contentName, version);
+		String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+		String signatureName = String.format("Подпись %s для контента %s версии %s от %s", serialNumber, contentName, version, date);
+		return FileNameValidator.getValidFileName(signatureName);
 	}
 
 	private NodeRef getDocumentRef(final NodeRef contentRef) {
@@ -440,7 +443,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 			businessJournalService.log(authService.getCurrentUserName(), contentRef, SignedDocflowEventCategory.SIGNATURE, messageTemplate, objects);
 		}
 	}
-	
+
 	@Override
 	public List<NodeRef> getSignaturesByContent(NodeRef contentRef) {
 		return findNodesByAssociationRef(contentRef, SignedDocflowModel.ASSOC_SIGN_TO_CONTENT, SignedDocflowModel.TYPE_SIGN, BaseBean.ASSOCIATION_TYPE.SOURCE);
@@ -489,7 +492,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 				if(!updateSignature(signRef, signingDate, Boolean.parseBoolean(isValid))){
 					result.put("result", "failure");
 				}
-				
+
 			} catch (JSONException ex) {
 				logger.error("Error parsing json", ex);
 				result.put("ERROR", "Somethig goes bad");
@@ -498,5 +501,5 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		return result;
 	}
 
-	
+
 }
