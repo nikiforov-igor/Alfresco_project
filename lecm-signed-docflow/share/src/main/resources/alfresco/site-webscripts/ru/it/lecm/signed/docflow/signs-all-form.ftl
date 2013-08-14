@@ -18,7 +18,7 @@
 
 	<!-- ko ifnot: $root.singsIsEmpty() -->
 	<div style="display: none;" data-bind="visible: $root.singsIsNotEmpty(), foreach: signs">
-		<h1 class="signs-category-header" data-bind="text: categoryName"></h1>
+		<h1 class="signs-category-header" data-bind="text: categoryName, visible: $root.categoryIsNotEmpty($context)"></h1>
 		<div data-bind="foreach: signedContent">
 			<p class="signs-file-header" data-bind="text: fileName"></p>
 
