@@ -2,6 +2,7 @@ package ru.it.lecm.base.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -42,19 +43,26 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 	 * @return Заголовок элемента
 	 */
 	@Override
-	public String formatNodeTitle(NodeRef node, String formatString, String dateFormat, Integer timeZoneOffset) {
-		if (node == null) {
-			return "";
-		}
-		if (dateFormat == null) {
-			dateFormat = this.dateFormat;
-		}
-		String result = formatString;
-		List<String> nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
-		for (String param : nameParams) {
-			result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param, dateFormat, timeZoneOffset).toString());
-		}
-		return result;
+	public String formatNodeTitle(final NodeRef node, final String formatString, final String dateFormat, final Integer timeZoneOffset) {
+        final AuthenticationUtil.RunAsWork<String> substitudeString = new AuthenticationUtil.RunAsWork<String>() {
+            @Override
+            public String doWork() throws Exception {
+                if (node == null) {
+                    return "";
+                }
+                String dFormat = dateFormat;
+                if (dFormat == null) {
+                    dFormat = getDateFormat();
+                }
+                String result = formatString;
+                List<String> nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
+                for (String param : nameParams) {
+                    result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param, dFormat, timeZoneOffset).toString());
+                }
+                return result;
+            }
+        };
+        return AuthenticationUtil.runAsSystem(substitudeString);
 	}
 
 	@Override
@@ -380,6 +388,9 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         this.dateFormat = !dateFormat.equals("${lecm.base.date.format}") ? dateFormat : this.dateFormat;
     }
 
+    public String getDateFormat(){
+        return dateFormat;
+    }
     /**
      * Метод, возвращающий ссылку на объект справочника "Тип объекта" для заданного объекта
      *
