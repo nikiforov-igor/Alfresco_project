@@ -130,7 +130,7 @@
 			},
 
 			categoryIsNotEmpty: function($context) {
-				var i0 = $context.index();
+				var i0 = $context.$index();
 
 				return this.signs()[i0].length > 0;
 			},

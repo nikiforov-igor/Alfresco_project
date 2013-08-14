@@ -4,17 +4,14 @@
  */
 package ru.it.lecm.signed.docflow.webscripts;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.Cache;
@@ -53,44 +50,21 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 		this.documentAttachmentsService = documentAttachmentsService;
 	}
 	private final static Logger logger = LoggerFactory.getLogger(GetDocumentSignsInfoWebscript.class);
-	
-	@Override
-	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
-		JSONArray JSONres = new JSONArray();
-		boolean isDocument;
-		Map<String, Object> result = new HashMap<String, Object>();
-		List<NodeRef> categories = new ArrayList<NodeRef>();
-		String nodeRef = req.getParameter("nodeRef");
-		final NodeRef docNodeRef = new NodeRef(nodeRef);
-		if (nodeRef == null) {
-			logger.error("GetDocumentSignsInfoWebscript was called with empty parameter");
-			throw new WebScriptException("GetDocumentSignsInfoWebscript was called with empty parameter");
-		}
-		if(dictionaryService.isSubClass(nodeService.getType(docNodeRef), DocumentService.TYPE_BASE_DOCUMENT)){
-			categories = documentAttachmentsService.getCategories(docNodeRef);
-			isDocument = true;
-		} else {
-			categories.add(documentAttachmentsService.getCategoryByAttachment(docNodeRef));
-			isDocument = false;
-		}
+
+	private JSONArray getDocumentSignsInfo(final NodeRef documentRef) {
+		JSONArray result = new JSONArray();
+		List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
 		for (NodeRef categoryRef : categories) {
-			Map<String, Object> jsonResponse = new HashMap<String, Object>();
-			Map<String, Object> resultObject = new HashMap<String, Object>();
 			JSONArray contentArray = new JSONArray();
 			String categoryName = (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);
-			List<NodeRef> attachments = new ArrayList<NodeRef>();
-			if(isDocument){
-				attachments = documentAttachmentsService.getAttachmentsByCategory(docNodeRef, categoryName);
-			} else {
-				attachments.add(docNodeRef);
-			}
+			List<NodeRef> attachments = documentAttachmentsService.getAttachmentsByCategory(documentRef, categoryName);
 			for (NodeRef attachRef : attachments) {
 				if (signedDocflowService.isSignable(attachRef)) {
 					Map<String, Object> attachmentObject = new HashMap<String, Object>();
-					
+
 					JSONArray signsInfoJSON = new JSONArray();
 					List<Signature> signs = signedDocflowService.getSignatures(attachRef);
-					
+
 					for (Signature sign : signs) {
 						Map<String, Object> signInfo = new HashMap<String, Object>();
 						signInfo.put("isOur", sign.getOur());
@@ -111,14 +85,74 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 				}
 			}
 			if(contentArray.length() != 0){
-				jsonResponse.put("categoryName", categoryName);
-				jsonResponse.put("signedContent", contentArray);
-				JSONres.put(jsonResponse);
+				Map<String, Object> categoryJSON = new HashMap<String, Object>();
+				categoryJSON.put("categoryName", categoryName);
+				categoryJSON.put("signedContent", contentArray);
+				result.put(categoryJSON);
 			}
 		}
+		return result;
+	}
+
+	private JSONArray getContentSignsInfo(final NodeRef contentRef) {
+
+		JSONArray signsInfoJSON = new JSONArray();
+		List<Signature> signs = signedDocflowService.getSignatures(contentRef);
+		for (Signature sign : signs) {
+			Map<String, Object> signInfo = new HashMap<String, Object>();
+			signInfo.put("isOur", sign.getOur());
+			signInfo.put("organization", sign.getOwnerOrganization());
+			signInfo.put("position", sign.getOwnerPosition());
+			signInfo.put("FIO", sign.getOwner());
+			signInfo.put("signDate", sign.getSigningDateString());
+			signInfo.put("isValid", sign.getValid());
+			signInfo.put("lastValidate", sign.getUpdateDateString());
+			signInfo.put("nodeRef", sign.getNodeRef());
+			signInfo.put("signature", sign.getSignatureContent());
+			signsInfoJSON.put(signInfo);
+		}
+		Map<String, Object> contentObject = new HashMap<String, Object>();
+		contentObject.put("fileName", (String) nodeService.getProperty(contentRef, ContentModel.PROP_NAME));
+		contentObject.put("nodeRef", contentRef.toString());
+		contentObject.put("signsInfo", signsInfoJSON);
+
+		JSONArray contentArray = new JSONArray();
+		contentArray.put(contentObject);
+
+		Map<String, Object> categoryJSON = new HashMap<String, Object>();
+		NodeRef categoryRef = documentAttachmentsService.getCategoryByAttachment(contentRef);
+		String categoryName;
+		if (categoryRef != null) {
+			categoryName = (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);
+		} else {
+			categoryName = "";
+		}
+		categoryJSON.put("categoryName", categoryName);
+		categoryJSON.put("signedContent", contentArray);
+
+		JSONArray result = new JSONArray();
+		result.put(categoryJSON);
+
+		return result;
+	}
+
+	@Override
+	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
+		String nodeRef = req.getParameter("nodeRef");
+		final NodeRef docNodeRef = new NodeRef(nodeRef);
+		if (nodeRef == null) {
+			logger.error("GetDocumentSignsInfoWebscript was called with empty parameter");
+			throw new WebScriptException("GetDocumentSignsInfoWebscript was called with empty parameter");
+		}
+
+		JSONArray JSONres;
+		if(dictionaryService.isSubClass(nodeService.getType(docNodeRef), DocumentService.TYPE_BASE_DOCUMENT)){
+			JSONres = getDocumentSignsInfo(docNodeRef);
+		} else {
+			JSONres = getContentSignsInfo(docNodeRef);
+		}
+		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", JSONres);
 		return result;
 	}
-	
-	
 }
