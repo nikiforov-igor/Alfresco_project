@@ -88,6 +88,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 
             errandsList: null,
             skipCount: 0,
+            dataTable: null,
 
             /**
              * Fired by YUI when parent element is available for scripting
@@ -100,6 +101,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 this.populateErrandsList();
                 YAHOO.util.Event.addListener(this.id + "-paginator", "scroll", this.onContainerScroll, this);
             },
+
             onContainerScroll: function (event, scope) {
                 var container = event.currentTarget;
                 if (container.scrollTop + container.clientHeight == container.scrollHeight) {
@@ -107,6 +109,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                     scope.populateErrandsList();
                 }
             },
+
             /**
              * Populate the activity list via Ajax request
              * @method populateContractsList
@@ -123,7 +126,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         },
                         successCallback:
                         {
-                            fn: this.onListLoaded,
+                            fn: this.showDataTable,
                             scope: this
                         },
                         failureCallback:
@@ -135,6 +138,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         execScripts: true
                     });
             },
+
             createRow: function(innerHtml) {
                 var div = document.createElement('div');
 
@@ -144,33 +148,55 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 }
                 return div;
             },
-            onListLoaded: function Contracts_onListLoaded(p_response, p_obj)
+
+            showDataTable: function showDataTableDashlet(response, obj){
+
+                if (response.json.data.length > 0) {
+                    this.skipCount = this.skipCount + response.json.paging.totalItems;
+                }
+
+                if (this.dataTable == null) {
+                    var columnDefs = [
+                        { key: "isImportant", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), width: "auto", className: "column" },
+                        { key: "baseDocString", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), width: "auto", className: "column" },
+                        { key: "linkString", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), className: "column"}
+                    ];
+                    var initialSource = new YAHOO.util.DataSource(response.json.data);
+                    initialSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+                    initialSource.responseSchema = {isImportant: "isImportant", baseDocString: "baseDocString", linkString: "linkString"};
+
+                    this.dataTable = new YAHOO.widget.DataTable(this.id + "-errands", columnDefs, initialSource, {});
+                    this.dataTable.getTheadEl().hidden=true;
+
+                } else {
+                    this.dataTable.addRows(response.json.data);
+                }
+            },
+
+            /**
+             * Priority & pooled icons custom datacell formatter
+             */
+            renderCellIcons: function (elCell, oRecord, oColumn, oData)
             {
-                this.options.activeFilter = p_obj;
-                if (p_response.json.data.length > 0) {
-                    this.skipCount = this.skipCount + p_response.json.paging.totalItems;
-                    var results = p_response.json.data;
-                    for (var i = 0; i < results.length; i++) { // [].forEach() не работает в IE
-                        var item = results[i];
-                        var div = this.createRow();
-                        var detail = document.createElement('span');
-                        if (item.isImportant == "true") {
-                            detail.innerHTML = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png' + '" width="16" alt="' + this.msg("label.important") + '" title="' + this.msg("label.important") + '" />';
-                        }
-                        if (item.baseDocString != undefined) {
-                            detail.innerHTML += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/base_doc_16.png' + '" width="16" alt="' + item.baseDocString + '" title="' + item.baseDocString + '" />';
-                        }
-                        var str = "<a href='" + window.location.protocol + "//" + window.location.host +
-                            Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef="+ item.nodeRef + "'>"+
-                            item.record + "</a> ";
-                        detail.innerHTML += item.record.replace(item.record, str);
-                        if (item.isExpired == "true") {
-                            detail.innerHTML += "<div class='expired'>" + this.msg("label.is-expired") + "</div>" ;
-                        }
-                        div.appendChild(detail);
-                        this.errandsList.appendChild(div);
+                var data = oRecord.getData(),
+                    desc = "";
+
+                if (oColumn.key =="isImportant" && data.isImportant == "true") {
+                    desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png' + '" width="16" alt="' + this.msg("label.important") + '" title="' + this.msg("label.important") + '" />';
+                }
+
+                if (oColumn.key =="baseDocString" && data.baseDocString != undefined) {
+                    desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/base_doc_16.png' + '" width="16" alt="' + data.baseDocString + '" title="' + data.baseDocString + '" />';
+                }
+
+                if (oColumn.key =="linkString") {
+                    desc = "<a href='" + window.location.protocol + "//" + window.location.host +Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef="+ data.nodeRef + "'>"+data.record + "</a> ";
+                    if (data.isExpired == "true") {
+                        desc  += "<div class='expired'>" + this.msg("label.is-expired") + "</div>";
                     }
                 }
+
+                elCell.innerHTML = desc;
             },
 
             /**

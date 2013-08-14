@@ -45,4 +45,5 @@
 
 .expired {
     color: #cd853f;
+    display: inline;
 }
