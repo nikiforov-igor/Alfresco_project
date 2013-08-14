@@ -15,6 +15,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
  * @class LogicECM.DocumentMembers
  */
 (function() {
+
+	Alfresco.util.PopupManager.zIndex = 1000;
+
 	/**
 	 * YUI Library aliases
 	 */
@@ -59,7 +62,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					mode: "create",
 					submitType: "json",
 					showCancelButton: "true",
-					formId: "signs-info-short",
+					formId: "signs-info-all",
 					signedContentRef: this.options.nodeRef
 				},
 				destroyOnHide: true,

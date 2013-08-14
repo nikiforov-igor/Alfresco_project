@@ -19,7 +19,6 @@
 	<!-- ko ifnot: $root.singsIsEmpty() -->
 	<div style="display: none;" data-bind="visible: $root.singsIsNotEmpty(), foreach: signs">
 		<h1 class="signs-category-header" data-bind="text: categoryName"></h1>
-
 		<div data-bind="foreach: signedContent">
 			<p class="signs-file-header" data-bind="text: fileName"></p>
 
@@ -53,7 +52,6 @@
 			</table>
 			<!-- /ko -->
 		</div>
-
 	</div>
 	<!-- /ko -->
 </div>
@@ -62,5 +60,8 @@
 <@formLib.renderFormsRuntime formId = formId />
 
 <script type="text/javascript">
-	new LogicECM.module.SignsAllForm("${htmlId}", "${controlId}").setOptions({ "signedContentRef": "${signedContentRef}" });
+	new LogicECM.module.SignsAllForm("${htmlId}", "${controlId}").setOptions({
+		"signedContentRef": "${signedContentRef}",
+		"refreshBeforeShow": false
+	});
 </script>

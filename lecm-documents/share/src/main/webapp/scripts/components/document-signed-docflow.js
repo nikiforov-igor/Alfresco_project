@@ -15,6 +15,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
  * @class LogicECM.DocumentMembers
  */
 (function () {
+
+	Alfresco.util.PopupManager.zIndex = 1000;
+
 	/**
 	 * YUI Library aliases
 	 */
@@ -66,7 +69,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-all-form");
 
 			form.setOptions({
-				width: "55em",
+				width: "50em",
 				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 				templateRequestParams: {
 					itemKind: "type",

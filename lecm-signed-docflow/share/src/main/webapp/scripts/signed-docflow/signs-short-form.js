@@ -15,7 +15,8 @@
 		};
 
 		this.options = {
-			signedContentRef: null
+			signedContentRef: null,
+			refreshBeforeShow: false
 		};
 
 		return this;
@@ -56,16 +57,14 @@
 
 		_initRefreshButton: function() {
 			var divRefreshButton = new YAHOO.util.Element(this.elements.divRefreshButton);
-			divRefreshButton.on("click", this.refreshSigns, null, this);
+			divRefreshButton.on("click", function() {
+				this.refreshSigns();
+				this.getSignsInfo();
+			}, null, this);
 		},
 
 		refreshSigns: function() {
-			this.elements.divSignsContractor.innerHTML = "";
-			this.elements.divSignsOur.innerHTML = "";
-
 			cryptoAppletModule.CheckContentSignature(this.options.signedContentRef);
-
-			this.getSignsInfo();
 		},
 
 		getSignsInfo: function() {
@@ -97,6 +96,9 @@
 				} else {
 					this.elements.divSignsHeader.innerHTML = YAHOO.lang.substitute("Документ {signedContentName} подписали:", signsInfo);
 				}
+
+				this.elements.divSignsContractor.innerHTML = "";
+				this.elements.divSignsOur.innerHTML = "";
 				/* jshint validthis:false */
 
 				/* jshint boss:true */
@@ -150,6 +152,10 @@
 			this._generateIds();
 			this._findElements();
 			this._initRefreshButton();
+
+			if(this.options.refreshBeforeShow) {
+				this.refreshSigns();
+			}
 
 			this.getSignsInfo();
 		}
