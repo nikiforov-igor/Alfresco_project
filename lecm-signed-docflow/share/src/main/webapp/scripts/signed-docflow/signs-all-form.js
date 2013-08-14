@@ -132,7 +132,7 @@
 			categoryIsNotEmpty: function($context) {
 				var i0 = $context.$index();
 
-				return this.signs()[i0].length > 0;
+				return this.signs()[i0].categoryName.length > 0;
 			},
 
 			isOur: function(object) {
