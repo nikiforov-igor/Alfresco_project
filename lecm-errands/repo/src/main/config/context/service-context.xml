@@ -128,7 +128,7 @@
             <map>
                 <entry key="lecm-errands:document">
                     <list>
-                        <value>ERRANDS_READER</value>
+                        <!-- Согласно 1433 - страница доступна всем пользователям-->
                     </list>
                 </entry>
             </map>
