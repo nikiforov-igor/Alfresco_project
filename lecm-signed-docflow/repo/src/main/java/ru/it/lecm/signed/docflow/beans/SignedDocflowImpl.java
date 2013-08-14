@@ -382,7 +382,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		Map<String, Object> result = sign(signatureProperties);
 		final NodeRef contentRef = (NodeRef) result.remove("contentRef");
 		final NodeRef signatureNode = (NodeRef) result.remove("signatureNode");
-		addBusinessJournalRecord(contentRef, signatureNode, false);
+		if(signatureNode != null) addBusinessJournalRecord(contentRef, signatureNode, false);
 		return result;
 	}
 
@@ -391,7 +391,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		Map<String, Object> result = sign(signatureProperties);
 		final NodeRef contentRef = (NodeRef) result.remove("contentRef");
 		final NodeRef signatureNode = (NodeRef) result.remove("signatureNode");
-		addBusinessJournalRecord(contentRef, signatureNode, true);
+		if(signatureNode != null) addBusinessJournalRecord(contentRef, signatureNode, true);
 		return result;
 	}
 

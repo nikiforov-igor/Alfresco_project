@@ -382,8 +382,13 @@ var cryptoAppletModule = (function () {
 		
 		currentContainer : certContainer,
 		startApplet : function() {
-			loadConfig();
-			signApplet.setConfig(config);
+			try{
+				loadConfig();
+				signApplet.setConfig(config);	
+			} catch(ex) {
+				console.log(ex);
+			}
+			
 		},
 		
 		reConfig : function(config) {
@@ -647,6 +652,7 @@ var cryptoAppletModule = (function () {
 				Alfresco.util.PopupManager.displayMessage({
 							text: 'Подпись недействительна, загрузка не состоялась'
 						});
+				return;
 			}
 			var signObj = {  
 				"sign-to-content-association" : nodeRef, 
@@ -917,30 +923,5 @@ var cryptoAppletModule = (function () {
 		}
 	}
 })();	
-//YAHOO.util.Event.onDOMReady(cryptoAppletModule.deployApplet(false), "The onDOMReady event fired.  The DOM is now safe to modify via script.");
-YAHOO.util.Event.onDOMReady(function() {
-	if(document.getElementById('signApplet')){
-				cryptoAppletModule.startApplet();
-				return;
-			}
-			
-	var app = document.createElement('applet');
-	app.id= 'signApplet';
-	app.archive= '/share/scripts/signed-docflow/ITStampApplet.jar';
-	app.code= 'ru.businesslogic.crypto.userinterface.CryptoApplet.class';
-	app.width = '1';
-	app.height = '1';
-	app.innerHTML = '<param name="signOnLoad" value="false"/>' +
-					'<param name="debug" value="true"/>' +
-					'<param name="providerType" value="CSP_CRYPTOPRO"/>' +
-					'<param name="doAfterLoad" value="false"/>';
-	document.getElementsByTagName('body')[0].appendChild(app);
-	
-	try {
-		cryptoAppletModule.startApplet();
-	} catch(ex) {
-		console.log(ex);
-	}
-	
-});
+
 
