@@ -46,12 +46,8 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
             onReady: function () {
                 this.widgets.linksButton = Alfresco.util.createYUIButton(this, "links-add", this.drawLinksForm,
                     {
-//                        label: addButtonLabel,
                         disabled: false
                     });
-//                this.widgets.uploadButton = Alfresco.util.createYUIButton(this, "upload-button", this.onUploadButtonClick);
-//                this.widgets.newAssigneesListButton = Alfresco.util.createYUIButton( this, "save-assignees-list-button", null,
-//                    { label: "", title: "Создать новый список" }, "${newAssigneesListButtonId}" );
 
                 this.widgets.execLinksButton = Alfresco.util.createYUIButton(this, "exec-links-add", this.drawLinksExecuteForm,
                     {
@@ -59,14 +55,6 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                     });
             },
 
-            _formAddElemet: function(form, tag, nameId, value) {
-                input = document.createElement(tag);
-                input.setAttribute("id", this.id + "-createDetails-form-" + nameId);
-                input.setAttribute("type", "hidden");
-                input.setAttribute("name", nameId);
-                input.setAttribute("value", value);
-                form.appendChild(input);
-            },
             drawLinksForm: function() {
                 this.isExecute = false;
                 this.containerList = Dom.get(this.id + "-links-list");
@@ -79,11 +67,16 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                 this.drawForm();
             },
 
-            drawForm: function (isExecute) {
+            _formAddElemet: function(form, tag, nameId, value) {
+                input = document.createElement(tag);
+                input.setAttribute("id", this.id + "-createDetails-form-" + nameId);
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", nameId);
+                input.setAttribute("value", value);
+                form.appendChild(input);
+            },
 
-                if (isExecute == null || isExecute == undefined){
-                    isExecute = false
-                }
+            drawForm: function () {
                 var doBeforeDialogShow = function(p_form, p_dialog) {
                     Alfresco.util.populateHTML(
                         [ p_dialog.id + "-form-container_h", this.msg("label.connection.add.title") ]
@@ -103,7 +96,6 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         submitType:"json"
                     });
 
-                //				// Using Forms Service, so always create new instance
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
                 createDetails.setOptions(
                     {
@@ -124,9 +116,9 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                                 var results = response.json;
                                 var details = "";
                                 if (results.success) {
-                                    details += "<li title='" + results.nodeRef + "'>";
-                                    details += "<img src="+Alfresco.constants.URL_CONTEXT+"res/components/images/filetypes/generic-file-16.png class='file-icon'/>";
-                                    details += "<a href="+ results.url +">" + results.name + "</a>";
+                                    details += "<li title='" + results.name + "'>";
+                                    details += "<img src=" + Alfresco.constants.URL_CONTEXT + "res/components/images/filetypes/generic-file-16.png class='file-icon'/>";
+                                    details += "<a href=" + results.url + ">" + results.name + "</a>";
                                     details += "</li>";
                                     this.containerList.innerHTML += details;
                                     var count = 0;
