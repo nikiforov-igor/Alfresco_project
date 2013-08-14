@@ -20,7 +20,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                 parentDoc: null
             },
 
-            onAddErrandClick: function Errands_onAddErrandsClick() {
+            onAddErrandClick: function Errands_onAddErrandsClick(args) {
                 var destination = this.options.destination,
                     itemType = this.options.itemType;
 
@@ -32,14 +32,15 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                     Dom.addClass(p_dialog.id + "-form", "errands-form-edit");
                 };
 
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&maxLimit={maxLimit}",
+                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}",
                     {
                         itemKind: "type",
                         itemId: itemType,
                         destination: destination,
                         mode: "create",
                         formId: "workflow-form",
-                        submitType: "json"
+                        submitType: "json",
+                        args: args ? YAHOO.lang.JSON.stringify(args) : {}
                     });
 
                 // Using Forms Service, so always create new instance
@@ -78,30 +79,17 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
             },
 
             createChildErrand: function Errands_onAddErrandsClick() {
-                Alfresco.util.Ajax.request({
-                    method: "GET",
-                    url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/errands/getAvailableEmployeesForChildErrand",
-                    dataObj: {
-                        parentDoc: this.options.parentDoc
-                    },
-                    successCallback: {
-                        fn: onSuccess,
-                        scope: this
-                    },
-                    failureCallback: {
-                        fn: onFailure,
-                        scope: this
-                    },
-                    execScripts: true
-                });
-
-                function onSuccess(response) {
-                    this.onAddErrandClick(response.json.employees);
+                var limitElement = Dom.get("errandLimitationDate");
+                var limitDate = "";
+                if (limitElement){
+                    limitDate = limitElement.value;
                 }
+                var args = {
+                    parentDoc: this.options.destination,
+                    parentLimitationDate: limitDate
+                };
 
-                function onFailure(response) {
-                    this.onAddErrandClick(null);
-                }
+                this.onAddErrandClick(args);
             }
         });
 })();

@@ -137,7 +137,7 @@
 				    }).setMessages(${messages});
 
 		    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-child-errands-add", function() {
-			    errands.onAddErrandClick()
+			    errands.createChildErrand()
 		    });
 	    }
 
@@ -206,6 +206,7 @@
             </#if>
 
             ${msg("message.eddand.limitationDate")} <span>${limitDate?string("d MMM yyyy")}</span>
+            <input type="hidden" id="errandLimitationDate" value="${limitDate?string("yyyy-MM-dd'T'HH:mm")}"/>
             <#if justInTime>
                 &nbsp;${msg("message.eddand.justInTime")}
             </#if>
