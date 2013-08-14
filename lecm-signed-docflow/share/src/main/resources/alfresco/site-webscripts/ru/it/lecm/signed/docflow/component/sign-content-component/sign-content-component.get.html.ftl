@@ -6,7 +6,10 @@
 <#include "/org/alfresco/components/component.head.inc">
 <@script type="text/javascript" src="${page.url.context}/res/scripts/signed-docflow/sign-content.js"></@script>
 
-    <!-- Markup -->
+<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
+<@view.viewForm formId = el + "-view-attributes-form" />
+
+<!-- Markup -->
 <script type="text/javascript">
     var contentAtachmentSigningComponent = null;
 </script>
