@@ -9,7 +9,7 @@ import org.alfresco.service.namespace.QName;
 /**
  * Фильтр данных для ассоциаций
  */
-public interface AssocDataFilter extends DataFilter{
+public interface AssocDataFilter extends DataFilter {
 
 
 	/**

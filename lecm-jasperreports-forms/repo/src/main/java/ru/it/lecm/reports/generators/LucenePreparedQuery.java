@@ -84,6 +84,8 @@ public class LucenePreparedQuery {
 	/** текущий текст запроса */
 	public String luceneQueryText() { return this.luceneQueryText; }
 
+	public void setLuceneQueryText(String qtext) { this.luceneQueryText = qtext; }
+
 	/** поисковый запрос */
 	public SearchParameters alfrescoSearch() { 
 		return this.alfrescoSearch;
@@ -164,7 +166,7 @@ public class LucenePreparedQuery {
 			 *   1) getAlfrescoType() ТИП ПОЛЯ АЛЬФРЕСКО, исп-ся для определения является ли ссылка ассоциацией 
 			 *   2) getExpression()  ВЫРАЖЕНИЕ ДЛЯ ПОЛУЧЕНИЯ ЗНАЧЕНИЯ ПОЛЯ - это в терминах провайдера, так что используется метод isDirectAlfrescoPropertyLink
 			 *   (предполагается, что простые ссылки ВСЕГДА имеют вид "{abc:def}")
-			 *   3) bound1/bound2 ИСКОМЫЕ/ПРОВЕРЯЕМЫЕ ЗНАЧЕНИЯ 
+			 *   3) bound1/bound2 ИСКОМЫЕ (ПРОВЕРЯЕМЫЕ) ЗНАЧЕНИЯ 
 			 */
 
 			// параметр пустой? обязательный? ...
@@ -193,39 +195,7 @@ public class LucenePreparedQuery {
 				continue;
 			}
 
-
-//			final boolean isForSubstService = substitudeExpression.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL);
-//			if (!isForSubstService)
-//				/* раз не подходит для сервиса -> пропускаем */
-//				continue;
-//
-//			/* если подходит для сервиса */
-//			if (substitudeExpression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL)) {
-//				// для ассоциаций ...
-//				result.argsByLinks.add(colDesc); // сложный параметр будем проверять позже - в фильтре данных
-//			} else {
-//				// параметр может быть как название свойства, так и названием ассоциации - проверяем
-//				QName expressionQName = null;
-//				try {
-//					expressionQName = QName.createQName(colDesc.getQNamedExpression(), registry.getNamespaceService());
-//				} catch (InvalidQNameException ex) {
-//					logger.warn("Unsupported parameter expression '%s' for column '%s'. Column skipped", substitudeExpression, colDesc);
-//				}
-//
-//				if (expressionQName == null)
-//					continue; // у нас записано нечто непонятное - пропускаем
-//
-//				final AssociationDefinition definition = dictionaryService.getAssociation(expressionQName);
-//				if (definition != null) {
-//					/* здесь colDesc содержит ассоциацию ... */
-//					result.argsByLinks.add(colDesc); // сложный параметр будем проверять позже - в фильтре данных
-//				} else {
-//					/* здесь colDesc содержит простой параметр ... */
-//					result.argsByProps.add(colDesc);
-//				}
-//			}
-
-			/* здесь поле задано простой ссылкой */
+			/* здесь поле задано ссылкой */
 
 			// вставляем в список ссылок или простых полей ...
 			{
@@ -275,7 +245,8 @@ public class LucenePreparedQuery {
 			 *  isEmpty(), для LIST/VALUE нижняя граница не пустая, а для
 			 *  RANGE - одна из границ точно не пустая
 			 */
-			final Object bound1 = colDesc.getParameterValue().getBound1(),
+			final Object
+					bound1 = colDesc.getParameterValue().getBound1(),
 					bound2 = colDesc.getParameterValue().getBound2();
 
 			final StringBuilder cond = new StringBuilder(); // сгенерированное условие
@@ -322,10 +293,10 @@ public class LucenePreparedQuery {
 				} else if (bound1 instanceof String[]) {
 					values = (String[]) bound1;
 				} else {
-					values = new String[]{bound1.toString()};
+					values = new String[]{ bound1.toString()};
 				}
 
-				Utils.emmitValuesInsideList(cond, luceneFldName, values);
+				Utils.emmitValuesInsideList( cond, luceneFldName, values);
 				break;
 
 			default: // непонятный тип - сообщение об ошибке и игнор ...
@@ -338,7 +309,7 @@ public class LucenePreparedQuery {
 				hasData = true;
 
 				iblog++;
-				blog.append(String.format("\t[%d]\t%s\n", iblog, cond));
+				blog.append( String.format("\t[%d]\t%s\n", iblog, cond));
 			}
 		}
 
@@ -485,7 +456,7 @@ public class LucenePreparedQuery {
 
 		final QName qtype = QName.createQName(type, nameSrv);
 		final List<ChildAssociationRef> links = (qtype != null)
-				? nodeSrv.getChildAssocs(node, new HashSet<QName>(Arrays.asList(qtype)))
+						? nodeSrv.getChildAssocs(node, new HashSet<QName>(Arrays.asList(qtype)))
 						: nodeSrv.getChildAssocs(node);
 				if (links != null && !links.isEmpty()) {
 					for (ChildAssociationRef item : links) {

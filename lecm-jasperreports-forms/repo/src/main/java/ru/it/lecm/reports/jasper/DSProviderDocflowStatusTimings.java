@@ -26,16 +26,9 @@ import ru.it.lecm.reports.utils.Utils;
  */
 public class DSProviderDocflowStatusTimings extends DSProviderDocflowStatusCounters
 {
-
-	// см как основной ru.it.lecm.reports.jasper.DSProviderReestrDogovorov
-
-	// private static final Logger logger = LoggerFactory.getLogger(DSProviderDocflowStatusTimings.class);
-
 	public DSProviderDocflowStatusTimings() {
 		super();
-		super.setPreferedType(TYPE_CONRACT);
 	}
-
 
 	final static String ATTR_STATUS_CHANGED = "lecm-document:status-changed-date"; // атрибут со временем изменения статуса
 

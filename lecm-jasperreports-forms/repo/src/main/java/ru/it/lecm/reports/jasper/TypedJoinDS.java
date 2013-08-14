@@ -11,7 +11,7 @@ import net.sf.jasperreports.engine.JRException;
 import org.alfresco.service.cmr.search.ResultSetRow;
 
 /**
- * Типизированный НД.
+ * Типизированный НД, в котором строки набора являются контейнерами типа T.
  * Предполагается для реализации "JOIN" возможностей - когда из одной строки 
  * данных базового запроса будет получено ноль,одна или более строк в результате. 
  * @author rabdullin

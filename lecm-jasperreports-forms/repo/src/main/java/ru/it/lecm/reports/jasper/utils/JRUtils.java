@@ -94,6 +94,7 @@ public class JRUtils {
 	public static JRDesignField createJRField(ColumnDescriptor colDesc) {
 		final JRDesignField field = new JRDesignField();
 		field.setName( colDesc.getColumnName());
+		field.setDescription( colDesc.getDefault());
 		try {
 			field.setValueClass( Class.forName(colDesc.className()) );
 		} catch (ClassNotFoundException ex) {

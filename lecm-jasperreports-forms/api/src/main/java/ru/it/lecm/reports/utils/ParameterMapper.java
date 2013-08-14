@@ -174,7 +174,7 @@ public class ParameterMapper {
 	public static String getArgRootName(final ColumnDescriptor colDesc) {
 		if (colDesc == null || colDesc.getParameterValue() == null) // не параметризуется ...
 			return null;
-		return colDesc.getColumnName();
+		return Utils.nonblank(colDesc.getParameterValue().getMnem(), colDesc.getColumnName());
 	}
 
 	/**

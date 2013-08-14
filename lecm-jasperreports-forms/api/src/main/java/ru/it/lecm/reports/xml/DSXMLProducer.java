@@ -99,7 +99,8 @@ public class DSXMLProducer {
 	public static final String XMLNODE_CMIS_PASSWORD = "password";
 
 	public final static String XMLATTR_JR_FLDNAME = "jrFldName";
-	public final static String XMLATTR_QUERY_FLDNAME ="queryFldName";
+	public final static String XMLATTR_QUERY_FLDNAME = "queryFldName";
+	public final static String XMLATTR_EXPRESSION = "expression";
 	public final static String XMLATTR_DISPLAYNAME = "displayName";
 	public final static String XMLATTR_ORDER = "order";
 
@@ -596,6 +597,13 @@ public class DSXMLProducer {
 
 			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME)) {
 				final String queryFldName = fldNode.getAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME);
+				if (queryFldName != null && queryFldName.length() > 0)
+					column.setExpression(queryFldName);
+			}
+
+			// синоним для задания выражения ...
+			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_EXPRESSION)) {
+				final String queryFldName = fldNode.getAttribute(DSXMLProducer.XMLATTR_EXPRESSION);
 				if (queryFldName != null && queryFldName.length() > 0)
 					column.setExpression(queryFldName);
 			}

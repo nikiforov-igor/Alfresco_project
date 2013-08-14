@@ -40,6 +40,9 @@ public class AlfrescoJRDataSource implements JRDataSource
 {
 	private static final Logger logger = LoggerFactory.getLogger(AlfrescoJRDataSource.class);
 
+	/**
+	 * Контекст выполнения для НД отчёта.
+	 */
 	final protected ReportDSContextImpl context = new ReportDSContextImpl();
 
 	public AlfrescoJRDataSource(Iterator<ResultSetRow> iterator) {

@@ -45,5 +45,9 @@ public interface L18able {
 	 */
 	String get(String locale, String l18default);
 
-	String getDefault(); // тоже что и get(null, "");
+	/**
+	 * Получить описание в локали по-умолчанию.
+	 * @return тоже что и get(null, null);
+	 */
+	String getDefault();
 }

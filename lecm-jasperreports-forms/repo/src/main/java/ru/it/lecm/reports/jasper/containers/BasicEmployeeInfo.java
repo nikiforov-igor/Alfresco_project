@@ -29,20 +29,21 @@ public class BasicEmployeeInfo {
 	public static final QName PROP_ORGUNIT_CODE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "unit-code");
 
 	// <!-- Сотрудник организации -->
- 	public static final QName PROP_EMPLOYEE_NAME1 = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-first-name");
- 	public static final QName PROP_EMPLOYEE_NAME2 = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-middle-name");
- 	public static final QName PROP_EMPLOYEE_NAME3 = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-last-name");
+ 	public static final QName PROP_EMPLOYEE_NAME_FIRST = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-first-name");
+ 	public static final QName PROP_EMPLOYEE_NAME_MIDDLE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-middle-name");
+ 	public static final QName PROP_EMPLOYEE_NAME_LAST = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-last-name");
 
 	final public NodeRef employeeId;
 
-	// ФИО
+	/** ФИО */
 	public String firstName, middleName, lastName;
 
-	// Название основной должности и соот-го подразделения
+	/** Название основной должности и соот-го подразделения */
 	public String staffName, unitName;
+	/** id основной должности и соот-го подразделения */
 	public NodeRef staffId, unitId;
 
-	// характеристики связанного системного пользователя 
+	/** характеристики связанного системного пользователя */ 
 	public String userLogin;
 
 	public BasicEmployeeInfo(NodeRef employeeId) {
@@ -84,11 +85,16 @@ public class BasicEmployeeInfo {
 				+ unitName + "]";
 	}
 
+	/**
+	 * Подгрузить данные для employeeId.
+	 * @param nodeSrv обязательный параметр
+	 * @param orgSrv необязательный, задаётся если требуются параметры об Организации и Должности Сотрудника
+	 */
 	public void loadProps(NodeService nodeSrv, OrgstructureBean orgSrv) {
 		if (employeeId != null) {
-			this.firstName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME1), "");
-			this.middleName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME2), "");
-			this.lastName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME3), "");
+			this.firstName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME_FIRST), "");
+			this.middleName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME_MIDDLE), "");
+			this.lastName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME_LAST), "");
 
 			if (orgSrv != null) {
 				final List<NodeRef> staffList = orgSrv.getEmployeeStaffs(employeeId);

@@ -3,6 +3,7 @@ package ru.it.lecm.reports.generators;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -21,6 +22,7 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +37,13 @@ import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
+import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
+import ru.it.lecm.reports.xml.DSXMLProducer;
 
 /**
  * Провайдер данных.
@@ -63,6 +67,7 @@ public class GenericDSProviderBase
 	 */
 	protected LucenePreparedQuery alfrescoQuery;
 	protected ResultSet alfrescoResult;
+	private JRDSConfigXML xmlConfig; // для загрузки конфы из ds-xml
 
 	public WKServiceKeeper getServices() {
 		return services;
@@ -78,9 +83,14 @@ public class GenericDSProviderBase
 	}
 
 	@Override
-	public void setReportDescriptor(ReportDescriptor reportDescriptor) {
-		this.reportDescriptor = reportDescriptor;
+	public void setReportDescriptor(ReportDescriptor rdesc) {
+		if (Utils.isSafelyEquals(this.reportDescriptor, rdesc))
+			return;
+		this.reportDescriptor = rdesc;
+		if (this.xmlConfig != null && this.reportDescriptor != null)
+			this.xmlConfig.setConfigName( DSXMLProducer.makeDsConfigFileName( this.reportDescriptor.getMnem() ));
 	}
+
 
 	@Override
 	public void setReportManager(ReportsManager reportMgr) {
@@ -101,6 +111,59 @@ public class GenericDSProviderBase
 	final static int UNLIMITED = -1;
 
 	/**
+	 * Стандартное построение запроса согласно параметров this.reportDescriptor.
+	 * В классах-потомках может использоваться другая логика параметризации 
+	 * и построения отчётов.
+	 * @return
+	 */
+	protected LucenePreparedQuery buildQuery() {
+		return LucenePreparedQuery.prepareQuery(this.reportDescriptor, getServices().getServiceRegistry());
+	}
+
+	public JRDSConfigXML conf() {
+		if (xmlConfig == null)
+			xmlConfig = createXmlConfig();
+		return xmlConfig;
+	}
+
+	/**
+	 * Дополнить конфигурацию значениями по-умолчанию
+	 * @param defaults
+	 */
+	protected void setXMLDefaults(Map<String, Object> defaults) {
+		// "add-on" sections для чтения конфигуратором ...
+//		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_OFFSET, null);
+//		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_LIMIT, null);
+		if (this.xmlConfig != null) {
+			if (this.reportDescriptor != null)
+				this.xmlConfig.setConfigName( "ds-" + this.reportDescriptor.getMnem()+ ".xml" );
+		}
+	}
+
+	/**
+	 * Вернуть объект конфигуратор
+	 * @return
+	 */
+	protected JRDSConfigXML createXmlConfig() {
+		PropertyCheck.mandatory(this, "reportManager", getReportManager());
+		return new ConfigXMLOfGenericDsProvider( this.getReportManager());
+	}
+
+	private class ConfigXMLOfGenericDsProvider 
+			extends JRDSConfigXML
+	{
+			public ConfigXMLOfGenericDsProvider(ReportsManager mgr) {
+				super(mgr);
+			}
+
+			@Override
+			protected void setDefaults(Map<String, Object> defaults) {
+				super.setDefaults(defaults);
+				setXMLDefaults( defaults);
+			}
+	}
+
+	/**
 	 * Формирует alfrescoResult согласно запросу полученному от buildQueryText и
 	 * параметрам limit/offset.
 	 */
@@ -109,8 +172,8 @@ public class GenericDSProviderBase
 
 		clearSearch();
 
-		/* формирование запроса */
-		this.alfrescoQuery = LucenePreparedQuery.prepareQuery(this.reportDescriptor, getServices().getServiceRegistry());
+		/* формирование запроса: параметры выбираются непосредственно из reportDescriptor */
+		this.alfrescoQuery = this.buildQuery();
 
 		if (logger.isDebugEnabled()) {
 			logger.debug(String.format("Quering Afresco by:>>>\n%s\n<<<", this.alfrescoQuery.luceneQueryText()));
@@ -161,10 +224,10 @@ public class GenericDSProviderBase
 	@Override
 	public JRField[] getFields(JasperReport report)
 			throws JRException, UnsupportedOperationException
-			{
+	{
 		final List<JRField> result = JRUtils.getJRFields(this.getReportDescriptor());
 		return (result != null) ? result.toArray( new JRField[result.size()]) : null;
-			}
+	}
 
 	@Override
 	public void dispose(JRDataSource ds) throws JRException {
@@ -263,7 +326,7 @@ public class GenericDSProviderBase
 				String expression = colDesc.getExpression();
 				if (expression.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) && expression.endsWith(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL)) {
 					if (!expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL)) {
-						//TODO добавить обработку parent и source ассоциаций, согласно правилам substitudeService
+						// TODO добавить обработку parent и source ассоциаций, согласно правилам substitudeService
 						expression = expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
 						final QName qnAssocType = QName.createQName(expression, ns);
 						AssociationDefinition assocDef =  ds.getAssociation(qnAssocType);
@@ -271,15 +334,12 @@ public class GenericDSProviderBase
 							final List<NodeRef> idsTarget = ParameterMapper.getArgAsNodeRef(colDesc);
 							if (!idsTarget.isEmpty()) {
 								targetType = assocDef.getTargetClass().getName();
-								AssocKind kind = AssocKind.target;
-								if (assocDef.isChild()) {
-									kind = AssocKind.child;
-								}
+								final AssocKind kind = (assocDef.isChild()) ? AssocKind.child : AssocKind.target;
 								result.addAssoc(new AssocDataFilter.AssocDesc(kind, qnAssocType, targetType, idsTarget));
 							}
 						}
 					} else {
-						//TODO добавить обратку сложных ссылок
+						// TODO добавить обратку сложных ссылок
 					}
 				}
 			} catch (Exception ignored) {

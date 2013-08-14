@@ -256,7 +256,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 						// получение списка ...
 						final List<ChildAssociationRef> childItems = nodeSrv.getChildAssocs(approveListId, approveQNames.childApproveSet);
 						if (childItems == null || childItems.isEmpty()) {
-							// если списка нет - доавим один пустой элемент только ...
+							// если списка нет - добавим один пустой элемент только ...
 							result.add( new ApprovalInfo(null, docInfo));
 							continue;
 						}
@@ -313,6 +313,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 			return (l18 != null) ? l18 : listValue;
 		}
 
+		// TODO: вынести в бин
 		static Map<String, String> l18ResultApproveMap;
 		static Map<String, String> getL18ApproveResultMap() {
 			if (l18ResultApproveMap == null) {

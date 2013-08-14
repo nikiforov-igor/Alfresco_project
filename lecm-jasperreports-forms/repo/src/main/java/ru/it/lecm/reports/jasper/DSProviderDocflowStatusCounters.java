@@ -2,9 +2,7 @@ package ru.it.lecm.reports.jasper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.reports.api.AssocDataFilter.AssocDesc;
 import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
+import ru.it.lecm.reports.calc.DataGroupCounter;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
@@ -42,6 +41,8 @@ import ru.it.lecm.reports.utils.Utils;
  *   •	Контрагент
  *   •	Инициатор
  * 
+ * НД заполняет колонки с именами "Col_Count1", "Col_Count2" и т.д. значениями
+ * кол-ва соот-щих статусов.
  * @author rabdullin
  */
 public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReportBase {
@@ -67,7 +68,9 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	 * Формат названия колонки со счётчиками
 	 */
 	final static String COLNAME_TAG = "col_RowTag";
-	final static String COLNAME_COUNTER_FMT = "col_Count%d";
+	final static String COLNAME_STATUS_FMT = "col_Status%d"; // колонка с названием i-го статуса
+	final static String COLNAME_COUNTER_FMT = "col_Count%d"; // колонка с количеством найденных строк в i-м статусе
+	final static String COLVALUE_ALL_OTHER = "All other"; // "Все отсальные статусы"
 
 	final static String ATTR_STATUS = "lecm-statemachine:status";
 
@@ -354,110 +357,22 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	}
 
 
-	final static String JRFLD_Executor_Staff = "col_Executor_Staff";
+	// final static String JRFLD_Executor_Staff = "col_Executor_Staff";
 
 	/**
-	 * Контейнерный класс
+	 * Контейнерный класс для подсчёта объектов по статусам (getAttrCounters())
 	 * @author rabdullin
 	 */
-	protected class DocStatusGroup {
-		/**
-		 * Тэг данной группы
-		 */
-		final String groupTag;
-
-		/**
-		 * Счётчики связанные со статусами.
-		 */
-		final Map<String, Integer> statusCounters = new HashMap<String, Integer>();
-
-		/**
-		 * Общая сумма значений
-		 */
-		private Integer total; 
-
+	protected class DocStatusGroup extends DataGroupCounter {
 		public DocStatusGroup(String groupTag) {
-			super();
-			this.groupTag = groupTag;
-		}
-
-		@Override
-		public String toString() {
-			return "[group '" + groupTag+ "' (" + statusCounters + ")]";
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + getOuterType().hashCode();
-			result = prime * result + ((groupTag == null) ? 0 : groupTag.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			final DocStatusGroup other = (DocStatusGroup) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
-			if (groupTag == null) {
-				if (other.groupTag != null)
-					return false;
-			} else if (!groupTag.equals(other.groupTag))
-				return false;
-			return true;
-		}
-
-		private DSProviderDocflowStatusCounters getOuterType() {
-			return DSProviderDocflowStatusCounters.this;
-		}
-
-		/**
-		 * Увеличить счётчик связанный с указанным статусом.
-		 * Воз-ся увеличенный счётчик.
-		 * @param statusName
-		 * @return
-		 */
-		public int incCounter(final String statusName, int delta) {
-			Integer counter = null;
-			total = delta + ((total == null) ? 0 : total.intValue());
-			if (statusCounters.containsKey(statusName))
-				counter = statusCounters.get(statusName);
-			final int result = delta + ( (counter == null) ? 0 : counter.intValue() );
-			statusCounters.put(statusName, result);
-			return result;
-		}
-
-		/**
-		 * Вычислить суммы всех статусов, которые НЕ перечислены в указанном списке
-		 * @param statusMarked
-		 * @return
-		 */
-		public Integer sumAllOthers(Collection<String> statusMarked) {
-			int result = 0;
-			for(Map.Entry<String, Integer> e: this.statusCounters.entrySet()) {
-				if (!statusMarked.contains(e.getKey())) { // учесть ...
-					if (e.getValue() != null)
-						result += e.getValue().intValue(); 
-				}
-			}
-			return (result != 0) ? result : null;
-		}
-
-		public Integer sumAll() {
-			return total;
+			super( groupTag);
 		}
 	}
 
 	/**
-	 * Вычисление статистики для указанной группы (это может быть увеличение 
-	 * кол-ва или суммарной длительности, в зависимости от отчёта)
+	 * Увеличение статистики для указанной группы (которой может быть "кол-во" 
+	 * или "суммарная длительность", в зависимости от отчёта - и от этого будет 
+	 * зависеть изменение). Здесь увеличение целого значения на единицу.
 	 * @param group наборр статусов, в котором надо вычсилить статистику
 	 * @param statusName статус для модификации статистики
 	 * @param docId документ для которого надо модифицировать статистику
@@ -508,7 +423,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 
 		@Override
 		public int buildJoin() {
-			// TODO: построить  в groups список объектов сгруппированных по названиям Измерения (ключ в groups)
+			// построить  в groups список объектов сгруппированных по названиям Измерения (ключ в groups)
 
 			final ArrayList<DocStatusGroup> result = new ArrayList<DocStatusGroup>();
 
@@ -521,17 +436,16 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 				final Map<String, Object> mapGroupBy = conf().getMap(XMLGROUPBY_FORMATS_MAP);
 				if (mapGroupBy == null)
 					throw new RuntimeException( String.format("Invalid configuration: no '%s' map provided", XMLGROUPBY_FORMATS_MAP));
+		
 				if (!mapGroupBy.containsKey(groupBy))
-					throw new RuntimeException( String.format("Invalid configuration: provided map '%s' not contains variant for demanded report order '%s'", XMLGROUPBY_FORMATS_MAP, groupBy));
+					throw new RuntimeException( String.format("Invalid configuration: provided map '%s' not contains variant for demanded report groupBy order '%s'", XMLGROUPBY_FORMATS_MAP, groupBy));
+
 				fmtForTag = (String) mapGroupBy.get(groupBy);
 			}
 
 			if (context.getRsIter() != null) {
 
 				final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
-//				final NamespaceService ns = serviceRegistry.getNamespaceService();
-//				final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
-
 				final QName status = QName.createQName( getStatusAttrName(), getServices().getServiceRegistry().getNamespaceService());
 
 				while(context.getRsIter().hasNext()) {
@@ -585,7 +499,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 			final Map<String, Serializable> result = new LinkedHashMap<String, Serializable>();
 
 			/* Название ... */
-			result.put( COLNAME_TAG, item.groupTag);
+			result.put( COLNAME_TAG, item.getGroupTag());
 
 			/* Счётчики ... */
 			final List<String> statusOrderedList = conf().getList(XMLSTATUSES_LIST);
@@ -593,8 +507,13 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 			int iCol = 0;
 			for( String colName: statusOrderedList) {
 				iCol++; // (!) нумерация от Единицы
+
+				// "col_StatusNN": вносим в набор название статуса
+				result.put( String.format( COLNAME_STATUS_FMT, iCol), colName);
+
 				// "col_CountNN" = (Integer) счётчик в этом статусе
-				result.put( String.format( COLNAME_COUNTER_FMT, iCol), item.statusCounters.get(colName));
+				result.put( String.format( COLNAME_COUNTER_FMT, iCol), item.getAttrCounters().get(colName));
+
 				// TODO: TEMP DEBUG ONLY
 				// final int iRow = super.getData().indexOf(item);
 				// result.put( String.format( COLNAME_COUNTER_FMT, iCol), iCol + iRow * 100);
@@ -602,6 +521,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 
 			/* последняя со статусами колонка будет состоять из всех значений, не вошедших в какие-либо предыдущие ... */ 
 			iCol++;
+			result.put( String.format( COLNAME_STATUS_FMT, iCol), COLVALUE_ALL_OTHER);
 			result.put( String.format( COLNAME_COUNTER_FMT, iCol), item.sumAllOthers(statusOrderedList));
 
 			/* Параметры формирования колонки с суммой данных по строке ... */

@@ -155,7 +155,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 	}
 
 	/**
-	 * Простой ссылкой считаем выражение вида "{abc}"
+	 * Простой ссылкой считаем ссылки на конкретные поля, виде выражения "{abc}"
 	 * @return true, если колонка содержит просто ссылку на поле
 	 */
 	public static boolean isDirectAlfrescoPropertyLink(final String expression) {

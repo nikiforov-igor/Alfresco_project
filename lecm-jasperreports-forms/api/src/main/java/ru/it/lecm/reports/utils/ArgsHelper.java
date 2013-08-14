@@ -80,7 +80,8 @@ public class ArgsHelper {
 	}
 
 	/**
-	 * 
+	 * По строковому списку id узлов получить список NodeRef.
+	 * Разделители в списке запятая или точка с запятой. 
 	 * @param value
 	 * @param destInfoTag
 	 * @return непустой список [NodeRef] или null, если строка пуста

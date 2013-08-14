@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
@@ -155,31 +156,6 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource( Iterator<ResultSetRow> iterator) {
 		return new ApprovalDS(iterator);
-	}
-
-	/**
-	 * Структура для накопления и хранения средних значений некоторой величины
-	 */
-	protected class AvgValue {
-		int count; // кол-во
-		float avg; // текущее среднее
-
-		public void clear() {
-			count = 0;
-			avg = 0;
-		}
-
-		/**
-		 * Скорректировать среднее значение с учётом очердного "замера"
-		 * @param value
-		 */
-		public void adjust(float value) {
-			if (++count == 1) { // первая порция данных
-				avg = value;
-			} else { // корректировка ср значения
-				avg = (avg * (count - 1) + value)/count;
-			}
-		}
 	}
 
 
@@ -387,9 +363,9 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 			result.put( getAlfAttrNameByJRKey(JRName_STAFFPOSNAME), item.staffName );
 			result.put( getAlfAttrNameByJRKey(JRName_OU), item.unitName); 
 
-			result.put( getAlfAttrNameByJRKey(JRName_MISSED_APPROVES_COUNT), (int) item.missedApproves.count);
-			result.put( getAlfAttrNameByJRKey(JRName_AVG_MISSED_DAYS), (float) roundToHumanRead(item.missedApproves.avg) );
-			result.put( getAlfAttrNameByJRKey(JRName_AVG_APPROVE_DAYS), (float) roundToHumanRead(item.normalApproves.avg) );
+			result.put( getAlfAttrNameByJRKey(JRName_MISSED_APPROVES_COUNT), (int) item.missedApproves.getCount());
+			result.put( getAlfAttrNameByJRKey(JRName_AVG_MISSED_DAYS), (float) roundToHumanRead(item.missedApproves.getAvg()) );
+			result.put( getAlfAttrNameByJRKey(JRName_AVG_APPROVE_DAYS), (float) roundToHumanRead(item.normalApproves.getAvg()) );
 
 			// период согласования включаем как данные
 			final Date now = new Date();
