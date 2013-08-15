@@ -16,8 +16,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
     /**
      * YUI Library aliases
      */
-    var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
+    var Dom = YAHOO.util.Dom;
 
     LogicECM.module.Errands.Links = function ErrandsTasks_constructor(htmlId) {
         LogicECM.module.Errands.Links.superclass.constructor.call(this, "LogicECM.module.Errands.Links", htmlId, ["button", "container"]);
