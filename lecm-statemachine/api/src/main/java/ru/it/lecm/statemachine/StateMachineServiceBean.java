@@ -115,4 +115,12 @@ public interface StateMachineServiceBean {
      */
     public boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName);
 
+    /**
+     * Возвращает true, если поле возможно редактировать
+     * @param document
+     * @param field
+     * @return
+     */
+    public boolean isEditableField(NodeRef document, String field);
+
 }

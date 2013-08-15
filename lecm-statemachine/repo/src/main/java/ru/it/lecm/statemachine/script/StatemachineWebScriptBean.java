@@ -274,4 +274,14 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.grandDynamicRoleForEmployee(document.getNodeRef(), employee.getNodeRef(), roleName);
     }
 
+    /**
+     * Возвращает true, если поле возможно редактировать
+     * @param document
+     * @param field
+     * @return
+     */
+    public boolean isEditableField(ScriptNode document, String field) {
+        return stateMachineHelper.isEditableField(document.getNodeRef(), field);
+    }
+
 }

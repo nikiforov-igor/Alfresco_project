@@ -491,6 +491,24 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     @Override
+    public boolean isEditableField(NodeRef document, String field) {
+        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        if (executionId != null) {
+            String taskId = getCurrentTaskId(executionId);
+            if (taskId != null) {
+                List<StateMachineAction> actions = getStatusChangeActions(document);
+                Set<StateField> result = new HashSet<StateField>();
+                for (StateMachineAction action : actions) {
+                    StatusChangeAction statusChangeAction = (StatusChangeAction) action;
+                    result.addAll(statusChangeAction.getFields());
+                }
+                return result.contains(field);
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName) {
         String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         boolean result = false;
