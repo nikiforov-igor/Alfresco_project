@@ -269,6 +269,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         };
 
                         successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                        this.dataGrid.currentFilter = successFilter;
                     }
                 }
 

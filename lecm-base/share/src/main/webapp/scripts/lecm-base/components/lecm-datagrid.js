@@ -1151,6 +1151,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         };
 
                         successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                        me.currentFilter = successFilter;
                     }
                 }
 
