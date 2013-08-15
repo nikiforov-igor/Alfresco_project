@@ -5,7 +5,7 @@
 		{
 			"nodeRef": "${item.nodeRef}",
 			"name":"${item.name!""}",
-			"limitationDate": "<#if item.limitationDate??>${item.limitationDate?string("d MMM yyyy")}</#if>",
+			"limitationDate": "<#if item.limitationDate??>${item.limitationDate?string("dd MMM yyyy")}</#if>",
 			"executorNodeRef":"${item.executorNodeRef!""}",
 			"executorName":"${item.executorName!""}"
 		}<#if item_has_next>,</#if>
