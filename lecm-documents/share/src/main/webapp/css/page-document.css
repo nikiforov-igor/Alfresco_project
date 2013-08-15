@@ -341,3 +341,7 @@
     color: #333333;
 }
 
+.dashlet-metadata div.association-auto-complete-selected-item, .dashlet-metadata div.association-auto-complete-selected-item-even {
+    display: inline;
+}
+
