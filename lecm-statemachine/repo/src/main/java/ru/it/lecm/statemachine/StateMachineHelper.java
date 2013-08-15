@@ -497,12 +497,17 @@ public class StateMachineHelper implements StateMachineServiceBean {
             String taskId = getCurrentTaskId(executionId);
             if (taskId != null) {
                 List<StateMachineAction> actions = getStatusChangeActions(document);
-                Set<StateField> result = new HashSet<StateField>();
+                Set<StateField> fields = new HashSet<StateField>();
                 for (StateMachineAction action : actions) {
                     StatusChangeAction statusChangeAction = (StatusChangeAction) action;
-                    result.addAll(statusChangeAction.getFields());
+	                fields.addAll(statusChangeAction.getFields());
                 }
-                return result.contains(field);
+	            for (StateField stateField: fields) {
+		            if (stateField.getName().equals(field)) {
+			            return stateField.isEditable();
+		            }
+	            }
+                return false;
             }
         }
         return false;

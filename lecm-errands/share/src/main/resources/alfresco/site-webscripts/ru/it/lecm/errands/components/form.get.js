@@ -52,6 +52,22 @@ function main() {
 	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD);
 
 	model.hasAttrEditPerm = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
+
+	uri = addParamToUrl('/lecm/statemachine/api/field/editable', 'nodeRef', model.nodeRef);
+	uri = addParamToUrl(uri, 'field', 'lecm-errands:child-errands');
+	model.isEditableChildErrands = doGetCall(uri);
+
+	uri = addParamToUrl('/lecm/statemachine/api/field/editable', 'nodeRef', model.nodeRef);
+	uri = addParamToUrl(uri, 'field', 'lecm-errands:links-assoc');
+	model.isEditableLinks = doGetCall(uri);
+
+	uri = addParamToUrl('/lecm/statemachine/api/field/editable', 'nodeRef', model.nodeRef);
+	uri = addParamToUrl(uri, 'field', 'lecm-errands:execution-report');
+	model.isEditableExecutionReport = doGetCall(uri);
+
+	uri = addParamToUrl('/lecm/statemachine/api/field/editable', 'nodeRef', model.nodeRef);
+	uri = addParamToUrl(uri, 'field', 'lecm-errands:execution-links-assoc');
+	model.isEditableExecutionLinks = doGetCall(uri);
 }
 
 main();

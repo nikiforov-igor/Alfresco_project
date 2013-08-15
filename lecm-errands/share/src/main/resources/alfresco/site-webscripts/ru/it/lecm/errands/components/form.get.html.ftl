@@ -234,7 +234,7 @@
         </#if>
         <div id="${id}-links" class="data-list-block">
             <span class="heading">${msg("label.links.head")}<span class="count" id="${id}-links-count"> (${links.links?size})</span></span>
-            <#if hasAttrEditPerm && roles.isInitiator>
+            <#if roles.isInitiator && hasAttrEditPerm && isEditableLinks>
 		        <span id="${id}-links-add" class="yui-button yui-push-button">
 	                <span class="first-child">
 	                    <button type="button">${msg("label.links.button")}</button>
@@ -301,7 +301,7 @@
 			</#if>
             <div id="${id}-exec-links" class="data-list-block">
                 <span class="heading">${msg("label.links.head")}<span class="count" id="${id}-execute-links-count"> (${(executeLinks.links)?size})</span></span>
-				<#if hasAttrEditPerm && roles.isExecutor>
+				<#if roles.isExecutor && hasAttrEditPerm && isEditableExecutionLinks>
 		            <span id="${id}-exec-links-add" class="yui-button yui-push-button">
 	                    <span class="first-child">
 	                        <button type="button">${msg("label.links.button")}</button>
@@ -321,7 +321,7 @@
             </div>
             <div id="${id}-exec-child-errands" class="data-list-block">
                 <span class="heading">${msg("message.eddand.childErrands")}<span class="count"> (${(childErrands![])?size})</span></span>
-                <#if hasAttrEditPerm && roles.isExecutor>
+                <#if roles.isExecutor && isEditableChildErrands>
 	                <span id="${id}-exec-child-errands-add" class="yui-button yui-push-button">
 	                    <span class="first-child">
 	                        <button type="button">${msg("message.eddand.addChildErrands")}</button>
@@ -353,9 +353,9 @@
             <div id="${id}-exec-report" class="exec-report">
                 <span class="heading">${msg("message.errands.executionReport")}</span> <br/>
                 <div>
-                    <textarea id="${id}-setExecutionReport-textarea" rows="" cols="" <#if !hasAttrEditPerm || !roles.isExecutor>disabled="disabled" </#if>>${props["lecm-errands:execution-report"]!""}</textarea>
+                    <textarea id="${id}-setExecutionReport-textarea" rows="" cols="" <#if !roles.isExecutor || !hasAttrEditPerm || !isEditableExecutionReport>disabled="disabled" </#if>>${props["lecm-errands:execution-report"]!""}</textarea>
                 </div>
-				<#if hasAttrEditPerm && roles.isExecutor>
+				<#if roles.isExecutor && hasAttrEditPerm && isEditableExecutionReport>
 	                <div>
 	                    <span id="${id}-exec-report-set" class="yui-button yui-push-button">
 	                        <span class="first-child">
