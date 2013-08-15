@@ -50,7 +50,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 		},
 
-		onViewSignature: function(layer, args) {
+		onViewSignature: function(event) {
 			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
 
 			form.setOptions({
@@ -90,31 +90,31 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			form.show();
 		},
 
-		onSignDocument: function(layer, args) {
+		onSignDocument: function(event) {
 			cryptoAppletModule.Sign(this.options.nodeRef);
 		},
 
-		onRefreshSignatures: function(layer, args) {
+		onRefreshSignatures: function(event) {
 			cryptoAppletModule.CheckContentSignature(this.options.nodeRef);
-			this.onViewSignature(layer, args);
+			this.onViewSignature(event);
 		},
 
-		onUploadSignature: function(layer, args) {
+		onUploadSignature: function(event) {
 			cryptoAppletModule.loadSign(this.options.nodeRef);
 		},
 
-		onSendDocument: function(layer, args) {
+		onSendDocument: function(event) {
 			Alfresco.util.PopupManager.displayMessage({
 				text: "Отправка документа контрагенту"
 			});
 			cryptoAppletModule.SendToContragent(this.options.nodeRef);
 		},
 
-		onSignaturesReceived: function(layer, args) {
+		onSignaturesReceived: function(event) {
 			alert("onSignaturesReceived");
 		},
 
-		onRefreshSentDocuments: function(layer, args) {
+		onRefreshSentDocuments: function(event) {
 			alert("onRefreshSentDocuments");
 		}
 	}, true);

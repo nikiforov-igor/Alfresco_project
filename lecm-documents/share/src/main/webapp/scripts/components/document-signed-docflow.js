@@ -53,19 +53,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			Alfresco.util.createTwister(id + "-heading", "DocumentSignedDocflow");
 		},
 
-		onRefresh: function (layer, args) {
+		onRefresh: function (event) {
 			cryptoAppletModule.CheckDocumentSignatures(this.options.nodeRef);
 		},
 
-		onSignDocuments:  function (layer, args) {
+		onSignDocuments:  function (event) {
 			cryptoAppletModule.MultipleSignFormShow(this.options.nodeRef, cryptoAppletModule.SignMultiple);
 		},
 
-		onSendDocuments: function (layer, args) {
+		onSendDocuments: function (event) {
 			cryptoAppletModule.MultipleSignFormShow(this.options.nodeRef, cryptoAppletModule.SendMultiple);
 		},
 
-		onViewSignatures: function (layer, args) {
+		onViewSignatures: function (event) {
 			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-all-form");
 
 			form.setOptions({

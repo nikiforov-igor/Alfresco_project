@@ -11,9 +11,9 @@
                     <region-id>document-actions</region-id>
                     <source-id>document-details</source-id>
                     <sub-components>
-                        <sub-component id="sign-content-component" index="150">
+                        <sub-component id="sign-content" index="150">
                             <evaluations>
-                                <evaluation id="sign-content-component-add">
+                                <evaluation id="sign-content-add">
                                     <url>/lecm/signed-docflow/component/sign-content</url>
                                     <properties>
                                         <nodeRef>{nodeRef}</nodeRef>

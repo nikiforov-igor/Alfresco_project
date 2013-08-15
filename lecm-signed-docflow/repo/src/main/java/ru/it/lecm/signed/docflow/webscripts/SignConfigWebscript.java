@@ -16,7 +16,6 @@ import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.DeclarativeWebScriptHelper;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.signed.docflow.api.SignedDocflow;
 import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
 
 /**

@@ -8,10 +8,10 @@
 				<js src="/scripts/signed-docflow/signs-all-form.js"/>
 			</dependencies>
 			<form id="signs-info-short">
-				<create-form template="/ru/it/lecm/signed/docflow/signs-short-form.ftl"/>
+				<create-form template="/ru/it/lecm/signed/docflow/forms/signs-short-form.ftl"/>
 			</form>
 			<form id="signs-info-all">
-				<create-form template="/ru/it/lecm/signed/docflow/signs-all-form.ftl"/>
+				<create-form template="/ru/it/lecm/signed/docflow/forms/signs-all-form.ftl"/>
 			</form>
 		</forms>
 	</config>
@@ -73,10 +73,10 @@
 				<js src="/scripts/signed-docflow/signApplet.js" />
 			</dependencies>
 			<form id="auth-form">
-				<create-form template="/ru/it/lecm/signed-docflow/form/auth-form.ftl" />
+				<create-form template="/ru/it/lecm/signed/docflow/forms/auth-form.ftl" />
 			</form>
 			<form id="multiple-sign-form">
-				<create-form template="/ru/it/lecm/signed-docflow/form/multiple-sign-form.ftl" />
+				<create-form template="/ru/it/lecm/signed/docflow/forms/multiple-sign-form.ftl" />
 			</form>
 		</forms>
 	</config>

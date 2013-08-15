@@ -53,7 +53,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			this.exchangeContainer = Dom.get(id + "-exchange-container");
 		},
 
-		onViewSignature: function(layer, args) {
+		onViewSignature: function(event) {
 			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
 
 			form.setOptions({
@@ -93,21 +93,21 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			form.show();
 		},
 
-		onSignDocument: function(layer, args) {
+		onSignDocument: function(event) {
 			cryptoAppletModule.Sign(this.options.nodeRef);
 		},
 
-		onRefreshSignatures: function(layer, args) {
+		onRefreshSignatures: function(event) {
 			cryptoAppletModule.CheckContentSignature(this.options.nodeRef);
-			this.onViewSignature(layer, args);
+			this.onViewSignature(event);
 		},
 
-		onUploadSignature: function(layer, args) {
+		onUploadSignature: function(event) {
 			cryptoAppletModule.loadSign(this.options.nodeRef);
 		},
 
-		onSignableSwitch: function(layer, args) {
-			var checkbox = args.checkbox;
+		onSignableSwitch: function(event) {
+			var checkbox = event.currentTarget;
 
 			Alfresco.util.Ajax.request({
 				method: "POST",
@@ -144,7 +144,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 		},
 
-		onSendDocument: function(layer, args) {
+		onSendDocument: function(event) {
 			Alfresco.util.PopupManager.displayMessage({
 				text: "Отправка документа контрагенту"
 			});
@@ -174,11 +174,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			// });
 		},
 
-		onSignaturesReceived: function(layer, args) {
+		onSignaturesReceived: function(event) {
 			alert("onSignaturesReceived");
 		},
 
-		onRefreshSentDocuments: function(layer, args) {
+		onRefreshSentDocuments: function(event) {
 			alert("onRefreshSentDocuments");
 		}
 	}, true);
