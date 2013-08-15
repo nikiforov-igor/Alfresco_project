@@ -15,7 +15,7 @@
     <div class="document-metadata-header document-components-panel">
         <h2 id="${el}-checkbox-heading" class="dark">
             ${msg("label.signable")}&nbsp;
-            <input id="${el}-signableSwitch" type="checkbox" style="vertical-align: middle;" <#if isSignable>checked</#if>>
+            <input id="${el}-signableSwitch" type="checkbox" style="vertical-align: middle;" <#if isSignable>checked</#if> <#if isSigned>disabled="true"</#if>>
         </h2>
     </div>
 </div>

@@ -94,7 +94,32 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onSignDocument: function(event) {
-			cryptoAppletModule.Sign(this.options.nodeRef);
+			cryptoAppletModule.Sign(this.options.nodeRef, this.checkSigned, this);
+		},
+
+		checkSigned: function(scope){
+			var checkbox = document.getElementById(scope.id + '-signableSwitch');
+
+			Alfresco.util.Ajax.request({
+				method: "GET",
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/getSignsInfo?signedContentRef=" + scope.options.nodeRef,
+				failureCallback: {
+					fn: function(response) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: msg("message.setting.signable.failure")
+						});
+					},
+					scope: this
+				},
+				successCallback: {
+					fn: function(response) {
+						if(response.json[0].signatures.length != 0){
+							checkbox.disabled = true;
+						} 
+					},
+					scope: this
+				}
+			});
 		},
 
 		onRefreshSignatures: function(event) {
@@ -103,7 +128,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onUploadSignature: function(event) {
-			cryptoAppletModule.loadSign(this.options.nodeRef);
+			cryptoAppletModule.loadSign(this.options.nodeRef, this.checkSigned, this);
 		},
 
 		onSignableSwitch: function(event) {

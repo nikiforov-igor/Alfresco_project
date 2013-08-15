@@ -635,7 +635,10 @@ var cryptoAppletModule = (function () {
             });
 		},
 		
-		loadSign : function(nodeRef){
+		loadSign : function(nodeRef, callBack, callBackScope){
+			if(!callBack){
+				callBack = function(){};
+			}
 			var signature = '';
 			try{
 				signature = signApplet.getService().getCertFromFileUI();	
@@ -678,7 +681,7 @@ var cryptoAppletModule = (function () {
 							Alfresco.util.PopupManager.displayMessage({
 							text: text
 						});
-						
+						callBack(callBackScope);						
 					}
                 },
 				onFailure: {
@@ -839,7 +842,10 @@ var cryptoAppletModule = (function () {
 			});
 		},
 		
-		Sign : function (nodeRefList) {
+		Sign : function (nodeRefList, callBack, callBackScope) {
+			if(!callBack){
+				callBack = function(){};
+			}
 			if(!(nodeRefList instanceof Array)) {
 				nodeRefList = [nodeRefList];
 			}
@@ -909,6 +915,7 @@ var cryptoAppletModule = (function () {
 						Alfresco.util.PopupManager.displayMessage({
 							text: resText
 						});
+						callBack(callBackScope);
 						},
 						scope : this
                 },

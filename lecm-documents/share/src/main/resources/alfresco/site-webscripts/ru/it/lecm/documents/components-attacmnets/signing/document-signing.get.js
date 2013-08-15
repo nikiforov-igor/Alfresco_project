@@ -1,5 +1,6 @@
 function main() {
 	var isSignable = false,
+		isSigned = false,
 		isDocflowable,
 		nodeRef = args["nodeRef"],
 		documentNodeRef = getDocument(nodeRef);
@@ -13,7 +14,11 @@ function main() {
 	if (isDocflowable) {
 		isSignable = checkSignable(nodeRef);
 	}
+	if(isSignable) {
+		isSigned = getSigned(nodeRef);
+	}
 	model.isSignable = isSignable;
+	model.isSigned = isSigned;
 	model.nodeRef = nodeRef;
 }
 
@@ -26,6 +31,23 @@ function getDocument(nodeRef) {
 	if (response.status == 200) {
 		responseNative = eval('(' + response + ')');
 		result = responseNative.nodeRef;
+	}
+	return result;
+}
+
+function getSigned(nodeRef) {
+	var result = null,
+		responseNative,
+		url = "/lecm/signed-docflow/getSignsInfo?signedContentRef=" + nodeRef,
+		response = remote.connect("alfresco").get(url);
+
+	if (response.status == 200) {
+		responseNative = eval('(' + response + ')');
+		if(responseNative[0].signatures.length != 0){
+			return true;
+		} else {
+			return false; 
+		}
 	}
 	return result;
 }
