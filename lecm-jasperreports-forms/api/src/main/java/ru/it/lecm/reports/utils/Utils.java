@@ -1,7 +1,6 @@
 package ru.it.lecm.reports.utils;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -9,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -517,4 +515,29 @@ public class Utils {
 		}
 		throw new RuntimeException( String.format( "Too may files like '%s%s'", checkFile, fmtSuffix));
 	}
+
+
+	final public static long MILLIS_PER_HOUR = 1000 * 60 * 60;
+
+	/**
+	 * Вернуть длительность в часах
+	 * @param duration_ms длительность в миллисекундах
+	 * @return
+	 */
+	public static float getDurationInHours(long duration_ms) {
+		return ((float) duration_ms) / MILLIS_PER_HOUR;  
+	}
+
+	/**
+	 * Вычислить разницу двух дат в часах. Если одна из дат NULL, воз-ся 0.
+	 * @param start начало
+	 * @param end конец
+	 * @return
+	 */
+	public static float getDurationInHours(Date start, Date end) {
+		if (start == null || end == null)
+			return 0;
+		return getDurationInHours( end.getTime() - start.getTime());  
+	}
+
 }

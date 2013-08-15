@@ -86,6 +86,69 @@ public class BasicEmployeeInfo {
 	}
 
 	/**
+	 * @return Фамилия И.О.
+	 */
+	public String ФамилияИО() {
+		/// JASPER jrxml format: $F{col_Employee.LastName}+ " "+ ($F{col_Employee.FirstName}+ " ").substring( 0, 1 )+ "."+ ($F{col_Employee.MiddleName}+ " ").substring(0,1) + "."
+		final StringBuilder result = new StringBuilder();
+		result.append( Фамилия());
+		// Далее первые буквы Имени и отчества в верхнем регистре
+		if (!Utils.isStringEmpty(this.firstName))
+			result.append( String.format(" %s.", ИмяИнициал()) );
+		if (!Utils.isStringEmpty(this.middleName))
+			result.append( String.format("%s.", ОтчествоИнициал()) );
+		return result.toString();
+	}
+
+	/**
+	 * @return (none null) Фамилия или пустая строка 
+	 */
+	public String Фамилия() {
+		return Utils.coalesce( this.lastName, "");
+	}
+
+	/**
+	 * @return (none null) Первая буква фамилии в верхнем регистре или пусто 
+	 */
+	public String ФамилияИнициал() {
+		return (Utils.isStringEmpty(this.lastName))
+				? ""
+				: this.lastName.toUpperCase().substring(0,1);
+	}
+
+	/**
+	 * @return (none null) Имя или пустая строка 
+	 */
+	public String Имя() {
+		return Utils.coalesce( this.firstName, "");
+	}
+
+	/**
+	 * @return (none null) Первая буква имени в верхнем регистре или пусто 
+	 */
+	public String ИмяИнициал() {
+		return (Utils.isStringEmpty(this.firstName))
+				? ""
+				: this.firstName.toUpperCase().substring(0,1);
+	}
+
+	/**
+	 * @return (none null) Отчество или пустая строка 
+	 */
+	public String Отчество() {
+		return Utils.coalesce(this.middleName, "");
+	}
+
+	/**
+	 * @return (none null) Первая буква отчества в верхнем регистре или пусто 
+	 */
+	public String ОтчествоИнициал() {
+		return (Utils.isStringEmpty(this.middleName))
+				? ""
+				: this.middleName.toUpperCase().substring(0,1);
+	}
+
+	/**
 	 * Подгрузить данные для employeeId.
 	 * @param nodeSrv обязательный параметр
 	 * @param orgSrv необязательный, задаётся если требуются параметры об Организации и Должности Сотрудника

@@ -292,7 +292,6 @@ public class ReportsManagerImpl implements ReportsManager {
 					if (!isDsXml) // skip none-descriptor files ...
 						return;
 
-					found.add(id);
 					logger.debug(String.format( "loading report descriptor from '%s' ...", id));
 					final InputStream in = repos.loadContent(id).getContentInputStream();
 					try {
@@ -309,7 +308,8 @@ public class ReportsManagerImpl implements ReportsManager {
 										"Loaded report has custom mnemonic:\n\t by id '%s'\n\t loaded with mnem '%s'"
 										, id, desc.getMnem()
 								));
-							destMap.put(desc.getMnem(), desc);
+							destMap.put(desc.getMnem(), desc); // (!) найден очередной
+							found.add(id); // запоминаем только при отсутствии ошибок
 
 							logger.debug(String.format("... loaded deployed report descriptor '%s' from '%s'", desc.getMnem(), id));
 						} catch (Throwable ex) {
@@ -329,7 +329,7 @@ public class ReportsManagerImpl implements ReportsManager {
 
 		logger.info(String.format("Auto scanning reports at root '%s' ...", repos.getRoot()));
 		repos.scanContent( doEnum);
-
+		logger.info(String.format("... Found %s reports by auto scanning at root '%s'", found.size(), repos.getRoot()));
 		return found.size();
 	}
 
@@ -603,7 +603,7 @@ public class ReportsManagerImpl implements ReportsManager {
 			result = contentFileDAO.loadContent(idDS);
 		} else { 
 			// непонятно где хранится ...
-			final String msg = String.format( "ds-xml cannot be loaded for report '%s': not found at repository storage nor file storage", reportCode);
+			final String msg = String.format( "ds-xml cannot be loaded for report '%s':\n\t by id {%s}\n\t (!) not found at repository storage nor at file storage", reportCode, idDS);
 			logger.error(msg);
 			throw new RuntimeException(msg);
 		}
@@ -684,7 +684,7 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 
 		if (docType == null && reportType == null) {
-			// не задано фильтрование -> вернуть всё целиком
+			// не задано фильтрование -> вернуть сразу всё целиком ...
 			return new ArrayList<ReportDescriptor>(list.values());
 		}
 

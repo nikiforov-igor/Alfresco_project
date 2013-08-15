@@ -161,7 +161,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 	public File makeAbsFilePath(IdRContent id) {
 		return (id == null)
 				? null
-				: makeAbsFilePath(id.getReportType(), id.getReportMnemo(), id.getFileName());
+				: makeAbsFilePath( id.getReportType(), id.getReportMnemo(), id.getFileName());
 		
 	}
 
@@ -191,6 +191,12 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 	@Override
 	public boolean exists(IdRContent id) {
 		final File f = makeAbsFilePath(id);
+		if (logger.isInfoEnabled()) {
+			if (f == null)
+				logger.info( String.format("exists(id='%s')\n\t returns file==null", id) );
+			else if (!f.exists())
+				logger.info( String.format("exists(id='%s')\n\t returns FALSE and has absFilePath='%s'", id, f.getAbsolutePath()) );
+		}
 		return (f != null) && f.exists();
 	}
 

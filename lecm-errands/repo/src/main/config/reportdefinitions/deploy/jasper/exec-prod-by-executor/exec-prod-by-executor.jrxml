@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport 
+			xmlns="http://jasperreports.sourceforge.net/jasperreports" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports 
+			http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+			name="exec-prod-by-executor" 
+			pageWidth="842" pageHeight="595" orientation="Landscape" 
+			whenNoDataType="AllSectionsNoDetail" 
+			columnWidth="802" 
+			leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" 
+			uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="149"/>
+	<property name="dataSource" value="ru.it.lecm.reports.generators.errands.ErrandsProductionsGraphDSProvider"/>
+	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#DCDCDC"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="dataset2" uuid="76853ca6-6060-4579-9584-8e7e469dc851">
+		<queryString>
+			<![CDATA[""]]>
+		</queryString>
+		<field name="Col_NameTag" class="java.lang.String">
+			<fieldDescription><![CDATA[Название]]></fieldDescription>
+		</field>
+		<field name="Col_DateTime" class="java.sql.Timestamp">
+			<fieldDescription><![CDATA[Время]]></fieldDescription>
+		</field>
+		<field name="Col_Avg_Execution.Value" class="java.lang.Float">
+			<fieldDescription><![CDATA[Ср время исполнения]]></fieldDescription>
+		</field>
+		<field name="Col_Avg_Execution.Units" class="java.lang.String">
+			<fieldDescription><![CDATA[Ед измерения значения ср времени]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ds-exec-prod-by-executor.xml"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+
+	<field name="Col_NameTag" class="java.lang.String">
+		<fieldDescription><![CDATA[Название]]></fieldDescription>
+	</field>
+
+	<field name="Col_DateTime" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[Время]]></fieldDescription>
+	</field>
+
+	<field name="Col_Avg_Execution.Value" class="java.lang.Float">
+		<fieldDescription><![CDATA[Ср время исполнения]]></fieldDescription>
+	</field>
+
+	<field name="Col_Avg_Execution.Units" class="java.lang.String">
+		<fieldDescription><![CDATA[Ед измерения значения ср времени]]></fieldDescription>
+	</field>
+	
+	
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+
+	<title>
+		<band height="29" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="801" height="29"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="20" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Продуктивность Исполнителей]]></text>
+			</staticText>
+		</band>
+	</title>
+
+	<pageHeader>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="0" width="141" height="20"/>
+				<textElement textAlignment="Left">
+					<font fontName="DejaVu Serif" pdfEncoding="Cp1251"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Стр "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+
+	<columnHeader>
+		<band height="5" splitType="Stretch"/>
+	</columnHeader>
+
+	<detail>
+		<band height="5" splitType="Stretch"/>
+	</detail>
+
+	<columnFooter>
+		<band height="5" splitType="Stretch"/>
+	</columnFooter>
+
+	<pageFooter>
+		<band height="5" splitType="Stretch"/>
+	</pageFooter>
+
+	<summary>
+		<band height="530" splitType="Stretch">
+			<timeSeriesChart>
+				<chart isShowLegend="true">
+					<reportElement uuid="636e3559-83d4-4bf1-80b8-ce330e9f2dc8" x="20" y="10" width="760" height="520"/>
+					<chartTitle>
+						<!-- <titleExpression><![CDATA[Custon-Title-Expression]]></titleExpression> -->
+					</chartTitle>
+					<chartSubtitle>
+						<!-- <subtitleExpression><![CDATA[Custon-Subtitle-Expression]]></subtitleExpression> -->
+					</chartSubtitle>
+					<chartLegend/>
+				</chart>
+				<timeSeriesDataset timePeriod="Day">
+					<timeSeries>
+						<seriesExpression><![CDATA[$F{Col_NameTag}]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{Col_DateTime}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{Col_Avg_Execution.Value}]]></valueExpression>
+					</timeSeries>
+				</timeSeriesDataset>
+				<timeSeriesPlot isShowLines="true">
+					<plot/>
+					<timeAxisFormat>
+						<axisFormat/>
+					</timeAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</timeSeriesPlot>
+			</timeSeriesChart>
+		</band>
+	</summary>
+</jasperReport>

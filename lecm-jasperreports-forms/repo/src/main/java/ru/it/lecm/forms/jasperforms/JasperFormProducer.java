@@ -96,10 +96,14 @@ public class JasperFormProducer extends AbstractWebScript {
 		ReportBeansLocator.setReportsManager(this.getReportsManager());
 
 		final ReportDescriptor reportDesc = this.getReportsManager().getRegisteredReportDescriptor(reportName);
-		final ReportContentDAO storage = this.getReportsManager().findContentDAO(reportDesc); 
-		if (reportDesc != null) {
-			ParameterMapper.assignParameters( reportDesc, requestParameters);
+		if (reportDesc == null) {
+			throw new RuntimeException( String.format("Report descriptor '%s' not accessible (possibly report is not registered !?)", reportName) );
 		}
+		final ReportContentDAO storage = this.getReportsManager().findContentDAO(reportDesc); 
+		if (storage == null) {
+			throw new RuntimeException( String.format("Report '%s' storage point is unknown (possibly report is not registered !?)", reportName) );
+		}
+		ParameterMapper.assignParameters( reportDesc, requestParameters);
 
 		// получение провайдера ...
 		final ReportGenerator reporter = this.getReportsManager().getReportGenerators().get(rtype);

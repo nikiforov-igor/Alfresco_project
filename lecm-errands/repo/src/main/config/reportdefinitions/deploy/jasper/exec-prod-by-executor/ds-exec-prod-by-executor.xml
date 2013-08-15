@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ds.config>
-    <report.descriptor mnem="exec-discipline-by-creator">
+    <report.descriptor mnem="exec-prod-by-executor">
         <l18>
-            <item key="RU_RU" value="Исполнительская дисциплина по Инициаторам"/>
+            <item key="RU_RU" value="Продуктивность по Исполнителям"/>
         </l18>
         <type mnem="JASPER">
             <l18>
@@ -10,15 +10,15 @@
             </l18>
         </type>
         <provider
-            javaClass="ru.it.lecm.reports.generators.errands.ErrandsDisciplineDSProvider" mnem="PROVIDER_ERRANDS">
+            javaClass="ru.it.lecm.reports.generators.errands.ErrandsProductionsGraphDSProvider" mnem="PROVIDER_PROD_ERRANDS">
             <l18>
-                <item key="RU_RU" value="Провайдер Исполнительской Дисциплины по Исполнителям/Поразделениям"/>
+                <item key="RU_RU" value="Провайдер по Продуктивности Исполнителей"/>
             </l18>
         </provider>
         <template
-            filename="exec-discipline-by-creator.jrxml" mnem="exec-discipline-by-creator">
+            filename="exec-prod-by-executor.jrxml" mnem="exec-prod-by-executor">
             <l18>
-                <item key="RU_RU" value="exec-discipline-by-creator"/>
+                <item key="RU_RU" value="exec-prod-by-executor"/>
             </l18>
         </template>
         <datasource.descriptor>
@@ -113,6 +113,7 @@
                 </label2>
             </parameter>
         </field>
+
         <field alfrescoType="lecm-orgstr:employee"
             displayName="Исполнитель (сотрудник)"
             jrFldName="Col_Param_Creator" order="2" queryFldName="{lecm-orgstr:employee}">
@@ -131,6 +132,7 @@
                 </label2>
             </parameter>
         </field>
+
         <field alfrescoType="lecm-links:link"
             displayName="Подразделение инициатора"
             jrFldName="Col_Param_Exec_OrgUnit" order="3" queryFldName="{lecm-orgstr:organization-unit}">
@@ -145,6 +147,7 @@
             </parameter>
              -->
         </field>
+
         <field alfrescoType="d:text"
             displayName="Сотрудник или подразделение"
             javaValueClass="java.lang.String"
@@ -153,14 +156,16 @@
                 <item key="RU_RU" value="Сотрудник или подразделение"/>
             </l18>
         </field>
-        <field alfrescoType="d:text"
-            displayName="Выдано всего поручений за период"
-            javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Total" order="4" queryFldName="{{Col_Count_Total}}">
+
+        <field alfrescoType="d:date"
+            displayName="Дата/Время"
+            javaValueClass="java.sql.Timestamp"
+            jrFldName="Col_DateTime" order="4" queryFldName="{{Col_DateTime}}">
             <l18>
-                <item key="RU_RU" value="Выдано всего поручений за период"/>
+                <item key="RU_RU" value="Дата/Время"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Выдано важных поручений за период"
             javaValueClass="java.lang.Integer"
@@ -169,58 +174,20 @@
                 <item key="RU_RU" value="Выдано важных поручений за период"/>
             </l18>
         </field>
-        <field alfrescoType="d:text"
-            displayName="Закрытых всего поручений за период"
-            javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Closed" order="6" queryFldName="{{Col_Count_Closed}}">
-            <l18>
-                <item key="RU_RU" value="Закрытых всего поручений за период"/>
-            </l18>
-        </field>
-        <field alfrescoType="d:text"
-            displayName="Закрытых важных поручений за период"
-            javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Closed_important" order="7" queryFldName="{{Col_Count_Closed_important}}">
-            <l18>
-                <item key="RU_RU" value="Закрытых важных поручений за период"/>
-            </l18>
-        </field>
-        <field alfrescoType="d:text"
-            displayName="Кол-во исполнений в срок"
-            javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Intime" order="8" queryFldName="{{Col_Count_Intime}}">
-            <l18>
-                <item key="RU_RU" value="Кол-во исполнений в срок"/>
-            </l18>
-        </field>
-        <field alfrescoType="d:text"
-            displayName="Кол-во поручений, отклонённых руководителем"
-            javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Boss_Refused" order="9" queryFldName="{{Col_Count_Boss_Refused}}">
-            <l18>
-                <item key="RU_RU" value="Кол-во поручений, отклонённых руководителем"/>
-            </l18>
-        </field>
-        <field alfrescoType="d:text"
-            displayName="Кол-во важных поручений, неисполненных в срок"
-            javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Important_Refused" order="10" queryFldName="{{Col_Count_Important_Refused}}">
-            <l18>
-                <item key="RU_RU" value="Кол-во важных поручений, неисполненных в срок"/>
-            </l18>
-        </field>
+
         <field alfrescoType="d:text"
             displayName="Среднее время исполнения поручения"
             javaValueClass="java.lang.Float"
-            jrFldName="Col_Avg_Execution.Value" order="11" queryFldName="{{Col_Avg_Execution.Value}}">
+            jrFldName="Col_Avg_Execution.Value" order="6" queryFldName="{{Col_Avg_Execution.Value}}">
             <l18>
                 <item key="RU_RU" value="Среднее время исполнения поручения"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Единицы измерения среднего времени исполнения"
             javaValueClass="java.lang.String"
-            jrFldName="Col_Avg_Execution.Units" order="12" queryFldName="{{Col_Avg_Execution.Units}}">
+            jrFldName="Col_Avg_Execution.Units" order="7" queryFldName="{{Col_Avg_Execution.Units}}">
             <l18>
                 <item key="RU_RU" value="Единицы измерения среднего времени исполнения"/>
             </l18>
