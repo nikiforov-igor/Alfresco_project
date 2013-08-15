@@ -42,7 +42,7 @@ function main() {
     uri = addParamToUrl(uri, 'assocType', 'lecm-errands:execution-links-assoc');
     model.executeLinks = doGetCall(uri);
 
-    model.limitDate = new Date(nodeDetails.item.node.properties["lecm-errands:limitation-date"]["value"]);
+    model.limitDate = nodeDetails.item.node.properties["lecm-errands:limitation-date"];
 
 	uri = addParamToUrl('/lecm/errands/api/getCurrentEmployeeRoles', 'errandNodeRef', model.nodeRef);
 	model.roles = doGetCall(uri);

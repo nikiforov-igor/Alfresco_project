@@ -206,8 +206,8 @@
                 </#if>
             </#if>
 
-            ${msg("message.eddand.limitationDate")} <span>${limitDate?string("dd MMM yyyy")}</span>
-            <input type="hidden" id="errandLimitationDate" value="${limitDate?string("yyyy-MM-dd'T'HH:mm")}"/>
+            ${msg("message.eddand.limitationDate")} <span>${xmldate(limitDate.iso8601)?string("dd MMM yyyy")}</span>
+            <input type="hidden" id="errandLimitationDate" value="${xmldate(limitDate.iso8601)?string("yyyy-MM-dd'T'HH:mm")}"/>
             <#if justInTime>
                 &nbsp;${msg("message.eddand.justInTime")}
             </#if>
