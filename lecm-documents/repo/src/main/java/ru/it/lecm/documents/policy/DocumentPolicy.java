@@ -279,7 +279,7 @@ public class DocumentPolicy extends BaseBean
 
         if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
             nodeService.setProperty(nodeRef,DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
-            if (stateMachineHelper.isDraft(nodeRef)) {
+            if (stateMachineHelper.isDraft(nodeRef) || (before.size() == 0)) {
                 String status = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS);
                 List<String> objects = new ArrayList<String>(1);
                 if (status != null) {
