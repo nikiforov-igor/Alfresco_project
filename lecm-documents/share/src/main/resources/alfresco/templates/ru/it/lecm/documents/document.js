@@ -5,6 +5,11 @@ function main() {
         var access = eval('(' + result + ')');
         if (access && (access.readAccess)) {
             model.hasPermission = (("" + access.readAccess) == "true");
+
+            var errandsSettings = remote.connect("alfresco").get("/lecm/document-type/settings?docType=lecm-errands:document");
+            if (errandsSettings.status == 200) {
+                model.errandsSettings = errandsSettings;
+            }
         }
     } else {
         model.hasPermission = false;

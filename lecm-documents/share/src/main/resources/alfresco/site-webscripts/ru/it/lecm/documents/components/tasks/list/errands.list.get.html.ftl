@@ -8,7 +8,8 @@
             errands = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
                     {
                         itemType: "lecm-errands:document",
-                        destination: "${nodeRef}"
+                        destination: LogicECM.module.Documents.ERRANDS_SETTINGS.nodeRef,
+                        parentDoc:"${nodeRef}"
                     }).setMessages(${messages});
             var errandTasks = new LogicECM.module.Errands.Lists("${id}").setOptions(
                 {

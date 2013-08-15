@@ -26,11 +26,6 @@ function main() {
         var obj = eval("(" + json + ")");
         model.errandsIssuedByMeData = obj;
     }
-
-    var settingsStr = remote.connect("alfresco").get("/lecm/document-type/settings?docType=lecm-errands:document");
-    if (settingsStr.status == 200) {
-        model.errandsDashletSettings = settingsStr;
-    }
 }
 
 main();

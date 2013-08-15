@@ -85,7 +85,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                     limitDate = limitElement.value;
                 }
                 var args = {
-                    parentDoc: this.options.destination,
+                    parentDoc: this.options.parentDoc,
                     parentLimitationDate: limitDate
                 };
 

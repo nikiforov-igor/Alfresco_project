@@ -28,6 +28,16 @@
     <script type="text/javascript">
         //<![CDATA[
         var currentExtendedComponent = null;
+
+
+        LogicECM.module = LogicECM.module || {};
+        LogicECM.module.Documents = LogicECM.module.Documents|| {};
+        LogicECM.module.Documents.ERRANDS_SETTINGS =
+            <#if errandsSettings?? >
+            ${errandsSettings}
+            <#else>
+            {}
+            </#if>;
         //]]>
     </script>
 </@>

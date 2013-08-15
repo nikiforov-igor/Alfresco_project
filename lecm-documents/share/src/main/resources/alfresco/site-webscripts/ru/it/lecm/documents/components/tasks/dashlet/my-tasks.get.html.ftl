@@ -19,17 +19,12 @@
     (function () {
         function init() {
             new Alfresco.widget.DashletResizer("${id}", "document.tasks.dashlet");
-            LogicECM.module.Errands.SETTINGS =
-                <#if errandsDashletSettings?? >
-                ${errandsDashletSettings}
-                <#else>
-                {}
-                </#if>;
 
             errands = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
                     {
                         itemType: "lecm-errands:document",
-                        destination: LogicECM.module.Errands.SETTINGS.nodeRef
+                        destination: LogicECM.module.Documents.ERRANDS_SETTINGS.nodeRef,
+                        parentDoc:"${nodeRef}"
                     }).setMessages(${messages});
         }
 

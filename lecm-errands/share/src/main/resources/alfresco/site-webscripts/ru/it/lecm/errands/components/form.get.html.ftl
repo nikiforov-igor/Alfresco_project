@@ -133,7 +133,8 @@
 		    errands = new LogicECM.module.Errands.dashlet.Errands(htmlId + "-exec-child-errands").setOptions(
 				    {
 					    itemType: "lecm-errands:document",
-					    destination: "${nodeRef}"
+					    destination: LogicECM.module.Documents.ERRANDS_SETTINGS.nodeRef,
+                        parentDoc:"${nodeRef}"
 				    }).setMessages(${messages});
 
 		    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-child-errands-add", function() {
