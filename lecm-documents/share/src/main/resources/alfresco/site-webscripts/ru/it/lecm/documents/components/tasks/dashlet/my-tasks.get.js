@@ -26,6 +26,8 @@ function main() {
         var obj = eval("(" + json + ")");
         model.errandsIssuedByMeData = obj;
     }
+
+    model.nodeRef = args["nodeRef"];
 }
 
 main();
