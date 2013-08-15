@@ -51,6 +51,13 @@
 	<bean id="webscript.ru.it.lecm.signed.docflow.loadSign.loadSign.post" class="ru.it.lecm.signed.docflow.webscripts.LoadSignWebscript"
 		  parent="webscript"
 		  p:signedDocflowService-ref="signedDocflowService" />
-
-
+	
+	<bean id="webscript.ru.it.lecm.signed.docflow.getZip.getZip.get" class="ru.it.lecm.signed.docflow.webscripts.DownloadAsZipWebscript"
+		  parent="webscript"
+		  p:signedDocflowService-ref="signedDocflowService"
+		  p:serviceRegistry-ref="ServiceRegistry"
+		  p:documentAttachmentsService-ref="documentAttachmentsService"
+		  p:nodeService-ref="nodeService"
+	      p:dictionaryService-ref="dictionaryService"/>
+	
 </beans>
