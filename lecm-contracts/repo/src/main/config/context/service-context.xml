@@ -332,4 +332,15 @@
             </map>
         </property>
     </bean>
+
+    <bean id="listOfUsedContractsTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-additional-document:additionalDocument" value="Документ к договору"/>
+                <entry key="lecm-contract-dic:contract-type" value="Вид договора"/>
+                <entry key="lecm-contract-dic:contract-documents-type" value="Вид документа к договору"/>
+                <entry key="lecm-contract:document" value="Договор"/>
+            </map>
+        </property>
+    </bean>
 </beans>

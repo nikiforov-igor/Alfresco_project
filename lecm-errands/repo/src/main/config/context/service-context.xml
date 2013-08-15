@@ -464,6 +464,14 @@
     </bean>
 
 	<bean id="errandsChildFilter" class="ru.it.lecm.errands.beans.ErrandsChildFilter" depends-on="errandsService" parent="documentsFilter" init-method="register">
-
 	</bean>
+
+    <bean id="listOfUsedErrandsTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-errands-dic:errand-titles" value="Заголовок поручения"/>
+                <entry key="lecm-errands:document" value="Поручение"/>
+            </map>
+        </property>
+    </bean>
 </beans>

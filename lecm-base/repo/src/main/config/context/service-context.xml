@@ -195,4 +195,19 @@
 			</list>
 		</property>
 	</bean>
+
+    <bean id="listOfUsedTypes" class="ru.it.lecm.base.ListOfUsedTypesBean">
+        <property name="types">
+            <map>
+                <entry key="d:text" value="String"/>
+                <entry key="d:int" value="Int"/>
+                <entry key="d:long" value="Long"/>
+                <entry key="d:float" value="Float"/>
+                <entry key="d:double" value="Double"/>
+                <entry key="d:date" value="Date"/>
+                <entry key="d:datetime" value="Datetime"/>
+                <entry key="d:boolean" value="Boolean"/>
+            </map>
+        </property>
+    </bean>
 </beans>

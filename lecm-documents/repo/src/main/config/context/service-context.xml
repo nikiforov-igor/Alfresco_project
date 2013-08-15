@@ -507,4 +507,17 @@
     <bean id="documentsAuthorFilter" class="ru.it.lecm.documents.filters.AuthorFilter" parent="documentsFilter" init-method="register"/>
 
     <bean id="documentCopySettingsBean" class="ru.it.lecm.documents.beans.DocumentCopySettingsBean" abstract="true"/>
+
+    <bean id="listOfUsedDocumentsTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-connect:connection" value="Связь"/>
+                <entry key="lecm-connect-types:connection-type" value="Тип связи"/>
+                <entry key="lecm-doc-dic:subjects" value="Тематика"/>
+                <entry key="lecm-doc-members:member" value="Участник"/>
+                <entry key="lecm-document:base" value="Документ"/>
+                <entry key="lecm-document:documentComment" value="Комментарий"/>
+            </map>
+        </property>
+    </bean>
 </beans>

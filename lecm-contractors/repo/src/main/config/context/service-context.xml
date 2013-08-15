@@ -167,4 +167,15 @@
 
 	<bean id="contractorsOnCreateAssocsPolicy" class="ru.it.lecm.contractors.policies.ContractorsOnCreateAssocsPolicy"
 	      init-method="init" parent="logicEcmAssociationPolicy"/>
+
+    <bean id="listOfUsedContractorsTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-contractor:contractor-type" value="Контрагент"/>
+                <entry key="lecm-representative:representative-type" value="Представитель контрагента"/>
+                <entry key="lecm-specialization:specialization-type" value="Специализация контрагента"/>
+                <entry key="lecm-legalform:legalform-type" value="Организационно-правовая форма контрагента"/>
+            </map>
+        </property>
+    </bean>
 </beans>

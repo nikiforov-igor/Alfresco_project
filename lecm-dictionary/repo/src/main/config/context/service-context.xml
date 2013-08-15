@@ -150,4 +150,12 @@
             </map>
         </constructor-arg>
     </bean>
+
+    <bean id="listOfUsedDictionaryTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-currency:currency" value="Валюта"/>
+            </map>
+        </property>
+    </bean>
 </beans>

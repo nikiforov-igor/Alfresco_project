@@ -273,4 +273,22 @@
             </map>
         </constructor-arg>
     </bean>
+
+    <bean id="listOfUsedOrgstructureTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-orgstr:organization-element" value="Организационная единица"/>
+                <entry key="lecm-orgstr:organization-element-member" value="Позиция в структуре"/>
+                <entry key="lecm-orgstr:organization-unit" value="Структурное подразделение"/>
+                <entry key="lecm-orgstr:workGroup" value="Рабочая группа"/>
+                <entry key="lecm-orgstr:workforce" value="Участник рабочей группы"/>
+                <entry key="lecm-orgstr:staff-list" value="Штатное расписание"/>
+                <entry key="lecm-orgstr:position" value="Позиция"/>
+                <entry key="lecm-orgstr:staffPosition" value="Должностная позиция"/>
+                <entry key="lecm-orgstr:workRole" value="Роль в рабочей группе"/>
+                <entry key="lecm-orgstr:employee" value="Сотрудник"/>
+                <entry key="lecm-orgstr:business-role" value="Бизнес-роль"/>
+            </map>
+        </property>
+    </bean>
 </beans>

@@ -4,10 +4,10 @@ function sortByTitle(type1, type2) {
     return (title1 > title2) ? 1 : (title1 < title2) ? -1 : 0;
 }
 
-function getTypes(includeDataTypes){
-    var types = base.getRegisteredTypes(includeDataTypes);
+function getTypes(){
+    var types = base.getRegisteredTypes();
     types.sort(sortByTitle);
     return types;
 }
 
-model.types = getTypes(args["includeDicValues"] == "true");
+model.types = getTypes();

@@ -1,5 +1,6 @@
 package ru.it.lecm.base.scripts;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
 import org.alfresco.repo.jscript.ScriptNode;
@@ -12,6 +13,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
 import org.mozilla.javascript.Context;
+import ru.it.lecm.base.ListOfUsedTypesBean;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmObjectsService;
@@ -32,17 +34,6 @@ public class BaseWebScriptBean extends BaseWebScript {
 	final int REQUEST_MAX = 1000;
 
     private List<TypeMapper> registeredTypes = new ArrayList<TypeMapper>();
-    final private Set<QName> USED_TYPES = new HashSet<QName>() {{
-        add(DataTypeDefinition.TEXT);
-        add(DataTypeDefinition.INT);
-        add(DataTypeDefinition.LONG);
-        add(DataTypeDefinition.FLOAT);
-        add(DataTypeDefinition.DOUBLE);
-        add(DataTypeDefinition.DATE);
-        add(DataTypeDefinition.DATETIME);
-        add(DataTypeDefinition.BOOLEAN);
-        add(DataTypeDefinition.ANY);
-    }};
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
@@ -167,41 +158,14 @@ public class BaseWebScriptBean extends BaseWebScript {
         return new ScriptPagingNodes(Context.getCurrentContext().newArray(getScope(), results), pageOfNodeInfos.hasMoreItems(), totalResultCountLower, totalResultCountUpper);
     }
 
-    public Object[] getRegisteredTypes(boolean includeFromDictionary) {
+    public Object[] getRegisteredTypes() {
         if (registeredTypes == null || registeredTypes.size() == 0) {
             registeredTypes = new ArrayList<TypeMapper>();
-            Set<TypeMapper> types = new HashSet<TypeMapper>();
-            DictionaryService dicService = serviceRegistry.getDictionaryService();
-            if (includeFromDictionary) {
-                Collection<QName> dataTypes = dicService.getAllDataTypes();
-                for (QName dataType : dataTypes) {
-                    if (USED_TYPES.contains(dataType)) {
-                        DataTypeDefinition dtDef = dicService.getDataType(dataType);
-                        if (dtDef.getTitle() != null && !dtDef.getTitle().isEmpty()) {
-                            types.add(new TypeMapper(dtDef.getName().toPrefixString(namespaceService),
-                                    dtDef.getTitle()));
-                        }
-                    }
-                }
-            }
 
-            Collection<QName> docTypes = dicService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
-            for (QName docType : docTypes) {
-                TypeDefinition def = dicService.getType(docType);
-                Map<QName, AssociationDefinition> docTypeAssocs = def.getAssociations();
-                for (AssociationDefinition associationDefinition : docTypeAssocs.values()) {
-                    ClassDefinition classDef = associationDefinition.getTargetClass();
-                    if (classDef.getTitle() != null && !classDef.getTitle().isEmpty()) {
-                        String name = classDef.getName().toPrefixString(namespaceService);
-                        if (!name.startsWith("sys:")) {
-                            types.add(new TypeMapper(name,
-                                    classDef.getTitle()));
-                        }
-                    }
-                }
+            Map<String, String> registered = ListOfUsedTypesBean.getTypes();
+            for (Map.Entry<String, String> typeEntry : registered.entrySet()) {
+                registeredTypes.add(new TypeMapper(typeEntry.getKey(), typeEntry.getValue()));
             }
-
-            registeredTypes.addAll(types);
         }
         return registeredTypes.toArray();
     }

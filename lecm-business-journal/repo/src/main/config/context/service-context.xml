@@ -260,4 +260,12 @@
             </map>
         </constructor-arg>
     </bean>
+    <bean id="listOfUsedBJTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-busjournal:objectType" value="Тип объекта"/>
+                <entry key="lecm-busjournal:eventCategory" value="Категория событий"/>
+            </map>
+        </property>
+    </bean>
 </beans>
