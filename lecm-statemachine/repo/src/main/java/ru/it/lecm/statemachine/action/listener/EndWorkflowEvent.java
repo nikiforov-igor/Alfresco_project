@@ -102,7 +102,7 @@ public class EndWorkflowEvent implements ExecutionListener {
                     }
 
                     boolean stopSubWorkflows = false;
-                    Expression expression = new Expression(document, statemachineVariables, StateMachineHelper.getServiceRegistry());
+                    Expression expression = new Expression(document, StateMachineHelper.getServiceRegistry());
                     for (StateMachineAction action : transitionActions) {
                         TransitionAction transitionAction = (TransitionAction) action;
                         boolean currentTransitionValid = expression.execute(transitionAction.getExpression());

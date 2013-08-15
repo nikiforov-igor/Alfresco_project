@@ -769,6 +769,18 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return execution != null;
     }
 
+    public String getStatemachineId(NodeRef document) {
+        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        Execution execution = null;
+        if (statemachineId != null) {
+            execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
+            return execution.getId();
+        } else {
+            return null;
+        }
+
+    }
+
     public String getStatemachineVersion(NodeRef document) {
         String result = null;
         String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
@@ -1208,7 +1220,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
 
         if (nextState != null) {
-            Expression expression = new Expression(document, serviceRegistry, orgstructureBean);
+            Expression expression = new Expression(document, serviceRegistry);
 
             boolean access = true;
             Conditions conditions = nextState.getConditionAccess();
@@ -1295,7 +1307,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
             }
         }
         if (workflow != null && persistedResponse != null && !"null".equals(persistedResponse)) {
-            Expression expression = new Expression(document, serviceRegistry, orgstructureBean);
+            Expression expression = new Expression(document, serviceRegistry);
 
             boolean access = true;
             Conditions conditions = workflow.getConditionAccess();

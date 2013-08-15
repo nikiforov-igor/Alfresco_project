@@ -132,7 +132,7 @@ public class TimerActionHelper implements InitializingBean {
 
         NodeRef document = stateMachineHelper.getStatemachineDocument(stateMachineExecutionId);
         Map<String, Object> variables = stateMachineHelper.getVariables(stateMachineExecutionId);
-        Expression lecmExpression = new Expression(document, variables, serviceRegistry);
+        Expression lecmExpression = new Expression(document, serviceRegistry);
 
         for (TransitionExpression expression : expressions) {
             if (lecmExpression.execute(expression.getExpression())) {

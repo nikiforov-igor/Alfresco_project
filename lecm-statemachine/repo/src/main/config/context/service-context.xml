@@ -261,7 +261,11 @@
         <property name="stateMachineHelper" ref="stateMachineHelper"/>
     </bean>
 
-	<bean id="employeeExpression" class="ru.it.lecm.statemachine.expression.ExpressionEmployee">
+    <bean id="lecmBPExpression" class="ru.it.lecm.statemachine.expression.Expression">
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
+    </bean>
+
+     <bean id="employeeExpression" class="ru.it.lecm.statemachine.expression.ExpressionEmployee">
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
     </bean>
 

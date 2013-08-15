@@ -2,6 +2,7 @@ package ru.it.lecm.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
+import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.expression.Expression;
 
 import java.util.List;
@@ -22,7 +23,8 @@ public class TransitionAction extends StateMachineAction {
 
 	@Override
 	public void execute(DelegateExecution execution) {
-		Expression expression = new Expression(execution, getServiceRegistry());
+        StateMachineHelper helper = new StateMachineHelper();
+		Expression expression = new Expression(helper.getStatemachineDocument(execution.getId()), getServiceRegistry());
 		boolean result = expression.execute(expressionValue);
 		execution.setVariable(variableName, result);
 	}

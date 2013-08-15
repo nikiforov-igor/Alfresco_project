@@ -1,6 +1,5 @@
 package ru.it.lecm.statemachine.expression;
 
-import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
@@ -24,33 +23,24 @@ public class Expression {
 	private ExpressionDocument doc;
 	private ExpressionUser user;
 	private StandardEvaluationContext context;
+	private static OrgstructureBean orgstructureBean;
 
-	private static final transient Logger logger = LoggerFactory.getLogger(Expression.class);
+    private static final transient Logger logger = LoggerFactory.getLogger(Expression.class);
 
-    public Expression(NodeRef document, ServiceRegistry serviceRegistry, OrgstructureBean orgstructureBean) {
-        this.doc = new ExpressionDocument(document, serviceRegistry);
-        this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean);
-        context = new StandardEvaluationContext(this);
+    public Expression() {
     }
 
-	public Expression(DelegateExecution execution, ServiceRegistry serviceRegistry) {
-		StateMachineHelper helper = new StateMachineHelper();
-		NodeRef documentRef = helper.getStatemachineDocument(execution.getId());
-		doc = new ExpressionDocument(documentRef, serviceRegistry);
-		state = execution.getVariables();
-		context = new StandardEvaluationContext(this);
-	}
-
-	public Expression(NodeRef doc, ServiceRegistry serviceRegistry) {
-		this.doc = new ExpressionDocument(doc, serviceRegistry);
-		context = new StandardEvaluationContext(this);
-	}
-
-	public Expression(NodeRef doc, Map<String, Object> variables, ServiceRegistry serviceRegistry) {
-		this.doc = new ExpressionDocument(doc, serviceRegistry);
-		state = variables;
-		context = new StandardEvaluationContext(this);
-	}
+    public Expression(NodeRef document, ServiceRegistry serviceRegistry) {
+        StateMachineHelper helper = new StateMachineHelper();
+        NodeRef documentRef = document;
+        this.doc = new ExpressionDocument(documentRef, serviceRegistry);
+        this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean);
+        String executionId = helper.getStatemachineId(document);
+        if (executionId != null) {
+            this.state = helper.getVariables(executionId);
+        }
+        this.context = new StandardEvaluationContext(this);
+    }
 
 	public boolean execute(String expression) {
 		if ("".equals(expression)) {
@@ -77,4 +67,7 @@ public class Expression {
         return user;
     }
 
+    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+        Expression.orgstructureBean = orgstructureBean;
+    }
 }

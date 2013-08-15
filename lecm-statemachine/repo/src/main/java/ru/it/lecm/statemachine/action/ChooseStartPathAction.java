@@ -37,7 +37,7 @@ public class ChooseStartPathAction extends StateMachineAction {
             return;
         }
 
-        Expression expression = new Expression(document, getServiceRegistry(), getOrgstructureBean());
+        Expression expression = new Expression(document, getServiceRegistry());
         execution.setVariable(DIRECTION_VARIABLE, "");
         for (StartExpression startExpression : expressions) {
             if (expression.execute(startExpression.getExpression())) {
