@@ -7,12 +7,14 @@
 			name="exec-prod-by-executor" 
 			pageWidth="842" pageHeight="595" orientation="Landscape" 
 			whenNoDataType="AllSectionsNoDetail" 
-			columnWidth="802" 
+			columnWidth="802"
 			leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" 
+			isFloatColumnFooter="true" 
+			whenResourceMissingType="Key" 
 			uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="149"/>
+	<property name="ireport.y" value="118"/>
 	<property name="dataSource" value="ru.it.lecm.reports.generators.errands.ErrandsProductionsGraphDSProvider"/>
 	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
@@ -20,10 +22,9 @@
 			<style backcolor="#DCDCDC"/>
 		</conditionalStyle>
 	</style>
+	<!--
 	<subDataset name="dataset2" uuid="76853ca6-6060-4579-9584-8e7e469dc851">
-		<queryString>
-			<![CDATA[""]]>
-		</queryString>
+		<queryString> <![CDATA[""]]> </queryString>
 		<field name="Col_NameTag" class="java.lang.String">
 			<fieldDescription><![CDATA[Название]]></fieldDescription>
 		</field>
@@ -37,12 +38,13 @@
 			<fieldDescription><![CDATA[Ед измерения значения ср времени]]></fieldDescription>
 		</field>
 	</subDataset>
+	 -->
+
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["ds-exec-prod-by-executor.xml"]]></defaultValueExpression>
 	</parameter>
-	<queryString>
-		<![CDATA[]]>
-	</queryString>
+
+	<queryString> <![CDATA[]]> </queryString>
 
 	<field name="Col_NameTag" class="java.lang.String">
 		<fieldDescription><![CDATA[Название]]></fieldDescription>
@@ -66,10 +68,10 @@
 	</background>
 
 	<title>
-		<band height="29" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="801" height="29"/>
-				<textElement>
+				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="801" height="24"/>
+				<textElement textAlignment="Center">
 					<font fontName="DejaVu Sans" size="20" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Продуктивность Исполнителей]]></text>
@@ -90,33 +92,33 @@
 	</pageHeader>
 
 	<columnHeader>
-		<band height="5" splitType="Stretch"/>
+		<band height="1" splitType="Stretch"/>
 	</columnHeader>
 
 	<detail>
-		<band height="5" splitType="Stretch"/>
+		<band height="1" splitType="Stretch"/>
 	</detail>
 
 	<columnFooter>
-		<band height="5" splitType="Stretch"/>
+		<band height="1" splitType="Stretch"/>
 	</columnFooter>
 
 	<pageFooter>
-		<band height="5" splitType="Stretch"/>
+		<band height="1" splitType="Stretch"/>
 	</pageFooter>
 
 	<summary>
-		<band height="530" splitType="Stretch">
+		<band height="470" splitType="Stretch">
 			<timeSeriesChart>
 				<chart isShowLegend="true">
-					<reportElement uuid="636e3559-83d4-4bf1-80b8-ce330e9f2dc8" x="20" y="10" width="760" height="520"/>
+					<reportElement uuid="636e3559-83d4-4bf1-80b8-ce330e9f2dc8" x="35" y="0" width="745" height="465"/>
 					<chartTitle>
 						<!-- <titleExpression><![CDATA[Custon-Title-Expression]]></titleExpression> -->
 					</chartTitle>
 					<chartSubtitle>
 						<!-- <subtitleExpression><![CDATA[Custon-Subtitle-Expression]]></subtitleExpression> -->
 					</chartSubtitle>
-					<chartLegend/>
+					<chartLegend position="Top"/>
 				</chart>
 				<timeSeriesDataset timePeriod="Day">
 					<timeSeries>

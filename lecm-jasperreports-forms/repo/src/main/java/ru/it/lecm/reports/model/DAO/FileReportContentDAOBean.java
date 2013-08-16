@@ -22,15 +22,53 @@ import ru.it.lecm.reports.utils.Utils;
 
 public class FileReportContentDAOBean implements ReportContentDAO {
 
-	/** Обозначение макро-ссылок на отдельные элементы id*/
-	private static final String MACRO_RTYPE = "/@reporType";
+	/*
+	 * Обозначение макро-ссылок на отдельные элементы id
+	 * Используется три автоматических значения для макро-подстановки:
+	 *   1) на тип отчета
+	 *   2) на код (мнемонику) отчёта
+	 *   3) на имя файла.
+	 * Каждое значение может быть подставлено в трёх вариантах: 
+	 *   1) либо как есть, 
+	 *   2) либо значение в нижнем регистре, 
+	 *   3) либо в верхнем. 
+	 */
+
+	/* Как есть ==============================================================*/
+	/** Макрос для подстановки "Тип отчёта" как есть (без изменения регистра) */ 
+	private static final String MACRO_RTYPE = "@reporType";
+
+	/** Макрос для подстановки "Мнемоники/кода отчёта" как есть */ 
 	private static final String MACRO_RMNEM = "@reportMnemo";
+
+	/** Макрос для подстановки "Названия файла" как есть */ 
 	private static final String MACRO_FNAME = "@fileName";
+
+	/* Нижний регистр ========================================================*/
+	/** Макрос для подстановки "Тип отчёта" в НИЖНЕМ регистре */ 
+	private static final String MACRO_RTYPE_LO = "@reporTypeLo";
+
+	/** Макрос для подстановки "Мнемоники/кода отчёта" в НИЖНЕМ регистре */ 
+	private static final String MACRO_RMNEM_LO = "@reportMnemoLo";
+
+	/** Макрос для подстановки "Названия файла" в НИЖНЕМ регистре */ 
+	private static final String MACRO_FNAME_LO = "@fileNameLo";
+
+	/* Верхний регистр =======================================================*/
+	/** Макрос для подстановки "Тип отчёта" в ВЕРХНЕМ регистре */ 
+	private static final String MACRO_RTYPE_UP = "@reporTypeUp";
+
+	/** Макрос для подстановки "Мнемоники/кода отчёта" в ВЕРХНЕМ регистре */ 
+	private static final String MACRO_RMNEM_UP = "@reportMnemoUp";
+
+	/** Макрос для подстановки "Названия файла" в ВЕРХНЕМ регистре */ 
+	private static final String MACRO_FNAME_UP = "@fileNameUp";
 
 	/** формат по-умолчанию для формирования пути к файлу, относительно root-каталога */
 	private static final String DEFAULT_STORE_STRUC_FMT 
 		= MACRO_RTYPE+ "/"+ MACRO_RMNEM+ "/"+ MACRO_FNAME;
 
+	/* Умолчания и значения ==================================================*/
 	/** используемое значения, когда исходное NULL */
 	private static final String DEFAULT_NULL_FMT = MACRO_FNAME; // для формата - использовать только название файла
 	private static final String EMPTY_REPORT_TYPE_DIR = ReportsManagerImpl.DEFAULT_REPORT_TYPE; // для пустого типа отчёта
@@ -168,14 +206,31 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 	public File makeAbsFilePath(final ReportType rtype, final String mnem, final String fileName) {
 		// if (fileName() == null || fileName().trim().length() == 0) return null;
 
-		final String stype = (rtype == null)
-					? ReportsManagerImpl.DEFAULT_REPORT_TYPE
-					: rtype.getMnem();
+		final String stype = Utils.nonblank( (rtype == null) ? ReportsManagerImpl.DEFAULT_REPORT_TYPE : rtype.getMnem()
+						, EMPTY_REPORT_TYPE_DIR);
+		final String smnem = Utils.nonblank( mnem, EMPTY_REPORT_MNEM_DIR);
+		final String sname = Utils.nonblank( fileName, "");
 
+		/* NOTE: преобразования должны проводиться так, чтобы максросы,
+		 * отрабатываемые раньше, не включали текстуально себя в макросы, которые 
+		 * будут работать после, иначе подстановка выполниться некорректно (раньше 
+		 * и с другими подставляеммыми значениями).
+		 */
 		final String relPath = storeStructurePathFmt
-				.replaceAll( MACRO_RTYPE, Utils.nonblank( stype, EMPTY_REPORT_TYPE_DIR))
-				.replaceAll( MACRO_RMNEM, Utils.nonblank( mnem, EMPTY_REPORT_MNEM_DIR))
-				.replaceAll( MACRO_FNAME, Utils.nonblank( fileName, "") )
+				// для нижнего регистра ...
+				.replaceAll( MACRO_RTYPE_LO, stype.toLowerCase())
+				.replaceAll( MACRO_RMNEM_LO, smnem.toLowerCase())
+				.replaceAll( MACRO_FNAME_LO, sname.toLowerCase())
+
+				// для верхнего регистра ...
+				.replaceAll( MACRO_RTYPE_UP, stype.toUpperCase())
+				.replaceAll( MACRO_RMNEM_UP, smnem.toUpperCase())
+				.replaceAll( MACRO_FNAME_UP, sname.toUpperCase())
+
+				// для обычных значений ...
+				.replaceAll( MACRO_RTYPE, stype)
+				.replaceAll( MACRO_RMNEM, smnem)
+				.replaceAll( MACRO_FNAME, sname)
 				;
 
 		// все пути относительно class-path: getSysRootDir() и далее rootDir ... 
@@ -195,7 +250,9 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 			if (f == null)
 				logger.info( String.format("exists(id='%s')\n\t returns file==null", id) );
 			else if (!f.exists())
-				logger.info( String.format("exists(id='%s')\n\t returns FALSE and has absFilePath='%s'", id, f.getAbsolutePath()) );
+				logger.info( String.format("exists(id='%s')\n\t (!) returns FALSE for absFilePath='%s'", id, f.getAbsolutePath()) );
+			else 
+				logger.info( String.format("exists(id='%s')\n\t returns TRUE for absFilePath='%s'", id, f.getAbsolutePath()) );
 		}
 		return (f != null) && f.exists();
 	}

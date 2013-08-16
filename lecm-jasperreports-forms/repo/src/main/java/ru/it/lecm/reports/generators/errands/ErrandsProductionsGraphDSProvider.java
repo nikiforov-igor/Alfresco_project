@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -408,7 +409,7 @@ public class ErrandsProductionsGraphDSProvider
 			if (dstart == null || dend == null) // одной из дат нет ...
 				return 0;
 
-			// (!) Sпервую дату выравниваем на начало дня, 
+			// (!) первую дату выравниваем на начало дня, 
 			// вторую - не трогаем, т.к. будем ровнять delta_h сверху на 24ч
 			final Calendar cstart = Calendar.getInstance();
 			cstart.setTime(dstart);
@@ -417,7 +418,7 @@ public class ErrandsProductionsGraphDSProvider
 			cstart.set(Calendar.SECOND, 0);
 			cstart.set(Calendar.MILLISECOND, 0);
 
-			// вычсиление разницы в часах ...
+			// вычисление разницы в часах ...
 			final float delta_h = Utils.getDurationInHours(dend.getTime() - cstart.getTimeInMillis());
 			if (delta_h == 0)
 				return 0;
@@ -432,9 +433,31 @@ public class ErrandsProductionsGraphDSProvider
 
 			final List<GraphPoint> result = new ArrayList<GraphPoint>();
 
-			final int maxTimeCounter = countDeltaInDays(periodStart, periodEnd); // кол-во отметок времени
+			final int maxTimeCounter = 1+ countDeltaInDays(periodStart, periodEnd); // кол-во отметок времени
 
-			if (context.getRsIter() != null) {
+			// TODO: RANDOM DATA FILL FOR TEST
+			/*
+			// (!) перенос в основной блок с разбивкой по датам ...
+			{
+				final Calendar curDay = Calendar.getInstance();
+				curDay.setTime(periodStart);
+				final Random r = new Random(); 
+				for (int i = 0; i < maxTimeCounter; i++) { // цикл по дням
+					final Timestamp curStamp = new Timestamp(curDay.getTimeInMillis());
+
+					for (String outerName: new String[] {"Иванов", "Петров", "Сидоров"} ) { // цикл по объектам
+						final float avg = r.nextFloat()* 2f + 20f;
+						result.add( new GraphPoint( outerName, curStamp, avg, "h"));
+					}
+					curDay.add(Calendar.HOUR, 24); // сутки добавляем
+				}
+
+				this.setData( result );
+			}
+			 */
+
+			// проход по данным ...
+			if (context.getRsIter() != null && result.isEmpty()) {
 
 				// series: собранные данные по объекта (Сотрудникам или Подразделениям)
 				// Ключ здесь это название измерения (tag)

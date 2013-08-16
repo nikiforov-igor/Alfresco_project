@@ -74,7 +74,8 @@
 	<bean id="fileReportContentBean"
 			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
 			init-method="init">
-		<!-- для надёжности - запрещаем запись -->
+
+		<!-- для надёжности - запрещаем запись в предустановленные отчёты -->
 		<property name="readonly" value="true"/>
 
 		<!-- Расположение каталогов на серваке относительно ./classes -->
@@ -83,14 +84,19 @@
 		<!--
 			Форматная строка относительно rootDir для получения полного пути к файлу
 			(положение программно задаётся как id : IdContent, фактически используются его одноимённые атрибуты)
-			Именованные параметры обозначаются как "@{abc}":
+			Именованные параметры обозначаются как "@{abc}". 
+			В качестве имени "abc" могут подставляться:
 					@reportType		тип отчёта
-					@reportMnemo	название отчёта
+						@reportTypeLo		тип отчёта в нижнем регистре
+						@reportTypeUp		тип отчёта в верхнем регистре
+					@reportMnemo	название отчёта 
+						(@reportMnemoLo/@reportMnemoUp аналогично типу)
 					@fileName		название файла (только имя с расширением)
-					// @{root}		корневой каталог не разрешается
+						(@fileNameLo/@fileNameUp аналогично)
+					// @root		(!) корневой каталог использовать не разрешается
 		
 		  -->
-		<property name="storeStructurePathFmt" value="/@reporType/@reportMnemo/@fileName" />
+		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileName" />
 	</bean>
 
 	<!-- Хранилище шаблонов файлов отчётов в файловой системе
@@ -115,7 +121,7 @@
 
 			(!) Здесь зависимости от "кода отчёта" в форматной строке нет, т.к. это шаблоны
 		  -->
-		<property name="storeStructurePathFmt" value="/@reporType/@fileName" />
+		<property name="storeStructurePathFmt" value="/@reporTypeLo/@fileName" />
 	</bean>
 
 	<!-- 
