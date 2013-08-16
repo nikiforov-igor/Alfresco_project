@@ -774,7 +774,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         Execution execution = null;
         if (statemachineId != null) {
             execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
-            return execution.getId();
+            return execution != null ? execution.getId() : null;
         } else {
             return null;
         }
