@@ -117,7 +117,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                                 if (results.success) {
                                     details += "<li title='" + results.name + "'>";
                                     details += "<img src=" + Alfresco.constants.URL_CONTEXT + "res/components/images/filetypes/generic-file-16.png class='file-icon'/>";
-                                    details += "<a href=" + ((results.url.match("^(http|https)://") == null) ? "http://" + results.url : results.url) + ">" + results.name + "</a>";
+                                    details += "<a href=" + ((results.url.match("://") == null) ? "http://" + results.url : results.url) + ">" + results.name + "</a>";
                                     details += "</li>";
                                     this.containerList.innerHTML += details;
                                     var count = 0;

@@ -247,7 +247,7 @@
                     <#list links.links as link>
                         <li title="${link.name!""}">
                             <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
-                            <#if link.url?matches("^(http|https)://")>
+                            <#if link.url?matches("://")>
                                 <a href="${link.url}">${link.name!""}</a>
                             <#else>
                                 <a href="http://${link.url}">${link.name!""}</a>
@@ -319,7 +319,7 @@
                         <#list executeLinks.links as link>
                             <li title="${link.name!""}">
                                 <img src="${url.context}/res/components/images/filetypes/generic-file-16.png" class="file-icon"/>
-                                <#if link.url?matches("^(http|https)://")>
+                                <#if link.url?matches("://")>
                                     <a href="${link.url}">${link.name!""}</a>
                                 <#else>
                                     <a href="http://${link.url}">${link.name!""}</a>
