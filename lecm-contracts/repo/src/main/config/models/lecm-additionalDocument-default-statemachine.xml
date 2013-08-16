@@ -8393,6 +8393,9 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																<name>actionScript</name>
 																<value><![CDATA[var additionalDocument = bpm_package.children[0];
 
+additionalDocument.properties["lecm-additional-document:date"] = new Date();
+additionalDocument.save();
+
                                                                     var contractAssocs = additionalDocument.assocs["lecm-additional-document:document-assoc"];
                                                                     if (contractAssocs != null && contractAssocs.length == 1) {
     var contract = contractAssocs[0];
