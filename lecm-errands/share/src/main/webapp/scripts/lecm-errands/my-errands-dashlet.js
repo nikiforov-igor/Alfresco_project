@@ -157,16 +157,17 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 
                 if (this.dataTable == null) {
                     var columnDefs = [
-                        { key: "isImportant", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), width: "auto", className: "column" },
-                        { key: "baseDocString", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), width: "auto", className: "column" },
-                        { key: "linkString", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), className: "column"}
+                        { key: "isImportant", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), width: "16", className: "image"},
+                        { key: "baseDocString", label: "", sortable: false, formatter: this.bind(this.renderCellIcons), width: "16", className: "image"},
+                        { key: "linkString", label: "", sortable: false, formatter: this.bind(this.renderCellIcons)}
                     ];
                     var initialSource = new YAHOO.util.DataSource(response.json.data);
                     initialSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
                     initialSource.responseSchema = {isImportant: "isImportant", baseDocString: "baseDocString", linkString: "linkString"};
 
                     this.dataTable = new YAHOO.widget.DataTable(this.id + "-errands", columnDefs, initialSource, {});
-                    this.dataTable.getTheadEl().hidden=true;
+                    this.dataTable.getTheadEl().hidden = true;
+                    this.dataTable.getTableEl().className += "my-errands";
 
                 } else {
                     this.dataTable.addRows(response.json.data);
@@ -182,15 +183,26 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                     desc = "";
 
                 if (oColumn.key =="isImportant" && data.isImportant == "true") {
-                    desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png' + '" width="16" alt="' + this.msg("label.important") + '" title="' + this.msg("label.important") + '" />';
+                    elCell.className += " " + oColumn.className;
+                    oColumn.getThEl().className += "" + oColumn.className;
+                    desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png'
+                        + '" width="16" alt="' + this.msg("label.important") + '" title="' + this.msg("label.important")
+                        + '" />';
                 }
 
                 if (oColumn.key =="baseDocString" && data.baseDocString != undefined) {
-                    desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/base_doc_16.png' + '" width="16" alt="' + data.baseDocString + '" title="' + data.baseDocString + '" />';
+                    elCell.className += " " + oColumn.className;
+                    oColumn.getThEl().className += "" + oColumn.className;
+                    desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/base_doc_16.png'
+                        + '" width="16" alt="' + data.baseDocString + '" title="' + data.baseDocString + '" />';
                 }
 
                 if (oColumn.key =="linkString") {
-                    desc = "<a href='" + window.location.protocol + "//" + window.location.host +Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef="+ data.nodeRef + "'>"+data.record + "</a> ";
+                    desc = "<a href='" + window.location.protocol + "//" + window.location.host +Alfresco.constants.URL_PAGECONTEXT
+                        + "document?nodeRef="+ data.nodeRef + "'>"+data.number +": \""+ data.title + "\"</a> "
+                        + this.msg("label.from") + " <a href='" + window.location.protocol + "//" + window.location.host +
+                        Alfresco.constants.URL_PAGECONTEXT + "view-metadata?nodeRef="+ data.executor + "'>"
+                        + data.executor_name + ",</a> " + this.msg("label.up.to") + " " + data.date;
                     if (data.isExpired == "true") {
                         desc  += "<div class='expired'>" + this.msg("label.is-expired") + "</div>";
                     }

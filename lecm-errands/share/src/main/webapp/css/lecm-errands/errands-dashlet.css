@@ -49,3 +49,23 @@
     color: #cd853f;
     display: inline;
 }
+
+.body.scrollableList .my-errands .yui-dt-liner.image {
+    padding: 4px 0;
+}
+
+.body.scrollableList .my-errands tr.yui-dt-rec.yui-dt-odd {
+    background-color: #FFFFFF;
+}
+
+.body.scrollableList .my-errands td.image {
+    width: 16px;
+}
+
+.body.scrollableList .my-errands td {
+    border-bottom: 1px dashed #D9D9D9;
+}
+
+.body.scrollableList .my-errands {
+    width: 100%;
+}
