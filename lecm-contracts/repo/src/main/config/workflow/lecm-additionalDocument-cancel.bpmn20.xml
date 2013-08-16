@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/contract/workflow/createOnBasis/1.0">
+	<process id="contractAdditionalDocumentCancel" name="Отменить документ к договору">
+		<startEvent id="startContractAdditionalDocumentCancel" name="Start" activiti:formKey="lecmContractWf:contractAdditionalDocumentCancelTask"></startEvent>
+		<endEvent id="endContractAdditionalDocumentCancel" name="End"></endEvent>
+		<scriptTask id="cancelContractAdditionalDocument" name="Additional document cancel" scriptFormat="javascript">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="script">
+						<activiti:string>
+							var document = bpm_package.children[0];
+
+							var logObjects = [];
+							logObjects.push(lecmContractWf_contractAdditionalDocumentCancelBaseOnDocument);
+							var logText = "Сотрудник #initiator зафиксировал факт отмены документ #mainobject. Основанием для отмены является #object1.";
+							businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", logText, logObjects);
+						</activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+			<script></script>
+		</scriptTask>
+		<receiveTask id="contractReceiveTask" name="Receive Task"></receiveTask>
+		<sequenceFlow id="flow1" name="" sourceRef="startContractAdditionalDocumentCancel" targetRef="cancelContractAdditionalDocument"></sequenceFlow>
+		<sequenceFlow id="flow2" name="" sourceRef="cancelContractAdditionalDocument" targetRef="contractReceiveTask"></sequenceFlow>
+		<sequenceFlow id="flow3" name="" sourceRef="contractReceiveTask" targetRef="endContractAdditionalDocumentCancel"></sequenceFlow>
+	</process>
+</definitions>
+
+		<!--        user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") or user.currentUser().hasBusinessRole("CONTRACT_CURATOR")-->
+		<!--        Данное действие доступно только куратору и инициатору-->

@@ -119,5 +119,18 @@
                 <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
             </mandatory-aspects>
         </type>
+
+		<type name="lecmContractWf:contractAdditionalDocumentCancelTask">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmContractWf:contractAdditionalDocumentCancelBaseOnDocument">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
+		</type>
     </types>
 </model>

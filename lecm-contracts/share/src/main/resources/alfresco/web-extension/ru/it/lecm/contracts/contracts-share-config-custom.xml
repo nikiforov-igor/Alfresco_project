@@ -1485,6 +1485,25 @@
         </forms>
     </config>
 
+	<config evaluator="string-compare" condition="activiti$contractAdditionalDocumentCancel">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="packageItems" />
+					<show id="lecmContractWf:contractAdditionalDocumentCancelBaseOnDocument" />
+				</field-visibility>
+				<appearance>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+					<field id="lecmContractWf:contractAdditionalDocumentCancelBaseOnDocument" label-id="contract.contractAdditionalDocumentCancel.baseOnDocument">
+						<control template="/ru/it/lecm/contracts/component/contracts-based-on-document.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
     <config>
         <forms>
             <dependencies>

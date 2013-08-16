@@ -2501,14 +2501,14 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Для совершения этого действия
                                                                                     необходимо добавить вложение в
                                                                                     категорию "Документ".]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2580,13 +2580,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
+																				<name>inputFromValue</name>
+																				<value><![CDATA[Согласование]]></value>
+																			</property>
+																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					<![CDATA[commentFileAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
-																				<name>inputFromValue</name>
-																				<value><![CDATA[Согласование]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2611,14 +2611,14 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>
-																					<![CDATA[documentProjectNumber]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value>
 																					<![CDATA[lecm-additional-document:number]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentProjectNumber]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2635,14 +2635,14 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Для совершения этого действия
                                                                                     необходимо добавить вложение в
                                                                                     категорию "Документ".]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2672,13 +2672,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
+																				<name>inputFromValue</name>
+																				<value><![CDATA[Документ]]></value>
+																			</property>
+																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					<![CDATA[documentAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
-																				<name>inputFromValue</name>
-																				<value><![CDATA[Документ]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -3760,13 +3760,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Данное действие доступно только
                                                                                     куратору и инициатору]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -3818,13 +3818,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Данное действие доступно только
                                                                                     куратору договорной деятельности]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -3846,14 +3846,14 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Для совершения этого действия
                                                                                     необходимо добавить вложение в
                                                                                     категорию "Документ".]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -4967,14 +4967,14 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Для совершения этого действия
                                                                                     необходимо добавить вложение в
                                                                                     категорию "Документ".]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6014,14 +6014,14 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Для совершения этого действия
                                                                                     необходимо добавить вложение в
                                                                                     категорию "Документ".]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6093,14 +6093,14 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>
-																					<![CDATA[documentProjectNumber]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value>
 																					<![CDATA[lecm-additional-document:number]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentProjectNumber]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -6125,13 +6125,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
+																				<name>inputFromValue</name>
+																				<value><![CDATA[Согласование]]></value>
+																			</property>
+																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					<![CDATA[commentFileAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
-																				<name>inputFromValue</name>
-																				<value><![CDATA[Согласование]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -6148,14 +6148,14 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Для совершения этого действия
                                                                                     необходимо добавить вложение в
                                                                                     категорию "Документ".]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -6185,13 +6185,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
+																				<name>inputFromValue</name>
+																				<value><![CDATA[Документ]]></value>
+																			</property>
+																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					<![CDATA[documentAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
-																				<name>inputFromValue</name>
-																				<value><![CDATA[Документ]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -7331,13 +7331,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Подписан у контрагента]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -7359,13 +7359,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Данное действие доступно только
                                                                                     подписанту]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -7424,13 +7424,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Не подписан у контрагента]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -7453,13 +7453,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Данное действие доступно только
                                                                                     подписанту]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -8495,6 +8495,77 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 														<roleAssociations/>
 														<subFolders/>
 													</node>
+													<node>
+														<type>transitionWorkflow</type>
+														<name>b3591de6-e241-4047-b44d-87651bde2a14</name>
+														<nodeRef>
+															workspace://SpacesStore/0997d9a7-76e5-4f92-abf7-79c5bece123e
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[true]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Отменить документ]]></value>
+															</property>
+															<property>
+																<name>workflowId</name>
+																<value>
+																	<![CDATA[activiti$contractAdditionalDocumentCancel]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+															<workflowAspect/>
+															<transitionLabelAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/c468bb44-0a2a-45a2-a470-143243d577ce
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>3bb1fa48-159f-4aec-8284-fafaf19515e4
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/3f5ff2d6-5324-4f4f-9915-21ceeae2bf91
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Данное действие доступно только куратору и инициатору]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") or user.currentUser().hasBusinessRole("CONTRACT_CURATOR")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
+													</node>
 												</nodes>
 											</subFolder>
 										</subFolders>
@@ -9441,37 +9512,6 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 												<nodes>
 													<node>
 														<type>userTransition</type>
-														<name>3f2fe6ac-e034-4b8c-bfcc-d49cc50ea780</name>
-														<nodeRef>
-															workspace://SpacesStore/f840b22e-6b3b-4353-8fa2-aa86f144f129
-														</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[false]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Отменить]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>
-																	workspace://SpacesStore/c468bb44-0a2a-45a2-a470-143243d577ce
-																</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders/>
-													</node>
-													<node>
-														<type>userTransition</type>
 														<name>fa226618-da34-4b5b-9cd2-439d5ebfc656</name>
 														<nodeRef>
 															workspace://SpacesStore/ec2eec85-5f28-4454-bfbc-28865323230c
@@ -9496,6 +9536,77 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 														</associations>
 														<roleAssociations/>
 														<subFolders/>
+													</node>
+													<node>
+														<type>transitionWorkflow</type>
+														<name>2ad77e3d-bcf5-45dd-9746-e7f7f6e5cb87</name>
+														<nodeRef>
+															workspace://SpacesStore/010e2552-5e06-4ad0-a866-79311c7ae9af
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[true]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Отменить документ]]></value>
+															</property>
+															<property>
+																<name>workflowId</name>
+																<value>
+																	<![CDATA[activiti$contractAdditionalDocumentCancel]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+															<workflowAspect/>
+															<transitionLabelAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/c468bb44-0a2a-45a2-a470-143243d577ce
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>03974257-48ca-4ed3-9235-549f746e2fa5
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/e84625a5-30ca-4f4e-aeae-909ec723bd9a
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Данное действие доступно только куратору и инициатору]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") or user.currentUser().hasBusinessRole("CONTRACT_CURATOR")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 												</nodes>
 											</subFolder>
@@ -11034,13 +11145,13 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Данное действие доступно только
                                                                                     исполнителю и куратору]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
