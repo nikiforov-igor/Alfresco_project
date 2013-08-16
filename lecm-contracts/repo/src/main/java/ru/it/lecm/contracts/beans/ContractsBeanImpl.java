@@ -93,9 +93,10 @@ public class ContractsBeanImpl extends BaseBean {
         class NodeRefComparator<T extends Serializable & Comparable<T>> implements Comparator<NodeRef> {
             @Override
             public int compare(NodeRef nodeRef1, NodeRef nodeRef2) {
-                T obj1 = (T) nodeService.getProperty(nodeRef1, sortFieldQName);
-                T obj2 = (T) nodeService.getProperty(nodeRef2, sortFieldQName);
-
+                Object object1 = nodeService.getProperty(nodeRef1, sortFieldQName);
+                Object object2 = nodeService.getProperty(nodeRef2, sortFieldQName);
+                T obj1 = (T) (object1 != null ? object1 : "");
+                T obj2 = (T) (object2 != null ? object2 : "");
                 return sortAscending ? obj1.compareTo(obj2) : obj2.compareTo(obj1);
             }
         }
