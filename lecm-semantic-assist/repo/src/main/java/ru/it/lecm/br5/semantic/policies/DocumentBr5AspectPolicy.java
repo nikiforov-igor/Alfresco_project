@@ -83,15 +83,8 @@ public class DocumentBr5AspectPolicy implements ConstantsBean {
 			if (content!=null){
 				NodeRef document = documentAttachmentsService.getDocumentByAttachment(content);
 				if (document!=null){
-					if (nodeService.hasAspect(document, ConstantsBean.ASPECT_BR5_INTEGRATION)){
-						Map<QName,Serializable> mprops = new HashMap<QName,Serializable>();
-						if (nodeService.hasAspect(content, ContentModel.ASPECT_VERSIONABLE)){
-							String version = (String) nodeService.getProperty(content,ContentModel.PROP_VERSION_LABEL);
-							if (version!=null && !version.isEmpty() ){
-								mprops.put(ConstantsBean.PROP_BR5_INTEGRATION_VERSION, version);
-							}
-						}
-						nodeService.addAspect(content, ConstantsBean.ASPECT_BR5_INTEGRATION, mprops);
+					if (nodeService.hasAspect(document, ConstantsBean.ASPECT_BR5_INTEGRATION) && !nodeService.hasAspect(content, ASPECT_BR5_INTEGRATION)){
+						nodeService.addAspect(content, ConstantsBean.ASPECT_BR5_INTEGRATION, null);
 					}
 				}
 			}
