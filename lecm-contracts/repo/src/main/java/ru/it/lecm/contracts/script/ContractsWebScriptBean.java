@@ -214,7 +214,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
 		return createScriptable(additionalDocuments);
 	}
 
-    public Scriptable getAdditionalDocsByType(String typeFilter, String queryFilterId, boolean activeDocs) {
+    public Scriptable getAdditionalDocsByType(Scriptable paths, String typeFilter, String queryFilterId, boolean activeDocs) {
         String[] types = typeFilter != null && typeFilter.length() > 0 ? typeFilter.split("\\s*,\\s") : new String[0];
         String filter = "";
         for (String type : types) {
@@ -246,13 +246,11 @@ public class ContractsWebScriptBean extends BaseWebScript {
         List<QName> docType = new ArrayList<QName>();
         docType.add(ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT);
 
-        List<String> paths = Arrays.asList(documentService.getDraftPath(), documentService.getDocumentsFolderPath());
-
         List<String> statuses = new ArrayList<String>();
         for (String finalStatus : contractsDocsFinalStatuses) {
             statuses.add((activeDocs ? "!" : "") + finalStatus);
         }
-        List<NodeRef> additionalDocuments = this.documentService.getDocumentsByFilter(docType, paths, statuses, filter, null);
+        List<NodeRef> additionalDocuments = this.documentService.getDocumentsByFilter(docType, getElements(Context.getCurrentContext().getElements(paths)), statuses, filter, null);
         return createScriptable(additionalDocuments);
     }
 
