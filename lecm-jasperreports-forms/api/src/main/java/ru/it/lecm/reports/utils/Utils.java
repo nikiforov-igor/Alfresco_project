@@ -1,6 +1,11 @@
 package ru.it.lecm.reports.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -134,6 +139,15 @@ public class Utils {
 		// not found
 		return false;
 	}
+
+
+	public static String dup(String s, int count) {
+		final StringBuilder result = new StringBuilder();
+		if (s != null && s.length() > 0)
+			while (count > 0) { result.append(s); }
+		return result.toString();
+	}
+
 
 	/**
 	 * Проверить что строка начинается с указанной строки и имеет ровно одно вхождение
@@ -540,4 +554,22 @@ public class Utils {
 		return getDurationInHours( end.getTime() - start.getTime());  
 	}
 
+	public static <T> T clone(T source) {
+		if (source == null)
+			return null;
+
+		final ByteArrayOutputStream stm = new ByteArrayOutputStream();
+
+		try {
+			final ObjectOutputStream w = new ObjectOutputStream(stm);
+			w.writeObject(source);
+			w.close();
+
+			final ByteArrayInputStream result = new ByteArrayInputStream(stm.toByteArray());
+			return (T) (new ObjectInputStream(result)).readObject();
+
+		} catch(Exception ex) {
+			throw new RuntimeException( String.format( "Fail to clone() object: %s", ex.getMessage()), ex);
+		}
+	}
 }

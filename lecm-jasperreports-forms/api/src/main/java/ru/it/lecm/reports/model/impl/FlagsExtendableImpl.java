@@ -1,12 +1,17 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import ru.it.lecm.reports.api.model.FlagsExtendable;
 import ru.it.lecm.reports.api.model.NamedValue;
 
-public class FlagsExtendableImpl implements FlagsExtendable {
+public class FlagsExtendableImpl
+	implements FlagsExtendable, Serializable
+{
+
+	private static final long serialVersionUID = 1L;
 
 	private Set<NamedValue> flags;
 

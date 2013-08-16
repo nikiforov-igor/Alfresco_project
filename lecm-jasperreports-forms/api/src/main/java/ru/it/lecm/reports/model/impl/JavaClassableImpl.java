@@ -8,6 +8,8 @@ public class JavaClassableImpl
 		extends MnemonicNamedItem 
 		implements JavaClassable
 {
+	private static final long serialVersionUID = 1L;
+
 	private String className;
 
 	public JavaClassableImpl() {

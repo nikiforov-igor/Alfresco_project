@@ -8,6 +8,8 @@ public class ReportTemplateImpl
 		extends MnemonicNamedItem
 		implements ReportTemplate
 {
+	private static final long serialVersionUID = 1L;
+
 
 	private String fileName;
 	// NOTE: тут вполне может быть проксик для реальной загрузки данных только во время первовго требования порции данных ("load-on-demand")

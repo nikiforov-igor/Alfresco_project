@@ -4,7 +4,9 @@ import ru.it.lecm.reports.api.model.QueryDescriptor;
 
 public class QueryDescriptorImpl
 		extends MnemonicNamedItem
-		implements QueryDescriptor {
+		implements QueryDescriptor 
+{
+	private static final long serialVersionUID = 1L;
 
 	private String text;
 	private int offset, limit, pgSize;

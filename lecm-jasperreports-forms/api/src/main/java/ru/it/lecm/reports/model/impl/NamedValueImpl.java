@@ -11,6 +11,8 @@ import ru.it.lecm.reports.api.model.Valueable;
  */
 public class NamedValueImpl extends MnemonicNamedItem implements NamedValue {
 
+	private static final long serialVersionUID = 1L;
+
 	private Valueable value;
 
 	public NamedValueImpl() {

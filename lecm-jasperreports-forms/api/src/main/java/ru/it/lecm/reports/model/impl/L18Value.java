@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,9 @@ import ru.it.lecm.reports.api.model.L18able;
  * Хеш и равенство считается по всем наличным ключам и значениям.
  * @author rabdullin
  */
-public class L18Value implements L18able {
+public class L18Value implements L18able, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private static final String NO_TRANSLATIOMN_FOR_LOCALE_S1 = "No translatiomn for locale '%s'";
 

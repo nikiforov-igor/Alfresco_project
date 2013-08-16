@@ -12,6 +12,8 @@ public class ReportProviderDescriptorImpl
 		extends JavaClassableImpl
 		implements ReportProviderDescriptor
 {
+	private static final long serialVersionUID = 1L;
+
 
 	public ReportProviderDescriptorImpl() {
 		super();

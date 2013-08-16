@@ -1,8 +1,12 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.io.Serializable;
+
 import ru.it.lecm.reports.api.model.AlfrescoAssocInfo;
 
-public class AlfrescoAssocInfoImpl implements AlfrescoAssocInfo {
+public class AlfrescoAssocInfoImpl implements AlfrescoAssocInfo, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String assocTypeName;
 	private AssocKind assocKind;

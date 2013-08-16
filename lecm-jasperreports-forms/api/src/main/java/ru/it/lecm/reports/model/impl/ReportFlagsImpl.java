@@ -10,6 +10,8 @@ public class ReportFlagsImpl
 		extends FlagsExtendableImpl
 		implements ReportFlags
 {
+	private static final long serialVersionUID = 1L;
+
 	private QueryDescriptor queryDesc;
 	private boolean isMultiRow = false;
 	private boolean custom = false;

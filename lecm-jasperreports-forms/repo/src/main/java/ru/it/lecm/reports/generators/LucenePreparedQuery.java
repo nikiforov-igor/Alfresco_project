@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
+import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
@@ -136,7 +137,7 @@ public class LucenePreparedQuery {
 		result.argsByLinks.clear();
 		result.argsByProps.clear();
 
-		/* создаём базовый запрос: по ID или TYPE */
+		/* создаём базовый запрос: TYPE */
 		makeMasterCondition(bquery, reportDescriptor);
 
 		if (!bquery.isEmpty()) {
@@ -160,6 +161,11 @@ public class LucenePreparedQuery {
 			if (colDesc == null || colDesc.getParameterValue() == null) { // не параметр
 				continue;
 			}
+
+			/* пропускаем уже обработанные тип и ID ... */
+			if ( DataSourceDescriptor.COLNAME_TYPE.equals(colDesc.getColumnName())
+					|| DataSourceDescriptor.COLNAME_ID.equals(colDesc.getColumnName()))
+				continue;
 
 			/*
 			 * Здесь у колонки используется:
@@ -238,73 +244,10 @@ public class LucenePreparedQuery {
 
 			// экранированное имя с именем поля для поиска в Lucene
 			final String propertyName = substitudeExpression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
-			final String luceneFldName = Utils.luceneEncode(propertyName);
 
-			/*
-			 *  граничные значения для поиска. По-идее здесь, после проверки
-			 *  isEmpty(), для LIST/VALUE нижняя граница не пустая, а для
-			 *  RANGE - одна из границ точно не пустая
-			 */
-			final Object
-					bound1 = colDesc.getParameterValue().getBound1(),
-					bound2 = colDesc.getParameterValue().getBound2();
+			final StringBuilder cond = makeValueCond( propertyName, colDesc.getParameterValue()); // сгенерированное условие
 
-			final StringBuilder cond = new StringBuilder(); // сгенерированное условие
-
-			/* генерим условие поиска - одно значение или интервал ... */
-			switch (colDesc.getParameterValue().getType()) {
-			/*
-				1) экранировка символов в полном имени поля: ':', '-'
-				2) кавычки для значения
-				3) (для LIST)  что-то для списка элементов (посмотреть синтаксис люцена)
-				4) при подстановке дат надо их форматировать
-					если надо чётко указать формат, его можно предусмотреть в 
-					описателе колонки - для самой колонки и для параметра
-			 */
-			case RANGE:
-				/*
-				проверить тип значения фактических значений параметра:
-						для дат вызывать emmitDate
-						для чисел (и строк) emmitNumeric
-				 */
-				final boolean isArgDate = (bound1 instanceof Date) || (bound2 instanceof Date);
-				final boolean isArgNumber = (bound1 instanceof Number) || (bound2 instanceof Number);
-				final String condRange;
-				if (isArgDate) {
-					condRange = Utils.emmitDateIntervalCheck(luceneFldName, (Date) bound1, (Date) bound2);
-				} else if (isArgNumber) {
-					condRange = Utils.emmitNumericIntervalCheck(luceneFldName, (Number) bound1, (Number) bound2);
-				} else {
-					throw new RuntimeException( String.format( "Unsupported RANGE values of bounds: %s/%s"
-							, (bound1 == null ? "NULL" : bound1.getClass().getName())
-							, (bound2 == null ? "NULL" : bound2.getClass().getName())
-					)); 
-				}
-				if (condRange != null)
-					cond.append(condRange);
-				break; // case
-
-			case VALUE:
-			case LIST: // DONE: сгенерить запрос для списка (LIST) полное условие со всеми значениями
-				// пример формируемой строки: bquery.append( " AND @cm\\:creator:\"" + login + "\"");
-				final String[] values;
-				if (bound1 == null) {
-					values = null;
-				} else if (bound1 instanceof String[]) {
-					values = (String[]) bound1;
-				} else {
-					values = new String[]{ bound1.toString()};
-				}
-
-				Utils.emmitValuesInsideList( cond, luceneFldName, values);
-				break;
-
-			default: // непонятный тип - сообщение об ошибке и игнор ...
-				logger.error(String.format("Unsupported parameter type '%s' -> condition skipped", Utils.coalesce(colDesc.getParameterValue().getType(), "NULL")));
-				break;
-			}
-
-			if (cond.length() > 0) {
+			if (cond != null && cond.length() > 0) {
 				bquery.emmit( (hasData ? " AND" : "") + " (" + cond + ")");
 				hasData = true;
 
@@ -319,6 +262,86 @@ public class LucenePreparedQuery {
 
 		result.luceneQueryText = bquery.toString();
 		return result;
+	}
+
+	/**
+	 * Сгенерировать условие для проверки атрибута
+	 * @param propertyName атрибут Альфреско (строка вида "тип:поле")
+	 * @param parType параметр, с которым надо сгенерировать условие
+	 * @return
+	 */
+	private static StringBuilder makeValueCond( String propertyName, ParameterTypedValue parType) {
+
+		if (parType == null || propertyName == null)
+			return null;
+
+		final String luceneFldName = Utils.luceneEncode(propertyName);
+
+		/*
+		 *  граничные значения для поиска. По-идее здесь, после проверки
+		 *  isEmpty(), для LIST/VALUE нижняя граница не пустая, а для
+		 *  RANGE - одна из границ точно не пустая
+		 */
+		final Object
+				bound1 = parType.getBound1(),
+				bound2 = parType.getBound2();
+
+		final StringBuilder cond = new StringBuilder(); // сгенерированное условие
+
+		/* генерим условие поиска - одно значение или интервал ... */
+		switch (parType.getType()) {
+		/*
+			1) экранировка символов в полном имени поля: ':', '-'
+			2) кавычки для значения
+			3) (для LIST)  что-то для списка элементов (посмотреть синтаксис люцена)
+			4) при подстановке дат надо их форматировать
+				если надо чётко указать формат, его можно предусмотреть в 
+				описателе колонки - для самой колонки и для параметра
+		 */
+		case RANGE:
+			/*
+			проверить тип значения фактических значений параметра:
+					для дат вызывать emmitDate
+					для чисел (и строк) emmitNumeric
+			 */
+			final boolean isArgDate = (bound1 instanceof Date) || (bound2 instanceof Date);
+			final boolean isArgNumber = (bound1 instanceof Number) || (bound2 instanceof Number);
+			final String condRange;
+			if (isArgDate) {
+				condRange = Utils.emmitDateIntervalCheck(luceneFldName, (Date) bound1, (Date) bound2);
+			} else if (isArgNumber) {
+				condRange = Utils.emmitNumericIntervalCheck(luceneFldName, (Number) bound1, (Number) bound2);
+			} else {
+				throw new RuntimeException( String.format( "Unsupported RANGE values of bounds: %s/%s"
+						, (bound1 == null ? "NULL" : bound1.getClass().getName())
+						, (bound2 == null ? "NULL" : bound2.getClass().getName())
+				)); 
+			}
+			if (condRange != null)
+				cond.append(condRange);
+			break; // case
+
+		case VALUE:
+		case LIST: // DONE: сгенерить запрос для списка (LIST) полное условие со всеми значениями
+			// пример формируемой строки: bquery.append( " AND @cm\\:creator:\"" + login + "\"");
+			final String[] values;
+			if (bound1 == null) {
+				values = null;
+			} else if (bound1 instanceof String[]) {
+				values = (String[]) bound1;
+			} else {
+				values = new String[]{ bound1.toString()};
+			}
+
+			Utils.emmitValuesInsideList( cond, luceneFldName, values);
+			break;
+
+		default: // непонятный тип - сообщение об ошибке и игнор ...
+			logger.error(String.format("Unsupported parameter type '%s' -> condition skipped", Utils.coalesce(parType.getType(), "NULL")));
+			break;
+		}
+
+		return cond;
 	}
 
 	public static <T> List<T> checkSize(List<T> list, final int minCount, final int maxCount, final String msg) {
@@ -590,6 +613,7 @@ public class LucenePreparedQuery {
 	 */
 	private static void makeMasterCondition(final LuceneSearchBuilder bquery, ReportDescriptor reportDescriptor) {
 		if (reportDescriptor != null && reportDescriptor.getDsDescriptor() != null) {
+
 			// @NOTE: (reportDescriptor.getFlags().isMultiRow()) не достаточно для определения того что именно долждно проверяться TYPE или ID
 			// так что выбираем оба значения
 
@@ -616,9 +640,18 @@ public class LucenePreparedQuery {
 			{
 				final ColumnDescriptor colWithID = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_ID);
 				// boolean hasId = Utils.emmitParamCondition(bquery, colWithID, "ID:");
-				if (colWithID != null && colWithID.getParameterValue() != null) {
-					if (!colWithID.getParameterValue().isEmpty()) {
-						hasId = bquery.emmitIdCond( colWithID.getParameterValue().getBound1().toString(), null);
+				if (	colWithID != null
+						&& colWithID.getParameterValue() != null
+						&& !colWithID.getParameterValue().isEmpty()
+				) {
+//					// hasId = bquery.emmitIdCond( colWithID.getParameterValue().getBound1().toString(), (hasType ? " AND " : ""));
+//					if (!colWithID.getParameterValue().isEmpty())
+//						hasId = bquery.emmitIdCond( colWithID.getParameterValue().getBound1().toString(), (hasType ? " AND " : ""));
+					final StringBuilder idCond = makeValueCond( "ID", colWithID.getParameterValue());
+					if (idCond != null && idCond.length() > 0) {
+						final String sCond = idCond.toString().replace("@ID", "ID"); // замена обычной ссылки на атрибут, ссылкой на тип
+						bquery.emmit( (hasType ? " AND" : "") + " (" + sCond + ")");
+						hasId = true;
 					}
 				}
 			}

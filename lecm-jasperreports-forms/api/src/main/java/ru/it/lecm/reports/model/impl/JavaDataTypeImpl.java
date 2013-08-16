@@ -13,6 +13,7 @@ public class JavaDataTypeImpl
 		extends JavaClassableImpl
 		implements JavaDataType
 {
+	private static final long serialVersionUID = 1L;
 
 	protected JavaDataTypeImpl(String className) {
 		super(className);

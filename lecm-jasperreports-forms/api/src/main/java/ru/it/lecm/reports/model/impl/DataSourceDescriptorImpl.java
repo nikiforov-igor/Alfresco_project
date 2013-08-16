@@ -13,6 +13,8 @@ public class DataSourceDescriptorImpl
 		extends MnemonicNamedItem
 		implements DataSourceDescriptor
 {
+	private static final long serialVersionUID = 1L;
+
 	private List<ColumnDescriptor> columns;
 
 	public DataSourceDescriptorImpl() {

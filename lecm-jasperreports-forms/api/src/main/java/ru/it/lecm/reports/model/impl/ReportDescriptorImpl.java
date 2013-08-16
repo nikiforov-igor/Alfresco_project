@@ -12,6 +12,8 @@ public class ReportDescriptorImpl
 		extends MnemonicNamedItem
 		implements ReportDescriptor
 {
+	private static final long serialVersionUID = 1L;
+
 
 	private DataSourceDescriptor dsDescriptor;
 	private ReportType reportType;

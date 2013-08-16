@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import ru.it.lecm.reports.api.model.L18able;
@@ -12,7 +13,10 @@ import ru.it.lecm.reports.api.model.Mnemonicable;
  * @author rabdullin
  *
  */
-public class MnemonicNamedItem implements Mnemonicable, L18able {
+public class MnemonicNamedItem implements Mnemonicable, L18able, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 
 	private String mnem;
 	private L18able name;

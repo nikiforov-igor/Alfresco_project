@@ -242,4 +242,10 @@ public class StrUtils {
 		return deQuotes( s, '"' );
 	}
 
+	public static String dup(String s, int count) {
+		final StringBuilder result = new StringBuilder();
+		if (s != null && s.length() > 0)
+			while (count > 0) { result.append(s); }
+		return result.toString();
+	}
 }

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ds.config>
+    <report.descriptor mnem="exec-doc-tree">
+        <l18>
+            <item key="RU_RU" value="Дерево поручений документа"/>
+        </l18>
+        <type mnem="JASPER">
+            <l18>
+                <item key="RU_RU" value="Jasper"/>
+            </l18>
+        </type>
+        <provider
+            javaClass="ru.it.lecm.reports.generators.errands.ErrandsDocTreeDSProvider" mnem="PROVIDER_DOCTREE_ERRANDS">
+            <l18>
+                <item key="RU_RU" value="Провайдер дерева Поручений Документа"/>
+            </l18>
+        </provider>
+        <template
+            filename="exec-doc-tree.jrxml" mnem="exec-doc-tree">
+            <l18>
+                <item key="RU_RU" value="exec-doc-tree"/>
+            </l18>
+        </template>
+        <datasource.descriptor>
+            <l18>
+                <item key="RU_RU" value="b10c1b42-ad46-4694-b85f-cdaced5f9993"/>
+            </l18>
+        </datasource.descriptor>
+    </report.descriptor>
+
+    <query.descriptor>
+        <offset>0</offset>
+        <limit>-1</limit>
+        <pgsize>-1</pgsize>
+        <queryText><![CDATA[]]></queryText>
+        <allVersions>true</allVersions>
+        <preferedType>{lecm-document:base}</preferedType>
+        <isMultiRow>true</isMultiRow>
+        <isCustom>false</isCustom>
+    </query.descriptor>
+
+	<!--
+		formats: Формат для вывода информации по поручению.
+
+		Пример форматной строки:
+
+		[CDATA[{lecm-additional-document:additionalDocumentType/cm:name} <i>№{lecm-additional-document:number}</i> от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts} с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}
+		]]
+		детально:
+		[CDATA[
+				{lecm-additional-document:additionalDocumentType/cm:name}
+				<i>№{lecm-additional-document:number}</i>
+				от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts}
+				с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}
+		]]
+		будет формировать для каждой выходной строки:
+			<Название_документа> №<Номер> от <ДатаСоглОсновногоДокумента> с <НазваниеОгранизацииПартнёра>
+			
+		+ макросы в виде @Макрос. Доступные макросы:
+			@levelTab  отступ данного уровня (каждый уровень по-умолчанию вносит одну табуляцию)
+						(см также формат уровня levelShift)
+		
+	  -->
+	<tree.formats>
+		<map>
+			<!-- На каждом уровне вложенности поручения добавляется этот отступ -->
+			<item key="levelShift" value="\t" />
+			<item key="cycleMarker" value="*" />
+
+			<!-- Сейчас выводимые данные форматируются по типу Альфреско - как положено в SubstitudeBean.getObjectDescription -->
+			<!-- формат выводимой строки для Поручения (отсносительно Поручения)
+			<item key="fmtErrandReport">
+				<![CDATA[@levelTab {"lecm-errands:title"} {"lecm-errands:is-important"} от {cm:created}, Инициатор {lecm-errands:initiator-assoc/cm:name}]]>
+			</item>
+			-->
+
+		</map>
+	</tree.formats>
+
+	<!-- ассоциации для получения следующего уровня вложенности Поручений:
+		level.1: относительно документа "cm:document" (нулевой уровень)
+		level.2: относительно Поручения первого уровня
+		и т.д. 
+		Если уровень явно не указан, то используется последний родительский (ближайший сверху).
+	
+	  -->
+	<tree.levelAssoc>
+		<map>
+			<!-- Ссылка из Поручения на Основание (документ или поручение), если есть (M1 от поручения к родителю)
+				target: lecm-document:base
+			  -->
+			<item key="level.1">
+				<![CDATA[lecm-errands:additional-document-assoc]]>
+			</item>
+		</map>
+	</tree.levelAssoc>
+
+	<fields>
+
+		<field alfrescoType="lecm-document:base" order="0" displayName="Выбранные документы"
+				javaValueClass="java.lang.String" jrFldName="Col_Param_Documents" queryFldName="{ID}">
+			<l18>
+				<item key="RU_RU" value="Выбранные документы"/>
+			</l18>
+			<parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
+				<l18> <item key="RU_RU" value="Список"/> </l18>
+			</parameter>
+		</field>
+
+		<field alfrescoType="d:text" order="0" displayName="Иерархический номер"
+				javaValueClass="java.lang.String" jrFldName="Col_LeveledNum" queryFldName="{{Col_LeveledNum}}">
+			<l18>
+				<item key="RU_RU" value="Иерархический номер"/>
+			</l18>
+		</field>
+
+		<field alfrescoType="d:text" displayName="Название"
+				jrFldName="Col_DisplayName" order="2" queryFldName="{{Col_DisplayName}}">
+			<l18>
+				<item key="RU_RU" value="Название"/>
+			</l18>
+		</field>
+
+	</fields>
+
+</ds.config>

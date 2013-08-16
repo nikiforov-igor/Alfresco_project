@@ -44,7 +44,7 @@ public class ParameterMapper {
 				continue;
 
 			// если колонка параметризована ...
-			String argRootName = colDesc.getColumnName();
+			String argRootName = getArgRootName(colDesc);// colDesc.getColumnName();
 			switch (colDesc.getParameterValue().getType()) {
 			case RANGE: {
 				// проверяем диапозон дат
@@ -146,7 +146,7 @@ public class ParameterMapper {
 			, Object value, String colName, SupportedTypes colType) {
 		ColumnDescriptor result = dsDesc.findColumnByName(colName);
 		if ( result == null) { // создание новой колонки ...
-			result = new ColumnDescriptorImpl( DataSourceDescriptor.COLNAME_TYPE, colType);
+			result = new ColumnDescriptorImpl( colName, colType);
 
 			{ // задание типа параметра этой колонки ...
 				final ParameterTypedValueImpl ptv = new ParameterTypedValueImpl(colName);
@@ -155,8 +155,8 @@ public class ParameterMapper {
 			}
 
 			dsDesc.getColumns().add(result);
+			result.getParameterValue().setBound1(value);
 		}
-		result.getParameterValue().setBound1(value);
 		return result;
 	}
 
@@ -174,7 +174,8 @@ public class ParameterMapper {
 	public static String getArgRootName(final ColumnDescriptor colDesc) {
 		if (colDesc == null || colDesc.getParameterValue() == null) // не параметризуется ...
 			return null;
-		return Utils.nonblank(colDesc.getParameterValue().getMnem(), colDesc.getColumnName());
+		// example: colDesc.getParameterValue().getMnem() == "PARAM_TYPE_VALUE"
+		return colDesc.getColumnName();
 	}
 
 	/**

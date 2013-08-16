@@ -13,6 +13,8 @@ public class ParameterTypedValueImpl
 		extends MnemonicNamedItem
 		implements ParameterTypedValue 
 {
+	private static final long serialVersionUID = 1L;
+
 
 	private L18able[] prompts;
 	private Object[] bounds;

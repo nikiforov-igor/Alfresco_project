@@ -55,6 +55,11 @@ public class ErrandsQNamesHelper {
 	/** Фактическая дата начала работы с поручением */
 	final public QName QNFLD_START_WORK_DATE;
 
+	/** время создания объекта */
+	final public QName QNFLD_CREATED;
+
+	// final public QName QNFLD_CREATED;
+
 	/** Дата завершения поручения: date */
 	final public QName QNFLD_END_DATE;
 
@@ -81,6 +86,7 @@ public class ErrandsQNamesHelper {
 
 		this.QNFLD_START_DATE = QName.createQName(FLD_START_DATE, this.ns);
 		this.QNFLD_START_WORK_DATE = QName.createQName(FLD_START_WORK_DATE, this.ns);
+		this.QNFLD_CREATED =  QName.createQName("cm:created", this.ns);
 
 		this.QNFLD_END_DATE = QName.createQName(FLD_END_DATE, this.ns);
 		this.QNFLD_LIMIT_DATE = QName.createQName(FLD_LIMIT_DATE, this.ns);
@@ -143,8 +149,12 @@ public class ErrandsQNamesHelper {
 	public long getВремяИсполнения_мсек(Map<QName, Serializable> props) {
 		if (props == null)
 			return 0;
-		final Date start = (Date) props.get(QNFLD_START_WORK_DATE)
-				, end = (Date) props.get(QNFLD_END_DATE);
+		Date start = (Date) props.get(QNFLD_START_WORK_DATE);
+		if (start == null) // если нет "work-start" взять "время создания" ("cm:created"?) 
+			start = (Date) props.get(QNFLD_START_DATE); 
+		if (start == null)
+			start = (Date) props.get(QNFLD_CREATED);
+		final Date end = (Date) props.get(QNFLD_END_DATE);
 		if (start == null || end == null) // нельзя определить
 			return 0; 
 		return (end.getTime() - start.getTime());  

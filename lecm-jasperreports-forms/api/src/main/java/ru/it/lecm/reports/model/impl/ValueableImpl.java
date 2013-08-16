@@ -1,8 +1,13 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.io.Serializable;
+
 import ru.it.lecm.reports.api.model.Valueable;
 
-public class ValueableImpl implements Valueable {
+public class ValueableImpl implements Valueable, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 
 	private String value;
 

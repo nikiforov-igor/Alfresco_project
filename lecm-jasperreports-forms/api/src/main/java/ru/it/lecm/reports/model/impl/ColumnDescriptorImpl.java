@@ -21,6 +21,8 @@ public class ColumnDescriptorImpl
 		extends JavaClassableImpl
 		implements ColumnDescriptor
 {
+	private static final long serialVersionUID = 1L;
+
 	private JavaDataType dataType;
 	private ParameterTypedValue parameterTypedValue;
 	private FlagsExtendable flagsExtendable;
