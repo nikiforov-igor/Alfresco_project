@@ -29,11 +29,38 @@
             };
             this.widgets.contractsReportsButton = Alfresco.util.createYUIButton(this, "reportsBtn", onRecordsClick4, {});
 
-            var onRecordsClick5 = function (e) {
-                window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "contracts-archive-list";
+            var contractsArchiveMenu = new YAHOO.widget.Menu("contractsArchiveMenu");
+            contractsArchiveMenu.addItems([
+                {
+                    text: "Список договоров",
+                    onclick: {
+                        fn: function () {
+                            window.location.href = window.location.protocol + "//" + window.location.host +
+                                Alfresco.constants.URL_PAGECONTEXT + "contracts-archive-list";
+                        },
+                        scope: this
+                    }
+                },
+                {
+                    text: "Документы к договорам",
+                    onclick: {
+                        fn: function () {
+                            window.location.href = window.location.protocol + "//" + window.location.host +
+                                Alfresco.constants.URL_PAGECONTEXT + "contracts-docs-archive-list";
+                        },
+                        scope: this
+                    }
+                }
+            ]);
+
+            contractsArchiveMenu.render("contracts-archive-menu");
+
+            var onClickContractsMenuButton = function(e) {
+                contractsArchiveMenu.moveTo(e.clientX, e.clientY);
+                contractsArchiveMenu.show();
             };
-            this.widgets.archiveListButton = Alfresco.util.createYUIButton(this, "archiveBtn", onRecordsClick5, {});
+
+            this.widgets.archiveButton = Alfresco.util.createYUIButton(this, "archiveBtn", onClickContractsMenuButton, {});
         }
     });
 })();

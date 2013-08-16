@@ -72,7 +72,6 @@
         </property>
 	    <property name="nodeService" ref="nodeService"/>
         <property name="contractService" ref="contractService"/>
-        <property name="businessJournalService" ref="businessJournalService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="preferenceService" ref="preferenceService"/>
         <property name="authService" ref="authenticationService"/>
@@ -137,6 +136,12 @@
                     <map>
                         <entry key="Завершенные" value="Исполнен, Расторгнут"/>
                         <entry key="Корзина" value="Аннулирован, Удален"/>
+                    </map>
+                </entry>
+                <entry key="lecm-additional-document:additionalDocument">
+                    <map>
+                        <entry key="Завершенные" value="Исполнен, Отменен"/>
+                        <entry key="Корзина" value="Аннулирован"/>
                     </map>
                 </entry>
             </map>

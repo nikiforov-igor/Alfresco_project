@@ -5,7 +5,7 @@ function getFilters(filterType) {
     {
         var type = xmlFilter.@type.toString();
         var value = xmlFilter.@value.toString();
-        var url = "/lecm/contracts/additionalDocsCount?type=" + value + "&considerFilter=" + queryFilterId;
+        var url = "/lecm/contracts/additionalDocsCount?type=" + value + "&considerFilter=" + queryFilterId + '&active=' + args["active"];
         var addDocsStr = remote.connect("alfresco").get(stringUtils.urlEncodeComponent(url));
         var addDocs = [];
         if (addDocsStr.status == 200) {

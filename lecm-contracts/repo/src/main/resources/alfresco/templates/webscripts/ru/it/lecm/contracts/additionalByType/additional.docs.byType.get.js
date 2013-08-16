@@ -1,1 +1,1 @@
-model.docs = contracts.getAdditionalDocsByType(args.type, args.considerFilter);
+model.docs = contracts.getAdditionalDocsByType(args.type, args.considerFilter, ("" + args.active == "true"));

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/documents/documents-list</template-type>
+    <template-type>ru/it/lecm/documents/archive-documents-list</template-type>
     <properties>
         <docType>lecm-additional-document:additionalDocument</docType>
         <preferedFilter>docAuthor</preferedFilter>
@@ -12,18 +12,7 @@
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
                 <itemType>lecm-additional-document:additionalDocument</itemType>
-                <filteredLabel>page.contracts-documents.filter</filteredLabel>
-            </properties>
-        </component>
-        <!-- Toolbar -->
-        <component>
-            <region-id>toolbar</region-id>
-            <url>/lecm/documents/documents-list-toolbar</url>
-            <properties>
-                <itemType>lecm-additional-document:additionalDocument</itemType>
-                <bubblingLabel>contracts-documents</bubblingLabel>
-                <showExSearchBtn>true</showExSearchBtn>
-                <showCreateBtn>false</showCreateBtn>
+                <filteredLabel>page.contracts.filter</filteredLabel>
             </properties>
         </component>
         <!-- Menu -->
@@ -31,7 +20,7 @@
             <region-id>menu</region-id>
             <url>/lecm/contracts/menu</url>
             <properties>
-                <selected>documents</selected>
+                <selected>archive</selected>
             </properties>
         </component>
         <!-- Datagrid -->
@@ -46,7 +35,7 @@
                 <filterProperty>lecm-additional-document:additionalDocumentType-text-content</filterProperty>
                 <formId>{formId}</formId>
                 <filter>{query}</filter>
-                <includedStatuses>!Отменен, !Аннулирован, !Исполнен</includedStatuses>
+                <includedStatuses>Отменен, Аннулирован, Исполнен</includedStatuses>
             </properties>
         </component>
         <!-- Filter -->
@@ -54,7 +43,7 @@
             <region-id>documents-filter</region-id>
             <url>/lecm/contracts/contracts-docs-filter</url>
             <properties>
-                <active>true</active>
+                <active>false</active>
             </properties>
         </component>
         <!-- Filter -->

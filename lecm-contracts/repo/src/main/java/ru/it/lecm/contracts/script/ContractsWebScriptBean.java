@@ -31,12 +31,13 @@ import java.util.*;
 public class ContractsWebScriptBean extends BaseWebScript {
     private ContractsBeanImpl contractService;
 	protected NodeService nodeService;
-    private BusinessJournalService businessJournalService;
     private OrgstructureBean orgstructureService;
     private PreferenceService preferenceService;
     private AuthenticationService authService;
     private NamespaceService namespaceService;
     private DocumentService documentService;
+
+    private final String[] contractsDocsFinalStatuses = {"Аннулирован", "Отменен", "Исполнен"};
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -71,11 +72,6 @@ public class ContractsWebScriptBean extends BaseWebScript {
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
-
-    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
-        this.businessJournalService = businessJournalService;
-    }
-
 
     public ScriptNode getDraftRoot() {
         return new ScriptNode(contractService.getDraftRoot(), serviceRegistry, getScope());
@@ -218,7 +214,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
 		return createScriptable(additionalDocuments);
 	}
 
-    public Scriptable getAdditionalDocsByType(String typeFilter, String queryFilterId) {
+    public Scriptable getAdditionalDocsByType(String typeFilter, String queryFilterId, boolean activeDocs) {
         String[] types = typeFilter != null && typeFilter.length() > 0 ? typeFilter.split("\\s*,\\s") : new String[0];
         String filter = "";
         for (String type : types) {
@@ -247,8 +243,16 @@ public class ContractsWebScriptBean extends BaseWebScript {
                 filter += " AND (" + employeesFilter + ")";
             }
         }
+        List<QName> docType = new ArrayList<QName>();
+        docType.add(ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT);
 
-        List<NodeRef> additionalDocuments = this.contractService.getAdditionalDocs(filter.length() > 0 ? filter : null);
+        List<String> paths = Arrays.asList(documentService.getDraftPath(), documentService.getDocumentsFolderPath());
+
+        List<String> statuses = new ArrayList<String>();
+        for (String finalStatus : contractsDocsFinalStatuses) {
+            statuses.add((activeDocs ? "!" : "") + finalStatus);
+        }
+        List<NodeRef> additionalDocuments = this.documentService.getDocumentsByFilter(docType, paths, statuses, filter, null);
         return createScriptable(additionalDocuments);
     }
 

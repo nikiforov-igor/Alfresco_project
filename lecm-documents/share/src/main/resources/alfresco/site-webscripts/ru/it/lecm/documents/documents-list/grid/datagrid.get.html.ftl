@@ -52,6 +52,11 @@
                             <#else>
                                 ""
                             </#if>;
+
+                var statusesFilter = "";
+                <#if includedStatuses?? && (includedStatuses?length > 0)>
+                    statusesFilter = _generateFilterStr ("${includedStatuses}", "lecm-statemachine:status");
+                </#if>
                 YAHOO.util.Event.onContentReady ('${id}', function () {
                     YAHOO.Bubbling.fire ("activeGridChanged", {
                         datagridMeta: {
@@ -68,6 +73,7 @@
                                         + '(PATH:"' + LogicECM.module.Documents.SETTINGS.draftPath + '//*"'
                                         + ' OR PATH:"' + LogicECM.module.Documents.SETTINGS.documentPath + '//*"'
                                         + ((archiveFolders.length > 0)? (" OR " + archiveFolders + "") : "") + ')'
+                                        + (statusesFilter.length > 0 ? ' AND ' + statusesFilter : '')
 
                             }
                         },

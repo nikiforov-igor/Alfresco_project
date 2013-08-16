@@ -9,6 +9,7 @@
         <#if hasPermission>
             <@comp.baseMenuButton "reports" msg('lecm.contracts.reports.btn') selected true />
         </#if>
+        <div id="contracts-archive-menu"></div>
         <@comp.baseMenuButton "archive" msg('lecm.contracts.archive.btn') selected true true />
     </@comp.baseMenu>
 
