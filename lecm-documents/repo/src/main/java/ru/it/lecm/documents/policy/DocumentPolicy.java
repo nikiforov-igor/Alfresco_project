@@ -12,10 +12,7 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.dictionary.AssociationDefinition;
-import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.dictionary.PropertyDefinition;
+import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.AuthenticationService;
@@ -264,18 +261,18 @@ public class DocumentPolicy extends BaseBean
             }
         }
 
-	    NodeRef documentSearchObject = getDocumentSearchObject(nodeRef);
-        updatePresentString(nodeRef);
+	    updatePresentString(nodeRef);
 
-	    behaviourFilter.disableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
-	    try{
-		    if (documentSearchObject != null) {
+	    NodeRef documentSearchObject = getDocumentSearchObject(nodeRef);
+	    if (documentSearchObject != null) {
+		    behaviourFilter.disableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
+		    try{
 			    updateDocumentSearchObject(nodeRef, documentSearchObject);
-		    }
-		    createDocumentSearchObjectThumbnail(documentSearchObject, nodeRef);
-	    } finally {
-			behaviourFilter.enableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
-		}
+			    createDocumentSearchObjectThumbnail(documentSearchObject, nodeRef);
+		    } finally {
+				behaviourFilter.enableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
+			}
+	    }
 
         if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
             nodeService.setProperty(nodeRef,DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
@@ -314,6 +311,11 @@ public class DocumentPolicy extends BaseBean
         if (presentStringValue != null) {
             nodeService.setProperty(nodeRef, DocumentService.PROP_PRESENT_STRING, presentStringValue);
             nodeService.setProperty(nodeRef, ContentModel.PROP_NAME, FileNameValidator.getValidFileName(presentStringValue + " " + nodeRef.getId()));
+
+	        TypeDefinition typeDef = dictionaryService.getType(type);
+	        if (typeDef != null && typeDef.getTitle() != null) {
+		        nodeService.setProperty(nodeRef, DocumentService.PROP_EXT_PRESENT_STRING, typeDef.getTitle() + ": " + presentStringValue);
+	        }
         }
         String listPresentString = substituteService.getTemplateStringForObject(nodeRef, true);
 
@@ -357,35 +359,39 @@ public class DocumentPolicy extends BaseBean
 	}
 
 	public NodeRef getDocumentSearchObject(final NodeRef documentRef) {
-		final String fileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING)).trim();
-		NodeRef result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
-		if (result == null) {
-			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-				@Override
-				public NodeRef doWork() throws Exception {
-					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-						@Override
-						public NodeRef execute() throws Throwable {
-							NodeRef result;
-							synchronized (lock) {
-								result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
-								if (result == null) {
-									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-									QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
-									QName nodeTypeQName = ContentModel.TYPE_CONTENT;
+		NodeRef result = null;
+		Object extPresentString = nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING);
+		if (extPresentString != null) {
+			final String fileName = FileNameValidator.getValidFileName((String) extPresentString).trim();
+			result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
+			if (result == null) {
+				AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+					@Override
+					public NodeRef doWork() throws Exception {
+						return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+							@Override
+							public NodeRef execute() throws Throwable {
+								NodeRef result;
+								synchronized (lock) {
+									result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
+									if (result == null) {
+										QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+										QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
+										QName nodeTypeQName = ContentModel.TYPE_CONTENT;
 
-									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-									properties.put(ContentModel.PROP_NAME, fileName);
-									ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-									result = associationRef.getChildRef();
+										Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+										properties.put(ContentModel.PROP_NAME, fileName);
+										ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+										result = associationRef.getChildRef();
+									}
 								}
+								return result;
 							}
-							return result;
-						}
-					});
-				}
-			};
-			result = AuthenticationUtil.runAsSystem(raw);
+						});
+					}
+				};
+				result = AuthenticationUtil.runAsSystem(raw);
+			}
 		}
 
 		return result;
@@ -393,7 +399,7 @@ public class DocumentPolicy extends BaseBean
 
 	public void updateDocumentSearchObject(NodeRef documentRef, NodeRef objectRef) {
 		if (objectRef != null) {
-			String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING)).trim();
+			String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING)).trim();
 			nodeService.setProperty(objectRef, ContentModel.PROP_NAME, newFileName);
 
 			ContentService contentService = serviceRegistry.getContentService();
@@ -409,7 +415,7 @@ public class DocumentPolicy extends BaseBean
 				String documentLink = params.getShareProtocol() + "://" + params.getShareHost() + ":" +
 						params.getSharePort() +	DOCUMENT_LINK_URL + "?nodeRef=" + documentRef.toString();
 				model.put("documentLink", documentLink);
-				model.put("documentName", nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+				model.put("documentName", nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING));
 
 				writer.putContent(templateService.processTemplate(DOCUMENT_SEARCH_CONTENT_TEMPLATE, model));
 			}

@@ -19,8 +19,8 @@
                     <li class="text-broken">
                     ${item.type.name}
                         <br/>
-                        <#if item.connectedDocument.presentString?? && (item.connectedDocument.presentString?length > 0)>
-                            <#assign docname="${item.connectedDocument.presentString}"/>
+                        <#if item.connectedDocument.extPresentString?? && (item.connectedDocument.extPresentString?length > 0)>
+                            <#assign docname="${item.connectedDocument.extPresentString}"/>
                         <#else>
                             <#assign docname="${item.connectedDocument.name}"/>
                         </#if>

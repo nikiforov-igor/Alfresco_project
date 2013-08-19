@@ -25,6 +25,7 @@ public interface DocumentService {
 	public static final QName PROP_DOCUMENT_REGNUM = QName.createQName(DOCUMENT_NAMESPACE_URI, "regnum");
 
     public static final QName PROP_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "present-string");
+    public static final QName PROP_EXT_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "ext-present-string");
     public static final QName PROP_LIST_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "list-present-string");
     public static final String CONSTRAINT_PRESENT_STRING = "present-string-constraint";
     public static final String CONSTRAINT_AUTHOR_PROPERTY = "author-property-constraint";

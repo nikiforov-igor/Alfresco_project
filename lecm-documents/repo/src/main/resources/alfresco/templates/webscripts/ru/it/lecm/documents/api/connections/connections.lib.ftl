@@ -12,6 +12,7 @@
 							"type": "${item.assocs["lecm-connect:primary-document-assoc"][0].typeShort}",
 							"name": "${item.assocs["lecm-connect:primary-document-assoc"][0].properties["cm:name"]}",
 							"presentString": "${item.assocs["lecm-connect:primary-document-assoc"][0].properties["lecm-document:present-string"]!''}",
+							"extPresentString": "${item.assocs["lecm-connect:primary-document-assoc"][0].properties["lecm-document:ext-present-string"]!''}",
 							"listPresentString": "${item.assocs["lecm-connect:primary-document-assoc"][0].properties["lecm-document:list-present-string"]!''}"
 						</#if>
 					},
@@ -21,6 +22,7 @@
 							"type": "${item.assocs["lecm-connect:primary-document-assoc"][0].typeShort}",
 							"name": "${item.assocs["lecm-connect:connected-document-assoc"][0].properties["cm:name"]}",
 							"presentString": "${item.assocs["lecm-connect:connected-document-assoc"][0].properties["lecm-document:present-string"]!''}",
+							"extPresentString": "${item.assocs["lecm-connect:connected-document-assoc"][0].properties["lecm-document:ext-present-string"]!''}",
 							"listPresentString": "${item.assocs["lecm-connect:connected-document-assoc"][0].properties["lecm-document:list-present-string"]!''}"
 						</#if>
 					},

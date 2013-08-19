@@ -68,7 +68,7 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
 
                             var columnContent = "";
                             switch (datalistColumn.name.toLowerCase()) { //  меняем отрисовку для конкретных колонок
-                                case "lecm-document:present-string":
+                                case "lecm-document:ext-present-string":
                                     columnContent += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + data.displayValue + "</a>";
                                     columnContent += '<br />';
                                     columnContent += oRecord.getData("itemData")["prop_lecm-document_list-present-string"].value;

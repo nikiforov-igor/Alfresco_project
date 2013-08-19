@@ -22,7 +22,7 @@ public class CustomBaseDocNameProperty implements PropertyDecorator {
     public Serializable decorate(NodeRef nodeRef, String propertyName, Serializable value) {
         if (dictionaryService.isSubClass(nodeService.getType(nodeRef), DocumentService.TYPE_BASE_DOCUMENT)) {
             //Получаем представление
-            Serializable replaceValue = nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING);
+            Serializable replaceValue = nodeService.getProperty(nodeRef, DocumentService.PROP_EXT_PRESENT_STRING);
             //Замещаем имя на представление или возвращаем обычное
             return replaceValue != null ? replaceValue.toString().replaceAll("<.*?>","") : value;
         }

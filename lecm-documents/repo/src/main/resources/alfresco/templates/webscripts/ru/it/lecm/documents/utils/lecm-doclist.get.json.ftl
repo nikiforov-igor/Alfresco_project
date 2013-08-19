@@ -41,6 +41,7 @@
 	{
 		<@itemLib.itemJSON item=item />,
 		"presentString": "${item.node.properties["lecm-document:present-string"]!""}",
+		"extPresentString": "${item.node.properties["lecm-document:ext-present-string"]!""}",
 		"isLecmDocument": ${item.isLecmDocument?string}
 	}<#if item_has_next>,</#if>
 	</#list>

@@ -180,8 +180,8 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 
 					if (record.isLecmDocument) {
 						docDetailsUrl = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + nodeRef.toString();
-						if (record.presentString != null && record.presentString.length > 0) {
-							name = record.presentString;
+						if (record.extPresentString != null && record.extPresentString.length > 0) {
+							name = record.extPresentString;
 						}
 					}
 
@@ -297,8 +297,8 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 					}
 
 					var fileName = record.displayName;
-					if (record.presentString != null && record.presentString.length > 0) {
-						fileName = record.presentString;
+					if (record.extPresentString != null && record.extPresentString.length > 0) {
+						fileName = record.extPresentString;
 					}
 
 					if (this.options.simpleView)

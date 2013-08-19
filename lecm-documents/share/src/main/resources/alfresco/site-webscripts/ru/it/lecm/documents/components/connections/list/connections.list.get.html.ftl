@@ -44,7 +44,7 @@
 								<#if item.connectedDocument??>
 									<div class="document-name">
 										<a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef!""}" class="theme-color-1">
-											${item.connectedDocument.presentString!""}
+											${item.connectedDocument.extPresentString!""}
 										</a>
 									</div>
 									<div class="document-list-name">
@@ -56,7 +56,7 @@
 						<td class="list-actions-td">
 							<div class="list-action-set">
 								<#if hasDeletePerm && !item.isSystem>
-									<div class="onActionDelete" data-noderef="${item.nodeRef!""}" <#if item.connectedDocument??>data-name="${item.connectedDocument.presentString!""}"</#if>>
+									<div class="onActionDelete" data-noderef="${item.nodeRef!""}" <#if item.connectedDocument??>data-name="${item.connectedDocument.extPresentString!""}"</#if>>
 										<a title="${msg("action.delete-connection.title")}" class="list-action-link" href="#">
 											<span>
 												${msg("action.delete-connection.title")}
@@ -105,7 +105,7 @@
 							<#if item.primaryDocument??>
 								<div class="document-name">
 									<a href="${url.context}/page/document?nodeRef=${item.primaryDocument.nodeRef!""}" class="theme-color-1">
-										${item.primaryDocument.presentString!""}
+										${item.primaryDocument.extPresentString!""}
 									</a>
 								</div>
 								<div class="document-list-name">
