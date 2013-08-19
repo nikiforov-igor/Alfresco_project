@@ -1,6 +1,8 @@
 package ru.it.lecm.documents.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -19,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.*;
+import ru.it.lecm.documents.constraints.ArmUrlConstraint;
+import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -38,6 +42,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
 	private NodeService nodeService;
     private NamespaceService namespaceService;
     private PreferenceService preferenceService;
+	private DictionaryService dictionaryService;
 
     private AuthenticationService authService;
     private OrgstructureBean orgstructureService;
@@ -66,7 +71,11 @@ public class DocumentWebScriptBean extends BaseWebScript {
         this.namespaceService = namespaceService;
     }
 
-    public String getRating(String documentNodeRef) {
+	public void setDictionaryService(DictionaryService dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
+
+	public String getRating(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
         NodeRef documentRef = new NodeRef(documentNodeRef);
@@ -311,6 +320,21 @@ public class DocumentWebScriptBean extends BaseWebScript {
             if (createdNode != null) {
                 return new ScriptNode(createdNode, serviceRegistry, getScope());
             }
+        }
+        return null;
+    }
+
+	public String getArmUrl(String nodeRef) {
+        ParameterCheck.mandatory("nodeRef", nodeRef);
+        NodeRef ref = new NodeRef(nodeRef);
+        if (nodeService.exists(ref)) {
+	        QName type = nodeService.getType(ref);
+	        if (type != null) {
+		        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_ARM_URL));
+		        if (constraint != null && (constraint.getConstraint() instanceof ArmUrlConstraint)) {
+			        return ((ArmUrlConstraint) constraint.getConstraint()).getArmUrl();
+		        }
+	        }
         }
         return null;
     }

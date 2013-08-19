@@ -9,9 +9,9 @@
             <sub-component id="default">
                <evaluations>
                   <evaluation id="lecm-document">
-                     <url>/components/title/simple-title</url>
+                     <url>/lecm/components/document/title</url>
                      <properties>
-                        <title>title.documents</title>
+	                     <nodeRef>{nodeRef}</nodeRef>
                      </properties>
                   </evaluation>
                </evaluations>

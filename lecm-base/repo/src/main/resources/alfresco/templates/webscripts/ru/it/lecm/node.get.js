@@ -56,6 +56,8 @@ function getDoclist() {
         }
     }
 
+	item.typeTitle = base.getNodeTypeLabel(node.nodeRef);
+
     return (
     {
         container: parsedArgs.rootNode,

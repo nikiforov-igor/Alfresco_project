@@ -314,6 +314,7 @@
         <property name="preferenceService" ref="preferenceService"/>
         <property name="authService" ref="authenticationService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
     </bean>
 
     <bean id="documentCommentsService" class="ru.it.lecm.documents.beans.DocumentCommentsServiceImpl"

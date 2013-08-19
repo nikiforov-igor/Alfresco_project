@@ -29,6 +29,7 @@ public interface DocumentService {
     public static final String CONSTRAINT_PRESENT_STRING = "present-string-constraint";
     public static final String CONSTRAINT_AUTHOR_PROPERTY = "author-property-constraint";
     public static final String CONSTRAINT_REG_NUMBERS_PROPERTIES = "reg-number-properties-constraint";
+    public static final String CONSTRAINT_ARM_URL = "arm-url-constraint";
 
     public static final QName PROP_RATING = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "rating");
     public static final QName PROP_RATED_PERSONS_COUNT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "rated-persons-count");

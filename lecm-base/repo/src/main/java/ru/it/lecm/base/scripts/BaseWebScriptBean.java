@@ -8,10 +8,12 @@ import org.alfresco.repo.jscript.ScriptPagingNodes;
 import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
+import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Context;
 import ru.it.lecm.base.ListOfUsedTypesBean;
 import ru.it.lecm.base.beans.BaseBean;
@@ -30,6 +32,8 @@ import java.util.*;
 public class BaseWebScriptBean extends BaseWebScript {
 	private NamespaceService namespaceService;
 	private LecmObjectsService lecmObjectsService;
+	private DictionaryService dictionaryService;
+	private NodeService nodeService;
 
 	final int REQUEST_MAX = 1000;
 
@@ -41,6 +45,14 @@ public class BaseWebScriptBean extends BaseWebScript {
 
 	public void setLecmObjectsService(LecmObjectsService lecmObjectsService) {
 		this.lecmObjectsService = lecmObjectsService;
+	}
+
+	public void setDictionaryService(DictionaryService dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
 	}
 
 	public ScriptPagingNodes getChilds(ScriptNode node, String childQNameType, int maxItems, int skipCount, String sortProp, Boolean sortAsc, Boolean onlyActive) {
@@ -212,4 +224,17 @@ public class BaseWebScriptBean extends BaseWebScript {
             return true;
         }
     }
+
+	public String getNodeTypeLabel(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+
+		QName nodeType = nodeService.getType(new NodeRef(nodeRef));
+		if (nodeType != null) {
+			TypeDefinition typeDef = dictionaryService.getType(nodeType);
+			if (typeDef != null) {
+				return  typeDef.getTitle();
+			}
+		}
+		return null;
+	}
 }

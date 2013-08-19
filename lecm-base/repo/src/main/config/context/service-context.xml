@@ -122,6 +122,12 @@
         <property name="lecmObjectsService">
             <ref bean="lecmObjectsService"/>
         </property>
+	    <property name="dictionaryService">
+		    <ref bean="dictionaryService"/>
+	    </property>
+	    <property name="nodeService">
+		    <ref bean="nodeService" />
+	    </property>
     </bean>
 
     <bean id="lecmRepositoryWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.LecmRepositoryWebScriptBean">

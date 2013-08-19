@@ -61,6 +61,7 @@
    {
    <#if doclist.item??>
       <#assign item = doclist.item>
+      "typeTitle": "${item.typeTitle!""}",
       "node": <#noescape>${item.nodeJSON}</#noescape>,
       <#if item.parent??>"parent": <#noescape>${item.parent.nodeJSON},</#noescape></#if>
       <@itemJSON item=item />
