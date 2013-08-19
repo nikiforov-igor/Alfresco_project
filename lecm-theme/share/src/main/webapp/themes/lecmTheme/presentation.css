@@ -2560,3 +2560,11 @@ span.person a div.description:empty {
 	border-bottom: 1px solid #333;
 	margin-bottom: 5px;
 }
+
+.view-signatures {
+   background-image: url(/share/res/themes/lecmTheme/images/document.png);
+}
+
+.refresh-sent-document {
+   background-image: url(/share/res/themes/lecmTheme/images/refresh.png);
+}

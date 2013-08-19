@@ -25,7 +25,7 @@
         <h2 id="${el}-signing-heading" class="dark">
 				${msg("label.signing")}
                 <span class="alfresco-twister-actions">
-                    <a id="${el}-viewSignature" href="javascript:void(0)" class="edit" title="${msg("label.view")}"> &nbsp;</a>
+                    <a id="${el}-viewSignature" href="javascript:void(0)" class="view-signatures" title="${msg("label.view")}"> &nbsp;</a>
                 </span>
         </h2>
         <div id="${el}-signing-formContainer">
@@ -41,7 +41,7 @@
         <h2 id="${el}-exchange-heading" class="dark">
             ${msg("label.exchange")}
 			<span class="alfresco-twister-actions">
-				<a id="${el}-refreshSentDocuments" href="javascript:void(0)" class="edit" title="${msg("label.refresh.sent.document")}"> &nbsp;</a>
+				<a id="${el}-refreshSentDocuments" href="javascript:void(0)" class="refresh-sent-document" title="${msg("label.refresh.sent.document")}"> &nbsp;</a>
 			</span>
         </h2>
         <div id="${el}-exchange-formContainer">

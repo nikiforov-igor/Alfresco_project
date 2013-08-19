@@ -345,3 +345,14 @@
     display: inline;
 }
 
+.document-components-panel .alfresco-twister-actions .refresh {
+    background-image: url(/share/res/themes/lecmTheme/images/refresh.png);
+    display: none;
+    opacity: .8;
+}
+.document-components-panel .alfresco-twister:hover .alfresco-twister-actions .refresh {
+    display: inline;
+}
+.document-components-panel .alfresco-twister-actions .refresh:active {
+    opacity: 1;
+}

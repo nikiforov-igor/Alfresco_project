@@ -17,7 +17,7 @@
 		<h2 id="${el}-heading" class="dark">
 			${msg("heading")}
 			<span class="alfresco-twister-actions">
-				<a id="${el}-action-refresh" href="javascript:void(0);" class="expand" title="${msg("label.refresh")}">&nbsp</a>
+				<a id="${el}-action-refresh" href="javascript:void(0);" class="refresh" title="${msg("label.refresh")}">&nbsp</a>
 			 </span>
 		</h2>
 
