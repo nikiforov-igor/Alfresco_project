@@ -12,7 +12,6 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 import ru.it.lecm.documents.beans.DocumentFilter;
 import ru.it.lecm.documents.beans.DocumentMembersService;
@@ -233,7 +232,8 @@ public class ContractsWebScriptBean extends BaseWebScript {
                     ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT.toPrefixString(namespaceService).replaceAll(":", "_") + "." + queryFilterId;
             String currentUser = authService.getCurrentUserName();
             Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, filterId);
-            String filterData = preferences.get(filterId).toString();
+            Serializable filterPref = preferences.get(filterId);
+            String filterData = filterPref != null ? filterPref.toString() : null;
             String employeesFilter = "";
             DocumentFilter docFilter = FiltersManager.getFilterById(queryFilterId);
             if (docFilter != null && filterData != null && !filterData.isEmpty()) {
