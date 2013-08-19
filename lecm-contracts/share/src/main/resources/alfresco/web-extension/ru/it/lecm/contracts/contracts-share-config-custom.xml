@@ -284,6 +284,7 @@
                             <control-param name="showCreateNewLink">true</control-param>
                             <control-param name="showCreateNewButton">true</control-param>
                             <control-param name="createNewMessageId">contracts.contractor.createNew</control-param>
+                            <control-param name="createDialogClass">contractor-form-edit</control-param>
                         </control>
                     </field>
                     <field id="lecm-contract:representative-assoc" set="counterparty-info-1">

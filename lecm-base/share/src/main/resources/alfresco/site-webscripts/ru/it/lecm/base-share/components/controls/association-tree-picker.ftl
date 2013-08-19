@@ -158,6 +158,7 @@
 		    </#list>
 	    },
 	    </#if>
-        itemType: "${field.endpointType}"
+        itemType: "${field.endpointType}",
+        createDialogClass: "${field.control.params.createDialogClass!""}"
     }).setMessages( ${messages} );
 </script>

@@ -138,7 +138,9 @@ LogicECM.module = LogicECM.module || {};
 
             allowedNodes: null,
 
-            allowedNodesScript: null
+            allowedNodesScript: null,
+
+            createDialogClass: ""
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -192,7 +194,7 @@ LogicECM.module = LogicECM.module || {};
                 actionUrl:null,
                 destroyOnHide:true,
                 doBeforeDialogShow:{
-                    fn:this.setCreateNewFormDialogTitle,
+                    fn:this.doBeforeDialogShow,
                     scope:this
                 },
                 onSuccess:{
@@ -883,7 +885,7 @@ LogicECM.module = LogicECM.module || {};
                     actionUrl:null,
                     destroyOnHide:true,
                     doBeforeDialogShow:{
-                        fn: me.setCreateNewFormDialogTitle,
+                        fn: me.doBeforeDialogShow,
 						scope: me
                     },
                     onSuccess:{
@@ -911,14 +913,16 @@ LogicECM.module = LogicECM.module || {};
             };
         },
 
-        setCreateNewFormDialogTitle: function (p_form, p_dialog) {
-			var message;
-			if ( this.options.createNewMessage ) {
-		        message = this.options.createNewMessage;
-			} else {
-		        message = this.msg("dialog.createNew.title");
-			}
-			p_dialog.dialog.setHeader( message );
+        doBeforeDialogShow: function (p_form, p_dialog) {
+            var message;
+            if ( this.options.createNewMessage ) {
+                message = this.options.createNewMessage;
+            } else {
+                message = this.msg("dialog.createNew.title");
+            }
+            p_dialog.dialog.setHeader( message );
+
+            Dom.addClass(p_dialog.id + "-form-container", this.options.createDialogClass);
         },
 
         /**
