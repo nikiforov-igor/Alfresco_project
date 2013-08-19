@@ -118,9 +118,15 @@ public class LucenePreparedQuery {
 	}
 
 	/**
-	 * Сгенерить текст Lucene-запроса с учётом имеющихся простых параметров
-	 * и создать список сложных параметров.
-	 * Выполняется также проверка заполнения обязательных параметров, с поднятием исключений.
+	 * Сгенерить текст Lucene-запроса с учётом имеющихся:
+	 *   1) типа (TYPE), 
+	 *   2) ID, 
+	 *   3) простых параметров,
+	 *   4) и возможного текста запроса из флагов (reportDescriptor.flags.text).
+	 * Заполняются списки result.argsByLinks (с параметрами-сложными ссылками) 
+	 * и result.argsByProps (с простыми, условия для которых здесь добавляются 
+	 * в текст запроса)  
+	 * Выполняется проверка заполнения обязательных параметров, с поднятием исключений при ошибках.
 	 * @param reportDescriptor
 	 * @return
 	 */
@@ -195,7 +201,8 @@ public class LucenePreparedQuery {
 				continue;
 			}
 
-			if (!ReportDSContextImpl.isDirectAlfrescoPropertyLink(substitudeExpression)) {
+			final boolean isSimpleLink = ReportDSContextImpl.isDirectAlfrescoPropertyLink(substitudeExpression);
+			if (!isSimpleLink) {
 				// сложный параметр будем проверять позже - в фильтре данных
 				result.argsByLinks.add(colDesc); 
 				continue;
@@ -212,14 +219,14 @@ public class LucenePreparedQuery {
 
 				// параметр может быть как название свойства, так и названием ассоциации - проверяем
 				QName expressionQName = null;
-				try {
+				try { // создать qname поля ...
 					expressionQName = QName.createQName(colDesc.getQNamedExpression(), registry.getNamespaceService());
 				} catch (InvalidQNameException ex) {
 					logger.warn( "Unsupported parameter type '%s' for column '%s' -> column condition skipped", colDesc.getAlfrescoType(), colDesc.getColumnName());
 				}
 
 				if (expressionQName == null) {
-					try {
+					try { // qname типа, для проверки наличия ассоциаций 
 						expressionQName = QName.createQName(colDesc.getAlfrescoType(), registry.getNamespaceService());
 					} catch (InvalidQNameException ex) {
 						logger.warn( "Unsupported parameter type '%s' for column '%s' -> column condition skipped", colDesc.getAlfrescoType(), colDesc.getColumnName());
@@ -232,8 +239,7 @@ public class LucenePreparedQuery {
 				final AssociationDefinition definition = dictionaryService.getAssociation(expressionQName);
 
 				final boolean isLink = (definition != null);
-				if (isLink) { 
-					/* здесь colDesc содержит ассоциацию ... */
+				if (isLink) { /* здесь colDesc содержит ассоциацию ... */
 					result.argsByLinks.add(colDesc); // сложный параметр (с ассоциацией) будем проверять позже - в фильтре данных
 					continue;
 				}
@@ -245,7 +251,8 @@ public class LucenePreparedQuery {
 			// экранированное имя с именем поля для поиска в Lucene
 			final String propertyName = substitudeExpression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
 
-			final StringBuilder cond = makeValueCond( propertyName, colDesc.getParameterValue()); // сгенерированное условие
+			/* сгенерировать условие (VALUE/LIST/RANGE) ... */
+			final StringBuilder cond = makeValueCond( propertyName, colDesc.getParameterValue());
 
 			if (cond != null && cond.length() > 0) {
 				bquery.emmit( (hasData ? " AND" : "") + " (" + cond + ")");

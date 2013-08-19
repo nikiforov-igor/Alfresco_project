@@ -32,7 +32,6 @@ import ru.it.lecm.reports.generators.errands.ErrandsReportFilterParams.GroupByIn
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
-import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.utils.LuceneSearchBuilder;
@@ -99,28 +98,9 @@ public class ErrandsProductionsGraphDSProvider
 	}
 
 
-	/**
-	 * Нет фильтра
-	 */
-	@Override
-	protected DataFilter newDataFilter() {
-		return null; // super.newDataFilter();
-	}
-
-
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-		// return super.newJRDataSource(iterator);
-
 		final ExecProductionsJRDataSource result = new ExecProductionsJRDataSource(iterator);
-
-		result.getContext().setSubstitudeService( getServices().getSubstitudeService());
-		result.getContext().setRegistryService( getServices().getServiceRegistry());
-		// result.getContext().setJrSimpleProps( jrSimpleProps);
-		result.getContext().setMetaFields( JRUtils.getDataFields(getReportDescriptor()));
-		// if (filter != null) result.getContext().setFilter( filter.makeAssocFilter());
-		result.buildJoin();
-
 		return result;
 	}
 
@@ -134,17 +114,14 @@ public class ErrandsProductionsGraphDSProvider
 
 	@Override
 	protected LucenePreparedQuery buildQuery() {
+
+		final LucenePreparedQuery result = super.buildQuery(); // new LucenePreparedQuery();
+
 		final LuceneSearchBuilder builder = new LuceneSearchBuilder( getServices().getServiceRegistry().getNamespaceService());
+		builder.emmit( result.luceneQueryText());
 
-		/* задам тип */
 		// hasData: становится true после внесения первого любого условия в builder
-		boolean hasData = builder.emmitTypeCond( getReportDescriptor().getFlags().getPreferedNodeType(), null);
-
-		/* доп критерии из текста запроса */
-		if (getReportDescriptor().getFlags().getText() != null && !getReportDescriptor().getFlags().getText().isEmpty()) {
-			builder.emmit(hasData ? " AND " : "").emmit(getReportDescriptor().getFlags().getText());
-			hasData = true;
-		}
+		boolean hasData = !builder.isEmpty();
 
 		/* 
 		 * Критерий двойной:
@@ -177,7 +154,6 @@ public class ErrandsProductionsGraphDSProvider
 		}
 
 		/* Формирование */
-		final LucenePreparedQuery result = new LucenePreparedQuery();
 		result.setLuceneQueryText( builder.toString());
 		return result;
 	}
@@ -474,6 +450,11 @@ public class ErrandsProductionsGraphDSProvider
 					final ResultSetRow rs = context.getRsIter().next();
 
 					final NodeRef errandId = rs.getNodeRef(); // id Поручения 
+					if (context.getFilter() != null && !context.getFilter().isOk(errandId)) {
+						if (logger.isDebugEnabled())
+							logger.debug( String.format("{%s} filtered out", errandId));
+						continue;
+					}
 
 					// Исполнители
 					final List<AssociationRef> employees = nodeSrv.getTargetAssocs(errandId, qnames().QN_ASSOC_REF);
@@ -500,33 +481,36 @@ public class ErrandsProductionsGraphDSProvider
 					if (!qnames().isПоручениеЗакрыто(props)) // поручение ещё в работе ...
 						continue;
 
-					// дата завершения отчёта ...
+					// точка X: "дата завершения" отчёта ...
 					final Date endErrand = (Date) props.get(qnames().QNFLD_END_DATE);
-					if (endErrand == null)
-						continue; // пропускаем не завершённые поручения
+					if (endErrand == null) // пропускаем не завершённые поручения
+						continue;
 
-					// среднее время исполнения ...
+					// точка Y: "среднее время исполнения на (!) дату закрытия" ...
 					final int index = countDeltaInDays(periodStart, endErrand);
 					executor.registerDuration( index, qnames().getВремяИсполнения_мсек(props));
 
 				} // while по НД
 
 				// (!) перенос в основной блок с разбивкой по датам ...
-				final Calendar curDay = Calendar.getInstance();
-				curDay.setTime(periodStart);
+				final Calendar x_curDay = Calendar.getInstance();
+				x_curDay.setTime(periodStart);
 				for (int i = 0; i < maxTimeCounter; i++) { // цикл по дням
-					final Timestamp curStamp = new Timestamp(curDay.getTimeInMillis());
+					final Timestamp x_curStamp = new Timestamp(x_curDay.getTimeInMillis());
 					for (Map.Entry<NodeRef, ProductEmployeeInfo> e: series.entrySet()) { // цикл по объектам
 						final AvgValue avg = e.getValue().avgExecTimeInHours.get(i);
-						if (avg != null && avg.getCount() > 0) {
-							result.add( new GraphPoint(
-									  e.getValue().ФамилияИО()
-									, curStamp
-									, avg.getAvg()
-									, "h"));
-						}
+						// вместо отсутствующих значениё выводим ноль - чтобы 
+						// график не "схлопывался до точки" ...
+						final float y_value = (avg != null && avg.getCount() > 0) 
+								? avg.getAvg()
+								: 0;
+						result.add( new GraphPoint(
+								  e.getValue().ФамилияИО()
+								, x_curStamp
+								, y_value
+								, "h"));
 					}
-					curDay.add(Calendar.HOUR, 24); // сутки добавляем
+					x_curDay.add(Calendar.HOUR, 24); // сутки добавляем
 				}
 
 				this.setData( result );

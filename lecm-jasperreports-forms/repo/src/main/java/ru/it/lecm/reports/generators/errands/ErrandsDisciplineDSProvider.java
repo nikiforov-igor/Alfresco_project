@@ -31,7 +31,6 @@ import ru.it.lecm.reports.generators.errands.ErrandsReportFilterParams.GroupByIn
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
-import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.utils.LuceneSearchBuilder;
@@ -98,26 +97,14 @@ public class ErrandsDisciplineDSProvider
 		}
 	}
 
-	/**
-	 * Нет фильтра
-	 */
 	@Override
 	protected DataFilter newDataFilter() {
-		return null; // super.newDataFilter();
+		return super.newDataFilter();
 	}
-
 
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
 		final ExecDisciplineJRDataSource result = new ExecDisciplineJRDataSource(iterator);
-
-		result.getContext().setSubstitudeService( getServices().getSubstitudeService());
-		result.getContext().setRegistryService( getServices().getServiceRegistry());
-		// result.getContext().setJrSimpleProps( jrSimpleProps);
-		result.getContext().setMetaFields( JRUtils.getDataFields(getReportDescriptor()));
-		// if (filter != null) result.getContext().setFilter( filter.makeAssocFilter());
-		result.buildJoin();
-
 		return result;
 	}
 
@@ -131,17 +118,26 @@ public class ErrandsDisciplineDSProvider
 
 	@Override
 	protected LucenePreparedQuery buildQuery() {
+
+		final LucenePreparedQuery result = super.buildQuery(); // new LucenePreparedQuery();
+
 		final LuceneSearchBuilder builder = new LuceneSearchBuilder( getServices().getServiceRegistry().getNamespaceService());
+		builder.emmit( result.luceneQueryText());
 
-		/* задам тип */
 		// hasData: становится true после внесения первого любого условия в builder
-		boolean hasData = builder.emmitTypeCond( getReportDescriptor().getFlags().getPreferedNodeType(), null);
+		boolean hasData = !builder.isEmpty();
 
-		/* доп критерии из текста запроса */
+		/*
+		// задам тип
+		if (builder.emmitTypeCond( getReportDescriptor().getFlags().getPreferedNodeType(), null))
+			hasData = true;
+
+		// доп критерии из текста запроса
 		if (getReportDescriptor().getFlags().getText() != null && !getReportDescriptor().getFlags().getText().isEmpty()) {
 			builder.emmit(hasData ? " AND " : "").emmit(getReportDescriptor().getFlags().getText());
 			hasData = true;
 		}
+		 */
 
 		/* 
 		 * Критерий двойной:
@@ -173,7 +169,6 @@ public class ErrandsDisciplineDSProvider
 		}
 
 		/* Формирование */
-		final LucenePreparedQuery result = new LucenePreparedQuery();
 		result.setLuceneQueryText( builder.toString());
 		return result;
 	}
@@ -351,13 +346,17 @@ public class ErrandsDisciplineDSProvider
 				final GroupByInfo groupByInfo = paramsFilter.getCurrentGroupBy( getReportDescriptor().getDsDescriptor());
 				qnames().setQN_ASSOC_REF( groupByInfo.grpAssocQName); // задать название ассоциации для получения Инициаторов или Подразделений
 
-
 				/* проход по все загруженным Поручениям ... */
 				while(context.getRsIter().hasNext()) {
 
 					final ResultSetRow rs = context.getRsIter().next();
 
 					final NodeRef errandId = rs.getNodeRef(); // id Поручения 
+					if (context.getFilter() != null && !context.getFilter().isOk(errandId)) {
+						if (logger.isDebugEnabled())
+							logger.debug( String.format("{%s} filtered out", errandId));
+						continue;
+					}
 
 					// Исполнители
 					final List<AssociationRef> employees = nodeSrv.getTargetAssocs(errandId, qnames().QN_ASSOC_REF);
@@ -406,7 +405,7 @@ public class ErrandsDisciplineDSProvider
 							executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_IMPORTANT_REFUSED);
 						}
 					}
-					if (qnames().isПоручениеБылоОтклонено(props)) {
+					if (qnames().isПоручениеБылоОтклоненоБоссом(props)) {
 						executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_BOSS_REFUSED);
 					}
 				} // while

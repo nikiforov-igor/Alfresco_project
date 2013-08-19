@@ -601,7 +601,7 @@ public class DSXMLProducer {
 					column.setExpression(queryFldName);
 			}
 
-			// синоним для задания выражения ...
+			// синоним "expression" для задания выражения (вместо "queryFldName") ...
 			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_EXPRESSION)) {
 				final String queryFldName = fldNode.getAttribute(DSXMLProducer.XMLATTR_EXPRESSION);
 				if (queryFldName != null && queryFldName.length() > 0)

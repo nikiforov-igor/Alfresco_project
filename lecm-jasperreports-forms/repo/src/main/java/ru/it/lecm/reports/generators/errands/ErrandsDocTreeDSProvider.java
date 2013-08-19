@@ -46,6 +46,8 @@ public class ErrandsDocTreeDSProvider
 
 	private static final Logger logger = LoggerFactory.getLogger(ErrandsDocTreeDSProvider.class);
 
+	/** Формат названия документов по-умолчанию */
+	final static String DEFAULT_DISPLAY_FORMAT = "cm:name";
 
 	/**
 	 * Список отбираемых документов или null, если надо все ...
@@ -230,13 +232,6 @@ public class ErrandsDocTreeDSProvider
 	protected ResultSet execQuery() {
 		loadConfig();
 		return super.execQuery();
-	}
-
-
-	@Override
-	protected LucenePreparedQuery buildQuery() {
-		// параметр список документов укладывается в стандартный провайдинг ...
-		return super.buildQuery();
 	}
 
 
@@ -455,7 +450,7 @@ public class ErrandsDocTreeDSProvider
 			final boolean isDup = this.getProcessed().containsKey(docId);
 
 			/* Название нового элемента */
-			String displayName = substService.getObjectDescription(docId);
+			String displayName = makeDocName(docId);
 			// повторяющиеся элементы помечаем звёздочкой
 			if (isDup) displayName = configDocTreeParams.getDupMarker() + displayName;
 
@@ -484,6 +479,16 @@ public class ErrandsDocTreeDSProvider
 					regLeveldItem( child.getParentRef(), docItem, qnCurAssoc);
 				}
 			}
+		}
+
+		private String makeDocName(NodeRef docId) {
+			if (docId == null)
+				return "<...>";
+			String result = substService.getObjectDescription(docId);
+			if (Utils.isStringEmpty(result)) { // формирование только имени
+				result = substService.formatNodeTitle(docId, DEFAULT_DISPLAY_FORMAT);
+			}
+			return (Utils.isStringEmpty(result)) ? docId.toString() : result;
 		}
 	}
 
@@ -525,6 +530,11 @@ public class ErrandsDocTreeDSProvider
 				while(context.getRsIter().hasNext()) {
 					final ResultSetRow rs = context.getRsIter().next();
 					final NodeRef docId= rs.getNodeRef(); // id Документа или Поручения - что User выбрали то и будет)
+					if (context.getFilter() != null && !context.getFilter().isOk(docId)) {
+						if (logger.isDebugEnabled())
+							logger.debug( String.format("{%s} filtered out", docId));
+						continue;
+					}
 					result.regRootItem( docId);
 				} // while по НД
 

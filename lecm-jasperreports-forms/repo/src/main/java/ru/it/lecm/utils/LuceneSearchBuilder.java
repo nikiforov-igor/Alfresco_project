@@ -40,7 +40,7 @@ public class LuceneSearchBuilder {
 	}
 
 	public boolean isEmpty() {
-		return (this.bquery == null) || (this.bquery.length() == 0);
+		return (this.bquery == null) || (this.bquery.toString().trim().length() == 0);
 	}
 
 	@Override

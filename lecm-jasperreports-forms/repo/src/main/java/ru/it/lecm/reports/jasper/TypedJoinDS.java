@@ -45,6 +45,8 @@ public abstract class TypedJoinDS<T extends Object> extends AlfrescoJRDataSource
 
 	@Override
 	public boolean next() throws JRException {
+		if (iterData == null) // если ещё не был вызван построитель - вызвать его ...
+			buildJoin();
 		while (iterData != null && iterData.hasNext()) {
 			final T item = iterData.next();
 			context.setCurNodeProps( getNodeProps(item)); 

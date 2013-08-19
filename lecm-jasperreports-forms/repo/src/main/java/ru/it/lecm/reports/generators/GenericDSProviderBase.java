@@ -114,6 +114,12 @@ public class GenericDSProviderBase
 	 * Стандартное построение запроса согласно параметров this.reportDescriptor.
 	 * В классах-потомках может использоваться другая логика параметризации 
 	 * и построения отчётов.
+	 * Здесь генерируется текст Lucene-запроса с учётомЖ
+	 *   1) типа (TYPE), 
+	 *   2) ID 
+	 *   3) имеющихся простых параметров, 
+	 *   4) возможного текста запроса из флагов (reportDescriptor.flags.text).
+	 * 
 	 * @return
 	 */
 	protected LucenePreparedQuery buildQuery() {
@@ -314,6 +320,7 @@ public class GenericDSProviderBase
 		final NamespaceService ns = this.getServices().getServiceRegistry().getNamespaceService();
 		final DictionaryService ds = this.getServices().getServiceRegistry().getDictionaryService();
 
+		boolean useFilter = false;
 		for (ColumnDescriptor colDesc : this.alfrescoQuery.argsByLinks()) {
 			/*
 			 * Example:
@@ -329,12 +336,13 @@ public class GenericDSProviderBase
 						// TODO добавить обработку parent и source ассоциаций, согласно правилам substitudeService
 						expression = expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
 						final QName qnAssocType = QName.createQName(expression, ns);
-						AssociationDefinition assocDef =  ds.getAssociation(qnAssocType);
+						final AssociationDefinition assocDef =  ds.getAssociation(qnAssocType);
 						if (assocDef != null) {
 							final List<NodeRef> idsTarget = ParameterMapper.getArgAsNodeRef(colDesc);
 							if (!idsTarget.isEmpty()) {
 								targetType = assocDef.getTargetClass().getName();
 								final AssocKind kind = (assocDef.isChild()) ? AssocKind.child : AssocKind.target;
+								useFilter = true;
 								result.addAssoc(new AssocDataFilter.AssocDesc(kind, qnAssocType, targetType, idsTarget));
 							}
 						}
@@ -343,11 +351,11 @@ public class GenericDSProviderBase
 					}
 				}
 			} catch (Exception ignored) {
-				logger.debug("Some error occured", ignored);
+				logger.warn("Ignoring error at process parameteres:\n", ignored);
 			}
 		}
 
-		return result;
+		return (useFilter) ? result : null;
 	}
 
 }

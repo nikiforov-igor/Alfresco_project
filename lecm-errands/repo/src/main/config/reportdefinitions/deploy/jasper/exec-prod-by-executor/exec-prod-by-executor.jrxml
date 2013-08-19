@@ -14,7 +14,7 @@
 			uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="118"/>
+	<property name="ireport.y" value="68"/>
 	<property name="dataSource" value="ru.it.lecm.reports.generators.errands.ErrandsProductionsGraphDSProvider"/>
 	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
@@ -22,23 +22,6 @@
 			<style backcolor="#DCDCDC"/>
 		</conditionalStyle>
 	</style>
-	<!--
-	<subDataset name="dataset2" uuid="76853ca6-6060-4579-9584-8e7e469dc851">
-		<queryString> <![CDATA[""]]> </queryString>
-		<field name="Col_NameTag" class="java.lang.String">
-			<fieldDescription><![CDATA[Название]]></fieldDescription>
-		</field>
-		<field name="Col_DateTime" class="java.sql.Timestamp">
-			<fieldDescription><![CDATA[Время]]></fieldDescription>
-		</field>
-		<field name="Col_Avg_Execution.Value" class="java.lang.Float">
-			<fieldDescription><![CDATA[Ср время исполнения]]></fieldDescription>
-		</field>
-		<field name="Col_Avg_Execution.Units" class="java.lang.String">
-			<fieldDescription><![CDATA[Ед измерения значения ср времени]]></fieldDescription>
-		</field>
-	</subDataset>
-	 -->
 
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["ds-exec-prod-by-executor.xml"]]></defaultValueExpression>
@@ -46,8 +29,9 @@
 
 	<queryString> <![CDATA[]]> </queryString>
 
+	<!-- В зависимости от типа сортировки, здесь будет либо Исполнитель, либо Подразделение -->
 	<field name="Col_NameTag" class="java.lang.String">
-		<fieldDescription><![CDATA[Название]]></fieldDescription>
+		<fieldDescription><![CDATA[Исполнитель]]></fieldDescription>
 	</field>
 
 	<field name="Col_DateTime" class="java.sql.Timestamp">
@@ -129,9 +113,11 @@
 				</timeSeriesDataset>
 				<timeSeriesPlot isShowLines="true">
 					<plot/>
+					<timeAxisLabelExpression><![CDATA["Дата закрытия"]]></timeAxisLabelExpression>
 					<timeAxisFormat>
-						<axisFormat/>
+						<axisFormat verticalTickLabels="true"/>
 					</timeAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Ср время исполнения поручений"]]></valueAxisLabelExpression>
 					<valueAxisFormat>
 						<axisFormat/>
 					</valueAxisFormat>

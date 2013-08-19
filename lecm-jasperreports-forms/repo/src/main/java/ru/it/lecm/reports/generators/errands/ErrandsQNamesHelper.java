@@ -116,7 +116,7 @@ public class ErrandsQNamesHelper {
 		return isFlaged( props, QNFLD_IS_IMPORTANT);
 	}
 
-	final public boolean isПоручениеБылоОтклонено(Map<QName, Serializable> props) {
+	final public boolean isПоручениеБылоОтклоненоБоссом(Map<QName, Serializable> props) {
 		return isFlaged( props, QNFLD_WAS_REJECTED);
 	}
 

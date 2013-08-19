@@ -48,19 +48,17 @@ public class ParameterMapper {
 			switch (colDesc.getParameterValue().getType()) {
 			case RANGE: {
 				// проверяем диапозон дат
-				String dateRangeParam = argRootName + DATE_RANGE;
+				final String dateRangeParam = argRootName + DATE_RANGE;
 				boolean isDateRange = false;
 				boolean isNumberRange = false;
 				if (args.containsKey(dateRangeParam)) {
 					argRootName = dateRangeParam;
 					isDateRange = true;
-					isNumberRange = false;
 				} else {
 					// не нашли параметра - пробуем получить диапозон для чисел
-					String numberRangeParam = argRootName + NUMBER_RANGE;
+					final String numberRangeParam = argRootName + NUMBER_RANGE;
 					if (args.containsKey(numberRangeParam)) {
 						argRootName = numberRangeParam;
-						isDateRange = false;
 						isNumberRange = true;
 					}
 				}
@@ -184,7 +182,7 @@ public class ParameterMapper {
 	 * @param colDesc
 	 * @return
 	 */
-	public static List<NodeRef> getArgAsNodeRef(final ColumnDescriptor colDesc) {
+	public static final List<NodeRef> getArgAsNodeRef(final ColumnDescriptor colDesc) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 
 		if (colDesc == null || colDesc.getParameterValue() == null) {
@@ -196,10 +194,12 @@ public class ParameterMapper {
 			return result;
 		}
 
-		String[] nodeRefs = argValue.toString().split(",");
-		for (String nodeRef : nodeRefs) {
-			if (NodeRef.isNodeRef(nodeRef)) {
-				result.add(new NodeRef(argValue.toString()));
+		final String[] nodeRefs = (argValue instanceof String[])
+						? (String[]) argValue
+						: argValue.toString().split(",;");
+		for (String item : nodeRefs) {
+			if (NodeRef.isNodeRef(item)) {
+				result.add(new NodeRef(item.toString()));
 			}
 		}
 		return result;

@@ -155,14 +155,15 @@ public class ReportDSContextImpl implements ReportDSContext {
 	}
 
 	/**
-	 * Простой ссылкой считаем ссылки на конкретные поля, виде выражения "{abc}"
+	 * Проверить, является ли ссылка простой.
+	 * Простой ссылкой считаем ссылки на конкретные поля в виде выражений "{abc}"
 	 * @return true, если колонка содержит просто ссылку на поле
 	 */
 	public static boolean isDirectAlfrescoPropertyLink(final String expression) {
 		return (expression != null) && (expression.length() > 0)
-				&& Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) // одна певая "{"
-				&& Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) // одна последняя "}"
-				&& expression.indexOf(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL) == -1 // нету "/"
+				&& Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) // есть певая "{" и она одна  
+				&& Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) // есть последняя "}" и она одна
+				&& expression.indexOf(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL) == -1 // нет символов "/"
 				;
 	}
 

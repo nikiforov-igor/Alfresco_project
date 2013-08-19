@@ -96,6 +96,9 @@
             </l18>
         </field>
 
+        <!-- Период - это параметр для провеки сразу пары значений (начало и конец), 
+          так что выносим его для обработки провайдером - помечаем "{{ }}".
+          -->
         <field alfrescoType="d:date" order="1" displayName="Период"
             javaValueClass="java.util.Date" jrFldName="Col_Period" queryFldName="{{Col_Period}}">
             <l18>
@@ -113,9 +116,10 @@
                 </label2>
             </parameter>
         </field>
+
         <field alfrescoType="lecm-orgstr:employee"
-            displayName="Исполнитель (сотрудник)"
-            jrFldName="Col_Param_Creator" order="2" queryFldName="{lecm-orgstr:employee}">
+            displayName="Инициатор (сотрудник)"
+            jrFldName="Col_Param_Creator" order="2" queryFldName="{lecm-errands:initiator-assoc}">
             <l18>
                 <item key="RU_RU" value="Инициатор (сотрудник)"/>
             </l18>
@@ -131,6 +135,7 @@
                 </label2>
             </parameter>
         </field>
+
         <field alfrescoType="lecm-links:link"
             displayName="Подразделение инициатора"
             jrFldName="Col_Param_Exec_OrgUnit" order="3" queryFldName="{lecm-orgstr:organization-unit}">
@@ -145,6 +150,7 @@
             </parameter>
              -->
         </field>
+
         <field alfrescoType="d:text"
             displayName="Сотрудник или подразделение"
             javaValueClass="java.lang.String"
@@ -153,6 +159,7 @@
                 <item key="RU_RU" value="Сотрудник или подразделение"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Выдано всего поручений за период"
             javaValueClass="java.lang.Integer"
@@ -161,6 +168,7 @@
                 <item key="RU_RU" value="Выдано всего поручений за период"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Выдано важных поручений за период"
             javaValueClass="java.lang.Integer"
@@ -169,6 +177,7 @@
                 <item key="RU_RU" value="Выдано важных поручений за период"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Закрытых всего поручений за период"
             javaValueClass="java.lang.Integer"
@@ -177,6 +186,7 @@
                 <item key="RU_RU" value="Закрытых всего поручений за период"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Закрытых важных поручений за период"
             javaValueClass="java.lang.Integer"
@@ -185,6 +195,7 @@
                 <item key="RU_RU" value="Закрытых важных поручений за период"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Кол-во исполнений в срок"
             javaValueClass="java.lang.Integer"
@@ -193,6 +204,7 @@
                 <item key="RU_RU" value="Кол-во исполнений в срок"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Кол-во поручений, отклонённых руководителем"
             javaValueClass="java.lang.Integer"
@@ -201,6 +213,7 @@
                 <item key="RU_RU" value="Кол-во поручений, отклонённых руководителем"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Кол-во важных поручений, неисполненных в срок"
             javaValueClass="java.lang.Integer"
@@ -209,6 +222,7 @@
                 <item key="RU_RU" value="Кол-во важных поручений, неисполненных в срок"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Среднее время исполнения поручения"
             javaValueClass="java.lang.Float"
@@ -217,6 +231,7 @@
                 <item key="RU_RU" value="Среднее время исполнения поручения"/>
             </l18>
         </field>
+
         <field alfrescoType="d:text"
             displayName="Единицы измерения среднего времени исполнения"
             javaValueClass="java.lang.String"
@@ -225,6 +240,7 @@
                 <item key="RU_RU" value="Единицы измерения среднего времени исполнения"/>
             </l18>
         </field>
+
     </fields>
 
 </ds.config>
