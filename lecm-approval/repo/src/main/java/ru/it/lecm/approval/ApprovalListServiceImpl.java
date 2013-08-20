@@ -1,12 +1,22 @@
 package ru.it.lecm.approval;
 
+import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.workflow.WorkflowModel;
+import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
+import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
+import org.alfresco.service.cmr.repository.CopyService;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.approval.api.ApprovalListService;
@@ -16,34 +26,13 @@ import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.DelegateTask;
-import org.activiti.engine.delegate.VariableScope;
-import org.alfresco.repo.policy.BehaviourFilter;
-import org.alfresco.repo.workflow.WorkflowModel;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
-import org.alfresco.service.cmr.repository.CopyService;
-import org.alfresco.service.cmr.workflow.WorkflowInstance;
-import org.alfresco.service.cmr.workflow.WorkflowService;
-import org.alfresco.service.cmr.workflow.WorkflowTask;
-import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
-import org.alfresco.service.cmr.workflow.WorkflowTaskState;
-import org.apache.commons.lang.time.DateUtils;
-import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.wcalendar.IWorkCalendar;
+import java.util.*;
 
 /**
  *
@@ -565,8 +554,10 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 				createApprovalListItem(approvalListRef, orgstructureService.getEmployeeByPerson(currentUserName), newItemTitle, dueDate);
 			}
 			NodeRef oldApprovalListItem = getApprovalListItemByUserName(approvalListRef, previousUserName);
-			nodeService.setProperty(oldApprovalListItem, PROP_APPROVAL_ITEM_DECISION, DecisionResult.REASSIGNED.name());
-			nodeService.setProperty(oldApprovalListItem, PROP_APPROVAL_ITEM_APPROVE_DATE, new Date());
+            if (oldApprovalListItem != null) {
+                nodeService.setProperty(oldApprovalListItem, PROP_APPROVAL_ITEM_DECISION, DecisionResult.REASSIGNED.name());
+                nodeService.setProperty(oldApprovalListItem, PROP_APPROVAL_ITEM_APPROVE_DATE, new Date());
+            }
 		}
 
 		DelegateExecution execution = task.getExecution();
@@ -583,33 +574,42 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	@Override
 	public void completeTask(NodeRef assignee, DelegateTask task) {
-		TaskDecision taskDecision = new TaskDecision();
-		DelegateExecution execution = task.getExecution();
-		NodeRef bpmPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
-		String commentFileAttachmentCategoryName = (String) execution.getVariable("commentFileAttachmentCategoryName");
-		String documentProjectNumber = (String) execution.getVariable("documentProjectNumber");
-		NodeRef approvalListRef = getApprovalListRef(task);
-		String decision = (String) task.getVariableLocal("lecmApprove_approveTaskResult");
-		ActivitiScriptNode commentRef = (ActivitiScriptNode) task.getVariableLocal("lecmApprove_approveTaskCommentAssoc");
+        String decision = (String) task.getVariableLocal("lecmApprove_approveTaskResult");
+        ActivitiScriptNode commentScriptNode = (ActivitiScriptNode) task.getVariableLocal("lecmApprove_approveTaskCommentAssoc");
+        NodeRef commentRef = commentScriptNode != null ? commentScriptNode.getNodeRef() : null;
+        Date dueDate = (Date) nodeService.getProperty(assignee, PROP_ASSIGNEES_ITEM_DUE_DATE);
 
-		taskDecision.setUserName(task.getAssignee());
-		taskDecision.setDecision(decision);
-		taskDecision.setStartDate(task.getCreateTime());
-		taskDecision.setComment((String) task.getVariableLocal("bpm_comment"));
-		taskDecision.setCommentRef(commentRef != null ? commentRef.getNodeRef() : null);
-		taskDecision.setDocumentRef(Utils.getDocumentFromBpmPackage(bpmPackage));
-		taskDecision.setCommentFileAttachmentCategoryName(commentFileAttachmentCategoryName);
-		taskDecision.setDocumentProjectNumber(documentProjectNumber);
-		taskDecision.setDueDate((Date) nodeService.getProperty(assignee, PROP_ASSIGNEES_ITEM_DUE_DATE));
-		taskDecision.setPreviousUserName((String) nodeService.getProperty(assignee, PROP_ASSIGNEES_ITEM_USERNAME));
-
-		Map<String, String> decisionsMap = (Map<String, String>) execution.getVariable("decisionsMap");
-		decisionsMap = addDecision(decisionsMap, taskDecision);
-		execution.setVariable("decisionsMap", decisionsMap);
-
-		logDecision(approvalListRef, taskDecision);
-		execution.setVariable("taskDecision", decision);
+        completeTask(assignee, task, decision, commentRef, dueDate);
 	}
+
+    @Override
+    public void completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate) {
+		DelegateExecution execution = task.getExecution();
+        NodeRef bpmPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+        String commentFileAttachmentCategoryName = (String) execution.getVariable("commentFileAttachmentCategoryName");
+        String documentProjectNumber = (String) execution.getVariable("documentProjectNumber");
+
+        TaskDecision taskDecision = new TaskDecision();
+        taskDecision.setUserName(task.getAssignee());
+        taskDecision.setDecision(decision);
+        taskDecision.setStartDate(task.getCreateTime());
+        taskDecision.setComment((String) task.getVariableLocal("bpm_comment"));
+        taskDecision.setCommentRef(commentRef);
+        taskDecision.setDocumentRef(Utils.getDocumentFromBpmPackage(bpmPackage));
+        taskDecision.setCommentFileAttachmentCategoryName(commentFileAttachmentCategoryName);
+        taskDecision.setDocumentProjectNumber(documentProjectNumber);
+        taskDecision.setDueDate(dueDate);
+        taskDecision.setPreviousUserName((String) nodeService.getProperty(assignee, PROP_ASSIGNEES_ITEM_USERNAME));
+
+        Map<String, String> decisionsMap = (Map<String, String>) execution.getVariable("decisionsMap");
+        decisionsMap = addDecision(decisionsMap, taskDecision);
+        execution.setVariable("decisionsMap", decisionsMap);
+
+        NodeRef approvalListRef = getApprovalListRef(task);
+        logDecision(approvalListRef, taskDecision);
+
+		execution.setVariable("taskDecision", decision);
+    }
 
 	private Map<String, String> addDecision(final Map<String, String> decisionMap, TaskDecision taskDecision) {
 		Map<String, String> currentDecisionMap = (decisionMap == null) ? new HashMap<String, String>() : decisionMap;

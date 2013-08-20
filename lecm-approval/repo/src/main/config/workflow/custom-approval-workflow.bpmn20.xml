@@ -48,8 +48,7 @@
                                 task.setAssignee(documentExecutor);
                             }
 
-                            approval.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
-                            approval.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+                            approval.assignCustomApprovalTask(task);
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -58,50 +57,13 @@
                     <activiti:field name="script">
                         <activiti:string>
                             //<![CDATA[
-			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+                                var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+                                var commentScriptNode = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
+                                approval.completeTask(task, decision, commentScriptNode);
 
-							var userName = task.getAssignee();
-
-							var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
-							var startDate = task.getCreateTime().getTime();
-							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
-							var comment = task.getVariableLocal("bpm_comment");
-							var taskCommentAssoc = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
-							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
-							var documentRef = bpm_package.children[0].nodeRef;
-							logger.log("userName = " + userName);
-							logger.log("decision = " + decision);
-							logger.log("startDate = " + startDate);
-							logger.log("dueDate = " + dueDate);
-							logger.log("comment = " + comment);
-							logger.log("commentRef = " + commentRef);
-							logger.log("documentRef = " + documentRef);
-							logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);
-							logger.log("documentProjectNumber = " + documentProjectNumber);
-							var taskDecision = {
-								"userName": userName,
-								"decision": decision,
-								"startDate": startDate,
-								"dueDate": dueDate,
-								"comment": comment,
-								"commentRef": commentRef,
-								"documentRef": documentRef,
-								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
-								"documentProjectNumber": documentProjectNumber
-							};
-
-							var decisionsMap = execution.getVariable("decisionsMap");
-							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
-							}
-                            decisionsMap = approval.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
-                            execution.setVariable("decisionsMap", decisionsMap);
-
-			            	execution.setVariable("executorBossDecision", decision);
-
-			            	var approvalListRef = execution.getVariable("approvalListRef");
-			            	approval.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
-			            //]]>
+                                var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+                                execution.setVariable("executorBossDecision", decision);
+                            //]]>
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -122,8 +84,7 @@
                             dueDate.setDate(dueDate.getDate() + 2);
 							task.setDueDate(dueDate);
 
-                            approval.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
-                            approval.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+                            approval.assignCustomApprovalTask(task);
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -132,53 +93,14 @@
                     <activiti:field name="script">
                         <activiti:string>
                             //<![CDATA[
-                            var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+                                var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+                                var commentScriptNode = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
+                                approval.completeTask(task, decision, commentScriptNode);
 
-                            var userName = task.getAssignee();
-                            var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
-							var startDate = task.getCreateTime().getTime();
-							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
-							var comment = task.getVariableLocal("bpm_comment");
-							var taskCommentAssoc = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
-							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
-							var documentRef = bpm_package.children[0].nodeRef;
-							logger.log("userName = " + userName);
-							logger.log("decision = " + decision);
-							logger.log("startDate = " + startDate);
-							logger.log("dueDate = " + dueDate);
-							logger.log("comment = " + comment);
-							logger.log("commentRef = " + commentRef);
-							logger.log("documentRef = " + documentRef);
-							logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);
-							logger.log("documentProjectNumber = " + documentProjectNumber);
-							var taskDecision = {
-								"userName": userName,
-								"decision": decision,
-								"startDate": startDate,
-								"dueDate": dueDate,
-								"comment": comment,
-								"commentRef": commentRef,
-								"documentRef": documentRef,
-								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
-								"documentProjectNumber": documentProjectNumber
-							};
-
-							var decisionsMap = execution.getVariable("decisionsMap");
-							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
-							}
-                            decisionsMap = approval.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
-                            execution.setVariable("decisionsMap", decisionsMap);
-
-                            var divisionBossDecisions = execution.getVariable("divisionBossDecisions");
-                            if (!divisionBossDecisions) {
-                                logger.log("Attention: divisionBossDecisions is null, it will be created in approval.addDecision method");
-                            }
-                            divisionBossDecisions = approval.addDecision(divisionBossDecisions, jsonUtils.toJSONString(taskDecision));
-                            execution.setVariable("divisionBossDecisions", divisionBossDecisions);
-
-                            var approvalListRef = execution.getVariable("approvalListRef");
-                            approval.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
+                                var userName = task.getAssignee();
+                                var divisionBossDecisions = execution.getVariable("divisionBossDecisions");
+                                divisionBossDecisions = approval.addDecision(divisionBossDecisions, userName, decision);
+                                execution.setVariable("divisionBossDecisions", divisionBossDecisions);
                             //]]>
                         </activiti:string>
                     </activiti:field>
@@ -203,8 +125,7 @@
                             dueDate.setDate(dueDate.getDate() + 3);
                             task.setDueDate(dueDate);
 
-                            approval.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
-                            approval.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+                            approval.assignCustomApprovalTask(task);
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -213,50 +134,12 @@
                     <activiti:field name="script">
                         <activiti:string>
                             //<![CDATA[
-			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+                                var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+                                var commentScriptNode = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
+                                approval.completeTask(task, decision, commentScriptNode);
 
-			            	var userName = task.getAssignee();
-
-                            var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
-							var startDate = task.getCreateTime().getTime();
-							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
-							var comment = task.getVariableLocal("bpm_comment");
-							var taskCommentAssoc = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
-							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
-							var documentRef = bpm_package.children[0].nodeRef;
-							logger.log("userName = " + userName);
-							logger.log("decision = " + decision);
-							logger.log("startDate = " + startDate);
-							logger.log("dueDate = " + dueDate);
-							logger.log("comment = " + comment);
-							logger.log("commentRef = " + commentRef);
-							logger.log("documentRef = " + documentRef);
-							logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);
-							logger.log("documentProjectNumber = " + documentProjectNumber);
-							var taskDecision = {
-								"userName": userName,
-								"decision": decision,
-								"startDate": startDate,
-								"dueDate": dueDate,
-								"comment": comment,
-								"commentRef": commentRef,
-								"documentRef": documentRef,
-								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
-								"documentProjectNumber": documentProjectNumber
-							};
-
-							var decisionsMap = execution.getVariable("decisionsMap");
-							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
-							}
-                            decisionsMap = approval.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
-                            execution.setVariable("decisionsMap", decisionsMap);
-
-			            	execution.setVariable("departmentBossDecision", decision);
-
-			            	var approvalListRef = execution.getVariable("approvalListRef");
-			            	approval.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
-			            //]]>
+                                execution.setVariable("departmentBossDecision", decision);
+			                //]]>
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -279,8 +162,7 @@
                             dueDate.setDate(dueDate.getDate() + 2);
                             task.setDueDate(dueDate);
 
-                            approval.grantPermissionsForReviewer(task.getAssignee(), bpm_package);
-                            approval.notifyCustomApprovalStarted(task.getAssignee(), task.getDueDate(), bpm_package);
+                            approval.assignCustomApprovalTask(task);
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -289,48 +171,10 @@
                     <activiti:field name="script">
                         <activiti:string>
                             //<![CDATA[
-			            	var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
-
-                            var userName = task.getAssignee();
-
-                            var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
-							var startDate = task.getCreateTime().getTime();
-							var dueDate = task.getDueDate() != null ? task.getDueDate().getTime() : null;
-							var comment = task.getVariableLocal("bpm_comment");
-							var taskCommentAssoc = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
-							var commentRef = taskCommentAssoc ? taskCommentAssoc.nodeRef : null;
-							var documentRef = bpm_package.children[0].nodeRef;
-							logger.log("userName = " + userName);
-							logger.log("decision = " + decision);
-							logger.log("startDate = " + startDate);
-							logger.log("dueDate = " + dueDate);
-							logger.log("comment = " + comment);
-							logger.log("commentRef = " + commentRef);
-							logger.log("documentRef = " + documentRef);
-							logger.log("commentFileAttachmentCategoryName = " + commentFileAttachmentCategoryName);
-							logger.log("documentProjectNumber = " + documentProjectNumber);
-							var taskDecision = {
-								"userName": userName,
-								"decision": decision,
-								"startDate": startDate,
-								"dueDate": dueDate,
-								"comment": comment,
-								"commentRef": commentRef,
-								"documentRef": documentRef,
-								"commentFileAttachmentCategoryName": commentFileAttachmentCategoryName,
-								"documentProjectNumber": documentProjectNumber
-							};
-
-							var decisionsMap = execution.getVariable("decisionsMap");
-							if (!decisionsMap) {
-								logger.log("Attention: decisionsMap is null, it will be created in approval.addDecision method");
-							}
-                            decisionsMap = approval.addDecision(decisionsMap, jsonUtils.toJSONString(taskDecision));
-                            execution.setVariable("decisionsMap", decisionsMap);
-
-			            	var approvalListRef = execution.getVariable("approvalListRef");
-			            	approval.logDecision(approvalListRef, jsonUtils.toJSONString(taskDecision));
-			            //]]>
+                                var decision = task.getVariableLocal("lecmCustom_approveTaskResult");
+                                var commentScriptNode = task.getVariableLocal("lecmCustom_approveTaskCommentAssoc");
+                                approval.completeTask(task, decision, commentScriptNode);
+                            //]]>
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>

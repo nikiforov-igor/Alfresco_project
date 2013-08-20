@@ -1,15 +1,14 @@
 package ru.it.lecm.approval.api;
 
+import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.VariableScope;
+import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.Date;
 import java.util.List;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.DelegateTask;
-
-import org.activiti.engine.delegate.VariableScope;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 
 /**
  *
@@ -117,4 +116,5 @@ public interface ApprovalListService {
 
 	void deleteTempAssigneesList(DelegateExecution execution);
 
+    void completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate);
 }

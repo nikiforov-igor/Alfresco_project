@@ -1,10 +1,5 @@
 package ru.it.lecm.approval.extensions;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
@@ -23,6 +18,8 @@ import ru.it.lecm.approval.Utils;
 import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
+
+import java.util.*;
 
 public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension {
 
@@ -110,16 +107,6 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		}
 	}
 
-	public void grantPermissionsForReviewer(String userName, ActivitiScriptNode bpmPackage) {
-		if (userName == null || bpmPackage == null) {
-			return;
-		}
-
-		NodeRef personRef = personService.getPerson(userName);
-		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(personRef);
-		approvalListService.grantReviewerPermissions(employeeRef, bpmPackage.getNodeRef());
-	}
-
 	/**
 	 * прислать сотруднику уведомление о том, что начато согласование по
 	 * документу
@@ -139,16 +126,6 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 			NodeRef employeeRef = approvalListService.getEmployeeForAssignee(candidate);
 			approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
 		}
-	}
-
-	public void notifyCustomApprovalStarted(String userName, Date dueDate, final ActivitiScriptNode bpmPackage) {
-		if (userName == null || bpmPackage == null) {
-			return;
-		}
-
-		NodeRef personRef = personService.getPerson(userName);
-		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(personRef);
-		approvalListService.notifyApprovalStarted(employeeRef, dueDate, bpmPackage.getNodeRef());
 	}
 
 	public void notifyFinalDecision(final String decision, final ActivitiScriptNode bpmPackage) {
@@ -229,4 +206,25 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	public void deleteTempAssigneesList(DelegateExecution execution) {
 		approvalListService.deleteTempAssigneesList(execution);
 	}
+
+    public void assignCustomApprovalTask(DelegateTask task) {
+        NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
+        approvalListService.assignTask(employeeRef, task);
+    }
+
+    public void completeTask(DelegateTask task, String decision, ActivitiScriptNode commentScriptNode) {
+        NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
+        NodeRef commentRef = commentScriptNode != null ? commentScriptNode.getNodeRef() : null;
+        approvalListService.completeTask(employeeRef, task, decision, commentRef, task.getDueDate());
+    }
+
+    public Map<String, String> addDecision(Map<String, String> decisionMap, String userName, String decision) {
+        if (decisionMap == null) {
+            decisionMap = new HashMap<String, String>();
+        }
+        decisionMap.put(userName, decision);
+
+        return decisionMap;
+    }
+
 }
