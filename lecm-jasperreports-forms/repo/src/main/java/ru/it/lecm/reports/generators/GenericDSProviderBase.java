@@ -87,7 +87,16 @@ public class GenericDSProviderBase
 		if (Utils.isSafelyEquals(this.reportDescriptor, rdesc))
 			return;
 		this.reportDescriptor = rdesc;
+		reloadConfig();
+	}
+
+	/**
+	 * Выполнить загрузку конфигурации, если возможно (т.е. присвоены xmlConfig
+	 * и reportDescriptor)
+	 */
+	protected void reloadConfig() {
 		if (this.xmlConfig != null && this.reportDescriptor != null)
+			// загрузка конфигурации
 			this.xmlConfig.setConfigName( DSXMLProducer.makeDsConfigFileName( this.reportDescriptor.getMnem() ));
 	}
 

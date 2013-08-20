@@ -68,23 +68,24 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				на <target>
   -->
 <ds.config>
-    <report.descriptor mnem="approval-list">
-        <type mnem="JASPER"/>
-        <l18>
-            <item key="RU_RU" value="Лист согласования"/>
-        </l18>
-        <provider mnem="DSProviderApprovalById" javaClass="ru.it.lecm.reports.jasper.DSProviderApprovalById" >
-           <l18>
-               <item key="RU_RU" value="Провайдер Jasper отчётов: Лист согласования"/>
-           </l18>
-        </provider>
-        <template filename="approval-list.jrxml"/>
-        <datasource.descriptor mnem="datasource-approval">
-            <l18>
-                <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
-            </l18>
-        </datasource.descriptor>
-    </report.descriptor>
+	<report.descriptor mnem="approval-list">
+		<type mnem="JASPER"/>
+		<l18> <item key="RU_RU" value="Лист согласования"/>
+		</l18>
+
+		<provider mnem="DSProviderApprovalById" javaClass="ru.it.lecm.reports.jasper.DSProviderApprovalById" >
+			<l18> <item key="RU_RU" value="Провайдер Jasper отчётов: Лист согласования"/>
+			</l18>
+		</provider>
+
+		<template filename="approval-list.jrxml"/>
+
+		<datasource.descriptor mnem="datasource-approval">
+			<l18> <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
+			</l18>
+		</datasource.descriptor>
+
+	</report.descriptor>
 
 	<query.descriptor>
 		<offset>0</offset>
@@ -98,7 +99,13 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 			select * from lecm:documents
 			select * from lecm-al:approval-list as approvals
 		  -->
-		<queryText>	<![CDATA[]]></queryText>
+		<queryText><![CDATA[]]></queryText>
+
+		<flags>
+				<!-- соответствия входных параметров (values) свойствам бина провайдера (keys) -->
+				<property.nodeRef> <![CDATA[ID;id]]> </property.nodeRef>
+		</flags>
+
 	</query.descriptor>
 
 	<cmis.connection>
@@ -107,8 +114,16 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 		<password>111</password>
 	</cmis.connection>
 
-
 	<fields>
+
+		<field order="1"  alfrescoType="d:text"  javaValueClass="java.lang.String"
+				jrFldName="ID"  queryFldName="{{ID}}">
+				displayName="ID документа"
+			<l18>
+				<item key="RU_RU" value="ID документа"/>
+			</l18>
+		</field>
+
 
 		<!-- "lecm-contract:document": Регистрационный номер проекта договора-->
 		<field queryFldName="{lecm-contract:regNumProject}"

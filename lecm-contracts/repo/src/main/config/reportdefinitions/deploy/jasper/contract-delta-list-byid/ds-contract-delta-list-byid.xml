@@ -56,6 +56,10 @@
 			select * from lecm-contract:document as Contract
 		  -->
 		<queryText>	<![CDATA[]]> </queryText>
+		<flags>
+				<!-- соответствия входных параметров (values) свойствам бина провайдера (keys) -->
+				<property.nodeRef> <![CDATA[ID;id]]> </property.nodeRef>
+		</flags>
 	</query.descriptor>
 
 	<cmis.connection>

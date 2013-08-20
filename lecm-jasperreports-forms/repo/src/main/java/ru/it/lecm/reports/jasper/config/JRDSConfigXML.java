@@ -133,7 +133,7 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 			if ( params.containsKey(PARAM_CMIS_XMLCONFIG)) {
 				final Object jrparam = params.get(PARAM_CMIS_XMLCONFIG);
 				if (jrparam == null)
-					throw new RuntimeException( String.format("Paramter '%s' must be set", PARAM_CMIS_XMLCONFIG));
+					throw new RuntimeException( String.format("Paramter '%s' cannot be empty or must be absent", PARAM_CMIS_XMLCONFIG));
 				final String configName = MacrosHelper.getJRParameterValue(jrparam); 
 				getArgs().put(TAG_CONFIGNAME, configName);
 				loadConfig();

@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.jasper;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -174,7 +175,7 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 		if (report != null) {
 			// get the data source parameters from the report
 			final Map<String, JRParameter> params = JRUtils.buildParamMap(report.getParameters());
-			conf().setArgsByJRParams(params); // + conf.loadConfig() inside
+			conf().setArgsByJRParams(params); // (!) conf.loadConfig() inside
 		}
 
 		if (alfrescoResult == null) {
@@ -277,7 +278,8 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 						continue;
 					}
 					final QName qname = QName.createQName( fld.getValueLink(), ns);
-					jrSimpleProps.add( qname.toPrefixString(ns)); // (!) регим короткое название
+					if (qname != null)
+						jrSimpleProps.add( qname.toPrefixString(ns)); // (!) регим короткое название
 				}
 			}
 		}
@@ -318,10 +320,11 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 			alfrescoResult = getServices().getServiceRegistry().getSearchService().query(search);
 		}
 
-		final int foundCount = (alfrescoResult != null && alfrescoResult.hasMore()) ? alfrescoResult.length() : -1;
+		final int foundCount = (alfrescoResult != null) ? alfrescoResult.length() : -1;
 		d.logCtrlDuration(logger, String.format( 
 				"\nQuery in {t} msec: found %d rows, limit %d, offset %d" +
 				"\n>>>%s\n<<<"
 				, foundCount, maxItems,  skipCountOffset, queryText));
 	}
+
 }

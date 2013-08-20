@@ -42,7 +42,9 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
+import ru.it.lecm.reports.api.model.NamedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.ReportFlags;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.beans.ReportProviderExt;
@@ -164,12 +166,12 @@ public class JasperReportGeneratorImpl
 				if (dsProvider instanceof ReportProviderExt) {
 					final ReportProviderExt adsp = (ReportProviderExt) dsProvider;
 
-					adsp.setServices(this.getServices());
-					adsp.setReportDescriptor(reportDesc);
-					adsp.setReportManager(this.reportsMgr);
+					adsp.setServices( this.getServices());
+					adsp.setReportDescriptor( reportDesc);
+					adsp.setReportManager( this.reportsMgr);
 				}
 
-				BeanUtils.populate(dsProvider, parameters);
+				assignProviderProps( dsProvider, parameters, reportDesc);
 
 			} catch (ClassNotFoundException e) {
 				throw new IOException(failMsg + ". Class not found");
@@ -199,6 +201,79 @@ public class JasperReportGeneratorImpl
 				outputStream.close();
 			}
 		}
+	}
+
+	/**
+	 * Присвоение свойств для Провайдера:
+	 *    1) по совпадению названий параметров и свойств провайдера
+	 *    2) по списку сконфигурированному списку алиасов для этого провайдера
+	 * @param destProvider целевой Провайдер
+	 * @param srcParameters список параметров
+	 * @param srcReportDesc текущий описатель Отчёта, для получения из его флагов списка алиасов
+	 * (в виде "property.xxx=paramName")
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	private void assignProviderProps(JRDataSourceProvider destProvider,
+			Map<String, String[]> srcParameters, ReportDescriptor srcReportDesc
+		) throws IllegalAccessException, InvocationTargetException
+	{
+		if (srcParameters != null && destProvider != null) {
+			// присвоение сконфигурированных алиасов ...
+			ArgsHelper.assignParameters( destProvider, getPropertiesAliases(srcReportDesc), srcParameters);
+
+			// присвоение свойств с совпадающими именами с параметрами
+			BeanUtils.populate(destProvider, srcParameters);
+		}
+	}
+
+	/**
+	 * Получить из флагов описателя отчёта список алиасов параметров для именованных свойств.
+	 * Для случаев, когда название входного (web-)параметра отличается от 
+	 * названия свойства провайдера, в которое это свойство должно попасть. 
+	 *    ключ = название свойства провайдера,
+	 *    значение = возможные синонимы в параметрах.
+	 */
+	public Map<String, String[]> getPropertiesAliases(ReportDescriptor reportDesc) {
+		// выбираем из флагов дескриптора ...
+		final Map<String, String[]> result = getPropertiesAliases( (reportDesc == null) ? null : reportDesc.getFlags());
+
+		if (reportDesc != null && log.isDebugEnabled()) {
+			log.debug(String.format( "Found parameters' aliases for provider %s:\n\t%s", reportDesc.getClass(), result));
+		}
+
+		return result;
+	}
+
+	/** префикс названия для конвертирующего свойства */
+	final static String PFX_PROPERTY_ITEM = "property.".toLowerCase();
+
+	public Map<String, String[]> getPropertiesAliases(ReportFlags reportFlags) {
+		// выбираем из флагов дескриптора ...
+		if (reportFlags == null || reportFlags.flags() == null)
+			return null;
+
+		final Map<String, String[]> result = new HashMap<String, String[]>( reportFlags.flags().size());
+
+		// сканируем параметры-флаги вида "property.XXX"
+		for(NamedValue item: reportFlags.flags()) {
+			if (item != null && item.getMnem() != null) {
+				if (item.getMnem().toLowerCase().startsWith(PFX_PROPERTY_ITEM)) {
+					// это описание конвертирования ...
+					final String propName = item.getMnem().substring(PFX_PROPERTY_ITEM.length()); // часть строки после префикса это имя свойства (возможно вложенного)
+					final String[] aliases = (Utils.isStringEmpty(item.getValue())) ? null : item.getValue().split("[,;]");
+					if (aliases != null) {
+						for(int i = 0; i < aliases.length; i++) {
+							if (aliases[i] != null)
+								aliases[i] = aliases[i].trim();
+						}
+					}
+					result.put( propName, aliases);
+				}
+			}
+		}
+
+		return (result.isEmpty()) ? null : result;
 	}
 
 	/**

@@ -3,10 +3,10 @@ package ru.it.lecm.reports.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -554,6 +554,7 @@ public class Utils {
 		return getDurationInHours( end.getTime() - start.getTime());  
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T clone(T source) {
 		if (source == null)
 			return null;
@@ -571,5 +572,53 @@ public class Utils {
 		} catch(Exception ex) {
 			throw new RuntimeException( String.format( "Fail to clone() object: %s", ex.getMessage()), ex);
 		}
+	}
+
+	/**
+	 * Выставить суточное время в указанные величины
+	 * @param srcDate исходная дата, если null - будет использоваться today (!)
+	 * @param hh выставляемые для даты часы (0..23)
+	 * @param mm -//- минуты (0..59)
+	 * @param ss -//- секунды (0..59)
+	 * @param msec -//- миллисекунды (0..999)
+	 * @return дата с днём как в srcDate и с заказанным суточным временем
+	 */
+	public static Date adjustDayTime(Date srcDate, int hh, int mm, int ss, int msec) {
+		/*
+		if (srcDate == null)
+			srcDate = new Date();
+		final Calendar result = Calendar.getInstance();
+		result.setTime(srcDate);
+
+		int changes = 0; // индикатор изменений
+		if (result.get(Calendar.HOUR_OF_DAY) != hh) {
+			changes++;
+			result.set(Calendar.HOUR_OF_DAY, hh);
+		}
+		if (result.get(Calendar.MINUTE) != mm) {
+			changes++;
+			result.set(Calendar.MINUTE, mm);
+		}
+		if (result.get(Calendar.SECOND) != ss) {
+			changes++;
+			result.set(Calendar.SECOND, ss);
+		}
+		if (result.get(Calendar.MILLISECOND) != msec) {
+			changes++;
+			result.set(Calendar.MILLISECOND, msec);
+		}
+
+		// если не было изменений - вернём исходное значение
+		return (changes == 0) ? srcDate : result.getTime();
+		*/
+		final Calendar result = Calendar.getInstance();
+		result.setTime( (srcDate != null) ? srcDate : new Date());
+
+		result.set(Calendar.HOUR_OF_DAY, hh);
+		result.set(Calendar.MINUTE, mm);
+		result.set(Calendar.SECOND, ss);
+		result.set(Calendar.MILLISECOND, msec);
+
+		return result.getTime();
 	}
 }

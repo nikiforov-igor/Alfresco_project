@@ -235,10 +235,8 @@ public class ReportsManagerImpl implements ReportsManager {
 	public Map<String, ReportDefaultsDesc> getReportDefaults() {
 		if (this.reportDefaults == null) {
 			this.reportDefaults = new HashMap<String, ReportDefaultsDesc>();
-			{
-				final ReportDefaultsDesc jdesc = new ReportDefaultsDesc(DEFAULT_REPORT_EXTENSION, DEFAULT_REPORT_TEMPLATE);
-				// this.reportDefaults.put(DEFAULT_REPORT_TYPE, jdesc);
-			}
+			// final ReportDefaultsDesc jdesc = new ReportDefaultsDesc(DEFAULT_REPORT_EXTENSION, DEFAULT_REPORT_TEMPLATE);
+			// this.reportDefaults.put(DEFAULT_REPORT_TYPE, jdesc);
 		}
 		return this.reportDefaults;
 	}

@@ -63,10 +63,4 @@ public interface ReportDSContext {
 	 */
 	public Object getPropertyValueByJRField(String reportColumnName);
 
-	// NOTE: возможно потребуется закрепить НД ResultSet, тогда:
-	//	/**
-	//	 * @return текущая строка данных ответа
-	//	 */
-	//	public ResultSetRow getRsRow();
-
 }

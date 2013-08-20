@@ -10,8 +10,6 @@ import java.util.Set;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.ResultSetRow;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.DataFieldColumn;
@@ -23,7 +21,7 @@ import ru.it.lecm.reports.utils.Utils;
 
 public class ReportDSContextImpl implements ReportDSContext {
 
-	private static final Logger logger = LoggerFactory.getLogger(ReportDSContextImpl.class);
+	// private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ReportDSContextImpl.class);
 
 	private ServiceRegistry serviceRegistry;
 	final private ProxySubstitudeBean substitudeService = new ProxySubstitudeBean();

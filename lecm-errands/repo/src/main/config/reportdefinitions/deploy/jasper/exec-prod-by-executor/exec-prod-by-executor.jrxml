@@ -14,7 +14,7 @@
 			uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="68"/>
+	<property name="ireport.y" value="0"/>
 	<property name="dataSource" value="ru.it.lecm.reports.generators.errands.ErrandsProductionsGraphDSProvider"/>
 	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
@@ -29,7 +29,7 @@
 
 	<queryString> <![CDATA[]]> </queryString>
 
-	<!-- В зависимости от типа сортировки, здесь будет либо Исполнитель, либо Подразделение -->
+	<!-- В зависимости от типа группировки, здесь будет либо Исполнитель, либо Подразделение -->
 	<field name="Col_NameTag" class="java.lang.String">
 		<fieldDescription><![CDATA[Исполнитель]]></fieldDescription>
 	</field>
@@ -64,9 +64,9 @@
 	</title>
 
 	<pageHeader>
-		<band height="22" splitType="Stretch">
+		<band height="16" splitType="Prevent">
 			<textField>
-				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="0" width="141" height="20"/>
+				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="0" width="120" height="15"/>
 				<textElement textAlignment="Left">
 					<font fontName="DejaVu Serif" pdfEncoding="Cp1251"/>
 				</textElement>
@@ -92,7 +92,7 @@
 	</pageFooter>
 
 	<summary>
-		<band height="470" splitType="Stretch">
+		<band height="470" splitType="Prevent">
 			<timeSeriesChart>
 				<chart isShowLegend="true">
 					<reportElement uuid="636e3559-83d4-4bf1-80b8-ce330e9f2dc8" x="35" y="0" width="745" height="465"/>
@@ -117,7 +117,7 @@
 					<timeAxisFormat>
 						<axisFormat verticalTickLabels="true"/>
 					</timeAxisFormat>
-					<valueAxisLabelExpression><![CDATA["Ср время исполнения поручений"]]></valueAxisLabelExpression>
+					<valueAxisLabelExpression><![CDATA["Ср время исполнения поручений, ч"]]></valueAxisLabelExpression>
 					<valueAxisFormat>
 						<axisFormat/>
 					</valueAxisFormat>

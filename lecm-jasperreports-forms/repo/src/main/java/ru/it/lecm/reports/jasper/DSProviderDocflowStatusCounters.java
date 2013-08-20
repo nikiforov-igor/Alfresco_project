@@ -502,6 +502,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 			result.put( COLNAME_TAG, item.getGroupTag());
 
 			/* Счётчики ... */
+			@SuppressWarnings("unchecked")
 			final List<String> statusOrderedList = conf().getList(XMLSTATUSES_LIST);
 
 			int iCol = 0;

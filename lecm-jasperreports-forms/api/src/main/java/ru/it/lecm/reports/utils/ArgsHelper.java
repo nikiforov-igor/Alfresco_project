@@ -1,13 +1,16 @@
 package ru.it.lecm.reports.utils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,6 +144,54 @@ public class ArgsHelper {
 	{
 		final String[] values = findArgs(args, argName, null);
 		return (values != null) ? values[0] : ifDefault;
+	}
+
+	/**
+	 * Присвоить свойствам указанного бина значения параметров.
+	 * @param destBean целевой бин
+	 * @param propertiesAliases список ключ=название свойства бина, 
+	 * значения = список синонимов имён параметров, которые выбираются из parameters,
+	 * до первого совпадения и затем выполняется присвоение свойству destBean (по ключу).
+	 * @param parameters список ключ = название параметра (его синонимы могут 
+	 * быть в значениях propertiesAliases), значение = соот-щее значение параметра.
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 */
+	public static void assignParameters( final Object destBean,
+			final Map<String, String[]> propertiesAliases,
+			final Map<String, String[]> parameters
+	) throws IllegalAccessException, InvocationTargetException
+	{
+		if (destBean == null 
+				|| propertiesAliases == null || propertiesAliases.isEmpty()
+				|| parameters == null || parameters.isEmpty()
+			)
+			return;
+
+		// строим карту реально имеющихся параметров ...
+		final Map<String, String[]> result =  new HashMap<String, String[]>();
+
+		// проход по списку синонимов ...
+		for(Map.Entry<String, String[]> epropAlias: propertiesAliases.entrySet()) {
+
+			final String beanPropName = epropAlias.getKey();
+			final String[] aliases = epropAlias.getValue();
+			if (aliases == null || aliases.length == 0) // пропускаем пустые ... 
+				continue;
+
+			// до первого совпадения по имени в параметрах ...
+			for(String name: aliases) {
+				if (parameters.containsKey(name)) { // найден синоним среди параметров ...
+					result.put( beanPropName, parameters.get(name));
+					break;
+				}
+			} // for name
+
+		} // for epropAlias
+
+		logger.info( String.format( "assigning alias list:\n\t%s", result));
+
+		BeanUtils.populate(destBean, result);
 	}
 
 }

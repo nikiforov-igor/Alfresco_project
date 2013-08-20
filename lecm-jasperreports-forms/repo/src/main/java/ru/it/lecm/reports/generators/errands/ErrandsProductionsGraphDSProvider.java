@@ -23,7 +23,6 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
@@ -160,22 +159,28 @@ public class ErrandsProductionsGraphDSProvider
 
 
 	/**
-	 * Вычисление не пустых начала и конца в this.periodStart/periodEnd
-	 * @param ds надо данных
+	 * Вычисление не пустых начала и конца в this.periodStart/periodEnd.
+	 * (!) periodStart номируется на начало суток, periodEnd на конец.
+	 * @param ds набор данных
 	 */
 	private void applyPeriodParams(final DataSourceDescriptor ds) {
-		this.periodStart = paramsFilter.getParamPeriodStart(ds);
 		this.periodEnd = paramsFilter.getParamPeriodEnd(ds);
-		if (periodEnd == null) // берём текущий момент ...
+		if (periodEnd == null) // если не указан конец -  берём текущий момент ...
 			periodEnd = new Date();
-		if (periodStart == null) // одно-недельный период
+		// выравнивание periodEnd на конец суток ...
+		periodEnd = Utils.adjustDayTime( periodEnd, 23, 59, 59, 999 );
+
+		this.periodStart = paramsFilter.getParamPeriodStart(ds);
+		if (periodStart == null) // если не указано начало - одно-недельный период от конца ...
 			periodStart = new Date( periodEnd.getTime() - 7 * Utils.MILLIS_PER_DAY);
+		// выравнивание periodStart на начало суток ...
+		periodStart = Utils.adjustDayTime( periodStart, 0, 0, 0, 0 );
 	}
 
 	/**
 	 * Названия колонок в наборе данных для отчёта.
 	 */
-	final private class DsProductionsColumnNames {
+	final class DsProductionsColumnNames {
 
 		/** Колонка "Группировка" - по часам, дням и  т.д. */
 		final static String COL_PARAM_GROUP_BY = "Col_GroupBy"; // String значение долно быть в секцииях конфы "groupBy.xxx"
@@ -232,7 +237,7 @@ public class ErrandsProductionsGraphDSProvider
 	 * Структура для хранения данных о статистике по Сотруднику:
 	 * Средние значения накапливаются в обычном индексированном списке.
 	 */
-	private class ProductEmployeeInfo extends BasicEmployeeInfo {
+	class ProductEmployeeInfo extends BasicEmployeeInfo {
 
 		/** 
 		 * Список из элементов типа "Среднее время исполнения, часов"
@@ -277,7 +282,7 @@ public class ErrandsProductionsGraphDSProvider
 	/**
 	 * Точка на графике.
 	 */
-	private class GraphPoint {
+	class GraphPoint {
 		private String Col_NameTag;
 		private java.sql.Timestamp Col_DateTime;
 
@@ -386,18 +391,10 @@ public class ErrandsProductionsGraphDSProvider
 
 			// (!) первую дату выравниваем на начало дня, 
 			// вторую - не трогаем, т.к. будем ровнять delta_h сверху на 24ч
-			final Calendar cstart = Calendar.getInstance();
-			cstart.setTime(dstart);
-			cstart.set(Calendar.HOUR, 0);
-			cstart.set(Calendar.MINUTE, 0);
-			cstart.set(Calendar.SECOND, 0);
-			cstart.set(Calendar.MILLISECOND, 0);
+			final Date nstart = Utils.adjustDayTime(dstart, 0, 0, 0, 0);
 
 			// вычисление разницы в часах ...
-			final float delta_h = Utils.getDurationInHours(dend.getTime() - cstart.getTimeInMillis());
-			if (delta_h == 0)
-				return 0;
-
+			final float delta_h = Utils.getDurationInHours(dend.getTime() - nstart.getTime());
 			return (int) Math.ceil(delta_h/24); // "с округлением вверх" на 24ч границу
 		}
 
@@ -408,10 +405,10 @@ public class ErrandsProductionsGraphDSProvider
 
 			final List<GraphPoint> result = new ArrayList<GraphPoint>();
 
-			final int maxTimeCounter = 1+ countDeltaInDays(periodStart, periodEnd); // кол-во отметок времени
+			final int maxTimeCounter = countDeltaInDays(periodStart, periodEnd); // кол-во отметок времени
 
-			// TODO: RANDOM DATA FILL FOR TEST
 			/*
+			// @NOTE: RANDOM DATA FILL FOR TEST
 			// (!) перенос в основной блок с разбивкой по датам ...
 			{
 				final Calendar curDay = Calendar.getInstance();
@@ -444,7 +441,7 @@ public class ErrandsProductionsGraphDSProvider
 				final GroupByInfo groupByInfo = paramsFilter.getCurrentGroupBy( getReportDescriptor().getDsDescriptor());
 				qnames().setQN_ASSOC_REF( groupByInfo.grpAssocQName); // задать название ассоциации для получения Инициаторов или Подразделений
 
-				/* проход по все загруженным Поручениям ... */
+				/* проход по всем загруженным Поручениям ... */
 				while(context.getRsIter().hasNext()) {
 
 					final ResultSetRow rs = context.getRsIter().next();
@@ -492,6 +489,7 @@ public class ErrandsProductionsGraphDSProvider
 
 				} // while по НД
 
+				// TODO: подумать над тем, чтобы гарантировать наличие выбранных для отчёта Сотрудников в легенде всегда (даже если по ним не было данных) 
 				// (!) перенос в основной блок с разбивкой по датам ...
 				final Calendar x_curDay = Calendar.getInstance();
 				x_curDay.setTime(periodStart);
@@ -510,7 +508,7 @@ public class ErrandsProductionsGraphDSProvider
 								, y_value
 								, "h"));
 					}
-					x_curDay.add(Calendar.HOUR, 24); // сутки добавляем
+					x_curDay.add(Calendar.HOUR, 24); // (++) = добавляем ровно сутки
 				}
 
 				this.setData( result );
@@ -523,7 +521,6 @@ public class ErrandsProductionsGraphDSProvider
 
 			return result.size();
 		}
-
 
 	}
 }

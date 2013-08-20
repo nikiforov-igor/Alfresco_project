@@ -428,13 +428,14 @@ public class DSXMLProducer {
 	}
 
 	/**
-	 * Сохранение в xml атрибутов в списка флагов объекта destColumn
+	 * Сохранение в xml атрибутов в списке флагов объекта destColumn
 	 * @param result целевой xml узел
 	 * @param srcFlags исходный список атрибутов
 	 * @param stdSkipArgs названия атрибутов, которые надо (!) пропускать
 	 */
 	private static void xmlAddFlagsAttributes( Document doc, Element result
-			, Set<NamedValue> srcFlags, Set<String> stdSkipArgs) {
+			, Set<NamedValue> srcFlags, Set<String> stdSkipArgs)
+	{
 		if (srcFlags == null)
 			return;
 		for(NamedValue v: srcFlags) {
@@ -454,15 +455,18 @@ public class DSXMLProducer {
 	 * @param doc
 	 * @param xmlFlagsGrpName название группового узла
 	 * @param srcFlags флаги
+	 * @param createEmptyToo true, чтобы создавать узел даже если srcFlags пуст
 	 * @return
 	 */
 	private static Element xmlCreateFlagsAttributesGrp( Document doc
-			, String xmlFlagsGrpName, Set<NamedValue> srcFlags)
+			, String xmlFlagsGrpName, Set<NamedValue> srcFlags
+			, boolean createEmptyToo)
 	{
-		if (srcFlags == null || srcFlags.isEmpty())
-			return null;
-
 		final Element result = doc.createElement(xmlFlagsGrpName);
+
+		if (srcFlags == null || srcFlags.isEmpty())
+			return (createEmptyToo) ? result : null;
+
 		xmlAddFlagsAttributes( doc, result, srcFlags, null);
 		return result;
 	}
@@ -483,7 +487,7 @@ public class DSXMLProducer {
 			// фильтра нет или значение не фильтруется
 			final boolean isStdName = (stdSkipArgs != null) && stdSkipArgs.contains(n.getNodeName());
 			if (!isStdName)
-				destFlags.add( new NamedValueImpl(n.getNodeName(), n.getNodeValue()) );
+				destFlags.add( new NamedValueImpl(n.getNodeName(),XmlHelper.getTagContent(n)) );
 		}
 	}
 
@@ -792,7 +796,7 @@ public class DSXMLProducer {
 
 		/* включение атрибутов */
 		{
-			final Element flagsGrp = xmlCreateFlagsAttributesGrp( doc, XMLNODE_FLAGS_MAP, flags.flags() );
+			final Element flagsGrp = xmlCreateFlagsAttributesGrp( doc, XMLNODE_FLAGS_MAP, flags.flags(), true );
 			if (flagsGrp != null)
 				result.appendChild(flagsGrp);
 		}
@@ -823,7 +827,7 @@ public class DSXMLProducer {
 			// final Element flagsGrp = xmlCreateFlagsAttributesGrp( doc, XMLNODE_FLAGS_MAP, flags.flags() );
 			final Element flagsGrp = XmlHelper.findNodeByName(curNode, XMLNODE_FLAGS_MAP);
 			if (flagsGrp != null)
-				parseFlagsAttributes(result.flags(), flagsGrp.getChildNodes(), null);
+				parseFlagsAttributes( result.flags(), flagsGrp.getChildNodes(), null);
 		}
 
 		return result;

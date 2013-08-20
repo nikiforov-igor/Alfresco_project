@@ -942,10 +942,13 @@ public class XMLMacroGenerator {
 					return dv.intValue();
 				case LONG: 
 					return dv.longValue();
+				// case STRING:
+				// case ANY:
+				default:
+					// return as is ...
+					return v;
 			}
 
-			// return as is ...
-			return v;
 		}
 	} 
 
@@ -1047,9 +1050,9 @@ public class XMLMacroGenerator {
 
 		@Override 
 		public MacroVarBase clone() throws CloneNotSupportedException {
-			// final MacroValueConstBase result = (MacroValueConstBase) super.clone();
 			try {
-				final MacroVarBase result = (MacroVarBase) this.getClass().getConstructor(null).newInstance(null);
+				// создание переменной того же класса, что и this = "виртуальный конструктор" ...
+				final MacroVarBase result = (MacroVarBase) this.getClass().getConstructor().newInstance();
 				result.name = this.name;
 				if (this.expressions != null)
 					result.getExprMap().putAll( this.expressions);
@@ -1270,6 +1273,7 @@ public class XMLMacroGenerator {
 		@Override 
 		public RefMacroVar<T> clone() throws CloneNotSupportedException {
 			// final ReferencedExpressionValue<T> result = new ReferencedExpressionValue<T>(this.name());
+			@SuppressWarnings("unchecked")
 			final RefMacroVar<T> result = (RefMacroVar<T>) super.clone();
 			// if (this.getExprMap() != null) result.getExprMap().putAll( this.getExprMap());
 			// result.setValue( this.getValue());
@@ -1278,6 +1282,7 @@ public class XMLMacroGenerator {
 			return result;
 		}
 
+		@SuppressWarnings("unchecked")
 		public void calcNext(CalcPhase phase, MacroValues list) {
 			final String expr = getExpression(phase);
 			if (expr != null && list != null) {

@@ -28,16 +28,16 @@
         </datasource.descriptor>
     </report.descriptor>
 
-    <query.descriptor>
-        <offset>0</offset>
-        <limit>-1</limit>
-        <pgsize>-1</pgsize>
-        <queryText><![CDATA[]]></queryText>
-        <allVersions>true</allVersions>
-        <preferedType>{lecm-document:base}</preferedType>
-        <isMultiRow>true</isMultiRow>
-        <isCustom>false</isCustom>
-    </query.descriptor>
+	<query.descriptor>
+		<offset>0</offset>
+		<limit>-1</limit>
+		<pgsize>-1</pgsize>
+		<queryText><![CDATA[]]></queryText>
+		<allVersions>true</allVersions>
+		<preferedType>{lecm-document:base}</preferedType>
+		<isMultiRow>true</isMultiRow>
+		<isCustom>false</isCustom>
+	</query.descriptor>
 
 	<!--
 		formats: Формат для вывода информации по поручению.

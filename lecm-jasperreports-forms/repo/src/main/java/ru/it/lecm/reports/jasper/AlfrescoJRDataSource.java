@@ -163,7 +163,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 			int i = 0;
 			for (String fldName: this.context.getJrSimpleProps()) {
 				i++;
-				if (!context.isCalcField(fldName)) { // обычное поле
+				if (!ReportDSContextImpl.isCalcField(fldName)) { // обычное поле
 					result.put( fldName, null);
 					sb.append( String.format( "\t[%d]\t field '%s'\n", i, fldName));
 				} else

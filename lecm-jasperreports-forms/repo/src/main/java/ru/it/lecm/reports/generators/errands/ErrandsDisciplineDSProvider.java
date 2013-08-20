@@ -176,7 +176,7 @@ public class ErrandsDisciplineDSProvider
 	/**
 	 * Коды/Названия колонок в наборе данных для отчёта.
 	 */
-	private final static class DsDisciplineColumnNames {
+	final static class DsDisciplineColumnNames {
 
 		/** Колонка "Группировка" - по Подразделениям или по Исполнителям */
 		final static String COL_PARAM_GROUP_BY = "Col_GroupBy"; // String значение долно быть в секцииях конфы "groupBy.xxx"

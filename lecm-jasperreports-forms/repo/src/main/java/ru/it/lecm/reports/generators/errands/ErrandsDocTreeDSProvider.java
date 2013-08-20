@@ -23,13 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
-import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
-import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 
@@ -204,26 +201,15 @@ public class ErrandsDocTreeDSProvider
 	}
 
 
-	/**
-	 * Нет фильтра
-	 */
-	@Override
-	protected DataFilter newDataFilter() {
-		return null; // super.newDataFilter();
-	}
-
-
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
 		final ExecDocTreeJRDataSource result = new ExecDocTreeJRDataSource(iterator);
-
-		result.getContext().setSubstitudeService( getServices().getSubstitudeService());
-		result.getContext().setRegistryService( getServices().getServiceRegistry());
-		// result.getContext().setJrSimpleProps( jrSimpleProps);
-		result.getContext().setMetaFields( JRUtils.getDataFields(getReportDescriptor()));
-		// if (filter != null) result.getContext().setFilter( filter.makeAssocFilter());
-		result.buildJoin();
-
+//		result.getContext().setSubstitudeService( getServices().getSubstitudeService());
+//		result.getContext().setRegistryService( getServices().getServiceRegistry());
+//		// result.getContext().setJrSimpleProps( jrSimpleProps);
+//		result.getContext().setMetaFields( JRUtils.getDataFields(getReportDescriptor()));
+//		// if (filter != null) result.getContext().setFilter( filter.makeAssocFilter());
+//		result.buildJoin();
 		return result;
 	}
 
