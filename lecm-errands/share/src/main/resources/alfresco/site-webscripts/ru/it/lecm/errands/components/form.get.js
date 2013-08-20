@@ -50,6 +50,7 @@ function main() {
 	model.hasViewContentListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
 	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD);
+	model.hasActionExecPerm = hasPermission(model.nodeRef, PERM_ACTION_EXEC);
 
 	model.hasAttrEditPerm = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
 
