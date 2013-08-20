@@ -356,8 +356,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     };
 
                     YAHOO.Bubbling.fire("filterChanged", successFilter);
+	                var sotredBy = me.dataTable.get("sortedBy");
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oResponse.meta);
-                    YAHOO.Bubbling.fire("onSearchSuccess", {
+	                me.dataTable.set("sortedBy", sotredBy);
+	                YAHOO.Bubbling.fire("onSearchSuccess", {
                         bubblingLabel: this.bubblingLabel
                     });
 

@@ -302,7 +302,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 /**
                  * Колонки которые не следует показывать
                  */
-                excludeColumns: []
+                excludeColumns: [],
+
+	            useCookieForSort: true
             },
 
             currentFilter: null,
@@ -1095,6 +1097,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     if (me.sort) {
                         // Обнуляем сортировку иначе зациклится.
                         me.sort = null;
+	                    if (me.options.useCookieForSort) {
+		                    me.setCookie(this.getSortCookieName(), sortField + "|" + !me.desc);
+	                    }
                         if (!me.options.useDynamicPagination) {
                             this.search.performSearch({
                                 searchConfig: datagridMeta.searchConfig,
@@ -1106,7 +1111,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         }
                     }
                 }
-            }, /**
+            },
+
+	        /**
              * Прорисовка таблицы, установка свойств, сортировка.
              * @param columnDefinitions колонки
              * @param me {object} this
@@ -1114,54 +1121,53 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @private
              */
             _setupDataTable: function (columnDefinitions, me) {
+	            var generateRequest = function (oState, oSelf) {
+	                me.widgets.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON);
+	                var sort = me.datagridMeta.sort,
+	                    sortField;
+	                if (me.currentSort) {
+	                    if (me.currentSort.oColumn.field.indexOf("assoc_") != 0) {
+	                        sortField = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":");
+	                    } else {
+	                        sortField = me.currentSort.oColumn.field.replace("assoc_", "").replace("_", ":") + "-text-content";
+	                    }
+	                    sort = sortField + "|" + (me.currentSort.sSortDir == YAHOO.widget.DataTable.CLASS_ASC ? "true" : "false");
+	                }
 
-            var generateRequest = function (oState, oSelf) {
-                me.widgets.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON);
-                var sort = me.datagridMeta.sort,
-                    sortField;
-                if (me.currentSort) {
-                    if (me.currentSort.oColumn.field.indexOf("assoc_") != 0) {
-                        sortField = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":");
-                    } else {
-                        sortField = me.currentSort.oColumn.field.replace("assoc_", "").replace("_", ":") + "-text-content";
-                    }
-                    sort = sortField + "|" + (me.currentSort.sSortDir == YAHOO.widget.DataTable.CLASS_ASC ? "true" : "false");
-                }
+	                // дополнительный фильтр из адресной строки (или параметров)
+	                var successFilter = me.currentFilter;
+	                if (!successFilter) {
+	                    var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+	                    if (bookmarkedFilter){
+	                        try {
+	                            while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+	                            }
+	                        }
+	                        catch (e) {
+	                            // Catch "malformed URI sequence" exception
+	                        }
+	                        var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
+	                            var filters = strFilter.split("|"),
+	                                filterObj =
+	                                {
+	                                    filterId: window.unescape(filters[0] || ""),
+	                                    filterData: window.unescape(filters[1] || "")
+	                                };
+	                            return filterObj;
+	                        };
 
-                // дополнительный фильтр из адресной строки (или параметров)
-                var successFilter = me.currentFilter;
-                if (!successFilter) {
-                    var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
-                    if (bookmarkedFilter){
-                        try {
-                            while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
-                            }
-                        }
-                        catch (e) {
-                            // Catch "malformed URI sequence" exception
-                        }
-                        var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
-                            var filters = strFilter.split("|"),
-                                filterObj =
-                                {
-                                    filterId: window.unescape(filters[0] || ""),
-                                    filterData: window.unescape(filters[1] || "")
-                                };
-                            return filterObj;
-                        };
+	                        successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
+	                        me.currentFilter = successFilter;
+	                    }
+	                }
 
-                        successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
-                        me.currentFilter = successFilter;
-                    }
-                }
+	                var params = me.search.buildSearchParams(me.datagridMeta.nodeRef,
+	                    me.datagridMeta.itemType, sort, me.datagridMeta.searchConfig, me.dataRequestFields.join(","),
+	                    me.dataRequestNameSubstituteStrings.join(","), me.options.searchShowInactive, oState.pagination.recordOffset, successFilter);
+	                return YAHOO.lang.JSON.stringify(params);
+	            };
 
-                var params = me.search.buildSearchParams(me.datagridMeta.nodeRef,
-                    me.datagridMeta.itemType, sort, me.datagridMeta.searchConfig, me.dataRequestFields.join(","),
-                    me.dataRequestNameSubstituteStrings.join(","), me.options.searchShowInactive, oState.pagination.recordOffset, successFilter);
-                return YAHOO.lang.JSON.stringify(params);
-            };
-
-            var dTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
+	            var dTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
                     {
                         generateRequest: generateRequest,
                         initialLoad: false,
@@ -1169,7 +1175,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         "MSG_EMPTY": this.msg("message.empty"),
                         "MSG_ERROR": this.msg("message.error"),
                         "MSG_LOADING" : this.msg("message.loading"),
-                        paginator: this.widgets.paginator
+                        paginator: this.widgets.paginator,
+	                    sortedBy: this.getDatableSortBy(columnDefinitions)
                     });
 
                 // Обновляем значения totalRecords данными из ответа сервера
@@ -1288,6 +1295,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             {
                 // YUI DataTable colum
                 var columnDefinitions = this.getDataTableColumnDefinitions();
+	            this.restoreSortFromCookie();
                 // DataTable definition
                 var me = this;
                 if (!this.widgets.dataTable) {
@@ -1339,6 +1347,84 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     });
                 }
             },
+
+	        getDatableSortBy: function(columnDefinitions) {
+		        if (this.datagridMeta.sort != null) {
+			        var columnName = this.datagridMeta.sort.substr(0, this.datagridMeta.sort.indexOf("|"));
+			        var dir = this.datagridMeta.sort.substr(this.datagridMeta.sort.indexOf("|") + 1, this.datagridMeta.sort.length);
+			        if (columnName != null && columnName.length > 0 && dir != null && dir.length > 0) {
+				        columnName = columnName.replace(":", "_");
+				        var sotrColumnExist = false;
+				        for (var i = 0; i < columnDefinitions.length; i++) {
+					        var columnDef;
+					        if (columnDefinitions[i].key.indexOf("assoc_") != 0) {
+						        columnDef = columnDefinitions[i].key.replace("prop_", "");
+					        } else {
+						        columnDef = columnDefinitions[i].key.replace("assoc_", "") + "-text-content";
+					        }
+					        if (columnDef == columnName) {
+						        columnName = columnDefinitions[i].key;
+						        sotrColumnExist = true;
+						        break;
+					        }
+				        }
+				        if (sotrColumnExist) {
+					        return {
+						        key: columnName,
+						        dir: dir == "true" ? "asc" : "desc"
+					        }
+				        }
+			        }
+		        }
+		        return null;
+	        },
+
+	        restoreSortFromCookie: function() {
+		        if (this.options.useCookieForSort) {
+			        var cookieSort = this.getCookie(this.getSortCookieName());
+			        if (cookieSort != null && cookieSort.length > 0) {
+				        this.datagridMeta.sort = cookieSort;
+			        }
+		        }
+	        },
+
+	        getSortCookieName: function() {
+		        var cookieName = "datagrid-sort";
+		        if (this.datagridMeta.datagridFormId != null && this.datagridMeta.datagridFormId != undefined) {
+			        cookieName += "-" + this.datagridMeta.datagridFormId;
+		        }
+		        cookieName += "-" + this.datagridMeta.itemType;
+		        return cookieName;
+	        },
+
+	        getCookie: function(name) {
+		        var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
+		        return matches ? decodeURIComponent(matches[1]) : undefined;
+	        },
+
+	        setCookie: function(name, value, options) {
+				options = options || {};
+				var expires = options.expires;
+				if (typeof expires == "number" && expires) {
+					var d = new Date();
+					d.setTime(d.getTime() + expires*1000);
+					expires = options.expires = d;
+				}
+				if (expires && expires.toUTCString) {
+					options.expires = expires.toUTCString();
+				}
+				value = encodeURIComponent(value);
+				var updatedCookie = name + "=" + value;
+				for(var propName in options) {
+					updatedCookie += "; " + propName;
+					var propValue = options[propName];
+					if (propValue !== true) {
+						updatedCookie += "=" + propValue;
+					}
+				}
+				document.cookie = updatedCookie;
+			},
+
 
 			/**
 			 * Добавляет меню для колонок
