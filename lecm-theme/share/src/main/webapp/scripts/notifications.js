@@ -185,12 +185,16 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 			var sUrl = Alfresco.constants.PROXY_URI + "lecm/notifications/active-channel/api/new-count";
 			var callback = {
 				success:function (oResponse) {
-					var oResults = eval("(" + oResponse.responseText + ")");
-					if (oResults && oResults.newCount) {
-						var elem = Dom.get(me.notificationsCounterId);
-						if (elem != null) {
-							elem.innerHTML = (oResults.newCount > 99) ? "∞" : oResults.newCount;
-							me.checkVisibleCounter(oResults.newCount);
+					if (oResponse.responseText != null && oResponse.responseText.length > 0) {
+						var oResults = eval("(" + oResponse.responseText + ")");
+						if (oResults && oResults.newCount) {
+							var elem = Dom.get(me.notificationsCounterId);
+							if (elem != null) {
+								elem.innerHTML = (oResults.newCount > 99) ? "∞" : oResults.newCount;
+								me.checkVisibleCounter(oResults.newCount);
+							}
+						} else {
+							YAHOO.log("Failed to process XHR transaction.", "info", "example");
 						}
 					} else {
 						YAHOO.log("Failed to process XHR transaction.", "info", "example");
