@@ -1,5 +1,5 @@
 .yui-skin-lecmTheme .yui-panel.contractor-form-edit {
-
+    border: 1px solid #777;
 }
 .yui-skin-lecmTheme .yui-panel.contractor-form-edit .hd,
 .yui-skin-lecmTheme .yui-panel.contractor-form-edit .bd div.form-buttons {
@@ -38,12 +38,89 @@
 .yui-skin-lecmTheme .yui-panel.contractor-form-edit a.container-close:active {
     opacity: 1;
 }
-.yui-skin-lecmTheme .yui-panel.contractor-form-edit {
+
+
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit .yui-navset .yui-nav li {
+    margin: 0 5px 0 0;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit .yui-navset .yui-nav li a {
+    background: #eaeaea;
+    border: 1px solid #d2d2d2;
+    border-bottom-width: 0;
+    border-radius: 5px 5px 0 0;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit .yui-navset .yui-nav li a em {
+    padding: 7px 15px 6px;
+    border: none;
+    font-size: 13px;
+    font-weight: bold;
+    color: #303030;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit .yui-navset .yui-nav li.selected {
+    margin-bottom: -1px;
+    position: relative;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit .yui-navset .yui-nav li.selected a {
+    background: #fff;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit .yui-navset .yui-nav li:first-of-type.selected a:after {
+    content: "";
+    width: 5px;
+    height: 5px;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    background: #fff;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit .yui-navset .yui-nav li.selected a em {
+    padding-bottom: 7px;
+    color: #076a8d;
+}
+
+
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit .yui-navset .yui-content {
+    margin: 0;
+    border: none;
+    border-left: 1px solid #d2d2d2;
+    border-radius: 0 5px 5px 5px;
+    padding: 0;
+    background: #eaeaea;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit .yui-navset .yui-content > div {
+    overflow: hidden;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    background: #fff;
+    margin-left: -1px;
+    padding: 17px;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit div.form-fields {
+    padding: 10px;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit div.form-field label {
+    float: none;
+    display: inline-block;
+    padding-right: 12px;
+    text-align: right;
+    vertical-align: middle;
+    font-size: 13px;
+    color: #303030;
+    line-height: 15px;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit div.form-field label .mandatory-indicator {
+    position: absolute;
+    margin-left: 3px;
+    color: #f00;
+}
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit div.form-field input[type="text"],
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit div.form-field select {
+    float: none;
+    display: inline-block;
+}
+
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit  {
 
 }
-.yui-skin-lecmTheme .yui-panel.contractor-form-edit {
-
-}
-.yui-skin-lecmTheme .yui-panel.contractor-form-edit {
+.yui-skin-lecmTheme .yui-panel.contractor-form-edit  {
 
 }
