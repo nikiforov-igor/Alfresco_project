@@ -328,6 +328,42 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return result;
     }
 
+    public List<NodeRef> getActiveErrands(List<String> paths, int skipCount, int maxItems){
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        List<QName> types =  new ArrayList<QName>();
+        types.add(TYPE_ERRANDS);
+
+        List<NodeRef> employees = orgstructureService.getBossSubordinate(currentEmployee);
+
+        List<SortDefinition> sort = new ArrayList<SortDefinition>();
+        List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        List<String> status = stateMachineBean.getStatuses("lecm-errands:document", true, false);
+
+        // сортируем по наименованию поручения и по сроку исполнения
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + PROP_ERRANDS_NUMBER.toString(),false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + PROP_ERRANDS_LIMITATION_DATE.toString(),false));
+
+        for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
+            if (stateMachineBean.isDraft(nodeRef)) {
+                continue;
+            }
+            if (stateMachineBean.isFinal(nodeRef)) {
+                continue;
+            }
+            if (employees.containsAll(findNodesByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
+                sortingErrands.add(nodeRef);
+            }
+        }
+
+        int endIndex = (skipCount + maxItems) < sortingErrands.size() ? (skipCount + maxItems) : sortingErrands.size();
+
+        for (int i = skipCount; i < endIndex; i++) {
+            result.add(sortingErrands.get(i));
+        }
+        return result;
+    }
+
     @Override
     public synchronized NodeRef getLinksFolderRef(final NodeRef document) {
         NodeRef linkFolder = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, ERRANDS_LINK_FOLDER_NAME);

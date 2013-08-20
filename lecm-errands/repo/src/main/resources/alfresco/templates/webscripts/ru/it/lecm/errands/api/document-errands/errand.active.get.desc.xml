@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Get Active Errands</shortname>
+    <description>Get Active Errands</description>
+    <url>/lecm/errands/api/activeErrands</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+    <transaction>required</transaction>
+</webscript>

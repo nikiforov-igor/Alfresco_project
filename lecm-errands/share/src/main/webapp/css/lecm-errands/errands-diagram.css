@@ -1,0 +1,11 @@
+.yui-dt-liner.redline {
+    background-color: red;
+}
+
+.yui-dt-liner.blueline {
+    background-color: blue;
+}
+
+.errands.pagination.yui-pg-container {
+    text-align: center;
+}

@@ -109,6 +109,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return createScriptable(errandsIssuedByMe);
     }
 
+    public Scriptable getActiveErrands(Scriptable paths,int skipCount, int maxItems) {
+        List<NodeRef> activeErrands= errandsService.getActiveErrands(getElements(Context.getCurrentContext().getElements(paths)), skipCount, maxItems);
+        return createScriptable(activeErrands);
+    }
+
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }

@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/errands/errands-tasks</template-type>
+    <properties>
+        <docType>lecm-errands:document</docType>
+        <preferedFilter>errandsFilter</preferedFilter>
+    </properties>
+    <components>
+        <!-- Title -->
+        <component>
+            <region-id>title</region-id>
+            <url>/lecm/base/title-with-filter-label</url>
+            <properties>
+                <itemType>lecm-errands:document</itemType>
+                <filteredLabel>page.errands.filter.label</filteredLabel>
+            </properties>
+        </component>
+        <!-- Toolbar -->
+        <!--<component>-->
+            <!--<region-id>toolbar</region-id>-->
+            <!--<url>/lecm/documents/documents-list-toolbar</url>-->
+            <!--<properties>-->
+                <!--<itemType>lecm-errands:document</itemType>-->
+                <!--<showCreateBtn>true</showCreateBtn>-->
+                <!--<bubblingLabel>errands</bubblingLabel>-->
+                <!--<showExSearchBtn>true</showExSearchBtn>-->
+                <!--<createDialogWidth>55em</createDialogWidth>-->
+                <!--<createDialogClass>errands-form-edit</createDialogClass>-->
+            <!--</properties>-->
+        <!--</component>-->
+        <!-- Menu -->
+        <component>
+            <region-id>menu</region-id>
+            <url>/lecm/errands/menu</url>
+            <properties>
+                <selected>tasks</selected>
+            </properties>
+        </component>
+        <!-- Diagram -->
+        <component>
+            <region-id>diagram</region-id>
+            <url>/lecm/errands/diagram</url>
+        </component>
+        <!-- Forbidden -->
+        <!--<component>-->
+            <!--<region-id>forbidden</region-id>-->
+            <!--<url>/lecm/base/forbidden</url>-->
+        <!--</component>-->
+    </components>
+</template-instance>

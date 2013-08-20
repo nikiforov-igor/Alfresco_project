@@ -33,6 +33,7 @@ public interface ErrandsService {
     public static final QName PROP_ERRANDS_TITLE = QName.createQName(ERRANDS_NAMESPACE_URI, "title");
     public static final QName PROP_ERRANDS_START_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "start-date");
     public static final QName PROP_ERRANDS_EXECUTION_REPORT = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-report");
+    public static final QName PROP_ERRANDS_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "number");
 
 	public static final QName SETTINGS_PROP_MODE_CHOOSING_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-mode-choosing-executors");
 	public static final String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION = "ORGANIZATION";
@@ -107,6 +108,15 @@ public interface ErrandsService {
      * @return
      */
     public List<NodeRef> getErrandsDocuments(List<String> paths, int skipCount, int maxItems);
+
+    /**
+     * Поиск подписок находит все подписки в активном статусе.
+     * @param paths пути поиска
+     * @param skipCount - сколько результатов надо пропустить
+     * @param maxItems - максимальное число результатов
+     * @return
+     */
+    public List<NodeRef> getActiveErrands(List<String> paths, int skipCount, int maxItems);
 
     /**
      * Получить поручения, связанные с документом и находящиеся в статусах для выбранных бизнес ролей

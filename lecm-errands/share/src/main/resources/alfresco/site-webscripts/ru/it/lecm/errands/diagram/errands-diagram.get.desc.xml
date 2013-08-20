@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>errands diagram</shortname>
+    <description>Returns the errands diagram</description>
+    <url>/lecm/errands/diagram</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>
