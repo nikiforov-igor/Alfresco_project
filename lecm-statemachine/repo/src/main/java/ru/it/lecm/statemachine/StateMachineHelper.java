@@ -1275,9 +1275,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
                         }
                         //Посылаем сигнал, если процесс с ожиданием
                         sendSignal(dependencyExecution);
-
-                    } else {
-                        errors.add("Переход осуществлен, но дочерний процесс не был запущен");
                     }
                 }
             }
