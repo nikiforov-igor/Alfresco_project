@@ -81,8 +81,24 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
             {
                 // The activity list container
                 this.errandsList = Dom.get(this.id + "-errands-diagram");
+
+//                // локализуем дату
+//                YAHOO.util.DateLocale[this.msg("locale")] = {
+//                    b: [this.msg("column.month0"),
+//                        this.msg("column.month1"),
+//                        this.msg("column.month2"),
+//                        this.msg("column.month3"),
+//                        this.msg("column.month4"),
+//                        this.msg("column.month5"),
+//                        this.msg("column.month6"),
+//                        this.msg("column.month7"),
+//                        this.msg("column.month8"),
+//                        this.msg("column.month9"),
+//                        this.msg("column.month10"),
+//                        this.msg("column.month11")]
+//                };
+
                 this.populateErrandsList();
-//                YAHOO.util.Event.addListener(this.id + "-paginator", "scroll", this.onContainerScroll, this);
             },
 
             onContainerScroll: function (event, scope) {
@@ -135,61 +151,47 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
             showDataTable: function showDataTableDashlet(response, obj){
 
                 if(response.json.data.length > 0) {
-//                    this.skipCount = this.skipCount + response.json.paging.totalItems;
-//                    this.options.maxItems = this.skipCount ;
                     this.maxDate =  new Date(response.json.paging.maxDate);
                     this.minDate = (response.json.paging.minDate == "") ? new Date() : new Date(response.json.paging.minDate);
                 }
 
-                if (this.dataTable == null) {
+                this.columnDefs = [
+                    { key: "number", label: this.msg("datagrid.column.number"), sortable: false, formatter: this.bind(this.renderCellIcons)},
+                    { key: "taskName", label: this.msg("datagrid.column.taskName"), sortable: false, formatter: this.bind(this.renderCellIcons)},
+                    { key: "executor", label: this.msg("datagrid.column.executor"), sortable: false, formatter: this.bind(this.renderCellIcons)},
+                    { key: "startDate", label: this.msg("datagrid.column.startDate"), sortable: false, formatter: this.bind(this.renderCellIcons)},
+                    { key: "endDate", label: this.msg("datagrid.column.endDate"), sortable: false, formatter: this.bind(this.renderCellIcons)},
+                    { key: "duration", label: this.msg("datagrid.column.duration"), sortable: false, formatter: this.bind(this.renderCellIcons)}
+                ];
+                this.buildCalendar(response);
+                var initialSource = new YAHOO.util.DataSource(response.json.data);
+                initialSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+                this.errandsList.innerHTML = "";
+                this.dataTable = new YAHOO.widget.DataTable(this.id + "-errands-diagram", this.columnDefs, initialSource, {
+                    dynamicData: true,
+                    scope: this,
+                    generateRequest: this.generateRequest,
+                    paginator : new YAHOO.widget.Paginator({
+                        rowsPerPage: this.options.maxItems,
+                        totalRecords:response.json.paging.maxRecord,
+                        containers: [this.id + "-errands-paginator"],
+                        template: this.msg("pagination.template"),
+                        pageReportTemplate: this.msg("pagination.template.page-report"),
+                        previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
+                        nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel"),
+                        initialPage: this.options.initialPage
+                    })
+                });
 
-                }
-                    this.columnDefs = [
-                        { key: "number", label: this.msg("datagrid.column.number"), sortable: false, formatter: this.bind(this.renderCellIcons)},
-                        { key: "taskName", label: this.msg("datagrid.column.taskName"), sortable: false, formatter: this.bind(this.renderCellIcons)},
-                        { key: "executor", label: this.msg("datagrid.column.executor"), sortable: false, formatter: this.bind(this.renderCellIcons)},
-                        { key: "startDate", label: this.msg("datagrid.column.startDate"), sortable: false, formatter: this.bind(this.renderCellIcons)},
-                        { key: "endDate", label: this.msg("datagrid.column.endDate"), sortable: false, formatter: this.bind(this.renderCellIcons)},
-                        { key: "duration", label: this.msg("datagrid.column.duration"), sortable: false, formatter: this.bind(this.renderCellIcons)}
-                    ];
-                    this.buildCalendar(response);
-                    var initialSource = new YAHOO.util.DataSource(response.json.data);
-                    initialSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-                    this.errandsList.innerHTML = "";
-                    this.dataTable = new YAHOO.widget.DataTable(this.id + "-errands-diagram", this.columnDefs, initialSource, {
-//                        initialLoad: false,
-                        dynamicData: true,
-                        scope: this,
-                        generateRequest: this.generateRequest,
-                        paginator : new YAHOO.widget.Paginator({
-                            rowsPerPage: this.options.maxItems,
-                            totalRecords:response.json.paging.maxRecord,
-                            containers: [this.id + "-errands-paginator"],
-                            template: this.msg("pagination.template"),
-                            initialPage: this.options.initialPage
-                        })
-                    });
-
-//                    // Set width as a string value
-                    new YAHOO.widget.ScrollingDataTable(this.id + "-errands-diagram", this.columnDefs,
+                // добавляем скрол для календаря, если он выйдет за границы экрана
+                new YAHOO.widget.ScrollingDataTable(this.id + "-errands-diagram", this.columnDefs,
                         initialSource, {width:"100%"});
-//                } else {
-//                    console.log("sdfsdf");
-//                    this.dataTable.doBeforeLoadData = this.doBeforeLoadData();
-//                }
             },
-
-//            doBeforeLoadData: function(oRequest, oResponse, oPayload) {
-//                  oPayload.totalRecords = oResponse.meta.totalRecords;
-//                  oPayload.pagination.recordOffset = oResponse.meta.startIndex;
-//                  return oPayload;
-//            },
 
             generateRequest: function () {
                 var me = arguments[1].configs.scope;
                 var obj = arguments[0].pagination;
 
-//                me.options.maxItems = ((obj.recordOffset + obj.rowsPerPage)>obj.totalRecords) ? obj.totalRecords : (obj.recordOffset + obj.rowsPerPage);
                 me.options.initialPage = obj.page;
                 me.skipCount = obj.recordOffset;
                 me.populateErrandsList();
@@ -202,7 +204,6 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
             {
                 var data = oRecord.getData(),
                     desc = "";
-                var date;
 
                 if (oColumn.key =="number") {
                     desc = "<a href='" + window.location.protocol + "//" + window.location.host +Alfresco.constants.URL_PAGECONTEXT
@@ -211,7 +212,6 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                 if (oColumn.key =="taskName") {
                     desc = "<a href='" + window.location.protocol + "//" + window.location.host +Alfresco.constants.URL_PAGECONTEXT
                         + "document?nodeRef="+ data.nodeRef + "'>"+ data.title + "</a> ";
-//                    oColumn.getThEl().width = (desc.length+1)+"px"
                 }
                 if (oColumn.key =="executor") {
                     desc = "<a href='javascript:void(0);' onclick=\"viewAttributes('"+
@@ -219,14 +219,12 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                 }
                 if (oColumn.key =="startDate") {
                     if (data.startDate != undefined) {
-                        date = new Date(data.startDate);
-                        desc = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+                        desc = YAHOO.util.Date.format(new Date(data.startDate), {format: "%d/%m/%Y"});
                     }
                 }
                 if (oColumn.key =="endDate") {
                     if (data.endDate != undefined) {
-                        date = new Date(data.endDate);
-                        desc = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+                        desc = YAHOO.util.Date.format(new Date(data.endDate), {format: "%d/%m/%Y"});
                     }
                 }
                 if (oColumn.key =="duration") {
@@ -275,7 +273,6 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                     desc = "<a href='" + window.location.protocol + "//" + window.location.host +Alfresco.constants.URL_PAGECONTEXT
                         + "document?nodeRef="+ data.nodeRef + "'>"+ data.title + "</a> ";
                 }
-//                var minData = new Date(data)
 
                 elCell.innerHTML = desc;
             },
@@ -310,7 +307,6 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
 
                     // формируем столбец календаря
                     for (var year in calendar.years) {
-//                        var yearObj = { key:year, label:year, sortable: false, children:[] };
                         for (var month in calendar.years[year]){
                             var monthObj = { key:month, label:this.msg("column.month"+month) + " (" +year +") ", year:year, sortable: false, children:[] };
 
@@ -322,10 +318,8 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                                 var dayObj = { key:year + month + day, label:day, sortable: false, formatter: this.bind(this.drawCellIcons) };
                                 monthObj.children.push(dayObj);
                             }
-//                            yearObj.children.push(monthObj);
                             this.columnDefs.push(monthObj);
                         }
-//                        this.columnDefs.push(yearObj);
                     }
 
                 }
