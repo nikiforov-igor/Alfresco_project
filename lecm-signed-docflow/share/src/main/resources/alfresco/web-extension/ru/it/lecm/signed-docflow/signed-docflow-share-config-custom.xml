@@ -58,8 +58,17 @@
 					<set id="sign" appearance="" label-id="info.sign" />
 					<field id="lecm-signed-docflow:operator-code" set="sign"/>
 					<field id="lecm-signed-docflow:partner-key" set="sign"/>
-					<field id="lecm-signed-docflow:applet-key" set="sign"/>
-					<field id="lecm-signed-docflow:applet-cert" set="sign"/>
+					<field id="lecm-signed-docflow:applet-key" set="sign">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="rows">3</control-param>
+						</control>
+					</field>
+					<field id="lecm-signed-docflow:applet-cert" set="sign">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="columns">120</control-param>
+							<control-param name="rows">14</control-param>
+						</control>
+					</field>
 					<field id="lecm-signed-docflow:applet-container" set="sign"/>
 				</appearance>
 			</form>

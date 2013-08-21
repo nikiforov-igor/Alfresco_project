@@ -355,9 +355,9 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 			signatureProperties.put(SignedDocflowModel.PROP_IS_OUR, isOurSignature);
 			signatureProperties.put(ContentModel.PROP_NAME, signatureName);
 			signatureProperties.put(SignedDocflowModel.PROP_CONTENT_REF, contentRef);
-			NodeRef documentRef = getDocumentRef(contentRef);
+			NodeRef documentRef = documentAttachmentsService.getDocumentByAttachment(contentRef);
 			if (documentRef != null) {
-				signatureProperties.put(SignedDocflowModel.PROP_DOCUMENT_REF, getDocumentRef(contentRef));
+				signatureProperties.put(SignedDocflowModel.PROP_DOCUMENT_REF, documentRef);
 			}
 			NodeRef signaturesFolder = getSignedDocflowFolder();
 			QName assocQName = QName.createQName(SignedDocflowModel.SIGNED_DOCFLOW_NAMESPACE, UUID.randomUUID().toString());
@@ -410,12 +410,8 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		return FileNameValidator.getValidFileName(signatureName);
 	}
 
-	private NodeRef getDocumentRef(final NodeRef contentRef) {
-		return documentAttachmentsService.getDocumentByAttachment(contentRef);
-	}
-
 	private void addBusinessJournalRecord(NodeRef contentRef, NodeRef signatureRef, boolean loadSign) {
-		final NodeRef baseDocumentRef = getDocumentRef(contentRef);
+		final NodeRef baseDocumentRef = documentAttachmentsService.getDocumentByAttachment(contentRef);
 		final String messageTemplate;
 		final List<String> objects = new ArrayList<String>();
 

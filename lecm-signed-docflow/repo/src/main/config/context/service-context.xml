@@ -14,6 +14,8 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="contentService" ref="contentService"/>
+		<property name="transactionService" ref="transactionService"/>
+		<property name="signedDocflowService" ref="signedDocflowService"/>
 	</bean>
 
 	<bean id="lecm.signed-docflow.model-bootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
@@ -64,6 +66,7 @@
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="unicloudService" ref="unicloudService"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
 	</bean>
 
 </beans>

@@ -76,7 +76,7 @@ public class DownloadAsZipWebscript extends StreamContent {
 		this.fileFolderService = serviceRegistry.getFileFolderService();
 		NodeRef nodeRef = new NodeRef(req.getParameter(NODEREF_PARAM));
 		String zipName = "";
-		
+
 		if (dictionaryService.isSubClass(nodeService.getType(nodeRef), DocumentService.TYPE_BASE_DOCUMENT)) {
 			zipName = (String) nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING);
 			writeZip(res.getOutputStream(), processDocument(nodeRef));
@@ -109,7 +109,7 @@ public class DownloadAsZipWebscript extends StreamContent {
 			files.putAll(processContent(contentNodeRef));
 		}
 		return files;
-		
+
 	}
 
 	private void writeZip(OutputStream outputStream, Map<String, FileInfo[]> fileInfo) throws IOException {

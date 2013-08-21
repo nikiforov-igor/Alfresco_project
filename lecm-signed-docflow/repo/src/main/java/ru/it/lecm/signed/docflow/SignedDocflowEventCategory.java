@@ -12,4 +12,9 @@ public interface SignedDocflowEventCategory extends EventCategory {
 	 * Электронная подпись.
 	 */
 	String SIGNATURE = "SIGNATURE";
+
+	/**
+	 * Электронный обмен.
+	 */
+	String SIGNED_DOCFLOW = "SIGNED_DOCFLOW";
 }

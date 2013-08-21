@@ -16,6 +16,13 @@
 				<property name="lecm-busjournal:objectType-template">{lecm-signed-docflow:owner-organization} - {lecm-signed-docflow:owner} - {lecm-signed-docflow:signing-date}</property>
 				<property name="lecm-busjournal:objectType-list-template">{lecm-signed-docflow:owner-organization} - {lecm-signed-docflow:owner} - {lecm-signed-docflow:signing-date}</property>
 			</item>
+			<item name="cm:Контрагент" type="lecm-busjournal:objectType">
+				<property name="cm:name">Контрагент</property>
+				<property name="lecm-busjournal:objectType-code">CONTRACTOR</property>
+				<property name="lecm-busjournal:objectType-class">lecm-contractor:contractor-type</property>
+				<property name="lecm-busjournal:objectType-template">lecm-contractor:shortname</property>
+				<property name="lecm-busjournal:objectType-list-template">lecm-contractor:shortname</property>
+			</item>
 		</items>
 	</item>
 </items>

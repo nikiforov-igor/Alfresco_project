@@ -53,7 +53,7 @@ public class SendContentToPartnerWebscript extends DeclarativeWebScript {
 				contentToSend.setEmail(json.getString("email"));
 			}
 			if (json.has("interactionType")) {
-				contentToSend.setInteractionType("interactionType");
+				contentToSend.setInteractionType(json.getString("interactionType"));
 			}
 		} catch(JSONException ex) {
 			String msg = "Can't parse incoming json";
@@ -73,13 +73,12 @@ public class SendContentToPartnerWebscript extends DeclarativeWebScript {
 		}
 
 		JSONObject requestJSON = DeclarativeWebScriptHelper.getJsonContent(content);
-		JSONObject responseJSON = requestJSON;
 
 		ContentToSendData contentToSend = getContentToSendFromJSON(requestJSON);
-		sendContentToPartnerService.send(contentToSend);
+		List<Map<String, Object>> sendContentList = sendContentToPartnerService.send(contentToSend);
 
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("result", responseJSON);
+		result.put("result", new JSONArray(sendContentList));
 		return result;
 	}
 }

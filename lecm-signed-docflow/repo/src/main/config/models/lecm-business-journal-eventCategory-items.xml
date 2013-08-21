@@ -6,6 +6,10 @@
 				<property name="cm:name">Электронная подпись</property>
 				<property name="lecm-busjournal:eventCategory-code">SIGNATURE</property>
 			</item>
+			<item name="cm:Электронный обмен" type="lecm-busjournal:eventCategory">
+				<property name="cm:name">Электронный обмен</property>
+				<property name="lecm-busjournal:eventCategory-code">SIGNED_DOCFLOW</property>
+			</item>
 		</items>
 	</item>
 </items>
