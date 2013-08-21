@@ -21,7 +21,7 @@
                     if (documentRef) { // добавляем к параметрам ID - если задано
                         data["ID"] = documentRef;
                     }
-                    p_dialog.dialog.hide();
+	                YAHOO.util.Dom.setStyle(p_dialog.dialog.id, "display", "none");
                     Alfresco.util.Ajax.request({
                         method: "GET",
                         url: actionUrl,
