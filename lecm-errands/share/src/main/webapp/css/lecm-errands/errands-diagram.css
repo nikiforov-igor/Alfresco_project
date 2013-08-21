@@ -10,6 +10,10 @@
     background-color: orange;
 }
 
+.yui-dt-liner.greenline {
+    background-color: #32cd32;
+}
+
 .errands.pagination.yui-pg-container {
     text-align: center;
 }

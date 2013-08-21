@@ -262,11 +262,17 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
 
                 if (startDate <= dayColumn && dayColumn <= endDate) {
                     if (data.isExpired=="true") {
-                        elCell.setAttribute('class',elCell.getAttribute('class')+' redline');
-                    } else if (data.inControler=="true") {
                         elCell.setAttribute('class',elCell.getAttribute('class')+' orangeline');
+                        elCell.setAttribute('title',this.msg("label.is-expired"));
+                    } else if (data.isImportant=="true") {
+                        elCell.setAttribute('class',elCell.getAttribute('class')+' redline');
+                        elCell.setAttribute('title',this.msg("label.is-important"));
+                    } else if (data.inControler=="true") {
+                        elCell.setAttribute('class',elCell.getAttribute('class')+' greenline');
+                        elCell.setAttribute('title',this.msg("label.in-controler"));
                     } else {
                         elCell.setAttribute('class',elCell.getAttribute('class')+' blueline');
+                        elCell.setAttribute('title',this.msg("label.errand"));
                     }
                 }
 
