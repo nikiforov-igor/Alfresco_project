@@ -21,7 +21,9 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.api.DataFilter;
+import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.calc.DataGroupCounter;
@@ -176,10 +178,11 @@ public class ErrandsDisciplineDSProvider
 	/**
 	 * Коды/Названия колонок в наборе данных для отчёта.
 	 */
-	final static class DsDisciplineColumnNames {
+	final private static class DsDisciplineColumnNames {
 
 		/** Колонка "Группировка" - по Подразделениям или по Исполнителям */
 		final static String COL_PARAM_GROUP_BY = "Col_GroupBy"; // String значение долно быть в секцииях конфы "groupBy.xxx"
+		final static String CONTAINS_GROUP_BY_OU = "OrgUnit"; // подстрока, которая означает группировку по организации
 
 		/** Период с ... по ... */
 		final static String COL_PARAM_PERIOD = "Col_Period"; // date, PARAM_DELTA
@@ -253,7 +256,9 @@ public class ErrandsDisciplineDSProvider
 	/**
 	 * Структура для хранения данных о статистике по Сотруднику
 	 */
-	protected class DisciplineEmployeeInfo extends BasicEmployeeInfo {
+	protected class DisciplineGroupInfo {
+
+		final private BasicEmployeeInfo employee;
 
 		/* Счётчики данной персоны */
 		final DataGroupCounter counters; // = new DataGroupCounter("");
@@ -261,8 +266,12 @@ public class ErrandsDisciplineDSProvider
 		/** Среднее время исполнения, часов */
 		final AvgValue avgExecTimeInHours = new AvgValue("Avg exec time, h");
 
-		public DisciplineEmployeeInfo(NodeRef employeeId) {
-			super(employeeId);
+		// public DisciplineGroupInfo(NodeRef employeeId) {
+		public DisciplineGroupInfo(BasicEmployeeInfo empl) {
+			// this.employee = new BasicEmployeeInfo(employeeId);
+			this.employee = empl;
+			final NodeRef employeeId = empl.employeeId;
+
 			// регим атрибуты ...
 			this.counters = new DataGroupCounter( (employeeId != null) ? employeeId.getId() : "");
 			// числовые колонки
@@ -295,7 +304,10 @@ public class ErrandsDisciplineDSProvider
 	/**
 	 * Jasper-НД для вычисления статистики
 	 */
-	private class ExecDisciplineJRDataSource extends TypedJoinDS<DisciplineEmployeeInfo> {
+	private class ExecDisciplineJRDataSource extends TypedJoinDS<DisciplineGroupInfo> {
+
+		private GroupByInfo groupByInfo; // способ группировки, заполняется внутри buildJoin
+		private boolean useOUFilter; // true если использовать группировку по Подразделениям, заполняется внутри buildJoin
 
 		public ExecDisciplineJRDataSource(Iterator<ResultSetRow> iterator) {
 			super(iterator);
@@ -306,15 +318,21 @@ public class ErrandsDisciplineDSProvider
 		 * Прогрузить строку отчёта
 		 */
 		@Override
-		protected Map<String, Serializable> getReportContextProps(DisciplineEmployeeInfo item)
+		protected Map<String, Serializable> getReportContextProps(DisciplineGroupInfo item)
 		{
 			final Map<String, Serializable> result = new LinkedHashMap<String, Serializable>();
 
-			/* Название ... */
-			result.put( DsDisciplineColumnNames.COL_NAMEATAG, item.ФамилияИО() );
+			/* Название подразделения или имя пользователя ... */
+			result.put( DsDisciplineColumnNames.COL_NAMEATAG
+					, (useOUFilter ? item.employee.unitName : item.employee.ФамилияИО()) );
+
+			result.put( DsDisciplineColumnNames.COL_PARAM_GROUP_BY, this.groupByInfo.grpName);
+
+			/* Сотрудник и его Подразделение */
+			result.put( DsDisciplineColumnNames.COL_PARAM_EXEC_PERSON, item.employee.employeeId);
+			result.put( DsDisciplineColumnNames.COL_PARAM_EXEC_ORGUNIT, item.employee.unitId);
 
 			/* Счётчики ... */
-
 			// Имена колонок совпадают с названиями счётчиков
 			for(Map.Entry<String, Integer> entry: item.counters.getAttrCounters().entrySet()) {
 				result.put( entry.getKey(), entry.getValue());
@@ -334,8 +352,8 @@ public class ErrandsDisciplineDSProvider
 		public int buildJoin() {
 			// построить  в groups список объектов сгруппированных по названиям Измерения (ключ в groups)
 
-			// Ключ здесь это название измерения (tag)
-			final Map<NodeRef, DisciplineEmployeeInfo> result = new HashMap<NodeRef, DisciplineEmployeeInfo>();
+			// Ключ здесь это Сотрудник или Подразделение, в ~ от группировки (см this.useOUFilter)
+			final Map<NodeRef, DisciplineGroupInfo> result = new HashMap<NodeRef, DisciplineGroupInfo>();
 
 			if (context.getRsIter() != null) {
 
@@ -343,8 +361,21 @@ public class ErrandsDisciplineDSProvider
 				// final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
 
 				/* Получение формата и ссылки для выбранного groupby-Измерения из конфигурации ... */
-				final GroupByInfo groupByInfo = paramsFilter.getCurrentGroupBy( getReportDescriptor().getDsDescriptor());
+				this.groupByInfo = paramsFilter.getCurrentGroupBy( getReportDescriptor().getDsDescriptor());
 				qnames().setQN_ASSOC_REF( groupByInfo.grpAssocQName); // задать название ассоциации для получения Инициаторов или Подразделений
+
+				// использовать фильтр по организациям, если указан тип фильтрации ...  
+				this.useOUFilter = (groupByInfo != null) && (groupByInfo.grpName != null)
+							&& groupByInfo.grpName.toLowerCase().contains(DsDisciplineColumnNames.CONTAINS_GROUP_BY_OU.toLowerCase());
+				final OrgstructureBean beanOU = (useOUFilter) ? getServices().getOrgstructureService() : null;
+				String ouNodesList = null; // перечисление выбранных ID Подразделений (если указаны, то будет списком через запятую)
+				if (useOUFilter) {
+					// выбираем значения из соот-щей колонки ...
+					ouNodesList = getUONodesFromParams();
+					logger.info( String.format("group by OU, filter is [%s]", Utils.coalesce(ouNodesList, "*")));
+				} else {
+					logger.info( "group by executors");
+				}
 
 				/* проход по все загруженным Поручениям ... */
 				while(context.getRsIter().hasNext()) {
@@ -352,6 +383,8 @@ public class ErrandsDisciplineDSProvider
 					final ResultSetRow rs = context.getRsIter().next();
 
 					final NodeRef errandId = rs.getNodeRef(); // id Поручения 
+
+					// (!) Фильтрование
 					if (context.getFilter() != null && !context.getFilter().isOk(errandId)) {
 						if (logger.isDebugEnabled())
 							logger.debug( String.format("{%s} filtered out", errandId));
@@ -362,56 +395,74 @@ public class ErrandsDisciplineDSProvider
 					final List<AssociationRef> employees = nodeSrv.getTargetAssocs(errandId, qnames().QN_ASSOC_REF);
 					if (employees == null || employees.isEmpty() ) // (!?) с Поручением не связан никакой Сотрудник-Исполнитель ...
 					{
-						logger.warn( String.format( "No execution eployee found for errand item %s", errandId));
+						logger.warn( String.format( "No execution employee found for errand item %s", errandId));
 						continue;
 					}
 
-					final NodeRef executorId = employees.get(0).getTargetRef(); // id Сотрудника-Исполнителя 
+					for (int i = 0; i < employees.size(); i++) {
+						final NodeRef executorId = employees.get(i).getTargetRef(); // id Сотрудника-Исполнителя 
 
-					final DisciplineEmployeeInfo executor;
-					if (result.containsKey(executorId)) {
-						executor = result.get(executorId);
-					} else { // создание нового Сотрудника-Исполнителя
-						executor = new DisciplineEmployeeInfo(executorId);
-						executor.loadProps( nodeSrv, null); // если надо будет - грузим данные по подразделениям, указав второй аргумент: getServices().getOrgstructureService()
-						result.put(executorId, executor);
-					}
+						final BasicEmployeeInfo execEmployee = new BasicEmployeeInfo( executorId); 
 
-					// прогружаем атрибуты Поручения и корректируем данные ...
-					final Map<QName, Serializable> props = nodeSrv.getProperties(errandId);
+						// если надо будет - грузим данные по подразделениям, 
+						// указав второй аргумент: getServices().getOrgstructureService()
+						execEmployee.loadProps( nodeSrv, beanOU);
 
-					// среднее время исполнения ...
-					// [ props.get(QNFLD_START_DATE), props.get(QNFLD_END_DATE) ]
-					executor.registerDuration( qnames().getВремяИсполнения_мсек(props));
+						// ипользуем как ключ либо Сотрудника, либо его Подразделение ...
+						// TODO: иметь в виду несколько должностей Сотрудников и вложенность подразделений
+						final NodeRef keyId = (this.useOUFilter) ? execEmployee.unitId : execEmployee.employeeId;
 
-					/* остальные счётчики ... */
-					executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_TOTAL); // общее кол-во
-
-					final boolean важное = qnames().isПоручениеВажное(props);
-					final boolean вСрок = qnames().isПоручениеИсполненоВСрок(props);
-
-					if (важное)
-						executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_TOTAL_IMPORTANT);
-
-					if (qnames().isПоручениеЗакрыто(props)) {
-						executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_CLOSED);
-						if (важное)
-							executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_CLOSED_IMPORTANT);
-						if (вСрок)
-							executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_INTIME); // исполнено вСрок
-					} else { // Поручение НЕ Закрыто
-						if (важное && !вСрок) { 
-							// важное И неисполненное в срок ...
-							executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_IMPORTANT_REFUSED);
+						if (this.useOUFilter && ouNodesList != null) { // фильтрование по ID Подразделения
+							if ( (execEmployee.unitId == null) || !ouNodesList.contains(execEmployee.unitId.getId())) {
+								logger.info( String.format("OU '%s' for executor '%s' filtered out ...", execEmployee.unitName, execEmployee.ФамилияИО()));
+								continue; // for i
+							}
 						}
-					}
-					if (qnames().isПоручениеБылоОтклоненоБоссом(props)) {
-						executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_BOSS_REFUSED);
+
+						final DisciplineGroupInfo executor;
+						if (result.containsKey(keyId)) {
+							executor = result.get(keyId);
+						} else { // создание нового Сотрудника-Исполнителя
+							executor = new DisciplineGroupInfo(execEmployee);
+							result.put(keyId, executor);
+						}
+
+						// прогружаем атрибуты Поручения и корректируем данные ...
+						final Map<QName, Serializable> props = nodeSrv.getProperties(errandId);
+
+						// среднее время исполнения ...
+						// [ props.get(QNFLD_START_DATE), props.get(QNFLD_END_DATE) ]
+						executor.registerDuration( qnames().getВремяИсполнения_мсек(props));
+
+						/* остальные счётчики ... */
+						executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_TOTAL); // общее кол-во
+
+						final boolean важное = qnames().isПоручениеВажное(props);
+						final boolean вСрок = qnames().isПоручениеИсполненоВСрок(props);
+
+						if (важное)
+							executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_TOTAL_IMPORTANT);
+
+						if (qnames().isПоручениеЗакрыто(props)) {
+							executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_CLOSED);
+							if (важное)
+								executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_CLOSED_IMPORTANT);
+							if (вСрок)
+								executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_INTIME); // исполнено вСрок
+						} else { // Поручение НЕ Закрыто
+							if (важное && !вСрок) { 
+								// важное И неисполненное в срок ...
+								executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_IMPORTANT_REFUSED);
+							}
+						}
+						if (qnames().isПоручениеБылоОтклоненоБоссом(props)) {
+							executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_BOSS_REFUSED);
+						}
 					}
 				} // while
 
 				// (!) перенос в основной блок
-				this.setData( new ArrayList<DisciplineEmployeeInfo>(result.values()) );
+				this.setData( new ArrayList<DisciplineGroupInfo>(result.values()) );
 			} // if
 
 			if (this.getData() != null)
@@ -420,6 +471,34 @@ public class ErrandsDisciplineDSProvider
 			logger.info( String.format( "found %s row(s)", result.size()));
 
 			return result.size();
+		}
+
+
+		/**
+		 * Получить список Подразделений организации, по которым надо фильтровать ...
+		 * @return
+		 */
+		
+		private String getUONodesFromParams() {
+			final ColumnDescriptor colOU = getReportDescriptor().getDsDescriptor()
+						.findColumnByParameter(DsDisciplineColumnNames.COL_PARAM_EXEC_ORGUNIT);
+			if (colOU != null && colOU.getParameterValue() != null) {
+				final Object val = colOU.getParameterValue().getBound1();
+				if (val != null) {
+					final String result;
+					if (val instanceof String)
+						result = (String) val;
+					else if (val instanceof String[]) {
+						final String[] arr = (String[]) val;
+						result = (arr.length > 0) ? arr[0] : null;
+					} else
+						result = val.toString();
+
+					if (result != null && result.trim().length() > 0)
+						return result.trim(); // (!) FOUND non-empty
+				}
+			}
+			return null; // not present or is empty
 		}
 
 	}

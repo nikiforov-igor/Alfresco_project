@@ -34,7 +34,8 @@
 		<pgsize>-1</pgsize>
 		<queryText><![CDATA[]]></queryText>
 		<allVersions>true</allVersions>
-		<preferedType>{lecm-document:base}</preferedType>
+		<!-- <preferedType>{lecm-document:base}</preferedType> -->
+		<preferedType>{lecm-errands:document}</preferedType>
 		<isMultiRow>true</isMultiRow>
 		<isCustom>false</isCustom>
 	</query.descriptor>

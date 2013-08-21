@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
+import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
@@ -28,6 +30,7 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.ContentEnumerator;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.generators.XMLMacroGenerator;
+import ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 
@@ -43,48 +46,6 @@ public class ReportsManagerImpl implements ReportsManager {
 	final public static String DEFAULT_REPORT_TYPE = ReportType.RTYPE_MNEMO_JASPER;
 	final public static String DEFAULT_REPORT_EXTENSION = ".jrxml";
 	final public static String DEFAULT_REPORT_TEMPLATE = "jreportCommonTemplate.jrxml.gen";
-
-	/**
-	 * Описатеть умолчаний для типа отчёта.
-	 */
-	public static class ReportDefaultsDesc {
-
-		private String generationTemplate, fileExtension;
-
-		public ReportDefaultsDesc() {
-			super();
-		}
-
-		public ReportDefaultsDesc(String fileExtension, String generationTemplate) {
-			super();
-			this.fileExtension = fileExtension;
-			this.generationTemplate = generationTemplate;
-		}
-
-		/**
-		 * Расширение шаблона отчёта (с точкой в начале). Например, для Jasper это ".jrxml"
-		 * @return
-		 */
-		public String getFileExtension() {
-			return fileExtension;
-		}
-
-		public void setFileExtension(String fileExtension) {
-			this.fileExtension = fileExtension;
-		}
-
-		/**
-		 * Шаблон для генерации шаблона отчёта ("шаблон шаблона")
-		 * @return
-		 */
-		public String getGenerationTemplate() {
-			return generationTemplate;
-		}
-
-		public void setGenerationTemplate(String template) {
-			this.generationTemplate = template;
-		}
-	}
 
 	/**
 	 * Список зарегистрирванных отчётов
@@ -161,14 +122,64 @@ public class ReportsManagerImpl implements ReportsManager {
 		this.templateFileDAO = value;
 	}
 
+
 	@Override
 	public List<ReportDescriptor> getRegisteredReports() {
 		return getRegisteredReports(null, null);
 	}
 
+
 	@Override
-	public List<ReportDescriptor> getRegisteredReports(String[] docTypes,
-			boolean forCollection) {
+	public List<ReportDescriptor> getRegisteredReports( String docType,
+			String reportType)
+	{
+		final Map<String, ReportDescriptor> list = this.getDescriptors();
+		if (list == null || list.isEmpty())
+			return new ArrayList<ReportDescriptor>();
+
+		if (docType != null && docType.length() == 0) {
+			docType = null;
+		}
+
+		if (reportType != null && reportType.length() == 0) {
+			reportType = null;
+		}
+
+		final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
+		try {
+			if (docType == null && reportType == null) {
+				// не задано фильтрование -> вернуть сразу всё целиком ...
+				found.addAll(list.values());
+			} else {
+				for (ReportDescriptor desc : list.values()) {
+					final boolean okDocType =
+								(desc.getFlags() == null)
+								|| desc.getFlags().isTypeSupported(docType)
+					;
+
+					final boolean okRType = (reportType == null) // не задан фильтр по типам отчётов
+							|| ((desc.getReportType() == null)
+							|| desc.getReportType().getMnem() == null) // не задан тип отчёта шаблона -> подходит к любому
+							|| reportType.equalsIgnoreCase(desc.getReportType().getMnem()) // совпадение типа
+					;
+					if (okDocType && okRType) {
+						found.add(desc);
+					}
+				}
+			}
+		} finally {
+			// сортируем описания по алфавиту
+			Collections.sort( found, new ReportDescriptor.Comparator_ПоАлфавиту());
+		}
+		// return (found.isEmpty()) ? null : found;
+		return found;
+	}
+
+
+	@Override
+	public List<ReportDescriptor> getRegisteredReports( String[] docTypes,
+				boolean forCollection) 
+	{
 		final Set<ReportDescriptor> unFilteredReports = new HashSet<ReportDescriptor>();
 		if (docTypes != null) {
 			// указаны типы отчётов
@@ -193,12 +204,11 @@ public class ReportsManagerImpl implements ReportsManager {
 				resultedReports.add(descriptor);
 			}
 		}
+		// сортируем описания по алфавиту
+		Collections.sort( resultedReports, new ReportDescriptor.Comparator_ПоАлфавиту());
 		return resultedReports;
 	}
 
-//	public DsLoader getDsloader() {
-//		return ModelLoader.getInstance();
-//	}
 
 	/**
 	 * Дескрипторы, заданные бинами
@@ -229,14 +239,26 @@ public class ReportsManagerImpl implements ReportsManager {
 		return this.descriptors;
 	}
 
+	@Override
+	public ReportDefaultsDesc getReportDefaultsDesc(ReportType rtype) {
+		if (rtype != null && getReportDefaults() != null) {
+			if (getReportDefaults().containsKey(rtype))
+				return getReportDefaults().get(rtype); // FOUND
+		}
+
+		return null; // NOT FOUND
+	}
+
 	/**
-	 * @return не NULL список [ReportType.Mnem -> File Extension+Template+Generator]
+	 * @return не NULL список [ReportType.Mnem -> FileExtension+Template]
 	 */
 	public Map<String, ReportDefaultsDesc> getReportDefaults() {
 		if (this.reportDefaults == null) {
 			this.reportDefaults = new HashMap<String, ReportDefaultsDesc>();
-			// final ReportDefaultsDesc jdesc = new ReportDefaultsDesc(DEFAULT_REPORT_EXTENSION, DEFAULT_REPORT_TEMPLATE);
-			// this.reportDefaults.put(DEFAULT_REPORT_TYPE, jdesc);
+
+			// автодобавление для умолчания:
+			final ReportDefaultsDesc jdesc = new ReportDefaultsDescImpl(DEFAULT_REPORT_EXTENSION, DEFAULT_REPORT_TEMPLATE);
+			this.reportDefaults.put(DEFAULT_REPORT_TYPE, jdesc);
 		}
 		return this.reportDefaults;
 	}
@@ -394,7 +416,8 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 
 		// попытка загрузить DAO-объект
-		// TODO: после автоподъёма at boot-time файлов ds-xml, здесь уже не понадобится
+		// DONE: после автоподъёма at boot-time файлов ds-xml, здесь уже не понадобится
+		/*
 		if (reportDAO != null) {
 			final ReportDescriptor d = reportDAO.getReportDescriptor(reportMnemoName);
 			if (d != null) {
@@ -410,6 +433,7 @@ public class ReportsManagerImpl implements ReportsManager {
 				return d; // FOUND by DAO mnemonic
 			}
 		}
+		 */
 
 		logger.warn(String.format( "Report '%s' has no descriptor", reportMnemoName));
 		return null; // NOT FOUND
@@ -418,8 +442,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	@Override
 	public void registerReportDescriptor(NodeRef rdescId) {
 		PropertyCheck.mandatory(this, "reportDAO", getReportDAO());
-		final ReportDescriptor rdesc =
-				getReportDAO().getReportDescriptor(rdescId);
+		final ReportDescriptor rdesc = getReportDAO().getReportDescriptor(rdescId);
 		registerReportDescriptor(rdesc);
 	}
 
@@ -665,47 +688,6 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 	}
 
-	@Override
-	public List<ReportDescriptor> getRegisteredReports( String docType,
-			String reportType)
-	{
-		final Map<String, ReportDescriptor> list = this.getDescriptors();
-		if (list == null || list.isEmpty())
-			return new ArrayList<ReportDescriptor>();
-
-		if (docType != null && docType.length() == 0) {
-			docType = null;
-		}
-
-		if (reportType != null && reportType.length() == 0) {
-			reportType = null;
-		}
-
-		if (docType == null && reportType == null) {
-			// не задано фильтрование -> вернуть сразу всё целиком ...
-			return new ArrayList<ReportDescriptor>(list.values());
-		}
-
-		final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
-		for (ReportDescriptor desc : list.values()) {
-			final boolean okDocType = (docType == null) // не задан фильтр по типам доков
-					|| ((desc.getFlags() == null)
-					|| desc.getFlags().getPreferedNodeType() == null) // нет флажков у шаблона -> подходит к любому
-					|| docType.equalsIgnoreCase(desc.getFlags().getPreferedNodeType()) // совпадение типа (если заданы искомый тип и флажки)
-			;
-
-			final boolean okRType = (reportType == null) // не задан фильтр по типам отчётов
-					|| ((desc.getReportType() == null)
-					|| desc.getReportType().getMnem() == null) // не задан тип отчёта шаблона -> подходит к любому
-					|| reportType.equalsIgnoreCase(desc.getReportType().getMnem()) // совпадение типа
-			;
-			if (okDocType && okRType) {
-				found.add(desc);
-			}
-		}
-		// return (found.isEmpty()) ? null : found;
-		return found;
-	}
 
 	@Override
 	public ReportContentDAO findContentDAO(ReportDescriptor desc) {

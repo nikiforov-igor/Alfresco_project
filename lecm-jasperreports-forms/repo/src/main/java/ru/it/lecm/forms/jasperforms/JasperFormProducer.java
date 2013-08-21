@@ -99,7 +99,7 @@ public class JasperFormProducer extends AbstractWebScript {
 		if (reportDesc == null) {
 			throw new RuntimeException( String.format("Report descriptor '%s' not accessible (possibly report is not registered !?)", reportName) );
 		}
-		// (!) клонирование Дескриптора, чтобы не трогать общий для всех дескриптор ....
+		// (!) клонирование Дескриптора, чтобы не трогать общий для всех дескриптор ...
 		reportDesc = Utils.clone( reportDesc);
 		final ReportContentDAO storage = this.getReportsManager().findContentDAO(reportDesc); 
 		if (storage == null) {

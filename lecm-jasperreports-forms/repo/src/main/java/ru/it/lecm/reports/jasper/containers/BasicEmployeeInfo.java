@@ -38,10 +38,17 @@ public class BasicEmployeeInfo {
 	/** ФИО */
 	public String firstName, middleName, lastName;
 
-	/** Название основной должности и соот-го подразделения */
-	public String staffName, unitName;
-	/** id основной должности и соот-го подразделения */
-	public NodeRef staffId, unitId;
+	/** Название основной должности */
+	public String staffName;
+
+	/** id основной должности */
+	public NodeRef staffId;
+
+	/** Название подразделения по основной должности */
+	public String unitName;
+
+	/** id подразделения по основной должности */
+	public NodeRef unitId;
 
 	/** характеристики связанного системного пользователя */ 
 	public String userLogin;

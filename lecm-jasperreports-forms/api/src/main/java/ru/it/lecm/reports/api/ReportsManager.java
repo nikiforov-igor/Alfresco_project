@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 
+import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
@@ -113,9 +114,9 @@ public interface ReportsManager {
 	void setReportGenerators(Map<String, ReportGenerator> map);
 
 	/**
-	 * Получить строковое не NULL название
-	 * @param rtype
-	 * @return при rtype != null воз-ся rtype.code, иначе значение по-умолчанию данного менеджера
+	 * Получить строковое не NULL название указанного типа отчёта
+	 * @param rtype тип отчёта, допустимо NULL
+	 * @return при rtype != null воз-ся rtype.code, иначе значение по-умолчанию для данного менеджера
 	 */
 	String getReportTypeTag(ReportType rtype);
 
@@ -127,4 +128,10 @@ public interface ReportsManager {
 	 * @return
 	 */
 	ReportContentDAO findContentDAO(ReportDescriptor reportDesc);
+
+	/**
+	 * Список умочаний для указанного типа отчёта
+	 * @return не NULL список [key=ReportType.Mnem -> value={ file_Extension + template_of_template}]
+	 */
+	ReportDefaultsDesc getReportDefaultsDesc(ReportType rtype);
 }

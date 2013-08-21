@@ -137,7 +137,7 @@ public class ErrandsQNamesHelper {
 	 * Получить нормальное qname по его строкову варианту ... 
 	 */
 	final public QName makeQN(String qname) {
-		return QName.createQName(qname, this.ns);
+		return (qname != null && qname.trim().length() > 0) ? QName.createQName(qname, this.ns) : null;
 	}
 
 	/**

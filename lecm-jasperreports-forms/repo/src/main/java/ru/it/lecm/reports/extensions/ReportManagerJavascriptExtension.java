@@ -19,18 +19,24 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ReportsManager;
+import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 
 public class ReportManagerJavascriptExtension
 		extends BaseWebScript 
-//		implements ScriptApiReportManager
+		// implements ScriptApiReportManager
 {
 	public final static String REPORTS_EDITOR_URI = "http://www.it.ru/logicECM/reports/editor/1.0";
 	public final static QName PROP_REPORT_DESCRIPTOR_IS_DEPLOYED = QName.createQName(REPORTS_EDITOR_URI, "reportIsDeployed");
+
+	private static final transient Logger logger = LoggerFactory.getLogger(ReportManagerJavascriptExtension.class);
 
 	private ReportsManager reportsManager;
 
@@ -46,6 +52,7 @@ public class ReportManagerJavascriptExtension
 	public boolean deployReport(final String reportDescNode) {
 		PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 
+		logger.info( String.format( "deploying report '%s' ...", reportDescNode));
 		boolean result = false;
 		if (NodeRef.isNodeRef(reportDescNode)) {
 			final NodeRef rdId = new NodeRef(reportDescNode);
@@ -53,6 +60,7 @@ public class ReportManagerJavascriptExtension
 			result = true;
 			serviceRegistry.getNodeService().setProperty(rdId, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, result);
 		}
+		logger.warn( String.format( "report '%s' %sdeployed", reportDescNode, (result ? "" : "NOT ")));
 		return result;
 	}
 
@@ -60,22 +68,26 @@ public class ReportManagerJavascriptExtension
 	public boolean undeployReport(final String reportCode) {
 		PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 
+		logger.info( String.format( "Undeploying report '%s' ...", reportCode));
 		getReportsManager().unregisterReportDescriptor(reportCode);
 		NodeRef report = getReportsManager().getReportDAO().getReportDescriptorNodeByCode(reportCode);
 		if (report != null) {
 			serviceRegistry.getNodeService().setProperty(report, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, false);
 		}
+		logger.warn( String.format( "report '%s' undeployed", reportCode));
 		return true;
 	}
 
 	public List<ReportInfo> getRegisteredReports(String docTypes, boolean forCollection) {
-		List<ReportInfo> reports = new ArrayList<ReportInfo>();
-		String[] types = null;
-		List<ReportDescriptor> found;
-		if (docTypes != null && docTypes.length() > 0) { // задан тип(типы) - значит фильтруем по ним
-			types = docTypes.split(",");
-		}
-		found = getReportsManager().getRegisteredReports(types, forCollection);
+		logger.debug( String.format( "getRegisteredReports(docTypes=[%s], forCollection=%s) ...", docTypes, forCollection));
+
+		final List<ReportInfo> reports = new ArrayList<ReportInfo>();
+
+		final String[] types = (docTypes != null && docTypes.length() > 0)
+									? docTypes.split(",") // задан тип(типы) - значит фильтруем по ним
+									: null;
+
+		final List<ReportDescriptor> found = getReportsManager().getRegisteredReports(types, forCollection);
 		if (found != null && !found.isEmpty()) {
 			for (ReportDescriptor rd : found) {
 				final ReportInfo ri = new ReportInfo(rd.getReportType(), rd.getMnem(), (rd.getFlags() != null) ? rd.getFlags().getPreferedNodeType() : null);
@@ -83,26 +95,38 @@ public class ReportManagerJavascriptExtension
 				reports.add(ri);
 			}
 		}
+
+		logger.debug( String.format( "getRegisteredReports(docTypes=[%s], forCollection=%s) return count %s", docTypes, forCollection, reports.size()));
 		return reports;
 	}
 
 	public ScriptNode generateReportTemplate(final String reportRef) {
-		NodeRef report = new NodeRef(reportRef);
-		ReportDescriptor desc = getReportsManager().getReportDAO().getReportDescriptor(report);
-		if (desc == null) {
-            return null;
-        }
+		logger.debug( String.format( "generateReportTemplate(reportRef={%s}) ...", reportRef));
 
-		byte[] content = getReportsManager().produceDefaultTemplate(desc); // TODO почему-то шаблон по умолчанию не зависит от типа отчета - он всегда jrxml
-		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
+		final NodeRef report = new NodeRef(reportRef);
+		final ReportDescriptor desc = getReportsManager().getReportDAO().getReportDescriptor(report);
+		if (desc == null)
+			return null;
+
+		final byte[] content = getReportsManager().produceDefaultTemplate(desc);
+		final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
+
 		final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-        String reportTemplateName =  desc.getMnem() + ".jrxml"; // см TODO выше
-		properties.put(ContentModel.PROP_NAME, reportTemplateName);
-        NodeRef templateFile = serviceRegistry.getNodeService().getChildByName(report, ContentModel.ASSOC_CONTAINS, reportTemplateName);
-        if (templateFile != null) {
-            serviceRegistry.getNodeService().deleteNode(templateFile); // удаляем старый файл
-        }
-		ChildAssociationRef child =
+		
+		{ // формирование названия
+			final ReportDefaultsDesc def = getReportsManager().getReportDefaultsDesc(desc.getReportType()); // умолчания для типа
+			final String ext = (def != null ? def.getFileExtension() : null);
+			String reportTemplateName = desc.getMnem() + (Utils.isStringEmpty(ext) ? ".txt" : ext); // ".jrxml", etc ...
+
+			properties.put(ContentModel.PROP_NAME, reportTemplateName);
+
+			final NodeRef templateFile = serviceRegistry.getNodeService().getChildByName(report, ContentModel.ASSOC_CONTAINS, reportTemplateName);
+			if (templateFile != null) {
+				serviceRegistry.getNodeService().deleteNode(templateFile); // удаляем старый файл
+			}
+		}
+
+		final ChildAssociationRef child =
 				serviceRegistry.getNodeService().createNode(report, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
 		InputStream is = null;
 		try {
@@ -115,6 +139,9 @@ public class ReportManagerJavascriptExtension
 		} finally {
 			IOUtils.closeQuietly(is);
 		}
+
+		logger.debug( String.format( "generateReportTemplate(reportRef={%s}) returns {%s}", reportRef, child.getChildRef()));
+
 		return new ScriptNode(child.getChildRef(), serviceRegistry, getScope());
 	}
 

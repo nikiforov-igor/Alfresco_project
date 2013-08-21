@@ -100,6 +100,11 @@ public class ReportFlagsImpl
 		queryDesc().setMnem(mnemo);
 	}
 
+	@Override
+	public boolean isTypeSupported(String qname) {
+		return queryDesc().isTypeSupported(qname);
+	}
+
 	private QueryDescriptor queryDesc() {
 		if (this.queryDesc == null)
 			this.queryDesc = new QueryDescriptorImpl();

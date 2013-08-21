@@ -24,4 +24,11 @@ public interface QueryDescriptor extends Mnemonicable {
 	 */
 	String getPreferedNodeType();
 	void setPreferedNodeType(String value);
+
+	/**
+	 * Вернуть true, если указанный тип поддерживается
+	 * @param qname короткое или полное название типма
+	 * @return
+	 */
+	boolean isTypeSupported(String qname);
 }

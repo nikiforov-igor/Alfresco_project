@@ -144,7 +144,7 @@
 		<property name="beanDescriptors[0]" ref="jasperTemplate_DocFlowCounters" />
 
 		<property name="reportDefaults[JASPER]">
-			<bean class="ru.it.lecm.reports.beans.ReportsManagerImpl$ReportDefaultsDesc">
+			<bean class="ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl">
 				<property name="fileExtension" value=".jrxml" />
 				<property name="generationTemplate" value="jreportCommonTemplate.jrxml.gen" />
 			</bean>

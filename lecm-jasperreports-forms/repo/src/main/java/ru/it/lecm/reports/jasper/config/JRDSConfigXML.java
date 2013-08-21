@@ -291,8 +291,8 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		for (int i = 0; i < simpleNodeTags.length; i++) {
 			curNode = (Element) XmlHelper.findNodeByAttr(curNode, simpleNodeTags[i], null, null);
 			if (curNode == null) {
-				logger.warn( String.format( "XML did not contain items deeper than '%s' for full path '%s' -> got as NULL"
-						, concat(simpleNodeTags, i)
+				logger.warn( String.format( "XML node '%s' did not contain items deeper than '%s' for full path '%s' -> got as NULL"
+						, curNode , concat(simpleNodeTags, i)
 						, concat(simpleNodeTags, simpleNodeTags.length)
 						));
 				return null;
@@ -308,8 +308,12 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 
 	private static String concat(String[] items, int len) {
 		final StringBuilder result = new StringBuilder();
-		for (int i = 0; i < len; i++) {
-			result.append('/').append( items[i] );
+		if (len == 0){
+			result.append('/');
+		} else {
+			for (int i = 0; i < len; i++) {
+				result.append('/').append( items[i] );
+			}
 		}
 		return result.toString();
 	}

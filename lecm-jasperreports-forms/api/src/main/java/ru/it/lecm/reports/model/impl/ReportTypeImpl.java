@@ -9,9 +9,9 @@ import ru.it.lecm.reports.api.model.ReportType;
  */
 public class ReportTypeImpl
 		extends MnemonicNamedItem
-		implements ReportType {
+		implements ReportType 
+{
 	private static final long serialVersionUID = 1L;
-
 
 	public ReportTypeImpl() {
 		super();

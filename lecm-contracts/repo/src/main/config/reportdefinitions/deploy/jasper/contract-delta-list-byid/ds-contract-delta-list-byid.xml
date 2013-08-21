@@ -48,7 +48,7 @@
 		<limit>-1</limit>
 		<pgsize>-1</pgsize>
 		<allVersions>true</allVersions>
-		<preferedType></preferedType>
+		<preferedType>{lecm-contract:document}</preferedType>
 		<isMultiRow>false</isMultiRow>
 		<isCustom>true</isCustom>
 		<!--

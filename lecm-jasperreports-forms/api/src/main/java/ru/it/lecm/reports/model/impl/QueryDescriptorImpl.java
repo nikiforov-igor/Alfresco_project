@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.model.impl;
 
 import ru.it.lecm.reports.api.model.QueryDescriptor;
+import ru.it.lecm.reports.utils.Utils;
 
 public class QueryDescriptorImpl
 		extends MnemonicNamedItem
@@ -12,6 +13,20 @@ public class QueryDescriptorImpl
 	private int offset, limit, pgSize;
 	private boolean allVersions = true;
 	private String preferedNodeType;
+
+	private boolean emptyTypeMatchesAny = false;
+
+	/** @return: true, если принимать свой пустой preferedNodeType за подходящий к ЛЮБОМУ внешнему,
+	 * false: по-умолчанию считать свой пустой тип не соот-щим НИЧКАКОМУ внешнему, кроме пустого.
+	 */
+	public boolean isEmptyTypeMatchesAny() {
+		return emptyTypeMatchesAny;
+	}
+
+	/** true, если принимать пустой внешний тип за подходящий к preferedNodeType */
+	public void setEmptyTypeMatchesAny(boolean value) {
+		this.emptyTypeMatchesAny = value;
+	}
 
 	@Override
 	public String getPreferedNodeType() {
@@ -74,6 +89,33 @@ public class QueryDescriptorImpl
 	}
 
 	@Override
+	public boolean isTypeSupported(String qname) {
+
+		final boolean isOuterEmpty = Utils.isStringEmpty(qname);
+		if (isOuterEmpty) // если проверяется пустой внешний тип - считаем что он подходит к любому внутреннему
+			return true;
+
+		final boolean isInnerEmpty = Utils.isStringEmpty(getPreferedNodeType());
+		if (isInnerEmpty) 
+			// если this-тип не заполнен -> вернуть флажок "считать ли свой 
+			// пустой тип равным любому внешнему"
+			return isEmptyTypeMatchesAny(); 
+
+		// здесь оба не пустые 
+
+		/* сейчас проверяем на простое вхождение, чтобы потом легко было
+		 * сделать getPreferedNodeType списком
+		 */
+		if (getPreferedNodeType().equalsIgnoreCase(qname))
+				// совпадение типа (с точностью до регистра)
+			return true;
+
+		/* точного соот-вия нет - проверяем вхождение */
+		// (NOTE: можно подумать, чтобы иметь набор SET<QName>)
+		return getPreferedNodeType().toLowerCase().contains(qname.toLowerCase());
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
@@ -127,4 +169,5 @@ public class QueryDescriptorImpl
 		builder.append("\n\t\t]");
 		return builder.toString();
 	}
+
 }

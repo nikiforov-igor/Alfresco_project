@@ -90,7 +90,11 @@ public class ErrandsReportFilterParams {
 	 */
 	public class GroupByInfo {
 		/** Название, Форматная строка и ассоциативная ссылка на поле группировки */
-		String grpName, grpFmt, grpAssocQName;
+		String 
+			grpName // пример: byPerson | byOrgUnit
+			, grpFmt // пример: "Исполнитель {lecm-errands:executor-assoc/cm:name}"
+			, grpAssocQName // пример: "lecm-errands:executor-assoc"
+			;
 
 		public GroupByInfo(String groupName) {
 			this.grpName = groupName;

@@ -92,7 +92,7 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 		<limit>-1</limit>
 		<pgsize>-1</pgsize>
 		<allVersions>true</allVersions>
-		<preferedType></preferedType>
+		<preferedType>lecm-contract:document</preferedType>
 		<isMultiRow>false</isMultiRow>
 		<isCustom>true</isCustom>
 		<!--

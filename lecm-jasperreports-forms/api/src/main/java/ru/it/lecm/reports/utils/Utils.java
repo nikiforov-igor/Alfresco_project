@@ -364,7 +364,10 @@ public class Utils {
 				final String quotedValue = Utils.quoted(value);
 				if (addOR)
 					result.append(" OR ");
-				result.append( "@" + fldName + ":" + quotedValue);
+				final boolean isSpecialName = "TYPE ID".contains(fldName);
+				if (!isSpecialName) // добавление '@' требуется ТОЛЬКО для обычных полей 
+					result.append( "@"); //
+				result.append(fldName + ":" + quotedValue);
 				addOR = true;
 			}
 		}
@@ -621,4 +624,5 @@ public class Utils {
 
 		return result.getTime();
 	}
+
 }
