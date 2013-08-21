@@ -18,6 +18,10 @@
 		        <property name="cm:name">Отклонение выполнения</property>
 		        <property name="lecm-busjournal:eventCategory-code">ERRAND_DECLINE</property>
 	        </item>
+            <item name="cm:Смена контроллера" type="lecm-busjournal:eventCategory">
+		        <property name="cm:name">Смена контроллера</property>
+		        <property name="lecm-busjournal:eventCategory-code">ERRAND_CHANGE_CONTROLLER</property>
+	        </item>
         </items>
     </item>
 </items>
