@@ -784,23 +784,12 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     var allowedNodes = me.options.allowedNodes;
-                    if(YAHOO.lang.isArray(allowedNodes)) {
-                        tempItems = [];
-                        k = 0;
-                        for (index in items) {
-                            item = items[index];
-                            var allowed = false;
-                            for (var j = 0; j < allowedNodes.length; j++) {
-                                if (allowedNodes[j] == item.nodeRef) {
-                                    allowed = true;
-                                }
-                            }
-                            if (allowed) {
-                                tempItems[k] = item;
-                                k++;
+                    if(YAHOO.lang.isArray(allowedNodes) && allowedNodes.length > 0) {
+                        for(i = 0; item = items[i]; i++) {
+                            if(allowedNodes.indexOf(item.nodeRef) < 0) {
+                                items.splice(i, 1);
                             }
                         }
-                        items = tempItems;
                     }
 
 					if (me.options.employeeAbsenceMarker) {
