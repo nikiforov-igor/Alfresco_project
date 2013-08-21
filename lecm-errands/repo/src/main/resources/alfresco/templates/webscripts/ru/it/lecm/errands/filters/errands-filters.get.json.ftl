@@ -6,7 +6,7 @@
         "nodeRef":     "${record.getNodeRef()?string}",
         "record":      "${record.properties["lecm-document:present-string"]?string}",
         <#if record.properties["lecm-errands:limitation-date"]??>
-        "date":        "${record.properties["lecm-errands:limitation-date"]?string("dd/MM/yyyy")}",
+        "date":        "${record.properties["lecm-errands:limitation-date"]?string("yyyy-MM-dd")}",
         </#if>
         <#if record.assocs["lecm-errands:additional-document-assoc"]??>
         "baseDocString" : "${record.assocs["lecm-errands:additional-document-assoc"][0].properties["lecm-document:present-string"]?string}",

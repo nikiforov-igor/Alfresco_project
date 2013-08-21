@@ -66,6 +66,10 @@
     border-bottom: 1px dashed #D9D9D9;
 }
 
+.body.scrollableList .my-errands td .info a{
+    font-weight:bolder;
+}
+
 .body.scrollableList .my-errands {
     width: 100%;
 }
