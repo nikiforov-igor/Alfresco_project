@@ -8,4 +8,15 @@
 		  class="ru.it.lecm.signed.docflow.policies.SigningContentVersionChangePolicy"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"/>
+
+	<bean init-method="init" id="signedContentCopyPolicy"
+		  class="ru.it.lecm.signed.docflow.policies.SignedContentCopyPolicy"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"/>
+
+	<bean init-method="init" id="signedContentDeletePolicy"
+		  class="ru.it.lecm.signed.docflow.policies.SignedContentDeletePolicy"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"
+		  p:signedDocflowService-ref="signedDocflowService"/>
 </beans>
