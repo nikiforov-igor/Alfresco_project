@@ -6,6 +6,10 @@
     background-color: blue;
 }
 
+.yui-dt-liner.orangeline {
+    background-color: orange;
+}
+
 .errands.pagination.yui-pg-container {
     text-align: center;
 }

@@ -16,6 +16,12 @@
         "endDate":        "${record.properties["lecm-errands:limitation-date"]?string("yyyy-MM-dd")}",
         </#if>
 
+        <#if record.assocs["lecm-errands:controller-assoc"]??>
+            "inControler": "true",
+        <#else>
+            "inControler": "false",
+        </#if>
+
     "isExpired":   "${record.properties["lecm-errands:is-expired"]?string}",
     "isImportant": "${record.properties["lecm-errands:is-important"]?string}"
     }

@@ -263,6 +263,8 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                 if (startDate <= dayColumn && dayColumn <= endDate) {
                     if (data.isExpired=="true") {
                         elCell.setAttribute('class',elCell.getAttribute('class')+' redline');
+                    } else if (data.inControler=="true") {
+                        elCell.setAttribute('class',elCell.getAttribute('class')+' orangeline');
                     } else {
                         elCell.setAttribute('class',elCell.getAttribute('class')+' blueline');
                     }
