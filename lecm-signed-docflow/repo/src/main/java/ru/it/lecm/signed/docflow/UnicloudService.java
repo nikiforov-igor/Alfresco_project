@@ -302,6 +302,7 @@ public class UnicloudService {
 		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
 		String employeeId = employeeRef.getId();
 		String token = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_AUTH_TOKEN);
+		token = (token != null) ? token : "";
 
 		//получить ИНН и КПП контрагента
 		CompanyInfo companyInfo = new CompanyInfo();
@@ -334,7 +335,7 @@ public class UnicloudService {
 		addAuthHeaders(partnerKey, employeeId, organizationId, operatorCode, token);
 		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
 		Holder<String> documentId = new Holder<String>();
-		gateWcfService.sendDocument(doc, operatorCode, "", gateResponse, documentId);
+		gateWcfService.sendDocument(doc, operatorCode, null, gateResponse, documentId);
 		removeAuthHeaders();
 
 		SendDocumentData sendDocumentData = new SendDocumentData();
