@@ -10,9 +10,5 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage showToolbar=false>
-    <#--<#if employee.is-boss == "true">-->
         <@region id="diagram" scope="template" />
-    <#--<#else>-->
-        <#--<@region id="forbidden" scope="template"/>-->
-    <#--</#if>-->
 </@bpage.basePage>
