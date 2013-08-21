@@ -339,7 +339,7 @@ LogicECM.module = LogicECM.module || {};
                         }
 
                         var allowedNodes = me.options.allowedNodes;
-                        if(YAHOO.lang.isArray(allowedNodes) && allowedNodes.length > 0) {
+                        if(YAHOO.lang.isArray(allowedNodes) && (allowedNodes.length > 0) && allowedNodes[0]) {
                             for(i = 0; item = items[i]; i++) {
                                 if(allowedNodes.indexOf(item.nodeRef) < 0) {
                                     items.splice(i, 1);
