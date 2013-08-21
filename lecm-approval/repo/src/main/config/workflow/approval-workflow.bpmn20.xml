@@ -77,6 +77,8 @@
 				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
+							var dueDate = bpm_workflowDueDate;
+							task.setDueDate(dueDate);
 							approval.assignTask(assignee, task);
 						]]></activiti:string>
 					</activiti:field>
