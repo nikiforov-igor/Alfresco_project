@@ -55,6 +55,23 @@
 	            initSetExecutionReportForm('${id}');
 			</#if>
 	        initChildErrands('${id}');
+
+            var limitDate = "${limitDate.iso8601}";
+            if (limitDate !== "") {
+                var localLimitDate = Alfresco.util.fromISO8601(limitDate);
+                Dom.get("${id}-limitation-date").innerHTML = localLimitDate.toString(dateDisplayControlMsg("form.control.date-picker.entry.date.format"));
+
+                var month = localLimitDate.getMonth() + 1;
+                var date = localLimitDate.getDate();
+                var hours = localLimitDate.getHours();
+                var minutes = localLimitDate.getMinutes();
+                Dom.get("errandLimitationDate").value = localLimitDate.getFullYear() + "-" + (month < 10 ? "0" : "") + month + "-" + (date < 10 ? "0" : "") + date + "T"
+                        + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+            }
+        }
+
+        function dateDisplayControlMsg(messageId) {
+            return Alfresco.util.message.call(this, messageId, "LogicECM.DateDisplayControl", Array.prototype.slice.call(arguments).slice(1));
         }
 
 		<#if hasAddAttachmentPerm>
@@ -206,8 +223,8 @@
                 </#if>
             </#if>
 
-            ${msg("message.eddand.limitationDate")} <span>${xmldate(limitDate.iso8601)?string("dd MMM yyyy")}</span>
-            <input type="hidden" id="errandLimitationDate" value="${xmldate(limitDate.iso8601)?string("yyyy-MM-dd'T'HH:mm")}"/>
+            ${msg("message.eddand.limitationDate")} <span id="${id}-limitation-date"></span>
+            <input type="hidden" id="errandLimitationDate" value=""/>
             <#if justInTime>
                 &nbsp;${msg("message.eddand.justInTime")}
             </#if>
