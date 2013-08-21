@@ -2,6 +2,7 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.List;
@@ -122,4 +123,6 @@ public interface DocumentMembersService {
      * @param document ссылка на документ (для извлечения типа)
      */
     public void addMemberToUnit(NodeRef employeeRef, NodeRef document);
+
+	public LecmPermissionService.LecmPermissionGroup getMemberPermissionGroup(NodeRef memberRef);
 }

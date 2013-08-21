@@ -147,7 +147,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
         try {
             // Выдача прав новому участнику
-            LecmPermissionService.LecmPermissionGroup pgGranting = getLecmPermissionGroup(member);
+            LecmPermissionService.LecmPermissionGroup pgGranting = documentMembersService.getMemberPermissionGroup(member);
             lecmPermissionService.grantAccess(pgGranting, docRef, employee.getId());
             nodeService.setProperty(member, DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
         } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
@@ -292,17 +292,5 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         String propName = employee != null ? (String) nodeService.getProperty(employee, ContentModel.PROP_NAME) : "unnamed";
 
         return (propName + " " + groupName).trim();
-    }
-
-    private LecmPermissionService.LecmPermissionGroup getLecmPermissionGroup(NodeRef memberRef) {
-        LecmPermissionService.LecmPermissionGroup pgGranting = null;
-        String permGroup = (String) nodeService.getProperty(memberRef, DocumentMembersService.PROP_MEMBER_GROUP);
-        if (permGroup != null && !permGroup.isEmpty()) {
-            pgGranting = lecmPermissionService.findPermissionGroup(permGroup);
-        }
-        if (pgGranting == null) {
-            pgGranting = lecmPermissionService.findPermissionGroup(DEFAULT_ACCESS);
-        }
-        return pgGranting;
     }
 }

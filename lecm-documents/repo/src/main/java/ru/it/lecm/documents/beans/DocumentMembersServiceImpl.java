@@ -97,6 +97,9 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
                             QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()), TYPE_DOC_MEMBER, properties);
                     NodeRef newMemberRef = associationRef.getChildRef();
                     nodeService.createAssociation(newMemberRef, employeeRef, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
+
+	                LecmPermissionService.LecmPermissionGroup pgGranting = getMemberPermissionGroup(newMemberRef);
+	                lecmPermissionService.grantAccess(pgGranting, document, employeeRef.getId());
                     return newMemberRef;
                 }
             });
@@ -236,23 +239,6 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 
     /**
      * Добавление нового участника в ноду со списком всех участников для данного типа документа
-     * @param memberRef ссылка на ноду участника
-     * @return LecmPermissionService.LecmPermissionGroup группу привелегий, название которой сохранено в свойствах участника, либо DEFAULT_ACCESS
-     */
-    private LecmPermissionService.LecmPermissionGroup getLecmPermissionGroup(NodeRef memberRef) {
-        LecmPermissionService.LecmPermissionGroup pgGranting = null;
-        String permGroup = (String) nodeService.getProperty(memberRef, DocumentMembersService.PROP_MEMBER_GROUP);
-        if (permGroup != null && !permGroup.isEmpty()) {
-            pgGranting = lecmPermissionService.findPermissionGroup(permGroup);
-        }
-        if (pgGranting == null) {
-            pgGranting = lecmPermissionService.findPermissionGroup(DEFAULT_ACCESS);
-        }
-        return pgGranting;
-    }
-
-    /**
-     * Добавление нового участника в ноду со списком всех участников для данного типа документа
      * @param employeeRef ссылка на сотрудника
      * @param document ссылка на документ (для извлечения типа)
      */
@@ -264,4 +250,16 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
             logger.debug("Сотрудник уже сохранен в участниках документооборота для данного типа документов:" + nodeService.getType(document));
         }
     }
+
+	public LecmPermissionService.LecmPermissionGroup getMemberPermissionGroup(NodeRef memberRef) {
+		LecmPermissionService.LecmPermissionGroup pgGranting = null;
+		String permGroup = (String) nodeService.getProperty(memberRef, DocumentMembersService.PROP_MEMBER_GROUP);
+		if (permGroup != null && !permGroup.isEmpty()) {
+			pgGranting = lecmPermissionService.findPermissionGroup(permGroup);
+		}
+		if (pgGranting == null) {
+			pgGranting = lecmPermissionService.findPermissionGroup(DEFAULT_ACCESS);
+		}
+		return pgGranting;
+	}
 }
