@@ -32,8 +32,6 @@
                                         document.removeAssociation(controller, "lecm-errands:controller-assoc");
                                         document.createAssociation(lecmErrandWf_changeControllerNewController, "lecm-errands:controller-assoc");
 
-                                        lecmPermission.revokeDynamicRole(document, controller, "ERRANDS_CONTROLLER");
-
                                         var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
                                         notificationText += "отменил(а) назначение вас контроллером по поручению ";
                                         notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
@@ -43,6 +41,7 @@
                                         recipients.push(controller);
                                         notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
 
+	                                    lecmPermission.revokeDynamicRole(document, controller, "ERRANDS_CONTROLLER");
                                         statemachine.grandDynamicRoleForEmployee(document, lecmErrandWf_changeControllerNewController, "ERRANDS_CONTROLLER");
 
                                         var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
