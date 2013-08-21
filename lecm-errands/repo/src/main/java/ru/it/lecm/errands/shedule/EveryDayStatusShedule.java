@@ -164,7 +164,6 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
 
         types.add(ErrandsService.TYPE_ERRANDS);
 
-        paths.add(documentService.getDraftPath());
         paths.add(documentService.getDocumentsFolderPath());
 
         statuses.add("!Отменено");
