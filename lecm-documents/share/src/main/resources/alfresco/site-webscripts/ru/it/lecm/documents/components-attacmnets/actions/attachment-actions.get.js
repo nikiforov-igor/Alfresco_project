@@ -5,7 +5,8 @@
 
 var showActions = [
 	"document-download",
-	"document-view-content"
+	"document-view-content",
+	"document-unlock"
 ];
 
 function main() {

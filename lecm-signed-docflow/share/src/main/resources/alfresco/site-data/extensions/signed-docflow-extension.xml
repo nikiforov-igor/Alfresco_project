@@ -1,29 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension>
-    <modules>
-        <module>
-            <id>Sign content Document Details Page</id>
-            <evaluator type="default.extensibility.evaluator"/>
-            <auto-deploy>true</auto-deploy>
-            <components>
-                <component>
-                    <scope>template</scope>
-                    <region-id>document-actions</region-id>
-                    <source-id>document-details</source-id>
-                    <sub-components>
-                        <sub-component id="sign-content" index="150">
-                            <evaluations>
-                                <evaluation id="sign-content-add">
-                                    <url>/lecm/signed-docflow/component/sign-content</url>
-                                    <properties>
-                                        <nodeRef>{nodeRef}</nodeRef>
-                                    </properties>
-                                </evaluation>
-                            </evaluations>
-                        </sub-component>
-                    </sub-components>
-                </component>
-            </components>
-        </module>
-    </modules>
+	<modules>
+		<module>
+			<id>Sign content Document Details Page</id>
+			<evaluator type="default.extensibility.evaluator"/>
+			<auto-deploy>true</auto-deploy>
+			<components>
+				<!-- Блок подписи на карточке cm:content -->
+				<component>
+					<scope>template</scope>
+					<region-id>document-actions</region-id>
+					<source-id>document-details</source-id>
+					<sub-components>
+						<sub-component id="sign-content" index="150">
+							<evaluations>
+								<evaluation id="sign-content-add">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.signed.docflow.SignPermissionComponentEvaluator"></evaluator>
+									</evaluators>  
+									<url>/lecm/signed-docflow/component/sign-content</url>
+									<properties>
+										<nodeRef>{nodeRef}</nodeRef>
+									</properties>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<!-- Убирает блок версий со страницы cm:content при блокированном документе -->
+				<component>
+					<scope>template</scope>
+					<region-id>document-versions</region-id>
+					<source-id>document-details</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="details-version">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.signed.docflow.hasAspectComponent">
+											<params>
+												<nodeRef>{nodeRef}</nodeRef>
+												<aspect>lockable</aspect>
+											</params>
+										</evaluator>
+									</evaluators>  
+									<render>false</render>	
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<!-- Убирает блок версий со страницы вложения при блокированном документе -->
+				<component>
+					<scope>template</scope>
+					<region-id>document-versions</region-id>
+					<source-id>document-attachment</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="attachment-version">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.signed.docflow.hasAspectComponent">
+											<params>
+												<nodeRef>{nodeRef}</nodeRef>
+												<aspect>lockable</aspect>
+											</params>
+										</evaluator>
+									</evaluators>  
+									<render>false</render>	
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<!-- Убирает блок подписи со страницы вложения документа, если нету прав или не руководитель -->
+				<component>
+					<scope>template</scope>
+					<region-id>document-signing</region-id>
+					<source-id>document-attachment</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="sign-content-add">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.signed.docflow.SignPermissionComponentEvaluator" negate="true"></evaluator>
+									</evaluators>
+									<render>false</render>									  									
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<scope>template</scope>
+					<region-id>document-signed-docflow</region-id>
+					<source-id>document</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="sign-content-add">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.signed.docflow.SignPermissionComponentEvaluator" negate="true"></evaluator>
+									</evaluators>
+									<render>false</render>									  									
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<!-- Добавление блока с сообщением "Документ заблокирован" -->
+				<component>
+					<scope>template</scope>
+					<region-id>node-header</region-id>
+					<source-id>document-details</source-id>
+					<sub-components>
+						<sub-component id="blocked-label" index="10">
+							<evaluations>
+								<evaluation id="locked-label">				
+									<url>/lecm/signed-docflow/extensions/blocked-label</url>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<!-- Добавление блока с сообщением "Документ заблокирован" -->
+				<component>
+					<scope>template</scope>
+					<region-id>document-attachment-header</region-id>
+					<source-id>document-attachment</source-id>
+					<sub-components>
+						<sub-component id="blocked-label" index="10">
+							<evaluations>
+								<evaluation id="locked-label">				
+									<url>/lecm/signed-docflow/extensions/blocked-label</url>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+			</components>
+		</module>
+	</modules>
 </extension>

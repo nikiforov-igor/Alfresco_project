@@ -18,4 +18,63 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="evaluator.lecm.signed-docflow.Locked" parent="evaluator.doclib.action.hasAspect">
+		<property name="aspects">
+			<list>
+				<value>cm:lockable</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="evaluator.lecm.signed-docflow.notLocked" parent="evaluator.lecm.signed-docflow.Locked" >
+		<property name="negateOutput" value="true" />
+	</bean>
+		
+	<bean id="evaluator.ru.it.lecm.signed.docflow.isCreator" class="ru.it.lecm.signed.docflow.evaluators.isCreatorEvaluator" />
+	
+	<bean id="evaluator.ru.it.lecm.signed.docflow.SignPermissionActionEvaluator" class="ru.it.lecm.signed.docflow.evaluators.SignPermissionActionEvaluator">
+		<property name="evaluatorsUtil" ref="evaluators.util" />
+		<property name="businessRoleName" value="BR_SIGNING" />
+	</bean>
+	
+	<bean id="evaluator.ru.it.lecm.signed.docflow.SignPermissionComponentEvaluator" class="ru.it.lecm.signed.docflow.evaluators.SignPermissionComponentEvaluator">
+		<property name="evaluatorsUtil" ref="evaluators.util" />
+		<property name="roleId" value="BR_SIGNING" />
+	</bean>
+	
+	<bean id="evaluator.lecm.signed.docflow.showUnlockButton" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.lecm.signed.docflow.canUnlock" />
+				<ref bean="evaluator.lecm.signed-docflow.Locked" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="evaluator.lecm.signed.docflow.canUnlock" parent="evaluator.doclib.action.chainedMatchOne">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.ru.it.lecm.signed.docflow.SignPermissionActionEvaluator" />
+				<ref bean="evaluator.ru.it.lecm.signed.docflow.isCreator" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="evaluators.util" class="ru.it.lecm.signed.docflow.evaluators.EvaluatorsUtil">
+		<property name="scriptRemote" ref="webscripts.script.remote" />
+	</bean>
+	
+	<bean id="evaluator.lecm.signed.docflow.showNewVersionButton" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.doclib.action.editableByCurrentUser" />
+				<ref bean="evaluator.lecm.signed-docflow.notLocked" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="evaluator.ru.it.lecm.signed.docflow.hasAspectComponent" class="ru.it.lecm.signed.docflow.evaluators.hasAspectComponentEvaluator">
+		<property name="evaluatorsUtil" ref="evaluators.util" />
+	</bean>
 </beans>

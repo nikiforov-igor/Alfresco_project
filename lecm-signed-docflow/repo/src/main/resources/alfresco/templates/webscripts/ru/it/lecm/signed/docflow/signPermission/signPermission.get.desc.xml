@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>get sign permission</shortname>
+	<description>user has permission?</description>
+	<url>/lecm/signed/docflow/signPermission</url>
+	<format default="json" />
+	<authentication runas="admin">none</authentication>
+</webscript>

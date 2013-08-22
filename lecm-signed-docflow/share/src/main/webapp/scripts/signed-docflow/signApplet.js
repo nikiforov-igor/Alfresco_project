@@ -419,8 +419,15 @@ var cryptoAppletModule = (function () {
 			var result = [];
 			var containers = signApplet.getService().getKeyStoreList().split('###');
 			for(var i=0; i<containers.length; i++) {
+				
+				var Info = {};
+				try{
+					Info = JSON.parse(signApplet.getService().certInfo(signApplet.getService().bytesToBase64(signApplet.getService().getCertFromStore('', containers[i]))));
+				} catch(e){
+					console.log("bad container");
+					continue;
+				}
 				result[i] = {};
-				var Info = JSON.parse(signApplet.getService().certInfo(signApplet.getService().bytesToBase64(signApplet.getService().getCertFromStore('', containers[i]))));
 				var certIssued = Info.certIssued;
 				result[i].container = containers[i];
 				var tmp = certIssued.match('CN=(.+?)(?=,)'); 

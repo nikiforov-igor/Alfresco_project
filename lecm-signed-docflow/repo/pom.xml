@@ -94,6 +94,16 @@
 		 <groupId>org.apache.commons</groupId>
 		 <artifactId>commons-compress</artifactId>
 	 </dependency>
+	 <dependency>
+	  <groupId>ru.it.lecm.dictionary</groupId>
+	  <artifactId>dictionary-repo-api</artifactId>
+	  <version>${platform.version}</version>
+	  <scope>provided</scope>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.alfresco</groupId>
+	  <artifactId>alfresco-share</artifactId>
+	 </dependency>
 	</dependencies>
 	<!--
 	   The scm is required for the buildnumber-maven-plugin which is required

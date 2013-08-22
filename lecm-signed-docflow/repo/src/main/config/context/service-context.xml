@@ -43,6 +43,15 @@
 		</property>
 	</bean>
 
+	<bean id="lecm.signed-docflow.business-roles-dictionary-bootstrap"
+		  parent="lecmDictionaryBootstrap" depends-on="lecm.signed-docflow.model-bootstrap, businessJournalLogEventsPolicy, ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap" >
+		<property name="createOrUpdateDictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-signed-docflow-roles-items.xml</value>
+			</list>
+		</property>
+	</bean>
+
 	<util:constant id="signedDocflowFolder" static-field="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl.SIGNED_DOCFLOW_FOLDER"/>
 	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean"
 		  depends-on="lecm.signed-docflow.model-bootstrap" init-method="init">
@@ -67,6 +76,7 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="unicloudService" ref="unicloudService"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="lockService" ref="lockService"/>
 	</bean>
-
+	
 </beans>

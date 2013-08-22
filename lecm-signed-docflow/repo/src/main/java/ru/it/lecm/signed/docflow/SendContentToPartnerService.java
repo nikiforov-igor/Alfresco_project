@@ -3,6 +3,8 @@ package ru.it.lecm.signed.docflow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.alfresco.service.cmr.lock.LockService;
+import org.alfresco.service.cmr.lock.LockType;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -31,6 +33,11 @@ public class SendContentToPartnerService {
 	private final static QName ASSOC_CONTRACT_PARTNER = QName.createQName("http://www.it.ru/logicECM/contract/1.0", "partner-assoc");
 
 	private NodeService nodeService;
+	private LockService lockService;
+
+	public void setLockService(LockService lockService) {
+		this.lockService = lockService;
+	}
 	private DocumentAttachmentsService documentAttachmentsService;
 	private UnicloudService unicloudService;
 	private BusinessJournalService businessJournalService;
@@ -132,8 +139,12 @@ public class SendContentToPartnerService {
 		}
 		return effectiveEmail;
 	}
-
-	public List<Map<String, Object>> send(ContentToSendData contentToSend) {
+	
+		private void nodeLock(List<NodeRef> nodeRefList){
+		lockService.lock(nodeRefList, LockType.NODE_LOCK, 0);
+	}
+	
+	public List<Map<String, Object>> send(ContentToSendData contentToSend) {		
 		List<NodeRef> contentList = contentToSend.getContent();
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>(contentList.size());
 		for (NodeRef contentRef : contentList) {
@@ -141,6 +152,7 @@ public class SendContentToPartnerService {
 			String interactionType = getEffectiveInteractionType(partnerRef, contentToSend.getInteractionType());
 			String email = getEffectiveEmail(partnerRef, contentToSend.getEmail());
 			result.add(send(contentRef, partnerRef, interactionType, email));
+			nodeLock(contentList);
 		}
 		return result;
 	}

@@ -108,6 +108,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				text: "Отправка документа контрагенту"
 			});
 			cryptoAppletModule.SendToContragent(this.options.nodeRef);
+			
 		},
 
 		onSignaturesReceived: function(event) {

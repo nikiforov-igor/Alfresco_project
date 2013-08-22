@@ -29,7 +29,7 @@ import ru.it.lecm.signed.docflow.model.ContentToSendData;
 public class SendContentToPartnerWebscript extends DeclarativeWebScript {
 
 	private final static Logger logger = LoggerFactory.getLogger(SendContentToPartnerWebscript.class);
-
+		
 	private SendContentToPartnerService sendContentToPartnerService;
 
 	public void setSendContentToPartnerService(SendContentToPartnerService sendContentToPartnerService) {
@@ -62,7 +62,7 @@ public class SendContentToPartnerWebscript extends DeclarativeWebScript {
 		}
 		return contentToSend;
 	}
-
+	
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		final Content content = req.getContent();
@@ -76,7 +76,8 @@ public class SendContentToPartnerWebscript extends DeclarativeWebScript {
 
 		ContentToSendData contentToSend = getContentToSendFromJSON(requestJSON);
 		List<Map<String, Object>> sendContentList = sendContentToPartnerService.send(contentToSend);
-
+		
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", new JSONArray(sendContentList));
 		return result;

@@ -31,6 +31,24 @@
 			<artifactId>spring-beans</artifactId>
 		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
+	 <dependency>
+	  <groupId>com.googlecode.json-simple</groupId>
+	  <artifactId>json-simple</artifactId>
+	  <version>1.1</version>
+	  <type>jar</type>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.springframework.extensions.surf</groupId>
+	  <artifactId>spring-webscripts</artifactId>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.springframework.extensions.surf</groupId>
+	  <artifactId>spring-surf</artifactId>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.alfresco</groupId>
+	  <artifactId>alfresco-data-model</artifactId>
+	 </dependency>
 	</dependencies>
 
 	<build>
