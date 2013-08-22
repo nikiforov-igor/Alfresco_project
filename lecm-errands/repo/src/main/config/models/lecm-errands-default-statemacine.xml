@@ -3198,63 +3198,6 @@ if (document != null) {
                                                     </node>
                                                     <node>
                                                         <type>UserWorkflowEntity</type>
-                                                        <name>7668f463-028f-4914-8fdc-07b139967403</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/6126d156-2a02-46be-a50e-b2be93decd87
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsChangeDueDate]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowLabel</name>
-                                                                <value><![CDATA[Изменить срок]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <workflowAspect/>
-                                                        </aspects>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders>
-                                                            <subFolder>
-                                                                <name>variables</name>
-                                                                <nodes>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>c7be1ce5-14b9-450d-a5ca-2b6e3c98ca43
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/660a629d-c4f4-4be1-bf1d-54a4652d991a
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Данное действие доступно только Инициатору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                </nodes>
-                                                            </subFolder>
-                                                        </subFolders>
-                                                    </node>
-                                                    <node>
-                                                        <type>UserWorkflowEntity</type>
                                                         <name>589149e5-be1c-4cd5-8de2-e1789c9337d2</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/965df096-805c-4ebf-9ecc-f8b8e9e670d5
@@ -4985,63 +4928,6 @@ if (document != null) {
                                                     </node>
                                                     <node>
                                                         <type>UserWorkflowEntity</type>
-                                                        <name>ba176fbb-21fb-4dd0-900a-846543c7df4d</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/4bef3167-1e5b-4c70-993e-883ccddabb20
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsChangeDueDate]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowLabel</name>
-                                                                <value><![CDATA[Изменить срок]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <workflowAspect/>
-                                                        </aspects>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders>
-                                                            <subFolder>
-                                                                <name>variables</name>
-                                                                <nodes>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>2d2f8993-9d35-46eb-889e-249d267a0c8e
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/142ef709-6b4f-40aa-9c8b-63cd155dea38
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Данное действие доступно только Инициатору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                </nodes>
-                                                            </subFolder>
-                                                        </subFolders>
-                                                    </node>
-                                                    <node>
-                                                        <type>UserWorkflowEntity</type>
                                                         <name>b09d8197-38dd-4ca1-82e5-61f32ca136e4</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/9b8beb63-5bec-4285-ab27-79066b6c222a
@@ -6577,63 +6463,6 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                     </node>
                                                     <node>
                                                         <type>UserWorkflowEntity</type>
-                                                        <name>45144396-718a-42ef-bdcc-81690df9dab2</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/8a3d5243-a6be-4eb0-9197-5a4558464d48
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsChangeDueDate]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowLabel</name>
-                                                                <value><![CDATA[Изменить срок]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <workflowAspect/>
-                                                        </aspects>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders>
-                                                            <subFolder>
-                                                                <name>variables</name>
-                                                                <nodes>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>dde5d7b2-80d8-4de8-81aa-ef7349722f23
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/9cecca01-21c0-438c-ad2a-1818be89b1c9
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Данное действие доступно только Инициатору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                </nodes>
-                                                            </subFolder>
-                                                        </subFolders>
-                                                    </node>
-                                                    <node>
-                                                        <type>UserWorkflowEntity</type>
                                                         <name>9ec6c1b1-052a-4b87-873b-56858a04b688</name>
                                                         <nodeRef>
                                                             workspace://SpacesStore/4eb8dde1-aba2-49e9-9100-76dac6523481
@@ -7834,63 +7663,6 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                             <subFolder>
                                                 <name>transitions</name>
                                                 <nodes>
-                                                    <node>
-                                                        <type>UserWorkflowEntity</type>
-                                                        <name>fa67633b-36f8-4946-b386-c0815c52b140</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/5fda6524-7f27-486c-b9c9-cbe13e9a84a3
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value><![CDATA[activiti$errandsChangeDueDate]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowLabel</name>
-                                                                <value><![CDATA[Изменить срок]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <workflowAspect/>
-                                                        </aspects>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders>
-                                                            <subFolder>
-                                                                <name>variables</name>
-                                                                <nodes>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>d26d2b1e-f632-4c53-afc1-e7501c1f1752
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/9697facd-45b4-4836-a8f8-49cb81379ab4
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Данное действие доступно только Инициатору]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                </nodes>
-                                                            </subFolder>
-                                                        </subFolders>
-                                                    </node>
                                                     <node>
                                                         <type>UserWorkflowEntity</type>
                                                         <name>5f95f0a7-6305-4c1e-9a82-0e4f4ca28752</name>
