@@ -17,6 +17,10 @@ public interface ReportDescriptor extends Mnemonicable, L18able {
 	ReportFlags getFlags();
 
 
+	/**
+	 * Сортировка по-умолчанию для списков Дескрипторов отчёта будет по алфавиту названия (кода).
+	 * null-значения нижее в списке ("тяжёлые").
+	 */
 	static class Comparator_ПоАлфавиту 
 			implements Comparator<ReportDescriptor>
 	{
@@ -24,8 +28,8 @@ public interface ReportDescriptor extends Mnemonicable, L18able {
 		public int compare(ReportDescriptor rd1, ReportDescriptor rd2) {
 			if (rd1 == rd2)
 				return 0;
-			final String name1 = Utils.coalesce( rd1.getDefault(), rd1.getMnem());
-			final String name2 = Utils.coalesce( rd2.getDefault(), rd2.getMnem());
+			final String name1 = Utils.nonblank( rd1.getDefault(), rd1.getMnem());
+			final String name2 = Utils.nonblank( rd2.getDefault(), rd2.getMnem());
 			// null == null, null > any other
 			if (name1 == null)
 				return (name2 == null) ? 0 : 1;

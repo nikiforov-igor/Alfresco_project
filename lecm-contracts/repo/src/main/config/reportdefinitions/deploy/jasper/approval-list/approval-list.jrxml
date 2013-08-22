@@ -173,7 +173,7 @@
 					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Согласующий"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Сотрудник"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="8514e4c9-574d-4cbd-87f1-2afb80a884a2" x="210" y="2" width="170" height="26"/>

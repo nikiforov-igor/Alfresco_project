@@ -79,9 +79,9 @@
 				<![CDATA[lecm-errands:executor-assoc]]>
 			</item>
 
-			<!-- ссылка на организацию (отсносительно Персоны) -->
+			<!-- ссылка на организацию выбирается специально провайдером через Исполнителя -->
 			<item key="byOrgUnit">
-				<![CDATA[lecm-orgstr:organization-element]]>
+				<![CDATA[lecm-errands:executor-assoc]]>
 			</item>
 
 		</map>
@@ -136,9 +136,10 @@
             </parameter>
         </field>
 
-        <field alfrescoType="lecm-links:link"
-            displayName="Подразделение исполнителя"
-            jrFldName="Col_Param_Exec_OrgUnit" order="3" queryFldName="{lecm-orgstr:organization-unit}">
+        <!-- Подразделение -->
+        <field alfrescoType="lecm-orgstr:organization-unit"
+            displayName="Подразделение исполнителя" jrFldName="Col_Param_Exec_OrgUnit" order="3" 
+            queryFldName="{{Executor.OrgUnit}}">
             <l18>
                 <item key="RU_RU" value="Подразделение исполнителя"/>
             </l18>

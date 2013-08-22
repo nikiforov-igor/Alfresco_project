@@ -70,6 +70,7 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 <ds.config>
 	<report.descriptor mnem="approval-list">
 		<type mnem="JASPER"/>
+
 		<l18> <item key="RU_RU" value="Лист согласования"/>
 		</l18>
 
@@ -92,7 +93,8 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 		<limit>-1</limit>
 		<pgsize>-1</pgsize>
 		<allVersions>true</allVersions>
-		<preferedType>lecm-contract:document</preferedType>
+		<!-- <preferedType>lecm-contract:document</preferedType> -->
+		<preferedType></preferedType>
 		<isMultiRow>false</isMultiRow>
 		<isCustom>true</isCustom>
 		<!--

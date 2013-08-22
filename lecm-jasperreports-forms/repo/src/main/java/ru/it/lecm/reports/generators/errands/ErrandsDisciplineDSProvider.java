@@ -23,13 +23,12 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.api.DataFilter;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.calc.DataGroupCounter;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.generators.LucenePreparedQuery;
-import ru.it.lecm.reports.generators.errands.ErrandsReportFilterParams.GroupByInfo;
+import ru.it.lecm.reports.generators.errands.ErrandsReportFilterParams.DSGroupByInfo;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
@@ -64,10 +63,22 @@ public class ErrandsDisciplineDSProvider
 	 * Способ группировки элементов определяется параметрами отчёта
 	 * Конфигурируется:
 	 *    1) формат ссылки
-	 *    2) атрибут-источник для группирования
+	 *    2) атрибут-источник для группирования: 
+	 * в колонке данных DsDisciplineColumnNames.COL_PARAM_GROUP_BY должно
+	 * быть строковое значение с названием способа группировки. Это название
+	 * строго не регламентируется, но:
+	 * 1) оно должно быть описано двух xml-секциях:
+	 *    ErrandsReportFilterParams.XMLGROUPBY_FORMATS_MAP ("groupBy.formats")
+	 *  и ErrandsReportFilterParams.XMLGROUPBY_SOURCE_MAP ("groupBy.source")
+	 * 2) для группировки по Подразделениям, оно ДОЛЖНО СОДЕРЖАТЬ подстроку: 
+	 *    DsDisciplineColumnNames.CONTAINS_GROUP_BY_OU ("OrgUnit")
 	 */
 	final private ErrandsReportFilterParams paramsFilter = new ErrandsReportFilterParams(
-			DsDisciplineColumnNames.COL_PARAM_PERIOD, DsDisciplineColumnNames.COL_PARAM_GROUP_BY);
+				DsDisciplineColumnNames.COL_PARAM_PERIOD
+				, DsDisciplineColumnNames.COL_PARAM_GROUP_BY
+				, DsDisciplineColumnNames.CONTAINS_GROUP_BY_OU
+				, DsDisciplineColumnNames.COL_PARAM_EXEC_ORGUNIT
+	);
 
 
 	/** для упрощения работы с QName-объектами */
@@ -306,8 +317,8 @@ public class ErrandsDisciplineDSProvider
 	 */
 	private class ExecDisciplineJRDataSource extends TypedJoinDS<DisciplineGroupInfo> {
 
-		private GroupByInfo groupByInfo; // способ группировки, заполняется внутри buildJoin
-		private boolean useOUFilter; // true если использовать группировку по Подразделениям, заполняется внутри buildJoin
+		private DSGroupByInfo groupBy; // способ группировки, заполняется внутри buildJoin
+
 
 		public ExecDisciplineJRDataSource(Iterator<ResultSetRow> iterator) {
 			super(iterator);
@@ -324,9 +335,9 @@ public class ErrandsDisciplineDSProvider
 
 			/* Название подразделения или имя пользователя ... */
 			result.put( DsDisciplineColumnNames.COL_NAMEATAG
-					, (useOUFilter ? item.employee.unitName : item.employee.ФамилияИО()) );
+					, (groupBy.isUseOUFilter() ? item.employee.unitName : item.employee.ФамилияИО()) );
 
-			result.put( DsDisciplineColumnNames.COL_PARAM_GROUP_BY, this.groupByInfo.grpName);
+			result.put( DsDisciplineColumnNames.COL_PARAM_GROUP_BY, this.groupBy.getGroupByInfo().grpName);
 
 			/* Сотрудник и его Подразделение */
 			result.put( DsDisciplineColumnNames.COL_PARAM_EXEC_PERSON, item.employee.employeeId);
@@ -361,19 +372,15 @@ public class ErrandsDisciplineDSProvider
 				// final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
 
 				/* Получение формата и ссылки для выбранного groupby-Измерения из конфигурации ... */
-				this.groupByInfo = paramsFilter.getCurrentGroupBy( getReportDescriptor().getDsDescriptor());
-				qnames().setQN_ASSOC_REF( groupByInfo.grpAssocQName); // задать название ассоциации для получения Инициаторов или Подразделений
+				this.groupBy = paramsFilter.findGroupByInfo( getReportDescriptor().getDsDescriptor());
+				qnames().setQN_ASSOC_REF( groupBy.getGroupByInfo().grpAssocQName); // задать название ассоциации для получения Инициаторов или Подразделений
 
-				// использовать фильтр по организациям, если указан тип фильтрации ...  
-				this.useOUFilter = (groupByInfo != null) && (groupByInfo.grpName != null)
-							&& groupByInfo.grpName.toLowerCase().contains(DsDisciplineColumnNames.CONTAINS_GROUP_BY_OU.toLowerCase());
-				final OrgstructureBean beanOU = (useOUFilter) ? getServices().getOrgstructureService() : null;
-				String ouNodesList = null; // перечисление выбранных ID Подразделений (если указаны, то будет списком через запятую)
-				if (useOUFilter) {
-					// выбираем значения из соот-щей колонки ...
-					ouNodesList = getUONodesFromParams();
-					logger.info( String.format("group by OU, filter is [%s]", Utils.coalesce(ouNodesList, "*")));
+				final OrgstructureBean beanOU;
+				if (this.groupBy.isUseOUFilter()) {
+					beanOU = getServices().getOrgstructureService();
+					logger.info( String.format("group by OU, filter is [%s]", Utils.nonblank(this.groupBy.getNodesIdsLine(), "*")));
 				} else {
+					beanOU = null;
 					logger.info( "group by executors");
 				}
 
@@ -399,25 +406,26 @@ public class ErrandsDisciplineDSProvider
 						continue;
 					}
 
+					// прогружаем атрибуты Поручения и корректируем данные ...
+					final Map<QName, Serializable> props = nodeSrv.getProperties(errandId);
+
 					for (int i = 0; i < employees.size(); i++) {
 						final NodeRef executorId = employees.get(i).getTargetRef(); // id Сотрудника-Исполнителя 
 
 						final BasicEmployeeInfo execEmployee = new BasicEmployeeInfo( executorId); 
 
-						// если надо будет - грузим данные по подразделениям, 
-						// указав второй аргумент: getServices().getOrgstructureService()
+						// грузим данные по подразделениям, только если надо по
+						// ним группировать (указав beanOU != null)
 						execEmployee.loadProps( nodeSrv, beanOU);
+
+						if (!this.groupBy.isOUEnabled(execEmployee.unitId)) { // фильтрование по ID Подразделения
+							logger.info( String.format("Filtered out OU '%s' for executor %s '%s'", execEmployee.unitName, execEmployee.staffName, execEmployee.ФамилияИО()));
+							continue; // for i
+						}
 
 						// ипользуем как ключ либо Сотрудника, либо его Подразделение ...
 						// TODO: иметь в виду несколько должностей Сотрудников и вложенность подразделений
-						final NodeRef keyId = (this.useOUFilter) ? execEmployee.unitId : execEmployee.employeeId;
-
-						if (this.useOUFilter && ouNodesList != null) { // фильтрование по ID Подразделения
-							if ( (execEmployee.unitId == null) || !ouNodesList.contains(execEmployee.unitId.getId())) {
-								logger.info( String.format("OU '%s' for executor '%s' filtered out ...", execEmployee.unitName, execEmployee.ФамилияИО()));
-								continue; // for i
-							}
-						}
+						final NodeRef keyId = (this.groupBy.isUseOUFilter()) ? execEmployee.unitId : execEmployee.employeeId;
 
 						final DisciplineGroupInfo executor;
 						if (result.containsKey(keyId)) {
@@ -426,9 +434,6 @@ public class ErrandsDisciplineDSProvider
 							executor = new DisciplineGroupInfo(execEmployee);
 							result.put(keyId, executor);
 						}
-
-						// прогружаем атрибуты Поручения и корректируем данные ...
-						final Map<QName, Serializable> props = nodeSrv.getProperties(errandId);
 
 						// среднее время исполнения ...
 						// [ props.get(QNFLD_START_DATE), props.get(QNFLD_END_DATE) ]
@@ -471,34 +476,6 @@ public class ErrandsDisciplineDSProvider
 			logger.info( String.format( "found %s row(s)", result.size()));
 
 			return result.size();
-		}
-
-
-		/**
-		 * Получить список Подразделений организации, по которым надо фильтровать ...
-		 * @return
-		 */
-		
-		private String getUONodesFromParams() {
-			final ColumnDescriptor colOU = getReportDescriptor().getDsDescriptor()
-						.findColumnByParameter(DsDisciplineColumnNames.COL_PARAM_EXEC_ORGUNIT);
-			if (colOU != null && colOU.getParameterValue() != null) {
-				final Object val = colOU.getParameterValue().getBound1();
-				if (val != null) {
-					final String result;
-					if (val instanceof String)
-						result = (String) val;
-					else if (val instanceof String[]) {
-						final String[] arr = (String[]) val;
-						result = (arr.length > 0) ? arr[0] : null;
-					} else
-						result = val.toString();
-
-					if (result != null && result.trim().length() > 0)
-						return result.trim(); // (!) FOUND non-empty
-				}
-			}
-			return null; // not present or is empty
 		}
 
 	}

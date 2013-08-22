@@ -4,7 +4,7 @@
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 			xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports 
 			http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
-			name="exec-prod-by-executor" 
+			name="exec-prod-by-orgunit" 
 			pageWidth="842" pageHeight="595" orientation="Landscape" 
 			whenNoDataType="AllSectionsNoDetail" 
 			columnWidth="802"
@@ -24,14 +24,32 @@
 	</style>
 
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["ds-exec-prod-by-executor.xml"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["ds-exec-prod-by-orgunit.xml"]]></defaultValueExpression>
 	</parameter>
 
 	<queryString> <![CDATA[]]> </queryString>
 
+
+<!--
+	<field name="Col_Param_Person" class="java.lang.String">
+		<fieldDescription><![CDATA[Исполнитель (сотрудник)]]></fieldDescription>
+	</field>
+	<field name="Col_Param_Exec_OrgUnit" class="java.lang.String">
+		<fieldDescription><![CDATA[Подразделение исполнителя]]></fieldDescription>
+	</field>
+  -->
+
+	<field name="Col_GroupBy" class="java.lang.String">
+		<fieldDescription><![CDATA[Способ группировки]]></fieldDescription>
+	</field>
+
 	<!-- В зависимости от типа группировки, здесь будет либо Исполнитель, либо Подразделение -->
 	<field name="Col_NameTag" class="java.lang.String">
-		<fieldDescription><![CDATA[Исполнитель]]></fieldDescription>
+		<fieldDescription><![CDATA[Подразделение]]></fieldDescription>
+	</field>
+
+	<field name="Col_Period" class="java.util.Date">
+		<fieldDescription><![CDATA[Период с-по]]></fieldDescription>
 	</field>
 
 	<field name="Col_DateTime" class="java.sql.Timestamp">
@@ -58,7 +76,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Sans" size="20" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<text><![CDATA[Продуктивность Исполнителей]]></text>
+				<text><![CDATA[Продуктивность Подразделений]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -95,7 +113,7 @@
 		<band height="470" splitType="Prevent">
 			<timeSeriesChart>
 				<chart isShowLegend="true" evaluationTime="Report">
-					<reportElement uuid="636e3559-83d4-4bf1-80b8-ce330e9f2dc8" x="35" y="0" width="745" height="450"/>
+					<reportElement uuid="636e3559-83d4-4bf1-80b8-ce330e9f2dc8" x="35" y="0" width="745" height="460"/>
 					<chartTitle>
 						<!-- <titleExpression><![CDATA[Custon-Title-Expression]]></titleExpression> -->
 					</chartTitle>

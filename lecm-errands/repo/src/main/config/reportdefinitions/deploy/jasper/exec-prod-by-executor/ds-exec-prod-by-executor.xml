@@ -12,7 +12,7 @@
         <provider
             javaClass="ru.it.lecm.reports.generators.errands.ErrandsProductionsGraphDSProvider" mnem="PROVIDER_PROD_ERRANDS">
             <l18>
-                <item key="RU_RU" value="Провайдер по Продуктивности Исполнителей"/>
+                <item key="RU_RU" value="Провайдер по Продуктивности Исполнителей/Подразделений"/>
             </l18>
         </provider>
         <template
@@ -64,7 +64,7 @@
 				<![CDATA[ Инициатор {lecm-errands:initiator-assoc/cm:name}]]>
 			</item>
 
-			<!-- отсносительно Организации "lecm-orgstr:organization-element" -->
+			<!-- ссылка на организацию (отсносительно Персоны) "lecm-orgstr:organization-element" -->
 			<item key="byOrgUnit">
 				<![CDATA[ Подразделение {lecm-orgstr:element-short-name}]]>
 			</item>
@@ -74,14 +74,14 @@
 
 	<groupBy.source>
 		<map>
-			<!-- ссылка на Исполнителя (отсносительно Поручения) -->
+			<!-- ссылка на Сотрудника-Исполнителя (относительно Поручения) -->
 			<item key="byPerson">
 				<![CDATA[lecm-errands:executor-assoc]]>
 			</item>
 
-			<!-- ссылка на организацию (отсносительно Персоны) -->
+			<!-- ссылка на организацию выбирается специально провайдером через Исполнителя -->
 			<item key="byOrgUnit">
-				<![CDATA[lecm-orgstr:organization-element]]>
+				<![CDATA[lecm-errands:executor-assoc]]>
 			</item>
 
 		</map>
@@ -118,7 +118,6 @@
         </field>
 
         <!-- Исполнитель - обычный списочный параметр для Поручения -->
-
         <field alfrescoType="lecm-orgstr:employee"
             displayName="Исполнитель (сотрудник)"
             jrFldName="Col_Param_Person" order="2" queryFldName="{lecm-errands:executor-assoc}">
@@ -138,19 +137,18 @@
             </parameter>
         </field>
 
-        <field alfrescoType="lecm-links:link"
-            displayName="Подразделение инициатора"
-            jrFldName="Col_Param_Exec_OrgUnit" order="3" queryFldName="{lecm-orgstr:organization-unit}">
+        <!-- Подразделение -->
+        <field alfrescoType="lecm-orgstr:organization-unit"
+            displayName="Подразделение исполнителя" jrFldName="Col_Param_Exec_OrgUnit" order="3" 
+            queryFldName="{{Executor.OrgUnit}}">
             <l18>
-                <item key="RU_RU" value="Подразделение инициатора"/>
+                <item key="RU_RU" value="Подразделение исполнителя"/>
             </l18>
-            <!--
+<!--
             <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
                 <l18> <item key="RU_RU" value="Список"/> </l18>
-                <label1> <item key="RU_RU" value=""/> </label1>
-                <label2> <item key="RU_RU" value=""/> </label2>
             </parameter>
-             -->
+  -->
         </field>
 
         <field alfrescoType="d:text"

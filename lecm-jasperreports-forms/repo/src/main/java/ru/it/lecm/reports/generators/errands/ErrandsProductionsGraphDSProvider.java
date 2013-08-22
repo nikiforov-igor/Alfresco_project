@@ -23,11 +23,12 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.generators.LucenePreparedQuery;
-import ru.it.lecm.reports.generators.errands.ErrandsReportFilterParams.GroupByInfo;
+import ru.it.lecm.reports.generators.errands.ErrandsReportFilterParams.DSGroupByInfo;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
@@ -62,7 +63,11 @@ public class ErrandsProductionsGraphDSProvider
 	 *    2) атрибут-источник для группирования
 	 */
 	final private ErrandsReportFilterParams paramsFilter = new ErrandsReportFilterParams(
-			DsProductionsColumnNames.COL_PARAM_PERIOD , DsProductionsColumnNames.COL_PARAM_GROUP_BY);
+				DsProductionsColumnNames.COL_PARAM_PERIOD
+				, DsProductionsColumnNames.COL_PARAM_GROUP_BY
+				, DsProductionsColumnNames.CONTAINS_GROUP_BY_OU
+				, DsProductionsColumnNames.COL_PARAM_EXEC_ORGUNIT
+	);
 
 	private Date periodStart, periodEnd;
 
@@ -174,7 +179,7 @@ public class ErrandsProductionsGraphDSProvider
 		if (periodStart == null) // если не указано начало - одно-недельный период от конца ...
 			periodStart = new Date( periodEnd.getTime() - 7 * Utils.MILLIS_PER_DAY);
 		// выравнивание periodStart на начало суток ...
-		periodStart = Utils.adjustDayTime( periodStart, 0, 0, 0, 0 );
+		periodStart = Utils.adjustDayTime( periodStart, 0, 0, 0, 0 ); // начало суток
 	}
 
 	/**
@@ -184,6 +189,7 @@ public class ErrandsProductionsGraphDSProvider
 
 		/** Колонка "Группировка" - по часам, дням и  т.д. */
 		final static String COL_PARAM_GROUP_BY = "Col_GroupBy"; // String значение долно быть в секцииях конфы "groupBy.xxx"
+		final static String CONTAINS_GROUP_BY_OU = "OrgUnit"; // подстрока, которая означает группировку по организации
 
 		/** Период с ... по ... */
 		final static String COL_PARAM_PERIOD = "Col_Period"; // date, PARAM_DELTA
@@ -237,7 +243,9 @@ public class ErrandsProductionsGraphDSProvider
 	 * Структура для хранения данных о статистике по Сотруднику:
 	 * Средние значения накапливаются в обычном индексированном списке.
 	 */
-	class ProductEmployeeInfo extends BasicEmployeeInfo {
+	class ProductGroupInfo {
+
+		final private BasicEmployeeInfo employee;
 
 		/** 
 		 * Список из элементов типа "Среднее время исполнения, часов"
@@ -245,13 +253,18 @@ public class ErrandsProductionsGraphDSProvider
 		 */
 		final List<AvgValue> avgExecTimeInHours; // new AvgValue("Avg exec time, h");
 
+
 		/**
 		 * Зарегистрировать 
 		 * @param employeeId
 		 * @param maxListSize кол-во элементов в списке накопления
 		 */
-		public ProductEmployeeInfo(NodeRef employeeId, int maxListSize) {
-			super(employeeId);
+		public ProductGroupInfo(BasicEmployeeInfo employeeExec, int maxListSize) {
+			super(); // super(employeeId);
+
+			this.employee = employeeExec;
+			final NodeRef employeeId = employeeExec.employeeId;
+
 			this.avgExecTimeInHours = new ArrayList<AvgValue>(maxListSize);
 			for (int i = 0; i < maxListSize; i++) {
 				this.avgExecTimeInHours.add( new AvgValue( String.format("Avg exec time [%s], h", i)) );
@@ -345,6 +358,8 @@ public class ErrandsProductionsGraphDSProvider
 	 */
 	private class ExecProductionsJRDataSource extends TypedJoinDS<GraphPoint> {
 
+		private DSGroupByInfo groupBy; // способ группировки, заполняется внутри buildJoin
+
 		public ExecProductionsJRDataSource(Iterator<ResultSetRow> iterator) {
 			super(iterator);
 		}
@@ -364,7 +379,7 @@ public class ErrandsProductionsGraphDSProvider
 		{
 			final Map<String, Serializable> result = new LinkedHashMap<String, Serializable>();
 
-			/* Название ... */
+			/* Название подразделения или имя пользователя ... */
 			result.put( DsProductionsColumnNames.COL_NAMEATAG, item.getCol_NameTag());
 
 			/* Время ... */
@@ -433,13 +448,22 @@ public class ErrandsProductionsGraphDSProvider
 
 				// series: собранные данные по объекта (Сотрудникам или Подразделениям)
 				// Ключ здесь это название измерения (tag)
-				final Map<NodeRef, ProductEmployeeInfo> series = new HashMap<NodeRef, ProductEmployeeInfo>();
+				final Map<NodeRef, ProductGroupInfo> series = new HashMap<NodeRef, ProductGroupInfo>();
 
 				final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
 
 				/* Получение формата и ссылки для выбранного groupby-Измерения из конфигурации ... */
-				final GroupByInfo groupByInfo = paramsFilter.getCurrentGroupBy( getReportDescriptor().getDsDescriptor());
-				qnames().setQN_ASSOC_REF( groupByInfo.grpAssocQName); // задать название ассоциации для получения Инициаторов или Подразделений
+				this.groupBy = paramsFilter.findGroupByInfo( getReportDescriptor().getDsDescriptor());
+				qnames().setQN_ASSOC_REF( groupBy.getGroupByInfo().grpAssocQName); // задать название ассоциации для получения Инициаторов или Подразделений
+
+				final OrgstructureBean beanOU;
+				if (this.groupBy.isUseOUFilter()) {
+					beanOU = getServices().getOrgstructureService();
+					logger.info( String.format("group by OU, filter is [%s]", Utils.nonblank(this.groupBy.getNodesIdsLine(), "*")));
+				} else {
+					beanOU = null;
+					logger.info( "group by executors");
+				}
 
 				/* проход по всем загруженным Поручениям ... */
 				while(context.getRsIter().hasNext()) {
@@ -461,31 +485,47 @@ public class ErrandsProductionsGraphDSProvider
 						continue;
 					}
 
-					final NodeRef executorId = employees.get(0).getTargetRef(); // id Сотрудника-Исполнителя 
-
-					final ProductEmployeeInfo executor;
-					if (series.containsKey(executorId)) {
-						executor = series.get(executorId); // уже такой был ...
-					} else { // создание нового Сотрудника-Исполнителя
-						executor = new ProductEmployeeInfo(executorId, maxTimeCounter);
-						executor.loadProps( nodeSrv, null); // если надо будет - грузим данные по подразделениям, указав второй аргумент: getServices().getOrgstructureService()
-						series.put(executorId, executor);
-					}
-
 					// прогружаем атрибуты Поручения и корректируем данные ...
 					final Map<QName, Serializable> props = nodeSrv.getProperties(errandId);
 
-					if (!qnames().isПоручениеЗакрыто(props)) // поручение ещё в работе ...
-						continue;
+					for (int i = 0; i < employees.size(); i++) {
+						final NodeRef executorId = employees.get(i).getTargetRef(); // id Сотрудника-Исполнителя 
 
-					// точка X: "дата завершения" отчёта ...
-					final Date endErrand = (Date) props.get(qnames().QNFLD_END_DATE);
-					if (endErrand == null) // пропускаем не завершённые поручения
-						continue;
+						final BasicEmployeeInfo execEmployee = new BasicEmployeeInfo( executorId); 
 
-					// точка Y: "среднее время исполнения на (!) дату закрытия" ...
-					final int index = countDeltaInDays(periodStart, endErrand);
-					executor.registerDuration( index, qnames().getВремяИсполнения_мсек(props));
+						// грузим данные по подразделениям, только если надо по
+						// ним группировать (указав beanOU != null)
+						execEmployee.loadProps( nodeSrv, beanOU);
+
+						if (!this.groupBy.isOUEnabled(execEmployee.unitId)) { // фильтрование по ID Подразделения
+							logger.info( String.format("Filtered out OU '%s' for executor %s '%s'", execEmployee.unitName, execEmployee.staffName, execEmployee.ФамилияИО()));
+							continue; // for i
+						}
+
+						// ипользуем как ключ либо Сотрудника, либо его Подразделение ...
+						// TODO: иметь в виду несколько должностей Сотрудников и вложенность подразделений
+						final NodeRef keyId = (this.groupBy.isUseOUFilter()) ? execEmployee.unitId : execEmployee.employeeId;
+
+						final ProductGroupInfo executor;
+						if (series.containsKey(keyId)) {
+							executor = series.get(keyId); // уже такой был ...
+						} else { // создание нового Сотрудника-Исполнителя
+							executor = new ProductGroupInfo(execEmployee, maxTimeCounter);
+							series.put(keyId, executor);
+						}
+
+						if (!qnames().isПоручениеЗакрыто(props)) // поручение ещё в работе ...
+							continue;
+
+						// точка X: "дата завершения" отчёта ...
+						final Date endErrand = (Date) props.get(qnames().QNFLD_END_DATE);
+						if (endErrand == null) // пропускаем не завершённые поручения
+							continue;
+
+						// точка Y: "среднее время исполнения на (!) дату закрытия" ...
+						final int index = countDeltaInDays(periodStart, endErrand);
+						executor.registerDuration( index, qnames().getВремяИсполнения_мсек(props));
+					}
 
 				} // while по НД
 
@@ -495,18 +535,19 @@ public class ErrandsProductionsGraphDSProvider
 				x_curDay.setTime(periodStart);
 				for (int i = 0; i < maxTimeCounter; i++) { // цикл по дням
 					final Timestamp x_curStamp = new Timestamp(x_curDay.getTimeInMillis());
-					for (Map.Entry<NodeRef, ProductEmployeeInfo> e: series.entrySet()) { // цикл по объектам
-						final AvgValue avg = e.getValue().avgExecTimeInHours.get(i);
-						// вместо отсутствующих значениё выводим ноль - чтобы 
-						// график не "схлопывался до точки" ...
-						final float y_value = (avg != null && avg.getCount() > 0) 
-								? avg.getAvg()
-								: 0;
-						result.add( new GraphPoint(
-								  e.getValue().ФамилияИО()
-								, x_curStamp
-								, y_value
-								, "h"));
+					for (Map.Entry<NodeRef, ProductGroupInfo> e: series.entrySet()) { // цикл по объектам
+						final ProductGroupInfo item = e.getValue();
+
+						final float y_value;
+						{
+							final AvgValue avg = item.avgExecTimeInHours.get(i);
+							// вместо отсутствующих значений выводим ноль - чтобы 
+							// график не "схлопывался до точки" ...
+							y_value = (avg != null && avg.getCount() > 0) ? avg.getAvg() : 0;
+						}
+
+						final String tag = (groupBy.isUseOUFilter() ? item.employee.unitName : item.employee.ФамилияИО());
+						result.add( new GraphPoint( tag, x_curStamp, y_value, "h"));
 					}
 					x_curDay.add(Calendar.HOUR, 24); // (++) = добавляем ровно сутки
 				}

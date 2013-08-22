@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,20 @@ import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.utils.Utils;
 
 /**
- * Параметры НД для построения отчёта по поручениям (фильтр данных)
+ * Параметры НД для построения отчёта по поручениям - настройка фильтра данных
+ * Хранит название колонки НД с параметром-периодом и сконфигурированный способ
+ * группировки (из ds-ABC.xml).
+ * Способ группировки конфигурируется так:
+ *    1) формат ссылки
+ *    2) атрибут-источник для группирования: 
+ * в колонке данных DsDisciplineColumnNames.COL_PARAM_GROUP_BY должно
+ * быть строковое значение с названием способа группировки. Это название
+ * строго не регламентируется, но:
+ * 1) оно должно быть описано двух xml-секциях:
+ *    "groupBy.formats" (ErrandsReportFilterParams.XMLGROUPBY_FORMATS_MAP)
+ *  и "groupBy.source" (ErrandsReportFilterParams.XMLGROUPBY_SOURCE_MAP)
+ * 2) для группировки по Подразделениям, название группы ДОЛЖНО СОДЕРЖАТЬ подстроку: 
+ *    "OrgUnit" (DsDisciplineColumnNames.CONTAINS_GROUP_BY_OU)
  */
 public class ErrandsReportFilterParams {
 
@@ -41,13 +55,24 @@ public class ErrandsReportFilterParams {
 	 */
 	private LinkedHashMap<String, GroupByInfo> groupByMap; 
 
-	/** Названия колонок с параметрами "GroupBy" и "Period" */
-	final private String colnameGroupBy, colnamePeriod;
+	/** Названия колонок с параметрами "GroupBy", "Period" и список подразделений */
+	final private String colnameGroupBy, colnamePeriod, colnameOrgUnits;
 
-	public ErrandsReportFilterParams( String colnamePeriod, String colnameGroupBy) {
+	/**
+	 * Префикс значения колонки "GroupBy", которое будет означать использование 
+	 * фильтрации по подразделениям
+	 */
+	final private String valPrefixGroupByOU;
+
+	public ErrandsReportFilterParams( String colnamePeriod
+				, String colnameGroupBy
+				, String valPrefixGroupByOU
+				, String colnameOrgUnits ) {
 		super();
 		this.colnamePeriod = colnamePeriod;
 		this.colnameGroupBy = colnameGroupBy;
+		this.colnameOrgUnits = colnameOrgUnits;
+		this.valPrefixGroupByOU = valPrefixGroupByOU;
 	}
 
 	/** Название колонки с параметром "GroupBy" */
@@ -55,9 +80,22 @@ public class ErrandsReportFilterParams {
 		return colnameGroupBy;
 	}
 
+	/**
+	 * Префикс значения колонки "GroupBy", которое будет означать использование 
+	 * фильтрации по подразделениям
+	 */
+	public String getValPrefixGroupByOU() {
+		return valPrefixGroupByOU;
+	}
+
 	/** Название колонки с параметром "Period" */
 	public String getColnamePeriod() {
 		return colnamePeriod;
+	}
+
+	/** Название колонки с параметром список id Подразделений */
+	public String getColnameOrgUnits() {
+		return colnameOrgUnits;
 	}
 
 	private ColumnDescriptor getCheckedPeriodColumn(DataSourceDescriptor ds) {
@@ -227,5 +265,103 @@ public class ErrandsReportFilterParams {
 			logger.debug( String.format( "Config loaded for groupBy:\n%s", this.groupByMap));
 		} 
 	}
+
+	/**
+	 * Получить список Подразделений организации, по которым надо фильтровать ...
+	 * @param ds набор данных
+	 * @param colNameOrgUnits название колонки с заданными id подразделений
+	 * @return
+	 */
+	public static String getOUNodesFromParams(DataSourceDescriptor ds, String colNameOrgUnits) {
+		final ColumnDescriptor colOU = ds.findColumnByParameter(colNameOrgUnits);
+		if (colOU != null && colOU.getParameterValue() != null) {
+			final Object val = colOU.getParameterValue().getBound1();
+			if (val != null) {
+				final String result;
+				if (val instanceof String)
+					result = (String) val;
+				else if (val instanceof String[]) {
+					final String[] arr = (String[]) val;
+					result = (arr.length > 0) ? arr[0] : null;
+				} else
+					result = val.toString();
+
+				if (result != null && result.trim().length() > 0)
+					return result.trim(); // (!) FOUND non-empty
+			}
+		}
+		return null; // not present or is empty
+	}
+
+	/**
+	 * Вернуть для НД его текущеу состояние параметра "groupBy"
+	 * @param ds
+	 * @return
+	 */
+	public DSGroupByInfo findGroupByInfo( DataSourceDescriptor ds) {
+		final GroupByInfo groupByInfo = getCurrentGroupBy( ds);
+
+		// использовать фильтр по организациям, если указано значение "groupBy" 
+		// с подтекстом valPrefixGroupByOU ...  
+		final boolean useOUFilter = (groupByInfo != null)
+					&& Utils.nonblank( groupByInfo.grpName, "").toLowerCase().contains(this.valPrefixGroupByOU.toLowerCase());
+
+		final String nodesIdsLine = (useOUFilter) ? getOUNodesFromParams(ds, this.colnameOrgUnits) : null;
+
+		return new DSGroupByInfo(groupByInfo, useOUFilter, nodesIdsLine); 
+	}
+
+	/**
+	 * Контейнерный класс для описания состояния группирования в наборе данных
+	 */
+	public class DSGroupByInfo {
+		final private GroupByInfo groupByInfo;
+		final private boolean useOUFilter;
+		final private String nodesIdsLine;
+
+		private DSGroupByInfo(GroupByInfo groupByInfo, boolean useOUFilter,
+				String nodesIdsLine) {
+			super();
+			this.groupByInfo = groupByInfo;
+			this.useOUFilter = useOUFilter;
+			this.nodesIdsLine = Utils.nonblank( nodesIdsLine, null); // пустые строки воспринимаем как Null
+		}
+
+		/** Используемая группировка */
+		public GroupByInfo getGroupByInfo() {
+			return groupByInfo;
+		}
+
+		/** true, если используется группировка по Подразделениям */
+		public boolean isUseOUFilter() {
+			return useOUFilter;
+		}
+
+		/**
+		 * Строка со списком (через запятую) id подразделений. 
+		 * Значение null означает отсуствие фильтра по Подразделениям (т.е. "любое подразделение")
+		 * (имеет смысл когда useOUFilter=true, иначе всегда null) 
+		 */
+		public String getNodesIdsLine() {
+			return (useOUFilter) ? nodesIdsLine : null;
+		}
+
+		/**
+		 * Проверить, подходит ли указанное Подразделение под условия группового фильтра
+		 * (если фильтр по Подразделениям не указан - подходит любое подразделение (даже unitID = null)
+		 * , если указан списком, то проверяется, чтобы unitId имелся в этом списке)
+		 * @param unitId id Подразделения, значение null никогда не походит (return всегда будет false)
+		 * @return true, если подходит
+		 */
+		public boolean isOUEnabled(NodeRef unitId) {
+			final String filter = getNodesIdsLine();
+			return (filter == null) // фильтрование не задано -> пдходит любое значение OU
+					|| (
+						(unitId != null) // должен быть Id указан
+						&& filter.contains(unitId.getId()) // или id перечислен в фильтре
+					);
+		}
+
+	} // DSGroupByInfo
 
 }
