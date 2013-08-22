@@ -140,14 +140,21 @@
                     });
         }
 
+	    function updateView(layer, args) {
+		    var gridBublingLabel = "${args.gridBubblingLabel!''}";
+		    if (gridBublingLabel.length == 0 || gridBublingLabel == args[1].bubblingLabel) {
+			    getFilters();
+			    getStatuses();
+		    }
+	    }
+
         function init() {
             Alfresco.util.createTwister("${id}-heading", "documentsStatuses");
             setTimeout(function () {
                 LogicECM.module.Base.Util.setHeight();
             }, 10);
 
-            getFilters();
-            getStatuses();
+	        YAHOO.Bubbling.on("onSearchSuccess", updateView);
         }
 
         YAHOO.util.Event.onDOMReady(init);

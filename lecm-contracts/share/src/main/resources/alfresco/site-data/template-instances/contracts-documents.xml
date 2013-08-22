@@ -55,6 +55,7 @@
             <url>/lecm/contracts/contracts-docs-filter</url>
             <properties>
                 <active>true</active>
+	            <gridBubblingLabel>contracts-documents</gridBubblingLabel>
             </properties>
         </component>
         <!-- Filter -->
@@ -63,7 +64,7 @@
             <url>/lecm/documents/filters/author</url>
             <properties>
                 <itemType>lecm-additional-document:additionalDocument</itemType>
-                <bubblingLabel>contracts-documents</bubblingLabel>
+	            <gridBubblingLabel>contracts-documents</gridBubblingLabel>
             </properties>
         </component>
         <!-- Forbidden -->

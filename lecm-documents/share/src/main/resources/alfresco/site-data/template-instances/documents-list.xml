@@ -45,6 +45,7 @@
             <properties>
                 <itemType>{doctype}</itemType>
                 <linkPage>documents-list</linkPage>
+	            <gridBubblingLabel>documents-list</gridBubblingLabel>
             </properties>
         </component>
         <!-- Filter -->
@@ -53,7 +54,7 @@
             <url>/lecm/documents/filters/author</url>
             <properties>
                 <itemType>{doctype}</itemType>
-                <bubblingLabel>documents-list</bubblingLabel>
+	            <gridBubblingLabel>documents-list</gridBubblingLabel>
             </properties>
         </component>
         <!-- Forbidden -->

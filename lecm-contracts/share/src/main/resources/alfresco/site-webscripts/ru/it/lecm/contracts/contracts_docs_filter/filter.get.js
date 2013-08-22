@@ -1,6 +1,8 @@
 function getFilters(filterType) {
     var myConfig = new XML(config.script), filters = [];
     var queryFilterId = myConfig["queryFilter"];
+	model.queryFilterId = "" + queryFilterId;
+
     for each(var xmlFilter in myConfig[filterType].filter)
     {
         var type = xmlFilter.@type.toString();

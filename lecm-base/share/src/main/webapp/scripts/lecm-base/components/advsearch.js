@@ -293,41 +293,26 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 var me = this;
 
-                // Запуск сообщения о загрузке
-                var loadingMessage = null,
-                    timerShowLoadingMessage = null;
+	            this.loadingMessageShowing = false;
+                var loadingMessage = Alfresco.util.PopupManager.displayMessage(
+                    {
+                        displayTime:0,
+                        text:'<span class="wait">' + $html(this.msg("label.loading")) + '</span>',
+                        noEscape:true
+                    });
 
-                var fnShowLoadingMessage = function DataGrid_fnShowLoadingMessage() {
-                    if (timerShowLoadingMessage) {
-                        loadingMessage = Alfresco.util.PopupManager.displayMessage(
-                            {
-                                displayTime:0,
-                                text:'<span class="wait">' + $html(this.msg("label.loading")) + '</span>',
-                                noEscape:true
-                            });
-
-                        if (YAHOO.env.ua.ie > 0) {
-                            this.loadingMessageShowing = true;
-                        }
-                        else {
-                            loadingMessage.showEvent.subscribe(function () {
-                                this.loadingMessageShowing = true;
-                            }, this, true);
-                        }
-                    }
-                };
-
-                this.loadingMessageShowing = false;
-                timerShowLoadingMessage = YAHOO.lang.later(500, this, fnShowLoadingMessage);
+                if (YAHOO.env.ua.ie > 0) {
+                    this.loadingMessageShowing = true;
+                }
+                else {
+                    loadingMessage.showEvent.subscribe(function () {
+                        this.loadingMessageShowing = true;
+                    }, this, true);
+                }
 
                 var destroyLoaderMessage = function DataGrid__uDG_destroyLoaderMessage() {
-                    if (timerShowLoadingMessage) {
-                        // Stop the "slow loading" timed function
-                        timerShowLoadingMessage.cancel();
-                        timerShowLoadingMessage = null;
-                    }
                     if (loadingMessage) {
-                        if (this.loadingMessageShowing) {
+                        if (me.loadingMessageShowing) {
                             // Safe to destroy
                             loadingMessage.destroy();
                             loadingMessage = null;

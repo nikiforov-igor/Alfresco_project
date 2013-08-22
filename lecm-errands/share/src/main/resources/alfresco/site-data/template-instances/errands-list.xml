@@ -55,12 +55,16 @@
             <properties>
                 <itemType>lecm-errands:document</itemType>
                 <linkPage>errands-list</linkPage>
+	            <gridBubblingLabel>errands</gridBubblingLabel>
             </properties>
         </component>
         <!-- Filters -->
         <component>
             <region-id>filters</region-id>
             <url>/lecm/errands/filters</url>
+	        <properties>
+		        <gridBubblingLabel>errands</gridBubblingLabel>
+	        </properties>
         </component>
         <!-- Forbidden -->
         <component>

@@ -95,7 +95,10 @@
                 var success = {
                     fn: function () {
                         location.hash = '#filter=' + context.PREF_FILTER_ID + "|" + newValue;
-                        window.location.reload(true);
+	                    YAHOO.Bubbling.fire("datagridRefresh",
+		                    {
+			                    bubblingLabel: context.options.gridBubblingLabel
+		                    });
                     }
                 } ;
 

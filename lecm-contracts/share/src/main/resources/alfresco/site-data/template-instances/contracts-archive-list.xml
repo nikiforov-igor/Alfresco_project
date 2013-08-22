@@ -44,7 +44,7 @@
             <properties>
                 <itemType>lecm-contract:document</itemType>
                 <linkPage>contracts-archive-list</linkPage>
-                <bubblingLabel>contracts</bubblingLabel>
+	            <gridBubblingLabel>contracts</gridBubblingLabel>
             </properties>
         </component>
         <!-- Filter -->
@@ -53,7 +53,7 @@
             <url>/lecm/documents/filters/author</url>
             <properties>
                 <itemType>lecm-contract:document</itemType>
-                <bubblingLabel>contracts</bubblingLabel>
+	            <gridBubblingLabel>contracts</gridBubblingLabel>
             </properties>
         </component>
         <!-- Forbidden -->

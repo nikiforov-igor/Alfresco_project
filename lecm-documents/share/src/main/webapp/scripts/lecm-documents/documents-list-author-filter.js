@@ -72,7 +72,10 @@
                 var success = {
                     fn: function () {
                         location.hash = '#filter=' + context.PREF_FILTER_ID + "|" + context.options.docType + "/" + context.widgets.author.value;
-                        window.location.reload(true);
+	                    YAHOO.Bubbling.fire("datagridRefresh",
+		                    {
+			                    bubblingLabel: context.options.gridBubblingLabel
+		                    });
                     }
                 } ;
 

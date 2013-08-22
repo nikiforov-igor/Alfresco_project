@@ -6,7 +6,8 @@
 </#if>
 <script type="text/javascript">//<![CDATA[
     var errandsFilter = new LogicECM.module.Errands.Filter("${id}").setOptions({
-        filterOver: "${over?string}"
+        filterOver: "${over?string}",
+	    gridBubblingLabel: "${args.gridBubblingLabel!'errands'}"
     }).setMessages(${messages});
 //]]></script>
 
@@ -46,7 +47,7 @@
     </div>
     <span class="align-right yui-button" id="${id}-applyButton">
         <span class="first-child">
-           <button type="button" tabindex="1" title="Применить" onclick="errandsFilter.onApplyButtonClick()">
+           <button type="button" tabindex="1" title="Применить">
                Применить
            </button>
         </span>

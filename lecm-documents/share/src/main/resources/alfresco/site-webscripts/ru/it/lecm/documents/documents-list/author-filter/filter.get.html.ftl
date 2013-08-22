@@ -8,7 +8,7 @@ var authorFilter = new LogicECM.module.Documents.AuthorFilter("${id}").setOption
         {
             docType: ("${type}" != "") ? "${type}" : "lecm-base:document",
             filterOver: "${over?string}",
-            gridBubblingLabel: "${args.bubblingLabel!"documents"}"
+            gridBubblingLabel: "${args.gridBubblingLabel!"documents"}"
         }).setMessages(${messages});
 //]]></script>
 
@@ -28,7 +28,7 @@ var authorFilter = new LogicECM.module.Documents.AuthorFilter("${id}").setOption
     </div>
         <span class="align-right yui-button" id="${id}-applyButton">
             <span class="first-child">
-               <button type="button" tabindex="1" title="Применить" onclick="authorFilter.onApplyButtonClick()">
+               <button type="button" tabindex="1" title="Применить">
                    Применить
                </button>
             </span>
