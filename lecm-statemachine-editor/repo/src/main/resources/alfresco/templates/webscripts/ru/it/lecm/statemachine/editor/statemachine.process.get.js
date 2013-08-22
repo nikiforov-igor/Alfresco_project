@@ -5,6 +5,7 @@ if (statemachineId != null && statemachineId != '') {
 	var machinesFolder = lecmRepository.getHomeRef().childByNamePath("statemachines");
 	if (machinesFolder == null) {
 		machinesFolder = lecmRepository.getHomeRef().createNode("statemachines", "cm:folder", "cm:contains");
+        machinesFolder.setInheritsPermissions(false);
 	}
 
 	var machine = null;
