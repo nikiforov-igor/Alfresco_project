@@ -16,6 +16,7 @@
 		<property name="contentService" ref="contentService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="signedDocflowService" ref="signedDocflowService"/>
+		<property name="behaviourFilter" ref="policyBehaviourFilter"/>
 	</bean>
 
 	<bean id="lecm.signed-docflow.model-bootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">

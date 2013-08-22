@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Holder;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.repository.ContentIOException;
 import org.alfresco.service.cmr.repository.ContentReader;
@@ -60,6 +61,7 @@ public class UnicloudService {
 	private ContentService contentService;
 	private TransactionService transactionService;
 	private SignedDocflow signedDocflowService;
+	private BehaviourFilter behaviourFilter;
 
 	public void setGateWcfService(IGateWcfService gateWcfService) {
 		this.gateWcfService = gateWcfService;
@@ -83,6 +85,10 @@ public class UnicloudService {
 
 	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
 		this.signedDocflowService = signedDocflowService;
+	}
+
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+		this.behaviourFilter = behaviourFilter;
 	}
 
 	public void init() {
@@ -190,12 +196,17 @@ public class UnicloudService {
 	}
 
 	private void addDocumentIdToContent(final NodeRef contentRef, final String documentId) {
-		if (nodeService.getAspects(contentRef).contains(SignedDocflowModel.ASPECT_DOCUMENT_ID)) {
-			nodeService.setProperty(contentRef, SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
-		} else {
-			Map<org.alfresco.service.namespace.QName, Serializable> properties = new HashMap<org.alfresco.service.namespace.QName, Serializable>();
-			properties.put(SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
-			nodeService.addAspect(contentRef, SignedDocflowModel.ASPECT_DOCUMENT_ID, properties);
+		behaviourFilter.disableBehaviour(contentRef, ContentModel.ASPECT_VERSIONABLE);
+		try {
+			if (nodeService.getAspects(contentRef).contains(SignedDocflowModel.ASPECT_DOCUMENT_ID)) {
+				nodeService.setProperty(contentRef, SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
+			} else {
+				Map<org.alfresco.service.namespace.QName, Serializable> properties = new HashMap<org.alfresco.service.namespace.QName, Serializable>();
+				properties.put(SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
+				nodeService.addAspect(contentRef, SignedDocflowModel.ASPECT_DOCUMENT_ID, properties);
+			}
+		} finally {
+			behaviourFilter.enableBehaviour(contentRef, ContentModel.ASPECT_VERSIONABLE);
 		}
 	}
 
