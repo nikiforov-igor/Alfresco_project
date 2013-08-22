@@ -13,8 +13,8 @@
         </#if>
         "title":    "${record.properties["lecm-errands:title"]?string}",
         "number":   "${record.properties["lecm-errands:number"]?string}",
-        "executor": "${record.assocs["lecm-errands:executor-assoc"][0].nodeRef?string}",
-        "executor_name" : "${record.properties["lecm-errands:executor-assoc-text-content"]?string}",
+        "initiator": "${record.assocs["lecm-errands:initiator-assoc"][0].nodeRef?string}",
+        "initiator_name" : "${record.properties["lecm-errands:initiator-assoc-text-content"]?string}",
         "isExpired":   "${record.properties["lecm-errands:is-expired"]?string}",
         "isImportant": "${record.properties["lecm-errands:is-important"]?string}"
     }
