@@ -15,8 +15,7 @@ public class isCreatorEvaluator extends BaseEvaluator{
 
 	@Override
 	public boolean evaluate(JSONObject jsono) {
-		String userName = getUserId();		
-		return getProperty(jsono, "cm:creator").equals(userName);
+		return getMatchesCurrentUser(jsono, "cm:creator");
 	}
 	
 }
