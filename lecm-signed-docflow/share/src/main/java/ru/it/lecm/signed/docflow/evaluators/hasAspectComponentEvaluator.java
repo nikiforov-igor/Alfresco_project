@@ -5,7 +5,6 @@
 package ru.it.lecm.signed.docflow.evaluators;
 
 import java.util.Map;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.surf.RequestContext;
 import org.springframework.extensions.surf.extensibility.impl.DefaultSubComponentEvaluator;
 
@@ -14,20 +13,20 @@ import org.springframework.extensions.surf.extensibility.impl.DefaultSubComponen
  * @author ikhalikov
  */
 public class hasAspectComponentEvaluator extends DefaultSubComponentEvaluator{
-	
+
 	private EvaluatorsUtil evaluatorsUtil;
 
 	public void setEvaluatorsUtil(EvaluatorsUtil evaluatorsUtil) {
 		this.evaluatorsUtil = evaluatorsUtil;
 	}
-	
+
 	@Override
 	public boolean evaluate(RequestContext context, Map<String, String> params) {
 		String nodeRef = params.get("nodeRef");
 		String aspect = params.get("aspect");
 		return evaluatorsUtil.hasAspect(nodeRef, aspect);
-		
-		
+
+
 	}
-	
+
 }

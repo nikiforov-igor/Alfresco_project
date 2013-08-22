@@ -4,7 +4,6 @@
  */
 package ru.it.lecm.signed.docflow.evaluators;
 
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
@@ -16,17 +15,17 @@ import org.springframework.extensions.webscripts.connector.ResponseStatus;
  *
  * @author ikhalikov
  */
-public class EvaluatorsUtil { 
-	
+public class EvaluatorsUtil {
+
 	private final static Log logger = LogFactory.getLog(EvaluatorsUtil.class);
 	private ScriptRemote scriptRemote;
 
 	public void setScriptRemote(ScriptRemote scriptRemote) {
 		this.scriptRemote = scriptRemote;
 	}
-	
+
 	public boolean hasBusinessRoleOrBoss(String userName, String roleId){
-		
+
 		String url = "/lecm/signed/docflow/signPermission?action=signPermission&userName=" + userName + "&roleId=" + roleId;
 		Response response = scriptRemote.connect("alfresco").get(url);
 		try {
@@ -41,9 +40,9 @@ public class EvaluatorsUtil {
 		}
 		return false;
 	}
-	
+
 	public boolean hasAspect(String nodeRef, String aspect){
-		
+
 		String url = "/lecm/signed/docflow/signPermission?action=hasAspect&nodeRef=" + nodeRef + "&aspect=" + aspect;
 		Response response = scriptRemote.connect("alfresco").get(url);
 		try {
