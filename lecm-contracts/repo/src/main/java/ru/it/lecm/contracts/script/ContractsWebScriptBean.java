@@ -228,8 +228,11 @@ public class ContractsWebScriptBean extends BaseWebScript {
         }
 
         if (queryFilterId != null && !queryFilterId.isEmpty()) {
-            String filterId = DocumentService.PREF_DOCUMENTS + "." +
-                    ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT.toPrefixString(namespaceService).replaceAll(":", "_") + "." + queryFilterId;
+            String filterId = DocumentService.PREF_DOCUMENTS + ".";
+	        if (!activeDocs) {
+		        filterId += "archive.";
+	        }
+	        filterId += ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT.toPrefixString(namespaceService).replaceAll(":", "_") + "." + queryFilterId;
             String currentUser = authService.getCurrentUserName();
             Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, filterId);
             Serializable filterPref = preferences.get(filterId);

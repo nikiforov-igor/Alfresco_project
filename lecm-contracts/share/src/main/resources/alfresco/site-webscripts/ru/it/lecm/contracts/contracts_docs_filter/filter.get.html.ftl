@@ -37,7 +37,7 @@
 						    fn:function(response){
 							    var result = response.json;
 							    if (result){
-//								    YAHOO.util.Dom.get(containerId).innerHTML = result.length;
+								    YAHOO.util.Dom.get(containerId).innerHTML = result.length;
 							    }
 						    }
 					    },
