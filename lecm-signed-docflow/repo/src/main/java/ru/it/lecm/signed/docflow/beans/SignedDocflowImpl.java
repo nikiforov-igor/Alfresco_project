@@ -497,5 +497,9 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		return result;
 	}
 
+	@Override
+	public boolean isOurSignature(NodeRef signatureRef) {
+		return (Boolean) nodeService.getProperty(signatureRef, SignedDocflowModel.PROP_IS_OUR);
+	}
 
 }

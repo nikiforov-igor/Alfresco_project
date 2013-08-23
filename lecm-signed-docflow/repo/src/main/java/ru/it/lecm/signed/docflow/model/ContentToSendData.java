@@ -27,6 +27,11 @@ public class ContentToSendData {
 	private String email;
 
 	/**
+	 * Является ли контент вложением документа
+	 */
+	private boolean isDocumentAttachment;
+
+	/**
 	 * способ взаимодействия с контрагентом
 	 * SPECOP - через спецоператора
 	 * EMAIL - посредством электронной почты
@@ -64,4 +69,13 @@ public class ContentToSendData {
 	public void setInteractionType(String interactionType) {
 		this.interactionType = interactionType;
 	}
+
+	public boolean isDocumentAttachment() {
+		return isDocumentAttachment;
+	}
+
+	public void setIsDocumentAttachment(boolean isDocumentAttachment) {
+		this.isDocumentAttachment = isDocumentAttachment;
+	}
+
 }

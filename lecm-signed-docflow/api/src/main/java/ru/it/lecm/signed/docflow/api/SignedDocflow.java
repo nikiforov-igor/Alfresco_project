@@ -111,4 +111,10 @@ public interface SignedDocflow {
 	void addAttributesToOrganization();
 
 	void addAttributesToPersonalData();
+
+	/**
+	 * @param signatureRef NodeRef на объект подписи
+	 * @return является ли данная подпись подписью нашей организации
+	 */
+	boolean isOurSignature(NodeRef signatureRef);
 }
