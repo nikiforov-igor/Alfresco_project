@@ -7,6 +7,7 @@
 <#assign controlId = id + "-cntrl">
 <#assign containerId = id + "-container">
 <#assign viewFormId = id+ "-view">
+<#assign canEditExecutionReport = roles.isExecutor && hasAttrEditPerm && isEditableExecutionReport>
 
 <#if node??>
 <#assign props = node.properties/>
@@ -56,18 +57,20 @@
 			</#if>
 	        initChildErrands('${id}');
 
-            var limitDate = "${limitDate.iso8601}";
-            if (limitDate !== "") {
-                var localLimitDate = Alfresco.util.fromISO8601(limitDate);
-                Dom.get("${id}-limitation-date").innerHTML = localLimitDate.toString(dateDisplayControlMsg("form.control.date-picker.entry.date.format"));
+            <#if limitDate?? && limitDate.iso8601??>
+                var limitDate = "${limitDate.iso8601}";
+                if (limitDate !== "") {
+                    var localLimitDate = Alfresco.util.fromISO8601(limitDate);
+                    Dom.get("${id}-limitation-date").innerHTML = localLimitDate.toString(dateDisplayControlMsg("form.control.date-picker.entry.date.format"));
 
-                var month = localLimitDate.getMonth() + 1;
-                var date = localLimitDate.getDate();
-                var hours = localLimitDate.getHours();
-                var minutes = localLimitDate.getMinutes();
-                Dom.get("errandLimitationDate").value = localLimitDate.getFullYear() + "-" + (month < 10 ? "0" : "") + month + "-" + (date < 10 ? "0" : "") + date + "T"
-                        + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
-            }
+                    var month = localLimitDate.getMonth() + 1;
+                    var date = localLimitDate.getDate();
+                    var hours = localLimitDate.getHours();
+                    var minutes = localLimitDate.getMinutes();
+                    Dom.get("errandLimitationDate").value = localLimitDate.getFullYear() + "-" + (month < 10 ? "0" : "") + month + "-" + (date < 10 ? "0" : "") + date + "T"
+                            + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+                }
+            </#if>
         }
 
         function dateDisplayControlMsg(messageId) {
@@ -126,21 +129,29 @@
 			    var execReportElement = YAHOO.util.Dom.get(htmlId + "-setExecutionReport-textarea");
 			    if (execReportElement != null) {
 				    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-report-set", function() {
+                        if (setExecutionReport == null) {
+                            return;
+                        }
+
 					    Alfresco.util.Ajax.jsonRequest(
-							    {
-								    method: "POST",
-								    url: Alfresco.constants.PROXY_URI + "lecm/errands/api/setExecutionReport",
-								    dataObj: {
-									    nodeRef: "${nodeRef}",
-									    executionReport: execReportElement.value
-								    },
-								    successMessage: "${msg("message.setExecutionReport.success")}",
-								    failureMessage: "${msg("message.setExecutionReport.failure")}"
-							    });
+                            {
+                                method: "POST",
+                                url: Alfresco.constants.PROXY_URI + "lecm/errands/api/setExecutionReport",
+                                dataObj: {
+                                    nodeRef: "${nodeRef}",
+                                    executionReport: setExecutionReport.editor.getContent()
+                                },
+                                successMessage: "${msg("message.setExecutionReport.success")}",
+                                failureMessage: "${msg("message.setExecutionReport.failure")}"
+                            });
 				    });
 
 				    Alfresco.util.createYUIButton(YAHOO.util.Dom.get(htmlId), "exec-report-reset", function() {
-					    execReportElement.value = "";
+                        if (setExecutionReport == null) {
+                            return;
+                        }
+
+                        setExecutionReport.editor.clear();
 				    });
 			    }
 		    }
@@ -164,6 +175,29 @@
     //]]>
 </script>
 
+<#if canEditExecutionReport>
+    <script type="text/javascript">//<![CDATA[
+        var setExecutionReport = new LogicECM.RichTextControl("${id}-setExecutionReport-textarea").setOptions(
+            {
+                editorParameters: {
+                    height: 100,
+                    width: 700,
+                    inline_styles: false,
+                    convert_fonts_to_spans: false,
+                    theme: 'advanced',
+                    theme_advanced_toolbar_location: "top",
+                    theme_advanced_toolbar_align: "left",
+                    theme_advanced_statusbar_location: "bottom",
+                    theme_advanced_path: false,
+                    language: "${locale?substring(0, 2)?js_string}",
+                    theme_advanced_resizing: true,
+                    theme_advanced_buttons1: "bold,italic,underline,separator,bullist,numlist,separator,forecolor,separator,undo,redo,removeformat",
+                    theme_advanced_buttons2: null,
+                    theme_advanced_buttons3: null
+                }
+            });
+    //]]></script>
+</#if>
 
 <div id="${id}_metadata" class="metadata-form errands-main-form">
     <div id="${id}-form-fields" class="form-fields">
@@ -378,26 +412,31 @@
                 </ul>
             </div>
             <div id="${id}-exec-report" class="exec-report">
-                <span class="heading">${msg("message.errands.executionReport")}</span> <br/>
-                <div>
-                    <textarea id="${id}-setExecutionReport-textarea" rows="" cols="" <#if !roles.isExecutor || !hasAttrEditPerm || !isEditableExecutionReport>disabled="disabled" </#if>>${props["lecm-errands:execution-report"]!""}</textarea>
-                </div>
-				<#if roles.isExecutor && hasAttrEditPerm && isEditableExecutionReport>
-	                <div>
-	                    <span id="${id}-exec-report-set" class="yui-button yui-push-button">
-	                        <span class="first-child">
-	                            <button>${msg("message.errands.executionReport.save")}</button>
-	                        </span>
-	                    </span>
-	                    <br/>
-	                    <span id="${id}-exec-report-reset" class="yui-button yui-push-button">
-	                        <span class="first-child">
-	                            <button>${msg("message.errands.executionReport.clear")}</button>
-	                        </span>
-	                    </span>
-	                </div>
-				</#if>
+                <span class="heading">${msg("message.errands.executionReport")}</span>
             </div>
+            <div class="form-field" style="padding-left: 50px; padding-right: 10px;">
+                <#if canEditExecutionReport>
+                    <textarea id="${id}-setExecutionReport-textarea" rows="" cols="">${props["lecm-errands:execution-report"]!""}</textarea>
+                <#else>
+                    <div style="overflow: auto; border: 1px solid #CCC; border-radius: 3px; padding: 2px; width: 500px; height: 100px; background-color: rgb(235, 235, 228);">${props["lecm-errands:execution-report"]!""}</div>
+                </#if>
+            </div>
+            <#if canEditExecutionReport>
+                <div>
+                    <span id="${id}-exec-report-set" class="yui-button yui-push-button" style="width: 84px;">
+                        <span class="first-child">
+                            <button>${msg("message.errands.executionReport.save")}</button>
+                        </span>
+                    </span>
+                    <br/>
+                    <span id="${id}-exec-report-reset" class="yui-button yui-push-button" style="margin-top: 10px; width: 84px;">
+                        <span class="first-child">
+                            <button>${msg("message.errands.executionReport.clear")}</button>
+                        </span>
+                    </span>
+                </div>
+            </#if>
+            <div style="clear: both;"></div>
         </div>
         <div class="line"></div>
         <#-- КОНТРОЛЬ ИСПОЛНЕНИЯ -->
