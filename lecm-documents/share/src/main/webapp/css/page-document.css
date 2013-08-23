@@ -144,11 +144,11 @@
 
 /* Forms */
 
-.form-container .form-fields {
+div.form-container .form-fields {
     border-bottom: medium none;
     padding: 0 1em;
 }
-.yui-panel.form-container .form-fields {
+div.yui-panel.form-container .form-fields {
     padding-top: 1em;
 }
 

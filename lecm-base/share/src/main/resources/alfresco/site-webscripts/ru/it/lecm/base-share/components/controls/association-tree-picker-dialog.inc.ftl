@@ -1,54 +1,6 @@
 <#macro renderTreePickerDialogHTML controlId plane showSearch>
 <#assign pickerId = controlId + "-picker">
-<div id="${pickerId}" class="picker yui-panel tree-picker" style="display: none;">
-
-    <style type="text/css" media="screen">
-        #${pickerId}-searchContainer {
-            padding: 0;
-            margin: 0;
-            text-align: left;
-            width: 100%;
-        }
-        #${pickerId}-view-selector { margin-left: 1%; }
-        #${pickerId}-dataTable {
-            <#if plane>
-                width: 100%;
-            </#if>
-        }
-        #${pickerId}-userDetails { margin-left: 1% }
-        #${pickerId}-group-members thead { display: none; }
-        #${pickerId}-group-members table { border: none; width: 100% }
-        #${pickerId}-group-members td { border-right: none; }
-
-        #${pickerId}-groups td { text-align: left; }
-        div.tree-picker div.picker-groups td {
-            text-align: left;
-        }
-
-        #${pickerId}-searchText {
-            width: 410px;
-            padding: 0.3em 1em 0.4em 0.5em;
-        }
-        div.tree-picker div.search input.search-input {
-            width: 410px;
-            padding: 0.3em 1em 0.4em 0.5em;
-        }
-
-        #${pickerId}-view-selector { padding-top: 0.7em; }
-        #${pickerId}-view-roles, #${pickerId}-view-people { padding-left: 1em; }
-
-        .picker .bd > div:not(.bdft) {
-            margin: 0 2px;
-        }
-        .picker .bd > div:not(.bdft):first-of-type {
-            padding-top: 10px;
-        }
-        .picker .bd div.yui-gb,
-        .picker .bd div.yui-g {
-            margin-bottom: 10px;
-        }
-
-    </style>
+<div id="${pickerId}" class="picker yui-panel tree-picker">
 
     <div id="${pickerId}-head" class="hd">${msg("form.control.object-picker.header")}</div>
 
@@ -72,8 +24,8 @@
                     </div>
                 </div>
             </#if>
-            <div id="${pickerId}-dataTable" <#if !plane>class="yui-u panel-right"</#if>>
-                <div id="${pickerId}-group-members" class="picker-items"></div>
+            <div id="${pickerId}-dataTable" class="<#if !plane>yui-u panel-right<#else>width100</#if>">
+                <div id="${pickerId}-group-members" class="picker-items group-members"></div>
             </div>
         </div>
 
