@@ -4,19 +4,6 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.it.ru/logicECM/errands/workflow/requestCancel/1.0">
     <process id="errandsRequestCancel" name="Запросить отмену поручения">
-
-        <extensionElements>
-            <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
-                <activiti:field name="script">
-                    <activiti:string><![CDATA[
-	                        var document = bpm_package.children[0];
-                            document.properties["lecm-errands-aspect:isCancelRequested"] = false;
-                            document.save();
-					]]></activiti:string>
-                </activiti:field>
-            </activiti:executionListener>
-        </extensionElements>
-
         <startEvent id="startRequestCancel" name="Start" activiti:formKey="lecmErrandWf:requestCancel"></startEvent>
         <endEvent id="endRequestCancel" name="End"></endEvent>
         <scriptTask id="requestCancel" name="RequestCancel" scriptFormat="javascript">
@@ -151,6 +138,10 @@
 								    }
 							    }
 						    }
+
+                            var document = bpm_package.children[0];
+                            document.properties["lecm-errands-aspect:isCancelRequested"] = false;
+                            document.save();
 					    ]]></activiti:string>
 				    </activiti:field>
 			    </activiti:taskListener>
