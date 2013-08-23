@@ -5,6 +5,7 @@
                 <js src="/scripts/lecm-errands/errands-const.js" />
 	            <js src="/scripts/lecm-errands/constraints/errands-request-cancel-new-executor-validator.js"/>
 	            <js src="/scripts/lecm-errands/constraints/errands-request-change-due-date-validator.js"/>
+	            <js src="/scripts/lecm-errands/constraints/errands-limitation-date-validator.js"/>
             </dependencies>
            <default-controls>
                 <type name="association:lecm-errands-dic:errand-titles" template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
@@ -84,7 +85,11 @@
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="set1"/>
+                    <field id="lecm-errands:limitation-date" set="set1" mandatory="true">
+	                    <constraint-handlers>
+		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+	                    </constraint-handlers>
+                    </field>
                     <field id="lecm-errands:title" set="set2">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -279,7 +284,11 @@
                     <field id="lecm-errands:content" set="main">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="main"/>
+                    <field id="lecm-errands:limitation-date" set="main" mandatory="true">
+	                    <constraint-handlers>
+		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+	                    </constraint-handlers>
+                    </field>
                     <field id="lecm-errands:attachments-temp-assoc" set="main">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
 			                <control-param name="uploadDirectoryPath">{userhome}</control-param>
@@ -475,7 +484,10 @@
                     <field id="lecm-errands:content" set="main">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="main">
+                    <field id="lecm-errands:limitation-date" set="main" mandatory="true">
+	                    <constraint-handlers>
+		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+	                    </constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="maxLimitArg">parentLimitationDate</control-param>
                         </control>
