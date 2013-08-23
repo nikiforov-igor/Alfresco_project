@@ -103,11 +103,41 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			cryptoAppletModule.loadSign(this.options.nodeRef);
 		},
 
-		onSendDocument: function(event) {
-			Alfresco.util.PopupManager.displayMessage({
-				text: "Отправка документа контрагенту"
+		onSendDocument: function() {
+			var form = new Alfresco.module.SimpleDialog(this.id + "-send-to-contractor-form");
+
+			form.setOptions({
+				width: "50em",
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+				templateRequestParams: {
+					itemKind: "type",
+					itemId: "lecm-contractor:contractor-type",
+					mode: "create",
+					submitType: "json",
+					showCancelButton: "true",
+					formId: "send-to-contractor"
+				},
+				destroyOnHide: true,
+				contentRef: this.options.nodeRef,
+				doBeforeDialogShow:{
+					fn: function(form, dialog) {
+						dialog.dialog.setHeader("Отправка контрагенту");
+					}
+				},
+				onFailure: {
+					fn: function() {
+						Alfresco.util.PopupManager.displayMessage({
+							text: "Не удалось получить форму отправки, попробуйте ещё раз"
+						});
+					}
+				}
 			});
-			cryptoAppletModule.SendToContragent(this.options.nodeRef);
+
+			form.show();
+			// 1. Вызов формы отправки КА
+			// 2. UC Service
+
+			//cryptoAppletModule.SendToContragent(this.options.nodeRef);
 			
 		},
 

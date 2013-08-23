@@ -449,7 +449,7 @@ var cryptoAppletModule = (function () {
 			return {"guidSign" : GUIDsign, "timestamp" : TS.toString('yyyy-MM-dd hh:mm'), "timestampSign" : TSsign};
 		},
 		
-		unicloudAuth : function(container) {
+		unicloudAuth : function(container, authSuccessCallback) {
 			var GUIDsign = signApplet.sign("GUID", "String");
 			var TS = new Date();
 			var TSsign = signApplet.sign(TS.toString('yyyy-MM-dd hh:mm'), "String");
@@ -464,6 +464,7 @@ var cryptoAppletModule = (function () {
                         var resultText = '';
                         if(status == "OK"){
                         	resultText = 'Аутенфикация прошла успешно';
+							authSuccessCallback();
                         } else {
                         	resultText = 'Не удалось аутенфицироваться';
                         }
@@ -485,44 +486,47 @@ var cryptoAppletModule = (function () {
 
 		showAuthenticateForm: function() {
 			var templateUrl = "lecm/components/form"
-                + "?itemKind={itemKind}"
-                + "&itemId={itemId}"
-                + "&mode={mode}"
-                + "&submitType={submitType}"
-                + "&showCancelButton=true"
-                + "&formId={formId}";
-            var url = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + templateUrl, {
-                itemKind: "type",
-                itemId: "lecm-orgstr:employees",
-                mode: "create",
-                submitType: "json",
-                formId: "auth-form"
-            });
-                var sd = new Alfresco.module.SimpleDialog("dialog");
-                sd.setOptions({
-                width: "20em",
-                templateUrl: url,
-                actionUrl: null,
-                destroyOnHide: true,
-                doBeforeDialogShow: { 
-                	fn: function ( p_form, p_dialog ) {
-					p_dialog.dialog.setHeader( "Аутенфикация Unicloud" );
-					}               
-                },             
-                doBeforeAjaxRequest: {
-                	fn: function(){
-	                	if(!CurrentContainer) {
+				+ "?itemKind={itemKind}"
+				+ "&itemId={itemId}"
+				+ "&mode={mode}"
+				+ "&submitType={submitType}"
+				+ "&showCancelButton=true"
+				+ "&formId={formId}";
+
+			var url = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + templateUrl, {
+				itemKind: "type",
+				itemId: "lecm-orgstr:employees",
+				mode: "create",
+				submitType: "json",
+				formId: "auth-form"
+			});
+
+			var sd = new Alfresco.module.SimpleDialog("dialog");
+			sd.setOptions({
+				width: "50em",
+				templateUrl: url,
+				actionUrl: null,
+				destroyOnHide: true,
+				doBeforeDialogShow: {
+					fn: function ( p_form, p_dialog ) {
+						p_dialog.dialog.setHeader( "Аутенфикация Unicloud" );
+					}
+				},
+				doBeforeAjaxRequest: {
+					fn: function() {
+						if(!CurrentContainer) {
 							Alfresco.util.PopupManager.displayMessage({
 								text: 'Необходимо выбрать сертификат!'
 							});
-							return;
+							return false;
 						}
 						cryptoAppletModule.unicloudAuth(CurrentContainer);
-                	}
-            	}
-                }).show();
+						return false;
+					}
+				}
+			}).show();
 
-		},		
+		},
 		
 		Bang : function() {
 			var templateUrl = "lecm/components/form"
