@@ -418,6 +418,7 @@ var cryptoAppletModule = (function () {
 		getCertsInfo : function() {
 			var result = [];
 			var containers = signApplet.getService().getKeyStoreList().split('###');
+			var finalCount = 0;
 			for(var i=0; i<containers.length; i++) {
 				
 				var Info = {};
@@ -427,16 +428,16 @@ var cryptoAppletModule = (function () {
 					console.log("bad container");
 					continue;
 				}
-				result[i] = {};
+				result[finalCount] = {};
 				var certIssued = Info.certIssued;
-				result[i].container = containers[i];
+				result[finalCount].container = containers[i];
 				var tmp = certIssued.match('CN=(.+?)(?=,)'); 
-				if (tmp) result[i].SubjectName = tmp[1];
+				if (tmp) result[finalCount].SubjectName = tmp[1];
 				tmp = certIssued.match('O=(.+?)(?=,)');
-				if (tmp) result[i].Organization = tmp[1];
+				if (tmp) result[finalCount].Organization = tmp[1];
 				tmp = certIssued.match('OU=(.+?)(?=,)');
-				if (tmp) result[i].OrgUnit = tmp[1];
-
+				if (tmp) result[finalCount].OrgUnit = tmp[1];
+				finalCount++;
 			}
 			return result;
 		},
@@ -459,11 +460,68 @@ var cryptoAppletModule = (function () {
                 dataObj: dataObj,
                 successCallback: {
                     fn: function(response) {
-                        alert(response.json.timestamp);
+                        var status = response.json.gateResponse.responseType;
+                        var resultText = '';
+                        if(status == "OK"){
+                        	resultText = 'Аутенфикация прошла успешно';
+                        } else {
+                        	resultText = 'Не удалось аутенфицироваться';
+                        }
+                        Alfresco.util.PopupManager.displayMessage({
+							text: resultText
+						});
                     }
+                },
+                failureCallback: {
+                	fn: function(){
+                		Alfresco.util.PopupManager.displayMessage({
+							text: 'Не удалось аутенфицироваться'
+						});
+                	}
                 }
                 
             });
+		},
+
+		showAuthenticateForm: function() {
+			var templateUrl = "lecm/components/form"
+                + "?itemKind={itemKind}"
+                + "&itemId={itemId}"
+                + "&mode={mode}"
+                + "&submitType={submitType}"
+                + "&showCancelButton=true"
+                + "&formId={formId}";
+            var url = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + templateUrl, {
+                itemKind: "type",
+                itemId: "lecm-orgstr:employees",
+                mode: "create",
+                submitType: "json",
+                formId: "auth-form"
+            });
+                var sd = new Alfresco.module.SimpleDialog("dialog");
+                sd.setOptions({
+                width: "20em",
+                templateUrl: url,
+                actionUrl: null,
+                destroyOnHide: true,
+                doBeforeDialogShow: { 
+                	fn: function ( p_form, p_dialog ) {
+					p_dialog.dialog.setHeader( "Аутенфикация Unicloud" );
+					}               
+                },             
+                doBeforeAjaxRequest: {
+                	fn: function(){
+	                	if(!CurrentContainer) {
+							Alfresco.util.PopupManager.displayMessage({
+								text: 'Необходимо выбрать сертификат!'
+							});
+							return;
+						}
+						cryptoAppletModule.unicloudAuth(CurrentContainer);
+                	}
+            	}
+                }).show();
+
 		},		
 		
 		Bang : function() {
