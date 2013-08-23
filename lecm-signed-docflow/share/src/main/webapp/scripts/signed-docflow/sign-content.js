@@ -55,7 +55,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			form.setOptions({
 				width: "50em",
-				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
 				templateRequestParams: {
 					itemKind: "type",
 					itemId: "lecm-signed-docflow:sign",
@@ -108,7 +108,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			form.setOptions({
 				width: "50em",
-				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
 				templateRequestParams: {
 					itemKind: "type",
 					itemId: "lecm-contractor:contractor-type",
@@ -138,7 +138,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			// 2. UC Service
 
 			//cryptoAppletModule.SendToContragent(this.options.nodeRef);
-			
+
 		},
 
 		onSignaturesReceived: function(event) {
