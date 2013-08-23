@@ -393,6 +393,7 @@
                 <value>lecm-errands:is-important</value>
                 <value>lecm-errands:just-in-time</value>
                 <value>lecm-errands:is-short</value>
+                <value>lecm-errands:limitation-date</value>
             </list>
         </property>
         <property name="assocsToCopy">
