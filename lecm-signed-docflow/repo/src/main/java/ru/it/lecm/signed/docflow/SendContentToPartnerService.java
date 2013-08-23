@@ -36,11 +36,13 @@ import ru.it.lecm.signed.docflow.model.ContentToSendData;
  */
 public class SendContentToPartnerService {
 
+	private final static Log logger = LogFactory.getLog(SendContentToPartnerService.class);
 	private final static String SPECOP = "SPECOP";
 	private final static String EMAIL = "EMAIL";
 	private final static String BJ_MESSAGE_SEND_ATTACHMENT = "#initiator направил контрагенту #object1 вложение #mainObject к документу #object2.";
 	private final static String BJ_MESSAGE_SEND_CONTENT = "#initiator направил контрагенту #object1 файл #mainObject.";
 	private final static QName ASSOC_CONTRACT_PARTNER = QName.createQName("http://www.it.ru/logicECM/contract/1.0", "partner-assoc");
+
 	private NodeRef documentAttachmentMailTemplate;
 	private NodeRef contentMailTemplate;
 	private NodeService nodeService;
@@ -53,7 +55,6 @@ public class SendContentToPartnerService {
 	private SignedDocflow signedDocflowService;
 	private FileFolderService fileFolderService;
 	private ZipSignedContentService zipSignedContentService;
-	private final static Log logger = LogFactory.getLog(SendContentToPartnerService.class);
 
 	public void init() {
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
@@ -191,13 +192,8 @@ public class SendContentToPartnerService {
 		return effectiveEmail;
 	}
 
-	private void nodeLock(List<NodeRef> nodeRefList) {
-		lockService.lock(nodeRefList, LockType.NODE_LOCK, 0);
-	}
-
 	public List<Map<String, Object>> send(ContentToSendData contentToSend) {
 		List<NodeRef> contentList = contentToSend.getContent();
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>(contentList.size());
 		NodeRef contentRef = contentList.get(0);
 		NodeRef partnerRef = getEffectivePartner(contentRef, contentToSend.getPartner());
 		String interactionType = getEffectiveInteractionType(partnerRef, contentToSend.getInteractionType());
@@ -208,8 +204,7 @@ public class SendContentToPartnerService {
 		contentToSend.setInteractionType(interactionType);
 		contentToSend.setEmail(email);
 
-		nodeLock(contentList);
-
+		List<Map<String, Object>> result;
 		if (SPECOP.equals(interactionType)) {
 			result = sendUsingSPECOP(contentToSend);
 		} else if (EMAIL.equals(interactionType)) {
@@ -218,6 +213,8 @@ public class SendContentToPartnerService {
 			throw new IllegalArgumentException(String.format("%s is illegal interactionType with partner %s", interactionType, partnerRef));
 		}
 		addBusinessJournalRecord(contentRef, partnerRef);
+
+		lockService.lock(contentList, LockType.NODE_LOCK, 0);
 
 		return result;
 	}

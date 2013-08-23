@@ -294,6 +294,7 @@
                     <show id="lecm-orgstr:organization-boss"/>
                     <show id="lecm-orgstr:org-logo-assoc"/>
                     <show id="lecm-orgstr:org-tin"/>
+                    <show id="lecm-orgstr:org-kpp"/>
                     <show id="lecm-orgstr:org-ownership-type"/>
                     <show id="lecm-orgstr:org-incorporation-form"/>
                     <show id="lecm-orgstr:org-founding-docs"/>
@@ -323,7 +324,12 @@
                             <!--<control-param name="maxLength">10</control-param>-->
                         </control>
                     </field>
-                    <field id="lecm-orgstr:org-ownership-type" set="other"/>
+                    <field id="lecm-orgstr:org-kpp" set="other">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl">
+                            <control-param name="maxLength">9</control-param>
+                        </control>
+                    </field>
+					<field id="lecm-orgstr:org-ownership-type" set="other"/>
                     <field id="lecm-orgstr:org-incorporation-form" set="other"/>
                     <field id="lecm-orgstr:org-founding-docs" set="other"/>
                 </appearance>

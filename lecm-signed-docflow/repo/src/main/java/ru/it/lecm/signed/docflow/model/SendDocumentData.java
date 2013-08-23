@@ -1,6 +1,7 @@
 package ru.it.lecm.signed.docflow.model;
 
 import java.util.Map;
+import ucloud.gate.proxy.exceptions.GateResponse;
 
 /**
  *
@@ -12,11 +13,18 @@ public final class SendDocumentData extends UnicloudData {
 
 	private String documentId;
 
+	public SendDocumentData() {
+	}
+
+	public SendDocumentData(GateResponse gateResponse) {
+		setGateResponse(gateResponse);
+	}
+
 	@Override
 	protected Map<String, Object> putOwnProperties(Map<String, Object> properties) {
 		return properties;
 	}
-	
+
 	public String getDocumentId() {
 		return documentId;
 	}

@@ -21,6 +21,8 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.headers.Header;
@@ -313,7 +315,17 @@ public class UnicloudService {
 		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
 		String employeeId = employeeRef.getId();
 		String token = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_AUTH_TOKEN);
-		token = (token != null) ? token : "";
+
+		if (StringUtils.isEmpty(organizationId) || StringUtils.isEmpty(token)) {
+			String orgIdMsg = StringUtils.isEmpty(organizationId) ? "Organization Id not found. " : "";
+			String tokenMsg = StringUtils.isEmpty(token) ? "Token not found. " : "";
+			GateResponse fakeResponse = new GateResponse();
+			fakeResponse.setMessage(String.format("%s%sMaybe you are not authorized, try again", orgIdMsg, tokenMsg));
+			fakeResponse.setOperatorMessage(null);
+			fakeResponse.setResponseType(EResponseType.UNAUTHORIZED);
+			fakeResponse.setStackTrace(ExceptionUtils.getStackTrace(new Exception()));
+			return new SendDocumentData(fakeResponse);
+		}
 
 		//получить ИНН и КПП контрагента
 		CompanyInfo companyInfo = new CompanyInfo();
@@ -346,12 +358,21 @@ public class UnicloudService {
 		addAuthHeaders(partnerKey, employeeId, organizationId, operatorCode, token);
 		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
 		Holder<String> documentId = new Holder<String>();
-		gateWcfService.sendDocument(doc, operatorCode, null, gateResponse, documentId);
-		removeAuthHeaders();
+		try {
+			gateWcfService.sendDocument(doc, operatorCode, null, gateResponse, documentId);
+		} catch(Exception ex) {
+			gateResponse.value = new GateResponse();
+			gateResponse.value.setMessage(ex.getMessage());
+			gateResponse.value.setOperatorMessage(null);
+			gateResponse.value.setResponseType(EResponseType.INTERNAL_ERROR);
+			gateResponse.value.setStackTrace(ExceptionUtils.getStackTrace(ex));
+		} finally {
+			removeAuthHeaders();
+		}
 
-		SendDocumentData sendDocumentData = new SendDocumentData();
+		SendDocumentData sendDocumentData;
 		if (gateResponse.value != null) {
-			sendDocumentData.setGateResponse(gateResponse.value);
+			sendDocumentData = new SendDocumentData(gateResponse.value);
 			if (EResponseType.OK == gateResponse.value.getResponseType()) {
 				sendDocumentData.setDocumentId(documentId.value);
 				//добавляем вложению documentId?

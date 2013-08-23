@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for EResponseType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -22,10 +22,11 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="ServiceError"/>
  *     &lt;enumeration value="OperatorException"/>
  *     &lt;enumeration value="NotFoundByOperator"/>
+ *     &lt;enumeration value="InternalError"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- * 
+ *
  */
 @XmlType(name = "EResponseType")
 @XmlEnum
@@ -45,7 +46,10 @@ public enum EResponseType {
     @XmlEnumValue("OperatorException")
     OPERATOR_EXCEPTION("OperatorException"),
     @XmlEnumValue("NotFoundByOperator")
-    NOT_FOUND_BY_OPERATOR("NotFoundByOperator");
+    NOT_FOUND_BY_OPERATOR("NotFoundByOperator"),
+    @XmlEnumValue("InternalError")
+    INTERNAL_ERROR("InternalError");
+
     private final String value;
 
     EResponseType(String v) {
