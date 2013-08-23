@@ -33,6 +33,10 @@ public interface ReportContentDAO {
 	 * @return true, если хранилище только для чтения
 	 */
 	boolean isReadonly();
+
+	/**
+	 * @param value true, если хранилище только для чтения
+	 */
 	void setReadonly(boolean value);
 
 	/**
@@ -44,8 +48,8 @@ public interface ReportContentDAO {
 
 	/**
 	 * Удалить контент, если он существует, иначе ничего не происходит.
-	 * При readonly = true поднимается исключение.
-	 * Если файл id.fileName указан как "*", то удаляется весь каталог id.reportMnemo;
+	 * <br/> (!) При readonly = true поднимается исключение.
+	 * <br/> (!) Если файл id.fileName указан как "*", то удаляется весь каталог id.reportMnemo;
 	 * @param id
 	 */
 	void delete(IdRContent id); // throws java.io.IOException;

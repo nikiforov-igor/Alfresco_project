@@ -8,6 +8,7 @@ public enum JasperReportTargetFileType {
 	, RTF( "application/rtf", ".rtf")
 	, DOCX( "application/msword", ".docx")
 	, XML( "text/xml", ".xml")
+	, XLS( "application/vnd.ms-excel", ".xls")
 	;
 
 	final private String mimeType, extension;

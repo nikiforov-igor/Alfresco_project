@@ -111,11 +111,6 @@ public class ErrandsDisciplineDSProvider
 	}
 
 	@Override
-	protected DataFilter newDataFilter() {
-		return super.newDataFilter();
-	}
-
-	@Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
 		final ExecDisciplineJRDataSource result = new ExecDisciplineJRDataSource(iterator);
 		return result;

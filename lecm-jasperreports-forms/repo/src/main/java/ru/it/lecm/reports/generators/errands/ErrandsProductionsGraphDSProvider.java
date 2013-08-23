@@ -263,8 +263,7 @@ public class ErrandsProductionsGraphDSProvider
 			super(); // super(employeeId);
 
 			this.employee = employeeExec;
-			final NodeRef employeeId = employeeExec.employeeId;
-
+			// final NodeRef employeeId = employeeExec.employeeId;
 			this.avgExecTimeInHours = new ArrayList<AvgValue>(maxListSize);
 			for (int i = 0; i < maxListSize; i++) {
 				this.avgExecTimeInHours.add( new AvgValue( String.format("Avg exec time [%s], h", i)) );

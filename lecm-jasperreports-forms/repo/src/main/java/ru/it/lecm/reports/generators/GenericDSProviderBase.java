@@ -48,7 +48,9 @@ import ru.it.lecm.reports.xml.DSXMLProducer;
 /**
  * Провайдер данных.
  * Основное назначение - получение НД для указанного описателя шаблона с учётом 
- * параметров фильтрации.
+ * параметров фильтрации. 
+ * Умеет строить lucene-запрос для своей выборки (по простым полям не-ассоциациям)
+ * и создаёт фильтр данных для отбора по ассоциациям.
  * @author rabdullin
  *
  */
@@ -95,9 +97,16 @@ public class GenericDSProviderBase
 	 * и reportDescriptor)
 	 */
 	protected void reloadConfig() {
-		if (this.xmlConfig != null && this.reportDescriptor != null)
-			// загрузка конфигурации
-			this.xmlConfig.setConfigName( DSXMLProducer.makeDsConfigFileName( this.reportDescriptor.getMnem() ));
+		if (this.xmlConfig != null && this.reportDescriptor != null) {
+			final String configName = DSXMLProducer.makeDsConfigFileName( this.reportDescriptor.getMnem());
+			this.xmlConfig.setConfigName( configName);
+			/* // загрузка конфигурации
+			try { this.xmlConfig.loadConfig();
+			} catch( JRException ex) {
+				logger.warn( String.format("Fail to load config by name '%s'", configName), ex);
+			}
+			 */
+		}
 	}
 
 
@@ -340,7 +349,9 @@ public class GenericDSProviderBase
 			try {
 				QName targetType = null;
 				String expression = colDesc.getExpression();
-				if (expression.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) && expression.endsWith(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL)) {
+				if ( Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL)
+						&& Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL))
+				{
 					if (!expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL)) {
 						// TODO добавить обработку parent и source ассоциаций, согласно правилам substitudeService
 						expression = expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");

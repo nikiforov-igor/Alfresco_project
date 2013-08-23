@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
@@ -34,21 +35,15 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
-import ru.it.lecm.reports.api.ReportGenerator;
-import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.NamedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFlags;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.beans.ReportProviderExt;
-import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -58,56 +53,13 @@ import ru.it.lecm.reports.utils.Utils;
  * @author rabdullin
  *
  */
-public class JasperReportGeneratorImpl
-		implements ReportGenerator, ApplicationContextAware
+public class JasperReportGeneratorImpl extends ReportGeneratorBase
 {
 
 	private static final transient Logger log = LoggerFactory.getLogger(JasperReportGeneratorImpl.class);
 
-	private WKServiceKeeper services; 
-	private ReportsManager reportsMgr;
-	private String reportsManagerBeanName;
-	private ApplicationContext context;
-
 	public JasperReportGeneratorImpl() {
 	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext ctx)
-			throws BeansException {
-		this.context = ctx;
-	}
-
-	public WKServiceKeeper getServices() {
-		return services;
-	}
-
-	public void setServices(WKServiceKeeper services) {
-		this.services = services;
-	}
-
-	public String getReportsManagerBeanName() {
-		return reportsManagerBeanName;
-	}
-
-	public void setReportsManagerBeanName(String beanName) {
-		if ( Utils.isSafelyEquals(beanName, reportsManagerBeanName) )
-			return;
-		log.debug(String.format("ReportsManagerBeanName assigned: %s", beanName));
-		this.reportsManagerBeanName = beanName;
-		this.reportsMgr = null; // очистка
-	}
-
-	public ReportsManager getReportsManager() {
-		if (this.reportsMgr == null && this.reportsManagerBeanName != null) {
-			this.reportsMgr = (ReportsManager) this.context.getBean(this.reportsManagerBeanName);
-		}
-		return this.reportsMgr;
-	}
-
-//	public void setReportsManager(ReportsManager reportsManager) {
-//		this.reportsManager = reportsManager;
-//	}
 
 	@Override
 	public void produceReport( WebScriptResponse webScriptResponse
@@ -116,7 +68,7 @@ public class JasperReportGeneratorImpl
 			, ReportContentDAO rptContent
 	) throws IOException
 	{
-		PropertyCheck.mandatory (this, "services", services);
+		PropertyCheck.mandatory (this, "services", getServices());
 		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
 
 		// "/reportdefinitions/" + reportName + ".jasper"
@@ -168,7 +120,7 @@ public class JasperReportGeneratorImpl
 
 					adsp.setServices( this.getServices());
 					adsp.setReportDescriptor( reportDesc);
-					adsp.setReportManager( this.reportsMgr);
+					adsp.setReportManager( this.getReportsManager());
 				}
 
 				assignProviderProps( dsProvider, parameters, reportDesc);
@@ -281,6 +233,12 @@ public class JasperReportGeneratorImpl
 	 */
 	private static final JasperReportTargetFileType DEFAULT_TARGET = JasperReportTargetFileType.PDF;
 
+	/**
+	 * Найти целевой формат в параметрах ...
+	 * @param requestParameters
+	 * @return
+	 */
+	// TODO: (?) разрешить задавать формат в колонках данных (константой или выражением) 
 	private JasperReportTargetFileType findTargetArg( final Map<String, String[]> requestParameters) 
 	{
 		final String argname = "targetFormat";
@@ -338,6 +296,9 @@ public class JasperReportGeneratorImpl
 			break;
 		case DOCX:
 			exportReportToStream(new JRDocxExporter(), jPrint, outputStream);
+			break;
+		case XLS:
+			exportReportToStream(new JRXlsExporter(), jPrint, outputStream);
 			break;
 		default:
 			final String msg = String.format( "Unknown report target '%s'", target);

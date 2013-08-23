@@ -513,20 +513,20 @@ public class ReportsManagerImpl implements ReportsManager {
 
 		/* сохранение в репозиторий "шаблона отчёта"... */
 		try {
-			final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+			byte[] templateRawData = null;
 
 			if (desc.getReportTemplate() != null) {
+				final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 				final InputStream stm = desc.getReportTemplate().getData();
 				if (stm != null) {
 					stm.reset();
 					IOUtils.copy(stm, byteStream);
 
 					final String ext = (def != null) ? def.getFileExtension() : DEFAULT_REPORT_EXTENSION;
-					final IdRContent id = IdRContent.createId(
-								desc, String.format("%s%s", desc.getMnem(), ext)
-						);
+					final IdRContent id = IdRContent.createId( desc, String.format("%s%s", desc.getMnem(), ext));
 
-					this.contentRepositoryDAO.storeContent(id, new ByteArrayInputStream(byteStream.toByteArray()));
+					templateRawData = byteStream.toByteArray();
+					this.contentRepositoryDAO.storeContent(id, new ByteArrayInputStream(templateRawData));
 				}
 			}
 
@@ -536,8 +536,7 @@ public class ReportsManagerImpl implements ReportsManager {
 			 * именно его (не требуется определять откуда получен описатель - из 
 			 * файлового хранилища или из репозитория)
 			 */
-			// getReportGenerators().get(rtag).onRegister(outFullName, desc);
-			getReportGenerators().get(rtag).onRegister(desc, byteStream.toByteArray(), this.contentRepositoryDAO);
+			getReportGenerators().get(rtag).onRegister(desc, templateRawData, this.contentRepositoryDAO);
 			logger.debug(String.format("Report '%s': provider notified", desc.getMnem()));
 
 		} catch (Throwable ex) {

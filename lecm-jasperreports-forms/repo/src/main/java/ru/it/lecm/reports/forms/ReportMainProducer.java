@@ -1,4 +1,4 @@
-package ru.it.lecm.forms.jasperforms;
+package ru.it.lecm.reports.forms;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -33,9 +33,9 @@ import ru.it.lecm.reports.utils.Utils;
  * в файле отчета должно быть задано свойство <code><property name="dataSource" value="ru.it.lecm.forms.jasperforms.AbstractDataSourceProvider"/></code>
  * значение - полное имя класса провайдера источника данных, который будет использоваться для генерации отчета
  */
-public class JasperFormProducer extends AbstractWebScript {
+public class ReportMainProducer extends AbstractWebScript {
 
-	static final transient Logger log = LoggerFactory.getLogger(JasperFormProducer.class);
+	static final transient Logger log = LoggerFactory.getLogger(ReportMainProducer.class);
 
 	private ReportsManager reportsManager;
 
