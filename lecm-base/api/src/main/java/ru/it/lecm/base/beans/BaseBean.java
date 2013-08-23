@@ -63,8 +63,6 @@ public abstract class BaseBean implements InitializingBean {
     protected ServiceRegistry serviceRegistry;
 	protected AuthenticationService authService;
 
-	private final Object lock = new Object();
-
 	protected static enum ASSOCIATION_TYPE {
 		SOURCE,
 		TARGET
@@ -296,11 +294,7 @@ public abstract class BaseBean implements InitializingBean {
                         return directoryRef;
                     }
 				};
-				final NodeRef result;
-				synchronized (lock) {
-					result = transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);
-				}
-                return result;
+                return transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);
             }
         };
         return AuthenticationUtil.runAsSystem(raw);
