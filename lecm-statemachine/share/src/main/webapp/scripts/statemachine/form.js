@@ -94,9 +94,11 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		show: function showWorkflowForm(action) {
+            this._showSplash()
             var url = Alfresco.constants.PROXY_URI + "/lecm/statemachine/actions?documentNodeRef=" + this.options.nodeRef + "&actionId=" + action.actionId + "&taskId=" + this.taskId;
             callback = {
                 success:function (oResponse) {
+                    oResponse.argument.parent._hideSplash();
                     var oResults = eval("(" + oResponse.responseText + ")");
                     var parent = oResponse.argument.parent
                     if (oResults.errors != null && oResults.errors.length > 0) {
@@ -202,8 +204,10 @@ LogicECM.module = LogicECM.module || {};
 				formResponse: encodeURIComponent(formResponse),
 				actionId: actionId ? actionId : ""
 			});
+            this._showSplash()
 			callback = {
 				success:function (oResponse) {
+                    oResponse.argument.contractsObject._hideSplash();
                     var oResults = eval("(" + oResponse.responseText + ")");
                     if (oResults.error == "") {
                         if (oResults.redirect != null && oResults.redirect != "null") {
@@ -254,7 +258,20 @@ LogicECM.module = LogicECM.module || {};
 		onStartWorkflowFormContentReady:function FormManager_onStartWorkflowFormContentReady(layer, args) {
 			var formEl = Dom.get(this.id + "-workflowFormContainer");
 			Dom.removeClass(formEl, "hidden");
-		}
+		},
+
+        _showSplash: function() {
+            this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+                {
+                    text: Alfresco.util.message("label.loading"),
+                    spanClass: "wait",
+                    displayTime: 0
+                });
+        },
+
+        _hideSplash: function() {
+            YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
+        }
 
 	});
 })();
