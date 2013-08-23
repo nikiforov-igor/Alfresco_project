@@ -9,6 +9,7 @@ import java.util.Map;
 import org.alfresco.service.cmr.lock.LockService;
 import org.alfresco.service.cmr.lock.LockType;
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.lock.LockStatus;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -18,8 +19,8 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.contractors.api.Contractors;
@@ -36,7 +37,7 @@ import ru.it.lecm.signed.docflow.model.ContentToSendData;
  */
 public class SendContentToPartnerService {
 
-	private final static Log logger = LogFactory.getLog(SendContentToPartnerService.class);
+	private final static Logger logger = LoggerFactory.getLogger(SendContentToPartnerService.class);
 	private final static String SPECOP = "SPECOP";
 	private final static String EMAIL = "EMAIL";
 	private final static String BJ_MESSAGE_SEND_ATTACHMENT = "#initiator направил контрагенту #object1 вложение #mainObject к документу #object2.";
@@ -214,7 +215,14 @@ public class SendContentToPartnerService {
 		}
 		addBusinessJournalRecord(contentRef, partnerRef);
 
-		lockService.lock(contentList, LockType.NODE_LOCK, 0);
+		for(NodeRef content : contentList) {
+			LockStatus lockStatus = lockService.getLockStatus(contentRef);
+			if (lockStatus == LockStatus.NO_LOCK) {
+				lockService.lock(content, LockType.NODE_LOCK, 0);
+			} else {
+				logger.debug("Node {} is already locked. Lock status is {}", content, lockStatus);
+			}
+		}
 
 		return result;
 	}
