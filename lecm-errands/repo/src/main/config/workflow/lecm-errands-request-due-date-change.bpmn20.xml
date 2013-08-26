@@ -41,6 +41,10 @@
 
 		                        execution.setVariable("requestDueDateChangeAssignee", orgstructure.getEmployeeLogin(initiator));
 	                        }
+
+                            var props = [];
+                            props["lecm-errands-aspect:isDueDateChangeRequested"] = true;
+                            document.addAspect("lecm-errands-aspect:isDueDateChangeRequestedAspect", props);
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
@@ -113,6 +117,9 @@
 	                                }
 		                        }
 	                        }
+                            var document = bpm_package.children[0];
+                            document.properties["lecm-errands-aspect:isDueDateChangeRequested"] = false;
+                            document.save();
                         </activiti:string>
                     </activiti:field>
                 </activiti:taskListener>

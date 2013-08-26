@@ -258,13 +258,13 @@
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1632,13 +1632,13 @@ if (soExecutors != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только исполнителю]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1703,13 +1703,13 @@ if (soExecutors != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1731,13 +1731,13 @@ if (soExecutors != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1801,13 +1801,13 @@ if (soExecutors != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1915,13 +1915,13 @@ if (soExecutors != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1943,13 +1943,13 @@ if (soExecutors != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Вы уже направили запрос отмены поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -2867,13 +2867,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -2895,13 +2895,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -2965,13 +2965,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -3035,12 +3035,12 @@ if (document != null) {
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[parentDoc]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value><![CDATA[stm_document]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[parentDoc]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -3065,14 +3065,14 @@ if (document != null) {
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[parentLimitationDate]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
                                                                                     <![CDATA[lecm-errands:limitation-date]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[parentLimitationDate]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -3089,13 +3089,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -3173,18 +3173,46 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю поручения]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>436a9e48-b3e0-4fbb-833b-164db9c41d0e
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/9aa5e1e0-8877-406e-b5fc-d4424577274e
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Вы уже запросили изменение срока поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -3262,13 +3290,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -3290,13 +3318,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Вы уже направили запрос отмены поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -3348,13 +3376,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -3405,13 +3433,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие доступно только исполнителю поручения.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -3463,13 +3491,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исполнение" или заполнить поле «Отчет об исполнении».]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -4480,13 +4508,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -4508,13 +4536,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -4578,13 +4606,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -4648,12 +4676,12 @@ if (document != null) {
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[parentDoc]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value><![CDATA[stm_document]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[parentDoc]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4678,14 +4706,14 @@ if (document != null) {
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[parentLimitationDate]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
                                                                                     <![CDATA[lecm-errands:limitation-date]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[parentLimitationDate]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4702,13 +4730,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -4816,13 +4844,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -4844,13 +4872,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Вы уже направили запрос отмены поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -4903,18 +4931,46 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю поручения]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_EXECUTOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>033e0a9d-4340-456b-a02c-5a8f254cb1db
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/fa5d3e95-8fb6-4aa0-ac0f-a037901cd972
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Вы уже запросили изменение срока поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4961,13 +5017,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -5018,13 +5074,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие доступно только исполнителю поручения.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -5046,13 +5102,13 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исполнение" или заполнить поле «Отчет об исполнении».]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -6061,13 +6117,13 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -6089,13 +6145,13 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие недоступно, т.к. есть незаконченные дочерние поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -6159,13 +6215,13 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -6230,13 +6286,13 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Контролёру]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -6300,12 +6356,12 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[parentDoc]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value><![CDATA[stm_document]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[parentDoc]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6330,14 +6386,14 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[parentLimitationDate]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
                                                                                     <![CDATA[lecm-errands:document]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[parentLimitationDate]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6354,13 +6410,13 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -6438,18 +6494,46 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Контролёру]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>condition</name>
                                                                                 <value>
                                                                                     <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "ERRANDS_CONTROLLER")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>e57ecb25-72bd-48e6-82d8-32c0f2be8ecc
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/e9e876ba-034f-44e6-bf0d-c1d7f8a97cf4
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Вы уже запросили изменение срока поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6496,13 +6580,13 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Контролёру]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -7420,13 +7504,13 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -7491,13 +7575,13 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -7561,12 +7645,12 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[parentDoc]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value><![CDATA[stm_document]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[parentDoc]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -7591,14 +7675,14 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[parentLimitationDate]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
                                                                                     <![CDATA[lecm-errands:limitation-date]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value>
+                                                                                    <![CDATA[parentLimitationDate]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -7615,13 +7699,13 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Это действие доступно только исполнителю поручения]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -7698,13 +7782,13 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Данное действие доступно только Инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>

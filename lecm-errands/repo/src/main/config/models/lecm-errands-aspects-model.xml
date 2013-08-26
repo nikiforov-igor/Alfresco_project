@@ -18,5 +18,13 @@
                 </property>
             </properties>
         </aspect>
+        <aspect name="lecm-errands-aspect:isDueDateChangeRequestedAspect">
+            <properties>
+                <property name="lecm-errands-aspect:isDueDateChangeRequested">
+                    <type>d:boolean</type>
+                </property>
+            </properties>
+        </aspect>
+
     </aspects>
 </model>
