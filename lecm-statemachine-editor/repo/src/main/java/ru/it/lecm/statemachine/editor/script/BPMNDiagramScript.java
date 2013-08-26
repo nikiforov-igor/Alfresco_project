@@ -146,7 +146,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
             try {
                 fileFolderService.copy(file, version, fileName);
             } catch (org.alfresco.service.cmr.model.FileNotFoundException e) {
-                e.printStackTrace();
+                logger.error("Cannot copy file", e);
             }
 
             //Сохраняем свойсвтва контейнера версий

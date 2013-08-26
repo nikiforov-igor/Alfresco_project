@@ -4,6 +4,8 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.el.FixedValue;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * User: PMelnikov
@@ -12,6 +14,7 @@ import org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener;
  */
 public class ScriptAction extends StateMachineAction {
 
+    private static final transient Logger logger = LoggerFactory.getLogger(ScriptAction.class);
     private String script = "";
 
 	@Override
@@ -21,7 +24,7 @@ public class ScriptAction extends StateMachineAction {
         try {
             base.notify(execution);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while script execution", e);
         }
     }
 
