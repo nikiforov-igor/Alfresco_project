@@ -348,7 +348,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 			// считается, что подпись наша, если организация из атрибутивного состава подписи входит в сокращенное название нашей организации
 			String organizationShortName = orgstructureService.getOrganizationShortName();
 			String signatureOwnerOrganization = (String) signatureProperties.get(SignedDocflowModel.PROP_OWNER_ORGANIZATION);
-			boolean isOurSignature = StringUtils.containsIgnoreCase(organizationShortName, signatureOwnerOrganization);
+			boolean isOurSignature = StringUtils.containsIgnoreCase(signatureOwnerOrganization, organizationShortName);
 
 			signatureProperties.put(SignedDocflowModel.PROP_IS_VALID, true);
 			signatureProperties.put(SignedDocflowModel.PROP_UPDATE_DATE, signatureProperties.get(SignedDocflowModel.PROP_SIGNING_DATE));
