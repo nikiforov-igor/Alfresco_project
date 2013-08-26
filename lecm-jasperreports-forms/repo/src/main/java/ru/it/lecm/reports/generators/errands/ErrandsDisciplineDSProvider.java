@@ -63,14 +63,14 @@ public class ErrandsDisciplineDSProvider
 	 * Способ группировки элементов определяется параметрами отчёта
 	 * Конфигурируется:
 	 *    1) формат ссылки
-	 *    2) атрибут-источник для группирования: 
+	 *    2) атрибут-источник для группирования:
 	 * в колонке данных DsDisciplineColumnNames.COL_PARAM_GROUP_BY должно
 	 * быть строковое значение с названием способа группировки. Это название
 	 * строго не регламентируется, но:
 	 * 1) оно должно быть описано двух xml-секциях:
 	 *    ErrandsReportFilterParams.XMLGROUPBY_FORMATS_MAP ("groupBy.formats")
 	 *  и ErrandsReportFilterParams.XMLGROUPBY_SOURCE_MAP ("groupBy.source")
-	 * 2) для группировки по Подразделениям, оно ДОЛЖНО СОДЕРЖАТЬ подстроку: 
+	 * 2) для группировки по Подразделениям, оно ДОЛЖНО СОДЕРЖАТЬ подстроку:
 	 *    DsDisciplineColumnNames.CONTAINS_GROUP_BY_OU ("OrgUnit")
 	 */
 	final private ErrandsReportFilterParams paramsFilter = new ErrandsReportFilterParams(
@@ -106,7 +106,7 @@ public class ErrandsDisciplineDSProvider
 			conf().loadConfig();
 			this.paramsFilter.scanGroupByInfo( conf());
 		} catch (JRException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -147,9 +147,9 @@ public class ErrandsDisciplineDSProvider
 		}
 		 */
 
-		/* 
+		/*
 		 * Критерий двойной:
-		 * 		Время Начала 
+		 * 		Время Начала
 		 * 		или Время Окончания заданы внутри указанного интервала
 		 * Формируется в виде
 		 * 		"AND ( start_inside OR end_inside )"
@@ -206,45 +206,45 @@ public class ErrandsDisciplineDSProvider
 		final static String COL_NAMEATAG = "Col_NameTag"; // String
 
 		/** Колонка "Выдано всего поручений за период" */
-		final static String COL_COUNT_TOTAL = "Col_Count_Total"; // "java.lang.Integer" 
+		final static String COL_COUNT_TOTAL = "Col_Count_Total"; // "java.lang.Integer"
 
 		/** Колонка "Выдано важных поручений за период" */
 		final static String COL_COUNT_TOTAL_IMPORTANT = "Col_Count_Total_Important"; // "java.lang.Integer"
 
 		/** Колонка "Всего закрытых поручений за период" */
-		final static String COL_COUNT_CLOSED = "Col_Count_Closed"; // "java.lang.Integer" 
+		final static String COL_COUNT_CLOSED = "Col_Count_Closed"; // "java.lang.Integer"
 
 		/** Колонка "Закрытых важных поручений за период" */
-		final static String COL_COUNT_CLOSED_IMPORTANT = "Col_Count_Closed_important"; // "java.lang.Integer" 
+		final static String COL_COUNT_CLOSED_IMPORTANT = "Col_Count_Closed_important"; // "java.lang.Integer"
 
 		/** Колонка "Выполнено в срок" */
 		final static String COL_COUNT_INTIME = "Col_Count_Intime"; // int
 
 		/** Вычисляемая колонка "Процент исполнения в срок" */
-		// final static String CALC_COL_PERCENTS_INTIME = "Col_Percents_Intime"; // java.lang.Float 
+		// final static String CALC_COL_PERCENTS_INTIME = "Col_Percents_Intime"; // java.lang.Float
 
 		/** Колонка "Кол-во поручений, отклонённых руководителем" */
-		final static String COL_COUNT_BOSS_REFUSED = "Col_Count_Boss_Refused"; // int 
+		final static String COL_COUNT_BOSS_REFUSED = "Col_Count_Boss_Refused"; // int
 
 		/** Вычисляемая колонка "Процент поручений, отклонённых руководителем" */
-		// final static String CALC_COL_PERCENTS_BOSS_REFUSED = "Col_Percents_Boss_Refused"; // java.lang.Float 
+		// final static String CALC_COL_PERCENTS_BOSS_REFUSED = "Col_Percents_Boss_Refused"; // java.lang.Float
 
 		/** Колонка "Кол-во важных поручений, неисполненных в срок" */
-		final static String COL_COUNT_IMPORTANT_REFUSED = "Col_Count_Important_Refused"; // java.lang.Integer 
+		final static String COL_COUNT_IMPORTANT_REFUSED = "Col_Count_Important_Refused"; // java.lang.Integer
 
 		/** Колонка "Среднее время исполнения поручения" */
-		final static String COL_AVG_EXECUTION = "Col_Avg_Execution.Value"; // java.lang.Float 
+		final static String COL_AVG_EXECUTION = "Col_Avg_Execution.Value"; // java.lang.Float
 
 		/** Колонка "Название единицы измерения среднего времени исполнения" */
-		final static String COL_AVG_EXECUTION_UNITS = "Col_Avg_Execution.Units"; // String 
+		final static String COL_AVG_EXECUTION_UNITS = "Col_Avg_Execution.Units"; // String
 	}
 
 	/** QName-ссылки на данные Альфреско **************************************/
 	private class LocalQNamesHelper extends ErrandsQNamesHelper
 	{
 		/**
-		 * Параметр отчёта в НД: Исполнитель, Инициатор или Подразделение, по 
-		 * которому фактически будет выполняться группировка ... 
+		 * Параметр отчёта в НД: Исполнитель, Инициатор или Подразделение, по
+		 * которому фактически будет выполняться группировка ...
 		 */
 		QName QN_ASSOC_REF;
 
@@ -290,19 +290,19 @@ public class ErrandsDisciplineDSProvider
 
 		public void registerDuration(long duration_ms) {
 			if (duration_ms <= 0) // нельзя определить
-				return; 
-			final float fact = Utils.getDurationInHours(duration_ms);  
+				return;
+			final float fact = Utils.getDurationInHours(duration_ms);
 			this.avgExecTimeInHours.adjust(fact);
 		}
 
 		/**
-		 * Зарегистрировать длительность исполнения (работы) 
+		 * Зарегистрировать длительность исполнения (работы)
 		 * @param start время начала
 		 * @param end время конца
 		 */
 		public void registerDuration(Date start, Date end) {
 			if (start == null || end == null) // нельзя определить
-				return; 
+				return;
 			registerDuration(end.getTime() - start.getTime());
 		}
 	}
@@ -384,7 +384,7 @@ public class ErrandsDisciplineDSProvider
 
 					final ResultSetRow rs = context.getRsIter().next();
 
-					final NodeRef errandId = rs.getNodeRef(); // id Поручения 
+					final NodeRef errandId = rs.getNodeRef(); // id Поручения
 
 					// (!) Фильтрование
 					if (context.getFilter() != null && !context.getFilter().isOk(errandId)) {
@@ -405,9 +405,9 @@ public class ErrandsDisciplineDSProvider
 					final Map<QName, Serializable> props = nodeSrv.getProperties(errandId);
 
 					for (int i = 0; i < employees.size(); i++) {
-						final NodeRef executorId = employees.get(i).getTargetRef(); // id Сотрудника-Исполнителя 
+						final NodeRef executorId = employees.get(i).getTargetRef(); // id Сотрудника-Исполнителя
 
-						final BasicEmployeeInfo execEmployee = new BasicEmployeeInfo( executorId); 
+						final BasicEmployeeInfo execEmployee = new BasicEmployeeInfo( executorId);
 
 						// грузим данные по подразделениям, только если надо по
 						// ним группировать (указав beanOU != null)
@@ -450,7 +450,7 @@ public class ErrandsDisciplineDSProvider
 							if (вСрок)
 								executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_INTIME); // исполнено вСрок
 						} else { // Поручение НЕ Закрыто
-							if (важное && !вСрок) { 
+							if (важное && !вСрок) {
 								// важное И неисполненное в срок ...
 								executor.counters.incCounter(DsDisciplineColumnNames.COL_COUNT_IMPORTANT_REFUSED);
 							}

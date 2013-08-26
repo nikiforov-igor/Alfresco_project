@@ -79,8 +79,8 @@ public class Bosh2Connector implements Connector {
 	private Map<Request, String> activeRequests = new HashMap<Request, String>();
 
 	private RequestBuilder builder;
-	
-	private boolean crossDomain = false; 
+
+	private boolean crossDomain = false;
 	private RequestClient requestClient;
 	private RequestClientCallback requestClientCallback;
 	private Map<String, String> activeScriptRequests = new HashMap<String, String>();
@@ -92,15 +92,15 @@ public class Bosh2Connector implements Connector {
 	private String domain;
 	private String host = null;
 	int port = 5222;
-	
-	
+
+
 
 	private List<ConnectorListener> listeners = new ArrayList<ConnectorListener>();
-	
 
-	private PacketRenderer renderer = new PacketRenderer() 
+
+	private PacketRenderer renderer = new PacketRenderer()
 	{
-		public String render(Packet packet) 
+		public String render(Packet packet)
 		{
 			return packet.getAsString();
 		}
@@ -113,16 +113,16 @@ public class Bosh2Connector implements Connector {
 	private RequestCallback standardHandler;
 
 	private State state = State.disconnected;
-	
+
 	private User user;
 
-	public Bosh2Connector(final User user) 
+	public Bosh2Connector(final User user)
 	{
 		this.setUser(user);
-		standardHandler = new RequestCallback() 
+		standardHandler = new RequestCallback()
 		{
 
-			public void onError(Request request, Throwable exception) 
+			public void onError(Request request, Throwable exception)
 			{
 				if(state == State.resume)
 				{
@@ -131,48 +131,47 @@ public class Bosh2Connector implements Connector {
 					return;
 				}
 				final String lastSendedBody = activeRequests.remove(request);
-				if (exception instanceof RequestTimeoutException) 
+				if (exception instanceof RequestTimeoutException)
 				{
                     Log.log("Request too old. Trying again.");
 					GWT.log("Request too old. Trying again.", null);
 					DeferredCommand.addCommand(new Command() {
-						public void execute() 
+						public void execute()
 						{
-							if (lastSendedBody != null && state == State.connected && sid != null && sid.length() > 0) 
+							if (lastSendedBody != null && state == State.connected && sid != null && sid.length() > 0)
 								send(lastSendedBody, standardHandler);
 							else
 								continuousConnection(null);
 						}
 					});
-				} 
-				else if (exception.getMessage().startsWith("Unable to read XmlHttpRequest.status;")) 
+				}
+				else if (exception.getMessage().startsWith("Unable to read XmlHttpRequest.status;"))
 				{
                     Log.log("Lost request. Ignored. Resend.");
 					GWT.log("Lost request. Ignored. Resend.", null);
 					if (lastSendedBody != null) {
-						DeferredCommand.addCommand(new Command() 
+						DeferredCommand.addCommand(new Command()
 						{
-							public void execute() 
+							public void execute()
 							{
-								if (state == State.connected && sid != null && sid.length() > 0) 
+								if (state == State.connected && sid != null && sid.length() > 0)
 								{
 									send(lastSendedBody, standardHandler);
 								}
 							}
 						});
 					}
-				} 
+				}
 				else
 				{
 					state = State.disconnected;
                     Log.log("Connection error: " + exception.toString());
                     GWT.log("Connection error", exception);
-					exception.printStackTrace();
 					fireEventError(BoshErrorCondition.remote_connection_failed, null, "Response error: " + exception.getMessage());
 				}
 			}
 
-			public void onResponseReceived(Request request, Response response) 
+			public void onResponseReceived(Request request, Response response)
 			{
 				if (state == State.disconnected)
 					return;
@@ -198,7 +197,7 @@ public class Bosh2Connector implements Connector {
 
 				final String wait = body == null ? null : body.getAtribute("wait");
 				final String inactivity = body == null ? null : body.getAtribute("inactivity");
-				if (wait != null && inactivity != null) 
+				if (wait != null && inactivity != null)
 				{
 					try
 					{
@@ -208,13 +207,13 @@ public class Bosh2Connector implements Connector {
 						builder.setTimeoutMillis(t);
 						GWT.log("New timeout: " + t + "ms", null);
 					}
-					catch (Exception e) 
+					catch (Exception e)
 					{
 						GWT.log("Error in wait and inactivity attributes", e);
 					}
 				}
 
-				if (httpStatusCode != 200 || body == null || type != null && ("terminate".equals(type) || "error".equals(type))) 
+				if (httpStatusCode != 200 || body == null || type != null && ("terminate".equals(type) || "error".equals(type)))
 				{
 					if(state == State.resume)
 					{
@@ -228,34 +227,34 @@ public class Bosh2Connector implements Connector {
 					ErrorCondition condition = body == null ? ErrorCondition.bad_request : ErrorCondition.undefined_condition;
 					String msg = null;
 					Packet error = body == null ? null : body.getFirstChild("error");
-					if (error != null) 
+					if (error != null)
 					{
-						for (Packet c : error.getChildren()) 
+						for (Packet c : error.getChildren())
 						{
 							String xmlns = c.getAtribute("xmlns");
-							if ("text".equals(c.getName())) 
+							if ("text".equals(c.getName()))
 							{
 								msg = c.getCData();
 								break;
 							}
-							else if (xmlns != null && "urn:ietf:params:xml:ns:xmpp-stanzas".equals(xmlns)) 
+							else if (xmlns != null && "urn:ietf:params:xml:ns:xmpp-stanzas".equals(xmlns))
 							{
 								condition = getCondition(c.getName(), httpStatusCode);
 							}
 						}
 					}
 
-					if (condition == ErrorCondition.item_not_found) 
+					if (condition == ErrorCondition.item_not_found)
 					{
 						state = State.disconnected;
 						fireEventError(boshCondition, condition, msg);
 					}
-					else if (errorCounter < MAX_ERRORS) 
+					else if (errorCounter < MAX_ERRORS)
 					{
 						errorCounter++;
 						send(lastSendedBody, standardHandler);
-					} 
-					else if (type != null && "terminate".equals(type)) 
+					}
+					else if (type != null && "terminate".equals(type))
 					{
                         Log.log("Disconnected by server");
                         GWT.log("Disconnected by server", null);
@@ -265,31 +264,31 @@ public class Bosh2Connector implements Connector {
 					else
 					{
 						state = State.disconnected;
-						if (msg == null) 
+						if (msg == null)
 						{
 							msg = "[" + httpStatusCode + "] " + condition.name().replace('_', '-');
 						}
 						fireEventError(boshCondition, condition, msg);
 					}
-				} 
+				}
 				else
 				{
 					errorCounter = 0;
-					if (receivedSid != null && sid != null && !receivedSid.equals(sid)) 
+					if (receivedSid != null && sid != null && !receivedSid.equals(sid))
 					{
 						if(state == State.resume)
 							fireOnResumeFailed();
 						state = State.disconnected;
 						fireEventError(BoshErrorCondition.policy_violation, ErrorCondition.unexpected_request,
 								"Unexpected session initialisation.");
-					} 
-					else if (receivedSid != null && sid == null) 
+					}
+					else if (receivedSid != null && sid == null)
 					{
 						sid = receivedSid;
 						//Cookies.setCookie(user.getResource()+"sid", sid, null, null, "/", false);
 						state = State.connected;
 					}
-					
+
 					if(state == State.resume)
 					{
 						fireOnResumeSuccessed();
@@ -297,7 +296,7 @@ public class Bosh2Connector implements Connector {
 					}
 
 					final List<? extends Packet> children = body.getChildren();
-					if (children.size() > 0) 
+					if (children.size() > 0)
 					{
 						fireEventReceiveStanzas(children);
 					}
@@ -306,12 +305,12 @@ public class Bosh2Connector implements Connector {
                 Log.log("............sid value is:"+sid);
 			}
 		};
-		
+
 		//added by zhongfanglin@antapp.com
 		requestClientCallback = new RequestClientCallback()
 		{
 
-			public void onFailure(Throwable caught) 
+			public void onFailure(Throwable caught)
 			{
 				if(state == State.resume)
 				{
@@ -324,7 +323,7 @@ public class Bosh2Connector implements Connector {
 				fireEventError(BoshErrorCondition.remote_connection_failed, null, "Response error: request timeout or 404!");
 			}
 
-			public void onSuccess(int callbackID,String responseText) 
+			public void onSuccess(int callbackID,String responseText)
 			{
 				if (state == State.disconnected)
 					return;
@@ -361,7 +360,7 @@ public class Bosh2Connector implements Connector {
 					}
 				}
 
-				if ( body == null || type != null && ("terminate".equals(type) || "error".equals(type))) 
+				if ( body == null || type != null && ("terminate".equals(type) || "error".equals(type)))
 				{
 					if(state == State.resume)
 					{
@@ -402,11 +401,11 @@ public class Bosh2Connector implements Connector {
 						}
 						fireEventError(boshCondition, condition, msg);
 					}
-				} 
-				else 
+				}
+				else
 				{
 					errorCounter = 0;
-					if (receivedSid != null && sid != null && !receivedSid.equals(sid)) 
+					if (receivedSid != null && sid != null && !receivedSid.equals(sid))
 					{
 						if(state == State.resume)
 						{
@@ -417,14 +416,14 @@ public class Bosh2Connector implements Connector {
 						state = State.disconnected;
 						fireEventError(BoshErrorCondition.policy_violation, ErrorCondition.unexpected_request,
 								"Unexpected session initialisation.");
-					} 
-					else if (receivedSid != null && sid == null) 
+					}
+					else if (receivedSid != null && sid == null)
 					{
 						sid = receivedSid;
 						//Cookies.setCookie(user.getResource()+"sid", sid,null,null,"/",false);
 						state = State.connected;
 					}
-					
+
 					if(state == State.resume)
 					{
 						state = State.connected;
@@ -439,16 +438,16 @@ public class Bosh2Connector implements Connector {
 				}
 			}
 
-			
+
 		};
-		//end added 
+		//end added
 	}
 
 	public void addListener(ConnectorListener listener) {
 		this.listeners.add(listener);
 	}
 
-	public void connect() 
+	public void connect()
 	{
         Log.log("Bosh2Connector.connect");
         makeNewRequestBuilder(defaultTimeout + 7);
@@ -469,7 +468,7 @@ public class Bosh2Connector implements Connector {
 		e.setAttribute("xmpp:version","1.0");
 		if(host!=null&&!(host.length()==0))
 		{
-			final String value ="xmpp:"+host+":"+String.valueOf(port); 
+			final String value ="xmpp:"+host+":"+String.valueOf(port);
 			e.setAttribute("route", value);
 		}
 
@@ -480,7 +479,7 @@ public class Bosh2Connector implements Connector {
 			send(renderer.render(e), standardHandler);
 
 	}
-	
+
 	private int getActivesRequestCount()
 	{
 		if(crossDomain)
@@ -489,7 +488,7 @@ public class Bosh2Connector implements Connector {
 			return this.activeRequests.size();
 	}
 
-	public void continuousConnection(String ack) 
+	public void continuousConnection(String ack)
 	{
 		if (state != State.connected || getActivesRequestCount() > 0)
 			return;
@@ -509,7 +508,7 @@ public class Bosh2Connector implements Connector {
 			send(renderer.render(e), standardHandler);
 	}
 
-	public void disconnect(Packet packetToSend) 
+	public void disconnect(Packet packetToSend)
 	{
 		PacketImp e = new PacketImp("body");
 		e.setAttribute("rid", getNextRid());
@@ -523,7 +522,7 @@ public class Bosh2Connector implements Connector {
 		e.setAttribute("xmpp:version","1.0");
 		if(host!=null&&!(host.length()==0))
 		{
-			final String value ="xmpp:"+host+":"+String.valueOf(port); 
+			final String value ="xmpp:"+host+":"+String.valueOf(port);
 			e.setAttribute("route", value);
 		}
 		if (packetToSend != null) {
@@ -540,41 +539,41 @@ public class Bosh2Connector implements Connector {
 		reset();
 	}
 
-	private void fireDisconnectByServer(BoshErrorCondition boshCondition, ErrorCondition xmppCondition, String msg) 
+	private void fireDisconnectByServer(BoshErrorCondition boshCondition, ErrorCondition xmppCondition, String msg)
 	{
         for (ConnectorListener l : this.listeners) {
             l.onBoshTerminate(this, boshCondition);
         }
 	}
 
-	private void fireEventError(BoshErrorCondition boshErrorCondition, ErrorCondition xmppErrorCondition, String message) 
+	private void fireEventError(BoshErrorCondition boshErrorCondition, ErrorCondition xmppErrorCondition, String message)
 	{
         for (ConnectorListener l : this.listeners) {
             l.onBoshError(xmppErrorCondition, boshErrorCondition, message);
         }
 	}
 
-	private void fireEventReceiveStanzas(List<? extends Packet> nodes) 
+	private void fireEventReceiveStanzas(List<? extends Packet> nodes)
 	{
         for (ConnectorListener l : this.listeners) {
             l.onStanzaReceived(nodes);
         }
 	}
 
-	private void fireOnBodyReceive(Response response, String body) 
+	private void fireOnBodyReceive(Response response, String body)
 	{
         for (ConnectorListener l : this.listeners) {
             l.onBodyReceive(response, body);
         }
 	}
 
-	private void fireOnBodySend(String body) 
+	private void fireOnBodySend(String body)
 	{
         for (ConnectorListener l : this.listeners) {
             l.onBodySend(body);
         }
 	}
-	
+
 	private void fireOnResumeSuccessed()
 	{
         Log.log("Bosh2Connector.fireOnResumeSuccessed");
@@ -583,7 +582,7 @@ public class Bosh2Connector implements Connector {
 			l.onResumeSuccessed();
 		}
 	}
-	
+
 	private void fireOnResumeFailed()
 	{
         Log.log("Bosh2Connector.fireOnResumeFailed");
@@ -593,7 +592,7 @@ public class Bosh2Connector implements Connector {
 		}
 	}
 
-	private String getNextRid() 
+	private String getNextRid()
 	{
 		this.rid++;
 		String tmp = String.valueOf(this.rid);
@@ -602,22 +601,22 @@ public class Bosh2Connector implements Connector {
 		return tmp;
 	}
 
-	public boolean isCacheAvailable() 
+	public boolean isCacheAvailable()
 	{
 		return false;//Cookies.getCookie(user.getResource()+"sid") != null && Cookies.getCookie(user.getResource()+"rid") != null;
 	}
 
-	public boolean isConnected() 
+	public boolean isConnected()
 	{
 		return state == State.connected;
 	}
 
-	public boolean isDisconnected() 
+	public boolean isDisconnected()
 	{
 		return state == State.disconnected;
 	}
 
-	private void makeNewRequestBuilder(int timeOut) 
+	private void makeNewRequestBuilder(int timeOut)
 	{
 		if(crossDomain)
 			requestClient.setTimeoutMillis(timeOut*2000);
@@ -625,20 +624,20 @@ public class Bosh2Connector implements Connector {
 			builder.setTimeoutMillis(timeOut * 2000);
 		GWT.log("timeout==" + (timeOut * 2000), null);
 	}
-	
+
 	private Packet parse(final String s)
 	{
-		if (s == null || s.length() == 0) 
+		if (s == null || s.length() == 0)
 		{
 			return null;
 		}
 		else
 		{
-			try 
+			try
 			{
 				Element element = XMLParser.parse(s).getDocumentElement();
 				return new PacketGwtImpl(element);
-			} catch (Exception e) 
+			} catch (Exception e)
 			{
 				GWT.log("Parsing error (\"" + s + "\")", e);
 				return null;
@@ -646,12 +645,12 @@ public class Bosh2Connector implements Connector {
 		}
 	}
 
-	public void removeListener(ConnectorListener listener) 
+	public void removeListener(ConnectorListener listener)
 	{
 		this.listeners.remove(listener);
 	}
 
-	public void reset() 
+	public void reset()
 	{
 		Log.log("Bosh2Connector.reset");
         state = State.disconnected;
@@ -664,7 +663,7 @@ public class Bosh2Connector implements Connector {
 		this.rid = (long) (Math.random() * 10000000);
 	}
 
-	public void restartStream(IQ iq) 
+	public void restartStream(IQ iq)
 	{
 		PacketImp e = new PacketImp("body");
 		if (sid != null)
@@ -682,7 +681,7 @@ public class Bosh2Connector implements Connector {
 			send(renderer.render(e), standardHandler);
 	}
 
-	public void send(Packet stanza) 
+	public void send(Packet stanza)
 	{
 		PacketImp e = new PacketImp("body");
 		e.setAttribute("xmlns", "http://jabber.org/protocol/httpbind");
@@ -697,26 +696,25 @@ public class Bosh2Connector implements Connector {
 		else
 			send(renderer.render(e), standardHandler);
 	}
-	
+
 	//adde by zhongfanglin@antapp.com
 	private void send(String body,RequestClientCallback callback)
 	{
 		Log.log("OUT (" + this.sid + "): " + body);
-		try 
+		try
 		{
 			// ++activeConnections;
 			int id = requestClient.sendRequest(body, callback);
 			this.activeScriptRequests.put(id+"", body);
 			fireOnBodySend(body);
 		} catch (Exception e) {
-			e.printStackTrace();
+			GWT.log(e.getMessage(), e);
 		}
 	}
 	//end added
 
-	private void send(String body, RequestCallback callback) 
+	private void send(String body, RequestCallback callback)
 	{
-		// System.out.println("OUT (" + this.sid + ", " + connected + ", " +
 		// activeConnections + "): " + body);
 		Log.log("OUT (" + this.sid + "): " + body);
 		try
@@ -726,16 +724,15 @@ public class Bosh2Connector implements Connector {
 			this.activeRequests.put(request, body);
 			fireOnBodySend(body);
 		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
+		catch (Exception e) {
+			GWT.log(e.getMessage(), e);
 		}
 	}
 
-	public void sendStanza(String stanza) 
+	public void sendStanza(String stanza)
 	{
 		String r = "<body xmlns='http://jabber.org/protocol/httpbind' rid='" + getNextRid() + "'";
-		if (sid != null) 
+		if (sid != null)
 			r += " sid='" + sid + "'";
 		r += ">";
 		r += stanza;
@@ -746,11 +743,11 @@ public class Bosh2Connector implements Connector {
 			send(r, standardHandler);
 	}
 
-	public void setDomain(String domainname) 
+	public void setDomain(String domainname)
 	{
 		this.domain = domainname;
 	}
-	
+
 	private boolean isCrossDomain(final String boshUrl)
 	{
         return false;
@@ -762,7 +759,7 @@ public class Bosh2Connector implements Connector {
 //			return false;
 //		return true;
 	}
-	
+
 	private String getUrlHost(String url)
 	{
 		if(url.contains("http://"))
@@ -789,7 +786,7 @@ public class Bosh2Connector implements Connector {
 				return url;
 		}
 	}
-	
+
 	private String getUrlProtocol(final String url)
 	{
 		int i = url.indexOf(":");
@@ -803,9 +800,9 @@ public class Bosh2Connector implements Connector {
 		}
 		return "";
 	}
-	
 
-	public void setHttpBase(final String boshUrl) 
+
+	public void setHttpBase(final String boshUrl)
 	{
 		if(isCrossDomain(boshUrl))
 		{
@@ -815,8 +812,8 @@ public class Bosh2Connector implements Connector {
 		builder = new RequestBuilder(RequestBuilder.POST, boshUrl);
 		//builder.setHeader("Connection", "close");
 	}
-	
-	public void setCrossDomainHttpBase(final String boshUrl) 
+
+	public void setCrossDomainHttpBase(final String boshUrl)
 	{
 		crossDomain = true;
 		requestClient = new JsonpRequestClient(boshUrl);
@@ -828,12 +825,12 @@ public class Bosh2Connector implements Connector {
 		*/
 	}
 
-	public void setHost(String host) 
+	public void setHost(String host)
 	{
 		this.host = host;
 	}
 
-	public void setPort(int port) 
+	public void setPort(int port)
 	{
 		this.port = port;
 	}
@@ -846,7 +843,7 @@ public class Bosh2Connector implements Connector {
 		return user;
 	}
 
-	public boolean resume() 
+	public boolean resume()
 	{
         Log.log("Bosh2Connector.resume");
 		makeNewRequestBuilder(defaultTimeout + 7);
@@ -862,7 +859,7 @@ public class Bosh2Connector implements Connector {
 
 		if(this.sid == null||this.rid == 0)
 			return false;
-		
+
 		this.state = State.resume;
 
 		Packet e0 = new PacketImp("body");
@@ -878,18 +875,18 @@ public class Bosh2Connector implements Connector {
 		{
 			send(renderer.render(e0), standardHandler);
 		}
-		
+
 		return true;
 	}
 
-	public boolean suspend() 
+	public boolean suspend()
 	{
 		Packet e0 = new PacketImp("body");
 		e0.setAttribute("pause", "120");
 		e0.setAttribute("xmlns", "http://jabber.org/protocol/httpbind");
 		e0.setAttribute("sid", sid);
 		e0.setAttribute("rid", this.getNextRid());
-		
+
 		if(crossDomain)
 		{
 			send(renderer.render(e0),requestClientCallback);
@@ -898,10 +895,10 @@ public class Bosh2Connector implements Connector {
 		{
 			send(renderer.render(e0), standardHandler);
 		}
-		
+
 		return true;
 	}
-	
+
 	public boolean isCrossDomain()
 	{
 		return this.crossDomain;

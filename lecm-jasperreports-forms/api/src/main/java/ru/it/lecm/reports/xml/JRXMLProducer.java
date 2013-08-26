@@ -74,7 +74,7 @@ public class JRXMLProducer {
 			outJrxml.writeTo( new FileOutputStream(outJrxmlFileName));
 			outJrxml.close();
 
-			System.out.println( String.format( "\n successfully saved into jrxml '%s'", outJrxmlFileName));
+			logger.info("successfully saved into jrxml '{}'", outJrxmlFileName);
 
 		} catch (Exception e) {
 			throw new RuntimeException( String.format("Exception at stage '%s': %s\n", stage, e.toString()), e);
@@ -85,7 +85,7 @@ public class JRXMLProducer {
 	/**
 	 * Создание jrxml-файла с простой многоколоночной таблицей.
 	 * @param inPrototypeFileName название файла с прототипом создаваемого файла.
-	 * В нём отмечены все нужные секции и есть прототип колокни данных для 
+	 * В нём отмечены все нужные секции и есть прототип колокни данных для
 	 * создания таблицы из всех колонок НД отчёта.
 	 * @param outJrxmlFileName сгенерированный файл.
 	 * @param desc мета-описание отчёта
@@ -107,7 +107,7 @@ public class JRXMLProducer {
 			outJrxml.writeTo( new FileOutputStream(outJrxmlFileName));
 			outJrxml.close();
 
-			System.out.println( String.format( "\n successfully saved into jrxml '%s'", outJrxmlFileName));
+			logger.info("successfully saved into jrxml '{}'", outJrxmlFileName);
 
 		} catch (Exception e) {
 			throw new RuntimeException( String.format("Exception at stage '%s': %s\n", stage, e.toString()), e);
@@ -116,7 +116,7 @@ public class JRXMLProducer {
 
 	/**
 	 * Внести изменения в шаблонный xml.
-	 * Сейчас изменяет секции '<field>' и '<property name="dataSource" value="java-class">'. 
+	 * Сейчас изменяет секции '<field>' и '<property name="dataSource" value="java-class">'.
 	 * @param jrxml поток с файлом, который надо "патчить"
 	 * @param streamName название потока (для информации в журнал)
 	 * @param desc описание, которое надо внести
@@ -130,7 +130,7 @@ public class JRXMLProducer {
 			return null;
 		logger.debug("updating jrxml " + streamName);
 
-		try { 
+		try {
 			//	final InputSource src = new InputSource(xml);
 			//	src.setEncoding("UTF-8");
 			//	logger.info("Encodig set as: "+ src.getEncoding());
@@ -187,7 +187,7 @@ public class JRXMLProducer {
 	public static Element replaceInListByAttrName( final Document document
 			, final Element parentNode
 			, String xmlName, String attrMakerName, String attrMarkerValue
-			, String attrDestName, String attrDestValue) 
+			, String attrDestName, String attrDestValue)
 	{
 		final List<Node> properties = XmlHelper.findNodesList(parentNode, xmlName, attrMakerName, attrMarkerValue);
 
@@ -207,7 +207,7 @@ public class JRXMLProducer {
 		return dsNode;
 	}
 
-	/** 
+	/**
 	 * Название xml-элементов, перед которыми только и могут быть вставлены "field"
 	 * (!) порядок для iReport важен
 	 */

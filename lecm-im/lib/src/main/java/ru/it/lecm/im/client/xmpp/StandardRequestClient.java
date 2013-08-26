@@ -1,5 +1,6 @@
 package ru.it.lecm.im.client.xmpp;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -11,7 +12,7 @@ public class StandardRequestClient extends RequestClient
 	final private RequestBuilder request;
 	public StandardRequestClient(String url) {
 		super(url);
-		request = new RequestBuilder(RequestBuilder.POST,url); 
+		request = new RequestBuilder(RequestBuilder.POST,url);
 		request.setHeader("Connection", "close");
 	}
 
@@ -21,27 +22,26 @@ public class StandardRequestClient extends RequestClient
 		ID++;
 		final int id  = ID;
 		request.setTimeoutMillis(timeoutMillis);
-		try 
+		try
 		{
 			request.sendRequest(body, new RequestCallback()
 			{
 
-				public void onError(Request request, Throwable exception) 
+				public void onError(Request request, Throwable exception)
 				{
 					callback.onFailure(exception);
-					
+
 				}
 
-				public void onResponseReceived(Request request, Response response) 
+				public void onResponseReceived(Request request, Response response)
 				{
-					callback.onSuccess(id, response.getText());					
+					callback.onSuccess(id, response.getText());
 				}
-				
+
 			});
-		} 
-		catch (RequestException e) 
-		{
-			e.printStackTrace();
+		}
+		catch (RequestException e) {
+			GWT.log(e.getMessage(), e);
 		}
 		return ID;
 	}

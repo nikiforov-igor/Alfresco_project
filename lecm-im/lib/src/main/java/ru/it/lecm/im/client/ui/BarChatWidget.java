@@ -57,22 +57,22 @@ public class BarChatWidget extends BarChatWidgetUI
 	private final static String MSG_DATE = "0";
 	private final static String MSG_NICK = "1";
 	private final static String MSG_MSG = "2";
-	
+
 	final private ChatPanelButton button;
 	String lastNick = null;
 	private final List<JSONObject> messageHistorys = new ArrayList<JSONObject>();
-	
+
 	private Timer composingTimer = null;
 	boolean isComposing;
 	boolean sendComposingEvents;
 	ChatState contactChatState;
 	ChatState lastChatState;
-	
+
 	enum ArchiveRange{ToDay,OneWeek,OneMonth,HalfYear,All}
-	
+
 	public BarChatWidget(ChatPanelButton button)
 	{
-		this.button = button; 
+		this.button = button;
 		contactChatState = null;
 		lastChatState = null;
 		sendComposingEvents = false;
@@ -90,7 +90,7 @@ public class BarChatWidget extends BarChatWidgetUI
 			DateTimeFormat fmt = DateTimeFormat.getFormat("h:mm a");
 			String dateTime = fmt.format(new Date());
 			addMessage(createMessageWidget(nick,body,dateTime));
-			
+
 			sendComposingEvents = message.containsEvent(MsgEvent.ComposingEvent);
 			if(message.containsEvents()||message.getChatState() != null)
 				setContactChatState(ChatState.active);
@@ -103,12 +103,12 @@ public class BarChatWidget extends BarChatWidgetUI
 				setContactChatState(ChatState.paused);
 			else if(message.containsEvent(MsgEvent.ComposingEvent))
 				setContactChatState(ChatState.composing);
-			
+
 			if(message.getChatState() != null)
 				setContactChatState(message.getChatState());
 		}
 	}
-	
+
 	public void processSyncSend(Message message,boolean firstMessage)
 	{
 		if(message.getType() == Type.error)
@@ -121,7 +121,7 @@ public class BarChatWidget extends BarChatWidgetUI
 			addMessage(createMessageWidget(i18n.msg("Я"),body,dateTime));
 		}
 	}
-	
+
 	private HTML createMessageWidget(String nick,String message,final String dateTime)
 	{
 		JSONObject msgHistory = new JSONObject();
@@ -137,7 +137,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		if(lastNick != null&&lastNick.equals(nick))
 			isConsecutiveMessage = true;
 		lastNick = nick;
-		
+
 		String nickStyle = "ijab-local-message";
 		if(!nick.equals(i18n.msg("Я")))
 			nickStyle = "ijab-other-message";
@@ -149,16 +149,16 @@ public class BarChatWidget extends BarChatWidgetUI
 		else
 		{
 			String header = "<h4 class=\""+nickStyle+"\">"+"<span class=\"ijab-gray\">"+dateTime+"</span>"+nick+"</h4>";
-			html = header+"<p>"+message+"</p>"; 
+			html = header+"<p>"+message+"</p>";
 		}
-		
-		messageHistorys.add(msgHistory);	
-		
+
+		messageHistorys.add(msgHistory);
+
 		return new HTML(html);
 	}
-	
+
 	@Override
-	protected void send(String msg) 
+	protected void send(String msg)
 	{
 		Chat<XmppChat> item = button.getChatItem();
 		Message m  = new Message(Message.Type.chat, item.getJid(), null, msg, item.getThreadId());
@@ -170,9 +170,9 @@ public class BarChatWidget extends BarChatWidgetUI
 		m.setChatState(ChatState.active);
 		// Update current state
 		setChatState(ChatState.active);
-		
+
 		Session.instance().getChatPlugin().sendChatMessage(m);
-		
+
 		DateTimeFormat fmt = DateTimeFormat.getFormat("h:mm a");
 		final String dateTime = fmt.format(new Date());
 		addMessage(createMessageWidget(i18n.msg("Я"),msg,dateTime));
@@ -185,7 +185,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		lastNick = null;
 		messageHistorys.clear();
 	}
-	
+
 	public void doSuspend(final String storeKey)
 	{
 		if(messageHistorys.isEmpty())
@@ -206,7 +206,7 @@ public class BarChatWidget extends BarChatWidgetUI
 			Window.alert(e.toString());
 		}
 	}
-	
+
 	public void doResume(final String storeKey)
 	{
 		try
@@ -230,7 +230,7 @@ public class BarChatWidget extends BarChatWidgetUI
 				String dateString = obj.get(MSG_DATE).isString().stringValue();
 				String nick = obj.get(MSG_NICK).isString().stringValue();
 				String msg = obj.get(MSG_MSG).isString().stringValue();
-				
+
 				addMessage(createMessageWidget(nick,msg,dateString));
 			}
 		}
@@ -239,13 +239,13 @@ public class BarChatWidget extends BarChatWidgetUI
 			Window.alert(e.toString());
 		}
 	}
-	
+
 	public void onWindowClose()
 	{
 		resetComposing();
 		setChatState(ChatState.inactive);
 	}
-	
+
 	public void onButtonClose()
 	{
 		resetComposing();
@@ -254,7 +254,7 @@ public class BarChatWidget extends BarChatWidgetUI
 			setContactChatState(ChatState.paused);
 		updateChatStatusText();
 	}
-	
+
 	//for message event
 	private void setComposing()
 	{
@@ -272,10 +272,10 @@ public class BarChatWidget extends BarChatWidgetUI
 		composingTimer.schedule(2000);
 		isComposing = true;
 	}
-	
-	private void checkComposing() 
+
+	private void checkComposing()
 	{
-		if (!isComposing) 
+		if (!isComposing)
 		{
 			// User stopped composing
 			composingTimer.cancel();
@@ -284,7 +284,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		}
 		isComposing = false; // Reset composing
 	}
-	
+
 	private void resetComposing()
 	{
 		if (composingTimer!=null)
@@ -294,12 +294,12 @@ public class BarChatWidget extends BarChatWidgetUI
 			isComposing = false;
 		}
 	}
-	
+
 	private void updateIsComposing(boolean b)
 	{
 		setChatState(b ? ChatState.composing : ChatState.paused);
 	}
-	
+
 	private void setChatState(ChatState state)
 	{
 		if(!button.isContactAvailable())
@@ -308,18 +308,18 @@ public class BarChatWidget extends BarChatWidgetUI
 			lastChatState = null;
 			return;
 		}
-		
+
 		// Transform to more privacy-enabled chat states if necessary
 		if(state == ChatState.gone ||state == ChatState.inactive)
 			state = ChatState.gone;
-		
+
 		// Check if we should send a message
 		if (state == lastChatState || state == ChatState.active || (lastChatState == ChatState.active && state == ChatState.paused) )
 		{
 			lastChatState = state;
 			return;
 		}
-		
+
 		Chat<XmppChat> item = button.getChatItem();
 		// Build event message
 		Message msg = new Message(Message.Type.chat, item.getJid(), null, "", item.getThreadId());
@@ -330,28 +330,28 @@ public class BarChatWidget extends BarChatWidgetUI
 			else if(lastChatState == ChatState.composing)
 				msg.addEvent(MsgEvent.CancelEvent);
 		}
-		
+
 		if(contactChatState != null&&lastChatState != ChatState.gone)
 		{
-			if ((state == ChatState.active && lastChatState == ChatState.composing) || (state == ChatState.composing && lastChatState == ChatState.inactive)) 
+			if ((state == ChatState.active && lastChatState == ChatState.composing) || (state == ChatState.composing && lastChatState == ChatState.inactive))
 			{
 				// First go to the paused state
 				Session.instance().getChatPlugin().sendChatMessage(item.getJid(), "", item.getThreadId(), ChatState.paused);
 			}
 			msg.setChatState(state);
 		}
-		
+
 		if(msg.containsEvents()||state != null)
 			Session.instance().getChatPlugin().sendChatMessage(msg);
-		
+
 		if (lastChatState != ChatState.gone || state == ChatState.active)
 			lastChatState = state;
 	}
-	
+
 	void setContactChatState(ChatState state)
 	{
 		contactChatState = state;
-		if (state == ChatState.gone) 
+		if (state == ChatState.gone)
 		{
 			setChatStatusText(i18n.msg("Чат закрыт"));
 		}
@@ -362,9 +362,9 @@ public class BarChatWidget extends BarChatWidgetUI
 				setChatState(ChatState.active);
 			updateChatStatusText();
 		}
-		
+
 	}
-	
+
 	private void updateChatStatusText()
 	{
 		if(contactChatState == ChatState.composing)
@@ -375,9 +375,9 @@ public class BarChatWidget extends BarChatWidgetUI
 			setChatStatusText("");
 		button.setChatState(contactChatState);
 	}
-	
+
 	@Override
-	protected void onTyping() 
+	protected void onTyping()
 	{
 		setComposing();
 	}
@@ -385,10 +385,10 @@ public class BarChatWidget extends BarChatWidgetUI
 	 * @see anzsoft.iJab.client.ui.BarChatWidgetUI#viewHistory()
 	 */
 	@Override
-	public void viewHistory() 
+	public void viewHistory()
 	{
 		viewRangeArchive(ArchiveRange.ToDay);
-		
+
 		/*
 		if(iJab.client instanceof XmppClient)
 		{
@@ -397,7 +397,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		}
 		*/
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private Date getRangeStart(ArchiveRange range)
 	{
@@ -436,11 +436,9 @@ public class BarChatWidget extends BarChatWidgetUI
 		case All:
 			ret = null;
 		}
-		//DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
-		//System.out.println(fmt.format(ret));
 		return ret;
 	}
-	
+
 	private void viewRangeArchive(ArchiveRange range)
 	{
         Log.log("BarChatWidget.viewRangeArchive");
@@ -450,12 +448,12 @@ public class BarChatWidget extends BarChatWidgetUI
 		final FlowPanel archivePanel = new FlowPanel();
 		chatContent.add(archivePanel);
 		Date start = getRangeStart(range);
-		
+
 		final MessageArchivingPlugin plugin = Session.instance().getMessageArchivingPlugin();
 		plugin.retriveCollectionList(button.getChatItem().getJid(), 100, start, new CollectionHandler()
 		{
 			@Override
-			public void onSuccess(IQ iq, CollectionResultSet res) 
+			public void onSuccess(IQ iq, CollectionResultSet res)
 			{
 				Log.log("History: Received list of conversations");
                 if(res==null||res.getCollections().size() == 0)
@@ -475,7 +473,7 @@ public class BarChatWidget extends BarChatWidgetUI
 					plugin.retriveCollection(item0.getWith(), item0.getDateSource(), 9999, 0, new MessageArchiveRequestHandler()
 					{
 						@Override
-						public void onSuccess(IQ iq, ResultSet rs) 
+						public void onSuccess(IQ iq, ResultSet rs)
 						{
                             Log.log("MessageArchiveRequestHandler.onSuccess");
 							for(Item item:rs.getItems())
@@ -484,7 +482,7 @@ public class BarChatWidget extends BarChatWidgetUI
 							}
 						}
 					});
-					
+
 					for(int index=1;index<res.getCollections().size();index++)
 					{
 						CollectionItem cItem = res.getCollections().get(index);
@@ -496,7 +494,7 @@ public class BarChatWidget extends BarChatWidgetUI
 			}
 		});
 	}
-	
+
 	private Widget createMessageWidget4ArchiveItem(Item item)
 	{
 		DateTimeFormat fmt = DateTimeFormat.getFormat("h:mm a");
@@ -508,7 +506,7 @@ public class BarChatWidget extends BarChatWidgetUI
 			nick = XmppProfileManager.getName(button.getChatItem().getJid().toStringBare());
 		return createArchiveMessageWidget(nick,item.getBody(),dateTime);
 	}
-	
+
 	private Widget createTitleWidget4Collection(final CollectionItem item,final FlowPanel content)
 	{
 		DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm");
@@ -516,7 +514,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		panel.addStyleName("collopse");
 		final ClickHandler handler = new ClickHandler()
 		{
-			public void onClick(ClickEvent event) 
+			public void onClick(ClickEvent event)
 			{
                 Log.log("History: createTitleWidget4Collection.ClickHandler.onClick");
                 if(!panel.getStyleName().contains("collopse"))
@@ -527,7 +525,7 @@ public class BarChatWidget extends BarChatWidgetUI
 				plugin.retriveCollection(item.getWith(), item.getDateSource(), 999, 0, new MessageArchiveRequestHandler()
 				{
 					@Override
-					public void onSuccess(IQ iq, ResultSet rs) 
+					public void onSuccess(IQ iq, ResultSet rs)
 					{
                         Log.log("History: MessageArchiveRequestHandler.onSuccess()");
 						for(Item item:rs.getItems())
@@ -541,19 +539,19 @@ public class BarChatWidget extends BarChatWidgetUI
 		panel.addClickHandler(handler);
 		return panel;
 	}
-	
+
 	private Widget createTopRangeWidget(ArchiveRange range)
 	{
 //        return new HTML("<div class='ijab-archive-top ui-corner-all'><span>"+rangeString(range)+"</span></div>");
         return new HTML("<a class='ijab-archive-top-link'>" + rangeString(range) + "</a>");
 	}
-	
+
 	private String rangeString(ArchiveRange range)
 	{
 		String ret = range.toString();
 		return i18n.msg(ret);
 	}
-	
+
 	private FlowPanel createRangeSelectorWidget(ArchiveRange range)
 	{
 		FlowPanel widget = new FlowPanel();
@@ -565,7 +563,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		}
 		return widget;
 	}
-	
+
 	private FocusHTMLPanel createWidget4Range(final ArchiveRange range)
 	{
 		FocusHTMLPanel panel = new FocusHTMLPanel("a", rangeString(range));
@@ -578,7 +576,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		});
 		return panel;
 	}
-	
+
 	private HTML createArchiveMessageWidget(String nick,String message,final String dateTime)
 	{
 		if(message == null)
@@ -588,7 +586,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		if(lastNick != null&&lastNick.equals(nick))
 			isConsecutiveMessage = true;
 		lastNick = nick;
-		
+
 		String nickStyle = "ijab-local-message";
 		if(!nick.equals(i18n.msg("Я")))
 			nickStyle = "ijab-other-message";
@@ -600,7 +598,7 @@ public class BarChatWidget extends BarChatWidgetUI
 		else
 		{
 			String header = "<h4 class=\""+nickStyle+"\">"+"<span class=\"ijab-gray\">"+dateTime+"</span>"+nick+"</h4>";
-			html = header+"<p>"+message+"</p>"; 
+			html = header+"<p>"+message+"</p>";
 		}
 		return new HTML(html);
 	}

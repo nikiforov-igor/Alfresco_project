@@ -96,7 +96,6 @@
 		<module>lecm-business-journal</module>
 		<module>lecm-calendar</module>
 		<module>lecm-user-profile</module>
-		<module>lecm-integrotest</module>
 		<module>lecm-documents</module>
 		<module>lecm-regnumbers</module>
 		<module>lecm-contractors</module>

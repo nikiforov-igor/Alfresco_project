@@ -60,7 +60,6 @@ public class ReportTemplateImpl
 			try {
 				this.data = IOUtils.toByteArray(stm);
 			} catch (IOException e) {
-				// e.printStackTrace();
 				throw new RuntimeException("Fail to get data bytes from input stream", e);
 			}
 		}

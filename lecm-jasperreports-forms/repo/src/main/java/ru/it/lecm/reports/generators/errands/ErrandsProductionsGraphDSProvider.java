@@ -49,7 +49,7 @@ import ru.it.lecm.utils.LuceneSearchBuilder;
  * 		в зависимости от даты
  * @author rabdullin
  */
-public class ErrandsProductionsGraphDSProvider 
+public class ErrandsProductionsGraphDSProvider
 		extends GenericDSProviderBase
 {
 
@@ -97,15 +97,14 @@ public class ErrandsProductionsGraphDSProvider
 			conf().loadConfig();
 			this.paramsFilter.scanGroupByInfo( conf());
 		} catch (JRException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
 
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-		final ExecProductionsJRDataSource result = new ExecProductionsJRDataSource(iterator);
-		return result;
+		return new ExecProductionsJRDataSource(iterator);
 	}
 
 
@@ -127,9 +126,9 @@ public class ErrandsProductionsGraphDSProvider
 		// hasData: становится true после внесения первого любого условия в builder
 		boolean hasData = !builder.isEmpty();
 
-		/* 
+		/*
 		 * Критерий двойной:
-		 * 		Время Начала 
+		 * 		Время Начала
 		 * 		или Время Окончания заданы внутри указанного интервала
 		 * Формируется в виде
 		 * 		"AND ( start_inside OR end_inside )"
@@ -211,12 +210,12 @@ public class ErrandsProductionsGraphDSProvider
 
 		/**
 		 * Колонка "Показатель: среднее время исполнения поручения"
-		 * (его единицы измерения - см колонку COL_AVG_EXECUTION_UNITS) 
+		 * (его единицы измерения - см колонку COL_AVG_EXECUTION_UNITS)
 		 */
-		final static String COL_AVG_EXECUTION = "Col_Avg_Execution.Value"; // java.lang.Float 
+		final static String COL_AVG_EXECUTION = "Col_Avg_Execution.Value"; // java.lang.Float
 
 		/** Колонка "Показатель: название единицы измерения среднего времени исполнения" */
-		final static String COL_AVG_EXECUTION_UNITS = "Col_Avg_Execution.Units"; // String 
+		final static String COL_AVG_EXECUTION_UNITS = "Col_Avg_Execution.Units"; // String
 	}
 
 
@@ -224,8 +223,8 @@ public class ErrandsProductionsGraphDSProvider
 	private class LocalQNamesHelper extends ErrandsQNamesHelper
 	{
 		/**
-		 * Параметр отчёта в НД: Исполнитель или Подразделение, по которому 
-		 * фактически будет выполняться группировка ... 
+		 * Параметр отчёта в НД: Исполнитель или Подразделение, по которому
+		 * фактически будет выполняться группировка ...
 		 */
 		QName QN_ASSOC_REF;
 
@@ -247,7 +246,7 @@ public class ErrandsProductionsGraphDSProvider
 
 		final private BasicEmployeeInfo employee;
 
-		/** 
+		/**
 		 * Список из элементов типа "Среднее время исполнения, часов"
 		 * (индексы: по дням, неделям, месяцам и т.п.)
 		 */
@@ -255,7 +254,7 @@ public class ErrandsProductionsGraphDSProvider
 
 
 		/**
-		 * Зарегистрировать 
+		 * Зарегистрировать
 		 * @param employeeId
 		 * @param maxListSize кол-во элементов в списке накопления
 		 */
@@ -274,19 +273,19 @@ public class ErrandsProductionsGraphDSProvider
 
 		public void registerDuration(int index, long duration_ms) {
 			if (duration_ms <= 0) // нельзя определить
-				return; 
-			final float fact = (float) duration_ms / MILLIS_PER_HOUR;  
+				return;
+			final float fact = (float) duration_ms / MILLIS_PER_HOUR;
 			this.avgExecTimeInHours.get(index).adjust(fact);
 		}
 
 		/**
-		 * Зарегистрировать длительность исполнения (работы) 
+		 * Зарегистрировать длительность исполнения (работы)
 		 * @param start время начала
 		 * @param end время конца
 		 */
 		public void registerDuration(int index, Date start, Date end) {
 			if (start == null || end == null) // нельзя определить
-				return; 
+				return;
 			registerDuration( index, end.getTime() - start.getTime());
 		}
 	}
@@ -300,9 +299,9 @@ public class ErrandsProductionsGraphDSProvider
 
 		/**
 		 * Показатель: среднее время исполнения поручения
-		 * (его единицы измерения - см колонку COL_AVG_EXECUTION_UNITS) 
+		 * (его единицы измерения - см колонку COL_AVG_EXECUTION_UNITS)
 		 */
-		private Float Col_Avg_Execution_Value; 
+		private Float Col_Avg_Execution_Value;
 
 		/** Колонка "Показатель: название единицы измерения среднего времени исполнения" */
 		private String Col_Avg_Execution_Units;
@@ -349,9 +348,9 @@ public class ErrandsProductionsGraphDSProvider
 			Col_Avg_Execution_Units = col_Avg_Execution_Units;
 		}
 
-	} 
+	}
 
-	
+
 	/**
 	 * Jasper-НД для вычисления статистики
 	 */
@@ -403,7 +402,7 @@ public class ErrandsProductionsGraphDSProvider
 			if (dstart == null || dend == null) // одной из дат нет ...
 				return 0;
 
-			// (!) первую дату выравниваем на начало дня, 
+			// (!) первую дату выравниваем на начало дня,
 			// вторую - не трогаем, т.к. будем ровнять delta_h сверху на 24ч
 			final Date nstart = Utils.adjustDayTime(dstart, 0, 0, 0, 0);
 
@@ -427,7 +426,7 @@ public class ErrandsProductionsGraphDSProvider
 			{
 				final Calendar curDay = Calendar.getInstance();
 				curDay.setTime(periodStart);
-				final Random r = new Random(); 
+				final Random r = new Random();
 				for (int i = 0; i < maxTimeCounter; i++) { // цикл по дням
 					final Timestamp curStamp = new Timestamp(curDay.getTimeInMillis());
 
@@ -469,7 +468,7 @@ public class ErrandsProductionsGraphDSProvider
 
 					final ResultSetRow rs = context.getRsIter().next();
 
-					final NodeRef errandId = rs.getNodeRef(); // id Поручения 
+					final NodeRef errandId = rs.getNodeRef(); // id Поручения
 					if (context.getFilter() != null && !context.getFilter().isOk(errandId)) {
 						if (logger.isDebugEnabled())
 							logger.debug( String.format("{%s} filtered out", errandId));
@@ -488,9 +487,9 @@ public class ErrandsProductionsGraphDSProvider
 					final Map<QName, Serializable> props = nodeSrv.getProperties(errandId);
 
 					for (int i = 0; i < employees.size(); i++) {
-						final NodeRef executorId = employees.get(i).getTargetRef(); // id Сотрудника-Исполнителя 
+						final NodeRef executorId = employees.get(i).getTargetRef(); // id Сотрудника-Исполнителя
 
-						final BasicEmployeeInfo execEmployee = new BasicEmployeeInfo( executorId); 
+						final BasicEmployeeInfo execEmployee = new BasicEmployeeInfo( executorId);
 
 						// грузим данные по подразделениям, только если надо по
 						// ним группировать (указав beanOU != null)
@@ -528,7 +527,7 @@ public class ErrandsProductionsGraphDSProvider
 
 				} // while по НД
 
-				// TODO: подумать над тем, чтобы гарантировать наличие выбранных для отчёта Сотрудников в легенде всегда (даже если по ним не было данных) 
+				// TODO: подумать над тем, чтобы гарантировать наличие выбранных для отчёта Сотрудников в легенде всегда (даже если по ним не было данных)
 				// (!) перенос в основной блок с разбивкой по датам ...
 				final Calendar x_curDay = Calendar.getInstance();
 				x_curDay.setTime(periodStart);
@@ -540,7 +539,7 @@ public class ErrandsProductionsGraphDSProvider
 						final float y_value;
 						{
 							final AvgValue avg = item.avgExecTimeInHours.get(i);
-							// вместо отсутствующих значений выводим ноль - чтобы 
+							// вместо отсутствующих значений выводим ноль - чтобы
 							// график не "схлопывался до точки" ...
 							y_value = (avg != null && avg.getCount() > 0) ? avg.getAvg() : 0;
 						}

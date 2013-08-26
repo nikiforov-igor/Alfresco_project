@@ -390,7 +390,6 @@ public class DurationLogger {
 								+ (DurationLogger.UNITS[ii][jj].length() > 0 ? ","+DurationLogger.UNITS[ii][jj] : "")
 								+ "[}]";
 						substData.put( macro, value);
-						// System.out.println( macro + " will be "+ value);
 					}
 				}
 			}

@@ -48,7 +48,7 @@ public class ErrandsDocTreeDSProvider
 
 	/**
 	 * Список отбираемых документов или null, если надо все ...
-	 * По-сути требуется только при построении текста запроса 
+	 * По-сути требуется только при построении текста запроса
 	 */
 	// private List<NodeRef> selectedDocuments;
 
@@ -75,10 +75,10 @@ public class ErrandsDocTreeDSProvider
 		final static String XML_TREE_LEVEL_ASSOC = "tree.levelAssoc"; // key: "level.nn" = "qname-of-assoc-for-level-nn-to-get-next-level"
 
 		/** строка в качестве отступа на каждый уровень*/
-		private String levelShift = "\t"; 
+		private String levelShift = "\t";
 
 		/** строка для пометки повторов */
-		private String dupMarker = "(!)"; 
+		private String dupMarker = "(!)";
 
 		/** конфигурация по связям в виде: ключ "level.n" = значение qname-ассоциации...*/
 		final private Map<String, Object> levelsAssoc = new HashMap<String, Object>(4);
@@ -126,8 +126,8 @@ public class ErrandsDocTreeDSProvider
 
 		/**
 		 * Получить ассцоаицию на детей указанного уровня.
-		 * @param level уровень на который надо протянуть связь к детям (т.е. 
-		 * значение level=1 соот-ет получению ассоциации от Родителей верхнего 
+		 * @param level уровень на который надо протянуть связь к детям (т.е.
+		 * значение level=1 соот-ет получению ассоциации от Родителей верхнего
 		 * уровня к своим непосредственным детям и т.д.)
 		 * @return связь, или null если явно заданного значения нет в конфе.
 		 */
@@ -178,7 +178,7 @@ public class ErrandsDocTreeDSProvider
 
 			if (logger.isDebugEnabled()) {
 				logger.debug( String.format( "Config loaded for Errands Tree Report:\n%s", this));
-			} 
+			}
 		}
 	}
 
@@ -196,7 +196,7 @@ public class ErrandsDocTreeDSProvider
 			conf().loadConfig();
 			this.configDocTreeParams.scanTreeParams( conf());
 		} catch (JRException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -254,7 +254,7 @@ public class ErrandsDocTreeDSProvider
 		final private NodeRef node;
 
 		/* текущий уровень данного узла, фиксируем, т.к. не собираемся его менять
-		 * и было проще вычислять numberedStr 
+		 * и было проще вычислять numberedStr
 		 */
 		final private int level;
 
@@ -267,10 +267,10 @@ public class ErrandsDocTreeDSProvider
 		/** Название элемента */
 		private String displayName;
 
-		/** 
+		/**
 		 * Список детей
 		 */
-		final private List<ItemLeveledInfo> children = new ArrayList<ItemLeveledInfo>(); 
+		final private List<ItemLeveledInfo> children = new ArrayList<ItemLeveledInfo>();
 
 		public ItemLeveledInfo() {
 			// псевдо-узел
@@ -357,7 +357,7 @@ public class ErrandsDocTreeDSProvider
 		}
 
 		/**
-		 * Зарегистрировать нового детёныша ... 
+		 * Зарегистрировать нового детёныша ...
 		 * (!) уровень детёнышу присваивается автоматически
 		 * @param childId id узла
 		 * @param number номер в списке присваивается автоматически
@@ -365,7 +365,7 @@ public class ErrandsDocTreeDSProvider
 		 * @return созданный объект, (!) его номер в личном списке присваивается автоматически
 		 */
 		public ItemLeveledInfo addChild( NodeRef childId, String childName) {
-			final int number = this.children.size() + 1; // нумерация детишек от одного 
+			final int number = this.children.size() + 1; // нумерация детишек от одного
 			final ItemLeveledInfo result = new ItemLeveledInfo( childId, this.level + 1, number, this.leveledNumberStr, childName);
 			this.children.add(result);
 			return result;
@@ -418,11 +418,11 @@ public class ErrandsDocTreeDSProvider
 		}
 
 		/**
-		 * Зарегить документ указанного уровня и потом рекурсивно подгрузить его 
-		 * детей (с контролем от зацикливания). 
+		 * Зарегить документ указанного уровня и потом рекурсивно подгрузить его
+		 * детей (с контролем от зацикливания).
 		 * @param docId
 		 * @param parentNode
-		 * @param qnParentAssoc ассоциация, которая привела на уровень level (для корневых null) 
+		 * @param qnParentAssoc ассоциация, которая привела на уровень level (для корневых null)
 		 */
 		private void regLeveldItem( final NodeRef docId, ItemLeveledInfo parentNode, final QName qnParentAssoc) {
 
@@ -430,7 +430,7 @@ public class ErrandsDocTreeDSProvider
 			PropertyCheck.mandatory(this, "parentNode", parentNode);
 
 			// уровень создаваемого здесь объекта (0 = корневой)
-			final int level = parentNode.getLevel() + 1; 
+			final int level = parentNode.getLevel() + 1;
 
 			// флажок потора узла
 			final boolean isDup = this.getProcessed().containsKey(docId);
