@@ -59,6 +59,12 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>com.springsource.javax.mail</artifactId>
+			<version>1.4.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${platform.version}</version>
@@ -97,6 +103,12 @@
 		<dependency>
 			<groupId>ru.it.lecm.dictionary</groupId>
 			<artifactId>dictionary-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.regnumbers</groupId>
+			<artifactId>lecm-regnumbers-repo-api</artifactId>
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>

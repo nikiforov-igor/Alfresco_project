@@ -218,4 +218,12 @@ public interface RegNumbersService {
 	 * метода. Детали см. в эксепшене.
 	 */
 	void setDocumentNumber(String dictionaryTemplateCode, NodeRef documentNode, String documentPropertyPrefix) throws TemplateParseException, TemplateRunException;
+
+	/**
+	 * Получить NodeRef шаблона по его коду.
+	 *
+	 * @param dictionaryTemplateCode код шаблона в справочнике.
+	 * @return ссылка на объект шаблона.
+	 */
+	NodeRef getTemplateNodeByCode(String dictionaryTemplateCode);
 }

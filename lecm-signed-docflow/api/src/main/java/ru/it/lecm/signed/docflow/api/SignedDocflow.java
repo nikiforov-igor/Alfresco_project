@@ -117,4 +117,12 @@ public interface SignedDocflow {
 	 * @return является ли данная подпись подписью нашей организации
 	 */
 	boolean isOurSignature(NodeRef signatureRef);
+
+	/**
+	 * Добавить aspect-document-id к контенту и установить атрибут document-id.
+	 *
+	 * @param contentRef ссылка на наследник cm:content.
+	 * @param documentId DocumentID, который необходимо записать в соответствующий атрибут.
+	 */
+	void addDocumentIdToContent(final NodeRef contentRef, final String documentId);
 }

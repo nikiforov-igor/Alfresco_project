@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -56,6 +57,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	private DocumentAttachmentsService documentAttachmentsService;
 	private VersionService versionService;
 	private ContentService contentService;
+	private BehaviourFilter behaviourFilter;
 
 	public void setUnicloudService(UnicloudService unicloudService) {
 		this.unicloudService = unicloudService;
@@ -75,6 +77,10 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 	public void setContentService(ContentService contentService) {
 		this.contentService = contentService;
+	}
+
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+		this.behaviourFilter = behaviourFilter;
 	}
 
 	@Override
@@ -137,6 +143,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
 		PropertyCheck.mandatory(this, "unicloudService", unicloudService);
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
+		PropertyCheck.mandatory(this, "behaviourFilter", behaviourFilter);
 
 		addAttributesToOrganization();
 	}
@@ -500,6 +507,22 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	@Override
 	public boolean isOurSignature(NodeRef signatureRef) {
 		return (Boolean) nodeService.getProperty(signatureRef, SignedDocflowModel.PROP_IS_OUR);
+	}
+
+	@Override
+	public void addDocumentIdToContent(final NodeRef contentRef, final String documentId) {
+		behaviourFilter.disableBehaviour(contentRef, ContentModel.ASPECT_VERSIONABLE);
+		try {
+			if (nodeService.getAspects(contentRef).contains(SignedDocflowModel.ASPECT_DOCUMENT_ID)) {
+				nodeService.setProperty(contentRef, SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
+			} else {
+				Map<org.alfresco.service.namespace.QName, Serializable> properties = new HashMap<org.alfresco.service.namespace.QName, Serializable>();
+				properties.put(SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
+				nodeService.addAspect(contentRef, SignedDocflowModel.ASPECT_DOCUMENT_ID, properties);
+			}
+		} finally {
+			behaviourFilter.enableBehaviour(contentRef, ContentModel.ASPECT_VERSIONABLE);
+		}
 	}
 
 }

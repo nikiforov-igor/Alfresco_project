@@ -16,7 +16,6 @@
 		<property name="contentService" ref="contentService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="signedDocflowService" ref="signedDocflowService"/>
-		<property name="behaviourFilter" ref="policyBehaviourFilter"/>
 	</bean>
 
 	<bean id="lecm.signed-docflow.model-bootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
@@ -32,23 +31,33 @@
 		</property>
 	</bean>
 
-	<bean id="lecm.signed-docflow.business-journal-dictionary-bootstrap"
+	<bean id="lecm.signed-docflow.dictionary-bootstrap"
 		  parent="lecmDictionaryBootstrap"
-		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
-						ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">
+		  depends-on="lecm.signed-docflow.model-bootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
+						ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+						ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap,
+						businessJournalLogEventsPolicy, regNumbers.regNumbersTemplatesDicBootstrap">
 		<property name="createOrUpdateDictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory-items.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-signed-docflow-roles-items.xml</value>
+				<value>alfresco/module/${artifactId}/models/signed-docflow-regnumbers.xml</value>
 			</list>
 		</property>
 	</bean>
 
-	<bean id="lecm.signed-docflow.business-roles-dictionary-bootstrap"
-		  parent="lecmDictionaryBootstrap" depends-on="lecm.signed-docflow.model-bootstrap, businessJournalLogEventsPolicy, ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap" >
-		<property name="createOrUpdateDictionaries">
+	<bean id="lecm.signed-docflow.mail-templates-bootstrap" parent="spacesStoreImporter"
+		  depends-on="lecm.signed-docflow.model-bootstrap">
+		<property name="useExistingStore" value="true" />
+		<property name="bootstrapViews">
 			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-signed-docflow-roles-items.xml</value>
+				<props>
+					<prop key="uuidBinding">REMOVE_EXISTING</prop>
+					<prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}/${spaces.templates.email.childname}</prop>
+					<prop key="location">alfresco/module/${artifactId}/models/signed-docflow-mail-templates.xml</prop>
+					<prop key="messages">alfresco/messages/bootstrap-spaces</prop>
+				</props>
 			</list>
 		</property>
 	</bean>
@@ -70,9 +79,11 @@
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="versionService" ref="versionService"/>
 		<property name="contentService" ref="contentService"/>
+		<property name="behaviourFilter" ref="policyBehaviourFilter"/>
 	</bean>
 
-	<bean id="sendContentToPartnerService" class="ru.it.lecm.signed.docflow.SendContentToPartnerService" init-method="init">
+	<bean id="sendContentToPartnerService" class="ru.it.lecm.signed.docflow.SendContentToPartnerService" init-method="init"
+		  depends-on="lecm.signed-docflow.mail-templates-bootstrap">
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="unicloudService" ref="unicloudService"/>
@@ -83,6 +94,8 @@
 		<property name="signedDocflowService" ref="signedDocflowService"/>
 		<property name="fileFolderService" ref="fileFolderService"/>
 		<property name="zipSignedContentService" ref="zipSignedContentService"/>
+		<property name="regNumbersService" ref="regNumbersService"/>
+		<property name="defaultFromEmail" value="${mail.from.default}"/>
 	</bean>
 	
 	<bean id="zipSignedContentService" class="ru.it.lecm.signed.docflow.ZipSignedContentService" init-method="init">
@@ -90,6 +103,7 @@
 		<property name="fileFolderService" ref="fileFolderService"/>
 		<property name="signedDocflowService" ref="signedDocflowService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
 	</bean>
 
 </beans>

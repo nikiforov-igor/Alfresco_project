@@ -25,7 +25,7 @@ public class PlainCounter extends AbstractCounter implements RetryingTransaction
 	}
 
 	@Override
-	public synchronized long getValue() {
+	public long getValue() {
 		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
 
 		return transactionHelper.doInTransaction(this, false, true);

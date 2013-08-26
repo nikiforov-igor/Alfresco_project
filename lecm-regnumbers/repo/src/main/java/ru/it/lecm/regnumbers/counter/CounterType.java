@@ -21,7 +21,11 @@ public enum CounterType {
 	/**
 	 * Годовой счетчик для типа документа.
 	 */
-	DOCTYPE_YEAR("doctypeYearCounter[%s]");
+	DOCTYPE_YEAR("doctypeYearCounter[%s]"),
+	/**
+	 * Счетчик для использования в документообороте.
+	 */
+	SIGNED_DOCFLOW("signedDocflowCounter");
 	private final String objectName;
 
 	private CounterType(String objectName) {

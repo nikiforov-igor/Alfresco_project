@@ -35,7 +35,7 @@ public class YearCounter extends AbstractCounter implements RetryingTransactionC
 	}
 
 	@Override
-	public synchronized long getValue() {
+	public long getValue() {
 		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
 
 		return transactionHelper.doInTransaction(this, false, true);

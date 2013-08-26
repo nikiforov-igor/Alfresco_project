@@ -139,6 +139,12 @@ interface Document {
 	 * @return значение счетчика.
 	 */
 	long counterYearDoctype(String tag);
+	/**
+	 * Получить значение счетчика, используемого в документообороте.
+	 *
+	 * @return значение счетчика.
+	 */
+	long getCounterSignedDocflow();
 
 	/**
 	 * @return Дата содания документа.

@@ -61,7 +61,7 @@ public class ZipSignedContentService extends BaseBean {
 		PropertyCheck.mandatory(this, "documentAttachmentsService", documentAttachmentsService);
 	}
 
-	private Map<String, FileInfo[]> processContent(NodeRef nodeRef, boolean onlyOurSignatures) {
+	private Map<String, FileInfo[]> processContent(NodeRef nodeRef, boolean onlyOurSignatures, boolean createFolder) {
 		List<NodeRef> signsRef = signedDocflowService.getSignaturesByContent(nodeRef);
 		List<NodeRef> content;
 		if (onlyOurSignatures) {
@@ -79,7 +79,8 @@ public class ZipSignedContentService extends BaseBean {
 
 		List<FileInfo> contentInfo = getFileInfo(content);
 		Map<String, FileInfo[]> files = new HashMap<String, FileInfo[]>();
-		files.put(fileFolderService.getFileInfo(nodeRef).getName(), contentInfo.toArray(new FileInfo[contentInfo.size()]));
+		String folderName = createFolder ? fileFolderService.getFileInfo(nodeRef).getName() : null;
+		files.put(folderName, contentInfo.toArray(new FileInfo[contentInfo.size()]));
 		return files;
 	}
 
@@ -87,7 +88,7 @@ public class ZipSignedContentService extends BaseBean {
 		List<NodeRef> attachments = getAttachments(nodeRef);
 		Map<String, FileInfo[]> files = new HashMap<String, FileInfo[]>();
 		for (NodeRef contentNodeRef : attachments) {
-			files.putAll(processContent(contentNodeRef, onlyOurSignatures));
+			files.putAll(processContent(contentNodeRef, onlyOurSignatures, true));
 		}
 		return files;
 
@@ -112,7 +113,7 @@ public class ZipSignedContentService extends BaseBean {
 			fileInfo = processDocument(nodeRef, onlyOurSignatures);
 		} else {
 			zipName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
-			fileInfo = processContent(nodeRef, onlyOurSignatures);
+			fileInfo = processContent(nodeRef, onlyOurSignatures, false);
 		}
 
 		ZipArchiveOutputStream zipOut = null;
@@ -127,7 +128,15 @@ public class ZipSignedContentService extends BaseBean {
 				String folderName = entry.getKey();
 				FileInfo[] fileInfos = entry.getValue();
 				for (FileInfo file : fileInfos) {
-					ArchiveEntry zipEntry = new ZipArchiveEntry(FilenameUtils.removeExtension(folderName) + "/" + file.getName());
+					String filePath;
+
+					if (folderName != null) {
+						filePath = FilenameUtils.removeExtension(folderName) + "/" + file.getName();
+					} else {
+						filePath = file.getName();
+					}
+
+					ArchiveEntry zipEntry = new ZipArchiveEntry(filePath);
 					zipOut.putArchiveEntry(zipEntry);
 
 					int length;

@@ -52,6 +52,10 @@ public class CounterFactory extends BaseBean {
 	 */
 	private NodeRef globalYearCounter;
 	/**
+	 * Ссылка на счетчик для использования в документообороте.
+	 */
+	private NodeRef signedDocflowPlainCounter;
+	/**
 	 * Ссылки на сквозные счетчики по типу документа.
 	 * Структура: Тип в виде префикса (напр. "lecm-document:base") - Метка
 	 * счетчика - Cсылка на счетчик.
@@ -88,6 +92,7 @@ public class CounterFactory extends BaseBean {
 		initPlainCounter();
 		initYearCounter();
 		initDocTypeCounters();
+		initSignedDocflowCounter();
 	}
 
 	public void setNamespaceService(final NamespaceService namespaceService) {
@@ -152,7 +157,9 @@ public class CounterFactory extends BaseBean {
 				}
 				counter = new YearCounter(counterNodeRef, nodeService, transactionService);
 				break;
-
+			case SIGNED_DOCFLOW:
+				counter = new PlainCounter(signedDocflowPlainCounter, nodeService, transactionService);
+				break;
 			default:
 				throw new RuntimeException("Unknown counter type: " + type);
 
@@ -180,6 +187,17 @@ public class CounterFactory extends BaseBean {
 		if (globalYearCounter == null) {
 			globalYearCounter = createNewCounter(CounterType.YEAR, null, null);
 			logger.info(String.format("Global year counter node '%s' created", globalYearCounter.toString()));
+		}
+	}
+
+	/**
+	 * Создать (если его еще нет) счетчик для документооборота. Запомнить NodeRef
+	 */
+	private void initSignedDocflowCounter() {
+		signedDocflowPlainCounter = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, CounterType.SIGNED_DOCFLOW.objectName());
+		if (signedDocflowPlainCounter == null) {
+			signedDocflowPlainCounter = createNewCounter(CounterType.SIGNED_DOCFLOW, null, null);
+			logger.info(String.format("Signed docflow counter node '%s' created", signedDocflowPlainCounter.toString()));
 		}
 	}
 
@@ -301,6 +319,9 @@ public class CounterFactory extends BaseBean {
 				itemType = RegNumbersService.TYPE_DOCTYPE_YEAR_COUNTER;
 				properties.put(RegNumbersService.PROP_DOCTYPE, docType);
 				properties.put(RegNumbersService.PROP_YEAR, getCurYear());
+				break;
+			case SIGNED_DOCFLOW:
+				itemType = RegNumbersService.TYPE_PLAIN_COUNTER;
 				break;
 			default:
 				throw new RuntimeException("Unknown counter type: " + counterType);

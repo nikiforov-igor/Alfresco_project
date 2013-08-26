@@ -138,7 +138,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
 	@Override
 	public void setDocumentNumber(String dictionaryTemplateCode, NodeRef documentNode, String documentPropertyPrefix) throws TemplateParseException, TemplateRunException {
-		NodeRef templateDictionary = dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, dictionaryTemplateCode);
+		NodeRef templateDictionary = getTemplateNodeByCode(dictionaryTemplateCode);
 		if (templateDictionary != null) {
 			setDocumentNumber(documentNode, documentPropertyPrefix, templateDictionary);
 		}
@@ -149,5 +149,10 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
+	}
+
+	@Override
+	public NodeRef getTemplateNodeByCode(String dictionaryTemplateCode) {
+		return dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, dictionaryTemplateCode);
 	}
 }

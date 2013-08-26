@@ -166,6 +166,11 @@ public class DocumentImpl implements Document {
 		return counterFactory.getCounter(CounterType.DOCTYPE_YEAR, documentNode, tag).getValue();
 	}
 
+	@Override
+	public long getCounterSignedDocflow() {
+		return counterFactory.getCounter(CounterType.SIGNED_DOCFLOW, documentNode, null).getValue();
+	}
+
 	private Object getNodeRefAttribute(NodeRef node, String attributeName) {
 		QName attributeQName = QName.createQName(attributeName, namespaceService);
 		return nodeService.getProperty(node, attributeQName);
