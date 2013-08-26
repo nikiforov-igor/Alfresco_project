@@ -19,7 +19,7 @@
     <constraints>
         <constraint name="lecm-additional-document:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value><![CDATA[{lecm-additional-document:additionalDocumentType/cm:name} <i>№{lecm-additional-document:number}</i> от {lecm-additional-document:date} с {lecm-additional-document:document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}]]></value>
+                <value><![CDATA[{lecm-additional-document:additionalDocumentType/cm:name} <i>№{lecm-additional-document:number}</i> от {lecm-additional-document:date?dd.MM.yyyy} с {lecm-additional-document:document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}]]></value>
             </parameter>
         </constraint>
         <constraint name="lecm-additional-document:attachment-categories" type="LIST">
@@ -61,6 +61,7 @@
                 <!-- Дата документа к договору-->
                 <property name="lecm-additional-document:date">
                     <type>d:date</type>
+	                <default>1970-01-01T00:00:00.000Z</default>
                 </property>
                 <!-- Подписано контрагентом -->
                 <property name="lecm-additional-document:signedCounterparty">
