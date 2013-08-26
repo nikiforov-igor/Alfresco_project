@@ -23,7 +23,7 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!-- Registration of Business Journal models -->
-    <bean id="reportsEditor.modelBootstrap" parent="dictionaryModelBootstrap">
+    <bean id="reportsEditor.modelBootstrap" parent="dictionaryModelBootstrap" depends-on="ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-reports-editor-model.xml</value>
