@@ -59,10 +59,8 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 					formingDate: "date(format yyyy-MM-dd HH:mm:ss)",
 					initiator: "initiator"
 				},
-	 *
-	 * @return true - при успешной отправке иначе false
 	 */
-	public boolean sendNotification(JSONObject json) {
+	public void sendNotification(JSONObject json) {
 		Notification notf = new Notification();
 		notf.setAuthor("WebScript");
 		try {
@@ -109,7 +107,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 		} catch (ParseException e) {
 			logger.error("Error read forming date", e);
 		}
-		return service.sendNotification(notf);
+		service.sendNotification(notf);
 	}
 
     /**
@@ -118,9 +116,8 @@ public class NotificationsWebScriptBean extends BaseWebScript {
      * @param textFormatString форматная строка для текста сообщения
      * @param channels перечень каналов
      * @param object Основной объект уведомления
-     * @return true - при успешной отправке иначе false
      */
-    public boolean sendNotification(String author, Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object, NodeRef initiator) {
+    public void sendNotification(String author, Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object, NodeRef initiator) {
         ArrayList<String> recipientsArray = getArraysList(Context.getCurrentContext().getElements(employee));
 
 	    List<NodeRef> employees = null;
@@ -151,11 +148,11 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 		    channelsArray = getArraysList(Context.getCurrentContext().getElements(channels));
 	    }
 
-	    return service.sendNotification(author, object.getNodeRef(), textFormatString, employees, channelsArray, initiator);
+	    service.sendNotification(author, object.getNodeRef(), textFormatString, employees, channelsArray, initiator);
     }
 
-	public boolean sendNotification(Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object) {
-		return sendNotification("WebScript", employee, textFormatString, channels, object, null);
+	public void sendNotification(Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object) {
+		sendNotification("WebScript", employee, textFormatString, channels, object, null);
 	}
 
 	/**
@@ -163,14 +160,13 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	 * @param employee Список ссылок на получателей (пользователей).
 	 * @param textFormatString форматная строка для текста сообщения
 	 * @param object Основной объект уведомления
-	 * @return true - при успешной отправке иначе false
 	 */
-	public boolean sendNotification(Scriptable employee, String textFormatString, ScriptNode object) {
-		return sendNotification(employee, textFormatString, null, object);
+	public void sendNotification(Scriptable employee, String textFormatString, ScriptNode object) {
+		sendNotification(employee, textFormatString, null, object);
 	}
 
-	public boolean sendNotificationFromCurrentUser(Scriptable employee, String textFormatString, ScriptNode object) {
-		return sendNotification(authService.getCurrentUserName(), employee, textFormatString, null, object, orgstructureService.getCurrentEmployee());
+	public void sendNotificationFromCurrentUser(Scriptable employee, String textFormatString, ScriptNode object) {
+		sendNotification(authService.getCurrentUserName(), employee, textFormatString, null, object, orgstructureService.getCurrentEmployee());
 	}
 
     private ArrayList<String> getArraysList(Object[] object){
@@ -194,6 +190,6 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	}
 
 	public List<NodeRef> getCurrentUserDefaultNotificationTypes() {
-		return  service.getCurrentUserDefaultNotificationTypes();
+		return service.getCurrentUserDefaultNotificationTypes();
 	}
 }

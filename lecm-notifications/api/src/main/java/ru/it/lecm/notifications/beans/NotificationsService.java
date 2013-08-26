@@ -60,25 +60,15 @@ public interface NotificationsService {
 	 * Отправка уведомлений
 	 *
 	 * @param notification Обобщённое уведомление
-	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
 	 */
-	public boolean sendNotification(Notification notification);
-
-	/**
-	 * Отправка атомарного уведомления
-	 *
-	 * @param notification Атомарное уведомление
-	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
-	 */
-	public boolean sendNotification(NotificationUnit notification);
+	public void sendNotification(Notification notification);
 
 	/**
 	 * Отправка уведомлений в каналы, заданные строками (названиями bean-ов)
 	 * @param channels Список названий каналов отправки уведомолений
 	 * @param notification Объект с параметрами уведомления. Поле typeRefs заполнять не нужно
-	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
 	 */
-	public boolean sendNotification(List<String> channels, Notification notification);
+	public void sendNotification(List<String> channels, Notification notification);
 
 	/**
 	 * Получение корневой директории для уведомлений
@@ -135,9 +125,8 @@ public interface NotificationsService {
 	 * @param recipientEmployees Список сотрудников-получаетлей уведомления
 	 * @param channels каналы уведомления
 	 * @param initiatorRef Ссылка на инициатора. Если он попадает в список получателей, то ему сообщение не будет отправлено
-	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
 	 */
-	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef);
+	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef);
 
 	/**
 	 * Отправка уведомления сотрудникам по каналам уведомлений из личных настроек сотрудников
@@ -146,7 +135,6 @@ public interface NotificationsService {
 	 * @param textFormatString Форматная строка для текста уведомления. Стпроится по основному объекту
 	 * @param recipientEmployees Список сотрудников-получаетлей уведомления
 	 * @param initiatorRef Ссылка на инициатора. Если он попадает в список получателей, то ему сообщение не будет отправлено
-	 * @return true - если отправка успешна, false - если при отправки возникли ошибки
 	 */
-	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef);
+	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef);
 }

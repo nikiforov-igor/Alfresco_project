@@ -47,10 +47,6 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		this.orgstructureService = orgstructureService;
 	}
 
-	public OrgstructureBean getOrgstructureService() {
-		return orgstructureService;
-	}
-
 	@Override
 	public NodeRef getNotificationsRootRef() {
 		return notificationsRootRef;
@@ -129,7 +125,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	}
 
 	@Override
-	public boolean sendNotification(List<String> channels, Notification notification) {
+	public void sendNotification(List<String> channels, Notification notification) {
 		List<NodeRef> typeRefs = new ArrayList<NodeRef>();
 		if (channels != null) {
 			for (String channel: channels) {
@@ -139,53 +135,47 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 			}
 			notification.setTypeRefs(typeRefs);
 		}
-		return sendNotification(notification);
+		sendNotification(notification);
 	}
 
 	@Override
-	public boolean sendNotification(Notification notification) {
-		if (checkNotification(notification)) {
-			NodeRef generalizedNotification = createGeneralizedNotification(notification);
-			if (generalizedNotification != null) {
-				Set<NotificationUnit> notificationUnits = createAtomicNotifications(notification);
-				if (notificationUnits != null && notificationUnits.size() > 0) {
-					boolean success = true;
-					for (NotificationUnit notf: notificationUnits) {
-						boolean temp = sendNotification(notf);
-						if (success && !temp) {
-							success = false;
+	public void sendNotification(final Notification notification) {
+			Thread t = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					if (checkNotification(notification)) {
+						NodeRef generalizedNotification = createGeneralizedNotification(notification);
+						if (generalizedNotification != null) {
+							Set<NotificationUnit> notificationUnits = createAtomicNotifications(notification);
+							if (notificationUnits != null && notificationUnits.size() > 0) {
+								for (NotificationUnit notf: notificationUnits) {
+									sendNotification(notf);
+								}
+							} else {
+								logger.warn("Атомарные уведомления не были сформированы");
+							}
+						} else {
+							logger.warn("Обобщённое уведомление не создано");
 						}
+					} else {
+						logger.warn("Уведомление не прошло проверки");
 					}
-					return success;
-				} else {
-					logger.warn("Атомарные уведомления не были сформированы");
-					return false;
 				}
-			} else {
-				logger.warn("Обобщённое уведомление не создано");
-				return false;
-			}
-		} else {
-			logger.warn("Уведомление не прошло проверки");
-			return false;
-		}
+			});
+			t.run();
 	}
 
-	@Override
-	public boolean sendNotification(NotificationUnit notification) {
+	private void sendNotification(NotificationUnit notification) {
 		if (notification != null && notification.getRecipientRef() != null && notification.getObjectRef() != null) {
 			String employeeLogin = this.orgstructureService.getEmployeeLogin(notification.getRecipientRef());
 			if (employeeLogin != null && this.lecmPermissionService.hasReadAccess(notification.getObjectRef(), employeeLogin)) {
-				NotificationChannelBeanBase channelBean = null;
 				if (getChannels().containsKey(notification.getTypeRef())) {
-					channelBean = getChannels().get(notification.getTypeRef());
+					NotificationChannelBeanBase channelBean = getChannels().get(notification.getTypeRef());
+					if (channelBean != null) {
+						channelBean.sendNotification(notification);
+					}
 				}
-				return channelBean != null && channelBean.sendNotification(notification);
-			} else {
-				return false;
 			}
-		} else {
-			return false;
 		}
 	}
 
@@ -437,23 +427,23 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return getEmployeeDefaultNotificationTypes(orgstructureService.getCurrentEmployee());
 	}
 
-	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef) {
+	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef) {
 		Notification notification = new Notification();
 		notification.setAuthor(author);
 		notification.setRecipientEmployeeRefs(recipientEmployees);
 		notification.setObjectRef(object);
 		notification.setDescription(substituteService.formatNodeTitle(object, textFormatString));
 		notification.setInitiatorRef(initiatorRef);
-		return sendNotification(channels, notification);
+		sendNotification(channels, notification);
 	}
 
-	public boolean sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef) {
+	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef) {
 		Notification notification = new Notification();
 		notification.setAuthor(author);
 		notification.setRecipientEmployeeRefs(recipientEmployees);
 		notification.setObjectRef(object);
 		notification.setDescription(substituteService.formatNodeTitle(object, textFormatString));
 		notification.setInitiatorRef(initiatorRef);
-		return sendNotification(notification);
+		sendNotification(notification);
 	}
 }

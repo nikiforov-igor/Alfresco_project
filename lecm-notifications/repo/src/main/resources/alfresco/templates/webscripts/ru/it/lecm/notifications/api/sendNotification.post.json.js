@@ -1,1 +1,2 @@
-model.success = notifications.sendNotification(json);
+notifications.sendNotification(json);
+model.success = true;
