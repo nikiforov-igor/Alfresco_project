@@ -419,7 +419,7 @@ public class ErrandsProductionsGraphDSProvider
 
 			final List<GraphPoint> result = new ArrayList<GraphPoint>();
 
-			final int maxTimeCounter = countDeltaInDays(periodStart, periodEnd); // кол-во отметок времени
+			final int maxTimeCounter = 1 + countDeltaInDays(periodStart, periodEnd); // кол-во отметок времени
 
 			/*
 			// @NOTE: RANDOM DATA FILL FOR TEST
