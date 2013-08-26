@@ -49,7 +49,7 @@ function init() {
         destination:LogicECM.module.Documents.SETTINGS.nodeRef,
         newRowDialogTitle:"${newRowTitle}",
         createDialogWidth:"${args.createDialogWidth!"70em"}",
-        createDialogClass:"${args.createDialogClass!"metadata-form-edit"}"
+        createDialogClass:"${args.createDialogClass!""}"
     });
 }
 YAHOO.util.Event.onDOMReady(init);

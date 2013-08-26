@@ -25,7 +25,7 @@
                 <bubblingLabel>errands</bubblingLabel>
                 <showExSearchBtn>true</showExSearchBtn>
                 <createDialogWidth>55em</createDialogWidth>
-                <createDialogClass>errands-form-edit</createDialogClass>
+                <createDialogClass>lecm-errands_document</createDialogClass>
             </properties>
         </component>
         <!-- Menu -->

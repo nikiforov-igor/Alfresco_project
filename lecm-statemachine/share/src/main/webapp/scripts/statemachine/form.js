@@ -146,19 +146,24 @@ LogicECM.module = LogicECM.module || {};
             var me = this;
             LogicECM.CurrentModules = {};
             LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
-                width:"60em",
+                width:"55em",
                 templateUrl:templateUrl,
                 actionUrl:null,
                 destroyOnHide:true,
                 doBeforeDialogShow:{
                     fn:function (p_form, p_dialog) {
+                        var contId = p_dialog.id + "-form-container";
                         var dialogName = this.msg("logicecm.workflow.runAction.label", action.label);
                         Alfresco.util.populateHTML(
-                            [ p_dialog.id + "-form-container_h", dialogName]
+                            [contId + "_h", dialogName]
                         );
 
-                        Dom.addClass(p_dialog.id + "-form", "form-metadata-edit");
-
+                        Dom.addClass(contId, "metadata-form-edit");
+                        if (action.formType && action.formType != "") {
+                            Dom.addClass(contId, action.formType.replace(":", "_"));
+                        } else {
+                            Dom.addClass(contId, "no-form-type");
+                        }
                     }
                 },
                 onSuccess:{
@@ -346,7 +351,7 @@ LogicECM.module = LogicECM.module || {};
                             Alfresco.util.populateHTML(
                                 [ p_dialog.id + "-form-container_h", fileSpan]
                             );
-                            Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
+                            Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
                         },
                         scope: this
                     },

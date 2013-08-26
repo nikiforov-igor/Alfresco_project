@@ -48,7 +48,7 @@
                     });
                 }
             }
-            //YAHOO.util.Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
+            //YAHOO.util.Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
         };
 
         var url = "/lecm/components/form/report" +

@@ -911,7 +911,10 @@ LogicECM.module = LogicECM.module || {};
             }
             p_dialog.dialog.setHeader( message );
 
-            Dom.addClass(p_dialog.id + "-form-container", this.options.createDialogClass);
+            Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+            if (this.options.createDialogClass != "") {
+                Dom.addClass(p_dialog.id + "-form-container", this.options.createDialogClass);
+            }
         },
 
         /**

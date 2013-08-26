@@ -1,96 +1,82 @@
 /* Договор - Основные сведения - Редактирование */
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field {
     position: relative;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.set div.yui-g div.yui-u {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.set div.yui-g div.yui-u {
     margin-left: 0;
     margin-right: 0;
     padding-left: 0;
     padding-right: 0;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field > label,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field > label,
 .yui-skin-lecmTheme .yui-panel div.form-field div.viewmode-field span.viewmode-label {
     width: 190px;
     padding-right: 10px;
     text-align: right;
     margin: 0;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field div.viewmode-field span.viewmode-value {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.viewmode-field span.viewmode-value {
     max-width: 200px;
     padding-left: 0;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field div.viewmode-field span.viewmode-value .association-auto-complete-selected-item,
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field div.viewmode-field span.viewmode-value .association-auto-complete-selected-item-even {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.viewmode-field span.viewmode-value .association-auto-complete-selected-item,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.viewmode-field span.viewmode-value .association-auto-complete-selected-item-even {
     overflow: hidden;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field input[type=text],
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field div.selectone-control select,
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field input[type=text],
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.selectone-control select,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
     width: 225px;
     overflow: hidden;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field > input.date-entry {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field > input.date-entry {
     width: 200px;
     margin-bottom: 16px;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field > input.date-entry + a {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field > input.date-entry + a {
     float: left;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field > input.date-entry ~ div.format-info {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field > input.date-entry ~ div.format-info {
     height: 16px;
     line-height: 16px;
     position: absolute;
     top: 30px;
     margin-left: 200px;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field div.object-finder {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder {
     margin-bottom: 0;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field div.object-finder .current-values {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder .current-values {
     width: 590px;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.form-field div.object-finder .show-picker,
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.show-picker {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder .show-picker,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.show-picker {
     float: right;
     margin-right: 7px;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.show-picker {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.show-picker {
     margin-right: 3px;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
     width: 150px;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.association-auto-complete-selected-item span.person > a,
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.association-auto-complete-selected-item-even span.person > a {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.association-auto-complete-selected-item span.person > a,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.association-auto-complete-selected-item-even span.person > a {
     max-width: 178px;
     text-overflow: ellipsis;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.set > div.form-field > div > select {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.set > div.form-field > div > select {
     width: 639px;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.set > div.form-field > div > input[type=text]:not(.date-entry) {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.set > div.form-field > div > input[type=text]:not(.date-entry) {
     width: 675px !important;
 }
-.yui-skin-lecmTheme .yui-panel .metadata-form-edit div.set > div.form-field > input.formsCheckBox {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.set > div.form-field > input.formsCheckBox {
     margin-left: 200px;
 }
 
-.yui-skin-lecmTheme .yui-panel .form-metadata-edit div.form-field {
-    position: relative;
-}
-
-.yui-skin-lecmTheme .yui-panel .form-metadata-edit div.form-field > input.date-entry {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.no-form-type div.form-field > input.date-entry {
     width: 140px;
     margin-bottom: 16px;
-}
-.yui-skin-lecmTheme .yui-panel .form-metadata-edit div.form-field > input.date-entry + a {
-    float: left;
-}
-.yui-skin-lecmTheme .yui-panel .form-metadata-edit div.form-field > input.date-entry ~ div.format-info {
-    height: 16px;
-    line-height: 16px;
-    position: absolute;
-    top: 30px;
-    margin-left: 160px;
 }
 

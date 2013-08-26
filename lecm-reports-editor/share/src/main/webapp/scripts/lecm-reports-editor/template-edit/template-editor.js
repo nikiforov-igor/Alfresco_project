@@ -94,7 +94,7 @@
                     [ p_dialog.id + "-form-container_h", defaultMsg ]
                 );
 
-                Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
+                Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
 
                 if (response) {
                     // обновим форму данными шаблона

@@ -234,7 +234,7 @@
                     [ p_dialog.id + "-form-container_h", createMsg ]
                 );
 
-                Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
+                Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
                 if (this.isCopy) {
                     this.items = p_dialog.form.validations;
                     this._setInputValue('-createColumnDetails_prop_cm_name',"");

@@ -34,7 +34,7 @@
                 searchButtonsType: 'defaultActive',
                 newRowButtonType: 'defaultActive',
                 createDialogWidth: "70em",
-                createDialogClass: "metadata-form-edit"
+                createDialogClass: ""
             },
 
             _initButtons: function() {
@@ -57,6 +57,7 @@
                 // Intercept before dialog show
                 var me = this;
                 var doBeforeDialogShow = function (p_form, p_dialog) {
+                    var contId = p_dialog.id + "-form-container";
                     var addMsg = meta.addMessage;
                     var defaultMsg = this.msg("label.create-row.title");
                     var testMsg = this.msg(me.options.newRowDialogTitle);
@@ -64,10 +65,13 @@
                         defaultMsg = testMsg;
                     }
                     Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-form-container_h", addMsg ? addMsg : defaultMsg ]
+                        [contId + "_h", addMsg ? addMsg : defaultMsg ]
                     );
 
-                    Dom.addClass(p_dialog.id + "-form", me.options.createDialogClass);
+                    Dom.addClass(contId, "metadata-form-edit");
+                    if (me.options.createDialogClass != "") {
+                        Dom.addClass(contId, me.options.createDialogClass);
+                    }
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",

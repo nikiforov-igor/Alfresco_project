@@ -187,7 +187,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     [p_dialog.id + "-form-container_h", fileSpan]
                 );
 
-                Dom.addClass(p_dialog.id + "-form", "metadata-form-edit");
+                Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
             }
         }, true);
 })();
