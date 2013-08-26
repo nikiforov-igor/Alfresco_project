@@ -362,6 +362,8 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 			signatureProperties.put(SignedDocflowModel.PROP_IS_OUR, isOurSignature);
 			signatureProperties.put(ContentModel.PROP_NAME, signatureName);
 			signatureProperties.put(SignedDocflowModel.PROP_CONTENT_REF, contentRef);
+			signatureProperties.put(ContentModel.PROP_IS_INDEXED, false);
+			signatureProperties.put(ContentModel.PROP_IS_CONTENT_INDEXED, false);
 			NodeRef documentRef = documentAttachmentsService.getDocumentByAttachment(contentRef);
 			if (documentRef != null) {
 				signatureProperties.put(SignedDocflowModel.PROP_DOCUMENT_REF, documentRef);

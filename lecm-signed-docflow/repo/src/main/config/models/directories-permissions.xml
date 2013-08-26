@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReposioryPermissions>
+
+	<BusinessRole id="BR_SIGNED_DOCFLOW_ENGINEER">
+		<Permission object="." permissionGroup="Consumer" inheritPermissions="false"/>
+	</BusinessRole>
+
+</ReposioryPermissions>

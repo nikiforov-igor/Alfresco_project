@@ -139,6 +139,10 @@
 				</association>
 
 			</associations>
+			
+			<mandatory-aspects>
+				<aspect>cm:indexControl</aspect>
+			</mandatory-aspects>
 		</type>
 	</types>
 

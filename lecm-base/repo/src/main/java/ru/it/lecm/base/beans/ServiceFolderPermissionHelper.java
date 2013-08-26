@@ -12,6 +12,8 @@ import org.alfresco.util.PropertyCheck;
 import javax.xml.parsers.SAXParserFactory;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -37,6 +39,7 @@ public class ServiceFolderPermissionHelper {
 	private List<String> permissionsList;
 	private LecmPermissionService lecmPermissionService;
 	private PermissionService permissionService;
+	private AuthorityService authorityService;
 	final private static org.slf4j.Logger logger = LoggerFactory.getLogger(ServiceFolderPermissionHelper.class);
 
 	public void setNodeService(NodeService nodeService) {
@@ -57,6 +60,10 @@ public class ServiceFolderPermissionHelper {
 
 	public void setPermissionsList(List<String> permissionsList) {
 		this.permissionsList = permissionsList;
+	}
+
+	public void setAuthorityService(AuthorityService authorityService) {
+		this.authorityService = authorityService;
 	}
 
 	public void bootstrap() {
@@ -110,6 +117,9 @@ public class ServiceFolderPermissionHelper {
 				LecmPermissionGroup lecmPermissionGroup = lecmPermissionService.findPermissionGroup(permissionGroup);
 				if (lecmPermissionGroup != null) {
 					lecmPermissionService.grantAccessByPosition(lecmPermissionGroup, objectNode, sgBusinessRole);
+				} else {
+					String authority = authorityService.getName(AuthorityType.GROUP, sgBusinessRole.getAlfrescoSuffix());
+					permissionService.setPermission(objectNode, authority, permissionGroup, true);
 				}
 			}
 		}
