@@ -85,6 +85,7 @@
 		<property name="contentService" ref="contentService"/>
 		<property name="authenticationContext" ref="authenticationContext" />
 		<property name="transactionService" ref="transactionService" />
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
 	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StateMachineHelper">

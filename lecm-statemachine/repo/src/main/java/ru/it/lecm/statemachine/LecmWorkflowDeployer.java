@@ -8,6 +8,7 @@ import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationContext;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
+import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.workflow.WorkflowDeployment;
 import org.alfresco.service.cmr.workflow.WorkflowService;
@@ -52,7 +53,7 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 	private ContentService contentService;
 	private AuthenticationContext authenticationContext;
 	private TransactionService transactionService;
-
+	private ServiceRegistry serviceRegistry;
 
 	private static final String ENGINE_ID = "activiti";
 	private static final String MIMETYPE = "text/xml";
@@ -85,6 +86,7 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 						props);
 				workflowRef = childAssocRef.getChildRef();
 			}
+            serviceRegistry.getPermissionService().setInheritParentPermissions(workflowRef, false);
             logger.debug("Getting workflow files");
 			List<ChildAssociationRef> workflows = nodeService.getChildAssocs(workflowRef);
 			for (ChildAssociationRef workflow : workflows) {
@@ -160,6 +162,10 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
 	}
+
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
+    }
 
 	private String getProcessKey(InputStream workflowDefinition) throws Exception {
 		try {
