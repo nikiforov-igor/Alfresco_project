@@ -90,6 +90,12 @@ public interface OrgstructureBean {
 	 * &lt;property name="lecm-orgstr:org-tin"&gt;
 	 */
 	QName PROP_ORG_TIN = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-tin");
+
+	/**
+	 * &lt;property name="lecm-orgstr:org-kpp"&gt;
+	 */
+	QName PROP_ORG_KPP= QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "org-kpp");
+
 	/**
 	 * Получение директории Организация.
 	 * Если такой узел отсутствует - он НЕ создаётся.

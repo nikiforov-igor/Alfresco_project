@@ -222,7 +222,7 @@ public class UnicloudService {
 		String operatorCode = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_OPERATOR_CODE);
 		String partnerKey = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_PARTNER_KEY);
 		String inn = (String)nodeService.getProperty(organizationRef, OrgstructureBean.PROP_ORG_TIN);
-		String kpp = null;
+		String kpp = (String)nodeService.getProperty(organizationRef, OrgstructureBean.PROP_ORG_KPP);
 		String employeeId = orgstructureService.getCurrentEmployee().getId();
 
         Holder<GateResponse> gateResponse = new Holder<GateResponse>();
