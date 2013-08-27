@@ -1086,19 +1086,19 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         sortField = me.currentSort.oColumn.field.replace("assoc_", "").replace("_", ":") + "-text-content";
                     }
                     if (me.desc) {
-                        datagridMeta.sort = sortField + "|false";
-                        me.desc = false;
-                        me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_DESC;
-                    } else {
                         datagridMeta.sort = sortField + "|true";
-                        me.desc = true;
+                        me.desc = false;
                         me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_ASC;
+                    } else {
+                        datagridMeta.sort = sortField + "|false";
+                        me.desc = true;
+                        me.currentSort.sSortDir = YAHOO.widget.DataTable.CLASS_DESC;
                     }
                     if (me.sort) {
                         // Обнуляем сортировку иначе зациклится.
                         me.sort = null;
 	                    if (me.options.useCookieForSort) {
-		                    me.setCookie(this.getSortCookieName(), sortField + "|" + !me.desc);
+		                    me.setCookie(this.getSortCookieName(), datagridMeta.sort);
 	                    }
                         if (!me.options.useDynamicPagination) {
                             this.search.performSearch({
@@ -1384,6 +1384,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			        var cookieSort = this.getCookie(this.getSortCookieName());
 			        if (cookieSort != null && cookieSort.length > 0) {
 				        this.datagridMeta.sort = cookieSort;
+
+				        this.desc = this.datagridMeta.sort.substr(this.datagridMeta.sort.indexOf("|") + 1, this.datagridMeta.sort.length) == "false";
 			        }
 		        }
 	        },
