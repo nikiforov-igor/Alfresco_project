@@ -29,8 +29,6 @@
 <script type="text/javascript">
 	(function(htmlId, formId) {
 
-		debugger;
-
 		var onContentReady = YAHOO.util.Event.onContentReady,
 			formContainerId = formId + "-container",
 

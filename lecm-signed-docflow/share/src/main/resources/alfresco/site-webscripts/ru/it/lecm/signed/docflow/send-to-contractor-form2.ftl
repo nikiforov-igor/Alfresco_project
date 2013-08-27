@@ -47,7 +47,6 @@
 
 		function bindAjaxTo(url, dataObj) {
 			return function makeDataRequest() {
-				debugger;
 
 				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
 					text: "Пожалуйста, подождите, документ отправляется",
@@ -82,7 +81,6 @@
 							console.log("Документов, со статусом \"PARTNER_ERROR\": " + partner.length);
 
 							// Выходим, если всё хорошо
-							debugger;
 							if(good.length == responses.length) {
 								message = (responses.length > 1) ? "Документы успешно отправлены" : "Документ успешно отправлен";
 								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
@@ -152,8 +150,6 @@
 
 			interTypeField = new Element(interTypeInput.parentNode);
 			emailField = new Element(emailInput.parentNode);
-
-			debugger;
 
 			sendForm = ComponentManager.get("${htmlId}");
 			sendDialog = ComponentManager.get("${htmlId}").dialog;
