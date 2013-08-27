@@ -12,9 +12,8 @@
 //]]></script>
 
 <div id="${id}-filters" class="toolbar errands-filter">
-    <div style="font-weight: bold;">${msg("label.filter")}:</div>
     <div class="flat-button">
-        <label for="${id}-assign">${msg("label.filter-assign")}</label>
+        <label for="${id}-assign">${msg("label.filter-assign")}:</label>
         <span class="align-left yui-button yui-menu-button" id="${id}-assign">
             <span class="first-child">
                <button type="button" tabindex="0"></button>
@@ -25,7 +24,7 @@
             <option value="${filter.type?html}">${msg("filter." + filter.label)}</option>
         </#list>
         </select>
-        <label for="${id}-date">${msg("label.filter-date")}</label>
+        <label for="${id}-date">${msg("label.filter-date")}:</label>
         <span class="align-left yui-button yui-menu-button" id="${id}-date">
             <span class="first-child">
                <button type="button" tabindex="0"></button>
