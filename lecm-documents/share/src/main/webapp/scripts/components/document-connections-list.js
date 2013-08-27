@@ -46,9 +46,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
 					if (owner !== null)
 					{
-						if (typeof me[owner.className] == "function" && owner.dataset != null)
+						var nodeName = owner.getAttribute('data-name');
+						var nodeRef = owner.getAttribute('data-noderef');
+						if (typeof me[owner.className] == "function" && nodeName != null && nodeRef != null)
 						{
-							me[owner.className].call(me, owner.dataset);
+							me[owner.className].call(me, nodeName, nodeRef);
 						}
 					}
 					return true;
@@ -188,8 +190,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				Dom.removeClass(itemInfo.row, "highlighted");
 			},
 
-			onActionDelete: function (data) {
-				if (data.noderef != null && data.name != null) {
+			onActionDelete: function (name, noderef) {
+				if (noderef != null && name != null) {
 					var me = this;
 
 					var fnActionDeleteConfirm = function DataGridActions__onActionDelete_confirm(nodeRef) {
@@ -221,13 +223,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					Alfresco.util.PopupManager.displayPrompt(
 						{
 							title:this.msg("message.confirm.delete.title"),
-							text: this.msg("message.confirm.delete.description", '"' + data.name + '"'),
+							text: this.msg("message.confirm.delete.description", '"' + name + '"'),
 							buttons:[
 								{
 									text:this.msg("button.delete"),
 									handler:function () {
 										this.destroy();
-										fnActionDeleteConfirm.call(me, data.noderef);
+										fnActionDeleteConfirm.call(me, noderef);
 									}
 								},
 								{
