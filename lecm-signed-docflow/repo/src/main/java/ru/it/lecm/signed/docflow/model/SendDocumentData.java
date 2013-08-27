@@ -22,6 +22,7 @@ public final class SendDocumentData extends UnicloudData {
 
 	@Override
 	protected Map<String, Object> putOwnProperties(Map<String, Object> properties) {
+		properties.put("documentId", documentId);
 		return properties;
 	}
 

@@ -41,7 +41,7 @@
 	<div id="${el}-exchange-formContainer" class="doclist">
 		<div class="action-set">
 			<div><a id="${el}-sendDocument" href="javascript:void(0);" class="action-link">${msg("label.send")}</a></div>
-			<div><a href="javascript:void(0);" class="action-link"> ${msg("label.read")}</a></div>
+			<div><span style="background-position: 4px 1px; background-repeat: no-repeat; border: 1px solid transparent; display: block; min-height: 16px; padding: 2px 0 2px 24px;">${msg("label.read")}</span></div>
 			<div><a id="${el}-signaturesReceived" href="javascript:void(0);" class="action-link">${msg("label.signatures.received")}</a></div>
 		</div>
 	</div>

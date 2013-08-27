@@ -87,6 +87,7 @@
 		<property name="versionService" ref="versionService"/>
 		<property name="contentService" ref="contentService"/>
 		<property name="behaviourFilter" ref="policyBehaviourFilter"/>
+		<property name="lockService" ref="lockService"/>
 	</bean>
 
 	<bean id="sendContentToPartnerService" class="ru.it.lecm.signed.docflow.SendContentToPartnerService" init-method="init"
@@ -95,7 +96,6 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="unicloudService" ref="unicloudService"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="lockService" ref="lockService"/>
 		<property name="mailService" ref="mailService"/>
 		<property name="templateService" ref="templateService"/>
 		<property name="signedDocflowService" ref="signedDocflowService"/>

@@ -135,7 +135,7 @@ public class UnicloudService {
 			headersList.add(new Header(new QName("uauth", "partner"), partner, new JAXBDataBinding(String.class)));
 			headersList.add(new Header(new QName("uauth", "user"), user, new JAXBDataBinding(String.class)));
 			headersList.add(new Header(new QName("uauth", "organization"), organization, new JAXBDataBinding(String.class)));
-			headersList.add(new Header(new QName("uauth", "token_" + operator), token, new JAXBDataBinding(String.class)));
+			headersList.add(new Header(new QName("uauth", "token_".concat(operator)), token, new JAXBDataBinding(String.class)));
 
 			proxy.getRequestContext().put(Header.HEADER_LIST, headersList);
 		} catch(JAXBException ex) {
@@ -351,8 +351,6 @@ public class UnicloudService {
 			sendDocumentData = new SendDocumentData(gateResponse.value);
 			if (EResponseType.OK == gateResponse.value.getResponseType()) {
 				sendDocumentData.setDocumentId(documentId.value);
-				//добавляем вложению documentId?
-				signedDocflowService.addDocumentIdToContent(contentRef, documentId.value);
 			} else {
 				logGateResponse(gateResponse);
 			}

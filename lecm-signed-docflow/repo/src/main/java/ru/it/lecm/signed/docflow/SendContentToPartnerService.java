@@ -9,10 +9,7 @@ import java.util.List;
 import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import org.alfresco.service.cmr.lock.LockService;
-import org.alfresco.service.cmr.lock.LockType;
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.lock.LockStatus;
 import org.alfresco.service.cmr.lock.NodeLockedException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -65,7 +62,6 @@ public class SendContentToPartnerService {
 	private final static NodeRef documentAttachmentMailTemplate = new NodeRef("workspace://SpacesStore/document-attachment-signatures-tmpl");
 	private final static NodeRef contentMailTemplate = new NodeRef("workspace://SpacesStore/content-signatures-tmpl");
 	private NodeService nodeService;
-	private LockService lockService;
 	private DocumentAttachmentsService documentAttachmentsService;
 	private UnicloudService unicloudService;
 	private BusinessJournalService businessJournalService;
@@ -126,10 +122,6 @@ public class SendContentToPartnerService {
 		this.fileFolderService = fileFolderService;
 	}
 
-	public void setLockService(LockService lockService) {
-		this.lockService = lockService;
-	}
-
 	public void setRegNumbersService(RegNumbersService regNumbersService) {
 		this.regNumbersService = regNumbersService;
 	}
@@ -142,8 +134,16 @@ public class SendContentToPartnerService {
 		List<NodeRef> contentList = contentToSend.getContent();
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		NodeRef partnerRef = contentToSend.getPartner();
+
 		for (NodeRef contentRef : contentList) {
-			result.add(unicloudService.sendDocument(contentRef, partnerRef).getProperties());
+			SendDocumentData sendDocumentData = unicloudService.sendDocument(contentRef, partnerRef);
+			if (EResponseType.OK == sendDocumentData.getResponseType()) {
+				//добавляем вложению documentId
+				signedDocflowService.addDocumentIdToContent(contentRef, sendDocumentData.getDocumentId());
+				//вешаем блокировку на успешно отправленное вложение
+				signedDocflowService.lockSignedContentRef(contentRef);
+			}
+			result.add(sendDocumentData.getProperties());
 		}
 		return result;
 	}
@@ -198,6 +198,8 @@ public class SendContentToPartnerService {
 
 			for (NodeRef content : contentList) {
 				signedDocflowService.addDocumentIdToContent(content, regNumber);
+				signedDocflowService.lockSignedContentRef(content);
+				addBusinessJournalRecord(content, contentToSend.getPartner());
 			}
 
 			gateResponse = new GateResponse();
@@ -310,17 +312,6 @@ public class SendContentToPartnerService {
 		} else {
 			throw new IllegalArgumentException(String.format("%s is illegal interactionType with partner %s", interactionType, partnerRef));
 		}
-		addBusinessJournalRecord(contentRef, partnerRef);
-
-		for (NodeRef content : contentList) {
-			LockStatus lockStatus = lockService.getLockStatus(contentRef);
-			if (lockStatus == LockStatus.NO_LOCK) {
-				lockService.lock(content, LockType.NODE_LOCK, 0);
-			} else {
-				logger.debug("Node {} is already locked. Lock status is {}", content, lockStatus);
-			}
-		}
-
 		return result;
 	}
 

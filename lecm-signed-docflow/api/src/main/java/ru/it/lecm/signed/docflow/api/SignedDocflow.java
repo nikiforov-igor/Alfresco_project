@@ -52,12 +52,12 @@ public interface SignedDocflow {
 	 * @return На данный момент - карта типа "success": true
 	 */
 	Map<String, Object> signContent(Map<QName, Serializable> signatureProperties);
-	
+
 	/**
 	 * Загрузка подписи к коненту
-	 * 
+	 *
 	 * @param signatureProperties
-	 * @return 
+	 * @return
 	 */
 	Map<String, Object> loadSign(Map<QName, Serializable> signatureProperties);
 	/**
@@ -93,21 +93,21 @@ public interface SignedDocflow {
 	 * @return действительна ли данная подпись
 	 */
 	boolean isSignatureValid(NodeRef signatureRef);
-	
+
 	/**
 	 * Обновление данных о подписи
 	 * @param signatureRef
-	 * @return 
+	 * @return
 	 */
 	boolean updateSignature(NodeRef signatureRef, String singingDate, boolean isValid);
-	
+
 	/**
 	 * Обновление данных о подписях
 	 * @param json
-	 * @return 
+	 * @return
 	 */
 	Map<String, String> updateSignatures(JSONArray json);
-	
+
 	void addAttributesToOrganization();
 
 	void addAttributesToPersonalData();
@@ -125,4 +125,10 @@ public interface SignedDocflow {
 	 * @param documentId DocumentID, который необходимо записать в соответствующий атрибут.
 	 */
 	void addDocumentIdToContent(final NodeRef contentRef, final String documentId);
+
+	/**
+	 * Повесить блокировку на указанный контент
+	 * @param contentRef ссылка на наследник cm:content.
+	 */
+	void lockSignedContentRef(final NodeRef contentRef);
 }

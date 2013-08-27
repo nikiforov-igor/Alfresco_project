@@ -10,6 +10,9 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
+import org.alfresco.service.cmr.lock.LockService;
+import org.alfresco.service.cmr.lock.LockStatus;
+import org.alfresco.service.cmr.lock.LockType;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentReader;
@@ -58,6 +61,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	private VersionService versionService;
 	private ContentService contentService;
 	private BehaviourFilter behaviourFilter;
+	private LockService lockService;
 
 	public void setUnicloudService(UnicloudService unicloudService) {
 		this.unicloudService = unicloudService;
@@ -81,6 +85,10 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
 		this.behaviourFilter = behaviourFilter;
+	}
+
+	public void setLockService(LockService lockService) {
+		this.lockService = lockService;
 	}
 
 	@Override
@@ -527,4 +535,13 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		}
 	}
 
+	@Override
+	public void lockSignedContentRef(final NodeRef contentRef) {
+		LockStatus lockStatus = lockService.getLockStatus(contentRef);
+		if(lockStatus == LockStatus.NO_LOCK) {
+			lockService.lock(contentRef, LockType.NODE_LOCK, 0);
+		} else {
+			logger.debug("Node {} is already locked. Lock status is {}", contentRef, lockStatus);
+		}
+	}
 }
