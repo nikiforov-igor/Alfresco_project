@@ -64,7 +64,7 @@
 		  p:nodeService-ref="nodeService"
 		  p:orgstructureService-ref="serviceOrgstructure" />
 
-	<bean id="webscript.ru.it.lecm.signed.docflow.getContractorInfo.getContractorInfo.get" class="ru.it.lecm.signed.docflow.webscripts.GetContragentPropertiesWebscript"
+	<bean id="webscript.ru.it.lecm.signed.docflow.getContragentProperties.getContragentProperties.get" class="ru.it.lecm.signed.docflow.webscripts.GetContragentPropertiesWebscript"
 		  parent="webscript" 
 		  p:nodeService-ref="nodeService" />
 	
