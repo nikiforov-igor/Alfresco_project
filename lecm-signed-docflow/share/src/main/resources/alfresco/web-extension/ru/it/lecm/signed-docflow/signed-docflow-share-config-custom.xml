@@ -19,7 +19,7 @@
 	<config evaluator="model-type" condition="lecm-contractor:contractor-type">
 		<forms>
 			<form id="send-to-contractor">
-				<create-form template="/ru/it/lecm/signed/docflow/send-to-contractor-form2.ftl"/>
+				<create-form template="/ru/it/lecm/signed/docflow/forms/send-to-contractor-form.ftl"/>
 				<field-visibility>
 					<show id="contractor" force="true"></show>
 					<show id="lecm-contractor:interaction-type"></show>

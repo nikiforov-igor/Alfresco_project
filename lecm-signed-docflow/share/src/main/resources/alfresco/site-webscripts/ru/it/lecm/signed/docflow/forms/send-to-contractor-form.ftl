@@ -93,7 +93,7 @@
 							}
 
 							// Показываем форму авторизации, в ином случае
-							authSimpleDialog = new Alfresco.module.SimpleDialog("zxcv-asdf-1234-pppp-qqqq-form");
+							authSimpleDialog = new Alfresco.module.SimpleDialog("${htmlId}-auth-form");
 
 							authSimpleDialog.setOptions({
 								width: "50em",
@@ -125,7 +125,9 @@
 								},
 								onFailure: {
 									fn: function() {
-										console.log("Auth Failed!");
+										Alfresco.util.PopupManager.displayMessage({
+											text: "Не удалось открыть форму аутентификации, попробуйте ещё раз"
+										});
 									}
 								}
 							});
@@ -136,7 +138,9 @@
 					failureCallback: {
 						fn: function() {
 							loadingPopup.destroy();
-							console.log("Ajax Failure!");
+							Alfresco.util.PopupManager.displayMessage({
+								text: "Не удалось отправить документ(ы)"
+							});
 						}
 					}
 				});
