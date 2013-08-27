@@ -2,7 +2,7 @@
 <webscript>
 	<shortname>getContractorsInfo</shortname>
 	<description>Gets contractor info by content nodeRef</description>
-	<url>/lecm/signed-docflow/getContragentProperties</url>
+	<url>/lecm/signed-docflow/getContractorInfoBySendedContent</url>
 	<authentication>user</authentication>
 	<format default="json"/>
 </webscript>

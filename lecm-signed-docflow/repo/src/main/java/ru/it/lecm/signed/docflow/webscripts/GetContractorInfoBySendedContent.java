@@ -26,7 +26,7 @@ import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
  *
  * @author ikhalikov
  */
-public class GetContragentPropertiesWebscript extends DeclarativeWebScript{
+public class GetContractorInfoBySendedContent extends DeclarativeWebScript{
 	private static final String NODE_REF = "nodeRef";
 	private static final String EMPTY_PARAMETER = "GetContragentPropertiesWebscript was called with empty parameter nodeRef";
 	private static final String JSON_ERROR = "Something goes bad while processing JSON";
@@ -36,7 +36,7 @@ public class GetContragentPropertiesWebscript extends DeclarativeWebScript{
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
-	private final static Logger logger = LoggerFactory.getLogger(GetContragentPropertiesWebscript.class);
+	private final static Logger logger = LoggerFactory.getLogger(GetContractorInfoBySendedContent.class);
 	
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
