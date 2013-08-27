@@ -222,6 +222,36 @@
 				</property>
 			</properties>
 		</aspect>
+
+		<aspect name="lecm-signed-docflow:contractor-interaction-aspect">
+			<properties>
+				<property name="lecm-signed-docflow:contractor-ref">
+					<type>d:noderef</type>
+					<mandatory>true</mandatory>
+					<index enabled="false"/>
+				</property>
+				<property name="lecm-signed-docflow:interaction-type">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="false"/>
+					<constraints>
+						<constraint name="lecm-signed-docflow:interaction-type-constraint" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>SPECOP</value> <!-- Взаимодействие через спецоператора -->
+									<value>EMAIL</value> <!-- Взаимодействие через электронную почту -->
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+				<property name="lecm-signed-docflow:contractor-email">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="false"/>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 
 </model>

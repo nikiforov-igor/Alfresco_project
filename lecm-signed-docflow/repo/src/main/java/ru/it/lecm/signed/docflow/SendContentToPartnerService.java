@@ -3,10 +3,12 @@ package ru.it.lecm.signed.docflow;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.alfresco.model.ContentModel;
@@ -36,6 +38,7 @@ import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
+import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
 import ru.it.lecm.signed.docflow.model.ContentToSendData;
 import ru.it.lecm.signed.docflow.model.SendDocumentData;
 import ucloud.gate.proxy.exceptions.EResponseType;
@@ -158,7 +161,7 @@ public class SendContentToPartnerService {
 		GateResponse gateResponse;
 
 		try {
-			tempDir = createTmpDir();
+			tempDir = Utils.createTmpDir();
 			List<File> attachmentFiles = createAttachmentFiles(contentList, tempDir);
 
 			for (NodeRef content : contentList) {
@@ -298,11 +301,24 @@ public class SendContentToPartnerService {
 		NodeRef partnerRef = getEffectivePartner(contentRef, contentToSend.getPartner());
 		String interactionType = getEffectiveInteractionType(partnerRef, contentToSend.getInteractionType());
 		String email = getEffectiveEmail(partnerRef, contentToSend.getEmail());
-
-		contentToSend.setIsDocumentAttachment(documentAttachmentsService.isDocumentAttachment(contentRef));
+		boolean documentAttachment = documentAttachmentsService.isDocumentAttachment(contentRef);
+		contentToSend.setIsDocumentAttachment(documentAttachment);
 		contentToSend.setPartner(partnerRef);
 		contentToSend.setInteractionType(interactionType);
 		contentToSend.setEmail(email);
+
+		if (!documentAttachment) {
+			for (NodeRef content: contentList) {
+				Set<QName> aspects = nodeService.getAspects(content);
+				if (!aspects.contains(SignedDocflowModel.ASPECT_CONTRACTOR_INTERACTION)) {
+					Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+					props.put(SignedDocflowModel.PROP_CONTRACTOR_REF, partnerRef);
+					props.put(SignedDocflowModel.PROP_INTERACTION_TYPE, interactionType);
+					props.put(SignedDocflowModel.PROP_CONTRACTOR_EMAIL, email);
+					nodeService.addAspect(content, SignedDocflowModel.ASPECT_CONTRACTOR_INTERACTION, props);
+				}
+			}
+		}
 
 		List<Map<String, Object>> result;
 		if (SPECOP.equals(interactionType)) {
@@ -338,31 +354,6 @@ public class SendContentToPartnerService {
 
 		}
 		return result;
-	}
-
-	private File createTmpDir() {
-		int x = (int) (Math.random() * 1000000);
-		String s = System.getProperty("java.io.tmpdir");
-		File checkExists = new File(s);
-		if (!checkExists.exists() || !checkExists.isDirectory()) {
-			throw new RuntimeException("The directory "
-					+ checkExists.getAbsolutePath()
-					+ " does not exist, please set java.io.tempdir"
-					+ " to an existing directory");
-		}
-		if (!checkExists.canWrite()) {
-			throw new RuntimeException("The directory "
-					+ checkExists.getAbsolutePath()
-					+ " is now writable, please set java.io.tempdir"
-					+ " to an writable directory");
-		}
-		File newTmpDir = new File(s, "alfresco-signed-docflow-tmp-" + x);
-		while (!newTmpDir.mkdir()) {
-			x = (int) (Math.random() * 1000000);
-			newTmpDir = new File(s, "alfresco-signed-docflow-tmp-" + x);
-		}
-
-		return newTmpDir;
 	}
 
 	private GateResponse formErrorGateResponse(Exception ex, EResponseType eResponseType) {

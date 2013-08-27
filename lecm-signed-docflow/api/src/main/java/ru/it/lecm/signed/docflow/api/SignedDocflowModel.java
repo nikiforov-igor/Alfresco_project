@@ -144,6 +144,23 @@ public final class SignedDocflowModel {
 	 */
 	public final static QName PROP_DOCUMENT_REF = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "document-ref");
 
+	/**
+	 * &lt;aspect name="lecm-signed-docflow:contractor-interaction-aspect"&gt;
+	 */
+	public final static QName ASPECT_CONTRACTOR_INTERACTION = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "contractor-interaction-aspect");
+	/**
+	 * &lt;property name="lecm-signed-docflow:contractor-ref"&gt;
+	 */
+	public final static QName PROP_CONTRACTOR_REF = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "contractor-ref");
+	/**
+	 * &lt;property name="lecm-signed-docflow:interaction-type"&gt;
+	 */
+	public final static QName PROP_INTERACTION_TYPE = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "interaction-type");
+	/**
+	 * &lt;property name="lecm-signed-docflow:contractor-email"&gt;
+	 */
+	public final static QName PROP_CONTRACTOR_EMAIL = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "contractor-email");
+
 	private SignedDocflowModel() {
 	}
 }
