@@ -60,7 +60,6 @@ public final class SignedDocflowModel {
 	 * &lt;property name="lecm-signed-docflow:is-our/&gt;
 	 */
 	public final static QName PROP_IS_OUR = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "is-our");
-
 	/**
 	 * &lt;property name="lecm-signed-docflow:fingerprint"/&gt;
 	 */
@@ -85,10 +84,6 @@ public final class SignedDocflowModel {
 	 * &lt;property name="lecm-signed-docflow:document-id/&gt;
 	 */
 	public final static QName PROP_DOCUMENT_ID = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "document-id");
-	/**
-	 * &lt;aspect name="lecm-signed-docflow:organization-attrs-aspect"&gt;
-	 */
-	public final static QName ASPECT_ORGANIZATION_ATTRS = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "organization-attrs-aspect");
 	/**
 	 * &lt;property name="lecm-signed-docflow:operator-code"&gt;
 	 */
@@ -133,17 +128,14 @@ public final class SignedDocflowModel {
 	 * &lt;property name="lecm-signed-docflow:applet-container"&gt;
 	 */
 	public final static QName PROP_APPLET_CONTAINER = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "applet-container");
-
 	/**
 	 * &lt;property name="lecm-signed-docflow:content-ref"&gt;
 	 */
 	public final static QName PROP_CONTENT_REF = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "content-ref");
-
 	/**
 	 * &lt;property name="lecm-signed-docflow:document-ref"&gt;
 	 */
 	public final static QName PROP_DOCUMENT_REF = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "document-ref");
-
 	/**
 	 * &lt;aspect name="lecm-signed-docflow:contractor-interaction-aspect"&gt;
 	 */
@@ -160,7 +152,12 @@ public final class SignedDocflowModel {
 	 * &lt;property name="lecm-signed-docflow:contractor-email"&gt;
 	 */
 	public final static QName PROP_CONTRACTOR_EMAIL = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "contractor-email");
+	/**
+	 * &lt;property name="lecm-signed-docflow:name"&gt;
+	 */
+	public final static QName PROP_NAME = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "name");
 
-	private SignedDocflowModel() {
+	private SignedDocflowModel() throws IllegalAccessException {
+		throw new IllegalAccessException("You cannot create any instance of SignedDocflowModel class.");
 	}
 }

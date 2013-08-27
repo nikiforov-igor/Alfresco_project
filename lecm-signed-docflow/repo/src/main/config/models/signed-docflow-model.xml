@@ -26,11 +26,18 @@
 
 			<properties>
 
+				<property name="lecm-signed-docflow:name">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="false"/>
+				</property>
+
 				<!-- Владелец -->
 				<property name="lecm-signed-docflow:owner">
 					<title>Owner</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Должность -->
@@ -38,6 +45,7 @@
 					<title>Owner's Position</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Организация -->
@@ -45,6 +53,7 @@
 					<title>Owner's Organization</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Дата подписания -->
@@ -52,6 +61,7 @@
 					<title>Signing Date</title>
 					<type>d:date</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Серийный номер -->
@@ -59,6 +69,7 @@
 					<title>Serial Number</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Дата начала срока действия подписи -->
@@ -66,6 +77,7 @@
 					<title>Valid From</title>
 					<type>d:date</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Дата окончания срока действия подписи -->
@@ -73,6 +85,7 @@
 					<title>Valid Through</title>
 					<type>d:date</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Удостоверяющий центр (УЦ) -->
@@ -80,6 +93,7 @@
 					<title>Certification Authority</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Дата обновления -->
@@ -87,6 +101,7 @@
 					<title>Update Date</title>
 					<type>d:date</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Подпись действительна (?) -->
@@ -94,6 +109,7 @@
 					<title>Is Valid</title>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Наша организация (?) -->
@@ -101,6 +117,7 @@
 					<title>Is Our Organization</title>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- Фингерпринт сертификата -->
@@ -108,17 +125,28 @@
 					<title>Fingerprint</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 
 				<!-- NodeRef на тот cm:content, к которому относится эта подпись -->
 				<property name="lecm-signed-docflow:content-ref">
 					<type>d:noderef</type>
 					<mandatory>false</mandatory>
+					<index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+					</index>
 				</property>
 
 				<property name="lecm-signed-docflow:document-ref">
 					<type>d:noderef</type>
 					<mandatory>false</mandatory>
+					<index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+					</index>
 				</property>
 
 			</properties>
@@ -139,7 +167,7 @@
 				</association>
 
 			</associations>
-			
+
 			<mandatory-aspects>
 				<aspect>cm:indexControl</aspect>
 			</mandatory-aspects>
@@ -161,8 +189,8 @@
 			</properties>
 		</aspect>
 
-		<!-- Аспект расширяющий lecm-orgstr:organization атрибутами для работы с ЭП -->
-		<aspect name="lecm-signed-docflow:organization-attrs-aspect">
+		<!-- Аспект расширяющий lecm-orgstr:personal-data атрибутами для работы с ЭП -->
+		<aspect name="lecm-signed-docflow:personal-data-attrs-aspect">
 			<properties>
 				<!-- Код спецоператора ЭДО, например 2АЕ - Калуга Астрал -->
 				<property name="lecm-signed-docflow:operator-code">
@@ -180,12 +208,6 @@
 				<property name="lecm-signed-docflow:organization-edo-id">
 					<type>d:text</type>
 				</property>
-			</properties>
-		</aspect>
-
-		<!-- Аспект расширяющий lecm-orgstr:personal-data атрибутами для работы с ЭП -->
-		<aspect name="lecm-signed-docflow:personal-data-attrs-aspect">
-			<properties>
 				<!-- Пользовательский токен авторизации в сервисе Unicloud, действует 15 мин. -->
 				<property name="lecm-signed-docflow:auth-token">
 					<type>d:text</type>

@@ -17,7 +17,6 @@ import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.base.DeclarativeWebScriptHelper;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -33,7 +32,7 @@ public class SignPermissionWebscript extends DeclarativeWebScript {
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
-	
+
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
 	}
@@ -56,14 +55,14 @@ public class SignPermissionWebscript extends DeclarativeWebScript {
 		result.put("result", jsonRes);
 		return result;
 	}
-	
+
 	Map<String, Object> executeHasAspectAction(WebScriptRequest req) throws JSONException {
 		Map<String, Object> result = new HashMap<String, Object>();
 		//TODO: Сделать поддержку для передачи префикса модели
 		QName aspect = QName.createQName("{http://www.alfresco.org/model/content/1.0}"+req.getParameter("aspect"));
 		NodeRef nodeRef = new NodeRef(req.getParameter("nodeRef"));
 		JSONObject jsonRes = new JSONObject();
-		
+
 		if(nodeService.getAspects(nodeRef).contains(aspect)){
 			jsonRes.put("success", true);
 		} else {
@@ -77,11 +76,11 @@ public class SignPermissionWebscript extends DeclarativeWebScript {
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String action = req.getParameter("action");
-		
+
 		if(action.equals(SIGN_PERMISSION_ACTION)){
 			return executeSignPermissionAction(req);
 		}
-		
+
 		if(action.equals(HAS_ASPECT_ACTION)){
 			try {
 				return executeHasAspectAction(req);

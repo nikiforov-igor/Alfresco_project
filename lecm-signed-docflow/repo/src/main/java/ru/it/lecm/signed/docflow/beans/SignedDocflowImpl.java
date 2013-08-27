@@ -6,8 +6,6 @@ import java.util.*;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.lock.LockService;
@@ -25,7 +23,6 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.GUID;
 import org.alfresco.util.ISO8601DateFormat;
-import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,71 +86,6 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 	public void setLockService(LockService lockService) {
 		this.lockService = lockService;
-	}
-
-	@Override
-	public void addAttributesToOrganization() {
-		AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
-			@Override
-			public Void doWork() throws Exception {
-				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-				return transactionHelper.doInTransaction(new RetryingTransactionCallback<Void>() {
-					@Override
-					public Void execute() throws Throwable {
-						NodeRef organizationRef = orgstructureService.getOrganization();
-						Set<QName> aspects = nodeService.getAspects(organizationRef);
-						if (!aspects.contains(SignedDocflowModel.ASPECT_ORGANIZATION_ATTRS)) {
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-							properties.put(SignedDocflowModel.PROP_OPERATOR_CODE, "");
-							properties.put(SignedDocflowModel.PROP_PARTNER_KEY, "");
-							properties.put(SignedDocflowModel.PROP_ORGANIZATION_ID, "");
-							properties.put(SignedDocflowModel.PROP_ORGANIZATION_EDO_ID, "");
-							properties.put(SignedDocflowModel.PROP_APPLET_LIC_KEY, "");
-							properties.put(SignedDocflowModel.PROP_APPLET_CERT, "");
-							properties.put(SignedDocflowModel.PROP_APPLET_CONTAINER, "");
-							nodeService.addAspect(organizationRef, SignedDocflowModel.ASPECT_ORGANIZATION_ATTRS, properties);
-						}
-						return null;
-					}
-				}, false, true);
-			}
-		});
-	}
-
-	@Override
-	public void addAttributesToPersonalData() {
-		AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
-			@Override
-			public Void doWork() throws Exception {
-				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-				return transactionHelper.doInTransaction(new RetryingTransactionCallback<Void>() {
-					@Override
-					public Void execute() throws Throwable {
-						NodeRef currentEmployeeRef = orgstructureService.getCurrentEmployee();
-						NodeRef personalDataRef = orgstructureService.getEmployeePersonalData(currentEmployeeRef);
-						Set<QName> aspects = nodeService.getAspects(personalDataRef);
-						if (!aspects.contains(SignedDocflowModel.ASPECT_PERSONAL_DATA_ATTRS)) {
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-//							properties.put(SignedDocflowModel.PROP_AUTH_TOKEN, "");
-//							properties.put(SignedDocflowModel.PROP_CERT_THUMBPRINT, "");
-//							properties.put(SignedDocflowModel.PROP_AUTH_TYPE, "");
-							nodeService.addAspect(personalDataRef, SignedDocflowModel.ASPECT_PERSONAL_DATA_ATTRS, properties);
-						}
-						return null;
-					}
-				}, false, true);
-			}
-		});
-	}
-
-	public void init() {
-		PropertyCheck.mandatory(this, "nodeService", nodeService);
-		PropertyCheck.mandatory(this, "transactionService", transactionService);
-		PropertyCheck.mandatory(this, "unicloudService", unicloudService);
-		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
-		PropertyCheck.mandatory(this, "behaviourFilter", behaviourFilter);
-
-		addAttributesToOrganization();
 	}
 
 	@Override
@@ -368,9 +300,8 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 			signatureProperties.put(SignedDocflowModel.PROP_IS_VALID, true);
 			signatureProperties.put(SignedDocflowModel.PROP_UPDATE_DATE, signatureProperties.get(SignedDocflowModel.PROP_SIGNING_DATE));
 			signatureProperties.put(SignedDocflowModel.PROP_IS_OUR, isOurSignature);
-			signatureProperties.put(ContentModel.PROP_NAME, signatureName);
+			signatureProperties.put(SignedDocflowModel.PROP_NAME, signatureName);
 			signatureProperties.put(SignedDocflowModel.PROP_CONTENT_REF, contentRef);
-			signatureProperties.put(ContentModel.PROP_IS_INDEXED, false);
 			signatureProperties.put(ContentModel.PROP_IS_CONTENT_INDEXED, false);
 			NodeRef documentRef = documentAttachmentsService.getDocumentByAttachment(contentRef);
 			if (documentRef != null) {
@@ -543,5 +474,20 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		} else {
 			logger.debug("Node {} is already locked. Lock status is {}", contentRef, lockStatus);
 		}
+	}
+
+	@Override
+	public void saveAuthenticationData(final String organizationId, final String organizationEdoId, final String token) {
+		RetryingTransactionCallback<Void> cb = new RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				NodeRef currentEmployeeRef = orgstructureService.getCurrentEmployee();
+				nodeService.setProperty(currentEmployeeRef, SignedDocflowModel.PROP_ORGANIZATION_ID, organizationId);
+				nodeService.setProperty(currentEmployeeRef, SignedDocflowModel.PROP_ORGANIZATION_EDO_ID, organizationEdoId);
+				nodeService.setProperty(currentEmployeeRef, SignedDocflowModel.PROP_AUTH_TOKEN, token);
+				return null;
+			}
+		};
+		transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);
 	}
 }

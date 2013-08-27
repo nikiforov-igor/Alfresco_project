@@ -30,12 +30,7 @@ public class UnicloudWebscript extends DeclarativeWebScript {
 	private final static Logger logger = LoggerFactory.getLogger(UnicloudWebscript.class);
 	private final static String ACTION_DEF = "action";
 
-	private SignedDocflow signedDocflowService;
 	private UnicloudService unicloudService;
-
-	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
-		this.signedDocflowService = signedDocflowService;
-	}
 
 	public void setUnicloudService(UnicloudService unicloudService) {
 		this.unicloudService = unicloudService;
@@ -93,7 +88,6 @@ public class UnicloudWebscript extends DeclarativeWebScript {
 		try {
 			Method actionMethod = ReflectionUtils.findMethod(getClass(), action, JSONObject.class);
 			if (actionMethod != null) {
-				signedDocflowService.addAttributesToPersonalData();
 				responseJSON = (JSONObject) ReflectionUtils.invokeMethod(actionMethod, this, requestJSON);
 			} else {
 				throw new WebScriptException(String.format("There is no method %s(JSONObject json) in UnicloudService class", action));

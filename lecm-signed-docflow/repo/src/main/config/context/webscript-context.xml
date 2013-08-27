@@ -29,11 +29,10 @@
 		  p:nodeService-ref="nodeService"
 		  p:documentAttachmentsService-ref="documentAttachmentsService"
 		  p:dictionaryService-ref="dictionaryService"/>
-	
+
 	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.unicloud.api.post"
 		  class="ru.it.lecm.signed.docflow.webscripts.UnicloudWebscript"
-		  p:unicloudService-ref="unicloudService"
-		  p:signedDocflowService-ref="signedDocflowService"/>
+		  p:unicloudService-ref="unicloudService"/>
 
 	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.config.api.post"
 		  class="ru.it.lecm.signed.docflow.webscripts.SignConfigWebscript"
@@ -47,22 +46,22 @@
 	<bean parent="webscript" id="webscript.ru.it.lecm.signed.docflow.sendContentToPartner.sendContentToPartner.post"
 		  class="ru.it.lecm.signed.docflow.webscripts.SendContentToPartnerWebscript"
 		  p:sendContentToPartnerService-ref="sendContentToPartnerService"/>
-	
+
 	<bean id="webscript.ru.it.lecm.signed.docflow.loadSign.loadSign.post" class="ru.it.lecm.signed.docflow.webscripts.LoadSignWebscript"
 		  parent="webscript"
 		  p:signedDocflowService-ref="signedDocflowService" />
-	
+
 	<bean id="webscript.ru.it.lecm.signed.docflow.getZip.getZip.get" class="ru.it.lecm.signed.docflow.webscripts.DownloadAsZipWebscript"
 		  parent="webscript"
 	      p:zipSignedContentService-ref="zipSignedContentService"/>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.unlock.unlock.get" class="ru.it.lecm.signed.docflow.webscripts.LockingWebscript"
-		  parent="webscript" 
+		  parent="webscript"
 		  p:lockService-ref="lockService" />
-	
+
 	<bean id="webscript.ru.it.lecm.signed.docflow.signPermission.signPermission.get" class="ru.it.lecm.signed.docflow.webscripts.SignPermissionWebscript"
-		  parent="webscript" 
+		  parent="webscript"
 		  p:nodeService-ref="nodeService"
 		  p:orgstructureService-ref="serviceOrgstructure" />
-	
+
 </beans>

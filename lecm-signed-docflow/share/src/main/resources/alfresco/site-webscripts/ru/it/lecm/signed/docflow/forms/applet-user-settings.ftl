@@ -17,6 +17,8 @@
 </#if>
 
 <@formLib.renderFormContainer formId = formId>
+	<@formLib.renderField field = form.fields["prop_lecm-signed-docflow_operator-code"] />
+	<@formLib.renderField field = form.fields["prop_lecm-signed-docflow_partner-key"] />
 	<@formLib.renderField field = form.fields["prop_lecm-signed-docflow_applet-container"] />
 	<@formLib.renderField field = form.fields["prop_lecm-signed-docflow_applet-key"] />
 	<@formLib.renderField field = form.fields["prop_lecm-signed-docflow_auth-type"] />

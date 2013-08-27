@@ -108,10 +108,6 @@ public interface SignedDocflow {
 	 */
 	Map<String, String> updateSignatures(JSONArray json);
 
-	void addAttributesToOrganization();
-
-	void addAttributesToPersonalData();
-
 	/**
 	 * @param signatureRef NodeRef на объект подписи
 	 * @return является ли данная подпись подписью нашей организации
@@ -131,4 +127,13 @@ public interface SignedDocflow {
 	 * @param contentRef ссылка на наследник cm:content.
 	 */
 	void lockSignedContentRef(final NodeRef contentRef);
+
+	/**
+	 * сохранение результата аутентификации пользователя в сервисе unicloud.
+	 * результат аутентификации хранится как в профиле организации, так и в профиле пользователя
+	 * @param organizationId идентификатор организации в unicloud
+	 * @param organizationEdoId идентификатор организации у спецоператора ЭДО
+	 * @param token токен авторизации в сервисе unicloud
+	 */
+	void saveAuthenticationData(final String organizationId, final String organizationEdoId, final String token);
 }

@@ -75,22 +75,6 @@
 		</aspects>
 	</config>
 
-	<config evaluator="aspect" condition="lecm-signed-docflow:organization-attrs-aspect">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="lecm-signed-docflow:operator-code" for-mode="view,edit,create"/>
-					<show id="lecm-signed-docflow:partner-key" for-mode="view,edit,create"/>
-				</field-visibility>
-				<appearance>
-					<set id="sign" appearance="" label-id="info.sign" />
-					<field id="lecm-signed-docflow:operator-code" set="sign"/>
-					<field id="lecm-signed-docflow:partner-key" set="sign"/>
-				</appearance>
-			</form>
-		</forms>
-	</config>
-	
 	<config evaluator="aspect" condition="lecm-signed-docflow:personal-data-attrs-aspect">
 		<forms>
 			<form id="applet-user-settings-form">
@@ -98,42 +82,43 @@
 				<edit-form template="/ru/it/lecm/signed/docflow/forms/applet-user-settings.ftl" />
 				<view-form template="/ru/it/lecm/signed/docflow/forms/applet-user-settings.ftl" />
 				<field-visibility>
-					<show id="lecm-signed-docflow:applet-key" for-mode="edit,create"/>
-					<show id="lecm-signed-docflow:applet-cert" for-mode="edit,create"/>
+					<show id="lecm-signed-docflow:operator-code" for-mode="edit,create"/>
+					<show id="lecm-signed-docflow:partner-key" for-mode="edit,create"/>
 					<show id="lecm-signed-docflow:applet-container" for-mode="edit,create"/>
+					<show id="lecm-signed-docflow:applet-key" for-mode="edit,create"/>
 					<show id="lecm-signed-docflow:auth-type" for-mode="edit,create"/>
+					<show id="lecm-signed-docflow:applet-cert" for-mode="edit,create"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-signed-docflow:partner-key" />
+					<field id="lecm-signed-docflow:applet-container" >
+						<control template="/ru/it/lecm/signed/docflow/forms/controls/container-picker.ftl" />
+					</field>
 					<field id="lecm-signed-docflow:applet-key" >
 						<control template="/org/alfresco/components/form/controls/textarea.ftl">
 							<control-param name="rows">3</control-param>
 						</control>
-					</field>
-					<field id="lecm-signed-docflow:applet-cert" >
-						<control template="/ru/it/lecm/signed/docflow/forms/controls/cert-from-file.ftl" />
-					</field>
-					<field id="lecm-signed-docflow:applet-container" >
-						<control template="/ru/it/lecm/signed/docflow/forms/controls/container-picker.ftl" />
 					</field>
 					<field id="lecm-signed-docflow:auth-type">
 						<control template="/org/alfresco/components/form/controls/selectone.ftl">
 							<control-param name="options">LOCAL_CERT|Локально,REMOTE_CERT|Удалённо</control-param>
 						</control>
 					</field>
+					<field id="lecm-signed-docflow:applet-cert" >
+						<control template="/ru/it/lecm/signed/docflow/forms/controls/cert-from-file.ftl" />
+					</field>
 				</appearance>
 			</form>
 		</forms>
 	</config>
-	
-	
+
+
 
 	<!-- Конфиг для апплета АйТиШтамп -->
 	<config>
 		<forms>
 			<dependencies>
 				<js src="/scripts/signed-docflow/signApplet.js" />
-				<!-- JS для регистрации action'а "Разблокировать документ, 
+				<!-- JS для регистрации action'а "Разблокировать документ,
 				добавлен сюда, ибо иначе на странице вложения не цепляется-->
 				<js src="/scripts/signed-docflow/document-unlock.js" />
 			</dependencies>
@@ -145,10 +130,10 @@
 			</form>
 		</forms>
 	</config>
-	<!-- Добавление action'a "Разблокировать документа" -->	
+	<!-- Добавление action'a "Разблокировать документа" -->
 	<config evaluator="string-compare" condition="DocLibActions">
-		<actions>		
-			<action id="document-unlock" type="javascript" label="actions.document.unlock">				
+		<actions>
+			<action id="document-unlock" type="javascript" label="actions.document.unlock">
 				<param name="function">onUnlockAction</param>
 				<evaluator>evaluator.lecm.signed.docflow.showUnlockButton</evaluator>
 			</action>
@@ -168,5 +153,5 @@
 				<action index="101" id="document-unlock" />
 			</actionGroup>
 		</actionGroups>
-	</config>	
+	</config>
 </alfresco-config>

@@ -10,7 +10,6 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="contentService" ref="contentService"/>
-		<property name="transactionService" ref="transactionService"/>
 		<property name="signedDocflowService" ref="signedDocflowService"/>
 	</bean>
 
@@ -70,8 +69,7 @@
 	</bean>
 
 	<util:constant id="signedDocflowFolder" static-field="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl.SIGNED_DOCFLOW_FOLDER"/>
-	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean"
-		  depends-on="lecm.signed-docflow.model-bootstrap" init-method="init">
+	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean" depends-on="lecm.signed-docflow.model-bootstrap">
 		<property name="folders">
 			<map>
 				<entry key="#{signedDocflowFolder}" value="Сервис ЮЗД"/>

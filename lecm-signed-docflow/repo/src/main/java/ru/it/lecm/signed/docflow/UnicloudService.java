@@ -8,13 +8,11 @@ import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Holder;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.repository.ContentIOException;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -57,7 +55,6 @@ public class UnicloudService {
 	private NodeService nodeService;
 	private OrgstructureBean orgstructureService;
 	private ContentService contentService;
-	private TransactionService transactionService;
 	private SignedDocflow signedDocflowService;
 
 	public void setGateWcfService(IGateWcfService gateWcfService) {
@@ -74,10 +71,6 @@ public class UnicloudService {
 
 	public void setContentService(ContentService contentService) {
 		this.contentService = contentService;
-	}
-
-	public void setTransactionService(TransactionService transactionService) {
-		this.transactionService = transactionService;
 	}
 
 	public void setSignedDocflowService(SignedDocflow signedDocflowService) {
@@ -163,21 +156,6 @@ public class UnicloudService {
 		}
 	}
 
-	private void saveAuthenticationData(final String organizationId, final String organizationEdoId, final String token) {
-		RetryingTransactionCallback<Void> cb = new RetryingTransactionCallback<Void>() {
-			@Override
-			public Void execute() throws Throwable {
-				NodeRef organizationRef = orgstructureService.getOrganization();
-				NodeRef currentEmployeeRef = orgstructureService.getCurrentEmployee();
-				nodeService.setProperty(organizationRef, SignedDocflowModel.PROP_ORGANIZATION_ID, organizationId);
-				nodeService.setProperty(organizationRef, SignedDocflowModel.PROP_ORGANIZATION_EDO_ID, organizationEdoId);
-				nodeService.setProperty(currentEmployeeRef, SignedDocflowModel.PROP_AUTH_TOKEN, token);
-				return null;
-			}
-		};
-		transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);
-	}
-
 	private byte[] contentToByteArray(ContentReader reader) {
 		byte[] content;
 		try {
@@ -195,11 +173,12 @@ public class UnicloudService {
 
 
 		NodeRef organizationRef = orgstructureService.getOrganization();
-		String operatorCode = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_OPERATOR_CODE);
-		String partnerKey = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_PARTNER_KEY);
+		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+		String operatorCode = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_OPERATOR_CODE);
+		String partnerKey = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_PARTNER_KEY);
 		String inn = (String)nodeService.getProperty(organizationRef, OrgstructureBean.PROP_ORG_TIN);
 		String kpp = (String)nodeService.getProperty(organizationRef, OrgstructureBean.PROP_ORG_KPP);
-		String employeeId = orgstructureService.getCurrentEmployee().getId();
+		String employeeId = employeeRef.getId();
 
         Holder<GateResponse> gateResponse = new Holder<GateResponse>();
         Holder<String> organizationId = new Holder<String>();
@@ -219,7 +198,7 @@ public class UnicloudService {
 					authentication.setGateResponse(gateResponse.value);
 					if (EResponseType.OK == gateResponse.value.getResponseType()) {
 						authentication.setToken(token.value);
-						saveAuthenticationData(organizationId.value, organizationEdoId.value, token.value);
+						signedDocflowService.saveAuthenticationData(organizationId.value, organizationEdoId.value, token.value);
 					} else {
 						logGateResponse(gateResponse);
 					}
@@ -241,8 +220,8 @@ public class UnicloudService {
 	}
 
 	public SignatureData verifySignature(String contentRef, String signature) {
-		NodeRef organizationRef = orgstructureService.getOrganization();
-		String operatorCode = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_OPERATOR_CODE);
+		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+		String operatorCode = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_OPERATOR_CODE);
 
 		ContentReader reader = contentService.getReader(new NodeRef(contentRef), ContentModel.PROP_CONTENT);
 		byte[] sign = Base64.decodeBase64(signature);
@@ -283,12 +262,11 @@ public class UnicloudService {
 	}
 
 	public SendDocumentData sendDocument(final NodeRef contentRef, final NodeRef partnerRef) {
-		NodeRef organizationRef = orgstructureService.getOrganization();
-		String partnerKey = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_PARTNER_KEY);
-		String organizationId = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_ORGANIZATION_ID);
-		String operatorCode = (String)nodeService.getProperty(organizationRef, SignedDocflowModel.PROP_OPERATOR_CODE);
-
 		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+		String partnerKey = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_PARTNER_KEY);
+		String organizationId = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_ORGANIZATION_ID);
+		String operatorCode = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_OPERATOR_CODE);
+
 		String employeeId = employeeRef.getId();
 		String token = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_AUTH_TOKEN);
 
