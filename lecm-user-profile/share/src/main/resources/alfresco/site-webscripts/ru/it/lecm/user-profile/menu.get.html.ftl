@@ -20,5 +20,6 @@
 	<@comp.baseMenuButton "userProfileInstantAbsence" msg('label.absence.create-instant-absence.title') selected/>
 	<@comp.baseMenuButton "userProfileErrandsSettings" msg('label.user-profile.menu.errands-settings.btn') selected/>
 	<@comp.baseMenuButton "userProfileNotificationsSettings" msg('label.user-profile.menu.notifications-settings.btn') selected/>
+	<@comp.baseMenuButton "userProfileAppletSettings" msg('label.user-profile.menu.applet-settings.btn') selected/>
 </@comp.baseMenu>
 

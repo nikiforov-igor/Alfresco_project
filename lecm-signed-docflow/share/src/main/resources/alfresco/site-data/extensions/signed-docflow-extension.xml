@@ -91,6 +91,7 @@
 						</sub-component>
 					</sub-components>
 				</component>
+				<!-- Убирает блок подписи со страницы договора, если нету прав или не руководитель -->
 				<component>
 					<scope>template</scope>
 					<region-id>document-signed-docflow</region-id>
@@ -133,6 +134,24 @@
 							<evaluations>
 								<evaluation id="locked-label">				
 									<url>/lecm/signed-docflow/extensions/blocked-label</url>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<!-- Регулирование доступа к настройкам апплета в профиле -->
+				<component>
+					<scope>template</scope>
+					<region-id>applet-settings</region-id>
+					<source-id>my-applet-settings</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="sign-settings-show">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.signed.docflow.SignPermissionComponentEvaluator" negate="true"></evaluator>
+									</evaluators>
+									<url>/lecm/base/forbidden</url>								  									
 								</evaluation>
 							</evaluations>
 						</sub-component>

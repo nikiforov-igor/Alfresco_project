@@ -30,6 +30,13 @@ LogicECM.module.UserProfile = LogicECM.module.UserProfile || {};
 				scope._reloadPage ("my-absence");
 			}
 		},
+				
+		_userProfileAppletSettingsBtnClick: function () {
+			var scope = this;
+			return function (event, obj) {
+				scope._reloadPage ("my-applet-settings");
+			}
+		},
 
 		_userProfileDelegationBtnClick: function () {
 			var scope = this;
@@ -82,6 +89,7 @@ LogicECM.module.UserProfile = LogicECM.module.UserProfile || {};
 			YAHOO.Bubbling.on("currentEmployeeAbsenceChanged", this._onCurrentEmployeeAbsenceChecked, this);
 			Alfresco.util.createYUIButton(this, "userProfileErrandsSettingsBtn", this._userProfileErrandsSettingsBtnClick(), {});
 			Alfresco.util.createYUIButton(this, "userProfileNotificationsSettingsBtn", this._userProfileNotificationsSettingsBtnClick(), {});
+			Alfresco.util.createYUIButton(this, "userProfileAppletSettingsBtn", this._userProfileAppletSettingsBtnClick(), {});
 		},
 
 		onReady: function () {

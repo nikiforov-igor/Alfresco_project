@@ -69,10 +69,10 @@ public class SignConfigWebscript extends DeclarativeWebScript {
 		JSONObject result = new JSONObject();
 		String action = json.getString("action");
 		if("get".equals(action)) {
-			NodeRef orgRef = orgstructureService.getOrganization();
-			String licKey = (String) nodeService.getProperty(orgRef, SignedDocflowModel.PROP_APPLET_LIC_KEY);
-			String licCert = (String) nodeService.getProperty(orgRef, SignedDocflowModel.PROP_APPLET_CERT);
-			String licContainer = (String) nodeService.getProperty(orgRef, SignedDocflowModel.PROP_APPLET_CONTAINER);
+			NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+			String licKey = (String) nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_APPLET_LIC_KEY);
+			String licCert = (String) nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_APPLET_CERT);
+			String licContainer = (String) nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_APPLET_CONTAINER);
 			result.put("licKey", licKey);
 			result.put("licCert", licCert);
 			result.put("storeName", licContainer);
