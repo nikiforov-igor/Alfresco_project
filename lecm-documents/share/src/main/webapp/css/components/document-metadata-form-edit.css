@@ -75,6 +75,14 @@
     margin-left: 200px;
 }
 
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.no-form-type div.form-field > label,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.no-form-type div.form-field div.viemode-field span.viewmode-label {
+    width: 150px;
+    text-align: left;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.no-form-type div.form-field > input.date-entry ~ div.format-info {
+    margin-left: 160px;
+}
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit.no-form-type div.form-field > input.date-entry {
     width: 140px;
     margin-bottom: 16px;

@@ -19,6 +19,7 @@
 }
 
 .yui-skin-lecmTheme .yui-panel .lecm-daterange-control .datarange-end-date div.form-field label,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .lecm-daterange-control .datarange-end-date div.form-field label,
 .yui-skin-lecmTheme div.metadata-form div.lecm-daterange-control div.datarange-end-date div.form-field span.viewmode-label,
 .yui-skin-lecmTheme div.metadata-form div.lecm-daterange-control div.datarange-unlimited div.form-field span.viewmode-label {
 	width: auto;
