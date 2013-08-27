@@ -48,6 +48,16 @@
 		function bindAjaxTo(url, dataObj) {
 			return function makeDataRequest() {
 				debugger;
+
+				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
+					text: "Пожалуйста, подождите, документ отправляется",
+					spanClass: "wait",
+					displayTime: 0,
+					modal: true
+				});
+
+				loadingPopup.center();
+
 				Ajax.jsonRequest({
 					method: "POST",
 					url: Alfresco.constants.PROXY_URI_RELATIVE + url,
@@ -64,21 +74,20 @@
 								partner = responses.filter(function(v) { return v.gateResponse.responseType == "PARTNER_ERROR"; }),
 								unauthorized = responses.filter(function(v) { return v.gateResponse.responseType == "UNAUTHORIZED"; });
 
+							loadingPopup.destroy();
+
 							console.log(">>> Всего отправлено документов: " + responses.length);
 							console.log("Документов, со статусом \"ОК\": " + good.length);
 							console.log("Документов, со статусом отличным от \"OK\": " + bad.length);
 							console.log("Документов, со статусом \"PARTNER_ERROR\": " + partner.length);
 
 							// Выходим, если всё хорошо
+							debugger;
 							if(good.length == responses.length) {
 								message = (responses.length > 1) ? "Документы успешно отправлены" : "Документ успешно отправлен";
-								Alfresco.util.PopupManager.displayMessage({ text: message });
+								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
+								YAHOO.lang.later(2500, loadingPopup, loadingPopup.destroy);
 								return;
-							}
-
-							// FUTURE: ...
-							if(partner.length == 0) {
-								Alfresco.util.PopupManager.displayMessage({ text: "Ошибок партнёра не найдено" });
 							}
 
 							if(unauthorized.length == 0) {
@@ -128,6 +137,7 @@
 					},
 					failureCallback: {
 						fn: function() {
+							loadingPopup.destroy();
 							console.log("Ajax Failure!");
 						}
 					}
@@ -208,11 +218,17 @@
 			// "sendToContractorChanged" - это название события changeItemsFireAction (share-config-custom.xml)
 			Bubbling.on("sendToContractorChanged", function(layer, args) {
 				var selectedContractors = args[1].selectedItems,
-					selectedContractor = Object.keys(selectedContractors)[0];
+					selectedContractor = Object.keys(selectedContractors)[0],
+
+					okButton = sendForm.widgets.okButton;
 
 				if(selectedContractor) {
+					okButton.set("disabled", false);
+
 					checkContractor(selectedContractor);
 				} else {
+					okButton.set("disabled", true);
+
 					interTypeField.addClass("hidden");
 					emailField.addClass("hidden");
 

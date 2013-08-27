@@ -454,6 +454,13 @@ var cryptoAppletModule = (function () {
 			var TS = new Date();
 			var TSsign = signApplet.sign(TS.toString('yyyy-MM-dd hh:mm'), "String");
 			var dataObj = {"guidSign" : GUIDsign, "timestamp" : TS.toString('yyyy-MM-dd hh:mm'), "timestampSign" : TSsign};
+			var loadingPopup = Alfresco.util.PopupManager.displayMessage({
+				text: "Аутентификация",
+				spanClass: "wait",
+				displayTime: 0,
+				modal: true
+			});
+			loadingPopup.center();
 			Alfresco.util.Ajax.jsonRequest({
                 method: "POST",
                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/unicloud/api/authenticateByCertificate",
@@ -461,23 +468,23 @@ var cryptoAppletModule = (function () {
                 successCallback: {
                     fn: function(response) {
                         var status = response.json.gateResponse.responseType;
-                        var resultText = '';
+
+						loadingPopup.destroy();
+
                         if(status == "OK"){
-                        	resultText = 'Аутенфикация прошла успешно';
 							authSuccessCallback();
                         } else {
-                        	resultText = 'Не удалось аутенфицироваться';
+							loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: "Не удалось выполнить аутентификацию" });
+							YAHOO.lang.later(2500, loadingPopup, loadingPopup.destroy);
                         }
-                        Alfresco.util.PopupManager.displayMessage({
-							text: resultText
-						});
                     }
                 },
                 failureCallback: {
                 	fn: function(){
-                		Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось аутенфицироваться'
-						});
+						loadingPopup.destroy();
+
+						loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: "Не удалось выполнить аутентификацию" });
+						YAHOO.lang.later(2500, loadingPopup, loadingPopup.destroy);
                 	}
                 }
 
