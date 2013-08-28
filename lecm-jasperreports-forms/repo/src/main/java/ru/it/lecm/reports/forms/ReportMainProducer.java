@@ -84,8 +84,8 @@ public class ReportMainProducer extends AbstractWebScript {
 		final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
 		final String reportName = Utils.coalesce( templateParams.get("report"), templateParams.get("reportCode"));
 
-		// TODO: ТипОтчёта (Jasper/OOffice и пр) надо брать тоже из параметров
-		final String rtype = Utils.coalesce( templateParams.get("reporType"), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
+		// DONE: если ТипОтчёта (Jasper/OOffice и пр) брать из параметров, то может быть несоотвествие дескриптору ...
+		// final String rtype = Utils.coalesce( templateParams.get("reporType"), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
 
 		final Map<String, String[]> requestParameters = getRequestParameters(webScriptRequest, String.format("Processing report '%s' with args: \n", reportName));
  
@@ -106,6 +106,9 @@ public class ReportMainProducer extends AbstractWebScript {
 			throw new RuntimeException( String.format("Report '%s' storage point is unknown (possibly report is not registered !?)", reportName) );
 		}
 		ParameterMapper.assignParameters( reportDesc, requestParameters);
+
+		// final String rtype = Utils.coalesce( templateParams.get("reporType"), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
+		final String rtype = Utils.coalesce( reportDesc.getReportType().getMnem(), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
 
 		// получение провайдера ...
 		final ReportGenerator reporter = this.getReportsManager().getReportGenerators().get(rtype);

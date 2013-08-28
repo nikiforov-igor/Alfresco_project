@@ -378,7 +378,7 @@ public class ErrandsProductionsGraphDSProvider
 			final Map<String, Serializable> result = new LinkedHashMap<String, Serializable>();
 
 			/* Название подразделения или имя пользователя ... */
-			result.put( DsProductionsColumnNames.COL_NAMEATAG, item.getCol_NameTag());
+			result.put( DsProductionsColumnNames.COL_NAMEATAG, Utils.nonblank( item.getCol_NameTag(), "?") );
 
 			/* Время ... */
 			result.put( DsProductionsColumnNames.COL_DATETIME, item.getCol_DateTime());

@@ -143,11 +143,11 @@
         </field>
 
         <field alfrescoType="d:text"
-            displayName="Сотрудник или подразделение"
+            displayName="Подразделение"
             javaValueClass="java.lang.String"
             jrFldName="Col_NameTag" order="4" queryFldName="{{Col_NameTag}}">
             <l18>
-                <item key="RU_RU" value="Сотрудник или подразделение"/>
+                <item key="RU_RU" value="Подразделение"/>
             </l18>
         </field>
 
