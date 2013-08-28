@@ -1,3 +1,7 @@
+<#assign hideValue = false>
+<#if field.control.params.hideValue??>
+    <#assign hideValue = true>
+</#if>
 <div class="form-field field-status">
 <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
     <div class="read-only-status">
