@@ -451,15 +451,16 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	}
 
 	@Override
-	public void addDocumentIdToContent(final NodeRef contentRef, final String documentId) {
+	public void addDocflowIdsToContent(final NodeRef contentRef, final String documentId, final String docflowId) {
 		behaviourFilter.disableBehaviour(contentRef, ContentModel.ASPECT_VERSIONABLE);
 		try {
-			if (nodeService.getAspects(contentRef).contains(SignedDocflowModel.ASPECT_DOCUMENT_ID)) {
+			if (nodeService.getAspects(contentRef).contains(SignedDocflowModel.ASPECT_DOCFLOW_IDS)) {
 				nodeService.setProperty(contentRef, SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
 			} else {
 				Map<org.alfresco.service.namespace.QName, Serializable> properties = new HashMap<org.alfresco.service.namespace.QName, Serializable>();
 				properties.put(SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
-				nodeService.addAspect(contentRef, SignedDocflowModel.ASPECT_DOCUMENT_ID, properties);
+				properties.put(SignedDocflowModel.PROP_DOCFLOW_ID, docflowId);
+				nodeService.addAspect(contentRef, SignedDocflowModel.ASPECT_DOCFLOW_IDS, properties);
 			}
 		} finally {
 			behaviourFilter.enableBehaviour(contentRef, ContentModel.ASPECT_VERSIONABLE);

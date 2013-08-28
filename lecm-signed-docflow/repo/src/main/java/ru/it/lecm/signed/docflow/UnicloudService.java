@@ -1,14 +1,13 @@
 package ru.it.lecm.signed.docflow;
 
 import com.microsoft.schemas.serialization.arrays.ArrayOfbase64Binary;
-import java.io.IOException;
+import com.microsoft.schemas.serialization.arrays.ArrayOfguid;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Holder;
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.ContentIOException;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -29,14 +28,23 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.signed.docflow.api.Signature;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
 import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
+import ru.it.lecm.signed.docflow.model.AuthHeaders;
 import ru.it.lecm.signed.docflow.model.AuthenticationData;
 import ru.it.lecm.signed.docflow.model.SendDocumentData;
 import ru.it.lecm.signed.docflow.model.SignatureData;
+import ru.it.lecm.signed.docflow.model.UnicloudData;
+import ucloud.gate.proxy.ArrayOfDocflowInfoBase;
+import ucloud.gate.proxy.ArrayOfDocumentInfo;
 import ucloud.gate.proxy.ArrayOfOperatorInfo;
 import ucloud.gate.proxy.CompanyInfo;
+import ucloud.gate.proxy.DocflowInfoBase;
+import ucloud.gate.proxy.DocumentContent;
+import ucloud.gate.proxy.DocumentInfo;
 import ucloud.gate.proxy.DocumentToSend;
 import ucloud.gate.proxy.EDocumentType;
+import ucloud.gate.proxy.ERelationFilter;
 import ucloud.gate.proxy.OperatorInfo;
+import ucloud.gate.proxy.WorkspaceFilter;
 import ucloud.gate.proxy.docflow.EDocflowTransactionType;
 import ucloud.gate.proxy.exceptions.EResponseType;
 import ucloud.gate.proxy.exceptions.GateResponse;
@@ -78,15 +86,15 @@ public class UnicloudService {
 	}
 
 	public void init() {
-		if (logger.isDebugEnabled()) {
+		if (logger.isTraceEnabled()) {
 			try {
 				Holder<GateResponse> gateResponse = new Holder<GateResponse>();
 				Holder<String> version = new Holder<String>();
 				gateWcfService.getServiceVersion(gateResponse, version);
 				if (version.value != null) {
-					logger.debug(version.value);
+					logger.trace(version.value);
 				} else {
-					logGateResponse(gateResponse);
+					Utils.logGateResponse(gateResponse, logger);
 				}
 
 				gateResponse = new Holder<GateResponse>();
@@ -95,16 +103,16 @@ public class UnicloudService {
 				if (operatorsHolder.value != null) {
 				List<OperatorInfo> operators = operatorsHolder.value.getOperatorInfos();
 					for (OperatorInfo operator : operators) {
-						logger.debug("AuthenticationType = {}", operator.getAuthenticationType());
-						logger.debug("CertificateIssuerName = {}", operator.getCertificateIssuerName());
-						logger.debug("Code = {}", operator.getCode());
-						logger.debug("Extension = {}", operator.getExtension());
-						logger.debug("Inn = {}", operator.getInn());
-						logger.debug("IsRemoteSignEnabled = {}", operator.isIsRemoteSignEnabled());
-						logger.debug("Name = {}", operator.getName());
+						logger.trace("AuthenticationType = {}", operator.getAuthenticationType());
+						logger.trace("CertificateIssuerName = {}", operator.getCertificateIssuerName());
+						logger.trace("Code = {}", operator.getCode());
+						logger.trace("Extension = {}", operator.getExtension());
+						logger.trace("Inn = {}", operator.getInn());
+						logger.trace("IsRemoteSignEnabled = {}", operator.isIsRemoteSignEnabled());
+						logger.trace("Name = {}", operator.getName());
 					}
 				} else {
-					logGateResponse(gateResponse);
+					Utils.logGateResponse(gateResponse, logger);
 				}
 			} catch (Exception ex) {
 				logger.error(ex.getMessage());
@@ -120,15 +128,15 @@ public class UnicloudService {
 	 * @param operator код спецоператора ЭДО
 	 * @param token токен авторизации
 	 */
-	private void addAuthHeaders(String partner, String user, String organization, String operator, String token) {
+	private void addAuthHeaders(AuthHeaders authHeaders) {
 		try {
 			Client proxy = ClientProxy.getClient(gateWcfService);
 			List<Header> headersList = new ArrayList<Header>();
 
-			headersList.add(new Header(new QName("uauth", "partner"), partner, new JAXBDataBinding(String.class)));
-			headersList.add(new Header(new QName("uauth", "user"), user, new JAXBDataBinding(String.class)));
-			headersList.add(new Header(new QName("uauth", "organization"), organization, new JAXBDataBinding(String.class)));
-			headersList.add(new Header(new QName("uauth", "token_".concat(operator)), token, new JAXBDataBinding(String.class)));
+			headersList.add(new Header(new QName("uauth", "partner"), authHeaders.getPartner(), new JAXBDataBinding(String.class)));
+			headersList.add(new Header(new QName("uauth", "user"), authHeaders.getUser(), new JAXBDataBinding(String.class)));
+			headersList.add(new Header(new QName("uauth", "organization"), authHeaders.getOrganization(), new JAXBDataBinding(String.class)));
+			headersList.add(new Header(new QName("uauth", "token_".concat(authHeaders.getOperator())), authHeaders.getToken(), new JAXBDataBinding(String.class)));
 
 			proxy.getRequestContext().put(Header.HEADER_LIST, headersList);
 		} catch(JAXBException ex) {
@@ -147,23 +155,26 @@ public class UnicloudService {
 		}
 	}
 
-	private void logGateResponse(final Holder<GateResponse> gateResponse) {
+	private AuthenticationData registerUserByCertificate(final String operatorCode, final String partnerKey, final String organizationInn, final String organizationKpp, final byte[] sign, final String userId) {
+		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
+		Holder<String> organizationId = new Holder<String>();
+		Holder<String> organizationEdoId = new Holder<String>();
+		gateWcfService.registerUserByCertificate(operatorCode, partnerKey, organizationInn, organizationKpp, sign, userId, gateResponse, organizationId, organizationEdoId);
+		AuthenticationData authentication;
 		if (gateResponse.value != null) {
-			logger.debug("message = {}", gateResponse.value.getMessage());
-			logger.debug("operatorMessage = {}", gateResponse.value.getOperatorMessage());
-			logger.debug("responseType = {}", gateResponse.value.getResponseType());
-			logger.debug("stackTrace = {}", gateResponse.value.getStackTrace());
+			authentication = new AuthenticationData(gateResponse.value);
+			if (EResponseType.OK == gateResponse.value.getResponseType()) {
+				authentication.setOrganizationId(organizationId.value);
+				authentication.setOrganizationEdoId(organizationEdoId.value);
+			} else {
+				Utils.logGateResponse(gateResponse, logger);
+			}
+		} else {
+			String msg = "Error invoking unicloud gate. GateResponse can't be null!";
+			logger.error(msg);
+			throw new IllegalStateException(msg);
 		}
-	}
-
-	private byte[] contentToByteArray(ContentReader reader) {
-		byte[] content;
-		try {
-			content = IOUtils.toByteArray(reader.getContentInputStream());
-		} catch(IOException ex) {
-			throw new ContentIOException(ex.getMessage(), ex);
-		}
-		return content;
+		return authentication;
 	}
 
 	public AuthenticationData authenticateByCertificate(final String guidSignBase64, final String timestamp, final String timestampSignBase64) {
@@ -180,43 +191,26 @@ public class UnicloudService {
 		String kpp = (String)nodeService.getProperty(organizationRef, OrgstructureBean.PROP_ORG_KPP);
 		String employeeId = employeeRef.getId();
 
-        Holder<GateResponse> gateResponse = new Holder<GateResponse>();
-        Holder<String> organizationId = new Holder<String>();
-		Holder<String> organizationEdoId = new Holder<String>();
-		gateWcfService.registerUserByCertificate(operatorCode, partnerKey, inn, kpp, guidSign, employeeId, gateResponse, organizationId, organizationEdoId);
-
-		AuthenticationData authentication = new AuthenticationData();
-		if (gateResponse.value != null) {
-			authentication.setGateResponse(gateResponse.value);
-			if (EResponseType.OK == gateResponse.value.getResponseType()) {
-				authentication.setOrganizationId(organizationId.value);
-				authentication.setOrganizationEdoId(organizationEdoId.value);
-				gateResponse = new Holder<GateResponse>();
-				Holder<String> token = new Holder<String>();
-				gateWcfService.authenticateByCertificate(operatorCode, timestampSign, timestamp, gateResponse, token);
-				if (gateResponse.value != null) {
-					authentication.setGateResponse(gateResponse.value);
-					if (EResponseType.OK == gateResponse.value.getResponseType()) {
-						authentication.setToken(token.value);
-						signedDocflowService.saveAuthenticationData(organizationId.value, organizationEdoId.value, token.value);
-					} else {
-						logGateResponse(gateResponse);
-					}
+		AuthenticationData auth = registerUserByCertificate(operatorCode, partnerKey, inn, kpp, guidSign, employeeId);
+		if (EResponseType.OK == auth.getResponseType()) {
+			Holder<GateResponse> gateResponse = new Holder<GateResponse>();
+			Holder<String> token = new Holder<String>();
+			gateWcfService.authenticateByCertificate(operatorCode, timestampSign, timestamp, gateResponse, token);
+			if (gateResponse.value != null) {
+				auth.setGateResponse(gateResponse.value);
+				if (EResponseType.OK == gateResponse.value.getResponseType()) {
+					auth.setToken(token.value);
+					signedDocflowService.saveAuthenticationData(auth.getOrganizationId(), auth.getOrganizationEdoId(), auth.getToken());
 				} else {
-					String msg = "Error invoking unicloud gate. GateResponse can't be null!";
-					logger.error(msg);
-					throw new IllegalStateException(msg);
+					Utils.logGateResponse(gateResponse, logger);
 				}
 			} else {
-				logGateResponse(gateResponse);
+				String msg = "Error invoking unicloud gate. GateResponse can't be null!";
+				logger.error(msg);
+				throw new IllegalStateException(msg);
 			}
-		} else {
-			String msg = "Error invoking unicloud gate. GateResponse can't be null!";
-			logger.error(msg);
-			throw new IllegalStateException(msg);
 		}
-
-		return authentication;
+		return auth;
 	}
 
 	public SignatureData verifySignature(String contentRef, String signature) {
@@ -240,7 +234,7 @@ public class UnicloudService {
 
 		SignatureData signatureData = new SignatureData();
 
-        Holder<GateResponse> gateResponse = new Holder<GateResponse>();
+		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
 		Holder<String> signerInfo = new Holder<String>();
 		Holder<Boolean> isSignatureValid = new Holder<Boolean>();
 		gateWcfService.verifySignature(content, sign, operatorCode, gateResponse, signerInfo, isSignatureValid);
@@ -250,7 +244,7 @@ public class UnicloudService {
 				signatureData.setSignerInfo(signerInfo.value);
 				signatureData.setIsSignatureValid(isSignatureValid.value);
 			} else {
-				logGateResponse(gateResponse);
+				Utils.logGateResponse(gateResponse, logger);
 			}
 		} else {
 			String msg = "Error invoking unicloud gate. GateResponse can't be null!";
@@ -261,15 +255,10 @@ public class UnicloudService {
 		return signatureData;
 	}
 
-	public SendDocumentData sendDocument(final NodeRef contentRef, final NodeRef partnerRef) {
-		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
-		String partnerKey = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_PARTNER_KEY);
-		String organizationId = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_ORGANIZATION_ID);
-		String operatorCode = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_OPERATOR_CODE);
-
-		String employeeId = employeeRef.getId();
-		String token = (String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_AUTH_TOKEN);
-
+	private <T extends UnicloudData> T checkAuthenticationData(final AuthHeaders authHeaders, final Class<T> unicloudDataClass) {
+		T unicloudData = null;
+		String organizationId = authHeaders.getOrganization();
+		String token = authHeaders.getToken();
 		if (StringUtils.isEmpty(organizationId) || StringUtils.isEmpty(token)) {
 			String orgIdMsg = StringUtils.isEmpty(organizationId) ? "Organization Id not found. " : "";
 			String tokenMsg = StringUtils.isEmpty(token) ? "Token not found. " : "";
@@ -278,13 +267,38 @@ public class UnicloudService {
 			fakeResponse.setOperatorMessage(null);
 			fakeResponse.setResponseType(EResponseType.UNAUTHORIZED);
 			fakeResponse.setStackTrace(ExceptionUtils.getStackTrace(new Exception()));
-			return new SendDocumentData(fakeResponse);
+
+			try {
+				unicloudData = unicloudDataClass.newInstance();
+				unicloudData.setGateResponse(fakeResponse);
+			} catch (IllegalAccessException ex) {
+				logger.error(ex.getMessage(), ex);
+			} catch (InstantiationException ex) {
+				logger.error(ex.getMessage(), ex);
+			}
+		}
+
+		return unicloudData;
+	}
+
+	public SendDocumentData sendDocument(final NodeRef contentRef, final NodeRef contractorRef) {
+		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+		AuthHeaders authHeaders = new AuthHeaders();
+		authHeaders.setPartner((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_PARTNER_KEY));
+		authHeaders.setUser(employeeRef.getId());
+		authHeaders.setOrganization((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_ORGANIZATION_ID));
+		authHeaders.setOperator((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_OPERATOR_CODE));
+		authHeaders.setToken((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_AUTH_TOKEN));
+
+		SendDocumentData sendDocumentData = checkAuthenticationData(authHeaders, SendDocumentData.class);
+		if (sendDocumentData != null) {
+			return sendDocumentData;
 		}
 
 		//получить ИНН и КПП контрагента
 		CompanyInfo companyInfo = new CompanyInfo();
-		companyInfo.setInn((String)nodeService.getProperty(partnerRef, Contractors.PROP_CONTRACTOR_INN));
-		companyInfo.setKpp((String)nodeService.getProperty(partnerRef, Contractors.PROP_CONTRACTOR_KPP));
+		companyInfo.setInn((String)nodeService.getProperty(contractorRef, Contractors.PROP_CONTRACTOR_INN));
+		companyInfo.setKpp((String)nodeService.getProperty(contractorRef, Contractors.PROP_CONTRACTOR_KPP));
 
 		//получаем список подписей нашей организации
 		//подписи уже проверены на клиенте и валидны
@@ -301,19 +315,20 @@ public class UnicloudService {
 		//получаем ИД документа
 		ContentReader contentReader = contentService.getReader(contentRef, ContentModel.PROP_CONTENT);
 		DocumentToSend doc = new DocumentToSend();
-		doc.setContent(contentToByteArray(contentReader));
+		doc.setContent(Utils.contentToByteArray(contentReader));
+		doc.setDocflowId(contentRef.getId());
 		doc.setDocumentType(EDocumentType.NON_FORMALIZED);
 		doc.setFileName((String)nodeService.getProperty(contentRef, ContentModel.PROP_NAME));
 		doc.setId(contentRef.getId());
 		doc.setReceiver(companyInfo);
 		doc.setSignatures(ourSignatures);
-		doc.setTransactionType(EDocflowTransactionType.NO_RECIPIENT_SIGNATURE_REQUEST);
+		doc.setTransactionType(EDocflowTransactionType.WAITING_FOR_RECIPIENT_SIGNATURE); //двухнаправленный ЭДО
 
-		addAuthHeaders(partnerKey, employeeId, organizationId, operatorCode, token);
+		addAuthHeaders(authHeaders);
 		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
 		Holder<String> documentId = new Holder<String>();
 		try {
-			gateWcfService.sendDocument(doc, operatorCode, null, gateResponse, documentId);
+			gateWcfService.sendDocument(doc, authHeaders.getOperator(), null, gateResponse, documentId);
 		} catch(Exception ex) {
 			gateResponse.value = new GateResponse();
 			gateResponse.value.setMessage(ex.getMessage());
@@ -324,13 +339,13 @@ public class UnicloudService {
 			removeAuthHeaders();
 		}
 
-		SendDocumentData sendDocumentData;
 		if (gateResponse.value != null) {
 			sendDocumentData = new SendDocumentData(gateResponse.value);
 			if (EResponseType.OK == gateResponse.value.getResponseType()) {
 				sendDocumentData.setDocumentId(documentId.value);
+				sendDocumentData.setDocflowId(contentRef.getId());
 			} else {
-				logGateResponse(gateResponse);
+				Utils.logGateResponse(gateResponse, logger);
 			}
 		} else {
 			String msg = "Error invoking unicloud gate. GateResponse can't be null!";
@@ -339,5 +354,184 @@ public class UnicloudService {
 		}
 
 		return sendDocumentData;
+	}
+
+	private void markDocflowsAsRead(final AuthHeaders authHeaders, final ArrayOfguid readDocflows) {
+		//добавляем аутентификационный заголовок
+		addAuthHeaders(authHeaders);
+		try {
+			GateResponse gateResponse = gateWcfService.markDocflowsAsRead(readDocflows);
+			if (EResponseType.OK == gateResponse.getResponseType()) {
+				logger.debug("Docflows were successfully marked as read.");
+			} else {
+				Utils.logGateResponse(gateResponse, logger);
+			}
+		} catch(Exception ex) {
+			logger.error("Error marking docflows as read.", ex);
+		} finally {
+			removeAuthHeaders();
+		}
+	}
+
+	private List<DocflowInfoBase> getContractorDocflows(final AuthHeaders authHeaders, final NodeRef contentRef) {
+		String docflowId = (String)nodeService.getProperty(contentRef, SignedDocflowModel.PROP_DOCFLOW_ID);
+
+		WorkspaceFilter filter = new WorkspaceFilter();
+		filter.setRelation(ERelationFilter.INBOUND);
+		filter.setUnreadOnly(true);
+		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
+		Holder<ArrayOfDocflowInfoBase> docflows = new Holder<ArrayOfDocflowInfoBase>();
+		//добавляем аутентификационный заголовок
+		addAuthHeaders(authHeaders);
+		try {
+			gateWcfService.getDocflowList(filter, gateResponse, docflows);
+		} catch(Exception ex) {
+			logger.error("getDocflowList internal error", ex);
+		} finally {
+			removeAuthHeaders();
+		}
+		List<DocflowInfoBase> contractorDocflows;
+		if (gateResponse.value != null) {
+			contractorDocflows = new ArrayList<DocflowInfoBase>();
+			if (EResponseType.OK == gateResponse.value.getResponseType()) {
+				List<DocflowInfoBase> docflowInfoBases = docflows.value.getDocflowInfoBases();
+				ArrayOfguid readDocflows = new ArrayOfguid();
+				for (DocflowInfoBase docflowInfoBase : docflowInfoBases) {
+					String contractorDocflowId = docflowInfoBase.getDocflowId();
+
+					if (docflowId.equals(contractorDocflowId)) {
+						contractorDocflows.add(docflowInfoBase);
+						readDocflows.getGuids().add(docflowInfoBase.getDocflowId());
+					}
+				}
+				//отмечаем как прочитанные
+				markDocflowsAsRead(authHeaders, readDocflows);
+			} else {
+				Utils.logGateResponse(gateResponse, logger);
+			}
+		} else {
+			String msg = "Error invoking unicloud gate. GateResponse can't be null!";
+			logger.error(msg);
+			throw new IllegalStateException(msg);
+		}
+		return contractorDocflows;
+	}
+
+	private List<DocumentInfo> getContractorDocumentInfos(final AuthHeaders authHeaders, final String docflowId) {
+
+		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
+		Holder<ArrayOfDocumentInfo> documentInfos = new Holder<ArrayOfDocumentInfo>();
+		//добавляем аутентификационный заголовок
+		addAuthHeaders(authHeaders);
+		try {
+			gateWcfService.getDocumentList(docflowId, gateResponse, documentInfos);
+		} catch(Exception ex) {
+			logger.error("getContractorDocumentInfos internal error", ex);
+		} finally {
+			removeAuthHeaders();
+		}
+		List<DocumentInfo> documentInfoList;
+		if (gateResponse.value != null) {
+			if (EResponseType.OK == gateResponse.value.getResponseType()) {
+				documentInfoList = documentInfos.value.getDocumentInfos();
+			} else {
+				documentInfoList = new ArrayList<DocumentInfo>();
+				Utils.logGateResponse(gateResponse, logger);
+			}
+		} else {
+			String msg = "Error invoking unicloud gate. GateResponse can't be null!";
+			logger.error(msg);
+			throw new IllegalStateException(msg);
+		}
+		return documentInfoList;
+	}
+
+	private DocumentContent getContractorDocument(final AuthHeaders authHeaders, final String documentId) {
+		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
+		Holder<DocumentContent> documentContent = new Holder<DocumentContent>();
+		//добавляем аутентификационный заголовок
+		addAuthHeaders(authHeaders);
+		try {
+			gateWcfService.getDocumentContent(documentId, true, gateResponse, documentContent);
+		} catch(Exception ex) {
+			logger.error("getContractorDocument internal error", ex);
+		} finally {
+			removeAuthHeaders();
+		}
+		DocumentContent document;
+		if (gateResponse.value != null) {
+			if (EResponseType.OK == gateResponse.value.getResponseType()) {
+				document = documentContent.value;
+			} else {
+				document = null;
+				Utils.logGateResponse(gateResponse, logger);
+			}
+		} else {
+			String msg = "Error invoking unicloud gate. GateResponse can't be null!";
+			logger.error(msg);
+			throw new IllegalStateException(msg);
+		}
+		return document;
+	}
+
+	public void receiveDocuments(final NodeRef contentRef, final NodeRef contractorRef) {
+		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+		AuthHeaders authHeaders = new AuthHeaders();
+		authHeaders.setPartner((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_PARTNER_KEY));
+		authHeaders.setUser(employeeRef.getId());
+		authHeaders.setOrganization((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_ORGANIZATION_ID));
+		authHeaders.setOperator((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_OPERATOR_CODE));
+		authHeaders.setToken((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_AUTH_TOKEN));
+
+		//проверка аутентификационных параметров
+		//убеждаемся в том, у нас есть organizationId и token
+		//в противном случае возвращаем ошибку аутентификации
+//		SendDocumentData sendDocumentData = checkAuthenticationData(organizationId, token, SendDocumentData.class);
+//		if (sendDocumentData != null) {
+//			return sendDocumentData;
+//		}
+
+		List<DocflowInfoBase> docflows = getContractorDocflows(authHeaders, contentRef);
+		//бежим по свежепрочитанным docflow и достаем их них DocumentInfo
+		List<DocumentInfo> receiptNotifications = new ArrayList<DocumentInfo>();
+		List<DocumentInfo> recipientSignatures = new ArrayList<DocumentInfo>();
+		List<DocumentInfo> rejectedSignatures = new ArrayList<DocumentInfo>();
+		for(DocflowInfoBase docflow : docflows) {
+			List<DocumentInfo> documentInfos = getContractorDocumentInfos(authHeaders, docflow.getDocflowId());
+			logger.debug("docflow type = {}", docflow.getType());
+			for(DocumentInfo documentInfo : documentInfos) {
+				EDocumentType documentType = documentInfo.getDocumentType();
+				EDocflowTransactionType docflowTransactionType = documentInfo.getTransactionType();
+				//получили уведомление о прочтении
+				if (EDocumentType.RECEIPT_NOTIFICATION == documentType && EDocflowTransactionType.RECIPIENT_RECEIVE_NOTIFICATION == docflowTransactionType) {
+					receiptNotifications.add(documentInfo);
+				}
+				//партнер подписал документ и прислал подписи
+				if (EDocumentType.NON_FORMALIZED == documentType && EDocflowTransactionType.WITH_RECIPIENT_SIGNATURE == docflowTransactionType) {
+					recipientSignatures.add(documentInfo);
+				}
+
+				if (EDocumentType.NON_FORMALIZED == documentType && EDocflowTransactionType.SIGNATURE_REQUEST_REJECTED == docflowTransactionType) {
+					rejectedSignatures.add(documentInfo);
+				}
+			}
+		}
+		logger.debug("Contractor {} has received {} documents", contractorRef, receiptNotifications.size());
+		logger.debug("We received {} signed documents from contractor {}", recipientSignatures.size(), contractorRef);
+		logger.debug("Contractor {} has rejected {} documents", contractorRef, rejectedSignatures.size());
+
+		//получаем непосредственно подписи по документам
+		List<DocumentContent> documents = new ArrayList<DocumentContent>();
+		for (DocumentInfo documentInfo : recipientSignatures) {
+			DocumentContent document = getContractorDocument(authHeaders, documentInfo.getDocumentId());
+			documents.add(document);
+		}
+		//вычленяем из списка документов подписи
+		for(DocumentContent document : documents) {
+			List<byte[]> signatures = document.getSignatures().getBase64Binaries();
+			for(int i = 0; i < signatures.size(); ++i) {
+				String signature = Base64.encodeBase64String(signatures.get(i));
+			}
+		}
 	}
 }

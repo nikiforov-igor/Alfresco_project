@@ -12,17 +12,20 @@ import ucloud.gate.proxy.exceptions.GateResponse;
 public final class SendDocumentData extends UnicloudData {
 
 	private String documentId;
+	private String docflowId;
 
 	public SendDocumentData() {
+		super();
 	}
 
-	public SendDocumentData(GateResponse gateResponse) {
-		setGateResponse(gateResponse);
+	public SendDocumentData(final GateResponse gateResponse) {
+		super(gateResponse);
 	}
 
 	@Override
 	protected Map<String, Object> putOwnProperties(Map<String, Object> properties) {
 		properties.put("documentId", documentId);
+		properties.put("docflowId", documentId);
 		return properties;
 	}
 
@@ -32,5 +35,13 @@ public final class SendDocumentData extends UnicloudData {
 
 	public void setDocumentId(String documentId) {
 		this.documentId = documentId;
+	}
+
+	public String getDocflowId() {
+		return docflowId;
+	}
+
+	public void setDocflowId(String docflowId) {
+		this.docflowId = docflowId;
 	}
 }

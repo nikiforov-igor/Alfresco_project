@@ -142,7 +142,7 @@ public class SendContentToPartnerService {
 			SendDocumentData sendDocumentData = unicloudService.sendDocument(contentRef, partnerRef);
 			if (EResponseType.OK == sendDocumentData.getResponseType()) {
 				//добавляем вложению documentId
-				signedDocflowService.addDocumentIdToContent(contentRef, sendDocumentData.getDocumentId());
+				signedDocflowService.addDocflowIdsToContent(contentRef, sendDocumentData.getDocumentId(), sendDocumentData.getDocflowId());
 				//вешаем блокировку на успешно отправленное вложение
 				signedDocflowService.lockSignedContentRef(contentRef);
 			}
@@ -200,7 +200,7 @@ public class SendContentToPartnerService {
 			mailService.send(message);
 
 			for (NodeRef content : contentList) {
-				signedDocflowService.addDocumentIdToContent(content, regNumber);
+				signedDocflowService.addDocflowIdsToContent(content, regNumber, null);
 				signedDocflowService.lockSignedContentRef(content);
 				addBusinessJournalRecord(content, contentToSend.getPartner());
 			}

@@ -178,13 +178,13 @@
 		<aspect name="lecm-signed-docflow:signable"/>
 		<aspect name="lecm-signed-docflow:docflowable"/>
 
-		<aspect name="lecm-signed-docflow:aspect-document-id">
+		<aspect name="lecm-signed-docflow:aspect-docflow-ids">
 			<properties>
 				<property name="lecm-signed-docflow:document-id">
-					<title>Document ID</title>
 					<type>d:text</type>
-					<mandatory>true</mandatory>
-					<default>true</default>
+				</property>
+				<property name="lecm-signed-docflow:docflow-id">
+					<type>d:text</type>
 				</property>
 			</properties>
 		</aspect>

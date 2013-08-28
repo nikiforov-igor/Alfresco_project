@@ -115,12 +115,14 @@ public interface SignedDocflow {
 	boolean isOurSignature(NodeRef signatureRef);
 
 	/**
-	 * Добавить aspect-document-id к контенту и установить атрибут document-id.
+	 * Добавить aspect-document-id к контенту и установить атрибуты document-id, docflow-id.
+	 * В случае отправки по почте,
 	 *
 	 * @param contentRef ссылка на наследник cm:content.
 	 * @param documentId DocumentID, который необходимо записать в соответствующий атрибут.
+	 * @param docflowId DocflowID, который необходимо записать в соответствующий атрибут.
 	 */
-	void addDocumentIdToContent(final NodeRef contentRef, final String documentId);
+	void addDocflowIdsToContent(final NodeRef contentRef, final String documentId, final String docflowId);
 
 	/**
 	 * Повесить блокировку на указанный контент

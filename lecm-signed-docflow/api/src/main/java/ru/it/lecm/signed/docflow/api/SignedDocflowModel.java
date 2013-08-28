@@ -77,13 +77,17 @@ public final class SignedDocflowModel {
 	 */
 	public final static QName ASPECT_DOCFLOWABLE = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "docflowable");
 	/**
-	 * &lt;aspect name="lecm-signed-docflow:aspect-document-id/&gt;
+	 * &lt;aspect name="lecm-signed-docflow:aspect-docflow-ids/&gt;
 	 */
-	public final static QName ASPECT_DOCUMENT_ID = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "aspect-document-id");
+	public final static QName ASPECT_DOCFLOW_IDS = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "aspect-docflow-ids");
 	/**
 	 * &lt;property name="lecm-signed-docflow:document-id/&gt;
 	 */
 	public final static QName PROP_DOCUMENT_ID = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "document-id");
+	/**
+	 * &lt;property name="lecm-signed-docflow:docflow-id/&gt;
+	 */
+	public final static QName PROP_DOCFLOW_ID = QName.createQName(SIGNED_DOCFLOW_NAMESPACE, "docflow-id");
 	/**
 	 * &lt;property name="lecm-signed-docflow:operator-code"&gt;
 	 */

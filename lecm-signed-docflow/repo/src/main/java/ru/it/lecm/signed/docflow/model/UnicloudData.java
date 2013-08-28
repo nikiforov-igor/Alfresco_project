@@ -19,6 +19,11 @@ public abstract class UnicloudData {
 		gateResponse = new HashMap<String, Object>();
 	}
 
+	protected UnicloudData(final GateResponse gateResponse) {
+		this();
+		setGateResponse(gateResponse);
+	}
+
 	public final void setGateResponse(GateResponse gateResponse) {
 		this.gateResponse.put("message", gateResponse.getMessage());
 		this.gateResponse.put("operatorMessage", gateResponse.getOperatorMessage());
