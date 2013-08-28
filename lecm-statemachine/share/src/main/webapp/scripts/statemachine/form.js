@@ -166,6 +166,12 @@ LogicECM.module = LogicECM.module || {};
                         }
                     }
                 },
+                doBeforeFormSubmit: {
+                    fn: function () {
+                        this._showSplash();
+                    },
+                    scope: this
+                },
                 onSuccess:{
                     fn:function (response) {
                         this._chooseState(action.type, me.taskId, response.json.persistedObject, action.actionId);
