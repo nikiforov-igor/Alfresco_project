@@ -103,7 +103,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		if (channelsDictionary != null) {
 			List<NodeRef> channelsDictionaryValue = dictionaryService.getChildren(channelsDictionary);
 			if (channelsDictionaryValue != null) {
-				for (NodeRef typeRef: channelsDictionaryValue) {
+				for (NodeRef typeRef : channelsDictionaryValue) {
 					String beanId = (String) nodeService.getProperty(typeRef, PROP_SPRING_BEAN_ID);
 					if (beanId != null) {
 						channelsNodeRefs.put(beanId, typeRef);
@@ -128,7 +128,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	public void sendNotification(List<String> channels, Notification notification) {
 		List<NodeRef> typeRefs = new ArrayList<NodeRef>();
 		if (channels != null) {
-			for (String channel: channels) {
+			for (String channel : channels) {
 				if (getChannelsNodeRefs().containsKey(channel)) {
 					typeRefs.add(getChannelsNodeRefs().get(channel));
 				}
@@ -140,29 +140,39 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 	@Override
 	public void sendNotification(final Notification notification) {
-			Thread t = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					if (checkNotification(notification)) {
-						NodeRef generalizedNotification = createGeneralizedNotification(notification);
-						if (generalizedNotification != null) {
-							Set<NotificationUnit> notificationUnits = createAtomicNotifications(notification);
-							if (notificationUnits != null && notificationUnits.size() > 0) {
-								for (NotificationUnit notf: notificationUnits) {
-									sendNotification(notf);
+		new Thread() {
+			@Override
+			public void run() {
+				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+							@Override
+							public Void execute() throws Throwable {
+								if (checkNotification(notification)) {
+									NodeRef generalizedNotification = createGeneralizedNotification(notification);
+									if (generalizedNotification != null) {
+										Set<NotificationUnit> notificationUnits = createAtomicNotifications(notification);
+										if (notificationUnits != null && notificationUnits.size() > 0) {
+											for (NotificationUnit notf : notificationUnits) {
+												sendNotification(notf);
+											}
+										} else {
+											logger.warn("Атомарные уведомления не были сформированы");
+										}
+									} else {
+										logger.warn("Обобщённое уведомление не создано");
+									}
+								} else {
+									logger.warn("Уведомление не прошло проверки");
 								}
-							} else {
-								logger.warn("Атомарные уведомления не были сформированы");
+								return null;
 							}
-						} else {
-							logger.warn("Обобщённое уведомление не создано");
-						}
-					} else {
-						logger.warn("Уведомление не прошло проверки");
+						}, false, true);
 					}
-				}
-			});
-			t.run();
+				});
+			}
+		}.start();
 	}
 
 	private void sendNotification(NotificationUnit notification) {
@@ -226,13 +236,13 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 			}
 		}
 
-        if (notification.getRecipientBusinessRoleRefs() != null) {
-            for (NodeRef ref : notification.getRecipientBusinessRoleRefs()) {
-                nodeService.createAssociation(result, ref, ASSOC_RECIPIENT_BUSINESS_ROLE);
-            }
-        }
+		if (notification.getRecipientBusinessRoleRefs() != null) {
+			for (NodeRef ref : notification.getRecipientBusinessRoleRefs()) {
+				nodeService.createAssociation(result, ref, ASSOC_RECIPIENT_BUSINESS_ROLE);
+			}
+		}
 
-        return result;
+		return result;
 	}
 
 	/**
@@ -244,36 +254,36 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) {
 		Set<NotificationUnit> result = new HashSet<NotificationUnit>();
 		if (generalizedNotification != null) {
-            Set<NodeRef> employeeRefs = new HashSet<NodeRef>();
-            if (generalizedNotification.getRecipientEmployeeRefs() != null) {
-                employeeRefs.addAll(generalizedNotification.getRecipientEmployeeRefs());
-            }
+			Set<NodeRef> employeeRefs = new HashSet<NodeRef>();
+			if (generalizedNotification.getRecipientEmployeeRefs() != null) {
+				employeeRefs.addAll(generalizedNotification.getRecipientEmployeeRefs());
+			}
 
-            if (generalizedNotification.getRecipientOrganizationUnitRefs() != null) {
-                for (NodeRef organizationUnitRef : generalizedNotification.getRecipientOrganizationUnitRefs()) {
-                    employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(organizationUnitRef));
-                }
-            }
+			if (generalizedNotification.getRecipientOrganizationUnitRefs() != null) {
+				for (NodeRef organizationUnitRef : generalizedNotification.getRecipientOrganizationUnitRefs()) {
+					employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(organizationUnitRef));
+				}
+			}
 
-            if (generalizedNotification.getRecipientWorkGroupRefs() != null) {
-                for (NodeRef workGroupRef : generalizedNotification.getRecipientWorkGroupRefs()) {
-                    employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(workGroupRef));
-                }
-            }
+			if (generalizedNotification.getRecipientWorkGroupRefs() != null) {
+				for (NodeRef workGroupRef : generalizedNotification.getRecipientWorkGroupRefs()) {
+					employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(workGroupRef));
+				}
+			}
 
-            if (generalizedNotification.getRecipientPositionRefs() != null) {
-                for (NodeRef positionRef : generalizedNotification.getRecipientPositionRefs()) {
-                    if (orgstructureService.isPosition(positionRef)) {
-                        employeeRefs.addAll(orgstructureService.getEmployeesByPosition(positionRef));
-                    }
-                }
-            }
+			if (generalizedNotification.getRecipientPositionRefs() != null) {
+				for (NodeRef positionRef : generalizedNotification.getRecipientPositionRefs()) {
+					if (orgstructureService.isPosition(positionRef)) {
+						employeeRefs.addAll(orgstructureService.getEmployeesByPosition(positionRef));
+					}
+				}
+			}
 
-            if (generalizedNotification.getRecipientBusinessRoleRefs() != null) {
-                for (NodeRef businessRoleRef : generalizedNotification.getRecipientBusinessRoleRefs()) {
-                    employeeRefs.addAll(orgstructureService.getEmployeesByBusinessRole(businessRoleRef, true));
-                }
-            }
+			if (generalizedNotification.getRecipientBusinessRoleRefs() != null) {
+				for (NodeRef businessRoleRef : generalizedNotification.getRecipientBusinessRoleRefs()) {
+					employeeRefs.addAll(orgstructureService.getEmployeesByBusinessRole(businessRoleRef, true));
+				}
+			}
 
 			result.addAll(addNotificationUnits(generalizedNotification, employeeRefs));
 		}
@@ -283,7 +293,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private Set<NotificationUnit> addNotificationUnits(Notification generalizedNotification, Set<NodeRef> employeeRefs) {
 		Set<NotificationUnit> result = new HashSet<NotificationUnit>();
 
-		for (NodeRef employeeRef: employeeRefs) {
+		for (NodeRef employeeRef : employeeRefs) {
 			if (orgstructureService.isEmployee(employeeRef) && !employeeRef.equals(generalizedNotification.getInitiatorRef())) {
 				List<NodeRef> typeRefs = generalizedNotification.getTypeRefs();
 				if (typeRefs == null || typeRefs.size() == 0) {
@@ -308,6 +318,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 	/**
 	 * Проверка обобщённого уведомления
+	 *
 	 * @param notification Обобщённое уведомление
 	 * @return false - если уведомление неверно заполнено, иначе true
 	 */
@@ -373,7 +384,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 									List<NodeRef> systemDefaulChannels = getSystemDefaultNotificationTypes();
 									if (systemDefaulChannels != null) {
-										for (NodeRef typeRef: systemDefaulChannels) {
+										for (NodeRef typeRef : systemDefaulChannels) {
 											nodeService.createAssociation(settingsRef, typeRef, ASSOC_DEFAULT_NOTIFICATIONS_TYPES);
 										}
 									}
@@ -406,7 +417,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		if (settings != null) {
 			List<AssociationRef> defaultNotificationTypes = nodeService.getTargetAssocs(settings, ASSOC_DEFAULT_NOTIFICATIONS_TYPES);
 			if (defaultNotificationTypes != null) {
-				for (AssociationRef assocRef: defaultNotificationTypes) {
+				for (AssociationRef assocRef : defaultNotificationTypes) {
 					NodeRef typeRef = assocRef.getTargetRef();
 					if (!isArchive(typeRef)) {
 						result.add(typeRef);
