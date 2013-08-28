@@ -15,6 +15,7 @@ import ru.it.lecm.errands.ErrandsService;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -155,6 +156,15 @@ public class EveryDayNotificationShedule extends AbstractScheduledAction {
 
     private List<NodeRef> getErrandsOnExecution() {
         Date now = new Date();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        now = calendar.getTime();
+
         String filters;
         List<QName> types = new ArrayList<QName>();
         List<String> paths = new ArrayList<String>();
@@ -177,7 +187,7 @@ public class EveryDayNotificationShedule extends AbstractScheduledAction {
         List<NodeRef> appropErrands = new ArrayList<NodeRef>();
         for (NodeRef errand : errandsDocuments) {
             Date endDate = (Date) nodeService.getProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE);
-            if (endDate != null && now.before(endDate)) {
+            if (endDate != null && (now.before(endDate) || now.equals(endDate))) {
                 appropErrands.add(errand);
             }
         }
