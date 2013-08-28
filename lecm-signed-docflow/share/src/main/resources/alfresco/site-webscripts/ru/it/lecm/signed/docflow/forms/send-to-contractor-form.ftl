@@ -34,16 +34,35 @@
 			Ajax = Alfresco.util.Ajax,
 			ComponentManager = Alfresco.util.ComponentManager,
 
+			sendForm = ComponentManager.get("${htmlId}"),
+			sendDialog,
+
 			interTypeInput,
 			emailInput,
 
 			interTypeField,
-			emailField,
+			emailField;
 
-			sendForm,
-			sendDialog;
+		// Делаем нужный нам запрос, вместо submit'а формы
+		sendForm.options.doBeforeAjaxRequest = {
+			fn: function(config, obj) {
+				var dataObj = config.dataObj,
+					contentRef = sendForm.options.contentRef;
 
-		YAHOO.util.Event.onContentReady("${formContainerId}", init);
+				dataObj.content = [contentRef];
+				dataObj.partner = dataObj["contractor"];
+				dataObj.interactionType = dataObj["prop_lecm-contractor_interaction-type"];
+				dataObj.email = dataObj["prop_lecm-contractor_email"];
+
+				bindAjaxTo("lecm/signed-docflow/sendContentToPartner", dataObj)();
+
+				// Отменяем submit формы
+				return false;
+			},
+			scope: sendForm
+		};
+
+		YAHOO.util.Event.onContentReady("${formContainerId}", checkDocument);
 
 		function bindAjaxTo(url, dataObj) {
 			return function makeDataRequest() {
@@ -73,6 +92,11 @@
 								partner = responses.filter(function(v) { return v.gateResponse.responseType == "PARTNER_ERROR"; }),
 								unauthorized = responses.filter(function(v) { return v.gateResponse.responseType == "UNAUTHORIZED"; });
 
+							function hideAndReload() {
+								loadingPopup.destroy();
+								window.location.reload();
+							}
+
 							loadingPopup.destroy();
 
 							console.log(">>> Всего отправлено документов: " + responses.length);
@@ -84,7 +108,7 @@
 							if(good.length == responses.length) {
 								message = (responses.length > 1) ? "Документы успешно отправлены" : "Документ успешно отправлен";
 								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
-								YAHOO.lang.later(2500, loadingPopup, loadingPopup.destroy);
+								YAHOO.lang.later(2500, null, hideAndReload);
 								return;
 							}
 
@@ -108,13 +132,18 @@
 								},
 								actionUrl: null,
 								destroyOnHide: true,
+								doBeforeDialogShow:{
+									fn: function(form, simpleDialog) {
+										simpleDialog.dialog.setHeader("Необходима аутентификация, выберите сертификат");
+									}
+								},
 								doBeforeAjaxRequest: {
 									fn: function() {
 										var currentContainer = cryptoAppletModule.getCurrentContainer();
 
 										if(currentContainer == "") {
 											Alfresco.util.PopupManager.displayMessage({
-												text: "Необходимо выбрать сертификат!"
+												text: "Вы не выбрали сертификат"
 											});
 										} else {
 											cryptoAppletModule.unicloudAuth(currentContainer, makeDataRequest);
@@ -147,16 +176,29 @@
 			}
 		}
 
-		function init() {
+		function init(response) {
 
+			debugger;
+
+			var isValue = YAHOO.lang.isValue,
+
+				clearSelectionButton,
+
+				interType = response.json.interactionType,
+				contrRef = response.json.contractorRef,
+				contrEmail = response.json.contractorEmail,
+
+				treeViewer = Alfresco.util.ComponentManager.get("${htmlId}_contractor");
+
+			sendDialog = sendForm.dialog;
+
+			// Собираем поля формы
 			interTypeInput = Dom.get("${interTypeId}");
 			emailInput = Dom.get("${emailId}");
 
+			// Получаем "обёртки" через parentNode
 			interTypeField = new Element(interTypeInput.parentNode);
 			emailField = new Element(emailInput.parentNode);
-
-			sendForm = ComponentManager.get("${htmlId}");
-			sendDialog = ComponentManager.get("${htmlId}").dialog;
 
 			// При закрытии формы удаляем созданные Bubbling слои
 			sendDialog.subscribe("hide", function() {
@@ -164,8 +206,24 @@
 			});
 
 			// Прячем поля
-			interTypeField.addClass("hidden");
-			emailField.addClass("hidden");
+			if(isValue(interType)) {
+				treeViewer.addSelectedItem(contrRef); // async
+
+				if(interType == "SPECOP") {
+					emailField.addClass("hidden");
+					interTypeInput.value = "SPECOP";
+				} else { // interType == "EMAIL"
+					interTypeInput.value = "EMAIL";
+					emailInput.value = contrEmail;
+					emailInput.disabled = true;
+				}
+
+				treeViewer.widgets.pickerButton.set("disabled", true);
+				treeViewer.widgets.pickerButton.setStyle("display", "none");
+			} else {
+				interTypeField.addClass("hidden");
+				emailField.addClass("hidden");
+			}
 
 			// Создаём радио
 			interTypeGroup = new YAHOO.widget.ButtonGroup({
@@ -173,8 +231,18 @@
 			});
 
 			interTypeGroup.addButtons([
-				{ label: "Используя спецоператора", value: "SPECOP" },
-				{ label: "Используя Email", value: "EMAIL" }
+				{
+					label: "Используя спецоператора",
+					value: "SPECOP",
+					checked: interType == "SPECOP",
+					disabled: interType == "EMAIL"
+				},
+				{
+					label: "Используя Email",
+					value: "EMAIL",
+					checked: interType == "EMAIL",
+					disabled: interType == "SPECOP"
+				}
 			]);
 
 			// Исправляем стили
@@ -183,8 +251,14 @@
 
 			// Связываем радио и interaction-type-input
 			interTypeGroup.subscribe("valueChange", function(event) {
-				var newValue = event.newValue;
 
+				var newValue;
+
+				if(isValue(interType)) {
+					return false;
+				}
+
+				newValue = event.newValue;
 				interTypeInput.value = newValue;
 
 				if(newValue == "EMAIL") {
@@ -196,32 +270,33 @@
 				if(newValue == "SPECOP") {
 					emailField.addClass("hidden");
 				}
+
+				return true;
 			});
-
-			sendForm.options.doBeforeAjaxRequest = {
-				fn: function(config, obj) {
-					var dataObj = config.dataObj,
-						contentRef = sendForm.options.contentRef;
-
-					dataObj.content = [contentRef];
-					dataObj.partner = dataObj["contractor"];
-					dataObj.interactionType = dataObj["prop_lecm-contractor_interaction-type"];
-					dataObj.email = dataObj["prop_lecm-contractor_email"];
-
-					bindAjaxTo("lecm/signed-docflow/sendContentToPartner", dataObj)();
-
-					return false;
-				},
-				scope: sendForm
-			};
 
 			// "sendToContractorChanged" - это название события changeItemsFireAction (share-config-custom.xml)
 			Bubbling.on("sendToContractorChanged", function(layer, args) {
+
 				var selectedContractors = args[1].selectedItems,
 					selectedContractor = Object.keys(selectedContractors)[0],
 
 					okButton = sendForm.widgets.okButton;
 
+				// Если этот документ уже отправлялся
+				if(isValue(interType)) {
+					// Включаем кнопку "ОК"
+					okButton.set("disabled", false);
+
+					// Убираем кнопку "-" в контроле выбора контрагента
+					clearSelectionButton = Dom.get("${htmlId}_contractor-cntrl-currentValueDisplay").getElementsByTagName("a");
+					clearSelectionButton = new Element(clearSelectionButton);
+					clearSelectionButton.setStyle("display", "none");
+
+					// И больше ничего не делаем
+					return false;
+				}
+
+				// Если мы дошли до этого места, значит документ отправляется впервые
 				if(selectedContractor) {
 					okButton.set("disabled", false);
 
@@ -234,6 +309,21 @@
 
 					emailInput.value = "";
 				}
+			});
+		}
+
+		function checkDocument() {
+			function onFailureCallback(response) {
+				Alfresco.util.PopupManager.displayMessage({
+					text: "Не удалось получить данные по контрагенту для документа"
+				});
+			}
+
+			Ajax.jsonRequest({
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/getContractorInfoBySendedContent",
+				dataObj: { nodeRef: sendForm.options.contentRef },
+				successCallback: { fn: init },
+				failureCallback: { fn: onFailureCallback }
 			});
 		}
 
@@ -262,7 +352,6 @@
 			}
 
 			function onFailureCallback(response) {
-				// NOP
 			}
 
 			Ajax.jsonRequest({
