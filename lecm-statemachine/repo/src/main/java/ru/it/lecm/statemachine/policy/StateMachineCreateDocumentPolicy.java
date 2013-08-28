@@ -73,7 +73,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 			nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
 
             HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
-            properties.put(ContentModel.PROP_OWNER, "system");
+            properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
             nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
 
 			PersonService personService = serviceRegistry.getPersonService();

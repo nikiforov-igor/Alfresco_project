@@ -171,17 +171,13 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
         statuses.add("!Черновик");
         statuses.add("!Исполнено");
 
-        filters = "@lecm\\-errands\\:just\\-in\\-time:\"true\""+ " AND " + "@lecm\\-errands\\:is\\-expired:\"false\"";
-
+        filters = "@lecm\\-errands\\:just\\-in\\-time: true AND @lecm\\-errands\\:is\\-expired: false";
         // Фильтр по датам
         QName dateProperty = ErrandsService.PROP_ERRANDS_LIMITATION_DATE;
-        final String MIN = "MIN";
-        final String MAX = DocumentService.DateFormatISO8601.format(now);
 
         String property = dateProperty.toPrefixString(namespaceService);
         property = property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-        filters += " AND @" + property + ":\"" + MIN + " \"..\"" + MAX + "\"";
-
+        filters += " AND @" + property + ": [MIN to NOW]";
         List<NodeRef> errandsDocuments = documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
 
         // в списке подписок у которых дата исполнения меньше текущей
