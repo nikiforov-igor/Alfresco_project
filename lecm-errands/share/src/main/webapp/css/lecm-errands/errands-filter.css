@@ -4,13 +4,14 @@
     border-radius: 5px 5px 0 0;
     background: #dcdcdc;
     overflow: hidden;
+    padding: 5px 10px;
 }
 .errands-filter > div {
     float: left;
-    margin: 5px 0 5px 10px;
 }
 .errands-filter > span.yui-button {
-    margin-top: 5px;
+    float: right;
+    margin-right: 0;
 }
 .errands-filter > div > label,
 .errands-filter > div > span {
