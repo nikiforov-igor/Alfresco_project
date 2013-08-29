@@ -156,7 +156,7 @@
                     if (array[i] == value) return true;
                 }
                 return false;
-            }
+            };
 
             var column, sortable;
             for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
@@ -169,6 +169,11 @@
                 }
 
                 if (!(this.options.excludeColumns.length > 0 && inArray(column.name, this.options.excludeColumns))) {
+                    var className = "";
+                    if (column.dataType == "lecm-orgstr:employee" || (this.options.nowrapColumns.length > 0 && inArray(column.name, this.options.nowrapColumns))) {
+                         className = "nowrap "
+                    }
+
                     columnDefinitions.push(
                         {
                             key:this.dataResponseFields[i],
@@ -179,7 +184,7 @@
                                 sortFunction:this.getSortFunction()
                             },
                             formatter:this.getCellFormatter(column.dataType),
-                            className: (column.dataType == 'boolean') ? 'centered' : ''
+                            className: className + ((column.dataType == 'boolean') ? 'centered' : '')
                         });
                 }
             }

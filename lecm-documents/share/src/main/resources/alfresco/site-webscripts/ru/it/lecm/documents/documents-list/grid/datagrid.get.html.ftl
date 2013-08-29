@@ -39,7 +39,8 @@
                     showCheckboxColumn: false,
                     bubblingLabel: "${bubblingLabel!"documents"}",
                     attributeForShow:"${attributeForShow!"cm:name"}",
-                    excludeColumns: <#if excludedColumns?? && (excludedColumns?length > 0)>"${excludedColumns}".split(",")<#else>[]</#if>
+                    excludeColumns: <#if excludedColumns?? && (excludedColumns?length > 0)>"${excludedColumns}".split(",")<#else>[]</#if>,
+                    nowrapColumns: <#if nowrapColumns?? && (nowrapColumns?length > 0)>"${nowrapColumns}".split(",")<#else>[]</#if>
                 }).setMessages(${messages});
 
                 var query = <#if query?? && (query?length > 0)>"${query}"<#else>""</#if>;

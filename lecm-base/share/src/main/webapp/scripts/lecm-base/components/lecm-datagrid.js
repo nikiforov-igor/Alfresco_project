@@ -300,9 +300,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 overrideSortingWith: null,
 
                 /**
-                 * Колонки которые не следует показывать
+                 * Колонки, которые не следует показывать
                  */
                 excludeColumns: [],
+
+                /**
+                 * Колонки, содержимое которых не следует разбивать на строки
+                 */
+                nowrapColumns: [],
 
 	            useCookieForSort: true
             },
@@ -1019,7 +1024,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         if (array[i] == value) return true;
                     }
                     return false;
-                }
+                };
 
                 var column, sortable;
                 for (var i = 0, ii = this.datagridColumns.length; i < ii; i++) {
@@ -1032,8 +1037,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }
 
                     if (!(this.options.excludeColumns.length > 0 && inArray(column.name, this.options.excludeColumns))) {
-                    columnDefinitions.push(
-                        {
+                        var className = "";
+                        if (column.dataType == "lecm-orgstr:employee" || (this.options.nowrapColumns.length > 0 && inArray(column.name, this.options.nowrapColumns))) {
+                            className = "nowrap "
+                        }
+
+                        columnDefinitions.push({
                             key:this.dataResponseFields[i],
                             label:column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
                             sortable:sortable,
@@ -1042,7 +1051,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 sortFunction:this.getSortFunction()
                             },
                             formatter:this.getCellFormatter(column.dataType),
-                            className: (column.dataType == 'boolean') ? 'centered' : ''
+                            className: className + ((column.dataType == 'boolean') ? 'centered' : '')
                         });
                     }
                 }
