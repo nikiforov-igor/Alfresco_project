@@ -290,6 +290,10 @@
                     var dateTimePattern = this._msg("form.control.date-picker.entry.date.format") + " " + this._msg("form.control.date-picker.entry.time.format");
                     selDate = Date.parseExact(dateTime, dateTimePattern);
                 }
+            } else {
+	            selDate.setHours(12);
+	            selDate.setMinutes(0);
+	            selDate.setSeconds(0);
             }
 
             // if we have a valid date, convert to ISO format and set value on hidden field
