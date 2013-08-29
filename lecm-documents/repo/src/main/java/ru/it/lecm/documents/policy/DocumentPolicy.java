@@ -261,9 +261,13 @@ public class DocumentPolicy extends BaseBean
             }
         }
 
+	    NodeRef documentSearchObject = getDocumentSearchObject(nodeRef);
+
 	    updatePresentString(nodeRef);
 
-	    NodeRef documentSearchObject = getDocumentSearchObject(nodeRef);
+	    if (documentSearchObject == null) {
+		    documentSearchObject = getDocumentSearchObject(nodeRef);
+	    }
 	    if (documentSearchObject != null) {
 		    behaviourFilter.disableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
 		    try{
