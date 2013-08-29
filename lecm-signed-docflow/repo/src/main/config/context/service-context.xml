@@ -110,5 +110,16 @@
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
 	</bean>
+	
+	<bean id="receiveContentByEmailService" class="ru.it.lecm.signed.docflow.ReceiveContentByEmailService" init-method="init">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="zipSignedContentService" ref="zipSignedContentService"/>
+		<property name="mailHost" value="imap.googlemail.com"/>
+		<property name="mailUsername" value="USERNAME"/>
+		<property name="mailPassword" value="PASSWORD"/>
+		<property name="mailProtocol" value="imaps"/>
+		<property name="mailInboxFolder" value="INBOX"/>
+		<property name="mailDestinationFolder" value="signedDocflowProcessedMail"/>
+	</bean>
 
 </beans>

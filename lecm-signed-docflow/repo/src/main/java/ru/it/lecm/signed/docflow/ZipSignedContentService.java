@@ -1,9 +1,12 @@
 package ru.it.lecm.signed.docflow;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +20,9 @@ import org.alfresco.util.PropertyCheck;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -158,6 +163,39 @@ public class ZipSignedContentService extends BaseBean {
 			}
 		}
 		return zipName;
+	}
+
+	public List<File> unzipFile(File file, File destDirectory) {
+		List<File> result = new ArrayList<File>();
+		ZipFile zipFile = null;
+		try {
+			zipFile = new ZipFile(file);
+			Enumeration entries = zipFile.getEntries();
+			while (entries.hasMoreElements()) {
+				ZipArchiveEntry entry = (ZipArchiveEntry) entries.nextElement();
+				File entryDestination = new File(destDirectory, entry.getName());
+				entryDestination.getParentFile().mkdirs();
+				InputStream in = zipFile.getInputStream(entry);
+				OutputStream out = new FileOutputStream(entryDestination);
+				IOUtils.copy(in, out);
+				IOUtils.closeQuietly(in);
+				IOUtils.closeQuietly(out);
+				result.add(entryDestination);
+			}
+		} catch (IOException ex) {
+			logger.error("Error opening archive", ex);
+			throw new RuntimeException(ex);
+		} finally {
+			if (zipFile != null) {
+				try {
+					zipFile.close();
+				} catch (IOException ex) {
+					logger.error("Error closing archive", ex);
+				}
+			}
+		}
+
+		return result;
 	}
 
 	private InputStream getFileInputStream(FileInfo fileInfo) {
