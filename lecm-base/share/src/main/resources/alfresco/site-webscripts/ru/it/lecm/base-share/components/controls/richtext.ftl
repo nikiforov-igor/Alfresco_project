@@ -4,7 +4,7 @@
 <#if field.control.params.columns??><#assign columns=field.control.params.columns><#else><#assign columns=60></#if>
 
 <div class="form-field">
-<#if form.mode == "view">
+<#if form.mode == "view" || field.disabled>
     <div class="viewmode-field richtext">
         <#if field.mandatory && field.value == "">
         <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
