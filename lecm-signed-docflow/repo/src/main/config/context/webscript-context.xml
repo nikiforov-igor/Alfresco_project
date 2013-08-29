@@ -49,7 +49,7 @@
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.loadSign.loadSign.post" class="ru.it.lecm.signed.docflow.webscripts.LoadSignWebscript"
 		  parent="webscript"
-		  p:signedDocflowService-ref="signedDocflowService" />
+		  p:signedDocflowService-ref="signedDocflowService"/>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.getZip.getZip.get" class="ru.it.lecm.signed.docflow.webscripts.DownloadAsZipWebscript"
 		  parent="webscript"
@@ -57,19 +57,20 @@
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.unlock.unlock.get" class="ru.it.lecm.signed.docflow.webscripts.LockingWebscript"
 		  parent="webscript"
-		  p:lockService-ref="lockService" />
+		  p:lockService-ref="lockService"/>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.signPermission.signPermission.get" class="ru.it.lecm.signed.docflow.webscripts.SignPermissionWebscript"
 		  parent="webscript"
 		  p:nodeService-ref="nodeService"
-		  p:orgstructureService-ref="serviceOrgstructure" />
+		  p:orgstructureService-ref="serviceOrgstructure"/>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.getContractorInfoBySendedContent.getContractorInfoBySendedContent.get" class="ru.it.lecm.signed.docflow.webscripts.GetContractorInfoBySendedContent"
-		  parent="webscript" 
-		  p:nodeService-ref="nodeService" />
+		  parent="webscript"
+		  p:nodeService-ref="nodeService"/>
 
 	<bean id="webscript.ru.it.lecm.signed.docflow.getSignedContentFromPartner.getSignedContentFromPartner.get" class="ru.it.lecm.signed.docflow.webscripts.GetSignedContentFromPartnerWebscript"
 		  parent="webscript"
-		  p:receiveContentByEmailService-ref="receiveContentByEmailService" />
-	
+		  p:receiveContentByEmailService-ref="receiveContentByEmailService"
+		  p:unicloudService-ref="unicloudService"/>
+
 </beans>

@@ -4,6 +4,7 @@ import com.microsoft.schemas.serialization.arrays.ArrayOfbase64Binary;
 import com.microsoft.schemas.serialization.arrays.ArrayOfguid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Holder;
@@ -30,6 +31,7 @@ import ru.it.lecm.signed.docflow.api.SignedDocflow;
 import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
 import ru.it.lecm.signed.docflow.model.AuthHeaders;
 import ru.it.lecm.signed.docflow.model.AuthenticationData;
+import ru.it.lecm.signed.docflow.model.ReceiveDocumentData;
 import ru.it.lecm.signed.docflow.model.SendDocumentData;
 import ru.it.lecm.signed.docflow.model.SignatureData;
 import ru.it.lecm.signed.docflow.model.UnicloudData;
@@ -289,6 +291,10 @@ public class UnicloudService {
 		authHeaders.setOrganization((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_ORGANIZATION_ID));
 		authHeaders.setOperator((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_OPERATOR_CODE));
 		authHeaders.setToken((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_AUTH_TOKEN));
+		String docflowId = (String)nodeService.getProperty(contentRef, SignedDocflowModel.PROP_DOCFLOW_ID);
+		if (StringUtils.isEmpty(docflowId)) {
+			docflowId = UUID.randomUUID().toString();
+		}
 
 		SendDocumentData sendDocumentData = checkAuthenticationData(authHeaders, SendDocumentData.class);
 		if (sendDocumentData != null) {
@@ -316,7 +322,7 @@ public class UnicloudService {
 		ContentReader contentReader = contentService.getReader(contentRef, ContentModel.PROP_CONTENT);
 		DocumentToSend doc = new DocumentToSend();
 		doc.setContent(Utils.contentToByteArray(contentReader));
-		doc.setDocflowId(contentRef.getId());
+		doc.setDocflowId(docflowId);
 		doc.setDocumentType(EDocumentType.NON_FORMALIZED);
 		doc.setFileName((String)nodeService.getProperty(contentRef, ContentModel.PROP_NAME));
 		doc.setId(contentRef.getId());
@@ -343,7 +349,7 @@ public class UnicloudService {
 			sendDocumentData = new SendDocumentData(gateResponse.value);
 			if (EResponseType.OK == gateResponse.value.getResponseType()) {
 				sendDocumentData.setDocumentId(documentId.value);
-				sendDocumentData.setDocflowId(contentRef.getId());
+				sendDocumentData.setDocflowId(docflowId);
 			} else {
 				Utils.logGateResponse(gateResponse, logger);
 			}
@@ -474,7 +480,7 @@ public class UnicloudService {
 		return document;
 	}
 
-	public void receiveDocuments(final NodeRef contentRef, final NodeRef contractorRef) {
+	public ReceiveDocumentData receiveDocuments(final NodeRef contentRef/*, final NodeRef contractorRef*/) {
 		NodeRef employeeRef = orgstructureService.getCurrentEmployee();
 		AuthHeaders authHeaders = new AuthHeaders();
 		authHeaders.setPartner((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_PARTNER_KEY));
@@ -486,10 +492,12 @@ public class UnicloudService {
 		//проверка аутентификационных параметров
 		//убеждаемся в том, у нас есть organizationId и token
 		//в противном случае возвращаем ошибку аутентификации
-//		SendDocumentData sendDocumentData = checkAuthenticationData(organizationId, token, SendDocumentData.class);
-//		if (sendDocumentData != null) {
-//			return sendDocumentData;
-//		}
+		ReceiveDocumentData receiveDocumentData = checkAuthenticationData(authHeaders, ReceiveDocumentData.class);
+		if (receiveDocumentData != null) {
+			return receiveDocumentData;
+		} else {
+			receiveDocumentData = new ReceiveDocumentData();
+		}
 
 		List<DocflowInfoBase> docflows = getContractorDocflows(authHeaders, contentRef);
 		//бежим по свежепрочитанным docflow и достаем их них DocumentInfo
@@ -516,9 +524,9 @@ public class UnicloudService {
 				}
 			}
 		}
-		logger.debug("Contractor {} has received {} documents", contractorRef, receiptNotifications.size());
-		logger.debug("We received {} signed documents from contractor {}", recipientSignatures.size(), contractorRef);
-		logger.debug("Contractor {} has rejected {} documents", contractorRef, rejectedSignatures.size());
+//		logger.debug("Contractor {} has received {} documents", contractorRef, receiptNotifications.size());
+//		logger.debug("We received {} signed documents from contractor {}", recipientSignatures.size(), contractorRef);
+//		logger.debug("Contractor {} has rejected {} documents", contractorRef, rejectedSignatures.size());
 
 		//получаем непосредственно подписи по документам
 		List<DocumentContent> documents = new ArrayList<DocumentContent>();
@@ -526,12 +534,20 @@ public class UnicloudService {
 			DocumentContent document = getContractorDocument(authHeaders, documentInfo.getDocumentId());
 			documents.add(document);
 		}
+
 		//вычленяем из списка документов подписи
+		receiveDocumentData.setIsRead(!receiptNotifications.isEmpty());
+		receiveDocumentData.setSignatures(new ArrayList<String>());
 		for(DocumentContent document : documents) {
 			List<byte[]> signatures = document.getSignatures().getBase64Binaries();
 			for(int i = 0; i < signatures.size(); ++i) {
 				String signature = Base64.encodeBase64String(signatures.get(i));
+				receiveDocumentData.getSignatures().add(signature);
 			}
 		}
+		GateResponse gateResponse = new GateResponse();
+		gateResponse.setResponseType(EResponseType.OK);
+		receiveDocumentData.setGateResponse(gateResponse);
+		return receiveDocumentData;
 	}
 }

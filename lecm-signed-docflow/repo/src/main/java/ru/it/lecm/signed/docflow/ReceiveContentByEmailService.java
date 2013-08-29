@@ -3,7 +3,9 @@ package ru.it.lecm.signed.docflow;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
@@ -72,8 +74,8 @@ public class ReceiveContentByEmailService extends BaseBean {
 		PropertyCheck.mandatory(this, "mailDestinationFolder", mailDestinationFolder);
 	}
 
-	public List<String> getSignaturesForContentByEmail(NodeRef contentRef) {
-		final List<String> result = new ArrayList<String>();
+	public Map<String, Object> getSignaturesForContentByEmail(NodeRef contentRef) {
+		final List<String> signatures = new ArrayList<String>();
 		final String documentID = (String) nodeService.getProperty(contentRef, SignedDocflowModel.PROP_DOCUMENT_ID);
 		final String contentName = (String) nodeService.getProperty(contentRef, ContentModel.PROP_NAME);
 		if (documentID == null) {
@@ -98,7 +100,7 @@ public class ReceiveContentByEmailService extends BaseBean {
 						if (StringUtils.equalsIgnoreCase(assumedContentName, unzippedFileName)) {
 							continue;
 						}
-						result.add(FileUtils.readFileToString(unzippedFile));
+						signatures.add(FileUtils.readFileToString(unzippedFile));
 					}
 					mailClient.moveMessageFromInbox(message, mailDestinationFolder);
 				}
@@ -116,6 +118,8 @@ public class ReceiveContentByEmailService extends BaseBean {
 			// не забываем закрыть соединение и удалить временные файлы
 			mailClient.disconnect();
 		}
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("signatures", signatures);
 		return result;
 	}
 
