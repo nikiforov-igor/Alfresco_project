@@ -178,8 +178,6 @@
 
 		function init(response) {
 
-			debugger;
-
 			var isValue = YAHOO.lang.isValue,
 
 				clearSelectionButton,
