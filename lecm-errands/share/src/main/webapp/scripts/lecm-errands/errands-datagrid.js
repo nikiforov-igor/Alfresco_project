@@ -49,10 +49,12 @@
                                     }
                                     break;
                                 case "lecm-errands:number":
-                                    columnContent += '<div style="text-align: center;">'
                                     var value = data.displayValue;
                                     if (value == "Не присвоено") {
                                         value = " - ";
+                                        columnContent += '<div style="text-align: center;">'
+                                    } else {
+                                        columnContent += '<div>'
                                     }
                                     columnContent += $links($html(value));
                                     columnContent += '</div>'
