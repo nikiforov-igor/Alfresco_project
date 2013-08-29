@@ -379,13 +379,12 @@ public class UnicloudService {
 		}
 	}
 
-	private List<DocflowInfoBase> getContractorDocflows(final AuthHeaders authHeaders, final NodeRef contentRef) {
+	private List<DocflowInfoBase> getContractorDocflows(final AuthHeaders authHeaders, final NodeRef contentRef, final Holder<GateResponse> gateResponse) {
 		String docflowId = (String)nodeService.getProperty(contentRef, SignedDocflowModel.PROP_DOCFLOW_ID);
 
 		WorkspaceFilter filter = new WorkspaceFilter();
 		filter.setRelation(ERelationFilter.INBOUND);
 		filter.setUnreadOnly(true);
-		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
 		Holder<ArrayOfDocflowInfoBase> docflows = new Holder<ArrayOfDocflowInfoBase>();
 		//добавляем аутентификационный заголовок
 		addAuthHeaders(authHeaders);
@@ -423,9 +422,8 @@ public class UnicloudService {
 		return contractorDocflows;
 	}
 
-	private List<DocumentInfo> getContractorDocumentInfos(final AuthHeaders authHeaders, final String docflowId) {
+	private List<DocumentInfo> getContractorDocumentInfos(final AuthHeaders authHeaders, final String docflowId, final Holder<GateResponse> gateResponse) {
 
-		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
 		Holder<ArrayOfDocumentInfo> documentInfos = new Holder<ArrayOfDocumentInfo>();
 		//добавляем аутентификационный заголовок
 		addAuthHeaders(authHeaders);
@@ -452,8 +450,7 @@ public class UnicloudService {
 		return documentInfoList;
 	}
 
-	private DocumentContent getContractorDocument(final AuthHeaders authHeaders, final String documentId) {
-		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
+	private DocumentContent getContractorDocument(final AuthHeaders authHeaders, final String documentId, final Holder<GateResponse> gateResponse) {
 		Holder<DocumentContent> documentContent = new Holder<DocumentContent>();
 		//добавляем аутентификационный заголовок
 		addAuthHeaders(authHeaders);
@@ -499,13 +496,14 @@ public class UnicloudService {
 			receiveDocumentData = new ReceiveDocumentData();
 		}
 
-		List<DocflowInfoBase> docflows = getContractorDocflows(authHeaders, contentRef);
+		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
+		List<DocflowInfoBase> docflows = getContractorDocflows(authHeaders, contentRef, gateResponse);
 		//бежим по свежепрочитанным docflow и достаем их них DocumentInfo
 		List<DocumentInfo> receiptNotifications = new ArrayList<DocumentInfo>();
 		List<DocumentInfo> recipientSignatures = new ArrayList<DocumentInfo>();
 		List<DocumentInfo> rejectedSignatures = new ArrayList<DocumentInfo>();
 		for(DocflowInfoBase docflow : docflows) {
-			List<DocumentInfo> documentInfos = getContractorDocumentInfos(authHeaders, docflow.getDocflowId());
+			List<DocumentInfo> documentInfos = getContractorDocumentInfos(authHeaders, docflow.getDocflowId(), gateResponse);
 			logger.debug("docflow type = {}", docflow.getType());
 			for(DocumentInfo documentInfo : documentInfos) {
 				EDocumentType documentType = documentInfo.getDocumentType();
@@ -531,7 +529,7 @@ public class UnicloudService {
 		//получаем непосредственно подписи по документам
 		List<DocumentContent> documents = new ArrayList<DocumentContent>();
 		for (DocumentInfo documentInfo : recipientSignatures) {
-			DocumentContent document = getContractorDocument(authHeaders, documentInfo.getDocumentId());
+			DocumentContent document = getContractorDocument(authHeaders, documentInfo.getDocumentId(), gateResponse);
 			documents.add(document);
 		}
 
@@ -545,9 +543,7 @@ public class UnicloudService {
 				receiveDocumentData.getSignatures().add(signature);
 			}
 		}
-		GateResponse gateResponse = new GateResponse();
-		gateResponse.setResponseType(EResponseType.OK);
-		receiveDocumentData.setGateResponse(gateResponse);
+		receiveDocumentData.setGateResponse(gateResponse.value);
 		return receiveDocumentData;
 	}
 }
