@@ -231,7 +231,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                     if ((data.startDate != undefined) && (data.endDate != undefined)){
                         var startDate = new Date(data.startDate);
                         var endDate = new Date(data.endDate );
-                        desc = (endDate.getDate()+1) - startDate.getDate() + this.msg("label.day");
+                        desc = (Math.floor((endDate - startDate)/(1000*60*60*24)) + 1) + this.msg("label.day");
                     } else {
                         desc = this.msg("label.unknown")
                     }
@@ -299,30 +299,35 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                     for (var i=minDate.getFullYear(); i<maxDate.getFullYear()+1; i++) {
                         calendar.years[i] = {};
                         var day = new Date();
-                        if (i < maxDate.getFullYear()) {
-                            day.setFullYear(i);
-                            for (var month=0; month < 12; month++){
-                                day.setMonth(month);
-                                calendar.years[i][month] = day.getDaysInMonth();
-                            }
-                        } else {
-                            for (var month=minDate.getMonth(); month<maxDate.getMonth()+1; month++) {
-                                day.setMonth(month);
-                                calendar.years[i][month] = day.getDaysInMonth();
-                            }
-                        }
+	                    day.setFullYear(i);
+	                    if (i == minDate.getFullYear()) {
+		                    for (var month = minDate.getMonth(); month < 12; month++) {
+			                    day.setMonth(month);
+			                    calendar.years[i][month] = day.getDaysInMonth();
+		                    }
+	                    } else if (i == maxDate.getFullYear()) {
+		                    for (month = 0; month < maxDate.getMonth() + 1; month++) {
+			                    day.setMonth(month);
+			                    calendar.years[i][month] = day.getDaysInMonth();
+		                    }
+	                    } else {
+		                    for ( month=0; month < 12; month++){
+			                    day.setMonth(month);
+			                    calendar.years[i][month] = day.getDaysInMonth();
+		                    }
+	                    }
                     }
 
                     // формируем столбец календаря
                     for (var year in calendar.years) {
-                        for (var month in calendar.years[year]){
+                        for (month in calendar.years[year]){
                             var monthObj = { key:month, label:this.msg("column.month"+month) + " (" +year +") ", year:year, sortable: false, children:[] };
 
                             var startDay = ((this.minDate.getFullYear() == year) && (this.minDate.getMonth() == month)) ? this.minDate.getDate() : 1;
                             var endDay = ((this.maxDate.getFullYear() == year) && (this.maxDate.getMonth() == month)) ? this.maxDate.getDate()+1 : calendar.years[year][month]+1;
 
 
-                            for (var day = startDay; day < endDay; day++) {
+                            for (day = startDay; day < endDay; day++) {
                                 var dayObj = { key:year + month + day, label:day, sortable: false, formatter: this.bind(this.drawCellIcons) };
                                 monthObj.children.push(dayObj);
                             }
