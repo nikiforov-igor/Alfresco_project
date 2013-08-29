@@ -9,8 +9,9 @@ import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.lock.LockService;
-import org.alfresco.service.cmr.lock.LockStatus;
 import org.alfresco.service.cmr.lock.LockType;
+import org.alfresco.service.cmr.lock.NodeLockedException;
+import org.alfresco.service.cmr.lock.UnableToAquireLockException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentReader;
@@ -454,6 +455,13 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	public void addDocflowIdsToContent(final NodeRef contentRef, final String documentId, final String docflowId) {
 		behaviourFilter.disableBehaviour(contentRef, ContentModel.ASPECT_VERSIONABLE);
 		try {
+
+			try {
+				lockService.checkForLock(contentRef);
+			} catch(NodeLockedException ex) {
+				lockService.unlock(contentRef);
+			}
+
 			if (nodeService.getAspects(contentRef).contains(SignedDocflowModel.ASPECT_DOCFLOW_IDS)) {
 				nodeService.setProperty(contentRef, SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
 			} else {
@@ -464,16 +472,19 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 			}
 		} finally {
 			behaviourFilter.enableBehaviour(contentRef, ContentModel.ASPECT_VERSIONABLE);
+			lockSignedContentRef(contentRef);
 		}
 	}
 
 	@Override
 	public void lockSignedContentRef(final NodeRef contentRef) {
-		LockStatus lockStatus = lockService.getLockStatus(contentRef);
-		if(lockStatus == LockStatus.NO_LOCK) {
-			lockService.lock(contentRef, LockType.NODE_LOCK, 0);
-		} else {
-			logger.debug("Node {} is already locked. Lock status is {}", contentRef, lockStatus);
+		try {
+			lockService.checkForLock(contentRef);
+			lockService.lock(contentRef, LockType.READ_ONLY_LOCK, 0);
+		} catch(NodeLockedException ex) {
+			logger.debug("Node {} is already locked. Lock status is {}", contentRef, lockService.getLockStatus(contentRef));
+		} catch(UnableToAquireLockException ex) {
+			logger.error("Can't aquire lock for node", ex);
 		}
 	}
 

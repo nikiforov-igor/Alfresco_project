@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.lock.NodeLockedException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -152,90 +152,89 @@ public class SendContentToPartnerService {
 	}
 
 	private List<Map<String, Object>> sendUsingEmail(ContentToSendData contentToSend) {
-		String mailTemplate, mailSubject, regNumber;
+		String mailTemplate, mailSubject;
 		File tempDir = null;
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		Map<String, Object> mailTemplateModel = new HashMap<String, Object>();
 		List<NodeRef> contentList = contentToSend.getContent();
-		List<String> signedDocumentsNames = new ArrayList<String>();
-		GateResponse gateResponse;
 
-		try {
-			tempDir = Utils.createTmpDir();
-			List<File> attachmentFiles = createAttachmentFiles(contentList, tempDir);
+		for (NodeRef content : contentList) {
+			GateResponse gateResponse = null;
+			String regNumber = null;
+			try {
+				tempDir = Utils.createTmpDir();
+				List<File> attachmentFiles = createAttachmentFiles(content, tempDir);
+				NodeRef regnumTemplateRef = regNumbersService.getTemplateNodeByCode(REGNUM_SERVICE_ID);
 
-			for (NodeRef content : contentList) {
 				String contentName = (String) nodeService.getProperty(content, ContentModel.PROP_NAME);
-				signedDocumentsNames.add(contentName);
-			}
 
-			NodeRef regnumTemplateRef = regNumbersService.getTemplateNodeByCode(REGNUM_SERVICE_ID);
-			regNumber = regNumbersService.getNumber(null, regnumTemplateRef);
+				String existingDocumentID = (String) nodeService.getProperty(content, SignedDocflowModel.PROP_DOCUMENT_ID);
+				if (existingDocumentID != null) {
+					regNumber = existingDocumentID;
+				} else {
+					regNumber = regNumbersService.getNumber(null, regnumTemplateRef);
+				}
 
-			mailTemplateModel.put("signedDocuments", signedDocumentsNames);
+				mailTemplateModel.put("signedDocument", contentName);
 
-			if (contentToSend.isDocumentAttachment()) {
-				mailTemplate = documentAttachmentMailTemplate.toString();
-				NodeRef parentDocument = documentAttachmentsService.getDocumentByAttachment(contentList.get(0));
-				String presentString = (String) nodeService.getProperty(parentDocument, DocumentService.PROP_PRESENT_STRING);
-				mailTemplateModel.put("documentName", presentString);
-				mailSubject = String.format(MAIL_SUBJ_DOCUMENT_ATTACHMENT, presentString.replaceAll("\\<.*?>", ""), regNumber);
-			} else {
-				mailTemplate = contentMailTemplate.toString();
-				mailSubject = String.format(MAIL_SUBJ_CONTENT, regNumber);
-			}
+				if (contentToSend.isDocumentAttachment()) {
+					mailTemplate = documentAttachmentMailTemplate.toString();
+					NodeRef parentDocument = documentAttachmentsService.getDocumentByAttachment(contentList.get(0));
+					String presentString = (String) nodeService.getProperty(parentDocument, DocumentService.PROP_PRESENT_STRING);
+					mailTemplateModel.put("documentName", presentString);
+					mailSubject = String.format(MAIL_SUBJ_DOCUMENT_ATTACHMENT, presentString.replaceAll("\\<.*?>", ""), regNumber);
+				} else {
+					mailTemplate = contentMailTemplate.toString();
+					mailSubject = String.format(MAIL_SUBJ_CONTENT, regNumber);
+				}
 
-			String mailText = templateService.processTemplate("freemarker", mailTemplate, mailTemplateModel);
-			MimeMessage message = mailService.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-			helper.addTo(contentToSend.getEmail());
-			helper.setFrom(defaultFromEmail);
-			helper.setSubject(mailSubject);
-			helper.setText(mailText, true);
+				String mailText = templateService.processTemplate("freemarker", mailTemplate, mailTemplateModel);
+				MimeMessage message = mailService.createMimeMessage();
+				MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+				helper.addTo(contentToSend.getEmail());
+				helper.setFrom(defaultFromEmail);
+				helper.setSubject(mailSubject);
+				helper.setText(mailText, true);
 
-			for (File attachment : attachmentFiles) {
-				helper.addAttachment(attachment.getName(), attachment);
-			}
+				for (File attachment : attachmentFiles) {
+					String attachmentName = MimeUtility.encodeText(attachment.getName(), "UTF-8", null);
+					helper.addAttachment(attachmentName, attachment);
+				}
 
-			mailService.send(message);
+				mailService.send(message);
 
-			for (NodeRef content : contentList) {
 				signedDocflowService.addDocflowIdsToContent(content, regNumber, null);
 				signedDocflowService.lockSignedContentRef(content);
 				addBusinessJournalRecord(content, contentToSend.getPartner());
+			} catch (TemplateParseException ex) {
+				logger.error("Error parsing template", ex);
+				gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+			} catch (TemplateRunException ex) {
+				logger.error("Error running template", ex);
+				gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+			} catch (MessagingException ex) {
+				logger.error("Error creating message", ex);
+				gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+			} catch (MailAuthenticationException ex) {
+				logger.error("Error performing mail authentification", ex);
+				gateResponse = formErrorGateResponse(ex, EResponseType.UNAUTHORIZED);
+			} catch (MailSendException ex) {
+				logger.error("Error sending mail", ex);
+				gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+			} catch (Exception ex) {
+				logger.error("Error!", ex);
+				gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+			} finally {
+				if (gateResponse == null) {
+					gateResponse = new GateResponse();
+					gateResponse.setResponseType(EResponseType.OK);
+				}
+
+				SendDocumentData sendDocumentData = new SendDocumentData(gateResponse);
+				sendDocumentData.setDocumentId(regNumber);
+				result.add(sendDocumentData.getProperties());
+				FileUtils.deleteQuietly(tempDir);
 			}
-
-			gateResponse = new GateResponse();
-			gateResponse.setResponseType(EResponseType.OK);
-		} catch (TemplateParseException ex) {
-			logger.error("Error parsing template", ex);
-			gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
-		} catch (TemplateRunException ex) {
-			logger.error("Error running template", ex);
-			gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
-		} catch (MessagingException ex) {
-			logger.error("Error creating message", ex);
-			gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
-		} catch (MailAuthenticationException ex) {
-			logger.error("Error performing mail authentification", ex);
-			gateResponse = formErrorGateResponse(ex, EResponseType.UNAUTHORIZED);
-		} catch (MailSendException ex) {
-			logger.error("Error sending mail", ex);
-			gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
-		} catch (NodeLockedException ex) {
-			logger.error("Error! Node is locked", ex);
-			gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
-		} finally {
-			FileUtils.deleteQuietly(tempDir);
-		}
-
-		if (gateResponse != null) {
-			SendDocumentData sendDocumentData = new SendDocumentData(gateResponse);
-			result.add(sendDocumentData.getProperties());
-		} else {
-			String msg = "Error sending content to partner via email. GateResponse can't be null!";
-			logger.error(msg);
-			throw new IllegalStateException(msg);
 		}
 
 		return result;
@@ -308,7 +307,7 @@ public class SendContentToPartnerService {
 		contentToSend.setEmail(email);
 
 		if (!documentAttachment) {
-			for (NodeRef content: contentList) {
+			for (NodeRef content : contentList) {
 				Set<QName> aspects = nodeService.getAspects(content);
 				if (!aspects.contains(SignedDocflowModel.ASPECT_CONTRACTOR_INTERACTION)) {
 					Map<QName, Serializable> props = new HashMap<QName, Serializable>();
@@ -331,28 +330,28 @@ public class SendContentToPartnerService {
 		return result;
 	}
 
-	private List<File> createAttachmentFiles(List<NodeRef> signedContentList, File tempDir) {
+	private List<File> createAttachmentFiles(NodeRef content, File tempDir) {
 		List<File> result = new ArrayList<File>();
-		for (NodeRef contentRef : signedContentList) {
-			FileOutputStream zipFileOutput = null;
-			File zipFile = null;
-			try {
-				String contentName = (String) nodeService.getProperty(contentRef, ContentModel.PROP_NAME);
-				zipFile = new File(tempDir, contentName + ".zip");
-				zipFile.createNewFile();
-				zipFileOutput = new FileOutputStream(zipFile);
-				zipSignedContentService.writeZipToStream(zipFileOutput, contentRef, true);
-			} catch (IOException ex) {
-				logger.error("Error creating ZIP file", ex);
-			} finally {
-				IOUtils.closeQuietly(zipFileOutput);
-			}
 
-			if (zipFile != null) {
-				result.add(zipFile);
-			}
-
+		FileOutputStream zipFileOutput = null;
+		File zipFile = null;
+		try {
+			String contentName = (String) nodeService.getProperty(content, ContentModel.PROP_NAME);
+			zipFile = new File(tempDir, contentName + ".zip");
+			zipFile.createNewFile();
+			zipFileOutput = new FileOutputStream(zipFile);
+			zipSignedContentService.writeZipToStream(zipFileOutput, content, true);
+		} catch (IOException ex) {
+			logger.error("Error creating ZIP file", ex);
+		} finally {
+			IOUtils.closeQuietly(zipFileOutput);
 		}
+
+		if (zipFile != null) {
+			result.add(zipFile);
+		}
+
+
 		return result;
 	}
 

@@ -91,12 +91,14 @@ public class ReceiveContentByEmailService extends BaseBean {
 				for (File messageAttachment : messageAttachments) {
 					final String attachmentName = messageAttachment.getName();
 					final String assumedContentName = FilenameUtils.removeExtension(attachmentName);
+					// для контента с названием contract.doc ищем вложение contract.doc.zip
 					if (!StringUtils.equalsIgnoreCase(contentName, assumedContentName)) {
 						continue;
 					}
 					List<File> unzippedFiles = zipSignedContentService.unzipFile(messageAttachment, tmpDir);
 					for (File unzippedFile : unzippedFiles) {
 						final String unzippedFileName = unzippedFile.getName();
+						// нас не интересует сам контент, который мог оказаться в архиве
 						if (StringUtils.equalsIgnoreCase(assumedContentName, unzippedFileName)) {
 							continue;
 						}
