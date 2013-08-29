@@ -317,21 +317,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
     @Override
     public boolean isCurrentBoss() {
         NodeRef employeeRef = getCurrentEmployee();
-
-        if (employeeRef != null && nodeService.exists(employeeRef)) {
-            if (isEmployee(employeeRef)) {
-                // получаем основную должностную позицию
-                NodeRef primaryStaff = getEmployeePrimaryStaff(employeeRef);
-                if (primaryStaff != null) {
-                    // получаем подразделение для штатного расписания
-                    NodeRef unit = getUnitByStaff(primaryStaff);
-                    // получаем руководителя для подразделения
-                    NodeRef bossRef = getUnitBoss(unit);
-                    return employeeRef.equals(bossRef);
-                }
-            }
-        }
-        return false;
+        return isBoss(employeeRef, true);
     }
 
     @Override
@@ -1322,13 +1308,18 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         boolean isBoss = false;
         if (nodeService.exists(employeeRef) && isEmployee(employeeRef)) {
             // получаем основную должностную позицию
-            NodeRef primaryStaff = getEmployeePrimaryStaff(employeeRef);
-            if (primaryStaff != null) {
-                // получаем подразделение для штатного расписания
-                NodeRef unit = getUnitByStaff(primaryStaff);
-                // получаем руководителя для подразделения
-                NodeRef bossRef = getUnitBoss(unit);
-                isBoss = employeeRef.equals(bossRef);
+            List<NodeRef> employeeStaffs = getEmployeeStaffs(employeeRef);
+            for (NodeRef employeeStaff : employeeStaffs) {
+                if (employeeStaff != null) {
+                    // получаем подразделение для штатного расписания
+                    NodeRef unit = getUnitByStaff(employeeStaff);
+                    // получаем руководителя для подразделения
+                    NodeRef bossRef = getUnitBoss(unit);
+                    isBoss = employeeRef.equals(bossRef);
+                    if (isBoss) {
+                        break;
+                    }
+                }
             }
         }
         return isBoss;

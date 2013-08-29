@@ -333,7 +333,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<QName> types =  new ArrayList<QName>();
         types.add(TYPE_ERRANDS);
 
-        List<NodeRef> employees = orgstructureService.getBossSubordinate(currentEmployee);
+        List<NodeRef> employees = orgstructureService.getBossSubordinate(currentEmployee, true);
 
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
