@@ -60,10 +60,9 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
 
         if (employeeName.toString().indexOf( employeeFirstName.toString() ) >= 0){
             delegationService.getOrCreateDelegationOpts (nodeRef);
-		    logger.info ("employee with nodeRef '{}' sucessfully updated", nodeRef);
-        }else
-        {
-            logger.info ("employee with name '{}'  and fisrt name '{}' not updated", employeeName.toString(), employeeFirstName.toString() );
+		    logger.debug("employee with nodeRef '{}' sucessfully updated", nodeRef);
+        } else {
+            logger.warn("employee with name '{}'  and fisrt name '{}' not updated", employeeName.toString(), employeeFirstName.toString() );
         }
 	}
 }
