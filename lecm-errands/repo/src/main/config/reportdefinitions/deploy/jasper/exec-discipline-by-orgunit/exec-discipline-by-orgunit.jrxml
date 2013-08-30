@@ -40,7 +40,7 @@
 		<fieldDescription><![CDATA[Исполнитель (сотрудник)]]></fieldDescription>
 	</field>
 	<field name="Col_Param_Exec_OrgUnit" class="java.lang.String">
-		<fieldDescription><![CDATA[Подразделение исполнителя]]></fieldDescription>
+		<fieldDescription><![CDATA[Подразделение]]></fieldDescription>
 	</field>
 	<field name="Col_Count_Total" class="java.lang.Integer">
 		<fieldDescription><![CDATA[Выдано всего поручений за период]]></fieldDescription>

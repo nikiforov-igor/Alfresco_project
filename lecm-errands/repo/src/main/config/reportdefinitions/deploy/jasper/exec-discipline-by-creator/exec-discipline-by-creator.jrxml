@@ -127,7 +127,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Исполнитель-сотрудник"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Инициатор"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="fddcd90a-ed79-4a6c-9cb4-01504c915527" isPrintRepeatedValues="false" x="145" y="2" width="110" height="164"/>
