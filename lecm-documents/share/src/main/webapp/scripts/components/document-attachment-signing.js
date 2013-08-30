@@ -205,8 +205,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		_bindAjaxTo: function ContentSigning_bindAjaxTo(method, url, dataObj) {
-			var id = this.newId;
-			return function makeDataRequest() {
+			var id = this.newId,
+				contentRef = this.options.nodeRef;
+			return function makeDataRequest(signatureHandler) {
 
 				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
 					text: "Пожалуйста, подождите, запрашиваются подписи контрагента",
@@ -245,6 +246,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								}
 								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
 								YAHOO.lang.later(2500, null, hideAndReload);
+
+								if(YAHOO.lang.isFunction(signatureHandler)) {
+									signatureHandler(contentRef, result.signatures);
+								}
+
 								return;
 							}
 
@@ -316,6 +322,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			};
 		},
 
+		_loadSignaturesToRepo: function(contentRef, signatures) {
+			var i,
+				size = signatures.length;
+			for(i = 0; i < size; ++i) {
+				cryptoAppletModule.loadSignFromString(signatures[i], contentRef);
+			}
+		},
+
 		onRefreshSentDocuments: function(event) {
 			var templateUrl = "lecm/signed-docflow/getSignedContentFromPartner?nodeRef={nodeRef}",
 				url = YAHOO.lang.substitute(templateUrl, {
@@ -324,7 +338,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				makeDataRequest;
 
 			makeDataRequest = this._bindAjaxTo("GET", url, {});
-			makeDataRequest();
+			makeDataRequest(this._loadSignaturesToRepo);
 		}
 	}, true);
 })();

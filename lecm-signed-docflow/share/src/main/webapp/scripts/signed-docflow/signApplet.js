@@ -711,36 +711,29 @@ var cryptoAppletModule = (function () {
             });
 		},
 
-		loadSign : function(nodeRef, callBack, callBackScope){
-			if(!callBack){
+		loadSignFromString: function(signature, nodeRef, callBack, callBackScope) {
+			if(!YAHOO.lang.isFunction(callBack)){
 				callBack = function(){};
 			}
-			var signature = '';
-			try{
-				signature = signApplet.getService().getCertFromFileUI();
-			} catch(ex) {
-				console.log(ex);
-				return;
-			}
-			var signDate = Alfresco.util.toISO8601(new Date());
-			var contentURI = new Alfresco.util.NodeRef(nodeRef).uri;
-			var Result = signApplet.check(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL", signature);
-			var checkRes = Result.getResult();
-			var certB64 = Result.getCert();
+			var signDate = Alfresco.util.toISO8601(new Date()),
+				contentURI = new Alfresco.util.NodeRef(nodeRef).uri,
+				result = signApplet.check(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL", signature),
+				checkRes = result.getResult(),
+				certB64 = result.getCert(),
+				signObj = {
+					"sign-to-content-association" : nodeRef,
+					"content" : signature,
+					"signing-date" : signDate
+				},
+				certInfo = getCertInfo(null, certB64),
+				res = YAHOO.lang.merge(signObj, certInfo);
+
 			if(!checkRes) {
 				Alfresco.util.PopupManager.displayMessage({
-							text: 'Подпись недействительна, загрузка не состоялась'
-						});
+					text: 'Подпись недействительна, загрузка не состоялась'
+				});
 				return;
 			}
-			var signObj = {
-				"sign-to-content-association" : nodeRef,
-				"content" : signature,
-				"signing-date" : signDate
-				};
-
-			var certInfo = getCertInfo(null, certB64);
-			var res = YAHOO.lang.merge(signObj, certInfo);
 
 			Alfresco.util.Ajax.jsonRequest({
                 method: "POST",
@@ -748,13 +741,8 @@ var cryptoAppletModule = (function () {
 				dataObj: res,
                 successCallback: {
                     fn: function(response) {
-						var text = '';
-						if(response.json.success){
-							text = 'Подпись успешно загружена';
-						} else {
-							text = 'Подпись прошла проверку, но загрузка не удалась';
-						}
-							Alfresco.util.PopupManager.displayMessage({
+						var text = (response.json.success) ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась';
+						Alfresco.util.PopupManager.displayMessage({
 							text: text
 						});
 						callBack(callBackScope);
@@ -762,13 +750,26 @@ var cryptoAppletModule = (function () {
                 },
 				onFailure: {
 					fn: function() {
-                            Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось отправить подпись"
-                            });
-						}
+						Alfresco.util.PopupManager.displayMessage({
+							text: "Не удалось отправить подпись"
+						});
+					}
 				}
             });
+		},
 
+		loadSign : function(nodeRef, callBack, callBackScope){
+			if(!callBack){
+				callBack = function(){};
+			}
+			var signature;
+			try{
+				signature = signApplet.getService().getCertFromFileUI();
+			} catch(ex) {
+				console.log(ex);
+				return;
+			}
+			this.loadSignFromString(signature, nodeRef, callBack, callBackScope);
 		},
 
 		CheckDocumentContent : function(docNodeRef) {

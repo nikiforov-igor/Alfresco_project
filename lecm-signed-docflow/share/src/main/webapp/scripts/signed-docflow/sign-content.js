@@ -147,8 +147,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		_bindAjaxTo: function ContentSigning_bindAjaxTo(method, url, dataObj) {
-			var id = this.newId;
-			return function makeDataRequest() {
+			var id = this.newId,
+				contentRef = this.options.nodeRef;
+			return function makeDataRequest(signatureHandler) {
 
 				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
 					text: "Пожалуйста, подождите, запрашиваются подписи контрагента",
@@ -187,6 +188,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								}
 								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
 								YAHOO.lang.later(2500, null, hideAndReload);
+
+								if(YAHOO.lang.isFunction(signatureHandler)) {
+									signatureHandler(contentRef, result.signatures);
+								}
+
 								return;
 							}
 
@@ -258,6 +264,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			};
 		},
 
+		_loadSignaturesToRepo: function(contentRef, signatures) {
+			var i,
+				size = signatures.length;
+			for(i = 0; i < size; ++i) {
+				cryptoAppletModule.loadSignFromString(signatures[i], contentRef);
+			}
+		},
+
 		_getSignedContentFromPartner: function ContentSigning_getSignedContentFromPartner(response) {
 			//надо проверить что в response.json что-то есть, иначе послать лесом...
 			var interType = response.json.interactionType,
@@ -272,7 +286,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					});
 
 				makeDataRequest = this._bindAjaxTo("GET", url, {});
-				makeDataRequest();
+				makeDataRequest(this._loadSignaturesToRepo);
 			} else {
 				Alfresco.util.PopupManager.displayPrompt({
 					title: "Ошибка при получении подписей документа от контрагента",
