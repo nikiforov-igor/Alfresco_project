@@ -145,7 +145,13 @@ public class XMLMacroGenerator {
 
 	/** активный описатель отчёта */
 	private ReportDescriptor reportDesc;
-	private MacroValues globals; // глобальные переменные, здесь обычно reportDesc под именем "RD"
+
+	/**
+	 * Глобальные переменные для генерации.
+	 * Сейчас сюда автоматом вносятся: 
+	 *    reportDesc под именем "RDesc"
+	 */
+	private MacroValues globals;
 
 	public XMLMacroGenerator() {
 	}
@@ -162,25 +168,36 @@ public class XMLMacroGenerator {
 	/** активный описатель отчёта */
 	public void setReportDesc(ReportDescriptor reportDesc) {
 		this.reportDesc = reportDesc;
+
+		// готовим список глобальных переменных ...
 		if (this.reportDesc == null) {
 			this.globals = null;
 		} else {
 			this.globals = new MacroValues();
-			this.globals.addVar( new RefMacroVar<ReportDescriptor>(VNAME_RDesc, this.reportDesc));
+			initAutoVars(this.globals);
 		}
 	}
 
+	/**
+	 * Ввести в указанный список автоматические переменные.
+	 * Сейчас вносится алиас для активного описателя отчёта: reportDesc под именем "RDesc"
+	 * @param destVars
+	 */
+	protected void initAutoVars(MacroValues destVars) {
+		if (this.reportDesc != null)
+			destVars.addVar( new RefMacroVar<ReportDescriptor>(VNAME_RDesc, this.reportDesc));
+	}
 
 	/**
 	 * Создать xml-документ на основе шаблонного xml
-	 * @param streamName
-	 * @param templateStm
+	 * @param templateStm поток для преобразования
+	 * @param streamNameInfo информационная строка для журналирования (имя потока или подобная полезная инфа)
 	 * @return поток со сформированным xml
 	 */
-	public ByteArrayOutputStream xmlGenerateByTemplate( String streamName, InputStream templateStm) {
+	public ByteArrayOutputStream xmlGenerateByTemplate( InputStream templateStm, String streamNameInfo) {
 		if (templateStm == null)
 			return null;
-		logger.debug( String.format( "macro expanding template xml '%s' ...", streamName));
+		logger.debug( String.format( "macro expanding template xml '%s' ...", streamNameInfo));
 
 		/*(@) обновление мета-части описания ... */
 		// return JRXMLProducer.updateJRXML(templateStm, streamName, getReportDesc());
@@ -197,12 +214,12 @@ public class XMLMacroGenerator {
 			// формирование результата
 			final ByteArrayOutputStream result = XmlHelper.serialize( docResult);
 
-			logger.info( String.format( "macro expantion SUCCESSFULL from template xml '%s' ...", streamName));
+			logger.info( String.format( "macro expantion SUCCESSFULL from template xml '%s' ...", streamNameInfo));
 
 			return result;
 
 		} catch (Throwable t) {
-			final String msg = String.format( "Problem macro expanding template xml '%s' ...", streamName);
+			final String msg = String.format( "Problem macro expanding template xml '%s' ...", streamNameInfo);
 			logger.error(msg, t);
 			throw new RuntimeException(msg, t);
 		}

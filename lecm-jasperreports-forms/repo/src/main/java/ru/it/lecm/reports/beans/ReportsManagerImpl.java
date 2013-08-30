@@ -29,7 +29,6 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.ContentEnumerator;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
-import ru.it.lecm.reports.generators.XMLMacroGenerator;
 import ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
@@ -55,10 +54,10 @@ public class ReportsManagerImpl implements ReportsManager {
 	/** список дескрипторов явно заданных бинами */
 	private Map<String, ReportDescriptor> beanDescriptors;
 
-	private ReportEditorDAO reportDAO;
-	private ReportContentDAO contentRepositoryDAO; // файлы как "cm:content" в репозитории
-	private ReportContentDAO contentFileDAO; // файлы в файловой системе (поставка)
-	private ReportContentDAO templateFileDAO; // файлы шаблонов для генерации шаблонов отчётов
+	private ReportEditorDAO reportDAO; // хранилище отчётов редактора
+	private ReportContentDAO contentFileDAO; // файлы готовых отчётов (поставка) в файловой системе 
+	private ReportContentDAO templateFileDAO; // файлы готовых макетов шаблонов (поставка для генерации шаблонов отчётов)
+	private ReportContentDAO contentRepositoryDAO; // файлы создаваемых отчётов как "cm:content" в репозитории
 
 	// private String defaultGenTemplate = DEFAULT_JRXMLFILENAME; // шаблон для генерации xml-шаблона отчёта
 	// private String defaultGenReportType = DEFAULT_REPORT_TYPE; // тип отчёта по-умолчанию
@@ -242,8 +241,8 @@ public class ReportsManagerImpl implements ReportsManager {
 	@Override
 	public ReportDefaultsDesc getReportDefaultsDesc(ReportType rtype) {
 		if (rtype != null && getReportDefaults() != null) {
-			if (getReportDefaults().containsKey(rtype))
-				return getReportDefaults().get(rtype); // FOUND
+			if (getReportDefaults().containsKey(rtype.getMnem()))
+				return getReportDefaults().get(rtype.getMnem()); // FOUND
 		}
 
 		return null; // NOT FOUND
@@ -479,9 +478,9 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 		if (desc.getReportTemplate().getData() == null) {
 			// сгенерировать xml отчёта по gen-шаблону ...
-			final ByteArrayOutputStream stm = this.generateReportTemplate(desc);
+			final byte[] reportTemplateData = this.generateReportTemplate(desc);
 			desc.getReportTemplate().setData(
-					(stm == null) ? null : new ByteArrayInputStream(stm.toByteArray()));
+					(reportTemplateData == null) ? null : new ByteArrayInputStream(reportTemplateData));
 			logger.warn(String.format(
 						"Report '%s' has empty template data -> generated from '%s'"
 						, desc.getMnem()
@@ -536,7 +535,7 @@ public class ReportsManagerImpl implements ReportsManager {
 			 * именно его (не требуется определять откуда получен описатель - из 
 			 * файлового хранилища или из репозитория)
 			 */
-			getReportGenerators().get(rtag).onRegister(desc, templateRawData, this.contentRepositoryDAO);
+			findAndCheckReportGenerator(desc.getReportType()).onRegister(desc, templateRawData, this.contentRepositoryDAO);
 			logger.debug(String.format("Report '%s': provider notified", desc.getMnem()));
 
 		} catch (Throwable ex) {
@@ -548,6 +547,23 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Вернуть зарегистрированный генератор шаблонов для указанного типа отчётов.
+	 * Если нет такого - поднимается исключение.
+	 * @param rtype тип отчёта
+	 * @return
+	 */
+	protected ReportGenerator findAndCheckReportGenerator(ReportType rtype) {
+		if (rtype == null)
+			return null;
+		final String rtag = getReportTypeTag(rtype);
+		final ReportGenerator result = getReportGenerators().get(rtag);
+		if (result == null)
+			throw new RuntimeException( String.format( "Report type '%s' is not supported (no registered report generators)"
+						, Utils.coalesce(rtag, rtype.getMnem(), rtype.getDefault()) ));
+		return result;
 	}
 
 	@Override
@@ -638,8 +654,8 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	@Override
 	public byte[] produceDefaultTemplate(ReportDescriptor reportDesc) {
-		final ByteArrayOutputStream result = generateReportTemplate(reportDesc);
-		return (result != null) ? result.toByteArray() : null;
+		final byte[] result = generateReportTemplate(reportDesc);
+		return result;
 	}
 
 	/**
@@ -648,7 +664,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	 * @param reportDesc
 	 * @return
 	 */
-	public ByteArrayOutputStream generateReportTemplate(ReportDescriptor reportDesc)
+	private byte[] generateReportTemplate(ReportDescriptor reportDesc)
 	{
 		if (reportDesc == null)
 			return null;
@@ -658,32 +674,36 @@ public class ReportsManagerImpl implements ReportsManager {
 
 		final IdRContent id = IdRContent.createId(reportDesc, null);
 		{
-			final String reportTypeTag = getReportTypeTag(reportDesc.getReportType());
-			final ReportDefaultsDesc defaults
-					= this.getReportDefaults().get( reportTypeTag);
+			// final String reportTypeTag = getReportTypeTag(reportDesc.getReportType());
+			final ReportDefaultsDesc defaults = this.getReportDefaultsDesc(reportDesc.getReportType());
 
-			// название файла-шаблона для генерации
+			// получение названия файла-шаблона для генерации
 			final String templateFileName = (defaults != null)
-							? defaults.getGenerationTemplate()
+							? defaults.getGenerationTemplate() // название шаблона из установок по-умолчанию для данного типа отчёта
 							: DEFAULT_REPORT_TEMPLATE;
 			id.setFileName(templateFileName);
 		}
 
-		final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(reportDesc);
+		// загрузка макета шаблона ...
 		final ContentReader reader = this.getTemplateFileDAO().loadContent(id);
-		InputStream fin = null;
 		try {
-			fin = reader.getContentInputStream();
-			final ByteArrayOutputStream result = xmlGenerator.xmlGenerateByTemplate(id.getFileName(), fin);
-			return result;
+			final byte[] maketData = ru.it.lecm.reports.utils.Utils.ContentToBytes(reader);
+
+			/* генерация шаблона отчёта по макету шаблона ... */
+
+			// final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(reportDesc);
+			// xmlGenerator.xmlGenerateByTemplate(fin, id.getFileName());
+
+			final ReportGenerator rg = findAndCheckReportGenerator(reportDesc.getReportType());
+			final byte[] templateData = rg.generateReportTemplateByMaket( maketData, reportDesc);
+
+			return templateData;
+
 		} catch (Throwable ex) {
 			final String msg = String.format( "Report '%s': get generated template '%s' problem\n\t%s"
 					, reportDesc.getMnem(), id.getFileName(), ex.getMessage());
 			logger.error(msg, ex);
 			throw new RuntimeException(msg, ex);
-		} finally {
-			if (fin != null)
-				IOUtils.closeQuietly(fin);
 		}
 	}
 

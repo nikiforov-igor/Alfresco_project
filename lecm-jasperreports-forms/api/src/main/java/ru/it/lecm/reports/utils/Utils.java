@@ -3,8 +3,14 @@ package ru.it.lecm.reports.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -13,6 +19,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.alfresco.service.cmr.repository.ContentReader;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -503,17 +511,18 @@ public class Utils {
 	}
 
 	/**
-	 * пример:
+	 * Пример:
 	 * 		final File backupName = findEmptyFile( fout, ".bak%s");
 	 * @param checkFile проверяемый файл
 	 * @param fmtSuffix суффикс, который имеет один параметр (пустой или числовой номер), 
 	 * для генерации уникального имени файла
-	 * @return имя несуществующего файла: если checkFile отсутствует, то воз-ся
-	 * именно его имя, иначе "имя + суффикс", с подставленым номером 
+	 * @return имя несуществующего файла: если checkFile + суффикс с 
+	 * подстановкой пустой строки отсутствует, то воз-ся именно его имя,
+	 * иначе "имя + суффиксN", с подставленым номером. 
 	 */
 	public static File findEmptyFile( final File checkFile, final String fmtSuffix) {
-		if (!checkFile.exists())
-			return checkFile; // файла нет - вернуться сразу
+		// if (!checkFile.exists())
+		//	return checkFile; // файла нет - можно вернуться сразу с готовым именем
 
 		/* поиск уникального имени файла */
 
@@ -625,4 +634,83 @@ public class Utils {
 		return result.getTime();
 	}
 
+
+	/**
+	 * Получить содержимое контента в виде байт
+	 * @param reader
+	 * @return
+	 * @throws IOException 
+	 */
+	public static byte[] ContentToBytes(final ContentReader reader)
+			throws IOException
+	{
+		if (reader == null)
+			return null;
+		InputStream stmIn = null;
+		try {
+			stmIn = reader.getContentInputStream();
+			return (stmIn != null) ? IOUtils.toByteArray(stmIn) : null;
+		} finally {
+			if (stmIn != null)
+				IOUtils.closeQuietly(stmIn);
+		}
+	}
+
+	/**
+	 * Сохранение данных в виде файла
+	 * @param destFile
+	 * @param srcData сохраняемые данные
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static void saveDataToFile(File destFile, final byte[] srcData)
+			throws FileNotFoundException, IOException {
+		// сохранение контента в файл ...
+		final OutputStream out = new FileOutputStream(destFile);
+		try {
+			if (srcData != null)
+				IOUtils.write( srcData, out);
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
+	}
+
+	/**
+	 * Сохранение потока в файл
+	 * @param destFile
+	 * @param srcStm сохраняемые данные
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static void saveDataToFile(File destFile, InputStream srcStm)
+			throws FileNotFoundException, IOException {
+		// сохранение контента в файл ...
+		final OutputStream out = new FileOutputStream(destFile);
+		try {
+			if (srcStm != null)
+				IOUtils.copy( srcStm, out);
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
+	}
+
+	/**
+	 * Загрузить данные из файла как байтовый блок.
+	 * IO-исключения обёрнуты как rtm-exceptions.
+	 * @param srcFile исходный файл для загрузки
+	 * @param errInfo сообщение при ошибках
+	 * @return
+	 */
+	public static byte[] loadFileAsData (File srcFile, String errInfo) 
+			throws IOException
+	{
+		FileInputStream stmIn = null;
+		try {
+			stmIn = new FileInputStream(srcFile);
+			return IOUtils.toByteArray(stmIn); 
+		} finally {
+			if (stmIn != null)
+				IOUtils.closeQuietly(stmIn);
+		}
+	}
 }

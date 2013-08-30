@@ -19,9 +19,19 @@
 	<description>jasperforms forms repo</description>
 
 	<properties>
+
 		<!-- <dependency.opencmis.version>0.7.0</dependency.opencmis.version> -->
 		<xalan.version>2.5.1</xalan.version>
+		
 		<xerces.version>2.8.0</xerces.version>
+
+		<!-- <ooffice.version>2.1.0</ooffice.version> -->
+		<ooffice.version>3.2.0</ooffice.version>
+
+		<!--
+		<ooffice-jooConverter.version>2.1.0</ooffice-jooConverter.version>
+		  -->
+		<ooffice-jooConverter.version>2.1.0-alfresco-patched</ooffice-jooConverter.version>
 	</properties>
 
 	<!--
@@ -75,26 +85,39 @@
 		<dependency>
 			<groupId>org.openoffice</groupId>
 			<artifactId>juh</artifactId>
-			<version>2.1.0</version>
+			<version>${ooffice.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openoffice</groupId>
 			<artifactId>jurt</artifactId>
-			<version>2.1.0</version>
+			<version>${ooffice.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openoffice</groupId>
 			<artifactId>ridl</artifactId>
-			<version>2.1.0</version>
+			<version>${ooffice.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openoffice</groupId>
 			<artifactId>unoil</artifactId>
-			<version>2.1.0</version>
+			<version>${ooffice.version}</version>
 			<scope>compile</scope>
+		</dependency>
+		<!--
+		<dependency>
+			<groupId>net.sf.jooreports</groupId>
+			<artifactId>jooconverter</artifactId>
+			<version>${ooffice-jooConverter.version}</version>
+		</dependency>
+		  -->
+		<dependency>
+			<groupId>com.artofsolving</groupId>
+			<artifactId>jodconverter</artifactId>
+			<version>${ooffice-jooConverter.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>

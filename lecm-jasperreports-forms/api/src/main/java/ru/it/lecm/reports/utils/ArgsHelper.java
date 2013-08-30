@@ -152,19 +152,20 @@ public class ArgsHelper {
 	 * @param propertiesAliases список ключ=название свойства бина, 
 	 * значения = список синонимов имён параметров, которые выбираются из parameters,
 	 * до первого совпадения и затем выполняется присвоение свойству destBean (по ключу).
-	 * @param parameters список ключ = название параметра (его синонимы могут 
-	 * быть в значениях propertiesAliases), значение = соот-щее значение параметра.
+	 * @param srcParameters исхоный список параметров-данных:
+	 * 		ключ = название параметра (его синонимы могут быть в значениях propertiesAliases),
+	 * 		значение = соот-щее значение параметра.
 	 * @throws InvocationTargetException 
 	 * @throws IllegalAccessException 
 	 */
 	public static void assignParameters( final Object destBean,
 			final Map<String, String[]> propertiesAliases,
-			final Map<String, String[]> parameters
+			final Map<String, String[]> srcParameters
 	) throws IllegalAccessException, InvocationTargetException
 	{
 		if (destBean == null 
 				|| propertiesAliases == null || propertiesAliases.isEmpty()
-				|| parameters == null || parameters.isEmpty()
+				|| srcParameters == null || srcParameters.isEmpty()
 			)
 			return;
 
@@ -181,8 +182,8 @@ public class ArgsHelper {
 
 			// до первого совпадения по имени в параметрах ...
 			for(String name: aliases) {
-				if (parameters.containsKey(name)) { // найден синоним среди параметров ...
-					result.put( beanPropName, parameters.get(name));
+				if (srcParameters.containsKey(name)) { // найден синоним среди параметров ...
+					result.put( beanPropName, srcParameters.get(name));
 					break;
 				}
 			} // for name

@@ -19,10 +19,10 @@ public interface ReportsManager {
 
 	/**
 	 * Получить описатеть отчёта по названию.
-	 * Просматриваютс отчёты по порядку: 
+	 * Просматриваются отчёты по порядку: 
 	 *    1) зарегистрированные "свежие"
-	 *    2) хранимые в виде ds-xml файлов
-	 *    3) зарегенные в виде бинов
+	 *    2) хранимые в виде ds-xml файлов (поставка)
+	 *    3) зарегенные в виде бинов (сконфигурированные spring-beans)
 	 * @param reportMnemoName мнемонический код отчёта (уникальный)
 	 * @return
 	 */
@@ -48,7 +48,7 @@ public interface ReportsManager {
 	List<ReportDescriptor> getRegisteredReports(String[] docTypes, boolean forCollection);
 
 	/**
-	 * Получить список зарегистрированных  отчётов
+	 * Получить список всех зарегистрированных отчётов
 	 * @return список зарегеных отчётов
 	 */
 	List<ReportDescriptor> getRegisteredReports();
@@ -61,13 +61,16 @@ public interface ReportsManager {
 
 
 	/**
-	 * Зарегистрировать отчёт, указав его id
+	 * Зарегистрировать отчёт, созданный редактором отчётов ("lecm-reports-editor"), указав его id.
+	 * Доступ к данным будет выполняться через reportDAO.
 	 * @param rdescId
 	 */
 	void registerReportDescriptor(NodeRef rdescId);
 
 	/**
-	 * Обратная к registerReportDescriptor
+	 * Обратная к registerReportDescriptor.
+	 * Если отчёт стандартный из поставки, то он становится недоступен только до 
+	 * следующей перезагрузки приложения.
 	 * @param reportCode
 	 */
 	void unregisterReportDescriptor(String reportCode);
@@ -82,7 +85,7 @@ public interface ReportsManager {
 
 
 	/**
-	 * Сформировать jrxml по-умолчанию для НД указанного описания отчёта
+	 * Сформировать шаблон по-умолчанию для НД указанного описателя отчёта
 	 * @param reportDesc
 	 * @return
 	 */

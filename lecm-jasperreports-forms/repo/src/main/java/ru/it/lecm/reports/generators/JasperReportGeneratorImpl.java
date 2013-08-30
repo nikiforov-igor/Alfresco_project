@@ -5,8 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,22 +26,17 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
-import ru.it.lecm.reports.api.model.NamedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.ReportFlags;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
-import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -53,7 +46,8 @@ import ru.it.lecm.reports.utils.Utils;
  * @author rabdullin
  *
  */
-public class JasperReportGeneratorImpl extends ReportGeneratorBase
+public class JasperReportGeneratorImpl 
+		extends ReportGeneratorBase
 {
 
 	private static final transient Logger log = LoggerFactory.getLogger(JasperReportGeneratorImpl.class);
@@ -72,12 +66,9 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase
 		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
 
 		// "/reportdefinitions/" + reportName + ".jasper"
-		final String reportFileName = 
-//				String.format( "%s/%s.jasper" 
-//				, this.getReportsManager().getReportTemplateFileDir(reportDesc.getReportType())
-//				, reportName
-//				);
-				String.format( "%s.jasper", reportDesc.getMnem());
+		// String.format( "%s/%s.jasper", this.getReportsManager().getReportTemplateFileDir(reportDesc.getReportType()), reportName);
+		final String reportFileName =
+					String.format( "%s.jasper", reportDesc.getMnem());
 
 		final ContentReader reader = rptContent.loadContent( IdRContent.createId(reportDesc, reportFileName));
 
@@ -100,47 +91,15 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase
 			));
 			outputStream = webScriptResponse.getOutputStream();
 
+			/* создание Провайдера */
 			final String dataSourceClass = jasperReport.getProperty("dataSource");
-			final String failMsg = "Can not instantiate DataSourceProvider of class <" + dataSourceClass + ">";
-			// AbstractDataSourceProvider dsProvider = null;
-			JRDataSourceProvider dsProvider = null;
-			try {
-				
-				try {
-					final Constructor<?> cons = Class.forName(dataSourceClass).getConstructor(ServiceRegistry.class); 
-					dsProvider = (JRDataSourceProvider) cons.newInstance(getServices().getServiceRegistry());
-				} catch (NoSuchMethodException e) {
-					// если нет спец конструктора - пробуем обычный ...
-					dsProvider = (JRDataSourceProvider) Class.forName(dataSourceClass).getConstructor().newInstance();
-				}
+			final JRDataSourceProvider dsProvider = super.createDsProvider(reportDesc, dataSourceClass, parameters);
 
-				// "своих" особо облагородим ...
-				if (dsProvider instanceof ReportProviderExt) {
-					final ReportProviderExt adsp = (ReportProviderExt) dsProvider;
-
-					adsp.setServices( this.getServices());
-					adsp.setReportDescriptor( reportDesc);
-					adsp.setReportManager( this.getReportsManager());
-				}
-
-				assignProviderProps( dsProvider, parameters, reportDesc);
-
-			} catch (ClassNotFoundException e) {
-				throw new IOException(failMsg + ". Class not found");
-			} catch (NoSuchMethodException e) {
-				throw new IOException(failMsg + ". Constructor not defined or has incorrect parameters");
-			} catch (InvocationTargetException e) {
-				throw new IOException(failMsg, e);
-			} catch (InstantiationException e) {
-				throw new IOException(failMsg, e);
-			} catch (IllegalAccessException e) {
-				throw new IOException(failMsg, e);
-			}
 			/* построение отчёта */ 
 			generateReport(target, outputStream, jasperReport, dsProvider, parameters);
 
 		} catch (Throwable e) { // (JRException e) {
-			final String msg = String.format( "Fail to execute report '%s':\n\t%s", reportDesc.getMnem(), e);
+			final String msg = String.format( "Fail to build Jasper report '%s':\n\t%s", reportDesc.getMnem(), e);
 			log.error( msg, e);
 			throw new IOException(msg, e);
 		} finally {
@@ -153,79 +112,6 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase
 				outputStream.close();
 			}
 		}
-	}
-
-	/**
-	 * Присвоение свойств для Провайдера:
-	 *    1) по совпадению названий параметров и свойств провайдера
-	 *    2) по списку сконфигурированному списку алиасов для этого провайдера
-	 * @param destProvider целевой Провайдер
-	 * @param srcParameters список параметров
-	 * @param srcReportDesc текущий описатель Отчёта, для получения из его флагов списка алиасов
-	 * (в виде "property.xxx=paramName")
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	private void assignProviderProps(JRDataSourceProvider destProvider,
-			Map<String, String[]> srcParameters, ReportDescriptor srcReportDesc
-		) throws IllegalAccessException, InvocationTargetException
-	{
-		if (srcParameters != null && destProvider != null) {
-			// присвоение сконфигурированных алиасов ...
-			ArgsHelper.assignParameters( destProvider, getPropertiesAliases(srcReportDesc), srcParameters);
-
-			// присвоение свойств с совпадающими именами с параметрами
-			BeanUtils.populate(destProvider, srcParameters);
-		}
-	}
-
-	/**
-	 * Получить из флагов описателя отчёта список алиасов параметров для именованных свойств.
-	 * Для случаев, когда название входного (web-)параметра отличается от 
-	 * названия свойства провайдера, в которое это свойство должно попасть. 
-	 *    ключ = название свойства провайдера,
-	 *    значение = возможные синонимы в параметрах.
-	 */
-	public Map<String, String[]> getPropertiesAliases(ReportDescriptor reportDesc) {
-		// выбираем из флагов дескриптора ...
-		final Map<String, String[]> result = getPropertiesAliases( (reportDesc == null) ? null : reportDesc.getFlags());
-
-		if (reportDesc != null && log.isDebugEnabled()) {
-			log.debug(String.format( "Found parameters' aliases for provider %s:\n\t%s", reportDesc.getClass(), result));
-		}
-
-		return result;
-	}
-
-	/** префикс названия для конвертирующего свойства */
-	final static String PFX_PROPERTY_ITEM = "property.".toLowerCase();
-
-	public Map<String, String[]> getPropertiesAliases(ReportFlags reportFlags) {
-		// выбираем из флагов дескриптора ...
-		if (reportFlags == null || reportFlags.flags() == null)
-			return null;
-
-		final Map<String, String[]> result = new HashMap<String, String[]>( reportFlags.flags().size());
-
-		// сканируем параметры-флаги вида "property.XXX"
-		for(NamedValue item: reportFlags.flags()) {
-			if (item != null && item.getMnem() != null) {
-				if (item.getMnem().toLowerCase().startsWith(PFX_PROPERTY_ITEM)) {
-					// это описание конвертирования ...
-					final String propName = item.getMnem().substring(PFX_PROPERTY_ITEM.length()); // часть строки после префикса это имя свойства (возможно вложенного)
-					final String[] aliases = (Utils.isStringEmpty(item.getValue())) ? null : item.getValue().split("[,;]");
-					if (aliases != null) {
-						for(int i = 0; i < aliases.length; i++) {
-							if (aliases[i] != null)
-								aliases[i] = aliases[i].trim();
-						}
-					}
-					result.put( propName, aliases);
-				}
-			}
-		}
-
-		return (result.isEmpty()) ? null : result;
 	}
 
 	/**
@@ -262,12 +148,14 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase
 				, extension);
 	}
 
-	private void generateReport(JasperReportTargetFileType target, OutputStream outputStream, JasperReport report
+	private void generateReport(JasperReportTargetFileType target
+			, OutputStream outputStream
+			, JasperReport report
 			, JRDataSourceProvider dataSourceProvider
 			, Map<String, String[]> requestParameters)
 			throws IllegalArgumentException, JRException 
 	{
-		log.info("Generating report " + report.getName() + " ...");
+		log.debug("Generating report " + report.getName() + " ...");
 
 		if (outputStream == null) {
 			throw new IllegalArgumentException("The output stream was not specified");
@@ -283,7 +171,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase
 		final JasperPrint jPrint = fillManager.fill(report, reportParameters, dataSource);
 
 		/* формирование результата в нужном формате */
-		log.info("Exporting report " + report.getName() + " ...");
+		log.debug( String.format( "Exporting report '%s' as %s ...", report.getName(), target));
 		switch (target) {
 		case PDF:
 			JasperExportManager.exportReportToPdfStream(jPrint, outputStream);
@@ -306,7 +194,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase
 			throw new RuntimeException(msg);
 		}
 
-		log.info("Report " + report.getName() + " generated succefully");
+		log.info( String.format( "Report '%s' as %s generated succefully", report.getName(), target));
 	}
 
 	private void exportReportToStream( final JRAbstractExporter exporter 

@@ -47,4 +47,18 @@ public interface ReportGenerator {
 	 */
 	void onRegister(ReportDescriptor desc, byte[] templateData, ReportContentDAO storage);
 
+	/**
+	 * Сгенерировать шаблон отчёта на основании макета шаблона
+	 * @param maketData поток с данными макета шаблона
+	 * @param desc описатель отчёта
+	 * @return данные готового шаблона отчёта (получить из них поток достаточно
+	 * просто, например:<br/>
+	 * <code>
+	 * 		byte[] data = g.generateReportTemplateByMaket(...); <br/> 
+	 * 		ByteArrayOutputStream stm = new ByteArrayOutputStream( data);<br/>
+	 *	</code>
+	 */
+	byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc);
+
+
 }
