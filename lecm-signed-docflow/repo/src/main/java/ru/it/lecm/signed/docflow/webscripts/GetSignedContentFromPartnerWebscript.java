@@ -84,9 +84,9 @@ public class GetSignedContentFromPartnerWebscript extends DeclarativeWebScript {
 		JSONObject jsonResult;
 		ReceiveDocumentData receiveDocumentData;
 		if ("email".equalsIgnoreCase(method)) {
-			receiveDocumentData = receiveContentByEmailService.getSignaturesForContentByEmail(contentNodeRef);
+			receiveDocumentData = receiveContentByEmailService.getSignaturesForContentByEmail(contentRef);
 		} else if ("specop".equalsIgnoreCase(method)) {
-			receiveDocumentData = unicloudService.receiveDocuments(contentNodeRef);
+			receiveDocumentData = unicloudService.receiveDocuments(contentRef);
 		} else {
 			String message = String.format("GetSignedContentFromPartnerWebscript was called with unknown method '%s'", method);
 			logger.error(message);
