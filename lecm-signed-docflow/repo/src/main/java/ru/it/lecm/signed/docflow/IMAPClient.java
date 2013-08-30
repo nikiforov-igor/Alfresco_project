@@ -18,6 +18,7 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.mail.internet.MimeUtility;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -115,7 +116,8 @@ public class IMAPClient {
 				continue;
 			}
 			InputStream inputStream = bodyPart.getInputStream();
-			File file = new File(tmpDir, bodyPart.getFileName());
+			String fileName = MimeUtility.decodeText(bodyPart.getFileName());
+			File file = new File(tmpDir, fileName);
 			FileOutputStream fileOutputStream = new FileOutputStream(file);
 			byte[] buf = new byte[4096];
 			int bytesRead;
