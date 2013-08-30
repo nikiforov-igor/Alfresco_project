@@ -12,7 +12,7 @@ YAHOO.util.Event.onContentReady("alf-hd", function () {
                 template = "view-metadata?nodeRef={nodeRef}";
 
             // If the "userprofilepage" template doesn't exist or is empty, or we're in portlet mode we'll just return the user's fullName || userName
-            if (disableLink || Alfresco.constants.PORTLET || oUser.nodeRef.length == 0) {
+            if (disableLink || Alfresco.constants.PORTLET || !oUser.nodeRef) {
                 return '<span>' + html + '</span>';
             }
 
