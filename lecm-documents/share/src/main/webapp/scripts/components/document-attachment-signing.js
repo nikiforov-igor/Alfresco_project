@@ -115,7 +115,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					fn: function(response) {
 						if(response.json[0].signatures.length != 0){
 							checkbox.disabled = true;
-						} 
+						}
 					},
 					scope: this
 				}
@@ -200,11 +200,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onSignaturesReceived: function(event) {
-			alert("onSignaturesReceived");
+			cryptoAppletModule.CheckContentSignature(this.options.nodeRef);
+			this.onViewSignature(event);
 		},
 
 		onRefreshSentDocuments: function(event) {
-			alert("onRefreshSentDocuments");
+			//получение подписей от контрагента
 		}
 	}, true);
 })();
