@@ -178,7 +178,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 							// Выходим, если всё хорошо
 							if(result.gateResponse.responseType == "OK") {
-								message = (responses.length > 1) ? "Подписи успешно получены" : "Подпись успешно получена";
+								if (result.signatures.length > 1) {
+									message = "Подписи успешно получены";
+								} else if (result.signatures.length) {
+									message = "Подпись успешно получена";
+								} else {
+									message = "Новых подписей нет";
+								}
 								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
 								YAHOO.lang.later(2500, null, hideAndReload);
 								return;
@@ -235,7 +241,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							} else {
 								Alfresco.util.PopupManager.displayPrompt({
 									title: "Ошибка при получении подписей документа от контрагента",
-									text: YAHOO.lang.substitute("Код ошибки: {responseType}. Расшифровка: {message}", result.gateResponse)
+									text: YAHOO.lang.substitute("Код ошибки: {responseType}. {message}", result.gateResponse)
 								});
 							}
 						}
@@ -249,17 +255,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						}
 					}
 				});
-			}
+			};
 		},
 
 		_getSignedContentFromPartner: function ContentSigning_getSignedContentFromPartner(response) {
-			//получение подписей от контрагента
-
 			//надо проверить что в response.json что-то есть, иначе послать лесом...
-
 			var interType = response.json.interactionType,
 				templateUrl = "lecm/signed-docflow/getSignedContentFromPartner?method={method}&nodeRef={nodeRef}",
-				url;
+				url,
+				makeDataRequest;
 
 			if (YAHOO.lang.isValue(interType)) {
 				url = YAHOO.lang.substitute(templateUrl, {
@@ -267,10 +271,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						nodeRef: this.options.nodeRef
 					});
 
-				var makeDataRequest = this._bindAjaxTo("GET", url, {});
+				makeDataRequest = this._bindAjaxTo("GET", url, {});
 				makeDataRequest();
 			} else {
-				//по хорошему мы должны показывать форму выбора контрагента
 				Alfresco.util.PopupManager.displayPrompt({
 					title: "Ошибка при получении подписей документа от контрагента",
 					text: "Этот документ не участвовал в ЭДО ни с одним контрагентом. Прежде чем получать подписи, необходимо направить документ контрагенту"

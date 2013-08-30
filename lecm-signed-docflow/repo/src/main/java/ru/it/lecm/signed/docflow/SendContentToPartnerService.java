@@ -273,20 +273,20 @@ public class SendContentToPartnerService {
 		return effectivePartner;
 	}
 
-	private String getEffectiveInteractionType(final NodeRef parnerRef, final String interactionType) {
+	private String getEffectiveInteractionType(final NodeRef partnerRef, final String interactionType) {
 		String effectiveInteractionType;
 		if (StringUtils.isEmpty(interactionType)) {
-			effectiveInteractionType = (String) nodeService.getProperty(parnerRef, Contractors.PROP_CONTRACTOR_INTERACTION_TYPE);
+			effectiveInteractionType = (String) nodeService.getProperty(partnerRef, Contractors.PROP_CONTRACTOR_INTERACTION_TYPE);
 		} else {
 			effectiveInteractionType = interactionType;
 		}
 		return effectiveInteractionType;
 	}
 
-	private String getEffectiveEmail(final NodeRef parnerRef, final String email) {
+	private String getEffectiveEmail(final NodeRef partnerRef, final String email) {
 		String effectiveEmail;
 		if (StringUtils.isEmpty(email)) {
-			effectiveEmail = (String) nodeService.getProperty(parnerRef, Contractors.PROP_CONTRACTOR_EMAIL);
+			effectiveEmail = (String) nodeService.getProperty(partnerRef, Contractors.PROP_CONTRACTOR_EMAIL);
 		} else {
 			effectiveEmail = email;
 		}

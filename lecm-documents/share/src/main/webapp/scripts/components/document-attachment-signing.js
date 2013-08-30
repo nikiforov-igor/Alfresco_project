@@ -204,8 +204,127 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			this.onViewSignature(event);
 		},
 
+		_bindAjaxTo: function ContentSigning_bindAjaxTo(method, url, dataObj) {
+			var id = this.newId;
+			return function makeDataRequest() {
+
+				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
+					text: "Пожалуйста, подождите, запрашиваются подписи контрагента",
+					spanClass: "wait",
+					displayTime: 0,
+					modal: true
+				});
+
+				loadingPopup.center();
+
+				Alfresco.util.Ajax.jsonRequest({
+					method: method,
+					url: Alfresco.constants.PROXY_URI_RELATIVE + url,
+					dataObj: dataObj,
+					successCallback: {
+						fn: function(response) {
+							var message,
+								authSimpleDialog,
+								result = response.json;
+
+							function hideAndReload() {
+								loadingPopup.destroy();
+								window.location.reload();
+							}
+
+							loadingPopup.destroy();
+
+							// Выходим, если всё хорошо
+							if(result.gateResponse.responseType == "OK") {
+								if (result.signatures.length > 1) {
+									message = "Подписи успешно получены";
+								} else if (result.signatures.length) {
+									message = "Подпись успешно получена";
+								} else {
+									message = "Новых подписей нет";
+								}
+								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
+								YAHOO.lang.later(2500, null, hideAndReload);
+								return;
+							}
+
+							if(result.gateResponse.responseType == "UNAUTHORIZED") {
+								// Показываем форму авторизации, в ином случае
+								authSimpleDialog = new Alfresco.module.SimpleDialog(id + "-auth-form");
+
+								authSimpleDialog.setOptions({
+									width: "50em",
+									templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+									templateRequestParams: {
+										itemKind: "type",
+										itemId: "lecm-orgstr:employees",
+										formId: "auth-form",
+										mode: "create",
+										showCancelButton: "true",
+										submitType: "json"
+									},
+									actionUrl: null,
+									destroyOnHide: true,
+									doBeforeDialogShow:{
+										fn: function(form, simpleDialog) {
+											simpleDialog.dialog.setHeader("Необходима аутентификация, выберите сертификат");
+										}
+									},
+									doBeforeAjaxRequest: {
+										fn: function() {
+											var currentContainer = cryptoAppletModule.getCurrentContainer();
+
+											if(currentContainer == "") {
+												Alfresco.util.PopupManager.displayMessage({
+													text: "Вы не выбрали сертификат"
+												});
+											} else {
+												cryptoAppletModule.unicloudAuth(currentContainer, makeDataRequest);
+											}
+
+											return false;
+										}
+									},
+									onFailure: {
+										fn: function() {
+											Alfresco.util.PopupManager.displayMessage({
+												text: "Не удалось открыть форму аутентификации, попробуйте ещё раз"
+											});
+										}
+									}
+								});
+
+								authSimpleDialog.show();
+								return;
+							} else {
+								Alfresco.util.PopupManager.displayPrompt({
+									title: "Ошибка при получении подписей документа от контрагента",
+									text: YAHOO.lang.substitute("Код ошибки: {responseType}. {message}", result.gateResponse)
+								});
+							}
+						}
+					},
+					failureCallback: {
+						fn: function() {
+							loadingPopup.destroy();
+							Alfresco.util.PopupManager.displayMessage({
+								text: "Не удалось получить подписи"
+							});
+						}
+					}
+				});
+			};
+		},
+
 		onRefreshSentDocuments: function(event) {
-			//получение подписей от контрагента
+			var templateUrl = "lecm/signed-docflow/getSignedContentFromPartner?nodeRef={nodeRef}",
+				url = YAHOO.lang.substitute(templateUrl, {
+					nodeRef: this.options.nodeRef
+				}),
+				makeDataRequest;
+
+			makeDataRequest = this._bindAjaxTo("GET", url, {});
+			makeDataRequest();
 		}
 	}, true);
 })();
