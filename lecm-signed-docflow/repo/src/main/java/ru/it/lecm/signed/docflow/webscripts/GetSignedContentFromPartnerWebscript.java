@@ -38,26 +38,26 @@ public class GetSignedContentFromPartnerWebscript extends DeclarativeWebScript {
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 		String nodeRef = req.getParameter("nodeRef");
 		String method = req.getParameter("method");
-		final NodeRef contentNodeRef = new NodeRef(nodeRef);
 		if (nodeRef == null || method == null) {
 			String msg = "GetSignedContentFromPartnerWebscript was called with empty parameter";
 			logger.error(msg);
 			throw new WebScriptException(msg);
 		}
+		final NodeRef contentNodeRef = new NodeRef(nodeRef);
 
 		JSONObject jsonResult;
+		ReceiveDocumentData receiveDocumentData;
 		if ("email".equalsIgnoreCase(method)) {
-			Map<String, Object> signaturesForContentByEmail = receiveContentByEmailService.getSignaturesForContentByEmail(contentNodeRef);
-			jsonResult = new JSONObject(signaturesForContentByEmail);
+			receiveDocumentData = receiveContentByEmailService.getSignaturesForContentByEmail(contentNodeRef);
 		} else if ("specop".equalsIgnoreCase(method)) {
-			ReceiveDocumentData receiveDocumentData = unicloudService.receiveDocuments(contentNodeRef);
-			jsonResult = new JSONObject(receiveDocumentData.getProperties());
+			receiveDocumentData = unicloudService.receiveDocuments(contentNodeRef);
 		} else {
 			String message = String.format("GetSignedContentFromPartnerWebscript was called with unknown method '%s'", method);
 			logger.error(message);
 			throw new WebScriptException(message);
 		}
 
+		jsonResult = new JSONObject(receiveDocumentData.getProperties());
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", jsonResult);
 		return result;

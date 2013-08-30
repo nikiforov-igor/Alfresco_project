@@ -23,7 +23,6 @@ import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailAuthenticationException;
@@ -208,22 +207,22 @@ public class SendContentToPartnerService {
 				addBusinessJournalRecord(content, contentToSend.getPartner());
 			} catch (TemplateParseException ex) {
 				logger.error("Error parsing template", ex);
-				gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+				gateResponse = Utils.formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
 			} catch (TemplateRunException ex) {
 				logger.error("Error running template", ex);
-				gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+				gateResponse = Utils.formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
 			} catch (MessagingException ex) {
 				logger.error("Error creating message", ex);
-				gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+				gateResponse = Utils.formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
 			} catch (MailAuthenticationException ex) {
 				logger.error("Error performing mail authentification", ex);
-				gateResponse = formErrorGateResponse(ex, EResponseType.UNAUTHORIZED);
+				gateResponse = Utils.formErrorGateResponse(ex, EResponseType.UNAUTHORIZED);
 			} catch (MailSendException ex) {
 				logger.error("Error sending mail", ex);
-				gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+				gateResponse = Utils.formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
 			} catch (Exception ex) {
 				logger.error("Error!", ex);
-				gateResponse = formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+				gateResponse = Utils.formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
 			} finally {
 				if (gateResponse == null) {
 					gateResponse = new GateResponse();
@@ -355,12 +354,5 @@ public class SendContentToPartnerService {
 		return result;
 	}
 
-	private GateResponse formErrorGateResponse(Exception ex, EResponseType eResponseType) {
-		GateResponse gateResponse = new GateResponse();
-		gateResponse.setMessage(ex.getMessage());
-		gateResponse.setOperatorMessage(null);
-		gateResponse.setResponseType(eResponseType);
-		gateResponse.setStackTrace(ExceptionUtils.getStackTrace(ex));
-		return gateResponse;
-	}
+	
 }

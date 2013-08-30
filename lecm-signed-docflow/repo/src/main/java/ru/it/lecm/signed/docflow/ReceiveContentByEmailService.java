@@ -3,9 +3,7 @@ package ru.it.lecm.signed.docflow;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
@@ -19,6 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
+import ru.it.lecm.signed.docflow.model.ReceiveDocumentData;
+import ucloud.gate.proxy.exceptions.EResponseType;
+import ucloud.gate.proxy.exceptions.GateResponse;
 
 /**
  *
@@ -74,7 +75,9 @@ public class ReceiveContentByEmailService extends BaseBean {
 		PropertyCheck.mandatory(this, "mailDestinationFolder", mailDestinationFolder);
 	}
 
-	public Map<String, Object> getSignaturesForContentByEmail(NodeRef contentRef) {
+	public ReceiveDocumentData getSignaturesForContentByEmail(NodeRef contentRef) {
+		ReceiveDocumentData receiveDocumentData = new ReceiveDocumentData();
+		GateResponse gateResponse = null;
 		final List<String> signatures = new ArrayList<String>();
 		final String documentID = (String) nodeService.getProperty(contentRef, SignedDocflowModel.PROP_DOCUMENT_ID);
 		final String contentName = (String) nodeService.getProperty(contentRef, ContentModel.PROP_NAME);
@@ -109,20 +112,27 @@ public class ReceiveContentByEmailService extends BaseBean {
 			}
 		} catch (NoSuchProviderException ex) {
 			logger.error("Can not find mail provider", ex);
-			throw new RuntimeException(ex);
+			gateResponse = Utils.formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
 		} catch (MessagingException ex) {
-			logger.error("Mail error!", ex);
-			throw new RuntimeException(ex);
+			logger.error("Error getting mail!", ex);
+			gateResponse = Utils.formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
 		} catch (IOException ex) {
-			logger.error("File error!", ex);
-			throw new RuntimeException(ex);
+			logger.error("Error operating file!", ex);
+			gateResponse = Utils.formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
+		} catch (Exception ex) {
+			logger.error("Error!", ex);
+			gateResponse = Utils.formErrorGateResponse(ex, EResponseType.INTERNAL_ERROR);
 		} finally {
 			// не забываем закрыть соединение и удалить временные файлы
 			mailClient.disconnect();
+			if (gateResponse == null) {
+				gateResponse = new GateResponse();
+				gateResponse.setResponseType(EResponseType.OK);
+				receiveDocumentData.setSignatures(signatures);
+			}
 		}
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("signatures", signatures);
-		return result;
+		receiveDocumentData.setGateResponse(gateResponse);
+		return receiveDocumentData;
 	}
 
 	@Override

@@ -6,7 +6,9 @@ import javax.xml.ws.Holder;
 import org.alfresco.service.cmr.repository.ContentIOException;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
+import ucloud.gate.proxy.exceptions.EResponseType;
 import ucloud.gate.proxy.exceptions.GateResponse;
 
 /**
@@ -71,5 +73,14 @@ public final class Utils {
 		logger.debug("operatorMessage = {}", gateResponse.getOperatorMessage());
 		logger.debug("responseType = {}", gateResponse.getResponseType());
 		logger.debug("stackTrace = {}", gateResponse.getStackTrace());
+	}
+
+	public static GateResponse formErrorGateResponse(Exception ex, EResponseType eResponseType) {
+		GateResponse gateResponse = new GateResponse();
+		gateResponse.setMessage(ex.getMessage());
+		gateResponse.setOperatorMessage(null);
+		gateResponse.setResponseType(eResponseType);
+		gateResponse.setStackTrace(ExceptionUtils.getStackTrace(ex));
+		return gateResponse;
 	}
 }
