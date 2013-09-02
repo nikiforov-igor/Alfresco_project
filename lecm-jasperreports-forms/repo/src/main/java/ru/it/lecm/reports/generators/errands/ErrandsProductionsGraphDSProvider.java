@@ -551,8 +551,18 @@ public class ErrandsProductionsGraphDSProvider
 				}
 
 				this.setData( result );
+
 			} // if
 
+			/* possible fix [ALF-1524] Чтобы при пустом списке не было даты 01/01/1970, надо что-то добавить из "заказанного диапазона"
+			if (result.isEmpty()) { 
+				final String emptyTag = "";
+				result.add( new GraphPoint( emptyTag,  new Timestamp( periodStart.getTime()), 0f, "h")); // одна точка
+				result.add( new GraphPoint( emptyTag,  new Timestamp( periodEnd.getTime()), 0f, "h")); // вторая точка
+			}
+			 */
+
+			this.setData( result );
 			if (this.getData() != null)
 				this.setIterData(this.getData().iterator());
 

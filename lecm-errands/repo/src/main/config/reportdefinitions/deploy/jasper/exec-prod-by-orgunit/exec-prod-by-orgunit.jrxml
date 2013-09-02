@@ -137,7 +137,7 @@
 					</timeAxisFormat>
 					<valueAxisLabelExpression><![CDATA["Ср время исполнения поручений, ч"]]></valueAxisLabelExpression>
 					<valueAxisFormat>
-						<axisFormat/>
+						<axisFormat tickLabelMask="#,##0.00"/>
 					</valueAxisFormat>
 				</timeSeriesPlot>
 			</timeSeriesChart>

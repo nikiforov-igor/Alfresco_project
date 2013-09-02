@@ -3,6 +3,9 @@ package ru.it.lecm.reports.jasper;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -453,10 +456,30 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 						userInfo.registerDuration( norm_duration, fact_duration); // X,Y регистрируется
 					}
 				} // while
-				this.data.addAll(statistic.values()); // перенос в основной блок
+				this.data.addAll( getSortedItemsList(statistic.values())); // перенос в основной блок
 			}
 
 			this.iterData = this.data.iterator();
+		}
+
+		private List<EmployeeInfo> getSortedItemsList(Collection<EmployeeInfo> values) {
+			final List<EmployeeInfo> result = new ArrayList<EmployeeInfo>();
+			if (values != null) {
+				result.addAll(values);
+				Collections.sort(result, new Comparator<EmployeeInfo>() {
+
+					@Override
+					public int compare(EmployeeInfo o1, EmployeeInfo o2) {
+						final String s1 = o1.ФамилияИО();
+						final String s2 = o2.ФамилияИО();
+						return (s1 == null) 
+									? (s2 == null ? 0 : 1)
+									: (s2 == null ? -1 : s1.compareToIgnoreCase(s2));
+					}
+				});
+			} 
+
+			return result;
 		}
 	}
 
