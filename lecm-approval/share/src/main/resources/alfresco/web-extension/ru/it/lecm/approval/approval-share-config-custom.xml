@@ -124,8 +124,10 @@
 					<show id="lecmApprove:approvalType"/>
 				</field-visibility>
 				<appearance>
-					<field id="bpm:workflowDescription" labelid="workflow.field.message">
-						<control template="/ru/it/lecm/approval/controls/document-present-string-hidden.ftl"/>
+					<field id="bpm:workflowDescription">
+						<control template="/ru/it/lecm/documents/controls/workflow/document-present-string-hidden.ftl">
+							<control-param name="leftPartTextCode">ru.it.approval.workflowDescription.message</control-param>
+						</control>
 					</field>
 
 					<field id="bpm:workflowDueDate" mandatory="true">
