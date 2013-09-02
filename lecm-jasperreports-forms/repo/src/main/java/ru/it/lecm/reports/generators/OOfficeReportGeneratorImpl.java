@@ -179,6 +179,9 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 					throw new RuntimeException( msg);
 				}
 				result = Utils.findEmptyFile( fbase, nameFmtSuffix_s); // к имени добавляем генерируемую часть
+				if (result.getParentFile() != null) { // гарантируем вышестоящие каталоги ...
+					result.getParentFile().mkdirs();
+				}
 			} while (!result.createNewFile()); // крутим генерацию пока уникальный файл не создадим
 		}
 		return result;

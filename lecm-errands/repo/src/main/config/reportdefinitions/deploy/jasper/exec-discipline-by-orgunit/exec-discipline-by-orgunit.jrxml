@@ -108,49 +108,49 @@
 				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="279c1409-10d9-462c-8311-1bbaaae755e4" isPrintRepeatedValues="false" x="35" y="2" width="110" height="164"/>
+				<reportElement uuid="279c1409-10d9-462c-8311-1bbaaae755e4" x="35" y="2" width="110" height="164" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Подразделение"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="fddcd90a-ed79-4a6c-9cb4-01504c915527" isPrintRepeatedValues="false" x="145" y="2" width="110" height="164"/>
+				<reportElement uuid="fddcd90a-ed79-4a6c-9cb4-01504c915527" x="145" y="2" width="110" height="164" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Выдано всего поручений за период (из них важных)"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="5deded13-7b59-4fe2-8010-e47318a37c95" isPrintRepeatedValues="false" x="255" y="2" width="110" height="164"/>
+				<reportElement uuid="5deded13-7b59-4fe2-8010-e47318a37c95" x="255" y="2" width="110" height="164" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Закрытых всего поручений за период (их них важных)"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="1ede53b5-ccec-41e6-9dec-bff1bf22dd41" isPrintRepeatedValues="false" x="365" y="2" width="110" height="164"/>
+				<reportElement uuid="1ede53b5-ccec-41e6-9dec-bff1bf22dd41" x="365" y="2" width="110" height="164" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Процент исполнения в срок"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="5c8c984a-aa84-44a7-be82-0f8e19f000a9" isPrintRepeatedValues="false" x="475" y="2" width="110" height="164"/>
+				<reportElement uuid="5c8c984a-aa84-44a7-be82-0f8e19f000a9" x="475" y="2" width="110" height="164" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Процент поручений, отклонённых руководителем"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="eb69c24b-6c21-4538-8f04-a9681f4d7f98" isPrintRepeatedValues="false" x="585" y="2" width="110" height="164"/>
+				<reportElement uuid="eb69c24b-6c21-4538-8f04-a9681f4d7f98" x="585" y="2" width="110" height="164" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Процент (кол-во) важных поручений, неисполненных в срок"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="8589ba2a-9e4e-4cc2-9097-511c3488d66b" isPrintRepeatedValues="false" x="695" y="2" width="100" height="164"/>
+				<reportElement uuid="8589ba2a-9e4e-4cc2-9097-511c3488d66b" x="695" y="2" width="100" height="164" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>

@@ -2,12 +2,16 @@ package ru.it.lecm.reports.generators.errands;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -18,11 +22,11 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.calc.DataGroupCounter;
@@ -321,6 +325,16 @@ public class ErrandsDisciplineDSProvider
 
 
 		/**
+		 * Получить характерное для текущей группировки название объекта:
+		 * название Подразделения или инициалы Сотрудника.
+		 * @param item
+		 * @return
+		 */
+		String getItemName(DisciplineGroupInfo item) {
+			return (groupBy.isUseOUFilter() ? item.employee.unitName : item.employee.ФамилияИО());
+		}
+
+		/**
 		 * Прогрузить строку отчёта
 		 */
 		@Override
@@ -329,8 +343,7 @@ public class ErrandsDisciplineDSProvider
 			final Map<String, Serializable> result = new LinkedHashMap<String, Serializable>();
 
 			/* Название подразделения или имя пользователя ... */
-			result.put( DsDisciplineColumnNames.COL_NAMEATAG
-					, (groupBy.isUseOUFilter() ? item.employee.unitName : item.employee.ФамилияИО()) );
+			result.put( DsDisciplineColumnNames.COL_NAMEATAG, getItemName(item) );
 
 			result.put( DsDisciplineColumnNames.COL_PARAM_GROUP_BY, this.groupBy.getGroupByInfo().grpName);
 
@@ -379,7 +392,7 @@ public class ErrandsDisciplineDSProvider
 					logger.info( "group by executors");
 				}
 
-				/* проход по все загруженным Поручениям ... */
+				/* проход по всем загруженным Поручениям ... */
 				while(context.getRsIter().hasNext()) {
 
 					final ResultSetRow rs = context.getRsIter().next();
@@ -461,8 +474,11 @@ public class ErrandsDisciplineDSProvider
 					}
 				} // while
 
+				// DEBUG: добавляем данные, чтобы было достаточно данных для вывода на несколько страниц
+				// debugAddManyData(result, 128);
+
 				// (!) перенос в основной блок
-				this.setData( new ArrayList<DisciplineGroupInfo>(result.values()) );
+				this.setData( getSortedItemsList(result.values()) );
 			} // if
 
 			if (this.getData() != null)
@@ -471,6 +487,68 @@ public class ErrandsDisciplineDSProvider
 			logger.info( String.format( "found %s row(s)", result.size()));
 
 			return result.size();
+		}
+
+
+		private void debugAddManyData( final Map<NodeRef, DisciplineGroupInfo> result, int maxCount)
+		{
+			if (!result.isEmpty()) {
+				int i = 1000;
+				final Random rnd = new Random();
+				do {
+					i++;
+					final NodeRef fakeId = new NodeRef( String.format( "workspace://SpacesStore/%s", GUID.generate()) );
+					final BasicEmployeeInfo empl = new BasicEmployeeInfo( fakeId);
+					{	// фейковые данные по Сотруднику ...
+						empl.firstName = String.format( "Name_%s", i);
+						empl.lastName = String.format( "Family_%s", i);
+						empl.middleName = String.format( "Otchestvo_%s", i);
+
+						empl.unitId = empl.employeeId;
+						empl.staffName = String.format( "staff_%s", i);
+						empl.unitName = String.format( "Unit_%s", i);
+						empl.userLogin = String.format( "login_%s", i);
+					}
+
+					final DisciplineGroupInfo executor = new DisciplineGroupInfo(empl);
+					// fake-случайная последовательность выполнения поручений ...
+					for (int j = 0; j< 1+ rnd.nextInt(10); j++)
+						executor.avgExecTimeInHours.adjust(10 + 5*rnd.nextFloat());
+
+					result.put(fakeId, executor);
+				} while (result.size() <= maxCount);
+			}
+		}
+
+		private List<DisciplineGroupInfo> getSortedItemsList(
+				Collection<DisciplineGroupInfo> rawItems) {
+			final ArrayList<DisciplineGroupInfo> result = new ArrayList<DisciplineGroupInfo>();
+			if (rawItems != null) {
+				result.addAll(rawItems);
+
+				// сортировка по Алфавиту ...
+				Collections.sort(result, new GrpComparator(this));
+			}
+			return result;
+		}
+
+		final private class GrpComparator implements Comparator<DisciplineGroupInfo> {
+
+			final ExecDisciplineJRDataSource ds;
+
+			public GrpComparator(ExecDisciplineJRDataSource ds) {
+				super();
+				this.ds = ds;
+			}
+
+			@Override
+			public int compare(DisciplineGroupInfo o1, DisciplineGroupInfo o2) {
+				final String s1 = ds.getItemName(o1);
+				final String s2 = ds.getItemName(o2);
+				return (s1 == null) 
+							? (s2 == null ? 0 : 1)
+							: (s2 == null ? -1 : s1.compareToIgnoreCase(s2));
+			}
 		}
 
 	}
