@@ -98,14 +98,13 @@
     padding: 10px;
 }
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field label {
+    width: 150px;
     float: none;
     display: inline-block;
     padding-right: 12px;
     text-align: right;
-    vertical-align: middle;
     font-size: 13px;
     color: #303030;
-    line-height: 15px;
 }
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field label .mandatory-indicator {
     position: absolute;
@@ -114,13 +113,37 @@
 }
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field input[type="text"],
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field select {
+    width: 425px;
     float: none;
     display: inline-block;
 }
-
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit  {
-
+/* object-finder and autocomplete-block */
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field div.object-finder,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field div.autocomplete-block {
+    width: 428px;
+    float: right;
+    margin: 0;
 }
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit  {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field div.object-finder .current-values,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field div.autocomplete-block input.autocomplete-input,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
+    width: 388px;
+    margin: 0 5px 0 0;
+    float: left;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field div.object-finder .show-picker,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.form-field div.autocomplete-block .show-picker {
+    margin: 0;
+    float: right;
+}
 
+
+/* Настройки для конкретных табов */
+/* Таб "Коды" */
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.yui-content div.tab-codes div.form-field label {
+    width: 60px;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.yui-content div.tab-codes div.form-field input[type="text"],
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.contractor-form-edit div.yui-content div.tab-codes div.form-field select {
+    width: 515px;
 }

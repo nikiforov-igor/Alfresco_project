@@ -138,6 +138,9 @@
 		<#elseif field.control.params.createNewMessageId??>
 			createNewMessage: "${msg(field.control.params.createNewMessageId)}",
 	    </#if>
+        <#if field.control.params.createDialogClass??>
+            createDialogClass: "${field.control.params.createDialogClass}",
+        </#if>
 	    showSearch: ${showSearch?string},
         plane: ${plane?string},
         currentValue: "${field.value!''}",

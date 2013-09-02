@@ -20,7 +20,7 @@
     <div class="yui-content">
         <#list form.structure as item>
             <#if item.kind == "set">
-                <div><@formLib.renderSet set=item /></div>
+                <div class="tab-${item.id!""}"><@formLib.renderSet set=item /></div>
             </#if>
         </#list>
     </div>
