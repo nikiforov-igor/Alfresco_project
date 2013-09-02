@@ -41,6 +41,11 @@
                 <value>lecm-additional-document:number</value>
             </parameter>
         </constraint>
+	    <constraint name="lecm-additional-document:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
+		    <parameter name="armUrl">
+			    <value>contracts-documents</value>
+		    </parameter>
+	    </constraint>
     </constraints>
 
     <types>
