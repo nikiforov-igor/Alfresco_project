@@ -48,7 +48,7 @@ LogicECM.module = LogicECM.module || {};
                 var formIdPrefix = me.id.replace(me.options.fieldName, "");
                 var formField = document.getElementById(formIdPrefix + toProp + "-cntrl-date");
                 if (formField != null) {
-                    var date = new Date(value);
+                    var date = Alfresco.util.fromISO8601(value.iso8601);
                     var dateString = date.toString(me.options.dateFormat);
                     formField.value = dateString;
                     formField = document.getElementById(formIdPrefix + toProp);
@@ -66,7 +66,7 @@ LogicECM.module = LogicECM.module || {};
         onAfterSetItems: function SelectOne_onAfterSetItems(layer, args) {
             var me = this;
             var nodeRef = args[1].items;
-            var url = Alfresco.constants.PROXY_URI + "/api/metadata?nodeRef={nodeRef}&shortQNames";
+            var url = Alfresco.constants.PROXY_URI + "/lecm//api/metadata?nodeRef={nodeRef}&shortQNames";
             url = YAHOO.lang.substitute(url, {
                 nodeRef: nodeRef
             });
