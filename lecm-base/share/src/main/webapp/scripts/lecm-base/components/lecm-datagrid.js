@@ -2361,9 +2361,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var me = this;
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
+                    var contId = p_dialog.id + "-form-container";
                     Alfresco.util.populateHTML(
-                        [ p_dialog.id + "-form-container_h", this.msg("label.edit-row.title") ]
+                        [contId + "_h", this.msg("label.edit-row.title")]
                     );
+                    if (item.type && item.type != "") {
+                        Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
+                    }
                 };
 
 				var templateUrl = "lecm/components/form"
