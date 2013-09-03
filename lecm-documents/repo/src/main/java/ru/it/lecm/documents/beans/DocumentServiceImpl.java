@@ -2,6 +2,7 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
@@ -30,7 +31,10 @@ import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -523,5 +527,17 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
             }
         }
         return new QName[]{DocumentService.PROP_DOCUMENT_REGNUM};
+    }
+
+    @Override
+    public String getPresentString(final NodeRef document) {
+        String result = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<String>() {
+            @Override
+            public String doWork() throws Exception {
+                Serializable presentString = nodeService.getProperty(document, PROP_PRESENT_STRING);
+                return presentString != null ? presentString.toString() : null;
+            }
+        });
+        return result;
     }
 }

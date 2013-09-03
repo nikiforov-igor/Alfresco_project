@@ -7,8 +7,6 @@ import org.alfresco.service.namespace.QName;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -153,4 +151,11 @@ public interface DocumentService {
     public NodeRef duplicateDocument(NodeRef document);
 
     public QName[] getRegNumbersProperties(QName docType);
+
+    /**
+     * Возвращает заголовок документа без проверки на доступ к документу
+     * @param document
+     * @return
+     */
+    public String getPresentString(NodeRef document);
 }

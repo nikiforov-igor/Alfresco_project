@@ -22,7 +22,6 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.documents.constraints.ArmUrlConstraint;
-import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -337,5 +336,9 @@ public class DocumentWebScriptBean extends BaseWebScript {
 	        }
         }
         return null;
+    }
+
+    public String getPresentString(ScriptNode document) {
+        return documentService.getPresentString(document.getNodeRef());
     }
 }

@@ -3,20 +3,20 @@
 "data": [
     <#list records as record>
     {
-        "nodeRef":     "${record.getNodeRef()?string}",
-        "record":      "${record.properties["lecm-document:present-string"]?string}",
-        <#if record.properties["lecm-errands:limitation-date"]??>
-        "date":        "${record.properties["lecm-errands:limitation-date"]?string("yyyy-MM-dd")}",
+        "nodeRef": "${record.nodeRef}",
+        "record": "${record.record}",
+        <#if record.date??>
+        "date": "${record.date?string("yyyy-MM-dd")}",
         </#if>
-        <#if record.assocs["lecm-errands:additional-document-assoc"]??>
-        "baseDocString" : "${record.assocs["lecm-errands:additional-document-assoc"][0].properties["lecm-document:present-string"]?string}",
+        <#if record.baseDocString??>
+        "baseDocString": "${record.baseDocString}",
         </#if>
-        "title":    "${record.properties["lecm-errands:title"]?string}",
-        "number":   "${record.properties["lecm-errands:number"]?string}",
-        "initiator": "${record.assocs["lecm-errands:initiator-assoc"][0].nodeRef?string}",
-        "initiator_name" : "${record.properties["lecm-errands:initiator-assoc-text-content"]?string}",
-        "isExpired":   "${record.properties["lecm-errands:is-expired"]?string}",
-        "isImportant": "${record.properties["lecm-errands:is-important"]?string}"
+        "title":    "${record.title}",
+        "number":   "${record.number}",
+        "initiator": "${record.initiator}",
+        "initiator_name": "${record.initiator_name}",
+        "isExpired":   "${record.isExpired?string}",
+        "isImportant": "${record.isImportant?string}"
     }
         <#if record_has_next>,</#if>
     </#list>
