@@ -45,6 +45,8 @@ var cryptoAppletModule = (function () {
 						config.storeName = configRes.storeName;
 						config.licCert = configRes.licCert;
 						config.issuerCert = configRes.licCert;
+
+						signApplet.setConfig(config);
                     }
                 }
 
@@ -151,7 +153,7 @@ var cryptoAppletModule = (function () {
 				}
 			}
 			}).show();
-	}
+	};
 
 	var SendMultiple = function (response) {
 		var templateUrl = "components/form"
@@ -199,7 +201,7 @@ var cryptoAppletModule = (function () {
 				}
 			}
 			}).show();
-	}
+	};
 
 
 
@@ -384,7 +386,6 @@ var cryptoAppletModule = (function () {
 		startApplet : function() {
 			try{
 				loadConfig();
-				signApplet.setConfig(config);
 			} catch(ex) {
 				console.log(ex);
 			}
@@ -400,7 +401,7 @@ var cryptoAppletModule = (function () {
 			//config.storeName = certContainer;
 			config.certB64 = signApplet.getService().bytesToBase64(signApplet.getService().getCertFromStore('', certContainer));
 			signApplet.setConfig(config);
-			return
+			return;
 		},
 
 		getCerts : function(selectId) {
@@ -711,22 +712,25 @@ var cryptoAppletModule = (function () {
             });
 		},
 
-		loadSignFromString: function(signature, nodeRef, callBack, callBackScope) {
+		loadSignFromString: function(signatureRaw, nodeRef, callBack, callBackScope) {
 			if(!YAHOO.lang.isFunction(callBack)){
 				callBack = function(){};
 			}
-			var signDate = Alfresco.util.toISO8601(new Date()),
-				contentURI = new Alfresco.util.NodeRef(nodeRef).uri,
-				result = signApplet.check(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL", signature),
-				checkRes = result.getResult(),
-				certB64 = result.getCert(),
-				signObj = {
-					"sign-to-content-association" : nodeRef,
-					"content" : signature,
-					"signing-date" : signDate
-				},
-				certInfo = getCertInfo(null, certB64),
-				res = YAHOO.lang.merge(signObj, certInfo);
+			var signDate, signature, contentURI, result, checkRes, certB64,	signObj, certInfo, res;
+
+			signDate = Alfresco.util.toISO8601(new Date());
+			signature = signatureRaw.replace(/^-{1,}.*-{1,}$|\s/gmi, "");
+			contentURI = new Alfresco.util.NodeRef(nodeRef).uri;
+			result = signApplet.check(Alfresco.constants.PROXY_URI + "api/node/content/" + contentURI, "URL", signature);
+			checkRes = result.getResult();
+			certB64 = result.getCert();
+			signObj = {
+				"sign-to-content-association": nodeRef,
+				"content": signature,
+				"signing-date": signDate
+			};
+			certInfo = getCertInfo(null, certB64);
+			res = YAHOO.lang.merge(signObj, certInfo);
 
 			if(!checkRes) {
 				Alfresco.util.PopupManager.displayMessage({
@@ -1005,7 +1009,7 @@ var cryptoAppletModule = (function () {
 				}
 			}).show();
 		}
-	}
+	};
 })();
 
 
