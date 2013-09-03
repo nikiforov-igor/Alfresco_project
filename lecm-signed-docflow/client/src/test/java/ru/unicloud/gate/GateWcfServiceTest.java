@@ -31,7 +31,8 @@ public abstract class GateWcfServiceTest {
 
 	private final static Logger logger = LoggerFactory.getLogger(GateWcfServiceTest.class);
 
-	protected final static String PARTNER_KEY = "C570E2AB-C55F-49BE-B56A-233046F829A8";
+	protected final static String PARTNER_KEY = "1CA84656-BDFB-46A4-B491-76F60D85EA7F";
+//	protected final static String PARTNER_KEY = "C570E2AB-C55F-49BE-B56A-233046F829A8";
 	protected final static String OPERATOR_CODE = "2AE";
 
 	/**
@@ -50,7 +51,8 @@ public abstract class GateWcfServiceTest {
 	protected final static String INN_700000008094 = "652DFF41-4309-49F4-8604-946056F808C3";
 
 	@Autowired
-	@Qualifier("gateWcfService.https")
+//	@Qualifier("gateWcfService.https")
+	@Qualifier("gateWcfService.http")
 	protected IGateWcfService service;
 
 	/**

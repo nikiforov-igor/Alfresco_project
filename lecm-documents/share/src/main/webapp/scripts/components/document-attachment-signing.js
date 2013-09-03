@@ -230,7 +230,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 							function hideAndReload() {
 								loadingPopup.destroy();
-								window.location.reload();
+//								window.location.reload();
 							}
 
 							loadingPopup.destroy();

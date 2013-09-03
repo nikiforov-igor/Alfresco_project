@@ -6,7 +6,8 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<bean id="unicloudService" class="ru.it.lecm.signed.docflow.UnicloudService" init-method="init">
-		<property name="gateWcfService" ref="gateWcfService.https"/>
+		<!--<property name="gateWcfService" ref="gateWcfService.https"/>-->
+		<property name="gateWcfService" ref="gateWcfService.http"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="contentService" ref="contentService"/>
@@ -110,7 +111,7 @@
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
 	</bean>
-	
+
 	<bean id="receiveContentByEmailService" class="ru.it.lecm.signed.docflow.ReceiveContentByEmailService" init-method="init">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="zipSignedContentService" ref="zipSignedContentService"/>

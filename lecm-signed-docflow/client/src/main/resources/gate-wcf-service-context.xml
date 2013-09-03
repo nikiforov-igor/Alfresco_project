@@ -16,7 +16,7 @@
 						   http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd">
 
 	<http:conduit name="{http://tempuri.org}GateWcfServiceHttps.http-conduit">
-		<http:tlsClientParameters disableCNCheck="true">
+		<!--<http:tlsClientParameters disableCNCheck="true">
 			<sec:keyManagers keyPassword="password">
 				<sec:keyStore type="JKS" password="12345678" file="GateFlat.keystore"/>
 			</sec:keyManagers>
@@ -31,14 +31,30 @@
 				<sec:include>.*_WITH_NULL_.*</sec:include>
 				<sec:exclude>.*_DH_anon_.*</sec:exclude>
 			</sec:cipherSuitesFilter>
-		</http:tlsClientParameters>
+		</http:tlsClientParameters>-->
 	    <http:client AutoRedirect="true" Connection="Keep-Alive"/>
 	</http:conduit>
 
-	<jaxws:client id="gateWcfService.https"
+	<!--<jaxws:client id="gateWcfService.https"
 				  address="https://gate.business365.ru:1111/GateFlat.svc"
 				  serviceClass="org.tempuri.IGateWcfService"
 				  serviceName="s:GateWcfServiceHttps"
+				  endpointName="s:WSHttpBinding_IGateWcfService"
+                  xmlns:s="http://tempuri.org/">
+		<jaxws:dataBinding>
+			<bean class="org.apache.cxf.jaxb.JAXBDataBinding" />
+		</jaxws:dataBinding>
+		<jaxws:binding>
+			<soap:soapBinding version="1.2"/>
+		</jaxws:binding>
+		<jaxws:features>
+			<wsa:addressing xmlns:wsa="http://cxf.apache.org/ws/addressing"/>
+		</jaxws:features>
+	</jaxws:client>-->
+	<jaxws:client id="gateWcfService.http"
+				  address="http://178.159.254.194:8200/GateLocal.svc"
+				  serviceClass="org.tempuri.IGateWcfService"
+				  serviceName="s:GateWcfService"
 				  endpointName="s:WSHttpBinding_IGateWcfService"
                   xmlns:s="http://tempuri.org/">
 		<jaxws:dataBinding>
