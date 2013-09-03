@@ -26,6 +26,7 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.model.DAO.FileReportContentDAOBean;
 import ru.it.lecm.reports.ooffice.OpenOfficeFillManager;
+import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
 import com.sun.star.beans.XPropertyContainer;
@@ -287,6 +288,25 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 		}
 	}
 
+	/** Целевой формат отчёта по-умолчанию */
+	private static final JasperReportTargetFileType DEFAULT_TARGET = JasperReportTargetFileType.RTF;
+
+	/** "Что сгенерировать" = название колонки (типа строка) с целевым форматом файла после генератора */
+	private static final String COLNAME_TARGETFORMAT = "targetFormat";
+
+	/**
+	 * Найти целевой формат в параметрах ...
+	 * @param requestParameters
+	 * @return
+	 */
+	// DONE: (?) разрешить задавать формат в колонках данных (константой или выражением) 
+	private JasperReportTargetFileType findTargetArg( final Map<String, String[]> requestParameters) 
+	{
+		final String value = ArgsHelper.findArg(requestParameters, COLNAME_TARGETFORMAT, null);
+		logger.info( String.format( "dataSource column %s is %s", COLNAME_TARGETFORMAT, Utils.coalesce(value, "default: "+ Utils.coalesce( DEFAULT_TARGET, "empty"))));
+		return JasperReportTargetFileType.findByName( value, DEFAULT_TARGET);
+	}
+
 	@Override
 	public void produceReport(
 			WebScriptResponse webScriptResponse
@@ -325,7 +345,8 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 			ooFile = createNewUniquieFile( reportDesc, FMT_SFX_RESULT_FILENAME_S);
 			Utils.saveDataToFile(ooFile, reader.getContentInputStream());
 
-			final JasperReportTargetFileType target = JasperReportTargetFileType.RTF;
+			final JasperReportTargetFileType target = findTargetArg(parameters);
+
 			// конечное название файла
 			ooResultFile = createNewUniquieFile( reportDesc, "%s"+ target.getExtension());
 
@@ -459,7 +480,8 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	}
 
 	/**
-	 * Выполнить указанное действие, с повторами при ошибках соединения
+	 * Выполнить указанное действие, с несколькими повторами при ошибках openOffice-соединения
+	 * См также {@link #maxConnectionRetries}
 	 * @param todo
 	 * @return
 	 */
@@ -507,64 +529,6 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 		}
 	}
 
-	/**
-	 * Сгенерировать openOffice отчёт
-	 * @param desc
-	 * @param storage
-	 */
-	private byte[] openOfficeGenerateExecute( ReportDescriptor desc, ReportContentDAO storage) {
-		// PropertyCheck.mandatory(this, "templatesDAO", getTemplatesDAO());
-		PropertyCheck.mandatory(this, "resultDAO", getResultDAO());
-		PropertyCheck.mandatory (this, "reportsManager", getReportsManager());
-		PropertyCheck.mandatory (this, "reportDesc", desc);
-
-		try {
-			// final String ooInFileNameTemplate = "ExampleArgsOfTheDoc.odt";
-
-			// "/reportdefinitions/oo-templates/generated.odt";
-			// final String ooOutFileNameResult = Utils.nonblank(desc.getMnem(), "generated") + ".odt";
-
-			// File ooFileResult = null;
-			// генерация уникального названия для входного шаблона (после операции - удалим)
-			final File ooFileResult = createNewUniquieFile( desc, FMT_SFX_RESULT_FILENAME_S);
-			try {
-				// предварительно сохраняем данные на диск ...
-				final String reportFileName = String.format( "%s%s", desc.getMnem(), OO_FILEEXT);
-				final ContentReader reader = storage.loadContent( IdRContent.createId(desc, reportFileName));
-				Utils.saveDataToFile( ooFileResult, ru.it.lecm.reports.utils.Utils.ContentToBytes(reader));
-
-				final byte[] result = 
-						openOfficeExecWithRetry(new Job<byte[]>() {
-
-							@Override
-							protected byte[] doIt() throws ConnectException {
-								// входной шаблон
-								if (!ooFileResult.exists()) {
-									logger.warn(String.format( "file not found by id {%s}", ooFileResult));
-									return null;
-								}
-								final String urlProcess = toUrl(ooFileResult, connection);
-
-								/* Добавление атрибутов из колонок данных и сохранение в urlSave... */
-								final OpenOfficeTemplateGenerator ooGen = new OpenOfficeTemplateGenerator();
-
-								/** чтение файла в виде буфера ... */
-								return loadFileAsData( ooFileResult, String.format( "Fail to load generated [temporary] report file \n '%s':\n", ooFileResult));
-							}
-						});
-
-				logger.info( String.format( "Successfully generation for report '%s':\n\t result data size %s"
-						, desc.getMnem(), (result == null ? "NULL" : result.length) ));
-				return result;
-			} finally {
-				// if (ooFileResult != null) ooFileResult.delete();
-			}
-		} catch(Throwable ex) {
-			final String msg = String.format("Exception at build report '%s':\n%s", desc.getMnem(), ex.getMessage());
-			logger.error( msg, ex);
-			throw new RuntimeException( msg, ex);
-		}
-	}
 
 	/**
 	 * Perform the actual connection check.  If this component is {@link #setStrict(boolean) strict},
@@ -602,76 +566,5 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 		return this.ooAvailable;
 	}
 
-
-	/**
-	 * Вывести состояние свойств и обновить заранее заданные именованные.
-	 */
-	private void dumpAndUpdateUserProperties(final XPropertySet userPropSet) {
-		final String[] KNOWN_FIELD_NAMES = {"МоёПолеТекст", "МояДата", "MyFieldText", "MyFieldNumber"};
-		final XPropertySetInfo userPropSetInfo = (XPropertySetInfo) userPropSet.getPropertySetInfo();
-
-		final StringBuilder sb = new StringBuilder("Custom properties accessing:\n");
-		try {
-			for (final String propertyName: KNOWN_FIELD_NAMES) {
-				sb.append( String.format( "\n\t name='%s' -> ", propertyName));
-				try {
-					if (userPropSetInfo.hasPropertyByName(propertyName) == false) {
-						sb.append("NOT FOUND");
-					} else {
-						sb.append( String.format( "value '%s'", Utils.coalesce( userPropSet.getPropertyValue(propertyName), "NULL")) );
-						{ // обновление значения свойства 
-							Object newValue = null;
-							if (propertyName.equals("МоёПолеТекст"))
-								newValue = "new text as if (propertyName.equals(\"МоёПолеТекст\"))";
-							else if (propertyName.equals("МояДата"))
-								newValue = new com.sun.star.util.DateTime( (short) 2011, (short) 1, (short) 12, (short) 10, (short) 20, (short) 33, (short) 23);
-							else if (propertyName.equals("MyFieldText"))
-								newValue = " my-field-text value assigned programatically";
-							else if (propertyName.equals("MyFieldNumber"))
-								newValue = new Double(990230);
-
-							if (newValue != null) {
-								sb.append( String.format( "\n\t\t new value will be '%s'", Utils.coalesce( newValue, "NULL")) );
-								userPropSet.setPropertyValue(propertyName, newValue);
-							}
-						}
-					}
-				} catch(Throwable ex) {
-					sb.append("\n (!) Error ").append(ex.toString());
-				}
-			}
-		} finally {
-			logger.info( sb.toString());
-		}
-	}
-
-	private void addUserProperties(XComponent xCompDoc, String docInfoMsg) {
-
-		final StringBuilder sb = new StringBuilder();
-		sb.append( String.format( "Document: '%s'\n\t Custom properties accessing:\n", docInfoMsg));
-		try {
-
-			final XDocumentInfoSupplier xDocumentInfoSupplier = UnoRuntime.queryInterface(
-					XDocumentInfoSupplier.class, xCompDoc);
-			final XDocumentInfo docInfo = xDocumentInfoSupplier.getDocumentInfo();
-			final XPropertySet docProperties = UnoRuntime.queryInterface(XPropertySet.class, docInfo);
-
-			// if (!docProperties.getPropertySetInfo().hasPropertyByName(Constants.LICENSE_URI)) { ... add props ... }
-			// add the necessary properties to this document
-			final XPropertyContainer docPropertyContainer = UnoRuntime.queryInterface( XPropertyContainer.class, docInfo);
-
-			if (docPropertyContainer == null) {
-				logger.warn( String.format("Document '%s' custom properties list is empty", docInfoMsg));
-				return;
-			}
-
-			final int fldOptions = OpenOfficeTemplateGenerator.DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE;
-			OpenOfficeTemplateGenerator.addPropertySafely( docProperties, docPropertyContainer, sb, "ExtraDataString", fldOptions, "str-value-adskhsadfhkadhf");
-			OpenOfficeTemplateGenerator.addPropertySafely( docProperties, docPropertyContainer, sb, "ExtraData_Date", fldOptions, new com.sun.star.util.DateTime( (short) 2013, (short) 8, (short) 28, (short) 13, (short) 36, (short) 0, (short) 0));
-			OpenOfficeTemplateGenerator.addPropertySafely( docProperties, docPropertyContainer, sb, "ExtraData.Number", fldOptions, 12.345d);
-		} finally {
-			logger.info( sb.toString());
-		}
-	}
 
 }

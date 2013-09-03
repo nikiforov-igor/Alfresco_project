@@ -1,5 +1,7 @@
 package ru.it.lecm.reports.generators;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
@@ -15,6 +17,8 @@ import ru.it.lecm.reports.utils.Utils;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertyContainer;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
@@ -26,9 +30,12 @@ import com.sun.star.frame.XComponentLoader;
 import com.sun.star.io.IOException;
 import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
+import com.sun.star.util.DateTime;
 
 /**
  * Генератор шаблонов документов для OpenOffice-отчётов: формируется документ с
@@ -268,11 +275,14 @@ public class OpenOfficeTemplateGenerator {
 	 * @param desc
 	 * @param srcOODocUrl
 	 * @param destSaveAsUrl
-	 * @param author
+	 * @param author автор изменений
 	 */
-	public void odtSetColumnsAsDocCustomProps(Map<String, Object> props, OpenOfficeConnection connection,
-			ReportDescriptor desc, String srcOODocUrl, String destSaveAsUrl,
-			String author) 
+	public void odtSetColumnsAsDocCustomProps( Map<String, Object> props
+			, OpenOfficeConnection connection
+			, ReportDescriptor desc
+			, String srcOODocUrl
+			, String destSaveAsUrl
+			, String author) 
 	{
 		final boolean needSaveAs = !Utils.isStringEmpty(destSaveAsUrl);
 		logger.debug( String.format( "\n\t add DS columns into openOffice document '%s' %s"
@@ -341,17 +351,21 @@ public class OpenOfficeTemplateGenerator {
 						int i = 0;
 						for (Map.Entry<String, Object> item: props.entrySet()) {
 							final String propName = item.getKey();
-							final String propValue = Utils.coalesce( item.getValue(), "NULL");
+							final Object propValue = item.getValue();
 							try {
 								final boolean isPresent = docProperties.getPropertySetInfo().hasPropertyByName( propName);
 								i++;
 								sb.append(String.format("\n %s [%s]\t'%s' = '%s'", (isPresent ? "set" : "add"), i, propName, Utils.coalesce( propValue, "NULL") ));
 								if (isPresent) {
-									docProperties.setPropertyValue( propName,  propValue);
+									assignTypedProperty(docProperties, propName, propValue);
 								} else {
 									docPropertyContainer.addProperty( propName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, propValue);
 								}
 							} catch (Throwable t) {
+								/* 
+								 * это не страшно: например, сюда падаем с com.sun.star.lang.IllegalArgumentException 
+								 * при присвоении типизированному свойству значения NULL (например, для Дат)
+								 */
 								mustLog = true;
 								logger.warn( String.format("\n [%s]\t'%s' = '%s'", i, propName, propValue), t);
 								sb.append( String.format( "\n\t (!) error %s", t.getMessage()));
@@ -395,6 +409,103 @@ public class OpenOfficeTemplateGenerator {
 				throw (DisposedException) ex;
 			throw new RuntimeException( msg, ex);
 		}
+	}
+
+	/**
+	 * Присвоение значения openOffice-атрибуту свойства с учётом его типа.
+	 * @param docProperties
+	 * @param propName
+	 * @param propValue присваиваемое значение, конвертируется в целевой тип.
+	 * @throws UnknownPropertyException
+	 * @throws PropertyVetoException
+	 * @throws IllegalArgumentException
+	 * @throws WrappedTargetException
+	 */
+	public static void assignTypedProperty(final XPropertySet docProperties,
+			final String propName, final Object propValue)
+		throws UnknownPropertyException, PropertyVetoException,
+			IllegalArgumentException, WrappedTargetException
+	{
+		// присвоение NULL всегда прокатит ...
+		// docProperties.getPropertySetInfo().getPropertyByName("").Type
+		if (propValue == null) {
+			docProperties.setPropertyValue( propName,  null);
+			return;
+		}
+
+		final String sPropValue = (propValue instanceof String) ? (String) propValue : null;
+
+		// проверяем фактический тип аргумента ...
+		final Property pi = docProperties.getPropertySetInfo().getPropertyByName(propName);
+		com.sun.star.uno.Type t = pi.Type;
+		if (sPropValue != null) {
+			// при присвоении строки будем выполнять конвертирование в целевой тип ...
+			if (t.equals(Type.STRING)) {
+				docProperties.setPropertyValue( propName,  propValue);
+				return;
+			} else if (t.equals(Type.BOOLEAN)) {
+				docProperties.setPropertyValue( propName,  Boolean.valueOf( sPropValue.trim()));
+				return;
+			} else if (t.equals(Type.BYTE)) {
+				docProperties.setPropertyValue( propName,  Byte.valueOf( sPropValue.trim()));
+				return;
+			} else if (t.equals(Type.SHORT) || t.equals(Type.UNSIGNED_SHORT)) { // 2х байтный
+				docProperties.setPropertyValue( propName,  Short.valueOf( sPropValue.trim()));
+				return;
+			} else if (t.equals(Type.LONG) || t.equals(Type.UNSIGNED_LONG)) { // 4х байтный
+				docProperties.setPropertyValue( propName,  Integer.valueOf( sPropValue.trim()));
+				return;
+			} else if (t.equals(Type.HYPER) || t.equals(Type.UNSIGNED_HYPER) ) { // 8и байтный
+				docProperties.setPropertyValue( propName,  Long.valueOf( sPropValue.trim()));
+				return;
+			} else if (t.equals(Type.FLOAT)) {
+				docProperties.setPropertyValue( propName,  Float.valueOf( sPropValue.trim()));
+				return;
+			} else if (t.equals(Type.DOUBLE)) {
+				docProperties.setPropertyValue( propName,  Double.valueOf( sPropValue.trim()));
+				return;
+			} else if (t.equals(Type.CHAR)) {
+				final char ch = (sPropValue.length() == 0) ? '\00' : sPropValue.charAt(0);
+				docProperties.setPropertyValue( propName, ch);
+				return;
+			}
+		}
+
+		// здесь propValue уже не строки ...
+		if (propValue instanceof java.util.Date) {
+			// дату надо преобразовать в star-office-date
+			final com.sun.star.util.DateTime ooDate = newDateTime( (java.util.Date) propValue);
+			docProperties.setPropertyValue( propName,  ooDate);
+			return;
+		}
+
+		// по-умолчанию - простое присвоение ...
+		docProperties.setPropertyValue( propName,  propValue);
+	}
+
+	/**
+	 * Преобразование даты в office-DateTime
+	 * @param d
+	 * @return null, если d = null и преобразованную дату иначе (часовой пояс 
+	 * новой даты будет соот-ть часовому поясу d).
+	 */
+	public static DateTime newDateTime(Date d) {
+		if (d == null)
+			return null;
+
+		final Calendar c = Calendar.getInstance();
+		c.setTime(d);
+
+		final DateTime result = new DateTime();
+		result.Year = (short) c.get(Calendar.YEAR);
+		result.Month= (short) c.get(Calendar.MONTH);
+		result.Day  = (short) c.get(Calendar.DAY_OF_MONTH);
+
+		result.Hours  = (short) c.get(Calendar.HOUR_OF_DAY);
+		result.Minutes= (short) c.get(Calendar.MINUTE);
+		result.Seconds= (short) c.get(Calendar.SECOND);
+
+		return result;
 	}
 
 	public static void addPropertySafely(XPropertySet destProperties,

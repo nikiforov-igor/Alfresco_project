@@ -1,14 +1,19 @@
 package ru.it.lecm.reports.api;
 
 /**
- * Целевой тип файла
+ * Целевой тип файла в отчётах - подмножество alfresco mime (alfresco\tomcat\webapps\alfresco\WEB-INF\classes\alfresco\mimetype\*.xml).
  */
+// TODO: сделать поддерживаемые mime-типы частью провайдера и контролировать это на уровне ReportManager
 public enum JasperReportTargetFileType {
 	PDF( "application/pdf", ".pdf")
 	, RTF( "application/rtf", ".rtf")
 	, DOCX( "application/msword", ".docx")
+
 	, XML( "text/xml", ".xml")
 	, XLS( "application/vnd.ms-excel", ".xls")
+
+	, ODT( "application/vnd.oasis.opendocument.text", ".odt")
+	, OTT( "application/vnd.oasis.opendocument.text-template", ".ott")
 	;
 
 	final private String mimeType, extension;
@@ -45,7 +50,10 @@ public enum JasperReportTargetFileType {
 		if (aname != null) {
 			aname = aname.trim();
 			for(JasperReportTargetFileType v: values()) {
-				if ( aname.equalsIgnoreCase(v.name()) )
+				// по совпадению имени,mime типа или расширения - любое из этого уникально...
+				if ( aname.equalsIgnoreCase(v.name()) 
+						|| aname.equalsIgnoreCase(v.extension) 
+						|| aname.equalsIgnoreCase(v.mimeType) )
 					return v;
 			}
 		}

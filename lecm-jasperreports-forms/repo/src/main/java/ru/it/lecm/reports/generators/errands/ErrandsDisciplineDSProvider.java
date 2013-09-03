@@ -490,6 +490,11 @@ public class ErrandsDisciplineDSProvider
 		}
 
 
+		/**
+		 * Отладочное добавление данных, для получения отчёта на нескольких страницах.
+		 * @param result
+		 * @param maxCount
+		 */
 		private void debugAddManyData( final Map<NodeRef, DisciplineGroupInfo> result, int maxCount)
 		{
 			if (!result.isEmpty()) {

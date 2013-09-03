@@ -534,8 +534,8 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 				if (enCalcRowSum) {
 					// название столбца содержащего сумму по строке
 					final String rowSummaryColName = (mapStatusFlags.containsKey(XMLSTATUS_FLAGS_ITEM_ROWSUM_COLNAME))
-						? ""+ mapStatusFlags.get(XMLSTATUS_FLAGS_ITEM_ROWSUM_COLNAME)
-								: null;
+							? ""+ mapStatusFlags.get(XMLSTATUS_FLAGS_ITEM_ROWSUM_COLNAME)
+							: null;
 					iCol++;
 					result.put( Utils.coalesce( rowSummaryColName, String.format( COLNAME_COUNTER_FMT, iCol))
 							, item.sumAll());

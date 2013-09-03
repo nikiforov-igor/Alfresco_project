@@ -114,22 +114,22 @@ public class JasperReportGeneratorImpl
 		}
 	}
 
-	/**
-	 * Целевой формат отчёта по-умолчанию 
-	 */
+	/** Целевой формат отчёта по-умолчанию */
 	private static final JasperReportTargetFileType DEFAULT_TARGET = JasperReportTargetFileType.PDF;
+
+	/** "Что сгенерировать" = название колонки (типа строка) с целевым форматом файла после генератора */
+	private static final String COLNAME_TARGETFORMAT = "targetFormat";
 
 	/**
 	 * Найти целевой формат в параметрах ...
 	 * @param requestParameters
 	 * @return
 	 */
-	// TODO: (?) разрешить задавать формат в колонках данных (константой или выражением) 
+	// DONE: (?) разрешить задавать формат в колонках данных (константой или выражением) 
 	private JasperReportTargetFileType findTargetArg( final Map<String, String[]> requestParameters) 
 	{
-		final String argname = "targetFormat";
-		final String value = ArgsHelper.findArg(requestParameters, argname, null);
-		log.info( String.format( "argument %s is %s", argname, Utils.coalesce(value, "default: "+ Utils.coalesce( DEFAULT_TARGET, "empty"))));
+		final String value = ArgsHelper.findArg(requestParameters, COLNAME_TARGETFORMAT, null);
+		log.info( String.format( "dataSource column %s is %s", COLNAME_TARGETFORMAT, Utils.coalesce(value, "default: "+ Utils.coalesce( DEFAULT_TARGET, "empty"))));
 		return JasperReportTargetFileType.findByName( value, DEFAULT_TARGET);
 	}
 
