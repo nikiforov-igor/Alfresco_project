@@ -4,12 +4,8 @@
 	<config>
 		<forms>
 			<dependencies>
-				<js src="/scripts/signed-docflow/signs-short-form.js"/>
 				<js src="/scripts/signed-docflow/signs-all-form.js"/>
 			</dependencies>
-			<form id="signs-info-short">
-				<create-form template="/ru/it/lecm/signed/docflow/forms/signs-short-form.ftl"/>
-			</form>
 			<form id="signs-info-all">
 				<create-form template="/ru/it/lecm/signed/docflow/forms/signs-all-form.ftl"/>
 			</form>
