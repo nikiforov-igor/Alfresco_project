@@ -115,6 +115,7 @@
         <property name="copyService">
             <ref bean="copyService"/>
         </property>
+        <property name="reportsManager" ref="reportsManager"/>
     </bean>
 
     <bean id="dataSourcePolicy" class="ru.it.lecm.reports.editor.policies.DataSourcePolicy"

@@ -1,33 +1,18 @@
 package ru.it.lecm.reports.extensions;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportManagerJavascriptExtension
 		extends BaseWebScript 
@@ -104,45 +89,13 @@ public class ReportManagerJavascriptExtension
 		logger.debug( String.format( "generateReportTemplate(reportRef={%s}) ...", reportRef));
 
 		final NodeRef report = new NodeRef(reportRef);
-		final ReportDescriptor desc = getReportsManager().getReportDAO().getReportDescriptor(report);
-		if (desc == null)
-			return null;
 
-		final byte[] content = getReportsManager().produceDefaultTemplate(desc);
-		final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
 
-		final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-		
-		{ // формирование названия
-			final ReportDefaultsDesc def = getReportsManager().getReportDefaultsDesc(desc.getReportType()); // умолчания для типа
-			final String ext = (def != null ? def.getFileExtension() : null);
-			String reportTemplateName = desc.getMnem() + (Utils.isStringEmpty(ext) ? ".txt" : ext); // ".jrxml", etc ...
+        NodeRef templateFileRef = getReportsManager().produceDefaultTemplate(report);
 
-			properties.put(ContentModel.PROP_NAME, reportTemplateName);
+		logger.debug( String.format( "generateReportTemplate(reportRef={%s}) returns {%s}", reportRef, templateFileRef));
 
-			final NodeRef templateFile = serviceRegistry.getNodeService().getChildByName(report, ContentModel.ASSOC_CONTAINS, reportTemplateName);
-			if (templateFile != null) {
-				serviceRegistry.getNodeService().deleteNode(templateFile); // удаляем старый файл
-			}
-		}
-
-		final ChildAssociationRef child =
-				serviceRegistry.getNodeService().createNode(report, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
-		InputStream is = null;
-		try {
-			ContentService contentService = serviceRegistry.getContentService();
-			is = new ByteArrayInputStream(content);
-			ContentWriter writer = contentService.getWriter(child.getChildRef(), ContentModel.PROP_CONTENT, true);
-			writer.setEncoding("UTF-8");
-			writer.setMimetype("text/xml");
-			writer.putContent(is);
-		} finally {
-			IOUtils.closeQuietly(is);
-		}
-
-		logger.debug( String.format( "generateReportTemplate(reportRef={%s}) returns {%s}", reportRef, child.getChildRef()));
-
-		return new ScriptNode(child.getChildRef(), serviceRegistry, getScope());
+		return new ScriptNode(templateFileRef, serviceRegistry, getScope());
 	}
 
 }

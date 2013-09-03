@@ -9,9 +9,12 @@ import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.editor.ReportsEditorModel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: dbashmakov
@@ -25,6 +28,11 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
     protected NodeService nodeService;
     protected DictionaryService dictionaryService;
     private CopyService copyService;
+    private ReportsManager reportsManager;
+
+    public void setReportsManager(ReportsManager reportsManager) {
+        this.reportsManager = reportsManager;
+    }
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
@@ -63,9 +71,6 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
             if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
                 nodeService.createAssociation(parent, childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
 
-                //копируем файл с шаблоном из общей директории в отчет
-                copyTemplateFile(childAssociationRef.getChildRef(), parent);
-
                 // берем тип отчета из шаблона
                 NodeRef reportType;
                 List<AssociationRef> typeAssoc = nodeService.getTargetAssocs(childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_TEMPLATE_TYPE);
@@ -76,6 +81,9 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
                     //сохраняем в отчете
                     nodeService.setAssociations(parent, ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_REPORT_TYPE, types);
                 }
+
+                //копируем файл с шаблоном из общей директории в отчет (или генерим новый на основании источника данных)
+                copyTemplateFile(childAssociationRef.getChildRef(), parent);
             }
         } catch (AssociationExistsException ignored) {
         }
@@ -107,7 +115,13 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
     }
 
     private void copyTemplateFile(NodeRef template, NodeRef report) {
-        NodeRef templateFile = nodeService.getTargetAssocs(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE).get(0).getTargetRef();
+        List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
+        NodeRef templateFile;
+        if (targetAssocs != null && !targetAssocs.isEmpty()) {
+            templateFile = targetAssocs.get(0).getTargetRef();  //файл шаблона задан - используем
+        } else {
+            templateFile = reportsManager.produceDefaultTemplate(report);   //файл шаблона не задан - генерируем по источнику данных
+        }
         NodeRef newTemplateFile = copyService.copyAndRename(templateFile, report, ContentModel.ASSOC_CONTAINS, null, false);
         if (newTemplateFile != null) {
             nodeService.setAssociations(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(newTemplateFile));

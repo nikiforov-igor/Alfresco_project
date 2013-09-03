@@ -181,6 +181,7 @@
 	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportDAOBean, jasperReportGenerator"
 	 		init-method="init">
 		<!-- <property name="services" ref="wksKeeper"/> -->
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="namespaceService" ref="namespaceService"/>
 
 		<!-- хранилище отчётов редактора -->

@@ -67,27 +67,12 @@
 
         showCreateDialog: function (meta, generateReport) {
             if (generateReport) {
-                Alfresco.util.Ajax.request(
-                    {
-                        url: Alfresco.constants.PROXY_URI + "lecm/reports/rptmanager/generateReportTemplate",
-                        dataObj: {
-                            reportRef: meta.nodeRef
-                        },
-                        successCallback: {
-                            fn: function (response) {
-                                this._showCreateForm(meta, response);
-                            },
-                            scope: this
-                        },
-                        failureMessage: "message.failure",
-                        execScripts: true
-                    });
-            } else {
-                this._showCreateForm(meta);
+                this.formId = "createFromDataSource";
             }
+            this._showCreateForm(meta);
         },
 
-        _showCreateForm: function (meta, response) {
+        _showCreateForm: function (meta) {
             var doBeforeDialogShow = function (p_form, p_dialog) {
                 var defaultMsg = this.msg("label.create-template.title");
                 Alfresco.util.populateHTML(
@@ -96,27 +81,7 @@
 
                 Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
 
-                if (response) {
-                    // обновим форму данными шаблона
-                    var generatedTemplate = response.json.templateRef;
-                    var generatedTemplateName = response.json.templateName;
 
-                    var added = p_dialog.dialog.form['assoc_lecm-rpeditor_reportTemplateFile_added'];
-                    if (added != null) {
-                        added.value = generatedTemplate;
-                    }
-                    var current = p_dialog.dialog.form['assoc_lecm-rpeditor_reportTemplateFile'];
-                    if (current != null) {
-                        current.value = generatedTemplate;
-                    }
-
-                    var displayFileName = Dom.get(this.id + '-createDetails_assoc_lecm-rpeditor_reportTemplateFile-cntrl-currentValueDisplay');
-                    if (displayFileName != null) {
-                        displayFileName.innerHTML = '<div>' + generatedTemplateName + '</div>';
-
-                        YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
-                    }
-                }
                 this.items = p_dialog.form.validations;
                 if (this.isCopy){
                     var htmlItem = Dom.get(this.id + '-createDetails_prop_cm_name');

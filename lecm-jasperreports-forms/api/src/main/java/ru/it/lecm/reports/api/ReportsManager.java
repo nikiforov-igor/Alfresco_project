@@ -1,15 +1,14 @@
 package ru.it.lecm.reports.api;
 
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.service.cmr.repository.NodeRef;
-
+import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
+import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportType;
-import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
-import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Биновый интерфейс для работы с шаблонами зарегистрированных отчётов.
@@ -86,10 +85,10 @@ public interface ReportsManager {
 
 	/**
 	 * Сформировать шаблон по-умолчанию для НД указанного описателя отчёта
-	 * @param reportDesc
+	 * @param reportRef
 	 * @return
 	 */
-	byte[] produceDefaultTemplate(ReportDescriptor reportDesc);
+	NodeRef produceDefaultTemplate(NodeRef reportRef);
 
 	/**
 	 * Вернуть каталог, в котором располагается шаблоны отчётов указанного типа
