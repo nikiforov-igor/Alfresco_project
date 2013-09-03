@@ -46,8 +46,14 @@
         </h2>
         <div id="${el}-exchange-formContainer">
 			<div id="${el}-sendDocument" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.send")}</div>
-			<div class="text-cropped" style="font: 14px Arial; margin: 5px 0; padding: 3px 12px; text-decoration: none;">${msg("label.read")}</div>
-			<div id="${el}-signaturesReceived" class="text-cropped" style="font: 14px Arial; margin: 5px 0; padding: 3px 12px; text-decoration: none;">${msg("label.signatures.received")}</div>
+			<div class="text-cropped" style="font: 14px Arial; margin: 5px 0; padding: 3px 12px; text-decoration: none;">${msg("label.read")}
+				<span id="${el}-readState">
+					<i></i>
+				</span>
+			</div>
+			<div id="${el}-signaturesReceived" class="text-cropped" style="font: 14px Arial; margin: 5px 0; padding: 3px 12px; text-decoration: none;">${msg("label.signatures.received")}
+				<span id="${el}-receivedCount" class=""></span>
+			</div>
 		</div>
     </div>
 </div>

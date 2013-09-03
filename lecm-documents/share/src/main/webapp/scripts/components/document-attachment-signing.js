@@ -204,10 +204,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			this.onViewSignature(event);
 		},
 
-		_bindAjaxTo: function ContentSigning_bindAjaxTo(method, url, dataObj) {
+		_bindAjaxTo: function ContentSigning_bindAjaxTo(method, url, dataObj, scope, signatureHandler) {
 			var id = this.newId,
 				contentRef = this.options.nodeRef;
-			return function makeDataRequest(signatureHandler) {
+			return function makeDataRequest() {
 
 				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
 					text: "Пожалуйста, подождите, запрашиваются подписи контрагента",
@@ -248,7 +248,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								YAHOO.lang.later(2500, null, hideAndReload);
 
 								if(YAHOO.lang.isFunction(signatureHandler)) {
-									signatureHandler(contentRef, result.signatures);
+									signatureHandler.call(scope || window, contentRef, result);
 								}
 
 								return;
@@ -322,10 +322,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			};
 		},
 
-		_loadSignaturesToRepo: function(contentRef, signatures) {
+		_loadSignaturesToRepo: function(contentRef, result) {
 			var i,
-				size = signatures.length;
-			for(i = 0; i < size; ++i) {
+				signatures = result.signatures,
+				signaturesLength = signatures.length,
+				iReadState = YAHOO.util.Dom.get(this.id + "-readState").getElementsByTagName("i")[0],
+				iReadStateElem = new YAHOO.util.Element(iReadState),
+				spanReceivedCount = YAHOO.util.Dom.get(this.id + "-receivedCount");
+
+			spanReceivedCount.innerHTML = signaturesLength;
+			iReadStateElem.addClass(result.isRead ? "icon-ok" : "icon-remove");
+
+			for(i = 0; i < signaturesLength; i++) {
 				cryptoAppletModule.loadSignFromString(signatures[i], contentRef);
 			}
 		},
@@ -337,8 +345,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				}),
 				makeDataRequest;
 
-			makeDataRequest = this._bindAjaxTo("GET", url, {});
-			makeDataRequest(this._loadSignaturesToRepo);
+			makeDataRequest = this._bindAjaxTo("GET", url, {}, this, this._loadSignaturesToRepo);
+			makeDataRequest();
 		}
 	}, true);
 })();

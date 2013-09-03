@@ -440,6 +440,10 @@
 						<excludes>
 							<exclude>**/alfresco/site-webscripts/**/*.js</exclude>
 							<exclude>**/alfresco/templates/**/*.js</exclude>
+
+							<!-- Не пакуем то, что уже упаковано (knockout.js, font-awesome.css) -->
+							<exclude>**/*.min.js</exclude>
+							<exclude>**/*.min.css</exclude>
 						</excludes>
 					</configuration>
 					<dependencies>
