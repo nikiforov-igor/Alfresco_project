@@ -230,9 +230,9 @@
 
         this._addBubblingLayers();
 
-        this.deferredInit = new Deferred([ "onGetCurrentUserApprovalListFolderSuccess", "onGetEmployeesByBusinessRoleIdSuccess" ], { fn: this.init, scope: this });
+        this.deferredInit = new Deferred([ "onGetCurrentEmployeeInfoSuccess", "onGetEmployeesByBusinessRoleIdSuccess" ], { fn: this.init, scope: this });
 
-        this._getCurrentUserApprovalListFolder();
+        this._getCurrentEmployeeInfo();
         this._getEmployeesByBusinessRoleId();
 
         return this;
@@ -252,6 +252,7 @@
         constants: {
             URL_FORM: "lecm/components/form",
             LISTS_FOLDER_REF: null,
+            CURRENT_EMPLOYEE_REF: null,
             ALLOWED_ASSIGNEES: []
         },
 
@@ -277,10 +278,10 @@
             });
         },
 
-        _getCurrentUserApprovalListFolder: function approvalForm_getCurrentUserApprovalListFolder() {
+        _getCurrentEmployeeInfo: function approvalForm_getCurrentEmployeeInfo() {
             Alfresco.util.Ajax.jsonRequest({
                 method: "POST",
-                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/getCurrentUserApprovalListFolder",
+                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/getCurrentEmployeeInfo",
                 successCallback: {
                     fn: onSuccess,
                     scope: this
@@ -292,13 +293,15 @@
             });
 
             function onSuccess( response ) {
-                this.constants.LISTS_FOLDER_REF = response.json.approvalListFolderRef;
-                this.deferredInit.fulfil( "onGetCurrentUserApprovalListFolderSuccess" );
+                this.constants.LISTS_FOLDER_REF = response.json.currentListsFolderRef;
+                this.constants.CURRENT_EMPLOYEE_REF = response.json.currentEmployeeRef;
+
+                this.deferredInit.fulfil( "onGetCurrentEmployeeInfoSuccess" );
             }
 
             function onFailure() {
                 Alfresco.util.PopupManager.displayMessage({
-                    text: "Не удалось получить ссылку на корневую папку списков согласования"
+                    text: "Не удалось получить информацию о Вас"
                 });
             }
         },
@@ -537,12 +540,18 @@
          * @method approvalForm_getCurrentNodeRefs
          */
         getCurrentNodeRefs: function approvalForm_getCurrentNodeRefs() {
-            var datagrid = this.widgets.assigneesDatagrid,
+            var isValue = YAHOO.lang.isValue,
+                datagrid = this.widgets.assigneesDatagrid,
                 dataTable = datagrid.widgets.dataTable,
                 employeesSet = dataTable.getRecordSet(),
                 employeesLength = employeesSet.getLength(),
+                currentEmployee = this.constants.CURRENT_EMPLOYEE_REF,
                 result = [],
                 i;
+
+            if(isValue(currentEmployee)) {
+                result.push(currentEmployee)
+            }
 
             if( employeesLength === 0 ) {
                 return result;

@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExtension {
@@ -43,6 +44,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 	private AuthenticationService authenticationService;
 	private NodeService nodeService;
 	private ApprovalListService approvalListService;
+	private OrgstructureBean orgstructureService;
 	private IWorkCalendar workCalendarService;
 
 	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
@@ -59,6 +61,26 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 
 	public void setApprovalListService(ApprovalListService approvalListService) {
 		this.approvalListService = approvalListService;
+	}
+
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
+	}
+
+	public JSONObject getCurrentEmployeeInfo() {
+		JSONObject result = new JSONObject();
+
+		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+		NodeRef currentListsFolder = getListsFolderRef();
+
+		try {
+			result.put("currentEmployeeRef", currentEmployee);
+			result.put("currentListsFolderRef", currentListsFolder);
+		} catch (JSONException ex) {
+			throw new WebScriptException("Can not form JSONObject", ex);
+		}
+
+		return result;
 	}
 
 	/**
