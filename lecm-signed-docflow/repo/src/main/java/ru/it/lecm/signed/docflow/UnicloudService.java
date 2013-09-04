@@ -531,8 +531,12 @@ public class UnicloudService {
 		for(DocumentContent document : documents) {
 			List<byte[]> signatures = document.getSignatures().getBase64Binaries();
 			for(int i = 0; i < signatures.size(); ++i) {
-				String signature = Base64.encodeBase64String(signatures.get(i));
-				receiveDocumentData.getSignatures().add(signature);
+				byte[] sign = signatures.get(i);
+				if (Base64.isArrayByteBase64(sign)) {
+					receiveDocumentData.getSignatures().add(new String(sign));
+				} else {
+					receiveDocumentData.getSignatures().add(Base64.encodeBase64String(sign));
+				}
 			}
 		}
 		receiveDocumentData.setGateResponse(gateResponse.value);
