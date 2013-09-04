@@ -43,12 +43,13 @@
 			<div><a id="${el}-sendDocument" href="javascript:void(0);" class="action-link">${msg("label.send")}</a></div>
 			<div>
 				<span id="${el}-readState" style="background-position: 4px 1px; background-repeat: no-repeat; border: 1px solid transparent; display: block; min-height: 16px; padding: 2px 0 2px 24px;">${msg("label.read")}
-					<i></i>
+					<i style="float: right; margin-right: 10px;"></i>
 				</span>
 			</div>
-			<div>${msg("label.signatures.received")}
-				<span id="${el}-receivedCount" class=""></span>
-				<!--<a id="${el}-signaturesReceived" href="javascript:void(0);" class="action-link">${msg("label.signatures.received")}</a>-->
+			<div>
+				<a id="${el}-signaturesReceived" href="javascript:void(0);" class="action-link">${msg("label.signatures.received")}
+					<span id="${el}-receivedCount" style="float: right; margin-right: 10px; font-weight: bold;"></span>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -69,7 +70,7 @@
 			YAHOO.util.Event.on("${el}-uploadSignature", "click", signingComponent.onUploadSignature, signingComponent, true);
 			YAHOO.util.Event.on("${el}-refreshSentDocuments", "click", signingComponent.onRefreshSentDocuments, signingComponent, true);
 			YAHOO.util.Event.on("${el}-sendDocument", "click", signingComponent.onSendDocument, signingComponent, true);
-			//YAHOO.util.Event.on("${el}-signaturesReceived", "click", signingComponent.onSignaturesReceived, signingComponent, true);
+			YAHOO.util.Event.on("${el}-signaturesReceived", "click", signingComponent.onSignaturesReceived, signingComponent, true);
 		}
 	}
 	YAHOO.util.Event.onDOMReady(init);
