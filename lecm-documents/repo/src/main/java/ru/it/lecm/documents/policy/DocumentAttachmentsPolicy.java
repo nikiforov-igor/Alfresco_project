@@ -94,8 +94,6 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeUpdateNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode"));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnMoveNodePolicy.QNAME,
-                ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onMoveNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
@@ -151,19 +149,6 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	        }
         }
     }
-
-	public void onMoveNode(ChildAssociationRef childAssociationRef, ChildAssociationRef childAssociationRef2) {
-		final NodeRef newDocument = this.documentAttachmentsService.getDocumentByAttachment(childAssociationRef2.getChildRef());
-		if (newDocument != null) {
-			NodeRef attachmentRef = childAssociationRef2.getChildRef();
-
-			List<String> objects = new ArrayList<String>(1);
-			objects.add(attachmentRef.toString());
-			businessJournalService.log(newDocument, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator добавил(а) вложение #object1 к документу #mainobject", objects);
-
-			addParentDocumentAspect(newDocument, attachmentRef);
-		}
-	}
 
 	/**
 	 * добавляет аспект для ссылки на документ из формы document-details
