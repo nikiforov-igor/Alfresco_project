@@ -281,6 +281,15 @@
          </properties>
       </component>
 
+		<!-- Информация об адресанте -->
+		<component>
+			<region-id>addresser-info</region-id>
+		</component>
+		
+		<!-- Информация об обращении -->
+		<component>
+			<region-id>appeal-info</region-id>
+		</component>
 	   <!-- Статусная строка -->
 	   <!--<component>-->
 		   <!--<region-id>document-status-string</region-id>-->

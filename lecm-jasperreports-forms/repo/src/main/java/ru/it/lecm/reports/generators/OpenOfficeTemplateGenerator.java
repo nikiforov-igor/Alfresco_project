@@ -236,7 +236,8 @@ public class OpenOfficeTemplateGenerator {
 
 				for (ColumnDescriptor col : desc.getDsDescriptor().getColumns()) {
 					stage = String.format("(!) fail to directly add property '%s' with expression '%s'", col.getColumnName(), col.getExpression());
-					userPropsContainer.addProperty(col.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, col.getExpression());
+					final Object value = getTypedDefaultValue(col);
+					userPropsContainer.addProperty(col.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
 				} // for ColumnDescriptor
 
 				// final XPropertySet userPropSet = UnoRuntime.queryInterface(XPropertySet.class, userPropsContainer);
@@ -265,6 +266,7 @@ public class OpenOfficeTemplateGenerator {
 			throw new RuntimeException(msg, ex);
 		}
 	}
+
 
 	/**
 	 * Задать свойства для атрибутов документа
@@ -409,6 +411,50 @@ public class OpenOfficeTemplateGenerator {
 				throw (DisposedException) ex;
 			throw new RuntimeException( msg, ex);
 		}
+	}
+
+	/*
+	 * TODO: стоит сделать преобразование простых expression в целевой тип 
+	 * (для ссылок не надо), чтобы также упростить присвоение типизированной 
+	 * строки для assignTypedProperty.
+	 * Object getTypedValue( Class destType, String value) { ... код получения типизированного значения из value ...}
+	 * 
+	 * Object getTypedDefaultValue(ColumnDescriptor col) {
+	 * 		final Class<?> colType = Class.forName(col.getDataType().className());
+	 * 		try {
+	 * 			return getTypesValue( colType, col.getExpression());
+	 * 		} catch(ConvertException ex) {
+	 * 			return (colType.equals(java.util.Date.class)) ? newDateTime( new Date()) : getTypesValue( colType, "0");
+	 * 		}
+	 */
+	/*
+	 * особенность OpenOffice: типизированные данные не могут быть NULL, так 
+	 * что если у колонки тип дата, то надо чтобы объект тоже был датой, 
+	 * а числа должны быть числами. 
+	 * Формируем здесь правильные типы для значений.
+	 */
+	protected Object getTypedDefaultValue(ColumnDescriptor col) {
+		final Object value;
+		if (java.util.Date.class.getName().equals(col.getDataType().className())) {
+			value = newDateTime( new Date()); // сегодня
+		} else if (java.lang.Boolean.class.getName().equals(col.getDataType().className())) {
+			value = Boolean.FALSE;
+		} else if (java.lang.Byte.class.getName().equals(col.getDataType().className())) {
+			value = (byte) 0;
+		} else if (java.lang.Short.class.getName().equals(col.getDataType().className())) {
+			value = (short) 0;
+		} else if (java.lang.Integer.class.getName().equals(col.getDataType().className())) {
+			value = new Integer(0);
+		} else if (java.lang.Long.class.getName().equals(col.getDataType().className())) {
+			value = new Long(0);
+		} else if (java.lang.Float.class.getName().equals(col.getDataType().className())) {
+			value = new Float(0);
+		} else if (java.lang.Double.class.getName().equals(col.getDataType().className())) {
+			value = new Double(0);
+		} else { // иначе - просто присвоим выражение
+			value = col.getExpression(); 
+		}
+		return value;
 	}
 
 	/**

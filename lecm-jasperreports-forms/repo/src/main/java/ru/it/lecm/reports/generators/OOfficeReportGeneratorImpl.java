@@ -29,12 +29,6 @@ import ru.it.lecm.reports.ooffice.OpenOfficeFillManager;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
-import com.sun.star.beans.XPropertyContainer;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertySetInfo;
-import com.sun.star.document.XDocumentInfo;
-import com.sun.star.document.XDocumentInfoSupplier;
-import com.sun.star.lang.XComponent;
 import com.sun.star.ucb.XFileIdentifierConverter;
 import com.sun.star.uno.UnoRuntime;
 

@@ -187,7 +187,15 @@ public class ReportDSContextImpl implements ReportDSContext {
 		// (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
 		Object value = null;
 		if (isCalcField(fldAlfName)) {
-			value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
+			// try {
+				value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
+			//} catch (NamespaceException ex) {
+			//	// NOTE: исключение NamespaceException вида "Namespace prefix lecm-abc is not mapped to a namespace URI"
+			//	// возникает когда отчёты запускается не на своей системной
+			//	// конфе и в принципе их можно проигнорировать при построении 
+			//	// отчёта, журналируя, конечно
+			//	logger.error( "Namespace problem - check destination lecm-system for compatibility with the report", ex);
+			//}
 		} else {
 			value = fldAlfName;
 		}
