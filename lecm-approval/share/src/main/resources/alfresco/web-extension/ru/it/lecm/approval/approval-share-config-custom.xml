@@ -164,7 +164,9 @@
 						<control template="/org/alfresco/components/form/controls/info.ftl" />
 					</field>
 					<field id="lecmApprove:approveTaskResult">
-						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl">
+							<control-param name="options">APPROVED|Согласовать#alf#APPROVED_WITH_REMARK|Согласовать с замечаниями#alf#REJECTED|Отклонить</control-param>
+						</control>
 					</field>
 					<field id="lecmApprove:approveTaskCommentAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
@@ -331,7 +333,9 @@
 						<control template="/org/alfresco/components/form/controls/info.ftl" />
 					</field>
 					<field id="lecmCustom:approveTaskResult">
-						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl">
+							<control-param name="options">APPROVED|Согласовать#alf#APPROVED_WITH_REMARK|Согласовать с замечаниями#alf#REJECTED|Отклонить</control-param>
+						</control>
 					</field>
 					<field id="lecmCustom:approveTaskCommentAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
