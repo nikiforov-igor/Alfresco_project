@@ -399,12 +399,16 @@
                     this.widgets.assigneesDatagrid.setOptions({ approvalType: "parallel" });
                     dataTable.hideColumn( 0 );
                     dataTable.hideColumn( 1 );
+
+                    this.widgets.computeTermsButton.setStyle( "display", "none" );
                 } else {
                     approvalTypeInput.value = "SEQUENTIAL";
 
                     this.widgets.assigneesDatagrid.setOptions({ approvalType: "sequential" });
                     dataTable.showColumn( 0 );
                     dataTable.showColumn( 1 );
+
+                    this.widgets.computeTermsButton.setStyle( "display", "" );
                 }
             },
 
