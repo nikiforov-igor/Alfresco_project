@@ -18,56 +18,65 @@
 </#if>
 
 <script type="text/javascript">//<![CDATA[
-function Absence_CheckboxChanged(skipFiring) {
-	var myID = "${fieldHtmlId}";
-
-	var unlimitedCheckbox = YAHOO.util.Dom.get(myID);
-	unlimitedCheckbox.value = unlimitedCheckbox.checked;
-
-	var IDElements = myID.split("_");
-	IDElements.splice(-1, 1);
-	var commonID = IDElements.join("_");
-
-	var endInputDate = YAHOO.util.Dom.get(commonID + "_end-cntrl-date");
-	var endInputIcon = YAHOO.util.Dom.get(commonID + "_end-cntrl-icon");
-	var endInputHidden = YAHOO.util.Dom.get(commonID + "_end");
-
-	if (unlimitedCheckbox.checked) {
-		var today = new Date();
-		today.setHours(23, 59, 59, 0);
-
-		endInputDate.setAttribute("readonly", true);
-		endInputDate.removeAttribute("value");
-		endInputHidden.setAttribute("value", Alfresco.util.toISO8601(today));
-		endInputIcon.style.display = "none";
-
-		YAHOO.util.UserAction.keyup(endInputHidden);
-	} else {
-		endInputDate.removeAttribute("readonly");
-		endInputDate.value = "";
-		endInputHidden.removeAttribute("value");
-		endInputIcon.style.display = "block";
-
-		YAHOO.util.UserAction.keyup(endInputHidden);
-	}
-
-	if (!skipFiring) {
-		YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
-	}
-}
-
-function Absence_ChangeFormView() {
-	var formatInfosArray = YAHOO.util.Dom.getElementsByClassName('format-info', 'div');
-	for (var i = 0; i < formatInfosArray.length; i++) {
-		var formatInfo = formatInfosArray[i];
-		formatInfo.style.display = "none";
-	}
-}
-
 (function() {
-	YAHOO.util.Event.onContentReady("${formId}", Absence_ChangeFormView, true);
+	if (typeof LogicECM == "undefined" || !LogicECM) {
+		var LogicECM = {};
+	}
+
+	LogicECM.module = LogicECM.module || {};
+	LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
+	LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
+
+	LogicECM.module.WCalendar.Absence.CheckboxChanged = function Absence_CheckboxChanged(skipFiring) {
+		var myID = "${fieldHtmlId}";
+
+		var unlimitedCheckbox = YAHOO.util.Dom.get(myID);
+		unlimitedCheckbox.value = unlimitedCheckbox.checked;
+
+		var IDElements = myID.split("_");
+		IDElements.splice(-1, 1);
+		var commonID = IDElements.join("_");
+
+		var endInputDate = YAHOO.util.Dom.get(commonID + "_end-cntrl-date");
+		var endInputIcon = YAHOO.util.Dom.get(commonID + "_end-cntrl-icon");
+		var endInputHidden = YAHOO.util.Dom.get(commonID + "_end");
+
+		if (unlimitedCheckbox.checked) {
+			var today = new Date();
+			today.setHours(23, 59, 59, 0);
+
+			endInputDate.setAttribute("readonly", true);
+			endInputDate.removeAttribute("value");
+			endInputHidden.setAttribute("value", Alfresco.util.toISO8601(today));
+			endInputIcon.style.display = "none";
+
+			YAHOO.util.UserAction.keyup(endInputHidden);
+		} else {
+			endInputDate.removeAttribute("readonly");
+			endInputDate.value = "";
+			endInputHidden.removeAttribute("value");
+			endInputIcon.style.display = "block";
+
+			YAHOO.util.UserAction.keyup(endInputHidden);
+		}
+
+		if (!skipFiring) {
+			YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+		}
+	}
+
+	LogicECM.module.WCalendar.Absence.ChangeFormView = function Absence_ChangeFormView() {
+		var formatInfosArray = YAHOO.util.Dom.getElementsByClassName('format-info', 'div');
+		for (var i = 0; i < formatInfosArray.length; i++) {
+			var formatInfo = formatInfosArray[i];
+			formatInfo.style.display = "none";
+		}
+	}
+	YAHOO.util.Event.onContentReady("${formId}", LogicECM.module.WCalendar.Absence.ChangeFormView, true);
+	YAHOO.util.Event.addListener("${fieldHtmlId}", "click", LogicECM.module.WCalendar.Absence.CheckboxChanged);
+
 <#if isTrue>
-	YAHOO.util.Event.onContentReady("${formId}", Absence_CheckboxChanged, true);
+	YAHOO.util.Event.onContentReady("${formId}", LogicECM.module.WCalendar.Absence.CheckboxChanged, true);
 </#if>
 })();
 //]]></script>
@@ -84,8 +93,7 @@ function Absence_ChangeFormView() {
              <#if isTrue> value="true" checked="checked"</#if>
              <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>
              <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
-             <#if field.control.params.style??>style="${field.control.params.style}"</#if>
-             onchange='Absence_CheckboxChanged()' />
+             <#if field.control.params.style??>style="${field.control.params.style}"</#if> />
       <label for="${fieldHtmlId}" class="checkbox">${field.label?html}</label>
       <@formLib.renderFieldHelp field=field />
    </#if>

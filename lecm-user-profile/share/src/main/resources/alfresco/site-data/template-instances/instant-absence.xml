@@ -24,7 +24,7 @@
 			</properties>
 		</component>
 		<component>
-			<region-id>absence-instante</region-id>
+			<region-id>absence-instant</region-id>
 			<url>/ru/it/lecm/wcalendar/absence/absence-instant-page</url>
 		</component>
 	</components>

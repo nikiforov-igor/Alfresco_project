@@ -35,6 +35,5 @@ LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER = LogicECM.module.WCalendar.
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <@bpage.basePage showToolbar=false>
-	<@region id="absence-instante" scope="template"/>
+	<@region id="absence-instant" scope="template"/>
 </@bpage.basePage>
-
