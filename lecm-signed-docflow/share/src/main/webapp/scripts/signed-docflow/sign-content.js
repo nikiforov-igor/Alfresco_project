@@ -264,7 +264,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			};
 		},
 
-		_loadSignaturesToRepo: function(contentRef, signatures) {
+		_loadSignaturesToRepo: function(contentRef, result) {
 			var i,
 				signatures = result.signatures,
 				signaturesLength = signatures.length,
