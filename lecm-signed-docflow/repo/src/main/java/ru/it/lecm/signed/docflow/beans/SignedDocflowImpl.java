@@ -53,17 +53,12 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	private final static String BJ_MESSAGE_DOCUMENT_SIGN_LOAD = "#initiator загрузил подпись для файла: #mainobject к документу #object1.";
 	private final static String BJ_MESSAGE_CONTENT_SIGN_LOAD = "#initiator загрузил подпись для файла: #mainobject.";
 	private OrgstructureBean orgstructureService;
-	private UnicloudService unicloudService;
 	private BusinessJournalService businessJournalService;
 	private DocumentAttachmentsService documentAttachmentsService;
 	private VersionService versionService;
 	private ContentService contentService;
 	private BehaviourFilter behaviourFilter;
 	private LockService lockService;
-
-	public void setUnicloudService(UnicloudService unicloudService) {
-		this.unicloudService = unicloudService;
-	}
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
@@ -464,6 +459,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 			if (nodeService.getAspects(contentRef).contains(SignedDocflowModel.ASPECT_DOCFLOW_IDS)) {
 				nodeService.setProperty(contentRef, SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
+				nodeService.setProperty(contentRef, SignedDocflowModel.PROP_DOCFLOW_ID, docflowId);
 			} else {
 				Map<org.alfresco.service.namespace.QName, Serializable> properties = new HashMap<org.alfresco.service.namespace.QName, Serializable>();
 				properties.put(SignedDocflowModel.PROP_DOCUMENT_ID, documentId);

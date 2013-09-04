@@ -44,7 +44,6 @@ import ucloud.gate.proxy.DocumentContent;
 import ucloud.gate.proxy.DocumentInfo;
 import ucloud.gate.proxy.DocumentToSend;
 import ucloud.gate.proxy.EDocumentType;
-import ucloud.gate.proxy.ERelationFilter;
 import ucloud.gate.proxy.OperatorInfo;
 import ucloud.gate.proxy.WorkspaceFilter;
 import ucloud.gate.proxy.docflow.EDocflowTransactionType;
@@ -291,10 +290,7 @@ public class UnicloudService {
 		authHeaders.setOrganization((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_ORGANIZATION_ID));
 		authHeaders.setOperator((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_OPERATOR_CODE));
 		authHeaders.setToken((String)nodeService.getProperty(employeeRef, SignedDocflowModel.PROP_AUTH_TOKEN));
-		String docflowId = (String)nodeService.getProperty(contentRef, SignedDocflowModel.PROP_DOCFLOW_ID);
-		if (StringUtils.isEmpty(docflowId)) {
-			docflowId = UUID.randomUUID().toString();
-		}
+		String docflowId = UUID.randomUUID().toString(); //каждая отправка документа инициирует новый docflowID
 
 		SendDocumentData sendDocumentData = checkAuthenticationData(authHeaders, SendDocumentData.class);
 		if (sendDocumentData != null) {
@@ -383,7 +379,6 @@ public class UnicloudService {
 		String docflowId = (String)nodeService.getProperty(contentRef, SignedDocflowModel.PROP_DOCFLOW_ID);
 
 		WorkspaceFilter filter = new WorkspaceFilter();
-		filter.setRelation(ERelationFilter.INBOUND);
 		filter.setUnreadOnly(true);
 		Holder<ArrayOfDocflowInfoBase> docflows = new Holder<ArrayOfDocflowInfoBase>();
 		//добавляем аутентификационный заголовок
@@ -522,9 +517,6 @@ public class UnicloudService {
 				}
 			}
 		}
-//		logger.debug("Contractor {} has received {} documents", contractorRef, receiptNotifications.size());
-//		logger.debug("We received {} signed documents from contractor {}", recipientSignatures.size(), contractorRef);
-//		logger.debug("Contractor {} has rejected {} documents", contractorRef, rejectedSignatures.size());
 
 		//получаем непосредственно подписи по документам
 		List<DocumentContent> documents = new ArrayList<DocumentContent>();
