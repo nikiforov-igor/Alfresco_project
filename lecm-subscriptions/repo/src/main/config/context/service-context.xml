@@ -202,16 +202,4 @@
 			<ref bean="nodeService"/>
 		</property>
 	</bean>
-
-<!--
-	<bean id="subscribeTypeCategoryPolicy" class="ru.it.lecm.subscriptions.policy.TypeCategoryPolicy"
-		  init-method="init">
-		<property name="policyComponent">
-			<ref bean="policyComponent"/>
-		</property>
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-	</bean>
--->
-
-
 </beans>
