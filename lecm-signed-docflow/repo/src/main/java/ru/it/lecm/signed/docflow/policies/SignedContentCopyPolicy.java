@@ -43,7 +43,7 @@ public class SignedContentCopyPolicy implements OnCopyNodePolicy, OnCopyComplete
 		policyComponent.bindClassBehaviour(OnCopyNodePolicy.QNAME, ContentModel.TYPE_CONTENT,
 				new JavaBehaviour(this, "getCopyCallback"));
 		policyComponent.bindClassBehaviour(OnCopyCompletePolicy.QNAME, ContentModel.TYPE_CONTENT,
-				new JavaBehaviour(this, "onCopyComplete", NotificationFrequency.TRANSACTION_COMMIT));
+				new JavaBehaviour(this, "onCopyComplete"));
 	}
 
 	@Override
