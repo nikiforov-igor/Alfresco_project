@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>subscription</shortname>
-    <description>Return subscription folder</description>
-    <url>/lecm/subscription/api/getSubscription?nodeRef={nodeRef}</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-</webscript>
