@@ -107,8 +107,8 @@ public class ReceiveContentByEmailService extends BaseBean {
 						}
 						signatures.add(FileUtils.readFileToString(unzippedFile));
 					}
-					mailClient.moveMessageFromInbox(message, mailDestinationFolder);
 				}
+				mailClient.moveMessageFromInbox(message, mailDestinationFolder);
 			}
 		} catch (NoSuchProviderException ex) {
 			logger.error("Can not find mail provider", ex);
