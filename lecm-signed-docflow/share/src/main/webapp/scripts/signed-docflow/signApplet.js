@@ -235,6 +235,7 @@ var cryptoAppletModule = (function () {
 		currentContainer : certContainer,
 		startApplet : function() {
 			try{
+				signApplet.setConfig(config); //загрузка конфига "по-умолчанию"
 				loadConfig();
 			} catch(ex) {
 				console.log(ex);
