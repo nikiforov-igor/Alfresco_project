@@ -154,6 +154,15 @@ public class ParameterMapper {
 
 			dsDesc.getColumns().add(result);
 			result.getParameterValue().setBound1(value);
+		} else {
+			if ( value instanceof String && !Utils.isStringEmpty((String) value) )  {
+				result.getParameterValue().setBound1(value);
+			} else if ( value instanceof String[]) {
+ 				final String[] arr = (String[]) value;
+ 				if (arr.length > 0 && !Utils.isStringEmpty(arr[0]) )
+					result.getParameterValue().setBound1(arr[0]);
+			}
+
 		}
 		return result;
 	}

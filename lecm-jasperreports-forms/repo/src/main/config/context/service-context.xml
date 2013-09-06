@@ -178,11 +178,12 @@
 	  -->
 	<bean id="reportsManager"
 			class="ru.it.lecm.reports.beans.ReportsManagerImpl"
-	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportDAOBean, jasperReportGenerator"
+	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportDAOBean, jasperReportGenerator, mimetypeService"
 	 		init-method="init">
 		<!-- <property name="services" ref="wksKeeper"/> -->
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="namespaceService" ref="namespaceService"/>
+		<property name="mimeMap" ref="mimetypeService" />
 
 		<!-- хранилище отчётов редактора -->
 		<property name="reportDAO" ref="reportDAOBean"/>

@@ -150,7 +150,7 @@ public class ErrandsDocTreeDSProvider
 		}
 
 		/**
-		 * Прогрухка параметров из XML ...
+		 * Прогрузка параметров из XML ...
 		 * @param config
 		 */
 		public void scanTreeParams(JRDSConfigXML config) {

@@ -7,6 +7,7 @@ import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportType;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -136,4 +137,24 @@ public interface ReportsManager {
 	 * @return не NULL список [key=ReportType.Mnem -> value={ file_Extension + template_of_template}]
 	 */
 	ReportDefaultsDesc getReportDefaultsDesc(ReportType rtype);
+
+
+	/**
+	 * Содать отчёт
+	 * @param reportCode код отчёта
+	 * @param args параметры
+	 * @return
+	 * @throws IOException 
+	 */
+	ReportFileData generateReport( final String reportCode, Map<String, String[]> args) throws IOException;
+
+	/**
+	 * Сохранить данные в указанной папке репозитория.
+	 * Сохраняет как обычный дочерний "cm:content" c именем и содержанием файла.
+	 * Mime-тип будет определяться автоматом по расширению файла, если srcData.mimeType == null. 
+	 * @param srcData
+	 * @param destParentRef
+	 * @return созданный id узла
+	 */
+	NodeRef storeAsContent(ReportFileData srcData, NodeRef destParentRef);
 }

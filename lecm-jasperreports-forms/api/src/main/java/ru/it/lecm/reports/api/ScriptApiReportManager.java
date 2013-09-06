@@ -3,8 +3,6 @@ package ru.it.lecm.reports.api;
 import java.io.InputStream;
 import java.util.List;
 
-
-
 public interface ScriptApiReportManager {
 
 	/**
@@ -46,4 +44,5 @@ public interface ScriptApiReportManager {
 	 */
 	List<ReportInfo> getRegisteredReports(final String docType
 			, final String reportType);
+
 }

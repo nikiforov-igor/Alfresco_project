@@ -3,8 +3,6 @@ package ru.it.lecm.reports.api;
 import java.io.IOException;
 import java.util.Map;
 
-import org.springframework.extensions.webscripts.WebScriptResponse;
-
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 
@@ -12,7 +10,7 @@ public interface ReportGenerator {
 
 	/**
 	 * Построить отчёт по его мнемоническому названию и параметрам
-	 * @param webScriptResponse выходной ответ
+	 * @param result выходной ответ
 	 * @param reportDesc описатель отчёта (null, если нет описателя - "hardcoded report")
 	 * @param parameters параметры (обычно это request-параметры).
 	 * подразумевается что названия параметров в этом списке совпадают с мнемоникой
@@ -22,11 +20,12 @@ public interface ReportGenerator {
 	 * @param rptContent
 	 * @throws IOException
 	 */
-	void produceReport( WebScriptResponse webScriptResponse
+	void produceReport( ReportFileData result
 			, ReportDescriptor reportDesc
 			, Map<String, String[]> parameters
 			, ReportContentDAO rptContent
 	) throws IOException;
+
 
 	/**
 	 * Вызывается менеджером при получении нового шаблона отчёта, чтобы провайдер 

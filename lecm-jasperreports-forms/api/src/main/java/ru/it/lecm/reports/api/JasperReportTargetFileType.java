@@ -35,8 +35,8 @@ public enum JasperReportTargetFileType {
 	public String toString() {
 		return super.name()
 				+ "["
-					+ "mimeType=" + mimeType
-					+ ", extension=" + extension
+					+ "mimeType='" + mimeType
+					+ "', extension='" + extension + "'"
 				+ "]";
 	}
 

@@ -31,9 +31,9 @@ import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
+import ru.it.lecm.reports.api.ReportFileData;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
@@ -56,7 +56,7 @@ public class JasperReportGeneratorImpl
 	}
 
 	@Override
-	public void produceReport( WebScriptResponse webScriptResponse
+	public void produceReport( ReportFileData result
 			, ReportDescriptor reportDesc
 			, Map<String, String[]> parameters
 			, ReportContentDAO rptContent
@@ -72,7 +72,7 @@ public class JasperReportGeneratorImpl
 
 		final ContentReader reader = rptContent.loadContent( IdRContent.createId(reportDesc, reportFileName));
 
-		OutputStream outputStream = null;
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		InputStream stm = (reader != null) ? reader.getContentInputStream() : null;
 		try {
 			if (reader == null)
@@ -85,18 +85,22 @@ public class JasperReportGeneratorImpl
 			final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(stm);
 			IOUtils.closeQuietly(stm); stm = null; // сразу закроем поток отчёта
 
-			webScriptResponse.setContentType( String.format("%s;charset=UTF-8;filename=%s"
-							, target.getMimeType()
-							, generateReportResultFileName( reportDesc.getMnem(), target.getExtension()) 
-			));
-			outputStream = webScriptResponse.getOutputStream();
+			// webScriptResponse.setContentType( String.format( "%s;charset=UTF-8;filename=%s", target.getMimeType() , generateReportResultFileName( reportDesc.getMnem(), target.getExtension()) ));
+			// outputStream = webScriptResponse.getOutputStream();
 
-			/* создание Провайдера */
+			/* Создание Провайдера */
 			final String dataSourceClass = jasperReport.getProperty("dataSource");
 			final JRDataSourceProvider dsProvider = super.createDsProvider(reportDesc, dataSourceClass, parameters);
 
 			/* построение отчёта */ 
 			generateReport(target, outputStream, jasperReport, dsProvider, parameters);
+
+			result.setMimeType(target.getMimeType());
+			result.setFilename( generateReportResultFileName( reportDesc.getMnem(), target.getExtension()));
+			result.setEncoding("UTF-8");
+
+			outputStream.flush();
+			result.setData(outputStream.toByteArray());
 
 		} catch (Throwable e) { // (JRException e) {
 			final String msg = String.format( "Fail to build Jasper report '%s':\n\t%s", reportDesc.getMnem(), e);
@@ -141,7 +145,7 @@ public class JasperReportGeneratorImpl
 	 * @param extension расширения файла (с точкой): ".rtf"
 	 * @return уникальной имя файла (добавляется дата и время)
 	 */
-	static Object generateReportResultFileName(String name, String extension) {
+	static String generateReportResultFileName(String name, String extension) {
 		return String.format( "%s-%s%s"
 				, name
 				, new SimpleDateFormat(DEFAULT_FILENAME_DATE_SUFFIX).format(new Date())

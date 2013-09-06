@@ -2,7 +2,6 @@ package ru.it.lecm.reports.generators;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -15,12 +14,11 @@ import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
+import ru.it.lecm.reports.api.ReportFileData;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
@@ -303,7 +301,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 
 	@Override
 	public void produceReport(
-			WebScriptResponse webScriptResponse
+			ReportFileData buildResult
 			, ReportDescriptor reportDesc
 			, Map<String, String[]> parameters
 			, ReportContentDAO rptContent
@@ -332,7 +330,8 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 				throw new IOException( String.format("Report is missed - file '%s' not found", reportTemplateFileName ));
 		}
 
-		OutputStream outputStream = null;
+		// OutputStream outputStream = null;
+
 		File ooFile = null; // файл с шаблоном
 		File ooResultFile = null; // готовый файл с правильным расширением
 		try {
@@ -350,12 +349,12 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 				// отдельные параметры в запросе ...
 				// final Type1 arg1 = getArg1(parameters);
 
-				webScriptResponse.setContentType( String.format(
-						"%s;charset=UTF-8;filename=%s"
-						, target.getMimeType()
-						, reportResultFileName 
-						));
-				outputStream = webScriptResponse.getOutputStream();
+				// webScriptResponse.setContentType( String.format( "%s;charset=UTF-8;filename=%s", target.getMimeType(), reportResultFileName));
+				// outputStream = webScriptResponse.getOutputStream();
+				buildResult.setMimeType( target.getMimeType());
+				buildResult.setFilename(reportResultFileName);
+				buildResult.setEncoding("UTF-8");
+				buildResult.setData(null);
 				try {
 					/* создание Провайдера */
 					final String dataSourceClass = reportDesc.getProviderDescriptor().className(); // report.getProperty("dataSource");
@@ -364,15 +363,18 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 					/* построение отчёта */
 					final byte[] result = generateReport(ooFile, ooResultFile, target, reportDesc, dsProvider, parameters);
 					if (result != null)
-						IOUtils.write(result, outputStream);
+						// IOUtils.write(result, outputStream);
+						buildResult.setData(result);
 					else
 						logger.warn( String.format( "Report '%s' got empty result", reportDesc.getMnem()));
 
 				} finally {
+					/*
 					if (outputStream != null) {
 						outputStream.flush();
 						outputStream.close();
 					}
+					*/
 				} 
 			} finally {
 				if (ooResultFile != null)

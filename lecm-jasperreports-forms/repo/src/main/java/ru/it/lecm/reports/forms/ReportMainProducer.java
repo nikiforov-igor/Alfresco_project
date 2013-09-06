@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.forms;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,13 +13,9 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
-import ru.it.lecm.reports.api.ReportGenerator;
+import ru.it.lecm.reports.api.ReportFileData;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.beans.ReportBeansLocator;
-import ru.it.lecm.reports.beans.ReportsManagerImpl;
-import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 
 /**
@@ -47,7 +44,15 @@ public class ReportMainProducer extends AbstractWebScript {
 		this.reportsManager = reportsManager;
 	}
 
-	static Map<String, String[]> getRequestParameters( WebScriptRequest webScriptRequest
+	/**
+	 * Формирование карты параметров webScriptRequest в виде:
+	 *    ключ - название параметра, 
+	 *    значение - его строковое значение.
+	 * @param webScriptRequest
+	 * @param msg
+	 * @return
+	 */
+	public static Map<String, String[]> getRequestParameters( WebScriptRequest webScriptRequest
 			, final String msg) 
 	{
 		final Map<String, String[]> result = new HashMap<String, String[]>();
@@ -95,26 +100,21 @@ public class ReportMainProducer extends AbstractWebScript {
 		// локатору закинем текущее значение менеджера ...
 		ReportBeansLocator.setReportsManager(this.getReportsManager());
 
-		ReportDescriptor reportDesc = this.getReportsManager().getRegisteredReportDescriptor(reportName);
-		if (reportDesc == null) {
-			throw new RuntimeException( String.format("Report descriptor '%s' not accessible (possibly report is not registered !?)", reportName) );
+		final ReportFileData result = this.getReportsManager().generateReport(reportName, requestParameters);
+		if (result != null) {
+			webScriptResponse.setContentType(
+					String.format( "%s;charset=%s;filename=%s"
+							, result.getMimeType()
+							, result.getEncoding()
+							, result.getFilename() 
+							));
+			if (result.getData() != null) {
+				final OutputStream out = webScriptResponse.getOutputStream();
+				out.write( result.getData());
+				out.flush();
+				out.close();
+			}
 		}
-		// (!) клонирование Дескриптора, чтобы не трогать общий для всех дескриптор ...
-		reportDesc = Utils.clone( reportDesc);
-		final ReportContentDAO storage = this.getReportsManager().findContentDAO(reportDesc); 
-		if (storage == null) {
-			throw new RuntimeException( String.format("Report '%s' storage point is unknown (possibly report is not registered !?)", reportName) );
-		}
-		ParameterMapper.assignParameters( reportDesc, requestParameters);
-
-		// final String rtype = Utils.coalesce( templateParams.get("reporType"), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
-		final String rtype = Utils.coalesce( reportDesc.getReportType().getMnem(), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
-
-		// получение провайдера ...
-		final ReportGenerator reporter = this.getReportsManager().getReportGenerators().get(rtype);
-		if (reporter == null)
-			throw new RuntimeException( String.format("Unsupported report kind '%s': no provider registered", rtype));
-		reporter.produceReport( webScriptResponse, reportDesc, requestParameters, storage);
 	}
 
 	/**

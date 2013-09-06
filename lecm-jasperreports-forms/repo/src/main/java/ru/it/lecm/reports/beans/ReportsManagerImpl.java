@@ -1,32 +1,50 @@
 package ru.it.lecm.reports.beans;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.ContentReader;
+import org.alfresco.service.cmr.repository.ContentService;
+import org.alfresco.service.cmr.repository.ContentWriter;
+import org.alfresco.service.cmr.repository.MimetypeService;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ru.it.lecm.reports.api.ReportFileData;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
+import ru.it.lecm.reports.api.model.ReportFileDataImpl;
+import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.ContentEnumerator;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
-import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
-import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl;
+import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.*;
 
 public class ReportsManagerImpl implements ReportsManager {
 
@@ -54,9 +72,7 @@ public class ReportsManagerImpl implements ReportsManager {
 	private ReportContentDAO templateFileDAO; // файлы готовых макетов шаблонов (поставка для генерации шаблонов отчётов)
 	private ReportContentDAO contentRepositoryDAO; // файлы создаваемых отчётов как "cm:content" в репозитории
 
-	// private String defaultGenTemplate = DEFAULT_JRXMLFILENAME; // шаблон для генерации xml-шаблона отчёта
-	// private String defaultGenReportType = DEFAULT_REPORT_TYPE; // тип отчёта по-умолчанию
-	// private Map< /*ReportType*/ String, String> defaultTemplates; // список шаблонов по-умолчанию
+	private MimetypeService mimeMap; // для разменований расширений файлов в mime-типы 
 
 	// генераторы отчётов по типам
 	private Map< /*ReportType*/ String, ReportGenerator> reportGenerators;
@@ -110,6 +126,14 @@ public class ReportsManagerImpl implements ReportsManager {
 	public void setContentFileDAO(ReportContentDAO value) {
 		logger.debug(String.format( "contentFileDAO assigned: %s", value));
 		this.contentFileDAO = value;
+	}
+
+	public MimetypeService getMimeMap() {
+		return mimeMap;
+	}
+
+	public void setMimeMap(MimetypeService value) {
+		this.mimeMap = value;
 	}
 
 	/**
@@ -658,44 +682,88 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	@Override
 	public NodeRef produceDefaultTemplate(NodeRef reportRef) {
-        final ReportDescriptor desc = getReportDAO().getReportDescriptor(reportRef);
-        if (desc == null)
-            return null;
 
-        final byte[] content = generateReportTemplate(desc);
-        final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
+		final ReportDescriptor desc = getReportDAO().getReportDescriptor(reportRef);
+		if (desc == null)
+			return null;
 
-        final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		final ReportFileDataImpl templateFileData = new ReportFileDataImpl();
+		{
+			final byte[] contentBytes = generateReportTemplate(desc); // (!) ГЕНЕРАЦИЯ
+			templateFileData.setData(contentBytes);
+		}
 
-        { // формирование названия
-            final ReportDefaultsDesc def = getReportDefaultsDesc(desc.getReportType()); // умолчания для типа
-            final String ext = (def != null ? def.getFileExtension() : null);
-            String reportTemplateName = desc.getMnem() + (Utils.isStringEmpty(ext) ? ".txt" : ext); // ".jrxml", etc ...
+		{ // формирование названия
+			final ReportDefaultsDesc def = getReportDefaultsDesc(desc.getReportType()); // умолчания для типа
+			String extension = (def != null ? def.getFileExtension() : null);
+			if (Utils.isStringEmpty(extension)) 
+				extension = ".txt"; 
 
-            properties.put(ContentModel.PROP_NAME, reportTemplateName);
+			templateFileData.setEncoding("UTF-8");
+			templateFileData.setMimeType( findMimeType(extension));
 
-            final NodeRef templateFile = serviceRegistry.getNodeService().getChildByName(reportRef, ContentModel.ASSOC_CONTAINS, reportTemplateName);
-            if (templateFile != null) {
-                serviceRegistry.getNodeService().deleteNode(templateFile); // удаляем старый файл
-            }
-        }
+			final String reportTemplateName = desc.getMnem() + extension;
+			templateFileData.setFilename(reportTemplateName);
+		}
 
-        final ChildAssociationRef child =
-                serviceRegistry.getNodeService().createNode(reportRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
-        InputStream is = null;
-        NodeRef templateFileRef = child.getChildRef();
-        try {
-            ContentService contentService = serviceRegistry.getContentService();
-            is = new ByteArrayInputStream(content);
-            ContentWriter writer = contentService.getWriter(templateFileRef, ContentModel.PROP_CONTENT, true);
-            writer.setEncoding("UTF-8");
-            writer.setMimetype("text/xml");
-            writer.putContent(is);
-        } finally {
-            IOUtils.closeQuietly(is);
-        }
+		final NodeRef result = storeAsContent(templateFileData, reportRef);
 
-		return templateFileRef;
+		return result;
+	}
+
+	/**
+	 * Вернуть mime-тип по расширению.
+	 * @param extension расширение файла с точкой или без, т.е. вида ".abc" или "abc".
+	 * @return
+	 */
+	private String findMimeType(String extension) {
+		final String mimeType = (extension == null) 
+						? null 
+						: this.getMimeMap().getMimetype(extension.replace(".", ""));
+		return mimeType;
+	}
+
+	@Override
+	public NodeRef storeAsContent( final ReportFileData srcData, final NodeRef destParentRef) {
+
+		if (srcData == null)
+			return null;
+
+		final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
+		final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		{
+			properties.put(ContentModel.PROP_NAME, srcData.getFilename());
+			if (srcData.getFilename() != null) {
+				// предварительно удалим старый файл, если он имеется ...
+				final NodeRef prevFileNode = serviceRegistry.getNodeService().getChildByName(destParentRef, ContentModel.ASSOC_CONTAINS, srcData.getFilename());
+				if (prevFileNode != null) {
+					serviceRegistry.getNodeService().deleteNode(prevFileNode);  // удаляем старый файл
+				}
+			}
+		}
+
+		// создание нового узла ...
+		final ChildAssociationRef newChild =
+				serviceRegistry.getNodeService().createNode(destParentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
+		final NodeRef resultFileRef = newChild.getChildRef();
+		{
+			final ContentService contentService = serviceRegistry.getContentService();
+			final ContentWriter writer = contentService.getWriter(resultFileRef, ContentModel.PROP_CONTENT, true);
+			writer.setEncoding( srcData.getEncoding()); // "UTF-8"
+
+			String mimeType = srcData.getMimeType();
+			if (mimeType == null && srcData.getFilename() != null) { // autodetecting ...
+				mimeType = findMimeType( FilenameUtils.getExtension(srcData.getFilename()));
+			}
+			if (mimeType == null)
+				mimeType = "text/xml";
+			writer.setMimetype( mimeType);
+
+			if (srcData.getData() != null) {
+				writer.putContent(new ByteArrayInputStream(srcData.getData()));
+			}
+		}
+		return resultFileRef;
 	}
 
 	/**
@@ -762,6 +830,34 @@ public class ReportsManagerImpl implements ReportsManager {
 			// описатель имеется в стд файловом хранении ...
 			result = contentFileDAO;
 		}
+		return result;
+	}
+
+	@Override
+	public ReportFileData generateReport(String reportName,
+			Map<String, String[]> args) throws IOException 
+	{
+		ReportDescriptor reportDesc = this.getRegisteredReportDescriptor(reportName);
+		if (reportDesc == null)
+			throw new RuntimeException( String.format("Report descriptor '%s' not accessible (possibly report is not registered !?)", reportName) );
+
+		// (!) клонирование Дескриптора, чтобы не трогать общий для всех дескриптор ...
+		reportDesc = Utils.clone( reportDesc);
+		final ReportContentDAO storage = this.findContentDAO(reportDesc); 
+		if (storage == null)
+			throw new RuntimeException( String.format("Report '%s' storage point is unknown (possibly report is not registered !?)", reportName) );
+
+		ParameterMapper.assignParameters( reportDesc, args);
+
+		final String rtype = Utils.coalesce( reportDesc.getReportType().getMnem(), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
+
+		// получение провайдера ...
+		final ReportGenerator reporter = this.getReportGenerators().get(rtype);
+		if (reporter == null)
+			throw new RuntimeException( String.format("Unsupported report kind '%s': no provider registered", rtype));
+
+		final ReportFileData result = new ReportFileDataImpl();
+		reporter.produceReport( result, reportDesc, args, storage);
 		return result;
 	}
 
