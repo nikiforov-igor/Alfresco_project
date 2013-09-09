@@ -168,12 +168,12 @@
 			var divRefreshButton = new YAHOO.util.Element(this.id + "-refresh");
 			divRefreshButton.on("click", function() {
 				this.refreshSigns();
-				this.getSignsInfo();
+				//this.getSignsInfo();
 			}, null, this);
 		},
 
 		refreshSigns: function() {
-			cryptoAppletModule.CheckDocumentSignatures(this.options.signedContentRef);
+			CryptoApplet.updateSignsAction(this.options.signedContentRef, {successCallback: {fn: this.getSignsInfo, scope: this}});
 		},
 
 		getSignsInfo: function() {

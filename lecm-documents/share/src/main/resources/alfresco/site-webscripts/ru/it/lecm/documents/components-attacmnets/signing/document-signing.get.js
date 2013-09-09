@@ -38,8 +38,9 @@ function getDocument(nodeRef) {
 function getSigned(nodeRef) {
 	var result = null,
 		responseNative,
-		url = "/lecm/signed-docflow/getSignsInfo?signedContentRef=" + nodeRef,
-		response = remote.connect("alfresco").get(url);
+		url = "/lecm/signed-docflow/getSignsInfo",
+		jsonBody = jsonUtils.toJSONString([nodeRef]);
+		response = remote.connect("alfresco").post(url, jsonBody, 'application/json');
 
 	if (response.status == 200) {
 		responseNative = eval('(' + response + ')');

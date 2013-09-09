@@ -111,7 +111,6 @@
 								YAHOO.lang.later(2500, null, hideAndReload);
 								return;
 							}
-
 							if(unauthorized.length == 0) {
 								return;
 							}
@@ -139,16 +138,7 @@
 								},
 								doBeforeAjaxRequest: {
 									fn: function() {
-										var currentContainer = cryptoAppletModule.getCurrentContainer();
-
-										if(currentContainer == "") {
-											Alfresco.util.PopupManager.displayMessage({
-												text: "Вы не выбрали сертификат"
-											});
-										} else {
-											cryptoAppletModule.unicloudAuth(currentContainer, makeDataRequest);
-										}
-
+											CryptoApplet.unicloudAuth({successCallback: {fn: makeDataRequest, scope: this}});
 										return false;
 									}
 								},

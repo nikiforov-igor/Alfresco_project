@@ -1,17 +1,16 @@
 <#include "/org/alfresco/components/form/controls/common/utils.inc.ftl" />
 
 <#assign controlId = fieldHtmlId + "-cntrl">
-<script type="text/javascript">//<![CDATA[
-	    //cryptoAppletModule.deployApplet(true);
+<script type="text/javascript">
 		function getOptions() {
-			var infoStr = cryptoAppletModule.getCertsInfo();
+		    debugger;
 			var optsString = '';
 			
-			var infoStr = cryptoAppletModule.getCertsInfo();
+			var certs = CryptoApplet.getCerts();
 			var selectBox = document.getElementById('${fieldHtmlId}');
-			for (var i = 0; i < infoStr.length; i++) {
-				var container = infoStr[i].container;
-				var CN = infoStr[i].SubjectName;
+			for (var i = 0; i < certs.length; i++) {
+				var container = certs[i].getContainer();
+				var CN = certs[i].getOwner();
 				var opt = new Option(container + ': ' + CN, container);
 				if(container == '${field.value?string}'){
 					opt.selected = true;
@@ -19,15 +18,7 @@
 				selectBox.add(opt);
 			}
 		}
-		function afterLoad(){
-		if ( cryptoAppletModule ) {
-			cryptoAppletModule.startApplet();
-			getOptions();
-			
-		}
-	}
-	
-
+		YAHOO.util.Event.onAvailable('${controlId}', getOptions);
 </script>
 <#assign fieldValue=field.value>
 <div id="${controlId}" class="form-field">

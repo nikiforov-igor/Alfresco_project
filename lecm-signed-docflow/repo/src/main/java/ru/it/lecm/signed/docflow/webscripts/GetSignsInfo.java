@@ -44,13 +44,14 @@ public class GetSignsInfo extends DeclarativeWebScript {
 		JSONObject jsonResult;
 		JSONArray jsonArrayResult;
 		try {
-			String signedContentRefString = req.getParameter("signedContentRef");
-			List<String> signedContentStringList = Arrays.asList(signedContentRefString.split("!!!"));
-			List<NodeRef> signedContentList = new ArrayList<NodeRef>();
-			for (String string : signedContentStringList) {
-				signedContentList.add(new NodeRef(string));
-			}
+			JSONArray data = DeclarativeWebScriptHelper.getJsonArrayContent(content);
 
+			List<NodeRef> signedContentList = new ArrayList<NodeRef>();
+			
+			for(int i = 0; i < data.length(); i++){
+				signedContentList.add(new NodeRef(data.getString(i)));
+			}
+			
 			jsonArrayResult = new JSONArray();
 
 			Map<NodeRef, List<Signature>> signatures = signedDocflowService.getSignaturesInfo(signedContentList);

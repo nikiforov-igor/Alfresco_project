@@ -3,8 +3,6 @@
 
 <script type="text/javascript">//<![CDATA[
 
-//cryptoAppletModule.deployApplet(false);
-
 function onButtonClick(){
 	var certBox = document.getElementById('${fieldHtmlId}');
 	try {
@@ -16,8 +14,8 @@ function onButtonClick(){
 }
 
 function onReady() {
-var loadCertButton = new YAHOO.widget.Button("${fieldHtmlId}-cert-button");
-loadCertButton.on("click", onButtonClick);
+	var loadCertButton = new YAHOO.widget.Button("${fieldHtmlId}-cert-button");
+	loadCertButton.on("click", onButtonClick);
 }
 
 YAHOO.util.Event.onAvailable("${fieldHtmlId}-cert-button", this.onReady, this);

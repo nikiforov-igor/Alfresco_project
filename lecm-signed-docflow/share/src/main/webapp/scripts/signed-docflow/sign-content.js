@@ -91,65 +91,70 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onSignDocument: function(event) {
-			cryptoAppletModule.Sign(this.options.nodeRef);
+			CryptoApplet.signAction(this.options.nodeRef);
 		},
 
 		onRefreshSignatures: function(event) {
-			cryptoAppletModule.CheckContentSignature(this.options.nodeRef);
-			this.onViewSignature(event);
+			CryptoApplet.updateSignsAction(this.options.nodeRef, {successCallback: {fn: this.onViewSignature, scope: this}});
 		},
 
 		onUploadSignature: function(event) {
-			cryptoAppletModule.loadSign(this.options.nodeRef);
+			CryptoApplet.loadSignAction(this.options.nodeRef);
 		},
 
 		onSendDocument: function() {
-			var form = new Alfresco.module.SimpleDialog(this.id + "-send-to-contractor-form");
+			var checkOptions = {};
 
-			form.setOptions({
-				width: "50em",
-				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-				templateRequestParams: {
-					itemKind: "type",
-					itemId: "lecm-contractor:contractor-type",
-					mode: "create",
-					submitType: "json",
-					showCancelButton: "true",
-					formId: "send-to-contractor"
-				},
-				destroyOnHide: true,
-				contentRef: this.options.nodeRef,
-				doBeforeDialogShow:{
-					fn: function(form, dialog) {
-						dialog.dialog.setHeader("Отправка контрагенту");
+			function showForm() {
+				var form = new Alfresco.module.SimpleDialog(this.id + "-send-to-contractor-form");
+
+				form.setOptions({
+					width: "50em",
+					templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+					templateRequestParams: {
+						itemKind: "type",
+						itemId: "lecm-contractor:contractor-type",
+						mode: "create",
+						submitType: "json",
+						showCancelButton: "true",
+						formId: "send-to-contractor"
+					},
+					destroyOnHide: true,
+					contentRef: this.options.nodeRef,
+					doBeforeDialogShow:{
+						fn: function(form, dialog) {
+							dialog.dialog.setHeader("Отправка контрагенту");
+						}
+					},
+					onFailure: {
+						fn: function() {
+							Alfresco.util.PopupManager.displayMessage({
+								text: "Не удалось получить форму отправки, попробуйте ещё раз"
+							});
+						}
 					}
-				},
-				onFailure: {
-					fn: function() {
-						Alfresco.util.PopupManager.displayMessage({
-							text: "Не удалось получить форму отправки, попробуйте ещё раз"
-						});
-					}
-				}
-			});
+				});
 
-			form.show();
-			// 1. Вызов формы отправки КА
-			// 2. UC Service
+				form.show();
+			};
 
-			//cryptoAppletModule.SendToContragent(this.options.nodeRef);
+			checkOptions.successCallback = {};
+			checkOptions.successCallback.fn = showForm;
+			checkOptions.successCallback.scope = this;
+
+			CryptoApplet.CheckSignaturesByNodeRefList(this.options.nodeRef, checkOptions);
 
 		},
 
 		onSignaturesReceived: function(event) {
-			cryptoAppletModule.CheckContentSignature(this.options.nodeRef);
-			this.onViewSignature(event);
+			CryptoApplet.updateSignsAction(this.options.nodeRef, {successCallback: {fn: this.onViewSignature, scope: this}});
+
 		},
 
-		_bindAjaxTo: function ContentSigning_bindAjaxTo(method, url, dataObj, scope, signatureHandler) {
+		_bindAjaxTo: function ContentSigning_bindAjaxTo(method, url, dataObj) {
 			var id = this.newId,
 				contentRef = this.options.nodeRef;
-			return function makeDataRequest() {
+			return function makeDataRequest(signatureHandler) {
 
 				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
 					text: "Пожалуйста, подождите, запрашиваются подписи контрагента",
@@ -172,7 +177,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 							function hideAndReload() {
 								loadingPopup.destroy();
-//								window.location.reload();
+								window.location.reload();
 							}
 
 							loadingPopup.destroy();
@@ -190,7 +195,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								YAHOO.lang.later(2500, null, hideAndReload);
 
 								if(YAHOO.lang.isFunction(signatureHandler)) {
-									signatureHandler.call(scope || window, contentRef, result);
+									signatureHandler(contentRef, result.signatures);
 								}
 
 								return;
@@ -220,16 +225,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 									},
 									doBeforeAjaxRequest: {
 										fn: function() {
-											var currentContainer = cryptoAppletModule.getCurrentContainer();
-
-											if(currentContainer == "") {
-												Alfresco.util.PopupManager.displayMessage({
-													text: "Вы не выбрали сертификат"
-												});
-											} else {
-												cryptoAppletModule.unicloudAuth(currentContainer, makeDataRequest);
-											}
-
+												CryptoApplet.unicloudAuth({successCallback: {fn: makeDataRequest, scope: this}});
 											return false;
 										}
 									},
@@ -264,19 +260,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			};
 		},
 
-		_loadSignaturesToRepo: function(contentRef, result) {
+		_loadSignaturesToRepo: function(contentRef, signatures) {
 			var i,
-				signatures = result.signatures,
-				signaturesLength = signatures.length,
-				iReadState = YAHOO.util.Dom.get(this.id + "-readState").getElementsByTagName("i")[0],
-				iReadStateElem = new YAHOO.util.Element(iReadState),
-				spanReceivedCount = YAHOO.util.Dom.get(this.id + "-receivedCount");
-
-			spanReceivedCount.innerHTML = signaturesLength;
-			iReadStateElem.addClass(result.isRead ? "icon-ok" : "icon-remove");
-
-			for(i = 0; i < signaturesLength; i++) {
-				cryptoAppletModule.loadSignFromString(signatures[i], contentRef);
+				size = signatures.length;
+			for(i = 0; i < size; ++i) {
+				CryptoApplet.loadSignFromString(contentRef, signatures[i]);
 			}
 		},
 
@@ -293,8 +281,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						nodeRef: this.options.nodeRef
 					});
 
-				makeDataRequest = this._bindAjaxTo("GET", url, {}, this, this._loadSignaturesToRepo);
-				makeDataRequest();
+				makeDataRequest = this._bindAjaxTo("GET", url, {});
+				makeDataRequest(this._loadSignaturesToRepo);
 			} else {
 				Alfresco.util.PopupManager.displayPrompt({
 					title: "Ошибка при получении подписей документа от контрагента",

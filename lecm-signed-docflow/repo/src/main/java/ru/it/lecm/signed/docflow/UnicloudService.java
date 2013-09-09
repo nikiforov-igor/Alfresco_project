@@ -395,17 +395,13 @@ public class UnicloudService {
 			contractorDocflows = new ArrayList<DocflowInfoBase>();
 			if (EResponseType.OK == gateResponse.value.getResponseType()) {
 				List<DocflowInfoBase> docflowInfoBases = docflows.value.getDocflowInfoBases();
-				ArrayOfguid readDocflows = new ArrayOfguid();
 				for (DocflowInfoBase docflowInfoBase : docflowInfoBases) {
 					String contractorDocflowId = docflowInfoBase.getDocflowId();
 
 					if (docflowId.equals(contractorDocflowId)) {
 						contractorDocflows.add(docflowInfoBase);
-						readDocflows.getGuids().add(docflowInfoBase.getDocflowId());
 					}
 				}
-				//отмечаем как прочитанные
-				markDocflowsAsRead(authHeaders, readDocflows);
 			} else {
 				Utils.logGateResponse(gateResponse, logger);
 			}
@@ -494,11 +490,15 @@ public class UnicloudService {
 		Holder<GateResponse> gateResponse = new Holder<GateResponse>();
 		List<DocflowInfoBase> docflows = getContractorDocflows(authHeaders, contentRef, gateResponse);
 		//бежим по свежепрочитанным docflow и достаем их них DocumentInfo
+		//а также строим список docflows которые будут отмечены как прочитанные
+		ArrayOfguid readDocflows = new ArrayOfguid();
 		List<DocumentInfo> receiptNotifications = new ArrayList<DocumentInfo>();
 		List<DocumentInfo> recipientSignatures = new ArrayList<DocumentInfo>();
 		List<DocumentInfo> rejectedSignatures = new ArrayList<DocumentInfo>();
 		for(DocflowInfoBase docflow : docflows) {
-			List<DocumentInfo> documentInfos = getContractorDocumentInfos(authHeaders, docflow.getDocflowId(), gateResponse);
+			String docflowId = docflow.getDocflowId();
+			readDocflows.getGuids().add(docflowId);
+			List<DocumentInfo> documentInfos = getContractorDocumentInfos(authHeaders, docflowId, gateResponse);
 			logger.debug("docflow type = {}", docflow.getType());
 			for(DocumentInfo documentInfo : documentInfos) {
 				EDocumentType documentType = documentInfo.getDocumentType();
@@ -524,6 +524,9 @@ public class UnicloudService {
 			DocumentContent document = getContractorDocument(authHeaders, documentInfo.getDocumentId(), gateResponse);
 			documents.add(document);
 		}
+
+		//отмечаем как прочитанные
+		markDocflowsAsRead(authHeaders, readDocflows);
 
 		//вычленяем из списка документов подписи
 		receiveDocumentData.setIsRead(!receiptNotifications.isEmpty());

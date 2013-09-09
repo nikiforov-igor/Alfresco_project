@@ -94,15 +94,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onSignDocument: function(event) {
-			cryptoAppletModule.Sign(this.options.nodeRef, this.checkSigned, this);
+			CryptoApplet.signAction(this.options.nodeRef, {successCallback: {fn: this.checkSigned, scope: this}});
 		},
 
-		checkSigned: function(scope){
-			var checkbox = document.getElementById(scope.id + '-signableSwitch');
+		checkSigned: function(){
+			var checkbox = document.getElementById(this.id + '-signableSwitch');
 
-			Alfresco.util.Ajax.request({
-				method: "GET",
-				url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/getSignsInfo?signedContentRef=" + scope.options.nodeRef,
+			Alfresco.util.Ajax.jsonRequest({
+				method: "POST",
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/getSignsInfo",
+				dataObj: [this.options.nodeRef],
 				failureCallback: {
 					fn: function(response) {
 						Alfresco.util.PopupManager.displayMessage({
@@ -123,12 +124,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onRefreshSignatures: function(event) {
-			cryptoAppletModule.CheckContentSignature(this.options.nodeRef);
-			this.onViewSignature(event);
+			CryptoApplet.updateSignsAction(this.options.nodeRef, {successCallback: {fn: this.onViewSignature, scope: this}});
 		},
 
 		onUploadSignature: function(event) {
-			cryptoAppletModule.loadSign(this.options.nodeRef, this.checkSigned, this);
+			CryptoApplet.loadSignAction(this.options.nodeRef, {successCallback: {fn: this.checkSigned, scope: this}});
 		},
 
 		onSignableSwitch: function(event) {
@@ -169,39 +169,129 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 		},
 
-		onSendDocument: function(event) {
-			Alfresco.util.PopupManager.displayMessage({
-				text: "Отправка документа контрагенту"
-			});
-			cryptoAppletModule.SendToContragent(this.options.nodeRef);
-			//проверка всех наших подписей на валидность
-			//если хоть одна из наших подписей невалидна
-			//то ничего никуда не отправляем
+		bindAjaxSendDocument: function(dataObj) {
+			return function makeDataRequest() {
 
-			//вызываем сервис, который отправит документ контрагенту
-			//this.options.nodeRef это NodeRef на наше вложение
-			// Alfresco.util.Ajax.jsonRequest({
-			// 	method: "POST",
-			// 	url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/sendContentToPartner",
-			// 	dataObj: {
-			// 		content:[this.options.nodeRef]
-			// 	},
-			// 	failureMessage: this.msg("message.sending.attachment.failure"),
-			// 	successCallback: {
-			// 		fn: function(response) {
-			// 			//смотрим какой ответ пришел нам с сервера
-			// 			//если все хорошо, то выводим сообщение что все хорошо
-			// 			//если response.json.gateResponse.responseType != OK то надо пойти в сценарий повторной авторизации
-			// 			//и выполнить действие заново
-			// 		},
-			// 		scope: this
-			// 	}
-			// });
+				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
+					text: "Пожалуйста, подождите, документ отправляется",
+					spanClass: "wait",
+					displayTime: 0,
+					modal: true
+				});
+
+				loadingPopup.center();
+
+				Alfresco.util.Ajax.jsonRequest({
+					method: "POST",
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/signed-docflow/sendContentToPartner",
+					dataObj: dataObj,
+					successCallback: {
+						fn: function(response) {
+							var message,
+								authSimpleDialog,
+
+								responses = response.json,
+
+								good = responses.filter(function(v) { return v.gateResponse.responseType == "OK"; }),
+								bad = responses.filter(function(v) { return v.gateResponse.responseType != "OK"; }),
+								partner = responses.filter(function(v) { return v.gateResponse.responseType == "PARTNER_ERROR"; }),
+								unauthorized = responses.filter(function(v) { return v.gateResponse.responseType == "UNAUTHORIZED"; });
+
+							function hideAndReload() {
+								loadingPopup.destroy();
+								window.location.reload();
+							}
+
+							loadingPopup.destroy();
+
+							console.log(">>> Всего отправлено документов: " + responses.length);
+							console.log("Документов, со статусом \"ОК\": " + good.length);
+							console.log("Документов, со статусом отличным от \"OK\": " + bad.length);
+							console.log("Документов, со статусом \"PARTNER_ERROR\": " + partner.length);
+
+							// Выходим, если всё хорошо
+							if(good.length == responses.length) {
+								message = (responses.length > 1) ? "Документы успешно отправлены" : "Документ успешно отправлен";
+								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
+								YAHOO.lang.later(2500, null, hideAndReload);
+								return;
+							}
+							if(unauthorized.length == 0) {
+								return;
+							}
+
+							// Показываем форму авторизации, в ином случае
+							authSimpleDialog = new Alfresco.module.SimpleDialog("${htmlId}-auth-form");
+
+							authSimpleDialog.setOptions({
+								width: "50em",
+								templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+								templateRequestParams: {
+									itemKind: "type",
+									itemId: "lecm-orgstr:employees",
+									formId: "auth-form",
+									mode: "create",
+									showCancelButton: "true",
+									submitType: "json"
+								},
+								actionUrl: null,
+								destroyOnHide: true,
+								doBeforeDialogShow:{
+									fn: function(form, simpleDialog) {
+										simpleDialog.dialog.setHeader("Необходима аутентификация, выберите сертификат");
+									}
+								},
+								doBeforeAjaxRequest: {
+									fn: function() {
+											CryptoApplet.unicloudAuth({successCallback: {fn: makeDataRequest, scope: this}});
+										return false;
+									}
+								},
+								onFailure: {
+									fn: function() {
+										Alfresco.util.PopupManager.displayMessage({
+											text: "Не удалось открыть форму аутентификации, попробуйте ещё раз"
+										});
+									}
+								}
+							});
+
+							authSimpleDialog.show();
+						}
+					},
+					failureCallback: {
+						fn: function() {
+							loadingPopup.destroy();
+							Alfresco.util.PopupManager.displayMessage({
+								text: "Не удалось отправить документ(ы)"
+							});
+						}
+					}
+				});
+			}
+		},
+
+		onSendDocument: function(event) {
+			var checkOptions = {};
+
+			function sendDocuments(nodeRef){
+				var dataObj = {
+					content: nodeRef
+				};
+
+				this.bindAjaxSendDocument(dataObj)();
+			};
+
+			checkOptions.successCallback = {};
+			checkOptions.successCallback.fn = sendDocuments;
+			checkOptions.successCallback.scope = this;
+
+			CryptoApplet.CheckSignaturesByNodeRefList(this.options.nodeRef, checkOptions);
+
 		},
 
 		onSignaturesReceived: function(event) {
-			cryptoAppletModule.CheckContentSignature(this.options.nodeRef);
-			this.onViewSignature(event);
+			CryptoApplet.updateSignsAction(this.options.nodeRef, {successCallback: {fn: this.onViewSignature, scope: this}});
 		},
 
 		_bindAjaxTo: function ContentSigning_bindAjaxTo(method, url, dataObj, scope, signatureHandler) {
@@ -256,6 +346,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 							if(result.gateResponse.responseType == "UNAUTHORIZED") {
 								// Показываем форму авторизации, в ином случае
+								
+
 								authSimpleDialog = new Alfresco.module.SimpleDialog(id + "-auth-form");
 
 								authSimpleDialog.setOptions({
@@ -278,16 +370,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 									},
 									doBeforeAjaxRequest: {
 										fn: function() {
-											var currentContainer = cryptoAppletModule.getCurrentContainer();
-
-											if(currentContainer == "") {
-												Alfresco.util.PopupManager.displayMessage({
-													text: "Вы не выбрали сертификат"
-												});
-											} else {
-												cryptoAppletModule.unicloudAuth(currentContainer, makeDataRequest);
-											}
-
+												CryptoApplet.unicloudAuth({successCallback:{fn: makeDataRequest, scope: this}});
 											return false;
 										}
 									},
@@ -334,7 +417,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			iReadStateElem.addClass(result.isRead ? "icon-ok" : "icon-remove");
 
 			for(i = 0; i < signaturesLength; i++) {
-				cryptoAppletModule.loadSignFromString(signatures[i], contentRef);
+				CryptoApplet.loadSignFromString(contentRef, signatures[i]);
 			}
 		},
 

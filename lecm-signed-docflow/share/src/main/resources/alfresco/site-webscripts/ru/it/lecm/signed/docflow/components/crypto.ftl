@@ -4,9 +4,8 @@
 <#macro initApplet>
 <script type="text/javascript">
 	function afterLoad(){
-		if ( cryptoAppletModule ) {
-			cryptoAppletModule.startApplet();
-		}
+		CryptoApplet = new LogicECM.CryptoApplet('crypto-applet-module');
+		CryptoApplet.onReady();
 	}
 </script>
 <applet codebase="/share/scripts/signed-docflow"

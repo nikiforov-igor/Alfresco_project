@@ -21,20 +21,11 @@
 		var data = [];
 		var CurrentContainer = '';
 
-		var infoStr = cryptoAppletModule.getCertsInfo();
-        for (var i = 0; i < infoStr.length; i++) {
+		var certs = CryptoApplet.getCerts();
+        for (var i = 0; i < certs.length; i++) {
             data[i] = {};
-            var CN = infoStr[i].SubjectName;
-            var container = infoStr[i].container;
-            var organization = infoStr[i].Organization;
-            var orgUnit = infoStr[i].OrgUnit;
-            if (CN)
-                data[i].text = '<strong>' + CN + '</strong>';
-            if (organization)
-                data[i].text += '<br/>' + organization;
-            if (orgUnit)
-                data[i].text += '<br/>' + orgUnit;
-            data[i].value = container;
+            data[i].text = certs[i].getHumanReadable();
+			data[i].value = i;
         }
 
 		var certsList = new Button({
@@ -51,9 +42,8 @@
 
     var onSelectedMenuItemChange = function(event) {
         var oMenuItem = event.newValue;
-        CurrentContainer = event.newValue.value;
-		cryptoAppletModule.setCurrentContainer(event.newValue.value);
-        cryptoAppletModule.reConfigCert(CurrentContainer);
+        CurrentContainerIndex = event.newValue.value;
+		CryptoApplet.setCurrentSigningCert(certs[CurrentContainerIndex]);
         this.set("label", (oMenuItem.cfg.getProperty("text")));
     };
     certsList.on("selectedMenuItemChange", onSelectedMenuItemChange);
