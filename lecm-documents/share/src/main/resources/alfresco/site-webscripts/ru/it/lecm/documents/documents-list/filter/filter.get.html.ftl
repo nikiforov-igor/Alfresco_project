@@ -41,11 +41,13 @@
     <script type="text/javascript">//<![CDATA[
     (function () {
 
+        var currentFormId = "${formId!""}";
+
         function createRow(group) {
             var div = document.createElement('div');
             div.setAttribute('class', 'text-cropped');
 
-            if ("${formId!""}" == group.key || "${formId!""}" == group.id) {
+            if (currentFormId == group.key || currentFormId == group.id) {
                 Dom.addClass(div, "selected");
             }
             return div;
@@ -57,7 +59,7 @@
                         url:Alfresco.constants.PROXY_URI_RELATIVE  + "lecm/documents/summary",
                         dataObj:{
                             docType:"${args.itemType}",
-                            archive: false,
+                            archive: ("${args.archiveDocs!"false"}" == "true"),
                             considerFilter: location.hash.replace(/#(\w+)=/, "")
                         },
                         successCallback:{
@@ -79,7 +81,27 @@
                                             ref.innerHTML = filter.key;
                                             ref.setAttribute('class', 'status-button');
                                             YAHOO.util.Event.on(ref, 'click', function(ev) {
-                                                LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=' + String(this.filter) + '&formId=' + this.key, true);
+                                                currentFormId = this.key;
+
+                                                LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=' + String(this.filter) + '&formId=' + this.key, false);
+
+                                                var filterStr = _generatePropertyFilterStr(String(this.filter), "${args.filterProperty!'lecm-statemachine:status'}");
+                                                var archiveFolders = _generatePathsFilterStr(LogicECM.module.Documents.SETTINGS.archivePath);
+
+                                                var formId = (("datagrid_" + this.key).split(" ").join("_"));
+
+                                                YAHOO.Bubbling.fire ("reСreateDatagrid", {
+                                                    datagridMeta: {
+                                                        datagridFormId: formId,
+                                                        searchConfig: {
+                                                            filter: (filterStr.length > 0 ?  filterStr + " AND " : "")
+                                                                    + '(PATH:"' + LogicECM.module.Documents.SETTINGS.draftPath + '//*"'
+                                                                    + ' OR PATH:"' + LogicECM.module.Documents.SETTINGS.documentPath + '//*"'
+                                                                    + ((archiveFolders.length > 0)? (" OR " + archiveFolders + "") : "") + ')'
+                                                        }
+                                                    },
+                                                    bubblingLabel: "${args.gridBubblingLabel!''}"
+                                                });
                                             }.bind(filter));
 
                                             div.appendChild(ref);
@@ -107,8 +129,8 @@
                         url:Alfresco.constants.PROXY_URI_RELATIVE + "lecm/statemachine/getStatuses",
                         dataObj:{
                             docType:"${args.itemType}",
-                            active: true,
-                            final: false
+                            active: !("${args.archiveDocs!"false"}" == "true"),
+                            final: ("${args.archiveDocs!"false"}" == "true")
                         },
                         successCallback:{
                             fn:function(response){
@@ -126,7 +148,33 @@
                                         ref.innerHTML = status.id;
                                         ref.setAttribute('class', 'status-button text-broken');
                                         YAHOO.util.Event.on(ref, 'click', function(ev) {
-                                            LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=' + this.id + '&formId=' + this.id, true);
+                                            currentFormId = this.id;
+
+                                            LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=' + this.id + '&formId=' + this.id, false);
+
+                                            var filterStr = _generatePropertyFilterStr(String(this.id), "${args.filterProperty!'lecm-statemachine:status'}");
+                                            var archiveFolders = _generatePathsFilterStr(LogicECM.module.Documents.SETTINGS.archivePath);
+
+                                            var formId = "datagrid_" + this.id;
+
+                                            var statusesFilter = "";
+                                            <#if args.includedStatuses?? && (args.includedStatuses?length > 0)>
+                                                statusesFilter = _generatePropertyFilterStr ("${args.includedStatuses}", "lecm-statemachine:status");
+                                            </#if>
+
+                                            YAHOO.Bubbling.fire ("reСreateDatagrid", {
+                                                datagridMeta: {
+                                                    datagridFormId: formId,
+                                                    searchConfig: {
+                                                        filter: (filterStr.length > 0 ?  filterStr + " AND " : "")
+                                                                + '(PATH:"' + LogicECM.module.Documents.SETTINGS.draftPath + '//*"'
+                                                                + ' OR PATH:"' + LogicECM.module.Documents.SETTINGS.documentPath + '//*"'
+                                                                + ((archiveFolders.length > 0)? (" OR " + archiveFolders + "") : "") + ')'
+                                                                + (statusesFilter.length > 0 ? ' AND ' + statusesFilter : '')
+                                                    }
+                                                },
+                                                bubblingLabel: "${args.gridBubblingLabel!''}"
+                                            });
                                         }.bind(status));
 
                                         div.appendChild(ref);
@@ -143,8 +191,8 @@
 	    function updateView(layer, args) {
 		    var gridBublingLabel = "${args.gridBubblingLabel!''}";
 		    if (gridBublingLabel.length == 0 || gridBublingLabel == args[1].bubblingLabel) {
-			    getFilters();
-			    getStatuses();
+			    getFilters(false);
+			    getStatuses(false);
 		    }
 	    }
 

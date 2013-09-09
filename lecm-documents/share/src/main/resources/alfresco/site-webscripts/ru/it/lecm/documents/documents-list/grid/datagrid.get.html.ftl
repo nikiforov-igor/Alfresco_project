@@ -45,8 +45,8 @@
 
                 var query = <#if query?? && (query?length > 0)>"${query}"<#else>""</#if>;
 
-                var filter = _generateFilterStr(query.length > 0 ? query : LogicECM.module.Documents.FILTER , "${filterProperty}");
-                var archiveFolders = _generateArchiveFoldersStr(LogicECM.module.Documents.SETTINGS.archivePath);
+                var filter = _generatePropertyFilterStr(query.length > 0 ? query : LogicECM.module.Documents.FILTER , "${filterProperty}");
+                var archiveFolders = _generatePathsFilterStr(LogicECM.module.Documents.SETTINGS.archivePath);
 
                 var formId = <#if formId?? && (formId?length > 0)>
                                 (("_" + "${formId}").split(" ").join("_"))
@@ -56,7 +56,7 @@
 
                 var statusesFilter = "";
                 <#if includedStatuses?? && (includedStatuses?length > 0)>
-                    statusesFilter = _generateFilterStr ("${includedStatuses}", "lecm-statemachine:status");
+                    statusesFilter = _generatePropertyFilterStr ("${includedStatuses}", "lecm-statemachine:status");
                 </#if>
                 YAHOO.util.Event.onContentReady ('${id}', function () {
                     YAHOO.Bubbling.fire ("activeGridChanged", {
@@ -86,45 +86,6 @@
 			function init() {
 				createDatagrid();
 			}
-
-            function _generateFilterStr(filter, property) {
-                if ((filter && filter.length > 0) && (property && property.length > 0)) {
-                    var re = /\s*,\s*/;
-                    var values = filter.split(re);
-                    var shieldProp = property.split("-").join("\\-");
-                    var resultFilter = "";
-                    var notFilter = "";
-                    for (var i = 0; i < values.length; i++) {
-                        var value = values[i];
-                        if (value.indexOf("!") != 0) {
-                            resultFilter += "@" + shieldProp + ":\'" + value + "\' ";
-                        } else {
-                            value = value.replace("!","");
-                            notFilter += "@" + shieldProp + ":\'" + value + "\' ";
-                        }
-
-                    }
-                    return (resultFilter.length > 0 ? "(" + resultFilter + ")" : "")
-                            + (resultFilter.length > 0 && notFilter.length > 0 ? " AND " : "")
-                            + (notFilter.length > 0 ? "NOT (" + notFilter + ")" : "");
-                }
-                return "";
-            }
-
-            function _generateArchiveFoldersStr(paths) {
-                if (paths) {
-                    var archPaths = paths.split(",");
-                    var result = "";
-                    for (var i = 0; i < archPaths.length; i++) {
-                        if (result.length > 0) {
-                            result += " OR ";
-                        }
-                        result += 'PATH:"' + archPaths[i] + '//*"' ;
-                    }
-                    return result;
-                }
-                return "";
-            }
 
 			YAHOO.util.Event.onDOMReady(init);
 			//]]></script>

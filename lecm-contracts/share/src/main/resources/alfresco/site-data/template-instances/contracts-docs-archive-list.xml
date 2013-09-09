@@ -45,6 +45,7 @@
             <properties>
                 <active>false</active>
 	            <gridBubblingLabel>contracts-documents</gridBubblingLabel>
+                <includedStatuses>Отменен, Аннулирован, Исполнен</includedStatuses>
             </properties>
         </component>
         <!-- Filter -->

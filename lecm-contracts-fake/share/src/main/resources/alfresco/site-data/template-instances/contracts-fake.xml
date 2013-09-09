@@ -53,6 +53,7 @@
             <properties>
                 <itemType>lecm-contract-fake:document</itemType>
                 <linkPage>contracts-fake</linkPage>
+                <filterProperty>lecm-statemachine:status</filterProperty>
             </properties>
         </component>
         <!-- Forbidden -->

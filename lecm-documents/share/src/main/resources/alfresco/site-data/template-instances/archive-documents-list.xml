@@ -41,11 +41,13 @@
         <!-- Filter -->
         <component>
             <region-id>documents-filter</region-id>
-            <url>/lecm/documents/archive-documents-list-filter</url>
+            <url>/lecm/documents/documents-list-filter</url>
             <properties>
                 <itemType>{doctype}</itemType>
                 <linkPage>archive-documents-list</linkPage>
 	            <gridBubblingLabel>archive-documents-list</gridBubblingLabel>
+                <filterProperty>lecm-statemachine:status</filterProperty>
+                <archiveDocs>true</archiveDocs>
             </properties>
         </component>
         <!-- Filter -->

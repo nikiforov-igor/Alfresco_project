@@ -1,1 +1,0 @@
-<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/documents-list-filter.css" />

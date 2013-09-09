@@ -51,11 +51,12 @@
         <!-- Statuses Filter -->
         <component>
             <region-id>documents-filter</region-id>
-            <url>/lecm/documents/archive-documents-list-filter</url>
+            <url>/lecm/documents/documents-list-filter</url>
             <properties>
                 <itemType>lecm-errands:document</itemType>
                 <linkPage>errands-archive-list</linkPage>
 	            <gridBubblingLabel>errands</gridBubblingLabel>
+                <archiveDocs>true</archiveDocs>
             </properties>
         </component>
         <!-- Filters -->

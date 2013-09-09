@@ -3,26 +3,37 @@
     <#assign query = page.url.args.query/>
 </#if>
 <#assign statusesFilterKey = 'documents-list-statuses-filter'/>
+<script type="text/javascript">//<![CDATA[
+    var currentFormId = "${query!""}";
 
-<div id="contracts-filters" class="contracts-filter-panel">
-    <div class="contracts-filters-block">
-        <div id="filter-groups-set" class="filterBlock">
-        <#if filters??>
-            <#list filters as filter>
-                <div class="text-cropped <#if query?? && query == filter.value>selected</#if>">
-                    <a href="#" class="status-button"
-                       title="<#if filter.value == "*">${msg("filter.type.ALL")}<#else>${filter.value}</#if>"
-                       onclick="LogicECM.module.Documents.filtersManager.save('${statusesFilterKey}', 'query=${filter.value}', true); return false;">
-                        ${msg("filter.type." + filter.type)}
-                    </a>
-                    <span id="filter-${filter_index}-count" class="total-tasks-count-right">${filter.count}</span><br/>
-                </div>
-            </#list>
+    function onFilterClick(key, value) {
+        LogicECM.module.Documents.filtersManager.save(key, 'query=' + value, false);
+        currentFormId = value;
+
+        var filterStr = _generatePropertyFilterStr(value, "${args.filterProperty!'lecm-additional-document:additionalDocumentType-text-content'}");
+        var archiveFolders = _generatePathsFilterStr(LogicECM.module.Documents.SETTINGS.archivePath);
+
+        var statusesFilter = "";
+        <#if args.includedStatuses?? && (args.includedStatuses?length > 0)>
+            statusesFilter = _generatePropertyFilterStr ("${args.includedStatuses}", "lecm-statemachine:status");
         </#if>
-        </div>
-    </div>
 
-    <script type="text/javascript">//<![CDATA[
+        YAHOO.Bubbling.fire ("reСreateDatagrid", {
+            datagridMeta: {
+                searchConfig: {
+                    filter: (filterStr.length > 0 ?  filterStr + " AND " : "")
+                            + '(PATH:"' + LogicECM.module.Documents.SETTINGS.draftPath + '//*"'
+                            + ' OR PATH:"' + LogicECM.module.Documents.SETTINGS.documentPath + '//*"'
+                            + ((archiveFolders.length > 0)? (" OR " + archiveFolders + "") : "") + ')'
+                            + (statusesFilter.length > 0 ? ' AND ' + statusesFilter : '')
+                }
+            },
+            bubblingLabel: "${args.gridBubblingLabel!''}"
+        });
+    }
+</script>
+
+<script type="text/javascript">//<![CDATA[
     (function () {
 	    function updateFilterCount(query, filterId, containerId) {
 		    Alfresco.util.Ajax.request(
@@ -46,14 +57,29 @@
 				    });
 	    }
 
-	    function updateCounts(layer, args) {
-		    var gridBublingLabel = "${args.gridBubblingLabel!''}";
-		    if (gridBublingLabel.length == 0 || gridBublingLabel == args[1].bubblingLabel) {
-				<#list filters as filter>
-					updateFilterCount("${filter.value}", "${queryFilterId}", "filter-${filter_index}-count");
-				</#list>
-		    }
-	    }
+        function updateFilterSelect(containerId, query) {
+            var element = YAHOO.util.Dom.get(containerId);
+            if (element) {
+                if (currentFormId == query){
+                    YAHOO.util.Dom.addClass(element, "selected");
+                } else {
+                    YAHOO.util.Dom.removeClass(element, "selected");
+                }
+            }
+        }
+
+        function updateCounts(layer, args) {
+            var gridBublingLabel = "${args.gridBubblingLabel!''}";
+            if (gridBublingLabel.length == 0 || gridBublingLabel == args[1].bubblingLabel) {
+                <#list filters as filter>
+                    updateFilterCount("${filter.value}", "${queryFilterId}", "filter-${filter_index}-count");
+                </#list>
+            }
+
+            <#list filters as filter>
+                updateFilterSelect("filter-${filter_index}-block", "${filter.value}");
+            </#list>
+        }
 
         function init() {
             setTimeout(function () {
@@ -67,4 +93,22 @@
     })();
     //]]>
     </script>
+
+<div id="contracts-filters" class="contracts-filter-panel">
+    <div class="contracts-filters-block">
+        <div id="filter-groups-set" class="filterBlock">
+        <#if filters??>
+            <#list filters as filter>
+                <div id="filter-${filter_index}-block" class="text-cropped">
+                    <a href="#" class="status-button"
+                       title="<#if filter.value == "*">${msg("filter.type.ALL")}<#else>${filter.value}</#if>"
+                       onclick="onFilterClick('${statusesFilterKey}', '${filter.value}'); return false;">
+                    ${msg("filter.type." + filter.type)}
+                    </a>
+                    <span id="filter-${filter_index}-count" class="total-tasks-count-right">${filter.count}</span><br/>
+                </div>
+            </#list>
+        </#if>
+        </div>
+    </div>
 </div>

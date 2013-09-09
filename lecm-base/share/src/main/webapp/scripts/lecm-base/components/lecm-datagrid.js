@@ -105,6 +105,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("datagridRefresh", this.onDataGridRefresh, this);
         Bubbling.on("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
         Bubbling.on("changeFilter", this.onFilterChanged, this);
+        Bubbling.on("reСreateDatagrid", this.onReCreateDatagrid, this);
         // Во время закрытия диалогового окна сбрасываем параметр в false
         Bubbling.on("formContainerDestroyed", function() {
             if (editDialogOpening) {
@@ -1307,7 +1308,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	            this.restoreSortFromCookie();
                 // DataTable definition
                 var me = this;
-                if (!this.widgets.dataTable) {
+                if (!this.widgets.dataTable || this.datagridMeta.recreate) {
+                    this.datagridMeta.recreate = false; // сброс флага
                     this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
                     // initialize Search
                     this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
@@ -2782,7 +2784,17 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        }
 
 		        form.submit();
-	        }
+	        },
+
+            onReCreateDatagrid: function DataGrid_onChangeDatagrid(layer, args) {
+                var obj = args[1];
+                if (!obj || this._hasEventInterest(obj.bubblingLabel)) {
+                    var newMeta = obj.datagridMeta;
+                    this.datagridMeta = YAHOO.lang.merge(this.datagridMeta, newMeta);
+                    this.datagridMeta.recreate = true;
+                    this.populateDataGrid();
+                }
+            }
         }, true);
 })();
 

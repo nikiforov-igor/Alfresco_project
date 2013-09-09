@@ -40,11 +40,12 @@
         <!-- Filter -->
         <component>
             <region-id>documents-filter</region-id>
-            <url>/lecm/documents/archive-documents-list-filter</url>
+            <url>/lecm/documents/documents-list-filter</url>
             <properties>
                 <itemType>lecm-contract:document</itemType>
                 <linkPage>contracts-archive-list</linkPage>
 	            <gridBubblingLabel>contracts</gridBubblingLabel>
+                <archiveDocs>true</archiveDocs>
             </properties>
         </component>
         <!-- Filter -->

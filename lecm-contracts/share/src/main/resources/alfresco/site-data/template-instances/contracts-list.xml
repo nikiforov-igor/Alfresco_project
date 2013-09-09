@@ -58,6 +58,7 @@
                 <itemType>lecm-contract:document</itemType>
                 <linkPage>contracts-list</linkPage>
 	            <gridBubblingLabel>contracts</gridBubblingLabel>
+                <filterProperty>lecm-statemachine:status</filterProperty>
             </properties>
         </component>
         <!-- Filter -->
@@ -67,6 +68,7 @@
             <properties>
                 <itemType>lecm-contract:document</itemType>
                 <bubblingLabel>contracts</bubblingLabel>
+                <gridBubblingLabel>contracts</gridBubblingLabel>
             </properties>
         </component>
         <!-- Forbidden -->

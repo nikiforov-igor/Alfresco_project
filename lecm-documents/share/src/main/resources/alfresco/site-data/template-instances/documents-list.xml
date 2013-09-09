@@ -46,6 +46,7 @@
                 <itemType>{doctype}</itemType>
                 <linkPage>documents-list</linkPage>
 	            <gridBubblingLabel>documents-list</gridBubblingLabel>
+                <filterProperty>lecm-statemachine:status</filterProperty>
             </properties>
         </component>
         <!-- Filter -->
