@@ -23,6 +23,7 @@ public class StatemachineEditorModel {
 	public final static QName TYPE_WORKFLOW_TRANSITION = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionWorkflow");
 	public final static QName TYPE_OUTPUT_VARIABLE = QName.createQName(STATEMACHINE_EDITOR_URI, "outputVariable");
 	public final static QName TYPE_INPUT_VARIABLE = QName.createQName(STATEMACHINE_EDITOR_URI, "inputVariable");
+	public final static QName TYPE_INPUT_FORM_VARIABLE = QName.createQName(STATEMACHINE_EDITOR_URI, "inputFormVariable");
 	public final static QName TYPE_DYNAMIC_ROLE = QName.createQName(STATEMACHINE_EDITOR_URI, "dynamic-role");
 	public final static QName TYPE_CONDITION_ACCESS = QName.createQName(STATEMACHINE_EDITOR_URI, "conditionAccess");
 	public final static QName TYPE_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "versionContainer");
@@ -45,6 +46,9 @@ public class StatemachineEditorModel {
 	public final static QName PROP_INPUT_TO_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "inputToValue");
 	public final static QName PROP_INPUT_FROM_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "inputFromType");
 	public final static QName PROP_INPUT_FROM_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "inputFromValue");
+    public final static QName PROP_FORM_INPUT_TO_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputToValue");
+    public final static QName PROP_FORM_INPUT_FROM_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromType");
+    public final static QName PROP_FORM_INPUT_FROM_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromValue");
 	public final static QName PROP_OUTPUT_TO_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "outputToType");
 	public final static QName PROP_OUTPUT_TO_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "outputToValue");
 	public final static QName PROP_OUTPUT_FROM_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "outputFromType");

@@ -1070,7 +1070,45 @@
 		</forms>
 	</config>
 
-	<config evaluator="model-type" condition="lecm-stmeditor:outputVariable">
+    <config evaluator="model-type" condition="lecm-stmeditor:inputFormVariable">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:formInputToValue" force="true"/>
+                    <show id="lecm-stmeditor:formInputFromType" force="true"/>
+                    <show id="lecm-stmeditor:formInputFromValue" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="sender" appearance="bordered-panel" label-id="statemachine.editor.form.label.statemachine_sender" />
+                    <set id="receiver" appearance="bordered-panel" label-id="statemachine.editor.form.label.form_receive" />
+                    <field id="lecm-stmeditor:formInputToValue" set="receiver"/>
+                    <field id="lecm-stmeditor:formInputFromType" set="sender"/>
+                    <field id="lecm-stmeditor:formInputFromValue" set="sender"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-stmeditor:inputFormVariable">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:formInputToValue" force="true"/>
+                    <show id="lecm-stmeditor:formInputFromType" force="true"/>
+                    <show id="lecm-stmeditor:formInputFromValue" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="sender" appearance="bordered-panel" label-id="statemachine.editor.form.label.statemachine_sender" />
+                    <set id="receiver" appearance="bordered-panel" label-id="statemachine.editor.form.label.form_receive" />
+                    <field id="lecm-stmeditor:formInputToValue" set="receiver"/>
+                    <field id="lecm-stmeditor:formInputFromType" set="sender"/>
+                    <field id="lecm-stmeditor:formInputFromValue" set="sender"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-stmeditor:outputVariable">
 		<forms>
 			<form>
 				<field-visibility>
@@ -1421,7 +1459,7 @@
                     </field>
                     <field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputFormData">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
-                            <control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
+                            <control-param name="itemType">lecm-stmeditor:inputFormVariable</control-param>
                             <control-param name="height">100</control-param>
                             <control-param name="fullDelete">true</control-param>
                         </control>
@@ -1499,7 +1537,7 @@
                     </field>
                     <field id="lecm-stmeditor:inputWorkflowData" label-id="statemachine.editor.form.label.inputFormData">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
-                            <control-param name="itemType">lecm-stmeditor:inputVariable</control-param>
+                            <control-param name="itemType">lecm-stmeditor:inputFormVariable</control-param>
                             <control-param name="height">100</control-param>
                             <control-param name="fullDelete">true</control-param>
                         </control>

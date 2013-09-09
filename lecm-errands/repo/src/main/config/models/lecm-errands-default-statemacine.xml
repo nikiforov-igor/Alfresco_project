@@ -3019,7 +3019,7 @@ if (document != null) {
                                                                 <name>variables</name>
                                                                 <nodes>
                                                                     <node>
-                                                                        <type>inputVariable</type>
+                                                                        <type>inputFormVariable</type>
                                                                         <name>26082b5f-ebfe-4ac5-b296-ee48602d50e7
                                                                         </name>
                                                                         <nodeRef>
@@ -3027,19 +3027,15 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>inputFromType</name>
+                                                                                <name>formInputFromType</name>
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
+                                                                                <name>formInputFromValue</name>
                                                                                 <value><![CDATA[stm_document]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
+                                                                                <name>formInputToValue</name>
                                                                                 <value><![CDATA[parentDoc]]></value>
                                                                             </property>
                                                                         </properties>
@@ -3049,7 +3045,7 @@ if (document != null) {
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
-                                                                        <type>inputVariable</type>
+                                                                        <type>inputFormVariable</type>
                                                                         <name>d345f5d6-0815-4c3f-b545-61a98ae2bdef
                                                                         </name>
                                                                         <nodeRef>
@@ -3057,20 +3053,16 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>inputFromType</name>
+                                                                                <name>formInputFromType</name>
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
+                                                                                <name>formInputFromValue</name>
                                                                                 <value>
                                                                                     <![CDATA[lecm-errands:limitation-date]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
+                                                                                <name>formInputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[parentLimitationDate]]></value>
                                                                             </property>
@@ -4660,7 +4652,7 @@ if (document != null) {
                                                                 <name>variables</name>
                                                                 <nodes>
                                                                     <node>
-                                                                        <type>inputVariable</type>
+                                                                        <type>inputFormVariable</type>
                                                                         <name>71c064af-4952-4885-a5bb-830e1e66a06f
                                                                         </name>
                                                                         <nodeRef>
@@ -4668,19 +4660,15 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>inputFromType</name>
+                                                                                <name>formInputFromType</name>
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
+                                                                                <name>formInputFromValue</name>
                                                                                 <value><![CDATA[stm_document]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
+                                                                                <name>formInputToValue</name>
                                                                                 <value><![CDATA[parentDoc]]></value>
                                                                             </property>
                                                                         </properties>
@@ -4690,7 +4678,7 @@ if (document != null) {
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
-                                                                        <type>inputVariable</type>
+                                                                        <type>inputFormVariable</type>
                                                                         <name>9397918a-d41c-4fc1-9f59-f5e91ea29cc1
                                                                         </name>
                                                                         <nodeRef>
@@ -4698,20 +4686,16 @@ if (document != null) {
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>inputFromType</name>
+                                                                                <name>formInputFromType</name>
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
+                                                                                <name>formInputFromValue</name>
                                                                                 <value>
                                                                                     <![CDATA[lecm-errands:limitation-date]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
+                                                                                <name>formInputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[parentLimitationDate]]></value>
                                                                             </property>
@@ -6340,7 +6324,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                 <name>variables</name>
                                                                 <nodes>
                                                                     <node>
-                                                                        <type>inputVariable</type>
+                                                                        <type>inputFormVariable</type>
                                                                         <name>5480d9d0-7b7f-485c-bb5f-0addeffb4db4
                                                                         </name>
                                                                         <nodeRef>
@@ -6348,19 +6332,15 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>inputFromType</name>
+                                                                                <name>formInputFromType</name>
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
+                                                                                <name>formInputFromValue</name>
                                                                                 <value><![CDATA[stm_document]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
+                                                                                <name>formInputToValue</name>
                                                                                 <value><![CDATA[parentDoc]]></value>
                                                                             </property>
                                                                         </properties>
@@ -6370,7 +6350,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
-                                                                        <type>inputVariable</type>
+                                                                        <type>inputFormVariable</type>
                                                                         <name>e498be6d-65d8-42ef-9e61-ca3921f31b18
                                                                         </name>
                                                                         <nodeRef>
@@ -6378,20 +6358,16 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>inputFromType</name>
+                                                                                <name>formInputFromType</name>
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
+                                                                                <name>formInputFromValue</name>
                                                                                 <value>
                                                                                     <![CDATA[lecm-errands:document]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
+                                                                                <name>formInputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[parentLimitationDate]]></value>
                                                                             </property>
@@ -7629,7 +7605,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                 <name>variables</name>
                                                                 <nodes>
                                                                     <node>
-                                                                        <type>inputVariable</type>
+                                                                        <type>inputFormVariable</type>
                                                                         <name>74d2a87d-da03-4e00-8462-324abc132a33
                                                                         </name>
                                                                         <nodeRef>
@@ -7637,19 +7613,15 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>inputFromType</name>
+                                                                                <name>formInputFromType</name>
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
+                                                                                <name>formInputFromValue</name>
                                                                                 <value><![CDATA[stm_document]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
+                                                                                <name>formInputToValue</name>
                                                                                 <value><![CDATA[parentDoc]]></value>
                                                                             </property>
                                                                         </properties>
@@ -7659,7 +7631,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
-                                                                        <type>inputVariable</type>
+                                                                        <type>inputFormVariable</type>
                                                                         <name>08413ab4-b215-4c55-b17e-cc91c33e5875
                                                                         </name>
                                                                         <nodeRef>
@@ -7667,20 +7639,16 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>inputFromType</name>
+                                                                                <name>formInputFromType</name>
                                                                                 <value><![CDATA[FIELD]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
+                                                                                <name>formInputFromValue</name>
                                                                                 <value>
                                                                                     <![CDATA[lecm-errands:limitation-date]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
+                                                                                <name>formInputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[parentLimitationDate]]></value>
                                                                             </property>

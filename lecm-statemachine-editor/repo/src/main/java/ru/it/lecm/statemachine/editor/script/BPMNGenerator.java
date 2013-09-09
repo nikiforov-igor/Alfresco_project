@@ -790,6 +790,7 @@ public class BPMNGenerator {
         HashSet<QName> types = new HashSet<QName>();
         types.add(StatemachineEditorModel.TYPE_OUTPUT_VARIABLE);
         types.add(StatemachineEditorModel.TYPE_INPUT_VARIABLE);
+        types.add(StatemachineEditorModel.TYPE_INPUT_FORM_VARIABLE);
 		List<ChildAssociationRef> variables = nodeService.getChildAssocs(workflow, types);
 		if (variables.size() > 0) {
 			Element workflowVariables = doc.createElement("lecm:workflowVariables");
@@ -821,7 +822,18 @@ public class BPMNGenerator {
 					variableElement.setAttribute("fromType", fromType);
 					variableElement.setAttribute("fromValue", fromValue);
 					workflowVariables.appendChild(variableElement);
-				}
+                } else if (StatemachineEditorModel.TYPE_INPUT_FORM_VARIABLE.equals(variableType)) {
+                        String toValue = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_FORM_INPUT_TO_VALUE);
+                        String fromType = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_FORM_INPUT_FROM_TYPE);
+                        String fromValue = (String) nodeService.getProperty(variable.getChildRef(), StatemachineEditorModel.PROP_FORM_INPUT_FROM_VALUE);
+
+                        Element variableElement = doc.createElement("lecm:input");
+                        variableElement.setAttribute("toType", "VARIABLE");
+                        variableElement.setAttribute("toValue", toValue);
+                        variableElement.setAttribute("fromType", fromType);
+                        variableElement.setAttribute("fromValue", fromValue);
+                        workflowVariables.appendChild(variableElement);
+                }
 			}
 		}
 	}

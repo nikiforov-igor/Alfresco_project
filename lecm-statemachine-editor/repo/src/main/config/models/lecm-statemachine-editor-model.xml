@@ -472,6 +472,29 @@
 				</property>
 			</properties>
 		</type>
+
+        <type name="lecm-stmeditor:inputFormVariable">
+            <title>Logic ECM Statemachine Input Form Variable</title>
+            <parent>lecm-stmeditor:workflowVariableData</parent>
+            <properties>
+                <property name="lecm-stmeditor:formInputToValue">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-stmeditor:formInputFromType">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-stmeditor:fromTypeList" />
+                    </constraints>
+                </property>
+                <property name="lecm-stmeditor:formInputFromValue">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
+
 		<type name="lecm-stmeditor:outputVariable">
 			<title>Logic ECM Statemachine Output Workflow Variable</title>
 			<parent>lecm-stmeditor:workflowVariableData</parent>
