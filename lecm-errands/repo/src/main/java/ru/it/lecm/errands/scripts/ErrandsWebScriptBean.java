@@ -149,7 +149,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
         List<String> statuses = new ArrayList<String>();
 
-        String defFilter = DocumentStatusesFilterBean.getDefaultFilter(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService));
+        String defFilter = DocumentStatusesFilterBean.getDefaultFilter(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), false);
         String sts = DocumentStatusesFilterBean.getFilterForType(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService)).get(defFilter);
         for (String status : sts.split(",")) {
             if (status != null && !status.isEmpty()) {
@@ -248,7 +248,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         StringBuilder builder = new StringBuilder();
         builder.append("query=");
         Map<String, String> filters = DocumentStatusesFilterBean.getFilterForType(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService));
-        String defFilter = DocumentStatusesFilterBean.getDefaultFilter(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService));
+        String defFilter = DocumentStatusesFilterBean.getDefaultFilter(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), false);
 
         // список фильтров - по умолчанию, Все (не финальные)
         String statusesStr = filters.get(defFilter);

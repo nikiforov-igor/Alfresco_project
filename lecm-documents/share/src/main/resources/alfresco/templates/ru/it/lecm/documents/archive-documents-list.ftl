@@ -9,10 +9,6 @@
     <#assign filter = ""/>
     <#if page.url.args.query?? && page.url.args.query != "">
         <#assign filter = page.url.args.query/>
-    <#else>
-        <#if prefQuery??>
-            <#assign  reloadPage = true/>
-        </#if>
     </#if>
 
     <#assign formId = ""/>
@@ -45,14 +41,18 @@
                 return currObj;
             }
             return value;
-        };
+        }
 
         var ARCHIVE_DOCS = "ru.it.lecm.documents.archive.";
         <#if filter == "" && preferences??>
-            var PREFERENCE_DOCUMENTS_STATUSES = ARCHIVE_DOCS + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + ".documents-list-statuses-filter";
+                var PREFERENCE_DOCUMENTS_STATUSES = ARCHIVE_DOCS + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + ".documents-list-statuses-filter";
                 var preference = findValueByDotNotation(${preferences}, PREFERENCE_DOCUMENTS_STATUSES);
                 if (preference != null) {
                         window.location = window.location + <#if isDocListPage>"&"<#else>"?"</#if> + preference;
+                } else {
+                    <#if defaultFilter?? && defaultKey??>
+                        window.location = window.location + "?query=" + "${defaultFilter}" + "&formId=" + "${defaultKey}";
+                    </#if>
                 }
         </#if>
 

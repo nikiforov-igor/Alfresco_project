@@ -11,6 +11,7 @@ import java.util.Map;
 public class DocumentStatusesFilterBean {
 
     public static final String DEFAULT_FILTER = "Все";
+    private static final String ARCHIVE_POSTFIX = "-archive";
 
     protected static Map<String, Map> filters = new HashMap<String, Map>();
 
@@ -52,8 +53,8 @@ public class DocumentStatusesFilterBean {
         return getFilters().get(type);
     }
 
-    public static String getDefaultFilter(String type){
-        String defaultFilter = getDefaultFilters().get(type);
+    public static String getDefaultFilter(String type, boolean archive){
+        String defaultFilter = getDefaultFilters().get(!archive ? type : type + ARCHIVE_POSTFIX);
         return defaultFilter != null ? defaultFilter : DEFAULT_FILTER;
     }
 

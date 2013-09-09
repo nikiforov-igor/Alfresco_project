@@ -98,6 +98,7 @@
         <property name="defaultFilters">
             <map>
                 <entry key="lecm-errands:document" value="Все"/>
+                <entry key="lecm-errands:document-archive" value="Неисполненные"/>
             </map>
         </property>
         <property name="filters">

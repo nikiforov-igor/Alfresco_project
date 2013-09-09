@@ -14,7 +14,7 @@ model.nodeRef = node;
 model.draftPath = draftPath;
 model.documentPath = documentPath;
 model.archivePath = archDirectories.join(",");
-var filterObj = documentScript.getDefaultFilter(docType);
+var filterObj = documentScript.getDefaultFilter(docType, (args["archive"] ? args["archive"] == "true" : false));
 for (key in filterObj) {
     model.defaultKey = key;
     model.defaultFilter = filterObj[key];

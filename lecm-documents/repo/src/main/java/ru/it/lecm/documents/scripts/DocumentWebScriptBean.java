@@ -194,13 +194,18 @@ public class DocumentWebScriptBean extends BaseWebScript {
         }
     }
 
-    public Map<String, String> getDefaultFilter(String type) {
-        Map<String, String> filters = getFilters(type, false);
+    public Map<String, String> getDefaultFilter(String type, boolean forArchive) {
+        Map<String, String> filters = getFilters(type, forArchive);
         HashMap<String, String> defaultFilter = new HashMap<String, String>();
-        String defaultKey = DocumentStatusesFilterBean.getDefaultFilter(type);
+        String defaultKey = DocumentStatusesFilterBean.getDefaultFilter(type, forArchive);
         if (filters != null) {
             if (defaultKey != null) {
                 defaultFilter.put(defaultKey, filters.get(defaultKey));
+            } else {
+                for (Map.Entry<String, String> entry : filters.entrySet()) {
+                    defaultFilter.put(entry.getKey(), entry.getValue());
+                    break;
+                }
             }
         } else {
             defaultFilter.put(defaultKey, "*");

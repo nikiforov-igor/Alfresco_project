@@ -32,9 +32,15 @@ model.hasPermission = hasRole;
 
 
 if (hasRole) {
-    var settingsStr = remote.connect("alfresco").get("/lecm/document-type/settings?docType=" + type);
+    var settingsStr = remote.connect("alfresco").get("/lecm/document-type/settings?docType=" + type + "&archive=true");
     if (settingsStr.status == 200) {
         model.settings = settingsStr;
+
+        var settingsObj = eval("(" + settingsStr + ")");
+        if (settingsObj) {
+            model.defaultFilter = settingsObj.defaultFilter;
+            model.defaultKey = settingsObj.defaultKey;
+        }
 
         var PREFERENCE_DOCUMENTS = "ru.it.lecm.documents.archive.";
         var prefStr = remote.connect("alfresco").get("/api/people/" + encodeURIComponent(user.id) + "/preferences?pf=" + PREFERENCE_DOCUMENTS);
