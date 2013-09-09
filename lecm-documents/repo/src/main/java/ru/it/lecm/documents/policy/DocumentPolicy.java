@@ -57,7 +57,7 @@ public class DocumentPolicy extends BaseBean
 
     private static final String DOCUMENT_SEARCH_CONTENT_TEMPLATE = "/alfresco/templates/webscripts/ru/it/lecm/documents/document-search-object-content.ftl";
     private static final String DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH = "/alfresco/templates/webscripts/ru/it/lecm/documents/icons/";
-    final private QName[] IGNORED_PROPERTIES = {DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT, StatemachineModel.PROP_STATUS};
+    final private QName[] IGNORED_PROPERTIES = {DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT, StatemachineModel.PROP_STATUS, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS};
 
     private PolicyComponent policyComponent;
     private BusinessJournalService businessJournalService;
