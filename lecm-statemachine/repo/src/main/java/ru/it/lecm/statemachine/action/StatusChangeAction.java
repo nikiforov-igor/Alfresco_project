@@ -151,20 +151,23 @@ public class StatusChangeAction extends StateMachineAction {
         //Выставляем статус
         List<ChildAssociationRef> children = nodeService.getChildAssocs(nodeRef);
         for (ChildAssociationRef child : children) {
-            nodeService.setProperty(child.getChildRef(), QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "status"), status);
-            nodeService.setProperty(child.getChildRef(), StatemachineModel.PROP_STATEMACHINE_VERSION, version);
-            //запись в БЖ
-            try {
-                String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
-                List<String> objects = new ArrayList<String>(1);
-                objects.add(status);
-                if (!forDraft) {
-                    getBusinessJournalService().log(initiator, child.getChildRef(),
-                            EventCategory.CHANGE_DOCUMENT_STATUS,
-                            "#initiator перевел(а) документ \"#mainobject\" в статус \"#object1\"", objects);
+            String statusValue = nodeService.getProperty(child.getChildRef(), StatemachineModel.PROP_STATUS).toString();
+            if (!status.equals(statusValue)) {
+                nodeService.setProperty(child.getChildRef(), StatemachineModel.PROP_STATUS, status);
+                nodeService.setProperty(child.getChildRef(), StatemachineModel.PROP_STATEMACHINE_VERSION, version);
+                //запись в БЖ
+                try {
+                    String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
+                    List<String> objects = new ArrayList<String>(1);
+                    objects.add(status);
+                    if (!forDraft) {
+                        getBusinessJournalService().log(initiator, child.getChildRef(),
+                                EventCategory.CHANGE_DOCUMENT_STATUS,
+                                "#initiator перевел(а) документ \"#mainobject\" в статус \"#object1\"", objects);
+                    }
+                } catch (Exception e) {
+                    logger.error("Не удалось создать запись бизнес-журнала", e);
                 }
-            } catch (Exception e) {
-                logger.error("Не удалось создать запись бизнес-журнала", e);
             }
         }
 
