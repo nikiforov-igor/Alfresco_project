@@ -302,7 +302,7 @@
 					<textElement>
 						<font fontName="DejaVu Sans Mono" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Реквизиты конрагента:]]></text>
+					<text><![CDATA[Реквизиты контрагента:]]></text>
 				</staticText>
 			</frame>
 			<frame>
