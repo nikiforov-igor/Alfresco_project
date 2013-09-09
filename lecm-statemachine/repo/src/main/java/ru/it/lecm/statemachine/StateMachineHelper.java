@@ -1276,6 +1276,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
                         //Посылаем сигнал, если процесс с ожиданием
                         sendSignal(dependencyExecution);
                     }
+                } else {
+                    if (NodeRef.isNodeRef(persistedResponse)) {
+                        response.setRedirect("document?nodeRef=" + persistedResponse);
+                    }
                 }
             }
         } else {

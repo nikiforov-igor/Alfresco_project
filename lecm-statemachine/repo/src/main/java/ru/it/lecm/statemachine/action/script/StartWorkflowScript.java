@@ -61,9 +61,9 @@ public class StartWorkflowScript extends DeclarativeWebScript {
                 String newWorkflowId = helper.parseExecutionId(persistedResponse);
                 if (newWorkflowId != null) {
                     helper.logStartWorkflowEvent(document, newWorkflowId);
-                    if (transitionResponse.getRedirect() != null) {
-                        result.put("redirect", transitionResponse.getRedirect());
-                    }
+                }
+                if (transitionResponse.getRedirect() != null) {
+                    result.put("redirect", transitionResponse.getRedirect());
                 }
             }
 		} else if ("user".equals(actionType)){
