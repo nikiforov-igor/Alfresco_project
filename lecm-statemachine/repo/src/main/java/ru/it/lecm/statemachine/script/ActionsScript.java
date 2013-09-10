@@ -1,6 +1,8 @@
 package ru.it.lecm.statemachine.script;
 
 import org.activiti.engine.delegate.ExecutionListener;
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -9,6 +11,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowPath;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
@@ -178,7 +181,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                     resultState.put("isForm", state.isForm());
                                     if (state.isForm()) {
                                         resultState.put("formType", state.getFormType());
-                                        resultState.put("formFolder", documentService.getDraftRoot().toString());
+                                        resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
                                     }
                                     actionsList.add(resultState);
 
@@ -243,6 +246,10 @@ public class ActionsScript extends DeclarativeWebScript {
         return count;
     }
 
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+        ActionsScript.serviceRegistry = serviceRegistry;
+    }
+
     private void sort(ArrayList<HashMap<String, Object>> unsorted) {
         class ElementComparator<T extends Map> implements Comparator<T> {
             @Override
@@ -255,8 +262,44 @@ public class ActionsScript extends DeclarativeWebScript {
         Collections.sort(unsorted, new ElementComparator<HashMap>());
     }
 
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        ActionsScript.serviceRegistry = serviceRegistry;
+    private NodeRef getDestinationFolder(String path) {
+        NodeRef result = documentService.getDraftRoot();
+        if (path == null) {
+            return result;
+        }
+        NodeService nodeService = serviceRegistry.getNodeService();
+        StringTokenizer pathTokenizer = new StringTokenizer(path, "/");
+        while (pathTokenizer.hasMoreTokens()) {
+            String folder = pathTokenizer.nextToken();
+            if (!"".equals(folder)) {
+                NodeRef folderRef = nodeService.getChildByName(result, ContentModel.ASSOC_CONTAINS, folder);
+                if (folderRef == null) {
+                    folderRef = createFolder(result, folder);
+                }
+                result = folderRef;
+            }
+        }
+        return result;
     }
+
+    private NodeRef createFolder(final NodeRef parent, final String name) {
+        final NodeService nodeService = serviceRegistry.getNodeService();
+        final HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+        props.put(ContentModel.PROP_NAME, name);
+        ChildAssociationRef childAssocRef = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
+            @Override
+            public ChildAssociationRef execute() throws Throwable {
+                ChildAssociationRef childAssocRef = nodeService.createNode(
+                        parent,
+                        ContentModel.ASSOC_CONTAINS,
+                        QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
+                        ContentModel.TYPE_FOLDER,
+                        props);
+                return childAssocRef;
+            }
+        }, false, true);
+        return childAssocRef.getChildRef();
+    }
+
 
 }
