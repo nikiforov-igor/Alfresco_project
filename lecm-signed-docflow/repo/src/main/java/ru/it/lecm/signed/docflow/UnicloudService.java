@@ -360,18 +360,20 @@ public class UnicloudService {
 
 	private void markDocflowsAsRead(final AuthHeaders authHeaders, final ArrayOfguid readDocflows) {
 		//добавляем аутентификационный заголовок
-		addAuthHeaders(authHeaders);
-		try {
-			GateResponse gateResponse = gateWcfService.markDocflowsAsRead(readDocflows);
-			if (EResponseType.OK == gateResponse.getResponseType()) {
-				logger.debug("Docflows were successfully marked as read.");
-			} else {
-				Utils.logGateResponse(gateResponse, logger);
+		if (!readDocflows.getGuids().isEmpty()) {
+			addAuthHeaders(authHeaders);
+			try {
+				GateResponse gateResponse = gateWcfService.markDocflowsAsRead(readDocflows);
+				if (EResponseType.OK == gateResponse.getResponseType()) {
+					logger.debug("Docflows were successfully marked as read.");
+				} else {
+					Utils.logGateResponse(gateResponse, logger);
+				}
+			} catch(Exception ex) {
+				logger.error("Error marking docflows as read.", ex);
+			} finally {
+				removeAuthHeaders();
 			}
-		} catch(Exception ex) {
-			logger.error("Error marking docflows as read.", ex);
-		} finally {
-			removeAuthHeaders();
 		}
 	}
 
