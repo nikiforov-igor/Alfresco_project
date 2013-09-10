@@ -12,8 +12,7 @@ var authorFilter = new LogicECM.module.Documents.AuthorFilter("${id}").setOption
         }).setMessages(${messages});
 //]]></script>
 
-<div id="${id}-filters" class="toolbar documents-filter">
-    <div style="font-weight: bold;">${msg("label.filter")}:</div>
+<div id="${id}-filters" class="toolbar filter documents-filter">
     <div class="flat-button">
          <span class="align-left yui-button yui-menu-button" id="${id}-author">
             <span class="first-child">

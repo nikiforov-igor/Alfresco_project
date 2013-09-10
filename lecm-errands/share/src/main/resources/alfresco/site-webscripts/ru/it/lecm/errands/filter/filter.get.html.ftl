@@ -11,7 +11,7 @@
     }).setMessages(${messages});
 //]]></script>
 
-<div id="${id}-filters" class="toolbar errands-filter">
+<div id="${id}-filters" class="toolbar filter errands-filter">
     <div class="flat-button">
         <label for="${id}-assign">${msg("label.filter-assign")}:</label>
         <span class="align-left yui-button yui-menu-button" id="${id}-assign">

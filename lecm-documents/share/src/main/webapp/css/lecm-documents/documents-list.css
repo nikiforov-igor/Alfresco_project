@@ -23,26 +23,3 @@
     background-image: url("/share/res/images/lecm-contracts/alf_contract_add.png");
 }
 
-.documents-filter > div {
-    margin: 5px;
-}
-.documents-filter {
-    overflow: hidden;
-    padding-bottom: 5px;
-}
-.documents-filter > div > label,
-.documents-filter > div > span {
-    float: left;
-}
-.documents-filter > div > label,
-.documents-filter > div > span:not(.yui-button) {
-    padding-top: 5px;
-}
-.documents-filter > div > span,
-.documents-filter > div > span.yui-button {
-    margin-right: 15px;
-}
-.documents-filter > div > span input[type=checkbox] {
-    vertical-align: text-top;
-}
-
