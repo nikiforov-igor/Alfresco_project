@@ -9,6 +9,12 @@
 	<#assign showViewIncompleteWarning = true>
 </#if>
 
+<#if field.control.params.showSelectedItems?? && field.control.params.showSelectedItems == "false">
+	<#assign showSelectedItems = false>
+<#else>
+	<#assign showSelectedItems = true>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <div class="form-field">
@@ -102,6 +108,7 @@
 				</#list>
 			},
 		</#if>
+		showSelectedItems: ${showSelectedItems?string},
 		itemType: "${field.endpointType}"
 	}).setMessages( ${messages} );
 </script>

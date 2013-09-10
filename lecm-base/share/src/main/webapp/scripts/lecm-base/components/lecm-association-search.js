@@ -31,10 +31,10 @@ LogicECM.module = LogicECM.module || {};
 
 		this.eventGroup = htmlId;
 		this.selectedItems = {};
+		this.notShowedSelectedValue = {};
 		this.addItemButtons = {};
 		this.searchProperties = {};
 		this.currentNode = null;
-//		this.rootNode = null;
 		this.isSearch = false;
         this.allowedNodes = null;
         this.allowedNodesScript = null;
@@ -54,8 +54,6 @@ LogicECM.module = LogicECM.module || {};
 
 			currentNode: null,
 
-//			rootNode: null,
-
 			searchProperties: null,
 
 			isSearch: false,
@@ -65,6 +63,8 @@ LogicECM.module = LogicECM.module || {};
 				changeItemsFireAction: null,
 
 				selectedValue: null,
+
+				notShowedSelectedValue: null,
 
 				currentValue: "",
 				// If control is disabled (has effect in 'picker' mode only)
@@ -77,8 +77,6 @@ LogicECM.module = LogicECM.module || {};
 				initialized: false,
 
 				rootLocation: null,
-
-//				rootNodeRef: "",
 
 				itemType: "cm:content",
 
@@ -107,7 +105,9 @@ LogicECM.module = LogicECM.module || {};
 
                 allowedNodes:null,
 
-                allowedNodesScript: null
+                allowedNodesScript: null,
+
+				showSelectedItems: true
 			},
 
 			onReady: function AssociationSearchViewer_onReady()
@@ -123,15 +123,14 @@ LogicECM.module = LogicECM.module || {};
 				this.options.controlId = this.id + '-cntrl';
 				this.options.pickerId = this.id + '-cntrl-picker';
 
+				this._loadSelectedItems();
+
 				// Create button if control is enabled
 				if(!this.options.disabled)
 				{
-//					this._loadRootNode();
 					this.populateDataWithAllowedScript();
 					this.createSearchDialog();
 					this._loadSearchProperties();
-				} else {
-					this.updateViewForm();
 				}
 			},
 
@@ -195,11 +194,17 @@ LogicECM.module = LogicECM.module || {};
 					{
 						item = items[i];
 						this.selectedItems[item.nodeRef] = item;
+
+						if (!this.options.showSelectedItems) {
+							this.notShowedSelectedValue[item.nodeRef] = item;
+						}
 					}
+
 					if(!this.options.disabled)
 					{
 						this.updateAddButtons();
 					}
+
 					this.updateFormFields();
 				};
 
@@ -290,57 +295,6 @@ LogicECM.module = LogicECM.module || {};
 					obj[1].preventDefault();
 				}
 			},
-
-//			_loadRootNode: function AssociationSearchViewer__loadRootNode() {
-//				var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
-//
-//				Alfresco.util.Ajax.jsonGet(
-//					{
-//						url: sUrl,
-//						successCallback:
-//						{
-//							fn: function (response) {
-//								var oResults = response.json;
-//								if (oResults != null) {
-//									this.options.rootNodeRef = oResults.nodeRef;
-//									this._loadSelectedItems();
-//								}
-//							},
-//							scope: this
-//						},
-//						failureCallback:
-//						{
-//							fn: function (oResponse) {
-//								var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-//								this.widgets.dataTable.set("MSG_ERROR", response.message);
-//								this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-//							},
-//							scope: this
-//						}
-//					});
-//			},
-//
-//			_generateRootUrlPath: function AssociationSearchViewer__generateItemsUrlPath(nodeRef)
-//			{
-//				return $combine(Alfresco.constants.PROXY_URI, "/lecm/forms/node/search", nodeRef.replace("://", "/"));
-//			},
-//
-//			_generateRootUrlParams: function AssociationSearchViewer__generateItemsUrlParams()
-//			{
-//				var params = "?titleProperty=" + encodeURIComponent("cm:name");
-//				if (this.options.rootLocation && this.options.rootLocation.charAt(0) == "/")
-//				{
-//					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);
-//				} else if (this.options.xPathLocation)
-//				{
-//					params += "&xPathLocation=" + encodeURIComponent(this.options.xPathLocation);
-//					if (this.options.xPathLocationRoot != null) {
-//						params += "&xPathRoot=" + encodeURIComponent(this.options.xPathLocationRoot);
-//					}
-//				}
-//
-//				return params;
-//			},
 
 			_createSelectedControls: function AssociationSearchViewer__createSelectedControls()
 			{
@@ -708,24 +662,26 @@ LogicECM.module = LogicECM.module || {};
 				el.innerHTML = '';
 				var num = 0;
 				for (var i in this.selectedItems) {
-					var displayName = this.selectedItems[i].selectedName;
+					if (this.notShowedSelectedValue[i] == null) {
+						var displayName = this.selectedItems[i].selectedName;
 
-					var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
-					if(this.options.disabled) {
-						if (this.options.itemType == "lecm-orgstr:employee") {
-							el.innerHTML += '<div class="' + divClass + '"> ' +  this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + '</div>';
+						var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
+						if(this.options.disabled) {
+							if (this.options.itemType == "lecm-orgstr:employee") {
+								el.innerHTML += '<div class="' + divClass + '"> ' +  this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + '</div>';
+							} else {
+								el.innerHTML += '<div class="' + divClass + '">' + this.getDefaultView(displayName, true) + ' ' + '</div>';
+							}
 						} else {
-							el.innerHTML += '<div class="' + divClass + '">' + this.getDefaultView(displayName, true) + ' ' + '</div>';
+							if (this.options.itemType == "lecm-orgstr:employee") {
+								el.innerHTML
+									+= '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+							} else {
+								el.innerHTML
+									+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+							}
+							YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c"}, this);
 						}
-					} else {
-						if (this.options.itemType == "lecm-orgstr:employee") {
-							el.innerHTML
-								+= '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
-						} else {
-							el.innerHTML
-								+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
-						}
-						YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c"}, this);
 					}
 				}
 
@@ -740,7 +696,10 @@ LogicECM.module = LogicECM.module || {};
 						el.value += ( i < addItems.length-1 ? addItems[i] + ',' : addItems[i] );
 					}
 
-					var removedItems = this.getRemovedItems();
+					var removedItems = [];
+					if (this.options.showSelectedItems) {
+						removedItems = this.getRemovedItems();
+					}
 
 					// Update removed fields in main form to be submitted
 					el = Dom.get(this.options.controlId + "-removed");
@@ -834,41 +793,6 @@ LogicECM.module = LogicECM.module || {};
 					result = this.options.selectedItemsNameSubstituteString;
 				}
 				return result;
-			},
-
-			updateViewForm: function AssociationSearchViewer_getSelectedItemsNameSubstituteString() {
-//				var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
-//
-//				Alfresco.util.Ajax.jsonGet(
-//					{
-//						url: sUrl,
-//						successCallback:
-//						{
-//							fn: function (response) {
-//								var oResults = response.json;
-//								if (oResults != null) {
-//									this.rootNode =  {
-//										label:oResults.title,
-//										data: {
-//											nodeRef:oResults.nodeRef,
-//											type:oResults.type,
-//											displayPath: oResults.displayPath
-//										}
-//									};
-//									this.options.rootNodeRef = oResults.nodeRef;
-									this._loadSelectedItems();
-//								}
-//							},
-//							scope: this
-//						},
-//						failureCallback:
-//						{
-//							fn: function (oResponse) {
-//								alert(YAHOO.lang.JSON.parse(oResponse.responseText));
-//							},
-//							scope: this
-//						}
-//					});
 			},
 
             populateDataWithAllowedScript: function AssociationSelectOne_populateSelect() {
