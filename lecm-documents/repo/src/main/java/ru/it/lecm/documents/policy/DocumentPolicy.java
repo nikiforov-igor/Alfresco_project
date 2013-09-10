@@ -167,18 +167,6 @@ public class DocumentPolicy extends BaseBean
         nodeService.setProperty(documentRef, authorPropertyQName, afterAuthor.toString());
         nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_EMPLOYEE_REF, "");
 
-        for (AccessPermission permission : permissionsDoc) {
-            if (permissionsEmployee.contains(permission.getAuthority()) && !PermissionService.ALL_AUTHORITIES.equals(permission.getAuthority())) {
-                if (permission.getAuthority().indexOf(Types.SFX_BRME) != -1 || permission.getAuthority().indexOf(Types.SFX_SPEC) != -1 || permission.getAuthority().indexOf(Types.SFX_PRIV4USER) != -1) {
-                    // удаляем динамическую роль
-//                    lecmPermissionService.revokeDynamicRole(permission.getPermission(), documentRef, beforeAuthor.getId());
-                    permissionService.clearPermission(documentRef, permission.getAuthority());
-                    // назначаем динамическую роль другому сотруднику
-                    lecmPermissionService.grantDynamicRole(permission.getPermission(), documentRef, afterAuthor.getId(), lecmPermissionService.findPermissionGroup(permission.getPermission()));
-                }
-            }
-        }
-
         // добавляем в участники документа нового сотрудника
         documentMembersService.addMember(documentRef, afterAuthor, new HashMap<QName, Serializable>());
         // передаем задачи по документу
@@ -217,6 +205,18 @@ public class DocumentPolicy extends BaseBean
                     }
                 }
             }
+
+	        for (AccessPermission permission : permissionsDoc) {
+		        if (permissionsEmployee.contains(permission.getAuthority()) && !PermissionService.ALL_AUTHORITIES.equals(permission.getAuthority())) {
+			        if (permission.getAuthority().indexOf(Types.SFX_BRME) != -1 || permission.getAuthority().indexOf(Types.SFX_SPEC) != -1 || permission.getAuthority().indexOf(Types.SFX_PRIV4USER) != -1) {
+				        // удаляем динамическую роль
+//                    lecmPermissionService.revokeDynamicRole(permission.getPermission(), documentRef, beforeAuthor.getId());
+				        permissionService.clearPermission(documentRef, permission.getAuthority());
+				        // назначаем динамическую роль другому сотруднику
+				        lecmPermissionService.grantDynamicRole(permission.getPermission(), documentRef, afterAuthor.getId(), lecmPermissionService.findPermissionGroup(permission.getPermission()));
+        }
+		        }
+	        }
         }
 
     }
