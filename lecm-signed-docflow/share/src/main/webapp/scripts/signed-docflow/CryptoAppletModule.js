@@ -169,11 +169,9 @@ function checkForApplet() {
 						Alfresco.util.PopupManager.displayMessage({	text: message });
 					}
 
-					try {
-						cb = options.successCallback;
+					cb = options.successCallback;
+					if(cb && YAHOO.lang.isFunction(cb.fn)){
 						cb.fn.apply(cb.scope, cb.obj);
-					} catch(e) {
-						console.log('callback not defined');
 					}
 					
 				}
@@ -237,11 +235,10 @@ function checkForApplet() {
 					}
 
 					Alfresco.util.PopupManager.displayMessage({	text: resText });
-					try{
-						cb = options.successCallback;
+
+					cb = options.successCallback;
+					if(YAHOO.lang.isFunction(cb.fn)){
 						cb.fn.apply(cb.scope);
-					} catch(e) {
-						console.log('callback is undefined');
 					}
 				}
 
@@ -293,13 +290,10 @@ function checkForApplet() {
 
 					Alfresco.util.PopupManager.displayMessage({	text: 'Не удалось получить информацию о подписях' });
 
-					try{
-						cb = options.failureCallback;
+					cb = options.failureCallback;
+					if(YAHOO.lang.isFunction(cb.fn)){
 						cb.fn.apply(cb.scope);
-					} catch(e) {
-						console.log('failureCallback is not defined');
 					}
-
 				}
 
 				function getSignsSuccess(response){
@@ -318,13 +312,11 @@ function checkForApplet() {
 						}
 					}
 
-					try{
-						cb = options.successCallback;
+					cb = options.successCallback;
+					if(YAHOO.lang.isFunction(cb.fn)){
 						cb.fn.apply(cb.scope, [signs]);
-					} catch(e) {
-						console.log('successCallback is not defined');
 					}
-				}
+				};
 
 				Alfresco.util.Ajax.jsonRequest({
 				    method: 'GET',
@@ -445,11 +437,11 @@ function checkForApplet() {
 					        		//[!] Взять на заметку
 									var text = (response.json.signResponse == 'SIGN_OK') ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась так как данный документ уже был подписан этой подписью';
 									Alfresco.util.PopupManager.displayMessage({ text: text });
-									try {
-										callback = options.successCallback;
+
+									
+									callback = options.successCallback;
+									if(YAHOO.lang.isFunction(callback.fn)){
 										callback.fn.apply(callback.scope, [response]);
-									} catch(e) {
-										console.log('callback is not defined')
 									}
 								}
 					    },
@@ -458,12 +450,10 @@ function checkForApplet() {
 
 						    		Alfresco.util.PopupManager.displayMessage({	text: 'Загрузка подписи не удалась' });
 
-						    		try {
-										callback = options.failureCallback;
+									callback = options.failureCallback;
+						    		if(YAHOO.lang.isFunction(callback.fn)){
 										callback.fn.apply(callback.scope, [response]);
-									} catch(e) {
-										console.log('callback is not defined')
-									}
+						    		}
 					    	}
 					    }
 					});
@@ -487,22 +477,21 @@ function checkForApplet() {
 					        fn: function(response) {
 									var text = (response.json.signResponse == 'SIGN_OK') ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась так как данный документ уже был подписан этой подписью';
 									Alfresco.util.PopupManager.displayMessage({ text: text });
-									try {
-										callback = options.successCallback;
+
+
+									callback = options.successCallback;
+									if(YAHOO.lang.isFunction(callback.fn)){
 										callback.fn.apply(callback.scope, [response]);
-									} catch(e) {
-										console.log('callback is not defined')
 									}
 								}
 					    },
 					    failureCallback: {
 					    	fn: function() {
 						    		Alfresco.util.PopupManager.displayMessage({	text: 'Загрузка подписи не удалась' });
-						    		try {
-										callback = options.failureCallback;
+
+									callback = options.failureCallback;
+									if(YAHOO.lang.isFunction(callback.fn)){
 										callback.fn.apply(callback.scope, [response]);
-									} catch(e) {
-										console.log('callback is not defined')
 									}
 					    	}
 					    }
@@ -597,11 +586,9 @@ function checkForApplet() {
 						nodeRefList.push(contentSuccess[i].signedContentNodeRef);
 					}
 
-					try{
-						cb = options.successCallback;
+					cb = options.successCallback;
+					if(YAHOO.lang.isFunction(cb.fn)){
 						cb.fn.apply(cb.scope, [nodeRefList]);
-					} catch(e) {
-						console.log('successCallback not defined');
 					}
 
 				}
@@ -648,12 +635,10 @@ function checkForApplet() {
 							loadingPopup.destroy();
 
 	                        if(status == 'OK'){
-
-								try{
-									callback = options.successCallback;
+	                        	
+								callback = options.successCallback;
+								if(YAHOO.lang.isFunction(callback.fn)){
 									callback.fn.apply(callback.scope, callback.obj);
-								} catch(e) {
-									console.log('callback not defined');
 								}
 
 	                        } else {
@@ -843,12 +828,11 @@ function checkForApplet() {
 							return false;
 						}
 
-						try {
-							callback = params.doBeforeAjaxCallback;
+						callback = params.doBeforeAjaxCallback;
+						if(YAHOO.lang.isFunction(callback.fn)){
 							callback.fn.apply(callback.scope, [form]);
-						} catch(e) {
-							console.log('callback not defined');
 						}
+
 						if(params.actionURL == null) {
 							return false;
 						}
@@ -858,22 +842,18 @@ function checkForApplet() {
 				},
 				 onSuccess: {
 	                     fn: function(response){
-	                     	try {
-								callback = params.successCallback;
+							callback = params.successCallback;
+							if(YAHOO.lang.isFunction(callback.fn)){
 								callback.fn.apply(callback.scope, [response]);
-							} catch(e) {
-								console.log('callback not defined');
-							}	                     	
+							}
 	                     }
 	                 },
 				 onFailure: {
 				 	fn: function(){
-				 		try {
-							callback = params.failureCallback;
+						callback = params.failureCallback;
+						if(YAHOO.lang.isFunction(callback.fn)){
 							callback.fn.apply(callback.scope);
-						} catch(e) {
-							console.log('callback not defined');
-						}		
+						}
 				 	}
 				 }
 			}).show();
@@ -918,11 +898,9 @@ function checkForApplet() {
 								return false;
 							}
 
-							try{
-								callback = params.doBeforeAjaxCallback;
+							callback = params.doBeforeAjaxCallback;
+							if(YAHOO.lang.isFunction(callback.fn)){
 								callback.fn.apply(callback.scope, [nodeRefList, callback.obj]);
-							} catch(e){
-								console.log('callback undefined');
 							}
 
 							if(params.actionURL == null) {
@@ -933,22 +911,18 @@ function checkForApplet() {
 					},
 					 onSuccess: {
 		                     fn: function (response){
-		                     	try{
-									callback = params.successCallback;
+								callback = params.successCallback;
+								if(YAHOO.lang.isFunction(callback.fn)){
 									callback.fn.apply(callback.scope, [response]);
-								} catch(e){
-									console.log('callback undefined');
 								}
 		                     }
 		                 },
 					 onFailure: {
 					 	fn: function (){
-					 		try{
-									callback = params.failureCallback;
-									callback.fn.apply(callback.scope);
-								} catch(e){
-									console.log('callback undefined');
-								}
+							callback = params.failureCallback;
+							if(YAHOO.lang.isFunction(callback.fn)){
+								callback.fn.apply(callback.scope);
+							}
 					 	}
 					 }
 				}).show();
