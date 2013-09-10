@@ -68,7 +68,7 @@ function checkForApplet() {
 	};
 
 	YAHOO.extend(LogicECM.CryptoApplet, Alfresco.component.Base,
-		{	
+		{
 			/*
 			==========================================================
 			options = {
@@ -107,8 +107,8 @@ function checkForApplet() {
 				for(i = 0; i < nodeRefList.length; i++){
 					sign = new Signature(currentSigningCert, nodeRefList[i]);
 					if(sign != null){
-						signatures.push(sign);	
-					}			
+						signatures.push(sign);
+					}
 				}
 			return signatures;
 
@@ -118,7 +118,7 @@ function checkForApplet() {
 
 				var formParams;
 
-				
+
 				if(!YAHOO.lang.isArray(nodeRefList)) {
 					nodeRefList = [nodeRefList];
 				}
@@ -169,13 +169,12 @@ function checkForApplet() {
 						Alfresco.util.PopupManager.displayMessage({	text: message });
 					}
 
-					cb = options.successCallback;
-					if(cb && YAHOO.lang.isFunction(cb.fn)){
+					cb = (options) ? options.successCallback : null;
+					if(cb && YAHOO.lang.isFunction(cb.fn)) {
 						cb.fn.apply(cb.scope, cb.obj);
 					}
-					
 				}
-				
+
 				formParams.doBeforeAjaxCallback = {};
 				formParams.doBeforeAjaxCallback.fn = doBeforeAjaxCallBack;
 				formParams.doBeforeAjaxCallback.scope = this;
@@ -236,8 +235,8 @@ function checkForApplet() {
 
 					Alfresco.util.PopupManager.displayMessage({	text: resText });
 
-					cb = options.successCallback;
-					if(YAHOO.lang.isFunction(cb.fn)){
+					cb = (options) ? options.successCallback : null;
+					if(cb && YAHOO.lang.isFunction(cb.fn)){
 						cb.fn.apply(cb.scope);
 					}
 				}
@@ -275,7 +274,7 @@ function checkForApplet() {
 				me.getSignsByNodeRef(nodeRef, opts);
 			},
 
-			
+
 
 			/*
 			==========================================================
@@ -290,8 +289,8 @@ function checkForApplet() {
 
 					Alfresco.util.PopupManager.displayMessage({	text: 'Не удалось получить информацию о подписях' });
 
-					cb = options.failureCallback;
-					if(YAHOO.lang.isFunction(cb.fn)){
+					cb = (options) ? options.failureCallback : null;
+					if(cb && YAHOO.lang.isFunction(cb.fn)){
 						cb.fn.apply(cb.scope);
 					}
 				}
@@ -301,7 +300,7 @@ function checkForApplet() {
 						sign,
 						contentURI,
 						cb,
-						i, j, k; 
+						i, j, k;
 					//[!]
 					for(i = 0; i < response.json.length; i++){
 						for(j = 0; j < response.json[i].signedContent.length; j++){
@@ -312,8 +311,8 @@ function checkForApplet() {
 						}
 					}
 
-					cb = options.successCallback;
-					if(YAHOO.lang.isFunction(cb.fn)){
+					cb = (options) ? options.successCallback : null;
+					if(cb && YAHOO.lang.isFunction(cb.fn)){
 						cb.fn.apply(cb.scope, [signs]);
 					}
 				};
@@ -397,7 +396,7 @@ function checkForApplet() {
 				return certs;
 			},
 
-			
+
 			//[delete?]
 			checkSignatures: function(signatures){
 				var result = true;
@@ -434,26 +433,24 @@ function checkForApplet() {
 					    dataObj: dataObj,
 					    successCallback: {
 					        fn: function(response) {
-					        		//[!] Взять на заметку
-									var text = (response.json.signResponse == 'SIGN_OK') ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась так как данный документ уже был подписан этой подписью';
-									Alfresco.util.PopupManager.displayMessage({ text: text });
+								//[!] Взять на заметку
+								var text = (response.json.signResponse == 'SIGN_OK') ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась так как данный документ уже был подписан этой подписью',
+									cb = (options) ? options.successCallback : null;
+								Alfresco.util.PopupManager.displayMessage({ text: text });
 
-									
-									callback = options.successCallback;
-									if(YAHOO.lang.isFunction(callback.fn)){
-										callback.fn.apply(callback.scope, [response]);
-									}
+								if(cb && YAHOO.lang.isFunction(cb.fn)){
+									cb.fn.apply(cb.scope, [response]);
 								}
+							}
 					    },
 					    failureCallback: {
 					    	fn: function() {
+								Alfresco.util.PopupManager.displayMessage({	text: 'Загрузка подписи не удалась' });
 
-						    		Alfresco.util.PopupManager.displayMessage({	text: 'Загрузка подписи не удалась' });
-
-									callback = options.failureCallback;
-						    		if(YAHOO.lang.isFunction(callback.fn)){
-										callback.fn.apply(callback.scope, [response]);
-						    		}
+								var cb = (options) ? options.failureCallback : null;
+								if(cb && YAHOO.lang.isFunction(cb.fn)){
+									cb.fn.apply(cb.scope);
+								}
 					    	}
 					    }
 					});
@@ -465,7 +462,7 @@ function checkForApplet() {
 			loadSignFromString: function(nodeRef, signatureContent, options){
 				var dataObj = {};
 				signature = new SignatureFromContent(nodeRef, signatureContent, null);
-				
+
 				if(signature.getStatus()){
 					dataObj = signature.getJSONInfo();
 
@@ -475,24 +472,23 @@ function checkForApplet() {
 					    dataObj: dataObj,
 					    successCallback: {
 					        fn: function(response) {
-									var text = (response.json.signResponse == 'SIGN_OK') ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась так как данный документ уже был подписан этой подписью';
-									Alfresco.util.PopupManager.displayMessage({ text: text });
+								var text = (response.json.signResponse == 'SIGN_OK') ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась так как данный документ уже был подписан этой подписью',
+									cb = (options) ? options.successCallback : null;
+								Alfresco.util.PopupManager.displayMessage({ text: text });
 
-
-									callback = options.successCallback;
-									if(YAHOO.lang.isFunction(callback.fn)){
-										callback.fn.apply(callback.scope, [response]);
-									}
+								if(cb && YAHOO.lang.isFunction(cb.fn)){
+									cb.fn.apply(cb.scope, [response]);
 								}
+							}
 					    },
 					    failureCallback: {
 					    	fn: function() {
-						    		Alfresco.util.PopupManager.displayMessage({	text: 'Загрузка подписи не удалась' });
+								Alfresco.util.PopupManager.displayMessage({	text: 'Загрузка подписи не удалась' });
 
-									callback = options.failureCallback;
-									if(YAHOO.lang.isFunction(callback.fn)){
-										callback.fn.apply(callback.scope, [response]);
-									}
+								var cb = (options) ? options.failureCallback : null;
+								if(cb && YAHOO.lang.isFunction(cb.fn)){
+									cb.fn.apply(cb.scope);
+								}
 					    	}
 					    }
 					});
@@ -537,7 +533,7 @@ function checkForApplet() {
 					for(i = 0; i < response.json.length; i++){
 						contentNodeRef = response.json[i].signedContentNodeRef;
 						contentName = response.json[i].signedContentName;
-						
+
 						signatures = [];
 						signaturesStatus = true;
 
@@ -586,8 +582,8 @@ function checkForApplet() {
 						nodeRefList.push(contentSuccess[i].signedContentNodeRef);
 					}
 
-					cb = options.successCallback;
-					if(YAHOO.lang.isFunction(cb.fn)){
+					cb = (options) ? options.successCallback : null;
+					if(cb && YAHOO.lang.isFunction(cb.fn)){
 						cb.fn.apply(cb.scope, [nodeRefList]);
 					}
 
@@ -630,15 +626,15 @@ function checkForApplet() {
 	                dataObj: dataObj,
 	                successCallback: {
 	                    fn: function(response) {
-	                        var status = response.json.gateResponse.responseType;
+	                        var status = response.json.gateResponse.responseType,
+								cb = (options) ? options.successCallback : null;
 
 							loadingPopup.destroy();
 
 	                        if(status == 'OK'){
-	                        	
-								callback = options.successCallback;
-								if(YAHOO.lang.isFunction(callback.fn)){
-									callback.fn.apply(callback.scope, callback.obj);
+
+								if(cb && YAHOO.lang.isFunction(cb.fn)){
+									cb.fn.apply(cb.scope, cb.obj);
 								}
 
 	                        } else {
@@ -756,7 +752,7 @@ function checkForApplet() {
 
 			/*
 			==========================================================
-			
+
 			==========================================================
 			*/
 
@@ -793,7 +789,7 @@ function checkForApplet() {
 			==========================================================
 			*/
 
-			
+
 
 			loadCertsForm: function (params){
 
@@ -828,12 +824,12 @@ function checkForApplet() {
 							return false;
 						}
 
-						callback = params.doBeforeAjaxCallback;
-						if(YAHOO.lang.isFunction(callback.fn)){
-							callback.fn.apply(callback.scope, [form]);
+						var cb = (params) ? params.doBeforeAjaxCallback : null;
+						if(cb && YAHOO.lang.isFunction(cb.fn)){
+							cb.fn.apply(cb.scope, [form]);
 						}
 
-						if(params.actionURL == null) {
+						if(!params.actionURL) {
 							return false;
 						}
 						return true;
@@ -842,17 +838,17 @@ function checkForApplet() {
 				},
 				 onSuccess: {
 	                     fn: function(response){
-							callback = params.successCallback;
-							if(YAHOO.lang.isFunction(callback.fn)){
-								callback.fn.apply(callback.scope, [response]);
+							var cb = (params) ? params.successCallback : null;
+							if(cb && YAHOO.lang.isFunction(cb.fn)){
+								cb.fn.apply(cb.scope, [response]);
 							}
 	                     }
 	                 },
 				 onFailure: {
 				 	fn: function(){
-						callback = params.failureCallback;
-						if(YAHOO.lang.isFunction(callback.fn)){
-							callback.fn.apply(callback.scope);
+						var cb = (params) ? params.failureCallback : null;
+						if(cb && YAHOO.lang.isFunction(cb.fn)){
+							cb.fn.apply(cb.scope);
 						}
 				 	}
 				 }
@@ -885,8 +881,9 @@ function checkForApplet() {
 						}},
 					doBeforeAjaxRequest: {
 						fn : function(form, obj) {
-							var nodeRefList = [];
-							var fields = document.forms[params.htmlId + '-form'].getElementsByTagName('input');
+							var nodeRefList = [],
+								fields = document.forms[params.htmlId + '-form'].getElementsByTagName('input'),
+								cb = (params) ? params.doBeforeAjaxCallback : null;
 
 							for(var i = 0; i < fields.length; i++) {
 								if(fields[i].checked) nodeRefList.push(fields[i].value);
@@ -898,12 +895,11 @@ function checkForApplet() {
 								return false;
 							}
 
-							callback = params.doBeforeAjaxCallback;
-							if(YAHOO.lang.isFunction(callback.fn)){
-								callback.fn.apply(callback.scope, [nodeRefList, callback.obj]);
+							if(cb && YAHOO.lang.isFunction(cb.fn)){
+								cb.fn.apply(cb.scope, [nodeRefList, cb.obj]);
 							}
 
-							if(params.actionURL == null) {
+							if(!params.actionURL) {
 								return false;
 							}
 							return true;
@@ -911,17 +907,17 @@ function checkForApplet() {
 					},
 					 onSuccess: {
 		                     fn: function (response){
-								callback = params.successCallback;
-								if(YAHOO.lang.isFunction(callback.fn)){
-									callback.fn.apply(callback.scope, [response]);
+								var cb = (params) ? params.successCallback : null;
+								if(cb && YAHOO.lang.isFunction(cb.fn)){
+									cb.fn.apply(cb.scope, [response]);
 								}
 		                     }
 		                 },
 					 onFailure: {
 					 	fn: function (){
-							callback = params.failureCallback;
-							if(YAHOO.lang.isFunction(callback.fn)){
-								callback.fn.apply(callback.scope);
+							var cb = (params) ? params.failureCallback : null;
+							if(cb && YAHOO.lang.isFunction(cb.fn)){
+								cb.fn.apply(cb.scope);
 							}
 					 	}
 					 }
@@ -995,7 +991,7 @@ function Certificate(containerName){
 		}
 		certIssued = Info.certIssued;
 		this.container = containerName;
-		
+
 		tmp = certIssued.match('CN=(.+?)(?=,)'); //ФИО владельца
 		if (tmp)
 			this.owner = tmp[1];
@@ -1101,7 +1097,7 @@ function CertificateFromBase64(base64){
 		this.certIssuer = '';
 	//Доверяй, но проверяй!
 	this.valid = signApplet.getAPI().certIsValid(this.base64);
-	
+
 }
 
 Certificate.prototype = {
@@ -1224,7 +1220,7 @@ function Signature(cert, nodeRef) {
 		console.log('error while processing signature');
 		return null;
 	}
-	
+
 };
 
 /*
@@ -1293,7 +1289,7 @@ function SignatureFromFile(nodeRef){
 
 	if(nodeRef != null && nodeRef.length !=0){
 		try{
-			signatureRaw = signApplet.getService().getCertFromFileUI();			
+			signatureRaw = signApplet.getService().getCertFromFileUI();
 			this.signatureContent = prepareBase64(signatureRaw);
 			if(this.signatureContent != null && this.signatureContent.length != 0){
 				contentURI = new Alfresco.util.NodeRef(this.contentAssociation).uri;
