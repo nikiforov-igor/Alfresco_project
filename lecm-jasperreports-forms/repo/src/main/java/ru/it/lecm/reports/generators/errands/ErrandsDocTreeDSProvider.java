@@ -10,6 +10,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -46,12 +47,6 @@ public class ErrandsDocTreeDSProvider
 	/** Формат названия документов по-умолчанию */
 	final static String DEFAULT_DISPLAY_FORMAT = "cm:name";
 
-	/**
-	 * Список отбираемых документов или null, если надо все ...
-	 * По-сути требуется только при построении текста запроса
-	 */
-	// private List<NodeRef> selectedDocuments;
-
 	/** для упрощения работы с QName-объектами Поручений */
 	private LocalQNamesHelper _qnames;
 
@@ -66,7 +61,11 @@ public class ErrandsDocTreeDSProvider
 	}
 
 
-	@SuppressWarnings("unused")
+	/**
+	 * Параметры для построения иерархического списка Поручений.
+	 * @author rabdullin
+	 * SuppressWarnings("unused")
+	 */
 	private static class ErrandsDocTreeParams {
 
 		final static String XML_TREE_FORMATS = "tree.formats"; // key: "levelShift" = String_For_Level_Shift
@@ -204,12 +203,6 @@ public class ErrandsDocTreeDSProvider
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
 		final ExecDocTreeJRDataSource result = new ExecDocTreeJRDataSource(iterator);
-//		result.getContext().setSubstitudeService( getServices().getSubstitudeService());
-//		result.getContext().setRegistryService( getServices().getServiceRegistry());
-//		// result.getContext().setJrSimpleProps( jrSimpleProps);
-//		result.getContext().setMetaFields( JRUtils.getDataFields(getReportDescriptor()));
-//		// if (filter != null) result.getContext().setFilter( filter.makeAssocFilter());
-//		result.buildJoin();
 		return result;
 	}
 
@@ -249,7 +242,7 @@ public class ErrandsDocTreeDSProvider
 	/**
 	 * Структура для хранения данных о иерархическом объекте:
 	 */
-	private class ItemLeveledInfo {
+	private static class ItemLeveledInfo {
 
 		final private NodeRef node;
 
@@ -276,16 +269,6 @@ public class ErrandsDocTreeDSProvider
 			// псевдо-узел
 			this(null, /*level*/-1, /*number*/0, /*parentStr*/ "", /*displayName*/ "RootNode");
 		}
-
-		/*
-		public ItemLeveledInfo(NodeRef node) {
-			this(node, 0, 1, null, null);
-		}
-
-		public ItemLeveledInfo(NodeRef node, int level, int number, String numberedStrOfParent) {
-			this(node, level, number, numberedStrOfParent, null);
-		}
-		 */
 
 		/**
 		 * Создать описание узла указанного уровня
@@ -379,6 +362,9 @@ public class ErrandsDocTreeDSProvider
 	 */
 	private class DocTreeBuilder {
 
+		/** ообозначение для неограниченной вложенности */
+		final static int UNLIMITED_LEVELS = -1;
+
 		final private NodeService nodeService;
 		final private SubstitudeBean substService;
 		final private NamespaceService ns;
@@ -399,7 +385,7 @@ public class ErrandsDocTreeDSProvider
 		 * @param docId
 		 */
 		public void regRootItem(NodeRef docId) {
-			regLeveldItem(docId, virtRoot, null);
+			regLeveldItem(docId, virtRoot, null, UNLIMITED_LEVELS);
 		}
 
 		/**
@@ -422,9 +408,11 @@ public class ErrandsDocTreeDSProvider
 		 * детей (с контролем от зацикливания).
 		 * @param docId
 		 * @param parentNode
+		 * @param maxDeepLevel оставшиеся уровни, если 0, то дети не будут грузиться,
+		 * если (<0), то глубина не ограничена.
 		 * @param qnParentAssoc ассоциация, которая привела на уровень level (для корневых null)
 		 */
-		private void regLeveldItem( final NodeRef docId, ItemLeveledInfo parentNode, final QName qnParentAssoc) {
+		private void regLeveldItem( final NodeRef docId, ItemLeveledInfo parentNode, final QName qnParentAssoc, int maxDeepLevel) {
 
 			PropertyCheck.mandatory(this, "docId", docId);
 			PropertyCheck.mandatory(this, "parentNode", parentNode);
@@ -432,12 +420,13 @@ public class ErrandsDocTreeDSProvider
 			// уровень создаваемого здесь объекта (0 = корневой)
 			final int level = parentNode.getLevel() + 1;
 
-			// флажок потора узла
+			// флажок повтора узла
 			final boolean isDup = this.getProcessed().containsKey(docId);
 
 			/* Название нового элемента */
 			String displayName = makeDocName(docId);
-			// повторяющиеся элементы помечаем звёздочкой
+
+			// повторяющиеся элементы помечаем "звёздочкой"
 			if (isDup) displayName = configDocTreeParams.getDupMarker() + displayName;
 
 			/* Добавление нового элемента */
@@ -446,23 +435,32 @@ public class ErrandsDocTreeDSProvider
 			this.processedList.add( docItem);
 
 			/* Детей добавим только если элемента ещё не было или он верхнего уровня */
-			if (isDup && level > 0) {
-				logger.warn( String.format( "Item {%s} at level %s is cyclic -> children not scanned", docId, level));
+			if (isDup && level > 0) { // повтор и глубина есть ...
+				logger.warn( String.format( "Item {%s} at level %s found recursevly -> deeper children not scanned", docId, level));
 				return;
 			}
 
 			/* подгружаем детей ((!) по обратной связи) */
-			final String cur_qnameStr = configDocTreeParams.getLeveledAssocQn(level+1);
+			if (maxDeepLevel != 0) {
+				final String cur_qnameStr = configDocTreeParams.getLeveledAssocQn(level+1);
 
-			// если явно не задано ассоциации - используем от предыдущего уровня
-			final QName qnCurAssoc = Utils.isStringEmpty(cur_qnameStr) ? qnParentAssoc : QName.createQName(cur_qnameStr, this.ns);
-			if (qnCurAssoc == null)
-				throw new RuntimeException( String.format( "Invalid configuration: no association found from level %d", level));
+				// если явно не задано ассоциации - используем от предыдущего уровня
+				final QName qnCurAssoc = Utils.isStringEmpty(cur_qnameStr) ? qnParentAssoc : QName.createQName(cur_qnameStr, this.ns);
+				if (qnCurAssoc == null)
+					throw new RuntimeException( String.format( "Invalid configuration: no association found from level %d", level));
 
-			final List<ChildAssociationRef> children = nodeService.getParentAssocs(docId, qnCurAssoc, RegexQNamePattern.MATCH_ALL);
-			if (children != null) {
-				for (ChildAssociationRef child: children) {
-					regLeveldItem( child.getParentRef(), docItem, qnCurAssoc);
+				final List<ChildAssociationRef> children = nodeService.getParentAssocs(docId, qnCurAssoc, RegexQNamePattern.MATCH_ALL);
+				if (children != null) {
+					for (ChildAssociationRef child: children) {
+						regLeveldItem( child.getParentRef(), docItem, qnCurAssoc, maxDeepLevel-1);
+					}
+				} else { // пробуем другой тип ассоциаций ...
+					final List<AssociationRef> children2 = nodeService.getSourceAssocs(docId, qnCurAssoc);
+					if (children2 != null) {
+						for (AssociationRef child: children2) {
+							regLeveldItem( child.getSourceRef(), docItem, qnCurAssoc, maxDeepLevel-1);
+						} // for
+					} // if
 				}
 			}
 		}

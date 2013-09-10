@@ -24,6 +24,7 @@ import org.alfresco.service.cmr.repository.MimetypeService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -731,6 +732,11 @@ public class ReportsManagerImpl implements ReportsManager {
 
 		final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
 		final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		String srcDataFilename = srcData.getFilename();
+		if (srcDataFilename != null && !srcDataFilename.isEmpty()) {
+			srcDataFilename = FileNameValidator.getValidFileName(srcDataFilename);
+		}
+
 		{
 			properties.put(ContentModel.PROP_NAME, srcData.getFilename());
 			if (srcData.getFilename() != null) {

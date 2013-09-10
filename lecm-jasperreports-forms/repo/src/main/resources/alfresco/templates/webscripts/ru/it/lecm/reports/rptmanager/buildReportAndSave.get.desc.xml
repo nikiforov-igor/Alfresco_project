@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <webscript>
 	<shortname>Generate Report and Save it</shortname>
-	<url>/lecm/reports/rptmanager/buildReportAndSave?reportCode={reportCode}&destFolderRef={destFolderRef}&args={args}</url>
+	<url>/lecm/reports/rptmanager/buildReportAndSave?reportCode={reportCode}&amp;destFolderRef={destFolderRef}&amp;args={args}</url>
 	<authentication>user</authentication>
 	<format default="json">extension</format>
 	<transaction>required</transaction>

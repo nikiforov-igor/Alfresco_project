@@ -63,8 +63,8 @@ public abstract class TypedJoinDS<T extends Object> extends AlfrescoJRDataSource
 	 * @param item
 	 * @return
 	 */
-	private Map<String, Serializable> getNodeProps(T item) {
-		final Map<String, Serializable> result = new HashMap<String, Serializable>();
+	private Map<String, Object> getNodeProps(T item) {
+		final Map<String, Object> result = new HashMap<String, Object>();
 
 		final Map<String, Serializable> contextProps = getReportContextProps( item);
 		if (contextProps != null) {

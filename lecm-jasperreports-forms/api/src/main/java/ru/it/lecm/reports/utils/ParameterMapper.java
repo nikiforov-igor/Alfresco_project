@@ -1,8 +1,17 @@
 package ru.it.lecm.reports.utils;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType.Type;
@@ -11,19 +20,13 @@ import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
 import ru.it.lecm.reports.model.impl.JavaDataTypeImpl.SupportedTypes;
 import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Распределитель request-аргументов по параметрам описателя отчёта.
  * Название аргумента для колонки данных выбирается в getArgRootName.
  */
 public class ParameterMapper {
 	static final transient Logger log = LoggerFactory.getLogger(ParameterMapper.class);
+
 	public static final String DATE_RANGE = "-date-range";
 	public static final String NUMBER_RANGE = "-range";
 	public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -40,11 +43,32 @@ public class ParameterMapper {
 			return;
 
 		for (ColumnDescriptor colDesc : reportDesc.getDsDescriptor().getColumns()) {
-			if (colDesc.getParameterValue() == null) // колонка не описана как параметр ...
+			String argRootName = getArgRootName(colDesc);// colDesc.getColumnName();
+
+			/*
+			 * Если колонка НЕ описана как параметр, но значение ей передаётся в 
+			 * аргументах, считаем что она задана как константа.
+			 */
+			if (colDesc.getParameterValue() == null) { // колонка не описана как параметр ...
+
+				// проверка на наличие данных в строке параметров - CONSTANT VALUE
+				if ( args.containsKey(colDesc.getColumnName())) {
+					final String[] argv = args.get(colDesc.getColumnName());
+					final String value = (argv != null && argv.length > 0) ? argv[0] : null;
+					log.info( String.format(
+							"Arguments list contains data for report column '%s' that is not marked as parameter -> column set as constant:"
+							+ "\n\t default column expression: '%s'"
+							+ "\n\t new argument constant: '%s'"
+							, colDesc.getColumnName()
+							, colDesc.getExpression()
+							, value
+					));
+					colDesc.setExpression(value);
+				}
 				continue;
+			}
 
 			// если колонка параметризована ...
-			String argRootName = getArgRootName(colDesc);// colDesc.getColumnName();
 			switch (colDesc.getParameterValue().getType()) {
 			case RANGE: {
 				// проверяем диапозон дат
@@ -68,24 +92,13 @@ public class ParameterMapper {
 					if (args.containsKey(argRootName)) {
 						final String[] paramValue = args.get(argRootName)[0].split("\\|");
 						if (isDateRange) {
-							try {
-								bound1 = (paramValue[0] != null && paramValue[0].length() > 0) ? DATE_FORMAT.parse(paramValue[0]) : null;
-								if (paramValue.length == 2) {
-									bound2 = (paramValue[1] != null && paramValue[1].length() > 0) ? DATE_FORMAT.parse(paramValue[1]) : null;
-								}
-							} catch (ParseException ignored) {
-							}
+							bound1 = getDateValue(paramValue[0]);
+							if (paramValue.length >= 2)
+								bound2 = getDateValue(paramValue[1]);
 						} else {
-							bound1 = (paramValue[0] != null && paramValue[0].length() > 0) ? paramValue[0] : null;
-							if (bound1 != null) {
-								bound1 = bound1.toString().indexOf(".") > 0 ? Double.valueOf((String) bound1) : Long.valueOf((String) bound1);
-							}
-							if (paramValue.length == 2) {
-								bound2 = (paramValue[1] != null && paramValue[1].length() > 0) ? paramValue[1] : null;
-								if (bound2 != null) {
-									bound2 = bound2.toString().indexOf(".") > 0 ? Double.valueOf((String) bound2) : Long.valueOf((String) bound2);
-								}
-							}
+							bound1 = getNumericAutoTypedValue( paramValue[0]);
+							if (paramValue.length >= 2)
+								bound2 = getNumericAutoTypedValue( paramValue[1]);
 						}
 					}
 				}
@@ -129,6 +142,25 @@ public class ParameterMapper {
 		}
 	}
 
+
+	final static Object getNumericAutoTypedValue( String value) {
+		if (value == null || value.length() == 0)
+			return null;
+		final Object result = value.indexOf(".") > 0 
+						? Double.valueOf(value)
+						: Long.valueOf(value);
+		return result;
+	}
+
+	final static Date getDateValue(String paramValue) {
+		try {
+			if (paramValue != null && paramValue.length() > 0) 
+				return DATE_FORMAT.parse(paramValue);
+		} catch (ParseException ignored) {
+			log.warn( String.format( "Value string '%s' is not correct date was ignored and set as NULL.\n\t Last error was: ", paramValue, ignored.toString()));
+		}
+		return null;
+	}
 
 	/**
 	 * Гарантировать наличие колонки с указанным названием и присвоить ей указанное значение.

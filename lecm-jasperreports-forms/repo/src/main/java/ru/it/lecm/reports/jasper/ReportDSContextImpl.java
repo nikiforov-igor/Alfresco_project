@@ -1,6 +1,5 @@
 package ru.it.lecm.reports.jasper;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,7 +30,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 
 	// список отобранных для отчёта атрибутов Альфреско для активной строки набора данных
 	// ключ = QName.toString() с короткими именами типов (т.е. вида "cm:folder" или "lecm-contract:document")
-	private Map<String, Serializable> curProps; // ключ = нативное Альфреско-имя
+	private Map<String, Object> curProps; // ключ = нативное Альфреско-имя
 	private NodeRef curNodeRef;
 	private Iterator<ResultSetRow> rsIter;
 	private ResultSetRow rsRow;
@@ -117,11 +116,11 @@ public class ReportDSContextImpl implements ReportDSContext {
 	}
 
 	@Override
-	public Map<String, Serializable> getCurNodeProps() {
+	public Map<String, Object> getCurNodeProps() {
 		return curProps;
 	}
 
-	public void setCurNodeProps(Map<String, Serializable> value) {
+	public void setCurNodeProps(Map<String, Object> value) {
 		this.curProps = value;
 	}
 

@@ -15,7 +15,6 @@ import ru.it.lecm.reports.api.model.NamedValue;
  *    - custom-атрибуты (attributes), заполняемые непосредственно набором данных конкретного провайдера. 
  * @author Ruslan
  */
-// TODO: сделать опции (представление NULL и пр) либо поотдельности, либо Map-списком (хуже, т.к. опции станут неявными) 
 public class DataFieldColumn extends JRDesignField {
 
 	private static final long serialVersionUID = 1L;
@@ -102,10 +101,24 @@ public class DataFieldColumn extends JRDesignField {
 	public static DataFieldColumn createDataField(ColumnDescriptor colDesc) {
 		if (colDesc == null)
 			return null;
+
 		final DataFieldColumn result = new DataFieldColumn();
 		result.setName( colDesc.getColumnName());
 		result.setDescription( colDesc.getDefault());
-		result.setValueLink(colDesc.getExpression());
+
+		/* значение ... */
+		// if (colDesc.getExpression() != null && colDesc.getExpression().length() > 0)
+		if (colDesc.getParameterValue() != null) {
+			// если параметризован ...
+			if (colDesc.getParameterValue().getBound1() != null)
+				result.setValueLink( String.format( "%s", colDesc.getParameterValue().getBound1()) );
+			else
+				result.setValueLink( colDesc.getExpression());
+		} else { // не параметр ...
+			result.setValueLink( colDesc.getExpression());
+		}
+
+		/* тип ... */
 		try {
 			if (colDesc.getDataType() != null && colDesc.getDataType().className() != null) {
 				result.setValueClass( Class.forName(colDesc.getDataType().className()) );

@@ -345,8 +345,8 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 		 * Сформировать контйнер с данными для jr
 		 * @param item
 		 */
-		private Map<String, Serializable> makeCurProps(EmployeeInfo item) {
-			final Map<String, Serializable> result = new HashMap<String, Serializable>();
+		private Map<String, Object> makeCurProps(EmployeeInfo item) {
+			final Map<String, Object> result = new HashMap<String, Object>();
 
 			result.put( getAlfAttrNameByJRKey(JRName_FIRSTNAME), item.firstName);
 			result.put( getAlfAttrNameByJRKey(JRName_MIDDLENAME), item.middleName);

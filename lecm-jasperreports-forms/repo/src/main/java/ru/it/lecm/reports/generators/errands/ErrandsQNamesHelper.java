@@ -22,6 +22,9 @@ public class ErrandsQNamesHelper {
 	/** assoc Исполнитель (1) */
 	final public static String ASSOC_EXECUTOR = "lecm-errands:executor-assoc"; // default value for QN_ASSOC_REF
 
+	/** assoc Соисполнители */
+	final public static String ASSOC_COEXECUTORS = "lecm-errands:coexecutors-assoc";
+
 	/** Дата выдачи поручения: date */
 	final public static String FLD_START_DATE = "lecm-errands:start-date";
 
@@ -43,11 +46,20 @@ public class ErrandsQNamesHelper {
 	/** Просрочено: boolean, default=false */
 	final public static String FLD_IS_EXPIRED = "lecm-errands:is-expired";
 
+	/** Заголовок */
+	final public static String FLD_TITLE = "lecm-errands:title";
+
+	/** Статус */
+	final public static String FLD_DOCSTATUS = "lecm-statemachine:status";
+
 	/** type "Поручение" */
 	final public QName QN_TYPE_ERRANDS; 
 
 	/** Ассоциация для Исполнителей Поручения */
 	final public QName QN_ASSOC_EXECUTOR;
+
+	/** Ассоциация для Соисполнителей */
+	final public QName QN_ASSOC_COEXECUTORS;
 
 	/** Дата выдачи поручения: date */
 	final public QName QNFLD_START_DATE;
@@ -75,6 +87,12 @@ public class ErrandsQNamesHelper {
 	/** Просрочено: boolean, default=false */
 	final public QName QNFLD_IS_EXPIRED;
 
+	/** Статус */
+	final public QName QNFLD_DOCSTATUS;
+
+	/** Заголовок */
+	final public QName QNFLD_TITLE;
+
 	final public NamespaceService ns;
 
 	public ErrandsQNamesHelper(NamespaceService ns) {
@@ -83,6 +101,7 @@ public class ErrandsQNamesHelper {
 
 		this.QN_TYPE_ERRANDS = QName.createQName(TYPE_ERRANDS, this.ns);
 		this.QN_ASSOC_EXECUTOR = QName.createQName(ASSOC_EXECUTOR, this.ns);
+		this.QN_ASSOC_COEXECUTORS = QName.createQName(ASSOC_COEXECUTORS, this.ns);
 
 		this.QNFLD_START_DATE = QName.createQName(FLD_START_DATE, this.ns);
 		this.QNFLD_START_WORK_DATE = QName.createQName(FLD_START_WORK_DATE, this.ns);
@@ -94,6 +113,9 @@ public class ErrandsQNamesHelper {
 		this.QNFLD_WAS_REJECTED = QName.createQName(FLD_WAS_REJECTED, this.ns);
 		this.QNFLD_IS_IMPORTANT = QName.createQName(FLD_IS_IMPORTANT, this.ns);
 		this.QNFLD_IS_EXPIRED = QName.createQName(FLD_IS_EXPIRED, this.ns);
+
+		this.QNFLD_TITLE = QName.createQName(FLD_TITLE, this.ns);
+		this.QNFLD_DOCSTATUS = QName.createQName(FLD_DOCSTATUS, this.ns);
 	}
 
 	/**

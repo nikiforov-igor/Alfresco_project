@@ -49,7 +49,7 @@ public interface ReportDSContext {
 	 * например, ключом может быть ссылка DataFieldColumn.getValueLink,
 	 * где DataFieldColumn получен как getMetaFields().get( jrField.getName() ). 
 	 */
-	public Map<String, Serializable> getCurNodeProps();
+	public Map<String, Object> getCurNodeProps();
 
 	/**
 	 * Получить данные для указанного поля отчёта

@@ -156,8 +156,8 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 * набор всех свойств объекта (например, может не быть пустых значений), 
 	 * добавлением мы гарантируем, чтобы curProps содержал всё, что надо для jr.
 	 */
-	private HashMap<String, Serializable> ensureJRProps() {
-		final HashMap<String, Serializable> result = new HashMap<String, Serializable>();
+	private HashMap<String, Object> ensureJRProps() {
+		final HashMap<String, Object> result = new HashMap<String, Object>();
 		final StringBuilder sb = new StringBuilder("Filtering alfresco properties by names: \n"); 
 		if (this.context.getJrSimpleProps() != null){
 			// все свойства включаем в набор с пустыми значениями

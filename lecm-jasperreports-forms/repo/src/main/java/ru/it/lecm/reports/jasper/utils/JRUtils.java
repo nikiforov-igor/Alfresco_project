@@ -74,9 +74,9 @@ public class JRUtils {
 		// NOTE: если понадобится, можно сделать список для полей "однажды приготавливаемый" ...
 		final List<JRField> result =
 				(reportDescriptor != null && reportDescriptor.getDsDescriptor() != null) 
-					? getJRFields(reportDescriptor.getDsDescriptor().getColumns())
-					: new ArrayList<JRField>();
-		return result;
+				? getJRFields(reportDescriptor.getDsDescriptor().getColumns())
+						: new ArrayList<JRField>();
+				return result;
 	}
 
 	public static List<JRField> getJRFields(Collection<ColumnDescriptor> columns) {
@@ -117,11 +117,8 @@ public class JRUtils {
 				&& reportDescriptor.getDsDescriptor().getColumns() != null
 				) {
 			for(ColumnDescriptor colDesc: reportDescriptor.getDsDescriptor().getColumns()) {
-				final DataFieldColumn item = new DataFieldColumn();
-				item.setName( colDesc.getColumnName());
-				item.setValueLink( colDesc.getExpression());
-                item.setValueClassName(colDesc.className());
-                result.add(item);
+				final DataFieldColumn item = DataFieldColumn.createDataField(colDesc);
+				result.add(item);
 			} // for
 		}
 		return result;
