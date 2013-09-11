@@ -145,7 +145,11 @@
 		<property name="policyComponent" ref="policyComponent"/>
 	</bean>
 
-	<bean id="webscript.ru.it.lecm.statemachine.changestate.get"
+    <bean id="stateMachineDeleteDocumentPolicy" class="ru.it.lecm.statemachine.policy.StateMachineDeleteDocumentPolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.statemachine.changestate.get"
 		  class="ru.it.lecm.statemachine.action.script.StartWorkflowScript"
 		  parent="webscript">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>

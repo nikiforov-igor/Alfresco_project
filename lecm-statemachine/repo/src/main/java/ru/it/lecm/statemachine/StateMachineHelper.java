@@ -1023,36 +1023,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                         }
 
                         String processId = execution.getProcessInstanceId();
-                        ExecutionEntity process = (ExecutionEntity) activitiProcessEngineConfiguration.getRuntimeService().createProcessInstanceQuery().processInstanceId(processId).singleResult();
-                        //Завершаем процесс
-                        ProcessDefinitionEntity definition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(process.getProcessDefinitionId());
-                        List<ActivityImpl> activities = definition.getActivities();
-                        ActivityImpl endActivity = null;
-                        for (ActivityImpl activity : activities) {
-                            if (activity.getActivityBehavior() instanceof NoneEndEventActivityBehavior) {
-                                endActivity = activity;
-                            }
-                        }
-                        if (endActivity != null) {
-                            process.setProcessDefinition(definition);
-                            process.setActivity(endActivity);
-                            try {
-                                process.end();
-                            } catch (Exception e) {
-	                            logger.error(e.getMessage(), e);
-                            }
-
-                        }
-
-                        //Завершаем все активные задачи
-                        activitiProcessEngineConfiguration.getRuntimeService().deleteProcessInstance(processId, "cancelled");
-                        /*List<Execution> executionEntities = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().processInstanceId(processId).list();
-                        for (Execution executionEntity : executionEntities) {
-                            ExecutionEntity ee = (ExecutionEntity) executionEntity;
-                            if (ee.isActive()) {
-                                ee.performOperation(AtomicOperation.DELETE_CASCADE);
-                            }
-                        }*/
+                        terminateProcess(processId);
                     }
                 }
             }
@@ -1144,6 +1115,15 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
+    /**
+     * Останавливает процесс по его Id
+     * @param processId
+     */
+    public void terminateProcess(String processId) {
+        activitiProcessEngineConfiguration.getRuntimeService().deleteProcessInstance(processId, "cancelled");
+    }
+
+
     private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
         List<StateMachineAction> result = new ArrayList<StateMachineAction>();
         ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
@@ -1201,8 +1181,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         return result;
     }
-
-
 
     private TransitionResponse executeTransitionAction(final NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
         TransitionResponse response = new TransitionResponse();
@@ -1444,5 +1422,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         return statuses;
     }
+
+
 
 }
