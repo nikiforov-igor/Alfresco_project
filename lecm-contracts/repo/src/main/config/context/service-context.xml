@@ -158,49 +158,49 @@
 					<prop key="engineId">activiti</prop>
 					<prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-create-on-basis.bpmn20.xml</prop>
 					<prop key="mimetype">text/xml</prop>
-					<prop key="redeploy">true</prop>
+					<prop key="redeploy">${redeploy.process.definitions}</prop>
 				</props>
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-delete-reason.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">true</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-contract-time.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">true</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
 				<props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-termination.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">true</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-executed.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">true</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-sign-contractor.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">true</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-additionalDocument-sign-contractor.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">true</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
 				<props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${artifactId}/workflow/lecm-additionalDocument-cancel.bpmn20.xml</prop>
                     <prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">true</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
 			</list>
 		</property>

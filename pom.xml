@@ -71,6 +71,7 @@
 		<buildNumber>1</buildNumber>
 		<client.debug>false</client.debug>
 		<module.log.level>info</module.log.level>
+        <redeploy.process.definitions>false</redeploy.process.definitions>
 		<repo.jscript.ScriptLogger>info</repo.jscript.ScriptLogger>
 		<apache.cxf.version>2.7.5</apache.cxf.version>
 	</properties>
@@ -539,6 +540,11 @@
 				<module.log.level>debug</module.log.level>
 				<repo.jscript.ScriptLogger>debug</repo.jscript.ScriptLogger>
 			</properties>
+		</profile>
+		<profile>
+			<id>redeploy-process-definitions</id>
+			<properties>
+                <redeploy.process.definitions>true</redeploy.process.definitions>			</properties>
 		</profile>
 	</profiles>
 </project>
