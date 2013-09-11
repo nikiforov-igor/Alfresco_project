@@ -21,6 +21,7 @@ import ru.it.lecm.base.beans.getchildren.GetLECMChildrenCannedQueryFactory;
 import ru.it.lecm.base.beans.getchildren.GetLECMChildsCannedQuery;
 
 /**
+ * Сервис поиска объектов без использования Solr
  * @author dbashmakov
  *         Date: 08.02.13
  *         Time: 15:01

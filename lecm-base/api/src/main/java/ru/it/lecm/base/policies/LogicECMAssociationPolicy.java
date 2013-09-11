@@ -15,6 +15,9 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 
 /**
+ * Policy, содержащее логику сохранения текстовых описаний (для последующего поиска по ним) объектов,
+ * на которые добавляется ассоциация. Наследуется другими, чтобы включить сохранение описаний
+ * для конкретных типов в соответствующих модулях
  * @author dbashmakov
  *         Date: 05.02.13
  *         Time: 11:09
@@ -48,7 +51,7 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
 		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
 	}
 	/**
-	 * Метод добавляет значение ассоциации в поле объекта с именем 'assoc'-ref, если оно существует
+	 * Метод добавляет значение ассоциации в поле объекта с именем 'assoc'-ref и 'assoc'-text-content, если оно существует
 	 * @param nodeAssocRef
 	 */
 	@Override
@@ -88,7 +91,7 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
 	}
 
 	/**
-	 * Метод сбрасывает значение ассоциации в поле объекта с именем 'assoc'-ref, если оно существует
+	 * Метод сбрасывает значение ассоциации в поле объекта с именем 'assoc'-ref и 'assoc'-text-content, если оно существует
 	 * @param nodeAssocRef
 	 */
 	@Override

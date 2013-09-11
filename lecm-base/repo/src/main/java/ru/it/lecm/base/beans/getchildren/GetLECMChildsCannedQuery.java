@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Класс, реализующий запрос и фильтрацию для получение списка child элементов ноды
  * @author dbashmakov
  *         Date: 11.02.13
  *         Time: 10:58

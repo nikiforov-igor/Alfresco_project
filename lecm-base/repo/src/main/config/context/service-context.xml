@@ -60,6 +60,7 @@
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="dictionaryService" ref="serviceDictionary"/>
+        <property name="documentService" ref="documentService"/>
         <property name="dateFormat">
             <value>${lecm.base.date.format}</value>
         </property>

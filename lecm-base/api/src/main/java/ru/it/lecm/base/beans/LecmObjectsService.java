@@ -11,6 +11,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.Pair;
 
 /**
+ * Класс для поиска LECM-объектов без использования Solr
  * @author dbashmakov
  *         Date: 08.02.13
  *         Time: 14:59

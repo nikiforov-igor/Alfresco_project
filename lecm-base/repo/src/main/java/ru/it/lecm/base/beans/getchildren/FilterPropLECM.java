@@ -7,6 +7,8 @@ import org.alfresco.repo.node.getchildren.FilterType;
 import org.alfresco.service.namespace.QName;
 
 /**
+ * утилитный класс, использующийся при поиске объектов.
+ * Предоставляет возможность проверять на эквивалентность данные разных типов.
  * @author dbashmakov
  *         Date: 11.02.13
  *         Time: 11:16

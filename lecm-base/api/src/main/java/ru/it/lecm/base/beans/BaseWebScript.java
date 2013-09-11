@@ -34,7 +34,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
      *
      * @return Scriptable
      */
-    public Scriptable createScriptable(List<NodeRef> refs) {
+    protected Scriptable createScriptable(List<NodeRef> refs) {
         Object[] results = new Object[refs.size()];
         for (int i = 0; i < results.length; i++) {
             results[i] = new ScriptNode(refs.get(i), serviceRegistry, getScope());
@@ -47,7 +47,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	 *
 	 * @return Scriptable
 	 */
-	public Scriptable createVersionScriptable(Collection<Version> versions) {
+	protected Scriptable createVersionScriptable(Collection<Version> versions) {
 		Object[] results = new Object[versions.size()];
 		int i = 0;
 		for (Version version : versions) {

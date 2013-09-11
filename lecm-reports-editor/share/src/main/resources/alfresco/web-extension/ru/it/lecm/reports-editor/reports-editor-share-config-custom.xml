@@ -428,7 +428,7 @@
                     <field id="lecm-rpeditor:dataColumnClass">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
-                            <control-param name="webscript">lecm/base/types?includeDicValues=true</control-param>
+                            <control-param name="webscript">lecm/base/types</control-param>
                             <control-param name="withEmpty">true</control-param>
                             <control-param name="updateOnAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
@@ -476,7 +476,7 @@
                     <field id="lecm-rpeditor:dataColumnClass">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
-                            <control-param name="webscript">lecm/base/types?includeDicValues=true</control-param>
+                            <control-param name="webscript">lecm/base/types</control-param>
                             <control-param name="withEmpty">true</control-param>
                             <control-param name="updateOnAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>

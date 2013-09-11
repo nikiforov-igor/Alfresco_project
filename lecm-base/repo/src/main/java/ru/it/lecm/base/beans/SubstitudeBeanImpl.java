@@ -4,6 +4,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -33,8 +34,9 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
     private String dateFormat = "yyyy-MM-dd HH:mm";
 
 	final private static Logger logger = LoggerFactory.getLogger(SubstitudeBeanImpl.class);
+    private DocumentService documentService;
 
-	/**
+    /**
 	 * Получение заголовка элемента в соответствии с форматной строкой.
 	 * Выражения в форматной строке должны быть заключены в символы открытия (@see OPEN_SUBSTITUDE_SYMBOL) и закрытия (@see CLOSE_SUBSTITUDE_SYMBOL)
 	 *
@@ -276,9 +278,11 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 	}
 
     private NodeRef getDocumentAuthor(NodeRef document) {
-        String documentCreator = (String) nodeService.getProperty(document, DocumentService.PROP_DOCUMENT_CREATOR_REF);
+        QName docType = nodeService.getType(document);
+        String authorProp = documentService.getAuthorProperty(docType);
+        String documentCreator = (String) nodeService.getProperty(document, QName.createQName(authorProp, namespaceService));
 	    if (documentCreator != null && !documentCreator.isEmpty()) {
-			return new NodeRef(documentCreator.toString());
+			return new NodeRef(documentCreator);
 	    } else {
 		    Object creator = nodeService.getProperty(document, ContentModel.PROP_CREATOR);
 		    NodeRef person = serviceRegistry.getPersonService().getPerson(creator.toString(), false);
@@ -528,5 +532,9 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             }
         }
         return showNode;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 }

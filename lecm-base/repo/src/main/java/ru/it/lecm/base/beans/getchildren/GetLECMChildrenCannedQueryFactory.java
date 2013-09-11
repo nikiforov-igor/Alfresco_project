@@ -23,6 +23,7 @@ import org.alfresco.util.ParameterCheck;
 import org.alfresco.util.PropertyCheck;
 
 /**
+ * Класс-фабрика, возвращающая поисковый запрос для поиска объектов
  * @author dbashmakov
  *         Date: 11.02.13
  *         Time: 12:10
