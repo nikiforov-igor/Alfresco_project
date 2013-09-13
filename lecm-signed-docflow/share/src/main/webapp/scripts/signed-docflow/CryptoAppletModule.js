@@ -106,7 +106,7 @@ function checkForApplet() {
 
 				for(i = 0; i < nodeRefList.length; i++){
 					sign = new Signature(currentSigningCert, nodeRefList[i]);
-					if(sign != null){
+					if(sign != null && sign.valid){
 						signatures.push(sign);
 					}
 				}
@@ -389,7 +389,7 @@ function checkForApplet() {
 				for(i = 0; i < containers.length; i++) {
 					cert = null;
 					cert = new Certificate(containers[i]);
-					if(cert != null && cert.getBase64() != ''){
+					if(cert != null && cert.getBase64() != '' && cert.isValid()){
 						certs.push(cert);
 					}
 				}
@@ -1215,6 +1215,10 @@ function Signature(cert, nodeRef) {
 		this.signDate = Alfresco.util.toISO8601(new Date());
 		contentURI = new Alfresco.util.NodeRef(nodeRef).uri;
 		this.signatureContent = signApplet.sign(Alfresco.constants.PROXY_URI + 'api/node/content/' + contentURI, 'URL');
+		if(this.signautreContent == null){
+			console.log('error while creating signature');
+			return null;
+		}
 		this.valid = true;
 	} catch(e) {
 		console.log('error while processing signature');

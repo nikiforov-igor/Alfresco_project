@@ -265,6 +265,9 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		result.put("contentRef", contentRef);
 		result.put("name", nodeService.getProperty(contentRef, ContentModel.PROP_NAME));
 		result.put("signResponse", "SIGN_FAILURE");
+		if(signatureContent == null){
+			return result;
+		}
 //		Map<String, Object> verifySignatureResponse = unicloudService.verifySignature(contentRefStr, signatureContent);
 //		if (verifySignatureResponse.containsKey("isSignatureValid")) {
 //			boolean isSignatureValid = (Boolean) verifySignatureResponse.get("isSignatureValid");
