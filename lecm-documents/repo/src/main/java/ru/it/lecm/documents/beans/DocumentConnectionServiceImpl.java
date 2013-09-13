@@ -53,6 +53,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		this.dictionaryService = dictionaryService;
 	}
 
+	@Override
 	public NodeRef getRootFolder(final NodeRef documentRef) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
@@ -86,15 +87,21 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return AuthenticationUtil.runAsSystem(raw);
 	}
 
+	@Override
 	public NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
-		return getDefaultConnectionType(primaryDocumentRef, connectedDocumentRef, null);
+		return getDefaultConnectionType(primaryDocumentRef, nodeService.getType(connectedDocumentRef));
+	}
+	
+	@Override
+	public NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, QName connectedDocumentType) {
+		return getDefaultConnectionType(primaryDocumentRef, connectedDocumentType, null);
 	}
 
-	private NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef, NodeRef dictionary) {
+	private NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, QName connectedDocumentType, NodeRef dictionary) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 
 		if (dictionary == null) {
-			dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
+			dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentType);
 		}
 		if (dictionary != null) {
 			List<AssociationRef> defaultTypeAssoc = nodeService.getTargetAssocs(dictionary, ASSOC_DEFAULT_CONNECTION_TYPE);
@@ -105,11 +112,12 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return null;
 	}
 
-	public List<NodeRef> getRecommendedConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+	@Override
+	public List<NodeRef> getRecommendedConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 
 		List<NodeRef> results = null;
-		NodeRef dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
+		NodeRef dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentType);
 		if (dictionary != null) {
 			results = new ArrayList<NodeRef>();
 			List<AssociationRef> recommendedTypesAssoc = nodeService.getTargetAssocs(dictionary, ASSOC_RECOMMENDED_CONNECTION_TYPES);
@@ -119,7 +127,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 				}
 			}
 
-			NodeRef defaultType = getDefaultConnectionType(primaryDocumentRef, connectedDocumentRef, dictionary);
+			NodeRef defaultType = getDefaultConnectionType(primaryDocumentRef, connectedDocumentType, dictionary);
 			if (defaultType != null && !results.contains(defaultType)) {
 				results.add(defaultType);
 			}
@@ -127,11 +135,18 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return results;
 	}
 
-	public List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+	@Override
+	public List<NodeRef> getRecommendedConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+		return getRecommendedConnectionTypes(primaryDocumentRef, nodeService.getType(connectedDocumentRef));
+	}
+
+
+	@Override
+	public List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 
 		List<NodeRef> results = null;
-		NodeRef dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentRef);
+		NodeRef dictionary = getAvailableTypeDictionary(primaryDocumentRef, connectedDocumentType);
 		if (dictionary != null) {
 			results = new ArrayList<NodeRef>();
 			List<AssociationRef> notAvailableTypesAssoc = nodeService.getTargetAssocs(dictionary, ASSOC_NOT_AVAILABLE_CONNECTION_TYPES);
@@ -141,7 +156,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 				}
 			}
 
-			NodeRef defaultType = getDefaultConnectionType(primaryDocumentRef, connectedDocumentRef, dictionary);
+			NodeRef defaultType = getDefaultConnectionType(primaryDocumentRef, connectedDocumentType, dictionary);
 			if (defaultType != null && !results.contains(defaultType)) {
 				results.add(defaultType);
 			}
@@ -149,21 +164,33 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return results;
 	}
 
-	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+	@Override
+	public List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+		return getNotAvailableConnectionTypes(primaryDocumentRef, nodeService.getType(connectedDocumentRef));
+	}
+
+
+	@Override
+	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 		List<NodeRef> result = getAllConnectionTypes();
-		List<NodeRef> notAvailableTypes = getNotAvailableConnectionTypes(primaryDocumentRef, connectedDocumentRef);
+		List<NodeRef> notAvailableTypes = getNotAvailableConnectionTypes(primaryDocumentRef, connectedDocumentType);
 		if (notAvailableTypes != null) {
 			result.removeAll(notAvailableTypes);
 		}
 		return result;
 	}
 
-	public NodeRef getAvailableTypeDictionary(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+	@Override
+	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
+		return getAvailableConnectionTypes(primaryDocumentRef, nodeService.getType(connectedDocumentRef));
+	}
+
+	public NodeRef getAvailableTypeDictionary(NodeRef primaryDocumentRef, QName connectedDocumentTypeQname) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 
 		String primaryDocumentType = nodeService.getType(primaryDocumentRef).toPrefixString(namespaceService);
-		String connectedDocumentType = nodeService.getType(connectedDocumentRef).toPrefixString(namespaceService);
+		String connectedDocumentType = connectedDocumentTypeQname.toPrefixString(namespaceService);
 
 		String propPrimaryDocumentType = "@" + PROP_PRIMARY_DOCUMENT_TYPE.toPrefixString(namespaceService).replace(":", "\\:");
 		String propConnectedDocumentType = "@" + PROP_CONNECTED_DOCUMENT_TYPE.toPrefixString(namespaceService).replace(":", "\\:");
@@ -193,6 +220,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return null;
 	}
 
+	@Override
 	public List<NodeRef> getExistsConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
 
@@ -235,6 +263,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return results;
 	}
 
+	@Override
 	public List<NodeRef> getAllConnectionTypes() {
 		String type = TYPE_CONNECTION_TYPE.toPrefixString(namespaceService);
 
@@ -258,6 +287,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return null;
 	}
 
+	@Override
 	public List<NodeRef> getConnections(NodeRef documentRef) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
@@ -277,6 +307,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return results;
 	}
 
+	@Override
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
@@ -317,6 +348,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return connectionNodeRef;
 	}
 
+	@Override
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, String typeDictionaryElementCode, boolean isSystem) {
 		NodeRef connectionType = dictionaryService.getDictionaryValueByParam(
 					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,

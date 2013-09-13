@@ -175,6 +175,7 @@
 	    <property name="serviceRegistry">
             <ref bean="ServiceRegistry"/>
         </property>
+		<property name="namespaceService" ref="namespaceService"/>
     </bean>
 
     <bean id="documentConnectionsOnCreateAssocsPolicy" class="ru.it.lecm.documents.policy.DocumentConnectionsOnCreateAssocsPolicy"

@@ -62,6 +62,14 @@ public interface DocumentConnectionService {
 	public NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
 
 	/**
+	 * Получение типа связи по умолчанию для документов. Берётся из справочника "Доступные типы связи"
+	 * @param primaryDocumentRef Ссылка на исходный объект
+	 * @param connectedDocumentType Тип связанного объекта
+	 * @return ссылка на элемент справочника "Типы связи"
+	 */
+	public NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, QName connectedDocumentType);
+
+	/**
 	 * Получение рекоммендуемых типов связи для документов. Берётся из справочника "Доступные типы связи"
 	 * @param primaryDocumentRef Ссылка на исходный объект
 	 * @param connectedDocumentRef Ссылка на связанный объект
@@ -70,12 +78,28 @@ public interface DocumentConnectionService {
 	public List<NodeRef> getRecommendedConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
 
 	/**
+	 * Получение рекоммендуемых типов связи для документов. Берётся из справочника "Доступные типы связи"
+	 * @param primaryDocumentRef Ссылка на исходный объект
+	 * @param connectedDocumentType Тип связанного объекта
+	 * @return список ссылок на элементы справочника "Типы связи"
+	 */
+	public List<NodeRef> getRecommendedConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType);
+
+	/**
 	 * Получение доступный типов связи для документов. Берётся из справочника "Доступные типы связи"
 	 * @param primaryDocumentRef Ссылка на исходный объект
 	 * @param connectedDocumentRef Ссылка на связанный объект
 	 * @return список ссылок на элементы справочника "Типы связи"
 	 */
 	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
+
+	/**
+	 * Получение доступный типов связи для документов. Берётся из справочника "Доступные типы связи"
+	 * @param primaryDocumentRef Ссылка на исходный объект
+	 * @param connectedDocumentType Тип связанного объекта
+	 * @return список ссылок на элементы справочника "Типы связи"
+	 */
+	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType);
 
 	/**
 	 * Получение полного списка типов связи
@@ -141,4 +165,7 @@ public interface DocumentConnectionService {
 	public boolean isConnection(NodeRef ref);
 
 	public boolean isConnectionType(NodeRef ref);
+
+	List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
+	List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType);
 }

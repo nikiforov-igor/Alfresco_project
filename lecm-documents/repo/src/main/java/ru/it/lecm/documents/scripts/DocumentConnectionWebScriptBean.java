@@ -4,6 +4,7 @@ package ru.it.lecm.documents.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
@@ -12,6 +13,7 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.List;
+import org.mozilla.javascript.Context;
 
 /**
  * User: AIvkin
@@ -22,6 +24,7 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 	private DocumentConnectionService documentConnectionService;
 	private DocumentService documentService;
 	protected NodeService nodeService;
+	private NamespaceService namespaceService;
 
 	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
 		this.documentConnectionService = documentConnectionService;
@@ -33,6 +36,10 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
+	}
+
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
 	}
 
 	public ScriptNode getRootFolder(String documentNodeRef) {
@@ -49,57 +56,102 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
-	public ScriptNode getDefaultConnectionType(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
+	public ScriptNode getDefaultConnectionType(String primaryDocumentNodeRef, String connectedDocumentRefOrType) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
-		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
+		ParameterCheck.mandatory("connectedDocumentRefOrType", connectedDocumentRefOrType);
+		NodeRef connectedDocumentRef = null, defaultConnectionType = null;
+		QName connectedDocumentType = null;
+
+		if (NodeRef.isNodeRef(connectedDocumentRefOrType)) {
+			connectedDocumentRef = new NodeRef(connectedDocumentRefOrType);
+		} else {
+			connectedDocumentType = QName.createQName(connectedDocumentRefOrType, namespaceService);
+		}
 
 		NodeRef primaryDocumentRef = new NodeRef(primaryDocumentNodeRef);
-		NodeRef connectedDocumentRef = new NodeRef(connectedDocumentNodeRef);
 
-		if (this.nodeService.exists(primaryDocumentRef) && this.nodeService.exists(connectedDocumentRef)) {
-			NodeRef defaultConnectionType = this.documentConnectionService.getDefaultConnectionType(primaryDocumentRef, connectedDocumentRef);
-			if (defaultConnectionType != null) {
-				return new ScriptNode(defaultConnectionType, this.serviceRegistry, getScope());
-			}
+		if (this.nodeService.exists(primaryDocumentRef) &&
+				(connectedDocumentRef != null && this.nodeService.exists(connectedDocumentRef))) {
+			defaultConnectionType = this.documentConnectionService.getDefaultConnectionType(primaryDocumentRef, connectedDocumentRef);
+		} else if (this.nodeService.exists(primaryDocumentRef) && connectedDocumentType != null) {
+			defaultConnectionType = this.documentConnectionService.getDefaultConnectionType(primaryDocumentRef, connectedDocumentType);
 		}
-		return null;
+
+		if (defaultConnectionType != null) {
+			return new ScriptNode(defaultConnectionType, this.serviceRegistry, getScope());
+		} else {
+			return null;
+		}
 	}
 
-	public Scriptable getRecommendedConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
+	public Scriptable getRecommendedConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentRefOrType) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
-		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
+		ParameterCheck.mandatory("connectedDocumentRefOrType", connectedDocumentRefOrType);
+
+		NodeRef connectedDocumentRef = null;
+		QName connectedDocumentType = null;
+		List<NodeRef> recommendedConnectionTypes = null;
+
+		if (NodeRef.isNodeRef(connectedDocumentRefOrType)) {
+			connectedDocumentRef = new NodeRef(connectedDocumentRefOrType);
+		} else {
+			connectedDocumentType = QName.createQName(connectedDocumentRefOrType, namespaceService);
+		}
 
 		NodeRef primaryDocumentRef = new NodeRef(primaryDocumentNodeRef);
-		NodeRef connectedDocumentRef = new NodeRef(connectedDocumentNodeRef);
 
-		if (this.nodeService.exists(primaryDocumentRef) && this.nodeService.exists(connectedDocumentRef)) {
-			List<NodeRef> recommendedConnectionType = this.documentConnectionService.getRecommendedConnectionTypes(primaryDocumentRef, connectedDocumentRef);
-			if (recommendedConnectionType != null) {
-				return createScriptable(recommendedConnectionType);
-			}
+		if (this.nodeService.exists(primaryDocumentRef) &&
+				(connectedDocumentRef != null && this.nodeService.exists(connectedDocumentRef))) {
+			recommendedConnectionTypes = this.documentConnectionService.getRecommendedConnectionTypes(primaryDocumentRef, connectedDocumentRef);
+		} else if (this.nodeService.exists(primaryDocumentRef) && connectedDocumentType != null) {
+			recommendedConnectionTypes = this.documentConnectionService.getRecommendedConnectionTypes(primaryDocumentRef, connectedDocumentType);
 		}
-		return null;
+
+		if (recommendedConnectionTypes != null) {
+			return createScriptable(recommendedConnectionTypes);
+		} else {
+			return null;
+		}
 	}
 
-	public Scriptable getAvailableConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
+	public Scriptable getAvailableConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentRefOrType) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
-		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
+		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentRefOrType);
+
+		NodeRef connectedDocumentRef = null;
+		QName connectedDocumentType = null;
+		List<NodeRef> availableConnectionType = null;
+
+		if (NodeRef.isNodeRef(connectedDocumentRefOrType)) {
+			connectedDocumentRef = new NodeRef(connectedDocumentRefOrType);
+		} else {
+			connectedDocumentType = QName.createQName(connectedDocumentRefOrType, namespaceService);
+		}
 
 		NodeRef primaryDocumentRef = new NodeRef(primaryDocumentNodeRef);
-		NodeRef connectedDocumentRef = new NodeRef(connectedDocumentNodeRef);
 
-		if (this.nodeService.exists(primaryDocumentRef) && this.nodeService.exists(connectedDocumentRef)) {
-			List<NodeRef> availableConnectionType = this.documentConnectionService.getAvailableConnectionTypes(primaryDocumentRef, connectedDocumentRef);
-			if (availableConnectionType != null) {
-				return createScriptable(availableConnectionType);
-			}
+		if (this.nodeService.exists(primaryDocumentRef) &&
+				(connectedDocumentRef != null && this.nodeService.exists(connectedDocumentRef))) {
+			availableConnectionType = this.documentConnectionService.getAvailableConnectionTypes(primaryDocumentRef, connectedDocumentRef);
+		} else if (this.nodeService.exists(primaryDocumentRef) && connectedDocumentType != null) {
+			availableConnectionType = this.documentConnectionService.getAvailableConnectionTypes(primaryDocumentRef, connectedDocumentType);
 		}
-		return null;
+
+		if (availableConnectionType != null) {
+			return createScriptable(availableConnectionType);
+		} else {
+			return null;
+		}
+
 	}
 
 	public Scriptable getExistConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
 		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
+
+		if (!NodeRef.isNodeRef(connectedDocumentNodeRef)) {
+			return Context.getCurrentContext().newArray(getScope(), 0);
+		}
 
 		NodeRef primaryDocumentRef = new NodeRef(primaryDocumentNodeRef);
 		NodeRef connectedDocumentRef = new NodeRef(connectedDocumentNodeRef);
