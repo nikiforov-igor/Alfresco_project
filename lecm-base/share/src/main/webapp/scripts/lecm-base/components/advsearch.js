@@ -96,9 +96,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @param repopulate {boolean} If true, repopulate form instance based on supplied data
              */
             renderFormTemplate:function ADVSearch_renderFormTemplate(form, isClearSearch, e, obj) {
-	            if (isClearSearch == undefined) {
-		            isClearSearch = false;
-	            }
+                if (isClearSearch == undefined) {
+                    isClearSearch = false;
+                }
                 // update current form state
                 this.currentForm = form;
 
@@ -123,7 +123,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             fn:function ADVSearch_onFormTemplateLoaded(response) {
                                 formDiv.innerHTML = response.serverResponse.responseText;
                                 if (this.searchDialog != null) {
-	                                if (isClearSearch) {
+                                    if (isClearSearch) {
                                         //сбрасываем на значение по умолчанию
                                         if (this.dataGrid.datagridMeta.searchConfig) {
                                             // сбрасываем данные формы
@@ -156,8 +156,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                             YAHOO.Bubbling.fire("hideFilteredLabel");
                                         }
                                     } else {
-		                                this.searchDialog.show();
-	                                }
+                                        this.searchDialog.show();
+                                    }
                                 }
                             },
                             scope:this
@@ -176,9 +176,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @param obj {object} Object passed back from addListener method
              */
             onSearchClick:function ADVSearch_onSearchClick(e, obj, showFilteredLabel) {
-	            if (showFilteredLabel == undefined) {
-		            showFilteredLabel = true;
-	            }
+                if (showFilteredLabel == undefined) {
+                    showFilteredLabel = true;
+                }
                 var me = this;
                 if (!me.searchStarted) { // если поиск еще не начат (для предотвращения повторного взова метода)
                     me.searchStarted = true; // блокируем остальные запросы
@@ -216,24 +216,24 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             sort:me.dataGrid.datagridMeta.sort
                         });
 
-	                if (showFilteredLabel) {
-	                    YAHOO.Bubbling.fire("showFilteredLabel");
-	                }
+                    if (showFilteredLabel) {
+                        YAHOO.Bubbling.fire("showFilteredLabel");
+                    }
 
                     this.searchDialog.hide();
                 }
             },
 
-	        /**
-	         * Обработчик для кнопки "Очитста" для аттрибутивного поиска
-	         *
-	         * @method onClearSearchClick
-	         * @param e {object} DomEvent
-	         * @param obj {object} Object passed back from addListener method
-	         */
-	        onClearSearchClick:function ADVSearch_onSearchClick(e, obj) {
-		        this.renderFormTemplate(this.currentForm, true, e, obj);
-	        },
+            /**
+             * Обработчик для кнопки "Очитста" для аттрибутивного поиска
+             *
+             * @method onClearSearchClick
+             * @param e {object} DomEvent
+             * @param obj {object} Object passed back from addListener method
+             */
+            onClearSearchClick:function ADVSearch_onSearchClick(e, obj) {
+                this.renderFormTemplate(this.currentForm, true, e, obj);
+            },
 
             /**
              * Поиск
@@ -283,7 +283,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     var column = this.dataColumns[i],
                         columnName = column.name.replace(":", "_");
                     reqFields.push(columnName);
-	                reqNameSubstituteStrings.push(column.nameSubstituteString);
+                    reqNameSubstituteStrings.push(column.nameSubstituteString);
                 }
                 var fields = reqFields.join(",");
                 var nameSubstituteStrings = reqNameSubstituteStrings.join(",");
@@ -293,8 +293,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 var me = this;
 
-	            this.loadingMessageShowing = false;
-                var loadingMessage = Alfresco.util.PopupManager.displayMessage(
+                this.loadingMessageShowing = false;
+                this.loadingMessage = this.loadingMessage || Alfresco.util.PopupManager.displayMessage(
                     {
                         displayTime:0,
                         text:'<span class="wait">' + $html(this.msg("label.loading")) + '</span>',
@@ -303,19 +303,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 if (YAHOO.env.ua.ie > 0) {
                     this.loadingMessageShowing = true;
-                }
-                else {
-                    loadingMessage.showEvent.subscribe(function () {
+                } else {
+                    this.loadingMessage.showEvent.subscribe(function () {
                         this.loadingMessageShowing = true;
                     }, this, true);
                 }
 
                 var destroyLoaderMessage = function DataGrid__uDG_destroyLoaderMessage() {
-                    if (loadingMessage) {
+                    if (me.loadingMessage) {
                         if (me.loadingMessageShowing) {
                             // Safe to destroy
-                            loadingMessage.destroy();
-                            loadingMessage = null;
+                            me.loadingMessage.destroy();
+                            me.loadingMessage = null;
+                            me.loadingMessageShowing = false;
                         }
                         else {
                             // Wait and try again later. Scope doesn't get set correctly with "this"
@@ -341,10 +341,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     };
 
                     YAHOO.Bubbling.fire("filterChanged", successFilter);
-	                var sotredBy = me.dataTable.get("sortedBy");
+                    var sotredBy = me.dataTable.get("sortedBy");
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oResponse.meta);
-	                me.dataTable.set("sortedBy", sotredBy);
-	                YAHOO.Bubbling.fire("onSearchSuccess", {
+                    me.dataTable.set("sortedBy", sotredBy);
+                    YAHOO.Bubbling.fire("onSearchSuccess", {
                         bubblingLabel: this.bubblingLabel
                     });
 
