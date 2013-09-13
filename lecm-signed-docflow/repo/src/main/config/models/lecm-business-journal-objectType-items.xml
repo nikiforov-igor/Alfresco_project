@@ -20,8 +20,8 @@
 				<property name="cm:name">Контрагент</property>
 				<property name="lecm-busjournal:objectType-code">CONTRACTOR</property>
 				<property name="lecm-busjournal:objectType-class">lecm-contractor:contractor-type</property>
-				<property name="lecm-busjournal:objectType-template">lecm-contractor:shortname</property>
-				<property name="lecm-busjournal:objectType-list-template">lecm-contractor:shortname</property>
+				<property name="lecm-busjournal:objectType-template">{lecm-contractor:shortname}</property>
+				<property name="lecm-busjournal:objectType-list-template">{lecm-contractor:shortname}</property>
 			</item>
 		</items>
 	</item>

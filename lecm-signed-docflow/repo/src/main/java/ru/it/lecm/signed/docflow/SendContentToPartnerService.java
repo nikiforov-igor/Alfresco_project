@@ -56,8 +56,8 @@ public class SendContentToPartnerService {
 	private final static String SPECOP = "SPECOP";
 	private final static String EMAIL = "EMAIL";
 	private final static String REGNUM_SERVICE_ID = "SIGNED_DOCFLOW_REGNUM";
-	private final static String BJ_MESSAGE_SEND_ATTACHMENT = "#initiator направил контрагенту #object1 вложение #mainObject к документу #object2.";
-	private final static String BJ_MESSAGE_SEND_CONTENT = "#initiator направил контрагенту #object1 файл #mainObject.";
+	private final static String BJ_MESSAGE_SEND_ATTACHMENT = "#initiator направил контрагенту #object1 вложение #mainobject к документу #object2.";
+	private final static String BJ_MESSAGE_SEND_CONTENT = "#initiator направил контрагенту #object1 файл #mainobject.";
 	private final static String MAIL_SUBJ_DOCUMENT_ATTACHMENT = "Подписанные документы к договору \"%s\" (%s)";
 	private final static String MAIL_SUBJ_CONTENT = "Подписанные документы (%s)";
 	private final static QName ASSOC_CONTRACT_PARTNER = QName.createQName("http://www.it.ru/logicECM/contract/1.0", "partner-assoc");
