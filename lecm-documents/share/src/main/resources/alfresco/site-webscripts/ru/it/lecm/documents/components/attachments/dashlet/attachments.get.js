@@ -9,6 +9,7 @@ function main() {
 	model.hasAddNewVersionAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD_VER);
 	model.hasDeleteAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_DELETE);
 	model.hasDeleteOwnAttachmentPerm = hasPermission(model.nodeRef, PERM_OWN_CONTENT_DELETE);
+	model.lockedAttacments = getLockedAttachments(model.nodeRef, 50);
 	if (model.hasViewListPerm) {
 	    var cats = getCategories(model.nodeRef);
         if (cats != null) {
@@ -27,6 +28,27 @@ function getCategories(nodeRef, defaultValue) {
 		return null;
 	}
 	return eval('(' + result + ')');
+}
+
+function getLockedAttachments(nodeRef, count) {
+	var i, j, category, attachment;
+	var lockedAttachments = [];
+	var url = '/lecm/document/attachments/api/get?documentNodeRef=' + nodeRef + '&count=' + count;
+	var result = remote.connect("alfresco").get(url);
+	if (result.status == 200) {
+		var data = eval('(' + result + ')');
+		for (i = 0; i < data.items.length; i++) {
+			category = data.items[i];
+			for (j = 0; j < category.attachments.length; j++) {
+				attachment = category.attachments[j];
+				if (attachment.locked) {
+					lockedAttachments.push(attachment.nodeRef);
+				}
+			}
+		}
+		
+	}
+	return lockedAttachments;
 }
 
 main();

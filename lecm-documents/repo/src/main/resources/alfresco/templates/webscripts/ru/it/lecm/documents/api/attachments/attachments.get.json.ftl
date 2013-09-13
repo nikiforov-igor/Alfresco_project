@@ -5,17 +5,18 @@
         <#list items as item>
             {
                 <#if item.category?? && item.category.node??>
-	                category: {
+	                "category": {
 		                "nodeRef": "${item.category.node.nodeRef}",
 		                "name": "${item.category.node.name}",
                         "isReadOnly": ${item.category.isReadOnly?string}
 	                },
                 </#if>
-                attachments: [
+                "attachments": [
 	                <#list item.attachments as attachment>
 		                {
 			                "nodeRef": "${attachment.nodeRef}",
-			                "name": "${attachment.name}"
+			                "name": "${attachment.name}",
+							"locked": ${lockStatus[attachment.nodeRef]?string}
 		                }<#if attachment_has_next>,</#if>
 	                </#list>
                 ]

@@ -34,6 +34,14 @@
 		            </#if>
 	            };
 
+				var lockedAttacments = [
+		            <#if lockedAttacments??>
+			            <#list lockedAttacments as lockedAttacment>
+				            "${lockedAttacment}"<#if lockedAttacment_has_next>,</#if>
+			            </#list>
+		            </#if>
+	            ];
+
                 YAHOO.util.Event.onDOMReady(function (){
                     select = Dom.get("${id}-attachment-categories");
                     var selectValue = "";
@@ -61,7 +69,7 @@
 	                                permission: "edit",
 	                                label: "${msg("actions.upload-new-version")}",
 		                            evaluator: function (rowData) {
-			                            return !readOnlyCategories[select.value];
+			                            return !readOnlyCategories[select.value] && (lockedAttacments.indexOf(rowData.nodeRef) == -1);
 		                            }
 	                            }<#if hasDeleteAttachmentPerm || hasDeleteOwnAttachmentPerm>,</#if>
 	                        </#if>

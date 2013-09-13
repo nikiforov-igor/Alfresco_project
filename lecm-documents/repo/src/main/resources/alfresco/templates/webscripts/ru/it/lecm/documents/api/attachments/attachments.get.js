@@ -1,5 +1,6 @@
 var documentNodeRef = args['documentNodeRef'];
 var count = parseInt(args['count']);
+var lockStatus = {};
 
 var categories = documentAttachments.getCategories(documentNodeRef);
 var items = [];
@@ -13,7 +14,19 @@ if (categories != null) {
 				var showAttachments = [];
 				for (var j = 0; j < attachments.length; j++) {
 					if (k < count) {
-						showAttachments.push(attachments[j]);
+						var attachment = attachments[j];
+						var aspects = attachment.aspects;
+						var locked = false;
+						if (aspects) {
+							for (var l = 0; l < aspects.length; l++) {
+								if (aspects[l] == "{http://www.alfresco.org/model/content/1.0}lockable") {
+									locked = true;
+									break;
+								}
+							}
+						}
+						lockStatus[attachment.nodeRef.toString()] = locked;
+						showAttachments.push(attachment);
 					} else {
 						hasNext = true;
 					}
@@ -33,3 +46,4 @@ if (categories != null) {
 }
 model.items = items;
 model.hasNext = hasNext;
+model.lockStatus = lockStatus;
