@@ -5,5 +5,4 @@
 	<url>/lecm/regNumbers/getNumber</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>required</transaction>
 </webscript>

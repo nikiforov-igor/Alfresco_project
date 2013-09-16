@@ -5,5 +5,4 @@
 	<authentication>user</authentication>
 	<format default="json"/>
     <lifecycle>internal</lifecycle>
-	<transaction>required</transaction>
 </webscript>

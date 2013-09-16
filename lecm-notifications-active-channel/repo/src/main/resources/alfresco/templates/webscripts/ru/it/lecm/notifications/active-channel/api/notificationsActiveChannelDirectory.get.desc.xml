@@ -4,5 +4,4 @@
 	<url>/lecm/notifications/active-channel/api/directory</url>
     <authentication>user</authentication>
     <format default="json"/>
-    <transaction>required</transaction>
 </webscript>

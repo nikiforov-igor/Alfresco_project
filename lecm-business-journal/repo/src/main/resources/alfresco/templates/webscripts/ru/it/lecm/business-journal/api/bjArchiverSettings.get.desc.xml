@@ -4,5 +4,4 @@
 	<url>/lecm/business-journal/api/getArchiverSettings</url>
     <authentication>user</authentication>
     <format default="json"/>
-    <transaction>required</transaction>
 </webscript>

@@ -5,5 +5,4 @@
 	<url>/lecm/contractors/representatives/busy</url>
 	<format default="json"/>
 	<authentication>user</authentication>
-	<transaction>required</transaction>
 </webscript>

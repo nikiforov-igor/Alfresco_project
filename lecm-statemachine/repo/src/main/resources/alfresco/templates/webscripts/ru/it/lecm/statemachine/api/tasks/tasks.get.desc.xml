@@ -4,5 +4,4 @@
 	<url>/lecm/statemachine/api/tasks</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>required</transaction>
 </webscript>

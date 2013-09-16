@@ -5,5 +5,4 @@
     <url>/lecm/contractors/getrepresentatives</url>
     <format default="json"/>
     <authentication>user</authentication>
-    <transaction>required</transaction>
 </webscript>

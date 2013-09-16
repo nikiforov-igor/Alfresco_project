@@ -5,5 +5,4 @@
 	<url>/lecm/wcalendar/absence/get/isIntervalSuitableForAbsence</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>required</transaction>
 </webscript>

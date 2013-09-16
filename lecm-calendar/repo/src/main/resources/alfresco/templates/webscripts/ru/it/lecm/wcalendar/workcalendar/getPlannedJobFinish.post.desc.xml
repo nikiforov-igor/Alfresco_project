@@ -5,5 +5,4 @@
 	<url>/lecm/wcalendar/workCalendar/getPlannedJobFinish</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>required</transaction>
 </webscript>

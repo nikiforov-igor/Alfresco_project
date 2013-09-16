@@ -4,5 +4,4 @@
     <url>/lecm/document/attachments/api/get?documentNodeRef={documentNodeRef}&amp;count={count}</url>
     <authentication>user</authentication>
     <format default="json"/>
-    <transaction>required</transaction>
 </webscript>

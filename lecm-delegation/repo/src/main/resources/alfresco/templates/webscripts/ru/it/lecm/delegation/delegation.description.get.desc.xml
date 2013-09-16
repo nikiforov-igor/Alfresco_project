@@ -5,5 +5,4 @@
 	<url>/lecm/delegation/get/description/for/{page}?nodeRef={nodeRef?}</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>required</transaction>
 </webscript>

@@ -1,4 +1,4 @@
-if (typeof json !== "undefined") {
+f (typeof json !== "undefined") {
     var document = json.get("document");
     var employee = json.get("employee");
     var permGroup = json.has("permGroup") ? json.get("permGroup") : "";

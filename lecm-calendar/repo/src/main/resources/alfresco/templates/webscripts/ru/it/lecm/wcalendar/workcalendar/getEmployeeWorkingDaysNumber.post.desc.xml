@@ -5,5 +5,4 @@
 	<url>/lecm/wcalendar/workCalendar/getEmployeeWorkingDaysNumber</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>required</transaction>
 </webscript>
