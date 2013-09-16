@@ -1,6 +1,5 @@
 package ru.it.lecm.reports.jasper;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -227,16 +226,12 @@ public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider
 
 	/**
 	 * Построить запрос к Альфреско (Lucene и пр) по данным соот-го фильтра отчёта.
-	 * Example: 
-	 *    TYPE:"{http://www.it.ru/logicECM/contract/1.0}document" AND  @lecm\-contract\:totalAmount:(0 TO 23450000)   AND @lecm\-contract\:endDate:[ NOW/DAY TO *]
-	 * Здесь загружает объекты с типом preferedNodeTypes и/или preferedNodeId:
-	 * @return
-	 */
-	// TODO: функцией экранировать символы в названиях атрибутов
-	// protected abstract String buildQueryText();
-	/**
 	 * Формируется запрос вида:
-	 * TYPE:"lecm-al:approval-list" AND ID:"workspace://SpacesStore/11a08758-6eb7-450f-9f17-3f168d981629"
+	 *   TYPE:"lecm-al:approval-list" AND ID:"workspace://SpacesStore/11a08758-6eb7-450f-9f17-3f168d981629"
+	 * или
+	 *   TYPE:"{http://www.it.ru/logicECM/contract/1.0}document" AND  @lecm\-contract\:totalAmount:(0 TO 23450000)   AND @lecm\-contract\:endDate:[ NOW/DAY TO *]
+	 * Здесь загружает объекты с типом preferedNodeTypes и/или preferedNodeId
+	 * @return
 	 */
 	protected String buildQueryText() {
 		// make it as LuceneQueryBuilder: emitType, emmitID, emmitDateInterval, etc ...it

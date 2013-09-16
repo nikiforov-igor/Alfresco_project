@@ -175,26 +175,30 @@ public class ParameterMapper {
 	private static ColumnDescriptor ensureDataColumn( DataSourceDescriptor dsDesc
 			, Object value, String colName, SupportedTypes colType) {
 		ColumnDescriptor result = dsDesc.findColumnByName(colName);
+		Object destValue = null;
 		if ( result == null) { // создание новой колонки ...
 			result = new ColumnDescriptorImpl( colName, colType);
 
-			{ // задание типа параметра этой колонки ...
+			dsDesc.getColumns().add(result);
+			destValue = value;
+		} else {
+			if ( value instanceof String) {
+				if (!Utils.isStringEmpty((String) value) )  {
+					destValue = value;
+				}
+			} else if ( value instanceof String[]) {
+ 				final String[] arr = (String[]) value;
+ 				if (arr.length > 0 && !Utils.isStringEmpty(arr[0]) )
+					destValue = arr[0];
+			}
+		}
+		if (destValue != null) { // задать значение ...
+			if (result.getParameterValue() == null) {
 				final ParameterTypedValueImpl ptv = new ParameterTypedValueImpl(colName);
 				// by default: ptv.setType( Type.VALUE);
 				result.setParameterValue(ptv);
 			}
-
-			dsDesc.getColumns().add(result);
 			result.getParameterValue().setBound1(value);
-		} else {
-			if ( value instanceof String && !Utils.isStringEmpty((String) value) )  {
-				result.getParameterValue().setBound1(value);
-			} else if ( value instanceof String[]) {
- 				final String[] arr = (String[]) value;
- 				if (arr.length > 0 && !Utils.isStringEmpty(arr[0]) )
-					result.getParameterValue().setBound1(arr[0]);
-			}
-
 		}
 		return result;
 	}

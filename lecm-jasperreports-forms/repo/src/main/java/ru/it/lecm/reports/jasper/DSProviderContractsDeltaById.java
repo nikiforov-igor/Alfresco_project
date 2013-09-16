@@ -155,7 +155,7 @@ public class DSProviderContractsDeltaById
 					final ResultSetRow rs = context.getRsIter().next();
 					final NodeRef docId = rs.getNodeRef(); // id основного документа
 
-					// TODO: здесь должен быть поиск id присоединённых документов, которые и надо будет добавлять в result ...
+					// поиск id присоединённых документов, которые и надо будет добавлять в result ...
 					final List<NodeRef> connections = findSystemConnections(docId);
 					if (connections == null || connections.isEmpty())
 						continue;

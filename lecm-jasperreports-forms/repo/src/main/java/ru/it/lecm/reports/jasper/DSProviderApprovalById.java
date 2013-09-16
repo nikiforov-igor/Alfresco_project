@@ -33,10 +33,16 @@ import ru.it.lecm.reports.utils.Utils;
 public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 
 		private static final Logger logger = LoggerFactory.getLogger(DSProviderApprovalById.class);
+		private static final String XMLNODE_STATUS_DISPLAYNAMES = "statuses.valueDisplay";
 
 		public DSProviderApprovalById() {
 			super();
 			setPreferedType(DSProdiverApprovalSummaryByPeriod.TYPE_APPROVAL_LIST);
+		}
+
+		protected void setXMLDefaults(Map<String, Object> defaults) {
+			super.setXMLDefaults(defaults);
+			defaults.put( XMLNODE_STATUS_DISPLAYNAMES, null);
 		}
 
 		@Override
@@ -294,7 +300,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 					} // while
 				}
 
-				setData(result);
+				setData(result); 
 				setIterData( result.iterator());
 
 				return result.size();
@@ -302,30 +308,30 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 
 		} // ApprovalItemDS
 
-		// TODO: сделать работу L18 через properties-файл 
+		// TODO: сделать работу L18 через xml config или properties-файл 
 		/**
 		 * Локализация для "<!-- результат согласования документа -->" и "<!-- Результат согласования сотрудником -->"
 		 * @param listValue см lecm-approval-list-model.xml::"lecm-al:approval-item-decision" и "lecm-al:approval-list-decision"
 		 * @return
 		 */
-		static String makeL12_ApproveResult(String listValue) {
-			final String l18 = getL18ApproveResultMap().get(listValue);
-			return (l18 != null) ? l18 : listValue;
+		private String makeL12_ApproveResult(String listValue) {
+			final Object l18 = getL18ApproveResultMap().get(listValue);
+			return Utils.coalesce( l18, listValue);
 		}
 
-		// TODO: вынести в бин
-		static Map<String, String> l18ResultApproveMap;
-		static Map<String, String> getL18ApproveResultMap() {
-			if (l18ResultApproveMap == null) {
-				l18ResultApproveMap = new HashMap<String, String>();
-				l18ResultApproveMap.put("NO_DECISION", "решение пока не принято");
-				l18ResultApproveMap.put("APPROVED", "согласован");
-				l18ResultApproveMap.put("REJECTED", "отклонен");
-				l18ResultApproveMap.put("APPROVED_WITH_REMARK", "согласован с замечанием");
-				l18ResultApproveMap.put("REJECTED_FORCE", "отозван с согласования");
-				l18ResultApproveMap.put("APPROVED_FORCE", "согласование принудительно завершено");
-			}
-			return l18ResultApproveMap;
+		private Map<String, Object> getL18ApproveResultMap() {
+			Map<String, Object> resultL18 = conf().getMap(XMLNODE_STATUS_DISPLAYNAMES);
+			if (resultL18 == null)
+				resultL18 = new HashMap<String, Object>();
+//			{ // названия по кодам
+//				resultL18.put("NO_DECISION", "решение пока не принято");
+//				resultL18.put("APPROVED", "согласован");
+//				resultL18.put("REJECTED", "отклонен");
+//				resultL18.put("APPROVED_WITH_REMARK", "согласован с замечанием");
+//				resultL18.put("REJECTED_FORCE", "отозван с согласования");
+//				resultL18.put("APPROVED_FORCE", "согласование принудительно завершено");
+//			}
+			return resultL18;
 		}
 
 }

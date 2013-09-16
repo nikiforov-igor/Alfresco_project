@@ -3,8 +3,10 @@ package ru.it.lecm.reports.jasper.config;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -41,7 +43,23 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 	// параметр в this.args с названием файла XML конфигурации
 	final static public String TAG_CONFIGNAME = "xmlconfigName";
 
+
+	/**
+	 * Call-back для реакции на загрузку конфы или для выполнения сложной 
+	 * прогрузки конфы
+	 * @author rabdullin
+	 */
+	public interface ConfigListener {
+		/**
+		 * Загрузить из указанного узла
+		 * @param rootElem
+		 * @param info инфорация по читаемому потоку
+		 */
+		void onLoad(Element rootElem, String info);
+	}
+
 	private ReportsManager reportManager;
+	private Set<ConfigListener> cfgListeners;
 
 	/**
 	 * Создание конфигуратора, с загрузкой необходимых конфигурационных файлов из указанного хранилища 
@@ -53,25 +71,8 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 	}
 
 	/* Fields Descriptors - look at DSXMLProducer */
-	/*
-	final static private String XMLTAG_ROOT = "cmis-ds.config";
 
-	final static public String XML_PATH_URL = "url";
-	final static public String XML_PATH_USERNAME = "username";
-	final static public String XML_PATH_PSW = "password";
-
-	final static public String XMLNODE_QUERY = "query";
-	final static public String XMLNODE_PATH_ALLVER = "allVersions";
-
-	final static private String XMLNODE_LIST_FIELDS = "fields";
-	final static private String XMLNITEM_FIELD = "field";
-		final static private String XMLATTR_QUERY_FIELDNAME = "queryFldName";
-		final static private String XMLATTR_DISPLAYNAME = "displayName";
-		final static private String XMLATTR_JR_FIELDNAME = "jrFldName"; // если не указано - автоматически присваивается название @JR_COLNAMEPREFIX + N кол (от единицы), вида "COL_1", "COL_2" ...
-		final static private String XMLATTR_JAVA_VALUECLASS = "javaValueClass";
-
-	 */
-		final static String JR_COLNAMEPREFIX = "COL_"; // префикс названий колонок для передачи в jasper
+	final static String JR_COLNAMEPREFIX = "COL_"; // префикс названий колонок для передачи в jasper
 
 	@Override
 	protected void setDefaults(Map<String, Object> defaults) {
@@ -250,6 +251,11 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 				xmlGetMetaFields( rootElem, info);
 			}
 
+			// call-back
+			{
+				notifyXmlConfigListeners( rootElem, info);
+			}
+
 			logger.info( "xml loaded successfully from "+ info);
 
 		} catch (Throwable t) {
@@ -259,6 +265,29 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 		}
 	}
 
+
+	private void notifyXmlConfigListeners(Element rootElem, String info) {
+		if (cfgListeners != null) {
+			for(ConfigListener conf: cfgListeners) {
+				conf.onLoad( rootElem, info);
+			} // for
+		}
+	}
+
+	public void addListener(ConfigListener listener) {
+		if (listener == null)
+			return;
+
+		if (this.cfgListeners == null)
+			this.cfgListeners = new HashSet<ConfigListener>(1);
+		this.cfgListeners.add( listener);
+	}
+
+
+	public void remListener(ConfigListener listener) {
+		if ( (listener != null) && (this.cfgListeners != null) )
+			this.cfgListeners.remove( listener);
+	}
 
 	/**
 	 * Найти вложенный узел по имени и получить из него значение для аргумента.
@@ -309,10 +338,10 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 	private static String concat(String[] items, int len) {
 		final StringBuilder result = new StringBuilder();
 		if (len == 0){
-			result.append('/');
+			result.append(String.format("/(%s)", len));
 		} else {
 			for (int i = 0; i < len; i++) {
-				result.append('/').append( items[i] );
+				result.append(String.format("/(%s)", i)).append( items[i] );
 			}
 		}
 		return result.toString();

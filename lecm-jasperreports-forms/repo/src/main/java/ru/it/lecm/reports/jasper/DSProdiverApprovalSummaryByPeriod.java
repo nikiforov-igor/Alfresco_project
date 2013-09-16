@@ -120,7 +120,8 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 
 	@Override
 	protected AlfrescoJRDataSource createDS(JasperReport report)
-			throws JRException {
+			throws JRException
+	{
 		// задаём период выборки в переменные отчёта ...
 		setPeriodDates(report.getVariables());
 		// report.setProperty("start", this.getStart());
@@ -134,7 +135,7 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 	private void setPeriodDates(JRVariable[] variables) {
 		if (variables == null || variables.length == 0)
 			return;
-		// TODO: задать свойства properties, т.к. variables проблематично изменять
+		// TODO: задать свойства properties или parameters в момент JasperFillManager.fill, т.к. здесь variables проблематично изменять
 //		for(JRVariable var: variables) { 
 //			if ( VARNAME_START.equalsIgnoreCase(var.getName())) {
 //				// ((JRBaseVariable) var).setValue(this.periodStart) ;

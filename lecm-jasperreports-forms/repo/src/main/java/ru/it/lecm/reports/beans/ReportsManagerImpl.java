@@ -34,9 +34,9 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.ReportFileData;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.api.model.ReportFileDataImpl;
 import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.ReportFileDataImpl;
 import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.ContentEnumerator;
@@ -495,7 +495,6 @@ public class ReportsManagerImpl implements ReportsManager {
 					"Report '%s' has empty report type -> set to '%s'",
 					desc.getMnem(), desc.getReportType().getMnem()));
 		}
-		// TODO: ввести зависимость от типа очёта
 		final ReportDefaultsDesc def = this.getReportDefaults().get(desc.getMnem());
 
 		if (desc.getReportTemplate().getFileName() == null) { // задать default-название файла
@@ -757,11 +756,12 @@ public class ReportsManagerImpl implements ReportsManager {
 			final ContentWriter writer = contentService.getWriter(resultFileRef, ContentModel.PROP_CONTENT, true);
 			writer.setEncoding( srcData.getEncoding()); // "UTF-8"
 
+			// mime-тип берём по-возможности из источника ...
 			String mimeType = srcData.getMimeType();
 			if (mimeType == null && srcData.getFilename() != null) { // autodetecting ...
 				mimeType = findMimeType( FilenameUtils.getExtension(srcData.getFilename()));
 			}
-			if (mimeType == null)
+			if (mimeType == null) // если уж ничего не задано - ставим default
 				mimeType = "text/xml";
 			writer.setMimetype( mimeType);
 
@@ -848,7 +848,8 @@ public class ReportsManagerImpl implements ReportsManager {
 			throw new RuntimeException( String.format("Report descriptor '%s' not accessible (possibly report is not registered !?)", reportName) );
 
 		// (!) клонирование Дескриптора, чтобы не трогать общий для всех дескриптор ...
-		reportDesc = Utils.clone( reportDesc);
+		reportDesc = Utils.clone( reportDesc); 
+
 		final ReportContentDAO storage = this.findContentDAO(reportDesc); 
 		if (storage == null)
 			throw new RuntimeException( String.format("Report '%s' storage point is unknown (possibly report is not registered !?)", reportName) );

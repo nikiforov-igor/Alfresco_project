@@ -28,6 +28,12 @@ public interface DataSourceDescriptor extends Mnemonicable, L18able {
 	// final static public String COLNAME_NODEREF = "nodeRef";
 
 	/**
+	 * "Что сгенерировать" = название колонки (типа строка) с целевым форматом файла
+	 * Название используется везде в генерации отчётов, так что здесь описано вместе с основными именами ID/TYPE.  
+	 */
+	final static public String COLNAME_REPORT_TARGETFORMAT = "targetFormat";
+
+	/**
 	 * Описания колонок данного НД.
 	 * @return
 	 */

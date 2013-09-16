@@ -312,8 +312,6 @@ public class RepositoryReportContentDAOBean
 
 	@Override
 	public void storeContent(IdRContent id, InputStream stm) {
-		// byte[] content = getReportsManager().produceDefaultTemplate(desc); // TODO почему-то шаблон по умолчанию не зависит от типа отчета - он всегда jrxml
-
 		if (id == null)
 			return;
 

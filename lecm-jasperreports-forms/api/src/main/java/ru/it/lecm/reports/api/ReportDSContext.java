@@ -1,6 +1,5 @@
 package ru.it.lecm.reports.api;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import org.alfresco.service.ServiceRegistry;
@@ -26,10 +25,9 @@ public interface ReportDSContext {
 	public void setFilter(DataFilter filter);
 
 	/**
-	 * Карта сопоставления ИМЁН полей из jrxml-шаблона и ОПИСАТЕЛЕЙ полей данных Альфреско.
-	 * В общем, здесь описания свойств, доступных для Jasper по именам в jrxml-шаблоне.
+	 * Карта сопоставления ИМЁН полей из шаблона отчёта к ОПИСАТЕЛЯМ полей данных Альфреско.
+	 * ключ = название колонки отчёта (короткое название) или ссылка на поле Альфреско в виде "xx:yy".
 	 */
-	// TODO: назвать чтобы было понятно, что с чем сопоставляется, наподобии "jasperField2Descriptor"
 	public Map<String, DataFieldColumn> getMetaFields();
 
 	/**

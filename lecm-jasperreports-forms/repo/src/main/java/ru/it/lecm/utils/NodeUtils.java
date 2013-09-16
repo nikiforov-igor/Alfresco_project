@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 
 /**
@@ -101,4 +103,60 @@ public class NodeUtils {
 	}
 
 
+	/**
+	 * Получение списка вложений (пробуется child-список, parent-список и ассоциации)
+	 * @param nodeId
+	 * @param assocRef
+	 * @return
+	 */
+	public static List<NodeRef> findChildrenByAssoc( NodeRef nodeId, QName assocRef
+			, NodeService nodeService)
+	{
+		final List<NodeRef> result = new ArrayList<NodeRef>();
+
+		// TODO: в зависимости от метаданных можно точно и строго выбрать один из 4х вариантов ...
+		do {
+			{ /* классические "дети" ... */
+				final List<ChildAssociationRef> children = nodeService.getParentAssocs(nodeId, assocRef, RegexQNamePattern.MATCH_ALL);
+				if (children != null && !children.isEmpty()) {
+					for (ChildAssociationRef child: children) {
+						result.add( child.getChildRef());
+					}
+					break;
+				} 
+			}
+
+			{ /* пробуем родителей ... */
+				final List<ChildAssociationRef> parents = nodeService.getChildAssocs(nodeId, assocRef, RegexQNamePattern.MATCH_ALL);
+				if (parents != null && !parents.isEmpty()) {
+					for (ChildAssociationRef child: parents) {
+						result.add( child.getParentRef());
+					}
+					break;
+				}
+			}
+
+			{ /* пробуем source-связи ... */
+				final List<AssociationRef> listSrcAssocs = nodeService.getSourceAssocs(nodeId, assocRef);
+				if (listSrcAssocs != null && !listSrcAssocs.isEmpty()) {
+					for (AssociationRef child: listSrcAssocs) {
+						result.add( child.getSourceRef());
+					}
+					break;
+				}
+			}
+
+			{ /* пробуем target-связи ... */
+				final List<AssociationRef> listDestAssocs = nodeService.getTargetAssocs(nodeId, assocRef);
+				if (listDestAssocs != null && !listDestAssocs.isEmpty()) {
+					for (AssociationRef child: listDestAssocs) {
+						result.add( child.getTargetRef());
+					}
+					break;
+				}
+			}
+		} while(false); // one-time exec
+
+		return (result.isEmpty()) ? null : result;
+	}
 }

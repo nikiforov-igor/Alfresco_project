@@ -225,7 +225,6 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	 *    TYPE:"{http://www.it.ru/logicECM/contract/1.0}document" AND  @lecm\-contract\:totalSum:(0 TO 23450000)   AND @lecm\-contract\:endDate:[ NOW/DAY TO *]
 	 * @return
 	 */
-	// TODO: функцией экранировать символы в названиях атрибутов
 	@Override
 	protected String buildQueryText() {
 		final StringBuilder bquery = new StringBuilder();

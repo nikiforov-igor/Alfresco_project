@@ -30,7 +30,7 @@ public interface ParameterType extends Mnemonicable, L18able {
 	void setPrompt2(L18able value);
 
 	/** связанный тип параметра альфреско */
-	// TODO: think it over
+	// NOTE: think it over = параметры могут появиться динамически - если при формировании отчёта они передаются как константы
 	//String getAlfrescoType();
 	//void setAlfrescoType(String alfrescoType);
 

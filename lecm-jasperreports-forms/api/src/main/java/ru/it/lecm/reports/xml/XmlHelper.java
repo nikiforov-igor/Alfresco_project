@@ -666,6 +666,13 @@ public class XmlHelper {
 		return result;
 	}
 
+	/**
+	 * Из указанного узла выбрать list, map или значение.
+	 * @param node
+	 * @return List, если у node имеется вложенный узел <list>
+	 * Map, если имеется у node имеется вложенный узел <map>
+	 * и простое текстовое значение иначе
+	 */
 	public static Object getNodeAsSmart(Node node) {
 		Object result = null;
 		if (node != null) {

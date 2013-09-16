@@ -34,6 +34,8 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
 import ru.it.lecm.reports.api.ReportFileData;
+import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
@@ -79,7 +81,7 @@ public class JasperReportGeneratorImpl
 				throw new IOException( String.format("Report is missed - file '%s' not found", reportFileName ));
 
 			// DONE: параметризовать выходной формат
-			final JasperReportTargetFileType target = findTargetArg(parameters);
+			final JasperReportTargetFileType target = findTargetArg(parameters, reportDesc);
 
 			// final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportDefinitionURL);// catch message NullPoiterException for ...
 			final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(stm);
@@ -122,17 +124,27 @@ public class JasperReportGeneratorImpl
 	private static final JasperReportTargetFileType DEFAULT_TARGET = JasperReportTargetFileType.PDF;
 
 	/** "Что сгенерировать" = название колонки (типа строка) с целевым форматом файла после генератора */
-	private static final String COLNAME_TARGETFORMAT = "targetFormat";
+	private static final String COLNAME_TARGETFORMAT = DataSourceDescriptor.COLNAME_REPORT_TARGETFORMAT; // "targetFormat";
 
 	/**
 	 * Найти целевой формат в параметрах ...
 	 * @param requestParameters
+	 * @param reportDesc 
 	 * @return
 	 */
 	// DONE: (?) разрешить задавать формат в колонках данных (константой или выражением) 
-	private JasperReportTargetFileType findTargetArg( final Map<String, String[]> requestParameters) 
+	private JasperReportTargetFileType findTargetArg( final Map<String, String[]> requestParameters, ReportDescriptor reportDesc) 
 	{
-		final String value = ArgsHelper.findArg(requestParameters, COLNAME_TARGETFORMAT, null);
+		String value = ArgsHelper.findArg(requestParameters, COLNAME_TARGETFORMAT, null);
+		if (Utils.isStringEmpty(value) ) {
+			if (reportDesc != null) {
+				final ColumnDescriptor coldesc = reportDesc.getDsDescriptor().findColumnByName(COLNAME_TARGETFORMAT);
+				if (coldesc != null) {
+					value = coldesc.getExpression();
+				}
+			}
+		} 
+
 		log.info( String.format( "dataSource column %s is %s", COLNAME_TARGETFORMAT, Utils.coalesce(value, "default: "+ Utils.coalesce( DEFAULT_TARGET, "empty"))));
 		return JasperReportTargetFileType.findByName( value, DEFAULT_TARGET);
 	}

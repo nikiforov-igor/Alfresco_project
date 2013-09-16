@@ -89,6 +89,15 @@ public class Utils {
 	}
 
 	/**
+	 * Выполнить расширение символьных пар "\Y" в их кодовые эквиваленты
+	 * @param s
+	 * @return
+	 */
+	public static String expandCharPairs(String s) {
+		 return (s == null) ? null : s.replaceAll( "[\\\\][n]", "\n").replaceAll( "[\\\\][r]", "\r").replaceAll( "[\\\\][t]", "\t");
+	}
+
+	/**
 	 * Get value, replacing empty one it by default value.
 	 * @param obj
 	 * @param defIfEmpty

@@ -56,7 +56,6 @@ public interface ColumnDescriptor
 	ParameterTypedValue getParameterValue();
 	void setParameterValue(ParameterTypedValue value);
 
-	// TODO: перенести в interface ParameterTyped 
 	/** связанный тип параметра альфреско */
 	String getAlfrescoType();
 	void setAlfrescoType(String alfrescoType);
