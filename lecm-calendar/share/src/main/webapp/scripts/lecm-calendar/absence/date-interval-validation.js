@@ -57,14 +57,17 @@ LogicECM.module.WCalendar.Absence.dateIntervalValidation =
 		if (beginValue && (endValue || isUnlimited)) {
 			var today = new Date();
 			var endDate;
+			var todayTruncated = new Date(today);
 
-			today.setHours(0, 0, 0, 0);
+			todayTruncated.setHours(0, 0, 0, 0);
 
 			var beginDate = new Date(beginValue);
 
-			if (beginDate < today) {
+			if (beginDate < todayTruncated) {
 				valid = false;
 				errorMessage += Alfresco.component.Base.prototype.msg("message.error.absence.date-interval-validation.early-begin") + "<br>";
+			} else if (beginDate.getTime() == todayTruncated.getTime()) {
+				beginDate = today;
 			}
 
 			if (!isUnlimited) {
