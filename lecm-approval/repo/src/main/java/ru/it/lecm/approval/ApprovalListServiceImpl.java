@@ -218,8 +218,9 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	private void logDecision(final NodeRef approvalListRef, final TaskDecision taskDecision) {
 		Date startDate, completionDate;
-		String comment, decision, userName, commentFileAttachmentCategoryName, documentProjectNumber, previousUserName;
-		NodeRef commentRef, documentRef;
+		final String comment, decision, userName, commentFileAttachmentCategoryName, documentProjectNumber, previousUserName, itemTitle;
+		final NodeRef commentRef, documentRef, approvalListItemRef;
+		final Map<QName, Serializable> properties;
 
 		startDate = DateUtils.truncate(taskDecision.getStartDate(), Calendar.DATE);
 		completionDate = DateUtils.truncate(new Date(), Calendar.DATE);
@@ -232,15 +233,11 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		documentProjectNumber = taskDecision.getDocumentProjectNumber();
 		previousUserName = taskDecision.getPreviousUserName();
 
-		String itemTitle = String.format(ASSEGNEE_ITEM_FORMAT, userName);
+		itemTitle = String.format(ASSEGNEE_ITEM_FORMAT, userName);
 
-		NodeRef approvalListItemRef = getApprovalListItemByUserName(approvalListRef, userName);
+		approvalListItemRef = getApprovalListItemByUserName(approvalListRef, userName);
 
-//		if (approvalListItemRef == null) {
-//			approvalListItemRef = createApprovalListItem(approvalListRef, orgstructureService.getEmployeeByPerson(userName), itemTitle, taskDecision.getDueDate());
-//		}
-
-		Map<QName, Serializable> properties = nodeService.getProperties(approvalListItemRef);
+		properties = nodeService.getProperties(approvalListItemRef);
 
 		properties.put(PROP_APPROVAL_ITEM_START_DATE, startDate);
 		properties.put(PROP_APPROVAL_ITEM_APPROVE_DATE, completionDate);
@@ -292,7 +289,14 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 			List<NodeRef> targetRefs = new ArrayList<NodeRef>();
 			targetRefs.add(commentRef);
-			nodeService.setAssociations(approvalListItemRef, ASSOC_APPROVAL_ITEM_COMMENT, targetRefs);
+			behaviourFilter.disableBehaviour(documentRef);
+			behaviourFilter.disableBehaviour(commentRef);
+			try {
+				nodeService.setAssociations(approvalListItemRef, ASSOC_APPROVAL_ITEM_COMMENT, targetRefs);
+			} finally {
+				behaviourFilter.enableBehaviour(documentRef);
+				behaviourFilter.enableBehaviour(commentRef);
+			}
 		}
 
 	}
