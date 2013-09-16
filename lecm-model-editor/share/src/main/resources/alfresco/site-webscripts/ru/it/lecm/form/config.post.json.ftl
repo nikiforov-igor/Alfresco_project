@@ -1,0 +1,4 @@
+{
+	body: ${jsonBody}
+	result: ${configResult}
+}
