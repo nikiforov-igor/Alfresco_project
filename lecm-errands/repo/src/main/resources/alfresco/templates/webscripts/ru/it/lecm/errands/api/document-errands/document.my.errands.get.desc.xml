@@ -3,5 +3,6 @@
 	<description>Get Document My Errands</description>
 	<url>/lecm/errands/api/documentMyErrands</url>
 	<authentication>user</authentication>
+    <transaction>none</transaction>
 	<format default="json"/>
 </webscript>

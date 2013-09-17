@@ -4,4 +4,5 @@
    <url>/lecm/dashlet/ds/members</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
+    <transaction>none</transaction>
 </webscript>

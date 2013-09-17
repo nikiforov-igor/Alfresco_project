@@ -4,4 +4,5 @@
     <url>/lecm/dictionary/get/export</url>
     <format default="xml">extension</format>
     <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
 </webscript>

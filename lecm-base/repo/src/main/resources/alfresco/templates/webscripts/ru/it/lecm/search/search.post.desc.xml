@@ -4,6 +4,6 @@
    <url>/lecm/search</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
-   <transaction allow="readwrite">required</transaction>
+   <transaction allow="readonly">required</transaction>
    <lifecycle>internal</lifecycle>
 </webscript>

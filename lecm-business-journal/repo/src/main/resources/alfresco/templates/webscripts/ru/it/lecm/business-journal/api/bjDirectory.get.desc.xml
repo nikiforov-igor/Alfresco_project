@@ -3,5 +3,6 @@
 	<description>BJ Directory</description>
 	<url>/lecm/business-journal/api/directory</url>
     <authentication>user</authentication>
+    <transaction>none</transaction>
     <format default="json"/>
 </webscript>

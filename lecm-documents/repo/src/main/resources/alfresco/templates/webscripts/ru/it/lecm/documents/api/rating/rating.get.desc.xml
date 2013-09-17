@@ -3,5 +3,6 @@
     <description>Document Rating</description>
     <url>/lecm/document/api/getRating?nodeRef={nodeRef}</url>
     <authentication>user</authentication>
+    <transaction>none</transaction>
     <format default="json"/>
 </webscript>

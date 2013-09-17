@@ -4,4 +4,5 @@
     <url>/lecm/reports-editor/getDataSourceColumns?dataSourceId={dataSourceId}</url>
     <format default="json"></format>
     <authentication>user</authentication>
+    <transaction>none</transaction>
 </webscript>

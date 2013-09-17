@@ -4,4 +4,5 @@
     <url>/lecm/reports-editor/report-types</url>
     <format default="json">extension</format>
     <authentication>user</authentication>
+    <transaction>none</transaction>
 </webscript>

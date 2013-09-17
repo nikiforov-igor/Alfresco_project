@@ -3,5 +3,6 @@
 	<description>BJ Record By Interval</description>
 	<url>/lecm/business-journal/api/records-by-interval</url>
     <authentication>user</authentication>
+    <transaction>none</transaction>
     <format default="json"/>
 </webscript>

@@ -1,9 +1,5 @@
 package ru.it.lecm.base.beans.getchildren;
 
-import java.io.Serializable;
-import java.text.Collator;
-import java.util.*;
-
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.CannedQueryParameters;
@@ -11,7 +7,10 @@ import org.alfresco.query.CannedQuerySortDetails;
 import org.alfresco.repo.domain.node.*;
 import org.alfresco.repo.domain.qname.QNameDAO;
 import org.alfresco.repo.domain.query.CannedQueryDAO;
-import org.alfresco.repo.node.getchildren.*;
+import org.alfresco.repo.node.getchildren.FilterProp;
+import org.alfresco.repo.node.getchildren.FilterSortNodeEntity;
+import org.alfresco.repo.node.getchildren.GetChildrenCannedQuery;
+import org.alfresco.repo.node.getchildren.GetChildrenCannedQueryParams;
 import org.alfresco.repo.security.permissions.PermissionCheckedValue;
 import org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityBean;
 import org.alfresco.repo.tenant.TenantService;
@@ -25,6 +24,10 @@ import org.alfresco.util.Pair;
 import org.alfresco.util.ParameterCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.Serializable;
+import java.text.Collator;
+import java.util.*;
 
 /**
  * Класс, реализующий запрос и фильтрацию для получение списка child элементов ноды
@@ -150,7 +153,7 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 		// Set child node type qnames (additional filter - performed by DB query)
 
 		if (childNodeTypeQNames != null) {
-			Set<Long> childNodeTypeQNameIds = qnameDAO.convertQNamesToIds(childNodeTypeQNames, true);
+			Set<Long> childNodeTypeQNameIds = qnameDAO.convertQNamesToIds(childNodeTypeQNames, false);
 			if (childNodeTypeQNameIds.size() > 0) {
 				params.setChildNodeTypeQNameIds(new ArrayList<Long>(childNodeTypeQNameIds));
 			}

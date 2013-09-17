@@ -1,4 +1,4 @@
-ar container = absence.getWCalendarContainer();
+var container = absence.getWCalendarContainer();
 var itemType = absence.getItemType();
 
 model.nodeRef = container.nodeRef.toString ();

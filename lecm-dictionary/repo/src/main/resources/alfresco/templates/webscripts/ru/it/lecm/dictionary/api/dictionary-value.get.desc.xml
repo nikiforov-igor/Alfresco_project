@@ -4,4 +4,5 @@
 	<url>/lecm/dictionary/api/getValueAttributes</url>
 	<format default="xml">extension</format>
 	<authentication>user</authentication>
+    <transaction>none</transaction>
 </webscript>
