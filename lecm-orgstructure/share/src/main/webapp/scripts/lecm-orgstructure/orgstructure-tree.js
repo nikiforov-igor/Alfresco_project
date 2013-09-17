@@ -276,6 +276,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
 
         _editNode:function editNodeByEvent(event) {
+            if (this.selectedNode.data.type == "lecm-orgstr:structure") {
+                return;
+            }
             var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);
             new Alfresco.module.SimpleDialog("editNode-dialog").setOptions({
                 width:"50em",
