@@ -72,10 +72,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 			aspectProps.put(StatemachineModel.PROP_STATUS, "NEW");
 			nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
 
-            HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
-            properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
-            nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
-
 			PersonService personService = serviceRegistry.getPersonService();
 			NodeRef assigneeNodeRef = personService.getPerson("workflow");
 
@@ -116,7 +112,11 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 			aspectProps.put(StatemachineModel.PROP_STATEMACHINE_ID, path.getInstance().getId());
 			nodeService.addAspect(childAssocRef.getChildRef(), StatemachineModel.ASPECT_STATEMACHINE, aspectProps);
 
-			List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
+            HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
+            properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
+            nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
+
+            List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
 			for (WorkflowTask task : tasks) {
 				workflowService.endTask(task.getId(), null);
 			}
