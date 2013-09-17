@@ -56,6 +56,14 @@ public class XmlHelper {
 
 	public static final String XMLATTR_MNEM = "mnem";
 
+	/** парсер org.w3c.dom так называет узлы с комментариями (при этом тип узла Node.ELEMENT_NODE=1) */
+	public static final String XML_STD_NODENAME_COMMENT = "#comment";
+
+	/** парсер org.w3c.dom так называет CDATA-узлы (при этом тип узла Node.ELEMENT_NODE=1) */
+	public static final String XML_STD_NODENAME_CDATA = "#cdata-section";
+
+	public static final String XML_NODENAME_VALUE = "value";
+
 	final private static Logger logger = LoggerFactory.getLogger(XmlHelper.class);
 
 	private XmlHelper() {
@@ -181,7 +189,7 @@ public class XmlHelper {
 		return result;
 	}
 
-	/** альтернативный поиск */
+	/** альтернативный поиск непосредственным перебором вложенных узлов по именам */
 	static Node findNodeByName2(Node cur, String tag) {
 		// почленный поиск ...
 		if (cur != null && cur.getChildNodes() != null) {
@@ -340,6 +348,41 @@ public class XmlHelper {
 		return vDefault;
 	}
 
+
+	/**
+	 * Внутри указанного узла найти именованный субузел и вернуть его значение,
+	 * которое может быть указано как (в порядке убывания приоритета):
+	 *   1) АТРИБУТ "value",
+	 *   2) как text-значение дочернего узла с именем "value", 
+	 *   3) как cdata-значение дочернего узла.
+	 * Узлы-комментарии пропускаются. 
+	 * @param srcGrpNode
+	 * @param xmlSubnodeName
+	 * @return
+	 */
+	public static String findNodeChildValue(Element srcGrpNode, String xmlSubnodeName) {
+		final Node subNode = findNodeByName(srcGrpNode, xmlSubnodeName);
+		if (subNode != null && subNode.getChildNodes() != null) {
+			for (int i = 0; i < subNode.getChildNodes().getLength(); i++) {
+				final Node item = subNode.getChildNodes().item(i);
+
+				if (item == null 
+						|| item.getNodeType() == Node.COMMENT_NODE
+						|| XML_STD_NODENAME_COMMENT.equalsIgnoreCase(item.getNodeName())
+				) // skip comments and ELEMENT_NODE with name="#comment" ...
+					continue;
+
+				if ( XML_NODENAME_VALUE.equalsIgnoreCase(item.getNodeName()) ) { // FOUND value-node
+					return XmlHelper.getTagContent(item);
+				} else if (item.getNodeType() == Node.CDATA_SECTION_NODE
+						|| XML_STD_NODENAME_CDATA.equalsIgnoreCase(item.getNodeName())) {
+					// NOTE: (!?) для CDATA-секции имеем тип ELEMENT_NODE и ловим её только по имени name="#cdata-section"
+					return item.getTextContent();
+				}
+			}
+		}
+		return null; // NOT FOUND
+	} 
 
 	private static final DateFormat FORMAT_DATE = new SimpleDateFormat("yyyyMMdd");
 

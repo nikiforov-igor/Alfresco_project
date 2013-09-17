@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
 import ru.it.lecm.reports.api.ReportFileData;
+import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
@@ -284,7 +285,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	private static final JasperReportTargetFileType DEFAULT_TARGET = JasperReportTargetFileType.RTF;
 
 	/** "Что сгенерировать" = название колонки (типа строка) с целевым форматом файла после генератора */
-	private static final String COLNAME_TARGETFORMAT = "targetFormat";
+	private static final String COLNAME_TARGETFORMAT = DataSourceDescriptor.COLNAME_REPORT_TARGETFORMAT; // "targetFormat";
 
 	/**
 	 * Найти целевой формат в параметрах ...
