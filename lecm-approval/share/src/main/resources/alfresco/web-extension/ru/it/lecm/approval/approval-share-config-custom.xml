@@ -170,7 +170,7 @@
 					</field>
 					<field id="lecmApprove:approveTaskCommentAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
-							<control-param name="uploadDirectoryPath">{userhome}</control-param>
+							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
 						</control>
 					</field>
 					<field id="reassignScriptField">
@@ -339,7 +339,7 @@
 					</field>
 					<field id="lecmCustom:approveTaskCommentAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
-							<control-param name="uploadDirectoryPath">{userhome}</control-param>
+							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
 						</control>
 					</field>
 				</appearance>
