@@ -342,10 +342,14 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 		this.usertemp = usertemp;
 	}
 
-	public NodeRef getUserTemp() {
-		NodeRef userHome = repositoryHelper.getUserHome(repositoryHelper.getPerson());
+	public NodeRef getUserTemp(boolean createIfNotExist) {
+		return getUserTemp(repositoryHelper.getPerson(), createIfNotExist);
+	}
+
+	public NodeRef getUserTemp(NodeRef person, boolean createIfNotExist) {
+		NodeRef userHome = repositoryHelper.getUserHome(person);
 		NodeRef userTemp = getFolder(userHome, this.usertemp);
-		if (userTemp == null) {
+		if (userTemp == null && createIfNotExist) {
 			userTemp = createFolder(userHome, this.usertemp);
 		}
 		return userTemp;

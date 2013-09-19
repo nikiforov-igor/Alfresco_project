@@ -48,7 +48,16 @@ public interface RepositoryStructureHelper {
 
 	/**
 	 * Получение папки пользователя для временного хранилища файлов, которая очищается по расписанию
+	 * @param person пользователь
+	 * @param createIfNotExist создавать если не найдена
 	 * @return идентификатор папки временного хранилища файлов пользователя
 	 */
-	public NodeRef getUserTemp();
+	public NodeRef getUserTemp(NodeRef person, boolean createIfNotExist);
+
+	/**
+	 * Получение папки текущего пользователя для временного хранилища файлов, которая очищается по расписанию
+	 * @param createIfNotExist создавать если не найдена
+	 * @return идентификатор папки временного хранилища файлов пользователя
+	 */
+	public NodeRef getUserTemp(boolean createIfNotExist);
 }

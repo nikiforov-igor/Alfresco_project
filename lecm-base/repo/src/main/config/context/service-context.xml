@@ -221,4 +221,49 @@
             </map>
         </property>
     </bean>
+
+	<bean id="userTempDirectoryCleanSchedule" class="ru.it.lecm.base.schedule.UserTempDirectoryCleanSchedule">
+		<property name="repositoryStructureHelper">
+			<ref bean="repositoryStructureHelper" />
+		</property>
+		<property name="orgstructureService">
+			<ref bean="serviceOrgstructure" />
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService" />
+		</property>
+		<property name="transactionMode">
+			<value>ISOLATED_TRANSACTIONS</value>
+		</property>
+		<property name="compensatingActionMode">
+			<value>IGNORE</value>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 4 * * ?</value>
+		</property>
+		<property name="jobName">
+			<value>usertemp-directory-cleaner</value>
+		</property>
+		<property name="jobGroup">
+			<value>usertemp-directory</value>
+		</property>
+		<property name="triggerName">
+			<value>usertemp-directory-clean-trigger</value>
+		</property>
+		<property name="triggerGroup">
+			<value>usertemp-directory-trigger</value>
+		</property>
+		<property name="scheduler">
+			<ref bean="schedulerFactory"/>
+		</property>
+		<property name="actionService">
+			<ref bean="ActionService"/>
+		</property>
+		<property name="transactionService">
+			<ref bean="TransactionService"/>
+		</property>
+		<property name="runAsUser">
+			<value>System</value>
+		</property>
+	</bean>
 </beans>

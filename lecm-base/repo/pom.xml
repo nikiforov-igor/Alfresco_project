@@ -83,6 +83,10 @@
 		    <artifactId>documents-repo-api</artifactId>
 		    <version>${project.version}</version>
 	    </dependency>
+	    <dependency>
+		    <groupId>org.quartz-scheduler</groupId>
+		    <artifactId>quartz</artifactId>
+	    </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required
