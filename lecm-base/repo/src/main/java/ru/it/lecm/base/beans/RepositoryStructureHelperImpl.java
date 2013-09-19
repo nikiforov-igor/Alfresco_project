@@ -9,6 +9,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransacti
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -42,11 +43,14 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 	private PermissionService permissionService;
 	private PersonService personService;
 	private TransactionService transactionService;
+	protected AuthenticationService authService;
+	private Repository repositoryHelper;
 
 	String root;
 	String home;
 	String documents;
 	String drafts;
+	String usertemp;
 
 	public void setRepository (final Repository repository) {
 		this.repository = repository;
@@ -66,6 +70,14 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 
 	public void setTransactionService (TransactionService transactionService) {
 		this.transactionService = transactionService;
+	}
+
+	public void setAuthService(AuthenticationService authService) {
+		this.authService = authService;
+	}
+
+	public void setRepositoryHelper(Repository repositoryHelper) {
+		this.repositoryHelper = repositoryHelper;
 	}
 
 	/**
@@ -324,5 +336,18 @@ public class RepositoryStructureHelperImpl implements ServiceFolderStructureHelp
 			}
 		}
 		return folderRef;
+	}
+
+	public void setUsertemp(String usertemp) {
+		this.usertemp = usertemp;
+	}
+
+	public NodeRef getUserTemp() {
+		NodeRef userHome = repositoryHelper.getUserHome(repositoryHelper.getPerson());
+		NodeRef userTemp = getFolder(userHome, this.usertemp);
+		if (userTemp == null) {
+			userTemp = createFolder(userHome, this.usertemp);
+		}
+		return userTemp;
 	}
 }

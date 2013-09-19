@@ -25,10 +25,13 @@
 		<property name="personService" ref="personService"/>
 		<property name="repository" ref="repositoryHelper"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="authService" ref="authenticationService"/>
 		<property name="root" value="Business platform"/>
 		<property name="home" value="LECM"/>
 		<property name="documents" value="Documents"/>
 		<property name="drafts" value="Черновики"/>
+		<property name="usertemp" value="temp"/>
 		<!--
 		<property name="" ref=""/>
 		-->

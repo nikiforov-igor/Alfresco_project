@@ -193,7 +193,7 @@
                 <appearance>
                     <field id="lecm-errands:attachments-temp-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">{userhome}</control-param>
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">label.errands.attachments</control-param>
                             <control-param name="showAttsLabel">false</control-param>
                             <control-param name="showAttsList">false</control-param>
@@ -291,7 +291,7 @@
                     </field>
                     <field id="lecm-errands:attachments-temp-assoc" set="main">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
-			                <control-param name="uploadDirectoryPath">{userhome}</control-param>
+			                <control-param name="uploadDirectoryPath">{usertemp}</control-param>
 			                <control-param name="directoryName">label.errands.attachments</control-param>
 		                </control>
 	                </field>
@@ -494,7 +494,7 @@
                     </field>
                     <field id="lecm-errands:attachments-temp-assoc" set="main">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">{userhome}</control-param>
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">label.errands.attachments</control-param>
                         </control>
                     </field>

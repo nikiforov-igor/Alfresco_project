@@ -45,4 +45,10 @@ public interface RepositoryStructureHelper {
      * @return
      */
     NodeRef getCompanyHomeRef ();
+
+	/**
+	 * Получение папки пользователя для временного хранилища файлов, которая очищается по расписанию
+	 * @return идентификатор папки временного хранилища файлов пользователя
+	 */
+	public NodeRef getUserTemp();
 }

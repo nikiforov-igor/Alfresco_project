@@ -145,17 +145,14 @@ LogicECM.control = LogicECM.control || {};
 					params += "&xpath=" + encodeURIComponent(this.options.uploadDirectoryPath);
 				} else if (this.options.uploadDirectoryPath.charAt(0) == "{") {
 					var location = "";
-					if (this.options.uploadDirectoryPath == "{companyhome}")
-					{
+					if (this.options.uploadDirectoryPath == "{companyhome}") {
 						location = "alfresco://company/home";
-					}
-					else if (this.options.uploadDirectoryPath == "{userhome}")
-					{
+					} else if (this.options.uploadDirectoryPath == "{userhome}") {
 						location = "alfresco://user/home";
-					}
-					else if (this.options.uploadDirectoryPath == "{siteshome}")
-					{
+					} else if (this.options.uploadDirectoryPath == "{siteshome}") {
 						location = "alfresco://sites/home";
+					} else if (this.options.uploadDirectoryPath == "{usertemp}") {
+						location = "alfresco://user/temp";
 					}
 					if (location.length > 0) {
 						params += "&rootNode=" + encodeURIComponent(location);

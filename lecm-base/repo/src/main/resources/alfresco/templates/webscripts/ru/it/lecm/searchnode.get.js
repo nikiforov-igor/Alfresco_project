@@ -96,27 +96,19 @@ function resolveNode(reference)
     var node = null;
     try
     {
-        if (reference == "alfresco://company/home" || reference == "{companyhome}")
-        {
+        if (reference == "alfresco://company/home" || reference == "{companyhome}") {
             node = companyhome;
-        }
-        else if (reference == "alfresco://user/home")
-        {
+        } else if (reference == "alfresco://user/home") {
             node = userhome;
-        }
-        else if (reference == "alfresco://sites/home")
-        {
+        } else if (reference == "alfresco://sites/home") {
             node = companyhome.childrenByXPath("st:sites")[0];
-        }
-        else if (reference.indexOf("://") > 0)
-        {
+        } else if (reference == "alfresco://user/temp") {
+	        node = businessPlatform.getUserTemp();
+        } else if (reference.indexOf("://") > 0) {
             node = search.findNode(reference);
-        }
-        else if (reference.substring(0, 1) == "/")
-        {
+        } else if (reference.substring(0, 1) == "/") {
             node = search.xpathSearch(reference)[0];
-        }
-        else if (reference == "{organization}") {
+        } else if (reference == "{organization}") {
             node = companyhome.childByNamePath("Организация");
         }
     }

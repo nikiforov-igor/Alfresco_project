@@ -60,4 +60,12 @@ public class RepositoryStructureHelperJavascriptExtension extends BaseScopablePr
 	public ScriptNode getDraftsRef (final ScriptNode personRef) {
 		return new ScriptNode (repositoryStructureHelper.getDraftsRef (personRef.getNodeRef ()), serviceRegistry, getScope ());
 	}
+
+	/**
+	 * Получение папки пользователя для временного хранилища файлов, которая очищается по расписанию
+	 * @return папка временного хранилища файлов пользователя
+	 */
+	public ScriptNode getUserTemp() {
+		return new ScriptNode(repositoryStructureHelper.getUserTemp(), serviceRegistry, getScope());
+	}
 }
