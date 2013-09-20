@@ -8,11 +8,9 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.RegexQNamePattern;
 import org.quartz.CronTrigger;
-import org.quartz.SchedulerException;
 import org.quartz.Trigger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.quartz.Scheduler;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -26,8 +24,6 @@ import java.util.*;
  * Time: 11:59
  */
 public class UserTempDirectoryCleanSchedule extends AbstractScheduledAction {
-	private final static Logger logger = LoggerFactory.getLogger(UserTempDirectoryCleanSchedule.class);
-
 	private OrgstructureBean orgstructureService;
 	private RepositoryStructureHelper repositoryStructureHelper;
 	private NodeService nodeService;
@@ -146,45 +142,36 @@ public class UserTempDirectoryCleanSchedule extends AbstractScheduledAction {
 	public List<NodeRef> getNodes() {
 		List<NodeRef> searchFiles = new ArrayList<NodeRef>();
 
-		try {
-			Trigger trigger = this.scheduler.getTrigger(getTriggerName(), getTriggerGroup());
- 			if (trigger != null && trigger.getPreviousFireTime() != null && trigger.getNextFireTime() != null) {
-				Date fireTime = trigger.getPreviousFireTime();
-				Date nextFireTime = trigger.getNextFireTime();
+	    Calendar cal = Calendar.getInstance();
+	    cal.add(Calendar.DAY_OF_YEAR, -1);
+	    Date beforeFireTime = cal.getTime();
 
-			    Calendar cal = Calendar.getInstance();
-			    cal.setTime(fireTime);
-			    cal.add(Calendar.MILLISECOND, (int) (fireTime.getTime() - nextFireTime.getTime()));
+		List<NodeRef> allEmployees = this.orgstructureService.getAllEmployees();
+		if (allEmployees != null) {
+			Set<NodeRef> allPersons = new HashSet<NodeRef>(allEmployees.size());
 
-			    Date beforeFireTime = cal.getTime();
+			for (NodeRef employee: allEmployees) {
+				allPersons.add(this.orgstructureService.getPersonForEmployee(employee));
+			}
+			for (NodeRef person: allPersons) {
+				NodeRef tempDirectory = repositoryStructureHelper.getUserTemp(person, false);
+				if (tempDirectory != null) {
+					List<ChildAssociationRef> childs = nodeService.getChildAssocs(tempDirectory);
+					if (childs != null) {
+						for (ChildAssociationRef child: childs) {
+							NodeRef nodeRef = child.getChildRef();
 
-				List<NodeRef> allEmployees = this.orgstructureService.getAllEmployees();
-				if (allEmployees != null) {
-					Set<NodeRef> allPersons = new HashSet<NodeRef>(allEmployees.size());
-
-					for (NodeRef employee: allEmployees) {
-						allPersons.add(this.orgstructureService.getPersonForEmployee(employee));
-					}
-					for (NodeRef person: allPersons) {
-						NodeRef tempDirectory = repositoryStructureHelper.getUserTemp(person, false);
-						if (tempDirectory != null) {
-							List<ChildAssociationRef> childs = nodeService.getChildAssocs(tempDirectory);
-							if (childs != null) {
-								for (ChildAssociationRef child: childs) {
-									NodeRef nodeRef = child.getChildRef();
-
-									Date createDate = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATED);
-									if (createDate != null && createDate.before(beforeFireTime)) {
-										searchFiles.add(nodeRef);
-									}
+							Date createDate = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATED);
+							if (createDate != null && createDate.before(beforeFireTime)) {
+								List<AssociationRef> source = nodeService.getSourceAssocs(tempDirectory, RegexQNamePattern.MATCH_ALL);
+								if (source == null || source.size() == 0) {
+									searchFiles.add(nodeRef);
 								}
 							}
 						}
 					}
 				}
 			}
-		} catch (SchedulerException e) {
-			logger.error("Error get trigger " + getTriggerName(), e);
 		}
 		return searchFiles;
 	}
