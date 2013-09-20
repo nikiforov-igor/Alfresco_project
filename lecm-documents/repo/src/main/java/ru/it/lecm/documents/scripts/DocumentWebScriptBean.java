@@ -238,8 +238,8 @@ public class DocumentWebScriptBean extends BaseWebScript {
         for (String docType : docTypes) {
             qNameTypes.add(QName.createQName(docType, namespaceService));
         }
-        return documentService.getDocumentsByFilter(qNameTypes,
-                getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), queryFilter, null).size();
+        return documentService.getAmountDocumentsByFilter(qNameTypes,
+                getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), queryFilter, null);
     }
 
     public List<String> getAccessPermissionsList(String type) {

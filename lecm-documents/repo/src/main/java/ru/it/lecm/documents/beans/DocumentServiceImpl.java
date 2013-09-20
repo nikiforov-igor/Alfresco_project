@@ -299,8 +299,40 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     @Override
+    public Integer getAmountDocumentsByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
+        SearchParameters sp = buildDocumentsSearcParametersByFilter(docTypes, paths, statuses, filterQuery, sortDefinition);
+        ResultSet results = null;
+        int length = -1;
+        try {
+            results = searchService.query(sp);
+            length = results.length();
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+        }
+        return length;
+    }
+
+    @Override
     public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
+        SearchParameters sp = buildDocumentsSearcParametersByFilter(docTypes, paths, statuses, filterQuery, sortDefinition);
+        ResultSet results = null;
         List<NodeRef> records = new ArrayList<NodeRef>();
+        try {
+            results = searchService.query(sp);
+            for (ResultSetRow row : results) {
+                records.add(row.getNodeRef());
+            }
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+        }
+        return records;
+    }
+
+    private SearchParameters buildDocumentsSearcParametersByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
@@ -352,19 +384,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
             }
         }
 
-        ResultSet results = null;
         sp.setQuery(query);
-        try {
-            results = searchService.query(sp);
-            for (ResultSetRow row : results) {
-                records.add(row.getNodeRef());
-            }
-        } finally {
-            if (results != null) {
-                results.close();
-            }
-        }
-        return records;
+        return sp;
     }
 
     public String getAuthorProperty(QName docType) {

@@ -141,6 +141,17 @@ public interface DocumentService {
     public List<NodeRef> getDocumentsByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition);
 
     /**
+     * Подсчет количества документов по разным параметрам
+     *
+     * @param docTypes - список QName типов на документы
+     * @param paths - список путей для поиска, формат: app:company_home/cm:Черновики
+     * @param statuses - список статусов, если null то по статусам не фильтрует
+     * @param sortDefinition - набор полей для сортировки
+     * @return Integer - количество документов
+     */
+    public Integer getAmountDocumentsByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition);
+
+    /**
      * Метод для получения папки с черновиками для заданного типа
      * @return имя папки с черновиками
      */
