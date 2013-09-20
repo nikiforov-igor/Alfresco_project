@@ -105,7 +105,7 @@
 		<module>lecm-scaner</module>
 		<module>lecm-reports-editor</module>
 		<module>lecm-errands</module>
-		<!--<module>lecm-semantic-assist</module>-->
+		<module>lecm-semantic-assist</module>
 		<module>lecm-permission-exp</module>
 		<module>lecm-signed-docflow</module>
 	</modules>

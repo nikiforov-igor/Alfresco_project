@@ -298,13 +298,13 @@
             <type>amp</type>
             <scope>runtime</scope>
         </dependency>
-		<!--<dependency>
+		<dependency>
             <groupId>ru.it.lecm.br5.semantic</groupId>
             <artifactId>semantic-assist-repo</artifactId>
             <version>${platform.version}</version>
             <scope>runtime</scope>
             <type>amp</type>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>ru.it.lecm.permission-exp</groupId>
             <artifactId>permission-exp-repo</artifactId>
