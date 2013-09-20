@@ -1,14 +1,13 @@
 package ru.it.lecm.orgstructure.policies;
 
-import java.util.List;
-
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,7 +36,7 @@ public class OrgstructureBossPolicy
 		final NodeRef staff = childAssocRef.getChildRef(); // type: "lecm-orgstr:staff-list"
 		final NodeRef orgUnit = childAssocRef.getParentRef();
 		List<NodeRef> staffList = orgstructureService.getUnitStaffLists(orgUnit);
-		final boolean isBoss = staffList.size() >= 1 && staffList.get(0).equals(staff);
+		final boolean isBoss = staffList.size() == 1 && staffList.get(0).equals(staff);
 		nodeService.setProperty(staff, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS, isBoss);
 
 		// оповещение securityService по Должностной Позиции ...
