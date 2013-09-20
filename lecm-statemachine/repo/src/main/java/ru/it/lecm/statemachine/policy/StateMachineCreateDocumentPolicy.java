@@ -6,6 +6,9 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -24,9 +27,11 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * User: PMelnikov
@@ -35,12 +40,19 @@ import java.util.Map;
  */
 public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 
-	private ServiceRegistry serviceRegistry;
+    private static final String STM_POST_TRANSACTION_PENDING_DOCS = "stm_post_transaction_pending_docs";
+    private ServiceRegistry serviceRegistry;
 	private PolicyComponent policyComponent;
+    private ThreadPoolExecutor threadPoolExecutor;
+    private TransactionListener transactionListener;
 
-	final static Logger logger = LoggerFactory.getLogger(StateMachineCreateDocumentPolicy.class);
+    final static Logger logger = LoggerFactory.getLogger(StateMachineCreateDocumentPolicy.class);
 
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+    public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+        this.threadPoolExecutor = threadPoolExecutor;
+    }
+
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
 	}
 
@@ -53,74 +65,138 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 
 		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
-
+        transactionListener = new StateMachineTransactionListener();
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, StatemachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
-	public void onCreateNode(ChildAssociationRef childAssocRef) {
-		NodeService nodeService = serviceRegistry.getNodeService();
+	public void onCreateNode(final ChildAssociationRef childAssocRef) {
+        final NodeRef docRef = childAssocRef.getChildRef();
+        // Ensure that the transaction listener is bound to the transaction
+        AlfrescoTransactionSupport.bindListener(this.transactionListener);
 
-		final NodeRef docRef = childAssocRef.getChildRef();
+        // Add the pending action to the transaction resource
+        List<NodeRef> pendingActions = AlfrescoTransactionSupport
+                .getResource(STM_POST_TRANSACTION_PENDING_DOCS);
+        if (pendingActions == null) {
+            pendingActions = new ArrayList<NodeRef>();
+            AlfrescoTransactionSupport.bindResource(STM_POST_TRANSACTION_PENDING_DOCS, pendingActions);
+        }
 
-		QName type = nodeService.getType(docRef);
-		List<String> prefixes = (List<String>) serviceRegistry.getNamespaceService().getPrefixes(type.getNamespaceURI());
-		String stateMashineId = prefixes.get(0) + "_" + type.getLocalName();
-		if (stateMashineId != null) {
-			//append status aspect to new document
-			HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-			aspectProps.put(StatemachineModel.PROP_STATUS, "NEW");
-			nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
+        // Check that action has only been added to the list once
+        if (!pendingActions.contains(docRef)) {
+            pendingActions.add(docRef);
+        }
+    }
 
-			PersonService personService = serviceRegistry.getPersonService();
-			NodeRef assigneeNodeRef = personService.getPerson("workflow");
+    private class StateMachineTransactionListener implements TransactionListener
+    {
 
-			Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
+        @Override
+        public void flush() {
 
-			WorkflowService workflowService = serviceRegistry.getWorkflowService();
+        }
 
-			NodeRef stateProcessPackage = workflowService.createPackage(null);
-			nodeService.addChild(stateProcessPackage, docRef, ContentModel.ASSOC_CONTAINS, type);
+        @Override
+        public void beforeCommit(boolean readOnly) {
 
-			workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
-			workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
+        }
 
-			workflowProps.put(QName.createQName("{}stm_document"), docRef);
-			serviceRegistry.getPermissionService().setPermission(docRef, "workflow",
-					PermissionService.ALL_PERMISSIONS, true);
+        @Override
+        public void beforeCompletion() {
 
-			// get the moderated workflow
-			WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
-			if (wfDefinition == null) {
-                wfDefinition = workflowService.getDefinitionByName("activiti$default_statemachine");
-			}
-			if (wfDefinition == null) {
-				throw new IllegalStateException("no workflow: " + stateMashineId);
-			}
-			// start the workflow
-			final String currentUser = AuthenticationUtil.getFullyAuthenticatedUser();
-			AuthenticationUtil.setFullyAuthenticatedUser("workflow");
-			WorkflowPath path = null; 
-			try {
-				path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
-            } catch (Exception e) {
-                logger.error("Error while start statemachine", e);
-			} finally {
-				AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
-			}
-			aspectProps = new HashMap<QName, Serializable>();
-			aspectProps.put(StatemachineModel.PROP_STATEMACHINE_ID, path.getInstance().getId());
-			nodeService.addAspect(childAssocRef.getChildRef(), StatemachineModel.ASPECT_STATEMACHINE, aspectProps);
+        }
 
-            HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
-            properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
-            nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
+        @Override
+        public void afterCommit() {
+            final NodeService nodeService = serviceRegistry.getNodeService();
+            final String currentUser = AuthenticationUtil.getFullyAuthenticatedUser();
+            List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(STM_POST_TRANSACTION_PENDING_DOCS);
+            if (pendingDocs != null) {
+                while (!pendingDocs.isEmpty()) {
+                    final NodeRef docRef = pendingDocs.remove(0);
+                    if (docRef != null) {
+                        final QName type = nodeService.getType(docRef);
+                        List<String> prefixes = (List<String>) serviceRegistry.getNamespaceService().getPrefixes(type.getNamespaceURI());
+                        final String stateMashineId = prefixes.get(0) + "_" + type.getLocalName();
+                        Runnable runnable = new Runnable() {
+                            public void run() {
+                                AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
+                                    @Override
+                                    public Void doWork() throws Exception {
+                                        return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                            @Override
+                                            public Void execute() throws Throwable {
+                                                //append status aspect to new document
+                                                HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+                                                aspectProps.put(StatemachineModel.PROP_STATUS, "NEW");
+                                                nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
 
-            List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
-			for (WorkflowTask task : tasks) {
-				workflowService.endTask(task.getId(), null);
-			}
-		}
-	}
+                                                PersonService personService = serviceRegistry.getPersonService();
+                                                NodeRef assigneeNodeRef = personService.getPerson("workflow");
 
+                                                Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
+
+                                                WorkflowService workflowService = serviceRegistry.getWorkflowService();
+
+                                                NodeRef stateProcessPackage = workflowService.createPackage(null);
+                                                nodeService.addChild(stateProcessPackage, docRef, ContentModel.ASSOC_CONTAINS, type);
+
+                                                workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
+                                                workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
+
+                                                workflowProps.put(QName.createQName("{}stm_document"), docRef);
+                                                serviceRegistry.getPermissionService().setPermission(docRef, "workflow",
+                                                        PermissionService.ALL_PERMISSIONS, true);
+
+                                                // get the moderated workflow
+                                                WorkflowDefinition wfDefinition = workflowService.getDefinitionByName("activiti$" + stateMashineId);
+                                                if (wfDefinition == null) {
+                                                    wfDefinition = workflowService.getDefinitionByName("activiti$default_statemachine");
+                                                }
+                                                if (wfDefinition == null) {
+                                                    throw new IllegalStateException("no workflow: " + stateMashineId);
+                                                }
+                                                // start the workflow
+
+                                                AuthenticationUtil.setFullyAuthenticatedUser("workflow");
+                                                WorkflowPath path = null;
+                                                try {
+                                                    path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+                                                } catch (Exception e) {
+                                                    logger.error("Error while start statemachine", e);
+                                                } finally {
+                                                    AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
+                                                }
+                                                aspectProps = new HashMap<QName, Serializable>();
+                                                aspectProps.put(StatemachineModel.PROP_STATEMACHINE_ID, path.getInstance().getId());
+                                                nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATEMACHINE, aspectProps);
+
+                                                HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
+                                                properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
+                                                nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
+
+                                                List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
+                                                for (WorkflowTask task : tasks) {
+                                                    workflowService.endTask(task.getId(), null);
+                                                }
+                                                return null;
+                                            }
+                                        }, false, true);
+                                    }
+                                }, currentUser);
+                            }
+                        };
+
+                        threadPoolExecutor.execute(runnable);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void afterRollback() {
+
+        }
+    }
 }

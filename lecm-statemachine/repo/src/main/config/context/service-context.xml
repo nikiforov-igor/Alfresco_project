@@ -141,6 +141,9 @@
 
 	<bean id="stateMachineCreateDocumentPolicy"
 		  class="ru.it.lecm.statemachine.policy.StateMachineCreateDocumentPolicy" init-method="init">
+        <property name="threadPoolExecutor">
+            <ref bean="defaultAsyncThreadPool"/>
+        </property>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="policyComponent" ref="policyComponent"/>
 	</bean>
