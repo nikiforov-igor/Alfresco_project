@@ -81,8 +81,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 		return new ScriptNode(errandsService.getCurrentUserSettingsNode(), serviceRegistry, getScope());
 	}
 
-	public List<NodeRef> getAvailableInitiators() {
-		return  errandsService.getAvailableInitiators();
+	public List<NodeRef> getAvailableExecutors() {
+		return  errandsService.getAvailableExecutors();
 	}
 
 	public boolean isDefaultWithoutInitiatorApproval() {

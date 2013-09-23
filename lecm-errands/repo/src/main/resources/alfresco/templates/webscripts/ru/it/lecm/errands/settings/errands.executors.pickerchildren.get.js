@@ -4,11 +4,15 @@ function main() {
 	var data = getPickerChildrenItems();
 
 	var filteredResults = [];
-	var availableInitiators = errands.getAvailableInitiators();
-	for (var i = 0; i < data.results.length; i++) {
-		if (availableInitiators.contains(data.results[i].item.nodeRef)) {
-			filteredResults.push(data.results[i]);
+	var availableExecutors = errands.getAvailableExecutors();
+	if (availableExecutors != null) {
+		for (var i = 0; i < data.results.length; i++) {
+			if (availableExecutors.contains(data.results[i].item.nodeRef)) {
+				filteredResults.push(data.results[i]);
+			}
 		}
+	} else {
+		filteredResults = data.results;
 	}
 
 	model.parent = data.parent;

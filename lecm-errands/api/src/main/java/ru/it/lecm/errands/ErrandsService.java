@@ -75,10 +75,10 @@ public interface ErrandsService {
 	public NodeRef getCurrentUserSettingsNode();
 
 	/**
-	 * Получение списка сотрудников, доступных текущему пользователю для выбора инициатора
+	 * Получение списка сотрудников, доступных текущему пользователю для выбора исполнителя и соисполнителей
 	 * @return список сотрудников
 	 */
-	public List<NodeRef> getAvailableInitiators();
+	public List<NodeRef> getAvailableExecutors();
 
 	/**
 	 * Проверяет личные настройки "Без утверждения Инициатором"

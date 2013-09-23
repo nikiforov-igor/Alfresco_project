@@ -74,17 +74,7 @@
                     <field id="lecm-statemachine:status" set="set0">
                         <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
                     </field>
-                    <field id="lecm-errands:initiator-assoc" set="set1">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="employeeAbsenceMarker">true</control-param>
-                            <control-param name="childrenDataSource">lecm/errands/initiator/picker</control-param>
-                            <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-errands:initiator-assoc" set="set1"/>
                     <field id="lecm-errands:limitation-date" set="set1" mandatory="true">
 	                    <constraint-handlers>
 		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
@@ -101,14 +91,32 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="set3"/>
+	                <field id="lecm-errands:executor-assoc" set="set3">
+		                <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+			                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+			                <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+			                <control-param name="showCreateNewLink">false</control-param>
+			                <control-param name="showCreateNewButton">false</control-param>
+			                <control-param name="employeeAbsenceMarker">true</control-param>
+			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+		                </control>
+	                </field>
                     <field id="lecm-errands:end-date" set="set3"/>
                     <field id="lecm-errands:controller-assoc" set="set3"/>
                     <field id="lecm-errands:start-date" set="set3"/>
                     <field id="lecm-errands:content" set="set4">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecm-errands:coexecutors-assoc" set="set5"/>
+	                <field id="lecm-errands:coexecutors-assoc" set="set5">
+		                <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+			                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+			                <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+			                <control-param name="showCreateNewLink">false</control-param>
+			                <control-param name="showCreateNewButton">false</control-param>
+			                <control-param name="employeeAbsenceMarker">true</control-param>
+			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+		                </control>
+	                </field>
                     <field id="lecm-document:creator" set="set6"/>
                     <field id="lecm-errands:subject-assoc" set="set6">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
@@ -265,6 +273,7 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
+	                        <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:is-important" set="top-set">
@@ -305,24 +314,23 @@
 	                        <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:initiator-assoc" set="exist-bussines-role">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="employeeAbsenceMarker">true</control-param>
-                            <control-param name="childrenDataSource">lecm/errands/initiator/picker</control-param>
-                            <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-errands:initiator-assoc" set="exist-bussines-role"/>
                     <field id="lecm-errands:without-initiator-approval" set="collapsable-inner">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
 	                        <control-param name="defaultValueDataSource">lecm/errands/getDefaultWithoutInitiatorApproval</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:controller-assoc" set="collapsable-inner"/>
-                    <field id="lecm-errands:coexecutors-assoc" set="collapsable-inner"/>
+	                <field id="lecm-errands:coexecutors-assoc" set="collapsable-inner">
+		                <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+			                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+			                <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+			                <control-param name="showCreateNewLink">false</control-param>
+			                <control-param name="showCreateNewButton">false</control-param>
+			                <control-param name="employeeAbsenceMarker">true</control-param>
+			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+		                </control>
+	                </field>
                     <field id="lecm-errands:start-date" set="start-date-set"/>
                     <field id="lecm-errands:just-in-time" set="start-date-set">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
@@ -409,6 +417,7 @@
                         <control-param name="showCreateNewButton">false</control-param>
                         <control-param name="employeeAbsenceMarker">true</control-param>
                         <control-param name="mandatory">false</control-param>
+	                    <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
                     </control>
                     </field>
                 </appearance>
@@ -465,6 +474,7 @@
                             <control-param name="allowedNodesScript">lecm/errands/getAvailableEmployeesForChildErrand?parentDoc={parentDoc}</control-param>
                             <!--<control-param name="applyAllowedFilter">true</control-param>-->
                             <control-param name="param_parentDoc">parentDoc</control-param>
+	                        <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:is-important" set="top-set">
@@ -515,7 +525,6 @@
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
-                            <control-param name="childrenDataSource">lecm/errands/initiator/picker</control-param>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
                         </control>
                     </field>
@@ -525,7 +534,16 @@
                         </control>
                     </field>
                     <field id="lecm-errands:controller-assoc" set="collapsable-inner"/>
-                    <field id="lecm-errands:coexecutors-assoc" set="collapsable-inner"/>
+	                <field id="lecm-errands:coexecutors-assoc" set="collapsable-inner">
+		                <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+			                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+			                <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+			                <control-param name="showCreateNewLink">false</control-param>
+			                <control-param name="showCreateNewButton">false</control-param>
+			                <control-param name="employeeAbsenceMarker">true</control-param>
+			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+		                </control>
+	                </field>
                     <field id="lecm-errands:start-date" set="start-date-set"/>
                     <field id="lecm-errands:just-in-time" set="start-date-set">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
@@ -645,16 +663,6 @@
 					<show id="lecm-errands:user-settings-default-subject-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-errands:user-settings-default-initiator-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="employeeAbsenceMarker">true</control-param>
-							<control-param name="childrenDataSource">lecm/errands/initiator/picker</control-param>
-						</control>
-					</field>
 					<field id="lecm-errands:user-settings-default-subject-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
@@ -678,16 +686,6 @@
 					<show id="lecm-errands:user-settings-default-subject-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-errands:user-settings-default-initiator-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="employeeAbsenceMarker">true</control-param>
-							<control-param name="childrenDataSource">lecm/errands/initiator/picker</control-param>
-						</control>
-					</field>
 					<field id="lecm-errands:user-settings-default-subject-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>

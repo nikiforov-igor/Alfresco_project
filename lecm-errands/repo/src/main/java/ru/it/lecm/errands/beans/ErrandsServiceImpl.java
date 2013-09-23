@@ -205,24 +205,17 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 		return null;
 	}
 
-	public List<NodeRef> getAvailableInitiators() {
-		List<NodeRef> initiatorRoleEmployees = orgstructureService.getEmployeesByBusinessRole(BUSINESS_ROLE_ERRANDS_INITIATOR_ID);
+	public List<NodeRef> getAvailableExecutors() {
 		if (getModeChoosingExecutors() == ModeChoosingExecutors.ORGANIZATION) {
-			return initiatorRoleEmployees;
+			return null;
 		} else {
 			NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 			List<NodeRef> subordinates = orgstructureService.getBossSubordinate(currentEmployee, true);
 
 			List<NodeRef> result = new ArrayList<NodeRef>();
-			if (initiatorRoleEmployees.contains(currentEmployee)) {
-				result.add(currentEmployee);
-			}
+			result.add(currentEmployee);
+			result.addAll(subordinates);
 
-			for (NodeRef subordinate: subordinates) {
-				if (initiatorRoleEmployees.contains(subordinate)) {
-					result.add(subordinate);
-				}
-			}
 			return result;
 		}
 	}
