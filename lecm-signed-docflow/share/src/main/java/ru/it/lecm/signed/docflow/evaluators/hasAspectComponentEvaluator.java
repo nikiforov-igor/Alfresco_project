@@ -24,7 +24,7 @@ public class hasAspectComponentEvaluator extends DefaultSubComponentEvaluator{
 	public boolean evaluate(RequestContext context, Map<String, String> params) {
 		String nodeRef = params.get("nodeRef");
 		String aspect = params.get("aspect");
-		return evaluatorsUtil.hasAspect(nodeRef, aspect);
+		return evaluatorsUtil.hasProperties(nodeRef);
 
 
 	}

@@ -4,10 +4,12 @@
  */
 package ru.it.lecm.signed.docflow.webscripts;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
@@ -27,6 +29,7 @@ public class SignPermissionWebscript extends DeclarativeWebScript {
 
 	private static final String SIGN_PERMISSION_ACTION = "signPermission";
 	private static final String HAS_ASPECT_ACTION = "hasAspect";
+	private static final String HAS_PROPERTIES_ACTION = "hasProperties";
 	private NodeService nodeService;
 
 	public void setNodeService(NodeService nodeService) {
@@ -52,6 +55,18 @@ public class SignPermissionWebscript extends DeclarativeWebScript {
 		} catch (JSONException ex) {
 			Logger.getLogger(SignPermissionWebscript.class.getName()).log(Level.SEVERE, null, ex);
 		}
+		result.put("result", jsonRes);
+		return result;
+	}
+	
+	Map<String, Object> executeHasPropertiesAction(WebScriptRequest req) throws JSONException{
+		Map<String, Object> result = new HashMap<String, Object>();
+		JSONObject jsonRes = new JSONObject();
+		Map<String, Object> properties = new HashMap<String, Object>();
+		NodeRef node = new NodeRef(req.getParameter("nodeRef"));
+		Serializable lockOwner = nodeService.getProperty(node, ContentModel.PROP_LOCK_OWNER);
+		Serializable lockType = nodeService.getProperty(node, ContentModel.PROP_LOCK_TYPE);
+		jsonRes.put("result", (lockOwner != null && lockType != null));
 		result.put("result", jsonRes);
 		return result;
 	}
@@ -84,6 +99,14 @@ public class SignPermissionWebscript extends DeclarativeWebScript {
 		if(action.equals(HAS_ASPECT_ACTION)){
 			try {
 				return executeHasAspectAction(req);
+			} catch (JSONException ex) {
+				Logger.getLogger(SignPermissionWebscript.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+		
+		if(action.equals(HAS_PROPERTIES_ACTION)){
+			try {
+				return executeHasPropertiesAction(req);
 			} catch (JSONException ex) {
 				Logger.getLogger(SignPermissionWebscript.class.getName()).log(Level.SEVERE, null, ex);
 			}

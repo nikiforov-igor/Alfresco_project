@@ -57,4 +57,20 @@ public class EvaluatorsUtil {
 		}
 		return false;
 	}
+	
+	public boolean hasProperties(String nodeRef){
+		String url = "/lecm/signed/docflow/signPermission?action=hasProperties&nodeRef=" + nodeRef;
+		Response response = scriptRemote.connect("alfresco").get(url);
+		try {
+			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
+				org.json.JSONObject resultJson = new org.json.JSONObject(response.getResponse());
+				return resultJson.getBoolean("result");
+			} else {
+				logger.warn("Cannot get result from server");
+			}
+		} catch (JSONException e) {
+			logger.warn("Cannot get result from server", e);
+		}
+		return false;
+	}
 }
