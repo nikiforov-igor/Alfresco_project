@@ -5,4 +5,8 @@
 		<Permission object="." permissionGroup="Consumer" inheritPermissions="false"/>
 	</BusinessRole>
 
+	<BusinessRole id="*">
+		<Permission object="." permissionGroup="ReadProperties" inheritPermissions="false"/>
+	</BusinessRole>
+
 </ReposioryPermissions>

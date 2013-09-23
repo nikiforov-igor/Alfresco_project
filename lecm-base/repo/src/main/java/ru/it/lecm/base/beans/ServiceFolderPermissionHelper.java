@@ -1,10 +1,7 @@
 package ru.it.lecm.base.beans;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -101,24 +98,34 @@ public class ServiceFolderPermissionHelper {
 	}
 
 	private void applyPermissions(Map<String, List<PermissionSettings>> permissions) {
+		Set<NodeRef> processedNodes = new HashSet<NodeRef>();
 		for (Map.Entry<String, List<PermissionSettings>> businessRole : permissions.entrySet()) {
 			final String businessRoleName = businessRole.getKey();
 			final Types.SGPosition sgBusinessRole = Types.SGKind.SG_BR.getSGPos(businessRoleName);
+			String shortName;
+			if ("*".equals(businessRoleName)) {
+				shortName = "EVERYONE";
+			} else {
+				shortName = sgBusinessRole.getAlfrescoSuffix();
+			}
 
 			for (PermissionSettings objectsPermissions : businessRole.getValue()) {
 				final NodeRef objectNode = getObjectNodeRef(objectsPermissions.getObjectName());
 				if (objectNode == null) {
-					return;
+					continue;
 				}
 				final String permissionGroup = objectsPermissions.getPermissionGroup();
 				final boolean inheritPermissions = objectsPermissions.isInheritPermissions();
-				permissionService.clearPermission(objectNode, PermissionService.ALL_AUTHORITIES);
-				permissionService.setInheritParentPermissions(objectNode, inheritPermissions);
+				if (!processedNodes.contains(objectNode)) {
+					permissionService.clearPermission(objectNode, PermissionService.ALL_AUTHORITIES);
+					permissionService.setInheritParentPermissions(objectNode, inheritPermissions);
+					processedNodes.add(objectNode);
+				}
 				LecmPermissionGroup lecmPermissionGroup = lecmPermissionService.findPermissionGroup(permissionGroup);
 				if (lecmPermissionGroup != null) {
 					lecmPermissionService.grantAccessByPosition(lecmPermissionGroup, objectNode, sgBusinessRole);
 				} else {
-					String authority = authorityService.getName(AuthorityType.GROUP, sgBusinessRole.getAlfrescoSuffix());
+					String authority = authorityService.getName(AuthorityType.GROUP, shortName);
 					permissionService.setPermission(objectNode, authority, permissionGroup, true);
 				}
 			}
