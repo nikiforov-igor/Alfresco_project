@@ -128,7 +128,7 @@ function main() {
 
         var modelName = node.properties["cm:name"].replace("_", ":");
 
-        var formConfig = getFormConfig(modelName, "");
+        var formConfig = getFormConfig(modelName, "statemachine-editable-fields");
 
         var fields = [];
         // pass form ui model to FTL

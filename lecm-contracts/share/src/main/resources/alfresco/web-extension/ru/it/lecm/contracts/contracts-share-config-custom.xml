@@ -783,6 +783,32 @@
                     </field>
                 </appearance>
             </form>
+            <form id="statemachine-editable-fields">
+                <field-visibility>
+                    <show id="lecm-contract:regNumProject"/>
+                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-contract:typeContract-assoc" force="true"/>
+                    <show id="lecm-contract:subjectContract-assoc" force="true"/>
+                    <show id="lecm-contract:totalAmount" force="true"/>
+                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc" force="true"/>
+                    <show id="lecm-contract:representative-assoc"/>
+                    <show id="lecm-contract:signedCounterparty"/>
+                    <show id="lecm-contract:signatoryCounterparty"/>
+                    <show id="lecm-contract:regNumContractor"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-contract:endDate"/>
+                    <show id="lecm-contract:unlimited"/>
+                    <show id="lecm-contract:summaryContent"/>
+                    <show id="lecm-contract:regNumSystem"/>
+                    <show id="lecm-contract:dateRegContracts"/>
+                    <show id="lecm-contract:registrator-assoc"/>
+                    <show id="lecm-contract:locationRegistration"/>
+                    <show id="lecm-contract:locationContract"/>
+                    <show id="lecm-contract-aspect:reasonDelete-assoc"/>
+                </field-visibility>
+            </form>
 		</forms>
 	</config>
 
