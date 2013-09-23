@@ -19,10 +19,39 @@
 		</property>
 	</bean>
 	
-	<bean id="evaluator.lecm.signed-docflow.Locked" parent="evaluator.doclib.action.hasAspect">
+	<bean id="evaluator.lecm.signed-docflow.aspectLocked" parent="evaluator.doclib.action.hasAspect">
 		<property name="aspects">
 			<list>
 				<value>cm:lockable</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="evaluator.lecm.signed.docflow.hasLockOnwer" parent="evaluator.doclib.action.propertyNotNull">
+		<property name="property">
+			<value>cm:lockOwner</value>
+		</property>
+	</bean>
+	
+	<bean id="evaluator.lecm.signed.docflow.hasLockType" parent="evaluator.doclib.action.propertyNotNull">
+		<property name="property">
+			<value>cm:lockType</value>
+		</property>
+	</bean>
+	
+	<bean id="evaluator.lecm.signed.docflow.hasLockProperties" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.lecm.signed.docflow.hasLockOnwer" />
+				<ref bean="evaluator.lecm.signed.docflow.hasLockType" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="evaluator.lecm.signed-docflow.Locked" parent="evaluator.doclib.action.chainedMatchAll">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.lecm.signed.docflow.hasLockProperties" />
+				<ref bean="evaluator.lecm.signed-docflow.aspectLocked" />
 			</list>
 		</property>
 	</bean>

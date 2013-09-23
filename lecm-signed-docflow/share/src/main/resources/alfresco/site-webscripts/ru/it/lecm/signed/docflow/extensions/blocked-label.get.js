@@ -2,6 +2,8 @@
 
 function getBlocked(nodeRef) {
 	var result = false,
+		hasLockOwner = false,
+		hasLockType = false,
 		response,
 		responseNative,
 		url = "/lecm/signed-docflow/config/aspect",
@@ -14,8 +16,17 @@ function getBlocked(nodeRef) {
 	response = remote.connect("alfresco").post(url, jsonUtils.toJSONString(dataObj), "application/json");
 	if (response.status == 200) {
 		responseNative = eval('(' + response + ')');
-		result = responseNative.enabled;
+		if(responseNative.properties["{http://www.alfresco.org/model/content/1.0}lockOwner"] != null){
+			hasLockOwner = true;
+		}
+		if(responseNative.properties["{http://www.alfresco.org/model/content/1.0}lockType"] != null){
+			hasLockType = true;
+		}
+		return responseNative.enabled && hasLockOwner && hasLockType;
 	}
+	
+	
+	
 	return result;
 }
 AlfrescoUtil.param('nodeRef');

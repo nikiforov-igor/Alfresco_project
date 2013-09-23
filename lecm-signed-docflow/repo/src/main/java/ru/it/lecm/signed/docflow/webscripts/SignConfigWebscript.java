@@ -1,7 +1,9 @@
 package ru.it.lecm.signed.docflow.webscripts;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
@@ -51,6 +53,16 @@ public class SignConfigWebscript extends DeclarativeWebScript {
 		result.put("aspect", aspect.toString());
 		if("get".equals(action)) {
 			result.put("enabled", nodeService.getAspects(node).contains(aspect));
+			Map<String, Object> properties = new HashMap<String, Object>();
+			Serializable lockOwner = nodeService.getProperty(node, ContentModel.PROP_LOCK_OWNER);
+			if (lockOwner != null) {
+				properties.put(ContentModel.PROP_LOCK_OWNER.toString(), lockOwner);
+			}
+			Serializable lockType = nodeService.getProperty(node, ContentModel.PROP_LOCK_TYPE);
+			if (lockType != null) {
+				properties.put(ContentModel.PROP_LOCK_TYPE.toString(), lockType);
+			}
+			result.put("properties", properties);
 		} else if ("set".equals(action)) {
 			boolean enabled = json.getBoolean("enabled");
 			result.put("enabled", enabled);
