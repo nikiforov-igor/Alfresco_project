@@ -85,36 +85,6 @@
             return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
         },
 
-        onEventHighlightRow:function DataGrid_onEventHighlightRow(oArgs) {
-
-            LogicECM.module.Errands.DataGrid.superclass.onEventHighlightRow.apply( this, [oArgs] );
-
-            // Выбранный элемент
-            var numSelectItem = this.widgets.dataTable.getTrIndex(oArgs.target);
-            if (this.widgets.paginator) {
-                numSelectItem = numSelectItem + ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
-            }
-
-            var selectItem = this.widgets.dataTable.getRecordSet().getRecord(numSelectItem);
-            if (selectItem){
-                var oData = selectItem.getData();
-                this._showBaseDocumentTitle(oData.itemData, oArgs.target.id);
-            }
-        },
-
-        _showBaseDocumentTitle:function (oData, id) {
-            var baseDocPresentString = oData["prop_lecm-errands_baseDocString"] ? oData["prop_lecm-errands_baseDocString"] .value : null;
-            if (baseDocPresentString && baseDocPresentString != "") {
-                // Получаем список ячеек tr
-                var childTrElement = Dom.getChildren(id);
-                // Количество элементов tr
-                var colTr = Dom.getChildren(Dom.get(id)).length;
-                for (i = 0; i < colTr; i++) {
-                    Dom.setAttribute(childTrElement[i], "title", baseDocPresentString);
-                }
-            }
-        },
-
         getDataTableColumnDefinitions: function DataGrid_getDataTableColumnDefinitions() {
             // YUI DataTable column definitions
             var columnDefinitions = [];
