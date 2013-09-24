@@ -12,6 +12,9 @@
     <jaxws:endpoint address="/LECMStaffService" implementor="#staffService"
                     implementorClass="staffManager.WSStaffManagerPort"/>
 
-    <bean id="staffService" class="staffManager.WSStaffManagerPort" />
+    <bean id="staffService" class="staffManager.WSStaffManagerPort">
+        <property name="objectFactory" ref="objectFactory"/>
+    </bean>
 
+    <bean id="objectFactory" class="staffManager.ObjectFactory" />
 </beans>
