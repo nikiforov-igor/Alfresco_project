@@ -8,6 +8,12 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit.lecm-errands_document form div.form-field > label {
     width: 130px;
 }
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder .current-values.small div.association-auto-complete-selected-item > span > a,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder .current-values.small div.association-auto-complete-selected-item-even > span > a,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder .current-values.small div.association-auto-complete-selected-item > span.not-person,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder .current-values.small div.association-auto-complete-selected-item-even > span.not-person {
+    width: 100px;
+}
 .yui-skin-lecmTheme div.yui-panel.metadata-form-edit.lecm-errands_document form div.form-field input[type="text"],
 .yui-skin-lecmTheme div.yui-panel.metadata-form-edit.lecm-errands_document form div.form-field div.selectone-control select,
 .yui-skin-lecmTheme div.yui-panel.metadata-form-edit.lecm-errands_document form div.form-field div.autocompleteCurrentValueDisplay,

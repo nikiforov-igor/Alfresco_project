@@ -6,7 +6,8 @@
     width: 100%;
     margin-left: 0;
 }
-.metadata-form .set .viewmode-field .viewmode-value > .association-auto-complete-selected-item  {
+.metadata-form .set .viewmode-field .viewmode-value > .association-auto-complete-selected-item,
+.metadata-form .set .viewmode-field .viewmode-value > .association-auto-complete-selected-item-even {
     display: inline-block;
     width: 100%;
 }

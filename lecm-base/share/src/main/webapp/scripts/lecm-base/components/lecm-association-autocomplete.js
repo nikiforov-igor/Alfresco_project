@@ -432,7 +432,7 @@ LogicECM.module = LogicECM.module || {};
 	                if (this.options.itemType == "lecm-orgstr:employee") {
 		                el.innerHTML += '<div class="' + divClass + '"> ' + this.getEmployeeView(item.nodeRef, itemName) + ' ' + this.getRemoveButtonHTML(item) + '</div>';
 	                } else {
-		                el.innerHTML += '<div class="' + divClass + '"> ' + itemName + ' ' + this.getRemoveButtonHTML(item) + '</div>';
+		                el.innerHTML += '<div class="' + divClass + '"> ' + this.getDefaultView(itemName) + ' ' + this.getRemoveButtonHTML(item) + '</div>';
 	                }
                     YAHOO.util.Event.onAvailable("ac-" + this.controlId + item.nodeRef, this.attachRemoveItemClickListener, item, this);
                 }
@@ -441,6 +441,10 @@ LogicECM.module = LogicECM.module || {};
 	        getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
 		        return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 	        },
+
+            getDefaultView: function (displayValue) {
+                return "<span class='not-person'>" + displayValue + "</span>";
+            },
 
             getRemoveButtonHTML: function AssociationAutoComplete_getRemoveButtonHTML(node)
             {
@@ -490,7 +494,7 @@ LogicECM.module = LogicECM.module || {};
 	                if (this.options.itemType == "lecm-orgstr:employee") {
 		                el.innerHTML += '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, this.selectedItems[i].name) + ' </div>';
 	                } else {
-		                el.innerHTML += '<div class="' + divClass + '"> ' + this.selectedItems[i].name + ' </div>';
+		                el.innerHTML += '<div class="' + divClass + '"> ' + this.getDefaultView(this.selectedItems[i].name) + ' </div>';
 	                }
                 }
 

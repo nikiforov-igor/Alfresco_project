@@ -1157,7 +1157,7 @@ LogicECM.module = LogicECM.module || {};
 							(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(items[i].nodeRef) : ' ') + this.getRemoveButtonHTML(items[i]) + '</div>';
 		            } else {
 			            Dom.get(fieldId).innerHTML
-				            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+				            += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
 		            }
 
 	                YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: ""}, this);
@@ -1168,6 +1168,10 @@ LogicECM.module = LogicECM.module || {};
 		getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
 			return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 		},
+
+        getDefaultView: function (displayValue) {
+            return "<span class='not-person'>" + displayValue + "</span>";
+        },
 
         updateAddButtons: function AssociationTreeViewer_updateAddButtons() {
             var button;
@@ -1221,7 +1225,7 @@ LogicECM.module = LogicECM.module || {};
 			            if (this.options.itemType == "lecm-orgstr:employee") {
 				            el.innerHTML += '<div class="' + divClass + '"> ' +  this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + '</div>';
 			            } else {
-				            el.innerHTML += '<div class="' + divClass + '"> ' + displayName + ' ' + '</div>';
+				            el.innerHTML += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + '</div>';
 			            }
 		            } else {
 			            if (this.options.itemType == "lecm-orgstr:employee") {
@@ -1230,7 +1234,7 @@ LogicECM.module = LogicECM.module || {};
 								(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(this.selectedItems[i].nodeRef) : ' ') + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 			            } else {
 				            el.innerHTML
-					            += '<div class="' + divClass + '"> ' + displayName + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+					            += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 			            }
 			            YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c"}, this);
 		            }

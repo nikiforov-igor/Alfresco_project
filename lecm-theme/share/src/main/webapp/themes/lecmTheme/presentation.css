@@ -1902,6 +1902,7 @@ span.tree-picker-button .yui-button .first-child button {
 
 div.form-field input[type="text"],
 div.form-field ul,
+div.form-field select,
 div.current-values,
 div.currentValueDisplay,
 div.autocompleteCurrentValueDisplay,
@@ -1928,6 +1929,25 @@ div.autocompleteCurrentValueDisplayInvisible,
 
 .yui-skin-lecmTheme .yui-ac-content {
     max-width: 28em;
+}
+
+div.association-auto-complete-selected-item,
+div.association-auto-complete-selected-item-even {
+    height: 22px;
+    line-height: 22px;
+    white-space: normal;
+    border-bottom: 1px solid #ccc;
+    padding: 3px 5px;
+}
+div.association-auto-complete-selected-item > span > a,
+div.association-auto-complete-selected-item-even > span > a,
+div.association-auto-complete-selected-item > span.not-person,
+div.association-auto-complete-selected-item-even > span.not-person {
+    max-width: 330px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 div.current-values,
@@ -1978,25 +1998,16 @@ a.remove-item {
     background: url(images/remove-item.png) no-repeat right center;
 }
 
-div.association-auto-complete-selected-item,
-div.association-auto-complete-selected-item-even {
-    height: 22px;
-    line-height: 22px;
-    white-space: normal;
-    border-bottom: 1px solid #ccc;
-    padding: 3px 5px;
-}
-div.association-auto-complete-selected-item > span > a,
-div.association-auto-complete-selected-item-even > span > a,
-div.association-auto-complete-selected-item > span.not-person,
-div.association-auto-complete-selected-item-even > span.not-person {
+.yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item > span > a,
+.yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item-even > span > a,
+.yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span > a,
+.yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item-even > span > a {
     max-width: 400px;
-    display: inline-block;
-    white-space: nowrap;
-    overflow-x: hidden;
 }
-div.association-auto-complete-selected-item > span.not-person,
-div.association-auto-complete-selected-item-even > span.not-person {
+.yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item > span.not-person,
+.yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item-even > span.not-person,
+.yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span.not-person,
+.yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item-even > span.not-person {
     max-width: 420px;
 }
 div.association-auto-complete-selected-item > span.not-person.width100,
@@ -2576,3 +2587,16 @@ span.person a div.description:empty {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* Datagrid : table : fixed header - start */
+.yui-skin-lecmTheme div.grid table.fixedHeader thead tr {
+    display: block;
+    position: relative;
+}
+.yui-skin-lecmTheme div.grid table.fixedHeader tbody {
+    width: 100%;
+    max-height: 80px;
+    overflow: auto;
+    display: block;
+}
+/* Datagrid : table : fixed header - end */

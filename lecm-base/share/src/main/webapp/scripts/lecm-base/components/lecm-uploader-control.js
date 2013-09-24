@@ -123,7 +123,8 @@ LogicECM.control = LogicECM.control || {};
                                     var el = Dom.get(this.options.controlId + "-currentValueDisplay");
                                     el.innerHTML = '';
                                     var displayName = oResults.properties["{http://www.alfresco.org/model/content/1.0}name"];
-                                    el.innerHTML += '<div class="association-auto-complete-selected-item"> ' + displayName + '</div>';
+                                    el.innerHTML += '<div class="association-auto-complete-selected-item"><span>'
+                                        + displayName + '</span></div>';
                                 }
                             },
                             scope: this
@@ -249,9 +250,9 @@ LogicECM.control = LogicECM.control || {};
 
 				var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
 				if(this.options.multiple) {
-					el.innerHTML += '<div class="' + divClass + '"> ' + displayName + '</div>';
+					el.innerHTML += '<div class="' + divClass + '"><span>' + displayName + '</span></div>';
 				} else {
-					el.innerHTML = '<div class="' + divClass + '"> ' + displayName + '</div>';
+					el.innerHTML = '<div class="' + divClass + '"><span>' + displayName + '</span></div>';
 				}
 			}
 
