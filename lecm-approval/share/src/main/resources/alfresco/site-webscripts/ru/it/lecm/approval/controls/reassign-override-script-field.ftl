@@ -21,6 +21,7 @@
 
         var personLogin = null;
 
+
         jQuery.ajax({
             url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/OverrideReassign",
             type: "GET",
@@ -110,6 +111,8 @@
                 fn: function ( p_form, p_dialog ) {
 					p_dialog.dialog.setHeader( "Переназначение задачи" );
                     var frm = Alfresco.util.ComponentManager.get(this.dialog.form.id);
+                    frm.formsRuntime.addValidation("${fieldHtmlId}-dialogOverride_reassign-to-employee-cntrl-currentValueDisplay", validateField, null, "DOMSubtreeModified");
+                    this.dialog.validate = validateField;
                     var btn = frm.buttons.cancel;
                     btn._button.style.display = "none";
                     btn._button.hidden = "hidden";
@@ -131,6 +134,17 @@
         btn.on("click", payLoad);
     };
 
+    var validateField = function(field, args,  event, form, silent, message){
+        debugger;
+        if(!field) {
+            field = document.getElementById("${fieldHtmlId}-dialogOverride_reassign-to-employee-cntrl-currentValueDisplay");
+        }
+        var selected = field.getElementsByClassName("association-auto-complete-selected-item");
+        if(selected != null && selected.length > 0){
+            return true;
+        }
+        return false;
+    }
 
     var fieldHtmlId = "${fieldHtmlId}";
     var resignButtonHtmlId = fieldHtmlId
