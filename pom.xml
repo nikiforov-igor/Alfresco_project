@@ -88,6 +88,7 @@
 		<module>lecm-statemachine-editor</module>
 		<module>lecm-theme</module>
 		<module>lecm-delegation</module>
+        <module>lecm-integrotest</module>
 		<module>lecm-subscriptions</module>
 		<module>lecm-model-editor</module>
 		<module>lecm-notifications</module>
