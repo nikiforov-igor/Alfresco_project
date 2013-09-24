@@ -8,6 +8,7 @@ function main() {
         model.members = members;
     }
     model.mayAdd = hasPermission(model.nodeRef, PERM_MEMBERS_ADD);
+    model.hasStatemachine = hasStatemachine(model.nodeRef);
 }
 
 function getMembers(nodeRef) {

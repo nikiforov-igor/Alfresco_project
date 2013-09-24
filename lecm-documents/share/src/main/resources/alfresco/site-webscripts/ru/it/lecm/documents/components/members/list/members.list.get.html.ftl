@@ -3,7 +3,7 @@
 <#assign aDateTime = .now>
 <#assign el=args.htmlid + aDateTime?iso_utc/>
 <#assign docRef= nodeRef/>
-<#assign hasAddPermission = (mayAdd?? && mayAdd)/>
+<#assign hasAddPermission = (hasStatemachine && mayAdd?? && mayAdd)/>
 <div id="${el}" class="members-list">
     <table class="members-title">
         <tr>
