@@ -16,7 +16,7 @@
             </properties>
         </component>
         <!-- Toolbar -->
-        <!--<component>
+        <component>
             <region-id>toolbar</region-id>
             <url>/lecm/documents/documents-list-toolbar</url>
             <properties>
@@ -27,7 +27,7 @@
                 <createDialogWidth>55em</createDialogWidth>
                 <createDialogClass>lecm-errands_document</createDialogClass>
             </properties>
-        </component>-->
+        </component>
         <!-- Menu -->
         <component>
             <region-id>menu</region-id>
