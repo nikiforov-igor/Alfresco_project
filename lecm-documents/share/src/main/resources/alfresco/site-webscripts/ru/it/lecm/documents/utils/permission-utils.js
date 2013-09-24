@@ -64,3 +64,14 @@ function hasRole(roleId) {
 	var hasRole = eval('(' + result + ')');
 	return (("" + hasRole) ==  "true");
 }
+
+function hasStatemachine(nodeRef) {
+    url = '/lecm/documents/hasStatemachine?nodeRef=' + nodeRef;
+    result = remote.connect("alfresco").get(url);
+    if (result.status == 200) {
+        var hasStatemachine = eval('(' + result + ')');
+        return hasStatemachine;
+    } else {
+        return false;
+    }
+}

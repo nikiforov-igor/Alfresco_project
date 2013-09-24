@@ -15,6 +15,16 @@ function main() {
         model.hasPermission = false;
     }
 
+    url = '/lecm/documents/hasStatemachine?nodeRef=' + page.url.args.nodeRef;
+    result = remote.connect("alfresco").get(url);
+    if (result.status == 200) {
+        var hasStatemachine = eval('(' + result + ')');
+        model.hasStatemachine = hasStatemachine;
+    } else {
+        model.hasStatemachine = false;
+    }
+
+
     url = '/api/metadata?nodeRef=' + page.url.args.nodeRef;
     result = remote.connect("alfresco").get(url);
     if (result.status == 200) {
