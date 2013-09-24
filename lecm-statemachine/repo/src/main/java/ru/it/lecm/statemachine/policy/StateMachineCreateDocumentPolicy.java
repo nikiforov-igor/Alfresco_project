@@ -72,6 +72,11 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 	@Override
 	public void onCreateNode(final ChildAssociationRef childAssocRef) {
         final NodeRef docRef = childAssocRef.getChildRef();
+        final NodeService nodeService = serviceRegistry.getNodeService();
+        //append status aspect to new document
+        HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+        aspectProps.put(StatemachineModel.PROP_STATUS, "NEW");
+        nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
         // Ensure that the transaction listener is bound to the transaction
         AlfrescoTransactionSupport.bindListener(this.transactionListener);
 
@@ -127,11 +132,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                         return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
                                             @Override
                                             public Void execute() throws Throwable {
-                                                //append status aspect to new document
-                                                HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-                                                aspectProps.put(StatemachineModel.PROP_STATUS, "NEW");
-                                                nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
-
                                                 PersonService personService = serviceRegistry.getPersonService();
                                                 NodeRef assigneeNodeRef = personService.getPerson("workflow");
 
@@ -168,7 +168,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                                 } finally {
                                                     AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
                                                 }
-                                                aspectProps = new HashMap<QName, Serializable>();
+                                                HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
                                                 aspectProps.put(StatemachineModel.PROP_STATEMACHINE_ID, path.getInstance().getId());
                                                 nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATEMACHINE, aspectProps);
 
