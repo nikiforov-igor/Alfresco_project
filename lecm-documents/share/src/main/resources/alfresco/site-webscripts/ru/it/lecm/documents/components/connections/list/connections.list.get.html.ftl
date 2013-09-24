@@ -9,7 +9,7 @@
 					${msg("title.connected-documents")}
 				</td>
 				<td class="connections-add">
-					<#if hasCreatePerm>
+					<#if hasCreatePerm && hasStatemachine>
 						<div class="connections-add">
 		                   <span id="${el}-addConnection-button" class="yui-button yui-push-button">
 		                      <span class="first-child">

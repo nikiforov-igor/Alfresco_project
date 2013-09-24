@@ -224,7 +224,7 @@
 
             <div class="form-field field-status">
                 <div class="read-only-status">
-                    <a onclick="showViewStatusDialog();" href="javascript:void(0);">${props["lecm-statemachine:status"]}</a>
+                    <a onclick="showViewStatusDialog();" href="javascript:void(0);">${props["lecm-statemachine:status"]!""}</a>
                 </div>
             </div>
             <@historyStatus.showDialog formId="form-errans-history-status" nodeRef="${nodeRef}" />
@@ -331,7 +331,7 @@
         <div class="line"></div>
         <#-- РАБОТА НАД ПОРУЧЕНИЕМ -->
         <div id="${id}-exec" class="block">
-	        <#if hasAddAttachmentPerm>
+	        <#if hasAddAttachmentPerm && hasStatemachine>
 		        <div id="${id}-dnd" class="dnd-uploader"></div>
 	        </#if>
             <div class="title">${msg("message.eddand.work")}</div>

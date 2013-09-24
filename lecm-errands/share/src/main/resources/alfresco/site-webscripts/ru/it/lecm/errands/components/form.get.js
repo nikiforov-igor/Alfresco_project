@@ -69,6 +69,8 @@ function main() {
 	uri = addParamToUrl('/lecm/statemachine/api/field/editable', 'nodeRef', model.nodeRef);
 	uri = addParamToUrl(uri, 'field', 'lecm-errands:execution-links-assoc');
 	model.isEditableExecutionLinks = doGetCall(uri);
+
+    model.hasStatemachine = hasStatemachine(model.nodeRef);
 }
 
 main();

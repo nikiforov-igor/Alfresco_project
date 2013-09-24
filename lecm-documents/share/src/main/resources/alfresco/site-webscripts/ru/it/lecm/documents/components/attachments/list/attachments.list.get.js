@@ -8,6 +8,7 @@ function main() {
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
 	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD);
 	model.hasDeleteOwnAttachmentPerm = hasPermission(model.nodeRef, PERM_OWN_CONTENT_DELETE);
+	model.hasStatemachine = hasStatemachine(model.nodeRef);
 
 	var allActions = [];
 	model.readOnlyActions = [

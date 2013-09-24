@@ -43,7 +43,7 @@
 </script>
 
 <div class="metadata-form" id="${id}_metadata">
-    <#if mayAdd!false>
+    <#if hasStatemachine && (mayAdd!false)>
     <div class="lecm-dashlet-actions">
         <a id="${id}-action-edit" onclick="documentMetadataComponent.onEdit('${id}_container')"
             class="edit" title="${msg("dashlet.edit.tooltip")}"></a>

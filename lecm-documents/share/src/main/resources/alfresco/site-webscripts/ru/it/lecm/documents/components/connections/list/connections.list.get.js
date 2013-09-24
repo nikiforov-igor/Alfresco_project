@@ -6,6 +6,7 @@ function main() {
 	model.hasViewPerm = hasPermission(model.nodeRef, PERM_LINKS_VIEW);
 	model.hasCreatePerm = hasPermission(model.nodeRef, PERM_LINKS_CREATE);
 	model.hasDeletePerm = hasPermission(model.nodeRef, PERM_LINKS_DELETE);
+	model.hasStatemachine = hasStatemachine(model.nodeRef);
 	if (model.hasViewPerm) {
         var connections = getConnections(model.nodeRef);
         if (connections != null) {

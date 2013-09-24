@@ -19,7 +19,7 @@
 	                            ${category.name}
 	                        </td>
 	                        <td class="category-upload">
-		                        <#if hasAddAttachmentPerm && !category.isReadOnly>
+		                        <#if hasAddAttachmentPerm && !category.isReadOnly && hasStatemachine>
 		                            <div class="file-upload">
 		                               <span id="${el}-${category.nodeRef}-fileUpload-button" class="yui-button yui-push-button">
 		                                  <span class="first-child">
@@ -52,7 +52,7 @@
 	        function init() {
 				<#if categories??>
 					<#list categories as category>
-						<#if category.isReadOnly>
+						<#if category.isReadOnly || !hasStatemachine>
 							<#assign showActions = readOnlyActions/>
 						<#else>
 							<#assign showActions = allActions/>
