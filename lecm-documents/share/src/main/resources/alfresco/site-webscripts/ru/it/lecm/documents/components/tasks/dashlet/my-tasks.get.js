@@ -11,6 +11,8 @@ function main() {
         }
     }
 
+    model.hasStatemachine = hasStatemachine(model.nodeRef);
+
     var statuses = "В работе,На доработке,На утверждении контролером,На утверждении инициатором";
 
     var url = "/lecm/errands/api/documentMyErrands?nodeRef=" + args["nodeRef"];

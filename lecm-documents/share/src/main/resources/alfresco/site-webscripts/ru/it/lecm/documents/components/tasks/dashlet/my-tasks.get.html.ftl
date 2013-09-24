@@ -38,13 +38,15 @@
             <div style="float:left; margin-right: 4px;">${msg("label.title")}</div>
             <div class="total-tasks-count">
 
-            <span class="lecm-dashlet-actions">
-                <a id="${id}-action-add" href="javascript:void(0);" onclick="errands.onAddErrandClick()" class="add"
-                   title="${msg("dashlet.add.errand.tooltip")}">${msg("dashlet.add.errand")}</a>
-            </span>
+            <#if hasStatemachine>
+                <span class="lecm-dashlet-actions">
+                    <a id="${id}-action-add" href="javascript:void(0);" onclick="errands.onAddErrandClick()" class="add"
+                       title="${msg("dashlet.add.errand.tooltip")}">${msg("dashlet.add.errand")}</a>
+                </span>
+            </#if>
+
+            </div>
         </span>
-    </div>
-    </span>
         <span class="lecm-dashlet-actions">
             <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentTasksComponent.onExpand()"
                class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
