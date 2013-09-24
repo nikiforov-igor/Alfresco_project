@@ -17,4 +17,9 @@
     </bean>
 
     <bean id="objectFactory" class="staffManager.ObjectFactory" />
+
+    <jaxws:endpoint address="/DocumentManagerImplService" implementor="#documentManagerServicePort"
+                    implementorClass="documentManager.DocumentManagerImplServicePort"/>
+
+    <bean id="documentManagerServicePort" class="documentManager.DocumentManagerImplServicePort"/>
 </beans>
