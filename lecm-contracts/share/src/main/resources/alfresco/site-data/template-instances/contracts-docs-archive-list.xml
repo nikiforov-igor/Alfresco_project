@@ -15,6 +15,17 @@
                 <filteredLabel>page.contracts.filter</filteredLabel>
             </properties>
         </component>
+        <!-- Toolbar -->
+        <component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/documents/documents-list-toolbar</url>
+            <properties>
+                <itemType>lecm-additional-document:additionalDocument</itemType>
+                <showCreateBtn>false</showCreateBtn>
+                <bubblingLabel>contracts-documents</bubblingLabel>
+                <showExSearchBtn>true</showExSearchBtn>
+            </properties>
+        </component>
         <!-- Menu -->
         <component>
             <region-id>menu</region-id>

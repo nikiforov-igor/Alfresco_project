@@ -21,11 +21,9 @@
             <url>/lecm/documents/documents-list-toolbar</url>
             <properties>
                 <itemType>lecm-contract:document</itemType>
-                <showCreateBtn>true</showCreateBtn>
+                <showCreateBtn>false</showCreateBtn>
                 <bubblingLabel>contracts</bubblingLabel>
                 <showExSearchBtn>true</showExSearchBtn>
-                <newRowLabel>label.create-lecm-contract_document</newRowLabel>
-                <newRowDialogTitle>label.create-lecm-contract_document</newRowDialogTitle>
             </properties>
         </component>
         <!-- Menu -->
