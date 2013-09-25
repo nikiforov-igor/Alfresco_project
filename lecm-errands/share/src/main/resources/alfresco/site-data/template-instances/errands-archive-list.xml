@@ -21,11 +21,9 @@
             <url>/lecm/documents/documents-list-toolbar</url>
             <properties>
                 <itemType>lecm-errands:document</itemType>
-                <showCreateBtn>true</showCreateBtn>
+                <showCreateBtn>false</showCreateBtn>
                 <bubblingLabel>errands</bubblingLabel>
                 <showExSearchBtn>true</showExSearchBtn>
-                <createDialogWidth>55em</createDialogWidth>
-                <createDialogClass>lecm-errands_document</createDialogClass>
             </properties>
         </component>
         <!-- Menu -->
