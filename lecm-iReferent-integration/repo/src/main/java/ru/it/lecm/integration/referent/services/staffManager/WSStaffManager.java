@@ -138,8 +138,4 @@ public interface WSStaffManager {
         boolean includeattachments,
         @WebParam(name = "CONTEXT", partName = "CONTEXT")
         WSOCONTEXT context);
-
-    @WebMethod
-    @WebResult(partName = "return")
-    public String ping();
 }

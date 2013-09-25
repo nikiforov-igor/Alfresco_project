@@ -14,9 +14,20 @@
 
     <bean id="staffService" class="ru.it.lecm.integration.referent.services.staffManager.WSStaffManagerPort">
         <property name="objectFactory" ref="objectFactory"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="personService" ref="personService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure" />
+        <property name="documentService" ref="documentService"/>
     </bean>
 
-    <bean id="objectFactory" class="ru.it.lecm.integration.referent.objects.ObjectFactory" />
+    <bean id="objectFactory" class="ru.it.lecm.integration.referent.objects.ObjectFactory">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="authService" ref="authenticationService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure" />
+        <property name="documentService" ref="documentService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="contentService" ref="contentService"/>
+    </bean>
 
     <jaxws:endpoint address="/LECMDocumentService" implementor="#documentManagerServicePort"
                     implementorClass="ru.it.lecm.integration.referent.services.documentManager.DocumentManagerImplServicePort"/>
