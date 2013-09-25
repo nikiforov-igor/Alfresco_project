@@ -1215,7 +1215,7 @@ function Signature(cert, nodeRef) {
 		this.signDate = Alfresco.util.toISO8601(new Date());
 		contentURI = new Alfresco.util.NodeRef(nodeRef).uri;
 		this.signatureContent = signApplet.sign(Alfresco.constants.PROXY_URI + 'api/node/content/' + contentURI, 'URL');
-		if(this.signautreContent == null){
+		if(this.signatureContent == null){
 			console.log('error while creating signature');
 			return null;
 		}
