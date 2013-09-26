@@ -79,9 +79,16 @@ public class WSStaffManagerPort implements WSStaffManager {
     @Override
     public WSOCOLLECTION getPersons(@WebParam(name = "GROUPID", partName = "GROUPID") String groupid, @WebParam(name = "ISMOBJECT", partName = "ISMOBJECT") boolean ismobject, @WebParam(name = "CHILDSLEVEL", partName = "CHILDSLEVEL") int childslevel, @WebParam(name = "INCLUDEATTACHMENTS", partName = "INCLUDEATTACHMENTS") boolean includeattachments, @WebParam(name = "CONTEXT", partName = "CONTEXT") WSOCONTEXT context) {
         WSOCOLLECTION.DATA data = objectFactory.createWSOCOLLECTIONDATA();
-        List<NodeRef> employees = orgstructureService.getAllEmployees();
-        for (NodeRef employee : employees) {
-            data.getItem().add(objectFactory.createWSOPERSON(employee));
+        List<NodeRef> employees;
+        if (groupid != null) {
+            if (NodeRef.isNodeRef(groupid)) {
+                employees = orgstructureService.getUnitEmployees(new NodeRef(groupid));
+            } else {
+                employees = orgstructureService.getAllEmployees();
+            }
+            for (NodeRef employee : employees) {
+                data.getItem().add(objectFactory.createWSOPERSON(employee));
+            }
         }
         return objectFactory.createWSOCOLLECTION(data);
     }

@@ -2,6 +2,7 @@
 package ru.it.lecm.integration.referent.objects;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -9,17 +10,24 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StatemachineModel;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.*;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +57,7 @@ public class ObjectFactory {
     private OrgstructureBean orgstructureService;
     private NamespaceService namespaceService;
     private ContentService contentService;
+    private TransactionService transactionService;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -334,35 +343,43 @@ public class ObjectFactory {
      * Create an instance of {@link WSOFILE }
      *
      */
-    public WSOFILE createWSOFILE(NodeRef fileRef) {
-        WSOFILE file = createWSOFILE();
+    public WSOFILE createWSOFILE(final NodeRef fileRef) {
+        final WSOFILE file = createWSOFILE();
         file.setID(fileRef.toString());
         file.setTYPE(nodeService.getType(fileRef).toPrefixString(namespaceService).toUpperCase());
         file.setTITLE(getNotNullStringValue(nodeService.getProperty(fileRef, ContentModel.PROP_NAME)));
         file.setNAME(getNotNullStringValue(nodeService.getProperty(fileRef, ContentModel.PROP_NAME)));
-        ByteArrayOutputStream os = null;
-        InputStream is = null;
-        try {
-            ContentReader reader = contentService.getReader(fileRef, ContentModel.PROP_CONTENT);
-            is = reader.getContentInputStream();
-            os = new ByteArrayOutputStream();
 
-            final int BUF_SIZE = 1 << 8;
-            byte[] buffer = new byte[BUF_SIZE];
-            int bytesRead;
+        transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+            @Override
+            public Void execute() throws Throwable {
+                ByteArrayOutputStream os = null;
+                InputStream is = null;
+                try {
+                    ContentReader reader = contentService.getReader(fileRef, ContentModel.PROP_CONTENT);
+                    is = reader.getContentInputStream();
+                    os = new ByteArrayOutputStream();
 
-            while ((bytesRead = is.read(buffer)) > -1) {
-                os.write(buffer, 0, bytesRead);
+                    final int BUF_SIZE = 1 << 8;
+                    byte[] buffer = new byte[BUF_SIZE];
+                    int bytesRead;
+
+                    while ((bytesRead = is.read(buffer)) > -1) {
+                        os.write(buffer, 0, bytesRead);
+                    }
+
+                    byte[] binaryData = os.toByteArray();
+                    file.setBODY(binaryData);
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                } finally {
+                    IOUtils.closeQuietly(is);
+                    IOUtils.closeQuietly(os);
+                }
+                return null;
             }
+        });
 
-            byte[] binaryData = os.toByteArray();
-            file.setBODY(binaryData);
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        } finally {
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(os);
-        }
         return file;
     }
 
@@ -473,6 +490,49 @@ public class ObjectFactory {
      */
     public WSOMDOCUMENT createWSOMDOCUMENT() {
         return new WSOMDOCUMENT();
+    }
+
+    /**
+     * Create an instance of {@link WSOMDOCUMENT }
+     *
+     */
+    public WSOMDOCUMENT createWSOMDOCUMENT(String nodeRef) {
+        if (NodeRef.isNodeRef(nodeRef)){
+            return createWSOMDOCUMENT(new NodeRef(nodeRef));
+        }
+        return createWSOMDOCUMENT();
+    }
+
+    /**
+     * Create an instance of {@link WSOMDOCUMENT }
+     *
+     */
+    public WSOMDOCUMENT createWSOMDOCUMENT(NodeRef documentRef) {
+        WSOMDOCUMENT doc = new WSOMDOCUMENT();
+        doc.setID(documentRef.toString());
+        doc.setTITLE((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+        doc.setSUBJECT((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+        QName type = nodeService.getType(documentRef);
+        doc.setTYPE(type.toPrefixString(namespaceService).toUpperCase());
+
+        QName[] props = documentService.getRegNumbersProperties(type);
+        if (props.length > 0) {
+            Object rdataValue = nodeService.getProperty(documentRef, props[0]);
+            if (rdataValue != null) {
+                doc.setREGNUM((String) rdataValue);
+            }
+        }
+
+        try {
+            Date regDate = (Date) nodeService.getProperty(documentRef, ContentModel.PROP_CREATED);
+            GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
+            gc.setTime(regDate);
+            doc.setREGDATE(DatatypeFactory.newInstance().newXMLGregorianCalendar(gc));
+        } catch (DatatypeConfigurationException ignored) {
+        }
+
+        doc.setSTATUSNAME((String) nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS));
+        return doc;
     }
 
     /**
@@ -610,6 +670,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link WSODOCUMENTIN }
+     *
+     */
+    public WSODOCUMENTIN createWSODOCUMENTIN(String nodeRef) {
+        if (NodeRef.isNodeRef(nodeRef)){
+            return createWSODOCUMENTIN(new NodeRef(nodeRef));
+        }
+        return new WSODOCUMENTIN();
+    }
+
+    /**
+     * Create an instance of {@link WSODOCUMENTIN }
+     *
+     */
+    public WSODOCUMENTIN createWSODOCUMENTIN(NodeRef documentRef) {
+        WSOMDOCUMENT mDoc = createWSOMDOCUMENT(documentRef);
+        WSODOCUMENTIN doc = new WSODOCUMENTIN();
+        doc.setID(mDoc.getID());
+        doc.setREGNUM(mDoc.getREGNUM());
+        doc.setSUBJECT(mDoc.getSUBJECT());
+        doc.setSTATUSNAME(mDoc.getSTATUSNAME());
+        doc.setTYPE(mDoc.getTYPE());
+        doc.setREGDATE(mDoc.getREGDATE());
+        doc.setTITLE(mDoc.getTITLE() != null ? mDoc.getTITLE() : "");
+
+        return doc;
+    }
+
+    /**
      * Create an instance of {@link WSOAPPROVAL }
      * 
      */
@@ -652,5 +741,9 @@ public class ObjectFactory {
 
     private String getNotNullStringValue(Object value) {
         return value != null ? (String) value : "";
+    }
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 }

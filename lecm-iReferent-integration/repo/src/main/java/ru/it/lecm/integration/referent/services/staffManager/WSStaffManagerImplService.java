@@ -28,11 +28,9 @@ public class WSStaffManagerImplService
     static {
         URL url = null;
         try {
-            URL baseUrl;
-            baseUrl = WSStaffManagerImplService.class.getResource(".");
-            url = new URL(baseUrl, "http://193.232.107.133:8080/IReferentServices/WSBR_StaffManager?wsdl");
+            url = new URL("file:WSBR_StaffManager.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'http://193.232.107.133:8080/IReferentServices/WSBR_StaffManager?wsdl', retrying as a local file");
+            logger.warning("Can not initialize the default wsdl from file:WSBR_StaffManager?wsdl");
             logger.warning(e.getMessage());
         }
         WSSTAFFMANAGERIMPLSERVICE_WSDL_LOCATION = url;

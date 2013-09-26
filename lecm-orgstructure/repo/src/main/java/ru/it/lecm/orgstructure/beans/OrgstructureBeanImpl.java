@@ -938,6 +938,24 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
     }
 
     @Override
+    public List<NodeRef> getUnitEmployees(NodeRef unitRef) {
+        List<NodeRef> employees = new ArrayList<NodeRef>();
+        // Получаем список штатных расписаний
+        List<NodeRef> staffs = getUnitStaffLists(unitRef);
+        Set<NodeRef> employessSet = new HashSet<NodeRef>();
+        for (NodeRef staff : staffs) {
+            if (!isArchive(staff)) {
+                NodeRef employee =  getEmployeeByPosition(staff);
+                if (employee != null && !isArchive(employee)) {
+                    employessSet.add(employee);
+                }
+            }
+        }
+        employees.addAll(employessSet);
+        return employees;
+    }
+
+    @Override
     public List<NodeRef> getEmployeeStaffLinks(NodeRef employeeRef) {
         List<NodeRef> links = new ArrayList<NodeRef>();
         if (isEmployee(employeeRef)) {

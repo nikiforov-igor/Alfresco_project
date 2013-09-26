@@ -694,4 +694,6 @@ public interface OrgstructureBean {
     boolean isWorkRole(NodeRef ref);
 
     List<NodeRef> getEmployeeLinks(NodeRef employeeRef, boolean includeArchived);
+
+    List<NodeRef> getUnitEmployees(NodeRef unitRef);
 }
