@@ -223,7 +223,7 @@
             this.widgets.formContainer = Dom.get(this.id + "-properties-form");
 
             // Set up Nav events:
-            navEls = Dom.getElementsByClassName("historic-properties-nav", "a", this.id + "-dialog")
+            var navEls = Dom.getElementsByClassName("historic-properties-nav", "a", this.id + "-dialog");
             Event.addListener(navEls[0], "click", this.onNavButtonClick, this, true);
             Event.addListener(navEls[1], "click", this.onNavButtonClick, this, true);
             this.updateNavState();
@@ -310,7 +310,7 @@
          * Instantiates a YUI Menu Button & Writes the Menu HTML for it.
          *
          * @method createMenu
-         * @param {HTMLElement} The containing element for the Version History Dialogue
+         * @param {HTMLElement} dialogDiv - The containing element for the Version History Dialogue
          *
          */
 
@@ -324,11 +324,10 @@
                     {
                         "0": this.showConfig.latestVersion.label
                     }),
-                i, menuHTML, menuTitle,
-
+                i, menuTitle;
 
             // Write HTML for menu & add current version and option groups to menu:
-                menuHTML = "<option value='" + this.showConfig.latestVersion.nodeRef + "' title='" + currentTitle + "'>" + currentTitle + "</option>";
+            menuContainer.options.add(new Option(currentTitle, this.showConfig.latestVersion.nodeRef));
 
             // Add an option element for each of the previous versions
             for (i in this.versions) {
@@ -339,25 +338,22 @@
                         });
 
                 // Check if this version is the earliest available
-                if (parseInt(i, 10) === this.versions.length - 1)
-                {
+                if (parseInt(i, 10) === this.versions.length - 1) {
                     this.earliestVersion = version;
                 }
 
-                menuHTML += "<option value='" + version.nodeRef + "' title='" + title + "'>" + title + "</option>"
+                menuContainer.options.add(new Option(title, version.nodeRef));
                 if (version.nodeRef === this.showConfig.nodeRef) {
                     menuTitle = title;
                 }
             }
-
-            menuContainer.innerHTML = menuHTML;
 
             // Instantiate the Menu
             this.widgets.versionMenu = new Alfresco.util.createYUIButton(this, "versionNav-button", this.onVersionMenuChange, {
                 type: "menu",
                 menu: menuContainer,
                 lazyloadmenu: false
-            })
+            });
 
             // Set the menu title:
             this.setMenuTitle(menuTitle);
@@ -406,7 +402,7 @@
                 returnIndex = parseInt(visibleIndex, 10) - 1;
             }
             else if (returnLabel === "previous") {
-                returnIndex = parseInt(visibleIndex, 10) + 1
+                returnIndex = parseInt(visibleIndex, 10) + 1;
             }
 
             // Treat current version specially: -1 = current version
@@ -415,7 +411,7 @@
                 return this.showConfig.latestVersion.nodeRef;
             }
 
-            returnVersion = this.versions[returnIndex]
+            var returnVersion = this.versions[returnIndex];
             if (typeof(returnVersion) !== "undefined") {
                 returnNodeRef = returnVersion.nodeRef;
                 return returnNodeRef;
@@ -451,8 +447,7 @@
             var dir = event.target.rel,
                 newNodeRef = this.getVersionNodeRef(dir);
 
-            if (!Dom.hasClass(event.target, "disabled"))
-            {
+            if (!Dom.hasClass(event.target, "disabled")) {
                 this.update(newNodeRef);
             }
             //prevent the default action.
@@ -493,16 +488,13 @@
             // If the title hasn't been passed, we'll need to find it from the currentNodeRef.
             if (!title) {
                 if (this.showConfig.nodeRef === this.showConfig.latestVersion.nodeRef) {
-                    label = this.showConfig.latestVersion.label
+                    label = this.showConfig.latestVersion.label;
 
                     title = Alfresco.util.message("historicProperties.menu.title.latest", this.name,
                         {
                             "0": label
                         });
-
-                }
-                else
-                {
+                } else {
                     for (i in this.versions) {
                         if (this.versions[i].nodeRef === this.showConfig.nodeRef) {
                             label = this.versions[i].label;
@@ -513,7 +505,6 @@
                         {
                             "0": label
                         });
-
                 }
             }
 
@@ -574,8 +565,7 @@
     };
 })();
 
-Alfresco.module.getHistoricPropertiesViewerInstance = function()
-{
+Alfresco.module.getHistoricPropertiesViewerInstance = function() {
     var instanceId = "alfresco-historicPropertiesViewer-instance";
     return Alfresco.util.ComponentManager.get(instanceId) || new Alfresco.module.HistoricPropertiesViewer(instanceId);
-}
+};

@@ -8,10 +8,10 @@
          <div class="nav flat-button">
 				<a href="#" rel="previous" class="historic-properties-nav prev">previous</a>
 				<span id="${el}-versionNav-button" class="yui-button yui-push-button">
-	            <span class="first-child">
-	               <button name="historic-properties-versionNav-menu"></button>
-	            </span>
-	         </span>
+                    <span class="first-child">
+                       <button name="historic-properties-versionNav-menu"></button>
+                    </span>
+                 </span>
 				<select id="${el}-versionNav-menu"></select>
 				<a href="#" rel="next" class="historic-properties-nav next">next</a>
 			</div>
