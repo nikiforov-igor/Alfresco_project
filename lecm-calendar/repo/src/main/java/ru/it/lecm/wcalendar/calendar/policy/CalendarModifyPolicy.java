@@ -1,13 +1,13 @@
 package ru.it.lecm.wcalendar.calendar.policy;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
-import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
@@ -76,5 +76,10 @@ public class CalendarModifyPolicy implements NodeServicePolicies.OnUpdatePropert
             wCalendarService.addBusinessJournalRecord(nodeRef, CalendarCategory.SET_CALENDAR);
             logger.debug(String.format("Policy CalendarModifyPolicy invoked on %s", nodeRef.toString()));
         }
+		if(curActive != prevActive && !curActive){
+			String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+			String ts = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss").format(new Date()).toString();
+			nodeService.setProperty(nodeRef, ContentModel.PROP_NAME, name + "_deleted_" + ts);
+		}
     }
 }
