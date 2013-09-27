@@ -268,10 +268,6 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		if(signatureContent == null){
 			return result;
 		}
-//		Map<String, Object> verifySignatureResponse = unicloudService.verifySignature(contentRefStr, signatureContent);
-//		if (verifySignatureResponse.containsKey("isSignatureValid")) {
-//			boolean isSignatureValid = (Boolean) verifySignatureResponse.get("isSignatureValid");
-//			if (isSignatureValid) {
 
 		// проверяем, прикрепрена ли уже к контенту валидна подпись с фингерпринтом, совпадающим с нашим
 		boolean alreadySigned = false;

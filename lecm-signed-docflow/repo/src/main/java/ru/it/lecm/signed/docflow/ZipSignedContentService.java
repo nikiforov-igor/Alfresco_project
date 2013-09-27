@@ -165,6 +165,12 @@ public class ZipSignedContentService extends BaseBean {
 		return zipName;
 	}
 
+	/**
+	 * Распаковать указанный zip-архив в папку с сохранением структуры каталогов.
+	 * @param file zip-архив.
+	 * @param destDirectory целевой каталог
+	 * @return список распакованных файлов.
+	 */
 	public List<File> unzipFile(File file, File destDirectory) {
 		List<File> result = new ArrayList<File>();
 		ZipFile zipFile = null;

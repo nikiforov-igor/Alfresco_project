@@ -26,7 +26,8 @@ public class SigningContentVersionChangePolicy implements BeforeCreateVersionPol
 	public void init() {
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
-		policyComponent.bindClassBehaviour(BeforeCreateVersionPolicy.QNAME, ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeCreateVersion", NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindClassBehaviour(BeforeCreateVersionPolicy.QNAME, ContentModel.TYPE_CONTENT,
+				new JavaBehaviour(this, "beforeCreateVersion", NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {

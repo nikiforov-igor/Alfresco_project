@@ -16,7 +16,6 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.util.ReflectionUtils;
 import ru.it.lecm.base.DeclarativeWebScriptHelper;
 import ru.it.lecm.signed.docflow.UnicloudService;
-import ru.it.lecm.signed.docflow.api.SignedDocflow;
 import ru.it.lecm.signed.docflow.model.UnicloudData;
 
 /**

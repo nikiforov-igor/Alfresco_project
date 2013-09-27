@@ -42,7 +42,6 @@ public class LoadSignWebscript extends DeclarativeWebScript{
 		SignedDocflowModel.PROP_CA,
 		ContentModel.PROP_CONTENT,
 		SignedDocflowModel.ASSOC_SIGN_TO_CONTENT,
-		SignedDocflowModel.PROP_CERT_FINGERPRINT,
 		SignedDocflowModel.PROP_CERT_FINGERPRINT
 	};
 

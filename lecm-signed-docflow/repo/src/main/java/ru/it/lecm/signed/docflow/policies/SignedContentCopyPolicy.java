@@ -9,7 +9,6 @@ import org.alfresco.repo.copy.CopyDetails;
 import org.alfresco.repo.copy.CopyServicePolicies.OnCopyCompletePolicy;
 import org.alfresco.repo.copy.CopyServicePolicies.OnCopyNodePolicy;
 import org.alfresco.repo.copy.DefaultCopyBehaviourCallback;
-import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
