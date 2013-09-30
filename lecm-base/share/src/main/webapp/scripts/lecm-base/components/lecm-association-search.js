@@ -800,6 +800,8 @@ LogicECM.module = LogicECM.module || {};
                 if (this.options.allowedNodesScript && this.options.allowedNodesScript != "") {
                     Alfresco.util.Ajax.request({
                         method: "GET",
+                        requestContentType: "application/json",
+                        responseContentType: "application/json",
                         url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.allowedNodesScript,
                         successCallback: {
                             fn: function (response) {
