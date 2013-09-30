@@ -87,6 +87,15 @@
                     </span>
             </span>
         </td>
+        <td>
+            <span class="statemachine-menu">
+                <span id="menu-buttons-alternative-start-menu-button" class="yui-button yui-push-button">
+                    <span class="first-child">
+                        <button type="button" title="Альтернативные начальные статусы">&nbsp;</button>
+                    </span>
+                </span>
+            </span>
+        </td>
     </tr>
 </table>
 
