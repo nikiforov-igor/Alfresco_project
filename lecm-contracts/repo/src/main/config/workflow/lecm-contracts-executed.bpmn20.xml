@@ -15,9 +15,9 @@
 
                             var allContractDocuments = contracts.getAllContractDocuments(document);
                             for (i in allContractDocuments) {
-                            allContractDocuments[i].addAspect("lecm-contract-aspect:primaryDocumentDeletedAspect");
-                            allContractDocuments[i].properties["lecm-contract-aspect:primaryDocumentDeleted"] = true;
-                            allContractDocuments[i].save();
+                                allContractDocuments[i].addAspect("lecm-contract-aspect:primaryDocumentExecutedAspect");
+                                allContractDocuments[i].properties["lecm-contract-aspect:primaryDocumentExecuted"] = true;
+                                allContractDocuments[i].save();
                             }
 
                             businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", "#initiator зафиксировал(а) факт исполнения договора #mainobject.", []);
