@@ -13,11 +13,14 @@
                         <activiti:string>
 	                        var document = bpm_package.children[0];
 
-	                        document.addAspect("lecm-contract-aspect:primaryDocumentExecutedAspect");
-	                        document.properties["lecm-contract-aspect:primaryDocumentExecuted"] = true;
-	                        document.save();
+                            var allContractDocuments = contracts.getAllContractDocuments(document);
+                            for (i in allContractDocuments) {
+                            allContractDocuments[i].addAspect("lecm-contract-aspect:primaryDocumentDeletedAspect");
+                            allContractDocuments[i].properties["lecm-contract-aspect:primaryDocumentDeleted"] = true;
+                            allContractDocuments[i].save();
+                            }
 
-	                        businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", "#initiator зафиксировал(а) факт исполнения договора #mainobject.", []);
+                            businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", "#initiator зафиксировал(а) факт исполнения договора #mainobject.", []);
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
