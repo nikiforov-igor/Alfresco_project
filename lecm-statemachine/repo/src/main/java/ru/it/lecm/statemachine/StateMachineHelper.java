@@ -184,42 +184,8 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     }
 
-    public void startDocumentProcessing(final String taskId) {
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
-
-                    @Override
-                    public Object doWork() throws Exception {
-                        NodeService nodeService = serviceRegistry.getNodeService();
-
-                        WorkflowService workflowService = serviceRegistry.getWorkflowService();
-                        WorkflowTask task = workflowService.getTaskById(ACTIVITI_PREFIX + taskId);
-
-                        NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
-
-                        NodeRef document = null;
-                        List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
-                        for (ChildAssociationRef item : documents) {
-                            document = item.getChildRef();
-                        }
-
-                        if (!nodeService.hasAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
-                            nodeService.addAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
-                        }
-                        nodeService.setProperty(document, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, taskId);
-                        return null;
-                    }
-                }, AuthenticationUtil.SYSTEM_USER_NAME);
-            }
-        };
-        timer.schedule(task, 1000);
-    }
-
     public void stopDocumentProcessing(String taskId) {
-        nextTransition(ACTIVITI_PREFIX + taskId);
+        nextTransition(ACTIVITI_PREFIX + taskId.replace(ACTIVITI_PREFIX, ""));
     }
 
     public boolean transferRightTask(NodeRef documentRef, String beforeAuthority, String afterAuthority) {
@@ -453,8 +419,11 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     @Override
     public String nextTransition(String taskId) {
+        String currentStatemachine = getCurrentExecutionId(taskId);
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
-        return workflowService.endTask(taskId, null).getId();
+        String newTaskId = workflowService.endTask(taskId, null).getId();
+        executePostponedActions(currentStatemachine);
+        return newTaskId;
     }
 
     @Override
@@ -1121,6 +1090,17 @@ public class StateMachineHelper implements StateMachineServiceBean {
      */
     public void terminateProcess(String processId) {
         activitiProcessEngineConfiguration.getRuntimeService().deleteProcessInstance(processId, "cancelled");
+    }
+
+    public void executePostponedActions(String executionId) {
+        String taskId = getCurrentTaskId(executionId);
+        List<StateMachineAction> actions = getTaskActions(taskId, ExecutionListener.EVENTNAME_START);
+        for(StateMachineAction action : actions) {
+            if (action instanceof PostponedAction) {
+                PostponedAction postponedAction = (PostponedAction) action;
+                postponedAction.postponedExecution(taskId, this);
+            }
+        }
     }
 
 

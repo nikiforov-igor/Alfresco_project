@@ -3,20 +3,26 @@ package ru.it.lecm.statemachine.action.document;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.workflow.WorkflowModel;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.workflow.WorkflowService;
+import org.alfresco.service.cmr.workflow.WorkflowTask;
 import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.StatemachineModel;
+import ru.it.lecm.statemachine.action.PostponedAction;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * User: PMelnikov
  * Date: 23.10.12
  * Time: 8:47
  */
-public class WaitForDocumentChangeAction extends StateMachineAction {
+public class WaitForDocumentChangeAction extends StateMachineAction implements PostponedAction {
 
 	private List<Expression> expressions = new ArrayList<Expression>();
 
@@ -40,31 +46,40 @@ public class WaitForDocumentChangeAction extends StateMachineAction {
 
 	@Override
 	public void execute(DelegateExecution execution) {
-		final String processId = execution.getProcessInstanceId();
-		Timer timer = new Timer();
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run() {
-				AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
-
-					@Override
-					public Object doWork() throws Exception {
-						StateMachineHelper helper = new StateMachineHelper();
-						String taskId = helper.getCurrentTaskId(processId);
-						helper.startDocumentProcessing(taskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""));
-						return null;
-					}
-				}, AuthenticationUtil.SYSTEM_USER_NAME);
-			}
-		};
-		timer.schedule(task, 10000);
         for (Expression expression : expressions) {
             execution.setVariable(expression.getOutputVariable(), "");
         }
 	}
 
+    @Override
+    public void postponedExecution(final String taskId, StateMachineHelper helper) {
+        AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
 
-	public class Expression {
+            @Override
+            public Object doWork() throws Exception {
+                NodeService nodeService = getServiceRegistry().getNodeService();
+
+                WorkflowService workflowService = getServiceRegistry().getWorkflowService();
+                WorkflowTask task = workflowService.getTaskById(StateMachineHelper.ACTIVITI_PREFIX + taskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""));
+
+                NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
+
+                NodeRef document = null;
+                List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
+                for (ChildAssociationRef item : documents) {
+                    document = item.getChildRef();
+                }
+
+                if (!nodeService.hasAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
+                    nodeService.addAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
+                }
+                nodeService.setProperty(document, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, taskId);
+                return null;
+            }
+        }, AuthenticationUtil.SYSTEM_USER_NAME);
+    }
+
+    public class Expression {
 
 		private String expression = null;
 		private String outputVariable = null;

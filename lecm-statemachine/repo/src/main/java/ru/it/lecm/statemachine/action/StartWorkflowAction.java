@@ -1,6 +1,7 @@
 package ru.it.lecm.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
@@ -11,15 +12,13 @@ import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * User: PMelnikov
  * Date: 23.10.12
  * Time: 8:47
  */
-public class StartWorkflowAction extends StateMachineAction {
+public class StartWorkflowAction extends StateMachineAction implements PostponedAction {
 
 	private String id = "";
 	private String workflowId = "";
@@ -61,33 +60,56 @@ public class StartWorkflowAction extends StateMachineAction {
 		final String actionName = StateMachineActions.getActionName(StartWorkflowAction.class);
 		final String eventName = execution.getEventName();
 
-		Timer timer = new Timer();
-		final String user = AuthenticationUtil.getFullyAuthenticatedUser();
-		final WorkflowVariables localVariables = variables;
-		final String id = this.id;
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run() {
-				AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
+        if (eventName.equals(ExecutionListener.EVENTNAME_END)) {
+            final String user = AuthenticationUtil.getFullyAuthenticatedUser();
+            final WorkflowVariables localVariables = variables;
+            final String id = this.id;
+                AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
 
-					@Override
-					public Object doWork() throws Exception {
-						StateMachineHelper helper = new StateMachineHelper();
-						String currentTaskId = helper.getCurrentTaskId(stateMachineExecutionId);
-						String executionId = helper.startUserWorkflowProcessing(currentTaskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee);
-						helper.setInputVariables(stateMachineExecutionId, executionId, localVariables.getInput());
-						//Обозначить запуск процесса в документе
-						WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, stateMachineExecutionId, workflowId, currentTaskId, actionName, id, eventName);
-						new DocumentWorkflowUtil().addWorkflow(document, executionId, descriptor);
+                    @Override
+                    public Object doWork() throws Exception {
+                        StateMachineHelper helper = new StateMachineHelper();
+                        String currentTaskId = helper.getCurrentTaskId(stateMachineExecutionId);
+                        String executionId = helper.startUserWorkflowProcessing(currentTaskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee);
+                        helper.setInputVariables(stateMachineExecutionId, executionId, localVariables.getInput());
+                        //Обозначить запуск процесса в документе
+                        WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, stateMachineExecutionId, workflowId, currentTaskId, actionName, id, eventName);
+                        new DocumentWorkflowUtil().addWorkflow(document, executionId, descriptor);
 
                         helper.logStartWorkflowEvent(document, executionId);
 
-						return null;
-					}
-				}, user);
-			}
-		};
-		timer.schedule(task, 10000);
+                        return null;
+                    }
+                }, user);
+        }
 	}
+
+    @Override
+    public void postponedExecution(String taskId, StateMachineHelper helper) {
+        final String stateMachineExecutionId = helper.getCurrentExecutionId(taskId);
+        final NodeRef document = helper.getStatemachineDocument(stateMachineExecutionId);
+        final String actionName = StateMachineActions.getActionName(StartWorkflowAction.class);
+
+        final String user = AuthenticationUtil.getFullyAuthenticatedUser();
+        final WorkflowVariables localVariables = variables;
+        final String id = this.id;
+        AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
+
+            @Override
+            public Object doWork() throws Exception {
+                StateMachineHelper helper = new StateMachineHelper();
+                String currentTaskId = helper.getCurrentTaskId(stateMachineExecutionId);
+                String executionId = helper.startUserWorkflowProcessing(currentTaskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee);
+                helper.setInputVariables(stateMachineExecutionId, executionId, localVariables.getInput());
+                //Обозначить запуск процесса в документе
+                WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, stateMachineExecutionId, workflowId, currentTaskId, actionName, id, ExecutionListener.EVENTNAME_START);
+                new DocumentWorkflowUtil().addWorkflow(document, executionId, descriptor);
+
+                helper.logStartWorkflowEvent(document, executionId);
+
+                return null;
+            }
+        }, user);
+    }
 
 }

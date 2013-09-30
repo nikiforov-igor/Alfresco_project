@@ -24,6 +24,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
@@ -180,6 +181,8 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                                 for (WorkflowTask task : tasks) {
                                                     workflowService.endTask(task.getId(), null);
                                                 }
+                                                StateMachineHelper helper = new StateMachineHelper();
+                                                helper.executePostponedActions(path.getInstance().getId());
                                                 return null;
                                             }
                                         }, false, true);

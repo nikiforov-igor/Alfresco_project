@@ -3,14 +3,13 @@ package ru.it.lecm.statemachine.action;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.expression.TransitionExpression;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class TimerAction extends StateMachineAction {
+public class TimerAction extends StateMachineAction implements PostponedAction {
     public static final String PROP_TIMER_DURATION = "timerDuration";
 
     private List<TransitionExpression> transitionExpressions = new ArrayList<TransitionExpression>();
@@ -45,26 +44,21 @@ public class TimerAction extends StateMachineAction {
     public void execute(DelegateExecution execution) {
         String eventName = execution.getEventName();
         final String stateMachineExecutionId = execution.getId();
-
-        if (eventName.equalsIgnoreCase("start")) {
-            TimerTask waitForRealTaskId = new TimerTask() {
-                @Override
-                public void run() {
-                    AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-                        @Override
-                        public Object doWork() throws Exception {
-                            getTimerActionHelper().addTimer(stateMachineExecutionId, timerDuration, variable, transitionExpressions);
-                            return null;
-                        }
-                    });
-                }
-            };
-
-            new Timer().schedule(waitForRealTaskId, 5000);
-        }
-
         if (eventName.equalsIgnoreCase("end")) {
             getTimerActionHelper().removeTimerNode(stateMachineExecutionId);
         }
     }
+
+    @Override
+    public void postponedExecution(String taskId, StateMachineHelper helper) {
+        final String stateMachineExecutionId = helper.getCurrentExecutionId(taskId);
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                getTimerActionHelper().addTimer(stateMachineExecutionId, timerDuration, variable, transitionExpressions);
+                return null;
+            }
+        });
+    }
+
 }
