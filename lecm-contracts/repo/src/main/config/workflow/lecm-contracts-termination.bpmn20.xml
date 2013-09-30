@@ -13,9 +13,12 @@
 						<activiti:string>
 							var document = bpm_package.children[0];
 
-							document.addAspect("lecm-contract-aspect:primaryDocumentDeletedAspect");
-							document.properties["lecm-contract-aspect:primaryDocumentDeleted"] = true;
-							document.save();
+                            var allContractDocuments = contracts.getAllContractDocuments(document);
+                            for (i in allContractDocuments) {
+                                allContractDocuments[i].addAspect("lecm-contract-aspect:primaryDocumentDeletedAspect");
+                                allContractDocuments[i].properties["lecm-contract-aspect:primaryDocumentDeleted"] = true;
+                                allContractDocuments[i].save();
+                            }
 
 							var logObjects = [];
 							logObjects.push(lecmContractWf_contractTerminateBaseOnDocument);
