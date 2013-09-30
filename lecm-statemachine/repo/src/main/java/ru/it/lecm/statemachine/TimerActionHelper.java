@@ -234,20 +234,13 @@ public class TimerActionHelper implements InitializingBean {
             }
 
             if (finishTimestamp < new Date().getTime()) {
-                TimerTask timerTask = new TimerTask() {
+                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                     @Override
-                    public void run() {
-                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-                            @Override
-                            public Object doWork() throws Exception {
-                                nextTransition(timerExecutionId, timerTaskId, variable, transitionExpressions);
-                                return null;
-                            }
-                        });
+                    public Object doWork() throws Exception {
+                        nextTransition(timerExecutionId, timerTaskId, variable, transitionExpressions);
+                        return null;
                     }
-                };
-
-                new Timer().schedule(timerTask, 300000);
+                });
             } else {
                 startTimer(timerExecutionId, timerTaskId, finishTimestamp, variable, transitionExpressions);
             }
@@ -308,9 +301,11 @@ public class TimerActionHelper implements InitializingBean {
         long finishTimestamp = calendar.getTimeInMillis();
 
         //TODO:stub for testing!!!
+/*
         GregorianCalendar calendarStub = new GregorianCalendar();
         calendarStub.add(Calendar.MINUTE, timerDuration);
         finishTimestamp = calendarStub.getTimeInMillis();
+*/
 
         return finishTimestamp;
     }

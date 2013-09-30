@@ -98,7 +98,7 @@
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 	</bean>
 
-    <bean id="timerActionHelper" class="ru.it.lecm.statemachine.TimerActionHelper">
+    <bean id="timerActionHelper" class="ru.it.lecm.statemachine.TimerActionHelper" depends-on="activitiProcessEngineConfiguration, statemachine.LogicEcmModelsBootstrap, stateMachineHelper">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
         <property name="nodeService" ref="nodeService"/>
