@@ -70,7 +70,7 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
                 DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE);
 
         if (connectionType != null) {
-            documentConnectionService.createConnection(associationRef.getTargetRef(), associationRef.getSourceRef(), connectionType, true);
+            documentConnectionService.createConnection(associationRef.getTargetRef(), associationRef.getSourceRef(), connectionType, true, true);
         }
 
         //обновление номера документа-основания в поручении

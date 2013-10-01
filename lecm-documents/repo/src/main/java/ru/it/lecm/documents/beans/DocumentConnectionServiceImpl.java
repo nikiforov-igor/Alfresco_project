@@ -3,6 +3,7 @@ package ru.it.lecm.documents.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -329,7 +330,22 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef, boolean isSystem) {
-		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_CREATE, primaryDocumentNodeRef);
+        return createConnection(primaryDocumentNodeRef, connectedDocumentNodeRef, typeNodeRef, isSystem, false);
+    }
+
+	@Override
+	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef, boolean isSystem, boolean doNotCheckPermission) {
+        // ALF-1583
+        // При добавлении поручения через блок "Задачи" появляется сообщение "Ваши изменения не удалось сохранить"
+        // В транзакцию добавляется переменная DocumentConnectionService.DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS,
+        // позволяющая отключить прооверку прав на создание связи к документу.
+        // Переменная устанавливается в методе ru.it.lecm.documents.beans.DocumentConnectionServiceImpl.createConnection()
+        // Проверяется в ru.it.lecm.documents.policy.DocumentConnectionPolicy.beforeCreateNode()
+        AlfrescoTransactionSupport.bindResource(DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS, doNotCheckPermission);
+
+        if (!doNotCheckPermission) {
+		    this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_CREATE, primaryDocumentNodeRef);
+        }
 
 		QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
 		QName assocQName = ContentModel.ASSOC_CONTAINS;

@@ -6,20 +6,19 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
-import ru.it.lecm.documents.beans.DocumentMembersService;
-import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: AIvkin
@@ -142,6 +141,17 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 
 	@Override
 	public void beforeCreateNode(NodeRef parentRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
+        // ALF-1583
+        // При добавлении поручения через блок "Задачи" появляется сообщение "Ваши изменения не удалось сохранить"
+        // В транзакцию добавляется переменная DocumentConnectionService.DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS,
+        // позволяющая отключить прооверку прав на создание связи к документу.
+        // Переменная устанавливается в методе ru.it.lecm.documents.beans.DocumentConnectionServiceImpl.createConnection()
+        // Проверяется в ru.it.lecm.documents.policy.DocumentConnectionPolicy.beforeCreateNode()
+        Boolean doNotCheckPermission = AlfrescoTransactionSupport.getResource(DocumentConnectionService.DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS);
+        if (doNotCheckPermission != null && doNotCheckPermission) {
+            return;
+        }
+
 		NodeRef document = null;
 		if (nodeService.getProperty(parentRef, ContentModel.PROP_NAME).equals(this.documentConnectionService.DOCUMENT_CONNECTIONS_ROOT_NAME)) {
 			document = nodeService.getPrimaryParent(parentRef).getParentRef();

@@ -46,6 +46,14 @@ public interface DocumentConnectionService {
 
     public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE = "onBasis";
 
+    // ALF-1583
+    // При добавлении поручения через блок "Задачи" появляется сообщение "Ваши изменения не удалось сохранить"
+    // В транзакцию добавляется переменная DocumentConnectionService.DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS,
+    // позволяющая отключить прооверку прав на создание связи к документу.
+    // Переменная устанавливается в методе ru.it.lecm.documents.beans.DocumentConnectionServiceImpl.createConnection()
+    // Проверяется в ru.it.lecm.documents.policy.DocumentConnectionPolicy.beforeCreateNode()
+    public static final String DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS = "DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS";
+
 	/**
 	 * Получение папки со связями для документа
 	 * @param documentRef Ссылка на документ
@@ -146,6 +154,17 @@ public interface DocumentConnectionService {
 	 * @return Ссылка на созданную связь
 	 */
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, String typeDictionaryElementCode, boolean isSystem);
+
+    /**
+     * Создание связи
+     * @param primaryDocumentNodeRef Ссылка на исходный документ
+     * @param connectedDocumentNodeRef  Ссылка на целевой документ
+     * @param typeNodeRef Ссылка на тип связи
+     * @param isSystem создавать системную связь
+     * @param doNotCheckPermission не проверять наличие прав на создание связей у текущего пользователя
+     * @return Ссылка на созданную связь
+     */
+    public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef, boolean isSystem, boolean doNotCheckPermission);
 
 	/**
 	 * Получение связанных документов
