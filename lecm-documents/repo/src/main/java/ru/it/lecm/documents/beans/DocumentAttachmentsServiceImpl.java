@@ -37,7 +37,6 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	private LecmPermissionService lecmPermissionService;
 	private StateMachineServiceBean stateMachineBean;
 	private BusinessJournalService businessJournalService;
-    private final Object lock = new Object();
 
     public void setDictionaryService(DictionaryService dictionaryService) {
         this.dictionaryService = dictionaryService;
@@ -71,19 +70,16 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
                 return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                     @Override
                     public NodeRef execute() throws Throwable {
-                        NodeRef attachmentsRef;
-                        synchronized (lock) {
-                            attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
-                            if (attachmentsRef == null) {
-                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
-                                QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+                        NodeRef attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
+                        if (attachmentsRef == null) {
+                            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
+                            QName nodeTypeQName = ContentModel.TYPE_FOLDER;
 
-                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                properties.put(ContentModel.PROP_NAME, attachmentsRootName);
-                                ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                attachmentsRef = associationRef.getChildRef();
-                            }
+                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                            properties.put(ContentModel.PROP_NAME, attachmentsRootName);
+                            ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+                            attachmentsRef = associationRef.getChildRef();
                         }
                         return attachmentsRef;
                     }
@@ -137,19 +133,17 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	                    @Override
 	                    public NodeRef execute() throws Throwable {
 	                        NodeRef categoryFolderRef;
-	                        synchronized (lock) {
-	                            categoryFolderRef = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
-	                            if (categoryFolderRef == null) {
-	                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-	                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, category);
-	                                QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+                            categoryFolderRef = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
+                            if (categoryFolderRef == null) {
+                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, category);
+                                QName nodeTypeQName = ContentModel.TYPE_FOLDER;
 
-	                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-	                                properties.put(ContentModel.PROP_NAME, category);
-	                                ChildAssociationRef associationRef = nodeService.createNode(attachmentRootRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-	                                categoryFolderRef = associationRef.getChildRef();
-	                            }
-	                        }
+                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                                properties.put(ContentModel.PROP_NAME, category);
+                                ChildAssociationRef associationRef = nodeService.createNode(attachmentRootRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+                                categoryFolderRef = associationRef.getChildRef();
+                            }
 	                        return categoryFolderRef;
 	                    }
 	                });

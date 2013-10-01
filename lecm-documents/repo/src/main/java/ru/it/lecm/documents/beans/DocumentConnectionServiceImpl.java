@@ -36,8 +36,6 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	private LecmPermissionService lecmPermissionService;
 	private DictionaryBean dictionaryService;
 
-	private final Object lock = new Object();
-
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
 	}
@@ -66,20 +64,17 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 					@Override
 					public NodeRef execute() throws Throwable {
-						NodeRef attachmentsRef;
-						synchronized (lock) {
-							attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
-							if (attachmentsRef == null) {
-								QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-								QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
-								QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+						NodeRef attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
+                        if (attachmentsRef == null) {
+                            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
+                            QName nodeTypeQName = ContentModel.TYPE_FOLDER;
 
-								Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-								properties.put(ContentModel.PROP_NAME, attachmentsRootName);
-								ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-								attachmentsRef = associationRef.getChildRef();
-							}
-						}
+                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                            properties.put(ContentModel.PROP_NAME, attachmentsRootName);
+                            ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+                            attachmentsRef = associationRef.getChildRef();
+                        }
 						return attachmentsRef;
 					}
 				});

@@ -24,8 +24,6 @@ import java.util.UUID;
 public class DocumentWorkflowCommentsServiceImpl extends BaseBean implements DocumentWorkflowCommentsService {
 	private final static Logger logger = LoggerFactory.getLogger(DocumentWorkflowCommentsServiceImpl.class);
 
-	private final Object lock = new Object();
-
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
@@ -41,9 +39,7 @@ public class DocumentWorkflowCommentsServiceImpl extends BaseBean implements Doc
 				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 					@Override
 					public NodeRef execute() throws Throwable {
-						NodeRef attachmentsRef;
-						synchronized (lock) {
-							attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, rootName);
+						NodeRef attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, rootName);
 							if (attachmentsRef == null) {
 								QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
 								QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
@@ -54,7 +50,6 @@ public class DocumentWorkflowCommentsServiceImpl extends BaseBean implements Doc
 								ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 								attachmentsRef = associationRef.getChildRef();
 							}
-						}
 						return attachmentsRef;
 					}
 				});

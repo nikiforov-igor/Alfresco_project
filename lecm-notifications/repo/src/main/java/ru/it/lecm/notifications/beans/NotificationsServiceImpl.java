@@ -41,8 +41,6 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private Map<String, NodeRef> channelsNodeRefs;
 	private LecmPermissionService lecmPermissionService;
 
-	private final Object lock = new Object();
-
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
 	}
@@ -369,27 +367,24 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 						@Override
 						public NodeRef execute() throws Throwable {
-							NodeRef settingsRef;
-							synchronized (lock) {
-								settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
-								if (settingsRef == null) {
-									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-									QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, settingsObjectName);
-									QName nodeTypeQName = TYPE_NOTIFICATIONS_USER_SETTINGS;
+							NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+                            if (settingsRef == null) {
+                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, settingsObjectName);
+                                QName nodeTypeQName = TYPE_NOTIFICATIONS_USER_SETTINGS;
 
-									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-									properties.put(ContentModel.PROP_NAME, settingsObjectName);
-									ChildAssociationRef associationRef = nodeService.createNode(getServiceRootFolder(), assocTypeQName, assocQName, nodeTypeQName, properties);
-									settingsRef = associationRef.getChildRef();
+                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                                properties.put(ContentModel.PROP_NAME, settingsObjectName);
+                                ChildAssociationRef associationRef = nodeService.createNode(getServiceRootFolder(), assocTypeQName, assocQName, nodeTypeQName, properties);
+                                settingsRef = associationRef.getChildRef();
 
-									List<NodeRef> systemDefaulChannels = getSystemDefaultNotificationTypes();
-									if (systemDefaulChannels != null) {
-										for (NodeRef typeRef : systemDefaulChannels) {
-											nodeService.createAssociation(settingsRef, typeRef, ASSOC_DEFAULT_NOTIFICATIONS_TYPES);
-										}
-									}
-								}
-							}
+                                List<NodeRef> systemDefaulChannels = getSystemDefaultNotificationTypes();
+                                if (systemDefaulChannels != null) {
+                                    for (NodeRef typeRef : systemDefaulChannels) {
+                                        nodeService.createAssociation(settingsRef, typeRef, ASSOC_DEFAULT_NOTIFICATIONS_TYPES);
+                                    }
+                                }
+                            }
 							return settingsRef;
 						}
 					});

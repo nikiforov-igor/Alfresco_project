@@ -53,8 +53,6 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     private NamespaceService namespaceService;
     private BusinessJournalService businessJournalService;
 
-	private final Object lock = new Object();
-
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
 	}
@@ -101,20 +99,17 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 						@Override
 						public NodeRef execute() throws Throwable {
-							NodeRef settingsRef;
-							synchronized (lock) {
-								settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
-								if (settingsRef == null) {
-									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-									QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_SETTINGS_NODE_NAME);
-									QName nodeTypeQName = TYPE_ERRANDS_SETTINGS;
+							NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
+                            if (settingsRef == null) {
+                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_SETTINGS_NODE_NAME);
+                                QName nodeTypeQName = TYPE_ERRANDS_SETTINGS;
 
-									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-									properties.put(ContentModel.PROP_NAME, ERRANDS_SETTINGS_NODE_NAME);
-									ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
-									settingsRef = associationRef.getChildRef();
-								}
-							}
+                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                                properties.put(ContentModel.PROP_NAME, ERRANDS_SETTINGS_NODE_NAME);
+                                ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+                                settingsRef = associationRef.getChildRef();
+                            }
 							return settingsRef;
 						}
 					});
@@ -149,20 +144,17 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 						@Override
 						public NodeRef execute() throws Throwable {
-							NodeRef settingsRef;
-							synchronized (lock) {
-								settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
-								if (settingsRef == null) {
-									QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-									QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, settingsObjectName);
-									QName nodeTypeQName = TYPE_ERRANDS_USER_SETTINGS;
+							NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+                            if (settingsRef == null) {
+                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, settingsObjectName);
+                                QName nodeTypeQName = TYPE_ERRANDS_USER_SETTINGS;
 
-									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-									properties.put(ContentModel.PROP_NAME, settingsObjectName);
-									ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
-									settingsRef = associationRef.getChildRef();
-								}
-							}
+                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                                properties.put(ContentModel.PROP_NAME, settingsObjectName);
+                                ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+                                settingsRef = associationRef.getChildRef();
+                            }
 							return settingsRef;
 						}
 					});

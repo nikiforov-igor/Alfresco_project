@@ -75,8 +75,6 @@ public class DocumentPolicy extends BaseBean
 	private TemplateService templateService;
 	private BehaviourFilter behaviourFilter;
 
-	private final Object lock = new Object();
-
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
     }
@@ -375,20 +373,17 @@ public class DocumentPolicy extends BaseBean
 						return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 							@Override
 							public NodeRef execute() throws Throwable {
-								NodeRef result;
-								synchronized (lock) {
-									result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
-									if (result == null) {
-										QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-										QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
-										QName nodeTypeQName = ContentModel.TYPE_CONTENT;
+								NodeRef result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
+                                if (result == null) {
+                                    QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                                    QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
+                                    QName nodeTypeQName = ContentModel.TYPE_CONTENT;
 
-										Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-										properties.put(ContentModel.PROP_NAME, fileName);
-										ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-										result = associationRef.getChildRef();
-									}
-								}
+                                    Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                                    properties.put(ContentModel.PROP_NAME, fileName);
+                                    ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+                                    result = associationRef.getChildRef();
+                                }
 								return result;
 							}
 						});
@@ -470,37 +465,34 @@ public class DocumentPolicy extends BaseBean
 					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 						@Override
 						public NodeRef execute() throws Throwable {
-							NodeRef thumbnail;
-							synchronized (lock) {
-								thumbnail = serviceRegistry.getThumbnailService().getThumbnailByName(objectRef, ContentModel.PROP_CONTENT, thumbnailName);
-								if (thumbnail == null) {
-									QName assocTypeQName = RenditionModel.ASSOC_RENDITION;
-									QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, thumbnailName);
-									QName nodeTypeQName = ContentModel.TYPE_THUMBNAIL;
+							NodeRef thumbnail = serviceRegistry.getThumbnailService().getThumbnailByName(objectRef, ContentModel.PROP_CONTENT, thumbnailName);
+                            if (thumbnail == null) {
+                                QName assocTypeQName = RenditionModel.ASSOC_RENDITION;
+                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, thumbnailName);
+                                QName nodeTypeQName = ContentModel.TYPE_THUMBNAIL;
 
-									Map<QName, Serializable> properties = new HashMap<QName, Serializable>(4);
-									properties.put(ContentModel.PROP_NAME, thumbnailName);
-									properties.put(ContentModel.PROP_THUMBNAIL_NAME, thumbnailName);
-									properties.put(ContentModel.PROP_CONTENT_PROPERTY_NAME, ContentModel.PROP_CONTENT);
-									ChildAssociationRef associationRef = nodeService.createNode(objectRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-									thumbnail = associationRef.getChildRef();
+                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(4);
+                                properties.put(ContentModel.PROP_NAME, thumbnailName);
+                                properties.put(ContentModel.PROP_THUMBNAIL_NAME, thumbnailName);
+                                properties.put(ContentModel.PROP_CONTENT_PROPERTY_NAME, ContentModel.PROP_CONTENT);
+                                ChildAssociationRef associationRef = nodeService.createNode(objectRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+                                thumbnail = associationRef.getChildRef();
 
-									NamespacePrefixResolver namespacePrefixResolver = serviceRegistry.getNamespaceService();
-									String documentType = nodeService.getType(documentRef).toPrefixString(namespacePrefixResolver).replace(":", "_");
+                                NamespacePrefixResolver namespacePrefixResolver = serviceRegistry.getNamespaceService();
+                                String documentType = nodeService.getType(documentRef).toPrefixString(namespacePrefixResolver).replace(":", "_");
 
-									InputStream stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + documentType + ".png");
-									if (stream == null) {
-										stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + "default_document.png");
-									}
-									if (stream != null){
-										ContentService contentService = serviceRegistry.getContentService();
-										ContentWriter writer = contentService.getWriter(thumbnail, ContentModel.PROP_CONTENT, true);
-										if (writer != null) {
-											writer.setMimetype(MimetypeMap.MIMETYPE_IMAGE_PNG);
-											writer.putContent(stream);
-										}
-									}
-								}
+                                InputStream stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + documentType + ".png");
+                                if (stream == null) {
+                                    stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + "default_document.png");
+                                }
+                                if (stream != null){
+                                    ContentService contentService = serviceRegistry.getContentService();
+                                    ContentWriter writer = contentService.getWriter(thumbnail, ContentModel.PROP_CONTENT, true);
+                                    if (writer != null) {
+                                        writer.setMimetype(MimetypeMap.MIMETYPE_IMAGE_PNG);
+                                        writer.putContent(stream);
+                                    }
+                                }
 							}
 							return thumbnail;
 						}
