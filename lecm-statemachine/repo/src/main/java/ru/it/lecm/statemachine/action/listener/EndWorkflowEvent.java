@@ -93,14 +93,6 @@ public class EndWorkflowEvent implements ExecutionListener {
                     String taskId = helper.getCurrentTaskId(statemachineId);
                     List<StateMachineAction> transitionActions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(TransitionAction.class), ExecutionListener.EVENTNAME_END);
                     boolean isTrasitionValid = false;
-
-                    Map<String, Object> statemachineVariables = new HashMap<String, Object>();
-                    //необходима проверка существования execution машины состояний,
-                    // иначе происходит ActivitiException и таск не закрывается, даже при перехвате ActivitiException
-                    if (helper.getExecution(statemachineId) != null) {
-                        statemachineVariables = helper.getVariables(statemachineId);
-                    }
-
                     boolean stopSubWorkflows = false;
                     Expression expression = new Expression(document, StateMachineHelper.getServiceRegistry());
                     for (StateMachineAction action : transitionActions) {

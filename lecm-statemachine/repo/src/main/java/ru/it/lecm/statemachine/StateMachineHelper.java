@@ -1089,6 +1089,26 @@ public class StateMachineHelper implements StateMachineServiceBean {
      * @param processId
      */
     public void terminateProcess(String processId) {
+        ExecutionEntity process = (ExecutionEntity) activitiProcessEngineConfiguration.getRuntimeService().createProcessInstanceQuery().processInstanceId(processId).singleResult();
+        //Завершаем процесс
+        ProcessDefinitionEntity definition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(process.getProcessDefinitionId());
+        List<ActivityImpl> activities = definition.getActivities();
+        ActivityImpl endActivity = null;
+        for (ActivityImpl activity : activities) {
+            if (activity.getActivityBehavior() instanceof NoneEndEventActivityBehavior) {
+                endActivity = activity;
+            }
+        }
+        if (endActivity != null) {
+            process.setProcessDefinition(definition);
+            process.setActivity(endActivity);
+            try {
+                process.end();
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
+
+        }
         activitiProcessEngineConfiguration.getRuntimeService().deleteProcessInstance(processId, "cancelled");
     }
 
