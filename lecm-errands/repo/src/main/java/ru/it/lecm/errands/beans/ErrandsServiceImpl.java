@@ -35,9 +35,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
 
     private static enum ModeChoosingExecutors {
-		ORGANIZATION,
-		UNIT
-	}
+        ORGANIZATION,
+        UNIT
+    }
+
     private static enum FilterEnum {
         ALL,
         ACTIVE,
@@ -46,20 +47,20 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     public static final int MAX_ITEMS = 1000;
 
-	private DocumentService documentService;
-	private OrgstructureBean orgstructureService;
+    private DocumentService documentService;
+    private OrgstructureBean orgstructureService;
     private StateMachineServiceBean stateMachineBean;
     private LecmObjectsService lecmObjectsService;
     private NamespaceService namespaceService;
     private BusinessJournalService businessJournalService;
 
-	public void setDocumentService(DocumentService documentService) {
-		this.documentService = documentService;
-	}
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
 
-	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		this.orgstructureService = orgstructureService;
-	}
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
 
     public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
         this.stateMachineBean = stateMachineBean;
@@ -78,28 +79,28 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 
     @Override
-	public NodeRef getServiceRootFolder() {
-		return getFolder(ERRANDS_ROOT_ID);
-	}
+    public NodeRef getServiceRootFolder() {
+        return getFolder(ERRANDS_ROOT_ID);
+    }
 
-	public NodeRef getDraftRoot() {
-		return  documentService.getDraftRootByType(TYPE_ERRANDS);
-	}
+    public NodeRef getDraftRoot() {
+        return documentService.getDraftRootByType(TYPE_ERRANDS);
+    }
 
-	public NodeRef getSettingsNode() {
-		final NodeRef rootFolder = this.getServiceRootFolder();
+    public NodeRef getSettingsNode() {
+        final NodeRef rootFolder = this.getServiceRootFolder();
 
-		NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
-		if (settings != null) {
-			return settings;
-		} else {
-			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-				@Override
-				public NodeRef doWork() throws Exception {
-					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-						@Override
-						public NodeRef execute() throws Throwable {
-							NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
+        NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
+        if (settings != null) {
+            return settings;
+        } else {
+            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+                @Override
+                public NodeRef doWork() throws Exception {
+                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
                             if (settingsRef == null) {
                                 QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
                                 QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_SETTINGS_NODE_NAME);
@@ -110,41 +111,41 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                                 ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
                                 settingsRef = associationRef.getChildRef();
                             }
-							return settingsRef;
-						}
-					});
-				}
-			};
-			return AuthenticationUtil.runAsSystem(raw);
-		}
-	}
+                            return settingsRef;
+                        }
+                    });
+                }
+            };
+            return AuthenticationUtil.runAsSystem(raw);
+        }
+    }
 
-	public ModeChoosingExecutors getModeChoosingExecutors() {
-		NodeRef settings = getSettingsNode();
-		if (settings != null) {
-		 	String modeChoosingExecutors = (String) nodeService.getProperty(settings, SETTINGS_PROP_MODE_CHOOSING_EXECUTORS);
-			if (modeChoosingExecutors.equals(SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION)) {
-				return ModeChoosingExecutors.ORGANIZATION;
-			}
-		}
-		return ModeChoosingExecutors.UNIT;
-	}
+    public ModeChoosingExecutors getModeChoosingExecutors() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            String modeChoosingExecutors = (String) nodeService.getProperty(settings, SETTINGS_PROP_MODE_CHOOSING_EXECUTORS);
+            if (modeChoosingExecutors.equals(SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION)) {
+                return ModeChoosingExecutors.ORGANIZATION;
+            }
+        }
+        return ModeChoosingExecutors.UNIT;
+    }
 
-	public NodeRef getCurrentUserSettingsNode() {
-		final NodeRef rootFolder = this.getServiceRootFolder();
-		final String settingsObjectName = authService.getCurrentUserName() + "_" + ERRANDS_SETTINGS_NODE_NAME;
+    public NodeRef getCurrentUserSettingsNode() {
+        final NodeRef rootFolder = this.getServiceRootFolder();
+        final String settingsObjectName = authService.getCurrentUserName() + "_" + ERRANDS_SETTINGS_NODE_NAME;
 
-		NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
-		if (settings != null) {
-			return settings;
-		} else {
-			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-				@Override
-				public NodeRef doWork() throws Exception {
-					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-						@Override
-						public NodeRef execute() throws Throwable {
-							NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+        NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+        if (settings != null) {
+            return settings;
+        } else {
+            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+                @Override
+                public NodeRef doWork() throws Exception {
+                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
                             if (settingsRef == null) {
                                 QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
                                 QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, settingsObjectName);
@@ -155,62 +156,62 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                                 ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
                                 settingsRef = associationRef.getChildRef();
                             }
-							return settingsRef;
-						}
-					});
-				}
-			};
-			return AuthenticationUtil.runAsSystem(raw);
-		}
-	}
+                            return settingsRef;
+                        }
+                    });
+                }
+            };
+            return AuthenticationUtil.runAsSystem(raw);
+        }
+    }
 
-	public boolean isDefaultWithoutInitiatorApproval() {
-		NodeRef settings = getCurrentUserSettingsNode();
-		if (settings != null) {
-			return (Boolean) nodeService.getProperty(settings, USER_SETTINGS_PROP_WITHOUT_INITIATOR_APPROVAL);
-		}
-		return false;
-	}
+    public boolean isDefaultWithoutInitiatorApproval() {
+        NodeRef settings = getCurrentUserSettingsNode();
+        if (settings != null) {
+            return (Boolean) nodeService.getProperty(settings, USER_SETTINGS_PROP_WITHOUT_INITIATOR_APPROVAL);
+        }
+        return false;
+    }
 
-	public NodeRef getDefaultInitiator() {
-		NodeRef result = orgstructureService.getCurrentEmployee();
-		if (orgstructureService.isCurrentEmployeeHasBusinessRole(BUSINESS_ROLE_ERRANDS_CHOOSING_INITIATOR)) {
-			NodeRef settings = getCurrentUserSettingsNode();
-			if (settings != null) {
-				List<AssociationRef> defaultInitiatorAssocs = nodeService.getTargetAssocs(settings, USER_SETTINGS_ASSOC_DEFAULT_INITIATOR);
-				if (defaultInitiatorAssocs.size() > 0) {
-					result = defaultInitiatorAssocs.get(0).getTargetRef();
-				}
-			}
-		}
-		return result;
-	}
+    public NodeRef getDefaultInitiator() {
+        NodeRef result = orgstructureService.getCurrentEmployee();
+        if (orgstructureService.isCurrentEmployeeHasBusinessRole(BUSINESS_ROLE_ERRANDS_CHOOSING_INITIATOR)) {
+            NodeRef settings = getCurrentUserSettingsNode();
+            if (settings != null) {
+                List<AssociationRef> defaultInitiatorAssocs = nodeService.getTargetAssocs(settings, USER_SETTINGS_ASSOC_DEFAULT_INITIATOR);
+                if (defaultInitiatorAssocs.size() > 0) {
+                    result = defaultInitiatorAssocs.get(0).getTargetRef();
+                }
+            }
+        }
+        return result;
+    }
 
-	public NodeRef getDefaultSubject() {
-		NodeRef settings = getCurrentUserSettingsNode();
-		if (settings != null) {
-			List<AssociationRef> defaultSubjectAssocs = nodeService.getTargetAssocs(settings, USER_SETTINGS_ASSOC_DEFAULT_SUBJECT);
-			if (defaultSubjectAssocs.size() > 0) {
-				return defaultSubjectAssocs.get(0).getTargetRef();
-			}
-		}
-		return null;
-	}
+    public NodeRef getDefaultSubject() {
+        NodeRef settings = getCurrentUserSettingsNode();
+        if (settings != null) {
+            List<AssociationRef> defaultSubjectAssocs = nodeService.getTargetAssocs(settings, USER_SETTINGS_ASSOC_DEFAULT_SUBJECT);
+            if (defaultSubjectAssocs.size() > 0) {
+                return defaultSubjectAssocs.get(0).getTargetRef();
+            }
+        }
+        return null;
+    }
 
-	public List<NodeRef> getAvailableExecutors() {
-		if (getModeChoosingExecutors() == ModeChoosingExecutors.ORGANIZATION) {
-			return null;
-		} else {
-			NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-			List<NodeRef> subordinates = orgstructureService.getBossSubordinate(currentEmployee, true);
+    public List<NodeRef> getAvailableExecutors() {
+        if (getModeChoosingExecutors() == ModeChoosingExecutors.ORGANIZATION) {
+            return null;
+        } else {
+            NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+            List<NodeRef> subordinates = orgstructureService.getBossSubordinate(currentEmployee, true);
 
-			List<NodeRef> result = new ArrayList<NodeRef>();
-			result.add(currentEmployee);
-			result.addAll(subordinates);
+            List<NodeRef> result = new ArrayList<NodeRef>();
+            result.add(currentEmployee);
+            result.addAll(subordinates);
 
-			return result;
-		}
-	}
+            return result;
+        }
+    }
 
     private List<NodeRef> getDocumentErrands(NodeRef document, Boolean active, List<QName> roles) {
         if (document == null) {
@@ -264,11 +265,11 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     @Override
     public List<NodeRef> getFilterDocumentErrands(NodeRef document, String filter, List<QName> roles) {
         if (filter != null && !filter.equals("")) {
-            switch (FilterEnum.valueOf(filter.toUpperCase())){
+            switch (FilterEnum.valueOf(filter.toUpperCase())) {
                 case ALL: {
                     return getDocumentErrands(document, null, roles);
                 }
-                case ACTIVE : {
+                case ACTIVE: {
                     return getDocumentErrands(document, true, roles);
                 }
                 case COMPLETE: {
@@ -279,8 +280,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return getDocumentErrands(document, null, roles);
     }
 
-    public List<NodeRef> getErrandsDocuments(List<String> paths, int skipCount, int maxItems){
-        List<QName> types =  new ArrayList<QName>();
+    public List<NodeRef> getErrandsDocuments(List<String> paths, int skipCount, int maxItems) {
+        List<QName> types = new ArrayList<QName>();
         types.add(TYPE_ERRANDS);
 
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
@@ -290,8 +291,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         // сортируем по важности поручения и по сроку исполнения
-        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + PROP_ERRANDS_IS_IMPORTANT.toString(),false));
-        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + PROP_ERRANDS_LIMITATION_DATE.toString(),false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_IS_IMPORTANT.toString(), false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_LIMITATION_DATE.toString(), false));
 
         for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
             if (stateMachineBean.isDraft(nodeRef)) {
@@ -313,9 +314,9 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return result;
     }
 
-    public List<NodeRef> getActiveErrands(List<String> paths, int skipCount, int maxItems){
+    public List<NodeRef> getActiveErrands(List<String> paths, int skipCount, int maxItems) {
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-        List<QName> types =  new ArrayList<QName>();
+        List<QName> types = new ArrayList<QName>();
         types.add(TYPE_ERRANDS);
 
         List<NodeRef> employees = orgstructureService.getBossSubordinate(currentEmployee, true);
@@ -326,8 +327,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<String> status = stateMachineBean.getStatuses("lecm-errands:document", true, false);
 
         // сортируем по наименованию поручения и по сроку исполнения
-        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + PROP_ERRANDS_NUMBER.toString(),false));
-        sort.add(new SortDefinition(SortDefinition.SortType.FIELD,"@" + PROP_ERRANDS_LIMITATION_DATE.toString(),false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_NUMBER.toString(), false));
+        sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_LIMITATION_DATE.toString(), false));
 
         for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
             if (stateMachineBean.isDraft(nodeRef)) {
@@ -350,27 +351,28 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 
     @Override
-    public synchronized NodeRef getLinksFolderRef(final NodeRef document) {
-        NodeRef linkFolder = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, ERRANDS_LINK_FOLDER_NAME);
-        if (linkFolder == null) {
-            linkFolder = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
+    public NodeRef getLinksFolderRef(final NodeRef document) {
+        return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        NodeRef linkFolder = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, ERRANDS_LINK_FOLDER_NAME);
+                        if (linkFolder == null) {
                             QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_LINK_FOLDER_NAME);
                             Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
                             properties.put(ContentModel.PROP_NAME, ERRANDS_LINK_FOLDER_NAME);
                             ChildAssociationRef childAssoc = nodeService.createNode(document, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
                             return childAssoc.getChildRef();
+                        } else {
+                            return linkFolder;
                         }
-                    });
-                }
-            });
-        }
-        return linkFolder;
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -381,24 +383,24 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     @Override
     public List<NodeRef> getLinks(NodeRef document, int skipCount, int maxItems) {
         List<NodeRef> results = new ArrayList<NodeRef>();
-            List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
-            sortProps.add(new Pair<QName, Boolean>(ContentModel.PROP_MODIFIED, false));
+        List<Pair<QName, Boolean>> sortProps = new ArrayList<Pair<QName, Boolean>>(1);
+        sortProps.add(new Pair<QName, Boolean>(ContentModel.PROP_MODIFIED, false));
 
-            PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
-            pageRequest.setRequestTotalCountMax(MAX_ITEMS);
+        PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
+        pageRequest.setRequestTotalCountMax(MAX_ITEMS);
 
-            PagingResults<NodeRef> pageOfNodeInfos = null;
-            FileFilterMode.setClient(FileFilterMode.Client.script);
-            try {
-                pageOfNodeInfos = lecmObjectsService.list(getLinksFolderRef(document), TYPE_BASE_LINK, new ArrayList<FilterProp>(), sortProps, pageRequest);
-            } finally {
-                FileFilterMode.clearClient();
-            }
+        PagingResults<NodeRef> pageOfNodeInfos = null;
+        FileFilterMode.setClient(FileFilterMode.Client.script);
+        try {
+            pageOfNodeInfos = lecmObjectsService.list(getLinksFolderRef(document), TYPE_BASE_LINK, new ArrayList<FilterProp>(), sortProps, pageRequest);
+        } finally {
+            FileFilterMode.clearClient();
+        }
 
-            List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
-            for (NodeRef ref : nodeInfos) {
-                results.add(ref);
-            }
+        List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
+        for (NodeRef ref : nodeInfos) {
+            results.add(ref);
+        }
         return results;
     }
 
@@ -447,7 +449,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return findNodeByAssociationRef(errand, ASSOC_ADDITIONAL_ERRANDS_DOCUMENT, null, BaseBean.ASSOCIATION_TYPE.TARGET);
     }
 
-	public void setExecutionReport(NodeRef errandRef, String report) {
-		nodeService.setProperty(errandRef, PROP_ERRANDS_EXECUTION_REPORT, report);
-	}
+    public void setExecutionReport(NodeRef errandRef, String report) {
+        nodeService.setProperty(errandRef, PROP_ERRANDS_EXECUTION_REPORT, report);
+    }
 }

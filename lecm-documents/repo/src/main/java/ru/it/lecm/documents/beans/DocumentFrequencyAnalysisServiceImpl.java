@@ -137,17 +137,17 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
         return units;
     }
 
-    private synchronized NodeRef getWorkDirectory(NodeRef employee, String docType) {
+    private NodeRef getWorkDirectory(NodeRef employee, String docType) {
         final String typeFolderName = docType.replace(":", "_");
         final String employeeFolderName = orgstructureService.getEmployeeLogin(employee);
-        NodeRef docTypeFolderRef = nodeService.getChildByName(ROOT, ContentModel.ASSOC_CONTAINS, employeeFolderName);
-        if (docTypeFolderRef == null) {
-            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
+        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        NodeRef docTypeFolderRef = nodeService.getChildByName(ROOT, ContentModel.ASSOC_CONTAINS, employeeFolderName);
+                        if (docTypeFolderRef == null) {
                             NodeRef directoryRef;
                             QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
                             QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, employeeFolderName);
@@ -155,22 +155,23 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
                             properties.put(ContentModel.PROP_NAME, employeeFolderName);
                             directoryRef = nodeService.createNode(ROOT, assocTypeQName, assocQName, ContentModel.TYPE_FOLDER, properties).getChildRef();
                             return directoryRef;
+                        } else {
+                            return docTypeFolderRef;
                         }
-                    });
-                }
-            };
-            docTypeFolderRef = AuthenticationUtil.runAsSystem(raw);
-
-        }
+                    }
+                });
+            }
+        };
+        NodeRef docTypeFolderRef = AuthenticationUtil.runAsSystem(raw);
         final NodeRef SUB_ROOT = docTypeFolderRef;
-        NodeRef workDirectory = nodeService.getChildByName(SUB_ROOT, ContentModel.ASSOC_CONTAINS, typeFolderName);
-        if (workDirectory == null) {
-            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
+        raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        NodeRef workDirectory = nodeService.getChildByName(SUB_ROOT, ContentModel.ASSOC_CONTAINS, typeFolderName);
+                        if (workDirectory == null) {
                             NodeRef directoryRef;
                             QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
                             QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, typeFolderName);
@@ -178,25 +179,26 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
                             properties.put(ContentModel.PROP_NAME, typeFolderName);
                             directoryRef = nodeService.createNode(SUB_ROOT, assocTypeQName, assocQName, ContentModel.TYPE_FOLDER, properties).getChildRef();
                             return directoryRef;
+                        } else {
+                            return workDirectory;
                         }
-                    });
-                }
-            };
-            return AuthenticationUtil.runAsSystem(raw);
 
-        }
-        return workDirectory;
+                    }
+                });
+            }
+        };
+        return AuthenticationUtil.runAsSystem(raw);
     }
 
-    private synchronized NodeRef getOrCreateFrequencyUnit(final NodeRef employee, final String docType, final String actionId) {
-        NodeRef unitRef = getFrequencyUnit(employee, docType, actionId);
-        if (unitRef == null) {
-            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
+    private NodeRef getOrCreateFrequencyUnit(final NodeRef employee, final String docType, final String actionId) {
+        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        NodeRef unitRef = getFrequencyUnit(employee, docType, actionId);
+                        if (unitRef == null) {
                             NodeRef directoryRef;
                             QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
                             final String name = GUID.generate();
@@ -209,12 +211,12 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
                             directoryRef = nodeService.createNode(root, assocTypeQName, assocQName, TYPE_FREQUENCY_UNIT, properties).getChildRef();
                             return directoryRef;
                         }
-                    });
-                }
-            };
-            return AuthenticationUtil.runAsSystem(raw);
-        }
-        return unitRef;
+                        return unitRef;
+                    }
+                });
+            }
+        };
+        return AuthenticationUtil.runAsSystem(raw);
     }
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/

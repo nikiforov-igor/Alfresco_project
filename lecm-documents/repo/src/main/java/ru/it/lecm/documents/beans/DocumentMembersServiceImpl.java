@@ -118,27 +118,28 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     }
 
     @Override
-    public synchronized NodeRef getMembersFolderRef(final NodeRef document) {
-        NodeRef membersFolder = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, DOCUMENT_MEMBERS_ROOT_NAME);
-        if (membersFolder == null) {
-            membersFolder = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                    return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
+    public NodeRef getMembersFolderRef(final NodeRef document) {
+        return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        NodeRef membersFolder = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, DOCUMENT_MEMBERS_ROOT_NAME);
+                        if (membersFolder == null) {
                             QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, DOCUMENT_MEMBERS_ROOT_NAME);
                             Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
                             properties.put(ContentModel.PROP_NAME, DOCUMENT_MEMBERS_ROOT_NAME);
                             ChildAssociationRef childAssoc = nodeService.createNode(document, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
                             return childAssoc.getChildRef();
+                        } else {
+                            return membersFolder;
                         }
-                    });
-                }
-            });
-        }
-        return membersFolder;
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -212,15 +213,15 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
      * @param docType тип документов (краткое представление с заменой ":" на "_" )
      * @return ссылка на ноду
      */
-    private synchronized NodeRef getOrCreateDocMembersUnit(final String docType) {
-        NodeRef unitRef = nodeService.getChildByName(getRoot(), ContentModel.ASSOC_CONTAINS, docType);
-        if (unitRef == null) {
-            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
+    private NodeRef getOrCreateDocMembersUnit(final String docType) {
+        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        NodeRef unitRef = nodeService.getChildByName(getRoot(), ContentModel.ASSOC_CONTAINS, docType);
+                        if (unitRef == null) {
                             NodeRef directoryRef;
                             QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
                             QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, docType);
@@ -228,13 +229,14 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
                             properties.put(ContentModel.PROP_NAME, docType);
                             directoryRef = nodeService.createNode(getRoot(), assocTypeQName, assocQName, DocumentMembersService.TYPE_DOC_MEMBERS_UNIT, properties).getChildRef();
                             return directoryRef;
+                        } else {
+                            return unitRef;
                         }
-                    });
-                }
-            };
-            return AuthenticationUtil.runAsSystem(raw);
-        }
-        return unitRef;
+                    }
+                });
+            }
+        };
+        return AuthenticationUtil.runAsSystem(raw);
     }
 
     /**
