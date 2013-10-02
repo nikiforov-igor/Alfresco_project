@@ -64,9 +64,9 @@ public interface LecmPermissionService {
 
     /**
 	 * Получить обозначение группы полномочий по имени, среди зарегистрированных групп.
-	 * @param lecmPermissionGroupName назвнаие группы, например, "LECM_BASIC_PG_Editor"
-	 * Регистр не важен, в любом возвращаемое значение будет содержать точное 
-	 * название с учётом регистра. 
+	 * @param lecmPermissionGroupName название группы, например, "LECM_BASIC_PG_Editor".
+	 * Регистр на входе не важен - в любом случае, возвращаемое значение будет 
+	 * содержать точное название уже с учётом регистра. 
 	 * @return
 	 */
 	LecmPermissionGroup findPermissionGroup( String lecmPermissionGroupName );
@@ -112,6 +112,8 @@ public interface LecmPermissionService {
 	 * @param permission  Привелегия
 	 * @param node Ссылка на узел
 	 * @return true, если указанная привилегия permission имеется у текущего пользователя
+	 * <br/> Пример: 
+	 * <b><br/>if (!permissionBean.hasPermission( "_lecmPerm_MemberList", docId)) throw new SecurityException("No access");</b>
 	 */
 	boolean hasPermission(String permission, NodeRef node);
 
@@ -179,7 +181,7 @@ public interface LecmPermissionService {
 	 * @param employeeId id Сотрудника
 	 * @param permissionGroup предоставляемый доступ, если null, то будет присвоено право по-умолчанию (конфигурируется бинами)
 	 */
-	void grantDynamicRole( String roleCode, NodeRef nodeRef, String employeeId, LecmPermissionGroup permissionGroup);
+	void grantDynamicRole(String roleCode, NodeRef nodeRef, String employeeId, LecmPermissionGroup permissionGroup);
     void grantDynamicRole(String roleCode, NodeRef nodeRef, String employeeId, String permission);
 	/**
 	 * Отобрать у Сотрудника динамическую роль в документе/папке
@@ -258,6 +260,7 @@ public interface LecmPermissionService {
 
 		/**
 		 * @return характерный (для объектов данного типа) префикс внутри названия name.
+		 * <br/>Пример "LECM_BASIC_PG_" или "_lecmPerm_"
 		 */
 		String getPrefix();
 
@@ -278,6 +281,7 @@ public interface LecmPermissionService {
 		 */
 		public static String PGROLE_Initiator = PFX_LECM_ROLE + "Initiator"; // "LECM_BASIC_PG_Initiator"
 		public static String PGROLE_Reader = PFX_LECM_ROLE + "Reader"; // "LECM_BASIC_PG_Reader"
+		public static String PGROLE_Member = PFX_LECM_ROLE + "Member"; // "LECM_BASIC_PG_Reader"
 
 		public String getLabel();
 

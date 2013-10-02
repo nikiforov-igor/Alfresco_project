@@ -66,7 +66,7 @@ public class LecmPermissionServiceImpl
 			for (Map.Entry< String, LecmPermissionGroup> item: map.entrySet()) {
 				sb.append( String.format( " [%d] '%s'\t %s\n", (++i), item.getKey()
 						, ((item.getValue() == null) ? "NULL" : item.getValue().toString())
-				));
+						));
 			}
 			sb.append( " ==================================== \n");
 		}
@@ -177,8 +177,8 @@ public class LecmPermissionServiceImpl
 
 	static String makeNamedKey(String permName) {
 		return (permName != null && permName.length() > 0)
-					? permName.trim().toUpperCase()
-					: "";
+				? permName.trim().toUpperCase()
+						: "";
 	}
 
 	/**
@@ -213,10 +213,15 @@ public class LecmPermissionServiceImpl
 			sb.append( String.format( "\t (*) Selected %s counter: %s\n", subjInfo, result.size() ));
 		}
 		if (logger.isDebugEnabled())
-				logger.debug( sb.toString() );
+			logger.debug( sb.toString() );
 		return result;
 	}
 
+	/**
+	 * зарегистрированные фактически lecm-полномочия среди всех security-groups Альфреско.
+	 * <li> Ключ - название в верхнем регистре см {@link #makeNamedKey(String)}
+	 * <li> Значение - описатель полномочия
+	 */
 	private Map<String, LecmPermission> allPermissions = null; // new HashMap<String, LecmPermissionImpl>();
 
 	/**
@@ -249,16 +254,20 @@ public class LecmPermissionServiceImpl
 		// DONE: check via real list of permissions
 		final LecmPermission result = 
 				(allPermissions.containsKey(key)) ? allPermissions.get(key) : null;
-		if (result == null) {
-			// // allPermissions.put( key, new LecmPermissionImpl(lecmPermissionName));
-			final String info = String.format( "Unknown permission '%s' -> skipped", lecmPermissionName);
-			// throw new RuntimeException( new InvalidNameException(info));
-			logger.warn(info);
-		}
-		return result;
+				if (result == null) {
+					// // allPermissions.put( key, new LecmPermissionImpl(lecmPermissionName));
+					final String info = String.format( "Unknown permission '%s' -> skipped", lecmPermissionName);
+					// throw new RuntimeException( new InvalidNameException(info));
+					logger.warn(info);
+				}
+				return result;
 	}
 
-
+	/**
+	 * зарегистрированные фактически lecm-группы среди всех security-groups Альфреско.
+	 * <li> Ключ - название группы в верхнем регистре см {@link #makeNamedKey(String)}
+	 * <li> Значение - описатель группы
+	 */
 	private Map<String, LecmPermissionGroup> allGroups = null;
 
 	/**
@@ -296,14 +305,14 @@ public class LecmPermissionServiceImpl
 
 		final LecmPermissionGroup result = 
 				(allGroups.containsKey(key)) ? allGroups.get(key) : null;
-		if (result == null) {
-			// // allGroups.put( key, new LecmPermissionGroupImpl(lecmGroupName));
-			// throw new RuntimeException( new InvalidNameException(info)) );
-			final String info = String.format(String.format( "Unknown permission group name '%s' -> skipped", lecmGroupName));
-			logger.warn( info);
-		}
+				if (result == null) {
+					// // allGroups.put( key, new LecmPermissionGroupImpl(lecmGroupName));
+					// throw new RuntimeException( new InvalidNameException(info)) );
+					final String info = String.format(String.format( "Unknown permission group name '%s' -> skipped", lecmGroupName));
+					logger.warn( info);
+				}
 
-		return result;
+				return result;
 	}
 
 	@Override
@@ -327,7 +336,7 @@ public class LecmPermissionServiceImpl
 
 	@Override
 	public boolean hasPermission(final String permission, final NodeRef node) {
-	 	return hasPermission(permission, node,  authService.getCurrentUserName());
+		return hasPermission(permission, node,  authService.getCurrentUserName());
 	}
 
 	@Override
@@ -352,8 +361,8 @@ public class LecmPermissionServiceImpl
 
 			if (userLogin == null) { // проверка относительно текущего пользователя
 				result = runner.doWork();
-			//	} else if (ASSYSTEM.equalsIgnoreCase(userLogin)) { // выполнить от имени системы
-			//		AuthenticationUtil.runAsSystem( runner);
+				//	} else if (ASSYSTEM.equalsIgnoreCase(userLogin)) { // выполнить от имени системы
+				//		AuthenticationUtil.runAsSystem( runner);
 			} else { // выполнить от имени указанного ползователя ...
 				// (for safe) получение Person по сконфигурированному имени ...
 				// final NodeRef person = getPersonService().getPerson(userLogin);
@@ -415,15 +424,15 @@ public class LecmPermissionServiceImpl
 	@Override
 	public void grantDynamicRole(String roleCode, NodeRef nodeRef,
 			String employeeId, LecmPermissionGroup permissionGroup)
-    {
-        final String permission = findACEPermission(permissionGroup);
-        grantDynamicRole(roleCode, nodeRef, employeeId, permission);
-    }
+	{
+		final String permission = findACEPermission(permissionGroup);
+		grantDynamicRole(roleCode, nodeRef, employeeId, permission);
+	}
 
 
 	@Override
 	public void grantDynamicRole(String roleCode, NodeRef nodeRef,
-                                 String employeeId, String permission)
+			String employeeId, String permission)
 	{
 		final SGPrivateBusinessRole posBRME = Types.SGKind.getSGMyRolePos(employeeId, roleCode);
 
@@ -441,24 +450,24 @@ public class LecmPermissionServiceImpl
 	}
 
 	@Override
-    public boolean hasEmployeeDynamicRole(NodeRef document, NodeRef employee, String roleName) {
-        boolean result = false;
-        final SGPrivateBusinessRole posBRME = Types.SGKind.getSGMyRolePos(employee.getId(), roleName);
-        String authority = sgnm.makeSGName(posBRME);
+	public boolean hasEmployeeDynamicRole(NodeRef document, NodeRef employee, String roleName) {
+		final SGPrivateBusinessRole posBRME = Types.SGKind.getSGMyRolePos(employee.getId(), roleName);
+		final String authority = sgnm.makeSGName(posBRME);
 
-        Set<AccessPermission> status = permissionService.getAllSetPermissions(document);
-        for (AccessPermission permission : status) {
-            if (permission.getAuthority().equals(authority) && permission.getAccessStatus() == AccessStatus.ALLOWED) {
-                result = true;
-                break;
-            }
-        }
-        return result;
-    }
+		final Set<AccessPermission> status = permissionService.getAllSetPermissions(document);
+		if (status != null) {
+			for (AccessPermission permission : status) {
+				if (permission.getAccessStatus() == AccessStatus.ALLOWED && permission.getAuthority().equals(authority)) {
+					return true; // FOUND
+				}
+			}
+		}
+		return false;// NOT FOUND
+	}
 
 	@Override
 	public void revokeDynamicRole(String roleCode, NodeRef nodeRef,
-                                  String employeeId) {
+			String employeeId) {
 		final String authority = sgnm.makeFullBRMEAuthName(employeeId, roleCode);
 		permissionService.clearPermission( nodeRef, authority);
 		logger.debug(String.format("Dynamic role '%s' for employee '%s' revoked from document '%s'", roleCode, employeeId, nodeRef));
@@ -508,8 +517,8 @@ public class LecmPermissionServiceImpl
 	@Override
 	public void rebuildStaticACL(NodeRef nodeRef,
 			Map<String, LecmPermissionGroup> accessMap) {
-//		logger.info( "rebuildStaticACL for node "+ nodeRef);
-//		return;
+		//		logger.info( "rebuildStaticACL for node "+ nodeRef);
+		//		return;
 		final StringBuilder sb = new StringBuilder( String.format("Rebuild Static Roles for folder/node '%s', inherit parent access rules: %s\n\t by access table: %s \r\n", nodeRef, isStaticInheritParentPermissions(), getMapInfo(accessMap)));
 		try {
 
@@ -557,8 +566,8 @@ public class LecmPermissionServiceImpl
 	@Override
 	public void rebuildACL(NodeRef nodeRef,
 			Map<String, LecmPermissionGroup> accessMap) {
-//		logger.info( "rebuildStaticACL for node "+ nodeRef);
-//		return;
+		//		logger.info( "rebuildStaticACL for node "+ nodeRef);
+		//		return;
 		final StringBuilder sb = new StringBuilder( String.format("Rebuild Dynamic Roles for folder/node '%s', inherit parent access rules: %s\n\t by access table: %s \n", nodeRef, isDynamicInheritParentPermissions(), getMapInfo(accessMap)));
 		try {
 			// получить полный текущий ACL ...
@@ -609,8 +618,8 @@ public class LecmPermissionServiceImpl
 	 * Создание объектов типа см. LecmPermissionService.getPerm() 
 	 */
 	class LecmPermissionGroupImpl
-			extends PrefixedNameKeeper
-			implements LecmPermissionGroup
+	extends PrefixedNameKeeper
+	implements LecmPermissionGroup
 	{
 		/**
 		 * @param fullLecmPermGroupName полное название lecm-группы полномочий (включая префикс PFX_LECM_ROLE = "LECM_BASIC_PG_"), 
@@ -636,11 +645,11 @@ public class LecmPermissionServiceImpl
 	 * Выделен отдельный класс, чтобы можно было runtime-контролировать 
 	 * корректность используемых полномочий и точно параметризовать методы 
 	 * интерфейса LecmPermissionService вместо многозначного String. 
-	 * Создание объектов типа см. LecmPermissionService.getPermGroups()
+	 * Создание объектов этого типа см. LecmPermissionService.getPermGroups()
 	 */
 	class LecmPermissionImpl
-			extends PrefixedNameKeeper
-			implements LecmPermission
+	extends PrefixedNameKeeper
+	implements LecmPermission
 	{
 
 		/**
@@ -702,7 +711,7 @@ public class LecmPermissionServiceImpl
 		public String getShortName() {
 			return (fullName.toUpperCase().startsWith( prefix.toUpperCase())) 
 					? fullName.substring(prefix.length())
-					: fullName;
+							: fullName;
 		}
 
 		@Override
@@ -749,14 +758,14 @@ public class LecmPermissionServiceImpl
 	 * @param destBuf для формирования журнальных сообщений, м.б. Null
 	 * @throws AuthenticationException 
 	 */
-	
+
 	void setACE(
 			final NodeRef nodeRef
 			, final String authority
 			, final LecmPermissionGroup permGrp
 			, final StringBuilder destBuf
 			) throws AuthenticationException 
-	{
+			{
 		// удаление прежней auth-записи ...
 		permissionService.clearPermission(nodeRef, authority);
 
@@ -790,13 +799,13 @@ public class LecmPermissionServiceImpl
 
 		if (destBuf != null)
 			destBuf.append(String.format("\t'%s' \t as '%s'\n", authority, rawPerm));
-	}
+			}
 
 	void setACE( final NodeRef nodeRef, final String authority, final LecmPermissionGroup permGrp)
 			throws AuthenticationException
-	{
+			{
 		setACE(nodeRef, authority, permGrp, null);
-	}
+			}
 
 	/**
 	 * Вернуть название полномочия Альфреско, которое будет соот-ть группе полномочий 
@@ -817,7 +826,7 @@ public class LecmPermissionServiceImpl
 	 */
 	private Set<Pair<String, String>> filterByDynamicRoles(
 			Set<AccessPermission> acl)
-	{
+			{
 		final Set<Pair<String, String>> result = new HashSet<Pair<String,String>>();
 		for(Iterator<AccessPermission> iter = acl.iterator(); iter.hasNext(); ) {
 			final AccessPermission ap = iter.next();
@@ -827,7 +836,7 @@ public class LecmPermissionServiceImpl
 			}
 		}
 		return result;
-	}
+			}
 
 	private static final String EMPTYLINE = "\n------------------------------------------------------------";
 

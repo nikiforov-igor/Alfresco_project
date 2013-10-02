@@ -9,9 +9,9 @@ import ru.it.lecm.security.Types.SGPosition;
  * Основные оповещения с уровня модели LECM до уровня службы security groups.
  * Синхронизирует события создания-удаления-изменения объектов Сотрудник,
  * Подразделение, Должность, Бизнес-роль, предоставления БР для Сотрудников, 
- * Должностей, Подразделений с соответствующими операциями для службы 
+ * Должностей и Подразделений, с соответствующими операциями для службы 
  * работы с security groups:
- *   ru.it.lecm.orgstructure.policies.* -> call IOrgStructureNotifiers
+ *   ru.it.lecm.orgstructure.policies.* -> call OrgstructureSGNotifierBean -> IOrgStructureNotifiers
  * 
  * @author rabdullin
  */
