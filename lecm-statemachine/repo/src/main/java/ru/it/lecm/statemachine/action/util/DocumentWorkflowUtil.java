@@ -27,36 +27,37 @@ public class DocumentWorkflowUtil {
 		DocumentWorkflowUtil.serviceRegistry = serviceRegistry;
 	}
 
-	public synchronized void addWorkflow(final NodeRef document, String executionId, WorkflowDescriptor descriptor) {
-		try {
-			Object value = serviceRegistry.getNodeService().getProperty(document, PROP_WORKFLOWS);
-			JSONObject workflows;
-			if (value == null) {
-				workflows = new JSONObject();
-			} else {
-				workflows = new JSONObject((String) value);
-			}
-			JSONObject descriptorJSON = new JSONObject();
-			descriptorJSON.put("statemachineExecutionId", descriptor.getStatemachineExecutionId());
-			descriptorJSON.put("workflowId", descriptor.getWorkflowId());
-			descriptorJSON.put("startTaskId", descriptor.getStartTaskId());
-			descriptorJSON.put("actionName", descriptor.getActionName());
-			descriptorJSON.put("actionId", descriptor.getActionId());
-			descriptorJSON.put("eventName", descriptor.getEventName());
-			workflows.put(executionId, descriptorJSON);
-			final String result = workflows.toString();
-            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-                @Override
-                public Object doWork() throws Exception {
+    public synchronized void addWorkflow(final NodeRef document, final String executionId, final WorkflowDescriptor descriptor) {
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                Object value = serviceRegistry.getNodeService().getProperty(document, PROP_WORKFLOWS);
+                try {
+                    JSONObject workflows;
+                    if (value == null) {
+                        workflows = new JSONObject();
+                    } else {
+                        workflows = new JSONObject((String) value);
+                    }
+                    JSONObject descriptorJSON = new JSONObject();
+                    descriptorJSON.put("statemachineExecutionId", descriptor.getStatemachineExecutionId());
+                    descriptorJSON.put("workflowId", descriptor.getWorkflowId());
+                    descriptorJSON.put("startTaskId", descriptor.getStartTaskId());
+                    descriptorJSON.put("actionName", descriptor.getActionName());
+                    descriptorJSON.put("actionId", descriptor.getActionId());
+                    descriptorJSON.put("eventName", descriptor.getEventName());
+                    workflows.put(executionId, descriptorJSON);
+                    final String result = workflows.toString();
                     serviceRegistry.getNodeService().setProperty(document, PROP_WORKFLOWS, result);
-                    return null;
+                } catch (JSONException e) {
+                    throw new IllegalStateException(e);
                 }
-            });
+                return null;
+            }
+        });
 
-		} catch (JSONException e) {
-			throw new IllegalStateException(e);
-		}
-	}
+
+    }
 
 	public WorkflowDescriptor getWorkflowDescriptor(NodeRef document, String executionId) {
 		try {

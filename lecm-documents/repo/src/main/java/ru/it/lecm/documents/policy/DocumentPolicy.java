@@ -225,11 +225,11 @@ public class DocumentPolicy extends BaseBean
         return (constraint == null) ? null : QName.createQName(((AuthorPropertyConstraint)constraint.getConstraint()).getAuthorProperty(), namespaceService);
     }
 
-    public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-        final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+    public void onUpdateProperties(final NodeRef nodeRef, final Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        NodeRef employeeRef = orgstructureService.getCurrentEmployee();
         if (employeeRef != null) {
-            nodeService.setProperty(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER, substituteService.getObjectDescription(employeeRef));
-            nodeService.setProperty(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF, employeeRef.toString());
+            setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER, substituteService.getObjectDescription(employeeRef));
+            setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF, employeeRef.toString());
         }
         QName authorPropertyQName = getAuthorProperty(nodeRef);
         if (authorPropertyQName == null) {
@@ -277,16 +277,34 @@ public class DocumentPolicy extends BaseBean
 	    }
 
         if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
-            nodeService.setProperty(nodeRef,DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
-            if (stateMachineHelper.isDraft(nodeRef) || (before.size() == 0)) {
-                String status = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS);
-                List<String> objects = new ArrayList<String>(1);
-                if (status != null) {
-                    objects.add(status);
+            setPropertyAsSystem(nodeRef, DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
+
+            final List<String> objects = new ArrayList<String>();
+            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                @Override
+                public Object doWork() throws Exception {
+                    if (stateMachineHelper.isDraft(nodeRef) || (before.size() == 0)) {
+                        String status = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS);
+                        if (status != null) {
+                            objects.add(status);
+                        }
+                    }
+                    return null;
                 }
-                businessJournalService.log(nodeRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
-            }
+            });
+
+            businessJournalService.log(nodeRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
         }
+    }
+
+    private void setPropertyAsSystem(final NodeRef nodeRef, final QName property, final Serializable value) {
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                nodeService.setProperty(nodeRef, property, value);
+                return null;
+            }
+        });
     }
 
     private void updatePresentString(final NodeRef nodeRef) {
@@ -311,19 +329,19 @@ public class DocumentPolicy extends BaseBean
 
         String presentStringValue = AuthenticationUtil.runAsSystem(stringValue);
         if (presentStringValue != null) {
-            nodeService.setProperty(nodeRef, DocumentService.PROP_PRESENT_STRING, presentStringValue);
-            nodeService.setProperty(nodeRef, ContentModel.PROP_NAME, FileNameValidator.getValidFileName(presentStringValue + " " + nodeRef.getId()));
+            setPropertyAsSystem(nodeRef, DocumentService.PROP_PRESENT_STRING, presentStringValue);
+            setPropertyAsSystem(nodeRef, ContentModel.PROP_NAME, FileNameValidator.getValidFileName(presentStringValue + " " + nodeRef.getId()));
 
-	        TypeDefinition typeDef = dictionaryService.getType(type);
-	        if (typeDef != null && typeDef.getTitle() != null) {
-		        nodeService.setProperty(nodeRef, DocumentService.PROP_EXT_PRESENT_STRING, typeDef.getTitle() + ": " + presentStringValue);
-	        }
+            TypeDefinition typeDef = dictionaryService.getType(type);
+            if (typeDef != null && typeDef.getTitle() != null) {
+                setPropertyAsSystem(nodeRef, DocumentService.PROP_EXT_PRESENT_STRING, typeDef.getTitle() + ": " + presentStringValue);
+            }
         }
         String listPresentString = substituteService.getTemplateStringForObject(nodeRef, true);
 
         String listPresentStringValue = substituteService.formatNodeTitle(nodeRef, listPresentString);
         if (listPresentStringValue != null) {
-            nodeService.setProperty(nodeRef, DocumentService.PROP_LIST_PRESENT_STRING, listPresentStringValue);
+            setPropertyAsSystem(nodeRef, DocumentService.PROP_LIST_PRESENT_STRING, listPresentStringValue);
         }
 
     }
@@ -396,30 +414,36 @@ public class DocumentPolicy extends BaseBean
 		return result;
 	}
 
-	public void updateDocumentSearchObject(NodeRef documentRef, NodeRef objectRef) {
-		if (objectRef != null) {
-			String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING)).trim();
-			nodeService.setProperty(objectRef, ContentModel.PROP_NAME, newFileName);
+    public void updateDocumentSearchObject(final NodeRef documentRef, final NodeRef objectRef) {
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                if (objectRef != null) {
+                    String newFileName = FileNameValidator.getValidFileName((String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING)).trim();
+                    nodeService.setProperty(objectRef, ContentModel.PROP_NAME, newFileName);
 
-			ContentService contentService = serviceRegistry.getContentService();
-			ContentWriter writer = contentService.getWriter(objectRef, ContentModel.PROP_CONTENT, true);
-			if (writer != null) {
-				writer.setEncoding("UTF-8");
-				writer.setMimetype(MimetypeMap.MIMETYPE_HTML);
+                    ContentService contentService = serviceRegistry.getContentService();
+                    ContentWriter writer = contentService.getWriter(objectRef, ContentModel.PROP_CONTENT, true);
+                    if (writer != null) {
+                        writer.setEncoding("UTF-8");
+                        writer.setMimetype(MimetypeMap.MIMETYPE_HTML);
 
-				Map<String, Object> model = new HashMap<String, Object>();
-				model.put("properties", getDocumentSearchProperties(documentRef));
+                        Map<String, Object> model = new HashMap<String, Object>();
+                        model.put("properties", getDocumentSearchProperties(documentRef));
 
-				SysAdminParams params = serviceRegistry.getSysAdminParams();
-				String documentLink = params.getShareProtocol() + "://" + params.getShareHost() + ":" +
-						params.getSharePort() +	DOCUMENT_LINK_URL + "?nodeRef=" + documentRef.toString();
-				model.put("documentLink", documentLink);
-				model.put("documentName", nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING));
+                        SysAdminParams params = serviceRegistry.getSysAdminParams();
+                        String documentLink = params.getShareProtocol() + "://" + params.getShareHost() + ":" +
+                                params.getSharePort() +	DOCUMENT_LINK_URL + "?nodeRef=" + documentRef.toString();
+                        model.put("documentLink", documentLink);
+                        model.put("documentName", nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING));
 
-				writer.putContent(templateService.processTemplate(DOCUMENT_SEARCH_CONTENT_TEMPLATE, model));
-			}
-		}
-	}
+                        writer.putContent(templateService.processTemplate(DOCUMENT_SEARCH_CONTENT_TEMPLATE, model));
+                    }
+                }
+                return null;
+            }
+        });
+    }
 
 	public Map<String, Serializable> getDocumentSearchProperties(NodeRef documentRef) {
 		Map<String, Serializable> result = new HashMap<String, Serializable>();
@@ -455,16 +479,13 @@ public class DocumentPolicy extends BaseBean
 	}
 
 	public NodeRef createDocumentSearchObjectThumbnail(final NodeRef objectRef, final NodeRef documentRef) {
-		final String thumbnailName = "doclib";
-
-		NodeRef result = serviceRegistry.getThumbnailService().getThumbnailByName(objectRef, ContentModel.PROP_CONTENT, thumbnailName);
-		if (result == null) {
 			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 				@Override
 				public NodeRef doWork() throws Exception {
 					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 						@Override
 						public NodeRef execute() throws Throwable {
+		                    String thumbnailName = "doclib";
 							NodeRef thumbnail = serviceRegistry.getThumbnailService().getThumbnailByName(objectRef, ContentModel.PROP_CONTENT, thumbnailName);
                             if (thumbnail == null) {
                                 QName assocTypeQName = RenditionModel.ASSOC_RENDITION;
@@ -499,9 +520,7 @@ public class DocumentPolicy extends BaseBean
 					});
 				}
 			};
-			result = AuthenticationUtil.runAsSystem(raw);
-		}
 
-		return result;
-	}
+        return AuthenticationUtil.runAsSystem(raw);
+    }
 }
