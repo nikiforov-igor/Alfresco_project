@@ -1,10 +1,5 @@
 package ru.it.lecm.wcalendar.beans;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -14,6 +9,12 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -338,7 +339,15 @@ public class WorkCalendarBean implements IWorkCalendar {
 			curDate = offset > 0 ? addDayToDate(curDate) : substractDayFromDate(curDate);
 		}
 
-		while (!getEmployeeAvailability(node, curDate)) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, 2000);
+		calendar.set(Calendar.DAY_OF_YEAR, 1);
+		long past = calendar.getTime().getTime();
+		calendar.set(Calendar.YEAR, 2025);
+		calendar.set(Calendar.DAY_OF_YEAR, 1);
+		long future = calendar.getTime().getTime();
+
+		while (!getEmployeeAvailability(node, curDate) && curDate.getTime() > past && curDate.getTime() < future) {
 			curDate = shiftToFuture ? addDayToDate(curDate) : substractDayFromDate(curDate);
 		}
 		result = curDate;
