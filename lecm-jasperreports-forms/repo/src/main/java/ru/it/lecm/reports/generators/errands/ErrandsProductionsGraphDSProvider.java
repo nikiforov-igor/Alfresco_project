@@ -402,6 +402,11 @@ public class ErrandsProductionsGraphDSProvider
 			if (dstart == null || dend == null) // одной из дат нет ...
 				return 0;
 
+            if (dstart.getTime() > dend.getTime()) {
+                long buf = dstart.getTime();
+                dstart = dend;
+                dend = new Date(buf);
+            }
 			// (!) первую дату выравниваем на начало дня,
 			// вторую - не трогаем, т.к. будем ровнять delta_h сверху на 24ч
 			final Date nstart = Utils.adjustDayTime(dstart, 0, 0, 0, 0);
@@ -418,7 +423,8 @@ public class ErrandsProductionsGraphDSProvider
 
 			final List<GraphPoint> result = new ArrayList<GraphPoint>();
 
-			final int maxTimeCounter = 1 + countDeltaInDays(periodStart, periodEnd); // кол-во отметок времени
+            int countDays = countDeltaInDays(periodStart, periodEnd);
+			final int maxTimeCounter = 1 +  (countDays >= 0 ? countDays : 0); // кол-во отметок времени
 
 			/*
 			// @NOTE: RANDOM DATA FILL FOR TEST
