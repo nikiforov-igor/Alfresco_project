@@ -1013,28 +1013,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
-    public Map<String, String> getTaskDocumentPresentStrings(WorkflowTask task, List<String> documentTypes) {
-        Map<String, String> result = new HashMap<String, String>();
-
-        List<NodeRef> taskDocuments = getTaskDocuments(task, documentTypes);
-        for (NodeRef document : taskDocuments) {
-            Map<String, String> presentString = getDocumentPresentString(document);
-            result.putAll(presentString);
-        }
-
-        return result;
-    }
-
-    public Map<String,String> getDocumentPresentString(NodeRef document) {
-        Map<String, String> result = new HashMap<String, String>();
-
-        QName type = getDocumentType(document);
-        String presentString = (String) serviceRegistry.getNodeService().getProperty(document, QName.createQName("http://www.it.ru/logicECM/document/1.0", "present-string"));
-        result.put(type.getLocalName(), presentString);
-
-        return result;
-    }
-
     private List<WorkflowInstance> getWorkflows(NodeRef nodeRef, boolean isActive) {
         boolean hasPermission = lecmPermissionService.hasPermission(LecmPermissionService.PERM_WF_LIST, nodeRef);
         if (!hasPermission) {
@@ -1348,28 +1326,21 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     private boolean hasDocuments(WorkflowTask task, List<String> documentTypes) {
-        return getTaskDocuments(task, documentTypes).size() > 0;
+        return getTaskDocument(task, documentTypes) != null;
     }
 
-    private List<NodeRef> getTaskDocuments(WorkflowTask task, List<String> documentTypes) {
-        List<NodeRef> result = new ArrayList<NodeRef>();
-
-        NodeService nodeService = serviceRegistry.getNodeService();
+    public NodeRef getTaskDocument(WorkflowTask task, List<String> documentTypes) {
         NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
-        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(wfPackage);
+        List<ChildAssociationRef> childAssocs = serviceRegistry.getNodeService().getChildAssocs(wfPackage);
         for (ChildAssociationRef childAssoc : childAssocs) {
             NodeRef document = childAssoc.getChildRef();
-            String type = getDocumentType(document).getLocalName();
-            if (documentTypes.contains(type)) {
-                result.add(document);
+            QName documentType = serviceRegistry.getNodeService().getType(document);
+            if (documentTypes.contains(documentType.getLocalName())) {
+                return document;
             }
         }
 
-        return result;
-    }
-
-    private QName getDocumentType(NodeRef document) {
-        return serviceRegistry.getNodeService().getType(document);
+        return null;
     }
 
     /**

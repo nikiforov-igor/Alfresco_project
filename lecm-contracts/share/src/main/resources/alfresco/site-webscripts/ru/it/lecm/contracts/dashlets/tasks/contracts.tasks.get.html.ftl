@@ -26,7 +26,7 @@
                         <div class="workflow-task-main-text">
                             <span class="workflow-task-title">
                                 <a href="${url.context}/page/task-edit?taskId=${task.id}">${task.title}:</a>
-                            </span>&nbsp;${task.documentPresentStrings.document!""}
+                            </span>&nbsp;${task.documentPresentString!""}
                         </div>
                     </div>
                 </#list>

@@ -45,7 +45,7 @@ public class WorkflowTaskBean {
     private WorkflowTask workflowTask;
     private WorkflowTaskType type = WorkflowTaskType.WORKFLOWTASKTYPE_NA;
     private int priority;
-    private Map<String, String> documentPresentStrings = new HashMap<String, String>();
+    private String documentPresentString = "";
 
     public WorkflowTaskBean(WorkflowTask workflowTask) {
         if (workflowTask == null) {
@@ -78,16 +78,16 @@ public class WorkflowTaskBean {
         return workflowTask.getDescription();
     }
 
-    public Map getDocumentPresentStrings() {
-        return documentPresentStrings;
+    public String getDocumentPresentString() {
+        return documentPresentString;
     }
 
-    public void setDocumentPresentStrings(Map<String, String> documentPresentStrings) {
-        if (documentPresentStrings == null) {
+    public void setDocumentPresentString(String documentPresentString) {
+        if (documentPresentString == null) {
             return;
         }
 
-        this.documentPresentStrings = documentPresentStrings;
+        this.documentPresentString = documentPresentString;
     }
 
     public Date getStartDate() {
