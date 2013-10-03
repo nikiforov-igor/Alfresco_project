@@ -278,22 +278,6 @@ public class DocumentPolicy extends BaseBean
 
         if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
             setPropertyAsSystem(nodeRef, DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
-
-            final List<String> objects = new ArrayList<String>();
-            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-                @Override
-                public Object doWork() throws Exception {
-                    if (stateMachineHelper.isDraft(nodeRef) || (before.size() == 0)) {
-                        String status = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS);
-                        if (status != null) {
-                            objects.add(status);
-                        }
-                    }
-                    return null;
-                }
-            });
-
-            businessJournalService.log(nodeRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
         }
     }
 

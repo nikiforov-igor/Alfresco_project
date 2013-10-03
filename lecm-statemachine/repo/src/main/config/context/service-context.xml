@@ -146,6 +146,7 @@
         </property>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="policyComponent" ref="policyComponent"/>
+        <property name="businessJournalService" ref="businessJournalService" />
 	</bean>
 
     <bean id="stateMachineDeleteDocumentPolicy" class="ru.it.lecm.statemachine.policy.StateMachineDeleteDocumentPolicy" init-method="init">

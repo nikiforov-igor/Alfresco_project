@@ -24,6 +24,8 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 
@@ -46,6 +48,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 	private PolicyComponent policyComponent;
     private ThreadPoolExecutor threadPoolExecutor;
     private TransactionListener transactionListener;
+    private BusinessJournalService businessJournalService;
 
     final static Logger logger = LoggerFactory.getLogger(StateMachineCreateDocumentPolicy.class);
 
@@ -61,7 +64,11 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 		this.policyComponent = policyComponent;
 	}
 
-	public final void init() {
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
+
+    public final void init() {
 		logger.debug( "Installing Policy ...");
 
 		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
@@ -76,7 +83,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
         final NodeService nodeService = serviceRegistry.getNodeService();
         //append status aspect to new document
         HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-        aspectProps.put(StatemachineModel.PROP_STATUS, "NEW");
+        aspectProps.put(StatemachineModel.PROP_STATUS, "Новый");
         nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
         // Ensure that the transaction listener is bound to the transaction
         AlfrescoTransactionSupport.bindListener(this.transactionListener);
@@ -183,6 +190,13 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                                 }
                                                 StateMachineHelper helper = new StateMachineHelper();
                                                 helper.executePostponedActions(path.getInstance().getId());
+
+                                                String status = (String) nodeService.getProperty(docRef, StatemachineModel.PROP_STATUS);
+                                                List<String> objects = new ArrayList<String>(1);
+                                                if (status != null) {
+                                                    objects.add(status);
+                                                }
+                                                businessJournalService.log(docRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
                                                 return null;
                                             }
                                         }, false, true);
