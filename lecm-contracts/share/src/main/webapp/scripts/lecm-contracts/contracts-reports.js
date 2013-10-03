@@ -113,18 +113,20 @@
 			ajaxSubmitMethod: "GET",
 			doBeforeAjaxRequest: {
 				fn: function ContractsReports_doBeforeAjaxRequest(form, formToReportProperties) {
-					Object.prototype.renameProperty = function(oldName, newName) {
-						// Check for the old property name to avoid a ReferenceError in strict mode.
-						if (this.hasOwnProperty(oldName)) {
-							if (newName.length > 0) {
-								this[newName] = this[oldName];
-							}
-							delete this[oldName];
-						}
-						return this;
-					};
+
+                    var renameProperty = function (dataObj, oldName, newName) {
+                        // Check for the old property name to avoid a ReferenceError in strict mode.
+                        if (dataObj.hasOwnProperty(oldName)) {
+                            if (newName.length > 0) {
+                                dataObj[newName] = dataObj[oldName];
+                            }
+                            delete dataObj[oldName];
+                        }
+                        return dataObj;
+                    };
+
 					for (var property in formToReportProperties) {
-						form.dataObj.renameProperty(property, formToReportProperties[property]);
+						renameProperty(form.dataObj, property, formToReportProperties[property]);
 					}
 					form.method = "GET";
 					return true;
