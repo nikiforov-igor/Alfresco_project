@@ -93,11 +93,11 @@ public class AssocDataFilterImpl implements AssocDataFilter {
 					return false;
 				break;
 			case target:
-				if (!containsAssoc( nodeSrv.getTargetAssocs(id, desc.assoctype), desc, true))
+				if (!containsAssoc( nodeSrv.getTargetAssocs(id, desc.type), desc, true))
 					return false;
 				break;
 			case source:
-				if (!containsAssoc( nodeSrv.getSourceAssocs(id, desc.assoctype), desc, false))
+				if (!containsAssoc( nodeSrv.getSourceAssocs(id, desc.type), desc, false))
 					return false;
 				break;
 			default:
@@ -144,7 +144,7 @@ public class AssocDataFilterImpl implements AssocDataFilter {
 	static boolean containsAssoc(List<AssociationRef> assocs, AssocDesc desc, boolean isTarget) {
 		if (assocs != null && !assocs.isEmpty()) {
 			for( AssociationRef item: assocs) {
-				if (desc.assoctype == null || desc.assoctype.equals(item.getTypeQName()) ) {
+				if (desc.type == null || desc.type.equals(item.getTypeQName()) ) {
 					if (   (isTarget && desc.contains(item.getTargetRef()))
 							|| (!isTarget && desc.contains(item.getSourceRef())) ) {
 						return true; // FOUND
