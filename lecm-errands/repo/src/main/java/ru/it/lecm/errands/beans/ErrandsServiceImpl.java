@@ -8,6 +8,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.DuplicateChildNodeNameException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.SearchParameters.SortDefinition;
 import org.alfresco.service.namespace.NamespaceService;
@@ -153,8 +154,15 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
                                 Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
                                 properties.put(ContentModel.PROP_NAME, settingsObjectName);
-                                ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                settingsRef = associationRef.getChildRef();
+                                try {
+                                    ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+                                    settingsRef = associationRef.getChildRef();
+                                } catch (DuplicateChildNodeNameException e) {
+                                    settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+                                    if (settingsRef == null) {
+                                        throw e;
+                                    }
+                                }
                             }
                             return settingsRef;
                         }
