@@ -182,13 +182,13 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 			if (hasType) {
 				final QName qnCType = QName.createQName( "lecm-contract-dic:contract-type", ns); // Вид договора 
 				final QName qnAssocCType = QName.createQName( "lecm-contract:typeContract-assoc", ns);
-				result.addAssoc( AssocKind.target, qnAssocCType, qnCType, contractType);
+				result.addAssoc( AssocKind.target, qnCType, qnAssocCType, contractType);
 			}
 
 			if (hasSubject) {
 				final QName qnCSubject = QName.createQName( "lecm-doc-dic:subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
-				result.addAssoc( AssocKind.target, qnAssocCSubject, qnCSubject, contractSubject);
+				result.addAssoc( AssocKind.target, qnCSubject, qnAssocCSubject, contractSubject);
 			}
 
 			if (hasCAgents) {

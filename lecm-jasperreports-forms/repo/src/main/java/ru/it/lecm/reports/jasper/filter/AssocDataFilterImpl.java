@@ -93,7 +93,7 @@ public class AssocDataFilterImpl implements AssocDataFilter {
 					return false;
 				break;
 			case target:
-				if (!containsAssoc( nodeSrv.getTargetAssocs(id, desc.type), desc, true))
+				if (!containsAssoc( nodeSrv.getTargetAssocs(id, desc.assoctype), desc, true))
 					return false;
 				break;
 			case source:
@@ -135,7 +135,6 @@ public class AssocDataFilterImpl implements AssocDataFilter {
 	/**
 	 * Проверить наличие в списке links дочерней ссылки указанной ссылки
 	 * @param assocs список ассоциаций
-	 * @param qnAssocType тип ссылки
 	 * @param desc
 	 * @param isTarget true для проверки целевых значений, false иначе
 	 * @return true, если ссылка в списке есть, false иначе
@@ -144,7 +143,7 @@ public class AssocDataFilterImpl implements AssocDataFilter {
 	static boolean containsAssoc(List<AssociationRef> assocs, AssocDesc desc, boolean isTarget) {
 		if (assocs != null && !assocs.isEmpty()) {
 			for( AssociationRef item: assocs) {
-				if (desc.type == null || desc.type.equals(item.getTypeQName()) ) {
+				if (desc.assoctype == null || desc.assoctype.equals(item.getTypeQName()) ) {
 					if (   (isTarget && desc.contains(item.getTargetRef()))
 							|| (!isTarget && desc.contains(item.getSourceRef())) ) {
 						return true; // FOUND

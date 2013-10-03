@@ -84,19 +84,19 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 			if (hasSubject) {
 				final QName qnCSubject = QName.createQName( "lecm-doc-dic:subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
-				result.addAssoc( AssocKind.target, qnAssocCSubject, qnCSubject, contractSubject);
+				result.addAssoc( AssocKind.target, qnCSubject, qnAssocCSubject,contractSubject);
 			}
 
 			if (hasType) {
 				final QName qnCType = QName.createQName( "lecm-contract-dic:contract-type", ns); // Вид договора 
 				final QName qnAssocCType = QName.createQName( "lecm-contract:typeContract-assoc", ns);
-				result.addAssoc( AssocKind.target, qnAssocCType, qnCType, contractType);
+				result.addAssoc( AssocKind.target, qnCType, qnAssocCType, contractType);
 			}
 
             if (hasCAgents) {
                 final QName qnCAgent = QName.createQName("lecm-contractor:contractor-type", ns); // Контрагенты, "lecm-contract:partner-assoc"
                 final QName qnAssocCAgent = QName.createQName("lecm-contract:partner-assoc", ns);
-                result.addAssoc(new AssocDesc(AssocKind.target, qnCAgent, qnAssocCAgent, contragents));
+                result.addAssoc(new AssocDesc(AssocKind.target, qnAssocCAgent, qnCAgent, contragents));
             }
 
 			return result;
