@@ -93,11 +93,11 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 				result.addAssoc( AssocKind.target, qnAssocCType, qnCType, contractType);
 			}
 
-			if (hasCAgents) {
-				final QName qnCAgent = QName.createQName( "lecm-contractor:contractor-type", ns); // Контрагенты, "lecm-contract:partner-assoc"
-				final QName qnAssocCAgent = QName.createQName( "lecm-contract:partner-assoc", ns);
-				result.addAssoc( new AssocDesc(AssocKind.target, qnAssocCAgent, qnCAgent, contragents));
-			}
+            if (hasCAgents) {
+                final QName qnCAgent = QName.createQName("lecm-contractor:contractor-type", ns); // Контрагенты, "lecm-contract:partner-assoc"
+                final QName qnAssocCAgent = QName.createQName("lecm-contract:partner-assoc", ns);
+                result.addAssoc(new AssocDesc(AssocKind.target, qnCAgent, qnAssocCAgent, contragents));
+            }
 
 			return result;
 		}
