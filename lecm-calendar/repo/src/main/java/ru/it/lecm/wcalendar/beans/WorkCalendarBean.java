@@ -25,7 +25,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 	private IAbsence absenceService;
 	private ISchedule scheduleService;
 	private ICalendar WCalendarService;
-	private SimpleDateFormat yearParser = new SimpleDateFormat("yyyy");
+	private final static SimpleDateFormat yearParser = new SimpleDateFormat("yyyy");
 	private final static Logger logger = LoggerFactory.getLogger(WorkCalendarBean.class);
 
 	public final void init() {
@@ -44,15 +44,12 @@ public class WorkCalendarBean implements IWorkCalendar {
 	public boolean getEmployeeAvailability(NodeRef node, Date day) {
 		boolean result;
 		if (!orgstructureService.isEmployee(node)) {
-			String errMessage = "Argument 'node' must be an Employee!";
-			IllegalArgumentException t = new IllegalArgumentException(errMessage);
-			throw t;
+			throw new IllegalArgumentException("Argument 'node' must be an Employee!");
 		}
 		NodeRef schedule = getScheduleOrParentSchedule(node);
 		if (schedule == null) {
-			String errMessage = String.format("No schedule associated with employee [%s] nor with it's parent OUs! ", node.toString());
-			IllegalArgumentException t = new IllegalArgumentException(errMessage);
-			throw t;
+			logger.warn("No schedule associated with employee {} nor with it's parent OUs!", node);
+			return false;
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
 
@@ -60,22 +57,17 @@ public class WorkCalendarBean implements IWorkCalendar {
 			Boolean isPresent = isEmployeePresent(day, node);
 
 			if (isPresent == null) {
-				String errMessage = String.format("No calendar for such year (%d)!", getYearByDate(day));
-				IllegalArgumentException t = new IllegalArgumentException(errMessage);
-				throw t;
+				logger.warn("No calendar for such year ({})!", getYearByDate(day));
+				result = false;
 			} else {
 				result = isPresent;
 			}
 
 		} else if (ISchedule.SCHEDULE_TYPE_SPECIAL.equals(scheduleType)) {
-			result = scheduleService.isWorkingDay(schedule, day);
-			if (result) {
-				result = !absenceService.isEmployeeAbsent(node, day);
-			}
+			result = scheduleService.isWorkingDay(schedule, day) && !absenceService.isEmployeeAbsent(node, day);
 		} else {
 			String errMessage = String.format("Something wrong with schedule: it has some strange type: %s", scheduleType);
-			RuntimeException t = new RuntimeException(errMessage);
-			throw t;
+			throw new IllegalStateException(errMessage);
 		}
 
 		return result;
@@ -86,17 +78,12 @@ public class WorkCalendarBean implements IWorkCalendar {
 		List<Date> result = new ArrayList<Date>();
 
 		if (!orgstructureService.isEmployee(node)) {
-			String errMessage = "Argument \"node\" must be an Employee!";
-			IllegalArgumentException t = new IllegalArgumentException(errMessage);
-			logger.error(errMessage, t);
-			throw t;
+			throw new IllegalArgumentException("Argument \"node\" must be an Employee!");
 		}
 		NodeRef schedule = getScheduleOrParentSchedule(node);
 		if (schedule == null) {
-			String errMessage = "No schedule associated with employee nor with it's parent OUs!";
-			IllegalArgumentException t = new IllegalArgumentException(errMessage);
-			logger.error(errMessage, t);
-			throw t;
+			logger.warn("No schedule associated with employee nor with it's parent OUs!");
+			return result;
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
 
@@ -105,15 +92,10 @@ public class WorkCalendarBean implements IWorkCalendar {
 			while (!curDay.after(end)) {
 				Boolean isPresent = isEmployeePresent(curDay, node);
 
-				if (isPresent == null) {
-					String errMessage = String.format("No calendar for such year (%d)!", getYearByDate(curDay));
-					IllegalArgumentException t = new IllegalArgumentException(errMessage);
-					logger.error(errMessage, t);
-					throw t;
-				}
-
-				if (isPresent) {
+				if (isPresent != null && isPresent) {
 					result.add(curDay);
+				} else if (isPresent == null) {
+					logger.warn("No calendar for such year ({})!", getYearByDate(curDay));
 				}
 
 				curDay = addDayToDate(curDay);
@@ -144,17 +126,12 @@ public class WorkCalendarBean implements IWorkCalendar {
 		List<Date> result = new ArrayList<Date>();
 
 		if (!orgstructureService.isEmployee(node)) {
-			String errMessage = "Argument 'node' must be an Employee!";
-			IllegalArgumentException t = new IllegalArgumentException(errMessage);
-			logger.error(errMessage, t);
-			throw t;
+			throw new IllegalArgumentException("Argument 'node' must be an Employee!");
 		}
 		NodeRef schedule = getScheduleOrParentSchedule(node);
 		if (schedule == null) {
-			String errMessage = "No schedule associated with employee nor with it's parent OUs!";
-			IllegalArgumentException t = new IllegalArgumentException(errMessage);
-			logger.error(errMessage, t);
-			throw t;
+			logger.warn("No schedule associated with employee nor with it's parent OUs!");
+			return result;
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
 		List<NodeRef> scheduleElements = scheduleService.getScheduleElements(schedule);
@@ -166,16 +143,12 @@ public class WorkCalendarBean implements IWorkCalendar {
 			if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
 				Boolean isPresent = isEmployeePresent(curDay, node);
 
-				if (isPresent == null) {
-					String errMessage = String.format("No calendar for such year (%d)!", getYearByDate(curDay));
-					IllegalArgumentException t = new IllegalArgumentException(errMessage);
-					logger.error(errMessage, t);
-					throw t;
+				if (isPresent != null && isPresent) {
+					toBeAdded = false;
+				} else if (isPresent == null) {
+					logger.warn("No calendar for such year ({})!", getYearByDate(curDay));
 				}
 
-				if (isPresent) {
-					toBeAdded = false;
-				}
 			} else if (ISchedule.SCHEDULE_TYPE_SPECIAL.equals(scheduleType)) {
 				Date curDayNoTime = resetTime(curDay);
 
@@ -212,17 +185,12 @@ public class WorkCalendarBean implements IWorkCalendar {
 		int i = 0, j = 0;
 		Date result = null;
 		if (!orgstructureService.isEmployee(node)) {
-			String errMessage = "Argument 'node' must be an Employee!";
-			IllegalArgumentException t = new IllegalArgumentException(errMessage);
-			logger.error(errMessage, t);
-			throw t;
+			throw new IllegalArgumentException("Argument 'node' must be an Employee!");
 		}
 		NodeRef schedule = getScheduleOrParentSchedule(node);
 		if (schedule == null) {
-			String errMessage = "No schedule associated with employee nor with it's parent OUs!";
-			IllegalArgumentException t = new IllegalArgumentException(errMessage);
-			logger.error(errMessage, t);
-			throw t;
+			logger.warn("No schedule associated with employee nor with it's parent OUs!");
+			return result;
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
 		Date curDay = new Date(start.getTime());
@@ -230,14 +198,10 @@ public class WorkCalendarBean implements IWorkCalendar {
 			if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
 				Boolean isPresent = isEmployeePresent(curDay, node);
 
-				if (isPresent == null) {
-					String errMessage = String.format("No calendar for such year (%d)!", getYearByDate(curDay));
-					IllegalArgumentException t = new IllegalArgumentException(errMessage);
-					logger.error(errMessage, t);
-					throw t;
-				}
-				if (isPresent) {
+				if (isPresent != null && isPresent) {
 					i++;
+				} else if (isPresent == null) {
+					logger.warn("No calendar for such year ({})!", getYearByDate(curDay));
 				}
 
 			} else if (ISchedule.SCHEDULE_TYPE_SPECIAL.equals(scheduleType)) {
