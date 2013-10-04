@@ -151,33 +151,39 @@ public class ErrandsDisciplineDSProvider
 		}
 		 */
 
-		/*
-		 * Критерий двойной:
-		 * 		Время Начала
-		 * 		или Время Окончания заданы внутри указанного интервала
-		 * Формируется в виде
-		 * 		"AND ( start_inside OR end_inside )"
-		 */
 		final DataSourceDescriptor ds = getReportDescriptor().getDsDescriptor();
 		final Date periodStart = paramsFilter.getParamPeriodStart(ds)
 				 , periodEnd = paramsFilter.getParamPeriodEnd(ds);
-		{
-			final String condStart = Utils.emmitDateIntervalCheck( Utils.luceneEncode(LocalQNamesHelper.FLD_START_DATE), periodStart, periodEnd);
-			final String condEnd = Utils.emmitDateIntervalCheck( Utils.luceneEncode(LocalQNamesHelper.FLD_END_DATE), periodStart, periodEnd);
-			final boolean hasStart = !Utils.isStringEmpty(condStart);
-			final boolean hasEnd = !Utils.isStringEmpty(condEnd);
-			if (hasStart || hasEnd) {
-				final String condBoth;
-				if (hasStart && hasEnd) {
-					condBoth = String.format( "\n\t( (%s) OR (%s) )\n\t", condStart, condEnd);
-				} else if (hasStart) {
-					condBoth = String.format( "\n\t(%s)\n\t", condStart);
-				} else { // here  (true == hasEnd) ...
-					condBoth = String.format( "\n\t(%s)\n\t", condEnd);
-				}
-				builder.emmit(hasData ? " AND " : "").emmit( condBoth);
-				hasData = true;
-			}
+
+//		/*
+//		 * Критерий двойной:
+//		 * 		Время Начала
+//		 * 		или Время Окончания заданы внутри указанного интервала
+//		 * Формируется в виде
+//		 * 		"AND ( start_inside OR end_inside )"
+//		 */
+//		{
+//			final String condStart = Utils.emmitDateIntervalCheck( Utils.luceneEncode(LocalQNamesHelper.FLD_START_DATE), periodStart, periodEnd);
+//			final String condEnd = Utils.emmitDateIntervalCheck( Utils.luceneEncode(LocalQNamesHelper.FLD_END_DATE), periodStart, periodEnd);
+//			final boolean hasStart = !Utils.isStringEmpty(condStart);
+//			final boolean hasEnd = !Utils.isStringEmpty(condEnd);
+//			if (hasStart || hasEnd) {
+//				final String condBoth;
+//				if (hasStart && hasEnd) {
+//					condBoth = String.format( "\n\t( (%s) OR (%s) )\n\t", condStart, condEnd);
+//				} else if (hasStart) {
+//					condBoth = String.format( "\n\t(%s)\n\t", condStart);
+//				} else { // here  (true == hasEnd) ...
+//					condBoth = String.format( "\n\t(%s)\n\t", condEnd);
+//				}
+//				builder.emmit(hasData ? " AND " : "").emmit( condBoth);
+//				hasData = true;
+//			}
+//		}
+
+		/* Проверка на диапазон для даты выдачи поручения ... */
+		if (builder.emmitDateIntervalCond( (hasData ? " AND " : ""), LocalQNamesHelper.FLD_START_DATE, periodStart, periodEnd)) {
+			hasData = true;
 		}
 
 		/* Формирование */
