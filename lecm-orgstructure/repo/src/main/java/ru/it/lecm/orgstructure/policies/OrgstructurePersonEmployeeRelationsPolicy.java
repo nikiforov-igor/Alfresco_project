@@ -267,7 +267,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 			// получить ссылку на аватар
 			final NodeRef personAvatar = nodeAssocRef.getTargetRef();
 			// получить ссылку на фото
-			final NodeRef employeePhoto = findNodeByAssociationRef(employee, ContentModel.ASSOC_AVATAR, ContentModel.TYPE_CONTENT, ASSOCIATION_TYPE.TARGET);
+			final NodeRef employeePhoto = findNodeByAssociationRef(employee, OrgstructureBean.ASSOC_EMPLOYEE_PHOTO, ContentModel.TYPE_CONTENT, ASSOCIATION_TYPE.TARGET);
 
 			behaviourFilter.disableBehaviour(employee);
 			try {
