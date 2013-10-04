@@ -99,7 +99,7 @@
 	<fields>
 
 		<field alfrescoType="lecm-document:base" order="0" displayName="Выбранные документы"
-				javaValueClass="java.lang.String" jrFldName="Col_Param_Documents" queryFldName="{ID}">
+				javaValueClass="java.lang.String" jrFldName="Col_baseDocs" queryFldName="{ID}">
 			<l18>
 				<item key="RU_RU" value="Выбранные документы"/>
 			</l18>

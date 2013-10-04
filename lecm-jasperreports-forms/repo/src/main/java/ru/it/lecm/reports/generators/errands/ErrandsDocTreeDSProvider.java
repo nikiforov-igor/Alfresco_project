@@ -1,15 +1,6 @@
 package ru.it.lecm.reports.generators.errands;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.sf.jasperreports.engine.JRException;
-
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -22,14 +13,25 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.reports.api.AssocDataFilter;
+import ru.it.lecm.reports.api.DataFilter;
+import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
+import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
+import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
+import ru.it.lecm.reports.utils.ArgsHelper;
+import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
+import ru.it.lecm.utils.LuceneSearchBuilder;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Дерево Поручений по Документам
@@ -60,6 +62,27 @@ public class ErrandsDocTreeDSProvider
 		return this._qnames;
 	}
 
+    private final SearchFilter filter = new SearchFilter();
+
+    public void setBaseDoc(final String value) {
+        filter.setBaseDoc(ArgsHelper.makeNodeRefs(value, "baseDocRef"));
+    }
+
+    protected LucenePreparedQuery buildQuery() {
+        final LucenePreparedQuery result = new LucenePreparedQuery();
+
+        final LuceneSearchBuilder builder = new LuceneSearchBuilder( getServices().getServiceRegistry().getNamespaceService());
+        final DataSourceDescriptor ds = getReportDescriptor().getDsDescriptor();
+        ColumnDescriptor columnType = ds.findColumnByName(DataSourceDescriptor.COLNAME_TYPE);
+        builder.emmitTypeCond(columnType.getParameterValue().getBound1().toString(), null);
+
+        result.setLuceneQueryText(builder.getQuery().toString());
+        return result;
+    }
+
+    protected DataFilter newDataFilter() {
+        return this.filter.makeAssocFilter();
+    }
 
 	/**
 	 * Параметры для построения иерархического списка Поручений.
@@ -203,6 +226,18 @@ public class ErrandsDocTreeDSProvider
 	@Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
 		final ExecDocTreeJRDataSource result = new ExecDocTreeJRDataSource(iterator);
+
+        final DataSourceDescriptor ds = getReportDescriptor().getDsDescriptor();
+        ColumnDescriptor columnParentID = ds.findColumnByName(DsErrandsDocTreeColumnNames.COL_PARAM_DOCUMENTS);
+        if (columnParentID != null) {
+            final List<NodeRef> idsTarget = ParameterMapper.getArgAsNodeRef(columnParentID);
+            if (!idsTarget.isEmpty()) {
+                filter.setBaseDoc(idsTarget);
+                result.getContext().setFilter(filter.makeAssocFilter());
+            }
+        }
+
+        result.buildJoin();
 		return result;
 	}
 
@@ -220,8 +255,7 @@ public class ErrandsDocTreeDSProvider
 	final private class DsErrandsDocTreeColumnNames {
 
 		/** Колонка "Выбранные документы" */
-		@SuppressWarnings("unused")
-		final static String COL_PARAM_DOCUMENTS = "Col_Param_Documents"; // String со списком nodeRefs
+		final static String COL_PARAM_DOCUMENTS = "Col_BaseDocs"; // String со списком nodeRefs
 
 		/** Колонка "Иерархический номер" */
 		final static String Col_LEVELED_NUM = "Col_LeveledNum"; // String
@@ -343,7 +377,6 @@ public class ErrandsDocTreeDSProvider
 		 * Зарегистрировать нового детёныша ...
 		 * (!) уровень детёнышу присваивается автоматически
 		 * @param childId id узла
-		 * @param number номер в списке присваивается автоматически
 		 * @param childName имя детёнышу
 		 * @return созданный объект, (!) его номер в личном списке присваивается автоматически
 		 */
@@ -536,4 +569,30 @@ public class ErrandsDocTreeDSProvider
 
 	}
 
+    class SearchFilter {
+        List<NodeRef> baseDoc;
+
+        public void clear() {
+            baseDoc = null;
+        }
+
+        public void setBaseDoc(List<NodeRef> doc) {
+            this.baseDoc = doc;
+        }
+
+        public AssocDataFilterImpl makeAssocFilter() {
+            final AssocDataFilterImpl result = new AssocDataFilterImpl(getServices().getServiceRegistry());
+
+            final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
+
+            if (baseDoc != null) {
+                final QName docBase = QName.createQName("lecm-document:base", ns);
+                final QName errandsBaseDocAssoc = QName.createQName("lecm-errands:additional-document-assoc", ns);
+                result.addAssoc(new AssocDataFilter.AssocDesc(AssocDataFilter.AssocKind.target, errandsBaseDocAssoc, docBase, baseDoc));
+            }
+
+            return result;
+        }
+
+    }
 }

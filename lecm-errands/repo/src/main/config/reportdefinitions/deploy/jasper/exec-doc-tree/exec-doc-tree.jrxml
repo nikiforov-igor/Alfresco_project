@@ -29,7 +29,7 @@
 
 	<queryString> <![CDATA[]]> </queryString>
 
-	<field name="Col_Param_Documents" class="java.lang.String">
+	<field name="Col_baseDocs" class="java.lang.String">
 		<fieldDescription><![CDATA[Выбранные документы]]></fieldDescription>
 	</field>
 
