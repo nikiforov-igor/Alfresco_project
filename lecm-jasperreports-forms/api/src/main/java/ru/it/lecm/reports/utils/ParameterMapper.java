@@ -11,6 +11,7 @@ import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
@@ -138,7 +139,10 @@ public class ParameterMapper {
 		if (args.containsKey(DataSourceDescriptor.COLNAME_TYPE)){
 			ensureDataColumn( reportDesc.getDsDescriptor(), args.get(DataSourceDescriptor.COLNAME_TYPE), DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.STRING);
 		} else if (reportDesc.getFlags() != null && !Utils.isStringEmpty(reportDesc.getFlags().getPreferedNodeType()) ) {
-			ensureDataColumn( reportDesc.getDsDescriptor(), reportDesc.getFlags().getPreferedNodeType(), DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.STRING);
+			ensureDataColumn( reportDesc.getDsDescriptor()
+					, StringUtils.collectionToCommaDelimitedString(reportDesc.getFlags().getSupportedNodeTypes())
+					, DataSourceDescriptor.COLNAME_TYPE
+					, SupportedTypes.STRING);
 		}
 	}
 

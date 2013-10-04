@@ -1,5 +1,7 @@
 package ru.it.lecm.utils;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -66,19 +68,62 @@ public class LuceneSearchBuilder {
 		this.bquery = bquery;
 	}
 
+	private boolean emmitOneTypeCond(final String typeName, String prefix) {
+		return emmitOneTypeCond(typeName, prefix, true);
+	}
+
+	private boolean emmitOneTypeCond(final String typeName, String prefix, boolean strictCond) {
+		if (typeName == null || typeName.trim().length() == 0)
+			return false;
+		PropertyCheck.mandatory(this, "nameService", getNameService() );
+		final QName qType = QName.createQName( typeName.trim().replace("{", "").replace("}", ""), this.getNameService());
+		return emmitTypeCond(qType, prefix, strictCond);
+	}
+
 	/**
 	 * Добавить условие для проверки по типу
-	 * @param typeName требующийся тип, если NULL ничего не добавляется
+	 * @param typeName требующийся тип или список типов, если NULL ничего не добавляется
 	 * @param prefix префикс, добавляемый перед условием на тип  (например " AND")
 	 * , может быть NULL
 	 * @return true, если условие было добавлено
 	 */
-	public boolean emmitTypeCond(final String typeName, final String prefix) {
-		if (typeName == null || typeName.length() == 0)
+	public boolean emmitTypeCond(final String typeNames, String prefix) {
+		if (typeNames == null || typeNames.length() == 0)
 			return false;
+		final String[] values = typeNames.split("\\s*[,;]\\s*");
+		if (values == null) 
+			return false;
+		return emmitTypeCond( Arrays.asList(values), prefix);
+	}
+
+	public boolean emmitTypeCond(final Collection<String> typeNames, final String prefix) {
+		if (typeNames == null || typeNames.isEmpty())
+			return false;
+
+		if (typeNames.size() == 1) // единичное значение присвоим без доп скобок ...
+			return emmitOneTypeCond( typeNames.iterator().next(), prefix, true);
+
+		// Utils.emmitValuesInsideList(result, "TYPE", typeNames.toArray());
+
 		PropertyCheck.mandatory(this, "nameService", getNameService() );
-		final QName qType = QName.createQName( typeName.replace("{", "").replace("}", ""), this.getNameService());
-		return emmitTypeCond(qType, prefix);
+		final StringBuilder result = getQuery();
+		if (prefix != null)
+			result.append( prefix);
+		result.append("+("); // (!) экранируем выражение с проверкой двух и более типов и "плюсом" задаём строгое условие ...
+		boolean first = true;
+		for (String typeName : typeNames) {
+			result.append("\n\t");
+			// (!) условие здесь не строгое - плюс выставлен перед скобкой
+			if (emmitOneTypeCond(typeName, (first ? "" : "OR "), false )) {
+				first = false;
+			}
+		}
+		if (first) // фактически не было добавлено ни одного условия
+			getQuery().append(" TYPE:*");
+		result.append("\n)\n");
+
+		// return emmitTypeCond(qType, prefix);
+		return true;
 	}
 
 	/**
@@ -86,19 +131,22 @@ public class LuceneSearchBuilder {
 	 * @param qType требующийся тип, если NULL ничего не добавляется
 	 * @param prefix префикс, добавляемый перед условием на тип  (например " AND")
 	 * , может быть NULL
+	 * @param strictCond true, чтобы условие было строгим (добавляется "+" перед 
+	 * типом), false иначе.
 	 * @return true, если условие было добавлено
 	 */
-	public boolean emmitTypeCond(final QName qType, final String prefix) {
+	public boolean emmitTypeCond(final QName qType, final String prefix, final boolean strictCond) {
 		if (qType == null)
 			return false;
 		if (prefix != null)
 			getQuery().append( prefix);
-		getQuery().append( " +TYPE:"+ Utils.quoted(qType.toString()));
+		final String typeTag = (strictCond) ? " +TYPE:" : " TYPE:";
+		getQuery().append( typeTag+ Utils.quoted(qType.toString()));
 		return true;
 	}
 
 	public boolean emmitTypeCond(final QName qType) {
-		return emmitTypeCond(qType, null);
+		return emmitTypeCond(qType, null, true);
 	}
 
 

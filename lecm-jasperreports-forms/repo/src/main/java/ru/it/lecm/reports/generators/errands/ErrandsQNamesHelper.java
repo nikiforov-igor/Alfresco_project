@@ -34,6 +34,9 @@ public class ErrandsQNamesHelper {
 	/** Дата завершения поручения: date */
 	final public static String FLD_END_DATE = "lecm-errands:end-date";
 
+	/** Дата исполнения */
+	final public static String FLD_EXEC_DATE = "lecm-errands:execution-date";
+
 	/** Требуемый срок исполнения поручения: date */
 	final public static String FLD_LIMIT_DATE = "lecm-errands:limitation-date";
 

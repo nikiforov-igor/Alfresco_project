@@ -1,5 +1,9 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import org.springframework.util.StringUtils;
 import ru.it.lecm.reports.api.model.QueryDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -12,7 +16,9 @@ public class QueryDescriptorImpl
 	private String text;
 	private int offset, limit, pgSize;
 	private boolean allVersions = true;
-	private String preferedNodeType;
+
+	// private String preferedNodeType;
+	private List<String> supportedNodeTypes;
 
 	private boolean emptyTypeMatchesAny = false;
 
@@ -30,12 +36,39 @@ public class QueryDescriptorImpl
 
 	@Override
 	public String getPreferedNodeType() {
-		return preferedNodeType;
+		// return preferedNodeType;
+		// первый элемент из supportedNodeTypes
+		return (supportedNodeTypes == null || supportedNodeTypes.isEmpty())
+				? null : supportedNodeTypes.get(0);
 	}
 
 	@Override
 	public void setPreferedNodeType(String value) {
-		this.preferedNodeType = value;
+		// this.preferedNodeType = value;
+		List<String> newSupportedList = null;
+		if (value != null && value.length() > 0) {
+			final String[] items = value.split("\\s*[,;]\\s*");
+			if (items != null)
+				newSupportedList = Arrays.asList(items);
+		}
+		this.setSupportedNodeTypes(newSupportedList);
+	}
+
+	@Override
+	public List<String> getSupportedNodeTypes() {
+		return supportedNodeTypes;
+	}
+
+	@Override
+	public void setSupportedNodeTypes(List<String> values) {
+		this.supportedNodeTypes = values;
+		if (this.supportedNodeTypes != null){ // отфильтруем и оставим только непустые
+			for( Iterator<String> ii = this.supportedNodeTypes.iterator(); ii.hasNext(); ) {
+				final String s = ii.next();
+				if (s == null || s.trim().length() == 0) // убираем пустое 
+					ii.remove();
+			}
+		}
 	}
 
 	@Override
@@ -103,16 +136,24 @@ public class QueryDescriptorImpl
 
 		// здесь оба не пустые 
 
-		/* сейчас проверяем на простое вхождение, чтобы потом легко было
-		 * сделать getPreferedNodeType списком
-		 */
-		if (getPreferedNodeType().equalsIgnoreCase(qname))
+		if (getSupportedNodeTypes() == null)
+			return false;
+
+		for(String s : getSupportedNodeTypes()) {
+			if (s.equalsIgnoreCase(qname))
 				// совпадение типа (с точностью до регистра)
-			return true;
+				return true;
+		}
 
 		/* точного соот-вия нет - проверяем вхождение */
 		// (NOTE: можно подумать, чтобы иметь набор SET<QName>)
-		return getPreferedNodeType().toLowerCase().contains(qname.toLowerCase());
+		// return getPreferedNodeType().toLowerCase().contains(qname.toLowerCase());
+		for(String s : getSupportedNodeTypes()) {
+			if (s.toLowerCase().contains(qname.toLowerCase()))
+				return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -122,7 +163,7 @@ public class QueryDescriptorImpl
 		result = prime * result + limit;
 		result = prime * result + offset;
 		result = prime * result + pgSize;
-		result = prime * result + ((preferedNodeType == null) ? 0 : preferedNodeType.hashCode());
+		result = prime * result + ((supportedNodeTypes == null) ? 0 : supportedNodeTypes.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		return result;
 	}
@@ -143,17 +184,19 @@ public class QueryDescriptorImpl
 		if (pgSize != other.pgSize)
 			return false;
 
-		if (preferedNodeType == null) {
-			if (other.preferedNodeType != null)
+		if (this.supportedNodeTypes == null) {
+			if (other.supportedNodeTypes != null)
 				return false;
-		} else if (!preferedNodeType.equals(other.preferedNodeType))
+		} else if (!Arrays.equals( this.supportedNodeTypes.toArray(), other.supportedNodeTypes.toArray())) {
 			return false;
+		}
 
 		if (text == null) {
 			if (other.text != null)
 				return false;
 		} else if (!text.equals(other.text))
 			return false;
+
 		return true;
 	}
 
@@ -164,7 +207,12 @@ public class QueryDescriptorImpl
 		builder.append(", offset ").append(offset);
 		builder.append(", limit ").append(limit);
 		builder.append(", pgSize ").append(pgSize);
-		builder.append(", nodeType ").append(preferedNodeType);
+		builder.append(", preferedNodeType ").append(getPreferedNodeType());
+		builder.append(", supportedNodeTypes ").append(
+				getSupportedNodeTypes() == null 
+						? "NULL"
+						: StringUtils.collectionToCommaDelimitedString(getSupportedNodeTypes())
+		);
 		builder.append( String.format( "\n\t\t\t<text>\n'%s'\n\t\t\t<text>", text) );
 		builder.append("\n\t\t]");
 		return builder.toString();

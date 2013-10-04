@@ -1,8 +1,11 @@
 package ru.it.lecm.reports.generators.errands;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
@@ -14,27 +17,29 @@ import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.utils.Utils;
 
 /**
- * Параметры НД для построения отчёта по поручениям - настройка фильтра данных
- * Хранит название колонки НД с параметром-периодом и сконфигурированный способ
- * группировки (из ds-ABC.xml).
- * Способ группировки конфигурируется так:
- *    1) формат ссылки
- *    2) атрибут-источник для группирования: 
- * в колонке данных DsDisciplineColumnNames.COL_PARAM_GROUP_BY должно
+ * Параметры НД для построения отчёта по задачам - настройка фильтра данных.
+ * <br/> Хранит название колонки НД с параметром-периодом и сконфигурированный 
+ * способ группировки (из ds-ABC.xml).
+ * <br/>Способ группировки конфигурируется так:
+ * <li>   1) формат ссылки </li>
+ * <li>  2) атрибут-источник для группирования: </li> 
+ * <br/>в колонке данных DsDisciplineColumnNames.COL_PARAM_GROUP_BY должно
  * быть строковое значение с названием способа группировки. Это название
- * строго не регламентируется, но:
- * 1) оно должно быть описано двух xml-секциях:
- *    "groupBy.formats" (ErrandsReportFilterParams.XMLGROUPBY_FORMATS_MAP)
- *  и "groupBy.source" (ErrandsReportFilterParams.XMLGROUPBY_SOURCE_MAP)
- * 2) для группировки по Подразделениям, название группы ДОЛЖНО СОДЕРЖАТЬ подстроку: 
- *    "OrgUnit" (DsDisciplineColumnNames.CONTAINS_GROUP_BY_OU)
+ * строго не регламентируется, но:<br/>
+ * <li>1) оно должно быть описано двух xml-секциях:<br/>
+ *    <ul>"groupBy.formats" (ErrandsReportFilterParams.XMLGROUPBY_FORMATS_MAP)</ul>
+ *    <ul> и "groupBy.source" (ErrandsReportFilterParams.XMLGROUPBY_SOURCE_MAP)</ul>
+ * </li>
+ * <li> 2) для группировки по Подразделениям, название группы ДОЛЖНО СОДЕРЖАТЬ подстроку: 
+ *    <ul>"OrgUnit" (DsDisciplineColumnNames.CONTAINS_GROUP_BY_OU) </ul>
+ * </li>
  */
 public class ErrandsReportFilterParams {
 
 	private static final Logger logger = LoggerFactory.getLogger(ErrandsReportFilterParams.class);
 
 	/**
-	 * XML Config-параметр с ссылками на assoc-атрибут в Поручении для выборки
+	 * XML Config-параметр с ссылками на assoc-атрибут в Задаче для выборки
 	 * группирующих значений:
 	 * Ключ = название группы, Значение = стд qname-ссылка вида "тип:атрибут"
 	 * (см также XMLGROUPBY_FORMATS_MAP - и там и здесь должны быть одинаковые Ключи)
@@ -50,6 +55,9 @@ public class ErrandsReportFilterParams {
 	 */
 	final public static String XMLGROUPBY_FORMATS_MAP = "groupBy.formats";
 
+	final public static String XMLSTATUS_LIST_ENABLED = "status.enabled";
+	final public static String XMLSTATUS_LIST_DISABLED = "status.disabled";
+
 	/**
 	 * форматы и исходные поля для групп (ключ=название группы) 
 	 */
@@ -63,6 +71,8 @@ public class ErrandsReportFilterParams {
 	 * фильтрации по подразделениям
 	 */
 	final private String valPrefixGroupByOU;
+
+	Set<String> enabledStatuses, disabledStatuses;
 
 	public ErrandsReportFilterParams( String colnamePeriod
 				, String colnameGroupBy
@@ -123,14 +133,51 @@ public class ErrandsReportFilterParams {
 	}
 
 	/**
+	 * @return ключ=название группы, значение = описатель
+	 */
+	public Map<String, GroupByInfo> getGroupByMap() {
+		return groupByMap;
+	}
+
+	public Set<String> getEnabledStatuses() {
+		return enabledStatuses;
+	}
+
+	public void setEnabledStatuses(Set<String> enabledStatuses) {
+		this.enabledStatuses = enabledStatuses;
+	}
+
+	public Set<String> getDisabledStatuses() {
+		return disabledStatuses;
+	}
+
+	public void setDisabledStatuses(Set<String> disabledStatuses) {
+		this.disabledStatuses = disabledStatuses;
+	}
+
+	/**
+	 * Проверить одходит ли указанный статус.
+	 * <br/> Значение Null не подходит всегда.
+	 * @param status
+	 * @return
+	 */
+	public boolean isStatusOk(String status) {
+		return (status != null) 
+				&& (enabledStatuses == null || enabledStatuses.contains(status))
+				&& (disabledStatuses == null || !disabledStatuses.contains(status))
+			;
+	}
+
+
+	/**
 	 * Контейнерный класс с инфой по группирующему объекту
 	 * Тип группировки задаётся колонокой (@link{COL_GROUP_BY}) в наборе данных
 	 */
 	public class GroupByInfo {
 		/** Название, Форматная строка и ассоциативная ссылка на поле группировки */
-		String 
-			grpName // пример: byPerson | byOrgUnit
-			, grpFmt // пример: "Исполнитель {lecm-errands:executor-assoc/cm:name}"
+		final public String grpName; // пример: byPerson | byOrgUnit
+		String
+			grpFmt // пример: "Исполнитель {lecm-errands:executor-assoc/cm:name}"
 			, grpAssocQName // пример: "lecm-errands:executor-assoc"
 			;
 
@@ -263,6 +310,31 @@ public class ErrandsReportFilterParams {
 
 		if (logger.isDebugEnabled()) {
 			logger.debug( String.format( "Config loaded for groupBy:\n%s", this.groupByMap));
+		} 
+	}
+
+	/**
+	 * Загрузка параметром группирования из конфигурации
+	 * @param config
+	 */
+	@SuppressWarnings("unchecked")
+	public void scanStatuses(JRDSConfigXML config) {
+		if (config == null)
+			return;
+
+		List<String> list;
+		{
+			list = config.getList(XMLSTATUS_LIST_ENABLED);
+			this.enabledStatuses = (list == null || list.isEmpty()) ? null : new HashSet<String>(list);
+		}
+		{
+			list = config.getList(XMLSTATUS_LIST_DISABLED);
+			this.disabledStatuses = (list == null || list.isEmpty()) ? null : new HashSet<String>(list);
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "Config status lists loaded:\n\t enabled statuses: %s\n\t disabled statuses: %s"
+					, this.enabledStatuses, this.disabledStatuses));
 		} 
 	}
 

@@ -51,6 +51,7 @@ public interface ParameterType extends Mnemonicable, L18able {
 		  VALUE( "PARAM_TYPE_VALUE")
 		, LIST( "PARAM_TYPE_LIST")
 		, RANGE( "PARAM_TYPE_RANGE")
+		// TODO: , CUSTOM( "PARAM_TYPE_CUSTOM") // параметр непосредственно для провайдера - удобно было бы использовать для передачи констант по метаданным
 		;
 
 		final private String mnemonic;

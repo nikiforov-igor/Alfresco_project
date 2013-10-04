@@ -13,6 +13,11 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.reports.api.AssocDataFilter;
 import ru.it.lecm.reports.utils.Utils;
 
+/**
+ * Фильтр данных для отфильтровывания объектов по ассоциациям (уровень 
+ * вложенности ссылок пока один, расширение на произвольный потребует доработки).
+ * <br/> Основной фильтрующий метод {@link #isOk(NodeRef)}
+ */
 public class AssocDataFilterImpl implements AssocDataFilter {
 
 	final List<AssocDesc> assocList = new ArrayList<AssocDataFilter.AssocDesc>();

@@ -23,6 +23,7 @@ import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.NamedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFlags;
+import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.utils.ArgsHelper;
@@ -37,6 +38,7 @@ public abstract class ReportGeneratorBase
 	private static final transient Logger log = LoggerFactory.getLogger(ReportGeneratorBase.class);
 
 	private WKServiceKeeper services; 
+	private LinksResolver resolver;
 	private ReportsManager reportsMgr;
 	private String reportsManagerBeanName;
 	private ApplicationContext context;
@@ -78,6 +80,13 @@ public abstract class ReportGeneratorBase
 		return this.reportsMgr;
 	}
 
+	public LinksResolver getResolver() {
+		return resolver;
+	}
+
+	public void setResolver(LinksResolver resolver) {
+		this.resolver = resolver;
+	}
 
 	/**
 	 * Предполагается, что входной поток это xml-макет для генератора ru.it.lecm.reports.generators.XMLMacroGenerator 
@@ -122,6 +131,7 @@ public abstract class ReportGeneratorBase
 				adsp.setServices( this.getServices());
 				adsp.setReportDescriptor( reportDesc);
 				adsp.setReportManager( this.getReportsManager());
+				adsp.setResolver(this.getResolver());
 			}
 
 			assignProviderProps( resultProvider, parameters, reportDesc);

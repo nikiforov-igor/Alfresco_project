@@ -1,25 +1,43 @@
 package ru.it.lecm.reports.api.model;
 
 import java.util.Comparator;
+import java.util.List;
 
 import ru.it.lecm.reports.utils.Utils;
 
 public interface ReportDescriptor extends Mnemonicable, L18able {
 
+	/**
+	 * Описатель данных.
+	 */
 	DataSourceDescriptor getDsDescriptor();
 
+	/**
+	 * Тип отчёта (и провайдера). Ключ уникальности - обычная мнемоника.
+	 * Список доуступных отчётов расширяем, но требует разворачивания соот-щих 
+	 * jar-ок дл яновых провайдеров.
+	 */
 	ReportType getReportType();
 
+	/**
+	 * Шаблон для построения отчёта (файл) в терминах провайдера.
+	 * Например jrxml-файл для Jasper-отчёта.
+	 */
 	ReportTemplate getReportTemplate();
 
 	ReportProviderDescriptor getProviderDescriptor();
 
 	ReportFlags getFlags();
 
+	/**
+	 * @return список подотчётов или null если нет таковых
+	 */
+	List<SubReportDescriptor> getSubreports();
+	void setSubreports(List<SubReportDescriptor> list);
 
 	/**
-	 * Сортировка по-умолчанию для списков Дескрипторов отчёта будет по алфавиту названия (кода).
-	 * null-значения нижее в списке ("тяжёлые").
+	 * Сортировка по-умолчанию для списков Дескрипторов отчёта будет по алфавиту по названиям (кодам).
+	 * Здесь null-значения будут ниже в списке ("тяжёлые").
 	 */
 	static class Comparator_ПоАлфавиту 
 			implements Comparator<ReportDescriptor>
@@ -40,4 +58,5 @@ public interface ReportDescriptor extends Mnemonicable, L18able {
 			return name1.compareToIgnoreCase(name2);
 		}
 	}
+
 }

@@ -16,4 +16,5 @@ public interface ReportProviderExt {
 
 	void setReportManager(ReportsManager reportsManager);
 
+	void setResolver(LinksResolver resolver);
 }

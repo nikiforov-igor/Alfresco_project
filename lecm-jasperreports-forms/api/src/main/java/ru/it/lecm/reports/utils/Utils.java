@@ -89,12 +89,23 @@ public class Utils {
 	}
 
 	/**
-	 * Выполнить расширение символьных пар "\Y" в их кодовые эквиваленты
+	 * Выполнить расширение символьных пар "\X" в их кодовые эквиваленты.
+	 * <br/>Обратная к expandCharPairs.
 	 * @param s
 	 * @return
 	 */
-	public static String expandCharPairs(String s) {
+	public static String expandFromCharPairs(String s) {
 		 return (s == null) ? null : s.replaceAll( "[\\\\][n]", "\n").replaceAll( "[\\\\][r]", "\r").replaceAll( "[\\\\][t]", "\t");
+	}
+
+	/**
+	 * Выполнить подстановку для символов, кодирующихся как '\X' в двухсимвольные последовательности.
+	 * <br/>Обратная к expandCharPairs.
+	 * @param s
+	 * @return
+	 */
+	public static String expandToCharPairs(String s) {
+		 return (s == null) ? null : s.replaceAll( "\n", "\\\\n").replaceAll( "\r", "\\\\r").replaceAll( "\t", "\\\\t");
 	}
 
 	/**
@@ -157,6 +168,9 @@ public class Utils {
 		return false;
 	}
 
+	public static String trimmed(String s) {
+		return (s == null) ? null : s.trim();
+	}
 
 	public static String dup(String s, int count) {
 		final StringBuilder result = new StringBuilder();
@@ -374,6 +388,8 @@ public class Utils {
 			return false;
 
 		// final StringBuilder result = new StringBuilder();
+		final boolean isSpecialName = "TYPE ID".contains(fldName);
+
 		result.append("( ");
 		boolean addOR = false;
 		for (String value : values) {
@@ -381,7 +397,6 @@ public class Utils {
 				final String quotedValue = Utils.quoted(value);
 				if (addOR)
 					result.append(" OR ");
-				final boolean isSpecialName = "TYPE ID".contains(fldName);
 				if (!isSpecialName) // добавление '@' требуется ТОЛЬКО для обычных полей 
 					result.append( "@"); //
 				result.append(fldName + ":" + quotedValue);

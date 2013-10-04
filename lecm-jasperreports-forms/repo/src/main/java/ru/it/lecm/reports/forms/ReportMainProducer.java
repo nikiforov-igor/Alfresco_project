@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +101,19 @@ public class ReportMainProducer extends AbstractWebScript {
 		// локатору закинем текущее значение менеджера ...
 		ReportBeansLocator.setReportsManager(this.getReportsManager());
 
-		final ReportFileData result = this.getReportsManager().generateReport(reportName, requestParameters);
+		/* Прежний вариант с проверкой прав на уровне текущего пользователя:
+		 * final ReportFileData result = this.getReportsManager().generateReport(reportName, requestParameters);
+		 */
+
+		/* Вариант "права побоку": построение от имени системы */
+		final ReportFileData result = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<ReportFileData>() {
+			@Override
+			public ReportFileData doWork() throws Exception {
+				final ReportFileData data = getReportsManager().generateReport(reportName, requestParameters);
+				return data;
+			}
+		} );
+
 		if (result != null) {
 			webScriptResponse.setContentType(
 					String.format( "%s;charset=%s;filename=%s"

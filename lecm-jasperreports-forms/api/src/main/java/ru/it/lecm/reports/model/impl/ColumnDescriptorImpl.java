@@ -26,9 +26,11 @@ public class ColumnDescriptorImpl
 	private JavaDataType dataType;
 	private ParameterTypedValue parameterTypedValue;
 	private FlagsExtendable flagsExtendable;
+
 	private String expression;
 	private boolean special = false;
 	private String alfrescoType;
+
 	private int order = 0;
 
 	public ColumnDescriptorImpl() {
@@ -205,6 +207,12 @@ public class ColumnDescriptorImpl
 		return flagsExtendable().flags();
 	}
 
+	public void setFlags( Set<NamedValue> aflags) {
+		this.flagsExtendable().flags().clear();
+		if (aflags != null)
+			this.flagsExtendable().flags().addAll(aflags);
+	}
+
 	@Override
 	public boolean isSpecial() {
 		return this.special;
@@ -235,6 +243,20 @@ public class ColumnDescriptorImpl
 			return null;
 		}
 		return this.expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
+	}
+
+	public void assign(ColumnDescriptor srcCol) {
+		if (srcCol.getDataType() != null) 
+			this.setDataType(srcCol.getDataType());
+
+		this.setExpression( srcCol.getExpression());
+		this.setSpecial( srcCol.isSpecial());
+		this.setAlfrescoType(srcCol.getAlfrescoType());
+
+		this.setOrder(srcCol.getOrder());
+		this.setParameterValue( Utils.clone(srcCol.getParameterValue()) );
+
+		this.setFlags(srcCol.flags());
 	}
 
 }

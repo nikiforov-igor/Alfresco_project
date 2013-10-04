@@ -64,7 +64,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 	 */
 	protected boolean isPropVisibleInReport(final String propNameWithPrefix) {
 		return (context.getJrSimpleProps() == null) // если нет фильтра -> видно всё
-				|| context.getJrSimpleProps().contains(propNameWithPrefix); // или название имеется в списке того, что отрисовывается в Jasper
+				|| context.getJrSimpleProps().contains(propNameWithPrefix); // или название имеется в списке того, что отрисовывается в отчёте
 	}
 
 	@Override
@@ -86,14 +86,17 @@ public class AlfrescoJRDataSource implements JRDataSource
 	}
 
 	/**
-	 * Загржуает строку с указанным id и проверяет её на соот-вие фильтру.
-	 * Удобно использовать в "провайдерских" НД для вставки значений custom-колонок. 
+	 * Загружает строку с указанным id и проверяет её на соот-вие фильтру.
+	 * Предполагается что отнаследованные "провайдерские" НД будут использовать 
+	 * этот метод для вставки значений своих custom-колонок ("{{...}}"). 
 	 * @param id
-	 * @return true, если фильтра нет или строка удовлетворяет фильтру
+	 * @return true, если строка загружена и фильтра нет или строка удовлетворяет 
+	 * фильтру; и false, если не пропущена фильтром.
 	 */
 	protected boolean loadAlfNodeProps(NodeRef id) {
 		// дополнительно фильтруем по критериям, если они есть ...
 		if (this.context.getFilter() != null && !context.getFilter().isOk(id)) {
+			this.context.setCurNodeProps( null);
 			logger.debug( String.format("Filtered out node %s", id));
 			return false;
 		}
@@ -107,10 +110,19 @@ public class AlfrescoJRDataSource implements JRDataSource
 		 */
 		this.context.setCurNodeProps( ensureJRProps());
 
+		/*
+		 * теперь вносим "нативные" Alfresco-свойства объекта как Map:
+		 *    Map.key = краткие qname-атрибутов,
+		 *    Map.value = соот-шее атрибуту значение.
+		 * Если список context.getJrSimpleProps() null, то вносятся все 
+		 * Альфреско-атриубуты, иначе только перечисленные в нём.
+		 */
 		final NodeService nodeSrv = context.getRegistryService().getNodeService();
 		final Map<QName, Serializable> realProps = nodeSrv.getProperties(id);
-		log_alfreco_data( realProps, String.format("Loaded properties of %s\n\t Filtering fldNames for jasper-report by list: %s"
-				, id, Utils.coalesce(context.getJrSimpleProps(), "*") ));
+		log_alfreco_data( realProps, String.format(
+				"Loaded properties of %s\n\t Filtering fldNames for jasper-report by list: %s"
+				, id, Utils.coalesce(context.getJrSimpleProps(), "*") 
+		));
 		if (realProps != null) { 
 			for (Map.Entry<QName, Serializable> e: realProps.entrySet()) {
 				// переводим название свойства в краткую форму
@@ -132,12 +144,11 @@ public class AlfrescoJRDataSource implements JRDataSource
 	}
 
 	/**
-	 * Получить название поля соот-щее jasper-названию колонки.
+	 * Получить qname-название поля соот-щее jasper-названию колонки.
 	 * Т.е. по "короткому имени" получить полное ссылочное. 
 	 *
-	 * @param jrFldName название колонки для Jasper (оно упрощено относительно "полного" названия в curProps).
-	 * Соот-ет члючам в списке атрибутов после вызова getReportContextProps. 
-	 * @return
+	 * @param jrFldName название колонки для Отчёта (оно обычно упрощено относительно "полного" названия в curProps).
+	 * @return соот-ет ключам в списке атрибутов после вызова getReportContextProps. 
 	 */
 	protected String getAlfAttrNameByJRKey(String jrFldName) {
 		final DataFieldColumn fld = (context != null) && context.getMetaFields().containsKey(jrFldName) 
@@ -172,7 +183,7 @@ public class AlfrescoJRDataSource implements JRDataSource
 					sb.append( String.format( "\t[%d]\t referenced field '%s' detected -> using evaluator for it \n", i, fldName));
 			}
 		} else {
-			sb.append("\t all fields will de includes'");
+			sb.append("\t all alfresco node properties will de included'");
 		}
 		if (logger.isDebugEnabled()) 
 			logger.debug(sb.toString());

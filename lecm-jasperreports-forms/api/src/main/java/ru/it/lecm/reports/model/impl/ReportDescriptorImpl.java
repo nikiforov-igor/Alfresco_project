@@ -1,5 +1,7 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.util.List;
+
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
@@ -7,6 +9,8 @@ import ru.it.lecm.reports.api.model.ReportFlags;
 import ru.it.lecm.reports.api.model.ReportProviderDescriptor;
 import ru.it.lecm.reports.api.model.ReportTemplate;
 import ru.it.lecm.reports.api.model.ReportType;
+import ru.it.lecm.reports.api.model.SubReportDescriptor;
+import ru.it.lecm.reports.utils.Utils;
 
 public class ReportDescriptorImpl
 		extends MnemonicNamedItem
@@ -14,12 +18,13 @@ public class ReportDescriptorImpl
 {
 	private static final long serialVersionUID = 1L;
 
-
 	private DataSourceDescriptor dsDescriptor;
 	private ReportType reportType;
 	private ReportTemplate reportTemplate;
+
 	private ReportProviderDescriptor providerDescriptor;
 	private ReportFlags flags;
+	private List<SubReportDescriptor> subreports;
 
 	public ReportDescriptorImpl() {
 		super();
@@ -89,6 +94,17 @@ public class ReportDescriptorImpl
 	}
 
 	@Override
+	public List<SubReportDescriptor> getSubreports() {
+		return subreports;
+		// ItemsFormatDescriptor
+	}
+
+	@Override
+	public void setSubreports(List<SubReportDescriptor> list) {
+		this.subreports = list;
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
@@ -147,10 +163,11 @@ public class ReportDescriptorImpl
 		StringBuilder builder = new StringBuilder();
 		builder.append( String.format( "ReportDescriptorImpl [ mnem '%s'", getMnem()) );
 		builder.append("\n\t, reportType ").append(reportType);
-		builder.append("\n\t, reportTemplate ").append(reportTemplate);
-		builder.append("\n\t, providerDescriptor ").append(providerDescriptor);
+		builder.append("\n\t, reportTemplate '").append(reportTemplate).append("'");
+		builder.append("\n\t, providerDescriptor '").append(providerDescriptor).append("'");
 		builder.append("\n\t, flags ").append(flags);
 		builder.append("\n\t, dsDescriptor ").append(dsDescriptor);
+		builder.append("\n\t, subreports: \n\t\t").append(Utils.getAsString( this.subreports, "\n\t\t"));
 		builder.append("\n\t]");
 		return builder.toString();
 	}

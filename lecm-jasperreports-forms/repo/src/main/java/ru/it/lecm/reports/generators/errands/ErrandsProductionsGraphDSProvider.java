@@ -403,9 +403,9 @@ public class ErrandsProductionsGraphDSProvider
 				return 0;
 
             if (dstart.getTime() > dend.getTime()) {
-                long buf = dstart.getTime();
+                final Date buf = dstart;
                 dstart = dend;
-                dend = new Date(buf);
+                dend = buf;
             }
 			// (!) первую дату выравниваем на начало дня,
 			// вторую - не трогаем, т.к. будем ровнять delta_h сверху на 24ч

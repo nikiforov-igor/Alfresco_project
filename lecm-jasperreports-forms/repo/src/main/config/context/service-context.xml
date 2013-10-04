@@ -24,9 +24,15 @@
 		<property name="documentConnectionService" ref="documentConnectionService"/>
 	</bean>
 
+	<!-- Бин для разименований ссылок ... -->
+	<bean id="linksResolverBean" class="ru.it.lecm.reports.beans.LinksResolverBean">
+		<property name="services" ref="wksKeeper" />
+	</bean>
+
 	<!-- Генератор Jasper отчётов (версия v2.x lecm-сервиса) -->
 	<bean id="jasperReportGenerator" class="ru.it.lecm.reports.generators.JasperReportGeneratorImpl" init-method="init">
 		<property name="services" ref="wksKeeper"/>
+		<property name="resolver" ref="linksResolverBean"/>
 		<property name="reportsManagerBeanName" value="reportsManager"/>
 	</bean>
 
@@ -37,6 +43,7 @@
 	<!-- Генератор OOffice отчётов -->
 	<bean id="ooReportGenerator" class="ru.it.lecm.reports.generators.OOfficeReportGeneratorImpl" init-method="init">
 		<property name="services" ref="wksKeeper"/>
+		<property name="resolver" ref="linksResolverBean"/>
 		<property name="reportsManagerBeanName" value="reportsManager"/>
 		<!--  <property name="templatesDAO" ref="fileReportTemplatesBean" /> -->
 		<property name="resultDAO" ref="fileOOReportResultBean" />

@@ -38,10 +38,12 @@ import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFileDataImpl;
 import ru.it.lecm.reports.api.model.ReportType;
+import ru.it.lecm.reports.api.model.SubReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.ContentEnumerator;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
+import ru.it.lecm.reports.generators.SubreportMetaDataBuilder;
 import ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
@@ -51,14 +53,12 @@ public class ReportsManagerImpl implements ReportsManager {
 
 	static final transient Logger logger = LoggerFactory.getLogger(ReportsManagerImpl.class);
 
-	// final static String REPORT_TEMPLATE_FILES_BASEDIR = "/reportdefinitions";
-	// final static String REPORT_DS_FILES_BASEDIR = REPORT_TEMPLATE_FILES_BASEDIR+ "/ds-config";
-
-	// final static String DEFAULT_GENXMLTEMPLATE_BASEDIR = REPORT_TEMPLATE_FILES_BASEDIR + "/templates";
-
 	final public static String DEFAULT_REPORT_TYPE = ReportType.RTYPE_MNEMO_JASPER;
 	final public static String DEFAULT_REPORT_EXTENSION = ".jrxml";
 	final public static String DEFAULT_REPORT_TEMPLATE = "jreportCommonTemplate.jrxml.gen";
+
+	/** соот-щий патерн для разбора */
+	// private static final String PATTERN_SUFFIX_SUBREPORT_COLUMN = "[.]sub[.]";
 
 	/**
 	 * Список зарегистрирванных отчётов
@@ -477,8 +477,6 @@ public class ReportsManagerImpl implements ReportsManager {
 	@Override
 	public void registerReportDescriptor(ReportDescriptor desc) {
 		if (desc != null) {
-			checkReportDescData(desc);
-			setDefaults(desc);
 			createDsFile(desc); // создание ds-xml
 			saveReportTemplate(desc); // сохранение шаблона отчёта
 			getDescriptors().put(desc.getMnem(), desc);
@@ -488,6 +486,13 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 	}
 
+	/**
+	 * Установить умочания для описателя.
+	 * <br/> (!) Если шаблоны для отчёта и его подотчётов не заданы явно, то 
+	 * автоматом cгенерируются шаблоны по-умолчанию. Имена вложенных подотчётов
+	 * генерируются аналогично основному.
+	 * @param desc
+	 */
 	private void setDefaults(ReportDescriptor desc) {
 		if (Utils.isStringEmpty(desc.getReportType().getMnem())) {
 			desc.getReportType().setMnem( DEFAULT_REPORT_TYPE);
@@ -515,9 +520,24 @@ public class ReportsManagerImpl implements ReportsManager {
 						, (def != null) ? def.getGenerationTemplate() : DEFAULT_REPORT_TEMPLATE // // makeGenTemplateFileName(...)
 			));
 		}
+
+		// рекурсивно для подотчётов ...
+		if (desc.getSubreports() != null) {
+			for ( SubReportDescriptor sr: desc.getSubreports()) {
+				// TODO: шаблоны для подотчётов надо сгенерировать ТАМ же где основной отчёт
+				// TODO: при построении подотчётов придётся выгрузить файлы подотчётов на диск, а значит и основной отчёт тоже.
+				setDefaults(sr);
+			} // for sr
+		}
 	}
 
+	/**
+	 * Сохранение шаблона отчёта из desc.getReportTemplate()
+	 * @param desc
+	 * @return
+	 */
 	private boolean saveReportTemplate(ReportDescriptor desc) {
+
 		if (desc.getReportTemplate() == null) {
 			logger.warn(String.format( "Report '%s' has no template", desc.getMnem()));
 			return false;
@@ -565,6 +585,13 @@ public class ReportsManagerImpl implements ReportsManager {
 			 */
 			findAndCheckReportGenerator(desc.getReportType()).onRegister(desc, templateRawData, this.contentRepositoryDAO);
 			logger.debug(String.format("Report '%s': provider notified", desc.getMnem()));
+
+			// рекурсивно для подотчётов ...
+			if (desc.getSubreports() != null) {
+				for ( SubReportDescriptor sr: desc.getSubreports()) {
+					saveReportTemplate(sr);
+				} // for sr
+			}
 
 		} catch (Throwable ex) {
 			final String msg = String.format(
@@ -621,7 +648,10 @@ public class ReportsManagerImpl implements ReportsManager {
 	private void createDsFile(ReportDescriptor desc) {
 		if (desc == null)
 			return;
+
 		checkReportDescData(desc);
+		checkSubreports(desc);
+		setDefaults(desc);
 
 		// создание ds-файла ...
 		final ByteArrayOutputStream dsxml = DSXMLProducer.xmlCreateDSXML(desc.getMnem(), desc);
@@ -639,15 +669,33 @@ public class ReportsManagerImpl implements ReportsManager {
 		}
 	}
 
+
 	/**
-	 * Выполнить проверку данных. Поднять исключения при неверном/недостаточном
-	 * заполнении.
+	 * Выполнить проверку данных. 
+	 * <br/>Поднять исключения при неверном или недостаточном заполнении полей описателя отчёта.
 	 * @param desc
 	 */
 	private void checkReportDescData(ReportDescriptor desc) {
 		if (desc.getMnem() == null || desc.getMnem().trim().length() == 0)
-			throw new RuntimeException(
-					String.format("Report descriptor must have mnemo code"));
+			throw new RuntimeException(String.format("Report descriptor must have mnemo code"));
+	}
+
+	/**
+	 * Если нет явно заданного списка подотчётов desc.subreports - cформировать 
+	 * его на основе линейного списка колонок НД.
+	 * @param desc
+	 */
+	private void checkSubreports(ReportDescriptor desc) {
+		/** формирование Subreports из общего линейного списка колонок */
+		if (desc.getSubreports() == null) { // (!) только если подотчётов ещё нет
+			final List<SubReportDescriptor> srlist = SubreportMetaDataBuilder.scanSubreports( desc.getDsDescriptor());
+			if (srlist != null) {
+				logger.info( String.format( "Report '%s': found %s subreports", desc.getMnem(), srlist.size()));
+				desc.setSubreports( srlist);
+			} else 
+				logger.info( String.format( "Report '%s': no subreports found", desc.getMnem()));
+		} else
+			logger.info( String.format( "Report '%s' contains %s subreports", desc.getMnem(), desc.getSubreports().size()));
 	}
 
 	@Override

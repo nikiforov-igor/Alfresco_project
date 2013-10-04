@@ -1,5 +1,7 @@
 package ru.it.lecm.reports.api.model;
 
+import java.util.List;
+
 public interface QueryDescriptor extends Mnemonicable {
 
 	String getText();
@@ -18,15 +20,34 @@ public interface QueryDescriptor extends Mnemonicable {
 	void setAllVersions(boolean value);
 
 	/**
-	 * (необ) Тип документов в выборке
-	 * Имеет вид сслыки на тип, например: "lecm-contract:document"
+	 * (необ) Предпочитаемый тип документов в выборке
+	 * <br/> Имеет вид qname-ссылки на тип, например: "lecm-contract:document"
+	 * <br/> см также {@link #getSupportedNodeTypes} - его первый элемент является
+	 * результатом для preferedNodeType
 	 * @return
 	 */
 	String getPreferedNodeType();
+
+	/**
+	 * Можно присвоить сразу список - несколько значений через запятую или тчк-с-з.
+	 * Фактически вызовет {@link #setSupportedNodeTypes}.
+	 * @param value
+	 */
 	void setPreferedNodeType(String value);
 
 	/**
-	 * Вернуть true, если указанный тип поддерживается
+	 * @return Список типов, которые данные дескриптов может обслуживать.
+	 * <br/> Первый элемент это результат для getPrereredNodeType 
+	 */
+	List<String> getSupportedNodeTypes();
+
+	/**
+	 * @values Список типов, которые данные дескриптов может обслуживать 
+	 */
+	void setSupportedNodeTypes(List<String> values);
+
+	/**
+	 * Вернуть true, если указанный тип поддерживается данным дескриптором (отчётом)
 	 * @param qname короткое или полное название типма
 	 * @return
 	 */

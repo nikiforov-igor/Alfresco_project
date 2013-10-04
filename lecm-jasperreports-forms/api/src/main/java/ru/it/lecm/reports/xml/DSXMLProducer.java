@@ -4,15 +4,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -30,10 +33,13 @@ import ru.it.lecm.reports.api.model.ReportFlags;
 import ru.it.lecm.reports.api.model.ReportProviderDescriptor;
 import ru.it.lecm.reports.api.model.ReportTemplate;
 import ru.it.lecm.reports.api.model.ReportType;
+import ru.it.lecm.reports.api.model.SubReportDescriptor;
+import ru.it.lecm.reports.api.model.SubReportDescriptor.ItemsFormatDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.model.impl.AlfrescoAssocInfoImpl;
 import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
 import ru.it.lecm.reports.model.impl.DataSourceDescriptorImpl;
+import ru.it.lecm.reports.model.impl.ItemsFormatDescriptorImpl;
 import ru.it.lecm.reports.model.impl.NamedValueImpl;
 import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
 import ru.it.lecm.reports.model.impl.ReportDescriptorImpl;
@@ -41,13 +47,14 @@ import ru.it.lecm.reports.model.impl.ReportFlagsImpl;
 import ru.it.lecm.reports.model.impl.ReportProviderDescriptorImpl;
 import ru.it.lecm.reports.model.impl.ReportTemplateImpl;
 import ru.it.lecm.reports.model.impl.ReportTypeImpl;
+import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.Utils;
 
 /**
  * Создание ds-xml с описанием мета-данных полей и запроса.
  * 
  * @author rabdullin
- *
+ * 
  */
 public class DSXMLProducer {
 
@@ -68,6 +75,9 @@ public class DSXMLProducer {
 	public static final String XMLNODE_PARAMETER = "parameter";
 	public static final String XMLATTR_PARAM_LABEL1 = "label1";
 	public static final String XMLATTR_PARAM_LABEL2 = "label2";
+	
+	public static final String XMLATTR_PARAM_BOUND1 = "bound1";
+	public static final String XMLATTR_PARAM_BOUND2 = "bound2";
 
 	/* параметры запроса в xml-секции "query" */
 	public static final String XMLNODE_QUERYDESC = "query.descriptor";
@@ -90,6 +100,7 @@ public class DSXMLProducer {
 	public static final String XMLNODE_REPORT_PROVIDER = "provider";
 	public static final String XMLNODE_REPORT_TEMPLATE = "template";
 	public static final String XMLNODE_REPORT_DS = "datasource.descriptor";
+
 	public static final String XMLATTR_FILENAME = "filename";
 
 	/* параметры cmis-соединения в xml-секции "cmis" */
@@ -109,16 +120,42 @@ public class DSXMLProducer {
 
 	// public final static String XMLATTR_INMAINDOC = "inMainDoc";
 
-	// public static final String XMLATTR_MNEM = "mnem";
 	public static final String XMLATTR_PARAM_TYPE = "paramType";
 	public static final String XMLATTR_PARAM_ALFRESCO_TYPE = "alfrescoType";
 	public static final String XMLNODE_ALFRESCO_ASSOC = "alfrescoAssoc";
 	public static final String XMLATTR_ALFRESCO_ASSOC_NAME = "assocTypeName";
 	public static final String XMLATTR_ALFRESCO_ASSOC_KIND = "assocKind"; // 11, 1M, M1, MM
 
+
+	/* подотчёты  SubReports */
+	public static final String XMLNODE_LIST_SUBREPORTS = "subreports";
+	public static final String XMLNODE_SUBREPORT = "subreport";
+	public static final String XMLNODE_SUBLIST_SOURCE = "sublist.source";
+	public static final String XMLNODE_SUBLIST_ITEM = "sublist.item";
+
+	public static final String XMLATTR_SUBREPORT_NAME = "name";
+	public static final String XMLATTR_DESTCOLUMN_NAME = "destColumnName";
+
+	/** название атрибута, в котором указан класс бина для элемента строки subreport */
+	public static final String XMLATTR_BEANCLASS = "beanclass";
+
+	/** описание формата */
+	public static final String XMLNODE_FORMAT = "format";
+
+
+	/** класс по-умолчанию для свойств суб-элементов (элементов подотчёта) */
+	public static final Class<?> DEFAULT_BEANCLASS = HashMap.class;
+
+	/** название блока для описания формата */
+	public final static String XML_FORMAT = XMLNODE_FORMAT; 
+	public final static String XMLATTR_FORMAT_ITEMDELIMITER = "itemDelimiter";
+	public final static String XMLATTR_FORMAT_IFEMPTY = "ifEmpty";
+
 	/* Класс по-умолчанию для колонки */
 	private final static String DEFAULT_COLUMN_JAVACLASS = String.class.getName();
 	private final static String DEFAULT_COLUMN_ALFRESCO_CLASS = "d:text";
+
+
 	/**
 	 * Создать контент ds-xml файл.
 	 * Сейчас изменяет секции '<field>' и '<property name="dataSource" value="java-class">'. 
@@ -131,10 +168,10 @@ public class DSXMLProducer {
 			return null;
 		logger.debug("producing ds-xml " + streamName);
 
-		try { 
-			//	final InputSource src = new InputSource(xml);
-			//	src.setEncoding("UTF-8");
-			//	logger.info("Encodig set as: "+ src.getEncoding());
+		try {
+			// final InputSource src = new InputSource(xml);
+			// src.setEncoding("UTF-8");
+			// logger.info("Encodig set as: "+ src.getEncoding());
 			final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 
 			// создание корневого элемента
@@ -166,13 +203,21 @@ public class DSXMLProducer {
 			}
 			 */
 
+			/* параметры запроса в xml-секции "query" */
+			// xmlAddSubReports( doc, XMLNODE_LIST_SUBREPORTS,
+			// XMLNODE_SUBREPORT, desc.getDsDescriptor().getColumns());
+
 			/*
-			 * ListOf<feild>
+			 * Колонки данных как ListOf<feild>
 			 */
-			xmlAddFieldsList( doc, rootElem, XMLNODE_LIST_FIELDS, XMLNODE_FIELD, desc.getDsDescriptor().getColumns());
+			if (desc.getDsDescriptor() != null)
+				xmlAddFieldsList(doc, rootElem, XMLNODE_LIST_FIELDS, XMLNODE_FIELD, desc.getDsDescriptor().getColumns());
+
+			/* Подотчёты */
+			xmlAddSubreportsList(doc, rootElem, XMLNODE_LIST_SUBREPORTS, XMLNODE_SUBREPORT, desc.getSubreports());
 
 			/* формирование результата */
-			final ByteArrayOutputStream result = XmlHelper.serialize( doc);
+			final ByteArrayOutputStream result = XmlHelper.serialize(doc);
 
 			logger.debug("produced SUCCESSFULL of ds-xml " + streamName);
 
@@ -197,7 +242,7 @@ public class DSXMLProducer {
 			return null;
 		logger.debug("reading ds-xml " + streamName);
 
-		try { 
+		try {
 			final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(data);
 
 			// создание корневого элемента
@@ -209,19 +254,24 @@ public class DSXMLProducer {
 			final ReportDescriptorImpl result = new ReportDescriptorImpl();
 
 			/* параметры xml-секции "report.descriptor" */
-			parseReportDesc( result, rootElem, XMLNODE_REPORTDESC);
+			parseReportDesc(result, rootElem, XMLNODE_REPORTDESC);
 			if (result.getMnem() == null) { // название как суффикс в имени файла потока ...
-				result.setMnem( extractReportName(streamName));
+				result.setMnem(extractReportName(streamName));
 			}
 
 			/* параметры запроса в xml-секции "query" */
-			result.setFlags( parseReportFlags( rootElem, XMLNODE_QUERYDESC) );
+			result.setFlags(parseReportFlags(rootElem, XMLNODE_QUERYDESC));
 
 			// NOTE: когда появятся доп характеристики query внутри desc - сохранить их тут
 			/* параметры cmis-соединения в xml-секции "cmis" */
 
 			/* ListOf<feild> */
 			parseColumns( result.getDsDescriptor().getColumns(), rootElem, streamName);
+
+			{ // подотчёты
+				final List<SubReportDescriptor> subreports = parseSubreportsList( rootElem, XMLNODE_LIST_SUBREPORTS, XMLNODE_SUBREPORT);
+				result.setSubreports(subreports);
+			}
 
 			logger.debug("load SUCCESSFULL from ds-xml " + streamName);
 
@@ -254,13 +304,11 @@ public class DSXMLProducer {
 				result.appendChild(nodeProvider);
 		}
 
-
 		{ // нативный шаблон отчёта
 			final Element nodeTemplate = xmlCreateReportTemplateNode( doc, XMLNODE_REPORT_TEMPLATE, srcRDesc.getReportTemplate());
 			if (nodeTemplate != null)
 				result.appendChild(nodeTemplate);
 		}
-
 
 		{ // набор данных ...
 			final Element nodeDS = xmlCreateReportDSNode( doc, XMLNODE_REPORT_DS, srcRDesc.getDsDescriptor());
@@ -285,25 +333,24 @@ public class DSXMLProducer {
 
 		{ // тип отчёта
 			final Element nodeRType = XmlHelper.findNodeByName( srcNode, XMLNODE_REPORT_TYPE);
-			dest.setReportType( parseReportType(nodeRType) );
+			dest.setReportType(parseReportType(nodeRType));
 		}
 
 		{ // провайдер
 			final Element nodeProvider = XmlHelper.findNodeByName( srcNode, XMLNODE_REPORT_PROVIDER);
-			dest.setProviderDescriptor( parseProviderDescriptor(nodeProvider));
+			dest.setProviderDescriptor(parseProviderDescriptor(nodeProvider));
 		}
-
 
 		{ // нативный шаблон отчёта
 			final Element nodeTemplate = XmlHelper.findNodeByName( srcNode, XMLNODE_REPORT_TEMPLATE);
-			dest.setReportTemplate( parseReportTemplate(nodeTemplate));
+			dest.setReportTemplate(parseReportTemplate(nodeTemplate));
 		}
-
 
 		{ // набор данных ...
 			final Element nodeDS = XmlHelper.findNodeByName( srcNode, XMLNODE_REPORT_DS);
-			dest.setDSDescriptor( parseDSDescriptor(nodeDS));
+			dest.setDSDescriptor(parseDSDescriptor(nodeDS));
 		}
+
 	}
 
 	private static Element xmlCreateReportTypeNode(Document doc,
@@ -318,10 +365,9 @@ public class DSXMLProducer {
 			return null;
 
 		final ReportTypeImpl result = new ReportTypeImpl();
-		XmlHelper.parseStdMnemoItem( result, srcNodeRType);
+		XmlHelper.parseStdMnemoItem(result, srcNodeRType);
 		return result;
 	}
-
 
 	private static Element xmlCreateReportProviderNode(Document doc,
 			String xmlNodeNameRP, ReportProviderDescriptor rpDesc)
@@ -342,7 +388,7 @@ public class DSXMLProducer {
 			return null;
 
 		final ReportProviderDescriptorImpl result = new ReportProviderDescriptorImpl();
-		XmlHelper.parseStdMnemoItem( result, srcNodeProvider);
+		XmlHelper.parseStdMnemoItem(result, srcNodeProvider);
 
 		{ // java-класс провайдера ...
 			final String javaClass = XmlHelper.getClassNameAttr( srcNodeProvider, XMLATTR_JAVACLASS, DEFAULT_COLUMN_JAVACLASS);
@@ -369,14 +415,13 @@ public class DSXMLProducer {
 			return null;
 
 		final ReportTemplateImpl result = new ReportTemplateImpl();
-		XmlHelper.parseStdMnemoItem( result, srcNodeTemplate);
+		XmlHelper.parseStdMnemoItem(result, srcNodeTemplate);
 
 		if (srcNodeTemplate.hasAttribute(XMLATTR_FILENAME))
-			result.setFileName( srcNodeTemplate.getAttribute(XMLATTR_FILENAME));
+			result.setFileName(srcNodeTemplate.getAttribute(XMLATTR_FILENAME));
 
 		return result;
 	}
-
 
 	private static Element xmlCreateReportDSNode(Document doc,
 			String xmlNodeNameDS, DataSourceDescriptor dsDesc)
@@ -395,7 +440,7 @@ public class DSXMLProducer {
 			return null;
 
 		final DataSourceDescriptorImpl result = new DataSourceDescriptorImpl();
-		XmlHelper.parseStdMnemoItem( result, srcNodeDS);
+		XmlHelper.parseStdMnemoItem(result, srcNodeDS);
 
 		return result;
 	}
@@ -404,27 +449,77 @@ public class DSXMLProducer {
 	 * Сформировать группу с описанием колонок:
 	 *	<fields>
 	 *		<field jrFldName="col_DocKind"
-	 *			queryFldName="{lecm-contract:typeContract-assoc/cm:name}"
+	 * queryFldName="{lecm-contract:typeContract-assoc/cm:name}"
 	 *			displayName="Вид договора"
 	 *			inMainDoc="true"/>
 	 *		...
 	 *	</fields>
 	 */
 	private static void xmlAddFieldsList(Document doc, Element destRoot,
-			String xmlNodeList, String xmlNodeItem,
-			List<ColumnDescriptor> srcColumns) 
+			String xmlNodeListName, String xmlNodeItemName,
+			List<ColumnDescriptor> srcColumns)
 	{
-		final Element nodeFields = doc.createElement(xmlNodeList);
+		final Element nodeFields = doc.createElement(xmlNodeListName);
 		destRoot.appendChild(nodeFields);
 
 		if (srcColumns == null || srcColumns.isEmpty())
 			return;
 
 		/* вывод колонок ... */
-		for(ColumnDescriptor cdesc: srcColumns) {
-			final Element nodeColItem = xmlCreateColumnNode(doc, xmlNodeItem, cdesc);
+		for (ColumnDescriptor cdesc : srcColumns) {
+			final Element nodeColItem = xmlCreateColumnNode(doc, xmlNodeItemName, cdesc);
 			nodeFields.appendChild(nodeColItem);
 		}
+	}
+
+	/**
+	 * Формирование группы подотчётов:
+	 * 		<subreports>
+	 * 			<subreport name="xxx" destColumn="yyy"> ...
+	 * 			</subreport>
+	 * 		</subreports>
+	 */
+	private static void xmlAddSubreportsList(Document doc, Element destRoot,
+			String xmlNodeListName, String xmlNodeItemName,
+			List<SubReportDescriptor> srcSubReports)
+	{
+		if (srcSubReports == null || srcSubReports.isEmpty())
+			return;
+
+		final Element nodeFields = doc.createElement(xmlNodeListName);
+		destRoot.appendChild(nodeFields);
+
+		/* вывод колонок ... */
+		for (SubReportDescriptor sdesc : srcSubReports) {
+			final Element nodeColItem = xmlCreateSubreportNode(doc, xmlNodeItemName, sdesc);
+			nodeFields.appendChild(nodeColItem);
+		}
+	}
+
+	private static List<SubReportDescriptor> parseSubreportsList( Element srcRoot, 
+			String xmlNodeListName, String xmlNodeItemName )
+	{
+		// чтение мета-описаний полей ...
+		final Element subreportsNode  = (Element) XmlHelper.findNodeByAttr(srcRoot, xmlNodeListName, null, null);
+		if (subreportsNode == null)
+			return null;
+
+		final List<Node> subreportsNodeList = XmlHelper.findNodesList(subreportsNode, xmlNodeItemName, null, null);
+		return parseSubreports( subreportsNodeList);
+	}
+
+	private static List<SubReportDescriptor> parseSubreports( List<Node> subreportsNodeList) {
+		if (subreportsNodeList == null || subreportsNodeList.isEmpty()) 
+			return null;
+
+		final List<SubReportDescriptor> result = new ArrayList<SubReportDescriptor>();
+		for (Node node : subreportsNodeList) {
+			final SubReportDescriptorImpl desc = parseSubReportDescriptor( (Element) node);
+			if (desc != null)
+				result.add(desc);
+		}
+
+		return result;
 	}
 
 	/**
@@ -438,7 +533,7 @@ public class DSXMLProducer {
 	{
 		if (srcFlags == null)
 			return;
-		for(NamedValue v: srcFlags) {
+		for (NamedValue v : srcFlags) {
 			final boolean isStdName = (stdSkipArgs != null) && stdSkipArgs.contains(v.getMnem());
 			if (!isStdName)
 				XmlHelper.xmlCreatePlainNode( doc, result, v.getMnem(), v.getValue());
@@ -467,7 +562,7 @@ public class DSXMLProducer {
 		if (srcFlags == null || srcFlags.isEmpty())
 			return (createEmptyToo) ? result : null;
 
-		xmlAddFlagsAttributes( doc, result, srcFlags, null);
+		xmlAddFlagsAttributes(doc, result, srcFlags, null);
 		return result;
 	}
 
@@ -481,15 +576,165 @@ public class DSXMLProducer {
 			, NodeList src, Set<String> stdSkipArgs) {
 		if (src == null)
 			return;
-		for( int i = 0; i < src.getLength(); i++) {
+		for (int i = 0; i < src.getLength(); i++) {
 			final Node n = src.item(i);
 			if (n == null) continue;
 			// фильтра нет или значение не фильтруется
 			final boolean isStdName = (stdSkipArgs != null) && stdSkipArgs.contains(n.getNodeName());
 			if (!isStdName)
 				destFlags.add( new NamedValueImpl(n.getNodeName(),XmlHelper.getTagContent(n)) );
-		}
+		} // for i
 	}
+
+	private static Element xmlCreateSubreportNode (Document doc,
+			String nodeName, SubReportDescriptor subreport)
+	{
+		if (subreport == null)
+			return null;
+
+		final Element result = doc.createElement(nodeName);
+
+		result.setAttribute(XMLATTR_SUBREPORT_NAME, subreport.getMnem());
+		result.setAttribute(XMLATTR_DESTCOLUMN_NAME, subreport.getDestColumnName());
+
+		// save <list.source> as CDATA ... </>
+		{
+			// final Element listSource = 
+			XmlHelper.xmlCreateCDataNode(doc, result, XMLNODE_SUBLIST_SOURCE, subreport.getSourceListExpression());
+		}
+
+		// save <list.item beanClass="...">
+		{
+			final Element listItem = doc.createElement(XMLNODE_SUBLIST_ITEM);
+			result.appendChild(listItem);
+
+			listItem.setAttribute(XMLATTR_BEANCLASS, subreport.getBeanClassName());
+
+			/* отгрузка формата <format ... > */ 
+			xmlCreateItemsFormat( doc, listItem, XMLNODE_FORMAT, subreport.getItemsFormat());
+
+			/* отгрузка карты соответствий <map ...> для вложенных колонок ... */
+			if (subreport.getSubItemsSourceMap() != null){
+				final Element mapNode = doc.createElement(XmlHelper.XMLNODE_MAP);
+				listItem.appendChild(mapNode);
+				XmlHelper.xmlAddMapItems(doc, mapNode, subreport.getSubItemsSourceMap());
+			}
+		}
+
+		// отгрузка обычных атрибутов ReportDescriptor ... 
+		xmlCreateReportDescNode(doc, XMLNODE_REPORT_DS, subreport);
+
+		return result;
+	}
+
+
+	@SuppressWarnings({ "unchecked" })
+	private static SubReportDescriptorImpl parseSubReportDescriptor(Element srcNodeSubreport) {
+
+		if (srcNodeSubreport == null)
+			return null;
+
+		final SubReportDescriptorImpl result = new SubReportDescriptorImpl();
+
+		if (srcNodeSubreport.hasAttribute(XMLATTR_SUBREPORT_NAME))
+			result.setMnem( Utils.trimmed(srcNodeSubreport.getAttribute(XMLATTR_SUBREPORT_NAME)) );
+
+		if (srcNodeSubreport.hasAttribute(XMLATTR_DESTCOLUMN_NAME))
+			result.setDestColumnName( Utils.trimmed(srcNodeSubreport.getAttribute(XMLATTR_DESTCOLUMN_NAME)) );
+
+		// <list.source> as CDATA ... </>
+		{
+			final String source = XmlHelper.findNodeChildValue(srcNodeSubreport, XMLNODE_SUBLIST_SOURCE);
+			result.setSourceListExpression( Utils.trimmed( source));
+
+			if ( Utils.isStringEmpty(result.getSourceListExpression()))
+				logger.warn( String.format( "(!?) Subreport '%s' xml-configured with empty association", result.getMnem()));
+		}
+
+
+		// load <list.item beanClass="...">
+		final Element nodeItem = XmlHelper.findNodeByName(srcNodeSubreport, XMLNODE_SUBLIST_ITEM);
+		if (nodeItem != null) {
+			if (nodeItem.hasAttribute(XMLATTR_BEANCLASS))
+				result.setBeanClassName( nodeItem.getAttribute(XMLATTR_BEANCLASS));
+
+			/* формат <format ... > */
+			{
+				final Element nodeFormat = XmlHelper.findNodeByName(nodeItem, XMLNODE_FORMAT);
+				if (nodeFormat != null) {
+					result.setItemsFormat( parseItemsFormat(nodeFormat));
+
+					if (result.getItemsFormat() != null && !result.isUsingFormat()) {
+						logger.warn( String.format("Subreport '%s' has format when bean class is configured -> format ignored"
+								+ "\n\t bean class using: '%s'\n\t format will be ignored ignored: '%s'"
+								, result.getMnem()
+								, result.getBeanClassName()
+								, result.getItemsFormat()
+						));
+					}
+				}
+			}
+
+			/* получение карты соответствий <map ...> для вложенных колонок ... */
+			{
+				final Element nodeMap = XmlHelper.findNodeByName(nodeItem, XmlHelper.XMLNODE_MAP);
+				if (nodeMap != null) {
+					@SuppressWarnings("rawtypes")
+					final Map map = XmlHelper.getNodeAsItemsMap( nodeMap);
+					result.setSubItemsSourceMap(map);
+				}
+			}
+
+		}
+
+		// отгрузка обычных атрибутов ReportDescriptor ... 
+		parseReportDesc(result, srcNodeSubreport, XMLNODE_REPORT_DS);
+
+		return result;
+	}
+
+
+	private static Element xmlCreateItemsFormat( Document doc, Element parentNode,
+			String nodeName, ItemsFormatDescriptor itemsFormat)
+	{
+		if (itemsFormat == null)
+			return null;
+
+		// save format string as CDATA
+		final Element result = XmlHelper.xmlCreateCDataNode(doc, parentNode, nodeName, itemsFormat.getFormatString());
+
+		// разделитель
+		if ( !Utils.isStringEmpty( itemsFormat.getItemsDelimiter()) )
+			result.setAttribute( XMLATTR_FORMAT_ITEMDELIMITER, itemsFormat.getItemsDelimiter());
+
+		// обозначение для пустого списка ...
+		if ( !Utils.isStringEmpty( itemsFormat.getIfEmptyTag()) )
+			result.setAttribute( XMLATTR_FORMAT_IFEMPTY, itemsFormat.getIfEmptyTag());
+
+		return result;
+	}
+
+	private static ItemsFormatDescriptor parseItemsFormat( Element srcNode)
+	{
+		if (srcNode == null)
+			return null;
+
+		final ItemsFormatDescriptorImpl result = new ItemsFormatDescriptorImpl();
+
+		// строка форматирования свойств из CData или value ...
+		result.setFormatString( Utils.dequote( Utils.trimmed(XmlHelper.getTagContent( srcNode))));
+
+		// обозначение для пустого списка ...
+		if (srcNode.hasAttribute(XMLATTR_FORMAT_IFEMPTY))
+			result.setIfEmptyTag( srcNode.getAttribute( XMLATTR_FORMAT_IFEMPTY));
+
+		// разделитель элементов ...
+		if (srcNode.hasAttribute(XMLATTR_FORMAT_ITEMDELIMITER))
+			result.setItemsDelimiter( srcNode.getAttribute( XMLATTR_FORMAT_ITEMDELIMITER));
+
+		return result;
+	}
+
 
 	/** Набор стандартных названий атрибутов */
 	final static Set<String> STD_XML_FLD_ARGS = new HashSet<String>( Arrays.asList( 
@@ -501,6 +746,7 @@ public class DSXMLProducer {
 
 	/**
 	 * Создание field-узла для колонки
+	 * 
 	 * @param doc
 	 * @param nodeName
 	 * @param column
@@ -513,7 +759,7 @@ public class DSXMLProducer {
 		final Element result = doc.createElement(nodeName);
 
 		result.setAttribute(XMLATTR_JR_FLDNAME, column.getColumnName());
-		result.setAttribute(XMLATTR_QUERY_FLDNAME, column.getExpression());
+		result.setAttribute(XMLATTR_EXPRESSION, column.getExpression()); // XMLATTR_QUERY_FLDNAME
 		result.setAttribute(XMLATTR_DISPLAYNAME, column.get("ru", ""));
 		if (column.getOrder() != 0)
 			result.setAttribute(XMLATTR_ORDER, String.valueOf(column.getOrder()));
@@ -541,11 +787,12 @@ public class DSXMLProducer {
 
 	/**
 	 * Загрузить список метаописаний полей из указанного документа
+	 * 
 	 * @param srcRoot
 	 * @param info название читаемого потока
 	 * @param destColumns
 	 */
-	public static void parseColumns( List<ColumnDescriptor> destColumns, 
+	public static void parseColumns(List<ColumnDescriptor> destColumns,
 			Element srcRoot, String info)
 	{
 		destColumns.clear();
@@ -553,9 +800,9 @@ public class DSXMLProducer {
 		// @param xmlNodeNameListFields название xml-группы с метаописаниями
 		// @param xmlNodeNameField элементы внутри группы
 
-		// чтение мета-описаний полей ... 
-		final Element fieldsNode  = (Element) XmlHelper.findNodeByAttr(srcRoot, DSXMLProducer.XMLNODE_LIST_FIELDS, null, null);
-		final List<Node> fieldsNodeList = XmlHelper.findNodesList(fieldsNode, DSXMLProducer.XMLNODE_FIELD, null, null);
+		// чтение мета-описаний полей ...
+		final Element fieldsNode  = (Element) XmlHelper.findNodeByAttr(srcRoot, XMLNODE_LIST_FIELDS, null, null);
+		final List<Node> fieldsNodeList = XmlHelper.findNodesList(fieldsNode, XMLNODE_FIELD, null, null);
 		final List<ColumnDescriptor> newColumns = parseColumns( fieldsNodeList, info);
 		if (newColumns != null)
 			destColumns.addAll(newColumns);
@@ -622,7 +869,7 @@ public class DSXMLProducer {
 			if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_ORDER)) {
 				final String sorder = fldNode.getAttribute(DSXMLProducer.XMLATTR_ORDER);
 				if (!Utils.isStringEmpty(sorder)) {
-					column.setOrder( Integer.parseInt(sorder));
+					column.setOrder(Integer.parseInt(sorder));
 				}
 			}
 
@@ -651,7 +898,7 @@ public class DSXMLProducer {
 				sb.append(String.format("got column/field %s: %s/%s [%s] '%s'"
 						, i, column.getColumnName(), column.getExpression(), column.className(), column.get(null, null)));
 
-		} //for
+		} // for
 
 		if (logger.isDebugEnabled()) {
 			sb.append(String.format("load %d fields from %s", i, info));
@@ -661,7 +908,7 @@ public class DSXMLProducer {
 		return new ArrayList<ColumnDescriptor>(result.values());
 	}
 
-	private static Element xmlCreateParameterNode( Document doc,
+	private static Element xmlCreateParameterNode(Document doc,
 			String xmlNodeName, ParameterTypedValue parameter) 
 	{
 		if (parameter == null)
@@ -669,7 +916,7 @@ public class DSXMLProducer {
 
 		final Element result = doc.createElement(xmlNodeName);
 
-		XmlHelper.xmlAddMnemAttr( result, parameter);
+		XmlHelper.xmlAddMnemAttr(result, parameter);
 
 		if (parameter.getType() != null)
 			result.setAttribute( XMLATTR_PARAM_TYPE, parameter.getType().getMnemonic());
@@ -684,6 +931,9 @@ public class DSXMLProducer {
 		XmlHelper.xmlAddL18Name( doc, result, parameter);
 		XmlHelper.xmlAddL18Name( doc, result, parameter.getPrompt1(), XMLATTR_PARAM_LABEL1);
 		XmlHelper.xmlAddL18Name( doc, result, parameter.getPrompt2(), XMLATTR_PARAM_LABEL2);
+
+		parameter.setBound1( XmlHelper.getTagContent( doc, XMLATTR_PARAM_BOUND1, null, null));
+		parameter.setBound2( XmlHelper.getTagContent( doc, XMLATTR_PARAM_BOUND2, null, null));
 
 		return result;
 	}
@@ -712,21 +962,21 @@ public class DSXMLProducer {
 		if (nodeParameter == null)
 			return null;
 
-		final ParameterTypedValueImpl result = new ParameterTypedValueImpl( );
-		XmlHelper.parseMnemAttr( result, nodeParameter);
+		final ParameterTypedValueImpl result = new ParameterTypedValueImpl();
+		XmlHelper.parseMnemAttr(result, nodeParameter);
 
 		/* альфресковская ассоциация ... */
 		result.setAlfrescoAssoc( parseAssocNode(nodeParameter, XMLNODE_ALFRESCO_ASSOC));
 
 		{ /* тип параметра */
 			Type parType = null;
-			if (nodeParameter.hasAttribute( XMLATTR_PARAM_TYPE)) {
+			if (nodeParameter.hasAttribute(XMLATTR_PARAM_TYPE)) {
 				parType = Type.findType( nodeParameter.getAttribute( XMLATTR_PARAM_TYPE) );
 			}
-			result.setType( parType);
+			result.setType(parType);
 		}
 
-		XmlHelper.parseL18( result, nodeParameter);
+		XmlHelper.parseL18(result, nodeParameter);
 		XmlHelper.parseL18( result.getPrompt1(), nodeParameter, XMLATTR_PARAM_LABEL1);
 		XmlHelper.parseL18( result.getPrompt2(), nodeParameter, XMLATTR_PARAM_LABEL2);
 
@@ -735,22 +985,6 @@ public class DSXMLProducer {
 
 	private static AlfrescoAssocInfoImpl parseAssocNode(Element srcAssocNode,
 			String xmlNodeName) {
-		/*
-	private static Element xmlCreateAssocNode(Document doc, String xmlNodeName, AlfrescoAssocInfo assoc) {
-		if (assoc == null)
-			return null;
-
-		final Element result = doc.createElement(xmlNodeName);
-
-		if (assoc.getAssocTypeName() != null)
-			result.setAttribute( XMLATTR_ALFRESCO_ASSOC_NAME, assoc.getAssocTypeName());
-		if (assoc.getAssocKind() != null)
-			result.setAttribute( XMLATTR_ALFRESCO_ASSOC_KIND, assoc.getAssocKind().getMnemonic());
-
-		return result;
-	}
-
-		 * */
 		if (srcAssocNode == null)
 			return null;
 
@@ -761,17 +995,17 @@ public class DSXMLProducer {
 		final AlfrescoAssocInfoImpl result = new AlfrescoAssocInfoImpl();
 
 		/* альфресковский ассоциация параметра */
-		if (nodeAssoc.hasAttribute( XMLATTR_ALFRESCO_ASSOC_NAME)) {
+		if (nodeAssoc.hasAttribute(XMLATTR_ALFRESCO_ASSOC_NAME)) {
 			result.setAssocTypeName( nodeAssoc.getAttribute( XMLATTR_ALFRESCO_ASSOC_NAME) );
 		}
 
 		/* альфресковский ассоциация параметра */
 		{
 			AssocKind kind = null;
-			if (nodeAssoc.hasAttribute( XMLATTR_ALFRESCO_ASSOC_KIND)) {
+			if (nodeAssoc.hasAttribute(XMLATTR_ALFRESCO_ASSOC_KIND)) {
 				kind = AssocKind.findAssocKind(nodeAssoc.getAttribute( XMLATTR_ALFRESCO_ASSOC_KIND));
 			}
-			result.setAssocKind( kind);
+			result.setAssocKind(kind);
 		}
 
 		return result;
@@ -789,7 +1023,12 @@ public class DSXMLProducer {
 
 		XmlHelper.xmlCreateCDataNode(doc, result, XMLNODE_QUERY_TEXT, flags.getText());
 		XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_ALLVERSIONS, flags.isAllVersions());
-		XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_PREFEREDTYPE, flags.getPreferedNodeType());
+		{
+			final String values = (flags.getSupportedNodeTypes() == null) 
+								? null 
+								: StringUtils.collectionToCommaDelimitedString( flags.getSupportedNodeTypes());
+			XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_PREFEREDTYPE, values); // flags.getPreferedNodeType()
+		}
 
 		XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_MULTIROW, flags.isMultiRow());
 		XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_ISCUSTOM, flags.isCustom());
@@ -817,7 +1056,10 @@ public class DSXMLProducer {
 
 		result.setText( XmlHelper.getNodeAsText( curNode, XMLNODE_QUERY_TEXT, result.getText()) );
 		result.setAllVersions( XmlHelper.getNodeAsBool( curNode, XMLNODE_QUERY_ALLVERSIONS, result.isAllVersions() ));
-		result.setPreferedNodeType( XmlHelper.getNodeAsText( curNode, XMLNODE_QUERY_PREFEREDTYPE, result.getPreferedNodeType()) );
+		result.setPreferedNodeType( XmlHelper.getNodeAsText( curNode, XMLNODE_QUERY_PREFEREDTYPE
+				// , result.getPreferedNodeType()
+				, (result.getSupportedNodeTypes() == null ? null : StringUtils.collectionToCommaDelimitedString( result.getSupportedNodeTypes())))
+		);
 
 		result.setMultiRow( XmlHelper.getNodeAsBool( curNode, XMLNODE_QUERY_MULTIROW, result.isMultiRow()) );
 		result.setCustom( XmlHelper.getNodeAsBool( curNode, XMLNODE_QUERY_ISCUSTOM, result.isCustom()) );
@@ -839,18 +1081,18 @@ public class DSXMLProducer {
 	 * @param dsFileName
 	 * @return
 	 */
-	public static String extractReportName( String dsFileName) {
+	public static String extractReportName(String dsFileName) {
 		if (dsFileName == null)
 			return null;
 		int start = dsFileName.indexOf(PFX_DS);
 		if (start >= 0) // с символа сразу после "ds-" ...
-			start+= PFX_DS.length();
+			start += PFX_DS.length();
 		else if ( (start = dsFileName.lastIndexOf("\\")) >= 0) // после символа "\"
 			start++;
 		else if ( (start = dsFileName.lastIndexOf("/")) >= 0) // после символа "/"
 			start++;
 		else
-			start = 0; // если ничего нет - то с начала строки 
+			start = 0; // если ничего нет - то с начала строки
 
 		int end = dsFileName.lastIndexOf(".");
 		if (end < 0 || end < start) // если нет точки или она слева от start - до конца строки
@@ -867,19 +1109,19 @@ public class DSXMLProducer {
 	public static boolean isDsConfigFileName(final String testFileName) {
 		final boolean isDsXml = (testFileName != null)
 				&& testFileName.startsWith(PFX_DS) // начинается с "ds-"
-				&& testFileName.endsWith(".xml"); //расширение "xml"
+				&& testFileName.endsWith(".xml"); // расширение "xml"
 		return isDsXml;
 	}
 
 	/**
-	 * Получение названия стандартного файла с мета-описанием ("ds-xxx.xml"), 
-	 * который соот-ет указанному отчёту 
+	 * Получение названия стандартного файла с мета-описанием ("ds-xxx.xml"),
+	 * который соот-ет указанному отчёту
 	 * @param reportCode код (мнемоника) отчёт
 	 * @return название вида "ds-reportCode.xml"
 	 */
 	public static String makeDsConfigFileName(final String reportCode) {
 		// return PFX_DS + reportCode + ".xml";
-		return  String.format("%s%s.xml", PFX_DS, reportCode);
+		return String.format("%s%s.xml", PFX_DS, reportCode);
 	}
 
 	/**
@@ -889,7 +1131,7 @@ public class DSXMLProducer {
 	 * @return полное имя файла.
 	 */
 	public static IdRContent makeDsXmlId(ReportDescriptor desc) {
-		return IdRContent.createId( desc, makeDsConfigFileName(desc.getMnem()) );
+		return IdRContent.createId(desc, makeDsConfigFileName(desc.getMnem()));
 	}
 
 }

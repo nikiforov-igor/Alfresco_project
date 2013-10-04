@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import ru.it.lecm.reports.utils.Utils;
-
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRValueParameter;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+
+import ru.it.lecm.reports.utils.Utils;
 
 /**
  * Класс, реализуюший простые макро-подстановки, в первую очередь для списков свойств.
@@ -142,5 +145,28 @@ public class MacrosHelper {
 
 	public static String getJRParameterValue(Object jrparam) {
 		return getJRParameterValue(jrparam, null);
+	}
+
+
+	/**
+	 * Присвоение свойства бина с игнорированием ошибок.
+	 * @param destBean
+	 * @param propName название свойства (в том числе вложенного вида "objPropA.propB.propFinal")
+	 * @param value присваиваемое значение
+	 * @param logger необ параметр для журналирования ошибок
+	 * @return
+	 */
+	public static boolean safeSetBeanProperty(Object destBean, String propName, Object value, Logger logger)
+	{
+		try {
+			BeanUtils.setProperty(destBean, propName, value);
+			return true; // SUCCESS
+		} catch (Throwable ex) {
+			final String msg = String.format( "Ignoring error setting property\n\t %s::%s = '%s'\n\t Error: %s"
+					, destBean.getClass().getName(), propName, value, ex.getMessage() );
+			if (logger != null)
+				logger.error( msg, ex);
+		}
+		return false;
 	}
 }

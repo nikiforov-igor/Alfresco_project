@@ -17,13 +17,13 @@ public interface ReportDefaultsDesc {
 	public void setFileExtension(String fileExtension);
 
 	/**
-	 * Шаблон для генерации шаблона отчёта ("шаблон шаблона")
+	 * Макет для генерации шаблона отчёта ("шаблон шаблона")
 	 * @return
 	 */
 	public String getGenerationTemplate();
 
 	/**
-	 * Шаблон для генерации шаблона отчёта ("шаблон шаблона")
+	 * Макет для генерации шаблона отчёта ("шаблон шаблона")
 	 */
 	public void setGenerationTemplate(String template);
 }

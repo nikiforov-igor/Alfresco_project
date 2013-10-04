@@ -8,10 +8,9 @@ import ru.it.lecm.reports.api.model.Mnemonicable;
 
 /**
  * Значение, имеюшее мнемонику и L18-название.
- * Мнемоника регистрочувствительная.
- * (!) Хеш и сравнение вычисляются ТОЛЬКО ПО MNEM.
+ * <br/><b>Мнемоника регистрочувствительная.</b>
+ * <br/><b>(!) Хеш и сравнение вычисляются ТОЛЬКО ПО НАЗВАНИЮ MNEM.</b>
  * @author rabdullin
- *
  */
 public class MnemonicNamedItem implements Mnemonicable, L18able, Serializable {
 

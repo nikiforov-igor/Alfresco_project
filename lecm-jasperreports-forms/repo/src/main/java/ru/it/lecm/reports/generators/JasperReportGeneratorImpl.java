@@ -109,14 +109,9 @@ public class JasperReportGeneratorImpl
 			log.error( msg, e);
 			throw new IOException(msg, e);
 		} finally {
-			if (stm != null) {
+			if (stm != null)
 				IOUtils.closeQuietly(stm);
-			}
-		
-			if (outputStream != null) {
-				outputStream.flush();
-				outputStream.close();
-			}
+			IOUtils.closeQuietly(outputStream);
 		}
 	}
 

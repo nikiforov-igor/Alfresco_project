@@ -64,6 +64,10 @@ public class XmlHelper {
 
 	public static final String XML_NODENAME_VALUE = "value";
 
+	public static final String XMLNODE_MAP = "map";
+	public static final String XMLNODE_LIST = "list";
+
+
 	final private static Logger logger = LoggerFactory.getLogger(XmlHelper.class);
 
 	private XmlHelper() {
@@ -720,10 +724,10 @@ public class XmlHelper {
 		Object result = null;
 		if (node != null) {
 			final Element vListNode = (node.hasChildNodes()) 
-					? (Element) XmlHelper.findNodeByAttr(node, "list", null, null)
+					? (Element) XmlHelper.findNodeByAttr(node, XMLNODE_LIST, null, null)
 					: null;
 			final Element vMapNode = (node.hasChildNodes()) 
-							? (Element) XmlHelper.findNodeByAttr(node, "map", null, null)
+							? (Element) XmlHelper.findNodeByAttr(node, XMLNODE_MAP, null, null)
 							: null;
 			if (vListNode != null) { // загружаем список ...
 				result = getNodeAsItemsList(vListNode);

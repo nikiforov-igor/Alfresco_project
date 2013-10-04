@@ -11,6 +11,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.reports.api.ReportFileData;
@@ -80,7 +81,11 @@ public class ReportManagerJavascriptExtension
 		final List<ReportDescriptor> found = getReportsManager().getRegisteredReports(types, forCollection);
 		if (found != null && !found.isEmpty()) {
 			for (ReportDescriptor rd : found) {
-				final ReportInfo ri = new ReportInfo(rd.getReportType(), rd.getMnem(), (rd.getFlags() != null) ? rd.getFlags().getPreferedNodeType() : null);
+				final ReportInfo ri = new ReportInfo(
+							rd.getReportType(), rd.getMnem(), 
+							(rd.getFlags() == null) ? null 
+								: StringUtils.collectionToCommaDelimitedString(rd.getFlags().getSupportedNodeTypes()) 
+				);
 				ri.setReportName(rd.get(null, rd.getMnem()));
 				reports.add(ri);
 			}

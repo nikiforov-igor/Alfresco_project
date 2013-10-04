@@ -10,6 +10,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 
@@ -26,6 +27,7 @@ public abstract class AbstractDataSourceProvider
 {
 
 	protected WKServiceKeeper services;
+	protected LinksResolver resolver;
 	private List<JRField> fieldsList;
 	private ReportDescriptor reportDescriptor;
 	private ReportsManager reportManager;
@@ -69,6 +71,11 @@ public abstract class AbstractDataSourceProvider
 	@Override
 	public void setReportManager(ReportsManager reportManager) {
 		this.reportManager = reportManager;
+	}
+
+	@Override
+	public void setResolver(LinksResolver resolver) {
+		this.resolver = resolver;
 	}
 
 	/**

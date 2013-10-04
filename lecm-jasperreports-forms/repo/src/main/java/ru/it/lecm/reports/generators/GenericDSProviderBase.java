@@ -33,6 +33,8 @@ import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.SubReportDescriptor;
+import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
@@ -61,6 +63,7 @@ public class GenericDSProviderBase
 	private static final Logger logger = LoggerFactory.getLogger(GenericDSProviderBase.class);
 
 	private WKServiceKeeper services;
+	private LinksResolver resolver;
 	private ReportDescriptor reportDescriptor;
 	private ReportsManager reportManager;
 
@@ -90,6 +93,11 @@ public class GenericDSProviderBase
 			return;
 		this.reportDescriptor = rdesc;
 		reloadConfig();
+	}
+
+	@Override
+	public void setResolver(LinksResolver resolver) {
+		this.resolver = resolver;
 	}
 
 	/**
@@ -317,7 +325,8 @@ public class GenericDSProviderBase
 	 * @return
 	 */
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-		return new AlfrescoJRDataSource(iterator);
+		final GenericJRDataSource result = new GenericJRDataSource(iterator);
+		return result;
 	}
 
 	/**
@@ -367,7 +376,7 @@ public class GenericDSProviderBase
 							}
 						}
 					} else {
-						// TODO добавить обратку сложных ссылок
+						// TODO добавить обратку более сложных ссылок
 					}
 				}
 			} catch (Exception ignored) {
@@ -376,6 +385,59 @@ public class GenericDSProviderBase
 		}
 
 		return (useFilter) ? result : null;
+	}
+
+	/**
+	 * НД с поддержкой построения подотчётов
+	 * @author rabdullin
+	 *
+	 */
+	public class GenericJRDataSource extends AlfrescoJRDataSource {
+
+		private GenericJRDataSource(Iterator<ResultSetRow> iterator) {
+			super(iterator);
+		}
+
+		@Override
+		protected boolean loadAlfNodeProps(NodeRef docId) {
+			final boolean result = super.loadAlfNodeProps(docId); // (!) прогрузка бызовых свойств
+
+			if (result && context != null) {
+				if (getReportDescriptor().getSubreports() != null) {  // прогрузка вложенных subreports ...
+					for(SubReportDescriptor subreport: getReportDescriptor().getSubreports()) {
+						final Object stringOrBean = prepareSubReport( docId, subreport, resolver);
+						context.getCurNodeProps().put( getAlfAttrNameByJRKey(subreport.getDestColumnName()), stringOrBean);
+					}
+				}
+			}
+			return result;
+		}
+
+	}
+
+	/**
+	 * Подготовить данные подотчёта по ассоциированныму списку subreport:
+	 * @param subreport
+	 * @param ns
+	 * @return <li> ОДНУ строку, если subreport должен форматироваться (строка будет
+	 * состоять из форматированных всех элементов ассоциированного списка),  
+	 * <li> или список бинов List[Object] - по одному на каждую строку
+	 */
+	private static Object prepareSubReport( NodeRef docId
+				, SubReportDescriptor subreport
+				, LinksResolver resolver
+				) 
+	{
+		// if (subreport == null) return null;
+		if (Utils.isStringEmpty(subreport.getSourceListExpression())) {
+			logger.warn( String.format( "Subreport '%s' has empty association", subreport.getMnem()));
+			return null;
+		}
+
+		/* получение ассоциированного списка и построение ... */
+		final SubreportBuilder builder = new SubreportBuilder(subreport, resolver);
+		final Object result = builder.buildSubreport(docId);
+		return result;
 	}
 
 }

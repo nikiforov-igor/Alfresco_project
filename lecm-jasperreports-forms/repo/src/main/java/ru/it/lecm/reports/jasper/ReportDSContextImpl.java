@@ -165,6 +165,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 	}
 
 
+	// TODO: использовать LinksResolverBean
 	@Override
 	public Object getPropertyValueByJRField(String reportColumnName) {
 		if (reportColumnName == null) {
@@ -204,41 +205,48 @@ public class ReportDSContextImpl implements ReportDSContext {
 
 		// типизация value согласно описанию ...
 		if ((fld != null) && (fld.getValueClass() != null)) {
-				// TODO: метод для восстановления реального типа данных ...
+				// учёт реального типа данных ...
 				final JavaDataTypeImpl.SupportedTypes type = JavaDataTypeImpl.SupportedTypes.findType(fld.getValueClassName());
-				String strValue = value.toString();
-				switch (type) {
-					case DATE: {
-						if (strValue.isEmpty()) {
-							value = null;
-						} else {
-							value = ArgsHelper.tryMakeDate(strValue, null);
+				if (type == null) {
+					// type may be Map/List or any other ...
+					return value;
+				} else {
+					final String strValue = value.toString();
+					switch (type) {
+						case DATE: {
+							value = (strValue.isEmpty()) ? null: ArgsHelper.tryMakeDate(strValue, null);
+							break;
 						}
-						break;
-					}
-					case BOOL: {
-						value = Boolean.valueOf(strValue);
-						break;
-					}
-					case FLOAT: {
-						value = (strValue.isEmpty()) ? null : Float.valueOf(strValue);
-						break;
-					}
-					case INTEGER: {
-						value = (strValue.isEmpty()) ? null : Integer.valueOf(strValue);
-						break;
-					}
-					default: // case STRING:
-					{
-						value = strValue;
-						break;
-					}
-				} // switch
+						case BOOL: {
+							value = Boolean.valueOf(strValue);
+							break;
+						}
+						case FLOAT: {
+							value = (strValue.isEmpty()) ? null : Float.valueOf(strValue);
+							break;
+						}
+						case INTEGER: {
+							value = (strValue.isEmpty()) ? null : Integer.valueOf(strValue);
+							break;
+						}
+						default: { // case STRING or other:
+							value = strValue;
+							break;
+						}
+					} // switch
+				}
 		}
+
+		/*
+		 * NOTE: вариант для случаев, когда NULL не желателен ...
 		if (value != null)
 			return value;
 
-		return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null; // no value -> return current name if valueClass is String
+		// NULL result in value -> return current name if valueClass is String
+		return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null;
+		 */
+		return value;
+
 	}
 
 	/**

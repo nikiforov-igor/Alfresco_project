@@ -1,15 +1,21 @@
 package ru.it.lecm.utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.slf4j.Logger;
+
+import ru.it.lecm.reports.beans.LinksResolver;
 
 /**
  * Утилитки для работы с узлами.
@@ -159,4 +165,66 @@ public class NodeUtils {
 
 		return (result.isEmpty()) ? null : result;
 	}
+
+
+	/**
+	 * Получение свойства по ссылке - либо непосредственно из свойств, 
+	 * либо по ссылке.
+	 * <br/>Если значение НЕ содержит "{}", то предполагается что это обычный
+	 * атрибут, иначе - форматированный для SubstitudeService
+	 * <br/> Пример: 
+	 * <br/		final Object value = getByLink(sourceLink, subItemId, props, nodeService, nameService, substService, propName);
+	 * @param sourceLink
+	 * @param docId 
+	 * @param props список свойств объекта, если null, то свойство будет загружаться непосредственно
+	 * @param resolver
+	 * @param logger для журналирования, м.б. null
+	 * @param info  пояснения по получемому значению для журналирования ошибок
+	 * @return полученное значение
+	 */
+	public static Object getByLink(String sourceLink
+			, NodeRef docId
+			, Map<QName, Serializable> props
+			, LinksResolver resolver
+			, Logger logger
+			, String info)
+	{
+		if (sourceLink == null)
+			return null;
+
+		sourceLink = sourceLink.trim();
+		if (sourceLink.length() == 0)
+			return null;
+
+		Object value = null;
+		try {
+			if (resolver.isSubstCalcExpr(sourceLink)) {
+				// форматируем значение вида "{a/b/c...}"
+				// value = substService.formatNodeTitle(docId, sourceLink);
+				value = resolver.evaluateLinkExpr(docId, sourceLink);
+			} else { // простое значение выбираем в свойствах
+				final NodeService nodeService = resolver.getServices().getServiceRegistry().getNodeService();
+				final NamespaceService ns = resolver.getServices().getServiceRegistry().getNamespaceService();
+				final QName qname = QName.createQName(sourceLink, ns);
+				value = (props != null) ? props.get(qname) : nodeService.getProperty( docId, qname);
+			}
+		} catch (Throwable ex) {
+			if (logger != null) {
+				final String msg = String.format( "Ignoring problem getting property '%s'\n\t for docId %s \n\t by link '%s' -> ignored \n\t %s"
+						, info, docId, sourceLink,  ex.getMessage() );
+				logger.error( msg, ex);
+			}
+			value = null;
+		}
+		return value;
+	}
+
+	public static Object getByLink(String sourceLink
+			, NodeRef docId
+			, LinksResolver resolver
+			, Logger logger
+			, String info) {
+		return getByLink(sourceLink, docId, null, resolver, logger, info);
+	}
+
 }

@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.util.List;
 import java.util.Set;
 
 import ru.it.lecm.reports.api.model.NamedValue;
@@ -47,6 +48,16 @@ public class ReportFlagsImpl
 	@Override
 	public void setPreferedNodeType(String value) {
 		queryDesc().setPreferedNodeType(value);
+	}
+
+	@Override
+	public List<String> getSupportedNodeTypes() {
+		return queryDesc().getSupportedNodeTypes();
+	}
+
+	@Override
+	public void setSupportedNodeTypes(List<String> values) {
+		queryDesc().setSupportedNodeTypes(values);
 	}
 
 	@Override

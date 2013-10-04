@@ -637,10 +637,10 @@ public class LucenePreparedQuery {
 					}
 				}
 
-				if ( !hasType ) { // пробуем из атрибута "preferedNodeType" ...
+				if ( !hasType ) { // если тп не задан параметрами - пробуем из описателя атрибута ...
 					if(reportDescriptor.getFlags() != null ) {
 						// bquery.append("TYPE:").append(Utils.quoted(reportDescriptor.getFlags().getPreferedNodeType()));
-						hasType = bquery.emmitTypeCond( reportDescriptor.getFlags().getPreferedNodeType(), null);
+						hasType = bquery.emmitTypeCond( reportDescriptor.getFlags().getSupportedNodeTypes(), null);
 					}
 				}
 			}

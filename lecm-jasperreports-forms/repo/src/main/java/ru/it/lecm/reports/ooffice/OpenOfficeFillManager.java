@@ -13,9 +13,6 @@ import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.generators.OpenOfficeTemplateGenerator;
-import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
-
-import com.sun.star.lang.XComponent;
 
 public class OpenOfficeFillManager {
 
