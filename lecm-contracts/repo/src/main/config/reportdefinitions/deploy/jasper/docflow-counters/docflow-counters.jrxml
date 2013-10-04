@@ -10,18 +10,6 @@
 			<style backcolor="#E2DFD6"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="CMIS_URL" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["http://127.0.0.1:8080/alfresco/cmisatom"]]></defaultValueExpression>
-	</parameter>
-	<parameter name="CMIS_USER" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["admin"]]></defaultValueExpression>
-	</parameter>
-	<parameter name="CMIS_PASS" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["111"]]></defaultValueExpression>
-	</parameter>
-	<parameter name="CMIS_ALLVERSIONS" class="java.lang.Boolean" isForPrompting="false">
-		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
-	</parameter>
 	<parameter name="CMIS_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["select * from lecm-contract:document as Contract"]]></defaultValueExpression>
 	</parameter>
@@ -31,6 +19,15 @@
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
+	<field name="col_MeasureTag" class="java.lang.String">
+		<fieldDescription><![CDATA[Измерение.Название]]></fieldDescription>
+	</field>
+	<field name="col_DateReg.From" class="java.util.Date">
+		<fieldDescription><![CDATA[ДатаРегистрации.С]]></fieldDescription>
+	</field>
+	<field name="col_DateReg.To" class="java.util.Date">
+		<fieldDescription><![CDATA[ДатаРегистрации.По]]></fieldDescription>
+	</field>
 	<field name="col_Count1" class="java.lang.Integer">
 		<fieldDescription><![CDATA[Статус1.Кол-во]]></fieldDescription>
 	</field>
@@ -121,17 +118,32 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<property name="cmis.url" value="http://127.0.0.1:8080/alfresco/cmisatom"/>
 			<property name="cmis.binding_type" value="atompub"/>
 			<property name="cmis.user" value="admin"/>
 			<property name="cmis.password" value="111"/>
 			<textField>
-				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="10" width="141" height="20"/>
+				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="409" y="2" width="141" height="16">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Left">
 					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Стр "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Page" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="8a0773d5-f6b8-4b79-9625-0b895e8835bb" stretchType="RelativeToTallestObject" x="6" y="2" width="397" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( ($F{col_DateReg.From} == null)
+	&& ($F{col_DateReg.From} == null)
+) ? ""
+:	"Период"
+	+ (($F{col_DateReg.From} == null) ? "" : " с "+ (new SimpleDateFormat("dd.MM.yyyy")).format($F{col_DateReg.From}))
+	+ (($F{col_DateReg.To} == null) ? "" : " по "+ (new SimpleDateFormat("dd.MM.yyyy")).format($F{col_DateReg.To}))]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -147,12 +159,12 @@
 				</textElement>
 				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField evaluationTime="Page">
 				<reportElement uuid="8514e4c9-574d-4cbd-87f1-2afb80a884a2" x="38" y="1" width="120" height="80"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Название"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{col_MeasureTag} != null) ? $F{col_MeasureTag} : "Название"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="ad617c43-79fd-4734-84d2-1e37958cfa8c" x="160" y="1" width="30" height="80"/>

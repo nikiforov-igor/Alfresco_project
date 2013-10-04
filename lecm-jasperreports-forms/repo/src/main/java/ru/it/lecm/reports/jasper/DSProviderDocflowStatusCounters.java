@@ -68,6 +68,14 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	 * Формат названия колонки со счётчиками
 	 */
 	final static String COLNAME_TAG = "col_RowTag";
+
+	 /** колонка название выбранного пользователем измерения */
+	final static String COLNAME_MEASURE_TAG = "col_MeasureTag";
+
+	/** Дата регистрации с ... по ...*/
+	final static String COLNAME_DATEREG_FROM = "col_DateReg.From";
+	final static String COLNAME_DATEREG_TO = "col_DateReg.To";
+
 	final static String COLNAME_STATUS_FMT = "col_Status%d"; // колонка с названием i-го статуса
 	final static String COLNAME_COUNTER_FMT = "col_Count%d"; // колонка с количеством найденных строк в i-м статусе
 	final static String COLVALUE_ALL_OTHER = "All other"; // "Все отсальные статусы"
@@ -394,6 +402,9 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 		 */
 		final protected Map<String, DocStatusGroup> groups = new LinkedHashMap<String, DocStatusGroup>();
 
+		// формат и название выбранного способа группировки
+		String fmtForTag, nameForTag;
+
 		public DocflowJRDataSource(Iterator<ResultSetRow> iterator) {
 			super(iterator);
 		}
@@ -428,7 +439,6 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 			final ArrayList<DocStatusGroup> result = new ArrayList<DocStatusGroup>();
 
 			/* Получение формата строки для выбранного Измерения из конфигурации ... */
-			final String fmtForTag;
 			{
 				if (groupBy == null)
 					throw new RuntimeException( "Too few parameters: 'groupBy' not assigned");
@@ -441,6 +451,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 					throw new RuntimeException( String.format("Invalid configuration: provided map '%s' not contains variant for demanded report groupBy order '%s'", XMLGROUPBY_FORMATS_MAP, groupBy));
 
 				fmtForTag = (String) mapGroupBy.get(groupBy);
+				nameForTag = (String) mapGroupBy.get(groupBy + "Tag");
 			}
 
 			if (context.getRsIter() != null) {
@@ -500,6 +511,15 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 
 			/* Название ... */
 			result.put( COLNAME_TAG, item.getGroupTag());
+			result.put( COLNAME_MEASURE_TAG, nameForTag);
+
+			/* Дата регистрации с ... по ... */
+			result.put( COLNAME_DATEREG_FROM, filter.dateRegAfter);
+			result.put( COLNAME_DATEREG_TO, filter.dateRegBefore);
+
+			// /* Вид и тематика договора... */
+			// result.put( COLNAME_DOC_KIND, filter.contractType);
+			// result.put( COLNAME_DOC_THEME, filter.contractSubject);
 
 			/* Счётчики ... */
 			@SuppressWarnings("unchecked")

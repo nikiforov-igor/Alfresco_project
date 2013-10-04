@@ -17,7 +17,7 @@
 	<description>this is reports generator api module</description>
 
 	<properties>
-		<module.log.level>info</module.log.level>
+		<module.log.level>debug</module.log.level>
 		<alfproject.version>4.0</alfproject.version>
 		<jasperreports.fonts.version>4.0.0</jasperreports.fonts.version>
 		<!-- <jasperreports.version>5.0</jasperreports.version> -->

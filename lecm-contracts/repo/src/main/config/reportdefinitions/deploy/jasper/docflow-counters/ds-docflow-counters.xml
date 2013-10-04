@@ -102,20 +102,24 @@
 	<groupby.formats>
 		<map>
 			<item key="contractKind">
-				<![CDATA[ Вид договора {lecm-contract:typeContract-assoc/cm:name}]]>
+				<![CDATA[ {lecm-contract:typeContract-assoc/cm:name}]]>
 			</item>
+			<item key="contractKindTag" value="Вид договора" />
 
 			<item key="contractTheme">
-				<![CDATA[ Тематика договора {lecm-contract:subjectContract-assoc/cm:name}]]>
+				<![CDATA[ {lecm-contract:subjectContract-assoc/cm:name}]]>
 			</item>
+			<item key="contractThemeTag" value="Тематика договора" />
 
 			<item key="contractor">
-				<![CDATA[Контрагент {lecm-contract:partner-assoc/lecm-contractor:shortname}]]>
+				<![CDATA[{lecm-contract:partner-assoc/lecm-contractor:shortname}]]>
 			</item>
+			<item key="contractorTag" value="Контрагент" />
 
 			<item key="initiator">
 				<![CDATA[ Инициатор {~AUTHOR} ]]>
 			</item>
+			<item key="initiatorTag" value="Инициатор" />
 		</map>
 	</groupby.formats>
 
@@ -171,7 +175,11 @@
 		<!-- Первый столбец это значение выбранного Измерения, т.е. название вида договоров,
 		тематика, котрагент или инициатор.
 		  -->
-		<field jrFldName="col_RowTag" queryFldName="customTag" displayName="Измерение.Название" />
+		<field jrFldName="col_RowTag" queryFldName="customTag" displayName="Данные.Название" />
+		<field jrFldName="col_MeasureTag" queryFldName="col_MeasureTag" displayName="Измерение.Название" />
+
+		<field jrFldName="col_DateReg.From" queryFldName="col_DateReg.From" displayName="ДатаРегистрации.С" javaValueClass="java.util.Date" />
+		<field jrFldName="col_DateReg.From" queryFldName="col_DateReg.To" displayName="ДатаРегистрации.По" javaValueClass="java.util.Date" />
 
 		<!-- Далее столбцы это кол-во в соот-щих Статусах (см узлы "statuses")-->
 		<field jrFldName="col_Count1" queryFldName="status1.counter" displayName="Статус1.Кол-во" javaValueClass="int" />

@@ -69,10 +69,10 @@
 	</cmis.connection>
 
 	<!--
-		Описания для группирования строк из НД, полученного после сбора всех договоров.
+		groupby.formats: Описания для группирования строк из НД, полученного после сбора всех договоров.
 		(!) Ключи "key" - это значения параметра формирования отчёта "reportGroupBy"
-		, а соот-щие значения - форматная строка для отчёта.
-		В дону группу попадут строки с одинаковым значением отформатированной строки.
+		, а соот-щие значения - форматная строка для отчёта в терминах substituteService.
+		В одну группу будут отнесены строки с одинаковым значением отформатированной строки.
 
 		Пример форматной строки:
 
@@ -91,25 +91,29 @@
 	<groupby.formats>
 		<map>
 			<item key="contractKind">
-				<![CDATA[ Вид договора {lecm-contract:typeContract-assoc/cm:name}]]>
+				<![CDATA[ {lecm-contract:typeContract-assoc/cm:name}]]>
 			</item>
+			<item key="contractKindTag" value="Вид договора" />
 
 			<item key="contractTheme">
-				<![CDATA[ Тематика договора {lecm-contract:subjectContract-assoc/cm:name}]]>
+				<![CDATA[ {lecm-contract:subjectContract-assoc/cm:name}]]>
 			</item>
+			<item key="contractThemeTag" value="Тематика договора" />
 
 			<item key="contractor">
-				<![CDATA[Контрагент {lecm-contract:partner-assoc/lecm-contractor:shortname}]]>
+				<![CDATA[{lecm-contract:partner-assoc/lecm-contractor:shortname}]]>
 			</item>
+			<item key="contractorTag" value="Контрагент" />
 
 			<item key="initiator">
 				<![CDATA[ Инициатор {~AUTHOR} ]]>
 			</item>
+			<item key="initiatorTag" value="Инициатор" />
 		</map>
 	</groupby.formats>
 
 	<!-- Список реальных значений атрибута-статуса для группировки 
-	     внутри групп после примеенения grupby.format
+	     внутри групп после применения groupby.format
 	  -->
 	<statuses>
 		<list>
@@ -139,16 +143,18 @@
 			<!--
 			   rowSum.show: надо ли вычислять сумму по строкам (по всем статусам) 
 			     и включать соот-щую колонку для dataSource отчёта
+
 			   rowSum.colName: (имеет значение только при rowSum.show=true)
 			   название колонки в секции fields.jasper с суммой данных по строке
-			   (!) это название одинаково тут и в секции fields.jasper.
+			   (!) это название должно быть одинаковым тут и в секции fields.
 			 -->
 			<item key="rowSum.show">false</item>
 			<item key="rowSum.colName">col_RowSum</item>
 
-			<!--
+			<!-- свойство Альфреско, в котором брать статус
 			<item key="doc.statusProperty">lecm-statemachine:status</item>
 			  -->
+
 		</map>
 	</status.flags>
 
@@ -158,7 +164,11 @@
 		<!-- Первый столбец это значение выбранного Измерения, т.е. название вида договоров,
 		тематика, котрагент или инициатор.
 		  -->
-		<field jrFldName="col_RowTag" queryFldName="customTag" displayName="Измерение.Название" />
+		<field jrFldName="col_RowTag" queryFldName="customTag" displayName="Данные.Название" />
+		<field jrFldName="col_MeasureTag" queryFldName="col_MeasureTag" displayName="Измерение.Название" />
+
+		<field jrFldName="col_DateReg.From" queryFldName="col_DateReg.From" displayName="ДатаРегистрации.С" javaValueClass="java.util.Date" />
+		<field jrFldName="col_DateReg.From" queryFldName="col_DateReg.To" displayName="ДатаРегистрации.По" javaValueClass="java.util.Date" />
 
 		<!-- Далее столбцы это кол-во в соот-щих Статусах (см узлы "statuses")-->
 		<field jrFldName="col_Count1" queryFldName="status1.counter" displayName="Статус1.Кол-во" javaValueClass="int" />
