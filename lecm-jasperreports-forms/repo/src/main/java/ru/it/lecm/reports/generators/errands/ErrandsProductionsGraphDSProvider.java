@@ -402,11 +402,11 @@ public class ErrandsProductionsGraphDSProvider
 			if (dstart == null || dend == null) // одной из дат нет ...
 				return 0;
 
-            if (dstart.getTime() > dend.getTime()) {
-                final Date buf = dstart;
-                dstart = dend;
-                dend = buf;
-            }
+			if (dstart.getTime() > dend.getTime()) {
+				final Date buf = dstart;
+				dstart = dend;
+				dend = buf;
+			}
 			// (!) первую дату выравниваем на начало дня,
 			// вторую - не трогаем, т.к. будем ровнять delta_h сверху на 24ч
 			final Date nstart = Utils.adjustDayTime(dstart, 0, 0, 0, 0);
@@ -423,7 +423,7 @@ public class ErrandsProductionsGraphDSProvider
 
 			final List<GraphPoint> result = new ArrayList<GraphPoint>();
 
-            int countDays = countDeltaInDays(periodStart, periodEnd);
+			final int countDays = countDeltaInDays(periodStart, periodEnd);
 			final int maxTimeCounter = 1 +  (countDays >= 0 ? countDays : 0); // кол-во отметок времени
 
 			/*
@@ -527,7 +527,7 @@ public class ErrandsProductionsGraphDSProvider
 							continue;
 
 						// точка Y: "среднее время исполнения на (!) дату закрытия" ...
-						final int index = countDeltaInDays(periodStart, endErrand);
+						final int index = countDeltaInDays(periodStart, endErrand) - 1;
 						executor.registerDuration( index, qnames().getВремяИсполнения_мсек(props));
 					}
 
@@ -537,7 +537,7 @@ public class ErrandsProductionsGraphDSProvider
 				// (!) перенос в основной блок с разбивкой по датам ...
 				final Calendar x_curDay = Calendar.getInstance();
 				x_curDay.setTime(periodStart);
-				for (int i = 0; i < maxTimeCounter; i++) { // цикл по дням
+				for (int i = 0; i < countDays; i++) { // цикл по дням
 					final Timestamp x_curStamp = new Timestamp(x_curDay.getTimeInMillis());
 					for (Map.Entry<NodeRef, ProductGroupInfo> e: series.entrySet()) { // цикл по объектам
 						final ProductGroupInfo item = e.getValue();
