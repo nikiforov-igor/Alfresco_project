@@ -1,5 +1,10 @@
 package ru.it.lecm.wcalendar.beans;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -9,12 +14,6 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -49,7 +48,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 		}
 		NodeRef schedule = getScheduleOrParentSchedule(node);
 		if (schedule == null) {
-			logger.warn("No schedule associated with employee {} nor with it's parent OUs!", node);
+			logger.trace("No schedule associated with employee {} nor with it's parent OUs!", node);
 			return false;
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
@@ -83,7 +82,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 		}
 		NodeRef schedule = getScheduleOrParentSchedule(node);
 		if (schedule == null) {
-			logger.warn("No schedule associated with employee nor with it's parent OUs!");
+			logger.trace("No schedule associated with employee nor with it's parent OUs!");
 			return result;
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
@@ -131,7 +130,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 		}
 		NodeRef schedule = getScheduleOrParentSchedule(node);
 		if (schedule == null) {
-			logger.warn("No schedule associated with employee nor with it's parent OUs!");
+			logger.trace("No schedule associated with employee nor with it's parent OUs!");
 			return result;
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
@@ -190,7 +189,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 		}
 		NodeRef schedule = getScheduleOrParentSchedule(node);
 		if (schedule == null) {
-			logger.warn("No schedule associated with employee nor with it's parent OUs!");
+			logger.trace("No schedule associated with employee nor with it's parent OUs!");
 			return result;
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
@@ -273,16 +272,23 @@ public class WorkCalendarBean implements IWorkCalendar {
 	}
 
 	private Date addDayToDate(Date date) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		c.add(Calendar.DAY_OF_MONTH, 1);
-		return c.getTime();
+		return shiftDate(date, 1);
 	}
 
 	private Date substractDayFromDate(Date date) {
+		return shiftDate(date, -1);
+	}
+
+	/**
+	 * сдвинуть дату на указанное число дней
+	 * @param date дата которую будем двигать
+	 * @param amount кол-во дней для сдвига. Если больше нуля то в будущее. Если меньше, то в прошлое
+	 * @return новая дата
+	 */
+	private Date shiftDate(Date date, int amount) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
-		c.add(Calendar.DAY_OF_MONTH, -1);
+		c.add(Calendar.DAY_OF_MONTH, amount);
 		return c.getTime();
 	}
 
@@ -331,27 +337,18 @@ public class WorkCalendarBean implements IWorkCalendar {
 	}
 
 	private Date getEmployeeWorkingDayOffset(NodeRef node, Date initialDate, int offset, boolean shiftToFuture) {
-		Date result;
-		Date curDate = initialDate;
-		int absOffset = Math.abs(offset);
-
-		for (int i = 0; i < absOffset; i++) {
-			curDate = offset > 0 ? addDayToDate(curDate) : substractDayFromDate(curDate);
-		}
+		Date curDate = shiftDate(initialDate, offset);
 
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, 2000);
-		calendar.set(Calendar.DAY_OF_YEAR, 1);
-		long past = calendar.getTime().getTime();
-		calendar.set(Calendar.YEAR, 2025);
-		calendar.set(Calendar.DAY_OF_YEAR, 1);
-		long future = calendar.getTime().getTime();
-
-		while (!getEmployeeAvailability(node, curDate) && curDate.getTime() > past && curDate.getTime() < future) {
+		while (!getEmployeeAvailability(node, curDate)) {
 			curDate = shiftToFuture ? addDayToDate(curDate) : substractDayFromDate(curDate);
+			calendar.setTime(curDate);
+			int year = calendar.get(Calendar.YEAR);
+			if (!WCalendarService.isCalendarExists(year)) {
+				curDate = null;
+				break;
+			}
 		}
-		result = curDate;
-
-		return result;
+		return curDate;
 	}
 }

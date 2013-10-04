@@ -402,31 +402,33 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		recipients.add(employee);
 		Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(employee, dueDate, -1);
 		Date currentDate = new Date();
-		int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
-		int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
-		Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
-		if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
-			fakeProps.put(FAKE_PROP_COMINGSOON, "");
-			Notification notification = new Notification();
-			notification.setAuthor(AuthenticationUtil.getSystemUserName());
-			String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
-			notification.setDescription(description);
-			notification.setObjectRef(docInfo.getDocumentRef());
-			notification.setRecipientEmployeeRefs(recipients);
-			notificationsService.sendNotification(notification);
-		}
-		if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
-			fakeProps.put(FAKE_PROP_OVERDUE, "");
-			Notification notification = new Notification();
-			notification.setAuthor(AuthenticationUtil.getSystemUserName());
-			String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
-			notification.setDescription(description);
-			notification.setObjectRef(docInfo.getDocumentRef());
-			notification.setRecipientEmployeeRefs(recipients);
-			notificationsService.sendNotification(notification);
-		}
-		if (!fakeProps.isEmpty()) {
-			workflowService.updateTask(userTask.getId(), fakeProps, null, null);
+		if (comingSoonDate != null) {
+			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
+			int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
+			Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
+			if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
+				fakeProps.put(FAKE_PROP_COMINGSOON, "");
+				Notification notification = new Notification();
+				notification.setAuthor(AuthenticationUtil.getSystemUserName());
+				String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
+				notification.setDescription(description);
+				notification.setObjectRef(docInfo.getDocumentRef());
+				notification.setRecipientEmployeeRefs(recipients);
+				notificationsService.sendNotification(notification);
+			}
+			if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
+				fakeProps.put(FAKE_PROP_OVERDUE, "");
+				Notification notification = new Notification();
+				notification.setAuthor(AuthenticationUtil.getSystemUserName());
+				String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
+				notification.setDescription(description);
+				notification.setObjectRef(docInfo.getDocumentRef());
+				notification.setRecipientEmployeeRefs(recipients);
+				notificationsService.sendNotification(notification);
+			}
+			if (!fakeProps.isEmpty()) {
+				workflowService.updateTask(userTask.getId(), fakeProps, null, null);
+			}
 		}
 	}
 
@@ -478,32 +480,34 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 			Date dueDate = workflowInstance.getDueDate();
 			Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(docInfo.getInitiatorRef(), dueDate, -1);
 			Date currentDate = new Date();
-			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
-			int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
-			if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
-				variableScope.setVariable("initiatorComingSoon", "");
-				Notification notification = new Notification();
-				notification.setAuthor(AuthenticationUtil.getSystemUserName());
-				String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
-				notification.setDescription(description);
-				notification.setObjectRef(docInfo.getDocumentRef());
-				notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
-				notificationsService.sendNotification(notification);
-			}
-			if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
-				variableScope.setVariable("initiatorOverdue", "");
-				Notification notification = new Notification();
-				notification.setAuthor(AuthenticationUtil.getSystemUserName());
-				String people = getIncompleteAssignees(processInstanceId);
-				String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate), people);
-				if (isDocumentApproval) {
-					//получить список кураторов и добавить его в recipients
-					recipients.addAll(Utils.getCurators());
+			if ( comingSoonDate != null) {
+				int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
+				int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
+				if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
+					variableScope.setVariable("initiatorComingSoon", "");
+					Notification notification = new Notification();
+					notification.setAuthor(AuthenticationUtil.getSystemUserName());
+					String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
+					notification.setDescription(description);
+					notification.setObjectRef(docInfo.getDocumentRef());
+					notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
+					notificationsService.sendNotification(notification);
 				}
-				notification.setDescription(description);
-				notification.setObjectRef(docInfo.getDocumentRef());
-				notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
-				notificationsService.sendNotification(notification);
+				if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
+					variableScope.setVariable("initiatorOverdue", "");
+					Notification notification = new Notification();
+					notification.setAuthor(AuthenticationUtil.getSystemUserName());
+					String people = getIncompleteAssignees(processInstanceId);
+					String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate), people);
+					if (isDocumentApproval) {
+						//получить список кураторов и добавить его в recipients
+						recipients.addAll(Utils.getCurators());
+					}
+					notification.setDescription(description);
+					notification.setObjectRef(docInfo.getDocumentRef());
+					notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
+					notificationsService.sendNotification(notification);
+				}
 			}
 		} catch (Exception ex) {
 			logger.error("Internal error while notifying initiator and curators", ex);
