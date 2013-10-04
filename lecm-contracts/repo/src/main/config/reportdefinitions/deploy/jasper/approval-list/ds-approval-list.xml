@@ -128,12 +128,16 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				<item key=""><![CDATA[ ]]></item>
 			  -->
 			<item key="NO_DECISION" value="решение пока не принято"/>
-			<item key="APPROVED" value="согласован"/>
-			<item key="REJECTED" value="отклонен"/>
 
+			<item key="APPROVED" value="согласован"/>
 			<item key="APPROVED_WITH_REMARK" value="согласован с замечанием"/>
-			<item key="REJECTED_FORCE" value="отозван с согласования"/>
 			<item key="APPROVED_FORCE" value="согласование принудительно завершено"/>
+
+			<item key="REJECTED" value="отклонен"/>
+			<item key="REJECTED_FORCE" value="отозван с согласования"/>
+
+			<item key="REASSIGNED" value="переназначить"/>
+
 		</map>
 	</statuses.valueDisplay>
 
