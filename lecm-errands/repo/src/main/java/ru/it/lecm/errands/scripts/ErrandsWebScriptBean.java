@@ -78,7 +78,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 	}
 
 	public ScriptNode getCurrentUserSettingsNode() {
-		return new ScriptNode(errandsService.getCurrentUserSettingsNode(), serviceRegistry, getScope());
+		return new ScriptNode(errandsService.getCurrentUserSettingsNode(true), serviceRegistry, getScope());
 	}
 
 	public List<NodeRef> getAvailableExecutors() {

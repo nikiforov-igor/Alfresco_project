@@ -131,12 +131,12 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return ModeChoosingExecutors.UNIT;
     }
 
-    public NodeRef getCurrentUserSettingsNode() {
+	public NodeRef getCurrentUserSettingsNode(boolean createNewIfNotExist) {
         final NodeRef rootFolder = this.getServiceRootFolder();
         final String settingsObjectName = authService.getCurrentUserName() + "_" + ERRANDS_SETTINGS_NODE_NAME;
 
         NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
-        if (settings != null) {
+		if (settings != null || !createNewIfNotExist) {
             return settings;
         } else {
             AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
@@ -166,7 +166,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 
     public boolean isDefaultWithoutInitiatorApproval() {
-        NodeRef settings = getCurrentUserSettingsNode();
+		NodeRef settings = getCurrentUserSettingsNode(false);
         if (settings != null) {
             return (Boolean) nodeService.getProperty(settings, USER_SETTINGS_PROP_WITHOUT_INITIATOR_APPROVAL);
         }
@@ -176,7 +176,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     public NodeRef getDefaultInitiator() {
         NodeRef result = orgstructureService.getCurrentEmployee();
         if (orgstructureService.isCurrentEmployeeHasBusinessRole(BUSINESS_ROLE_ERRANDS_CHOOSING_INITIATOR)) {
-            NodeRef settings = getCurrentUserSettingsNode();
+			NodeRef settings = getCurrentUserSettingsNode(false);
             if (settings != null) {
                 List<AssociationRef> defaultInitiatorAssocs = nodeService.getTargetAssocs(settings, USER_SETTINGS_ASSOC_DEFAULT_INITIATOR);
                 if (defaultInitiatorAssocs.size() > 0) {
@@ -188,7 +188,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 
     public NodeRef getDefaultSubject() {
-        NodeRef settings = getCurrentUserSettingsNode();
+		NodeRef settings = getCurrentUserSettingsNode(false);
         if (settings != null) {
             List<AssociationRef> defaultSubjectAssocs = nodeService.getTargetAssocs(settings, USER_SETTINGS_ASSOC_DEFAULT_SUBJECT);
             if (defaultSubjectAssocs.size() > 0) {

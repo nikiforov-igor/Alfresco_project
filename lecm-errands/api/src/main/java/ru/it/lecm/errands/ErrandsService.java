@@ -70,9 +70,10 @@ public interface ErrandsService {
 
 	/**
 	 * Получение объекта настроек поручений текущего пользователя
-	 * @return ссылка на объект пользовательских настроек поручений
-	 */
-	public NodeRef getCurrentUserSettingsNode();
+     * @param createNewIfNotExist создавать, если еще не существует, иначе вернет NULL
+     * @return ссылка на объект пользовательских настроек поручений
+     */
+	public NodeRef getCurrentUserSettingsNode(boolean createNewIfNotExist);
 
 	/**
 	 * Получение списка сотрудников, доступных текущему пользователю для выбора исполнителя и соисполнителей
