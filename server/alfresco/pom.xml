@@ -129,13 +129,6 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.experts</groupId>
-			<artifactId>experts-repo</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<!-- <groupId>ru.it.lecm.forms.jasperforms</groupId> -->
 			<groupId>ru.it.lecm.reports</groupId>
 			<!-- <artifactId>jasperforms-repo</artifactId> -->
@@ -257,13 +250,6 @@
             <scope>runtime</scope>
         </dependency>
 		<dependency>
-            <groupId>ru.it.lecm.contracts-fake</groupId>
-            <artifactId>contracts-fake-repo</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-		<dependency>
             <groupId>ru.it.lecm.approval</groupId>
             <artifactId>approval-repo</artifactId>
             <version>${platform.version}</version>
@@ -298,30 +284,9 @@
             <type>amp</type>
             <scope>runtime</scope>
         </dependency>
-		<dependency>
-            <groupId>ru.it.lecm.br5.semantic</groupId>
-            <artifactId>semantic-assist-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
         <dependency>
             <groupId>ru.it.lecm.permission-exp</groupId>
             <artifactId>permission-exp-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.model-editor</groupId>
-            <artifactId>model-editor-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.iReferent-integration</groupId>
-            <artifactId>iReferent-integration-repo</artifactId>
             <version>${platform.version}</version>
             <scope>runtime</scope>
             <type>amp</type>
@@ -610,5 +575,45 @@
 				</dependency>
 			</dependencies>
 		</profile>
+        <profile>
+            <id>non-production-modules</id>
+            <dependencies>
+                <dependency>
+                    <groupId>ru.it.lecm.model-editor</groupId>
+                    <artifactId>model-editor-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.iReferent-integration</groupId>
+                    <artifactId>iReferent-integration-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.br5.semantic</groupId>
+                    <artifactId>semantic-assist-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.experts</groupId>
+                    <artifactId>experts-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.contracts-fake</groupId>
+                    <artifactId>contracts-fake-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <type>amp</type>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
 	</profiles>
 </project>

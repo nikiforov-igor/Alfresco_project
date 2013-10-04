@@ -80,13 +80,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.experts</groupId>
-			<artifactId>experts-share</artifactId>
-			<version>${platform.version}</version>
-			<type>amp</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<!-- <groupId>ru.it.lecm.forms.jasperforms</groupId> -->
 			<groupId>ru.it.lecm.reports</groupId>
 			<!-- <artifactId>jasperforms-share</artifactId> -->
@@ -208,13 +201,6 @@
             <scope>runtime</scope>
         </dependency>
 		<dependency>
-			<groupId>ru.it.lecm.contracts-fake</groupId>
-			<artifactId>contracts-fake-share</artifactId>
-			<version>${platform.version}</version>
-			<type>amp</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.approval</groupId>
 			<artifactId>approval-share</artifactId>
 			<version>${platform.version}</version>
@@ -249,30 +235,9 @@
             <type>amp</type>
             <scope>runtime</scope>
         </dependency>
-		<dependency>
-            <groupId>ru.it.lecm.br5.semantic</groupId>
-            <artifactId>semantic-assist-share</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
         <dependency>
             <groupId>ru.it.lecm.permission-exp</groupId>
             <artifactId>permission-exp-share</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.model-editor</groupId>
-            <artifactId>model-editor-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.iReferent-integration</groupId>
-            <artifactId>iReferent-integration-share</artifactId>
             <version>${platform.version}</version>
             <scope>runtime</scope>
             <type>amp</type>
@@ -427,6 +392,46 @@
 		        </dependency>
 	        </dependencies>
 		</profile>
+        <profile>
+            <id>non-production-modules</id>
+            <dependencies>
+                <dependency>
+                    <groupId>ru.it.lecm.model-editor</groupId>
+                    <artifactId>model-editor-share</artifactId>
+                    <version>${platform.version}</version>
+                    <type>amp</type>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.br5.semantic</groupId>
+                    <artifactId>semantic-assist-share</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.iReferent-integration</groupId>
+                    <artifactId>iReferent-integration-share</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.experts</groupId>
+                    <artifactId>experts-share</artifactId>
+                    <version>${platform.version}</version>
+                    <type>amp</type>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.contracts-fake</groupId>
+                    <artifactId>contracts-fake-share</artifactId>
+                    <version>${platform.version}</version>
+                    <type>amp</type>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
 </project>

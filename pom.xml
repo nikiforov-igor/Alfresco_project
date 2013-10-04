@@ -80,37 +80,32 @@
 		<module>lecm-base</module>
 		<module>lecm-security</module>
 		<module>lecm-orgstructure</module>
-		<module>lecm-experts</module>
 		<module>lecm-jasperreports-forms</module>
-		<module>lecm-dictionary</module>
-		<module>lecm-contracts</module>
-		<module>lecm-statemachine</module>
-		<module>lecm-statemachine-editor</module>
-		<module>lecm-theme</module>
-		<module>lecm-delegation</module>
+        <module>lecm-dictionary</module>
+        <module>lecm-contracts</module>
+        <module>lecm-statemachine</module>
+        <module>lecm-statemachine-editor</module>
+        <module>lecm-theme</module>
+        <module>lecm-delegation</module>
         <module>lecm-integrotest</module>
-		<module>lecm-subscriptions</module>
-		<module>lecm-model-editor</module>
-		<module>lecm-notifications</module>
-		<module>lecm-notifications-email</module>
-		<module>lecm-notifications-dashlet</module>
-		<module>lecm-notifications-active-channel</module>
-		<module>lecm-business-journal</module>
-		<module>lecm-calendar</module>
-		<module>lecm-user-profile</module>
-		<module>lecm-documents</module>
-		<module>lecm-regnumbers</module>
-		<module>lecm-contractors</module>
-		<module>lecm-contracts-fake</module>
-		<module>lecm-approval</module>
-		<module>lecm-scaner</module>
-		<module>lecm-reports-editor</module>
-		<module>lecm-errands</module>
-		<module>lecm-semantic-assist</module>
-		<module>lecm-permission-exp</module>
-		<module>lecm-signed-docflow</module>
-        <module>lecm-iReferent-integration</module>
-	</modules>
+        <module>lecm-subscriptions</module>
+        <module>lecm-notifications</module>
+        <module>lecm-notifications-email</module>
+        <module>lecm-notifications-dashlet</module>
+        <module>lecm-notifications-active-channel</module>
+        <module>lecm-business-journal</module>
+        <module>lecm-calendar</module>
+        <module>lecm-user-profile</module>
+        <module>lecm-documents</module>
+        <module>lecm-regnumbers</module>
+        <module>lecm-contractors</module>
+        <module>lecm-approval</module>
+        <module>lecm-scaner</module>
+        <module>lecm-reports-editor</module>
+        <module>lecm-errands</module>
+        <module>lecm-permission-exp</module>
+        <module>lecm-signed-docflow</module>
+    </modules>
 	<scm>
 		<connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
 		<!--<developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>-->
@@ -548,5 +543,15 @@
 			<properties>
                 <redeploy.process.definitions>true</redeploy.process.definitions>			</properties>
 		</profile>
+        <profile>
+            <id>non-production-modules</id>
+            <modules>
+                <module>lecm-model-editor</module>
+                <module>lecm-semantic-assist</module>
+                <module>lecm-iReferent-integration</module>
+                <module>lecm-experts</module>
+                <module>lecm-contracts-fake</module>
+            </modules>
+        </profile>
 	</profiles>
 </project>
