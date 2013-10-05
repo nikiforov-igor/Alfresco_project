@@ -166,18 +166,26 @@ public class BasicEmployeeInfo {
 			this.middleName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME_MIDDLE), "");
 			this.lastName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME_LAST), "");
 
+			this.unitName = "";
+			this.staffName = "";
 			if (orgSrv != null) {
 				final List<NodeRef> staffList = orgSrv.getEmployeeStaffs(employeeId);
 				if (staffList != null && !staffList.isEmpty()) {
-					this.staffId = staffList.get(0); // занимаемая Должность
+					// идём по олжностям пока не встретим с не пустым названием ... 
+					for(NodeRef staffRef: staffList) {
+						this.staffId = staffRef; // занимаемая Должность
 
-					// название Подразделения ...
-					this.unitId = orgSrv.getUnitByStaff(this.staffId);
-					this.unitName = (this.unitId == null) ? "" : Utils.coalesce( nodeSrv.getProperty( this.unitId, PROP_ORGUNIT_NAME), "");
+						// название Подразделения ...
+						this.unitId = orgSrv.getUnitByStaff(this.staffId);
+						this.unitName = (this.unitId == null) ? "" : Utils.coalesce( nodeSrv.getProperty( this.unitId, PROP_ORGUNIT_NAME), "");
 
-					// получить словарное значение Должности по штатной позиции 
-					final NodeRef dpId = orgSrv.getPositionByStaff(this.staffId);
-					this.staffName = (dpId == null) ? "" : Utils.coalesce( nodeSrv.getProperty( dpId, PROP_DP_INFO), "");
+						// получить словарное значение Должности по штатной позиции 
+						final NodeRef dpId = orgSrv.getPositionByStaff(this.staffId);
+						this.staffName = (dpId == null) ? "" : Utils.coalesce( nodeSrv.getProperty( dpId, PROP_DP_INFO), "");
+
+						if ( !Utils.isStringEmpty(this.unitName) && !Utils.isStringEmpty(this.staffName))
+							break; // нашли непустую ...
+					}
 				}
 			}
 		}
