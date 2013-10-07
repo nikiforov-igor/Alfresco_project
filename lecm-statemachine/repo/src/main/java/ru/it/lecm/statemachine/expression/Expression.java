@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
 
@@ -24,6 +25,7 @@ public class Expression {
 	private ExpressionUser user;
 	private StandardEvaluationContext context;
 	private static OrgstructureBean orgstructureBean;
+	private static DocumentService documentService;
 
     private static final transient Logger logger = LoggerFactory.getLogger(Expression.class);
 
@@ -34,7 +36,7 @@ public class Expression {
         StateMachineHelper helper = new StateMachineHelper();
         NodeRef documentRef = document;
         this.doc = new ExpressionDocument(documentRef, serviceRegistry);
-        this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean);
+        this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean, documentService);
         String executionId = helper.getStatemachineId(document);
         if (executionId != null) {
             this.state = helper.getVariables(executionId);
@@ -69,5 +71,9 @@ public class Expression {
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         Expression.orgstructureBean = orgstructureBean;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        Expression.documentService = documentService;
     }
 }

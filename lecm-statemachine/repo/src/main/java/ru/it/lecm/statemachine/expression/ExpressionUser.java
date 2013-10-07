@@ -1,11 +1,11 @@
 package ru.it.lecm.statemachine.expression;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.List;
@@ -20,11 +20,13 @@ public class ExpressionUser {
     private ServiceRegistry serviceRegistry;
     private OrgstructureBean orgstructureBean;
     private NodeRef document;
+    private DocumentService documentService;
 
-    public ExpressionUser(NodeRef document, ServiceRegistry serviceRegistry, OrgstructureBean orgstructureBean) {
+    public ExpressionUser(NodeRef document, ServiceRegistry serviceRegistry, OrgstructureBean orgstructureBean, DocumentService documentService) {
         this.document = document;
         this.serviceRegistry = serviceRegistry;
         this.orgstructureBean = orgstructureBean;
+        this.documentService = documentService;
     }
 
     /**
@@ -60,7 +62,8 @@ public class ExpressionUser {
 	 */
 	public boolean isAutor() {
 		String login = AuthenticationUtil.getFullyAuthenticatedUser();
-		String creator = (String) this.serviceRegistry.getNodeService().getProperty(this.document, ContentModel.PROP_CREATOR);
-		return login.equals(creator);
+		NodeRef creator = documentService.getDocumentAuthor(document);
+        String creatorLogin = orgstructureBean.getEmployeeLogin(creator);
+		return login.equals(creatorLogin);
 	}
 }

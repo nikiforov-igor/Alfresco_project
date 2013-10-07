@@ -272,6 +272,7 @@
 
     <bean id="lecmBPExpression" class="ru.it.lecm.statemachine.expression.Expression">
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="documentService" ref="documentService"/>
     </bean>
 
      <bean id="employeeExpression" class="ru.it.lecm.statemachine.expression.ExpressionEmployee">
