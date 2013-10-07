@@ -36,9 +36,11 @@
             <properties>
                 <property name="lecmErrandWf:requestDueDateChangeNewDate">
                     <type>d:date</type>
+                    <mandatory>true</mandatory>
                 </property>
                 <property name="lecmErrandWf:requestDueDateChangeReason">
                     <type>d:text</type>
+                    <mandatory>true</mandatory>
                 </property>
             </properties>
             <mandatory-aspects>
