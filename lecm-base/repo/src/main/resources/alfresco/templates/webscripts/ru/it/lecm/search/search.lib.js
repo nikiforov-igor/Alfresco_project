@@ -347,10 +347,9 @@ function getSearchResults(params) {
             var queryDef = {
                 query:ftsQuery,
                 language:"fts-alfresco",
-                onerror:"no-results",
-                sort:sortColumns
+                onerror:"no-results"
             };
-            total = search.query(queryDef).length;
+            total = searchCounter.query(queryDef);
 
             // выполняем запрос с ограничением
             queryDef = {

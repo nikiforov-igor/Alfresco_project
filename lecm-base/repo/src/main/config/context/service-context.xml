@@ -266,4 +266,16 @@
 			<value>System</value>
 		</property>
 	</bean>
+
+    <bean id="lecmSearchCounterScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.SearchCounter">
+        <property name="extensionName">
+            <value>searchCounter</value>
+        </property>
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+        <property name="storeUrl">
+            <value>${spaces.store}</value>
+        </property>
+    </bean>
 </beans>

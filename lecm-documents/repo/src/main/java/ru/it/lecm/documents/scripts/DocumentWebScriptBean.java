@@ -226,7 +226,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
      * Получить количество документов
      * @return количество
      */
-    public Integer getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, String filterStr) {
+    public Long getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, String filterStr) {
         List<String> docTypes = getElements(Context.getCurrentContext().getElements(types));
         List<QName> qNameTypes = new ArrayList<QName>();
         String queryFilter = "";

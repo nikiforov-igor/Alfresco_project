@@ -149,7 +149,7 @@ public interface DocumentService {
      * @param sortDefinition - набор полей для сортировки
      * @return Integer - количество документов
      */
-    public Integer getAmountDocumentsByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition);
+    public Long getAmountDocumentsByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition);
 
     /**
      * Метод для получения папки с черновиками для заданного типа

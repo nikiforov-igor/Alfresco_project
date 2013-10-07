@@ -2,6 +2,7 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
+import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
@@ -299,19 +300,24 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     @Override
-    public Integer getAmountDocumentsByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
+    public Long getAmountDocumentsByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
         SearchParameters sp = buildDocumentsSearcParametersByFilter(docTypes, paths, statuses, filterQuery, sortDefinition);
+        sp.setMaxItems(0);
+        sp.setLimit(-1);
+
         ResultSet results = null;
-        int length = -1;
         try {
             results = searchService.query(sp);
-            length = results.length();
+            if (results instanceof SolrJSONResultSet) {
+                return ((SolrJSONResultSet) results).getNumberFound();
+            } else {
+                return (long) results.length();
+            }
         } finally {
             if (results != null) {
                 results.close();
             }
         }
-        return length;
     }
 
     @Override
