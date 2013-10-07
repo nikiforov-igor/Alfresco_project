@@ -18,6 +18,7 @@
     <modules>
         <module>repo</module>
         <module>share</module>
+        <module>scanner-applet/mmsc</module>
         <module>scanner-applet/scanner-applet</module>
     </modules>
 </project>
