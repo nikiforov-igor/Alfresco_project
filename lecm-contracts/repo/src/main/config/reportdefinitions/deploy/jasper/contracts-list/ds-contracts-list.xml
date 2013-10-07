@@ -100,7 +100,7 @@
 				javaValueClass="java.util.Date"/>
 
 		<!-- Создатель договора -->
-		<field jrFldName="col_Creator" queryFldName="cm:creator" displayName="Создатель договора" />
+		<field jrFldName="col_Creator" queryFldName="lecm-document:creator-ref" displayName="Создатель договора" />
 
 		<!--Представители (типа "lecm-representative:representative-type")
 			Фамилия Имя Отчество и Должность

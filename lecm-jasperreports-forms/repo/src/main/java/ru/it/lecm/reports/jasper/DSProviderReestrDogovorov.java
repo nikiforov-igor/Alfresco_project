@@ -175,46 +175,33 @@ public class DSProviderReestrDogovorov extends DSProviderSearchQueryReportBase {
 	final static String JRFLD_Executor_Staff = "col_Executor_Staff";
 
 	@Override
-	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
+    protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
+        final AlfrescoJRDataSource dataSource = new AlfrescoJRDataSource(iterator) {
+            @Override
+            protected boolean loadAlfNodeProps(NodeRef id) {
+                final boolean flag = super.loadAlfNodeProps(id);
+                if (flag) {
+                    // подгрузим автора - он же исполнгитель в договорах!
+                    final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
+                    final NodeRef executorId = getServices().getDocumentService().getDocumentAuthor(id);
+                    if (executorId != null) {
+                        final BasicEmployeeInfo docExecutor = new BasicEmployeeInfo(executorId);
+                        docExecutor.loadProps(nodeSrv, getServices().getOrgstructureService());
+                        // сохраним ФИО ...
+                        context.getCurNodeProps().put(getAlfAttrNameByJRKey(JRFLD_Executor_Name), docExecutor.firstName);
+                        context.getCurNodeProps().put(getAlfAttrNameByJRKey(JRFLD_Executor_Otchestvo), docExecutor.middleName);
+                        context.getCurNodeProps().put(getAlfAttrNameByJRKey(JRFLD_Executor_Family), docExecutor.lastName);
 
-		final QName QFLD_CREATOR = QName.createQName("cm:creator", getServices().getServiceRegistry().getNamespaceService());
+                        context.getCurNodeProps().put(getAlfAttrNameByJRKey(JRFLD_Executor_Staff), docExecutor.staffName);
+                    }
+                }
+                return flag;
+            }
+        };
 
-		final AlfrescoJRDataSource dataSource = new AlfrescoJRDataSource(iterator)  {
-
-			@Override
-			protected boolean loadAlfNodeProps(NodeRef id) {
-				final boolean flag = super.loadAlfNodeProps(id);
-				if (flag) {
-					// подгрузим Исполнителя по его login-у
-					final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
-					final String loginCreator = Utils.coalesce( nodeSrv.getProperty(id, QFLD_CREATOR), null);
-					if (loginCreator != null) { // получение Исполнителя по его login
-						final NodeRef person = getServices().getServiceRegistry().getPersonService().getPerson(loginCreator);
-						if (person != null) {
-							final NodeRef executorEmplId = getServices().getOrgstructureService().getEmployeeByPerson(person);
-							final BasicEmployeeInfo docExecutor = new BasicEmployeeInfo(executorEmplId);
-							docExecutor.loadProps(nodeSrv, getServices().getOrgstructureService());
-							// сохраним ФИО ...
-							context.getCurNodeProps().put( getAlfAttrNameByJRKey(JRFLD_Executor_Name), docExecutor.firstName);
-							context.getCurNodeProps().put( getAlfAttrNameByJRKey(JRFLD_Executor_Otchestvo), docExecutor.middleName);
-							context.getCurNodeProps().put( getAlfAttrNameByJRKey(JRFLD_Executor_Family), docExecutor.lastName);
-
-							// curProps.put( getAlfAttrNameByJRKey(JRFLD_Executor_Staff_ID), (docExecutor.staffId != null) ? docExecutor.staffId.getId() : "" );
-							context.getCurNodeProps().put( getAlfAttrNameByJRKey(JRFLD_Executor_Staff), docExecutor.staffName);
-
-							// curProps.put( getAlfAttrNameByJRKey(JRName_Executor_OU_ID), (docExecutor.unitId != null) ? docExecutor.unitId.getId() : "" );
-							// curProps.put( getAlfAttrNameByJRKey(JRName_ExecutorC_OU_Name), docExecutor.unitName);
-						}
-					}
-				} 
-				return flag;
-			}
-		};
-
-		if (filter != null)
-			dataSource.context.setFilter(filter.makeAssocFilter());
-		return dataSource;
-	}
+        dataSource.context.setFilter(filter.makeAssocFilter());
+        return dataSource;
+    }
 
 
 	final static String TYPE_CONRACT = "lecm-contract:document";

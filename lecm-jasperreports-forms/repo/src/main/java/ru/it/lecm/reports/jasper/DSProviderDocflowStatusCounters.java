@@ -151,7 +151,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 		Double contractSumLow, contractSumHi; // сумма договора (нижняя и верхняя границы)
 
 		/**
-		 *  (!) Инициатор (автор) хранится как "cm:creator" : text, и отфильтровывается в основном запросе.
+		 *  (!) Инициатор (автор) отфильтровывается в основном запросе.
 		 *  Остальные являются настоящими ассоциацими и фильтруются в результатах основного запроса.
 		 */
 		NodeRef contractType, contractSubject, author;
@@ -306,52 +306,41 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 	 */
 	// NOTE: отбор по ассоциациям происходит на уровне фильтров
 	@Override
-	protected String buildQueryText() {
-		final StringBuilder bquery = new StringBuilder();
+    protected String buildQueryText() {
+        final StringBuilder bquery = new StringBuilder();
 
-		bquery.append( super.buildQueryText() ); // "TYPE:\"{http://www.it.ru/logicECM/contract/1.0}document\""
+        bquery.append(super.buildQueryText()); // "TYPE:\"{http://www.it.ru/logicECM/contract/1.0}document\""
 
-//		// Контракт актуален: если ещё не истёк срок 
-//		if ( Boolean.TRUE.equals(filter.contractActualOnly)) {
-//			bquery.append( " AND (@lecm\\-contract\\:unlimited:true OR @lecm\\-contract\\:endDate:[NOW TO MAX])"); // неограниченый или "истекает позже чем сейчас"
-//		}
+        // начало .. конец <!-- Дата регистрации проекта -->
+        String cond = Utils.emmitDateIntervalCheck("lecm\\-contract\\:dateRegProjectContracts", filter.dateRegAfter, filter.dateRegBefore);
+        if (cond != null) {
+            bquery.append(" AND ").append(cond);
+        }
 
-		// начало .. конец <!-- Дата регистрации проекта -->
-		{
-			final String cond = Utils.emmitDateIntervalCheck("lecm\\-contract\\:dateRegProjectContracts", filter.dateRegAfter, filter.dateRegBefore);
-			if (cond != null)
-				bquery.append( " AND "+ cond);
-		}
+        // начало .. конец <!-- Дата начала действия договора -->
+        cond = Utils.emmitDateIntervalCheck("lecm\\-contract\\:startDate", filter.dateContractStartAfter, filter.dateContractStartBefore);
+        if (cond != null) {
+            bquery.append(" AND ").append(cond);
+        }
 
-		// начало .. конец <!-- Дата начала действия договора -->
-		{
-			final String cond = Utils.emmitDateIntervalCheck("lecm\\-contract\\:startDate", filter.dateContractStartAfter, filter.dateContractStartBefore);
-			if (cond != null)
-				bquery.append( " AND "+ cond);
-		}
-
-		// Сумма договора (указан диапазон)
-		{
-			// bquery.append( " AND @lecm\\-contract\\:totalAmount:(" + filter.contractSumLow.toString() + " TO *)");
-			final String cond = Utils.emmitNumericIntervalCheck("lecm\\-contract\\:totalAmount", filter.contractSumLow, filter.contractSumHi);
-			if (cond != null)
-				bquery.append( " AND "+ cond);
-		}
+        // Сумма договора (указан диапазон)
+        cond = Utils.emmitNumericIntervalCheck("lecm\\-contract\\:totalAmount", filter.contractSumLow, filter.contractSumHi);
+        if (cond != null) {
+            bquery.append(" AND ").append(cond);
+        }
 
 		/*
-		 *  Инициатор у нас хранится как текст с Login пользователя, так что это
-		 *  можно фильтрануть прямо тут
+         *  Инициатор хранится как текстовая ссылка на сотрудника. Можно фильтрануть прямо тут
 		 */
-		if (filter.author != null) {
-			// cm:creator
-			final String login = getServices().getOrgstructureService().getEmployeeLogin(filter.author);
-			bquery.append( " AND @cm\\:creator:\"" + login + "\"");
-		}
+        if (filter.author != null) {
+            String authorProp = getServices().getDocumentService().getAuthorProperty(QName.createQName("lecm-contract:document", getServices().getServiceRegistry().getNamespaceService()));
+            bquery.append(" AND @").append(authorProp.replaceAll(":", "\\\\:")).append(":\"").append(filter.author).append("\"");
+        }
 
-		return bquery.toString();
-	}
+        return bquery.toString();
+    }
 
-	@Override
+    @Override
 	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
 		final DocflowJRDataSource result = new DocflowJRDataSource(iterator);
 		result.context.setSubstitudeService(getServices().getSubstitudeService());

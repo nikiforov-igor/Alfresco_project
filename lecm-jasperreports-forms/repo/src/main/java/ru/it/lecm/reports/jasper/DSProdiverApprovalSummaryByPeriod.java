@@ -208,8 +208,6 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 
  		final NamespaceService ns;
 
-		final QName QFLD_CREATOR;
-
 		// ссылки на отдельные Согласования из списка 
 		// final QName ASSOC_APPROVEITEM = QName.createQName("lecm-al:approval-list-contains-approval-item", ns);
 		final QName QTYPE_APPROVE_ITEM;
@@ -257,8 +255,6 @@ public class DSProdiverApprovalSummaryByPeriod extends DSProviderSearchQueryRepo
 
 		public ApproveQNameHelper(NamespaceService ns) {
 			this.ns = ns;
-
-			this.QFLD_CREATOR = QName.createQName("cm:creator", ns);
 
 			this.QTYPE_APPROVE_ITEM = QName.createQName(TYPE_APPROVAL_ITEM, ns);
 			this.childApproveSet = new HashSet<QName>(Arrays.asList(QTYPE_APPROVE_ITEM));
