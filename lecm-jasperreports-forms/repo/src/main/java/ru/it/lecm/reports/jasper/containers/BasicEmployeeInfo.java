@@ -33,6 +33,8 @@ public class BasicEmployeeInfo {
  	public static final QName PROP_EMPLOYEE_NAME_MIDDLE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-middle-name");
  	public static final QName PROP_EMPLOYEE_NAME_LAST = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-last-name");
 
+ 	public static final QName PROP_STAFF_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-member-position-assoc-text-content");
+
 	final public NodeRef employeeId;
 
 	/** ФИО */
@@ -171,23 +173,41 @@ public class BasicEmployeeInfo {
 			if (orgSrv != null) {
 				final List<NodeRef> staffList = orgSrv.getEmployeeStaffs(employeeId);
 				if (staffList != null && !staffList.isEmpty()) {
-					// идём по олжностям пока не встретим с не пустым названием ... 
+					// идём по олжностям пока не встретим с не пустым названием ...
+					boolean namesPresent = false;
 					for(NodeRef staffRef: staffList) {
-						this.staffId = staffRef; // занимаемая Должность
+						setStaffId(staffRef, nodeSrv, orgSrv);
 
-						// название Подразделения ...
-						this.unitId = orgSrv.getUnitByStaff(this.staffId);
-						this.unitName = (this.unitId == null) ? "" : Utils.coalesce( nodeSrv.getProperty( this.unitId, PROP_ORGUNIT_NAME), "");
+						namesPresent = 
+							!Utils.isStringEmpty(this.unitName) 
+							&& !Utils.isStringEmpty(this.staffName);
+						if (namesPresent)
+							break; // нашли непустую -> можно выйти ...
+					}
 
-						// получить словарное значение Должности по штатной позиции 
-						final NodeRef dpId = orgSrv.getPositionByStaff(this.staffId);
-						this.staffName = (dpId == null) ? "" : Utils.coalesce( nodeSrv.getProperty( dpId, PROP_DP_INFO), "");
-
-						if ( !Utils.isStringEmpty(this.unitName) && !Utils.isStringEmpty(this.staffName))
-							break; // нашли непустую ...
+					// если данных целиком получено не было - оставляем то что есть для первой должности ...
+					if (!namesPresent) {
+						setStaffId( staffList.get(0), nodeSrv, orgSrv);
 					}
 				}
 			}
 		}
+	}
+
+	protected void setStaffId(NodeRef staffRef, NodeService nodeSrv,
+			OrgstructureBean orgSrv) {
+		this.staffId = staffRef; // занимаемая Должность
+
+		// название Подразделения ...
+		this.unitId = orgSrv.getUnitByStaff(this.staffId);
+		this.unitName = (this.unitId == null) ? "" : Utils.coalesce( nodeSrv.getProperty( this.unitId, PROP_ORGUNIT_NAME), "");
+
+		// получить словарное значение Должности по штатной позиции 
+		final NodeRef dpId = orgSrv.getPositionByStaff(this.staffId);
+		this.staffName = (dpId == null) ? "" 
+					: Utils.coalesce( 
+							nodeSrv.getProperty( dpId, PROP_DP_INFO)
+							, nodeSrv.getProperty( this.staffId, PROP_STAFF_NAME)
+							, "");
 	}
 }

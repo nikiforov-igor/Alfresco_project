@@ -21,7 +21,10 @@ import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 
 /**
- * Дописывание "fields" в jrxml-файлы.
+ * Работа с jrxml-файлами шаблонов Jasper:
+ * - замена описателей колонок ("fields") в существующем jrxml-файле на фактические из ReporTDescriptor,
+ * - генерация jrxml по макету и ReportDescriptor.
+ * 
  * @author rabdullin
  *
  */

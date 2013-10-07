@@ -207,99 +207,102 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 			 * Собираем статистику по всем перечисленным в this.rsIter объектах-согласованиях
 			 */
 			@Override
-            public int buildJoin() {
-                final ArrayList<ApprovalInfo> result = new ArrayList<ApprovalInfo>();
+			public int buildJoin() {
+				final ArrayList<ApprovalInfo> result = new ArrayList<ApprovalInfo>();
 
-                if (context.getRsIter() != null) {
-                    final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
-                    final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
+				if (context.getRsIter() != null) {
 
-                    final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
+					final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
+					final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
 
-                    while (context.getRsIter().hasNext()) { // тут только одна запись будет по-идее
-                        final ResultSetRow rs = context.getRsIter().next();
+					final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
-                        final NodeRef approveListId = rs.getNodeRef(); // id Списка Согласований
-                        final Map<QName, Serializable> realProps = nodeSrv.getProperties(approveListId); // получение отдельных Согласований внутри списка ...
-                        final DocInfo docInfo = new DocInfo();
+					while(context.getRsIter().hasNext()) { // тут только одна запись будет по-идее
+						final ResultSetRow rs = context.getRsIter().next();
+
+						final NodeRef approveListId = rs.getNodeRef(); // id Списка Согласований 
+
+						final Map<QName, Serializable> realProps = nodeSrv.getProperties(approveListId); // получение отдельных Согласований внутри списка ... 
+
+						final DocInfo docInfo = new DocInfo();
 
 						/* получение данных списка */
-                        // дата начала согласования
-                        docInfo.docStartApprove = (Date) realProps.get(approveQNames.QFLD_STARTAPPROVE);
 
-                        // дата завершения согласования
-                        docInfo.docEndApprove = (Date) realProps.get(approveQNames.QFLD_ENDAPPROVE);
+						// дата начала согласования 
+						docInfo.docStartApprove = (Date) realProps.get(approveQNames.QFLD_STARTAPPROVE);
 
-                        // результат согласования
-                        docInfo.docApproveResult = makeL12_ApproveResult(
-                                Utils.coalesce(realProps.get(approveQNames.QFLD_APPROVE_RESULT), null));
+						// дата завершения согласования 
+						docInfo.docEndApprove = (Date) realProps.get(approveQNames.QFLD_ENDAPPROVE);
 
-                        // версия и номер проекта договора
-                        docInfo.docVersion = Utils.coalesce(realProps.get(approveQNames.QFLD_APPROVE_DOCVER), null);
+						// результат согласования
+						docInfo.docApproveResult = makeL12_ApproveResult(
+								Utils.coalesce( realProps.get(approveQNames.QFLD_APPROVE_RESULT), null));
 
-                         /* получение данных из основного документа */
-                        final NodeRef mainDocRef = ApproveQNameHelper.getMainDocByApproveListId(approveListId, nodeSrv);
+						// версия и номер проекта договора
+						docInfo.docVersion =  Utils.coalesce( realProps.get(approveQNames.QFLD_APPROVE_DOCVER), null);
 
-                        Object projectNum = nodeSrv.getProperty(mainDocRef, approveQNames.QFLD_DOC_PROJECTNUM);
-                        docInfo.docProjectNumber = projectNum != null ? projectNum.toString() : "";
+						{ /* получение данных из основного документа */
+							final NodeRef mainDocRef = ApproveQNameHelper.getMainDocByApproveListId(approveListId, nodeSrv);
+							// final Map<QName, Serializable> docProps = nodeSrv.getProperties(mainDocRef); // если надо станет несколько свойств получать
 
-                        // подгрузим автора - он же исполнгитель в договорах!
-                        final NodeRef executorId = getServices().getDocumentService().getDocumentAuthor(mainDocRef);
-                        if (executorId != null) {
-                            docInfo.docExecutor = new BasicEmployeeInfo(executorId);
-                            docInfo.docExecutor.loadProps(nodeSrv, getServices().getOrgstructureService());
-                        }
+							docInfo.docProjectNumber = Utils.coalesce( nodeSrv.getProperty(mainDocRef, approveQNames.QFLD_DOC_PROJECTNUM), "");
 
-                        // получение списка ...
-                        final List<ChildAssociationRef> childItems = nodeSrv.getChildAssocs(approveListId, approveQNames.childApproveSet);
-                        if (childItems == null || childItems.isEmpty()) {
-                            // если списка нет - добавим один пустой элемент только ...
-                            result.add(new ApprovalInfo(null, docInfo));
-                            continue;
-                        }
+							// подгрузим автора - он же исполнгитель в договорах!
+							final NodeRef executorId = getServices().getDocumentService().getDocumentAuthor(mainDocRef);
+							if (executorId != null) {
+								docInfo.docExecutor = new BasicEmployeeInfo(executorId);
+								docInfo.docExecutor.loadProps(nodeSrv, getServices().getOrgstructureService());
+							}
+						}
 
-                        // поочерёдно грузим данные вложенных согласований
-                        for (ChildAssociationRef child : childItems) {
-                            final NodeRef childId = child.getChildRef();
-                            final Map<QName, Serializable> childProps = nodeSrv.getProperties(childId); // свойства "Согласующего Сотрудника"
+						// получение списка ...
+						final List<ChildAssociationRef> childItems = nodeSrv.getChildAssocs(approveListId, approveQNames.childApproveSet);
+						if (childItems == null || childItems.isEmpty()) {
+							// если списка нет - добавим один пустой элемент только ...
+							result.add( new ApprovalInfo(null, docInfo));
+							continue;
+						}
 
-                            if (childProps == null || childProps.isEmpty()) {
-                                continue;
-                            }
+						// поочерёдно грузим данные вложенных согласований
+						for (ChildAssociationRef child: childItems) {
+							final NodeRef childId = child.getChildRef();
+							final Map<QName, Serializable> childProps = nodeSrv.getProperties(childId); // свойства "Согласующего Сотрудника"
+							if (childProps == null || childProps.isEmpty()) continue;
+							// nodeSrv.getChildAssocs(childId, childEmployeeSet); 
+							final List<AssociationRef> employees = nodeSrv.getTargetAssocs(childId, approveQNames.QASSOC_APPROVAL_ITEM_TO_EMPLOYEE);
+							if (employees == null || employees.isEmpty() ) // (!?) с Согласованием не связан никакой сотрудник ...
+							{
+								logger.warn( String.format( "No employee found for approve item %s", childId));
+								continue;
+							}
+							
+							final NodeRef emplyeeId = employees.get(0).getTargetRef();
+							final ApprovalInfo apprInfo = new ApprovalInfo(emplyeeId, docInfo);
 
-                            final List<AssociationRef> employees = nodeSrv.getTargetAssocs(childId, approveQNames.QASSOC_APPROVAL_ITEM_TO_EMPLOYEE);
-                            if (employees == null || employees.isEmpty()) { // (!?) с Согласованием не связан никакой сотрудник ...
-                                logger.warn("No employee found for approve item " + childId);
-                                continue;
-                            }
+							apprInfo.loadProps(nodeSrv, getServices().getOrgstructureService());
 
-                            final NodeRef emplyeeId = employees.get(0).getTargetRef();
-                            final ApprovalInfo apprInfo = new ApprovalInfo(emplyeeId, docInfo);
+							// <!-- дата фактического Согласования Сотрудником -->
+							apprInfo.approvedAt = (Date) childProps.get(approveQNames.QFLD_USER_APPROVED);
 
-                            apprInfo.loadProps(nodeSrv, getServices().getOrgstructureService());
+							// результат согласования
+							apprInfo.approveResult = makeL12_ApproveResult(
+									Utils.coalesce( childProps.get(approveQNames.QFLD_USER_RESULT), null));
 
-                            // <!-- дата фактического Согласования Сотрудником -->
-                            apprInfo.approvedAt = (Date) childProps.get(approveQNames.QFLD_USER_APPROVED);
+							// замечания 
+							apprInfo.approveNotes = Utils.coalesce( childProps.get(approveQNames.QFLD_USER_COMMENT), null);
 
-                            // результат согласования
-                            apprInfo.approveResult = makeL12_ApproveResult(
-                                    Utils.coalesce(childProps.get(approveQNames.QFLD_USER_RESULT), null));
+							result.add( apprInfo);
+						}
+					} // while
+				}
 
-                            // замечания
-                            apprInfo.approveNotes = Utils.coalesce(childProps.get(approveQNames.QFLD_USER_COMMENT), null);
+				setData(result); 
+				setIterData( result.iterator());
 
-                            result.add(apprInfo);
-                        }
-                    } // while
-                }
+				return result.size();
+			}
 
-                setData(result);
-                setIterData(result.iterator());
-
-                return result.size();
-            }
-
-        } // ApprovalItemDS
+		} // ApprovalItemDS
 
 		// TODO: сделать работу L18 через xml config или properties-файл 
 		/**
