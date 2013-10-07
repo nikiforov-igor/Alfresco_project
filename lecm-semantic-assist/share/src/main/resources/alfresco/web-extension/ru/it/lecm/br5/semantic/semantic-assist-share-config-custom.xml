@@ -9,7 +9,7 @@
         </aspects>
     </config>
 
-    <config evaluator="node-type" condition="lecm-orgstr:employee">
+<!--    <config evaluator="node-type" condition="lecm-orgstr:employee">
         <forms>
             <form>
 				<field-visibility>
@@ -22,6 +22,6 @@
 				</appearance>
 			</form>
 		</forms>
-	</config>
+	</config> -->
 
 </alfresco-config>
