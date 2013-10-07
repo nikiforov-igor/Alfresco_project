@@ -23,6 +23,7 @@ import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -54,6 +55,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	private WorkflowService workflowService;
 	private IWorkCalendar workCalendar;
 	private LecmPermissionService lecmPermissionService;
+    private DocumentService documentService;
 	private CopyService copyService;
 	private BehaviourFilter behaviourFilter;
 
@@ -61,7 +63,11 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		this.lecmPermissionService = lecmPermissionService;
 	}
 
-	@Override
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
+
+    @Override
 	public NodeRef getServiceRootFolder() {
 		return getApprovalFolder();
 	}
@@ -364,7 +370,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, serviceRegistry);
 
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
-		recipients.add(docInfo.getInitiatorRef());
+		recipients.add(documentService.getDocumentAuthor(docInfo.getDocumentRef()));
 
 		String decision;
 		if (DecisionResult.APPROVED.name().equals(decisionCode)) {
