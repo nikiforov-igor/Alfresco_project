@@ -1,12 +1,13 @@
 package ru.it.lecm.contracts.schedule;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -28,6 +29,8 @@ public class InitiatorEveryDayNotificationExecutor extends ActionExecuterAbstrac
     private NotificationsService notificationsService;
     private OrgstructureBean orgstructureService;
     private NodeService nodeService;
+    private DocumentService documentService;
+    private NamespaceService namespaceService;
 
     public void setContractsService(ContractsBeanImpl contractsService) {
         this.contractsService = contractsService;
@@ -43,6 +46,14 @@ public class InitiatorEveryDayNotificationExecutor extends ActionExecuterAbstrac
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
     }
 
     @Override
@@ -65,8 +76,12 @@ public class InitiatorEveryDayNotificationExecutor extends ActionExecuterAbstrac
     }
 
     private NodeRef getInitiator(NodeRef document) {
-        String personName = (String) nodeService.getProperty(document, ContentModel.PROP_CREATOR);
-        return orgstructureService.getEmployeeByPerson(personName);
+        String type = documentService.getAuthorProperty(ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT);
+        NodeRef employeeRef = new NodeRef(nodeService.getProperty(document, QName.createQName(type, namespaceService)).toString());
+        if (employeeRef != null && orgstructureService.isEmployee(employeeRef)) {
+            return employeeRef;
+        }
+        return null;
     }
 
     private String getNotificationDescription(NodeRef document) {

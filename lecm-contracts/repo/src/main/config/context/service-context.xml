@@ -223,6 +223,8 @@
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
     <bean id="contractsInitiatorNotificationSchedule" class="ru.it.lecm.contracts.schedule.InititatorEveryDayNotificationSchedule">
