@@ -2,6 +2,8 @@ package ru.it.lecm.regnumbers.bean;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -80,8 +82,15 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
 		ResultSet results = null;
 		try {
+            sp.setMaxItems(0);
 			results = searchService.query(sp);
-			isUnique = results.length() == 0;
+            if (results instanceof SolrJSONResultSet) {
+                isUnique = ((SolrJSONResultSet) results).getNumberFound() == 0;
+            } else {
+                sp.setMaxItems(-1);
+                results = searchService.query(sp);
+                isUnique = results.length() == 0;
+            }
 		} finally {
 			if (results != null) {
 				results.close();

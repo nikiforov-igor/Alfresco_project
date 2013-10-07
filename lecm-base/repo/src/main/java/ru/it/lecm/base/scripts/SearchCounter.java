@@ -59,10 +59,30 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 String language = (String) def.get("language");
                 String namespace = (String) def.get("namespace");
                 String onerror = (String) def.get("onerror");
+                Map<Serializable, Serializable> page = (Map<Serializable, Serializable>)def.get("page");
 
                 // Выставляем в 0 - чтобы получать только общее число записей
-                int maxResults = 0;
+                int maxResults = -1;
                 int skipResults = 0;
+
+                if (page != null) {
+                    if (page.get("maxItems") != null) {
+                        Object maxItems = page.get("maxItems");
+                        if (maxItems instanceof Number) {
+                            maxResults = ((Number) maxItems).intValue();
+                        } else if (maxItems instanceof String) {
+                            maxResults = Integer.parseInt((String) maxItems);
+                        }
+                    }
+                    if (page.get("skipCount") != null) {
+                        Object skipCount = page.get("skipCount");
+                        if (skipCount instanceof Number) {
+                            skipResults = ((Number) page.get("skipCount")).intValue();
+                        } else if (skipCount instanceof String) {
+                            skipResults = Integer.parseInt((String) skipCount);
+                        }
+                    }
+                }
 
                 SearchParameters sp = new SearchParameters();
                 sp.addStore(store != null ? new StoreRef(store) : this.storeRef);
@@ -72,10 +92,14 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 if (namespace != null) {
                     sp.setNamespace(namespace);
                 }
-                sp.setMaxItems(maxResults);
-                sp.setLimitBy(LimitBy.FINAL_SIZE);
 
-                sp.setSkipCount(skipResults);
+                if (maxResults > 0) {
+                    sp.setLimit(maxResults);
+                    sp.setLimitBy(LimitBy.FINAL_SIZE);
+                }
+                if (skipResults > 0) {
+                    sp.setSkipCount(skipResults);
+                }
                 // error handling opions
                 boolean exceptionOnError = true;
                 if (onerror != null) {
@@ -89,21 +113,28 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 }
 
                 // execute search based on search definition
-                result = query(sp, exceptionOnError);
+                result = query(sp, exceptionOnError, maxResults, skipResults);
             }
         }
 
         return result;
     }
 
-    protected Long query(SearchParameters sp, boolean exceptionOnError) {
+    protected Long query(SearchParameters sp, boolean exceptionOnError, int maxResults, int skipCount) {
         // perform the search against the repo
         ResultSet results = null;
+        sp.setLimitBy(LimitBy.FINAL_SIZE);
         try {
+            sp.setMaxItems(0);
+            sp.setSkipCount(0);
+
             results = this.services.getSearchService().query(sp);
             if (results instanceof SolrJSONResultSet) {
                 return ((SolrJSONResultSet) results).getNumberFound();
             } else {
+                sp.setMaxItems(maxResults);
+                sp.setSkipCount(skipCount);
+                results = this.services.getSearchService().query(sp);
                 return (long) results.length();
             }
         } catch (Throwable err) {

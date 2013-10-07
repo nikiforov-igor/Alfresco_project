@@ -302,16 +302,17 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     @Override
     public Long getAmountDocumentsByFilter(List<QName> docTypes, List<String> paths, List<String> statuses, String filterQuery, List<SortDefinition> sortDefinition) {
         SearchParameters sp = buildDocumentsSearcParametersByFilter(docTypes, paths, statuses, filterQuery, sortDefinition);
-        sp.setMaxItems(0);
-        sp.setLimit(-1);
 
         ResultSet results = null;
         try {
+            sp.setMaxItems(0);
             results = searchService.query(sp);
             if (results instanceof SolrJSONResultSet) {
                 return ((SolrJSONResultSet) results).getNumberFound();
             } else {
-                return (long) results.length();
+                //если вдруг в бин был подложен другой SearchComponent - выполнил запрос без ограничений
+                sp.setMaxItems(-1);
+                return (long) searchService.query(sp).length();
             }
         } finally {
             if (results != null) {
