@@ -3,7 +3,7 @@
       <module>
          <id>Semantic assist panel module</id>
          <evaluator type="default.extensibility.evaluator"/>
-		 <auto-deploy>true</auto-deploy>
+		 <auto-deploy>false</auto-deploy>
          <components>
             <component>
 				<scope>template</scope>
