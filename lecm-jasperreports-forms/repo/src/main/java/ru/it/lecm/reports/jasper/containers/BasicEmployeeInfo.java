@@ -113,7 +113,7 @@ public class BasicEmployeeInfo {
 	 * @return (none null) Фамилия или пустая строка 
 	 */
 	public String Фамилия() {
-		return Utils.coalesce( this.lastName, "");
+		return Utils.coalesce(this.lastName, "");
 	}
 
 	/**
@@ -162,52 +162,30 @@ public class BasicEmployeeInfo {
 	 * @param nodeSrv обязательный параметр
 	 * @param orgSrv необязательный, задаётся если требуются параметры об Организации и Должности Сотрудника
 	 */
-	public void loadProps(NodeService nodeSrv, OrgstructureBean orgSrv) {
-		if (employeeId != null) {
-			this.firstName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME_FIRST), "");
-			this.middleName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME_MIDDLE), "");
-			this.lastName = Utils.coalesce( nodeSrv.getProperty( employeeId, PROP_EMPLOYEE_NAME_LAST), "");
+    public void loadProps(NodeService nodeSrv, OrgstructureBean orgSrv) {
+        if (employeeId != null) {
+            this.firstName = Utils.coalesce(nodeSrv.getProperty(employeeId, PROP_EMPLOYEE_NAME_FIRST), "");
+            this.middleName = Utils.coalesce(nodeSrv.getProperty(employeeId, PROP_EMPLOYEE_NAME_MIDDLE), "");
+            this.lastName = Utils.coalesce(nodeSrv.getProperty(employeeId, PROP_EMPLOYEE_NAME_LAST), "");
 
-			this.unitName = "";
-			this.staffName = "";
-			if (orgSrv != null) {
-				final List<NodeRef> staffList = orgSrv.getEmployeeStaffs(employeeId);
-				if (staffList != null && !staffList.isEmpty()) {
-					// идём по олжностям пока не встретим с не пустым названием ...
-					boolean namesPresent = false;
-					for(NodeRef staffRef: staffList) {
-						setStaffId(staffRef, nodeSrv, orgSrv);
+            this.unitName = "";
+            this.staffName = "";
+            if (orgSrv != null) {
+                final NodeRef staffList = orgSrv.getEmployeePrimaryStaff(employeeId);
+                if (staffList != null) {
+                    // занимаемая Должность
+                    this.staffId = staffList;
+                    this.unitId = orgSrv.getUnitByStaff(staffList);
 
-						namesPresent = 
-							!Utils.isStringEmpty(this.unitName) 
-							&& !Utils.isStringEmpty(this.staffName);
-						if (namesPresent)
-							break; // нашли непустую -> можно выйти ...
-					}
+                    // название Подразделения ...
+                    this.unitName = (this.unitId != null) ? Utils.coalesce(nodeSrv.getProperty(this.unitId, PROP_ORGUNIT_NAME), "") : "";
 
-					// если данных целиком получено не было - оставляем то что есть для первой должности ...
-					if (!namesPresent) {
-						setStaffId( staffList.get(0), nodeSrv, orgSrv);
-					}
-				}
-			}
-		}
-	}
-
-	protected void setStaffId(NodeRef staffRef, NodeService nodeSrv,
-			OrgstructureBean orgSrv) {
-		this.staffId = staffRef; // занимаемая Должность
-
-		// название Подразделения ...
-		this.unitId = orgSrv.getUnitByStaff(this.staffId);
-		this.unitName = (this.unitId == null) ? "" : Utils.coalesce( nodeSrv.getProperty( this.unitId, PROP_ORGUNIT_NAME), "");
-
-		// получить словарное значение Должности по штатной позиции 
-		final NodeRef dpId = orgSrv.getPositionByStaff(this.staffId);
-		this.staffName = (dpId == null) ? "" 
-					: Utils.coalesce( 
-							nodeSrv.getProperty( dpId, PROP_DP_INFO)
-							, nodeSrv.getProperty( this.staffId, PROP_STAFF_NAME)
-							, "");
-	}
+                    // получить словарное значение Должности по штатной позиции
+                    final NodeRef dpId = orgSrv.getPositionByStaff(this.staffId);
+                    this.staffName = (dpId == null) ? ""
+                            : Utils.coalesce(nodeSrv.getProperty(dpId, PROP_DP_INFO), nodeSrv.getProperty(this.staffId, PROP_STAFF_NAME), "");
+                }
+            }
+        }
+    }
 }
