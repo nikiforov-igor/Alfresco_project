@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<!--
-		Licensed to the Apache Software Foundation (ASF) under one or more
-		contributor license agreements. See the NOTICE file distributed with
-		this work for additional information regarding copyright ownership.
-		The ASF licenses this file to You under the Apache License, Version
-		2.0 (the "License"); you may not use this file except in compliance
-		with the License. You may obtain a copy of the License at
-		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
-		applicable law or agreed to in writing, software distributed under the
-		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-		CONDITIONS OF ANY KIND, either express or implied. See the License for
-		the specific language governing permissions and limitations under the
-		License.
-	-->
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one or more
+	contributor license agreements. See the NOTICE file distributed with
+	this work for additional information regarding copyright ownership.
+	The ASF licenses this file to You under the Apache License, Version
+	2.0 (the "License"); you may not use this file except in compliance
+	with the License. You may obtain a copy of the License at
+	http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+	applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+	CONDITIONS OF ANY KIND, either express or implied. See the License for
+	the specific language governing permissions and limitations under the
+	License.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -43,10 +43,10 @@
 		-->
 		<log.dir></log.dir>
 		<!--
-		 | By default the src/main/properties/local/alfresco-global.properties uses the property "alfresco.data.location" to specify where
-		 | alf_data gets created. For env=local you can use this shortcut property below, which gets filtered in the alfresco-global.properties file
-		 | DEFAULT: alf_data_jetty relativel to run dir
-		 -->
+		| By default the src/main/properties/local/alfresco-global.properties uses the property "alfresco.data.location" to specify where
+		| alf_data gets created. For env=local you can use this shortcut property below, which gets filtered in the alfresco-global.properties file
+		| DEFAULT: alf_data_jetty relativel to run dir
+		-->
 		<!-- For env=local DB is also configurable here. Of course keep in sync these two values otherwise you'll get integrity errors. Default Mysql-->
 		<alfresco.data.location>./alf_data_jetty</alfresco.data.location>
 		<alfresco.db.name>alfresco_dev</alfresco.db.name>
@@ -60,14 +60,14 @@
 		<!-- DEPRECATED -->
 		<desktop.action.package>org.alfresco.filesys.repo.desk</desktop.action.package>
 		<!--
-		 | Uncomment this property together with the <scm> section downwards
-		 |
-		 | <svn.url> https://mycompany.com/repos/my-test-project </svn.url>
-		 -->
+		| Uncomment this property together with the <scm> section downwards
+		|
+		| <svn.url> https://mycompany.com/repos/my-test-project </svn.url>
+		-->
 		<!--
-		 | Uncomment this property together with the maven-release-plugin <plugin><configuration><tagBase/></configuration></plugin> section downwards
-		 |  <svn.tags.url>${svn.url}/tags</svn.tags.url>
-		 -->
+		| Uncomment this property together with the maven-release-plugin <plugin><configuration><tagBase/></configuration></plugin> section downwards
+		|  <svn.tags.url>${svn.url}/tags</svn.tags.url>
+		-->
 		<!--
 		 These redundancies are due to filtering issues of Maven. See here
 		 http://maven.apache.org/plugins/maven-site-plugin/usage.html
@@ -179,13 +179,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.notifications</groupId>
-            <artifactId>notifications-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.notifications</groupId>
+			<artifactId>notifications-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.notifications.email</groupId>
 			<artifactId>notifications-email-repo</artifactId>
@@ -207,91 +207,84 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.business-journal</groupId>
-            <artifactId>business-journal-repo</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.calendar</groupId>
-            <artifactId>lecm-calendar-repo</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.security</groupId>
-            <artifactId>lecm-security-repo</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.documents</groupId>
-            <artifactId>documents-repo</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
 		<dependency>
-            <groupId>ru.it.lecm.regnumbers</groupId>
-            <artifactId>lecm-regnumbers-repo</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.contractors</groupId>
-            <artifactId>lecm-contractors-repo</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-		<dependency>
-            <groupId>ru.it.lecm.approval</groupId>
-            <artifactId>approval-repo</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
+			<groupId>ru.it.lecm.business-journal</groupId>
+			<artifactId>business-journal-repo</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.reports-editor</groupId>
-            <artifactId>reports-editor-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
 		<dependency>
-            <groupId>ru.it.lecm.errands</groupId>
-            <artifactId>errands-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.scaner</groupId>
-            <artifactId>scaner-repo</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
+			<groupId>ru.it.lecm.calendar</groupId>
+			<artifactId>lecm-calendar-repo</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.signed-docflow</groupId>
-            <artifactId>signed-docflow-repo</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.permission-exp</groupId>
-            <artifactId>permission-exp-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>ru.it.lecm.security</groupId>
+			<artifactId>lecm-security-repo</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.documents</groupId>
+			<artifactId>documents-repo</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.regnumbers</groupId>
+			<artifactId>lecm-regnumbers-repo</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.contractors</groupId>
+			<artifactId>lecm-contractors-repo</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.approval</groupId>
+			<artifactId>approval-repo</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.reports-editor</groupId>
+			<artifactId>reports-editor-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.errands</groupId>
+			<artifactId>errands-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.signed-docflow</groupId>
+			<artifactId>signed-docflow-repo</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.permission-exp</groupId>
+			<artifactId>permission-exp-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<finalName>${webapp.name}</finalName>
@@ -320,11 +313,11 @@
 			 | classpath:alfresco-global.properties
 			-->
 			<!--<resource>-->
-				<!--<directory>src/main/properties/${env}</directory>-->
-				<!--<includes>-->
-					<!--<include>alfresco-global.properties</include>-->
-				<!--</includes>-->
-				<!--<filtering>true</filtering>-->
+			<!--<directory>src/main/properties/${env}</directory>-->
+			<!--<includes>-->
+			<!--<include>alfresco-global.properties</include>-->
+			<!--</includes>-->
+			<!--<filtering>true</filtering>-->
 			<!--</resource>-->
 			<resource>
 				<directory>src/main/resources</directory>
@@ -398,43 +391,43 @@
 							<excludes>META*</excludes>
 						</configuration>
 					</execution>
-                    <execution>
-                        <id>copy-repo</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeTypes>amp</includeTypes>
-                            <outputDirectory>${project.build.directory}/../../install/amps/alfresco</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-repo-webapp</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>${project.artifactId}</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>${project.packaging}</type>
-                                    <destFileName>alfresco.war</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                            <outputDirectory>${project.build.directory}/../../install/war</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                        </configuration>
-                    </execution>
-                </executions>
+					<execution>
+						<id>copy-repo</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeTypes>amp</includeTypes>
+							<outputDirectory>${project.build.directory}/../../install/amps/alfresco</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-repo-webapp</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+									<type>${project.packaging}</type>
+									<destFileName>alfresco.war</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/../../install/war</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+				</executions>
 				<dependencies>
 					<!--
 					 | This is required to be re-defined explicitly at plugin level as
@@ -575,45 +568,52 @@
 				</dependency>
 			</dependencies>
 		</profile>
-        <profile>
-            <id>non-production-modules</id>
-            <dependencies>
-                <dependency>
-                    <groupId>ru.it.lecm.model-editor</groupId>
-                    <artifactId>model-editor-repo</artifactId>
-                    <version>${platform.version}</version>
-                    <scope>runtime</scope>
-                    <type>amp</type>
-                </dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.iReferent-integration</groupId>
-                    <artifactId>iReferent-integration-repo</artifactId>
-                    <version>${platform.version}</version>
-                    <scope>runtime</scope>
-                    <type>amp</type>
-                </dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.br5.semantic</groupId>
-                    <artifactId>semantic-assist-repo</artifactId>
-                    <version>${platform.version}</version>
-                    <scope>runtime</scope>
-                    <type>amp</type>
-                </dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.experts</groupId>
-                    <artifactId>experts-repo</artifactId>
-                    <version>${platform.version}</version>
-                    <scope>runtime</scope>
-                    <type>amp</type>
-                </dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.contracts-fake</groupId>
-                    <artifactId>contracts-fake-repo</artifactId>
-                    <version>${platform.version}</version>
-                    <type>amp</type>
-                    <scope>runtime</scope>
-                </dependency>
-            </dependencies>
-        </profile>
+		<profile>
+			<id>non-production-modules</id>
+			<dependencies>
+				<dependency>
+					<groupId>ru.it.lecm.model-editor</groupId>
+					<artifactId>model-editor-repo</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.iReferent-integration</groupId>
+					<artifactId>iReferent-integration-repo</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.br5.semantic</groupId>
+					<artifactId>semantic-assist-repo</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.experts</groupId>
+					<artifactId>experts-repo</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.contracts-fake</groupId>
+					<artifactId>contracts-fake-repo</artifactId>
+					<version>${platform.version}</version>
+					<type>amp</type>
+					<scope>runtime</scope>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.scaner</groupId>
+					<artifactId>scaner-repo</artifactId>
+					<version>${platform.version}</version>
+					<type>amp</type>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 </project>

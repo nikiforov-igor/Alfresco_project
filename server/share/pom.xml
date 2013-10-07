@@ -58,12 +58,12 @@
 			<type>war</type>
 		</dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <scope>compile</scope>
-            <version>${slf4j.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>compile</scope>
+			<version>${slf4j.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>ru.it.lecm.base</groupId>
@@ -137,13 +137,13 @@
 			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.notifications</groupId>
-            <artifactId>notifications-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.notifications</groupId>
+			<artifactId>notifications-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.notifications.dashlet</groupId>
 			<artifactId>notifications-dashlet-share</artifactId>
@@ -158,20 +158,20 @@
 			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.business-journal</groupId>
-            <artifactId>business-journal-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.calendar</groupId>
-            <artifactId>lecm-calendar-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.business-journal</groupId>
+			<artifactId>business-journal-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.calendar</groupId>
+			<artifactId>lecm-calendar-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.user-profile</groupId>
 			<artifactId>lecm-user-profile-share</artifactId>
@@ -179,27 +179,27 @@
 			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.documents</groupId>
-            <artifactId>documents-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.regnumbers</groupId>
-            <artifactId>lecm-regnumbers-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.contractors</groupId>
-            <artifactId>lecm-contractors-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.documents</groupId>
+			<artifactId>documents-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.regnumbers</groupId>
+			<artifactId>lecm-regnumbers-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.contractors</groupId>
+			<artifactId>lecm-contractors-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.approval</groupId>
 			<artifactId>approval-share</artifactId>
@@ -207,48 +207,41 @@
 			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.reports-editor</groupId>
-            <artifactId>reports-editor-share</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
 		<dependency>
-            <groupId>ru.it.lecm.errands</groupId>
-            <artifactId>errands-share</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
+			<groupId>ru.it.lecm.reports-editor</groupId>
+			<artifactId>reports-editor-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.scaner</groupId>
-			<artifactId>scaner-share</artifactId>
+			<groupId>ru.it.lecm.errands</groupId>
+			<artifactId>errands-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.signed-docflow</groupId>
+			<artifactId>signed-docflow-share</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.signed-docflow</groupId>
-			<artifactId>signed-docflow-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.permission-exp</groupId>
-            <artifactId>permission-exp-share</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
+			<groupId>ru.it.lecm.permission-exp</groupId>
+			<artifactId>permission-exp-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<finalName>${webapp.name}</finalName>
-	<!-- Runtime properties file which is used to configure your Share instance. It's multi-environment aware (-Denv=yourEnv) -->
+		<!-- Runtime properties file which is used to configure your Share instance. It's multi-environment aware (-Denv=yourEnv) -->
 		<!--<filters>-->
-			<!--<filter>${project.basedir}/src/main/properties/${env}/application.properties</filter>-->
+		<!--<filter>${project.basedir}/src/main/properties/${env}/application.properties</filter>-->
 		<!--</filters>-->
 
 		<!--
@@ -266,16 +259,16 @@
 				classpath:alfresco/extension/application.properties
 			-->
 			<!--<resource>-->
-				<!--<directory>src/main/properties/${env}</directory>-->
-				<!--<includes>-->
-					<!--<include>application.properties</include>-->
-				<!--</includes>-->
-				<!--&lt;!&ndash;-->
-					<!--This gets loaded to be the filter for spring runtime placeholding,-->
-					<!--so no need for build time filtering-->
-				<!--&ndash;&gt;-->
-				<!--<targetPath>alfresco/web-extension</targetPath>-->
-				<!--<filtering>true</filtering>-->
+			<!--<directory>src/main/properties/${env}</directory>-->
+			<!--<includes>-->
+			<!--<include>application.properties</include>-->
+			<!--</includes>-->
+			<!--&lt;!&ndash;-->
+			<!--This gets loaded to be the filter for spring runtime placeholding,-->
+			<!--so no need for build time filtering-->
+			<!--&ndash;&gt;-->
+			<!--<targetPath>alfresco/web-extension</targetPath>-->
+			<!--<filtering>true</filtering>-->
 			<!--</resource>-->
 		</resources>
 		<plugins>
@@ -296,49 +289,49 @@
 							<excludes>META*</excludes>
 						</configuration>
 					</execution>
-                    <execution>
-                        <id>copy-share</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeTypes>amp</includeTypes>
-                            <outputDirectory>${project.build.directory}/../../install/amps/share</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-share-webapp</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>${project.artifactId}</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>${project.packaging}</type>
-                                    <destFileName>share.war</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                            <outputDirectory>${project.build.directory}/../../install/war</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                        </configuration>
-                    </execution>
-                </executions>
+					<execution>
+						<id>copy-share</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeTypes>amp</includeTypes>
+							<outputDirectory>${project.build.directory}/../../install/amps/share</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-share-webapp</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+									<type>${project.packaging}</type>
+									<destFileName>share.war</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/../../install/war</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+				</executions>
 				<dependencies>
 					<!--
-				   This is required to be re-defined explicitly at plugin level as
-				   otherwise the 'amp' extension unArchiver won't be available to the
-				   maven-dependency-plugin
-			   -->
+						This is required to be re-defined explicitly at plugin level as
+						otherwise the 'amp' extension unArchiver won't be available to the
+						maven-dependency-plugin
+					-->
 					<dependency>
 						<groupId>org.alfresco.maven.plugin</groupId>
 						<artifactId>maven-amp-plugin</artifactId>
@@ -353,12 +346,12 @@
 				<configuration>
 					<archiveClasses>false</archiveClasses>
 					<!--<filters>-->
-						<!--<filter>${project.basedir}/src/main/properties/${env}/application.properties</filter>-->
+					<!--<filter>${project.basedir}/src/main/properties/${env}/application.properties</filter>-->
 					<!--</filters>-->
 					<webResources></webResources>
 				</configuration>
 			</plugin>
-			 <!-- Needed for cross OS compatibility in acp/zip encoding -->
+			<!-- Needed for cross OS compatibility in acp/zip encoding -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -366,9 +359,9 @@
 				<configuration>
 					<encoding>UTF-8</encoding>
 					<!-- By default as per http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7 FTL are not filtered to avoid corruption.
-						| This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described
-						| here http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7#c3
-						-->
+					| This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described
+					| here http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7#c3
+					-->
 					<nonFilteredFileExtensions>
 						<nonFilteredFileExtension>ftl</nonFilteredFileExtension>
 					</nonFilteredFileExtensions>
@@ -380,58 +373,65 @@
 	<!-- Custom behaviors -->
 
 	<profiles>
-        <profile>
-            <id>lecmIM</id>
-	        <dependencies>
-		        <dependency>
-			        <groupId>ru.it.lecm.lecm-im</groupId>
-			        <artifactId>lecm-im-share</artifactId>
-			        <version>${platform.version}</version>
-			        <type>amp</type>
-			        <scope>runtime</scope>
-		        </dependency>
-	        </dependencies>
+		<profile>
+			<id>lecmIM</id>
+			<dependencies>
+				<dependency>
+					<groupId>ru.it.lecm.lecm-im</groupId>
+					<artifactId>lecm-im-share</artifactId>
+					<version>${platform.version}</version>
+					<type>amp</type>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
 		</profile>
-        <profile>
-            <id>non-production-modules</id>
-            <dependencies>
-                <dependency>
-                    <groupId>ru.it.lecm.model-editor</groupId>
-                    <artifactId>model-editor-share</artifactId>
-                    <version>${platform.version}</version>
-                    <type>amp</type>
-                    <scope>runtime</scope>
-                </dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.br5.semantic</groupId>
-                    <artifactId>semantic-assist-share</artifactId>
-                    <version>${platform.version}</version>
-                    <scope>runtime</scope>
-                    <type>amp</type>
-                </dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.iReferent-integration</groupId>
-                    <artifactId>iReferent-integration-share</artifactId>
-                    <version>${platform.version}</version>
-                    <scope>runtime</scope>
-                    <type>amp</type>
-                </dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.experts</groupId>
-                    <artifactId>experts-share</artifactId>
-                    <version>${platform.version}</version>
-                    <type>amp</type>
-                    <scope>runtime</scope>
-                </dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.contracts-fake</groupId>
-                    <artifactId>contracts-fake-share</artifactId>
-                    <version>${platform.version}</version>
-                    <type>amp</type>
-                    <scope>runtime</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
+		<profile>
+			<id>non-production-modules</id>
+			<dependencies>
+				<dependency>
+					<groupId>ru.it.lecm.model-editor</groupId>
+					<artifactId>model-editor-share</artifactId>
+					<version>${platform.version}</version>
+					<type>amp</type>
+					<scope>runtime</scope>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.br5.semantic</groupId>
+					<artifactId>semantic-assist-share</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.iReferent-integration</groupId>
+					<artifactId>iReferent-integration-share</artifactId>
+					<version>${platform.version}</version>
+					<scope>runtime</scope>
+					<type>amp</type>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.experts</groupId>
+					<artifactId>experts-share</artifactId>
+					<version>${platform.version}</version>
+					<type>amp</type>
+					<scope>runtime</scope>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.contracts-fake</groupId>
+					<artifactId>contracts-fake-share</artifactId>
+					<version>${platform.version}</version>
+					<type>amp</type>
+					<scope>runtime</scope>
+				</dependency>
+				<dependency>
+					<groupId>ru.it.lecm.scaner</groupId>
+					<artifactId>scaner-share</artifactId>
+					<version>${platform.version}</version>
+					<type>amp</type>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 </project>
