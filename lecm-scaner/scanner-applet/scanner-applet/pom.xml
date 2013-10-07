@@ -15,10 +15,10 @@
 
 	<properties>
 		<applet.name>scanner-applet</applet.name>
-		<applet.output>applet</applet.output>
+		<applet.output>target</applet.output>
 		<jarsigner.alias>appletcert</jarsigner.alias>
 		<jarsigner.storepass>password</jarsigner.storepass>
-		<applet.keystore>keystore</applet.keystore>
+		<applet.keystore>target/keystore</applet.keystore>
 		<applet.dname>cn=LogicECM</applet.dname>
 		<applet.keypass>secret</applet.keypass>
 		<applet.storepass>secret</applet.storepass>
@@ -123,11 +123,11 @@
 							<goal>run</goal>
 						</goals>
 						<configuration>
-							<tasks>
+<!--							<tasks>
 								<delete>
-									<fileset dir="../${applet.output}"/>
+									<fileset dir="${applet.output}"/>
 								</delete>
-							</tasks>
+							</tasks>-->
 						</configuration>
 					</execution>
 					<execution>
@@ -138,8 +138,8 @@
 						</goals>
 						<configuration>
 							<tasks>
-								<copy file="../${applet.output}/scanner-applet.jar" todir="../../share/src/main/webapp/scripts/lecm-scaner" />
-								<copy file="../jai_imageio_windows-i586.jar" todir="../../share/src/main/webapp/scripts/lecm-scaner" />
+								<copy file="scanner-applet.jar" todir="../../../share/src/main/webapp/scripts/lecm-scaner" />
+								<copy file="../../jai_imageio_windows-i586.jar" todir="../../../share/src/main/webapp/scripts/lecm-scaner" />
 							</tasks>
 						</configuration>
 					</execution>
@@ -168,7 +168,7 @@
 				</executions>
 				<configuration>
 					<finalName>${applet.name}</finalName>
-					<outputDirectory>../${applet.output}</outputDirectory>
+					<outputDirectory>${applet.output}</outputDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -213,7 +213,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<archiveDirectory>../${applet.output}</archiveDirectory>
+					<archiveDirectory>${applet.output}</archiveDirectory>
 					<archive>scanner-applet.jar</archive>
 					<keystore>${basedir}/${applet.keystore}</keystore>
 					<alias>${applet.alias}</alias>
