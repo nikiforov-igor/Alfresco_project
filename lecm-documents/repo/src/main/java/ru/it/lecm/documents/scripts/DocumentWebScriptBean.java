@@ -347,6 +347,11 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return documentService.getPresentString(document.getNodeRef());
     }
 
+    /**
+     * Возвращает автора документа
+     * @param document - текстовая ссылка на документ
+     * @return ноду сотрудника-автор или null, если по какой-то причине нет такого свойства или сохранены битые данные
+     */
     public ScriptNode getDocumentAuthor(String document) {
         ParameterCheck.mandatory("document", document);
         if (NodeRef.isNodeRef(document)) {

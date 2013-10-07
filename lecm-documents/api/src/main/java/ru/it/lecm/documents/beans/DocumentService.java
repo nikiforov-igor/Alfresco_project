@@ -170,5 +170,10 @@ public interface DocumentService {
      */
     public String getPresentString(NodeRef document);
 
+    /**
+     * Возвращает автора документа
+     * @param document - ссылка на документ
+     * @return ссылку на сотрудника-автора
+     */
     public NodeRef getDocumentAuthor(NodeRef document);
 }
