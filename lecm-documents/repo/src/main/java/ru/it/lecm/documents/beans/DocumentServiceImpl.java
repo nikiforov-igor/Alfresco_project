@@ -561,4 +561,16 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         });
         return result;
     }
+
+    @Override
+    public NodeRef getDocumentAuthor(NodeRef document) {
+        QName docType = nodeService.getType(document);
+        String docAuthorProperty = getAuthorProperty(docType);
+        Object authorStr = nodeService.getProperty(document, QName.createQName(docAuthorProperty, namespaceService));
+        if (authorStr != null && NodeRef.isNodeRef((String) authorStr)) {
+            return new NodeRef((String) authorStr);
+        } else {
+            return null;
+        }
+    }
 }

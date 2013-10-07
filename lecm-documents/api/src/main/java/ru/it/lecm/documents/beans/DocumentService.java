@@ -169,4 +169,6 @@ public interface DocumentService {
      * @return
      */
     public String getPresentString(NodeRef document);
+
+    public NodeRef getDocumentAuthor(NodeRef document);
 }

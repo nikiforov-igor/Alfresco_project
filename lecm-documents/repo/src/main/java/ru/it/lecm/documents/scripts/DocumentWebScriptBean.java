@@ -346,4 +346,16 @@ public class DocumentWebScriptBean extends BaseWebScript {
     public String getPresentString(ScriptNode document) {
         return documentService.getPresentString(document.getNodeRef());
     }
+
+    public ScriptNode getDocumentAuthor(String document) {
+        ParameterCheck.mandatory("document", document);
+        if (NodeRef.isNodeRef(document)) {
+            NodeRef ref = new NodeRef(document);
+            if (nodeService.exists(ref)) {
+                NodeRef author = documentService.getDocumentAuthor(ref);
+                return new ScriptNode(author, serviceRegistry, getScope());
+            }
+        }
+        return null;
+    }
 }
