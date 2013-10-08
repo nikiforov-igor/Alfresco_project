@@ -63,6 +63,14 @@ public interface NotificationsService {
 	 */
 	public void sendNotification(Notification notification);
 
+    /**
+     * Отправка уведомлений
+     *
+     * @param notification Обобщённое уведомление
+     * @param dontCheckAccessToObject не проверять доступность объекта получателю
+     */
+    public void sendNotification(Notification notification, boolean dontCheckAccessToObject);
+
 	/**
 	 * Отправка уведомлений в каналы, заданные строками (названиями bean-ов)
 	 * @param channels Список названий каналов отправки уведомолений
@@ -70,7 +78,15 @@ public interface NotificationsService {
 	 */
 	public void sendNotification(List<String> channels, Notification notification);
 
-	/**
+    /**
+     * Отправка уведомлений в каналы, заданные строками (названиями bean-ов)
+     * @param channels Список названий каналов отправки уведомолений
+     * @param notification Объект с параметрами уведомления. Поле typeRefs заполнять не нужно
+     * @param dontCheckAccessToObject не проверять доступность объекта получателю
+     */
+    public void sendNotification(List<String> channels, Notification notification, boolean dontCheckAccessToObject);
+
+    /**
 	 * Получение корневой директории для уведомлений
 	 *
 	 * @return Ссылка на корневую директорию уведомлений
@@ -128,6 +144,18 @@ public interface NotificationsService {
 	 */
 	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef);
 
+    /**
+     * Отправка уведомления сотрудникам
+     * @param author Автор уведомления
+     * @param object Объект уведомления
+     * @param textFormatString Форматная строка для текста уведомления. Стпроится по основному объекту
+     * @param recipientEmployees Список сотрудников-получаетлей уведомления
+     * @param channels каналы уведомления
+     * @param initiatorRef Ссылка на инициатора. Если он попадает в список получателей, то ему сообщение не будет отправлено
+     * @param dontCheckAccessToObject не проверять доступность объекта получателю
+     */
+    public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef, boolean dontCheckAccessToObject);
+
 	/**
 	 * Отправка уведомления сотрудникам по каналам уведомлений из личных настроек сотрудников
 	 * @param author Автор уведомления
@@ -137,4 +165,15 @@ public interface NotificationsService {
 	 * @param initiatorRef Ссылка на инициатора. Если он попадает в список получателей, то ему сообщение не будет отправлено
 	 */
 	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef);
+
+    /**
+     * Отправка уведомления сотрудникам по каналам уведомлений из личных настроек сотрудников
+     * @param author Автор уведомления
+     * @param object Объект уведомления
+     * @param textFormatString Форматная строка для текста уведомления. Стпроится по основному объекту
+     * @param recipientEmployees Список сотрудников-получаетлей уведомления
+     * @param initiatorRef Ссылка на инициатора. Если он попадает в список получателей, то ему сообщение не будет отправлено
+     * @param dontCheckAccessToObject не проверять доступность объекта получателю
+     */
+    public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject);
 }

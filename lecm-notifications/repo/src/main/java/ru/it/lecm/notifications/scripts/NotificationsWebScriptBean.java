@@ -118,6 +118,17 @@ public class NotificationsWebScriptBean extends BaseWebScript {
      * @param object Основной объект уведомления
      */
     public void sendNotification(String author, Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object, NodeRef initiator) {
+        sendNotification(author, employee, textFormatString, channels, object, initiator, false);
+    }
+    /**
+     * Отправка уведомлений
+     * @param employee Список ссылок на получателей (пользователей).
+     * @param textFormatString форматная строка для текста сообщения
+     * @param channels перечень каналов
+     * @param object Основной объект уведомления
+     * @param dontCheckAccessToObject не проверять доступность объекта получателю
+     */
+    public void sendNotification(String author, Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object, NodeRef initiator, boolean dontCheckAccessToObject) {
         ArrayList<String> recipientsArray = getArraysList(Context.getCurrentContext().getElements(employee));
 
 	    List<NodeRef> employees = null;
@@ -148,11 +159,15 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 		    channelsArray = getArraysList(Context.getCurrentContext().getElements(channels));
 	    }
 
-	    service.sendNotification(author, object.getNodeRef(), textFormatString, employees, channelsArray, initiator);
+	    service.sendNotification(author, object.getNodeRef(), textFormatString, employees, channelsArray, initiator, dontCheckAccessToObject);
     }
 
 	public void sendNotification(Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object) {
-		sendNotification("WebScript", employee, textFormatString, channels, object, null);
+        sendNotification(employee, textFormatString, channels, object, false);
+    }
+
+	public void sendNotification(Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object, boolean dontCheckAccessToObject) {
+		sendNotification("WebScript", employee, textFormatString, channels, object, null, dontCheckAccessToObject);
 	}
 
 	/**
@@ -162,11 +177,25 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	 * @param object Основной объект уведомления
 	 */
 	public void sendNotification(Scriptable employee, String textFormatString, ScriptNode object) {
-		sendNotification(employee, textFormatString, null, object);
+        sendNotification(employee, textFormatString, object, false);
+    }
+	/**
+	 * Отправка уведомлений в каналы по умолчанию
+	 * @param employee Список ссылок на получателей (пользователей).
+	 * @param textFormatString форматная строка для текста сообщения
+	 * @param object Основной объект уведомления
+     * @param dontCheckAccessToObject не проверять доступность объекта получателю
+	 */
+	public void sendNotification(Scriptable employee, String textFormatString, ScriptNode object, boolean dontCheckAccessToObject) {
+		sendNotification(employee, textFormatString, null, object, dontCheckAccessToObject);
 	}
 
 	public void sendNotificationFromCurrentUser(Scriptable employee, String textFormatString, ScriptNode object) {
-		sendNotification(authService.getCurrentUserName(), employee, textFormatString, null, object, orgstructureService.getCurrentEmployee());
+        sendNotificationFromCurrentUser(employee, textFormatString, object, false);
+    }
+
+	public void sendNotificationFromCurrentUser(Scriptable employee, String textFormatString, ScriptNode object, boolean dontCheckAccessToObject) {
+		sendNotification(authService.getCurrentUserName(), employee, textFormatString, null, object, orgstructureService.getCurrentEmployee(), dontCheckAccessToObject);
 	}
 
     private ArrayList<String> getArraysList(Object[] object){

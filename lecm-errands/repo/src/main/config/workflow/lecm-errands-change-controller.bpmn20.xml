@@ -38,7 +38,7 @@
 
 	                                    var recipients = [];
 	                                    recipients.push(controller);
-	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
 
 	                                    lecmPermission.revokeDynamicRole(document, controller, "ERRANDS_CONTROLLER");
 	                                }
@@ -58,7 +58,7 @@
                                     }
                                     var recipients = [];
                                     recipients.push(newController);
-                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
                                 }
                             }
                         </activiti:string>

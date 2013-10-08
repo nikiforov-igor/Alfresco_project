@@ -124,6 +124,11 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 	@Override
 	public void sendNotification(List<String> channels, Notification notification) {
+        sendNotification(channels, notification, false);
+    }
+
+    @Override
+	public void sendNotification(List<String> channels, Notification notification, boolean dontCheckAccessToObject) {
 		List<NodeRef> typeRefs = new ArrayList<NodeRef>();
 		if (channels != null) {
 			for (String channel : channels) {
@@ -133,11 +138,16 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 			}
 			notification.setTypeRefs(typeRefs);
 		}
-		sendNotification(notification);
+		sendNotification(notification, dontCheckAccessToObject);
 	}
 
 	@Override
 	public void sendNotification(final Notification notification) {
+        sendNotification(notification, false);
+    }
+
+	@Override
+	public void sendNotification(final Notification notification, final boolean dontCheckAccessToObject) {
 		new Thread() {
 			@Override
 			public void run() {
@@ -153,7 +163,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 										Set<NotificationUnit> notificationUnits = createAtomicNotifications(notification);
 										if (notificationUnits != null && notificationUnits.size() > 0) {
 											for (NotificationUnit notf : notificationUnits) {
-												sendNotification(notf);
+												sendNotification(notf, dontCheckAccessToObject);
 											}
 										} else {
 											logger.warn("Атомарные уведомления не были сформированы");
@@ -173,10 +183,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		}.start();
 	}
 
-	private void sendNotification(NotificationUnit notification) {
+	private void sendNotification(NotificationUnit notification, boolean dontCheckAccessToObject) {
 		if (notification != null && notification.getRecipientRef() != null && notification.getObjectRef() != null) {
 			String employeeLogin = this.orgstructureService.getEmployeeLogin(notification.getRecipientRef());
-			if (employeeLogin != null && this.lecmPermissionService.hasReadAccess(notification.getObjectRef(), employeeLogin)) {
+			if (employeeLogin != null && (dontCheckAccessToObject || this.lecmPermissionService.hasReadAccess(notification.getObjectRef(), employeeLogin))) {
 				if (getChannels().containsKey(notification.getTypeRef())) {
 					NotificationChannelBeanBase channelBean = getChannels().get(notification.getTypeRef());
 					if (channelBean != null) {
@@ -349,6 +359,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return notificationsRootRef;
 	}
 
+    @Override
 	public NodeRef getCurrentUserSettingsNode(boolean createNewIfNotExist) {
 		return geUserSettingsNode(authService.getCurrentUserName(), createNewIfNotExist);
 	}
@@ -396,6 +407,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		}
 	}
 
+    @Override
 	public List<NodeRef> getSystemDefaultNotificationTypes() {
 		List<NodeRef> systemDefaultChannels = dictionaryService.getRecordsByParamValue(NOTIFICATION_TYPE_DICTIONARY_NAME, PROP_DEFAULT_SELECT, true);
 		if (systemDefaultChannels == null || systemDefaultChannels.size() == 0) {
@@ -404,6 +416,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return systemDefaultChannels;
 	}
 
+    @Override
 	public List<NodeRef> getEmployeeDefaultNotificationTypes(NodeRef employee) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 		String userName = orgstructureService.getEmployeeLogin(employee);
@@ -429,27 +442,40 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return result;
 	}
 
+    @Override
 	public List<NodeRef> getCurrentUserDefaultNotificationTypes() {
 		return getEmployeeDefaultNotificationTypes(orgstructureService.getCurrentEmployee());
 	}
 
+    @Override
 	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef) {
+        sendNotification(author, object, textFormatString, recipientEmployees, channels, initiatorRef, false);
+    }
+
+    @Override
+	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef, boolean dontCheckAccessToObject) {
 		Notification notification = new Notification();
 		notification.setAuthor(author);
 		notification.setRecipientEmployeeRefs(recipientEmployees);
 		notification.setObjectRef(object);
 		notification.setDescription(substituteService.formatNodeTitle(object, textFormatString));
 		notification.setInitiatorRef(initiatorRef);
-		sendNotification(channels, notification);
+		sendNotification(channels, notification, dontCheckAccessToObject);
 	}
 
+    @Override
 	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef) {
+        sendNotification(author, object, textFormatString, recipientEmployees, initiatorRef, false);
+    }
+
+    @Override
+	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject) {
 		Notification notification = new Notification();
 		notification.setAuthor(author);
 		notification.setRecipientEmployeeRefs(recipientEmployees);
 		notification.setObjectRef(object);
 		notification.setDescription(substituteService.formatNodeTitle(object, textFormatString));
 		notification.setInitiatorRef(initiatorRef);
-		sendNotification(notification);
+		sendNotification(notification, dontCheckAccessToObject);
 	}
 }
