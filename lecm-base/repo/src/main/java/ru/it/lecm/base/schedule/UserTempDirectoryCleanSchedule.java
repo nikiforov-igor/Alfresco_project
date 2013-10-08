@@ -10,8 +10,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.quartz.CronTrigger;
-import org.quartz.Trigger;
 import org.quartz.Scheduler;
+import org.quartz.Trigger;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -154,24 +154,26 @@ public class UserTempDirectoryCleanSchedule extends AbstractScheduledAction {
 				allPersons.add(this.orgstructureService.getPersonForEmployee(employee));
 			}
 			for (NodeRef person: allPersons) {
-				NodeRef tempDirectory = repositoryStructureHelper.getUserTemp(person, false);
-				if (tempDirectory != null) {
-					List<ChildAssociationRef> childs = nodeService.getChildAssocs(tempDirectory);
-					if (childs != null) {
-						for (ChildAssociationRef child: childs) {
-							NodeRef nodeRef = child.getChildRef();
+                if (person != null) {
+                    NodeRef tempDirectory = repositoryStructureHelper.getUserTemp(person, false);
+                    if (tempDirectory != null) {
+                        List<ChildAssociationRef> childs = nodeService.getChildAssocs(tempDirectory);
+                        if (childs != null) {
+                            for (ChildAssociationRef child : childs) {
+                                NodeRef nodeRef = child.getChildRef();
 
-							Date createDate = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATED);
-							if (createDate != null && createDate.before(beforeFireTime)) {
-								List<AssociationRef> source = nodeService.getSourceAssocs(tempDirectory, RegexQNamePattern.MATCH_ALL);
-								if (source == null || source.size() == 0) {
-									searchFiles.add(nodeRef);
-								}
-							}
-						}
-					}
-				}
-			}
+                                Date createDate = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATED);
+                                if (createDate != null && createDate.before(beforeFireTime)) {
+                                    List<AssociationRef> source = nodeService.getSourceAssocs(tempDirectory, RegexQNamePattern.MATCH_ALL);
+                                    if (source == null || source.size() == 0) {
+                                        searchFiles.add(nodeRef);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 		}
 		return searchFiles;
 	}
