@@ -293,40 +293,22 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 var me = this;
 
-                this.loadingMessageShowing = false;
-                this.loadingMessage = this.loadingMessage || Alfresco.util.PopupManager.displayMessage(
-                    {
-                        displayTime:0,
-                        text:'<span class="wait">' + $html(this.msg("label.loading")) + '</span>',
-                        noEscape:true
-                    });
+                var loadingMessage = Alfresco.util.PopupManager.displayMessage({
+                    displayTime: 0,
+                    text: $html(this.msg("label.loading")),
+                    spanClass: "wait",
+                    noEscape: true
+                });
 
-                if (YAHOO.env.ua.ie > 0) {
-                    this.loadingMessageShowing = true;
-                } else {
-                    this.loadingMessage.showEvent.subscribe(function () {
-                        this.loadingMessageShowing = true;
-                    }, this, true);
-                }
-
-                var destroyLoaderMessage = function DataGrid__uDG_destroyLoaderMessage() {
-                    if (me.loadingMessage) {
-                        if (me.loadingMessageShowing) {
-                            // Safe to destroy
-                            me.loadingMessage.destroy();
-                            me.loadingMessage = null;
-                            me.loadingMessageShowing = false;
-                        }
-                        else {
-                            // Wait and try again later. Scope doesn't get set correctly with "this"
-                            YAHOO.lang.later(100, me, destroyLoaderMessage);
-                        }
-                    }
-                };
+                loadingMessage.subscribe("hide", function() {
+                    loadingMessage.unsubscribeAll("hide");
+                    loadingMessage.destroy();
+                });
 
                 //Обработчик на успех
                 function successHandler(sRequest, oResponse, oPayload) {
-                    destroyLoaderMessage();
+                    loadingMessage.hide();
+
                     me.searchStarted = false;
                     // update current state on success
                     me.currentSearchConfig = searchConfig;
@@ -360,7 +342,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 // Обработчик на неудачу
                 function failureHandler(sRequest, oResponse) {
-                    destroyLoaderMessage();
+                    loadingMessage.hide();
+
                     me.searchStarted = false;
                     if (oResponse.status == 401) {
                         // Our session has likely timed-out, so refresh to offer the login page
