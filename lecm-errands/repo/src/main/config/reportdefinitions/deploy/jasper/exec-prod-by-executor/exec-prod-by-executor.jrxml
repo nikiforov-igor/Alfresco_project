@@ -66,7 +66,9 @@
 	<pageHeader>
 		<band height="16" splitType="Prevent">
 			<textField>
-				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="0" width="120" height="15"/>
+				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="0" width="120" height="15">
+						<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Left">
 					<font fontName="DejaVu Serif" pdfEncoding="Cp1251"/>
 				</textElement>
@@ -93,15 +95,22 @@
   -->
 	<summary>
 		<band height="470" splitType="Prevent">
+			<textField>
+				<reportElement uuid="0a743bbe-639f-4ba8-a41d-dd0f2a1c4949" x="20" y="40" width="750" height="25" forecolor="#FF0000">
+						<printWhenExpression><![CDATA[$V{REPORT_COUNT} < 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="14" isBold="true" pdfEncoding="Cp1251"/>
+				</textElement>
+				<textFieldExpression><![CDATA[ "Нет данных, удовлетворяющих выборке" ]]></textFieldExpression>
+			</textField>
 			<timeSeriesChart>
 				<chart isShowLegend="true" evaluationTime="Report">
-					<reportElement uuid="636e3559-83d4-4bf1-80b8-ce330e9f2dc8" x="35" y="0" width="745" height="450"/>
-					<chartTitle>
-						<!-- <titleExpression><![CDATA[Custon-Title-Expression]]></titleExpression> -->
-					</chartTitle>
-					<chartSubtitle>
-						<!-- <subtitleExpression><![CDATA[Custon-Subtitle-Expression]]></subtitleExpression> -->
-					</chartSubtitle>
+					<reportElement uuid="636e3559-83d4-4bf1-80b8-ce330e9f2dc8" x="35" y="0" width="745" height="450">
+						<printWhenExpression><![CDATA[$V{REPORT_COUNT} > 0]]></printWhenExpression>
+					</reportElement>
+					<chartTitle/>
+					<chartSubtitle/>
 					<chartLegend position="Top"/>
 				</chart>
 				<timeSeriesDataset timePeriod="Day">

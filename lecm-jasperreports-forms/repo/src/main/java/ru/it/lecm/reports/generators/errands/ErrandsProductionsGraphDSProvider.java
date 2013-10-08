@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -37,7 +38,7 @@ import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 
 /**
- * Продуктивность по исполнителям
+ * Продуктивность по исполнителям и (или) по подразделениям
  * Фильтры отчета:
  * 	•	За Период
  * 	•	Исполнители
@@ -424,28 +425,10 @@ public class ErrandsProductionsGraphDSProvider
 			final List<GraphPoint> result = new ArrayList<GraphPoint>();
 
 			final int countDays = countDeltaInDays(periodStart, periodEnd);
-			final int maxTimeCounter = 1 +  (countDays >= 0 ? countDays : 0); // кол-во отметок времени
+			final int maxDaysCounter = 1 +  (countDays >= 0 ? countDays : 0); // кол-во отметок времени
 
-			/*
 			// @NOTE: RANDOM DATA FILL FOR TEST
-			// (!) перенос в основной блок с разбивкой по датам ...
-			{
-				final Calendar curDay = Calendar.getInstance();
-				curDay.setTime(periodStart);
-				final Random r = new Random();
-				for (int i = 0; i < maxTimeCounter; i++) { // цикл по дням
-					final Timestamp curStamp = new Timestamp(curDay.getTimeInMillis());
-
-					for (String outerName: new String[] {"Иванов", "Петров", "Сидоров"} ) { // цикл по объектам
-						final float avg = r.nextFloat()* 2f + 20f;
-						result.add( new GraphPoint( outerName, curStamp, avg, "h"));
-					}
-					curDay.add(Calendar.HOUR, 24); // сутки добавляем
-				}
-
-				this.setData( result );
-			}
-			 */
+			// fillRandomData(result, maxDaysCounter);
 
 			// проход по данным ...
 			if (context.getRsIter() != null && result.isEmpty()) {
@@ -514,7 +497,7 @@ public class ErrandsProductionsGraphDSProvider
 						if (series.containsKey(keyId)) {
 							executor = series.get(keyId); // уже такой был ...
 						} else { // создание нового Сотрудника-Исполнителя
-							executor = new ProductGroupInfo(execEmployee, maxTimeCounter);
+							executor = new ProductGroupInfo(execEmployee, maxDaysCounter);
 							series.put(keyId, executor);
 						}
 
@@ -533,48 +516,88 @@ public class ErrandsProductionsGraphDSProvider
 
 				} // while по НД
 
-				// TODO: подумать над тем, чтобы гарантировать наличие выбранных для отчёта Сотрудников в легенде всегда (даже если по ним не было данных)
+				// DONE (см fix [ALF-1524]): подумать над тем, чтобы гарантировать наличие выбранных для отчёта Сотрудников в легенде всегда (даже если по ним не было данных)
+
 				// (!) перенос в основной блок с разбивкой по датам ...
-				final Calendar x_curDay = Calendar.getInstance();
-				x_curDay.setTime(periodStart);
-				for (int i = 0; i < countDays; i++) { // цикл по дням
-					final Timestamp x_curStamp = new Timestamp(x_curDay.getTimeInMillis());
-					for (Map.Entry<NodeRef, ProductGroupInfo> e: series.entrySet()) { // цикл по объектам
-						final ProductGroupInfo item = e.getValue();
+				fillGraphData(result, series, countDays);
 
-						final float y_value;
-						{
-							final AvgValue avg = item.avgExecTimeInHours.get(i);
-							// вместо отсутствующих значений выводим ноль - чтобы
-							// график не "схлопывался до точки" ...
-							y_value = (avg != null && avg.getCount() > 0) ? avg.getAvg() : 0;
-						}
+			} // if hasData
 
-						final String tag = (groupBy.isUseOUFilter() ? item.employee.unitName : item.employee.ФамилияИО());
-						result.add( new GraphPoint( tag, x_curStamp, y_value, "h"));
-					}
-					x_curDay.add(Calendar.HOUR, 24); // (++) = добавляем ровно сутки
-				}
-
-				this.setData( result );
-
-			} // if
-
-			/* possible fix [ALF-1524] Чтобы при пустом списке не было даты 01/01/1970, надо что-то добавить из "заказанного диапазона"
+			/* fix [ALF-1524] Чтобы при пустом списке не было даты 01/01/1970, можно добавить точки из "заказанного диапазона"
 			if (result.isEmpty()) { 
-				final String emptyTag = "";
-				result.add( new GraphPoint( emptyTag,  new Timestamp( periodStart.getTime()), 0f, "h")); // одна точка
-				result.add( new GraphPoint( emptyTag,  new Timestamp( periodEnd.getTime()), 0f, "h")); // вторая точка
+				final String emptyTag = "?";
+				result.add( new GraphPoint( emptyTag,  new Timestamp( periodStart.getTime()), 0f, "h")); // одна точка в начале
+				result.add( new GraphPoint( emptyTag,  new Timestamp( periodEnd.getTime()), 0f, "h")); // вторая точка в конце
 			}
-			 */
+			*/
 
-			this.setData( result );
+			this.setData( result);
 			if (this.getData() != null)
-				this.setIterData(this.getData().iterator());
-
+				this.setIterData( this.getData().iterator());
 			logger.info( String.format( "found %s data items", result.size()));
 
 			return result.size();
+		}
+
+
+		/**
+		 * Заполнение массива графических xy-данных согласно вычисленным 
+		 * значениям для Сотрудников.
+		 * Время начала см. periodStart
+		 * @param result  целевой массив точек
+		 * @param series отметки по Сотрудникам
+		 * @param countDays кол-во дней
+		 */
+		protected void fillGraphData(final List<GraphPoint> result,
+				final Map<NodeRef, ProductGroupInfo> series, final int countDays) {
+			final Calendar x_curDay = Calendar.getInstance();
+			x_curDay.setTime(periodStart);
+			for (int i = 0; i < countDays; i++) { // цикл по дням
+				final Timestamp x_curStamp = new Timestamp(x_curDay.getTimeInMillis());
+				for (Map.Entry<NodeRef, ProductGroupInfo> e: series.entrySet()) { // цикл по объектам
+					final ProductGroupInfo item = e.getValue();
+
+					final float y_value;
+					{
+						final AvgValue avg = item.avgExecTimeInHours.get(i);
+						// вместо отсутствующих значений выводим ноль - чтобы
+						// график не "схлопывался до точки" ...
+						y_value = (avg != null && avg.getCount() > 0) ? avg.getAvg() : 0;
+					}
+
+					final String tag = (groupBy.isUseOUFilter() ? item.employee.unitName : item.employee.ФамилияИО());
+					result.add( new GraphPoint( tag, x_curStamp, y_value, "h"));
+				}
+				x_curDay.add(Calendar.HOUR, 24); // (++) = добавляем ровно сутки
+			}
+		}
+
+
+		/**
+		 * Заполнить случайными данными выборки:
+		 *    три Сотрудника с выполнением ~20 поручений в сутки
+		 *    время начала = periodStart
+		 * @param result
+		 * @param daysCounter
+		 */
+		protected void fillRandomData(final List<GraphPoint> result,
+				final int daysCounter) {
+			{
+				final Calendar curDay = Calendar.getInstance();
+				curDay.setTime(periodStart);
+				final Random r = new Random();
+				for (int i = 0; i < daysCounter; i++) { // цикл по дням
+					final Timestamp curStamp = new Timestamp(curDay.getTimeInMillis());
+
+					for (String outerName: new String[] {"Иванов", "Петров", "Сидоров"} ) { // цикл по объектам
+						final float avg = r.nextFloat()* 2f + 20f;
+						result.add( new GraphPoint( outerName, curStamp, avg, "h"));
+					}
+					curDay.add(Calendar.HOUR, 24); // сутки добавляем
+				}
+
+				this.setData( result );
+			}
 		}
 
 	}
