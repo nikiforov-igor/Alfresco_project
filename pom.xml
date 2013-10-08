@@ -370,6 +370,8 @@
 							<nonFilteredFileExtension>ftl</nonFilteredFileExtension>
 							<nonFilteredFileExtension>prpt</nonFilteredFileExtension>
 							<nonFilteredFileExtension>jasper</nonFilteredFileExtension>
+							<nonFilteredFileExtension>odt</nonFilteredFileExtension>
+							<nonFilteredFileExtension>gen</nonFilteredFileExtension>
 						</nonFilteredFileExtensions>
 					</configuration>
 				</plugin>
@@ -564,7 +566,7 @@
                 <module>lecm-iReferent-integration</module>
                 <module>lecm-experts</module>
                 <module>lecm-contracts-fake</module>
-				<module>lecm-scaner</module>
+                <module>lecm-scaner</module>
             </modules>
         </profile>
 	</profiles>
