@@ -19,212 +19,217 @@ import ru.it.lecm.reports.beans.LinksResolver;
 
 /**
  * Утилитки для работы с узлами.
- * 
- * @author rabdullin
  *
+ * @author rabdullin
  */
 public class NodeUtils {
 
-	private NodeUtils() {}
+    private NodeUtils() {
+    }
 
-	/**
-	 * Перечислитель узлов
-	 */
-	public interface NodeEnumerator {
-		/**
-		 * Вызов для конкретного узла.
-		 * @param node узел
-		 * @param parents родительские узлы: 
-		 *   [0] родитель самого верхнего (первого) уровня, 
-		 *   [1] родитель второго уровня, т.е. узел вложенный в [0]
-		 *   и т.д.
-		 */
-		void lookAt(NodeRef node, List<NodeRef> parents);
-	}
+    /**
+     * Перечислитель узлов
+     */
+    public interface NodeEnumerator {
+        /**
+         * Вызов для конкретного узла.
+         *
+         * @param node    узел
+         * @param parents родительские узлы:
+         *                [0] родитель самого верхнего (первого) уровня,
+         *                [1] родитель второго уровня, т.е. узел вложенный в [0]
+         *                и т.д.
+         */
+        void lookAt(NodeRef node, List<NodeRef> parents);
+    }
 
-	/**
-	 * Выполнить перечисление дочерних узлов, расположенных на указанном уровне 
-	 * вложенности относительно root (первые вложенные - это уровень один).
-	 * Дети выбираются как все chil-узлы по связи ContentModel.ASSOC_CONTAINS. 
-	 * @param root исходный узел
-	 * @param service служба Альфреско
-	 * @param level уровень относительно root, на котором надо выполнить сканирования:
-	 *   (при level = 0 ничего не перечисляется) 
-	 *   при level = 1: перечисляются непосредственные дочерние узлы, 
-	 *   при level = 2: перечисляется дети детей и т.д. 
-	 * @param enumerator "call-back" (может быть null - для подсчёта кол-ва)
-	 * @return кол-во встреченных детей на указанном уровне
-	 */
-	public static int scanHierachicalChilren( NodeRef root, NodeService service
-			, int level, NodeEnumerator enumerator) {
-		return scanHierachicalChilren(root, service, level, null, enumerator);
-	}
+    /**
+     * Выполнить перечисление дочерних узлов, расположенных на указанном уровне
+     * вложенности относительно root (первые вложенные - это уровень один).
+     * Дети выбираются как все chil-узлы по связи ContentModel.ASSOC_CONTAINS.
+     *
+     * @param root       исходный узел
+     * @param service    служба Альфреско
+     * @param level      уровень относительно root, на котором надо выполнить сканирования:
+     *                   (при level = 0 ничего не перечисляется)
+     *                   при level = 1: перечисляются непосредственные дочерние узлы,
+     *                   при level = 2: перечисляется дети детей и т.д.
+     * @param enumerator "call-back" (может быть null - для подсчёта кол-ва)
+     * @return кол-во встреченных детей на указанном уровне
+     */
+    public static int scanHierachicalChilren(NodeRef root, NodeService service
+            , int level, NodeEnumerator enumerator) {
+        return scanHierachicalChilren(root, service, level, null, enumerator);
+    }
 
-	/**
-	 * Выполнить перечисление дочерних узлов, расположенных на указанном уровне 
-	 * вложенности относительно root (первые вложенные - с единицы).
-	 * Дети выбираются как все chil-узлы по связи ContentModel.ASSOC_CONTAINS. 
-	 * @param root исходный узел
-	 * @param service служба Альфреско
-	 * @param level уровень относительно root, на котором надо выполнить сканирования:
-	 *   (при level = 0 ничего не перечисляется) 
-	 *   при level = 1: перечисляются непосредственные дочерние узлы, 
-	 *   при level = 2: перечисляется дети детей и т.д. 
-	 * @param parents родительские для root узлы (может быть NULL)
-	 * @param enumerator "call-back" (может быть null - для подсчёта кол-ва)
-	 * @return кол-во встреченных детей на указанном уровне
-	 */
-	public static int scanHierachicalChilren( NodeRef root, NodeService service
-			, int level, List<NodeRef> parents, NodeEnumerator enumerator 
-			)
-	{
-		if (root == null || service == null || level < 1)
-			return 0;
+    /**
+     * Выполнить перечисление дочерних узлов, расположенных на указанном уровне
+     * вложенности относительно root (первые вложенные - с единицы).
+     * Дети выбираются как все chil-узлы по связи ContentModel.ASSOC_CONTAINS.
+     *
+     * @param root       исходный узел
+     * @param service    служба Альфреско
+     * @param level      уровень относительно root, на котором надо выполнить сканирования:
+     *                   (при level = 0 ничего не перечисляется)
+     *                   при level = 1: перечисляются непосредственные дочерние узлы,
+     *                   при level = 2: перечисляется дети детей и т.д.
+     * @param parents    родительские для root узлы (может быть NULL)
+     * @param enumerator "call-back" (может быть null - для подсчёта кол-ва)
+     * @return кол-во встреченных детей на указанном уровне
+     */
+    public static int scanHierachicalChilren(NodeRef root, NodeService service
+            , int level, List<NodeRef> parents, NodeEnumerator enumerator
+    ) {
+        if (root == null || service == null || level < 1) {
+            return 0;
+        }
 
-		int result = 0;
+        int result = 0;
 
-		if (parents == null)
-			parents = new ArrayList<NodeRef>();
+        if (parents == null) {
+            parents = new ArrayList<NodeRef>();
+        }
 
-		final List<ChildAssociationRef> listChildren = service.getChildAssocs(root, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
-		if (listChildren != null) {
-			parents.add( root); // регим родительский узел ...
-			try {
-				for (ChildAssociationRef assocChild : listChildren) {
-					final NodeRef child = assocChild.getChildRef();
-					if (level == 1) { // находимся на уровне перечисления ...
-						result++;
-						if (enumerator != null)
-							enumerator.lookAt(child, parents);
-					} else { // рекурсивный вызов перечисления внутри узла ...
-						result += scanHierachicalChilren(child, service, level-1, parents, enumerator);
-					}
-				}
-			} finally {
-				parents.remove( parents.size() - 1); // убрать последний
-			}
-		} // if
+        final List<ChildAssociationRef> listChildren = service.getChildAssocs(root, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+        if (listChildren != null) {
+            parents.add(root); // регим родительский узел ...
+            try {
+                for (ChildAssociationRef assocChild : listChildren) {
+                    final NodeRef child = assocChild.getChildRef();
+                    if (level == 1) { // находимся на уровне перечисления ...
+                        result++;
+                        if (enumerator != null) {
+                            enumerator.lookAt(child, parents);
+                        }
+                    } else { // рекурсивный вызов перечисления внутри узла ...
+                        result += scanHierachicalChilren(child, service, level - 1, parents, enumerator);
+                    }
+                }
+            } finally {
+                parents.remove(parents.size() - 1); // убрать последний
+            }
+        } // if
 
-		return result;
-	}
-
-
-	/**
-	 * Получение списка вложений (пробуется child-список, parent-список и ассоциации)
-	 * @param nodeId
-	 * @param assocRef
-	 * @return
-	 */
-	public static List<NodeRef> findChildrenByAssoc( NodeRef nodeId, QName assocRef
-			, NodeService nodeService)
-	{
-		final List<NodeRef> result = new ArrayList<NodeRef>();
-
-		// TODO: в зависимости от метаданных можно точно и строго выбрать один из 4х вариантов ...
-		do {
-			{ /* классические "дети" ... */
-				final List<ChildAssociationRef> children = nodeService.getParentAssocs(nodeId, assocRef, RegexQNamePattern.MATCH_ALL);
-				if (children != null && !children.isEmpty()) {
-					for (ChildAssociationRef child: children) {
-						result.add( child.getChildRef());
-					}
-					break;
-				} 
-			}
-
-			{ /* пробуем родителей ... */
-				final List<ChildAssociationRef> parents = nodeService.getChildAssocs(nodeId, assocRef, RegexQNamePattern.MATCH_ALL);
-				if (parents != null && !parents.isEmpty()) {
-					for (ChildAssociationRef child: parents) {
-						result.add( child.getParentRef());
-					}
-					break;
-				}
-			}
-
-			{ /* пробуем source-связи ... */
-				final List<AssociationRef> listSrcAssocs = nodeService.getSourceAssocs(nodeId, assocRef);
-				if (listSrcAssocs != null && !listSrcAssocs.isEmpty()) {
-					for (AssociationRef child: listSrcAssocs) {
-						result.add( child.getSourceRef());
-					}
-					break;
-				}
-			}
-
-			{ /* пробуем target-связи ... */
-				final List<AssociationRef> listDestAssocs = nodeService.getTargetAssocs(nodeId, assocRef);
-				if (listDestAssocs != null && !listDestAssocs.isEmpty()) {
-					for (AssociationRef child: listDestAssocs) {
-						result.add( child.getTargetRef());
-					}
-					break;
-				}
-			}
-		} while(false); // one-time exec
-
-		return (result.isEmpty()) ? null : result;
-	}
+        return result;
+    }
 
 
-	/**
-	 * Получение свойства по ссылке - либо непосредственно из свойств, 
-	 * либо по ссылке.
-	 * <br/>Если значение НЕ содержит "{}", то предполагается что это обычный
-	 * атрибут, иначе - форматированный для SubstitudeService
-	 * <br/> Пример: 
-	 * <br/		final Object value = getByLink(sourceLink, subItemId, props, nodeService, nameService, substService, propName);
-	 * @param sourceLink
-	 * @param docId 
-	 * @param props список свойств объекта, если null, то свойство будет загружаться непосредственно
-	 * @param resolver
-	 * @param logger для журналирования, м.б. null
-	 * @param info  пояснения по получемому значению для журналирования ошибок
-	 * @return полученное значение
-	 */
-	public static Object getByLink(String sourceLink
-			, NodeRef docId
-			, Map<QName, Serializable> props
-			, LinksResolver resolver
-			, Logger logger
-			, String info)
-	{
-		if (sourceLink == null)
-			return null;
+    /**
+     * Получение списка вложений (пробуется child-список, parent-список и ассоциации)
+     *
+     * @param nodeId
+     * @param assocRef
+     * @return
+     */
+    public static List<NodeRef> findChildrenByAssoc(NodeRef nodeId, QName assocRef, NodeService nodeService) {
+        final List<NodeRef> result = new ArrayList<NodeRef>();
 
-		sourceLink = sourceLink.trim();
-		if (sourceLink.length() == 0)
-			return null;
+        // TODO: в зависимости от метаданных можно точно и строго выбрать один из 4х вариантов ...
+        do {
+            { /* классические "дети" ... */
+                final List<ChildAssociationRef> children = nodeService.getParentAssocs(nodeId, assocRef, RegexQNamePattern.MATCH_ALL);
+                if (children != null && !children.isEmpty()) {
+                    for (ChildAssociationRef child : children) {
+                        result.add(child.getChildRef());
+                    }
+                    break;
+                }
+            }
 
-		Object value = null;
-		try {
-			if (resolver.isSubstCalcExpr(sourceLink)) {
-				// форматируем значение вида "{a/b/c...}"
-				// value = substService.formatNodeTitle(docId, sourceLink);
-				value = resolver.evaluateLinkExpr(docId, sourceLink);
-			} else { // простое значение выбираем в свойствах
-				final NodeService nodeService = resolver.getServices().getServiceRegistry().getNodeService();
-				final NamespaceService ns = resolver.getServices().getServiceRegistry().getNamespaceService();
-				final QName qname = QName.createQName(sourceLink, ns);
-				value = (props != null) ? props.get(qname) : nodeService.getProperty( docId, qname);
-			}
-		} catch (Throwable ex) {
-			if (logger != null) {
-				final String msg = String.format( "Ignoring problem getting property '%s'\n\t for docId %s \n\t by link '%s' -> ignored \n\t %s"
-						, info, docId, sourceLink,  ex.getMessage() );
-				logger.error( msg, ex);
-			}
-			value = null;
-		}
-		return value;
-	}
+            { /* пробуем родителей ... */
+                final List<ChildAssociationRef> parents = nodeService.getChildAssocs(nodeId, assocRef, RegexQNamePattern.MATCH_ALL);
+                if (parents != null && !parents.isEmpty()) {
+                    for (ChildAssociationRef child : parents) {
+                        result.add(child.getParentRef());
+                    }
+                    break;
+                }
+            }
 
-	public static Object getByLink(String sourceLink
-			, NodeRef docId
-			, LinksResolver resolver
-			, Logger logger
-			, String info) {
-		return getByLink(sourceLink, docId, null, resolver, logger, info);
-	}
+            { /* пробуем source-связи ... */
+                final List<AssociationRef> listSrcAssocs = nodeService.getSourceAssocs(nodeId, assocRef);
+                if (listSrcAssocs != null && !listSrcAssocs.isEmpty()) {
+                    for (AssociationRef child : listSrcAssocs) {
+                        result.add(child.getSourceRef());
+                    }
+                    break;
+                }
+            }
 
+            { /* пробуем target-связи ... */
+                final List<AssociationRef> listDestAssocs = nodeService.getTargetAssocs(nodeId, assocRef);
+                if (listDestAssocs != null && !listDestAssocs.isEmpty()) {
+                    for (AssociationRef child : listDestAssocs) {
+                        result.add(child.getTargetRef());
+                    }
+                    break;
+                }
+            }
+        } while (false); // one-time exec
+
+        return (result.isEmpty()) ? null : result;
+    }
+
+
+    /**
+     * Получение свойства по ссылке - либо непосредственно из свойств,
+     * либо по ссылке.
+     * <br/>Если значение НЕ содержит "{}", то предполагается что это обычный
+     * атрибут, иначе - форматированный для SubstitudeService
+     * <br/> Пример:
+     * <br/		final Object value = getByLink(sourceLink, subItemId, props, nodeService, nameService, substService, propName);
+     *
+     * @param sourceLink
+     * @param docId
+     * @param props      список свойств объекта, если null, то свойство будет загружаться непосредственно
+     * @param resolver
+     * @param logger     для журналирования, м.б. null
+     * @param info       пояснения по получемому значению для журналирования ошибок
+     * @return полученное значение
+     */
+    public static Object getByLink(String sourceLink
+            , NodeRef docId
+            , Map<QName, Serializable> props
+            , LinksResolver resolver
+            , Logger logger
+            , String info) {
+
+        if (sourceLink == null) {
+            return null;
+        }
+
+        sourceLink = sourceLink.trim();
+        if (sourceLink.isEmpty()) {
+            return null;
+        }
+
+        Object value;
+        try {
+            if (resolver.isSubstCalcExpr(sourceLink)) {
+                // форматируем значение вида "{a/b/c...}"
+                value = resolver.evaluateLinkExpr(docId, sourceLink);
+            } else { // простое значение выбираем в свойствах
+                NodeService nodeService = resolver.getServices().getServiceRegistry().getNodeService();
+                NamespaceService ns = resolver.getServices().getServiceRegistry().getNamespaceService();
+                QName qname = QName.createQName(sourceLink, ns);
+                value = (props != null) ? props.get(qname) : nodeService.getProperty(docId, qname);
+            }
+        } catch (Throwable ex) {
+            if (logger != null) {
+                final String msg = String.format("Ignoring problem getting property '%s'\n\t for docId %s \n\t by link '%s' -> ignored \n\t %s"
+                        , info, docId, sourceLink, ex.getMessage());
+                logger.error(msg, ex);
+            }
+            value = null;
+        }
+        return value;
+    }
+
+    public static Object getByLink(String sourceLink
+            , NodeRef docId
+            , LinksResolver resolver
+            , Logger logger
+            , String info) {
+        return getByLink(sourceLink, docId, null, resolver, logger, info);
+    }
 }

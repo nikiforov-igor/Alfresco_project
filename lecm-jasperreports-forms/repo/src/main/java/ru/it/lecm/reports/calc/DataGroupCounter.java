@@ -93,13 +93,13 @@ public class DataGroupCounter {
 	 */
 	public int incCounter(final String attrName, int delta) {
 		// корректировка общей суммы
-		this.total = delta + ((this.total == null) ? 0 : this.total.intValue());
+		this.total = delta + ((this.total == null) ? 0 : this.total);
 
 		// корректировка текущей суммы для статуса ...
 		Integer counter = null;
 		if (this.attrCounters.containsKey(attrName))
 			counter = this.attrCounters.get(attrName);
-		final int result = delta + ( (counter == null) ? 0 : counter.intValue() );
+		final int result = delta + ( (counter == null) ? 0 : counter);
 		this.attrCounters.put(attrName, result);
 
 		return result;
@@ -125,7 +125,7 @@ public class DataGroupCounter {
 		for(Map.Entry<String, Integer> e: this.attrCounters.entrySet()) {
 			if (!attrMarked.contains(e.getKey())) { // учесть если вне контрольной группы ...
 				if (e.getValue() != null)
-					result += e.getValue().intValue(); 
+					result += e.getValue();
 			}
 		}
 		return (result != 0) ? result : null;

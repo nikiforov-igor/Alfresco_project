@@ -7,16 +7,53 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-public interface WKServiceKeeper {
+public class WKServiceKeeper {
 
-	public ServiceRegistry getServiceRegistry();
+    private ServiceRegistry serviceRegistry;
+    private SubstitudeBean substitudeService;
+    private OrgstructureBean orgstructureService;
+    private DocumentService documentService;
+    private DocumentConnectionService documentConnectionService;
 
-	public SubstitudeBean getSubstitudeService();
+    public ServiceRegistry getServiceRegistry() {
+        return serviceRegistry;
+    }
 
-	public OrgstructureBean getOrgstructureService();
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
+    }
 
-	public DocumentService getDocumentService();
+    public SubstitudeBean getSubstitudeService() {
+        return substitudeService;
+    }
 
-	public DocumentConnectionService getDocumentConnectionService();
+    public void setSubstitudeService(SubstitudeBean substitudeService) {
+        this.substitudeService = substitudeService;
+    }
+
+    public OrgstructureBean getOrgstructureService() {
+        return this.orgstructureService;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
+    public DocumentService getDocumentService() {
+        return documentService;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
+
+    public DocumentConnectionService getDocumentConnectionService() {
+        return documentConnectionService;
+    }
+
+    public void setDocumentConnectionService(
+            DocumentConnectionService documentConnectionService) {
+        this.documentConnectionService = documentConnectionService;
+    }
 
 }

@@ -16,7 +16,7 @@
 	</bean>
 
 	<!-- Бин "часто используемых служб" -->
-	<bean id="wksKeeper" class="ru.it.lecm.reports.beans.WKServiceKeeperBean">
+	<bean id="wksKeeper" class="ru.it.lecm.reports.beans.WKServiceKeeper">
 		<property name="serviceRegistry" ref="ServiceRegistry" />
 		<property name="substitudeService" ref="substitudeService" />
 		<property name="orgstructureService" ref="serviceOrgstructure" />
@@ -25,12 +25,12 @@
 	</bean>
 
 	<!-- Бин для разименований ссылок ... -->
-	<bean id="linksResolverBean" class="ru.it.lecm.reports.beans.LinksResolverBean">
+	<bean id="linksResolverBean" class="ru.it.lecm.reports.beans.LinksResolver">
 		<property name="services" ref="wksKeeper" />
 	</bean>
 
 	<!-- Генератор Jasper отчётов (версия v2.x lecm-сервиса) -->
-	<bean id="jasperReportGenerator" class="ru.it.lecm.reports.generators.JasperReportGeneratorImpl" init-method="init">
+	<bean id="jasperReportGenerator" class="ru.it.lecm.reports.generators.JasperReportGeneratorImpl">
 		<property name="services" ref="wksKeeper"/>
 		<property name="resolver" ref="linksResolverBean"/>
 		<property name="reportsManagerBeanName" value="reportsManager"/>
@@ -52,9 +52,8 @@
 		<property name="connection" ref="reportOpenOfficeConnection" />
 	</bean>
 
-	<bean id="reportDAOBean" class="ru.it.lecm.reports.model.DAO.ReportDAOImpl" init-method="init">
+	<bean id="reportDAOBean" class="ru.it.lecm.reports.model.DAO.ReportDAOImpl">
 		<property name="services" ref="wksKeeper"/>
-		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<!--  RSF == Report Service Folder -->
@@ -71,7 +70,6 @@
 	<!-- Хранение в репозитории файлов для отчётов (xml-шаблоны, jasper и пр) -->
 	<bean id="repositoryReportContentBean"
 			class="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean"
-			init-method="init"
 			parent="baseBean" >
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
@@ -94,8 +92,7 @@
 	  -->
 	<!-- Хранение файлов для отчётов в файловой системе (xml-шаблоны, jasper и прнепосредственно из поставки) -->
 	<bean id="fileReportContentBean"
-			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
-			init-method="init">
+			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean">
 
 		<!-- для надёжности - запрещаем запись в предустановленные отчёты -->
 		<property name="readonly" value="true"/>
@@ -124,8 +121,7 @@
 		gen-файлов для генерации шаблонов отчётов
 	  -->
 	<bean id="fileReportTemplatesBean"
-			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
-			init-method="init">
+			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean">
 		<!-- для надёжности - запрещаем запись -->
 		<property name="readonly" value="true"/>
 
@@ -155,8 +151,7 @@
 		Должно быть файловое, т.к. OpenOffice работает именно с ними (не с потоками).
 	  -->
 	<bean id="fileOOReportResultBean"
-			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
-			init-method="init">
+			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean">
 		<!-- сюда запись надо разрешить ... -->
 		<property name="readonly" value="false"/>
 
@@ -185,8 +180,7 @@
 	  -->
 	<bean id="reportsManager"
 			class="ru.it.lecm.reports.beans.ReportsManagerImpl"
-	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportDAOBean, jasperReportGenerator, mimetypeService"
-	 		init-method="init">
+	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportDAOBean, jasperReportGenerator, mimetypeService">
 		<!-- <property name="services" ref="wksKeeper"/> -->
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="namespaceService" ref="namespaceService"/>

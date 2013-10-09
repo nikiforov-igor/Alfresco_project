@@ -1,6 +1,6 @@
 <webscript>
-    <shortname>Produce form</shortname>
-    <description>Produce form for node</description>
+    <shortname>Produce report form by recortCode</shortname>
+    <description>Produce report form by recortCode</description>
     <url>/lecm/report/{report}</url>
     <format default="html">extension</format>
     <authentication>user</authentication>

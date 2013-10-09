@@ -19,129 +19,108 @@ import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 
-public class ReportManagerJavascriptExtension
-		extends BaseWebScript 
-		// implements ScriptApiReportManager
-{
-	public final static String REPORTS_EDITOR_URI = "http://www.it.ru/logicECM/reports/editor/1.0";
-	public final static QName PROP_REPORT_DESCRIPTOR_IS_DEPLOYED = QName.createQName(REPORTS_EDITOR_URI, "reportIsDeployed");
+public class ReportManagerJavascriptExtension extends BaseWebScript {
+    public final static String REPORTS_EDITOR_URI = "http://www.it.ru/logicECM/reports/editor/1.0";
+    public final static QName PROP_REPORT_DESCRIPTOR_IS_DEPLOYED = QName.createQName(REPORTS_EDITOR_URI, "reportIsDeployed");
 
-	private static final transient Logger logger = LoggerFactory.getLogger(ReportManagerJavascriptExtension.class);
+    private static final transient Logger logger = LoggerFactory.getLogger(ReportManagerJavascriptExtension.class);
 
-	private ReportsManager reportsManager;
+    private ReportsManager reportsManager;
 
-	public ReportsManager getReportsManager() {
-		return reportsManager;
-	}
+    public ReportsManager getReportsManager() {
+        return reportsManager;
+    }
 
-	public void setReportsManager(ReportsManager reportsManager) {
-		this.reportsManager = reportsManager;
-	}
+    public void setReportsManager(ReportsManager reportsManager) {
+        this.reportsManager = reportsManager;
+    }
 
-	// @Override
-	public boolean deployReport(final String reportDescNode) {
-		PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
+    public boolean deployReport(final String reportDescNode) {
+        PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
+        boolean result = false;
+        if (NodeRef.isNodeRef(reportDescNode)) {
+            NodeRef rdId = new NodeRef(reportDescNode);
+            getReportsManager().registerReportDescriptor(rdId);
+            result = true;
+            serviceRegistry.getNodeService().setProperty(rdId, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, result);
+        }
+        return result;
+    }
 
-		logger.info( String.format( "deploying report '%s' ...", reportDescNode));
-		boolean result = false;
-		if (NodeRef.isNodeRef(reportDescNode)) {
-			final NodeRef rdId = new NodeRef(reportDescNode);
-			getReportsManager().registerReportDescriptor(rdId);
-			result = true;
-			serviceRegistry.getNodeService().setProperty(rdId, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, result);
-		}
-		logger.warn( String.format( "report '%s' %sdeployed", reportDescNode, (result ? "" : "NOT ")));
-		return result;
-	}
+    public boolean undeployReport(final String reportCode) {
+        PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
+        getReportsManager().unregisterReportDescriptor(reportCode);
+        NodeRef report = getReportsManager().getReportDAO().getReportDescriptorNodeByCode(reportCode);
+        if (report != null) {
+            serviceRegistry.getNodeService().setProperty(report, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, false);
+        }
+        return true;
+    }
 
-	// @Override
-	public boolean undeployReport(final String reportCode) {
-		PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
+    @SuppressWarnings("unused")
+    public List<ReportInfo> getRegisteredReports(String docTypes, boolean forCollection) {
+        PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 
-		logger.info( String.format( "Undeploying report '%s' ...", reportCode));
-		getReportsManager().unregisterReportDescriptor(reportCode);
-		NodeRef report = getReportsManager().getReportDAO().getReportDescriptorNodeByCode(reportCode);
-		if (report != null) {
-			serviceRegistry.getNodeService().setProperty(report, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, false);
-		}
-		logger.warn( String.format( "report '%s' undeployed", reportCode));
-		return true;
-	}
+        final List<ReportInfo> reports = new ArrayList<ReportInfo>();
 
-	public List<ReportInfo> getRegisteredReports(String docTypes, boolean forCollection) {
-		logger.debug( String.format( "getRegisteredReports(docTypes=[%s], forCollection=%s) ...", docTypes, forCollection));
-		PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
+        final String[] types = (docTypes != null && !docTypes.isEmpty()) ? docTypes.split(",") : null; // задан тип(типы) - значит фильтруем по ним
 
-		final List<ReportInfo> reports = new ArrayList<ReportInfo>();
+        final List<ReportDescriptor> found = getReportsManager().getRegisteredReports(types, forCollection);
+        if (found != null && !found.isEmpty()) {
+            for (ReportDescriptor rd : found) {
+                final ReportInfo ri = new ReportInfo(
+                        rd.getReportType(), rd.getMnem(),
+                        (rd.getFlags() == null) ? null
+                                : StringUtils.collectionToCommaDelimitedString(rd.getFlags().getSupportedNodeTypes())
+                );
+                ri.setReportName(rd.get(null, rd.getMnem()));
+                reports.add(ri);
+            }
+        }
 
-		final String[] types = (docTypes != null && docTypes.length() > 0)
-									? docTypes.split(",") // задан тип(типы) - значит фильтруем по ним
-									: null;
+        return reports;
+    }
 
-		final List<ReportDescriptor> found = getReportsManager().getRegisteredReports(types, forCollection);
-		if (found != null && !found.isEmpty()) {
-			for (ReportDescriptor rd : found) {
-				final ReportInfo ri = new ReportInfo(
-							rd.getReportType(), rd.getMnem(), 
-							(rd.getFlags() == null) ? null 
-								: StringUtils.collectionToCommaDelimitedString(rd.getFlags().getSupportedNodeTypes()) 
-				);
-				ri.setReportName(rd.get(null, rd.getMnem()));
-				reports.add(ri);
-			}
-		}
+    public ScriptNode generateReportTemplate(final String reportRef) {
+        PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 
-		logger.debug( String.format( "getRegisteredReports(docTypes=[%s], forCollection=%s) return count %s", docTypes, forCollection, reports.size()));
-		return reports;
-	}
+        final NodeRef report = new NodeRef(reportRef);
+        final NodeRef templateFileRef = getReportsManager().produceDefaultTemplate(report);
+        return new ScriptNode(templateFileRef, serviceRegistry, getScope());
+    }
 
-	public ScriptNode generateReportTemplate(final String reportRef) {
-		logger.debug( String.format( "generateReportTemplate(reportRef={%s}) ...", reportRef));
-		PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
+    /**
+     * Сгенерировать отчёт и сохранить его в указанном каталоге репозитория как
+     *
+     * @param reportCode    код отчёта для построения
+     * @param destFolderRef папка репозитория для сохранения, не может быть null
+     * @param args          аргументы для построения отчёта
+     * @return nodeRef созданного узла
+     */
+    public ScriptNode buildReportAndSave(final String reportCode, final String destFolderRef, Map<String, String[]> args) {
+        PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
+        PropertyCheck.mandatory(this, "reportCode", reportCode);
+        PropertyCheck.mandatory(this, "destFolderRef", destFolderRef);
 
-		final NodeRef report = new NodeRef(reportRef);
-		final NodeRef templateFileRef = getReportsManager().produceDefaultTemplate(report);
-		logger.debug( String.format( "generateReportTemplate(reportRef={%s}) returns {%s}", reportRef, templateFileRef));
-		return new ScriptNode(templateFileRef, serviceRegistry, getScope());
-	}
+        ReportFileData result;
+        try {
+            result = getReportsManager().generateReport(reportCode, args);
+        } catch (IOException ex) {
+            final String msg = String.format("Exception at buildReportAndSave(reportCode='%s', destFolder={%s}), args:\n\t%s", reportCode, destFolderRef, args);
+            logger.error(msg, ex);
+            throw new RuntimeException(msg, ex);
+        }
 
-	/**
-	 * Сгенерировать отчёт и сохранить его в указанном каталоге репозитория как
-	 * @param reportCode код отчёта для построения
-	 * @param destFolderRef папка репозитория для сохранения, не может быть null
-	 * @param args аргументы для построения отчёта
-	 * @return nodeRef созданного узла
-	 */
-	public ScriptNode buildReportAndSave(final String reportCode, final String destFolderRef, Map<String, String[]> args) {
-		logger.debug( String.format( "buildReportAndSave(reportCode='%s', destFolder={%s}), args:\n\t%s", reportCode, destFolderRef, args));
+        if (result == null || result.getData() == null) {
+            logger.warn(String.format("Built report '%s' result returns %s !?"
+                    , reportCode, (result == null ? "NULL" : "data NULL")));
+            return null;
+        }
 
-		PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
-		PropertyCheck.mandatory(this, "reportCode", reportCode);
-		PropertyCheck.mandatory(this, "destFolderRef", destFolderRef);
+        final NodeRef folder = new NodeRef(destFolderRef);
+        // сохранение внутри folder ...
+        final NodeRef resultRef = getReportsManager().storeAsContent(result, folder);
 
-		ReportFileData result;
-		try {
-			result = getReportsManager().generateReport(reportCode, args);
-		} catch (IOException ex) {
-			final String msg = String.format( "Exception at buildReportAndSave(reportCode='%s', destFolder={%s}), args:\n\t%s", reportCode, destFolderRef, args);
-			logger.error(msg, ex);
-			throw new RuntimeException(msg, ex);
-		}
-
-		if (result == null || result.getData() == null) {
-			logger.warn( String.format( "Built report '%s' result returns %s !?"
-					, reportCode, (result == null ? "NULL" : "data NULL") ));
-			return null;
-		}
-
-		logger.info( String.format( "built report info returns:\n\t mimeType: %s\n\t filename: %s\n\t dataSize: %s bytes"
-				, result.getMimeType(), result.getFilename(), (result.getData() != null ? result.getData().length: "NULL") ));
-
-		final NodeRef folder = new NodeRef(destFolderRef);
-		// сохранение внутри folder ...
-		final NodeRef resultRef = getReportsManager().storeAsContent(result, folder);
-
-		return new ScriptNode(resultRef, serviceRegistry, getScope());
-	}
-
+        return new ScriptNode(resultRef, serviceRegistry, getScope());
+    }
 }

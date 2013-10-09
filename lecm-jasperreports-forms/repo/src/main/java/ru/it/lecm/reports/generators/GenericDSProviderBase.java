@@ -49,395 +49,385 @@ import ru.it.lecm.reports.xml.DSXMLProducer;
 
 /**
  * Провайдер данных.
- * Основное назначение - получение НД для указанного описателя шаблона с учётом 
- * параметров фильтрации. 
+ * Основное назначение - получение НД для указанного описателя шаблона с учётом
+ * параметров фильтрации.
  * Умеет строить lucene-запрос для своей выборки (по простым полям не-ассоциациям)
  * и создаёт фильтр данных для отбора по ассоциациям.
- * @author rabdullin
  *
+ * @author rabdullin
  */
-public class GenericDSProviderBase
-		implements JRDataSourceProvider, ReportProviderExt
-{
+public class GenericDSProviderBase implements JRDataSourceProvider, ReportProviderExt {
 
-	private static final Logger logger = LoggerFactory.getLogger(GenericDSProviderBase.class);
+    private static final Logger logger = LoggerFactory.getLogger(GenericDSProviderBase.class);
 
-	private WKServiceKeeper services;
-	private LinksResolver resolver;
-	private ReportDescriptor reportDescriptor;
-	private ReportsManager reportManager;
+    private WKServiceKeeper services;
+    private LinksResolver resolver;
+    private ReportDescriptor reportDescriptor;
+    private ReportsManager reportManager;
 
-	/**
-	 * Запрос и НД, полученный после запроса к Альфреско
-	 */
-	protected LucenePreparedQuery alfrescoQuery;
-	protected ResultSet alfrescoResult;
-	private JRDSConfigXML xmlConfig; // для загрузки конфы из ds-xml
+    /**
+     * Запрос и НД, полученный после запроса к Альфреско
+     */
+    protected LucenePreparedQuery alfrescoQuery;
+    protected ResultSet alfrescoResult;
+    private JRDSConfigXML xmlConfig; // для загрузки конфы из ds-xml
 
-	public WKServiceKeeper getServices() {
-		return services;
-	}
+    public WKServiceKeeper getServices() {
+        return services;
+    }
 
-	@Override
-	public void setServices(WKServiceKeeper services) {
-		this.services = services;
-	}
+    @Override
+    public void setServices(WKServiceKeeper services) {
+        this.services = services;
+    }
 
-	public ReportDescriptor getReportDescriptor() {
-		return reportDescriptor;
-	}
+    public ReportDescriptor getReportDescriptor() {
+        return reportDescriptor;
+    }
 
-	@Override
-	public void setReportDescriptor(ReportDescriptor rdesc) {
-		if (Utils.isSafelyEquals(this.reportDescriptor, rdesc))
-			return;
-		this.reportDescriptor = rdesc;
-		reloadConfig();
-	}
+    @Override
+    public void setReportDescriptor(ReportDescriptor rdesc) {
+        if (Utils.isSafelyEquals(this.reportDescriptor, rdesc)) {
+            return;
+        }
+        this.reportDescriptor = rdesc;
+        reloadConfig();
+    }
 
-	@Override
-	public void setResolver(LinksResolver resolver) {
-		this.resolver = resolver;
-	}
+    @Override
+    public void setResolver(LinksResolver resolver) {
+        this.resolver = resolver;
+    }
 
-	/**
-	 * Выполнить загрузку конфигурации, если возможно (т.е. присвоены xmlConfig
-	 * и reportDescriptor)
-	 */
-	protected void reloadConfig() {
-		if (this.xmlConfig != null && this.reportDescriptor != null) {
-			final String configName = DSXMLProducer.makeDsConfigFileName( this.reportDescriptor.getMnem());
-			this.xmlConfig.setConfigName( configName);
-			/* // загрузка конфигурации
-			try { this.xmlConfig.loadConfig();
-			} catch( JRException ex) {
-				logger.warn( String.format("Fail to load config by name '%s'", configName), ex);
-			}
-			 */
-		}
-	}
+    /**
+     * Выполнить загрузку конфигурации, если возможно (т.е. присвоены xmlConfig
+     * и reportDescriptor)
+     */
+    protected void reloadConfig() {
+        if (this.xmlConfig != null && this.reportDescriptor != null) {
+            final String configName = DSXMLProducer.makeDsConfigFileName(this.reportDescriptor.getMnem());
+            this.xmlConfig.setConfigName(configName);
+        }
+    }
 
 
-	@Override
-	public void setReportManager(ReportsManager reportMgr) {
-		this.reportManager = reportMgr;
-	}
+    @Override
+    public void setReportManager(ReportsManager reportMgr) {
+        this.reportManager = reportMgr;
+    }
 
-	public ReportsManager getReportManager() {
-		return reportManager;
-	}
+    public ReportsManager getReportManager() {
+        return reportManager;
+    }
 
-	protected void clearSearch() {
-		alfrescoResult = null;
-		alfrescoQuery = null;
-		// foundCount = -1;
-	}
+    protected void clearSearch() {
+        alfrescoResult = null;
+        alfrescoQuery = null;
+    }
 
-	/** value means "no counter limit" for XML_LIMIT and XML_PGSIZE arguments */
-	final static int UNLIMITED = -1;
+    /**
+     * value means "no counter limit" for XML_LIMIT and XML_PGSIZE arguments
+     */
+    final static int UNLIMITED = -1;
 
-	/**
-	 * Стандартное построение запроса согласно параметров this.reportDescriptor.
-	 * В классах-потомках может использоваться другая логика параметризации 
-	 * и построения отчётов.
-	 * Здесь генерируется текст Lucene-запроса с учётомЖ
-	 *   1) типа (TYPE), 
-	 *   2) ID 
-	 *   3) имеющихся простых параметров, 
-	 *   4) возможного текста запроса из флагов (reportDescriptor.flags.text).
-	 * 
-	 * @return
-	 */
-	protected LucenePreparedQuery buildQuery() {
-		return LucenePreparedQuery.prepareQuery(this.reportDescriptor, getServices().getServiceRegistry());
-	}
+    /**
+     * Стандартное построение запроса согласно параметров this.reportDescriptor.
+     * В классах-потомках может использоваться другая логика параметризации
+     * и построения отчётов.
+     * Здесь генерируется текст Lucene-запроса с учётомЖ
+     * 1) типа (TYPE),
+     * 2) ID
+     * 3) имеющихся простых параметров,
+     * 4) возможного текста запроса из флагов (reportDescriptor.flags.text).
+     *
+     * @return
+     */
+    protected LucenePreparedQuery buildQuery() {
+        return LucenePreparedQuery.prepareQuery(this.reportDescriptor, getServices().getServiceRegistry());
+    }
 
-	public JRDSConfigXML conf() {
-		if (xmlConfig == null)
-			xmlConfig = createXmlConfig();
-		return xmlConfig;
-	}
+    public JRDSConfigXML conf() {
+        if (xmlConfig == null) {
+            xmlConfig = createXmlConfig();
+        }
+        return xmlConfig;
+    }
 
-	/**
-	 * Дополнить конфигурацию значениями по-умолчанию
-	 * @param defaults
-	 */
-	protected void setXMLDefaults(Map<String, Object> defaults) {
-		// "add-on" sections для чтения конфигуратором ...
-//		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_OFFSET, null);
-//		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_LIMIT, null);
-		if (this.xmlConfig != null) {
-			if (this.reportDescriptor != null)
-				this.xmlConfig.setConfigName( "ds-" + this.reportDescriptor.getMnem()+ ".xml" );
-		}
-	}
+    /**
+     * Дополнить конфигурацию значениями по-умолчанию
+     *
+     * @param defaults
+     */
+    protected void setXMLDefaults(Map<String, Object> defaults) {
+        // "add-on" sections для чтения конфигуратором ...
+        if (this.xmlConfig != null) {
+            if (this.reportDescriptor != null) {
+                this.xmlConfig.setConfigName("ds-" + this.reportDescriptor.getMnem() + ".xml");
+            }
+        }
+    }
 
-	/**
-	 * Вернуть объект конфигуратор
-	 * @return
-	 */
-	protected JRDSConfigXML createXmlConfig() {
-		PropertyCheck.mandatory(this, "reportManager", getReportManager());
-		return new ConfigXMLOfGenericDsProvider( this.getReportManager());
-	}
+    /**
+     * Вернуть объект конфигуратор
+     *
+     * @return
+     */
+    protected JRDSConfigXML createXmlConfig() {
+        PropertyCheck.mandatory(this, "reportManager", getReportManager());
+        return new ConfigXMLOfGenericDsProvider(this.getReportManager());
+    }
 
-	private class ConfigXMLOfGenericDsProvider 
-			extends JRDSConfigXML
-	{
-			public ConfigXMLOfGenericDsProvider(ReportsManager mgr) {
-				super(mgr);
-			}
+    private class ConfigXMLOfGenericDsProvider extends JRDSConfigXML {
+        public ConfigXMLOfGenericDsProvider(ReportsManager mgr) {
+            super(mgr);
+        }
 
-			@Override
-			protected void setDefaults(Map<String, Object> defaults) {
-				super.setDefaults(defaults);
-				setXMLDefaults( defaults);
-			}
-	}
+        @Override
+        protected void setDefaults(Map<String, Object> defaults) {
+            super.setDefaults(defaults);
+            setXMLDefaults(defaults);
+        }
+    }
 
-	/**
-	 * Формирует alfrescoResult согласно запросу полученному от buildQueryText и
-	 * параметрам limit/offset.
-	 */
-	protected ResultSet execQuery() {
-		final DurationLogger d = new DurationLogger();
+    /**
+     * Формирует alfrescoResult согласно запросу полученному от buildQueryText и
+     * параметрам limit/offset.
+     */
+    protected ResultSet execQuery() {
+        final DurationLogger d = new DurationLogger();
 
-		clearSearch();
+        clearSearch();
 
 		/* формирование запроса: параметры выбираются непосредственно из reportDescriptor */
-		this.alfrescoQuery = this.buildQuery();
+        this.alfrescoQuery = this.buildQuery();
 
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("Quering Afresco by:>>>\n%s\n<<<", this.alfrescoQuery.luceneQueryText()));
-		}
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Quering Afresco by:>>>\n%s\n<<<", this.alfrescoQuery.luceneQueryText()));
+        }
 
-		final SearchParameters search = new SearchParameters();
-		search.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		search.setLanguage(SearchService.LANGUAGE_LUCENE);
-		search.setQuery(this.alfrescoQuery.luceneQueryText());
-		this.alfrescoQuery.setAlfrescoSearch(search);
+        final SearchParameters search = new SearchParameters();
+        search.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        search.setLanguage(SearchService.LANGUAGE_LUCENE);
+        search.setQuery(this.alfrescoQuery.luceneQueryText());
+        this.alfrescoQuery.setAlfrescoSearch(search);
 
-		int skipCountOffset = -1,
-				maxItems = UNLIMITED;
+        int skipCountOffset = -1,
+                maxItems = UNLIMITED;
 
-		if (this.reportDescriptor.getFlags() != null) {
-			// set offset ...
-			skipCountOffset = this.reportDescriptor.getFlags().getOffset();
-			// set limit ...
-			maxItems = this.reportDescriptor.getFlags().getLimit();
-		}
-		if (skipCountOffset > 0) {
-			this.alfrescoQuery.alfrescoSearch().setSkipCount(skipCountOffset);
-		}
-		if (maxItems != UNLIMITED) {
-			this.alfrescoQuery.alfrescoSearch().setMaxItems(maxItems);
-		}
+        if (this.reportDescriptor.getFlags() != null) {
+            // set offset ...
+            skipCountOffset = this.reportDescriptor.getFlags().getOffset();
+            // set limit ...
+            maxItems = this.reportDescriptor.getFlags().getLimit();
+        }
+        if (skipCountOffset > 0) {
+            this.alfrescoQuery.alfrescoSearch().setSkipCount(skipCountOffset);
+        }
+        if (maxItems != UNLIMITED) {
+            this.alfrescoQuery.alfrescoSearch().setMaxItems(maxItems);
+        }
 
 		/* (!) момент истины - выполнение ЗАПРОСА */
-		ResultSet rs = null;
-		if (!Utils.isStringEmpty(this.alfrescoQuery.luceneQueryText())) {
-			rs = getServices().getServiceRegistry().getSearchService().query(this.alfrescoQuery.alfrescoSearch());
-		}
+        ResultSet rs = null;
+        if (!Utils.isStringEmpty(this.alfrescoQuery.luceneQueryText())) {
+            rs = getServices().getServiceRegistry().getSearchService().query(this.alfrescoQuery.alfrescoSearch());
+        }
 
-		final int foundCount = (rs != null) ? rs.length() : -1;
-		d.logCtrlDuration(logger, String.format(
-				"\nQuery in {t} msec: found %d rows, limit %d, offset %d" +
-						"\n>>>%s\n<<<"
-						, foundCount, maxItems, skipCountOffset, this.alfrescoQuery.luceneQueryText()));
+        final int foundCount = (rs != null) ? rs.length() : -1;
+        d.logCtrlDuration(logger, String.format(
+                "\nQuery in {t} msec: found %d rows, limit %d, offset %d" +
+                        "\n>>>%s\n<<<"
+                , foundCount, maxItems, skipCountOffset, this.alfrescoQuery.luceneQueryText()));
 
-		return rs;
-	}
+        return rs;
+    }
 
-	@Override
-	public boolean supportsGetFieldsOperation() {
-		return true;
-	}
+    @Override
+    public boolean supportsGetFieldsOperation() {
+        return true;
+    }
 
-	@Override
-	public JRField[] getFields(JasperReport report)
-			throws JRException, UnsupportedOperationException
-	{
-		final List<JRField> result = JRUtils.getJRFields(this.getReportDescriptor());
-		return (result != null) ? result.toArray( new JRField[result.size()]) : null;
-	}
+    @Override
+    public JRField[] getFields(JasperReport report) throws JRException, UnsupportedOperationException {
+        final List<JRField> result = JRUtils.getJRFields(this.getReportDescriptor());
+        return (result != null) ? result.toArray(new JRField[result.size()]) : null;
+    }
 
-	@Override
-	public void dispose(JRDataSource ds) throws JRException {
-		logger.debug( String.format("Disposing dataSource: %s", (ds == null ? "null" : ds.getClass().getName()) ));
-	}
+    @Override
+    public void dispose(JRDataSource ds) throws JRException {
+        logger.debug(String.format("Disposing dataSource: %s", (ds == null ? "null" : ds.getClass().getName())));
+    }
 
-	@Override
-	public JRDataSource create(JasperReport report) throws JRException {
-		if (alfrescoResult == null) { // выполнение запроса ...
-			alfrescoResult = execQuery();
-			if (alfrescoResult == null) {
-				return null;
-			}
-		}
+    @Override
+    public JRDataSource create(JasperReport report) throws JRException {
+        if (alfrescoResult == null) { // выполнение запроса ...
+            alfrescoResult = execQuery();
+            if (alfrescoResult == null) {
+                return null;
+            }
+        }
 
-		// Create a new data source
-		final AlfrescoJRDataSource dataSource = newJRDataSource(alfrescoResult.iterator());
-		fillContext(dataSource.getContext());
+        // Create a new data source
+        final AlfrescoJRDataSource dataSource = newJRDataSource(alfrescoResult.iterator());
+        fillContext(dataSource.getContext());
 
-		return dataSource;
-	}
+        return dataSource;
+    }
 
-	/**
-	 * Заполнение контекста используемыми службами, описанием полей.
-	 * @param context
-	 */
-	protected void fillContext(ReportDSContextImpl context) {
-		if (context != null) {
-			context.setSubstitudeService(getServices().getSubstitudeService());
-			context.setRegistryService(getServices().getServiceRegistry());
-			context.setJrSimpleProps( getColumnNames(this.alfrescoQuery.argsByProps(), this.getServices().getServiceRegistry().getNamespaceService()));
-			context.setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
+    /**
+     * Заполнение контекста используемыми службами, описанием полей.
+     *
+     * @param context
+     */
+    protected void fillContext(ReportDSContextImpl context) {
+        if (context != null) {
+            context.setSubstitudeService(getServices().getSubstitudeService());
+            context.setRegistryService(getServices().getServiceRegistry());
+            context.setJrSimpleProps(getColumnNames(this.alfrescoQuery.argsByProps(), this.getServices().getServiceRegistry().getNamespaceService()));
+            context.setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
 
-			// фильтр данных ...
-			context.setFilter(newDataFilter());
-		}
-	}
+            // фильтр данных ...
+            context.setFilter(newDataFilter());
+        }
+    }
 
-	/**
-	 * Получить список имён простых колонок в виде последовательности пар "тип", "атрибут" (QName Альфреско).
-	 * @param list список колонок, в которых выражение является ссылкой на атрибут
-	 * @param ns
-	 * @return
-	 */
-	static Set<String> getColumnNames(List<ColumnDescriptor> list, final NamespaceService ns) {
-		if (list == null || list.isEmpty())
-			return null;
-		final Set<String> result = new HashSet<String>();
-		for (ColumnDescriptor col : list) {
-			final QName qname = QName.createQName(col.getQNamedExpression(), ns);
-			if (qname != null) {
-				result.add(qname.toPrefixString(ns)); // (!) регим короткое название
-				result.add(col.getColumnName());
-			}
-		}
-		return result;
-	}
+    /**
+     * Получить список имён простых колонок в виде последовательности пар "тип", "атрибут" (QName Альфреско).
+     *
+     * @param list список колонок, в которых выражение является ссылкой на атрибут
+     * @param ns
+     * @return
+     */
+    static Set<String> getColumnNames(List<ColumnDescriptor> list, final NamespaceService ns) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
 
-	/**
-	 * Внутренний метод для создания нужного набора данных.
-	 * В потомках позволит менять конретный тип НД.
-	 * @param iterator
-	 * @return
-	 */
-	protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-		final GenericJRDataSource result = new GenericJRDataSource(iterator);
-		return result;
-	}
+        final Set<String> result = new HashSet<String>();
+        for (ColumnDescriptor col : list) {
+            final QName qname = QName.createQName(col.getQNamedExpression(), ns);
+            if (qname != null) {
+                result.add(qname.toPrefixString(ns)); // (!) регим короткое название
+                result.add(col.getColumnName());
+            }
+        }
+        return result;
+    }
 
-	/**
-	 * Внутренний метод для создания фильтра данных.
-	 * Здесь включает такой фильтр, в котором есть отбор по параметрам-ассоциациям (cм this.alfrescoQuery.argsByLinks()).
-	 * В потомках позволит менять конретный тип фильтра.
-	 * @return
-	 */
-	protected DataFilter newDataFilter() {
-		// фильтр, который может "заглядывать" по ссылкам
-		if (this.alfrescoQuery.argsByLinks() == null || this.alfrescoQuery.argsByLinks().isEmpty()) {
-			return null;
-		}
+    /**
+     * Внутренний метод для создания нужного набора данных.
+     * В потомках позволит менять конретный тип НД.
+     *
+     * @param iterator
+     * @return
+     */
+    protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
+        final GenericJRDataSource result = new GenericJRDataSource(iterator);
+        return result;
+    }
 
-		// TODO: надо разработать фильтр, который смог бы проверять длинные ссылки (DataFilterByLinks)
-		final AssocDataFilterImpl result = new AssocDataFilterImpl(this.getServices().getServiceRegistry());
+    /**
+     * Внутренний метод для создания фильтра данных.
+     * Здесь включает такой фильтр, в котором есть отбор по параметрам-ассоциациям (cм this.alfrescoQuery.argsByLinks()).
+     * В потомках позволит менять конретный тип фильтра.
+     *
+     * @return
+     */
+    protected DataFilter newDataFilter() {
+        // фильтр, который может "заглядывать" по ссылкам
+        if (this.alfrescoQuery.argsByLinks() == null || this.alfrescoQuery.argsByLinks().isEmpty()) {
+            return null;
+        }
 
-		final NamespaceService ns = this.getServices().getServiceRegistry().getNamespaceService();
-		final DictionaryService ds = this.getServices().getServiceRegistry().getDictionaryService();
+        // TODO: надо разработать фильтр, который смог бы проверять длинные ссылки (DataFilterByLinks)
+        final AssocDataFilterImpl result = new AssocDataFilterImpl(this.getServices().getServiceRegistry());
 
-		boolean useFilter = false;
-		for (ColumnDescriptor colDesc : this.alfrescoQuery.argsByLinks()) {
+        final NamespaceService ns = this.getServices().getServiceRegistry().getNamespaceService();
+        final DictionaryService ds = this.getServices().getServiceRegistry().getDictionaryService();
+
+        boolean useFilter = false;
+        for (ColumnDescriptor colDesc : this.alfrescoQuery.argsByLinks()) {
 			/*
 			 * Example:
 				final QName qnCSubject = QName.createQName( "lecm-doc-dic:subject-code", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
 				result.addAssoc( qnCSubject, qnAssocCSubject, contractSubject, AssocKind.target);
 			 */
-			try {
-				QName targetType = null;
-				String expression = colDesc.getExpression();
-				if ( Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL)
-						&& Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL))
-				{
-					if (!expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL)) {
-						// TODO добавить обработку parent и source ассоциаций, согласно правилам substitudeService
-						expression = expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
-						final QName qnAssocType = QName.createQName(expression, ns);
-						final AssociationDefinition assocDef =  ds.getAssociation(qnAssocType);
-						if (assocDef != null) {
-							final List<NodeRef> idsTarget = ParameterMapper.getArgAsNodeRef(colDesc);
-							if (!idsTarget.isEmpty()) {
-								targetType = assocDef.getTargetClass().getName();
-								final AssocKind kind = (assocDef.isChild()) ? AssocKind.child : AssocKind.target;
-								useFilter = true;
-								result.addAssoc(new AssocDataFilter.AssocDesc(kind, qnAssocType, targetType, idsTarget));
-							}
-						}
-					} else {
-						// TODO добавить обратку более сложных ссылок
-					}
-				}
-			} catch (Exception ignored) {
-				logger.warn("Ignoring error at process parameteres:\n", ignored);
-			}
-		}
+            try {
+                QName targetType;
+                String expression = colDesc.getExpression();
+                if (Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL)
+                        && Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL)) {
+                    if (!expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL)) {
+                        // TODO добавить обработку parent и source ассоциаций, согласно правилам substitudeService
+                        expression = expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
+                        final QName qnAssocType = QName.createQName(expression, ns);
+                        final AssociationDefinition assocDef = ds.getAssociation(qnAssocType);
+                        if (assocDef != null) {
+                            final List<NodeRef> idsTarget = ParameterMapper.getArgAsNodeRef(colDesc);
+                            if (!idsTarget.isEmpty()) {
+                                targetType = assocDef.getTargetClass().getName();
+                                final AssocKind kind = (assocDef.isChild()) ? AssocKind.child : AssocKind.target;
+                                useFilter = true;
+                                result.addAssoc(new AssocDataFilter.AssocDesc(kind, qnAssocType, targetType, idsTarget));
+                            }
+                        }
+                    } else {
+                        // TODO добавить обратку более сложных ссылок
+                    }
+                }
+            } catch (Exception ignored) {
+                logger.warn("Ignoring error at process parameteres:\n", ignored);
+            }
+        }
 
-		return (useFilter) ? result : null;
-	}
+        return (useFilter) ? result : null;
+    }
 
-	/**
-	 * НД с поддержкой построения подотчётов
-	 * @author rabdullin
-	 *
-	 */
-	public class GenericJRDataSource extends AlfrescoJRDataSource {
+    /**
+     * НД с поддержкой построения подотчётов
+     *
+     * @author rabdullin
+     */
+    public class GenericJRDataSource extends AlfrescoJRDataSource {
 
-		private GenericJRDataSource(Iterator<ResultSetRow> iterator) {
-			super(iterator);
-		}
+        private GenericJRDataSource(Iterator<ResultSetRow> iterator) {
+            super(iterator);
+        }
 
-		@Override
-		protected boolean loadAlfNodeProps(NodeRef docId) {
-			final boolean result = super.loadAlfNodeProps(docId); // (!) прогрузка бызовых свойств
+        @Override
+        protected boolean loadAlfNodeProps(NodeRef docId) {
+            final boolean result = super.loadAlfNodeProps(docId); // (!) прогрузка бызовых свойств
 
-			if (result && context != null) {
-				if (getReportDescriptor().getSubreports() != null) {  // прогрузка вложенных subreports ...
-					for(SubReportDescriptor subreport: getReportDescriptor().getSubreports()) {
-						final Object stringOrBean = prepareSubReport( docId, subreport, resolver);
-						context.getCurNodeProps().put( getAlfAttrNameByJRKey(subreport.getDestColumnName()), stringOrBean);
-					}
-				}
-			}
-			return result;
-		}
+            if (result) {
+                if (getReportDescriptor().getSubreports() != null) {  // прогрузка вложенных subreports ...
+                    for (SubReportDescriptor subreport : getReportDescriptor().getSubreports()) {
+                        final Object stringOrBean = prepareSubReport(docId, subreport, resolver);
+                        context.getCurNodeProps().put(getAlfAttrNameByJRKey(subreport.getDestColumnName()), stringOrBean);
+                    }
+                }
+            }
+            return result;
+        }
 
-	}
+    }
 
-	/**
-	 * Подготовить данные подотчёта по ассоциированныму списку subreport:
-	 * @param subreport
-	 * @param ns
-	 * @return <li> ОДНУ строку, если subreport должен форматироваться (строка будет
-	 * состоять из форматированных всех элементов ассоциированного списка),  
-	 * <li> или список бинов List[Object] - по одному на каждую строку
-	 */
-	private static Object prepareSubReport( NodeRef docId
-				, SubReportDescriptor subreport
-				, LinksResolver resolver
-				) 
-	{
-		// if (subreport == null) return null;
-		if (Utils.isStringEmpty(subreport.getSourceListExpression())) {
-			logger.warn( String.format( "Subreport '%s' has empty association", subreport.getMnem()));
-			return null;
-		}
+    /**
+     * Подготовить данные подотчёта по ассоциированныму списку subreport:
+     *
+     * @param subreport
+     * @return <li> ОДНУ строку, если subreport должен форматироваться (строка будет
+     *         состоять из форматированных всех элементов ассоциированного списка),
+     *         <li> или список бинов List[Object] - по одному на каждую строку
+     */
+    private static Object prepareSubReport(NodeRef docId, SubReportDescriptor subreport, LinksResolver resolver) {
+        if (Utils.isStringEmpty(subreport.getSourceListExpression())) {
+            logger.warn(String.format("Subreport '%s' has empty association", subreport.getMnem()));
+            return null;
+        }
 
 		/* получение ассоциированного списка и построение ... */
-		final SubreportBuilder builder = new SubreportBuilder(subreport, resolver);
-		final Object result = builder.buildSubreport(docId);
-		return result;
-	}
-
+        final SubreportBuilder builder = new SubreportBuilder(subreport, resolver);
+        return builder.buildSubreport(docId);
+    }
 }

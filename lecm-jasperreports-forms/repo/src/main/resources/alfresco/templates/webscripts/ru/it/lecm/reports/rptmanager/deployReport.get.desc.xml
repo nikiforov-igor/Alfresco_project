@@ -2,7 +2,6 @@
 <webscript>
 	<shortname>Register Report</shortname>
 	<description>Register new report by descriptor node (create ds-xml file, put template file)</description>
-	<!--  <url>/lecm/reports/manager/{action}?nodeRef={nodeRef}</url> -->
 	<url>/lecm/reports/rptmanager/deployReport?reportDescNode={reportDescNode}</url>
 	<authentication>user</authentication>
 	<format default="json">extension</format>

@@ -19,345 +19,321 @@ import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
 public class ReportDSContextImpl implements ReportDSContext {
+    private ServiceRegistry serviceRegistry;
+    final private ProxySubstitudeBean substitudeService = new ProxySubstitudeBean();
 
-	// private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ReportDSContextImpl.class);
+    private DataFilter filter; // может быть NULL
+    private Map<String, DataFieldColumn> metaFields; // ключ = имя колонки данных в НД
 
-	private ServiceRegistry serviceRegistry;
-	final private ProxySubstitudeBean substitudeService = new ProxySubstitudeBean();
+    // список отобранных для отчёта атрибутов Альфреско для активной строки набора данных
+    // ключ = QName.toString() с короткими именами типов (т.е. вида "cm:folder" или "lecm-contract:document")
+    private Map<String, Object> curProps; // ключ = нативное Альфреско-имя
+    private NodeRef curNodeRef;
+    private Iterator<ResultSetRow> rsIter;
+    private ResultSetRow rsRow;
 
-	private DataFilter filter; // может быть NULL
-	private Map<String, DataFieldColumn> metaFields; // ключ = имя колонки данных в НД
+    public void clear() {
+        curProps = null;
+        curNodeRef = null;
+        rsRow = null;
+        rsIter = null;
+    }
 
-	// список отобранных для отчёта атрибутов Альфреско для активной строки набора данных
-	// ключ = QName.toString() с короткими именами типов (т.е. вида "cm:folder" или "lecm-contract:document")
-	private Map<String, Object> curProps; // ключ = нативное Альфреско-имя
-	private NodeRef curNodeRef;
-	private Iterator<ResultSetRow> rsIter;
-	private ResultSetRow rsRow;
+    /**
+     * список простых gname Альфреско-атрибутов, которые требуются для JR-отчёта,
+     * здесь перечислены имена - с короткими префиксами, доступными для отчёта;
+     * если список null - ограничений на имена не вносятся (и все поля объекта
+     * Альфреско могут использоваться в самом шаблоне отчёта.
+     */
+    private Set<String> jrSimpleProps;
 
-	public void clear() {
-		curProps = null;
-		curNodeRef= null;
-		rsRow = null;
-		rsIter = null;
-	}
+    @Override
+    public ServiceRegistry getRegistryService() {
+        return serviceRegistry;
+    }
 
-	/**
-	 * список простых gname Альфреско-атрибутов, которые требуются для JR-отчёта, 
-	 * здесь перечислены имена - с короткими префиксами, доступными для отчёта;
-	 * если список null - ограничений на имена не вносятся (и все поля объекта
-	 * Альфреско могут использоваться в самом шаблоне отчёта.
-	 */
-	private Set<String> jrSimpleProps;
+    public void setRegistryService(ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
+    }
 
-	@Override
-	public ServiceRegistry getRegistryService() {
-		return serviceRegistry;
-	}
+    @Override
+    public SubstitudeBean getSubstitudeService() {
+        return substitudeService;
+    }
 
-	public void setRegistryService(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
+    public void setSubstitudeService(SubstitudeBean substitudeServiceBean) {
+        this.substitudeService.setRealBean(substitudeServiceBean);
+    }
 
-	@Override
-	public SubstitudeBean getSubstitudeService() {
-		return substitudeService;
-	}
+    public Iterator<ResultSetRow> getRsIter() {
+        return rsIter;
+    }
 
-	public void setSubstitudeService(SubstitudeBean substitudeServiceBean) {
-		this.substitudeService.setRealBean( substitudeServiceBean);
-	}
+    public void setRsIter(Iterator<ResultSetRow> rsIter) {
+        this.rsIter = rsIter;
+    }
 
-	public Iterator<ResultSetRow> getRsIter() {
-		return rsIter;
-	}
+    public ResultSetRow getRsRow() {
+        return rsRow;
+    }
 
-	public void setRsIter(Iterator<ResultSetRow> rsIter) {
-		this.rsIter = rsIter;
-	}
+    public void setRsRow(ResultSetRow rsRow) {
+        this.rsRow = rsRow;
+    }
 
-	public ResultSetRow getRsRow() {
-		return rsRow;
-	}
+    @Override
+    public DataFilter getFilter() {
+        return filter;
+    }
 
-	public void setRsRow(ResultSetRow rsRow) {
-		this.rsRow = rsRow;
-	}
+    @Override
+    public void setFilter(DataFilter value) {
+        this.filter = value;
+    }
 
-	@Override
-	public DataFilter getFilter() {
-		return filter;
-	}
+    @Override
+    /**
+     * Вернуть список описаний полей, где ключ = имя колонки данных в НД ("короткое имя")
+     */
+    public Map<String, DataFieldColumn> getMetaFields() {
+        return metaFields;
+    }
 
-	@Override
-	public void setFilter(DataFilter value) {
-		this.filter = value;
-	}
+    public void setMetaFields(Map<String, DataFieldColumn> metaFields) {
+        this.metaFields = metaFields;
+    }
 
-	@Override
-	/**
-	 * Вернуть список описаний полей, где ключ = имя колонки данных в НД ("короткое имя")
-	 */
-	public Map<String, DataFieldColumn> getMetaFields() {
-		return metaFields;
-	}
+    public void setMetaFields(List<DataFieldColumn> list) {
+        final Map<String, DataFieldColumn> result = new HashMap<String, DataFieldColumn>();
+        if (list != null) {
+            for (DataFieldColumn fld : list) {
+                result.put(fld.getName(), fld);
+            }
+        }
+        this.metaFields = result;
+    }
 
-	public void setMetaFields(Map<String, DataFieldColumn> metaFields) {
-		this.metaFields = metaFields;
-	}
+    @Override
+    public Map<String, Object> getCurNodeProps() {
+        return curProps;
+    }
 
-	public void setMetaFields(List<DataFieldColumn> list) {
-		final Map<String, DataFieldColumn> result = new HashMap<String, DataFieldColumn>();
-		if (list != null) {
-			for(DataFieldColumn fld: list)
-				result.put( fld.getName(), fld);
-		}
-		this.metaFields = result;
-	}
+    public void setCurNodeProps(Map<String, Object> value) {
+        this.curProps = value;
+    }
 
-	@Override
-	public Map<String, Object> getCurNodeProps() {
-		return curProps;
-	}
+    @Override
+    public NodeRef getCurNodeRef() {
+        return curNodeRef;
+    }
 
-	public void setCurNodeProps(Map<String, Object> value) {
-		this.curProps = value;
-	}
+    public void setCurNodeRef(NodeRef curNodeRef) {
+        this.curNodeRef = curNodeRef;
+    }
 
-	@Override
-	public NodeRef getCurNodeRef() {
-		return curNodeRef;
-	}
+    public Set<String> getJrSimpleProps() {
+        return jrSimpleProps;
+    }
 
-	public void setCurNodeRef(NodeRef curNodeRef) {
-		this.curNodeRef = curNodeRef;
-	}
+    public void setJrSimpleProps(Set<String> jrSimpleProps) {
+        this.jrSimpleProps = jrSimpleProps;
+    }
 
-	public Set<String> getJrSimpleProps() {
-		return jrSimpleProps;
-	}
+    /**
+     * Проверить является ли указанное поле вычисляемым (в понимании SubstitudeBean):
+     * если первый символ "{", то является.
+     *
+     * @param fldName
+     * @return
+     */
+    public static boolean isCalcField(final String fldName) {
+        return (fldName != null) && fldName.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL);
+    }
 
-	public void setJrSimpleProps(Set<String> jrSimpleProps) {
-		this.jrSimpleProps = jrSimpleProps;
-	}
+    /**
+     * Проверить, является ли ссылка простой.
+     * Простой ссылкой считаем ссылки на конкретные поля в виде выражений "{abc}"
+     *
+     * @return true, если колонка содержит просто ссылку на поле
+     */
+    public static boolean isDirectAlfrescoPropertyLink(final String expression) {
+        return (expression != null) && (expression.length() > 0)
+                && Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) // есть певая "{" и она одна
+                && Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) // есть последняя "}" и она одна
+                && !expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL); // нет символов "/"
+    }
 
-	/**
-	 * Проверить является ли указанное поле вычисляемым (в понимании SubstitudeBean):
-	 * если первый символ "{", то является.
-	 * @param fldName
-	 * @return
-	 */
-	public static boolean isCalcField(final String fldName) {
-		return (fldName != null) && fldName.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL);
-	}
+    // TODO: использовать LinksResolver
+    @Override
+    public Object getPropertyValueByJRField(String reportColumnName) {
+        if (reportColumnName == null) {
+            return null;
+        }
 
-	/**
-	 * Проверить, является ли ссылка простой.
-	 * Простой ссылкой считаем ссылки на конкретные поля в виде выражений "{abc}"
-	 * @return true, если колонка содержит просто ссылку на поле
-	 */
-	public static boolean isDirectAlfrescoPropertyLink(final String expression) {
-		return (expression != null) && (expression.length() > 0)
-				&& Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) // есть певая "{" и она одна  
-				&& Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) // есть последняя "}" и она одна
-				&& expression.indexOf(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL) == -1 // нет символов "/"
-				;
-	}
-
-
-	// TODO: использовать LinksResolverBean
-	@Override
-	public Object getPropertyValueByJRField(String reportColumnName) {
-		if (reportColumnName == null) {
-			return null;
-		}
-
-		// получаем нативное название данных
-		final DataFieldColumn fld = metaFields.get(reportColumnName);
-		final String fldAlfName = (fld != null && fld.getValueLink() != null) ? fld.getValueLink() : reportColumnName;
+        // получаем нативное название данных
+        final DataFieldColumn fld = metaFields.get(reportColumnName);
+        final String fldAlfName = (fld != null && fld.getValueLink() != null) ? fld.getValueLink() : reportColumnName;
 
 		/* если название имеется среди готовых свойств (прогруженных или вычисленных заранее) ... */
-		if (curProps != null) {
-			if (curProps.containsKey(fldAlfName)){
-				return curProps.get(fldAlfName);
-			}
-		}
+        if (curProps != null) {
+            if (curProps.containsKey(fldAlfName)) {
+                return curProps.get(fldAlfName);
+            }
+        }
 
-		// (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
-		// (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
-		Object value = null;
-		if (isCalcField(fldAlfName)) {
-			// try {
-				value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
-			//} catch (NamespaceException ex) {
-			//	// NOTE: исключение NamespaceException вида "Namespace prefix lecm-abc is not mapped to a namespace URI"
-			//	// возникает когда отчёты запускается не на своей системной
-			//	// конфе и в принципе их можно проигнорировать при построении 
-			//	// отчёта, журналируя, конечно
-			//	logger.error( "Namespace problem - check destination lecm-system for compatibility with the report", ex);
-			//}
-		} else {
-			value = fldAlfName;
-		}
+        // (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
+        // (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
+        Object value;
+        if (isCalcField(fldAlfName)) {
+            value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
+        } else {
+            value = fldAlfName;
+        }
 
-		if (value == null)
-			return null;
+        if (value == null) {
+            return null;
+        }
 
-		// типизация value согласно описанию ...
-		if ((fld != null) && (fld.getValueClass() != null)) {
-				// учёт реального типа данных ...
-				final JavaDataTypeImpl.SupportedTypes type = JavaDataTypeImpl.SupportedTypes.findType(fld.getValueClassName());
-				if (type == null) {
-					// type may be Map/List or any other ...
-					return value;
-				} else {
-					final String strValue = value.toString();
-					switch (type) {
-						case DATE: {
-							value = (strValue.isEmpty()) ? null: ArgsHelper.tryMakeDate(strValue, null);
-							break;
-						}
-						case BOOL: {
-							value = Boolean.valueOf(strValue);
-							break;
-						}
-						case FLOAT: {
-							value = (strValue.isEmpty()) ? null : Float.valueOf(strValue);
-							break;
-						}
-						case INTEGER: {
-							value = (strValue.isEmpty()) ? null : Integer.valueOf(strValue);
-							break;
-						}
-						default: { // case STRING or other:
-							value = strValue;
-							break;
-						}
-					} // switch
-				}
-		}
+        // типизация value согласно описанию ...
+        if ((fld != null) && (fld.getValueClass() != null)) {
+            // учёт реального типа данных ...
+            final JavaDataTypeImpl.SupportedTypes type = JavaDataTypeImpl.SupportedTypes.findType(fld.getValueClassName());
+            if (type == null) {
+                // type may be Map/List or any other ...
+                return value;
+            } else {
+                final String strValue = value.toString();
+                switch (type) {
+                    case DATE: {
+                        value = (strValue.isEmpty()) ? null : ArgsHelper.tryMakeDate(strValue, null);
+                        break;
+                    }
+                    case BOOL: {
+                        value = Boolean.valueOf(strValue);
+                        break;
+                    }
+                    case FLOAT: {
+                        value = (strValue.isEmpty()) ? null : Float.valueOf(strValue);
+                        break;
+                    }
+                    case INTEGER: {
+                        value = (strValue.isEmpty()) ? null : Integer.valueOf(strValue);
+                        break;
+                    }
+                    default: { // case STRING or other:
+                        value = strValue;
+                        break;
+                    }
+                } // switch
+            }
+        }
+        return value;
+    }
 
-		/*
-		 * NOTE: вариант для случаев, когда NULL не желателен ...
-		if (value != null)
-			return value;
+    /**
+     * ProxySubstitudeBean cейчас отрабатывет расширеные выражения для функции
+     * formatNodeTitle, в дальнейшем можно добавить макросы, встроенные
+     * функции и пр.
+     * Расширеный синтаксис выражений маркируется парами "{{" в начале строки и
+     * закрывающей "}}", вместо обычных "{" и "}".
+     *
+     * @author rabdullin
+     */
+    private class ProxySubstitudeBean implements SubstitudeBean {
 
-		// NULL result in value -> return current name if valueClass is String
-		return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null;
-		 */
-		return value;
+        /**
+         * префикс расширенного синтаксиса
+         * предполагается что строка вся целиком будет окружена: "{{ ... }}"
+         */
+        final public static String XSYNTAX_MARKER = "{{";
 
-	}
+        /**
+         * префикс доп функции: сейчас используется пока только для @AUTHOR.REF
+         */
+        final public static String PREFIX_XFUNC = "@";
 
-	/**
-	 * ProxySubstitudeBean cейчас отрабатывет расширеные выражения для функции
-	 * formatNodeTitle, в дальнейшем можно добавить макросы, встроенные 
-	 * функции и пр. 
-	 * Расширеный синтаксис выражений маркируется парами "{{" в начале строки и 
-	 * закрывающей "}}", вместо обычных "{" и "}".
-	 * 
-	 * @author rabdullin
-	 * 
-	 */
-	private class ProxySubstitudeBean implements SubstitudeBean {
+        final public static String AUTHORREF = AUTHOR + ".REF";
 
-		/**
-		 *  префикс расширенного синтаксиса
-		 *  предполагается что строка вся целиком будет окружена: "{{ ... }}"
-		 */
-		final public static String XSYNTAX_MARKER = "{{";
+        SubstitudeBean realBean; // имплементация нативного бина, который организует "хождение" по ссылкам
 
-		/**
-		 * префикс доп функции: сейчас используется пока только для @AUTHOR.REF
-		 */
-		final public static String PREFIX_XFUNC = "@";
+        public ProxySubstitudeBean() {
+            super();
+        }
 
-		final public static String AUTHORREF = AUTHOR + ".REF";
+        public void setRealBean(SubstitudeBean realBean) {
+            this.realBean = realBean;
+        }
 
-		SubstitudeBean realBean; // имплементация нативного бина, который организует "хождение" по ссылкам
+        public String getObjectDescription(NodeRef object) {
+            return (realBean == null) ? null : realBean.getObjectDescription(object);
+        }
 
+        public String getTemplateStringForObject(NodeRef object) {
+            return (realBean == null) ? null : realBean.getTemplateStringForObject(object);
+        }
 
-		public ProxySubstitudeBean() {
-			super();
-		}
+        public String getTemplateStringForObject(NodeRef object, boolean forList) {
+            return (realBean == null) ? null : realBean.getTemplateStringForObject(object, forList);
+        }
 
-		//		public SubstitudeBean getRealBean() {
-		//			return realBean;
-		//		}
+        public List<NodeRef> getObjectsByTitle(NodeRef object, String formatTitle) {
+            return (realBean == null) ? null : realBean.getObjectsByTitle(object, formatTitle);
+        }
 
-		public void setRealBean(SubstitudeBean realBean) {
-			this.realBean = realBean;
-		}
+        public String formatNodeTitle(NodeRef node, String fmt, String dateFormat, Integer timeZoneOffset) {
+            if (fmt == null) {
+                return null;
+            }
+            if (isExtendedSyntax(fmt)) {
+                return extendedFormatNodeTitle(node, fmt);
+            }
+            return (realBean == null) ? null : realBean.formatNodeTitle(node, fmt, dateFormat, timeZoneOffset);
+        }
 
-		public String getObjectDescription(NodeRef object) {
-			return (realBean == null) ? null : realBean.getObjectDescription(object);
-		}
+        @Override
+        public String formatNodeTitle(NodeRef node, String formatString) {
+            return formatNodeTitle(node, formatString, null, null);
+        }
 
-		public String getTemplateStringForObject(NodeRef object) {
-			return (realBean == null) ? null : realBean.getTemplateStringForObject(object);
-		}
+        protected boolean isExtendedSyntax(String fmt) {
+            return (fmt != null) && fmt.startsWith(XSYNTAX_MARKER);
+        }
 
-		public String getTemplateStringForObject(NodeRef object, boolean forList) {
-			return (realBean == null) ? null : realBean.getTemplateStringForObject(object, forList);
-		}
+        @Override
+        public List<NodeRef> getObjectByPseudoProp(NodeRef object, String psedudoProp) {
+            return (realBean == null) ? null : realBean.getObjectByPseudoProp(object, psedudoProp);
+        }
 
-		public List<NodeRef> getObjectsByTitle(NodeRef object,
-				String formatTitle) {
-			return (realBean == null) ? null : realBean.getObjectsByTitle(object, formatTitle);
-		}
+        /**
+         * Функция расширенной обработки. Вызывается когда выражение начинается
+         * с двойной фигурной скобки. Здесь сейчас отрабатывает дополнительно
+         * только @AUTHOR.REF, чтобы выполнить получение автора и применить к
+         * нему отсавшуюся часть выражения.
+         *
+         * @param node
+         * @param fmt
+         * @return
+         */
+        protected String extendedFormatNodeTitle(final NodeRef node, final String fmt) {
+            // NOTE: here new features can be implemented
+            final String begAuthorRef = XSYNTAX_MARKER + PREFIX_XFUNC + AUTHORREF;
+            if (fmt != null && fmt.startsWith(begAuthorRef)) {
+                // замена node на узел Автора
+                final List<NodeRef> list = realBean.getObjectByPseudoProp(node, AUTHOR);
+                final NodeRef authNode = (list != null && !list.isEmpty()) ? list.get(0) : null;
 
-		public String formatNodeTitle(NodeRef node, String fmt, String dateFormat, Integer timeZoneOffset) {
-			if (fmt == null)
-				return null;
-			if (isExtendedSyntax(fmt)) {
-				return extendedFormatNodeTitle(node, fmt);
-			}
-			return (realBean == null) ? null : realBean.formatNodeTitle(node, fmt, dateFormat, timeZoneOffset);
-		}
-
-		@Override
-		public String formatNodeTitle(NodeRef node, String formatString) {
-			return formatNodeTitle(node, formatString, null, null);
-		}
-
-		protected boolean isExtendedSyntax(String fmt) {
-			return (fmt != null) && fmt.startsWith(XSYNTAX_MARKER);
-		}
-
-		@Override
-		public List<NodeRef> getObjectByPseudoProp(NodeRef object,
-				String psedudoProp) {
-			return (realBean == null) ? null : realBean.getObjectByPseudoProp(object, psedudoProp);
-		}
-
-		/**
-		 * Функция расширенной обработки. Вызывается когда выражение начинается 
-		 * с двойной фигурной скобки. Здесь сейчас отрабатывает дополнительно
-		 * только @AUTHOR.REF, чтобы выполнить получение автора и применить к 
-		 * нему отсавшуюся часть выражения.
-		 * @param node
-		 * @param fmt
-		 * @return
-		 */
-		protected String extendedFormatNodeTitle(final NodeRef node, final String fmt) {
-			// NOTE: here new features can be implemented
-			final String begAuthorRef = XSYNTAX_MARKER + PREFIX_XFUNC + AUTHORREF; // "{{@AUTHOR.REF"
-			if ( fmt != null && fmt.startsWith( begAuthorRef) ) {
-				// замена node на узел Автора 
-				final List<NodeRef> list = realBean.getObjectByPseudoProp(node, AUTHOR);
-				final NodeRef authNode = (list != null && !list.isEmpty()) ? list.get(0) : null;
-
-				// убираем из строки fmt одну пару скобок: {{@AUTHOR.REF/...}}  -> {...}
-				// скорректировать и сделать более точно можно при условии скана ВСЕХ вхождений @XXX:
-				// while (...) {fmt = fmt.substring(1, 1+ fmt.indexOf("}}")) + ...; ...}
-				int startPos = begAuthorRef.length();
-				if (fmt.charAt(startPos) == '/') startPos++; // если после "@AUTHOR.REF" есть символ '/' его тоже убираем
-				// убираем в начале "{{@AUTHOR.REF/" и последюю скобку ...
-				final String shortFmt = "{" + fmt.substring(startPos, fmt.length() - 1);
-				return realBean.formatNodeTitle(authNode, shortFmt);
-			}
-			return fmt;
-		}
-
-	}
+                // убираем из строки fmt одну пару скобок: {{@AUTHOR.REF/...}}  -> {...}
+                // скорректировать и сделать более точно можно при условии скана ВСЕХ вхождений @XXX:
+                // while (...) {fmt = fmt.substring(1, 1+ fmt.indexOf("}}")) + ...; ...}
+                int startPos = begAuthorRef.length();
+                if (fmt.charAt(startPos) == '/') {
+                    startPos++; // если после "@AUTHOR.REF" есть символ '/' его тоже убираем
+                }
+                // убираем в начале "{{@AUTHOR.REF/" и последюю скобку ...
+                final String shortFmt = "{" + fmt.substring(startPos, fmt.length() - 1);
+                return realBean.formatNodeTitle(authNode, shortFmt);
+            }
+            return fmt;
+        }
+    }
 }
