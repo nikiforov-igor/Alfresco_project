@@ -735,12 +735,16 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 					if (activeOnly) {
 						String taskID = getTaskIDByDelegatedTask(delegatedTask);
 						WorkflowTask task = workflowService.getTaskById(taskID);
-						Map<QName, Serializable> properties = task.getProperties();
-						QName bpmStatus = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "status");
-						String taskStatus = (String) properties.get(bpmStatus);
-						if ("Not Yet Started".equals(taskStatus) || "In Progress".equals(taskStatus) || "On Hold".equals(taskStatus)) {
-							result.add(delegatedTask);
-						}
+                                                if(task != null){
+                                                    Map<QName, Serializable> properties = task.getProperties();
+                                                    QName bpmStatus = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "status");
+                                                    String taskStatus = (String) properties.get(bpmStatus);
+                                                    if ("Not Yet Started".equals(taskStatus) || "In Progress".equals(taskStatus) || "On Hold".equals(taskStatus)) {
+                                                            result.add(delegatedTask);
+                                                    }
+                                                } else {
+                                                        logger.error("Task is null.");
+                                                    }
 					} else {
 						result.add(delegatedTask);
 					}
