@@ -32,7 +32,7 @@
 	   below as the AMP module version. Instead we use the
 	   buildnumber-maven-plugin. This requires a scm connection.
 	-->
-	<version>0.5.1</version>
+	<version>1.0.0</version>
 	<description>Logic ECM Platform</description>
 	<repositories>
 		<repository>

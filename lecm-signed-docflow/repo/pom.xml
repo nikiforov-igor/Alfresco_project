@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>ru.it.lecm.signed-docflow</groupId>
 		<artifactId>signed-docflow</artifactId>
-		<version>0.5.1</version>
+		<version>1.0.0</version>
 	</parent>
 
 	<artifactId>signed-docflow-repo</artifactId>
