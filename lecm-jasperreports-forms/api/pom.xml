@@ -19,7 +19,7 @@
 	<properties>
 		<module.log.level>debug</module.log.level>
 		<alfproject.version>4.0</alfproject.version>
-		<jasperreports.fonts.version>4.0.0</jasperreports.fonts.version>
+		<!--<jasperreports.fonts.version>4.0.0</jasperreports.fonts.version>-->
 		<!-- <jasperreports.version>5.0</jasperreports.version> -->
 		<xalan.version>2.5.1</xalan.version>
 		<xerces.version>2.8.0</xerces.version>
@@ -69,7 +69,6 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports-fonts</artifactId>
-			<version>${jasperreports.fonts.version}</version>
 		</dependency>
 
 		<dependency>

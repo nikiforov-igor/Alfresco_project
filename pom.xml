@@ -64,6 +64,7 @@
 		<spring.surf.version>1.0.0</spring.surf.version>
 		<!-- <jasperreports.version>4.7.0</jasperreports.version> -->
 		<jasperreports.version>5.0.4</jasperreports.version>
+        <jasperreports.fonts.version>4.0.0</jasperreports.fonts.version>
 		<slf4j.version>1.5.11</slf4j.version>
 		<spring.security.version>3.1.0.RC2</spring.security.version>
 		<acegisecurity.version>0.8.2</acegisecurity.version>
@@ -219,6 +220,11 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports-fonts</artifactId>
+                <version>${jasperreports.fonts.version}</version>
+            </dependency>
 			<!--
 			   Example Jar dependency: will be properly packed into the AMP /lib
 			   directory <dependency> <groupId>rome</groupId>
