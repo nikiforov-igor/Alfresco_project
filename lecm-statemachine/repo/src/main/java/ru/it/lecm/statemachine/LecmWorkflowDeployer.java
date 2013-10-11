@@ -205,6 +205,7 @@ public class LecmWorkflowDeployer extends AbstractLifecycleBean {
 		} finally {
 			is.close();
 		}
+
 		return result;
 	}
 
