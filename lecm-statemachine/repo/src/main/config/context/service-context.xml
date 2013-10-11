@@ -77,7 +77,7 @@
         <property name="stateMachineHandler" ref="stateMachineHandler"/>
 	</bean>
 
-	<bean id="lecmWorkflowDeployer" class="ru.it.lecm.statemachine.LecmWorkflowDeployer">
+	<bean id="lecmWorkflowDeployer" class="ru.it.lecm.statemachine.LecmWorkflowDeployerImpl">
 		<property name="workflowService" ref="WorkflowService"/>
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
 		<property name="nodeService" ref="nodeService"/>
@@ -170,79 +170,79 @@
         <property name="documentService" ref="documentService"/>
 	</bean>
 
-	<bean id="stateMachineActions" class="ru.it.lecm.statemachine.bean.StateMachineActions" />
+	<bean id="stateMachineActions" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl" />
 
-	<bean id="statusChange.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+	<bean id="statusChange.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="StatusChange"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.StatusChangeAction" />
 		<property name="type" value="system" />
 		<property name="execution" value="start" />
 	</bean>
 
-	<bean id="finishStateWithTransition.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+	<bean id="finishStateWithTransition.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="FinishStateWithTransition"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction" />
 		<property name="type" value="user" />
 		<property name="execution" value="take" />
 	</bean>
 
-	<bean id="startWorkflow.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+	<bean id="startWorkflow.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="StartWorkflow"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.StartWorkflowAction" />
 		<property name="type" value="user" />
 		<property name="execution" value="start, end" />
 	</bean>
 
-	<bean id="waitForDocumentChange.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+	<bean id="waitForDocumentChange.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="WaitForDocumentChange"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeAction" />
 		<property name="type" value="user" />
 		<property name="execution" value="start" />
 	</bean>
 
-	<bean id="userWorkflow.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+	<bean id="userWorkflow.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="UserWorkflow"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.UserWorkflow" />
 		<property name="type" value="user" />
 		<property name="execution" value="take" />
 	</bean>
 
-	<bean id="transitionAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+	<bean id="transitionAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="TransitionAction"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.TransitionAction" />
 		<property name="type" value="user" />
 		<property name="execution" value="end" />
 	</bean>
 
-	<bean id="scriptAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+	<bean id="scriptAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="ScriptAction"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.ScriptAction" />
 		<property name="type" value="user" />
 		<property name="execution" value="start, end" />
 	</bean>
 
-	<bean id="archiveDocumentAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+	<bean id="archiveDocumentAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="ArchiveDocumentAction"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.ArchiveDocumentAction" />
 		<property name="type" value="system" />
 		<property name="execution" value="end" />
 	</bean>
 
-	<bean id="documentPermissionAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+	<bean id="documentPermissionAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="DocumentPermissionAction"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.DocumentPermissionAction" />
 		<property name="type" value="system" />
 		<property name="execution" value="take" />
 	</bean>
 
-    <bean id="chooseStartPath.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+    <bean id="chooseStartPath.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="ChooseStartPath"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.ChooseStartPathAction" />
 		<property name="type" value="system" />
 		<property name="execution" value="end" />
 	</bean>
 
-	<bean id="timerAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActions">
+	<bean id="timerAction.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="TimerAction"/>
 		<property name="action" value="ru.it.lecm.statemachine.action.TimerAction" />
 		<property name="type" value="user" />

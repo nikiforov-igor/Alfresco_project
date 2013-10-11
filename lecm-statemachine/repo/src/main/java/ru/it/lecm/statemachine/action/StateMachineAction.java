@@ -15,7 +15,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.TimerActionHelper;
-import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -26,7 +26,6 @@ import java.util.HashMap;
  * Time: 14:29
  */
 abstract public class StateMachineAction {
-    public static final String PROP_STOP_SUBWORKFLOWS = "stopSubWorkflows";
 
     public static final String TAG_EXPRESSIONS = "expressions";
     public static final String TAG_EXPRESSION = "expression";
@@ -95,7 +94,7 @@ abstract public class StateMachineAction {
 	abstract public void init(Element actionElement, String processId);
 
 	public String getActionName() {
-		return StateMachineActions.getActionName(getClass());
+		return StateMachineActionsImpl.getActionNameByClass(getClass());
 	}
 
 	protected NodeRef createFolder(NodeRef parent, String name) {

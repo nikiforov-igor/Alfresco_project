@@ -9,7 +9,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
 import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
-import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public class StartWorkflowAction extends StateMachineAction implements Postponed
 		final String stateMachineExecutionId = execution.getId();
 		NodeRef nodeRef = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 		final NodeRef document = getServiceRegistry().getNodeService().getChildAssocs(nodeRef).get(0).getChildRef();
-		final String actionName = StateMachineActions.getActionName(StartWorkflowAction.class);
+		final String actionName = StateMachineActionsImpl.getActionNameByClass(StartWorkflowAction.class);
 		final String eventName = execution.getEventName();
 
         if (eventName.equals(ExecutionListener.EVENTNAME_END)) {
@@ -88,7 +88,7 @@ public class StartWorkflowAction extends StateMachineAction implements Postponed
     public void postponedExecution(String taskId, StateMachineHelper helper) {
         final String stateMachineExecutionId = helper.getCurrentExecutionId(taskId);
         final NodeRef document = helper.getStatemachineDocument(stateMachineExecutionId);
-        final String actionName = StateMachineActions.getActionName(StartWorkflowAction.class);
+        final String actionName = StateMachineActionsImpl.getActionNameByClass(StartWorkflowAction.class);
 
         final String user = AuthenticationUtil.getFullyAuthenticatedUser();
         final WorkflowVariables localVariables = variables;

@@ -12,7 +12,7 @@ import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.StateMachineAction;
-import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 import ru.it.lecm.statemachine.expression.Expression;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
         if (nodeService.hasAspect(nodeRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
             String taskId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
             StateMachineHelper helper = new StateMachineHelper();
-            List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(WaitForDocumentChangeAction.class), ExecutionListener.EVENTNAME_START);
+            List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(WaitForDocumentChangeAction.class), ExecutionListener.EVENTNAME_START);
 
             Expression lecmExpression = new Expression(nodeRef, serviceRegistry);
 

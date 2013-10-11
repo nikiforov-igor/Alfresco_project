@@ -13,7 +13,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.TimerActionHelper;
 import ru.it.lecm.statemachine.action.StateMachineAction;
-import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,7 +94,7 @@ public class StateMachineHandler {
 		String actionName = actionElement.attribute("type");
 		StateMachineAction action = null;
 		try {
-			Class actionClass = Class.forName(StateMachineActions.getClassName(actionName));
+			Class actionClass = Class.forName(StateMachineActionsImpl.getClassName(actionName));
 			action = (StateMachineAction) actionClass.newInstance();
 		} catch (Exception e) {
 			logger.error("Cannot initialize action " + actionName, e);

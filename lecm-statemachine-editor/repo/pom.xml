@@ -56,10 +56,8 @@
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.statemachine</groupId>
-			<artifactId>statemachine-repo</artifactId>
+			<artifactId>statemachine-api</artifactId>
 			<version>${platform.version}</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/../../lecm-statemachine/repo/target/statemachine-repo-${platform.version}/lib/statemachine-repo-${platform.version}.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.tinyjee.jgraphx</groupId>

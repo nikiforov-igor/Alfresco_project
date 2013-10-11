@@ -27,7 +27,7 @@ import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
-import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 import ru.it.lecm.statemachine.expression.Expression;
 
 import java.io.Serializable;
@@ -149,7 +149,7 @@ public class ActionsScript extends DeclarativeWebScript {
                         Expression expression = new Expression(documentRef, serviceRegistry);
 
                         ArrayList<HashMap<String, Object>> resultStates = new ArrayList<HashMap<String, Object>>();
-                        List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
+                        List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
                         for (StateMachineAction action : actions) {
                             FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
                             List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
@@ -189,7 +189,7 @@ public class ActionsScript extends DeclarativeWebScript {
                             }
                         }
 
-                        actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
+                        actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
                         for (StateMachineAction action : actions) {
                             UserWorkflow userWorkflow = (UserWorkflow) action;
                             List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();

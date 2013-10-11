@@ -13,7 +13,7 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.servlet.FormData;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
-import ru.it.lecm.statemachine.bean.DefaultStatemachinesImpl;
+import ru.it.lecm.statemachine.DefaultStatemachines;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +28,7 @@ public class Import extends AbstractWebScript {
 
     private RepositoryStructureHelper repositoryStructureHelper;
     private NodeService nodeService;
-    private DefaultStatemachinesImpl defaultStatemachines;
+    private DefaultStatemachines defaultStatemachines;
     private ContentService contentService;
     private DictionaryBean serviceDictionary;
 
@@ -40,7 +40,7 @@ public class Import extends AbstractWebScript {
         this.nodeService = nodeService;
     }
 
-    public void setDefaultStatemachines(DefaultStatemachinesImpl defaultStatemachines) {
+    public void setDefaultStatemachines(DefaultStatemachines defaultStatemachines) {
         this.defaultStatemachines = defaultStatemachines;
     }
 

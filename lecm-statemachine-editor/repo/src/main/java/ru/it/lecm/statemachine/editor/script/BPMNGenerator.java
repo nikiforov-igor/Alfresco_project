@@ -12,8 +12,7 @@ import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.statemachine.action.StateMachineAction;
-import ru.it.lecm.statemachine.action.TimerAction;
+import ru.it.lecm.statemachine.StatemachineActionConstants;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -404,7 +403,7 @@ public class BPMNGenerator {
     private Element createStopSubWorkflowsAttribute(NodeRef nodeRef) {
         Boolean stopSubWorkflows = getStopSubWorkflowsProperty(nodeRef);
         Element result = doc.createElement("lecm:attribute");
-        result.setAttribute("name", StateMachineAction.PROP_STOP_SUBWORKFLOWS);
+        result.setAttribute("name", StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS);
         result.setAttribute("value", stopSubWorkflows.toString());
         return result;
     }
@@ -534,7 +533,7 @@ public class BPMNGenerator {
         }
 
         Element attribute = doc.createElement("lecm:attribute");
-        attribute.setAttribute("name", TimerAction.PROP_TIMER_DURATION);
+        attribute.setAttribute("name", StatemachineActionConstants.PROP_TIMER_DURATION);
         attribute.setAttribute("value", "" + timerDuration);
         actionElement.appendChild(attribute);
 
@@ -558,7 +557,7 @@ public class BPMNGenerator {
             expressionElement.setAttribute("outputValue", target);
 
             Boolean stopSubWorkflows = getStopSubWorkflowsProperty(expression.getChildRef());
-            expressionElement.setAttribute(StateMachineAction.PROP_STOP_SUBWORKFLOWS, stopSubWorkflows.toString());
+            expressionElement.setAttribute(StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS, stopSubWorkflows.toString());
 
             expressionsElement.appendChild(expressionElement);
             String var = "var" + actionVar;
@@ -768,7 +767,7 @@ public class BPMNGenerator {
 
             Boolean stopSubWorkflows = getStopSubWorkflowsProperty(transition.getChildRef());
             parameter = doc.createElement("lecm:parameter");
-            parameter.setAttribute("name", StateMachineAction.PROP_STOP_SUBWORKFLOWS);
+            parameter.setAttribute("name", StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS);
             parameter.setAttribute("value", stopSubWorkflows.toString());
 			attribute.appendChild(parameter);
 

@@ -2,6 +2,7 @@ package ru.it.lecm.statemachine.action.finishstate;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
+import ru.it.lecm.statemachine.StatemachineActionConstants;
 import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.WorkflowVariables;
@@ -57,7 +58,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 					variableValue = value;
 				} else if (PROP_CONDITION_ACCESS.equalsIgnoreCase(name)) {
 					conditionAccess = value;
-				} else if (PROP_STOP_SUBWORKFLOWS.equalsIgnoreCase(name)) {
+				} else if (StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS.equalsIgnoreCase(name)) {
                     stopSubWorkflows = Boolean.parseBoolean(value);
 				}
 			}

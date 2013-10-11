@@ -3,6 +3,7 @@ package ru.it.lecm.statemachine.action;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.StatemachineActionConstants;
 import ru.it.lecm.statemachine.expression.Expression;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class TransitionAction extends StateMachineAction {
 				variableName = value;
 			} else if (PROP_EXPRESSION.equalsIgnoreCase(name)) {
 				expressionValue = value;
-			} else if (PROP_STOP_SUBWORKFLOWS.equalsIgnoreCase(name)) {
+			} else if (StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS.equalsIgnoreCase(name)) {
                 stopSubWorkflows = Boolean.parseBoolean(value);
 			}
 		}

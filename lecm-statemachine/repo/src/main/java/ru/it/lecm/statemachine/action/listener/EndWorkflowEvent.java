@@ -9,12 +9,11 @@ import ru.it.lecm.statemachine.WorkflowDescriptor;
 import ru.it.lecm.statemachine.action.*;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
-import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 import ru.it.lecm.statemachine.expression.Expression;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -59,7 +58,7 @@ public class EndWorkflowEvent implements ExecutionListener {
                     }
 
                     List<WorkflowVariables.WorkflowVariable> variables = null;
-                    if (actionName.equals(StateMachineActions.getActionName(FinishStateWithTransitionAction.class))) {
+                    if (actionName.equals(StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class))) {
                         for (StateMachineAction action : actions) {
                             FinishStateWithTransitionAction finishStateWithTransitionAction = (FinishStateWithTransitionAction) action;
                             for (FinishStateWithTransitionAction.NextState state : finishStateWithTransitionAction.getStates()) {
@@ -68,7 +67,7 @@ public class EndWorkflowEvent implements ExecutionListener {
                                 }
                             }
                         }
-                    } else if (actionName.equals(StateMachineActions.getActionName(UserWorkflow.class))) {
+                    } else if (actionName.equals(StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class))) {
                         for (StateMachineAction action : actions) {
                             UserWorkflow userWorkflow = (UserWorkflow) action;
                             for (UserWorkflow.UserWorkflowEntity entity : userWorkflow.getUserWorkflows()) {
@@ -77,7 +76,7 @@ public class EndWorkflowEvent implements ExecutionListener {
                                 }
                             }
                         }
-                    } else if (actionName.equals(StateMachineActions.getActionName(StartWorkflowAction.class))) {
+                    } else if (actionName.equals(StateMachineActionsImpl.getActionNameByClass(StartWorkflowAction.class))) {
                         for (StateMachineAction action : actions) {
                             StartWorkflowAction startWorkflowAction = (StartWorkflowAction) action;
                             if (startWorkflowAction.getId().equalsIgnoreCase(actionId) && startWorkflowAction.getVariables() != null) {
@@ -91,7 +90,7 @@ public class EndWorkflowEvent implements ExecutionListener {
                     }
 
                     String taskId = helper.getCurrentTaskId(statemachineId);
-                    List<StateMachineAction> transitionActions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(TransitionAction.class), ExecutionListener.EVENTNAME_END);
+                    List<StateMachineAction> transitionActions = helper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(TransitionAction.class), ExecutionListener.EVENTNAME_END);
                     boolean isTrasitionValid = false;
                     boolean stopSubWorkflows = false;
                     Expression expression = new Expression(document, StateMachineHelper.getServiceRegistry());

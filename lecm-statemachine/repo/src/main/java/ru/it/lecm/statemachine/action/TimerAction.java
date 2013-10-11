@@ -4,13 +4,13 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.StatemachineActionConstants;
 import ru.it.lecm.statemachine.expression.TransitionExpression;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TimerAction extends StateMachineAction implements PostponedAction {
-    public static final String PROP_TIMER_DURATION = "timerDuration";
 
     private List<TransitionExpression> transitionExpressions = new ArrayList<TransitionExpression>();
     private int timerDuration = 0;
@@ -28,13 +28,13 @@ public class TimerAction extends StateMachineAction implements PostponedAction {
         for (Element expressionElement : expressions.elements(TAG_EXPRESSION)) {
             String expression = expressionElement.attribute(PROP_EXPRESSION);
             String outputValue = expressionElement.attribute(PROP_OUTPUT_VALUE);
-            boolean stopSubWorkflows = Boolean.parseBoolean(expressionElement.attribute(PROP_STOP_SUBWORKFLOWS));
+            boolean stopSubWorkflows = Boolean.parseBoolean(expressionElement.attribute(StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS));
             this.transitionExpressions.add(new TransitionExpression(expression, outputValue, stopSubWorkflows));
         }
 
         List<Element> attributes = action.elements("attribute");
         for (Element attribute : attributes) {
-            if (PROP_TIMER_DURATION.equalsIgnoreCase(attribute.attribute("name"))) {
+            if (StatemachineActionConstants.PROP_TIMER_DURATION.equalsIgnoreCase(attribute.attribute("name"))) {
                 timerDuration = Integer.parseInt(attribute.attribute("value"));
             }
         }

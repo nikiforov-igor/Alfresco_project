@@ -45,7 +45,7 @@ import ru.it.lecm.statemachine.action.*;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.assign.AssignExecution;
-import ru.it.lecm.statemachine.bean.StateMachineActions;
+import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 import ru.it.lecm.statemachine.expression.Expression;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
 
@@ -300,7 +300,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                                     List<StateMachineAction> result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("end");
                                     if (result != null) {
                                     for (StateMachineAction action : result) {
-                                        if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(ArchiveDocumentAction.class))) {
+                                        if (action.getActionName().equalsIgnoreCase(StateMachineActionsImpl.getActionNameByClass(ArchiveDocumentAction.class))) {
                                             ArchiveDocumentAction archiveDocumentAction = (ArchiveDocumentAction) action;
                                             String folder = archiveDocumentAction.getArchiveFolderPath();
                                             if (folder != null) {
@@ -756,7 +756,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         Execution execution = activitiProcessEngineConfiguration.getRuntimeService().createExecutionQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).singleResult();
         if (execution != null) {
             String taskId = getCurrentTaskId(execution.getId());
-            List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
+            List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
             for (StateMachineAction action : actions) {
                 if (action instanceof  StatusChangeAction) {
                     result = ((StatusChangeAction) action).getVersion();
@@ -825,7 +825,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         String currentTask = getCurrentTaskId(statemachineId);
         TransitionResponse response = new TransitionResponse();
-        List<StateMachineAction> actions = getTaskActionsByName(currentTask, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
+        List<StateMachineAction> actions = getTaskActionsByName(currentTask, StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
         FinishStateWithTransitionAction.NextState nextState = null;
         String id = "";
         for (StateMachineAction action : actions) {
@@ -1120,7 +1120,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     private List<StateMachineAction> getStatusChangeActions(NodeRef document) {
         String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         String taskId = getCurrentTaskId(executionId);
-        return getTaskActionsByName(taskId, StateMachineActions.getActionName(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
+        return getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(StatusChangeAction.class), ExecutionListener.EVENTNAME_START);
     }
 
     private String getWorkflowDescription(String executionId) {
@@ -1163,7 +1163,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     private TransitionResponse executeTransitionAction(final NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
         TransitionResponse response = new TransitionResponse();
         List<String> errors = new ArrayList<String>();
-        List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
+        List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
         FinishStateWithTransitionAction.NextState nextState = null;
         for (StateMachineAction action : actions) {
             FinishStateWithTransitionAction finishStateWithTransitionAction = (FinishStateWithTransitionAction) action;
@@ -1192,7 +1192,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
             if (!nextState.isForm()) {
                 String dependencyExecution = parseExecutionId(persistedResponse);
                 if (dependencyExecution != null) {
-                    WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, nextState.getWorkflowId(), taskId, StateMachineActions.getActionName(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
+                    WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, nextState.getWorkflowId(), taskId, StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), actionId, ExecutionListener.EVENTNAME_TAKE);
                     new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
                     setInputVariables(statemachineId, dependencyExecution, nextState.getVariables().getInput());
 
@@ -1237,9 +1237,9 @@ public class StateMachineHelper implements StateMachineServiceBean {
         TransitionResponse response = new TransitionResponse();
         List<String> errors = new ArrayList<String>();
         StateMachineHelper helper = new StateMachineHelper();
-        List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
+        List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
         if (actions.size() == 0) {
-            actions = getHistoricalTaskActionsByName(taskId, StateMachineActions.getActionName(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
+            actions = getHistoricalTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
         }
         UserWorkflow.UserWorkflowEntity workflow = null;
         for (StateMachineAction action : actions) {
@@ -1253,7 +1253,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         if (workflow != null && persistedResponse != null && !"null".equals(persistedResponse)) {
             String dependencyExecution = parseExecutionId(persistedResponse);
-            WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, workflow.getWorkflowId(), taskId, StateMachineActions.getActionName(UserWorkflow.class), actionId, ExecutionListener.EVENTNAME_TAKE);
+            WorkflowDescriptor descriptor = new WorkflowDescriptor(dependencyExecution, statemachineId, workflow.getWorkflowId(), taskId, StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class), actionId, ExecutionListener.EVENTNAME_TAKE);
             new DocumentWorkflowUtil().addWorkflow(document, dependencyExecution, descriptor);
 
             helper.setInputVariables(statemachineId, dependencyExecution, workflow.getVariables().getInput());
@@ -1360,7 +1360,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                         if (includeActive) {
                             result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("start");
                             for (StateMachineAction action : result) {
-                                if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(StatusChangeAction.class))) {
+                                if (action.getActionName().equalsIgnoreCase(StateMachineActionsImpl.getActionNameByClass(StatusChangeAction.class))) {
                                     StatusChangeAction statusAction = (StatusChangeAction) action;
                                     statuses.add(statusAction.getStatus());
                                 }
@@ -1369,7 +1369,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                         if (includeFinal) {
                             result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get("end");
                             for (StateMachineAction action : result) {
-                                if (action.getActionName().equalsIgnoreCase(StateMachineActions.getActionName(ArchiveDocumentAction.class))) {
+                                if (action.getActionName().equalsIgnoreCase(StateMachineActionsImpl.getActionNameByClass(ArchiveDocumentAction.class))) {
                                     ArchiveDocumentAction archiveDocumentAction = (ArchiveDocumentAction) action;
                                     statuses.add(archiveDocumentAction.getStatusName());
                                 }

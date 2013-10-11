@@ -2,7 +2,6 @@ package ru.it.lecm.statemachine.bean;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.extensions.surf.util.I18NUtil;
-import ru.it.lecm.statemachine.action.StateMachineAction;
 
 import java.util.*;
 
@@ -11,7 +10,7 @@ import java.util.*;
  * Date: 26.10.12
  * Time: 10:30
  */
-public class StateMachineActions implements InitializingBean {
+public class StateMachineActionsImpl implements InitializingBean, StateMachineActions {
 
 	private static HashMap<String, String> actionNames = new HashMap<String, String>();
 	private static HashMap<String, String> actionClasses = new HashMap<String, String>();
@@ -58,21 +57,26 @@ public class StateMachineActions implements InitializingBean {
 		}
 	}
 
-	public static String getActionName(Class<? extends StateMachineAction> className) {
-		return actionNames.get(className.getName());
-	}
+    public static String getActionNameByClass(Class className) {
+        return actionNames.get(className.getName());
+    }
 
-	public static String getClassName(String actionName) {
+    @Override
+    public String getActionName(String className) {
+        return actionNames.get(className);
+    }
+
+    public static String getClassName(String actionName) {
 		return actionClasses.get(actionName);
 	}
 
-	public List<String> getActions(String execution) {
+	@Override public List<String> getActions(String execution) {
 		ExecutionKey key = new ExecutionKey("user", execution.toLowerCase());
 		List<String> actions = actionsByExecution.get(key);
 		return actions == null ? new ArrayList<String>() : Collections.unmodifiableList(actions);
 	}
 
-	public String getActionTitle(String actionName) {
+	@Override public String getActionTitle(String actionName) {
 		String key = "statemachine.action." + actionName;
 		String message = I18NUtil.getMessage(key, I18NUtil.getLocale());
 		return message == null ? actionName : message;

@@ -10,6 +10,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.StatemachineActionConstants;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.PostponedAction;
 import ru.it.lecm.statemachine.action.StateMachineAction;
@@ -35,7 +36,7 @@ public class WaitForDocumentChangeAction extends StateMachineAction implements P
 		for (Element expressionElement : expressions.elements(TAG_EXPRESSION)) {
 			String expression = expressionElement.attribute(PROP_EXPRESSION);
 			String outputValue = expressionElement.attribute(PROP_OUTPUT_VALUE);
-			boolean stopSubWorkflows = Boolean.parseBoolean(expressionElement.attribute(PROP_STOP_SUBWORKFLOWS));
+			boolean stopSubWorkflows = Boolean.parseBoolean(expressionElement.attribute(StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS));
 			this.expressions.add(new Expression(expression, outputVariable, outputValue, stopSubWorkflows));
 		}
 	}

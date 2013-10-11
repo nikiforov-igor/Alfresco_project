@@ -14,7 +14,6 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
-import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.bean.StateMachineActions;
 
 import java.io.Serializable;
@@ -159,7 +158,7 @@ public class StateMachineStatusPolicy implements NodeServicePolicies.OnCreateNod
 				QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, action),
 				QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, action),
 				props);
-			if (action.equals(StateMachineActions.getActionName(FinishStateWithTransitionAction.class))) {
+			if (action.equals(stateMachineActions.getActionName("ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction"))) {
 				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action + "User"), childAssocRef.getChildRef().toString());
 				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action + "Workflow"), childAssocRef.getChildRef().toString());
 				nodeService.setProperty(status, QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, execution + action + "Form"), childAssocRef.getChildRef().toString());
