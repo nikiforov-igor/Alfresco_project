@@ -299,7 +299,7 @@
             <value>0 */15 * * * ?</value>
         </property>
         <property name="onServerStart">
-            <value>true</value>
+            <value>false</value>
         </property>
         <property name="jobName">
             <value>errands-sys-agent-status</value>
