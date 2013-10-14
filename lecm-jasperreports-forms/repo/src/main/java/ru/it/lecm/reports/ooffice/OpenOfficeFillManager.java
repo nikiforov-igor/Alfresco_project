@@ -64,8 +64,10 @@ public class OpenOfficeFillManager {
             }
         }
 
+		final String author = null;
+
         final OpenOfficeTemplateGenerator ooGen = new OpenOfficeTemplateGenerator();
-        ooGen.odtSetColumnsAsDocCustomProps(props, getConnection(), report, urlSrc, urlSaveAs, null);
+		ooGen.odtSetColumnsAsDocCustomProps(props, getConnection(), report, urlSrc, urlSaveAs, author);
     }
 
 }

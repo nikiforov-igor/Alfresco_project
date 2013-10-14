@@ -64,6 +64,15 @@ public class DSProviderOOfficeBase extends GenericDSProviderBase {
         if (document != null) {
             xStorable = UnoRuntime.queryInterface(com.sun.star.frame.XStorable.class, document);
 
+			/*
+			storeProps = new com.sun.star.beans.PropertyValue[ 2 ];
+			storeProps[0] = new com.sun.star.beans.PropertyValue();
+			storeProps[0].Name = "Overwrite";
+			storeProps[0].Value = new Boolean(true);
+			storeProps[1] = new com.sun.star.beans.PropertyValue();
+			storePropse[1].Name = "FilterName";
+			storeProps[1].Value = "StarOffice XML (Writer)";
+			*/
             final PropertyValue[] storeProps = new PropertyValue[1];
             storeProps[0].Name = "FilterName";
             storeProps[0].Value = "Rich Text Format";

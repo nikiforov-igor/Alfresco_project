@@ -102,6 +102,13 @@ public class ReportDescriptorImpl
 	@Override
 	public void setSubreports(List<SubReportDescriptor> list) {
 		this.subreports = list;
+
+		// пропишем подотчётам владельца ...
+		if (this.subreports != null) {
+			for(SubReportDescriptor item: this.subreports) {
+				item.setOwnerReport(this);
+			}
+		}
 	}
 
 	@Override

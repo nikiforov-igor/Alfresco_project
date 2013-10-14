@@ -209,9 +209,9 @@ public class NodeUtils {
                 // форматируем значение вида "{a/b/c...}"
                 value = resolver.evaluateLinkExpr(docId, sourceLink);
             } else { // простое значение выбираем в свойствах
-                NodeService nodeService = resolver.getServices().getServiceRegistry().getNodeService();
-                NamespaceService ns = resolver.getServices().getServiceRegistry().getNamespaceService();
-                QName qname = QName.createQName(sourceLink, ns);
+				final NodeService nodeService = resolver.getServices().getServiceRegistry().getNodeService();
+				final NamespaceService ns = resolver.getServices().getServiceRegistry().getNamespaceService();
+				final QName qname = QName.createQName(sourceLink, ns);
                 value = (props != null) ? props.get(qname) : nodeService.getProperty(docId, qname);
             }
         } catch (Throwable ex) {

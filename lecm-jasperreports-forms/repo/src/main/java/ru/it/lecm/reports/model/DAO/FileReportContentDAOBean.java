@@ -113,6 +113,14 @@ public class FileReportContentDAOBean implements ReportContentDAO {
      */
     private String storeStructurePathFmt = DEFAULT_STORE_STRUC_FMT;
 
+	public void init() {
+		logger.info( String.format( "initialized as:\n\t %s\t %s\n\t %s\t '%s' -> '%s'\n\t %s\t %s"
+				, "readonly", readonly
+				, "rootDir", rootDir, getRoot()
+				, "structure format", storeStructurePathFmt
+		));
+	}
+
     @Override
     public boolean isReadonly() {
         return readonly;
@@ -283,7 +291,8 @@ public class FileReportContentDAOBean implements ReportContentDAO {
             return null;
         try {
             final URL fileUrl = f.toURI().toURL();
-            return new org.alfresco.repo.content.filestore.FileContentReader(f, fileUrl.toString());
+			final ContentReader result = new org.alfresco.repo.content.filestore.FileContentReader(f, fileUrl.toString());
+			return result;
         } catch (MalformedURLException ex) {
             final String msg = String.format("Read error:\n\t file '%s'\n\t by id {%s}\n\t Error %s"
                     , f.getAbsolutePath(), id.toString(), ex.getMessage());
@@ -305,6 +314,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
             final File fDirReport = makeAbsFilePath(id.getReportType(), id.getReportMnemo(), "");
             try {
                 FileUtils.deleteDirectory(fDirReport);
+				logger.info( String.format( "Delete directory by id=[%s]:\n\t directory deleted: '%s'", id, fDirReport.getAbsolutePath()));
             } catch (IOException ex) {
                 final String msg = String.format("Fail to delete template file directory\n\t by id='%s'\n\t %s", id, ex.getMessage());
                 logger.error(msg, ex);

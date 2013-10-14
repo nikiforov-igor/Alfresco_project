@@ -249,6 +249,9 @@ public class ColumnDescriptorImpl
 		if (srcCol.getDataType() != null) 
 			this.setDataType(srcCol.getDataType());
 
+		if (srcCol instanceof ColumnDescriptorImpl)
+			this.setL18Name( ((ColumnDescriptorImpl) srcCol).getL18Name());
+
 		this.setExpression( srcCol.getExpression());
 		this.setSpecial( srcCol.isSpecial());
 		this.setAlfrescoType(srcCol.getAlfrescoType());

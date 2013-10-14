@@ -123,7 +123,7 @@ public interface ReportsManager {
 	 */
 	String getReportTypeTag(ReportType rtype);
 
-	ReportEditorDAO getReportDAO();
+	ReportEditorDAO getReportEditorDAO();
 
 	/**
 	 * Вернуть хранилище, которое содержит указанный описатель или NULL

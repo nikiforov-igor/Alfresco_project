@@ -24,6 +24,7 @@ public abstract class TypedJoinDS<T extends Object> extends AlfrescoJRDataSource
 
     public TypedJoinDS(Iterator<ResultSetRow> iterator) {
         super(iterator);
+		// buildData(); <- не проходит, т.к. нет ещё свойств обвязки (services, metadata и пр)
     }
 
     public List<T> getData() {

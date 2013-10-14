@@ -52,7 +52,7 @@
 		<property name="connection" ref="reportOpenOfficeConnection" />
 	</bean>
 
-	<bean id="reportDAOBean" class="ru.it.lecm.reports.model.DAO.ReportDAOImpl">
+	<bean id="reportEditorDAOBean" class="ru.it.lecm.reports.model.DAO.ReportEditorDAOImpl" init-method="init">
 		<property name="services" ref="wksKeeper"/>
 	</bean>
 
@@ -92,7 +92,8 @@
 	  -->
 	<!-- Хранение файлов для отчётов в файловой системе (xml-шаблоны, jasper и прнепосредственно из поставки) -->
 	<bean id="fileReportContentBean"
-			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean">
+			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+			init-method="init">
 
 		<!-- для надёжности - запрещаем запись в предустановленные отчёты -->
 		<property name="readonly" value="true"/>
@@ -121,7 +122,8 @@
 		gen-файлов для генерации шаблонов отчётов
 	  -->
 	<bean id="fileReportTemplatesBean"
-			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean">
+			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+			init-method="init">
 		<!-- для надёжности - запрещаем запись -->
 		<property name="readonly" value="true"/>
 
@@ -151,7 +153,8 @@
 		Должно быть файловое, т.к. OpenOffice работает именно с ними (не с потоками).
 	  -->
 	<bean id="fileOOReportResultBean"
-			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean">
+			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+			init-method="init">
 		<!-- сюда запись надо разрешить ... -->
 		<property name="readonly" value="false"/>
 
@@ -175,22 +178,48 @@
 		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileNameLo" />
 	</bean>
 
+	<!-- Хранилище в файловой системе для подотчётов.
+		Должно быть файловое, т.к. , например, jasper ожидает именованный ресурс.
+	  -->
+	<bean id="fileSubreportContentBean"
+			class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+			init-method="init">
+		<!-- запись надо разрешить ... -->
+		<property name="readonly" value="false"/>
+
+		<!-- Расположение каталогов на серваке относительно ./classes 
+		"/build/subreports"-->
+		<property name="rootDir" value="/reportdefinitions/deploy/subreports" />
+
+		<!--
+			Форматная строка относительно rootDir для получения полного пути к файлу - см описание выше.
+			Здесь используем обычную структуру хранения:
+				root (./classes/.../subreports/)
+					reportType (ooffice || jasper)
+						subReportName
+							files
+		  -->
+		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileNameLo" />
+	</bean>
+
 	<!-- 
 			Менеджер шаблонов отчёта
 	  -->
 	<bean id="reportsManager"
 			class="ru.it.lecm.reports.beans.ReportsManagerImpl"
-	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportDAOBean, jasperReportGenerator, mimetypeService">
+	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportEditorDAOBean, jasperReportGenerator, mimetypeService"
+	 		init-method="init">
 		<!-- <property name="services" ref="wksKeeper"/> -->
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="mimeMap" ref="mimetypeService" />
 
 		<!-- хранилище отчётов редактора -->
-		<property name="reportDAO" ref="reportDAOBean"/>
+		<property name="reportEditorDAO" ref="reportEditorDAOBean"/>
 
-		<!-- файлы создаваемых отчётов как "cm:content" в репозитории -->
+		<!-- файлы создаваемых шаблонов отчётов как "cm:content" в репозитории -->
 		<property name="contentRepositoryDAO" ref="repositoryReportContentBean" />
+		<property name="subreportFileDAO" ref="fileSubreportContentBean" />
 
 		<!-- файлы готовых отчётов (поставка) в файловой системе -->
 		<property name="contentFileDAO" ref="fileReportContentBean" />

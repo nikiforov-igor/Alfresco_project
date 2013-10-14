@@ -184,8 +184,12 @@ public class XMLMacroGenerator {
 	 * @param destVars
 	 */
 	protected void initAutoVars(MacroValues destVars) {
-		if (this.reportDesc != null)
+		if (this.reportDesc != null) {
 			destVars.addVar( new RefMacroVar<ReportDescriptor>(VNAME_RDesc, this.reportDesc));
+
+			// добавление стандартных функций
+			destVars.addVar( VNAME_GUID, new GuidAutoValue());
+		}
 	}
 
 	/**
@@ -482,8 +486,6 @@ public class XMLMacroGenerator {
 
 			this.curVars = parseVars( this.srcVars);
 			this.curVars.setOuterMacro( this.parentVars);
-			// добавление стандартных функций
-			this.curVars.addVar( VNAME_GUID, new GuidAutoValue());
 		}
 
 

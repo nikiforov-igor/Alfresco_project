@@ -3,6 +3,7 @@ package ru.it.lecm.reports.model.impl;
 import java.util.Map;
 
 import ru.it.lecm.reports.api.model.L18able;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.SubReportDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -16,6 +17,7 @@ public class SubReportDescriptorImpl
 
 	private ItemsFormatDescriptor itemsFormat;
 	private Map<String, String> subItemsSourceMap;
+	private ReportDescriptor ownerReport;
 
 	public SubReportDescriptorImpl() {
 	}
@@ -32,6 +34,7 @@ public class SubReportDescriptorImpl
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("SubReportDescriptorImpl [");
+		builder.append("ownerReport '").append( (ownerReport == null) ? "null" : ownerReport.getMnem() ).append("'");
 		builder.append("destColumn '").append(destColumnName).append("'");
 		// builder.append(", tagIfEmpty '").append(tagIfEmpty).append("'");
 		builder.append("\n\t, sourceListExpression '").append(sourceListExpression).append("'");
@@ -91,6 +94,16 @@ public class SubReportDescriptorImpl
 	@Override
 	public void setSubItemsSourceMap(Map<String, String> subItemsSourceMap) {
 		this.subItemsSourceMap = subItemsSourceMap;
+	}
+
+	@Override
+	public ReportDescriptor getOwnerReport() {
+		return ownerReport;
+	}
+
+	@Override
+	public void setOwnerReport(ReportDescriptor ownerReport) {
+		this.ownerReport = ownerReport;
 	}
 
 	@Override

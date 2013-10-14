@@ -160,6 +160,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      */
     protected void setXMLDefaults(Map<String, Object> defaults) {
         // "add-on" sections для чтения конфигуратором ...
+//		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_OFFSET, null);
+//		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_LIMIT, null);
         if (this.xmlConfig != null) {
             if (this.reportDescriptor != null) {
                 this.xmlConfig.setConfigName("ds-" + this.reportDescriptor.getMnem() + ".xml");
@@ -399,7 +401,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
         protected boolean loadAlfNodeProps(NodeRef docId) {
             final boolean result = super.loadAlfNodeProps(docId); // (!) прогрузка бызовых свойств
 
-            if (result) {
+			if (result && context != null) {
                 if (getReportDescriptor().getSubreports() != null) {  // прогрузка вложенных subreports ...
                     for (SubReportDescriptor subreport : getReportDescriptor().getSubreports()) {
                         final Object stringOrBean = prepareSubReport(docId, subreport, resolver);

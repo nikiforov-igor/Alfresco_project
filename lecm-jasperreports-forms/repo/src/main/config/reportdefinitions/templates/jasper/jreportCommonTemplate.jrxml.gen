@@ -8,7 +8,7 @@
 		pageWidth="842" pageHeight="595"
 		columnWidth="802"
 		leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
-		uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
+		uuid="@GUID">
 
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -25,23 +25,14 @@
 			<style backcolor="#DCDCDC"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="CMIS_URL" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["http://127.0.0.1:8080/alfresco/cmisatom"]]></defaultValueExpression>
-	</parameter>
-	<parameter name="CMIS_USER" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["admin"]]></defaultValueExpression>
-	</parameter>
-	<parameter name="CMIS_PASS" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["111"]]></defaultValueExpression>
-	</parameter>
-	<parameter name="CMIS_ALLVERSIONS" class="java.lang.Boolean" isForPrompting="false">
-		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
-	</parameter>
 	<parameter name="CMIS_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["select * from lecm-contract:document as Contract"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["ds-@RDesc.mnem@@.xml"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["reportdefinitions/deploy/jasper/@RDesc.mnem/subreports/"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[]]>

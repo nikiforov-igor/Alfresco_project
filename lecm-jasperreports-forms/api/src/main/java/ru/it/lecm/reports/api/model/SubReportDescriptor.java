@@ -70,6 +70,11 @@ public interface SubReportDescriptor extends ReportDescriptor
 	 */
 	boolean isUsingFormat();
 
+	/**
+	 * @return "владелец": описатель основного отчёта, к которому относится данный подотчёт
+	 */
+	ReportDescriptor getOwnerReport();
+	void setOwnerReport(ReportDescriptor ownerReport);
 
 	/**
 	 * Описатель форматирования элементов, когда их требуется представить в виде

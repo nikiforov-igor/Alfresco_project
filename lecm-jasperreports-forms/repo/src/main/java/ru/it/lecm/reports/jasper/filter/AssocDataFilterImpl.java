@@ -27,7 +27,7 @@ public class AssocDataFilterImpl implements AssocDataFilter {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("AssocDataFilter [ assoc count: ");
-        builder.append(assocList.size()).append("\n\t ");
+		builder.append( (assocList == null) ? "NULL" : assocList.size() ).append("\n\t ");
         builder.append(Utils.getAsString(assocList, "\n\t"));
         builder.append("\n]");
         return builder.toString();
@@ -40,6 +40,10 @@ public class AssocDataFilterImpl implements AssocDataFilter {
     public ServiceRegistry getServiceRegistry() {
         return serviceRegistry;
     }
+
+	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+		this.serviceRegistry = serviceRegistry;
+	}
 
     @Override
     public void addAssoc(AssocDesc desc) {

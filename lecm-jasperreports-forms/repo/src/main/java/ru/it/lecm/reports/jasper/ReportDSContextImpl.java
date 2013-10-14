@@ -227,7 +227,18 @@ public class ReportDSContextImpl implements ReportDSContext {
                 } // switch
             }
         }
+
+		/*
+		 * NOTE: вариант для случаев, когда NULL не желателен ...
+		if (value != null)
         return value;
+
+		// NULL result in value -> return current name if valueClass is String
+		return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null;
+		 */
+
+		return value;
+
     }
 
     /**

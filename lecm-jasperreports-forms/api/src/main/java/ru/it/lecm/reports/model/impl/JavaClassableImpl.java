@@ -57,7 +57,7 @@ public class JavaClassableImpl
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if (obj == null || !super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -302,7 +301,9 @@ public class LucenePreparedQuery {
 		 *  isEmpty(), для LIST/VALUE нижняя граница не пустая, а для
 		 *  RANGE - одна из границ точно не пустая
 		 */
-        final Object bound1 = parType.getBound1(), bound2 = parType.getBound2();
+		final Object
+				bound1 = parType.getBound1(),
+				bound2 = parType.getBound2();
 
         final StringBuilder cond = new StringBuilder(); // сгенерированное условие
 
@@ -666,7 +667,10 @@ public class LucenePreparedQuery {
             boolean hasId = false;
 
             final ColumnDescriptor colWithID = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_ID);
-            if (colWithID != null && colWithID.getParameterValue() != null && !colWithID.getParameterValue().isEmpty()) {
+			if (	colWithID != null
+					&& colWithID.getParameterValue() != null
+					&& !colWithID.getParameterValue().isEmpty()
+			) {
                 final StringBuilder idCond = makeValueCond("ID", colWithID.getParameterValue());
                 if (idCond != null && idCond.length() > 0) {
                     final String sCond = idCond.toString().replace("@ID", "ID"); // замена обычной ссылки на атрибут, ссылкой на тип

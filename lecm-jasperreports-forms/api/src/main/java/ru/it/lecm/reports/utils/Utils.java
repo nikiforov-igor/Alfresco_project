@@ -216,7 +216,7 @@ public class Utils {
 	 * @return true если объекты равны или оба одновременно null, иначе false
 	 */
 	public static boolean isSafelyEquals(Object a, Object b) {
-		return (a == b) ? true : ((a == null) ? (b == null) : a.equals(b));
+		return (a == b) ? true : ((a == null) ? (b == null) : (b != null) && a.equals(b));
 	}
 
 	/**
