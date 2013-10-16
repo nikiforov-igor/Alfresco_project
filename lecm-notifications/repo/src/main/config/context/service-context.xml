@@ -56,6 +56,21 @@
 	<util:constant id="NOTIFICATIONS_GENERALIZATION_ROOT_ID" static-field="ru.it.lecm.notifications.beans.NotificationsService.NOTIFICATIONS_GENERALIZATION_ROOT_ID"/>
 	<util:constant id="NOTIFICATIONS_GENERALIZATION_ROOT_NAME" static-field="ru.it.lecm.notifications.beans.NotificationsService.NOTIFICATIONS_GENERALIZATION_ROOT_NAME"/>
 
+	<bean id="notificationsAsyncThreadPool" class="org.alfresco.util.ThreadPoolExecutorFactoryBean">
+		<property name="poolName">
+			<value>notificationsAsyncAction</value>
+		</property>
+		<property name="corePoolSize">
+			<value>8</value>
+		</property>
+		<property name="maximumPoolSize">
+			<value>20</value>
+		</property>
+		<property name="threadPriority">
+			<value>1</value>
+		</property>
+	</bean>
+
 	<bean id="notificationsService" init-method="init" class="ru.it.lecm.notifications.beans.NotificationsServiceImpl" parent="baseBean"
 	      depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService, lecmPermissionServiceBean, serviceDictionary">
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
@@ -65,6 +80,8 @@
 		<property name="dictionaryService" ref="serviceDictionary"/>
 		<property name="authService" ref="authenticationService"/>
 		<property name="substituteService" ref="substitudeService"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

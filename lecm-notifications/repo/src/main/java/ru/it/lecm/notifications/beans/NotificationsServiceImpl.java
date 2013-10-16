@@ -2,7 +2,9 @@ package ru.it.lecm.notifications.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -22,6 +24,7 @@ import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * User: AIvkin
@@ -29,6 +32,8 @@ import java.util.*;
  * Time: 16:53
  */
 public class NotificationsServiceImpl extends BaseBean implements NotificationsService {
+	private static final String NOTIFICATION_POST_TRANSACTION_PENDING_OBJECTS = "notification_post_transaction_pending_objects";
+
 	final private static Logger logger = LoggerFactory.getLogger(NotificationsServiceImpl.class);
 
 	private OrgstructureBean orgstructureService;
@@ -40,6 +45,9 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private Map<NodeRef, NotificationChannelBeanBase> channels;
 	private Map<String, NodeRef> channelsNodeRefs;
 	private LecmPermissionService lecmPermissionService;
+
+	private ThreadPoolExecutor threadPoolExecutor;
+	private TransactionListener transactionListener;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -60,6 +68,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 	public void setSubstituteService(SubstitudeBean substituteService) {
 		this.substituteService = substituteService;
+	}
+
+	public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+		this.threadPoolExecutor = threadPoolExecutor;
 	}
 
 	public Map<NodeRef, NotificationChannelBeanBase> getChannels() {
@@ -84,6 +96,8 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	public void init() {
 		notificationsRootRef = getFolder(NOTIFICATIONS_ROOT_ID);
 		notificationsGenaralizetionRootRef = getFolder(NOTIFICATIONS_GENERALIZATION_ROOT_ID);
+
+		transactionListener = new NotificationTransactionListener();
 	}
 
 	@Override
@@ -148,39 +162,16 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 	@Override
 	public void sendNotification(final Notification notification, final boolean dontCheckAccessToObject) {
-		new Thread() {
-			@Override
-			public void run() {
-				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-					@Override
-					public Void doWork() throws Exception {
-						return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-							@Override
-							public Void execute() throws Throwable {
-								if (checkNotification(notification)) {
-									NodeRef generalizedNotification = createGeneralizedNotification(notification);
-									if (generalizedNotification != null) {
-										Set<NotificationUnit> notificationUnits = createAtomicNotifications(notification);
-										if (notificationUnits != null && notificationUnits.size() > 0) {
-											for (NotificationUnit notf : notificationUnits) {
-												sendNotification(notf, dontCheckAccessToObject);
-											}
-										} else {
-											logger.warn("Атомарные уведомления не были сформированы");
-										}
-									} else {
-										logger.warn("Обобщённое уведомление не создано");
-									}
-								} else {
-									logger.warn("Уведомление не прошло проверки");
-								}
-								return null;
-							}
-						}, false, true);
-					}
-				});
-			}
-		}.start();
+		AlfrescoTransactionSupport.bindListener(this.transactionListener);
+
+		List<Notification> pendingActions = AlfrescoTransactionSupport.getResource(NOTIFICATION_POST_TRANSACTION_PENDING_OBJECTS);
+		if (pendingActions == null) {
+			pendingActions = new ArrayList<Notification>();
+			AlfrescoTransactionSupport.bindResource(NOTIFICATION_POST_TRANSACTION_PENDING_OBJECTS, pendingActions);
+		}
+
+		notification.setDontCheckAccessToObject(dontCheckAccessToObject);
+		pendingActions.add(notification);
 	}
 
 	private void sendNotification(NotificationUnit notification, boolean dontCheckAccessToObject) {
@@ -477,5 +468,72 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		notification.setDescription(substituteService.formatNodeTitle(object, textFormatString));
 		notification.setInitiatorRef(initiatorRef);
 		sendNotification(notification, dontCheckAccessToObject);
+	}
+
+	private class NotificationTransactionListener implements TransactionListener
+	{
+
+		@Override
+		public void flush() {
+
+		}
+
+		@Override
+		public void beforeCommit(boolean readOnly) {
+
+		}
+
+		@Override
+		public void beforeCompletion() {
+
+		}
+
+		@Override
+		public void afterCommit() {
+			final List<Notification> pendingNotifications = AlfrescoTransactionSupport.getResource(NOTIFICATION_POST_TRANSACTION_PENDING_OBJECTS);
+			if (pendingNotifications != null) {
+				Runnable runnable = new Runnable() {
+					public void run() {
+						AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+							@Override
+							public Void doWork() throws Exception {
+								return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+									@Override
+									public Void execute() throws Throwable {
+										for (Notification notification: pendingNotifications) {
+											if (checkNotification(notification)) {
+												NodeRef generalizedNotification = createGeneralizedNotification(notification);
+												if (generalizedNotification != null) {
+													Set<NotificationUnit> notificationUnits = createAtomicNotifications(notification);
+													if (notificationUnits != null && notificationUnits.size() > 0) {
+														for (NotificationUnit notf : notificationUnits) {
+															sendNotification(notf, notification.isDontCheckAccessToObject());
+														}
+													} else {
+														logger.warn("Атомарные уведомления не были сформированы");
+													}
+												} else {
+													logger.warn("Обобщённое уведомление не создано");
+												}
+											} else {
+												logger.warn("Уведомление не прошло проверки");
+											}
+										}
+										return null;
+									}
+								}, false, true);
+							}
+						});
+					}
+				};
+
+				threadPoolExecutor.execute(runnable);
+			}
+		}
+
+		@Override
+		public void afterRollback() {
+
+		}
 	}
 }

@@ -68,6 +68,11 @@ public class Notification {
 
     private NodeRef initiatorRef;
 
+	/**
+	 * Проверять ли доступ до основного объекта. Задаётся автоматически.
+	 */
+	private boolean dontCheckAccessToObject = false;
+
     public Notification() {
 	}
 
@@ -162,4 +167,12 @@ public class Notification {
     public NodeRef getInitiatorRef() {
         return initiatorRef;
     }
+
+	public boolean isDontCheckAccessToObject() {
+		return dontCheckAccessToObject;
+	}
+
+	public void setDontCheckAccessToObject(boolean dontCheckAccessToObject) {
+		this.dontCheckAccessToObject = dontCheckAccessToObject;
+	}
 }
