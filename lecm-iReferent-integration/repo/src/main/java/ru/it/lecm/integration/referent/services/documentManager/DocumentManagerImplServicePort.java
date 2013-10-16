@@ -1,14 +1,19 @@
 package ru.it.lecm.integration.referent.services.documentManager;
 
 import javax.jws.WebParam;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.integration.referent.objects.*;
-
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +25,15 @@ import java.util.List;
 
 @javax.jws.WebService(name = "DocumentManagerServicePort", serviceName = "DocumentManager", portName = "DocumentManagerServicePort", targetNamespace = "urn:DefaultNamespace", endpointInterface = "ru.it.lecm.integration.referent.services.documentManager.WSDocumentManager")
 public class DocumentManagerImplServicePort implements WSDocumentManager {
+
+    @Resource
+    WebServiceContext wsContext;
+
     private NodeService nodeService;
     private DocumentService documentService;
     private ObjectFactory objectFactory;
+    private AuthenticationService authenticationService;
+    private AuthorityService authorityService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -36,6 +47,10 @@ public class DocumentManagerImplServicePort implements WSDocumentManager {
         this.objectFactory = objectFactory;
     }
 
+    public void setWsContext(WebServiceContext wsContext) {
+        this.wsContext = wsContext;
+    }
+
     @Override
     public WSOMDOCUMENT getdocument(@WebParam(name = "ID", partName = "ID") String id, @WebParam(name = "IN_CONTEXT", partName = "IN_CONTEXT") WSOCONTEXT inCONTEXT) {
         return objectFactory.createWSOMDOCUMENT(id);
@@ -43,6 +58,9 @@ public class DocumentManagerImplServicePort implements WSDocumentManager {
 
     @Override
     public WSOCOLLECTION getdocuments(@WebParam(name = "ISMOBJECT", partName = "ISMOBJECT") boolean ismobject, @WebParam(name = "INCLUDEATTACHMENTS", partName = "INCLUDEATTACHMENTS") boolean includeattachments, @WebParam(name = "IN_CONTEXT", partName = "IN_CONTEXT") WSOCONTEXT inCONTEXT) {
+        MessageContext msgCtxt = wsContext.getMessageContext();
+        HttpServletRequest req = (HttpServletRequest)msgCtxt.get(MessageContext.SERVLET_REQUEST);
+
         final AuthenticationUtil.RunAsWork<WSOCOLLECTION> runner = new AuthenticationUtil.RunAsWork<WSOCOLLECTION>() {
             @Override
             public WSOCOLLECTION doWork() throws Exception {
@@ -80,6 +98,14 @@ public class DocumentManagerImplServicePort implements WSDocumentManager {
         return AuthenticationUtil.runAs(runner,
                 inCONTEXT.getUSERID()
         );
+    }
+
+    public void setAuthenticationService(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+
+    public void setAuthorityService(AuthorityService authorityService) {
+        this.authorityService = authorityService;
     }
 }
 

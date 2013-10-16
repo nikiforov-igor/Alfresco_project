@@ -54,20 +54,14 @@
     <jaxws:endpoint address="/WSBR_DocumentManager" implementor="#documentManagerServicePort"
                     implementorClass="ru.it.lecm.integration.referent.services.documentManager.DocumentManagerImplServicePort">
         <!--<jaxws:inInterceptors>
-            <ref local="saajLECMInInterceptor" />
             <ref local="wss4jLECMInInterceptor" />
-            <ref local="authenticationLECMInterceptor" />
         </jaxws:inInterceptors>
 
         <jaxws:outInterceptors>
-            <ref local="authenticationLECMClearInterceptor" />
-            <ref local="saajLECMOutInterceptor" />
             <ref local="wss4jLECMOutInterceptor" />
         </jaxws:outInterceptors>
 
         <jaxws:outFaultInterceptors>
-            <ref local="authenticationLECMClearInterceptor" />
-            <ref local="saajLECMOutInterceptor" />
             <ref local="wss4jLECMOutInterceptor" />
         </jaxws:outFaultInterceptors>
 
@@ -80,6 +74,8 @@
         <property name="objectFactory" ref="objectFactory"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="documentService" ref="documentService"/>
+        <property name="authenticationService" ref="authenticationService"/>
+        <property name="authorityService" ref="authorityService"/>
     </bean>
 
     <!-- ========================================================================================================= -->
