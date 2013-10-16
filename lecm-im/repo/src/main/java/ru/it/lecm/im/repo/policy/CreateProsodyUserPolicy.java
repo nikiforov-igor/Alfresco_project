@@ -20,6 +20,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URLEncoder;
+import java.util.Properties;
 import org.apache.commons.httpclient.methods.RequestEntity;
 
 public class CreateProsodyUserPolicy implements NodeServicePolicies.OnUpdateNodePolicy {
@@ -29,16 +30,25 @@ public class CreateProsodyUserPolicy implements NodeServicePolicies.OnUpdateNode
     private PolicyComponent policyComponent;
     private OrgstructureBean orgstructureBean;
     private NodeService nodeService;
+    private Properties properties;
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
 
     public final void init () {
-        try
-        {
-            PropertyCheck.mandatory(this, "policyComponent", policyComponent);
-            policyComponent.bindClassBehaviour (NodeServicePolicies.OnUpdateNodePolicy.QNAME, OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateNode"));
-        }
-        catch (Exception e)
-        {
-            logger.error("CreateProsodyUserPolicy.init error!", e);
+        if(Boolean.parseBoolean(properties.getProperty("lecmim.enabled"))){
+            try
+            {
+                PropertyCheck.mandatory(this, "policyComponent", policyComponent);
+                policyComponent.bindClassBehaviour (NodeServicePolicies.OnUpdateNodePolicy.QNAME, OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateNode"));
+            }
+            catch (Exception e)
+            {
+                logger.error("CreateProsodyUserPolicy.init error!", e);
+            }
+        } else {
+            logger.info("Messenger disabled");
         }
     }
 
