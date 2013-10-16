@@ -540,7 +540,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-        query = "TYPE:\"" + TYPE_BR_RECORD.toString()  +"\" AND @lecm\\-busjournal\\:bjRecord\\-date:[" + MIN + " TO " + MAX + "]";
+        query = "PARENT: \"" + bjRootRef.toString() + "\" TYPE:\"" + TYPE_BR_RECORD.toString()  +"\" AND @lecm\\-busjournal\\:bjRecord\\-date:[" + MIN + " TO " + MAX + "] AND @lecm\\-dic\\:active: true ";
 
         if (objectTypeRefs != null && !"".equals(objectTypeRefs)) {
             String types = "";
@@ -603,24 +603,22 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
             results = searchService.query(sp);
             for (ResultSetRow row : results) {
                 NodeRef rowNodeRef = row.getNodeRef();
-	            if (!isArchive(rowNodeRef)){
-                    if (checkMainObject != null && checkMainObject) {
-                        // проверить доступность основного объекта
-                        List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(rowNodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
-                        if (targetAssocs != null) {
-                            for (AssociationRef sourceAssoc : targetAssocs) {
-                                NodeRef nodeRef = sourceAssoc.getTargetRef();
+                if (checkMainObject != null && checkMainObject) {
+                    // проверить доступность основного объекта
+                    List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(rowNodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
+                    if (targetAssocs != null) {
+                        for (AssociationRef sourceAssoc : targetAssocs) {
+                            NodeRef nodeRef = sourceAssoc.getTargetRef();
 
-                                if (lecmPermissionService.hasReadAccess(nodeRef)
-                                        && (!stateMachineService.isDraft(nodeRef) || isOwnNode(nodeRef))) {
-                                    records.add(rowNodeRef);
-                                }
+                            if (lecmPermissionService.hasReadAccess(nodeRef)
+                                    && (!stateMachineService.isDraft(nodeRef) || isOwnNode(nodeRef))) {
+                                records.add(rowNodeRef);
                             }
                         }
-                    } else {
-                        records.add(rowNodeRef);
                     }
-	            }
+                } else {
+                    records.add(rowNodeRef);
+                }
             }
         } finally {
             if (results != null) {

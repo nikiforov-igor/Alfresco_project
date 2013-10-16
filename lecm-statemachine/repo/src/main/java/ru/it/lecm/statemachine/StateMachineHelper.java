@@ -715,13 +715,18 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     @Override
     public boolean isDraft(NodeRef document) {
-        boolean result = false;
-        List<StateMachineAction> actions = getStatusChangeActions(document);
-        for (StateMachineAction action : actions) {
-            StatusChangeAction statusChangeAction = (StatusChangeAction) action;
-            result = result || statusChangeAction.isForDraft();
+        NodeService nodeService = serviceRegistry.getNodeService();
+        if (nodeService.hasAspect(document, StatemachineModel.ASPECT_IS_DRAFT)) {
+            return (Boolean) nodeService.getProperty(document, StatemachineModel.PROP_IS_DRAFT);
+        } else {
+            boolean result = false;
+            List<StateMachineAction> actions = getStatusChangeActions(document);
+            for (StateMachineAction action : actions) {
+                StatusChangeAction statusChangeAction = (StatusChangeAction) action;
+                result = result || statusChangeAction.isForDraft();
+            }
+            return result;
         }
-        return result;
     }
 
     public boolean hasStatemachine(NodeRef document) {

@@ -171,6 +171,16 @@ public class StatusChangeAction extends StateMachineAction {
             }
         }
 
+        //Проверяем наличие аспекта указывающего на черновик
+        for (ChildAssociationRef child : children) {
+            if (!nodeService.hasAspect(child.getChildRef(), StatemachineModel.ASPECT_IS_DRAFT)) {
+                nodeService.addAspect(child.getChildRef(), StatemachineModel.ASPECT_IS_DRAFT, null);
+            }
+        }
+        //Устанавливаем флаг черновика
+        for (ChildAssociationRef child : children) {
+            nodeService.setProperty(child.getChildRef(), StatemachineModel.PROP_IS_DRAFT, forDraft);
+        }
         //Если стартовый статус, то ничего никуда не перемещаем
         if (forDraft) return;
 
