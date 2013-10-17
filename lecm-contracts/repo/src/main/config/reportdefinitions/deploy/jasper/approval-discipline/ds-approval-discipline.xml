@@ -19,7 +19,7 @@
         <l18>
             <item key="RU_RU" value="Исполнительская дисциплина по согласованиям"/>
         </l18>
-        <provider mnem="DSProdiverApprovalSummaryByPeriod" javaClass="ru.it.lecm.reports.jasper.DSProdiverApprovalSummaryByPeriod" >
+        <provider mnem="DSProdiverApprovalSummaryByPeriod" javaClass="ru.it.lecm.contracts.reports.DSProdiverApprovalSummaryByPeriod" >
            <l18>
                <item key="RU_RU" value="Провайдер Jasper отчётов: Дисциплина согласований за период"/>
            </l18>

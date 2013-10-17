@@ -30,7 +30,7 @@
         <l18>
             <item key="RU_RU" value="Опись изменений договора"/>
         </l18>
-        <provider mnem="DSProviderContractsDeltaById" javaClass="ru.it.lecm.reports.jasper.DSProviderContractsDeltaById" >
+        <provider mnem="DSProviderContractsDeltaById" javaClass="ru.it.lecm.contracts.reports.DSProviderContractsDeltaById" >
            <l18>
                <item key="RU_RU" value="Провайдер Jasper отчётов: Опись изменений договора"/>
            </l18>

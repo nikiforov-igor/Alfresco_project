@@ -5,7 +5,7 @@
 	model of the contract/document:
 		.\lecm-contracts\repo\src\main\config\models\lecm-contracts-model.xml
 	provider:
-		ru.it.lecm.reports.jasper.DSProviderDocflowStatusTimings
+		ru.it.lecm.contracts.reports.DSProviderDocflowStatusTimings
 
 Фильтры: 
 •	Вид договора
@@ -32,7 +32,7 @@
         <l18>
             <item key="RU_RU" value="Сроки прохождения маршрута"/>
         </l18>
-        <provider mnem="DSProviderDocflowStatusTimings" javaClass="ru.it.lecm.reports.jasper.DSProviderDocflowStatusTimings" >
+        <provider mnem="DSProviderDocflowStatusTimings" javaClass="ru.it.lecm.contracts.reports.DSProviderDocflowStatusTimings" >
            <l18>
                <item key="RU_RU" value="Провайдер Jasper отчётов: Сроки прохождения маршрута"/>
            </l18>

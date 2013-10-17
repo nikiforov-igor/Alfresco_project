@@ -22,7 +22,6 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.it.lecm.forms.jasperforms.AbstractDataSourceProvider;
 import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.beans.ReportBeansLocator;
@@ -43,7 +42,7 @@ import ru.it.lecm.utils.LuceneSearchBuilder;
  * @author rabdullin
  *
  */
-public class DSProviderSearchQueryReportBase extends AbstractDataSourceProvider 
+public class DSProviderSearchQueryReportBase extends ru.it.lecm.jasperforms.AbstractDataSourceProvider
 {
 	private static final Logger logger = LoggerFactory.getLogger(DSProviderSearchQueryReportBase.class);
 

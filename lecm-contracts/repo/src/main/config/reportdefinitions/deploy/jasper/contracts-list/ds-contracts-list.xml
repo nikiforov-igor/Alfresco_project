@@ -29,7 +29,7 @@
         <l18>
             <item key="RU_RU" value="Договорная деятельность"/>
         </l18>
-        <provider mnem="DSProviderReestrDogovorov" javaClass="ru.it.lecm.reports.jasper.DSProviderReestrDogovorov" >
+        <provider mnem="DSProviderReestrDogovorov" javaClass="ru.it.lecm.contracts.reports.DSProviderReestrDogovorov" >
            <l18>
                <item key="RU_RU" value="Провайдер Jasper отчётов: Договорная деятельность"/>
            </l18>

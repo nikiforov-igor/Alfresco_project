@@ -3,7 +3,7 @@
 	<property name="ireport.zoom" value="1.9487171000000025"/>
 	<property name="ireport.x" value="9"/>
 	<property name="ireport.y" value="0"/>
-	<property name="dataSource" value="ru.it.lecm.reports.jasper.DSProviderDocflowStatusCounters"/>
+	<property name="dataSource" value="ru.it.lecm.contracts.reports.DSProviderDocflowStatusCounters"/>
 	<style name="styleOdd" mode="Opaque" backcolor="#F4F5F5">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[($V{REPORT_COUNT}%2 == 0) && false]]></conditionExpression>

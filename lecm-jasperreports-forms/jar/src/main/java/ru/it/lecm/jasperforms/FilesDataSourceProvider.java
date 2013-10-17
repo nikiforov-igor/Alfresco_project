@@ -1,4 +1,4 @@
-package ru.it.lecm.forms.jasperforms;
+package ru.it.lecm.jasperforms;
 
 import java.io.Serializable;
 import java.util.ArrayList;

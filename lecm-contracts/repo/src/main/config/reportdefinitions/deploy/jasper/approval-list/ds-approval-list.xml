@@ -74,7 +74,7 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 		<l18> <item key="RU_RU" value="Лист согласования"/>
 		</l18>
 
-		<provider mnem="DSProviderApprovalById" javaClass="ru.it.lecm.reports.jasper.DSProviderApprovalById" >
+		<provider mnem="DSProviderApprovalById" javaClass="ru.it.lecm.contracts.reports.DSProviderApprovalById" >
 			<l18> <item key="RU_RU" value="Провайдер Jasper отчётов: Лист согласования"/>
 			</l18>
 		</provider>

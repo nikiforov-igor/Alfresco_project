@@ -12,7 +12,7 @@
 	model of the contract/document:
 		.\lecm-contracts\repo\src\main\config\models\lecm-contracts-model.xml
 	provider:
-		ru.it.lecm.reports.jasper.DSProviderDocflowStatusCounters
+		ru.it.lecm.contracts.reports.DSProviderDocflowStatusCounters
 
 Фильтры: 
 •	Вид договора
@@ -43,7 +43,7 @@
         <l18>
             <item key="RU_RU" value="Сводный отчет по договорам"/>
         </l18>
-        <provider mnem="DSProviderDocflowStatusCounters" javaClass="ru.it.lecm.reports.jasper.DSProviderDocflowStatusCounters" >
+        <provider mnem="DSProviderDocflowStatusCounters" javaClass="ru.it.lecm.contracts.reports.DSProviderDocflowStatusCounters" >
            <l18>
                <item key="RU_RU" value="Провайдер Jasper отчётов: Сводный отчет по договорам"/>
            </l18>
