@@ -1,14 +1,22 @@
-<#macro renderDndUploaderContainerHTML fieldHtmlId uploadDirectoryPath directoryName disabled=false multiple=true autoSubmit=false>
+<#macro renderDndUploaderContainerHTML fieldHtmlId field form>
+	<#assign params = field.control.params/>
+	<#assign disabled = form.mode == "view">
+	<#assign autoSubmit = false/>
+	<#if params.autoSubmit?? && params.autoSubmit == "true">
+		<#assign autoSubmit = true/>
+	</#if>
+
 	<script type="text/javascript">//<![CDATA[
 	(function() {
 		var control = new LogicECM.control.DndUploader("${fieldHtmlId}").setMessages(${messages});
 		control.setOptions(
 				{
-					uploadDirectoryPath: "${uploadDirectoryPath}",
+					uploadDirectoryPath: "${params.uploadDirectoryPath}",
 					disabled: ${disabled?string},
-					multipleMode: ${multiple?string},
+					multipleMode: ${field.endpointMany?string},
 					autoSubmit: ${autoSubmit?string},
-					directoryName: "${directoryName}"
+					directoryName: "${msg(params.directoryNameCode)}",
+					currentValue: "${field.value!""}"
 				});
 	})();
 	//]]></script>
