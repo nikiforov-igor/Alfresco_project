@@ -29,9 +29,13 @@ public interface ErrandsService {
 
     public static final QName PROP_ERRANDS_IS_IMPORTANT = QName.createQName(ERRANDS_NAMESPACE_URI, "is-important");
     public static final QName PROP_ERRANDS_LIMITATION_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "limitation-date");
+    public static final QName PROP_ERRANDS_EXECUTION_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-date");
     public static final QName PROP_ERRANDS_IS_EXPIRED = QName.createQName(ERRANDS_NAMESPACE_URI, "is-expired");
+    public static final QName PROP_ERRANDS_IS_REJECTED = QName.createQName(ERRANDS_NAMESPACE_URI, "was-rejected");
     public static final QName PROP_ERRANDS_TITLE = QName.createQName(ERRANDS_NAMESPACE_URI, "title");
     public static final QName PROP_ERRANDS_START_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "start-date");
+    public static final QName PROP_ERRANDS_START_WORK_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "work-start-date");
+    public static final QName PROP_ERRANDS_END_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "end-date");
     public static final QName PROP_ERRANDS_EXECUTION_REPORT = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-report");
     public static final QName PROP_ERRANDS_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "number");
 

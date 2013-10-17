@@ -4,10 +4,6 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<!--
-		<groupId>ru.it.lecm.forms.jasperforms</groupId>
-		<artifactId>jasperforms</artifactId>
-		  -->
 		<groupId>ru.it.lecm.reports</groupId>
 		<artifactId>lecm-reports</artifactId>
 		<version>1.0.0</version>
@@ -18,160 +14,18 @@
 	<name>Logic ECM Jasperforms Module Repo</name>
 	<description>jasperforms forms repo</description>
 
-	<properties>
-
-		<!-- <dependency.opencmis.version>0.7.0</dependency.opencmis.version> -->
-		<xalan.version>2.5.1</xalan.version>
-		
-		<xerces.version>2.8.0</xerces.version>
-
-		<!-- <ooffice.version>2.1.0</ooffice.version> -->
-		<ooffice.version>3.2.0</ooffice.version>
-
-		<!--
-		<ooffice-jooConverter.version>2.1.0</ooffice-jooConverter.version>
-		  -->
-		<ooffice-jooConverter.version>2.1.0-alfresco-patched</ooffice-jooConverter.version>
-	</properties>
-
 	<!--
 	  need to list these as a provided so that Maven doesn't download them
 	  and include them in the AMP, they are provided by Alfresco
 	  -->
 	<dependencies>
 		<dependency>
-			<groupId>org.alfresco</groupId>
-			<artifactId>alfresco-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.alfresco</groupId>
-			<artifactId>alfresco-repository</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.alfresco</groupId>
-			<artifactId>alfresco-data-model</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.extensions.surf</groupId>
-			<artifactId>spring-surf</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.extensions.surf</groupId>
-			<artifactId>spring-webscripts</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-		</dependency>
-		<!-- we can use any version of jasperfonts cause it has only resources data -->
-		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports-fonts</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openoffice</groupId>
-			<artifactId>juh</artifactId>
-			<version>${ooffice.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openoffice</groupId>
-			<artifactId>jurt</artifactId>
-			<version>${ooffice.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openoffice</groupId>
-			<artifactId>ridl</artifactId>
-			<version>${ooffice.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openoffice</groupId>
-			<artifactId>unoil</artifactId>
-			<version>${ooffice.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<!--
-		<dependency>
-			<groupId>net.sf.jooreports</groupId>
-			<artifactId>jooconverter</artifactId>
-			<version>${ooffice-jooConverter.version}</version>
-		</dependency>
-		  -->
-		<dependency>
-			<groupId>com.artofsolving</groupId>
-			<artifactId>jodconverter</artifactId>
-			<version>${ooffice-jooConverter.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>xalan</groupId>
-			<artifactId>xalan</artifactId>
-			<version>${xalan.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
-			<version>${xerces.version}</version>
-		</dependency>
-
-		<!--
-		<dependency>
-			<groupId>org.apache.chemistry.opencmis</groupId>
-			<artifactId>chemistry-opencmis-client-impl</artifactId>
-			<version>${dependency.opencmis.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		  -->
-
-		<dependency>
-			<groupId>ru.it.lecm.base</groupId>
-			<artifactId>base-repo-api</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>ru.it.lecm.orgstructure</groupId>
-			<artifactId>orgstructure-repo-api</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>ru.it.lecm.reports</groupId>
-			<artifactId>lecm-reports-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ru.it.lecm.documents</groupId>
-			<artifactId>documents-repo-api</artifactId>
+			<artifactId>lecm-reports-jar</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
-
 	</dependencies>
 
 	<build>

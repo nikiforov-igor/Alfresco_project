@@ -15,7 +15,7 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="34"/>
-	<property name="dataSource" value="ru.it.lecm.reports.generators.errands.ErrandsProductionsGraphDSProvider"/>
+	<property name="dataSource" value="ru.it.lecm.errands.reports.ErrandsProductionsGraphDSProvider"/>
 	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>

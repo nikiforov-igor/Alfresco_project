@@ -10,7 +10,7 @@
             </l18>
         </type>
         <provider
-            javaClass="ru.it.lecm.reports.generators.errands.ErrandsDocTreeDSProvider" mnem="PROVIDER_DOCTREE_ERRANDS">
+            javaClass="ru.it.lecm.errands.reports.ErrandsDocTreeDSProvider" mnem="PROVIDER_DOCTREE_ERRANDS">
             <l18>
                 <item key="RU_RU" value="Провайдер дерева Поручений Документа"/>
             </l18>

@@ -10,7 +10,7 @@
             </l18>
         </type>
         <provider
-            javaClass="ru.it.lecm.reports.generators.errands.ErrandsProductionsGraphDSProvider" mnem="PROVIDER_PROD_ERRANDS">
+            javaClass="ru.it.lecm.errands.reports.ErrandsProductionsGraphDSProvider" mnem="PROVIDER_PROD_ERRANDS">
             <l18>
                 <item key="RU_RU" value="Провайдер по Продуктивности Исполнителей/Подразделений"/>
             </l18>

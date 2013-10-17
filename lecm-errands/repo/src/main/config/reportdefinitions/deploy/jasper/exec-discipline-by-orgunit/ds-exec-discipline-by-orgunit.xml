@@ -10,7 +10,7 @@
             </l18>
         </type>
         <provider
-            javaClass="ru.it.lecm.reports.generators.errands.ErrandsDisciplineDSProvider" mnem="PROVIDER_ERRANDS">
+            javaClass="ru.it.lecm.errands.reports.ErrandsDisciplineDSProvider" mnem="PROVIDER_ERRANDS">
             <l18>
                 <item key="RU_RU" value="Провайдер Исполнительской Дисциплины по Исполнителям/Поразделениям"/>
             </l18>
