@@ -109,7 +109,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
                         }
                         result = nodeService.getPath(folderRef).toPrefixString(getServiceRegistry().getNamespaceService());
                     } catch (Exception e) {
-                        logger.error("Archive folder \"" + archiveFolderPath + "\" removed or access denied");
+                        logger.warn("Archive folder \"" + archiveFolderPath + "\" removed or access denied");
                     }
                     return result;
                 }
