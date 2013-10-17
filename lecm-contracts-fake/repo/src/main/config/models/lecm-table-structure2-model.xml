@@ -38,7 +38,7 @@
     <aspects>
         <aspect name="lecm-table-structure2:table-aspect">
             <title>Table struicture aspect</title>
-            <parent>lecm-document:document-aspect</parent>
+            <parent>lecm-document:tableDataAspect</parent>
             <associations>
                 <association name="lecm-table-structure2:tableDataRow-assoc">
                     <source>

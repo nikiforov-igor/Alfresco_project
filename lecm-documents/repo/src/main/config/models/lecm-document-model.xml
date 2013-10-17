@@ -163,6 +163,6 @@
         </type>
     </types>
     <aspects>
-        <aspect name="lecm-document:document-aspect"/>
+        <aspect name="lecm-document:tableDataAspect"/>
     </aspects>
 </model>
