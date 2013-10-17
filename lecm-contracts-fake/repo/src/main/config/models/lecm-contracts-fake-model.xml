@@ -7,7 +7,9 @@
 		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
-	</imports>
+        <import uri="http://www.it.ru/logicECM/contract/fake/table-structure1/1.0" prefix="lecm-table-structure1"/>
+        <import uri="http://www.it.ru/logicECM/contract/fake/table-structure2/1.0" prefix="lecm-table-structure2"/>
+    </imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/contract/fake/1.0" prefix="lecm-contract-fake"/>
 	</namespaces>
@@ -56,6 +58,8 @@
 			</properties>
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:rateable</aspect>
+                <aspect>lecm-table-structure1:table-aspect</aspect>
+                <aspect>lecm-table-structure2:table-aspect</aspect>
             </mandatory-aspects>
 		</type>
 		<type name="lecm-contract-fake:importTestDocument">
@@ -68,5 +72,6 @@
 			</properties>
 		</type>
 	</types>
+
 
 </model>

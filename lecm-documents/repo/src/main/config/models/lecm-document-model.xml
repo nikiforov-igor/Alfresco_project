@@ -157,5 +157,12 @@
 				</property>
 			</properties>
 		</type>
+        <type name="lecm-document:tableDataRow">
+            <title>Logic ECM Base Document table row</title>
+            <parent>cm:cmobject</parent>
+        </type>
     </types>
+    <aspects>
+        <aspect name="lecm-document:document-aspect"/>
+    </aspects>
 </model>

@@ -19,8 +19,24 @@
 -->
 <beans>
 
+    <bean id="contracts.LogicEcmContractsFakeTableBootstrap" parent="dictionaryModelBootstrap"
+          depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-table-structure1-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-table-structure2-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-table-structure1-model</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-table-structure2-model</value>
+            </list>
+        </property>
+    </bean>
+
 	<bean id="contracts.LogicEcmContractsFakeBootstrap" parent="dictionaryModelBootstrap"
-		  depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap">
+		  depends-on="contracts.LogicEcmContractsFakeTableBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-contracts-fake-model.xml</value>
