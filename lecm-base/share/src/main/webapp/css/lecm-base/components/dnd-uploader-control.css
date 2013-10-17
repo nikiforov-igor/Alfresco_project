@@ -9,7 +9,7 @@
 .dnd-uploader ul.attachments-list li img {
     margin: 0 5px;
 }
-.dnd-uploader ul.attachments-list li > div {
+.dnd-uploader ul.attachments-list li div {
     width: 200px;
     height: 20px;
     display: inline-block;

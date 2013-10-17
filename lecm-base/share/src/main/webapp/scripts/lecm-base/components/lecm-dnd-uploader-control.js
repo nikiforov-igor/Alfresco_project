@@ -222,7 +222,8 @@ LogicECM.control = LogicECM.control || {};
 
 						this.selectedItems[nodeRef] = {
 							nodeRef: nodeRef,
-							name: fileName
+							name: fileName,
+							justUpload: true
 						};
 					}
 
@@ -261,6 +262,9 @@ LogicECM.control = LogicECM.control || {};
 
 							fileName = "<div>" + fileName + "</div>"
 							var row = fileIconHtml + fileName;
+							if (!item.justUpload) {
+								row = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + nodeRef + "'>" + row + "</a>";
+							}
 							if (!this.options.disabled) {
 								row += removeIcon;
 							}
