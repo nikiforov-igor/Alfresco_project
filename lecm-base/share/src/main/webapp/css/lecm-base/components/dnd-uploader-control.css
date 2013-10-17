@@ -17,7 +17,8 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.dnd-uploader ul.attachments-list li img.remove-icon {
+.dnd-uploader ul.attachments-list li img.remove-icon,
+.dnd-uploader ul.attachments-list li img.newVersion-icon {
     margin-right: 0;
     cursor: pointer;
 }

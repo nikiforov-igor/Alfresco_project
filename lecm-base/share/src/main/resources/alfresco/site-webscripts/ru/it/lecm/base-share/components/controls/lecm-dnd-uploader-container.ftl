@@ -1,9 +1,15 @@
 <#macro renderDndUploaderContainerHTML fieldHtmlId field form>
 	<#assign params = field.control.params/>
 	<#assign disabled = form.mode == "view">
+
 	<#assign autoSubmit = false/>
 	<#if params.autoSubmit?? && params.autoSubmit == "true">
 		<#assign autoSubmit = true/>
+	</#if>
+
+	<#assign showUploadNewVersionSubmit = false/>
+	<#if params.showUploadNewVersionSubmit?? && params.showUploadNewVersionSubmit == "true">
+		<#assign showUploadNewVersionSubmit = true/>
 	</#if>
 
 	<script type="text/javascript">//<![CDATA[
@@ -15,6 +21,7 @@
 					disabled: ${disabled?string},
 					multipleMode: ${field.endpointMany?string},
 					autoSubmit: ${autoSubmit?string},
+					showUploadNewVersionSubmit: ${showUploadNewVersionSubmit?string},
 					directoryName: "${msg(params.directoryNameCode)}",
 					currentValue: "${field.value!""}"
 				});
