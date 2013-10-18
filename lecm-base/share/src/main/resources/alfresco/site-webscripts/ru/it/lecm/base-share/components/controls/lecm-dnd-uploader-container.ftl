@@ -7,9 +7,9 @@
 		<#assign autoSubmit = true/>
 	</#if>
 
-	<#assign showUploadNewVersionSubmit = false/>
-	<#if params.showUploadNewVersionSubmit?? && params.showUploadNewVersionSubmit == "true">
-		<#assign showUploadNewVersionSubmit = true/>
+	<#assign showUploadNewVersion = false/>
+	<#if params.showUploadNewVersion?? && params.showUploadNewVersion == "true">
+		<#assign showUploadNewVersion = true/>
 	</#if>
 
 	<script type="text/javascript">//<![CDATA[
@@ -21,7 +21,7 @@
 					disabled: ${disabled?string},
 					multipleMode: ${field.endpointMany?string},
 					autoSubmit: ${autoSubmit?string},
-					showUploadNewVersionSubmit: ${showUploadNewVersionSubmit?string},
+					showUploadNewVersion: ${showUploadNewVersion?string},
 					directoryName: "${msg(params.directoryNameCode)}",
 					currentValue: "${field.value!""}"
 				});

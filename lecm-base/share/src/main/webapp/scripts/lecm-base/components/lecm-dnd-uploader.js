@@ -25,11 +25,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			config: {
 				disabled: false,
 
-				directoryName: null,
+				destinationName: null,
 
 				destination: null,
 
 				multipleMode: true,
+
+				uploadNewVersion: false,
 
 				onFileUploadComplete: null
 			},
@@ -147,18 +149,65 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						// If all tests are passed...
 						if (continueWithUpload)
 						{
-							var uploadConfig =
-							{
-								files: e.dataTransfer.files,
-								uploadDirectoryName: this.config.directoryName,
-								destination: this.config.destination,
-								filter: [],
-								mode: this.config.multipleMode ? progressDialog.MODE_MULTI_UPLOAD : progressDialog.MODE_SINGLE_UPDATE,
-								thumbnails: "doclib",
-								onFileUploadComplete: this.config.onFileUploadComplete
-							};
+							var uploadConfig;
+							if (this.config.uploadNewVersion) {
+								var me = this;
+								var files = e.dataTransfer.files;
+								Alfresco.util.Ajax.jsonGet(
+									{
+										url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/node/version?nodeRef=" + encodeURIComponent(this.config.destination),
+										successCallback:
+										{
+											fn: function (response) {
+												var version = "1.0";
+												var oResults = response.json;
+												if (oResults != null && oResults.version != null && oResults.version.length > 0) {
+													version = oResults.version;
+												}
 
-							progressDialog.show(uploadConfig);
+												uploadConfig =
+												{
+													files: files,
+													updateNodeRef: me.config.destination,
+													updateFilename: me.config.destinationName,
+													updateVersion: version,
+													uploadDirectoryName: me.config.destinationName,
+													overwrite: true,
+													filter: [
+														{
+															extensions: "*"
+														}],
+													mode: progressDialog.MODE_SINGLE_UPDATE,
+													onFileUploadComplete: me.config.onFileUploadComplete
+												};
+												progressDialog.show(uploadConfig);
+											},
+											scope: this
+										},
+										failureCallback:
+										{
+											fn: function (oResponse) {
+												Alfresco.util.PopupManager.displayPrompt(
+													{
+														text: this.msg("message.load.dnd-uploader.failure")
+													});
+											},
+											scope: this
+										}
+									});
+							} else {
+								uploadConfig =
+								{
+									files: e.dataTransfer.files,
+									uploadDirectoryName: this.config.destinationName,
+									destination: this.config.destination,
+									filter: [],
+									mode: this.config.multipleMode ? progressDialog.MODE_MULTI_UPLOAD : progressDialog.MODE_SINGLE_UPDATE,
+									thumbnails: "doclib",
+									onFileUploadComplete: this.config.onFileUploadComplete
+								};
+								progressDialog.show(uploadConfig);
+							}
 						}
 					}
 				}

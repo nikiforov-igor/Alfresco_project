@@ -44,7 +44,7 @@ LogicECM.control = LogicECM.control || {};
 
 				currentValue: "",
 
-				showUploadNewVersionSubmit: false
+				showUploadNewVersion: false
 			},
 
 			currentValueHtmlId: "",
@@ -204,7 +204,7 @@ LogicECM.control = LogicECM.control || {};
 				var uploader = new LogicECM.DndUploader(this.id + "-uploader-block");
 				uploader.initUploader({
 					disabled: this.options.disabled,
-					directoryName: this.options.directoryName,
+					destinationName: this.options.directoryName,
 					destination: this.rootNodeRef,
 					multipleMode: this.options.multipleMode,
 					onFileUploadComplete:
@@ -321,6 +321,15 @@ LogicECM.control = LogicECM.control || {};
 					});
 			},
 
+			attachUploadNewVersionDndListener: function(node) {
+				var dndUploader = new LogicECM.DndUploader("attachment-" + node.nodeRef);
+				dndUploader.initUploader({
+					destinationName: node.name,
+					destination: node.nodeRef,
+					uploadNewVersion: true
+				});
+			},
+
 			canUploaderShow: function() {
 				return this.options.multipleMode || (Object.keys(this.selectedItems).length == 0);
 			},
@@ -350,7 +359,7 @@ LogicECM.control = LogicECM.control || {};
 							}
 
 							if (!this.options.disabled) {
-								if (this.options.showUploadNewVersionSubmit) {
+								if (this.options.showUploadNewVersion) {
 									var iconNewVersionId = "attachment-newVersion-" + nodeRef;
 									row += "<img id='" + iconNewVersionId + "' src='" + Alfresco.constants.URL_RESCONTEXT
 										+ "/components/documentlibrary/actions/document-upload-new-version-16.png' class='newVersion-icon'/>";
@@ -363,7 +372,11 @@ LogicECM.control = LogicECM.control || {};
 								Event.onAvailable(iconRemoveId, this.attachRemoveItemClickListener, item, this);
 							}
 
-							elAttachments.innerHTML += "<li>" + row + "</li>";
+							var rowId = "attachment-" + nodeRef;
+							elAttachments.innerHTML += "<li id='" + rowId + "'>" + row + "</li>";
+							if (!this.options.disabled && this.options.showUploadNewVersion) {
+								Event.onAvailable(rowId, this.attachUploadNewVersionDndListener, item, this);
+							}
 						}
 					}
 				}
