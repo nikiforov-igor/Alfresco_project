@@ -209,10 +209,7 @@
 			class="ru.it.lecm.reports.beans.ReportsManagerImpl"
 	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportEditorDAOBean, jasperReportGenerator, mimetypeService"
 	 		init-method="init">
-		<!-- <property name="services" ref="wksKeeper"/> -->
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="namespaceService" ref="namespaceService"/>
-		<property name="mimeMap" ref="mimetypeService" />
 
 		<!-- хранилище отчётов редактора -->
 		<property name="reportEditorDAO" ref="reportEditorDAOBean"/>
@@ -243,15 +240,6 @@
 				<property name="generationTemplate" value="ooreportCommonTemplate.odt.gen" />
 			</bean>
 		</property>
-
-		<!-- 
-		<property name="defaultGenTemplate" value="jreportCommonTemplate.jrxml.gen"/>
-		<property name="defaultGenReportType" value="JASPER"/>
-		  -->
-
-		<!-- Hardcode-описатели отчётов: 
-		<property name="beanDescriptors[0]" ref="jasperTemplate_DocFlowCounters" />
-		 -->
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.forms.jasper.form.get"
