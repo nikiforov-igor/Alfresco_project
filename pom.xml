@@ -467,7 +467,7 @@
 					<configuration>
 						<sourceDirectory>${basedir}/src/main/config/reportdefinitions</sourceDirectory>
 						<outputDirectory>${project.build.outputDirectory}/reportdefinitions</outputDirectory>
-                        <compiler>net.sf.jasperreports.engine.design.JRJdk13Compiler</compiler>
+                        <compiler>net.sf.jasperreports.engine.design.JRJdtCompiler</compiler>
 					</configuration>
 					<executions>
 						<execution>
