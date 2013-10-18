@@ -1377,6 +1377,7 @@
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
                     <show id="lecm-contract-table-structure:status-assoc" />
                     <show id="lecm-contract-table-structure:responsible-assoc" />
+
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract-table-structure:status-assoc" >
@@ -1403,6 +1404,7 @@
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
                     <show id="lecm-contract-table-structure:status-assoc" />
                     <show id="lecm-contract-table-structure:responsible-assoc" />
+                    <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract-table-structure:status-assoc" >
@@ -1412,6 +1414,12 @@
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contract-table-structure:attachments-temp-assoc" >
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="directoryName">label.contracts.attachments</control-param>
                         </control>
                     </field>
                 </appearance>
