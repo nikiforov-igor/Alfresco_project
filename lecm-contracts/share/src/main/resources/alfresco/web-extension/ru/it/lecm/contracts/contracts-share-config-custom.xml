@@ -1368,7 +1368,7 @@
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-contract-table-structure:stages">
+    <config evaluator="node-type" condition="lecm-contract-table-structure:stages">
         <forms>
             <form>
                 <field-visibility>
@@ -1394,7 +1394,7 @@
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-contract-table-structure:stages">
+    <config evaluator="model-type" condition="lecm-contract-table-structure:stages">
         <forms>
             <form>
                 <field-visibility>
