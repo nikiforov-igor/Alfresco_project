@@ -543,4 +543,14 @@
 			<ref bean="nodeService"/>
 		</property>
 	</bean>
+
+	<bean  id="documentTablePolicy" class="ru.it.lecm.documents.policy.DocumentTablePolicy"
+	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap, errands.dictionaries.LogicEcmModelsBootstrap">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="documentTableService" ref="documentTableService"/>
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+	</bean>
 </beans>
