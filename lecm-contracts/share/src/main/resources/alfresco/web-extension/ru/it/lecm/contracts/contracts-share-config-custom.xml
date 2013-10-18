@@ -162,12 +162,12 @@
                     <field id="lecm-contract-aspect:reasonDelete-assoc" set="tab1"/>
                     <field id="lecm-contract-table-structure:tableDataRow-assoc" set="tab2">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
-                            <control-param name="itemType">lecm-table-structure2:tableDataRow</control-param>
+                            <control-param name="itemType">lecm-contract-table-structure:stages</control-param>
                             <control-param name="allowCreate">true</control-param>
                             <control-param name="showActions">true</control-param>
                             <control-param name="fullDelete">true</control-param>
                             <control-param name="height">100</control-param>
-                            <control-param name="bubblingLabel">lecm-contract-fake2-aspects</control-param>
+                            <control-param name="bubblingLabel">contract-table-structure</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1363,6 +1363,66 @@
                 <field-visibility>
                     <show id="cm:name" force="true"/>
                     <show id="cm:description" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-contract-table-structure:stages">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-contract-table-structure:name" force="true"/>
+                    <show id="lecm-contract-table-structure:start-date" force="true"/>
+                    <show id="lecm-contract-table-structure:end-date" force="true"/>
+                    <show id="lecm-contract-table-structure:status-assoc" />
+                    <show id="lecm-contract-table-structure:responsible-assoc" />
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contract-table-structure:status-assoc" >
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Статусы_x0020_этапов</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-contract-table-structure:stages">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-contract-table-structure:name" force="true"/>
+                    <show id="lecm-contract-table-structure:start-date" force="true"/>
+                    <show id="lecm-contract-table-structure:end-date" force="true"/>
+                    <show id="lecm-contract-table-structure:status-assoc" />
+                    <show id="lecm-contract-table-structure:responsible-assoc" />
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contract-table-structure:status-assoc" >
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Статусы_x0020_этапов</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-contract-table-structure:name" force="true"/>
+                    <show id="lecm-contract-table-structure:start-date" force="true"/>
+                    <show id="lecm-contract-table-structure:end-date" force="true"/>
+                    <show id="lecm-contract-table-structure:status-assoc" />
+                    <show id="lecm-contract-table-structure:responsible-assoc" />
                 </field-visibility>
             </form>
         </forms>
