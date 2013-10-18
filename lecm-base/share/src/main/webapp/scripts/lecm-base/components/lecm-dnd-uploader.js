@@ -165,8 +165,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 													version = oResults.version;
 												}
 
-												uploadConfig =
-												{
+												uploadConfig = {
 													files: files,
 													updateNodeRef: me.config.destination,
 													updateFilename: me.config.destinationName,
@@ -196,8 +195,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 										}
 									});
 							} else {
-								uploadConfig =
-								{
+								uploadConfig = {
 									files: e.dataTransfer.files,
 									uploadDirectoryName: this.config.destinationName,
 									destination: this.config.destination,
