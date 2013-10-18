@@ -1,7 +1,5 @@
 package ru.it.lecm.regnumbers.bean;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -12,6 +10,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -107,13 +106,9 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		try {
 			parser.parseTemplate(templateStr);
 		} catch (TemplateParseException ex) {
-			result = ex.getMessage() + " because of following: " + ex.getCause().getMessage();
+			result = String.format("%s because of following: %s", ex.getMessage(), ex.getCause().getMessage());
 			if (verbose) {
-				StringWriter stringWriter = new StringWriter();
-				PrintWriter printWriter = new PrintWriter(stringWriter);
-				ex.printStackTrace(printWriter);
-
-				result += stringWriter.toString();
+				result += ExceptionUtils.getStackTrace(ex);
 			}
 		}
 

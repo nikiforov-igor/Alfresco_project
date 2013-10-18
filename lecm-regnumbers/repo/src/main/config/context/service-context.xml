@@ -45,7 +45,7 @@
 
 	<util:constant id="REGNUMBERS_FOLDER_ID" static-field="ru.it.lecm.regnumbers.counter.CounterFactory.REGNUMBERS_FOLDER_ID"/>
 	<bean id="regNumbersCounterFactory" class="ru.it.lecm.regnumbers.counter.CounterFactory" init-method="init" parent="baseBean"
-		  depends-on="regNumbers.regNumbersBootstrap, documentService, contracts.LogicEcmContractsBootstrap, errands.LogicEcmModelsBootstrap">
+		  depends-on="regNumbers.regNumbersBootstrap">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="namespaceService" ref="namespaceService"/>

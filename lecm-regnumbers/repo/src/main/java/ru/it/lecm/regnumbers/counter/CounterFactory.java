@@ -2,11 +2,11 @@ package ru.it.lecm.regnumbers.counter;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -20,17 +20,21 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import static ru.it.lecm.regnumbers.RegNumbersService.REGNUMBERS_NAMESPACE;
 
 /**
- * Фабрика, создающая в хранилище объекты для счетчиков и возвращающая объекты
- * типа Counter заданного типа для заданного документа.
+ * Фабрика, создающая в хранилище объекты для счетчиков и возвращающая объекты типа Counter заданного типа для заданного документа.
  *
  * @author vlevin
  */
 public class CounterFactory extends BaseBean {
+
+	private final static String GLOBAL_PLAIN_COUNTER = "globalPlainCounter";
+	private final static String GLOBAL_YEAR_COUNTER = "globalYearCounter";
+	private final static String GLOBAL_SIGNEDDOCFLOW_PLAIN_COUNTER = "signedDocflowPlainCounter";
+	private final static String PLAIN_PREFIX = "PLAIN_";
+	private final static String YEAR_PREFIX = "YEAR_";
 
 	// необходимые сервисы
 	private NamespaceService namespaceService;
@@ -44,42 +48,25 @@ public class CounterFactory extends BaseBean {
 	 */
 	public final static String REGNUMBERS_FOLDER_ID = "REGNUMBERS_FOLDER_ID";
 	/**
-	 * Ссылка на глобальный сквозной счетчик.
+	 * Ссылки на сквозные счетчики по типу документа. Структура: Тип в виде префикса (напр. "lecm-document:base") - Метка счетчика - Cсылка на счетчик. Для счетчиков без тега "Метка счетчика" равна
+	 * null.
 	 */
-	private NodeRef globalPlainCounter;
+	private final Map<String, Map<String, NodeRef>> docTypeCounters = new ConcurrentHashMap<String, Map<String, NodeRef>>();
+
 	/**
-	 * Ссылка на глобальный годовой счетчик.
+	 * мапа на совсем глобальные счетчики - глобальный сквозной - глобальный годовой - глобальный для документооборота
 	 */
-	private NodeRef globalYearCounter;
-	/**
-	 * Ссылка на счетчик для использования в документообороте.
-	 */
-	private NodeRef signedDocflowPlainCounter;
-	/**
-	 * Ссылки на сквозные счетчики по типу документа.
-	 * Структура: Тип в виде префикса (напр. "lecm-document:base") - Метка
-	 * счетчика - Cсылка на счетчик.
-	 * Для счетчиков без тега "Метка счетчика" равна null.
-	 */
-	private final Map<String, Map<String, NodeRef>> doctypePlainCounters = new HashMap<String, Map<String, NodeRef>>();
-	/**
-	 * Ссылки на годовые счетчики по типу документа.
-	 * Структура: Тип в виде префикса (напр. "lecm-document:base") - Метка
-	 * счетчика - Cсылка на счетчик.
-	 * Для счетчиков без тега "Метка счетчика" равна null.
-	 */
-	private final Map<String, Map<String, NodeRef>> doctypeYearCounters = new HashMap<String, Map<String, NodeRef>>();
+	private final Map<String, NodeRef> globalCounters = new ConcurrentHashMap<String, NodeRef>();
 	// логгер
 	private final static Logger logger = LoggerFactory.getLogger(CounterFactory.class);
 	/**
-	 * Чем мы будем заменять двоеточие в имени счетчика, которое содержит
-	 * название типа документа.
+	 * Чем мы будем заменять двоеточие в имени счетчика, которое содержит название типа документа.
 	 */
-	private static String COLON_REPLACER = "_";
+	private final static char COLON_REPLACER = '_';
 	/**
 	 * Чем мы отделяем метку от имени типа
 	 */
-	private static String TAG_DELIMITER = "$";
+	private final static String TAG_DELIMITER = "$";
 
 	public void init() {
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
@@ -88,11 +75,6 @@ public class CounterFactory extends BaseBean {
 		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
 
 		countersRootNode = getFolder(REGNUMBERS_FOLDER_ID);
-
-		initPlainCounter();
-		initYearCounter();
-		initDocTypeCounters();
-		initSignedDocflowCounter();
 	}
 
 	public void setNamespaceService(final NamespaceService namespaceService) {
@@ -108,6 +90,7 @@ public class CounterFactory extends BaseBean {
 	 *
 	 * @param type тип счетчика.
 	 * @param documentRef экземпляр документа, для которого требуется счетчик.
+	 * @param tag метка счетчика
 	 * @return
 	 */
 	public Counter getCounter(final CounterType type, final NodeRef documentRef, final String tag) {
@@ -118,19 +101,42 @@ public class CounterFactory extends BaseBean {
 
 		switch (type) {
 			case PLAIN:
-				counter = new PlainCounter(globalPlainCounter, nodeService, transactionService);
+				counterNodeRef = globalCounters.get(GLOBAL_PLAIN_COUNTER);
+				if (counterNodeRef == null) {
+					counterNodeRef = initPlainCounter();
+				}
+				counter = new PlainCounter(counterNodeRef, nodeService, transactionService);
 				break;
 			case YEAR:
-				counter = new YearCounter(globalYearCounter, nodeService, transactionService);
+				counterNodeRef = globalCounters.get(GLOBAL_YEAR_COUNTER);
+				if (counterNodeRef == null) {
+					counterNodeRef = initYearCounter();
+				}
+				counter = new YearCounter(counterNodeRef, nodeService, transactionService);
+				break;
+			case SIGNED_DOCFLOW:
+				counterNodeRef = globalCounters.get(GLOBAL_SIGNEDDOCFLOW_PLAIN_COUNTER);
+				if (counterNodeRef == null) {
+					counterNodeRef = initSignedDocflowCounter();
+				}
+				counter = new PlainCounter(counterNodeRef, nodeService, transactionService);
 				break;
 			case DOCTYPE_PLAIN:
 				documentType = getItemTypeAsPrefix(documentRef);
-				tagCounter = doctypePlainCounters.get(documentType);
-				if (tagCounter.containsKey(tag)) {
-					counterNodeRef = tagCounter.get(tag);
+				tagCounter = docTypeCounters.get(documentType);
+				if (tagCounter == null) {
+					tagCounter = new ConcurrentHashMap<String, NodeRef>();
+					docTypeCounters.put(documentType, tagCounter);
+				}
+				if (tagCounter.containsKey(PLAIN_PREFIX + tag)) {
+					counterNodeRef = tagCounter.get(PLAIN_PREFIX + tag);
 				} else {
-					counterNodeRef = tagCounter.get(null);
-					logger.error("We have no counter with tag {} for item type {}. Using default counter!", tag, documentType);
+					counterNodeRef = tagCounter.get(PLAIN_PREFIX + null);
+					if (counterNodeRef == null) {
+						counterNodeRef = getDocTypePlainCounter(documentType, null);
+						tagCounter.put(PLAIN_PREFIX + null, counterNodeRef);
+					}
+					logger.warn("We have no counter with tag {} for item type {}. Using default counter!", tag, documentType);
 				}
 				if (counterNodeRef == null) {
 					String errMessage = String.format("No counter for node %s! In must be inherited from lecm-document:base", documentRef.toString());
@@ -142,12 +148,20 @@ public class CounterFactory extends BaseBean {
 				break;
 			case DOCTYPE_YEAR:
 				documentType = getItemTypeAsPrefix(documentRef);
-				tagCounter = doctypeYearCounters.get(documentType);
-				if (tagCounter.containsKey(tag)) {
-					counterNodeRef = tagCounter.get(tag);
+				tagCounter = docTypeCounters.get(documentType);
+				if (tagCounter == null) {
+					tagCounter = new ConcurrentHashMap<String, NodeRef>();
+					docTypeCounters.put(documentType, tagCounter);
+				}
+				if (tagCounter.containsKey(YEAR_PREFIX + tag)) {
+					counterNodeRef = tagCounter.get(YEAR_PREFIX + tag);
 				} else {
-					counterNodeRef = tagCounter.get(null);
-					logger.error("We have no year counter with tag {} for item type {}. Using default counter!", tag, documentType);
+					counterNodeRef = tagCounter.get(YEAR_PREFIX + null);
+					if (counterNodeRef == null) {
+						counterNodeRef = getDocTypeYearCounter(documentType, null);
+						tagCounter.put(YEAR_PREFIX + null, counterNodeRef);
+					}
+					logger.warn("We have no year counter with tag {} for item type {}. Using default counter!", tag, documentType);
 				}
 				if (counterNodeRef == null) {
 					String errMessage = String.format("No counter for node %s! In must be inherited from lecm-document:base", documentRef.toString());
@@ -157,12 +171,8 @@ public class CounterFactory extends BaseBean {
 				}
 				counter = new YearCounter(counterNodeRef, nodeService, transactionService);
 				break;
-			case SIGNED_DOCFLOW:
-				counter = new PlainCounter(signedDocflowPlainCounter, nodeService, transactionService);
-				break;
 			default:
 				throw new RuntimeException("Unknown counter type: " + type);
-
 		}
 
 		return counter;
@@ -171,107 +181,140 @@ public class CounterFactory extends BaseBean {
 	/**
 	 * Создать (если его еще нет) глобальный сквозной счетчик. Запомнить NodeRef
 	 */
-	private void initPlainCounter() {
-		globalPlainCounter = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, CounterType.PLAIN.objectName());
-		if (globalPlainCounter == null) {
-			globalPlainCounter = createNewCounter(CounterType.PLAIN, null, null);
-			logger.info(String.format("Global plain counter node '%s' created", globalPlainCounter.toString()));
-		}
+	private NodeRef initPlainCounter() {
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
+
+			@Override
+			public NodeRef execute() throws Throwable {
+				NodeRef counter = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, CounterType.PLAIN.objectName());
+				if (counter == null) {
+					counter = createNewCounter(CounterType.PLAIN, null, null);
+					NodeRef previousCounter = globalCounters.put(GLOBAL_PLAIN_COUNTER, counter);
+					if (previousCounter == null) {
+						logger.info("Global plain counter node '{}' created", counter);
+					} else {
+						logger.warn("Global plain counter has been found. It's id {}. It was updated to {}", previousCounter, counter);
+					}
+				}
+				return counter;
+			}
+		}, false, true);
 	}
 
 	/**
 	 * Создать (если его еще нет) глобальный годовой счетчик. Запомнить NodeRef
 	 */
-	private void initYearCounter() {
-		globalYearCounter = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, CounterType.YEAR.objectName());
-		if (globalYearCounter == null) {
-			globalYearCounter = createNewCounter(CounterType.YEAR, null, null);
-			logger.info(String.format("Global year counter node '%s' created", globalYearCounter.toString()));
-		}
+	private NodeRef initYearCounter() {
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
+
+			@Override
+			public NodeRef execute() throws Throwable {
+				NodeRef counter = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, CounterType.YEAR.objectName());
+				if (counter == null) {
+					counter = createNewCounter(CounterType.YEAR, null, null);
+					NodeRef previousCounter = globalCounters.put(GLOBAL_YEAR_COUNTER, counter);
+					if (previousCounter == null) {
+						logger.info("Global year counter node '{}' created", counter);
+					} else {
+						logger.warn("Global year counter has been found. It's id {}. It was updated to {}", previousCounter, counter);
+					}
+				}
+				return counter;
+			}
+		}, false, true);
 	}
 
 	/**
 	 * Создать (если его еще нет) счетчик для документооборота. Запомнить NodeRef
 	 */
-	private void initSignedDocflowCounter() {
-		signedDocflowPlainCounter = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, CounterType.SIGNED_DOCFLOW.objectName());
-		if (signedDocflowPlainCounter == null) {
-			signedDocflowPlainCounter = createNewCounter(CounterType.SIGNED_DOCFLOW, null, null);
-			logger.info(String.format("Signed docflow counter node '%s' created", signedDocflowPlainCounter.toString()));
-		}
+	private NodeRef initSignedDocflowCounter() {
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
+
+			@Override
+			public NodeRef execute() throws Throwable {
+				NodeRef counter = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, CounterType.SIGNED_DOCFLOW.objectName());
+				if (counter == null) {
+					counter = createNewCounter(CounterType.SIGNED_DOCFLOW, null, null);
+					NodeRef previousCounter = globalCounters.put(GLOBAL_SIGNEDDOCFLOW_PLAIN_COUNTER, counter);
+					if (previousCounter == null) {
+						logger.info("Global signed docflow plain counter node '{}' created", counter);
+					} else {
+						logger.warn("Global signed docflow plain counter has been found. It's id {}. It was updated to {}", previousCounter, counter);
+					}
+				}
+				return counter;
+			}
+		}, false, true);
 	}
 
-	/**
-	 * Создать (если их еще нет) сквозной и годовой счетчики для каждого из
-	 * типов, унаследованных от lecm-document:base. Запомнить ссылки на них.
-	 */
-	private void initDocTypeCounters() {
-		Collection<QName> documentSubTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
-		Map<String, NodeRef> tagCounter;
+	private NodeRef getDocTypePlainCounter(final String docType, final String tag) {
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
 
-		for (QName documentSubType : documentSubTypes) {
-			String typePrefixStr = getQnameAsPrefix(documentSubType);
-			if (!doctypePlainCounters.containsKey(typePrefixStr)) {
-				NodeRef doctypePlainCounterNodeRef = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS,
-						String.format(CounterType.DOCTYPE_PLAIN.objectName(), typePrefixStr.replace(":", COLON_REPLACER)));
-				if (doctypePlainCounterNodeRef == null) {
-					doctypePlainCounterNodeRef = createNewCounter(CounterType.DOCTYPE_PLAIN, typePrefixStr, null);
-					logger.info(String.format("Plain counter node '%s' for doctype '%s' created", doctypePlainCounterNodeRef.toString(), typePrefixStr));
+			@Override
+			public NodeRef execute() throws Throwable {
+				String childName;
+				if (tag == null) {
+					childName = String.format(CounterType.DOCTYPE_PLAIN.objectName(), docType.replace(':', COLON_REPLACER));
+				} else {
+					childName = String.format(CounterType.DOCTYPE_PLAIN.objectName(), docType.replace(':', COLON_REPLACER) + TAG_DELIMITER + tag);
 				}
-				tagCounter = new HashMap<String, NodeRef>();
-				tagCounter.put(null, doctypePlainCounterNodeRef);
-				doctypePlainCounters.put(typePrefixStr, tagCounter);
+				NodeRef counterNodeRef = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, childName);
+				if (counterNodeRef == null) {
+					counterNodeRef = createNewCounter(CounterType.DOCTYPE_PLAIN, docType, tag);
+					logger.info(String.format("Plain counter node '%s' for doctype '%s' with tag '%s' created", counterNodeRef, docType, tag));
+				}
+				return counterNodeRef;
 			}
+		});
+	}
 
-			if (!doctypeYearCounters.containsKey(typePrefixStr)) {
-				NodeRef doctypeYearCounterNodeRef = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS,
-						String.format(CounterType.DOCTYPE_YEAR.objectName(), typePrefixStr.replace(":", COLON_REPLACER)));
-				if (doctypeYearCounterNodeRef == null) {
-					doctypeYearCounterNodeRef = createNewCounter(CounterType.DOCTYPE_YEAR, typePrefixStr, null);
-					logger.info(String.format("Year counter node '%s' for doctype '%s' created", doctypeYearCounterNodeRef.toString(), typePrefixStr));
+	private NodeRef getDocTypeYearCounter(final String docType, final String tag) {
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		return transactionHelper.doInTransaction(new RetryingTransactionCallback<NodeRef>() {
+
+			@Override
+			public NodeRef execute() throws Throwable {
+				String childName;
+				if (tag == null) {
+					childName = String.format(CounterType.DOCTYPE_YEAR.objectName(), docType.replace(':', COLON_REPLACER));
+				} else {
+					childName = String.format(CounterType.DOCTYPE_YEAR.objectName(), docType.replace(':', COLON_REPLACER) + TAG_DELIMITER + tag);
 				}
-				tagCounter = new HashMap<String, NodeRef>();
-				tagCounter.put(null, doctypeYearCounterNodeRef);
-				doctypeYearCounters.put(typePrefixStr, tagCounter);
+				NodeRef counterNodeRef = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, childName);
+				if (counterNodeRef == null) {
+					counterNodeRef = createNewCounter(CounterType.DOCTYPE_YEAR, docType, tag);
+					logger.info(String.format("Year counter node '%s' for doctype '%s' with tag '%s' created", counterNodeRef, docType, tag));
+				}
+				return counterNodeRef;
 			}
-		}
+		});
 	}
 
 	/**
 	 * Создать тегированные счетчики для определенного типа документов.
 	 *
-	 * @param documentType Тип документа в префиксальной форме. Должен
-	 * наследоваться от lecm-document:base
+	 * @param documentType Тип документа в префиксальной форме. Должен наследоваться от lecm-document:base
 	 * @param tags Список меток счетчиков.
 	 */
 	void initTaggedCounters(String documentType, List<String> tags) {
+		Map<String, NodeRef> tagCounter = docTypeCounters.get(documentType);
+		if (tagCounter == null) {
+			tagCounter = new ConcurrentHashMap<String, NodeRef>();
+			docTypeCounters.put(documentType, tagCounter);
+		}
+
 		for (String tag : tags) {
 			// создание сквозного счетчика
-			String plainTaggedCounterName = String.format(CounterType.DOCTYPE_PLAIN.objectName(), documentType.replace(":", COLON_REPLACER) + TAG_DELIMITER + tag);
-			NodeRef doctypePlainTaggedCounterNodeRef = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, plainTaggedCounterName);
-			if (doctypePlainTaggedCounterNodeRef == null) {
-				doctypePlainTaggedCounterNodeRef = createNewCounter(CounterType.DOCTYPE_PLAIN, documentType, tag);
-				logger.info(String.format("Plain counter node '%s' for doctype '%s' with tag '%s' created", doctypePlainTaggedCounterNodeRef.toString(), documentType, tag));
-			}
-			if (doctypePlainCounters.containsKey(documentType)) {
-				doctypePlainCounters.get(documentType).put(tag, doctypePlainTaggedCounterNodeRef);
-			} else {
-				logger.error("Can not create counter for type " + documentType + " with tag " + tag + " because of wrong type");
-			}
+			NodeRef doctypePlainTaggedCounterNodeRef = getDocTypePlainCounter(documentType, tag);
+			tagCounter.put(PLAIN_PREFIX + tag, doctypePlainTaggedCounterNodeRef);
 
 			// создание годового счетчика
-			String yearTaggedCounterName = String.format(CounterType.DOCTYPE_YEAR.objectName(), documentType.replace(":", COLON_REPLACER) + TAG_DELIMITER + tag);
-			NodeRef doctypeYearTaggedCounterNodeRef = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, yearTaggedCounterName);
-			if (doctypeYearTaggedCounterNodeRef == null) {
-				doctypeYearTaggedCounterNodeRef = createNewCounter(CounterType.DOCTYPE_YEAR, documentType, tag);
-				logger.info(String.format("Year counter node '%s' for doctype '%s' with tag '%s' created", doctypeYearTaggedCounterNodeRef.toString(), documentType, tag));
-			}
-
-			if (doctypeYearCounters.containsKey(documentType)) {
-				doctypeYearCounters.get(documentType).put(tag, doctypeYearTaggedCounterNodeRef);
-			} else {
-				logger.error("Can not create counter for type " + documentType + " with tag " + tag + " because of wrong type");
-			}
+			NodeRef doctypeYearTaggedCounterNodeRef = getDocTypeYearCounter(documentType, tag);
+			tagCounter.put(YEAR_PREFIX + tag, doctypeYearTaggedCounterNodeRef);
 		}
 	}
 
@@ -290,8 +333,7 @@ public class CounterFactory extends BaseBean {
 	}
 
 	/**
-	 * Создать в репозитории новый счетчик определенного типа для определенного
-	 * вида документа.
+	 * Создать в репозитории новый счетчик определенного типа для определенного вида документа.
 	 *
 	 * @param counterType тип счетчика.
 	 * @param docType типа документа.
@@ -305,6 +347,7 @@ public class CounterFactory extends BaseBean {
 
 		switch (counterType) {
 			case PLAIN:
+			case SIGNED_DOCFLOW:
 				itemType = RegNumbersService.TYPE_PLAIN_COUNTER;
 				break;
 			case YEAR:
@@ -320,36 +363,25 @@ public class CounterFactory extends BaseBean {
 				properties.put(RegNumbersService.PROP_DOCTYPE, docType);
 				properties.put(RegNumbersService.PROP_YEAR, getCurYear());
 				break;
-			case SIGNED_DOCFLOW:
-				itemType = RegNumbersService.TYPE_PLAIN_COUNTER;
-				break;
 			default:
 				throw new RuntimeException("Unknown counter type: " + counterType);
 		}
 
 		if (tag != null) {
-			nodeName = String.format(counterType.objectName(), docType.replace(":", COLON_REPLACER) + TAG_DELIMITER + tag);
+			nodeName = String.format(counterType.objectName(), docType.replace(':', COLON_REPLACER) + TAG_DELIMITER + tag);
 			assocName = String.format(counterType.objectName(), docType + TAG_DELIMITER + tag);
 		} else {
-			nodeName = String.format(counterType.objectName(), docType != null ? docType.replace(":", COLON_REPLACER) : null);
+			nodeName = String.format(counterType.objectName(), docType != null ? docType.replace(':', COLON_REPLACER) : null);
 			assocName = String.format(counterType.objectName(), docType);
 		}
 		final QName assocQName = QName.createQName(REGNUMBERS_NAMESPACE, assocName);
 		properties.put(ContentModel.PROP_NAME, nodeName);
 
-
 		AuthenticationUtil.RunAsWork<NodeRef> plainCounterCreationWrapper = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
-				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-				RetryingTransactionCallback<NodeRef> transactionCalback = new RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						ChildAssociationRef associationRef = nodeService.createNode(countersRootNode, ContentModel.ASSOC_CONTAINS, assocQName, itemType, properties);
-						return associationRef.getChildRef();
-					}
-				};
-				return transactionHelper.doInTransaction(transactionCalback, false, true);
+				ChildAssociationRef associationRef = nodeService.createNode(countersRootNode, ContentModel.ASSOC_CONTAINS, assocQName, itemType, properties);
+				return associationRef.getChildRef();
 			}
 		};
 		return AuthenticationUtil.runAsSystem(plainCounterCreationWrapper);
