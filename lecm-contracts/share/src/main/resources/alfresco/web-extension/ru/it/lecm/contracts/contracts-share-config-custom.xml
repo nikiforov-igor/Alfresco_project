@@ -822,6 +822,7 @@
                     <show id="lecm-contract:registrator-assoc"/>
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
+                    <show id="lecm-contract-table-structure:tableDataRow-assoc"/>
                 </field-visibility>
 <!-- Example: How to use dynamic access role
                 <appearance>
