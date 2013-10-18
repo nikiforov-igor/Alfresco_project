@@ -159,6 +159,7 @@
                     </field>
                     <field id="lecm-contract:locationRegistration" set="registr-info"/>
                     <field id="lecm-contract:locationContract" set="other"/>
+                    <field id="lecm-contract-aspect:reasonDelete-assoc" set="tab1"/>
                     <field id="lecm-contract-table-structure:tableDataRow-assoc" set="tab2">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-table-structure2:tableDataRow</control-param>
