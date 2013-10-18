@@ -297,7 +297,7 @@
 						</goals>
 						<configuration>
 							<includeTypes>amp</includeTypes>
-							<outputDirectory>${project.build.directory}/../../install/amps/share</outputDirectory>
+							<outputDirectory>${project.build.directory}/../../target/amps/share</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteIfNewer>true</overWriteIfNewer>
 							<overWriteSnapshots>true</overWriteSnapshots>
@@ -319,7 +319,7 @@
 									<destFileName>share.war</destFileName>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.build.directory}/../../install/war</outputDirectory>
+							<outputDirectory>${project.build.directory}/../../target/war</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteIfNewer>true</overWriteIfNewer>
 							<overWriteSnapshots>true</overWriteSnapshots>
