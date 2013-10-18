@@ -273,7 +273,7 @@
 			<mandatory-aspects>
 				<aspect>lecm-signed-docflow:docflowable</aspect>
 				<aspect>lecm-document-aspects:semanticAssistAspect</aspect>
-				<aspect>lecm-contract-table-structure:table-aspect</aspect>
+				<aspect>lecm-contract-table-structure:table-stages-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

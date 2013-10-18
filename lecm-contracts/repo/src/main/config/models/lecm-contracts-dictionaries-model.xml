@@ -105,7 +105,7 @@
 				</property>
 			</properties>
 		</type>
-        <type name="lecm-contract-dic:status">
+        <type name="lecm-contract-dic:stage-status">
             <title>Logic Ecm Dictionary Reference Data</title>
             <parent>lecm-dic:plane_dictionary_values</parent>
         </type>

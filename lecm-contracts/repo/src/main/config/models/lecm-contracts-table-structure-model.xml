@@ -16,7 +16,7 @@
     </namespaces>
 
     <types>
-        <type name="lecm-contract-table-structure:stages">
+        <type name="lecm-contract-table-structure:stage">
             <title>Table structure stages</title>
             <parent>lecm-document:tableDataRow</parent>
 
@@ -53,7 +53,7 @@
                         <many>true</many>
                     </source>
                     <target>
-                        <class>lecm-contract-dic:status</class>
+                        <class>lecm-contract-dic:stage-status</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
@@ -87,19 +87,19 @@
         </type>
     </types>
     <aspects>
-        <aspect name="lecm-contract-table-structure:table-aspect">
+        <aspect name="lecm-contract-table-structure:table-stages-aspect">
             <title>Table structure aspect</title>
             <parent>lecm-document:tableDataAspect</parent>
             <associations>
-                <association name="lecm-contract-table-structure:tableDataRow-assoc">
+                <association name="lecm-contract-table-structure:stages-assoc">
                     <source>
                         <mandatory>true</mandatory>
                         <many>false</many>
                     </source>
                     <target>
-                        <class>lecm-contract-table-structure:stages</class>
+                        <class>lecm-contract-table-structure:stage</class>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </target>
                 </association>
             </associations>

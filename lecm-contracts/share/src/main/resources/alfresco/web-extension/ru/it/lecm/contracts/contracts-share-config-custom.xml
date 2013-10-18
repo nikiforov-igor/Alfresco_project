@@ -72,7 +72,7 @@
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
                     <show id="lecm-contract-aspect:reasonDelete-assoc"/>
-                    <show id="lecm-contract-table-structure:tableDataRow-assoc"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
 				</field-visibility>
                 <appearance>
                     <set id="tab1" appearance="" label-id="label.contracts.main" />
@@ -160,9 +160,9 @@
                     <field id="lecm-contract:locationRegistration" set="registr-info"/>
                     <field id="lecm-contract:locationContract" set="other"/>
                     <field id="lecm-contract-aspect:reasonDelete-assoc" set="tab1"/>
-                    <field id="lecm-contract-table-structure:tableDataRow-assoc" set="tab2">
+                    <field id="lecm-contract-table-structure:stages-assoc" set="tab2">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
-                            <control-param name="itemType">lecm-contract-table-structure:stages</control-param>
+                            <control-param name="itemType">lecm-contract-table-structure:stage</control-param>
                             <control-param name="allowCreate">true</control-param>
                             <control-param name="showActions">true</control-param>
                             <control-param name="fullDelete">true</control-param>
@@ -822,7 +822,7 @@
                     <show id="lecm-contract:registrator-assoc"/>
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
-                    <show id="lecm-contract-table-structure:tableDataRow-assoc"/>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
                 </field-visibility>
 <!-- Example: How to use dynamic access role
                 <appearance>
@@ -1345,7 +1345,7 @@
 		</forms>
 	</config>
 
-    <config evaluator="node-type" condition="lecm-contract-dic:status">
+    <config evaluator="node-type" condition="lecm-contract-dic:stage-status">
         <forms>
             <form>
                 <field-visibility>
@@ -1356,7 +1356,7 @@
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-contract-dic:status">
+    <config evaluator="model-type" condition="lecm-contract-dic:stage-status">
         <forms>
             <form>
                 <field-visibility>
@@ -1373,7 +1373,7 @@
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-contract-table-structure:stages">
+    <config evaluator="node-type" condition="lecm-contract-table-structure:stage">
         <forms>
             <form>
                 <field-visibility>
@@ -1403,11 +1403,10 @@
                     </field>
                 </appearance>
             </form>
-
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-contract-table-structure:stages">
+    <config evaluator="model-type" condition="lecm-contract-table-structure:stage">
         <forms>
             <form>
                 <field-visibility>
