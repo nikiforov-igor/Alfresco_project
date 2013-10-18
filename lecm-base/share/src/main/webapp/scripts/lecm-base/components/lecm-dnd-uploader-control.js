@@ -143,6 +143,7 @@ LogicECM.control = LogicECM.control || {};
 
 					this.updateSelectedItems();
 					this.updateFormFields();
+					this.updateFormUI();
 				};
 
 				var onFailure = function (response)
@@ -231,6 +232,7 @@ LogicECM.control = LogicECM.control || {};
 
 					me.updateSelectedItems();
 					me.updateFormFields();
+					me.updateFormUI();
 
 					if (this.options.autoSubmit) {
 						var formElem  = Dom.get(this.id).form;
@@ -244,58 +246,15 @@ LogicECM.control = LogicECM.control || {};
 				}
 			},
 
-			updateSelectedItems: function AssociationAutoComplete_updateSelectedItems() {
-				var items = this.selectedItems;
-
-				var elAttachments = Dom.get(this.id + "-attachments");
-				if (elAttachments != null) {
-					elAttachments.innerHTML = '';
-
-					for (var nodeRef in items) {
-						var item = items[nodeRef];
-						var fileName = item.name;
-
-						if (elAttachments != null) {
-							var fileIcon = Alfresco.util.getFileIcon(fileName, "cm:content", 16);
-							var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"'/>";
-							fileName = "<div>" + fileName + "</div>"
-							var row = fileIconHtml + fileName;
-							if (!item.justUpload) {
-								row = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + nodeRef + "'>" + row + "</a>";
-							}
-
-							if (!this.options.disabled) {
-								if (this.options.showUploadNewVersionSubmit) {
-									var iconNewVersionId = "attachment-newVersion-" + nodeRef;
-									row += "<img id='" + iconNewVersionId + "' src='" + Alfresco.constants.URL_RESCONTEXT
-										+ "/components/documentlibrary/actions/document-upload-new-version-16.png' class='newVersion-icon'/>";
-									Event.onAvailable(iconNewVersionId, this.attachUploadNewVersionClickListener, item, this);
-								}
-
-								var iconRemoveId = "attachment-remove-" + nodeRef;
-								row += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
-									+ "components/images/delete-16.png' class='remove-icon'/>";
-								Event.onAvailable(iconRemoveId, this.attachRemoveItemClickListener, item, this);
-							}
-
-							elAttachments.innerHTML += "<li>" + row + "</li>";
-						}
-					}
-				}
-			},
-
 			attachRemoveItemClickListener: function(node) {
 				Event.addListener("attachment-remove-" + node.nodeRef, "click", this.removeSelectedElement, node, this);
 			},
 
 			removeSelectedElement: function(event, node) {
-				var li = Dom.getAncestorByTagName("attachment-remove-" + node.nodeRef, "li");
-				var ul = Dom.getAncestorByTagName(li, "ul");
-
-				ul.removeChild(li);
-
 				delete this.selectedItems[node.nodeRef];
+				this.updateSelectedItems();
 				this.updateFormFields();
+				this.updateFormUI();
 			},
 
 			attachUploadNewVersionClickListener: function(node) {
@@ -360,6 +319,54 @@ LogicECM.control = LogicECM.control || {};
 							scope: this
 						}
 					});
+			},
+
+			canUploaderShow: function() {
+				return this.options.multipleMode || (Object.keys(this.selectedItems).length == 0);
+			},
+
+			updateFormUI: function() {
+				Dom.setStyle(Dom.get(this.id + "-uploader-block"), "display", this.canUploaderShow() ? "block" : "none");
+			},
+
+			updateSelectedItems: function AssociationAutoComplete_updateSelectedItems() {
+				var items = this.selectedItems;
+
+				var elAttachments = Dom.get(this.id + "-attachments");
+				if (elAttachments != null) {
+					elAttachments.innerHTML = '';
+
+					for (var nodeRef in items) {
+						var item = items[nodeRef];
+						var fileName = item.name;
+
+						if (elAttachments != null) {
+							var fileIcon = Alfresco.util.getFileIcon(fileName, "cm:content", 16);
+							var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"'/>";
+							fileName = "<div>" + fileName + "</div>"
+							var row = fileIconHtml + fileName;
+							if (!item.justUpload) {
+								row = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + nodeRef + "'>" + row + "</a>";
+							}
+
+							if (!this.options.disabled) {
+								if (this.options.showUploadNewVersionSubmit) {
+									var iconNewVersionId = "attachment-newVersion-" + nodeRef;
+									row += "<img id='" + iconNewVersionId + "' src='" + Alfresco.constants.URL_RESCONTEXT
+										+ "/components/documentlibrary/actions/document-upload-new-version-16.png' class='newVersion-icon'/>";
+									Event.onAvailable(iconNewVersionId, this.attachUploadNewVersionClickListener, item, this);
+								}
+
+								var iconRemoveId = "attachment-remove-" + nodeRef;
+								row += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
+									+ "components/images/delete-16.png' class='remove-icon'/>";
+								Event.onAvailable(iconRemoveId, this.attachRemoveItemClickListener, item, this);
+							}
+
+							elAttachments.innerHTML += "<li>" + row + "</li>";
+						}
+					}
+				}
 			},
 
 			updateFormFields: function() {
