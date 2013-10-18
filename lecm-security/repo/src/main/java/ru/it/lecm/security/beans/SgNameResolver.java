@@ -1,13 +1,13 @@
 package ru.it.lecm.security.beans;
 
-import java.util.Set;
-
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.slf4j.Logger;
-
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGPosition;
+
+import java.util.Set;
 
 public class SgNameResolver {
 
@@ -174,5 +174,14 @@ public class SgNameResolver {
 		// return "GROUP_" + kind.getSGPos(objId).getAlfrescoSuffix();
 		return makeSGName( kind.getSGPos(objId));
 	}
+
+    public String parseDynamicRoleName(String authority, NodeRef employee) {
+        String result = null;
+        if (authority.contains(employee.getId()) && authority.contains(Types.SGKind.SG_BRME.getSuffix())) {
+            result = authority.replace("GROUP_" + Types.PFX_LECM  + Types.SGKind.SG_BRME.getSuffix(), "");
+            result = result.replace(Types.SFX_PRIV4USER + Types.SFX_DELIM + employee.getId(),"");
+        }
+        return result;
+    }
 
 }

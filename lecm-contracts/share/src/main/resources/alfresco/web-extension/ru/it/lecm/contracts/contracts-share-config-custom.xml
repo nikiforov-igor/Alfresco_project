@@ -822,8 +822,12 @@
                     <show id="lecm-contract:registrator-assoc"/>
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
-                    <show id="lecm-contract-aspect:reasonDelete-assoc"/>
                 </field-visibility>
+<!-- Example: How to use dynamic access role
+                <appearance>
+                    <field id="lecm-contract:totalAmount" roles="BR_INITIATOR"/>
+                </appearance>
+-->
             </form>
 		</forms>
 	</config>

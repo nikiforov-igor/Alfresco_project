@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.security.Types.SGPosition;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -305,5 +306,13 @@ public interface LecmPermissionService {
      * @return
      */
     public boolean hasEmployeeDynamicRole(NodeRef document, NodeRef employee, String roleName);
+
+    /**
+     * Список существующих прав для пользователя по отношению к документу
+     * @param document документ
+     * @param employee сотрудник
+     * @return
+     */
+    public List<String> getEmployeeRoles(NodeRef document, NodeRef employee);
 
 }

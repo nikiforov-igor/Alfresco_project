@@ -465,7 +465,23 @@ public class LecmPermissionServiceImpl
 		return false;// NOT FOUND
 	}
 
-	@Override
+
+    @Override
+    public List<String> getEmployeeRoles(NodeRef document, NodeRef employee) {
+        final Set<AccessPermission> status = permissionService.getAllSetPermissions(document);
+        ArrayList<String> result = new ArrayList<String>();
+        if (status != null) {
+            for (AccessPermission permission : status) {
+                String roleName = sgnm.parseDynamicRoleName(permission.getAuthority(), employee);
+                if (roleName != null) {
+                    result.add(roleName);
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
 	public void revokeDynamicRole(String roleCode, NodeRef nodeRef,
 			String employeeId) {
 		final String authority = sgnm.makeFullBRMEAuthName(employeeId, roleCode);
@@ -754,7 +770,6 @@ public class LecmPermissionServiceImpl
 	 * Выполнить формирование ACE для списка доступа ACL указанного узла
 	 * @param nodeRef
 	 * @param authority
-	 * @param rawPerm низкоуровневое разрешение
 	 * @param destBuf для формирования журнальных сообщений, м.б. Null
 	 * @throws AuthenticationException 
 	 */

@@ -4,7 +4,11 @@ import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.security.LecmPermissionService;
+
+import java.util.List;
 
 /**
  * User: dbashmakov
@@ -61,6 +65,17 @@ public class LecmPermissionWebScript extends BaseScopableProcessorExtension {
      */
     public boolean hasEmployeeDynamicRole(ScriptNode document, ScriptNode employee, String roleName) {
         return lecmPermissionService.hasEmployeeDynamicRole(document.getNodeRef(), employee.getNodeRef(), roleName);
+    }
+
+    /**
+     * Список существующих прав для пользователя по отношению к документу
+     * @param document документ
+     * @param employee сотрудник
+     * @return
+     */
+    public Scriptable getEmployeeRoles(ScriptNode document, ScriptNode employee) {
+        List<String> results = lecmPermissionService.getEmployeeRoles(document.getNodeRef(), employee.getNodeRef());
+        return Context.getCurrentContext().newArray(getScope(), results.toArray());
     }
 
 }

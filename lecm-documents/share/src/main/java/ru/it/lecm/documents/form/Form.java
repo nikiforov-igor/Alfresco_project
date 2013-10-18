@@ -1,5 +1,7 @@
 package ru.it.lecm.documents.form;
 
+import org.alfresco.web.config.forms.FormConfigElement;
+import org.alfresco.web.config.forms.FormField;
 import org.alfresco.web.config.forms.Mode;
 import org.alfresco.web.scripts.forms.FormUIGet;
 import org.apache.commons.logging.Log;
@@ -7,17 +9,18 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.extensions.surf.FrameworkUtil;
+import org.springframework.extensions.surf.RequestContext;
+import org.springframework.extensions.surf.ServletUtil;
+import org.springframework.extensions.surf.support.ThreadLocalRequestContext;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.ScriptRemote;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import org.springframework.extensions.webscripts.connector.Response;
-import org.springframework.extensions.webscripts.connector.ResponseStatus;
+import org.springframework.extensions.webscripts.connector.*;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 /**
  * User: pmelnikov
@@ -97,6 +100,32 @@ public class Form extends FormUIGet {
             logger.warn("Cannot get editable fields list from server", e);
         }
 
+        HashSet<String> dynamicRoles = new HashSet<String>();
+        try {
+            url = "/lecm/documents/dynamicRoles?nodeRef=" + context.getRequest().getParameter(PARAM_ITEM_ID);
+            ConnectorService connService = FrameworkUtil.getConnectorService();
+            RequestContext requestContext = ThreadLocalRequestContext.getRequestContext();
+            String currentUserId = requestContext.getUserId();
+            HttpSession currentSession = ServletUtil.getSession(true);
+            Connector connector = connService.getConnector(ENDPOINT_ID, currentUserId, currentSession);
+            ConnectorContext connectorContext = new ConnectorContext(HttpMethod.GET, null, null);
+            connectorContext.setContentType("application/json");
+
+            // call the form service
+            response = connector.call(url, connectorContext);
+            if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
+                JSONArray roles = new JSONArray(response.getResponse());
+                for (int i = 0; i < roles.length(); i++) {
+                    String role = roles.getString(i);
+                    dynamicRoles.add(role);
+                }
+            } else {
+                logger.warn("Cannot get dynamic roles from server");
+            }
+        } catch (Exception e) {
+            logger.warn("Cannot get dynamic roles from server", e);
+        }
+
         //формируем подсветку для полей
         HashSet<String> highlightedFields = new HashSet<String>();
         if (context.getRequest().getParameter("fields") != null) {
@@ -110,13 +139,37 @@ public class Form extends FormUIGet {
             }
         }
 
+        String document = null;
+        try {
+            document = context.getFormDefinition().getJSONObject("data").getString("type");
+        } catch (JSONException e) {
+            logger.warn("Error while getting document type", e);
+        }
+        FormConfigElement formConfig = getFormConfig(document, "statemachine-editable-fields");
         JSONArray highlightResultFields = new JSONArray();
         Map<String, Field> fields = context.getFields();
         for (String prop : fields.keySet()) {
             Field field = fields.get(prop);
             if (hasStatemachine) {
                 if (editableFields.contains(field.getConfigName())) {
-                    field.setDisabled(false);
+                    FormField formField = formConfig.getFields().get(field.getConfigName());
+                    boolean allowed = true;
+                    if (formField != null) {
+                        String roles = formField.getAttributes().get("roles");
+                        if (roles != null && !"".equals(roles)) {
+                            allowed = false;
+                            StringTokenizer st = new StringTokenizer(roles, ",");
+                            while (st.hasMoreTokens()) {
+                                String role = st.nextToken().trim();
+                                allowed = allowed || dynamicRoles.contains(role);
+                            }
+                        }
+                    }
+                    if (allowed) {
+                        field.setDisabled(false);
+                    } else {
+                        field.setDisabled(true);
+                    }
                 } else {
                     field.setDisabled(true);
                 }
