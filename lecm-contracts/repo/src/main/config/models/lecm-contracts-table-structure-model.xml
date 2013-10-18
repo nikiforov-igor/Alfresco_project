@@ -38,6 +38,11 @@
                 <property name="lecm-contract-table-structure:end-date">
                     <type>d:date</type>
                 </property>
+	            <!-- Дата окончания этапа -->
+	            <property name="lecm-contract-table-structure:attachments-temp-assoc-category">
+		            <type>d:text</type>
+		            <default>Этапы</default>
+	            </property>
             </properties>
 
             <associations>

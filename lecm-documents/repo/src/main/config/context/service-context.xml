@@ -522,4 +522,25 @@
             </map>
         </property>
     </bean>
+
+	<bean id="documentTableService" class="ru.it.lecm.documents.beans.DocumentTableServiceImpl"
+	      depends-on="transactionService, nodeService, dictionaryService, lecmPermissionServiceBean">
+		<property name="transactionService" ref="transactionService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+	</bean>
+
+	<bean id="documentTableScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentTableWebScriptBean"
+	      depends-on="documentTableService">
+		<property name="extensionName">
+			<value>documentTables</value>
+		</property>
+		<property name="documentTableService">
+			<ref bean="documentTableService"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+	</bean>
 </beans>
