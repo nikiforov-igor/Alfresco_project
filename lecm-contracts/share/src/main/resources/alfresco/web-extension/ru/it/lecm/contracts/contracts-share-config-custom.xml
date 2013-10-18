@@ -47,6 +47,8 @@
 	<config evaluator="node-type" condition="lecm-contract:document">
 		<forms>
 			<form>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
                     <show id="lecm-contract:regNumProject"/>
                     <show id="lecm-contract:dateRegProjectContracts"/>
@@ -70,17 +72,20 @@
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
                     <show id="lecm-contract-aspect:reasonDelete-assoc"/>
+                    <show id="lecm-contract-table-structure:tableDataRow-assoc"/>
 				</field-visibility>
                 <appearance>
-                    <set id="contract-info" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
+                    <set id="tab1" appearance="" label-id="label.contracts.main" />
+                    <set id="tab2" appearance="" label-id="label.contracts.stage" />
+                    <set id="contract-info" appearance="" parent="tab1" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <set id="date-conclusion" parent="contract-info" appearance="" />
-                    <set id="counterparty-info-1" appearance=""/>
-                    <set id="counterparty-info-2" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
-                    <set id="content" appearance="" />
-                    <set id="registr-info" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="other" appearance="" />
+                    <set id="counterparty-info-1" parent="tab1" appearance=""/>
+                    <set id="counterparty-info-2" parent="tab1" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
+                    <set id="dates" appearance="" parent="tab1" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+                    <set id="content" appearance="" parent="tab1" />
+                    <set id="registr-info" appearance="" parent="tab1" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
+                    <set id="other" appearance="" parent="tab1" />
 
                     <field id="lecm-contract:regNumProject" set="contract-info"/>
                     <field id="lecm-contract:dateRegProjectContracts" set="contract-info"/>
@@ -154,6 +159,16 @@
                     </field>
                     <field id="lecm-contract:locationRegistration" set="registr-info"/>
                     <field id="lecm-contract:locationContract" set="other"/>
+                    <field id="lecm-contract-table-structure:tableDataRow-assoc" set="tab2">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-table-structure2:tableDataRow</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="bubblingLabel">lecm-contract-fake2-aspects</control-param>
+                        </control>
+                    </field>
                 </appearance>
 			</form>
             <form id="document">
@@ -1323,6 +1338,34 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="node-type" condition="lecm-contract-dic:status">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="cm:description" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-contract-dic:status">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="cm:description" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="cm:description" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 
 	<config evaluator="string-compare" condition="activiti$createOnBasis">
 		<forms>

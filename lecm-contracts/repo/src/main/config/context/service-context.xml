@@ -19,11 +19,25 @@
 -->
 <beans>
 
+    <bean id="contracts.LogicEcmContractsTableStructureBootstrap" parent="dictionaryModelBootstrap"
+          depends-on="contracts.LogicEcmContractsDictionariesBootstrap,ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-table-structure-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-contracts-table-structure-model</value>
+            </list>
+        </property>
+    </bean>
+
 	<bean id="contracts.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap,ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
 		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,contracts.LogicEcmContractsDictionariesBootstrap,
 		  dictionary.LogicEcmDictionaryCurrencyModelBootstrap,documents.LogicEcmModelsConnectionsBootstrap,
-		  documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap">
+		  documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap,contracts.LogicEcmContractsTableStructureBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>
@@ -91,6 +105,7 @@
 			    <value>alfresco/module/${artifactId}/models/lecm-contract-documents-types.xml</value>
 			    <value>alfresco/module/${artifactId}/models/lecm-contract-delete-reasons.xml</value>
 			    <value>alfresco/module/${artifactId}/models/lecm-contracts-reference-data.xml</value>
+			    <value>alfresco/module/${artifactId}/models/lecm-contracts-status-types.xml</value>
 		    </list>
 	    </property>
         <property name="createOrUpdateDictionaries">

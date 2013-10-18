@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-contract-table-structure:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Logic ECM Contracts table structure model</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/contract/table-structure/1.0" prefix="lecm-contract-table-structure"/>
+
+    </namespaces>
+
+    <types>
+        <type name="lecm-contract-table-structure:stages">
+            <title>Table structure stages</title>
+            <parent>lecm-document:tableDataRow</parent>
+
+            <properties>
+                <!-- Наименование этапа - строка-->
+                <property name="lecm-contract-table-structure:name">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Дата начала этапа -->
+                <property name="lecm-contract-table-structure:start-date">
+                    <type>d:date</type>
+                </property>
+                <!-- Дата окончания этапа -->
+                <property name="lecm-contract-table-structure:end-date">
+                    <type>d:date</type>
+                </property>
+            </properties>
+
+            <associations>
+                <!-- Статус -->
+                <association name="lecm-contract-table-structure:status-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-contract-dic:status</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Ответственный -->
+                <association name="lecm-contract-table-structure:responsible-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+
+        </type>
+    </types>
+    <aspects>
+        <aspect name="lecm-contract-table-structure:table-aspect">
+            <title>Table structure aspect</title>
+            <parent>lecm-document:tableDataAspect</parent>
+            <associations>
+                <association name="lecm-contract-table-structure:tableDataRow-assoc">
+                    <source>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>lecm-contract-table-structure:stages</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+    </aspects>
+
+</model>

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Статусы этапов" type="lecm-dic:dictionary">
+        <property name="cm:name">Статусы этапов</property>
+        <property name="lecm-dic:attributeForShow">cm:name</property>
+        <property name="lecm-dic:type">lecm-contract-dic:status</property>
+        <property name="lecm-dic:active">true</property>
+        <property name="lecm-dic:plane">true</property>
+        <property name="lecm-dic:description">Статусы этапов</property>
+        <items>
+            <item name="cm:Ожидает исполнения" type="lecm-contract-dic:status">
+                <property name="cm:name">Ожидает исполнения</property>
+            </item>
+            <item name="cm:Исполняется" type="lecm-contract-dic:status">
+                <property name="cm:name">Исполняется</property>
+            </item>
+            <item name="cm:Закрыт" type="lecm-contract-dic:status">
+                <property name="cm:name">Закрыт</property>
+            </item>
+        </items>
+    </item>
+</items>
