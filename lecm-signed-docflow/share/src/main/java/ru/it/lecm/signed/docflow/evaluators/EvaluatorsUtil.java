@@ -10,6 +10,9 @@ import org.json.JSONException;
 import org.springframework.extensions.webscripts.ScriptRemote;
 import org.springframework.extensions.webscripts.connector.Response;
 import org.springframework.extensions.webscripts.connector.ResponseStatus;
+import org.springframework.web.util.UriUtils;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  *
@@ -26,8 +29,14 @@ public class EvaluatorsUtil {
 
 	public boolean hasBusinessRoleOrBoss(String userName, String roleId){
 
-		String url = "/lecm/signed/docflow/signPermission?action=signPermission&userName=" + userName + "&roleId=" + roleId;
-		Response response = scriptRemote.connect("alfresco").get(url);
+        String url = null;
+        try {
+
+            url = "/lecm/signed/docflow/signPermission?action=signPermission&userName=" + userName + "&roleId=" + roleId;
+            url = UriUtils.encodeUri(url, "UTF-8");
+        } catch (UnsupportedEncodingException ignored) {
+        }
+        Response response = scriptRemote.connect("alfresco").get(url);
 		try {
 			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
 				org.json.JSONObject resultJson = new org.json.JSONObject(response.getResponse());
