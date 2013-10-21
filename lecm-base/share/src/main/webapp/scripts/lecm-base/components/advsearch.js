@@ -301,8 +301,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 });
 
                 loadingMessage.subscribe("hide", function() {
-                    loadingMessage.unsubscribeAll("hide");
-                    loadingMessage.destroy();
+                    //Временное решение. Необходимо дальнейшее исследование.
+                    // loadingMessage.unsubscribeAll("hide");
+                    // loadingMessage.destroy();
                 });
 
                 //Обработчик на успех
