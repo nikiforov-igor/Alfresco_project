@@ -24,6 +24,7 @@
                 <!-- Наименование этапа - строка-->
                 <property name="lecm-contract-table-structure:name">
                     <type>d:text</type>
+                    <mandatory>true</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
