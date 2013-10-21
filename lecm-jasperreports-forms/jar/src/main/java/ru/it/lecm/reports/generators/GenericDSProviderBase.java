@@ -110,7 +110,6 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
         }
     }
 
-
     @Override
     public void setReportManager(ReportsManager reportMgr) {
         this.reportManager = reportMgr;
@@ -140,7 +139,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      * 3) имеющихся простых параметров,
      * 4) возможного текста запроса из флагов (reportDescriptor.flags.text).
      *
-     * @return
+     * @return LucenePreparedQuery
      */
     protected LucenePreparedQuery buildQuery() {
         return LucenePreparedQuery.prepareQuery(this.reportDescriptor, getServices().getServiceRegistry());
@@ -155,13 +154,9 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
 
     /**
      * Дополнить конфигурацию значениями по-умолчанию
-     *
-     * @param defaults
      */
     protected void setXMLDefaults(Map<String, Object> defaults) {
         // "add-on" sections для чтения конфигуратором ...
-//		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_OFFSET, null);
-//		defaults.put( DSXMLProducer.XMLNODE_QUERYDESC + "/" + DSXMLProducer.XMLNODE_QUERY_LIMIT, null);
         if (this.xmlConfig != null) {
             if (this.reportDescriptor != null) {
                 this.xmlConfig.setConfigName("ds-" + this.reportDescriptor.getMnem() + ".xml");
@@ -172,7 +167,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
     /**
      * Вернуть объект конфигуратор
      *
-     * @return
+     * @return JRDSConfigXML
      */
     protected JRDSConfigXML createXmlConfig() {
         PropertyCheck.mandatory(this, "reportManager", getReportManager());
@@ -279,13 +274,13 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
     /**
      * Заполнение контекста используемыми службами, описанием полей.
      *
-     * @param context
+     * @param context ReportDSContextImpl
      */
     protected void fillContext(ReportDSContextImpl context) {
         if (context != null) {
             context.setSubstitudeService(getServices().getSubstitudeService());
             context.setRegistryService(getServices().getServiceRegistry());
-            context.setJrSimpleProps(getColumnNames(this.alfrescoQuery.argsByProps(), this.getServices().getServiceRegistry().getNamespaceService()));
+            context.setJrSimpleProps(getColumnNames(this.alfrescoQuery.argsByProps()));
             context.setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
 
             // фильтр данных ...
@@ -297,15 +292,14 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      * Получить список имён простых колонок в виде последовательности пар "тип", "атрибут" (QName Альфреско).
      *
      * @param list список колонок, в которых выражение является ссылкой на атрибут
-     * @param ns
-     * @return
+     * @return Set<String>
      */
-    static Set<String> getColumnNames(List<ColumnDescriptor> list, final NamespaceService ns) {
+    public Set<String> getColumnNames(List<ColumnDescriptor> list) {
         if (list == null || list.isEmpty()) {
             return null;
         }
-
         final Set<String> result = new HashSet<String>();
+        final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
         for (ColumnDescriptor col : list) {
             final QName qname = QName.createQName(col.getQNamedExpression(), ns);
             if (qname != null) {
@@ -320,12 +314,11 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      * Внутренний метод для создания нужного набора данных.
      * В потомках позволит менять конретный тип НД.
      *
-     * @param iterator
-     * @return
+     * @param iterator Iterator<ResultSetRow>
+     * @return AlfrescoJRDataSource
      */
     protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-        final GenericJRDataSource result = new GenericJRDataSource(iterator);
-        return result;
+        return new GenericJRDataSource(iterator);
     }
 
     /**
@@ -333,7 +326,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      * Здесь включает такой фильтр, в котором есть отбор по параметрам-ассоциациям (cм this.alfrescoQuery.argsByLinks()).
      * В потомках позволит менять конретный тип фильтра.
      *
-     * @return
+     * @return DataFilter
      */
     protected DataFilter newDataFilter() {
         // фильтр, который может "заглядывать" по ссылкам
@@ -349,8 +342,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
 
         boolean useFilter = false;
         for (ColumnDescriptor colDesc : this.alfrescoQuery.argsByLinks()) {
-			/*
-			 * Example:
+            /*
+             * Example:
 				final QName qnCSubject = QName.createQName( "lecm-doc-dic:subject-code", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
 				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
 				result.addAssoc( qnCSubject, qnAssocCSubject, contractSubject, AssocKind.target);
@@ -401,7 +394,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
         protected boolean loadAlfNodeProps(NodeRef docId) {
             final boolean result = super.loadAlfNodeProps(docId); // (!) прогрузка бызовых свойств
 
-			if (result && context != null) {
+            if (result) {
                 if (getReportDescriptor().getSubreports() != null) {  // прогрузка вложенных subreports ...
                     for (SubReportDescriptor subreport : getReportDescriptor().getSubreports()) {
                         final Object stringOrBean = prepareSubReport(docId, subreport, resolver);
@@ -411,13 +404,12 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
             }
             return result;
         }
-
     }
 
     /**
      * Подготовить данные подотчёта по ассоциированныму списку subreport:
      *
-     * @param subreport
+     * @param subreport SubReportDescriptor
      * @return <li> ОДНУ строку, если subreport должен форматироваться (строка будет
      *         состоять из форматированных всех элементов ассоциированного списка),
      *         <li> или список бинов List[Object] - по одному на каждую строку

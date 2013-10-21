@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ds.config>
+    <report.descriptor mnem="contract-stages-info">
+        <l18>
+            <item key="RU_RU" value="Этапы договора"/>
+        </l18>
+        <type mnem="JASPER">
+            <l18>
+                <item key="RU_RU" value="Jasper"/>
+            </l18>
+        </type>
+        <provider
+            javaClass="ru.it.lecm.reports.generators.GenericDSProviderBase" mnem="DocInfoProvider">
+            <l18>
+                <item key="RU_RU" value="Информации по документу"/>
+            </l18>
+        </provider>
+        <template filename="contract_stages_info.jrxml" mnem="Этапы договора">
+            <l18>
+                <item key="RU_RU" value="Этапы договора"/>
+            </l18>
+        </template>
+        <datasource.descriptor>
+            <l18>
+                <item key="RU_RU" value="0310323e-eedf-4271-9a90-c38f146b7a46"/>
+            </l18>
+        </datasource.descriptor>
+    </report.descriptor>
+
+    <query.descriptor>
+        <offset>0</offset>
+        <limit>-1</limit>
+        <pgsize>-1</pgsize>
+        <queryText><![CDATA[]]></queryText>
+        <allVersions>true</allVersions>
+        <preferedType>{lecm-contract:document}</preferedType>
+        <isMultiRow>false</isMultiRow>
+        <isCustom>false</isCustom>
+        <flags/>
+    </query.descriptor>
+
+	<subreports>
+	<!-- Описание данных для связанных Задач подотчёта  -->
+	<subreport name="stages" destColumnName="Col_Stages" >
+		<!-- ссылка на вложенные задачи -->
+		<sublist.source>
+			<![CDATA[lecm-contract-table-structure:stages-assoc]]>
+		</sublist.source>
+
+		<sublist.item beanclass="ru.it.lecm.contracts.reports.wrappers.StageInfoBean">
+			<map>
+				<item key="name"> <![CDATA[lecm-contract-table-structure:name]]> </item>
+				<item key="startDate"> <![CDATA[lecm-contract-table-structure:start-date]]> </item>
+				<item key="endDate"> <![CDATA[lecm-contract-table-structure:end-date]]> </item>
+				<item key="status"> <![CDATA[{lecm-contract-table-structure:status-assoc/cm:name}]]> </item>
+				<item key="responsibleName"> <![CDATA[{lecm-contract-table-structure:responsible-assoc/lecm-orgstr:employee-short-name}]]> </item>
+			</map>
+		</sublist.item>
+	</subreport>
+	</subreports>
+
+
+    <fields>
+        <field alfrescoType="d:text" displayName="Формат генерируемого документа"
+               jrFldName="targetFormat" expression="pdf">
+        </field>
+        <field alfrescoType="d:text" displayName="Номер договора"
+            jrFldName="Col_RegNumber" queryFldName="{lecm-contract:regNumProject}">
+            <l18>
+                <item key="RU_RU" value="Номер проекта"/>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Дата начала"
+            javaValueClass="java.util.Date" jrFldName="Col_DateIncome" queryFldName="{lecm-contract:startDate}">
+            <l18>
+                <item key="RU_RU" value="Дата начала"/>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Дата регистрации"
+            javaValueClass="java.util.Date" jrFldName="Col_RegDate" queryFldName="{lecm-contract:dateRegProjectContracts}">
+            <l18>
+                <item key="RU_RU" value="Дата регистрации"/>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Статус"
+            jrFldName="Col_Status" queryFldName="{lecm-statemachine:status}">
+            <l18>
+                <item key="RU_RU" value="Статус"/>
+            </l18>
+        </field>
+        <field alfrescoType="d:text"
+            displayName="Вид договора"
+            jrFldName="Col_DocKind" queryFldName="{lecm-contract:typeContract-assoc/cm:name}">
+            <l18>
+                <item key="RU_RU" value="Вид договора"/>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Автор"
+            jrFldName="Col_Author" queryFldName="{lecm-document:creator}">
+            <l18>
+                <item key="RU_RU" value="Автор"/>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Этапы договора"
+            jrFldName="Col_Stages" queryFldName="{{subreport::stages}}">
+            <l18>
+                <item key="RU_RU" value="Этапы договора"/>
+            </l18>
+        </field>
+    </fields>
+</ds.config>

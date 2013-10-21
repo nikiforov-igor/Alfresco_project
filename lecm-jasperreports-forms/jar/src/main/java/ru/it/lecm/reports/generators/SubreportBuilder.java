@@ -98,18 +98,6 @@ public class SubreportBuilder {
         return subreport;
     }
 
-    public NodeService getNodeService() {
-        return (resolver == null) ? null : resolver.getServices().getServiceRegistry().getNodeService();
-    }
-
-    public NamespaceService getNameService() {
-        return (resolver == null) ? null : resolver.getServices().getServiceRegistry().getNamespaceService();
-    }
-
-    public SubstitudeBean getSubstService() {
-        return (resolver == null) ? null : resolver.getServices().getSubstitudeService();
-    }
-
     /**
      * Присвоить конфигурационный список соот-вий для источников данных и
      * целевых полей бина или формата.
@@ -133,12 +121,15 @@ public class SubreportBuilder {
         for (Map.Entry<String, String> e : cfg.entrySet()) {
             final String propName = Utils.trimmed(e.getKey()); // ключ = название свойства
 
-            if (e.getValue() == null)
+            if (e.getValue() == null) {
                 continue;
+            }
 
             final String svalue = e.getValue().trim();
-            if (svalue.length() == 0) // нет значения - ничего не присваиваем ...
+            if (svalue.length() == 0) {
+                // нет значения - ничего не присваиваем ...
                 continue;
+            }
 
 			/* свойства для бина и соот-щие ссылки ... */
             if (propName.startsWith(ItemsFormatDescriptor.LIST_MARKER)) {
@@ -151,15 +142,15 @@ public class SubreportBuilder {
                 continue;
             }
 
-            { /* здесь имеем обычное поле или ссылка на ОДНО значение */
-                // значения могут содержать списки ...
-                final String[] sourceLinks = svalue.split("[;,]");
-                if (sourceLinks == null || sourceLinks.length == 0) {
-                    logger.warn(String.format("Configuration data has blank sourceLinks for item '%s' -> skipped", propName));
-                    continue;
-                }
-                this.beanFields.put(propName, sourceLinks);
+             /* здесь имеем обычное поле или ссылка на ОДНО значение */
+            // значения могут содержать списки ...
+            final String[] sourceLinks = svalue.split("[;,]");
+            if (sourceLinks == null || sourceLinks.length == 0) {
+                logger.warn(String.format("Configuration data has blank sourceLinks for item '%s' -> skipped", propName));
+                continue;
             }
+            this.beanFields.put(propName, sourceLinks);
+
         } // for i
     }
 
@@ -239,8 +230,8 @@ public class SubreportBuilder {
     /**
      * Заполнить бин свойствами. Если Бин это мапа, то заполнение короткое.
      *
-     * @param destBean
-     * @param args
+     * @param destBean Object
+     * @param args     Map<String, Object
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected void assignProperties(final Object destBean, final Map<String, Object> args) {
@@ -277,7 +268,7 @@ public class SubreportBuilder {
      * Получить сконфигурированные свойства вложенного объекта.
      * <br/> см также {@link #subreport}, {@link #beanFields} и {@link #beanLists}
      *
-     * @param subItemId
+     * @param subItemId NodeRef
      * @return <b>ключ</b> = название колонки или свойства,
      *         <br/><b>значение</b> = соот-щий объект, полученный по ссылке для колонки согласно {@link #subreport.subItemsSourceMap}
      */
@@ -358,10 +349,6 @@ public class SubreportBuilder {
     public Object buildSubreport(NodeRef docId) {
         final boolean usingFormat = subreport.isUsingFormat();
         final QName qnAssoc = QName.createQName(subreport.getSourceListExpression(), getNameService());
-        if (qnAssoc == null) {
-            throw new RuntimeException(String.format("Invalid configuration: invalid linked association '%s' for subreport '%s'"
-                    , subreport.getSourceListExpression(), subreport.getMnem()));
-        }
 
 		/* получение ассоциированного списка ... */
         final List<NodeRef> children = NodeUtils.findChildrenByAssoc(docId, qnAssoc, getNodeService());
@@ -435,5 +422,18 @@ public class SubreportBuilder {
             }
         }
     }
+
+    private NodeService getNodeService() {
+        return (resolver == null) ? null : resolver.getServices().getServiceRegistry().getNodeService();
+    }
+
+    private NamespaceService getNameService() {
+        return (resolver == null) ? null : resolver.getServices().getServiceRegistry().getNamespaceService();
+    }
+
+    private SubstitudeBean getSubstService() {
+        return (resolver == null) ? null : resolver.getServices().getSubstitudeService();
+    }
+
 }
 

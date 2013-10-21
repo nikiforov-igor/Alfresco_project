@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="contract-stages-info" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="dataSource" value="ru.it.lecm.reports.generators.GenericDSProviderBase"/>
+	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#DCDCDC"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ds-contract-stages-info.xml"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/reportdefinitions/deploy/jasper/contract-stages-info/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="Col_RegNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[Номер обращения]]></fieldDescription>
+	</field>
+	<field name="Col_DateIncome" class="java.util.Date">
+		<fieldDescription><![CDATA[Дата поступления]]></fieldDescription>
+	</field>
+	<field name="Col_RegDate" class="java.util.Date">
+		<fieldDescription><![CDATA[Дата регистрации]]></fieldDescription>
+	</field>
+	<field name="Col_Status" class="java.lang.String">
+		<fieldDescription><![CDATA[Статус]]></fieldDescription>
+	</field>
+	<field name="Col_DocKind" class="java.lang.String">
+		<fieldDescription><![CDATA[Вид обращения (документа)]]></fieldDescription>
+	</field>
+	<field name="Col_Author" class="java.lang.String">
+		<fieldDescription><![CDATA[Автор]]></fieldDescription>
+	</field>
+	<field name="Col_Stages" class="java.util.List">
+		<fieldDescription><![CDATA[Этапы (list)]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="29" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" x="154" y="0" width="263" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans Mono" size="18" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Справка по договору]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="5" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="110">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="28fc8b4a-c4e1-49e8-b903-de9feddbc204" isPrintRepeatedValues="false" x="320" y="0" width="67" height="26" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Статус"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a54fa070-32ee-4d7d-aeaf-1cf4ba01659b" isPrintRepeatedValues="false" x="123" y="62" width="410" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{Col_Author} == null ? "" : $F{Col_Author})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b2f651eb-e631-4faf-a8a4-f3be81373f52" isPrintRepeatedValues="false" x="10" y="56" width="110" height="26" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["от автора"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fc9a625b-4bb8-4798-ac44-6fc39e52fdc6" isPrintRepeatedValues="false" x="387" y="0" width="168" height="26" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Col_Status}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4f4f5c81-47b4-4b7e-bd8a-9674d1042af8" isPrintRepeatedValues="false" x="10" y="30" width="110" height="26" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Вид документа"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="14d36836-0290-4c15-af88-59d127fba49a" isPrintRepeatedValues="false" x="123" y="30" width="432" height="26" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Col_DocKind}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="aabcc6f6-a66d-4559-adcf-8272672ba788" isPrintRepeatedValues="false" x="10" y="0" width="110" height="26" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Номер договора"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a1d6422e-13e4-47bc-83c5-db2dd5736bb1" isPrintRepeatedValues="false" x="123" y="0" width="197" height="25" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{Col_RegNumber} == null ? "" : $F{Col_RegNumber})
++ " от "
++ ($F{Col_DateIncome} == null ? "" :  msg( "{0,date,short}", $F{Col_DateIncome}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21">
+			<subreport isUsingCache="true">
+				<reportElement uuid="9847fe82-eb64-46d5-9cf6-e59263bf8702" positionType="Float" x="0" y="20" width="555" height="0" isPrintWhenDetailOverflows="true" backcolor="#99CCFF"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Col_Stages})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_contractStages.jasper"]]></subreportExpression>
+			</subreport>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6d34b4cc-3bc4-4400-93b0-379581444989" positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="140" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Этапы:"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

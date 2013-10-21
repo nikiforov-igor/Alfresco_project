@@ -57,8 +57,7 @@ public class NodeUtils {
      * @param enumerator "call-back" (может быть null - для подсчёта кол-ва)
      * @return кол-во встреченных детей на указанном уровне
      */
-    public static int scanHierachicalChilren(NodeRef root, NodeService service
-            , int level, NodeEnumerator enumerator) {
+    public static int scanHierachicalChilren(NodeRef root, NodeService service, int level, NodeEnumerator enumerator) {
         return scanHierachicalChilren(root, service, level, null, enumerator);
     }
 
@@ -77,9 +76,7 @@ public class NodeUtils {
      * @param enumerator "call-back" (может быть null - для подсчёта кол-ва)
      * @return кол-во встреченных детей на указанном уровне
      */
-    public static int scanHierachicalChilren(NodeRef root, NodeService service
-            , int level, List<NodeRef> parents, NodeEnumerator enumerator
-    ) {
+    public static int scanHierachicalChilren(NodeRef root, NodeService service, int level, List<NodeRef> parents, NodeEnumerator enumerator) {
         if (root == null || service == null || level < 1) {
             return 0;
         }
@@ -90,7 +87,8 @@ public class NodeUtils {
             parents = new ArrayList<NodeRef>();
         }
 
-        final List<ChildAssociationRef> listChildren = service.getChildAssocs(root, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+        final List<ChildAssociationRef> listChildren =
+                service.getChildAssocs(root, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
         if (listChildren != null) {
             parents.add(root); // регим родительский узел ...
             try {
@@ -117,54 +115,53 @@ public class NodeUtils {
     /**
      * Получение списка вложений (пробуется child-список, parent-список и ассоциации)
      *
-     * @param nodeId
-     * @param assocRef
-     * @return
+     * @param nodeId   NodeRef
+     * @param assocRef QName
+     * @return List<NodeRef>
      */
     public static List<NodeRef> findChildrenByAssoc(NodeRef nodeId, QName assocRef, NodeService nodeService) {
         final List<NodeRef> result = new ArrayList<NodeRef>();
 
         // TODO: в зависимости от метаданных можно точно и строго выбрать один из 4х вариантов ...
         do {
-            { /* классические "дети" ... */
-                final List<ChildAssociationRef> children = nodeService.getParentAssocs(nodeId, assocRef, RegexQNamePattern.MATCH_ALL);
-                if (children != null && !children.isEmpty()) {
-                    for (ChildAssociationRef child : children) {
-                        result.add(child.getChildRef());
-                    }
-                    break;
+             /* классические "дети" ... */
+            final List<ChildAssociationRef> children = nodeService.getChildAssocs(nodeId, assocRef, RegexQNamePattern.MATCH_ALL);
+            if (children != null && !children.isEmpty()) {
+                for (ChildAssociationRef child : children) {
+                    result.add(child.getChildRef());
                 }
+                break;
             }
 
-            { /* пробуем родителей ... */
-                final List<ChildAssociationRef> parents = nodeService.getChildAssocs(nodeId, assocRef, RegexQNamePattern.MATCH_ALL);
-                if (parents != null && !parents.isEmpty()) {
-                    for (ChildAssociationRef child : parents) {
-                        result.add(child.getParentRef());
-                    }
-                    break;
+
+             /* пробуем родителей ... */
+            final List<ChildAssociationRef> parents = nodeService.getParentAssocs(nodeId, assocRef, RegexQNamePattern.MATCH_ALL);
+            if (parents != null && !parents.isEmpty()) {
+                for (ChildAssociationRef child : parents) {
+                    result.add(child.getParentRef());
                 }
+                break;
             }
 
-            { /* пробуем source-связи ... */
-                final List<AssociationRef> listSrcAssocs = nodeService.getSourceAssocs(nodeId, assocRef);
-                if (listSrcAssocs != null && !listSrcAssocs.isEmpty()) {
-                    for (AssociationRef child : listSrcAssocs) {
-                        result.add(child.getSourceRef());
-                    }
-                    break;
+             /* пробуем source-связи ... */
+            final List<AssociationRef> listSrcAssocs = nodeService.getSourceAssocs(nodeId, assocRef);
+            if (listSrcAssocs != null && !listSrcAssocs.isEmpty()) {
+                for (AssociationRef child : listSrcAssocs) {
+                    result.add(child.getSourceRef());
                 }
+                break;
             }
 
-            { /* пробуем target-связи ... */
-                final List<AssociationRef> listDestAssocs = nodeService.getTargetAssocs(nodeId, assocRef);
-                if (listDestAssocs != null && !listDestAssocs.isEmpty()) {
-                    for (AssociationRef child : listDestAssocs) {
-                        result.add(child.getTargetRef());
-                    }
-                    break;
+
+             /* пробуем target-связи ... */
+            final List<AssociationRef> listDestAssocs = nodeService.getTargetAssocs(nodeId, assocRef);
+            if (listDestAssocs != null && !listDestAssocs.isEmpty()) {
+                for (AssociationRef child : listDestAssocs) {
+                    result.add(child.getTargetRef());
                 }
+                break;
             }
+
         } while (false); // one-time exec
 
         return (result.isEmpty()) ? null : result;
@@ -179,10 +176,10 @@ public class NodeUtils {
      * <br/> Пример:
      * <br/		final Object value = getByLink(sourceLink, subItemId, props, nodeService, nameService, substService, propName);
      *
-     * @param sourceLink
-     * @param docId
+     * @param sourceLink String
+     * @param docId      NodeRef
      * @param props      список свойств объекта, если null, то свойство будет загружаться непосредственно
-     * @param resolver
+     * @param resolver   LinksResolver
      * @param logger     для журналирования, м.б. null
      * @param info       пояснения по получемому значению для журналирования ошибок
      * @return полученное значение
@@ -209,9 +206,9 @@ public class NodeUtils {
                 // форматируем значение вида "{a/b/c...}"
                 value = resolver.evaluateLinkExpr(docId, sourceLink);
             } else { // простое значение выбираем в свойствах
-				final NodeService nodeService = resolver.getServices().getServiceRegistry().getNodeService();
-				final NamespaceService ns = resolver.getServices().getServiceRegistry().getNamespaceService();
-				final QName qname = QName.createQName(sourceLink, ns);
+                final NodeService nodeService = resolver.getServices().getServiceRegistry().getNodeService();
+                final NamespaceService ns = resolver.getServices().getServiceRegistry().getNamespaceService();
+                final QName qname = QName.createQName(sourceLink, ns);
                 value = (props != null) ? props.get(qname) : nodeService.getProperty(docId, qname);
             }
         } catch (Throwable ex) {
