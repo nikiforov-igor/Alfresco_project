@@ -47,14 +47,15 @@ public class SignPermissionWebscript extends DeclarativeWebScript {
 		boolean isBoss = orgstructureService.isBoss(employee, true);
 		JSONObject jsonRes = new JSONObject();
 		try {
-			jsonRes.put("success", hasBR || isBoss);
+//			jsonRes.put("success", hasBR || isBoss);
+                        jsonRes.put("success", hasBR);
 		} catch (JSONException ex) {
 			Logger.getLogger(SignPermissionWebscript.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		result.put("result", jsonRes);
 		return result;
 	}
-	
+
 	Map<String, Object> executeHasPropertiesAction(WebScriptRequest req) throws JSONException{
 		Map<String, Object> result = new HashMap<String, Object>();
 		JSONObject jsonRes = new JSONObject();
@@ -99,7 +100,7 @@ public class SignPermissionWebscript extends DeclarativeWebScript {
 				Logger.getLogger(SignPermissionWebscript.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
-		
+
 		if(action.equals(HAS_PROPERTIES_ACTION)){
 			try {
 				return executeHasPropertiesAction(req);
