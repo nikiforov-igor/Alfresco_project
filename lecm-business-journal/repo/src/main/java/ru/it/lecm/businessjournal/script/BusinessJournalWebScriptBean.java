@@ -148,10 +148,10 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         }
 	}
 
-    public Scriptable getHistory(String nodeRef, String sortColumnName, boolean ascending, boolean includeSecondary) {
+    public Scriptable getHistory(String nodeRef, String sortColumnName, boolean ascending, boolean showSecondary, boolean showInactive) {
         ParameterCheck.mandatory("parentRef", nodeRef);
         NodeRef ref = new NodeRef(nodeRef);
-        List<NodeRef> records = service.getHistory(ref, sortColumnName, ascending, includeSecondary);
+        List<NodeRef> records = service.getHistory(ref, sortColumnName, ascending, showSecondary, showInactive);
 
         return createScriptable(records);
     }

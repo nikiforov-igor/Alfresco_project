@@ -258,10 +258,6 @@ public interface BusinessJournalService {
 	 */
 	boolean moveRecordToArchive(NodeRef record);
 
-    List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnName, boolean ascending, boolean includeSecondary);
-
-    List<NodeRef> getHistory(NodeRef nodeRef, boolean includeSecondary);
-
     List<NodeRef> getStatusHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending);
 
 	/**
@@ -269,4 +265,6 @@ public interface BusinessJournalService {
 	 * @return true если является
 	 */
 	boolean isBJEngineer();
+
+    List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnLocalName, boolean sortAscending, boolean includeSecondary, boolean showInactive);
 }

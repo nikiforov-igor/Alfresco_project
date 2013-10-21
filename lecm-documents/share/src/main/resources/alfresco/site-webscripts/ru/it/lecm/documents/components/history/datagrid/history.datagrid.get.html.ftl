@@ -13,7 +13,15 @@
 <#if args.showSecondaryCheckBox?? && args.showSecondaryCheckBox == "true">
     <#assign showCheckBox = true>
 </#if>
-<@grid.datagrid containerId true gridId+"form" showCheckBox>
+
+<div class="show-archive-cb-div" style="text-align: right;">
+    <input type="checkbox" class="formsCheckBox" id="${containerId}-cbShowSecondary" onChange="YAHOO.Bubbling.fire('showSecondaryClicked', null)">
+    <label class="checkbox" for="${containerId}-cbShowSecondary">${msg("logicecm.base.show-secondary.label")}</label>
+</div>
+
+<#--uncomment to display "Show Inactive" checkbox-->
+<#--<@grid.datagrid containerId true gridId+"form" showCheckBox>-->
+<@grid.datagrid containerId true gridId+"form" false>
     <script type="text/javascript">//<![CDATA[
     (function () {
         YAHOO.util.Event.onDOMReady(function (){

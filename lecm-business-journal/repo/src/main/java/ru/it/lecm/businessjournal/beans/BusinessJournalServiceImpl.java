@@ -678,9 +678,8 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	}
 
 	@Override
-    public List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending, final boolean includeSecondary) {
-
-        List<NodeRef> result = getHistory(nodeRef, includeSecondary);
+    public List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending, boolean showSecondary, boolean showInactive) {
+        List<NodeRef> result = getHistory(nodeRef, showSecondary, showInactive);
 
         final QName sortFieldQName = sortColumnLocalName != null && sortColumnLocalName.length() > 0 ? QName.createQName(BJ_NAMESPACE_URI, sortColumnLocalName) : PROP_BR_RECORD_DATE;
         if (sortFieldQName == null) {
@@ -708,8 +707,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         return result;
     }
 
-    @Override
-    public List<NodeRef> getHistory(NodeRef nodeRef, boolean includeSecondary) {
+    private List<NodeRef> getHistory(NodeRef nodeRef, boolean showSecondary, boolean showInactive) {
         if (nodeRef == null) {
             return new ArrayList<NodeRef>();
         }
@@ -717,7 +715,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
 
         List<NodeRef> result = new ArrayList<NodeRef>();
-        int index = includeSecondary ? MAX_SECONDARY_OBJECTS_COUNT  : 0;
+        int index = showSecondary ? MAX_SECONDARY_OBJECTS_COUNT  : 0;
 
         for (int i = -1; i<index; i++) {
             if (i >= 0) {
@@ -725,10 +723,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
             }
             for (AssociationRef sourceAssoc : sourceAssocs) {
                 NodeRef bjRecordRef = sourceAssoc.getSourceRef();
-
-                if (!isArchive(bjRecordRef)) {
-                    result.add(bjRecordRef);
+                if (!showInactive && isArchive(bjRecordRef)) {
+                    continue;
                 }
+
+                result.add(bjRecordRef);
             }
         }
 
@@ -738,7 +737,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
     @Override
     public List<NodeRef> getStatusHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending) {
 
-        List<NodeRef> result = getHistory(nodeRef, false);
+        List<NodeRef> result = getHistory(nodeRef, false, false);
         List<NodeRef> resultStatus = new ArrayList<NodeRef>();
 
         final QName sortFieldQName = sortColumnLocalName != null && sortColumnLocalName.length() > 0 ? QName.createQName(BJ_NAMESPACE_URI, sortColumnLocalName) : PROP_BR_RECORD_DATE;

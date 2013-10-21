@@ -23,6 +23,10 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 (function () {
 
     LogicECM.module.BusinessJournal.DataGrid = function (containerId) {
+        this.options.searchShowSecondary = false;
+
+        YAHOO.Bubbling.on("showSecondaryClicked", this.onShowSecondaryClicked, this);
+
         return LogicECM.module.BusinessJournal.DataGrid.superclass.constructor.call(this, containerId);
     };
 
@@ -35,6 +39,24 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
     YAHOO.lang.augmentObject(LogicECM.module.BusinessJournal.DataGrid.prototype, {
+        onShowSecondaryClicked: function (layer, args) {
+            var cbShowSecondary = YAHOO.util.Dom.get(this.id + "-cbShowSecondary");
+            if (!cbShowSecondary) {
+                return;
+            }
+            this.options.searchShowSecondary = cbShowSecondary.checked;
+
+            if (!this.datagridMeta.searchConfig) {
+                this.datagridMeta.searchConfig = {};
+            }
+            this.datagridMeta.searchConfig.showSecondary = this.options.searchShowSecondary;
+            var obj = {
+                datagridMeta: this.datagridMeta
+            };
+
+            YAHOO.Bubbling.fire("activeGridChanged", obj);
+        },
+
         getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
             var html = "";
             // Populate potentially missing parameters
