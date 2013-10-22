@@ -269,7 +269,7 @@ public class CounterFactory extends BaseBean {
 				}
 				return counterNodeRef;
 			}
-		});
+		}, false, true);
 	}
 
 	private NodeRef getDocTypeYearCounter(final String docType, final String tag) {
@@ -291,7 +291,7 @@ public class CounterFactory extends BaseBean {
 				}
 				return counterNodeRef;
 			}
-		});
+		}, false, true);
 	}
 
 	/**
