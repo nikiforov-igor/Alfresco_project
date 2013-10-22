@@ -2229,32 +2229,33 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 };
 
                 if (!fnPrompt){
-                    fnPrompt = function onDelete_Prompt(fnAfterPrompt){
-                        Alfresco.util.PopupManager.displayPrompt(
-                            {
-                                title:this.msg("message.confirm.delete.title", items.length),
-                                text: (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", itemsString),
-                                buttons:[
-                                    {
-                                        text:this.msg("button.delete"),
-                                        handler:function DataGridActions__onActionDelete_delete() {
-                                            this.destroy();
-											me.selectItems("selectNone");
-                                            fnAfterPrompt.call(me, items);
-                                        }
-                                    },
-                                    {
-                                        text:this.msg("button.cancel"),
-                                        handler:function DataGridActions__onActionDelete_cancel() {
-                                            this.destroy();
-                                        },
-                                        isDefault:true
-                                    }
-                                ]
-                            });
-                    }
+                    fnPrompt = function(){me.onDelete_Prompt(fnActionDeleteConfirm,me,items,itemsString)};
                 }
                 fnPrompt.call(this, fnActionDeleteConfirm);
+            },
+            onDelete_Prompt: function(fnAfterPrompt,me,items,itemsString){
+            Alfresco.util.PopupManager.displayPrompt(
+                {
+                    title:this.msg("message.confirm.delete.title", items.length),
+                    text: (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", itemsString),
+                    buttons:[
+                        {
+                            text:this.msg("button.delete"),
+                            handler:function DataGridActions__onActionDelete_delete() {
+                                this.destroy();
+                                me.selectItems("selectNone");
+                                fnAfterPrompt.call(me, items);
+                            }
+                        },
+                        {
+                            text:this.msg("button.cancel"),
+                            handler:function DataGridActions__onActionDelete_cancel() {
+                                this.destroy();
+                            },
+                            isDefault:true
+                        }
+                    ]
+                });
             },
             /**
              * Продублировать item(s).

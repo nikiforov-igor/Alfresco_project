@@ -56,7 +56,6 @@
     var Dom = YAHOO.util.Dom;
     LogicECM.module.Base.DataGridControl_${objectId} = function (htmlId) {
         LogicECM.module.Base.DataGridControl_${objectId}.superclass.constructor.call(this, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
-        YAHOO.Bubbling.on("addDataSource", this.refreshDataSource, this);
         return this;
     };
 
@@ -66,46 +65,6 @@
     YAHOO.lang.augmentObject(LogicECM.module.Base.DataGridControl_${objectId}.prototype, {
                 expand: false,
                 selectedItems: {},
-
-                refreshDataSource: function refreshDataSource(layer, args) {
-                    var obj = args[1];
-                    if (obj.options.bubblingLabel == "${bubblingId}") {
-                        this.widgets.dataTable.deleteRows(0, this.widgets.dataTable._oRecordSet._records.length);
-                        var container = Dom.get("${controlId}-container");
-                        var inputAdded = Dom.get("${fieldHtmlId}-added");
-                        if (inputAdded != null) {
-                            if (this.options.edit) {
-                                var inputRemove = Dom.get("${fieldHtmlId}-removed");
-                                var inputSelected = Dom.get("${fieldHtmlId}");
-                                //удаление
-                                if (inputRemove != null && inputSelected != null) {
-                                    inputRemove.value = "";
-                                    var refs = inputSelected.value.split(",");
-                                    for (var ref in refs) {
-                                        var remove = true;
-                                        for (var item in obj.selectedItems) {
-                                            if (refs[ref] == obj.selectedItems[item].nodeRef) {
-                                                remove = false;
-                                            }
-                                        }
-                                        if (remove) {
-                                            inputRemove.value = (inputRemove.value != "") ? inputRemove.value + "," + refs[ref] : refs[ref];
-                                        }
-                                    }
-                                }
-                            }
-                            // добавление
-                            for (var item in obj.selectedItems) {
-                                inputAdded.value = (inputAdded.value != "") ? inputAdded.value + "," + obj.selectedItems[item].nodeRef : obj.selectedItems[item].nodeRef;
-                                this.onDataItemCreated(null, [null, {
-                                    nodeRef: obj.selectedItems[item].nodeRef,
-                                    bubblingLabel: "${bubblingId}"
-                                }]);
-                            }
-
-                        }
-                    }
-                },
                 onDataItemCreated: function DataGrid_onDataItemCreated(layer, args) {
                     var obj = args[1];
                     if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
@@ -128,9 +87,13 @@
                                             };
                                             this.afterDataGridUpdate.push(fnAfterUpdate);
                                             this.widgets.dataTable.addRow(item);
-                                            var container = Dom.get("${controlId}-container");
+                                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", response.config.successCallback.scope);
                                             var inputAdded = Dom.get("${fieldHtmlId}-added");
                                             inputAdded.value = (inputAdded.value != "") ? inputAdded.value + "," + item.nodeRef : item.nodeRef;
+                                            if (response.config.successCallback.scope.options.formMode=="create"){
+                                                var input = Dom.get("${fieldHtmlId}");
+                                                input.value = (input.value != "") ? input.value + "," + item.nodeRef : item.nodeRef;
+                                            }
                                         },
                                         scope: this
                                     },
@@ -143,6 +106,43 @@
                                         },
                                         scope: this
                                     }
+                                });
+                    }
+                },
+                onDelete_Prompt: function (fnAfterPrompt, me, items, itemsString) {
+                    if (me._hasEventInterest(me.options.bubblingLabel)) {
+
+                        Alfresco.util.PopupManager.displayPrompt(
+                                {
+                                    title: this.msg("message.confirm.delete.title", items.length),
+                                    text: (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", itemsString),
+                                    buttons: [
+                                        {
+                                            text: this.msg("button.delete"),
+                                            handler: function DataGridActions__onActionDelete_delete() {
+                                                var inputAdded = Dom.get("${fieldHtmlId}-added");
+                                                if (inputAdded.value != "") {
+                                                    var refs = inputAdded.value.split(",");
+                                                    for (var i = 0; i < refs.length; i++) {
+                                                        if (refs[i] == items[0].nodeRef) {
+                                                            inputAdded.value = inputAdded.value.replace(items[0].nodeRef, "");
+                                                        }
+                                                    }
+                                                };
+                                                YAHOO.Bubbling.fire("mandatoryControlValueUpdated", me);
+                                                this.destroy();
+                                                me.selectItems("selectNone");
+                                                fnAfterPrompt.call(me, items);
+                                            }
+                                        },
+                                        {
+                                            text: this.msg("button.cancel"),
+                                            handler: function DataGridActions__onActionDelete_cancel() {
+                                                this.destroy();
+                                            },
+                                            isDefault: true
+                                        }
+                                    ]
                                 });
                     }
                 },
@@ -206,9 +206,7 @@
         var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
             usePagination: ${usePagination?string},
             showExtendSearchBlock: false,
-            <#if form.mode == "edit">
-                edit: true,
-            </#if>
+            formMode: "${form.mode?string}",
             actions: [
                 <#if allowExpand = "true">
                     {
@@ -284,9 +282,13 @@
 
     };
     function loadRootNode() {
-
-        var nodeRef = "${form.arguments.itemId}";
-        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/folder?documentNodeRef=" + nodeRef;
+        var sUrl = "";
+        <#if (form.mode == "create") || field.control.params.startLocation??>
+            sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search" + "?titleProperty=" + encodeURIComponent("cm:name") + "&xpath=" + encodeURIComponent("${field.control.params.startLocation}");
+        <#else>
+            var nodeRef = "${form.arguments.itemId}";
+            sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/folder?documentNodeRef=" + nodeRef;
+        </#if>
         Alfresco.util.Ajax.jsonGet(
                 {
                     url: sUrl,
@@ -322,7 +324,6 @@
     <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
     <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
     <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
-    <input type="hidden" id="${controlId}-selectedItems"/>
 </div>
 
 </div>
