@@ -79,11 +79,9 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 	@Override
 	public NodeRef getDocumentByTableData(NodeRef tableDataRef) {
 		if (nodeService.exists(tableDataRef)) {
-			//todo применить закомментированный код, после изменения струкутры хранения
-//			NodeRef tableDataRoot = nodeService.getPrimaryParent(tableDataRef).getParentRef();
-//			if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
-//				NodeRef document = nodeService.getPrimaryParent(tableDataRoot).getParentRef();
-				NodeRef document = nodeService.getPrimaryParent(tableDataRef).getParentRef();
+			NodeRef tableDataRoot = nodeService.getPrimaryParent(tableDataRef).getParentRef();
+			if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
+				NodeRef document = nodeService.getPrimaryParent(tableDataRoot).getParentRef();
 				if (document != null) {
 					QName testType = nodeService.getType(document);
 					Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
@@ -91,7 +89,7 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 						return document;
 					}
 				}
-//			}
+			}
 		}
 		return null;
 	}

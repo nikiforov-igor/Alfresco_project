@@ -59,3 +59,11 @@
 {
     display: block;
 }
+
+.datagrid .expandRow a {
+    background-image: url("/share/res/images/lecm-base/components/triangle_down.png");
+}
+
+.datagrid .expanded .expandRow a {
+    background-image: url("/share/res/images/lecm-base/components/triangle_up.png");
+}

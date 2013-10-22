@@ -161,13 +161,17 @@
                     <field id="lecm-contract:locationContract" set="other"/>
                     <field id="lecm-contract-aspect:reasonDelete-assoc" set="tab1"/>
                     <field id="lecm-contract-table-structure:stages-assoc" set="tab2">
-                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-association-control.ftl">
                             <control-param name="itemType">lecm-contract-table-structure:stage</control-param>
                             <control-param name="allowCreate">true</control-param>
+                            <control-param name="allowDelete">true</control-param>
+                            <control-param name="allowEdit">true</control-param>
+                            <control-param name="allowExpand">true</control-param>
                             <control-param name="showActions">true</control-param>
-                            <control-param name="fullDelete">true</control-param>
                             <control-param name="height">100</control-param>
-                            <control-param name="bubblingLabel">contract-table-structure</control-param>
+                            <!--<control-param name="usePagination">true</control-param>-->
+                            <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
+                            <control-param name="datagridFormId">datagrid</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1402,6 +1406,11 @@
                         </control>
                     </field>
                 </appearance>
+            </form>
+            <form id="table-structure-info">
+                <field-visibility>
+                    <show id="lecm-contract-table-structure:name" force="true"/>
+                </field-visibility>
             </form>
         </forms>
     </config>
