@@ -83,7 +83,9 @@
             doBeforeAjaxRequest: {
                 fn: function (form) {
                     var renameProperty = function (dataObj, name) {
-                        if (name.indexOf("_removed") > 0) { //не может быть удаленных значений, да и они не нужны
+                        if (name.indexOf("_removed") > 0 ||
+                            name.indexOf("-selectedItems") > 0 ||
+                            name.indexOf("-autocomplete-input") > 0) { //не может быть удаленных значений, да и они не нужны
                             delete dataObj[name];
                         } else if (name.indexOf("_added") > 0) { // что-то выбрано для ассоциаций
                             var newName = name.replace("_added", "");

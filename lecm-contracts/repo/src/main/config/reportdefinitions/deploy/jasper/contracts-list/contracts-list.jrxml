@@ -67,20 +67,8 @@
 	<field name="col_DateEnd" class="java.util.Date">
 		<fieldDescription><![CDATA[Дата окончания действия договора]]></fieldDescription>
 	</field>
-	<field name="col_Creator" class="java.lang.String">
-		<fieldDescription><![CDATA[Создатель договора]]></fieldDescription>
-	</field>
-	<field name="col_Executor_Family" class="java.lang.String">
-		<fieldDescription><![CDATA[Исполнитель.Фамилия]]></fieldDescription>
-	</field>
-	<field name="col_Executor_Name" class="java.lang.String">
-		<fieldDescription><![CDATA[Исполнитель.Имя]]></fieldDescription>
-	</field>
-	<field name="col_Executor_Otchestvo" class="java.lang.String">
-		<fieldDescription><![CDATA[Исполнитель.Отчество]]></fieldDescription>
-	</field>
-	<field name="col_Executor_Staff" class="java.lang.String">
-		<fieldDescription><![CDATA[Исполнитель.Должность]]></fieldDescription>
+	<field name="col_Executor" class="java.lang.String">
+		<fieldDescription><![CDATA[Исполнитель]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -280,9 +268,8 @@
 					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{col_Executor_Family} == null ? "" : $F{col_Executor_Family})
-+ ( $F{col_Executor_Name} == null ? "" : " "+ ($F{col_Executor_Name}+ " ").substring( 0, 1 )+ ".")
-+ ( $F{col_Executor_Otchestvo} == null ? "" : ($F{col_Executor_Otchestvo}+ " ").substring(0,1) + ".")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{col_Executor} == null ? "" : $F{col_Executor})
+]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="b8fc6c50-c272-4fda-86c8-c18a502c3205" x="690" y="0" width="107" height="20" isPrintWhenDetailOverflows="true"/>

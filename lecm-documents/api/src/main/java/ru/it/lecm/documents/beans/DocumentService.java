@@ -18,6 +18,7 @@ import java.util.Map;
 public interface DocumentService {
     public static final String DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/document/1.0";
     public static final String DOCUMENT_ASPECTS_NAMESPACE_URI = "http://www.it.ru/lecm/document/aspects/1.0";
+    public static final String DOCUMENT_SUBJECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/document/dictionaries/1.0";
 
     public static final QName TYPE_BASE_DOCUMENT = QName.createQName(DOCUMENT_NAMESPACE_URI, "base");
 	public static final QName PROP_DOCUMENT_REGNUM = QName.createQName(DOCUMENT_NAMESPACE_URI, "regnum");
@@ -52,6 +53,8 @@ public interface DocumentService {
 	public static final QName ASSOC_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document-assoc");
 
 	public static final QName ASPECT_SEMANTIC_ASSIST = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "semanticAssistAspect");
+
+    public static final QName TYPE_DOC_SUBJECT = QName.createQName(DOCUMENT_SUBJECTS_NAMESPACE_URI, "subjects");
 
     /**
      * Метод для получения рейтинга документа

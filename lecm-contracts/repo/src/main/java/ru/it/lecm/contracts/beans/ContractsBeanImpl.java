@@ -23,6 +23,7 @@ import java.util.*;
 public class ContractsBeanImpl extends BaseBean {
 	public static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
 	public static final String ADDITIONAL_DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/additional-document/1.0";
+	public static final String CONTRACT_DIC_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/dictionaries/1.0";
 
 	public static final QName TYPE_CONTRACTS_DOCUMENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
 	public static final QName TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocument");
@@ -38,6 +39,8 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
 	public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
+
+    public static final QName TYPE_CONTRACTS_TYPE = QName.createQName(CONTRACT_DIC_NAMESPACE_URI, "contract-type");
 
     private SearchService searchService;
     private DocumentService documentService;

@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/contracts/contracts-reports</template-type>
+    <template-type>ru/it/lecm/documents/reports-list</template-type>
+    <properties>
+        <docPage>true</docPage>
+    </properties>
     <components>
         <!-- Title -->
         <component>
@@ -8,6 +11,14 @@
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
                 <title>page.contracts-reports</title>
+            </properties>
+        </component>
+        <!-- Datagrid -->
+        <component>
+            <region-id>reports-grid</region-id>
+            <url>/lecm/documents/reports-list-grid</url>
+            <properties>
+                <itemType>lecm-contract:document</itemType>
             </properties>
         </component>
         <!-- Menu -->
@@ -22,11 +33,6 @@
         <component>
             <region-id>forbidden</region-id>
             <url>/lecm/base/forbidden</url>
-        </component>
-		<!-- Reports List -->
-		<component>
-            <region-id>reports-list</region-id>
-            <url>/lecm/contracts/reports/list</url>
         </component>
     </components>
 </template-instance>

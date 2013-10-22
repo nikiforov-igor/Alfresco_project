@@ -35,11 +35,6 @@
            </l18>
         </provider>
         <template filename="contracts-list.jrxml"/>
-        <datasource.descriptor mnem="datasource-approval">
-            <l18>
-                <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
-            </l18>
-        </datasource.descriptor>
     </report.descriptor>
 
 	<query.descriptor>
@@ -49,26 +44,101 @@
 		<allVersions>true</allVersions>
 		<preferedType>{lecm-contract:document}</preferedType>
 		<isMultiRow>true</isMultiRow>
-		<isCustom>true</isCustom>
-		<!--
-			select * from lecm:documents
-			select * from lecm-contract:document as Contract
-		  -->
-		<queryText>	<![CDATA[]]> </queryText>
+		<isCustom>false</isCustom>
+		<queryText><![CDATA[]]></queryText>
 	</query.descriptor>
 
-	<!-- параметры соединения с Альфреско (пока не используются) -->
-	<cmis.connection>
-		<url>http://localhost:8080/alfresco/service/cmis</url>
-		<username>admin</username>
-		<password>111</password>
-	</cmis.connection>
-
-
 	<fields>
-		<field queryFldName="lecm-contract:regNumSystem"
-				jrFldName="col_Regnum"
-				displayName="Регистрационный номер договора" javaValueClass="String"/>
+        <!-- Parameters-->
+        <field jrFldName="dateStart" order="0" queryFldName="{lecm-contract:startDate}" displayName="Дата начала действия договора"
+               javaValueClass="java.util.Date" alfrescoType="d:date">
+            <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
+                <l18>
+                    <item key="RU_RU" value="Диапазон"/>
+                </l18>
+                <label1>
+                    <item key="RU_RU" value="С"/>
+                </label1>
+                <label2>
+                    <item key="RU_RU" value="По"/>
+                </label2>
+            </parameter>
+        </field>
+
+        <field jrFldName="dateEnd" order="1" queryFldName="{lecm-contract:endDate}" displayName="Дата окончания действия договора"
+               javaValueClass="java.util.Date" alfrescoType="d:date">
+            <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
+                <l18>
+                    <item key="RU_RU" value="Диапазон"/>
+                </l18>
+                <label1>
+                    <item key="RU_RU" value="С"/>
+                </label1>
+                <label2>
+                    <item key="RU_RU" value="По"/>
+                </label2>
+            </parameter>
+        </field>
+
+        <field jrFldName="contractSum" order="2" queryFldName="{lecm-contract:totalAmount}" displayName="Сумма"
+               javaValueClass="java.lang.Float" alfrescoType="d:float" >
+            <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
+                <l18>
+                    <item key="RU_RU" value="Диапазон"/>
+                </l18>
+                <label1>
+                    <item key="RU_RU" value="От"/>
+                </label1>
+                <label2>
+                    <item key="RU_RU" value="До"/>
+                </label2>
+            </parameter>
+        </field>
+
+        <field jrFldName="contragents" order="3" queryFldName="{lecm-contract:partner-assoc-ref}" displayName="Контрагент"
+               javaValueClass="java.lang.String" alfrescoType="lecm-contractor:contractor-type">
+            <l18>
+                <item key="RU_RU" value="Контрагент"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
+                <l18> <item key="RU_RU" value="Список"/> </l18>
+            </parameter>
+        </field>
+
+        <field alfrescoType="lecm-contract-dic:contract-type" order="4" displayName="Вид договора"
+               javaValueClass="java.lang.String" jrFldName="contractType" queryFldName="{lecm-contract:typeContract-assoc-ref}">
+            <l18>
+                <item key="RU_RU" value="Вид договора"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
+                <l18> <item key="RU_RU" value="Список"/> </l18>
+            </parameter>
+        </field>
+
+        <field alfrescoType="lecm-doc-dic:subjects" order="5" displayName="Тематика договора"
+               javaValueClass="java.lang.String" jrFldName="contractSubject" queryFldName="{lecm-contract:subjectContract-assoc-ref}">
+            <l18>
+                <item key="RU_RU" value="Тематика договора"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
+                <l18> <item key="RU_RU" value="Список"/> </l18>
+            </parameter>
+        </field>
+
+        <field alfrescoType="d:boolean" order="6" displayName="Только актуальные"
+               javaValueClass="java.lang.Boolean" jrFldName="contractActualOnly" queryFldName="{{contractActualOnly}}">
+            <l18>
+                <item key="RU_RU" value="Только актуальные"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_VALUE" paramType="PARAM_TYPE_VALUE">
+                <l18> <item key="RU_RU" value="Значение"/> </l18>
+            </parameter>
+        </field>
+
+        <!-- данные для отчета-->
+        <field queryFldName="{lecm-contract:regNumSystem}"
+               jrFldName="col_Regnum"
+               displayName="Регистрационный номер договора" javaValueClass="java.lang.String"/>
 
 		<field jrFldName="col_numContragent" queryFldName="lecm-contract:regNumContractor" displayName="Регистрационный номер контрагента" />
 
@@ -87,32 +157,18 @@
 		<field jrFldName="col_Theme.desc" queryFldName="{lecm-contract:subjectContract-assoc/lecm-contract-dic:contract-subjects-description}" displayName="Тематика.Описание" />
 
 		<!-- Статус -->
-		<field jrFldName="col_Status" queryFldName="lecm-statemachine:status" displayName="Статус" />
+		<field jrFldName="col_Status" queryFldName="{lecm-statemachine:status}" displayName="Статус" />
 
 		<!-- Дата изменения статуса -->
-		<field jrFldName="col_StatusDate" queryFldName="lecm-document:status-changed-date" displayName="Дата смены статус"
+		<field jrFldName="col_StatusDate" queryFldName="{lecm-document:status-changed-date}" displayName="Дата смены статус"
 				javaValueClass="java.util.Date"/>
 
-		<field jrFldName="col_DateStart" queryFldName="lecm-contract:startDate" displayName="Дата начала действия договора"
-				javaValueClass="java.util.Date"/>
+        <field jrFldName="col_DateStart" queryFldName="{lecm-contract:startDate}" displayName="Дата начала действия договора"
+               javaValueClass="java.util.Date"/>
 
-		<field jrFldName="col_DateEnd" queryFldName="lecm-contract:endDate" displayName="Дата окончания действия договора"
-				javaValueClass="java.util.Date"/>
+        <field jrFldName="col_DateEnd" queryFldName="{lecm-contract:endDate}" displayName="Дата окончания действия договора"
+               javaValueClass="java.util.Date"/>
 
-		<!-- Создатель договора -->
-		<field jrFldName="col_Creator" queryFldName="lecm-document:creator-ref" displayName="Создатель договора" />
-
-		<!--Представители (типа "lecm-representative:representative-type")
-			Фамилия Имя Отчество и Должность
-		  -->
-		<field jrFldName="col_Executor_Family" queryFldName="{lecm-contract:representative-assoc/lecm-representative:surname}" displayName="Исполнитель.Фамилия" />
-		<field jrFldName="col_Executor_Name" queryFldName="{lecm-contract:representative-assoc/lecm-representative:firstname}" displayName="Исполнитель.Имя" />
-		<field jrFldName="col_Executor_Otchestvo" queryFldName="{lecm-contract:representative-assoc/lecm-representative:middlename}" displayName="Исполнитель.Отчество" />
-		<field jrFldName="col_Executor_Staff" queryFldName="{lecm-contract:representative-assoc/lecm-representative:rank}" displayName="Исполнитель.Должность" />
-
-		<!--
-			<field queryFldName="fmydata" dislayName="" javaValueClass="my.check.type"/>
-		  -->
+		<field jrFldName="col_Executor" queryFldName="{lecm-document:creator}" displayName="Исполнитель" />
 	</fields>
-
 </ds.config>
