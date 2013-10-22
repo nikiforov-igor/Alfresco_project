@@ -76,13 +76,17 @@ public class ParameterMapper {
                     boolean isDateRange = false;
                     boolean isNumberRange = false;
                     if (args.containsKey(dateRangeParam)) {
-                        argRootName = dateRangeParam;
+                        //добавляем в список параметр обработанный ключ
+                        args.put(argRootName, args.get(dateRangeParam));
+                        args.remove(dateRangeParam);
                         isDateRange = true;
                     } else {
                         // не нашли параметра - пробуем получить диапозон для чисел
                         final String numberRangeParam = argRootName + NUMBER_RANGE;
                         if (args.containsKey(numberRangeParam)) {
-                            argRootName = numberRangeParam;
+                            //добавляем в список параметр обработанный ключ
+                            args.put(argRootName, args.get(numberRangeParam));
+                            args.remove(numberRangeParam);
                             isNumberRange = true;
                         }
                     }
@@ -145,14 +149,14 @@ public class ParameterMapper {
     }
 
 
-    static Object getNumericAutoTypedValue(String value) {
+    static public Object getNumericAutoTypedValue(String value) {
         if (value == null || value.length() == 0) {
             return null;
         }
         return value.indexOf(".") > 0 ? Double.valueOf(value) : Long.valueOf(value);
     }
 
-    static Date getDateValue(String paramValue) {
+    static public Date getDateValue(String paramValue) {
         try {
             if (paramValue != null && paramValue.length() > 0) {
                 return DATE_FORMAT.parse(paramValue);
@@ -183,6 +187,9 @@ public class ParameterMapper {
             dsDesc.getColumns().add(result);
             destValue = value;
         } else {
+            if (result.getExpression() != null && !result.getExpression().isEmpty()) {
+                value = result.getExpression();
+            }
             if (value instanceof String) {
                 if (!Utils.isStringEmpty((String) value)) {
                     destValue = value;

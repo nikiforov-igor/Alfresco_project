@@ -17,7 +17,7 @@
     <report.descriptor mnem="approval-discipline">
         <type mnem="JASPER"/>
         <l18>
-            <item key="RU_RU" value="Исполнительская дисциплина по согласованиям"/>
+            <item key="RU_RU" value="Исполнительская дисциплина по согласованиям за период"/>
         </l18>
         <provider mnem="DSProdiverApprovalSummaryByPeriod" javaClass="ru.it.lecm.contracts.reports.DSProdiverApprovalSummaryByPeriod" >
            <l18>
@@ -25,11 +25,6 @@
            </l18>
         </provider>
         <template filename="approval-discipline.jrxml"/>
-        <datasource.descriptor mnem="datasource-approval">
-            <l18>
-                <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
-            </l18>
-        </datasource.descriptor>
     </report.descriptor>
 
 	<query.descriptor>
@@ -39,12 +34,8 @@
 		<allVersions>true</allVersions>
 		<preferedType>{lecm-contract:document}</preferedType>
 		<isMultiRow>true</isMultiRow>
-		<isCustom>true</isCustom>
-		<!--
-			select * from lecm:documents
-			select * from lecm-al:approval-list as approvals
-		  -->
-		<queryText>	<![CDATA[]]></queryText>
+		<isCustom>false</isCustom>
+        <queryText><![CDATA[]]></queryText>
 	</query.descriptor>
 
 	<cmis.connection>
@@ -53,58 +44,56 @@
 	</cmis.connection>
 
 	<fields>
+        <!-- параметры -->
 		<!-- Период - начало и конец -->
-		<field queryFldName="{period.start}" jrFldName="col_Period.Start" displayName="Начало периода" javaValueClass="Date">
-            <parameter mnem="PARAM_TYPE_VALUE" paramType="PARAM_TYPE_VALUE">
-                <l18><item key="RU_RU" value="Значение"/></l18>
-                <label1><item key="RU_RU" value="С"/></label1>
+		<field queryFldName="{lecm-al:approval-list-approve-start}" jrFldName="periodDate" displayName="Период" javaValueClass="java.util.Date" alfrescoType="d:date">
+            <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
+                <l18>
+                    <item key="RU_RU" value="Диапазон"/>
+                </l18>
+                <label1>
+                    <item key="RU_RU" value="Начало отсчета"/>
+                </label1>
+                <label2>
+                    <item key="RU_RU" value="Конец отсчета"/>
+                </label2>
             </parameter>
         </field>
-		<field queryFldName="{period.end}" jrFldName="col_Period.End" displayName="Конец периода" javaValueClass="Date">
-            <parameter mnem="PARAM_TYPE_VALUE" paramType="PARAM_TYPE_VALUE">
-                <l18><item key="RU_RU" value="Значение"/></l18>
-                <label1><item key="RU_RU" value="С"/></label1>
-            </parameter>
-        </field>
 
-		<!-- Фамилия Имя Отчество Сотрудника-->
-		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-first-name}"
-				jrFldName="col_Employee.FirstName"
-				displayName="Фамилия Сотрудника" javaValueClass="String"/>
+        <field queryFldName="lecm-al:approval-list" jrFldName="TYPE" displayName="Тип" javaValueClass="java.lang.String"/>
 
-		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-middle-name}"
-				jrFldName="col_Employee.MiddleName"
-				displayName="Имя Сотрудника" javaValueClass="String"/>
+        <field queryFldName="{period.start}" jrFldName="col_Period.Start" displayName="Начало периода" javaValueClass="java.util.Date"/>
+        <field queryFldName="{period.end}" jrFldName="col_Period.End" displayName="Конец периода" javaValueClass="java.util.Date"/>
 
-		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-last-name}"
-				jrFldName="col_Employee.LastName"
-				displayName="Отчество Сотрудника" javaValueClass="String"/>
+        <!-- данные в отчете -->
+		<!-- Фамилия И.О. Сотрудника-->
+		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-short-name}"
+				jrFldName="col_Employee"
+				displayName="Сотрудник" javaValueClass="java.lang.String"/>
 
 		<!-- Должность Сотрудника (!) вычисляемое -->
-		<field queryFldName="{Employee.StaffPosition{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
+		<field queryFldName="{col_Employee.StaffPosition}"
 				jrFldName="col_Employee.StaffPosition"
-				displayName="Должность Сотрудника" javaValueClass="String"/>
+				displayName="Должность Сотрудника" javaValueClass="java.lang.String"/>
 
 		<!-- Отдел Сотрудника (!) вычисляемое -->
-		<field queryFldName="{Employee.Unit{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
+		<field queryFldName="{col_Employee.Unit}"
 				jrFldName="col_Employee.Unit"
-				displayName="Отдел Сотрудника" javaValueClass="String"/>
+				displayName="Отдел Сотрудника" javaValueClass="java.lang.String"/>
 
 		<!-- Кол-во просроченных согласований (!) вычисляемое -->
-		<field queryFldName="{Employee.MissedApproves{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
+		<field queryFldName="{col_Employee.MissedApproves}"
 				jrFldName="col_Employee.MissedApproves"
-				displayName="Кол-во просроченных согласований" javaValueClass="int"/>
+				displayName="Кол-во просроченных согласований" javaValueClass="java.lang.Integer"/>
 
 		<!-- Средний срок согласований, дней (!) вычисляемое -->
-		<field queryFldName="{Employee.AvgApproved{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
+		<field queryFldName="{col_Employee.AvgApproved}"
 				jrFldName="col_Employee.AvgApproved"
-				displayName="Средний срок согласований, дней" javaValueClass="float"/>
+				displayName="Средний срок согласований, дней" javaValueClass="java.lang.Float"/>
 
 		<!-- Средний срок просрочки, дней (!) вычисляемое -->
-		<field queryFldName="{Employee.AvgMissed{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/sys:node-uuid}}"
+		<field queryFldName="{col_Employee.AvgMissed}"
 				jrFldName="col_Employee.AvgMissed"
-				displayName="Средний срок просрочки, дней" javaValueClass="float"/>
-
+				displayName="Средний срок просрочки, дней" javaValueClass="java.lang.Float"/>
 	</fields>
-
 </ds.config>

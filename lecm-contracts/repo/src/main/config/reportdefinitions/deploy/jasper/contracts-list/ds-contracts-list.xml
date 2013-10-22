@@ -27,7 +27,7 @@
     <report.descriptor mnem="contracts-list">
         <type mnem="JASPER"/>
         <l18>
-            <item key="RU_RU" value="Договорная деятельность"/>
+            <item key="RU_RU" value="Реестр договоров"/>
         </l18>
         <provider mnem="DSProviderReestrDogovorov" javaClass="ru.it.lecm.contracts.reports.DSProviderReestrDogovorov" >
            <l18>
@@ -50,7 +50,7 @@
 
 	<fields>
         <!-- Parameters-->
-        <field jrFldName="dateStart" order="0" queryFldName="{lecm-contract:startDate}" displayName="Дата начала действия договора"
+        <field jrFldName="dateStart" order="0" queryFldName="{lecm-contract:startDate}" displayName="Дата начала действия"
                javaValueClass="java.util.Date" alfrescoType="d:date">
             <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
                 <l18>
@@ -65,7 +65,7 @@
             </parameter>
         </field>
 
-        <field jrFldName="dateEnd" order="1" queryFldName="{lecm-contract:endDate}" displayName="Дата окончания действия договора"
+        <field jrFldName="dateEnd" order="1" queryFldName="{lecm-contract:endDate}" displayName="Дата окончания действия"
                javaValueClass="java.util.Date" alfrescoType="d:date">
             <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
                 <l18>
@@ -98,7 +98,7 @@
         <field jrFldName="contragents" order="3" queryFldName="{lecm-contract:partner-assoc-ref}" displayName="Контрагент"
                javaValueClass="java.lang.String" alfrescoType="lecm-contractor:contractor-type">
             <l18>
-                <item key="RU_RU" value="Контрагент"/>
+                <item key="RU_RU" value="Контрагент(ы)"/>
             </l18>
             <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
                 <l18> <item key="RU_RU" value="Список"/> </l18>

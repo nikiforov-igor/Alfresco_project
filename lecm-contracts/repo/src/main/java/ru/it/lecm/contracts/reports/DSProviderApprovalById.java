@@ -1,29 +1,22 @@
 package ru.it.lecm.contracts.reports;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSetRow;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.contracts.reports.DSProdiverApprovalSummaryByPeriod.ApproveQNameHelper;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.DSProviderSearchQueryReportBase;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.Utils;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Отчёт "Список согласования"
@@ -34,13 +27,13 @@ import ru.it.lecm.reports.utils.Utils;
  * @author rabdullin
  */
 public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
-
     private static final Logger logger = LoggerFactory.getLogger(DSProviderApprovalById.class);
     private static final String XMLNODE_STATUS_DISPLAYNAMES = "statuses.valueDisplay";
+    final static String TYPE_APPROVAL_LIST = "lecm-al:approval-list";
 
     public DSProviderApprovalById() {
         super();
-        setPreferedType(DSProdiverApprovalSummaryByPeriod.TYPE_APPROVAL_LIST);
+        setPreferedType(TYPE_APPROVAL_LIST);
     }
 
     protected void setXMLDefaults(Map<String, Object> defaults) {
@@ -210,9 +203,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
             if (context.getRsIter() != null) {
 
                 final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
-                final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
-
-                final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
+                final ApproveQNameHelper approveQNames = new ApproveQNameHelper(getServices().getServiceRegistry().getNamespaceService());
 
                 while (context.getRsIter().hasNext()) { // тут только одна запись будет по-идее
                     final ResultSetRow rs = context.getRsIter().next();
@@ -305,7 +296,6 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
      * Локализация для "<!-- результат согласования документа -->" и "<!-- Результат согласования сотрудником -->"
      *
      * @param listValue см lecm-approval-list-model.xml::"lecm-al:approval-item-decision" и "lecm-al:approval-list-decision"
-     * @return
      */
     private String makeL12_ApproveResult(String listValue) {
         final Object l18 = getL18ApproveResultMap().get(listValue);
@@ -314,8 +304,9 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 
     private Map<String, Object> getL18ApproveResultMap() {
         Map<String, Object> resultL18 = conf().getMap(XMLNODE_STATUS_DISPLAYNAMES);
-        if (resultL18 == null)
+        if (resultL18 == null) {
             resultL18 = new HashMap<String, Object>();
+        }
         return resultL18;
     }
 }
