@@ -113,13 +113,13 @@ public class FileReportContentDAOBean implements ReportContentDAO {
      */
     private String storeStructurePathFmt = DEFAULT_STORE_STRUC_FMT;
 
-	public void init() {
-		logger.info( String.format( "initialized as:\n\t %s\t %s\n\t %s\t '%s' -> '%s'\n\t %s\t %s"
-				, "readonly", readonly
-				, "rootDir", rootDir, getRoot()
-				, "structure format", storeStructurePathFmt
-		));
-	}
+    public void init() {
+        logger.info(String.format("initialized as:\n\t %s\t %s\n\t %s\t '%s' -> '%s'\n\t %s\t %s"
+                , "readonly", readonly
+                , "rootDir", rootDir, getRoot()
+                , "structure format", storeStructurePathFmt
+        ));
+    }
 
     @Override
     public boolean isReadonly() {
@@ -231,8 +231,8 @@ public class FileReportContentDAOBean implements ReportContentDAO {
     /**
      * По указанному id файла вернуть его полный абсолютный путь.
      *
-     * @param id
-     * @return
+     * @param id IdRContent
+     * @return File
      */
     public File makeAbsFilePath(IdRContent id) {
         return (id != null) ? makeAbsFilePath(id.getReportType(), id.getReportMnemo(), id.getFileName()) : null;
@@ -291,8 +291,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
             return null;
         try {
             final URL fileUrl = f.toURI().toURL();
-			final ContentReader result = new org.alfresco.repo.content.filestore.FileContentReader(f, fileUrl.toString());
-			return result;
+            return new org.alfresco.repo.content.filestore.FileContentReader(f, fileUrl.toString());
         } catch (MalformedURLException ex) {
             final String msg = String.format("Read error:\n\t file '%s'\n\t by id {%s}\n\t Error %s"
                     , f.getAbsolutePath(), id.toString(), ex.getMessage());
@@ -314,7 +313,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
             final File fDirReport = makeAbsFilePath(id.getReportType(), id.getReportMnemo(), "");
             try {
                 FileUtils.deleteDirectory(fDirReport);
-				logger.info( String.format( "Delete directory by id=[%s]:\n\t directory deleted: '%s'", id, fDirReport.getAbsolutePath()));
+                logger.info(String.format("Delete directory by id=[%s]:\n\t directory deleted: '%s'", id, fDirReport.getAbsolutePath()));
             } catch (IOException ex) {
                 final String msg = String.format("Fail to delete template file directory\n\t by id='%s'\n\t %s", id, ex.getMessage());
                 logger.error(msg, ex);
@@ -367,7 +366,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
         // проходим по всем типа, отчётам и файлам ...
 
 		/*
-		 * Иерахия хранения:
+         * Иерахия хранения:
 		 *   1. RootDir
 		 *      2. [lev==1] папки конкретного "Типа отчёта" (reportType)
 		 *            [lev==2] 3. папка "Отчёт" (reportMnemo)

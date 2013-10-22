@@ -203,11 +203,11 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	 *
 	 * @param srcFile    исходный файл для загрузки
 	 * @param errLogInfo сообщение при ошибках
-	 * @return
+	 * @return byte[]
 	 */
 	static byte[] loadFileAsData(File srcFile, String errLogInfo) {
 		try {
-			return Utils.loadFileAsData(srcFile, errLogInfo);
+			return Utils.loadFileAsData(srcFile);
 		} catch (IOException ex) {
 			final String msg = Utils.coalesce(errLogInfo, "") + ex.getMessage();
 			logger.error(msg, ex);

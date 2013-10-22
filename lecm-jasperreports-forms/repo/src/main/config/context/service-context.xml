@@ -45,7 +45,6 @@
 		<property name="services" ref="wksKeeper"/>
 		<property name="resolver" ref="linksResolverBean"/>
 		<property name="reportsManagerBeanName" value="reportsManager"/>
-		<!--  <property name="templatesDAO" ref="fileReportTemplatesBean" /> -->
 		<property name="resultDAO" ref="fileOOReportResultBean" />
 		<property name="ooConnectedStrictly" value="false" />
 		<property name="maxConnectionRetries" value="2" />
@@ -207,7 +206,7 @@
 	  -->
 	<bean id="reportsManager"
 			class="ru.it.lecm.reports.beans.ReportsManagerImpl"
-	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportEditorDAOBean, jasperReportGenerator, mimetypeService"
+	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportEditorDAOBean, jasperReportGenerator"
 	 		init-method="init">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 
@@ -246,10 +245,6 @@
 				class="ru.it.lecm.reports.forms.ReportMainProducer"
 				parent="webscript">
 		<property name="reportsManager" ref="reportsManager"/>
-		<!--
-		<property name="oofficeGenerator" ref="oofficeReportGenerator"/>
-		<property name="cubeGenerator" ref="cubeReportGenerator"/>
-		  -->
 	</bean>
 
 	<bean id="reportsMgrJavaScriptExtension" class="ru.it.lecm.reports.extensions.ReportManagerJavascriptExtension"

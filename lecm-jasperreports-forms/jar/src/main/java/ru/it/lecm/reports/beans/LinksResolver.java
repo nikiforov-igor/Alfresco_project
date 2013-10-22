@@ -47,12 +47,11 @@ public class LinksResolver {
     }
 
     /**
-     * Выполнить разименование ссылки в нативный тип.
-     * см также {@lik #evaluateLinkExpr(NodeRef, String, String, Map)}
+     * Выполнить разименование ссылки в нативный тип.}
      *
-     * @param docId
-     * @param linkExpression
-     * @return
+     * @param docId NodeRef
+     * @param linkExpression String
+     * @return Object
      */
     public Object evaluateLinkExpr(
             NodeRef docId

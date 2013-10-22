@@ -44,20 +44,20 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
             result = true;
             serviceRegistry.getNodeService().setProperty(rdId, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, result);
         }
-		logger.warn( String.format( "report '%s' %sdeployed", reportDescNode, (result ? "" : "NOT ")));
+        logger.warn(String.format("report '%s' %sdeployed", reportDescNode, (result ? "" : "NOT ")));
         return result;
     }
 
     public boolean undeployReport(final String reportCode) {
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 
-		logger.info( String.format( "Undeploying report '%s' ...", reportCode));
+        logger.info(String.format("Undeploying report '%s' ...", reportCode));
         getReportsManager().unregisterReportDescriptor(reportCode);
-		NodeRef report = getReportsManager().getReportEditorDAO().getReportDescriptorNodeByCode(reportCode);
+        NodeRef report = getReportsManager().getReportEditorDAO().getReportDescriptorNodeByCode(reportCode);
         if (report != null) {
             serviceRegistry.getNodeService().setProperty(report, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, false);
         }
-		logger.warn( String.format( "report '%s' undeployed", reportCode));
+        logger.warn(String.format("report '%s' undeployed", reportCode));
         return true;
     }
 
@@ -67,9 +67,9 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
 
         final List<ReportInfo> reports = new ArrayList<ReportInfo>();
 
-		final String[] types = (docTypes != null && docTypes.length() > 0)
-									? docTypes.split(",") // задан тип(типы) - значит фильтруем по ним
-									: null;
+        final String[] types = (docTypes != null && docTypes.length() > 0)
+                ? docTypes.split(",") // задан тип(типы) - значит фильтруем по ним
+                : null;
 
         final List<ReportDescriptor> found = getReportsManager().getRegisteredReports(types, forCollection);
         if (found != null && !found.isEmpty()) {
@@ -123,8 +123,8 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
             return null;
         }
 
-		logger.info( String.format( "built report info:\n\t mimeType: %s\n\t filename: %s\n\t dataSize: %s bytes"
-				, result.getMimeType(), result.getFilename(), (result.getData() != null ? result.getData().length: "NULL") ));
+        logger.info(String.format("built report info:\n\t mimeType: %s\n\t filename: %s\n\t dataSize: %s bytes"
+                , result.getMimeType(), result.getFilename(), (result.getData() != null ? result.getData().length : "NULL")));
 
         final NodeRef folder = new NodeRef(destFolderRef);
         // сохранение внутри folder ...

@@ -114,7 +114,6 @@ public class ReportsManagerImpl implements ReportsManager {
 
     /**
      * Файлы шаблонов для генерации шаблонов отчётов
-     *
      */
     public ReportContentDAO getTemplateFileDAO() {
         return templateFileDAO;
@@ -208,7 +207,6 @@ public class ReportsManagerImpl implements ReportsManager {
 
     /**
      * Дескрипторы, заданные бинами
-     *
      */
     public Map<String, ReportDescriptor> getBeanDescriptors() {
         if (this.beanDescriptors == null) {
@@ -224,7 +222,6 @@ public class ReportsManagerImpl implements ReportsManager {
      * 2) дескрипторы, имеющиеся в виде файлов,
      * 3) продеплоенные в хранилище дескрипторы.
      * (в этом списке чем ниже тем приоритетнее)
-     *
      */
     public Map<String, ReportDescriptor> getDescriptors() {
         if (this.descriptors == null) {
@@ -290,7 +287,7 @@ public class ReportsManagerImpl implements ReportsManager {
      * Просканировать указанное хранилище на наличие дескрипторов отчётов и загрузить их
      *
      * @param destMap целевой список
-     * @param repos ReportContentDAO
+     * @param repos   ReportContentDAO
      * @return кол-во загруженных описаний
      */
     private static int scanRepository(final Map<String, ReportDescriptor> destMap, final ReportContentDAO repos) {
@@ -369,7 +366,6 @@ public class ReportsManagerImpl implements ReportsManager {
     }
 
     public void setDescriptors(List<ReportDescriptor> list) {
-        // this.descriptors = list;
         this.descriptors = null;
         if (list != null)
             for (ReportDescriptor desc : list)
@@ -434,7 +430,6 @@ public class ReportsManagerImpl implements ReportsManager {
      * <br/> (!) Если шаблоны для отчёта и его подотчётов не заданы явно, то
      * автоматом cгенерируются шаблоны по-умолчанию. Имена вложенных подотчётов
      * генерируются аналогично основному.
-     *
      */
     private void setDefaults(ReportDescriptor desc) {
         if (Utils.isStringEmpty(desc.getReportType().getMnem())) {
@@ -476,7 +471,6 @@ public class ReportsManagerImpl implements ReportsManager {
 
     /**
      * Сохранение шаблона отчёта из desc.getReportTemplate()
-     *
      */
     private boolean saveReportTemplate(ReportDescriptor desc) {
         if (desc.getReportTemplate() == null) {
@@ -536,7 +530,7 @@ public class ReportsManagerImpl implements ReportsManager {
             }
 
 			/*
-			 * оповещение соот-го провайдера (компиляция) ...
+             * оповещение соот-го провайдера (компиляция) ...
 			 * т.к. деплоить можно только отчёты в репозиторий, здесь указываем 
 			 * именно его (не требуется определять откуда получен описатель - из 
 			 * файлового хранилища или из репозитория)
@@ -603,7 +597,6 @@ public class ReportsManagerImpl implements ReportsManager {
 
     /**
      * Создание ds-xml файла с названием "ds-"+desc.getMnem()+".xml"
-     *
      */
     private void createDsFile(ReportDescriptor desc) {
         if (desc == null) {
@@ -633,7 +626,6 @@ public class ReportsManagerImpl implements ReportsManager {
     /**
      * Выполнить проверку данных.
      * <br/>Поднять исключения при неверном или недостаточном заполнении полей описателя отчёта.
-     *
      */
     private void checkReportDescData(ReportDescriptor desc) {
         if (desc.getMnem() == null || desc.getMnem().trim().isEmpty()) {
@@ -644,7 +636,6 @@ public class ReportsManagerImpl implements ReportsManager {
     /**
      * Если нет явно заданного списка подотчётов desc.subreports - cформировать
      * его на основе линейного списка колонок НД.
-     *
      */
     private void checkSubreports(ReportDescriptor desc) {
         /** формирование Subreports из общего линейного списка колонок */
@@ -784,7 +775,6 @@ public class ReportsManagerImpl implements ReportsManager {
     /**
      * Сгенерировать для указанного описателя файл с шаблоном отчёта.
      * Используется сконфигурированное имя gen-шаблона.
-     *
      */
     private byte[] generateReportTemplate(ReportDescriptor reportDesc) {
         if (reportDesc == null) {

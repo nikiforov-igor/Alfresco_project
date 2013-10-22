@@ -30,118 +30,121 @@ import java.util.Map;
  * значение - полное имя класса провайдера источника данных, который будет использоваться для генерации отчета
  */
 public class ReportMainProducer extends AbstractWebScript {
-	public static final String FLAG_EXEC = "1";
+    public static final String FLAG_EXEC = "1";
 
-	static final transient Logger log = LoggerFactory.getLogger(ReportMainProducer.class);
+    static final transient Logger log = LoggerFactory.getLogger(ReportMainProducer.class);
 
-	private ReportsManager reportsManager;
+    final static String PARAM_EXEC = "exec";
+    final static String CONTENT_TEXT_HTML_CHARSET_UTF_8 = "text/html;charset=UTF-8";
 
-	public ReportsManager getReportsManager() {
-		return reportsManager;
-	}
+    private ReportsManager reportsManager;
 
-	public void setReportsManager(ReportsManager reportsManager) {
-		this.reportsManager = reportsManager;
-	}
+    public ReportsManager getReportsManager() {
+        return reportsManager;
+    }
 
-	/**
-	 * Журналирование параметров.
-	 * @param params
-	 * @param msg
-	 */
-	private static void logParameters( final Map<String, String[]> params, final String msg) 
-	{
-		final StringBuilder infosb = new StringBuilder();
-		if (msg != null)
-			infosb.append( msg);
-		int i = 0;
-		if (params != null) {
-			for (Map.Entry<String, String[]> entry: params.entrySet()) {
-				++i;
-				final String paramName = entry.getKey();
-				final String[] value = entry.getValue();
-				infosb.append( String.format( "\t[%d]\t'%s' \t'%s'\n", i, paramName, Utils.coalesce( Utils.getAsString(value), "NULL")));
-			}
-		}
-		log.info( String.format("Call report maker with args count=%d:\n %s", i, infosb.toString()) );
-	}
+    public void setReportsManager(ReportsManager reportsManager) {
+        this.reportsManager = reportsManager;
+    }
 
-	/**
-	 * Формирование карты параметров webScriptRequest в виде:
-	 *    ключ - название параметра, 
-	 *    значение - его строковое значение.
-	 * @param webScriptRequest
-	 * @return
-	 */
-	public static Map<String, String[]> getRequestParameters(WebScriptRequest webScriptRequest) {
-		final Map<String, String[]> result = new HashMap<String, String[]>();
-		for (String paramName : webScriptRequest.getParameterNames()) {
-			String[] value = webScriptRequest.getParameterValues(paramName);
-			result.put(paramName, value);
-		}
-		return result;
-	}
+    /**
+     * Журналирование параметров.
+     *
+     * @param params Map<String, String[]>
+     * @param msg String
+     */
+    private static void logParameters(final Map<String, String[]> params, final String msg) {
+        final StringBuilder infosb = new StringBuilder();
+        if (msg != null) {
+            infosb.append(msg);
+        }
+        int i = 0;
+        if (params != null) {
+            for (Map.Entry<String, String[]> entry : params.entrySet()) {
+                ++i;
+                final String paramName = entry.getKey();
+                final String[] value = entry.getValue();
+                infosb.append(String.format("\t[%d]\t'%s' \t'%s'\n", i, paramName, Utils.coalesce(Utils.getAsString(value), "NULL")));
+            }
+        }
+        log.info(String.format("Call report maker with args count=%d:\n %s", i, infosb.toString()));
+    }
 
-	final static String PARAM_EXEC = "exec";
-	final static String CONTENT_TEXT_HTML_CHARSET_UTF_8 = "text/html;charset=UTF-8";
+    /**
+     * Формирование карты параметров webScriptRequest в виде:
+     * ключ - название параметра,
+     * значение - его строковое значение.
+     *
+     * @param webScriptRequest WebScriptRequest
+     * @return  Map
+     */
+    public static Map<String, String[]> getRequestParameters(WebScriptRequest webScriptRequest) {
+        final Map<String, String[]> result = new HashMap<String, String[]>();
+        for (String paramName : webScriptRequest.getParameterNames()) {
+            String[] value = webScriptRequest.getParameterValues(paramName);
+            result.put(paramName, value);
+        }
+        return result;
+    }
 
-	@Override
-	public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-		// проверка надо ли выполнять запрос или только сформировать в ответ URL ...
-		if (!FLAG_EXEC.equals(webScriptRequest.getParameter(PARAM_EXEC))) {
-			prepareExecURL(webScriptRequest, webScriptResponse);
-			return;
-		}
+    @Override
+    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
+        // проверка надо ли выполнять запрос или только сформировать в ответ URL ...
+        if (!FLAG_EXEC.equals(webScriptRequest.getParameter(PARAM_EXEC))) {
+            prepareExecURL(webScriptRequest, webScriptResponse);
+            return;
+        }
 
-		PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
-		PropertyCheck.mandatory(this, "reportGenerators", getReportsManager().getReportGenerators());
+        PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
+        PropertyCheck.mandatory(this, "reportGenerators", getReportsManager().getReportGenerators());
 
-		final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
-		final String reportName = Utils.coalesce(templateParams.get("report"), templateParams.get("reportCode"));
+        final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
+        final String reportName = Utils.coalesce(templateParams.get("report"), templateParams.get("reportCode"));
 
-		final Map<String, String[]> requestParameters = getRequestParameters(webScriptRequest);
-		if (log.isInfoEnabled()) {
-			logParameters(requestParameters, String.format("Processing report '%s' with args: \n", reportName));
-		}
+        final Map<String, String[]> requestParameters = getRequestParameters(webScriptRequest);
+        if (log.isInfoEnabled()) {
+            logParameters(requestParameters, String.format("Processing report '%s' with args: \n", reportName));
+        }
 
-		// локатору закинем текущее значение менеджера ...
-		ReportBeansLocator.setReportsManager(getReportsManager());
+        // локатору закинем текущее значение менеджера ...
+        ReportBeansLocator.setReportsManager(getReportsManager());
 
 		/* Вариант "права побоку": построение от имени системы */
-		final ReportFileData result = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<ReportFileData>() {
-			@Override
-			public ReportFileData doWork() throws Exception {
-				return getReportsManager().generateReport(reportName, requestParameters);
-			}
-		});
+        //TODO дыра в системе. По какой-то причине было сделано, чтобы документы попадали в отчет без проверки прав
+        final ReportFileData result = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<ReportFileData>() {
+            @Override
+            public ReportFileData doWork() throws Exception {
+                return getReportsManager().generateReport(reportName, requestParameters);
+            }
+        });
 
-		if (result != null) {
-			webScriptResponse.setContentType(
-					String.format("%s;charset=%s;filename=%s"
-							, result.getMimeType()
-							, result.getEncoding()
-							, result.getFilename()
-							));
-			if (result.getData() != null) {
-				final OutputStream out = webScriptResponse.getOutputStream();
-				out.write(result.getData());
-				out.flush();
-				out.close();
-			}
-		}
-	}
+        if (result != null) {
+            webScriptResponse.setContentType(
+                    String.format("%s;charset=%s;filename=%s"
+                            , result.getMimeType()
+                            , result.getEncoding()
+                            , result.getFilename()
+                    ));
+            if (result.getData() != null) {
+                final OutputStream out = webScriptResponse.getOutputStream();
+                out.write(result.getData());
+                out.flush();
+                out.close();
+            }
+        }
+    }
 
-	/**
-	 * Отправить в ответе текст с URL, по-которому будет формироваться отчёт.
-	 *
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 */
-	private void prepareExecURL(WebScriptRequest request, WebScriptResponse response) throws IOException {
-		// добавление аргумента "exec=1"
-		final String answerURL = request.getURL() + "&" + PARAM_EXEC + "=" + FLAG_EXEC;
-		response.setContentType(CONTENT_TEXT_HTML_CHARSET_UTF_8);
-		response.getWriter().write(answerURL);
-	}
+    /**
+     * Отправить в ответе текст с URL, по-которому будет формироваться отчёт.
+     *
+     * @param request WebScriptRequest
+     * @param response WebScriptResponse
+     * @throws IOException
+     */
+    private void prepareExecURL(WebScriptRequest request, WebScriptResponse response) throws IOException {
+        // добавление аргумента "exec=1"
+        final String answerURL = request.getURL() + "&" + PARAM_EXEC + "=" + FLAG_EXEC;
+        response.setContentType(CONTENT_TEXT_HTML_CHARSET_UTF_8);
+        response.getWriter().write(answerURL);
+    }
 }
