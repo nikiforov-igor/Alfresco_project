@@ -78,6 +78,8 @@
                                         fn: function DataGrid_onDataItemCreated_refreshSuccess(response) {
                                             this.versionable = response.json.versionable;
                                             var item = response.json.item;
+                                            var repeating = response.config.successCallback.scope.options.repeating;
+                                            var formMode = response.config.successCallback.scope.options.formMode;
                                             var fnAfterUpdate = function DataGrid_onDataItemCreated_refreshSuccess_fnAfterUpdate() {
                                                 var recordFound = this._findRecordByParameter(item.nodeRef, "nodeRef");
                                                 if (recordFound !== null) {
@@ -88,11 +90,42 @@
                                             this.afterDataGridUpdate.push(fnAfterUpdate);
                                             this.widgets.dataTable.addRow(item);
                                             YAHOO.Bubbling.fire("mandatoryControlValueUpdated", response.config.successCallback.scope);
+
                                             var inputAdded = Dom.get("${fieldHtmlId}-added");
-                                            inputAdded.value = (inputAdded.value != "") ? inputAdded.value + "," + item.nodeRef : item.nodeRef;
-                                            if (response.config.successCallback.scope.options.formMode=="create"){
-                                                var input = Dom.get("${fieldHtmlId}");
-                                                input.value = (input.value != "") ? input.value + "," + item.nodeRef : item.nodeRef;
+                                            var inputRemoved = Dom.get("${fieldHtmlId}-removed");
+                                            var input = Dom.get("${fieldHtmlId}");
+                                            // связь 1:1
+                                            if (!repeating) {
+                                                if (input.value != "" || inputAdded.value != "") {
+                                                    var deleteRef = (inputAdded.value != "") ? inputAdded.value : input.value;
+                                                    var deleteRecord = this._findRecordByParameter(deleteRef, "nodeRef");
+                                                    var recordTag = this.widgets.dataTable.getTrEl(deleteRecord);
+                                                    this.widgets.dataTable.deleteRow(recordTag);
+                                                }
+                                                if (formMode == "create") {
+                                                    // форма создания
+                                                    // в форме создания в remove ничего не добавляем так как асоциация еще не создана
+                                                    inputAdded.value = item.nodeRef;
+                                                    input.value = item.nodeRef;
+                                                } else {
+                                                    // форма редактирования и просмотра
+                                                    if (input.value == "") {
+                                                        inputAdded.value = item.nodeRef;
+                                                    } else {
+                                                        inputAdded.value = item.nodeRef;
+                                                        // добавляем remove так как связь 1:1 и мы оперируем только с одной записью, чтобы знать что было
+                                                        inputRemoved.value = input.value;
+                                                    }
+                                                }
+
+                                            } else {
+                                                // 1:многим
+                                                if (formMode == "create") {
+                                                    inputAdded.value = (inputAdded.value == "") ? item.nodeRef  : inputAdded.value + "," + item.nodeRef;
+                                                    input.value = (input.value == "") ? item.nodeRef  : input.value + "," + item.nodeRef;
+                                                } else {
+                                                    inputAdded.value = (inputAdded.value == "") ? item.nodeRef  : inputAdded.value + "," + item.nodeRef;
+                                                }
                                             }
                                         },
                                         scope: this
@@ -121,11 +154,14 @@
                                             text: this.msg("button.delete"),
                                             handler: function DataGridActions__onActionDelete_delete() {
                                                 var inputAdded = Dom.get("${fieldHtmlId}-added");
+                                                var inputRemoved = Dom.get("${fieldHtmlId}-removed");
+                                                var input = Dom.get("${fieldHtmlId}");
                                                 if (inputAdded.value != "") {
                                                     var refs = inputAdded.value.split(",");
                                                     for (var i = 0; i < refs.length; i++) {
                                                         if (refs[i] == items[0].nodeRef) {
                                                             inputAdded.value = inputAdded.value.replace(items[0].nodeRef, "");
+                                                            input.value = (!me.options.repeating) ? ""  : input.value.replace(items[0].nodeRef, "");
                                                         }
                                                     }
                                                 };
@@ -263,19 +299,20 @@
         allowCreate: <#if form.mode == "view">false<#else>${allowCreate?string}</#if>,
             showActionColumn: ${showActions?string},
             showCheckboxColumn: false,
-            attributeForShow: "${attributeForShow?string}"
+            attributeForShow: "${attributeForShow?string}",
+            repeating: ${field.repeating?string}
         }).setMessages(${messages});
 
         var selectItems = Dom.get("${fieldHtmlId}");
         var filter = "";
-        if (selectItems != null) {
+        if (selectItems != null && selectItems.value != "") {
             var items = selectItems.value.split(",");
             for (var item in items) {
                 filter = filter + " ID:" + items[item].replace(":", "\\:");
-                if (filter == "") {
-                    filter += "ID:NOT_REF";
-                }
             }
+        }
+        if (filter == "") {
+            filter += "ID:NOT_REF";
         }
         datagrid.options.datagridMeta.searchConfig = {filter: (filter.length > 0 ? filter : "")};
         datagrid.draw();
