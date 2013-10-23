@@ -1,31 +1,20 @@
 package ru.it.lecm.contracts.reports;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSetRow;
-import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import ru.it.lecm.contracts.beans.ContractsBeanImpl;
-import ru.it.lecm.reports.api.AssocDataFilter.AssocDesc;
-import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.calc.DataGroupCounter;
+import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
-import ru.it.lecm.reports.jasper.DSProviderSearchQueryReportBase;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
-import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
+import ru.it.lecm.statemachine.StatemachineModel;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Провайдер для построения отчёта «Сводный отчет по договорам»
@@ -50,11 +39,9 @@ import ru.it.lecm.reports.utils.Utils;
  *
  * @author rabdullin
  */
-public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReportBase {
+public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
 
     private static final Logger logger = LoggerFactory.getLogger(DSProviderDocflowStatusCounters.class);
-
-    final static String TYPE_CONRACT = "lecm-contract:document";
 
     /* XML параметры */
     final static String XMLSTATUSES_LIST = "statuses";
@@ -69,11 +56,6 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
      * название столбца содержащего сумму по строке
      */
     final static String XMLSTATUS_FLAGS_ITEM_ROWSUM_COLNAME = "rowSum.colName";
-
-    /**
-     * название атрибута со статусом
-     */
-    final static String XMLSTATUS_PROPERTY = "doc.statusProperty";
 
     /**
      * Формат названия колонки со счётчиками
@@ -93,42 +75,36 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 
     final static String COLNAME_STATUS_FMT = "col_Status%d"; // колонка с названием i-го статуса
     final static String COLNAME_COUNTER_FMT = "col_Count%d"; // колонка с количеством найденных строк в i-м статусе
-    final static String COLVALUE_ALL_OTHER = "All other"; // "Все отсальные статусы"
-
-    final static String ATTR_STATUS = "lecm-statemachine:status";
+    final static String COLVALUE_ALL_OTHER = "All other"; // "Все остальные статусы"
 
     /**
      * Вариант групировки.
      */
     private String groupBy;
 
-    private final SearchDoclowFilter filter = new SearchDoclowFilter();
+    private Date dateRegStart, dateRegEnd; // дата регистрации проекта договора
 
     public DSProviderDocflowStatusCounters() {
         super();
-        super.setPreferedType(TYPE_CONRACT);
-    }
-
-    /**
-     * Выбор вараинта "Измерения"
-     * Реальные значения см. "ds-docflow-timings.xml" (т.е. в мета-конфигурации для jrxml-отчёта)
-     * Пример: "Вид договора", "Тематика договора" ...
-     *
-     * @return
-     */
-    public String getGroupBy() {
-        return groupBy;
     }
 
     /**
      * Задание варианта "Измерения"
      * Реальные значения см. "ds-docflow-timings.xml" (т.е. в мета-конфигурации для jrxml-отчёта)
      * Пример: "Вид договора", "Тематика договора" ...
-     *
-     * @groupBy
      */
+    @SuppressWarnings("unused")
     public void setGroupBy(String groupBy) {
         this.groupBy = groupBy;
+    }
+
+    @SuppressWarnings("unused")
+    public void setDateReg(final String value) {
+        final String[] paramValue = value.split("\\|");
+        dateRegStart = ArgsHelper.tryMakeDate(paramValue[0], "dateRegStart");
+        if (paramValue.length >= 2) {
+            dateRegEnd = ArgsHelper.tryMakeDate(paramValue[1], "dateRegEnd");
+        }
     }
 
     @Override
@@ -139,216 +115,6 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
         defaults.put(XMLSTATUS_FLAGS_MAP, null); // map
     }
 
-    /**
-     * Фильтр поиска для отчёта по срокам прохождения маршрута (по статусам):
-     * 1) "contractType" - Вид договора
-     * association name: "lecm-contract:typeContract-assoc"
-     * target: lecm-contract-dic:contract-type
-     * 2) "contractSubject" - Тематика договора
-     * association name: "lecm-contract:subjectContract-assoc"
-     * target: lecm-doc-dic:subjects
-     * 3) "contractContractor" - Контрагент
-     * association name: "lecm-contract:partner-assoc"
-     * target: lecm-contractor:contractor-type
-     * 4) "regAfter" и "regBefore"- Дата регистрации проекта (Период/Интервал)
-     * fmt like "2013-04-30T00:00:00.000+06:00"
-     * "lecm-contract:dateRegProjectContracts"
-     */
-    protected class SearchDoclowFilter {
-        // Boolean contractActualOnly;
-        Date dateRegAfter, dateRegBefore; // дата регистрации проекта договора
-        Date dateContractStartAfter, dateContractStartBefore; // дата начала действия договора
-        Double contractSumLow, contractSumHi; // сумма договора (нижняя и верхняя границы)
-
-        /**
-         * (!) Инициатор (автор) отфильтровывается в основном запросе.
-         * Остальные являются настоящими ассоциацими и фильтруются в результатах основного запроса.
-         */
-        NodeRef contractType, contractSubject, author;
-        List<NodeRef> contragents;
-
-        public void clear() {
-            dateRegAfter = dateRegBefore = dateContractStartAfter = dateContractStartBefore = null;
-            contractSubject = contractType = null;
-            contragents = null;
-            contractSumLow = contractSumHi = null;
-        }
-
-        public void setContragents(List<NodeRef> list) {
-            this.contragents = (list == null || list.isEmpty()) ? null : list;
-        }
-
-        /**
-         * Создать фильтр по ассоциациям.
-         * (!) По времени, интервалу регистации, отбор выполнен в основном запросе.
-         *
-         * @return
-         */
-        public AssocDataFilterImpl makeAssocFilter() {
-            final boolean hasSubject = (contractSubject != null);
-            final boolean hasType = (contractType != null);
-            final boolean hasCAgents = (contragents != null);
-            final boolean hasAny = hasSubject || hasType || hasCAgents;
-            if (!hasAny) {
-                // в фильтре ничего не задачно -> любые данные подойдут
-                return null;
-            }
-
-            final AssocDataFilterImpl result = new AssocDataFilterImpl(getServices().getServiceRegistry());
-
-            final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
-
-            if (hasType) {
-                final QName qnCType = QName.createQName("lecm-contract-dic:contract-type", ns); // Вид договора
-                final QName qnAssocCType = ContractsBeanImpl.ASSOC_CONTRACT_TYPE;
-                result.addAssoc(AssocKind.target, qnCType, qnAssocCType, contractType);
-            }
-
-            if (hasSubject) {
-                final QName qnCSubject = QName.createQName("lecm-doc-dic:subjects", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
-                final QName qnAssocCSubject = ContractsBeanImpl.ASSOC_CONTRACT_SUBJECT;
-                result.addAssoc(AssocKind.target, qnCSubject, qnAssocCSubject, contractSubject);
-            }
-
-            if (hasCAgents) {
-                final QName qnCAgent = QName.createQName("lecm-contractor:contractor-type", ns); // Контрагенты, "lecm-contract:partner-assoc"
-                final QName qnAssocCAgent = ContractsBeanImpl.ASSOC_CONTRACT_PARTNER;
-                result.addAssoc(new AssocDesc(AssocKind.target, qnAssocCAgent, qnCAgent, contragents));
-            }
-
-            return result;
-        }
-
-    }
-
-    /**
-     * Нижняя граница Даты регистрации договора
-     *
-     */
-    public void setDateRegAfter(final String value) {
-        filter.dateRegAfter = ArgsHelper.tryMakeDate(value, "dateRegAfter");
-    }
-
-    /**
-     * Верхняя граница Даты регистрации договора
-     *
-     */
-    public void setDateRegBefore(final String value) {
-        filter.dateRegBefore = ArgsHelper.tryMakeDate(value, "dateStartBefore");
-    }
-
-    /**
-     * Нижняя граница Даты начала действия договора
-     *
-     */
-    public void setDateContractStartAfter(final String value) {
-        filter.dateContractStartAfter = ArgsHelper.tryMakeDate(value, "dateContractStartAfter");
-    }
-
-    /**
-     * Верхняя граница Даты начала действия договора
-     *
-     */
-    public void setDateContractStartBefore(final String value) {
-        filter.dateContractStartBefore = ArgsHelper.tryMakeDate(value, "dateContractStartBefore");
-    }
-
-    public void setContractSubject(String value) {
-        filter.contractSubject = ArgsHelper.makeNodeRef(value, "contractSubject");
-    }
-
-    public void setContractType(String value) {
-        filter.contractType = ArgsHelper.makeNodeRef(value, "contractType");
-    }
-
-    public void setContragent(String value) {
-        filter.setContragents(ArgsHelper.makeNodeRefs(value, "contragents"));
-    }
-
-    /**
-     * Нижняяя граница для суммы договора.
-     *
-     */
-    public void setContractSumLow(String value) {
-        try {
-            filter.contractSumLow = Utils.isStringEmpty(value) ? null : Double.parseDouble(value);
-            if (filter.contractSumLow != null && filter.contractSumLow == 0) {
-                // значение ноль эквивалентно NULL
-                filter.contractSumLow = null;
-            }
-        } catch (Throwable e) {
-            logger.error(String.format("unexpected double value '%s' for contractSumLow -> ignored as NULL", value), e);
-            filter.contractSumLow = null;
-        }
-    }
-
-    /**
-     * Верхняя граница для суммы договора.
-     *
-     */
-    public void setContractSumHi(String value) {
-        try {
-            filter.contractSumHi = Utils.isStringEmpty(value) ? null : Double.parseDouble(value);
-            if (filter.contractSumHi != null && filter.contractSumHi == 0) {
-                // значение ноль эквивалентно NULL
-                filter.contractSumHi = null;
-            }
-        } catch (Throwable e) {
-            logger.error(String.format("unexpected double value '%s' for contractSumHi -> ignored as NULL", value), e);
-            filter.contractSumHi = null;
-        }
-    }
-
-    /**
-     * Задать автора (инициатора) договора.
-     *
-     */
-    public void setAuthor(String value) {
-        filter.author = ArgsHelper.makeNodeRef(value, "author");
-    }
-
-    /**
-     * Построить Lucene-запрос по данным фильтра.
-     * Example:
-     * TYPE:"{http://www.it.ru/logicECM/contract/1.0}document" AND  @lecm\-contract\:totalSum:(0 TO 23450000)   AND @lecm\-contract\:endDate:[ NOW/DAY TO *]
-     *
-     */
-    // NOTE: отбор по ассоциациям происходит на уровне фильтров
-    @Override
-    protected String buildQueryText() {
-        final StringBuilder bquery = new StringBuilder();
-
-        bquery.append(super.buildQueryText()); // "TYPE:\"{http://www.it.ru/logicECM/contract/1.0}document\""
-
-        // начало .. конец <!-- Дата регистрации проекта -->
-        String cond = Utils.emmitDateIntervalCheck("lecm\\-contract\\:dateRegProjectContracts", filter.dateRegAfter, filter.dateRegBefore);
-        if (cond != null) {
-            bquery.append(" AND ").append(cond);
-        }
-
-        // начало .. конец <!-- Дата начала действия договора -->
-        cond = Utils.emmitDateIntervalCheck("lecm\\-contract\\:startDate", filter.dateContractStartAfter, filter.dateContractStartBefore);
-        if (cond != null) {
-            bquery.append(" AND ").append(cond);
-        }
-
-        // Сумма договора (указан диапазон)
-        cond = Utils.emmitNumericIntervalCheck("lecm\\-contract\\:totalAmount", filter.contractSumLow, filter.contractSumHi);
-        if (cond != null) {
-            bquery.append(" AND ").append(cond);
-        }
-
-		/*
-         *  Инициатор хранится как текстовая ссылка на сотрудника. Можно фильтрануть прямо тут
-		 */
-        if (filter.author != null) {
-            String authorProp = getServices().getDocumentService().getAuthorProperty(ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT);
-            bquery.append(" AND @").append(authorProp.replaceAll(":", "\\\\:")).append(":\"").append(filter.author).append("\"");
-        }
-
-        return bquery.toString();
-    }
-
     @Override
     protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
         final DocflowJRDataSource result = new DocflowJRDataSource(iterator);
@@ -356,7 +122,6 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
         result.getContext().setRegistryService(getServices().getServiceRegistry());
         result.getContext().setJrSimpleProps(jrSimpleProps);
         result.getContext().setMetaFields(conf().getMetaFields());
-        result.getContext().setFilter(filter.makeAssocFilter());
         result.buildJoin();
         return result;
     }
@@ -419,7 +184,8 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
             if (groups.containsKey(tag)) {
                 result = groups.get(tag);
             } else { // создаём новую
-                groups.put(tag, result = new DocStatusGroup(tag));
+                result = new DocStatusGroup(tag);
+                groups.put(tag, result);
             }
             adjustStatistic(result, statusName, docId);
             return result;
@@ -449,7 +215,6 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
 
             if (getContext().getRsIter() != null) {
                 final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
-                final QName status = QName.createQName(getStatusAttrName(), getServices().getServiceRegistry().getNamespaceService());
 
                 while (getContext().getRsIter().hasNext()) {
                     final ResultSetRow rs = getContext().getRsIter().next();
@@ -464,7 +229,7 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
                     final String docTag = getServices().getSubstitudeService().formatNodeTitle(docId, fmtForTag);
 
 					/* Статус */
-                    final String statusName = (String) nodeSrv.getProperty(docId, status);
+                    final String statusName = (String) nodeSrv.getProperty(docId, StatemachineModel.PROP_STATUS);
                     incCounter(docTag, statusName, docId);
                 } // while
             }
@@ -479,21 +244,6 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
             return result.size();
         }
 
-        /**
-         * Вернуть название атрибута со статусом.
-         * Если имеется непустой конфигурационный параметр [(Map)"status.flags"]["doc.statusProperty"]
-         * то используется он, иначе используется const ATTR_STATUS.
-         *
-         */
-        private String getStatusAttrName() {
-            String result = null;
-            final Map<String, Object> mapStatusFlags = conf().getMap(XMLSTATUS_FLAGS_MAP);
-            if (mapStatusFlags != null && mapStatusFlags.containsKey(XMLSTATUS_PROPERTY)) {
-                result = Utils.coalesce(mapStatusFlags.get(XMLSTATUS_PROPERTY), ATTR_STATUS).trim();
-            }
-            return ((result != null) && result.length() > 0) ? result : ATTR_STATUS;
-        }
-
         @Override
         protected Map<String, Serializable> getReportContextProps(DocStatusGroup item) {
             final Map<String, Serializable> result = new LinkedHashMap<String, Serializable>();
@@ -503,8 +253,8 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
             result.put(COLNAME_MEASURE_TAG, nameForTag);
 
 			/* Дата регистрации с ... по ... */
-            result.put(COLNAME_DATEREG_FROM, filter.dateRegAfter);
-            result.put(COLNAME_DATEREG_TO, filter.dateRegBefore);
+            result.put(COLNAME_DATEREG_FROM, dateRegStart);
+            result.put(COLNAME_DATEREG_TO, dateRegEnd);
 
 			/* Счётчики ... */
             @SuppressWarnings("unchecked")
@@ -513,10 +263,8 @@ public class DSProviderDocflowStatusCounters extends DSProviderSearchQueryReport
             int iCol = 0;
             for (String colName : statusOrderedList) {
                 iCol++; // (!) нумерация от Единицы
-
                 // "col_StatusNN": вносим в набор название статуса
                 result.put(String.format(COLNAME_STATUS_FMT, iCol), colName);
-
                 // "col_CountNN" = (Integer) счётчик в этом статусе
                 result.put(String.format(COLNAME_COUNTER_FMT, iCol), item.getAttrCounters().get(colName));
             }

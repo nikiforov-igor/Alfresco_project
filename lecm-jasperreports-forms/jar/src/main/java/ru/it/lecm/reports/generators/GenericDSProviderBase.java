@@ -1,17 +1,6 @@
 package ru.it.lecm.reports.generators;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRDataSourceProvider;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JasperReport;
-
+import net.sf.jasperreports.engine.*;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -25,7 +14,6 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.AssocDataFilter;
 import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
@@ -46,6 +34,8 @@ import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
+
+import java.util.*;
 
 /**
  * Провайдер данных.
@@ -71,6 +61,13 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
     protected LucenePreparedQuery alfrescoQuery;
     protected ResultSet alfrescoResult;
     private JRDSConfigXML xmlConfig; // для загрузки конфы из ds-xml
+
+    /**
+     * Список простых Альфреско-атрибутов, которые нужны для отчёта.
+     * Имена - с короткими префиксами.
+     * null означает, что ограничений нет.
+     */
+    protected Set<String> jrSimpleProps;
 
     public WKServiceKeeper getServices() {
         return services;
@@ -152,6 +149,15 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
         return xmlConfig;
     }
 
+    private void loadConfig() {
+        try {
+            conf().setConfigName(DSXMLProducer.makeDsConfigFileName(this.getReportDescriptor().getMnem()));
+            conf().loadConfig();
+        } catch (JRException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
     /**
      * Дополнить конфигурацию значениями по-умолчанию
      */
@@ -194,7 +200,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
         final DurationLogger d = new DurationLogger();
 
         clearSearch();
-
+        loadConfig();
 		/* формирование запроса: параметры выбираются непосредственно из reportDescriptor */
         this.alfrescoQuery = this.buildQuery();
 

@@ -30,7 +30,7 @@
     <report.descriptor mnem="docflow-timings">
         <type mnem="JASPER"/>
         <l18>
-            <item key="RU_RU" value="Сроки прохождения маршрута"/>
+            <item key="RU_RU" value="Сроки прохождения маршрута за период"/>
         </l18>
         <provider mnem="DSProviderDocflowStatusTimings" javaClass="ru.it.lecm.contracts.reports.DSProviderDocflowStatusTimings" >
            <l18>
@@ -38,11 +38,6 @@
            </l18>
         </provider>
         <template filename="docflow-timings.jrxml"/>
-        <datasource.descriptor mnem="datasource-approval">
-            <l18>
-                <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
-            </l18>
-        </datasource.descriptor>
     </report.descriptor>
 
 	<!-- Ограничения основной выборки -->
@@ -53,12 +48,8 @@
 		<allVersions>true</allVersions>
 		<preferedType>{lecm-contract:document}</preferedType>
 		<isMultiRow>true</isMultiRow>
-		<isCustom>true</isCustom>
-		<!--
-			select * from lecm:documents
-			select * from lecm-contract:document as Contract
-		  -->
-		<queryText>	<![CDATA[]]> </queryText>
+		<isCustom>false</isCustom>
+        <queryText><![CDATA[]]></queryText>
 	</query.descriptor>
 
 	<!-- параметры соединения с Альфреско (пока не используются) -->
@@ -120,20 +111,13 @@
 			<item>Черновик</item>
 			<item>Проект зарегистрирован</item>
 			<item>На согласовании</item>
-
 			<item>Согласован</item>
 			<item>На доработке</item>
 			<item>На подписании</item>
-
 			<item>Подписан</item>
 			<item>На подписании у контрагента</item>
 			<item>Зарегистрирован</item>
-
 			<item>Действует</item>
-
-			<!--
-			<item>Приостановлен</item>
-			 -->
 		</list>
 	</statuses>
 
@@ -150,16 +134,66 @@
 			 -->
 			<item key="rowSum.show">false</item>
 			<item key="rowSum.colName">col_RowSum</item>
-
-			<!-- свойство Альфреско, в котором брать статус
-			<item key="doc.statusProperty">lecm-statemachine:status</item>
-			  -->
-
 		</map>
 	</status.flags>
 
 	<!-- Описания полей  данных в наборе -->
 	<fields>
+        <field alfrescoType="d:text" order="0" displayName="Измерение"
+               javaValueClass="java.lang.String" jrFldName="groupBy" queryFldName="groupBy">
+            <l18>
+                <item key="RU_RU" value="Измерение"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_VALUE" paramType="PARAM_TYPE_VALUE">
+                <l18> <item key="RU_RU" value="Значение"/> </l18>
+                <bound1>contractor|Контрагент,contractKind|Вид,contractTheme|Тематика,initiator|Инициатор</bound1>
+            </parameter>
+        </field>
+
+        <field jrFldName="dateReg" order="1" queryFldName="{lecm-contract:dateRegProjectContracts}" displayName="Дата регистрации"
+               javaValueClass="java.util.Date" alfrescoType="d:date">
+            <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
+                <l18>
+                    <item key="RU_RU" value="Диапазон"/>
+                </l18>
+                <label1>
+                    <item key="RU_RU" value="С"/>
+                </label1>
+                <label2>
+                    <item key="RU_RU" value="По"/>
+                </label2>
+            </parameter>
+        </field>
+
+        <field jrFldName="contragent" order="2" queryFldName="{lecm-contract:partner-assoc-ref}" displayName="Контрагент(ы)"
+               javaValueClass="java.lang.String" alfrescoType="lecm-contractor:contractor-type">
+            <l18>
+                <item key="RU_RU" value="Контрагент(ы)"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
+                <l18> <item key="RU_RU" value="Список"/> </l18>
+            </parameter>
+        </field>
+
+        <field alfrescoType="lecm-contract-dic:contract-type" order="3" displayName="Вид договора"
+               javaValueClass="java.lang.String" jrFldName="contractType" queryFldName="{lecm-contract:typeContract-assoc-ref}">
+            <l18>
+                <item key="RU_RU" value="Вид договора"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_VALUE" paramType="PARAM_TYPE_VALUE">
+                <l18> <item key="RU_RU" value="Значение"/> </l18>
+            </parameter>
+        </field>
+
+        <field alfrescoType="lecm-doc-dic:subjects" order="4" displayName="Тематика договора"
+               javaValueClass="java.lang.String" jrFldName="contractSubject" queryFldName="{lecm-contract:subjectContract-assoc-ref}">
+            <l18>
+                <item key="RU_RU" value="Тематика договора"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_VALUE" paramType="PARAM_TYPE_VALUE">
+                <l18> <item key="RU_RU" value="Значение"/> </l18>
+            </parameter>
+        </field>
 
 		<!-- Первый столбец это значение выбранного Измерения, т.е. название вида договоров,
 		тематика, котрагент или инициатор.
@@ -171,26 +205,19 @@
 		<field jrFldName="col_DateReg.From" queryFldName="col_DateReg.To" displayName="ДатаРегистрации.По" javaValueClass="java.util.Date" />
 
 		<!-- Далее столбцы это кол-во в соот-щих Статусах (см узлы "statuses")-->
-		<field jrFldName="col_Count1" queryFldName="status1.counter" displayName="Статус1.Кол-во" javaValueClass="int" />
-		<field jrFldName="col_Count2" queryFldName="status2.counter" displayName="Статус2.Кол-во" javaValueClass="int" />
-		<field jrFldName="col_Count3" queryFldName="status3.counter" displayName="Статус3.Кол-во" javaValueClass="int" />
+		<field jrFldName="col_Count1" queryFldName="status1.counter" displayName="Статус1.Кол-во" javaValueClass="java.lang.Integer" />
+		<field jrFldName="col_Count2" queryFldName="status2.counter" displayName="Статус2.Кол-во" javaValueClass="java.lang.Integer" />
+		<field jrFldName="col_Count3" queryFldName="status3.counter" displayName="Статус3.Кол-во" javaValueClass="java.lang.Integer" />
 
-		<field jrFldName="col_Count4" queryFldName="status4.counter" displayName="Статус4.Кол-во" javaValueClass="int" />
-		<field jrFldName="col_Count5" queryFldName="status5.counter" displayName="Статус5.Кол-во" javaValueClass="int" />
-		<field jrFldName="col_Count6" queryFldName="status6.counter" displayName="Статус6.Кол-во" javaValueClass="int" />
+		<field jrFldName="col_Count4" queryFldName="status4.counter" displayName="Статус4.Кол-во" javaValueClass="java.lang.Integer" />
+		<field jrFldName="col_Count5" queryFldName="status5.counter" displayName="Статус5.Кол-во" javaValueClass="java.lang.Integer" />
+		<field jrFldName="col_Count6" queryFldName="status6.counter" displayName="Статус6.Кол-во" javaValueClass="java.lang.Integer" />
 
-		<field jrFldName="col_Count7" queryFldName="status7.counter" displayName="Статус7.Кол-во" javaValueClass="int" />
-		<field jrFldName="col_Count8" queryFldName="status8.counter" displayName="Статус8.Кол-во" javaValueClass="int" />
-		<field jrFldName="col_Count9" queryFldName="status9.counter" displayName="Статус9.Кол-во" javaValueClass="int" />
+		<field jrFldName="col_Count7" queryFldName="status7.counter" displayName="Статус7.Кол-во" javaValueClass="java.lang.Integer" />
+		<field jrFldName="col_Count8" queryFldName="status8.counter" displayName="Статус8.Кол-во" javaValueClass="java.lang.Integer" />
+		<field jrFldName="col_Count9" queryFldName="status9.counter" displayName="Статус9.Кол-во" javaValueClass="java.lang.Integer" />
 
-		<field jrFldName="col_Count10" queryFldName="status10.counter" displayName="Статус10.Кол-во" javaValueClass="int" />
-		<field jrFldName="col_Count11" queryFldName="statusOther.counter" displayName="СтатусДругие.Кол-во" javaValueClass="int" />
-
-		<!-- атрибуты для таблицы вложенных файлов -->
-
-		<!--
-			<field queryFldName="fmydata" dislayName="" javaValueClass="my.check.type"/>
-		  -->
+		<field jrFldName="col_Count10" queryFldName="status10.counter" displayName="Статус10.Кол-во" javaValueClass="java.lang.Integer" />
+		<field jrFldName="col_Count11" queryFldName="statusOther.counter" displayName="СтатусДругие.Кол-во" javaValueClass="java.lang.Integer" />
 	</fields>
-
 </ds.config>

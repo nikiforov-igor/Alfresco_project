@@ -95,7 +95,7 @@
             </parameter>
         </field>
 
-        <field jrFldName="contragents" order="3" queryFldName="{lecm-contract:partner-assoc-ref}" displayName="Контрагент"
+        <field jrFldName="contragents" order="3" queryFldName="{lecm-contract:partner-assoc-ref}" displayName="Контрагент(ы)"
                javaValueClass="java.lang.String" alfrescoType="lecm-contractor:contractor-type">
             <l18>
                 <item key="RU_RU" value="Контрагент(ы)"/>

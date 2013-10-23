@@ -153,7 +153,6 @@ public class AlfrescoJRDataSource implements JRDataSource {
      */
     private HashMap<String, Object> ensureJRProps() {
         final HashMap<String, Object> result = new HashMap<String, Object>();
-        final StringBuilder sb = new StringBuilder("Filtering alfresco properties by names: \n");
         if (this.context.getJrSimpleProps() != null) {
             // все свойства включаем в набор с пустыми значениями
             int i = 0;
@@ -161,16 +160,8 @@ public class AlfrescoJRDataSource implements JRDataSource {
                 i++;
                 if (!ReportDSContextImpl.isCalcField(fldName)) { // обычное поле
                     result.put(fldName, null);
-                    sb.append(String.format("\t[%d]\t field '%s'\n", i, fldName));
-                } else
-                    // Если есть "пути" в именах -> атрибут косвенный -> в result здесь не включаем
-                    sb.append(String.format("\t[%d]\t referenced field '%s' detected -> using evaluator for it \n", i, fldName));
+                }
             }
-        } else {
-            sb.append("\t all alfresco node properties will de included'");
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug(sb.toString());
         }
         return result;
     }

@@ -43,14 +43,12 @@
 				<value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-additional-document-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-contracts-aspects-model.xml</value>
-				<value>alfresco/module/${artifactId}/models/lecm-contracts-reports-form-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
 			<list>
 				<value>alfresco/module/${artifactId}/messages/lecm-contracts-model</value>
 				<value>alfresco/module/${artifactId}/messages/lecm-additional-document-model</value>
-				<value>alfresco/module/${artifactId}/messages/lecm-contracts-reports-form-model</value>
 			</list>
 		</property>
 	</bean>

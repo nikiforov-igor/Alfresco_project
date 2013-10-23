@@ -893,11 +893,6 @@ public class DSXMLProducer {
 			// тип параметра для колонки ...
 			column.setParameterValue(parseParameterNode(fldNode, XMLNODE_PARAMETER));
 
-			// журналирование
-			if (logger.isDebugEnabled())
-				sb.append(String.format("got column/field %s: %s/%s [%s] '%s'"
-						, i, column.getColumnName(), column.getExpression(), column.className(), column.get(null, null)));
-
 		} // for
 
 		if (logger.isDebugEnabled()) {
@@ -980,6 +975,8 @@ public class DSXMLProducer {
 		XmlHelper.parseL18( result.getPrompt1(), nodeParameter, XMLATTR_PARAM_LABEL1);
 		XmlHelper.parseL18( result.getPrompt2(), nodeParameter, XMLATTR_PARAM_LABEL2);
 
+        result.setBound1(XmlHelper.getTagContent(nodeParameter, XMLATTR_PARAM_BOUND1, null, null));
+        result.setBound2(XmlHelper.getTagContent(nodeParameter, XMLATTR_PARAM_BOUND2, null, null));
 		return result;
 	}
 

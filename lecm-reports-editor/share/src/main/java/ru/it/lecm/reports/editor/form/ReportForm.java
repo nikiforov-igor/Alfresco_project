@@ -1,19 +1,6 @@
 package ru.it.lecm.reports.editor.form;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.alfresco.web.config.forms.Control;
-import org.alfresco.web.config.forms.ControlParam;
-import org.alfresco.web.config.forms.DefaultControlsConfigElement;
-import org.alfresco.web.config.forms.FormSet;
-import org.alfresco.web.config.forms.FormsConfigElement;
-import org.alfresco.web.config.forms.Mode;
+import org.alfresco.web.config.forms.*;
 import org.alfresco.web.scripts.forms.FormUIGet;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -22,13 +9,16 @@ import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-
+import org.springframework.util.StringUtils;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.manager.ReportManagerApi;
 import ru.it.lecm.reports.xml.DSXMLProducer;
+
+import java.io.InputStream;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -176,7 +166,7 @@ public class ReportForm extends FormUIGet {
             }
 
             Control defaultControlConfig;
-
+            String[] allowedValues = null;
             if (column.getParameterValue().getType().equals(ParameterType.Type.RANGE)
                     && enumHasValue(RangeableTypes.class, alfrescoType.replaceAll(":", "_"))) {
 
@@ -203,6 +193,9 @@ public class ReportForm extends FormUIGet {
                         defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
                     }
                 }
+                if (column.getParameterValue().getBound1() != null && !column.getParameterValue().getBound1().toString().isEmpty()){
+                    allowedValues = column.getParameterValue().getBound1().toString().split(",");
+                }
             }
 
             if (defaultControlConfig != null) {
@@ -216,6 +209,24 @@ public class ReportForm extends FormUIGet {
             }
 
             field.setControl(control);
+
+            if (allowedValues != null) {
+                if (field.isRepeating()) {
+                    field.getControl().setTemplate(CONTROL_SELECT_MANY);
+                } else {
+                    field.getControl().setTemplate(CONTROL_SELECT_ONE);
+                }
+
+                if (!field.getControl().getParams().containsKey(CONTROL_PARAM_OPTIONS)) {
+                    List<String> optionsList = new ArrayList<String>(allowedValues.length);
+                    Collections.addAll(optionsList, allowedValues);
+
+                    // ALF-7961: don't use a comma as the list separator
+                    field.getControl().getParams().put(CONTROL_PARAM_OPTIONS,
+                            StringUtils.collectionToDelimitedString(optionsList, DELIMITER));
+                    field.getControl().getParams().put(CONTROL_PARAM_OPTION_SEPARATOR, DELIMITER);
+                }
+            }
         }
     }
 
