@@ -51,7 +51,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             "defaultActive": [],
             "activeOnTreeNodeClick": [],
             "activeOnUnitClick": [],
-            "activeOnParentTableClick": []
+            "activeOnParentTableClick": [],
+            "inActive": []
+
         };
         this.groupActions = {};
         // Decoupled event listeners
@@ -89,7 +91,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 "defaultActive": [],
                 "activeOnTreeNodeClick": [],
                 "activeOnUnitClick": [],
-                "activeOnParentTableClick": []
+                "activeOnParentTableClick": [],
+                "inActive": []
             },
 
             groupActions: {},

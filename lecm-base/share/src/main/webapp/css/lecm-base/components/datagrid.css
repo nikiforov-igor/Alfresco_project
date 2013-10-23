@@ -67,3 +67,7 @@
 .datagrid .expanded .expandRow a {
     background-image: url("/share/res/images/lecm-base/components/triangle_up.png");
 }
+
+.form-field.with-grid.grid-control{
+    clear: both;
+}

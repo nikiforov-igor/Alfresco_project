@@ -1,6 +1,9 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
+<#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#assign controlId = fieldHtmlId + "-cntrl">
+<#--todo: здесь у toolbar-а должен быть свой id, но с другим пока не работает-->
+<#assign controlIdToolbar = fieldHtmlId + "-cntrl">
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
@@ -8,6 +11,7 @@
 <#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 <#assign objectId = field.name?replace("-", "_")>
 
+<#-- Datagrid -->
 <#assign allowCreate = true/>
 <#if field.control.params.allowCreate??>
     <#assign allowCreate = field.control.params.allowCreate?lower_case/>
@@ -45,7 +49,179 @@
     <#assign attributeForShow = field.control.params.attributeForShow/>
 </#if>
 
-<div class="form-field with-grid" id="${controlId}">
+<#-- Toolbar -->
+<#assign showSearchControl = true/>
+<#if field.control.params.showSearch??>
+    <#assign showSearchControl = field.control.params.showSearch/>
+</#if>
+
+<#assign exSearch = false/>
+<#if field.control.params.showExSearchBtn??>
+    <#assign exSearch = field.control.params.showExSearchBtn/>
+</#if>
+
+<#assign showCreateButton = true/>
+<#if field.control.params.showCreateBtn??>
+    <#assign showCreateButton = field.control.params.showCreateBtn/>
+</#if>
+
+<#assign newRowTitle = "label.create-row.title"/>
+<#if field.control.params.newRowDialogTitle??>
+    <#assign newRowTitle = field.control.params.newRowDialogTitle/>
+</#if>
+
+<#assign createBtnLabel = msg("label.create-row.title")/>
+
+<#if field.control.params.newRowButtonLabel??>
+    <#if msg(field.control.params.newRowButtonLabel) != field.control.params.newRowButtonLabel>
+        <#assign createBtnLabel = msg(field.control.params.newRowButtonLabel)/>
+    </#if>
+</#if>
+
+<script type="text/javascript">//<![CDATA[
+(function() {
+        function createToolabar(nodeRef) {
+            console.log("create");
+            new LogicECM.module.Base.Toolbar(null,"${controlIdToolbar}").setMessages(${messages}).setOptions({
+                bubblingLabel: "${bubblingId}",
+                itemType: "${field.control.params.itemType!""}",
+                destination:nodeRef,
+                newRowButtonType:<#if form.mode == "view">"inActive"<#else>"defaultActive"</#if>
+//                createDialogWidth:"100em",
+//                createDialogClass:""
+            });
+        }
+//        YAHOO.util.Event.onDOMReady(createToolabar);
+    function createDataGrid(nodeRef) {
+        var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
+            usePagination: ${usePagination?string},
+            showExtendSearchBlock: false,
+            formMode: "${form.mode?string}",
+            actions: [
+            <#if allowExpand = "true">
+                {
+                    type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
+                    id: "expandRow",
+                    permission: "edit",
+                    label: "${msg("addresser.expand")}"
+                }
+            </#if>
+            <#if ((allowExpand == "true") && (allowEdit == "true") && (form.mode != "view"))>,</#if>
+            <#if ((allowEdit == "true") && (form.mode != "view"))>
+                {
+                    type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
+                    id: "onActionEdit",
+                    permission: "edit",
+                    label: "${msg("actions.edit")}"
+                }
+            </#if>
+            <#if ((allowExpand == "true") && (allowDelete == "true") && (form.mode != "view")) || ((allowEdit == "true") && (allowDelete == "true") && (form.mode != "view"))>,</#if>
+            <#if ((allowDelete == "true") && (form.mode != "view"))>
+                {
+                    type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
+                    id: "onActionDelete",
+                    permission: "delete",
+                    label: "${msg("actions.delete-row")}"
+                }
+            </#if>
+            ],
+            datagridMeta: {
+                itemType: "${field.control.params.itemType!""}",
+                datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
+                createFormId: "${field.control.params.createFormId!""}",
+                nodeRef: nodeRef,
+                actionsConfig: {
+                    fullDelete: "${field.control.params.fullDelete!"true"}"
+                },
+                sort: "${field.control.params.sort!""}",
+                searchConfig: null,
+                documentRef: nodeRef
+            },
+            bubblingLabel: "${bubblingId}",
+        <#if field.control.params.height??>
+            height: ${field.control.params.height},
+        </#if>
+        <#if field.control.params.configURL??>
+            configURL: "${field.control.params.configURL}",
+        </#if>
+        <#if field.control.params.repoDatasource??>
+            repoDatasource: ${field.control.params.repoDatasource},
+        </#if>
+        <#if field.control.params.fixedHeader??>
+            fixedHeader: ${field.control.params.fixedHeader},
+        </#if>
+            showActionColumn: ${showActions?string},
+            showCheckboxColumn: false,
+            attributeForShow: "${attributeForShow?string}",
+            repeating: ${field.repeating?string}
+        }).setMessages(${messages});
+
+        var selectItems = Dom.get("${fieldHtmlId}");
+        var filter = "";
+        if (selectItems != null && selectItems.value != "") {
+            var items = selectItems.value.split(",");
+            for (var item in items) {
+                filter = filter + " ID:" + items[item].replace(":", "\\:");
+            }
+        }
+        if (filter == "") {
+            filter += "ID:NOT_REF";
+        }
+        datagrid.options.datagridMeta.searchConfig = {filter: (filter.length > 0 ? filter : "")};
+        datagrid.draw();
+    };
+    function loadRootNode() {
+        var sUrl = "";
+    <#if (form.mode == "create") || field.control.params.startLocation??>
+        sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search" + "?titleProperty=" + encodeURIComponent("cm:name") + "&xpath=" + encodeURIComponent("${field.control.params.startLocation}");
+    <#else>
+        var nodeRef = "${form.arguments.itemId}";
+        sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/folder?documentNodeRef=" + nodeRef;
+    </#if>
+        Alfresco.util.Ajax.jsonGet(
+                {
+                    url: sUrl,
+                    successCallback: {
+                        fn: function (response) {
+                            var oResults = response.json;
+                            if (oResults != null) {
+                                createToolabar(response.json.nodeRef);
+                                createDataGrid(response.json.nodeRef);
+                            }
+                        },
+                        scope: this
+                    },
+                    failureCallback: {
+                        fn: function (oResponse) {
+                            var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+                            this.widgets.dataTable.set("MSG_ERROR", response.message);
+                            this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+                        },
+                        scope: this
+                    }
+                });
+    };
+    function init() {
+        loadRootNode();
+    }
+
+    YAHOO.util.Event.onContentReady("${fieldHtmlId}", init, true);
+})();
+//]]></script>
+
+<@comp.baseToolbar controlIdToolbar true showSearchControl exSearch>
+    <#if showCreateButton>
+    <div class="new-row">
+        <span id="${controlIdToolbar}-newRowButton" class="yui-button yui-push-button">
+           <span class="first-child">
+              <button type="button" title="${createBtnLabel}">${createBtnLabel}</button>
+           </span>
+        </span>
+    </div>
+    </#if>
+</@comp.baseToolbar>
+
+<div class="form-field with-grid grid-control" id="${controlId}">
 <label for="${controlId}" style="white-space: nowrap; overflow: visible;">${field.label?html}
     :<#if field.endpointMandatory!false || field.mandatory!false><span
         class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
@@ -238,121 +414,6 @@
             },
             true
     );
-    function createDataGrid(nodeRef) {
-        var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
-            usePagination: ${usePagination?string},
-            showExtendSearchBlock: false,
-            formMode: "${form.mode?string}",
-            actions: [
-                <#if allowExpand = "true">
-                    {
-                        type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
-                        id: "expandRow",
-                        permission: "edit",
-                        label: "${msg("addresser.expand")}"
-                    }
-                </#if>
-                <#if ((allowExpand == "true") && (allowEdit == "true") && (form.mode != "view"))>,</#if>
-                <#if ((allowEdit == "true") && (form.mode != "view"))>
-                    {
-                        type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
-                        id: "onActionEdit",
-                        permission: "edit",
-                        label: "${msg("actions.edit")}"
-                    }
-                </#if>
-                <#if ((allowExpand == "true") && (allowDelete == "true") && (form.mode != "view")) || ((allowEdit == "true") && (allowDelete == "true") && (form.mode != "view"))>,</#if>
-                <#if ((allowDelete == "true") && (form.mode != "view"))>
-                    {
-                        type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
-                        id: "onActionDelete",
-                        permission: "delete",
-                        label: "${msg("actions.delete-row")}"
-                    }
-                </#if>
-            ],
-            datagridMeta: {
-                itemType: "${field.control.params.itemType!""}",
-                datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
-                createFormId: "${field.control.params.createFormId!""}",
-                nodeRef: nodeRef,
-                actionsConfig: {
-                    fullDelete: "${field.control.params.fullDelete!"true"}"
-                },
-                sort: "${field.control.params.sort!""}",
-                searchConfig: null,
-                documentRef: nodeRef
-            },
-            bubblingLabel: "${bubblingId}",
-            <#if field.control.params.height??>
-                height: ${field.control.params.height},
-            </#if>
-            <#if field.control.params.configURL??>
-                configURL: "${field.control.params.configURL}",
-            </#if>
-            <#if field.control.params.repoDatasource??>
-                repoDatasource: ${field.control.params.repoDatasource},
-            </#if>
-            <#if field.control.params.fixedHeader??>
-                fixedHeader: ${field.control.params.fixedHeader},
-            </#if>
-        allowCreate: <#if form.mode == "view">false<#else>${allowCreate?string}</#if>,
-            showActionColumn: ${showActions?string},
-            showCheckboxColumn: false,
-            attributeForShow: "${attributeForShow?string}",
-            repeating: ${field.repeating?string}
-        }).setMessages(${messages});
-
-        var selectItems = Dom.get("${fieldHtmlId}");
-        var filter = "";
-        if (selectItems != null && selectItems.value != "") {
-            var items = selectItems.value.split(",");
-            for (var item in items) {
-                filter = filter + " ID:" + items[item].replace(":", "\\:");
-            }
-        }
-        if (filter == "") {
-            filter += "ID:NOT_REF";
-        }
-        datagrid.options.datagridMeta.searchConfig = {filter: (filter.length > 0 ? filter : "")};
-        datagrid.draw();
-
-    };
-    function loadRootNode() {
-        var sUrl = "";
-        <#if (form.mode == "create") || field.control.params.startLocation??>
-            sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search" + "?titleProperty=" + encodeURIComponent("cm:name") + "&xpath=" + encodeURIComponent("${field.control.params.startLocation}");
-        <#else>
-            var nodeRef = "${form.arguments.itemId}";
-            sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/folder?documentNodeRef=" + nodeRef;
-        </#if>
-        Alfresco.util.Ajax.jsonGet(
-                {
-                    url: sUrl,
-                    successCallback: {
-                        fn: function (response) {
-                            var oResults = response.json;
-                            if (oResults != null) {
-                                createDataGrid(response.json.nodeRef);
-                            }
-                        },
-                        scope: this
-                    },
-                    failureCallback: {
-                        fn: function (oResponse) {
-                            var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-                            this.widgets.dataTable.set("MSG_ERROR", response.message);
-                            this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-                        },
-                        scope: this
-                    }
-                });
-    };
-    function init() {
-        loadRootNode();
-    }
-
-    YAHOO.util.Event.onContentReady("${fieldHtmlId}", init, true);
 
 })();
 //]]></script>

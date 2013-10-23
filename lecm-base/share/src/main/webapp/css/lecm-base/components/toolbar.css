@@ -42,3 +42,10 @@
     outline: none;
     padding-right: 0;
 }
+
+.datalist-toolbar.toolbar .header-bar.flat-button .left{
+    float: left;
+}
+.datalist-toolbar.toolbar .header-bar.flat-button .right{
+    float: right;
+}
