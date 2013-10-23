@@ -68,6 +68,12 @@
 		    <scope>provided</scope>
 	    </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
+        <dependency>
+            <groupId>ru.it.lecm.delegation</groupId>
+            <artifactId>lecm-delegation-repo-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

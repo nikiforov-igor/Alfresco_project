@@ -21,10 +21,13 @@ import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.delegation.IDelegation;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
+import static ru.it.lecm.base.beans.BaseBean.IS_ACTIVE;
+import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_EMPLOYEE;
 
 /**
  * User: AIvkin
@@ -283,6 +286,39 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 					employeeRefs.addAll(orgstructureService.getEmployeesByBusinessRole(businessRoleRef, true));
 				}
 			}
+
+                        //пробегаемся по сотрудникам, смотрим их параметры делегирования и наличие доверенных лиц (в том числе и по доверенностям
+			//если таковые имеются, то добавляем их в в общий перечень
+                        for (NodeRef employee : employeeRefs) {
+                            NodeRef delegationOpts = findNodeByAssociationRef(employee, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+                            if (delegationOpts != null) {
+                                Boolean active = (Boolean) nodeService.getProperty(delegationOpts, IS_ACTIVE);
+                                if(active) {
+                                    NodeRef trustee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+                                    if(trustee != null){
+                                        employeeRefs.add(trustee);
+                                    }
+
+                                    Set<QName> types = new HashSet<QName>();
+                                    types.add(IDelegation.TYPE_PROCURACY);
+
+                                    List<ChildAssociationRef> procuraciesList = nodeService.getChildAssocs(delegationOpts, types);
+
+                                    for (ChildAssociationRef procuaryAssoc : procuraciesList) {
+                                        NodeRef procuary = procuaryAssoc.getChildRef();
+                                        Boolean procuaryActive = (Boolean) nodeService.getProperty(procuary, IS_ACTIVE);
+
+                                        if(procuaryActive){
+                                            NodeRef procuaryTrustee = findNodeByAssociationRef(procuary, IDelegation.ASSOC_PROCURACY_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+
+                                            if(procuaryTrustee != null){
+                                                employeeRefs.add(procuaryTrustee);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
 			result.addAll(addNotificationUnits(generalizedNotification, employeeRefs));
 		}
