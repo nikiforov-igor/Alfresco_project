@@ -12,6 +12,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.service.transaction.TransactionService;
+import org.alfresco.util.GUID;
 import org.alfresco.util.ParameterCheck;
 import org.springframework.beans.factory.InitializingBean;
 import ru.it.lecm.base.ServiceFolder;
@@ -392,5 +393,37 @@ public abstract class BaseBean implements InitializingBean {
 			}
 		}
 		return folderRef;
+	}
+
+	public NodeRef createNode(final NodeRef rootFolder, final QName type, final String name, final Map<QName, Serializable> properties) {
+		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+			@Override
+			public NodeRef doWork() throws Exception {
+			return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+				@Override
+				public NodeRef execute() throws Throwable {
+					QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+					QName assocQName;
+					if (name != null) {
+						assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
+					} else {
+						assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
+					}
+
+					Map<QName, Serializable> props = properties;
+					if (props == null) {
+						props = new HashMap<QName, Serializable>();
+					}
+					if (props.get(ContentModel.PROP_NAME) == null && name != null) {
+						props.put(ContentModel.PROP_NAME, name);
+					}
+
+					ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, type, props);
+					return associationRef.getChildRef();
+				}
+			});
+			}
+		};
+		return AuthenticationUtil.runAsSystem(raw);
 	}
 }

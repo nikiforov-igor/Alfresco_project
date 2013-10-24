@@ -7,6 +7,7 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -78,6 +79,9 @@ public class DocumentTablePolicy implements
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
 				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "beforeDeleteNode"));
+
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "calculateTotalRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateTableDataRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -152,6 +156,31 @@ public class DocumentTablePolicy implements
 		}
 	}
 
+	public void calculateTotalRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(nodeRef);
+		if (totalRows != null) {
+			documentTableService.recalculateTotalRows(totalRows, getChangedProperties(before, after, nodeService.getType(nodeRef)));
+		}
+	}
+
+	public List<QName> getChangedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after, QName type) {
+		List<QName> result = new ArrayList<QName>();
+		TypeDefinition typeDefinition = dictionaryService.getType(type);
+		if (typeDefinition != null) {
+			Map<QName, PropertyDefinition> allProperties = typeDefinition.getProperties();
+			if (allProperties != null) {
+				for (QName property : allProperties.keySet()) {
+					Object prev = before.get(property);
+					Object cur = after.get(property);
+					if ((cur == null && prev != null) || (cur != null && !cur.equals(prev))) {
+						result.add(property);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * Создание связи на стока табличных данных
 	 */
@@ -160,11 +189,8 @@ public class DocumentTablePolicy implements
 		NodeRef documentTableDataRef = associationRef.getTargetRef();
 
 		if (documentTableService.isDocumentTableData(documentTableDataRef)) {
-			checkCreateTotalRow(documentRef, associationRef.getTypeQName());
+			//Создание результирующей записи, если она ещё не была создана
+			documentTableService.getTableDataTotalRows(documentRef, associationRef.getTypeQName(), true);
 		}
-	}
-
-	private void checkCreateTotalRow(NodeRef totalRow, QName assocType) {
-
 	}
 }

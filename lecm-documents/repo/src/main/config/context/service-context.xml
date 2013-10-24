@@ -529,6 +529,7 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<bean id="documentTableScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentTableWebScriptBean"
