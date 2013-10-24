@@ -3,7 +3,9 @@ package ru.it.lecm.businessjournal.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -30,6 +32,7 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author dbashmakov
@@ -37,6 +40,8 @@ import java.util.*;
  *         Time: 10:18
  */
 public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJournalService{
+
+    private static final String BUSINESS_JOURNAL_POST_TRANSACTION_PENDING_OBJECTS = "business_journal_post_transaction_pending_objects";
 
     private static final Logger logger = LoggerFactory.getLogger(BusinessJournalServiceImpl.class);
 
@@ -52,6 +57,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
     private LecmPermissionService lecmPermissionService;
     private StateMachineServiceBean stateMachineService;
     private BusinessJournalOnCreateAssocsPolicy businessJournalOnCreateAssocsPolicy;
+
+    private ThreadPoolExecutor threadPoolExecutor;
+    private TransactionListener transactionListener;
+
 
     private ThreadLocal<IgnoredCounter> threadSettings = new ThreadLocal<IgnoredCounter>();
     private static final String KEY_IGNORE_NEXT_RECORD = "BG_IGNORE_NEXT_RECORD";
@@ -92,6 +101,10 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         this.businessJournalOnCreateAssocsPolicy = businessJournalOnCreateAssocsPolicy;
     }
 
+    public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+        this.threadPoolExecutor = threadPoolExecutor;
+    }
+
     @Override
 	public NodeRef getServiceRootFolder() {
 		return bjRootRef;
@@ -117,95 +130,80 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         businessJournalOnCreateAssocsPolicy.setBusinessJournalService(this);
 		bjRootRef = getFolder(BJ_ROOT_ID);
 		bjArchiveRef =  getFolder(BJ_ARCHIVE_ROOT_ID);
+        transactionListener = new BusinessJournalTransactionListener();
 	}
 
 	@Override
-    public NodeRef log(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final String defaultDescription, final List<String> objects) {
+    public void log(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final String defaultDescription, final List<String> objects) {
         if (mainObject == null) {
             logger.warn("Main Object not set!");
-            return null;
+            return;
         }
         IgnoredCounter counter = threadSettings.get();
         if (counter != null) {
             if (counter.isIgnored()) {
                 counter.execute();
-                return null;
+                return;
             } else {
                 counter.execute();
             }
         }
-        final AuthenticationUtil.RunAsWork<NodeRef> runner = new AuthenticationUtil.RunAsWork<NodeRef>() {
-            @Override
-            public NodeRef doWork() throws Exception {
-                NodeRef record = null;
-                try {
-                    // получаем текущего пользователя по person
-                    NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
 
-                    // заполняем карту плейсхолдеров
-                    Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
-                    // пытаемся получить объект Категория события по ключу
-                    NodeRef category = getEventCategoryByCode(eventCategory);
-                    // получаем шаблон описания
-                    String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
-                    // заполняем шаблон данными
-                    String filled = fillTemplateString(templateString, holdersMap);
+        AlfrescoTransactionSupport.bindListener(this.transactionListener);
 
-                    // создаем записи
-                    record = createRecord(date, employee, mainObject, category, objects, filled);
-                } catch (Exception ex) {
-                    logger.error("Could not create business-journal record", ex);
-                }
-                return record;
-            }
-        };
+        List<BusinessJournalRecord> pendingActions = AlfrescoTransactionSupport.getResource(BUSINESS_JOURNAL_POST_TRANSACTION_PENDING_OBJECTS);
+        if (pendingActions == null) {
+            pendingActions = new ArrayList<BusinessJournalRecord>();
+            AlfrescoTransactionSupport.bindResource(BUSINESS_JOURNAL_POST_TRANSACTION_PENDING_OBJECTS, pendingActions);
+        }
 
-        return AuthenticationUtil.runAsSystem(runner);
+        BusinessJournalRecord record = new BusinessJournalRecord(date, initiator, mainObject, eventCategory, defaultDescription, objects);
+        pendingActions.add(record);
     }
 
     @Override
-    public NodeRef log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects){
+    public void log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects){
 	    NodeRef person = null;
 	    if (personService.personExists(initiator)) {
 		    person = personService.getPerson(initiator, false);
 	    }
-	    return log(date, person, mainObject, eventCategory, defaultDescription, objects);
+	    log(date, person, mainObject, eventCategory, defaultDescription, objects);
     }
 
 	@Override
-	public NodeRef log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects){
-		return log(new Date(), initiator, mainObject, eventCategory, defaultDescription, objects);
+	public void log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects){
+		log(new Date(), initiator, mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects){
+	public void log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects){
 		NodeRef person = null;
 		if (personService.personExists(initiator)) {
 			person = personService.getPerson(initiator, false);
 		}
-		return log(new Date(), person, mainObject, eventCategory, defaultDescription, objects);
+		log(new Date(), person, mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
-		return log(new Date(), mainObject, eventCategory, defaultDescription, objects);
+	public void log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
+		log(new Date(), mainObject, eventCategory, defaultDescription, objects);
 	}
 
-    public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects, boolean ignoreNext) {
+    public void log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects, boolean ignoreNext) {
         IgnoredCounter counter = new IgnoredCounter(1);
         threadSettings.set(counter);
-        return log(mainObject, eventCategory, defaultDescription, objects);
+        log(mainObject, eventCategory, defaultDescription, objects);
     }
 
 	@Override
-	public NodeRef log(Date date, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
+	public void log(Date date, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
 		String initiator = authService.getCurrentUserName();
-		return log(date, initiator, mainObject, eventCategory, defaultDescription, objects);
+		log(date, initiator, mainObject, eventCategory, defaultDescription, objects);
 	}
 
 	@Override
-	public NodeRef log(NodeRef mainObject, String eventCategory, String defaultDescription) {
-		return log (mainObject, eventCategory, defaultDescription, null);
+	public void log(NodeRef mainObject, String eventCategory, String defaultDescription) {
+		log (mainObject, eventCategory, defaultDescription, null);
 	}
 
 	/**
@@ -842,4 +840,113 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         }
 
     }
+
+    private class BusinessJournalTransactionListener implements TransactionListener {
+
+        @Override
+        public void flush() {
+
+        }
+
+        @Override
+        public void beforeCommit(boolean readOnly) {
+
+        }
+
+        @Override
+        public void beforeCompletion() {
+
+        }
+
+        @Override
+        public void afterCommit() {
+            final List<BusinessJournalRecord> pendingRecords = AlfrescoTransactionSupport.getResource(BUSINESS_JOURNAL_POST_TRANSACTION_PENDING_OBJECTS);
+            if (pendingRecords != null) {
+                Runnable runnable = new Runnable() {
+                    public void run() {
+                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+                            @Override
+                            public Void doWork() throws Exception {
+                                return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                    @Override
+                                    public Void execute() throws Throwable {
+                                        for (BusinessJournalRecord record: pendingRecords) {
+                                                try {
+                                                    // получаем текущего пользователя по person
+                                                    NodeRef employee = record.getInitiator() != null ? orgstructureService.getEmployeeByPerson(record.getInitiator()) : null;
+
+                                                    // заполняем карту плейсхолдеров
+                                                    Map<String, String> holdersMap = fillHolders(employee, record.getMainObject(), record.getObjects());
+                                                    // пытаемся получить объект Категория события по ключу
+                                                    NodeRef category = getEventCategoryByCode(record.getEventCategory());
+                                                    // получаем шаблон описания
+                                                    String templateString = getTemplateString(getObjectType(record.getMainObject()), category, record.getDefaultDescription());
+                                                    // заполняем шаблон данными
+                                                    String filled = fillTemplateString(templateString, holdersMap);
+
+                                                    // создаем записи
+                                                    createRecord(record.getDate(), employee, record.getMainObject(), category, record.getObjects(), filled);
+                                                } catch (Exception ex) {
+                                                    logger.error("Could not create business-journal record", ex);
+                                                }
+                                        }
+                                        return null;
+                                    }
+                                }, false, true);
+                            }
+                        });
+                    }
+                };
+                threadPoolExecutor.execute(runnable);
+            }
+        }
+
+        @Override
+        public void afterRollback() {
+
+        }
+    }
+
+    private class BusinessJournalRecord {
+        private Date date;
+        private NodeRef initiator;
+        private NodeRef mainObject;
+        private String eventCategory;
+        private String defaultDescription;
+        private List<String> objects;
+
+        private BusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
+            this.date = date;
+            this.initiator = initiator;
+            this.mainObject = mainObject;
+            this.eventCategory = eventCategory;
+            this.defaultDescription = defaultDescription;
+            this.objects = objects;
+        }
+
+        private Date getDate() {
+            return date;
+        }
+
+        private NodeRef getInitiator() {
+            return initiator;
+        }
+
+        private NodeRef getMainObject() {
+            return mainObject;
+        }
+
+        private String getEventCategory() {
+            return eventCategory;
+        }
+
+        private String getDefaultDescription() {
+            return defaultDescription;
+        }
+
+        private List<String> getObjects() {
+            return objects;
+        }
+    }
+
 }

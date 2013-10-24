@@ -11,5 +11,5 @@ if (typeof json !== "undefined") {
             objects.push("" + jsonFields.get(count));
         }
     }
-    model.record = businessJournal.log(mainObject, category, description, objects);
+    businessJournal.log(mainObject, category, description, objects);
 }

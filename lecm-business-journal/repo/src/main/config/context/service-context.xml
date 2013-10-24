@@ -70,7 +70,22 @@
 	<util:constant id="BJ_ARCHIVE_ROOT_ID" static-field="ru.it.lecm.businessjournal.beans.BusinessJournalService.BJ_ARCHIVE_ROOT_ID"/>
 	<util:constant id="BJ_ARCHIVE_ROOT_NAME" static-field="ru.it.lecm.businessjournal.beans.BusinessJournalService.BJ_ARCHIVE_ROOT_NAME"/>
 
-	<bean id="businessJournalService" init-method="init" class="ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl" parent="baseBean"
+    <bean id="businessJournalAsyncThreadPool" class="org.alfresco.util.ThreadPoolExecutorFactoryBean">
+        <property name="poolName">
+            <value>businessJournalAsyncAction</value>
+        </property>
+        <property name="corePoolSize">
+            <value>8</value>
+        </property>
+        <property name="maximumPoolSize">
+            <value>20</value>
+        </property>
+        <property name="threadPriority">
+            <value>1</value>
+        </property>
+    </bean>
+
+    <bean id="businessJournalService" init-method="init" class="ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl" parent="baseBean"
           depends-on="ServiceRegistry, repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService, serviceDictionary, ${groupId}.${artifactId}.businessJournalBootstrap">
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
@@ -85,6 +100,7 @@
         <property name="authService" ref="authenticationService"/>
         <property name="stateMachineService"  ref="stateMachineHelper"/>
         <property name="businessJournalOnCreateAssocsPolicy"  ref="businessJournalOnCreateAssocsPolicy"/>
+        <property name="threadPoolExecutor" ref="businessJournalAsyncThreadPool"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

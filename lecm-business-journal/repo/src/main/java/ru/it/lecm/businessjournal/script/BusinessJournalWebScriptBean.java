@@ -31,7 +31,7 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
 		this.service = service;
 	}
 
-	public ScriptNode log(String mainObject, String eventCategory, String description, Scriptable objects) {
+	public void log(String mainObject, String eventCategory, String description, Scriptable objects) {
 		NodeRef record;
 		Object[] objs = Context.getCurrentContext().getElements(objects);
 		List<String> refs = new ArrayList<String>();
@@ -39,8 +39,7 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
 			String ref = (String) obj;
 			refs.add(ref);
 		}
-		record = service.log(new NodeRef(mainObject), eventCategory, description, refs);
-		return new ScriptNode(record, serviceRegistry, getScope());
+		service.log(new NodeRef(mainObject), eventCategory, description, refs);
 	}
 
 	public Scriptable getRecordsByInterval(long start, long end) {
