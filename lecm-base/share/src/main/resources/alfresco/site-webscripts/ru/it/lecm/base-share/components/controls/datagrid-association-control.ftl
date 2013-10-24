@@ -79,19 +79,16 @@
 </#if>
 
 <script type="text/javascript">//<![CDATA[
-(function() {
-        function createToolabar(nodeRef) {
-            console.log("create");
-            new LogicECM.module.Base.Toolbar(null,"${controlIdToolbar}").setMessages(${messages}).setOptions({
-                bubblingLabel: "${bubblingId}",
-                itemType: "${field.control.params.itemType!""}",
-                destination:nodeRef,
-                newRowButtonType:<#if form.mode == "view">"inActive"<#else>"defaultActive"</#if>
-//                createDialogWidth:"100em",
-//                createDialogClass:""
-            });
-        }
-//        YAHOO.util.Event.onDOMReady(createToolabar);
+(function () {
+    function createToolabar(nodeRef) {
+        new LogicECM.module.Base.Toolbar(null, "${controlIdToolbar}").setMessages(${messages}).setOptions({
+            bubblingLabel: "${bubblingId}",
+            itemType: "${field.control.params.itemType!""}",
+            destination: nodeRef,
+        newRowButtonType:<#if form.mode == "view">"inActive"<#else>"defaultActive"</#if>
+        });
+    }
+
     function createDataGrid(nodeRef) {
         var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
             usePagination: ${usePagination?string},
@@ -134,8 +131,7 @@
                     fullDelete: "${field.control.params.fullDelete!"true"}"
                 },
                 sort: "${field.control.params.sort!""}",
-                searchConfig: null,
-                documentRef: nodeRef
+                searchConfig: null
             },
             bubblingLabel: "${bubblingId}",
         <#if field.control.params.height??>
@@ -156,10 +152,14 @@
             repeating: ${field.repeating?string}
         }).setMessages(${messages});
 
-        var selectItems = Dom.get("${fieldHtmlId}");
+        var inputTag = Dom.get("${fieldHtmlId}");
+        var inputAddedTag = Dom.get("${fieldHtmlId}-added");
+        var inputRemovedTag = Dom.get("${fieldHtmlId}-removed");
+        var selectItemsTag = Dom.get("${controlId}-selectedItems");
         var filter = "";
-        if (selectItems != null && selectItems.value != "") {
-            var items = selectItems.value.split(",");
+        if (inputTag != null && inputTag.value != "") {
+            var items = inputTag.value.split(",");
+            selectItemsTag.value = inputTag.value;
             for (var item in items) {
                 filter = filter + " ID:" + items[item].replace(":", "\\:");
             }
@@ -168,16 +168,23 @@
             filter += "ID:NOT_REF";
         }
         datagrid.options.datagridMeta.searchConfig = {filter: (filter.length > 0 ? filter : "")};
+        datagrid.filterValues = inputTag.value;
+        datagrid.input = inputTag;
+        datagrid.inputAdded = inputAddedTag;
+        datagrid.inputRemoved = inputRemovedTag;
+        datagrid.selectItems = selectItemsTag;
         datagrid.draw();
-    };
+    }
+
     function loadRootNode() {
         var sUrl = "";
-    <#if (form.mode == "create") || field.control.params.startLocation??>
+    <#if field.control.params.startLocation??>
         sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search" + "?titleProperty=" + encodeURIComponent("cm:name") + "&xpath=" + encodeURIComponent("${field.control.params.startLocation}");
-    <#else>
+    <#elseif (field.control.params.startLocationScriptUrl?? && (form.mode != "create"))>
         var nodeRef = "${form.arguments.itemId}";
-        sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/folder?documentNodeRef=" + nodeRef;
+        sUrl = Alfresco.constants.PROXY_URI + "${field.control.params.startLocationScriptUrl}?nodeRef=" + nodeRef;
     </#if>
+        if (sUrl != "") {
         Alfresco.util.Ajax.jsonGet(
                 {
                     url: sUrl,
@@ -200,7 +207,8 @@
                         scope: this
                     }
                 });
-    };
+        }
+    }
     function init() {
         loadRootNode();
     }
@@ -235,186 +243,9 @@
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, LogicECM.module.Base.DataGrid, {
+    YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, LogicECM.module.Base.DataGridAssociation, {
     ${field.control.params.actionsHandler!""}
     });
-    YAHOO.lang.augmentObject(LogicECM.module.Base.DataGridControl_${objectId}.prototype, {
-                expand: false,
-                selectedItems: {},
-                onDataItemCreated: function DataGrid_onDataItemCreated(layer, args) {
-                    var obj = args[1];
-                    if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
-                        var nodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
-                        // Reload the node's metadata
-                        Alfresco.util.Ajax.jsonPost(
-                                {
-                                    url: Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + nodeRef.uri,
-                                    dataObj: this._buildDataGridParams(),
-                                    successCallback: {
-                                        fn: function DataGrid_onDataItemCreated_refreshSuccess(response) {
-                                            this.versionable = response.json.versionable;
-                                            var item = response.json.item;
-                                            var repeating = response.config.successCallback.scope.options.repeating;
-                                            var formMode = response.config.successCallback.scope.options.formMode;
-                                            var fnAfterUpdate = function DataGrid_onDataItemCreated_refreshSuccess_fnAfterUpdate() {
-                                                var recordFound = this._findRecordByParameter(item.nodeRef, "nodeRef");
-                                                if (recordFound !== null) {
-                                                    var el = this.widgets.dataTable.getTrEl(recordFound);
-                                                    Alfresco.util.Anim.pulse(el);
-                                                }
-                                            };
-                                            this.afterDataGridUpdate.push(fnAfterUpdate);
-                                            this.widgets.dataTable.addRow(item);
-                                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", response.config.successCallback.scope);
-
-                                            var inputAdded = Dom.get("${fieldHtmlId}-added");
-                                            var inputRemoved = Dom.get("${fieldHtmlId}-removed");
-                                            var input = Dom.get("${fieldHtmlId}");
-                                            // связь 1:1
-                                            if (!repeating) {
-                                                if (input.value != "" || inputAdded.value != "") {
-                                                    var deleteRef = (inputAdded.value != "") ? inputAdded.value : input.value;
-                                                    var deleteRecord = this._findRecordByParameter(deleteRef, "nodeRef");
-                                                    var recordTag = this.widgets.dataTable.getTrEl(deleteRecord);
-                                                    this.widgets.dataTable.deleteRow(recordTag);
-                                                }
-                                                if (formMode == "create") {
-                                                    // форма создания
-                                                    // в форме создания в remove ничего не добавляем так как асоциация еще не создана
-                                                    inputAdded.value = item.nodeRef;
-                                                    input.value = item.nodeRef;
-                                                } else {
-                                                    // форма редактирования и просмотра
-                                                    if (input.value == "") {
-                                                        inputAdded.value = item.nodeRef;
-                                                    } else {
-                                                        inputAdded.value = item.nodeRef;
-                                                        // добавляем remove так как связь 1:1 и мы оперируем только с одной записью, чтобы знать что было
-                                                        inputRemoved.value = input.value;
-                                                    }
-                                                }
-
-                                            } else {
-                                                // 1:многим
-                                                if (formMode == "create") {
-                                                    inputAdded.value = (inputAdded.value == "") ? item.nodeRef  : inputAdded.value + "," + item.nodeRef;
-                                                    input.value = (input.value == "") ? item.nodeRef  : input.value + "," + item.nodeRef;
-                                                } else {
-                                                    inputAdded.value = (inputAdded.value == "") ? item.nodeRef  : inputAdded.value + "," + item.nodeRef;
-                                                }
-                                            }
-                                        },
-                                        scope: this
-                                    },
-                                    failureCallback: {
-                                        fn: function DataGrid_onDataItemCreated_refreshFailure(response) {
-                                            Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text: this.msg("message.create.refresh.failure")
-                                                    });
-                                        },
-                                        scope: this
-                                    }
-                                });
-                    }
-                },
-                onDelete_Prompt: function (fnAfterPrompt, me, items, itemsString) {
-                    if (me._hasEventInterest(me.options.bubblingLabel)) {
-
-                        Alfresco.util.PopupManager.displayPrompt(
-                                {
-                                    title: this.msg("message.confirm.delete.title", items.length),
-                                    text: (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", itemsString),
-                                    buttons: [
-                                        {
-                                            text: this.msg("button.delete"),
-                                            handler: function DataGridActions__onActionDelete_delete() {
-                                                var inputAdded = Dom.get("${fieldHtmlId}-added");
-                                                var inputRemoved = Dom.get("${fieldHtmlId}-removed");
-                                                var input = Dom.get("${fieldHtmlId}");
-                                                if (inputAdded.value != "") {
-                                                    var refs = inputAdded.value.split(",");
-                                                    for (var i = 0; i < refs.length; i++) {
-                                                        if (refs[i] == items[0].nodeRef) {
-                                                            inputAdded.value = inputAdded.value.replace(items[0].nodeRef, "");
-                                                            input.value = (!me.options.repeating) ? ""  : input.value.replace(items[0].nodeRef, "");
-                                                        }
-                                                    }
-                                                };
-                                                YAHOO.Bubbling.fire("mandatoryControlValueUpdated", me);
-                                                this.destroy();
-                                                me.selectItems("selectNone");
-                                                fnAfterPrompt.call(me, items);
-                                            }
-                                        },
-                                        {
-                                            text: this.msg("button.cancel"),
-                                            handler: function DataGridActions__onActionDelete_cancel() {
-                                                this.destroy();
-                                            },
-                                            isDefault: true
-                                        }
-                                    ]
-                                });
-                    }
-                },
-                expandRow: function onViewInformation() {
-                    var numSelectItem = this.widgets.dataTable.getTrIndex(arguments[1].id);
-                    var trId = this.widgets.dataTable.getRecord(numSelectItem).getId();
-                    var selectItem = Dom.get(trId);
-                    if (selectItem.getAttribute('class').indexOf("expanded") != -1) {
-                        this.collapseRow(selectItem);
-                    } else {
-                        Alfresco.util.Ajax.request(
-                                {
-                                    url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-                                    dataObj: {
-                                        htmlid: "${fieldHtmlId}" + arguments[0].nodeRef,
-                                        itemKind: "node",
-                                        itemId: arguments[0].nodeRef,
-                                        formId: "table-structure-info",
-                                        mode: "view"
-                                    },
-                                    successCallback: {
-                                        fn: function (response) {
-                                            if (response.serverResponse != null) {
-                                                var me = response.serverResponse.argument.config.scope;
-                                                var rowId = response.serverResponse.argument.config.rowId;
-                                                var numSelectItem = me.widgets.dataTable.getTrIndex(rowId);
-                                                var oData = me.widgets.dataTable.getRecord(numSelectItem).getData();
-                                                me.widgets.dataTable.addRow(oData, numSelectItem + 1);
-
-                                                var trId = me.widgets.dataTable.getRecord(numSelectItem).getId();
-                                                var selectItem = Dom.get(trId);
-                                                selectItem.setAttribute('class', (selectItem.getAttribute('class') + " " + "expanded"));
-
-                                                trId = me.widgets.dataTable.getRecord(numSelectItem + 1).getId();
-                                                var newRecord = Dom.get(trId);
-                                                for (var i = 0; i < newRecord.children.length; i++) {
-                                                    newRecord.removeChild(newRecord.children[i]);
-                                                }
-                                                var colCount = me.datagridColumns.length + 1;
-                                                newRecord.className = "CLASS_EXPANSION";
-                                                newRecord.innerHTML = "<td colspan=" + colCount + " class=\"CLASS_EXPANSION_LINE\">" + response.serverResponse.responseText + "</td>";
-                                            }
-                                        }
-                                    },
-                                    failureMessage: "message.failure",
-                                    execScripts: true,
-                                    scope: this,
-                                    rowId: arguments[1].id
-                                });
-                    }
-                },
-                collapseRow: function (selectItem) {
-                    var infoTag = Dom.getNextSibling(selectItem);
-                    this.widgets.dataTable.deleteRow(infoTag);
-                    selectItem.setAttribute('class', selectItem.getAttribute('class').replace("expanded"));
-                },
-            },
-            true
-    );
-
 })();
 //]]></script>
 </@grid.datagrid>
@@ -422,6 +253,7 @@
     <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
     <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
     <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
+    <input type="hidden" id="${controlId}-selectedItems"/>
 </div>
 
 </div>

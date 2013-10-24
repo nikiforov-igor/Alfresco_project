@@ -172,6 +172,7 @@
                             <!--<control-param name="usePagination">true</control-param>-->
                             <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
+                            <control-param name="startLocationScriptUrl">/lecm/document/tables/api/folder</control-param>
                         </control>
                     </field>
                 </appearance>
