@@ -123,7 +123,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
 					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Тип документа"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Название документа"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement uuid="8e330edb-4053-4fa9-8b27-970e51dedebf" x="202" y="3" width="68" height="26"/>
