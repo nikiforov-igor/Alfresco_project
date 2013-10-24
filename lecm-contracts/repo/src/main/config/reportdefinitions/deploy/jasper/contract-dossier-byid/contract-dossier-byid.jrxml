@@ -34,9 +34,6 @@
 	<field name="col_DateStart" class="java.util.Date">
 		<fieldDescription><![CDATA[Дата начала действия договора]]></fieldDescription>
 	</field>
-	<field name="col_Initiator.Family" class="java.lang.String">
-		<fieldDescription><![CDATA[Инициатор.Фамилия]]></fieldDescription>
-	</field>
 	<field name="col_Contragent.Bankname" class="java.lang.String">
 		<fieldDescription><![CDATA[Контрагент.БИК]]></fieldDescription>
 	</field>
@@ -64,17 +61,11 @@
 	<field name="col_Executor.Name" class="java.lang.String">
 		<fieldDescription><![CDATA[КонтрагентаИсполнитель.Имя]]></fieldDescription>
 	</field>
-	<field name="col_Initiator.OU" class="java.lang.String">
-		<fieldDescription><![CDATA[Инициатор.Подразделение]]></fieldDescription>
-	</field>
 	<field name="col_Theme.code" class="java.lang.String">
 		<fieldDescription><![CDATA[Тематика.Код]]></fieldDescription>
 	</field>
 	<field name="col_Initiator.Phone" class="java.lang.String">
 		<fieldDescription><![CDATA[Инициатор.Телефон]]></fieldDescription>
-	</field>
-	<field name="col_Initiator.Otchestvo" class="java.lang.String">
-		<fieldDescription><![CDATA[Инициатор.Отчество]]></fieldDescription>
 	</field>
 	<field name="col_Contract.RegPlace" class="java.lang.String">
 		<fieldDescription><![CDATA[Место регистрации договора]]></fieldDescription>
@@ -90,9 +81,6 @@
 	</field>
 	<field name="col_Executor.Staff" class="java.lang.String">
 		<fieldDescription><![CDATA[КонтрагентаИсполнитель.Должность]]></fieldDescription>
-	</field>
-	<field name="col_Initiator.Staff" class="java.lang.String">
-		<fieldDescription><![CDATA[Инициатор.Должность]]></fieldDescription>
 	</field>
 	<field name="col_RegnumContractor" class="java.lang.String">
 		<fieldDescription><![CDATA[Регистрационный номер контрагента]]></fieldDescription>
@@ -112,7 +100,7 @@
 	<field name="col_Theme.tname" class="java.lang.String">
 		<fieldDescription><![CDATA[Тематика.Название]]></fieldDescription>
 	</field>
-	<field name="col_Initiator.Name" class="java.lang.String">
+	<field name="col_Initiator" class="java.lang.String">
 		<fieldDescription><![CDATA[Инициатор.Имя]]></fieldDescription>
 	</field>
 	<field name="col_Contragent.fullname" class="java.lang.String">
@@ -141,14 +129,10 @@
 				<textField isStretchWithOverflow="true">
 					<reportElement uuid="b147e370-5cae-43c5-92e3-5b277c5196b6" x="265" y="4" width="240" height="20"/>
 					<textElement textAlignment="Left">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
-					<textFieldExpression><![CDATA[( ($F{col_Initiator.Family} == null) ? "" : $F{col_Initiator.Family})
-+ " "
-+ (($F{col_Initiator.Name} == null) ? "" : ($F{col_Initiator.Name}+ " ").substring(0,1) + "." )
-+ (($F{col_Initiator.Otchestvo} == null) ? "" : ($F{col_Initiator.Otchestvo}+ " ").substring(0,1)+ "." )
-+ (($F{col_Initiator.Staff} == null) ? "" : ", " + $F{col_Initiator.Staff})
-+ (($F{col_Initiator.Phone} == null) ? "" : "тел. "+ $F{col_Initiator.Phone})]]></textFieldExpression>
+					<textFieldExpression><![CDATA[( ($F{col_Initiator} == null) ? "" : $F{col_Initiator})
++ (($F{col_Initiator.Phone} == null) ? "" : ", тел. "+ $F{col_Initiator.Phone})]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="7bb365d6-f832-4ff0-91eb-ba8eee154d6d" x="5" y="4" width="245" height="20"/>
@@ -173,7 +157,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="8c4c74fa-24c9-4a2c-a28b-de1670df9bac" x="111" y="4" width="394" height="16"/>
 					<textElement>
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_Status}]]></textFieldExpression>
 				</textField>
@@ -196,7 +180,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="075f7fac-6c99-4b22-b3db-8ee34e818f87" stretchType="RelativeToTallestObject" x="105" y="4" width="150" height="20"/>
 					<textElement>
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_Sum} == null) ? "???" : msg("{0,number}", $F{col_Sum}) )
 + " "+ (($F{col_SumUnits} == null) ? "" : $F{col_SumUnits})]]></textFieldExpression>
@@ -211,7 +195,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="814ecca9-621f-4974-a688-917be9fd0949" x="378" y="4" width="132" height="31"/>
 					<textElement textAlignment="Left">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_Theme.tname} == null) ? "" : $F{col_Theme.tname} )]]></textFieldExpression>
 				</textField>
@@ -234,7 +218,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="6b6ce4a5-c256-4c95-b8ee-e8f84445381e" stretchType="RelativeToTallestObject" x="5" y="29" width="245" height="20"/>
 					<textElement>
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_DocKind} == null) ? "" : $F{col_DocKind})
 + " № " + (($F{col_Regnum} == null) ? "?" : $F{col_Regnum})
@@ -250,7 +234,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="1726e4cb-6f18-4779-ae44-181cfaa784ff" x="262" y="29" width="248" height="20"/>
 					<textElement textAlignment="Left">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_RegnumProject} == null) ? "" : $F{col_RegnumProject} )]]></textFieldExpression>
 				</textField>
@@ -273,7 +257,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="bbc5a4b4-d75d-4898-9ec2-4705f1ecc357" stretchType="RelativeToTallestObject" x="5" y="29" width="250" height="20"/>
 					<textElement>
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_Contragent.fullname} == null) ? "" : $F{col_Contragent.fullname})]]></textFieldExpression>
 				</textField>
@@ -287,7 +271,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="ba42ac58-4e87-49d4-b868-d599c6e30c88" x="262" y="29" width="246" height="20"/>
 					<textElement textAlignment="Left">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_RegnumContractor} == null) ? "" : $F{col_RegnumContractor} )]]></textFieldExpression>
 				</textField>
@@ -323,7 +307,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="7ea69480-9b57-45e6-9eea-fc2fa485d485" stretchType="RelativeToTallestObject" x="5" y="24" width="160" height="90"/>
 					<textElement>
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_Contragent.Bankname} == null) ? "" : $F{col_Contragent.Bankname})
 + (($F{col_Contragent.BIK} == null) ? "" : "БИК " + $F{col_Contragent.BIK})
@@ -340,7 +324,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="2dc6a433-92a1-4236-8957-90b3b8870a13" x="177" y="24" width="160" height="20"/>
 					<textElement textAlignment="Left">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_Contragent.YurAddress}]]></textFieldExpression>
 				</textField>
@@ -357,7 +341,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="c4cda64d-d79b-4ef3-9ded-5c09961c7b37" x="348" y="24" width="160" height="20"/>
 					<textElement textAlignment="Left">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[(($F{col_Contragent.PhisAddress} == null) ? "" : $F{col_Contragent.PhisAddress})
 + ( ($F{col_Contragent.phone} == null) ? "" : ", тел. " +$F{col_Contragent.phone})]]></textFieldExpression>
@@ -378,7 +362,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="7fe9b72c-c870-4cb7-85e7-9e6105351902" x="205" y="2" width="300" height="20"/>
 					<textElement>
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( $F{col_Executor.Family} == null ? "" : $F{col_Executor.Family})
 + ($F{col_Executor.Name} == null ? "" : "."+ $F{col_Executor.Name})
@@ -403,7 +387,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="606599c5-6f86-48a1-9d81-f8c97a845be5" stretchType="RelativeToTallestObject" x="5" y="25" width="250" height="58"/>
 					<textElement>
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[(($F{col_DateStart} == null) ? "" : msg( " с {0,date,short}", $F{col_DateStart}) )
 + (($F{col_DateEnd} == null) ? "" : msg( " по {0,date,short}", $F{col_DateEnd}) )]]></textFieldExpression>
@@ -418,7 +402,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="d51c8d45-4812-4ace-9d43-4d542d7e1252" x="341" y="3" width="116" height="20"/>
 					<textElement textAlignment="Left">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_ContractIsUnlimited} == null) ? "" : ($F{col_ContractIsUnlimited}.equals(Boolean.TRUE) ? "да" : "нет") )]]></textFieldExpression>
 				</textField>
@@ -438,7 +422,7 @@
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="218d976f-7183-4911-af47-7be0fa16c17e" x="159" y="2" width="353" height="20"/>
 					<textElement>
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{col_Contract.Placehold}]]></textFieldExpression>
 				</textField>

@@ -52,59 +52,20 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="col_ConclusionDate" class="java.util.Date">
-		<fieldDescription><![CDATA[Дата заключения]]></fieldDescription>
-	</field>
-	<field name="col_Regnum" class="java.lang.String">
-		<fieldDescription><![CDATA[Регистрационный номер договора]]></fieldDescription>
-	</field>
-	<field name="col_Theme.desc" class="java.lang.String">
-		<fieldDescription><![CDATA[Тематика.Описание]]></fieldDescription>
-	</field>
-	<field name="col_Theme.code" class="java.lang.String">
-		<fieldDescription><![CDATA[Тематика.Код]]></fieldDescription>
-	</field>
-	<field name="col_DocKind" class="java.lang.String">
+	<field name="col_DocString" class="java.lang.String">
 		<fieldDescription><![CDATA[Вид договора]]></fieldDescription>
-	</field>
-	<field name="col_StatusDate" class="java.util.Date">
-		<fieldDescription><![CDATA[Дата смены статус]]></fieldDescription>
 	</field>
 	<field name="col_Contragent.name" class="java.lang.String">
 		<fieldDescription><![CDATA[Контрагент.Короткое]]></fieldDescription>
 	</field>
-	<field name="col_Item.Doctype" class="java.lang.String">
+	<field name="col_Item.DocName" class="java.lang.String">
 		<fieldDescription><![CDATA[Вложение.ТипДокумента]]></fieldDescription>
-	</field>
-	<field name="col_RegnumContractor" class="java.lang.String">
-		<fieldDescription><![CDATA[Регистрационный номер контрагента]]></fieldDescription>
-	</field>
-	<field name="col_Status" class="java.lang.String">
-		<fieldDescription><![CDATA[Статус]]></fieldDescription>
 	</field>
 	<field name="col_Item.StatusDate" class="java.lang.String">
 		<fieldDescription><![CDATA[Вложение.Дата смены статус]]></fieldDescription>
 	</field>
-	<field name="col_DateRegister" class="java.util.Date">
-		<fieldDescription><![CDATA[Дата регистрации договора]]></fieldDescription>
-	</field>
-	<field name="col_Contragent.YurAddress" class="java.lang.String">
-		<fieldDescription><![CDATA[Контрагент.Юридический адрес]]></fieldDescription>
-	</field>
-	<field name="col_Item.Regnum" class="java.lang.String">
-		<fieldDescription><![CDATA[Регистрационный номер вложенного документа]]></fieldDescription>
-	</field>
 	<field name="col_Item.Status" class="java.lang.String">
 		<fieldDescription><![CDATA[Вложение.Статус]]></fieldDescription>
-	</field>
-	<field name="col_Contragent.PhisAddress" class="java.lang.String">
-		<fieldDescription><![CDATA[Контрагент.Фактический адрес]]></fieldDescription>
-	</field>
-	<field name="col_Theme.tname" class="java.lang.String">
-		<fieldDescription><![CDATA[Тематика.Название]]></fieldDescription>
-	</field>
-	<field name="col_Contragent.fullname" class="java.lang.String">
-		<fieldDescription><![CDATA[Контрагент.Полное наименование]]></fieldDescription>
 	</field>
 	<field name="col_Contragent.phone" class="java.lang.String">
 		<fieldDescription><![CDATA[Контрагент.Тел]]></fieldDescription>
@@ -134,16 +95,14 @@
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Sans Mono"/>
 				</textElement>
-				<textFieldExpression><![CDATA[(($F{col_DocKind} == null) ? "" : $F{col_DocKind})
-+ (($F{col_Regnum} == null) ? "" : " № "+ $F{col_Regnum})
-+ (($F{col_DateRegister} == null) ? "" : msg( " от {0,date,short}", $F{col_DateRegister}))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(($F{col_DocString} == null) ? "" : $F{col_DocString})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="35c49e4c-0413-49d6-8da7-31bfd96f232b" x="110" y="20" width="430" height="20"/>
 				<textElement textAlignment="Left">
 					<font fontName="DejaVu Sans Mono"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{col_Contragent.name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{col_Contragent.name} != null ? $F{col_Contragent.name} : "нет") + ($F{col_Contragent.phone} == null || $F{col_Contragent.name} == null ? "" : (" ,тел. " + $F{col_Contragent.phone}))]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="9fbf1225-5e61-4c50-bc38-59cc2c5a3e5d" x="38" y="20" width="72" height="20"/>
@@ -209,7 +168,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Item.Doctype}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Item.DocName}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="16d04a8b-5f73-4f50-b514-aa24b6a8f501" stretchType="RelativeToTallestObject" x="202" y="2" width="68" height="20" isPrintWhenDetailOverflows="true"/>

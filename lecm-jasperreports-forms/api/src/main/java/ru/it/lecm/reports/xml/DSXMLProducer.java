@@ -3,10 +3,7 @@ package ru.it.lecm.reports.xml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import ru.it.lecm.reports.api.model.*;
 import ru.it.lecm.reports.api.model.AlfrescoAssocInfo.AssocKind;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
@@ -547,6 +544,23 @@ public class DSXMLProducer {
         } // for i
     }
 
+    private static void parseFlagsAttributes(Set<NamedValue> destFlags, NamedNodeMap src, Set<String> stdSkipArgs) {
+        if (src == null) {
+            return;
+        }
+        for (int i = 0; i < src.getLength(); i++) {
+            final Node n = src.item(i);
+            if (n == null) {
+                continue;
+            }
+            // фильтра нет или значение не фильтруется
+            final boolean isStdName = (stdSkipArgs != null) && stdSkipArgs.contains(n.getNodeName());
+            if (!isStdName) {
+                destFlags.add(new NamedValueImpl(n.getNodeName(), XmlHelper.getTagContent(n)));
+            }
+        } // for i
+    }
+
     private static Element xmlCreateSubreportNode(Document doc, String nodeName, SubReportDescriptor subreport) {
         if (subreport == null) {
             return null;
@@ -841,7 +855,7 @@ public class DSXMLProducer {
 
 
             // подгрузка остальных атрибутов ...
-            parseFlagsAttributes(column.flags(), fldNode.getChildNodes(), STD_XML_FLD_ARGS);
+            parseFlagsAttributes(column.flags(), fldNode.getAttributes(), STD_XML_FLD_ARGS);
 
             // тип параметра для колонки ...
             column.setParameterValue(parseParameterNode(fldNode, XMLNODE_PARAMETER));

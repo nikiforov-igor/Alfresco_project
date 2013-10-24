@@ -23,17 +23,12 @@
         <l18>
             <item key="RU_RU" value="Досье договора"/>
         </l18>
-        <provider mnem="DSProviderSearchQueryReportBase" javaClass="ru.it.lecm.reports.jasper.DSProviderSearchQueryReportBase" >
+        <provider mnem="DSProviderSearchQueryReportBase" javaClass="ru.it.lecm.reports.generators.GenericDSProviderBase" >
            <l18>
                <item key="RU_RU" value="Провайдер Jasper отчётов: Досье договора"/>
            </l18>
         </provider>
         <template filename="contract-dossier-byid.jrxml"/>
-        <datasource.descriptor mnem="datasource-approval">
-            <l18>
-                <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
-            </l18>
-        </datasource.descriptor>
     </report.descriptor>
 
 	<query.descriptor>
@@ -43,13 +38,8 @@
 		<allVersions>true</allVersions>
 		<preferedType>{lecm-contract:document}</preferedType>
 		<isMultiRow>false</isMultiRow>
-		<isCustom>true</isCustom>
-		<!--
-			select * from lecm:documents
-			select * from lecm-contract:document as Contract
-		  -->
-		<queryText>	<![CDATA[]]> </queryText>
-
+		<isCustom>false</isCustom>
+		<queryText><![CDATA[]]></queryText>
 		<flags>
 				<!-- соответствия входных параметров (values) свойствам бина провайдера (keys) -->
 				<property.nodeRef> <![CDATA[ID;id]]> </property.nodeRef>
@@ -62,58 +52,45 @@
 		<password>111</password>
 	</cmis.connection>
 
-
 	<fields>
-		<!-- Регистратор assoc "lecm-contract:registrator-assoc", target "lecm-orgstr:employee" -->
-		<!--
-		<field jrFldName="col_Initiator.Family" queryFldName="{lecm-contract:registrator-assoc/lecm-orgstr:employee-last-name}" displayName="Инициатор.Фамилия" />
-		<field jrFldName="col_Initiator.Name" queryFldName="{lecm-contract:registrator-assoc/lecm-orgstr:employee-first-name}" displayName="Инициатор.Имя" />
-		<field jrFldName="col_Initiator.Otchestvo" queryFldName="{lecm-contract:registrator-assoc/lecm-orgstr:employee-middle-name}" displayName="Инициатор.Отчество" />
-		<field jrFldName="col_Initiator.Staff" queryFldName="{lecm-contract:registrator-assoc/lecm-representative:rank}" displayName="Инициатор.Должность" />
-		<field jrFldName="col_Initiator.OU" queryFldName="{lecm-contract:registrator-assoc/lecm-representative:rank}" displayName="Инициатор.Подразделение" />
-		<field jrFldName="col_Initiator.Phone" queryFldName="{lecm-contract:registrator-assoc/lecm-representative:rank}" displayName="Инициатор.Телефон" />
-		  -->
-
 		<!-- Инициатор договора == Автор "lecm-orgstr:employee" -->
-		<field jrFldName="col_Initiator.Family" queryFldName="{{@AUTHOR.REF/lecm-orgstr:employee-last-name}}" displayName="Инициатор.Фамилия" />
-		<field jrFldName="col_Initiator.Name" queryFldName="{{@AUTHOR.REF/lecm-orgstr:employee-first-name}}" displayName="Инициатор.Имя" />
-		<field jrFldName="col_Initiator.Otchestvo" queryFldName="{{@AUTHOR.REF/lecm-orgstr:employee-middle-name}}" displayName="Инициатор.Отчество" />
-		<field jrFldName="col_Initiator.Staff" queryFldName="{{@AUTHOR.REF/lecm-representative:rank}}" displayName="Инициатор.Должность" />
-		<field jrFldName="col_Initiator.OU" queryFldName="{{@AUTHOR.REF/lecm-representative:rank}}" displayName="Инициатор.Подразделение" />
-		<field jrFldName="col_Initiator.Phone" queryFldName="{{@AUTHOR.REF/lecm-representative:rank}}" displayName="Инициатор.Телефон" />
+		<field jrFldName="col_Initiator" queryFldName="{{@AUTHOR.REF/lecm-orgstr:employee-short-name}}" displayName="Инициатор" />
+<!--		<field jrFldName="col_Initiator.Staff" queryFldName="{{@AUTHOR.REF/lecm-representative:rank}}" displayName="Инициатор.Должность" />
+		<field jrFldName="col_Initiator.OU" queryFldName="{{@AUTHOR.REF/lecm-representative:rank}}" displayName="Инициатор.Подразделение" />-->
+		<field jrFldName="col_Initiator.Phone" queryFldName="{{@AUTHOR.REF/lecm-orgstr:employee-phone}}" displayName="Инициатор.Телефон" />
 
 		<!-- Статус -->
-		<field jrFldName="col_Status" queryFldName="lecm-statemachine:status" displayName="Статус" />
+		<field jrFldName="col_Status" queryFldName="{lecm-statemachine:status}" displayName="Статус" />
 
 		<!-- Дата изменения статуса -->
-		<field jrFldName="col_StatusDate" queryFldName="lecm-document:status-changed-date" displayName="Дата смены статус"
+		<field jrFldName="col_StatusDate" queryFldName="{lecm-document:status-changed-date}" displayName="Дата смены статус"
 				javaValueClass="java.util.Date"/>
 
 		<!-- "Общая сумма по договору": "lecm-contract:totalAmount" 
 			 и "Валюта договора": (assoc) "lecm-contract:currency-assoc" 
 				-> target: "lecm-currency:currency
 		  -->
-		<field jrFldName="col_Sum" queryFldName="lecm-contract:totalAmount" displayName="Сумма договора" />
-		<field jrFldName="col_SumUnits" queryFldName="{lecm-contract:currency-assoc/lecm-currency:alphabetic-code}" displayName="Валюта договора" />
+		<field jrFldName="col_Sum" queryFldName="{lecm-contract:totalAmount}" displayName="Сумма договора" javaValueClass="java.lang.Float"/>
+		<field jrFldName="col_SumUnits" queryFldName="{lecm-contract:currency-assoc/lecm-currency:alphabetic-code}" displayName="Валюта договора" javaValueClass="String"/>
 
 		<!-- Данные по "Виду договора" (с типом "lecm-contract-dic:contract-type") -->
 		<field jrFldName="col_DocKind" queryFldName="{lecm-contract:typeContract-assoc/cm:name}" displayName="Вид договора" />
 
-		<field queryFldName="lecm-contract:regNumSystem"
+		<field queryFldName="{lecm-contract:regNumSystem}"
 				jrFldName="col_Regnum"
 				displayName="Регистрационный номер договора" javaValueClass="String"/>
 
 		<!-- Дата заключения договора -->
-		<field jrFldName="col_ConclusionDate" queryFldName="lecm-contract:dateConclusionContracts" displayName="Дата заключения"
+		<field jrFldName="col_ConclusionDate" queryFldName="{lecm-contract:dateConclusionContracts}" displayName="Дата заключения"
 			javaValueClass="date"/>
 
 		<!-- Регистрационный номер проекта договора-->
-		<field queryFldName="lecm-contract:regNumProject"
+		<field queryFldName="{lecm-contract:regNumProject}"
 				jrFldName="col_RegnumProject"
 				displayName="Регистрационный номер проекта договора" javaValueClass="String"/>
 
 		<!-- Регистрационный номер контрагента -->
-		<field queryFldName="lecm-contract:regNumContractor"
+		<field queryFldName="{lecm-contract:regNumContractor}"
 				jrFldName="col_RegnumContractor"
 				displayName="Регистрационный номер контрагента" javaValueClass="String"/>
 
@@ -148,22 +125,22 @@
 		<field jrFldName="col_Executor.Staff" queryFldName="{lecm-contract:representative-assoc/lecm-representative:rank}" displayName="КонтрагентаИсполнитель.Должность" />
 
 		<!-- Дата начала действия договора -->
-		<field jrFldName="col_DateStart" queryFldName="lecm-contract:startDate" displayName="Дата начала действия договора"
+		<field jrFldName="col_DateStart" queryFldName="{lecm-contract:startDate}" displayName="Дата начала действия договора"
 				javaValueClass="java.util.Date"/>
 
 		<!-- Дата окончания действия договора -->
-		<field jrFldName="col_DateEnd" queryFldName="lecm-contract:endDate" displayName="Дата окончания действия договора"
+		<field jrFldName="col_DateEnd" queryFldName="{lecm-contract:endDate}" displayName="Дата окончания действия договора"
 				javaValueClass="java.util.Date"/>
 
 		<!-- Бессрочный -->
-		<field jrFldName="col_ContractIsUnlimited" queryFldName="lecm-contract:unlimited" displayName="Договор бессрочный"
+		<field jrFldName="col_ContractIsUnlimited" queryFldName="{lecm-contract:unlimited}" displayName="Договор бессрочный"
 				javaValueClass="boolean"/>
 
 		<!--  Местонахождение договора -->
-		<field jrFldName="col_Contract.Placehold" queryFldName="lecm-contract:locationContract" displayName="Местонахождение договора" />
+		<field jrFldName="col_Contract.Placehold" queryFldName="{lecm-contract:locationContract}" displayName="Местонахождение договора" />
 
 		<!-- Место регистрации -->
-		<field jrFldName="col_Contract.RegPlace" queryFldName="lecm-contract:locationRegistration" displayName="Место регистрации договора" />
+		<field jrFldName="col_Contract.RegPlace" queryFldName="{lecm-contract:locationRegistration}" displayName="Место регистрации договора" />
 
 
 		<!-- Данные по "Тематика договора" (с типом "lecm-doc-dic:subjects") -->
@@ -171,9 +148,5 @@
 		<field jrFldName="col_Theme.tname" queryFldName="{lecm-contract:subjectContract-assoc/cm:name}" displayName="Тематика.Название" />
 		<field jrFldName="col_Theme.desc" queryFldName="{lecm-contract:subjectContract-assoc/lecm-doc-dic:subject-description}" displayName="Тематика.Описание" />
 
-		<!--
-			<field queryFldName="fmydata" dislayName="" javaValueClass="my.check.type"/>
-		  -->
 	</fields>
-
 </ds.config>

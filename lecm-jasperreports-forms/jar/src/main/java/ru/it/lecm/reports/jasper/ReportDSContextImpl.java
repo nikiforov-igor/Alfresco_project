@@ -1,15 +1,8 @@
 package ru.it.lecm.reports.jasper;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.ResultSetRow;
-
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.DataFilter;
@@ -17,6 +10,8 @@ import ru.it.lecm.reports.api.ReportDSContext;
 import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
+
+import java.util.*;
 
 public class ReportDSContextImpl implements ReportDSContext {
     private ServiceRegistry serviceRegistry;
@@ -142,9 +137,6 @@ public class ReportDSContextImpl implements ReportDSContext {
     /**
      * Проверить является ли указанное поле вычисляемым (в понимании SubstitudeBean):
      * если первый символ "{", то является.
-     *
-     * @param fldName
-     * @return
      */
     public static boolean isCalcField(final String fldName) {
         return (fldName != null) && fldName.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL);
@@ -228,17 +220,7 @@ public class ReportDSContextImpl implements ReportDSContext {
             }
         }
 
-		/*
-		 * NOTE: вариант для случаев, когда NULL не желателен ...
-		if (value != null)
         return value;
-
-		// NULL result in value -> return current name if valueClass is String
-		return (fld != null && String.class.equals(fld.getValueClass())) ? fldAlfName : null;
-		 */
-
-		return value;
-
     }
 
     /**
@@ -320,10 +302,6 @@ public class ReportDSContextImpl implements ReportDSContext {
          * с двойной фигурной скобки. Здесь сейчас отрабатывает дополнительно
          * только @AUTHOR.REF, чтобы выполнить получение автора и применить к
          * нему отсавшуюся часть выражения.
-         *
-         * @param node
-         * @param fmt
-         * @return
          */
         protected String extendedFormatNodeTitle(final NodeRef node, final String fmt) {
             // NOTE: here new features can be implemented

@@ -1,14 +1,5 @@
 package ru.it.lecm.contracts.reports;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -17,22 +8,39 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.extensions.surf.util.ParameterCheck;
-
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.reports.api.DataFieldColumn;
+import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.DSProviderSearchQueryReportBase;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Провайдер для построения отчёта "Опись изменений к договору"
  *
  * @author rabdullin
  */
-public class DSProviderContractsDeltaById extends DSProviderSearchQueryReportBase {
+public class DSProviderContractsDeltaById extends GenericDSProviderBase {
     private static final Logger logger = LoggerFactory.getLogger(DSProviderSearchQueryReportBase.class);
+    public static final String IN_MAIN_DOC = "inMainDoc";
+
+    @SuppressWarnings("unsed")
+    private String nodeRef;
+
+    private NodeRef mainDoc;
+
+    public void setNodeRef(String value) {
+        this.nodeRef = value;
+        this.mainDoc = (value != null && NodeRef.isNodeRef(value)) ? new NodeRef(value) : null;
+    }
+
+    public NodeRef getMainDoc() {
+        return mainDoc;
+    }
 
     @Override
     protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
@@ -45,90 +53,7 @@ public class DSProviderContractsDeltaById extends DSProviderSearchQueryReportBas
         return result;
     }
 
-    /**
-     * Данные для отчёта по основному документу
-     */
-    private class NodeInfo {
-        final NodeRef nodeRef;
-
-        /**
-         * По именам из отчёта здесь атрибуты основного документа, которые в
-         * конфигурации помечены флажком "inMainDoc":
-         * Вид_договора
-         * Рег_номер
-         * Дата_регистрации
-         * Контрагент_краткое_наименование.
-         */
-        final Map<String, Serializable> props = new HashMap<String, Serializable>();
-
-        private NodeInfo(NodeRef nodeRef) {
-            super();
-            this.nodeRef = nodeRef;
-        }
-
-        @Override
-        public String toString() {
-            return "" + nodeRef;
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((nodeRef == null) ? 0 : nodeRef.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final NodeInfo other = (NodeInfo) obj;
-            if (nodeRef == null) {
-                if (other.nodeRef != null) {
-                    return false;
-                }
-            } else if (!nodeRef.equals(other.nodeRef)) {
-                return false;
-            }
-            return true;
-        }
-    }
-
-    /**
-     * Данные для отчёта по вложенному документу
-     */
-    private class LinkedDocumentInfo {
-        /**
-         * Данные основного документа
-         */
-        final NodeInfo docInfo;
-
-        /**
-         * Данные вложенного документа: его атрибуты те, которые в xml-конфигурации
-         * НЕ помечены флажком "inMainDoc":
-         * Тип_документа // изменения к договору, спецификация, протокол согласования разногласий
-         * Номер
-         * Дата_документа
-         * Статус.
-         */
-        final NodeInfo connectionInfo;
-
-        public LinkedDocumentInfo(NodeRef connectionRef, NodeInfo docInfo) {
-            super();
-            this.connectionInfo = new NodeInfo(connectionRef);
-            this.docInfo = docInfo;
-        }
-    }
-
-    private class LinkedDocumentsDS extends TypedJoinDS<LinkedDocumentInfo> {
+    private class LinkedDocumentsDS extends TypedJoinDS<Map<String, Serializable>> {
 
         public LinkedDocumentsDS(Iterator<ResultSetRow> iterator) {
             super(iterator);
@@ -136,10 +61,10 @@ public class DSProviderContractsDeltaById extends DSProviderSearchQueryReportBas
 
         @Override
         public int buildJoin() {
-            final ArrayList<LinkedDocumentInfo> result = new ArrayList<LinkedDocumentInfo>();
+            final List<Map<String, Serializable>> result = new ArrayList<Map<String, Serializable>>();
 
-            final NodeInfo mainDoc = new NodeInfo(nodeRef());
-            loadDocInfo(mainDoc, true); // получаем свойства основного документа
+            final NodeRef mainDoc = getMainDoc();
+            Map<String, Serializable> mainDocProps = loadDocInfo(mainDoc, true); // получаем свойства основного документа
 
             if (context.getRsIter() != null) {
                 while (context.getRsIter().hasNext()) { // тут только одна запись будет по-идее
@@ -152,10 +77,14 @@ public class DSProviderContractsDeltaById extends DSProviderSearchQueryReportBas
                         continue;
                     }
                     for (final NodeRef conn : connections) {
-                        final LinkedDocumentInfo linkedDoc = new LinkedDocumentInfo(conn, mainDoc);
-                        loadDocInfo(linkedDoc.connectionInfo, false); // прогрузить остальное
-                        result.add(linkedDoc);
-                        logger.info(String.format(" for doc %s found linked %s", docId, linkedDoc.connectionInfo));
+                        Map<String, Serializable> propsMap = new HashMap<String, Serializable>();
+                        propsMap.putAll(mainDocProps);
+
+                        Map<String, Serializable> linkDocProps = loadDocInfo(conn, false); // прогрузить остальное
+                        propsMap.putAll(linkDocProps);
+
+                        result.add(propsMap);
+                        logger.info(String.format(" for doc %s found linked %s", docId, conn));
                     } // for
                 } // while
             }
@@ -172,20 +101,14 @@ public class DSProviderContractsDeltaById extends DSProviderSearchQueryReportBas
          * @param docId - id документа
          * @return список СВЯЗЕЙ Документов типа DocumentConnectionService.TYPE_CONNECTION,
          *         связанных с docId так, что выставлено isSystem = true.
-         *         Далее эти коннекторы можно обработать так:
-         *         // get other side document ...
-         *         final NodeRef target= srv.getTargetAssocs(connector, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT).get(0).getTargetRef();
-         *         <p/>
-         *         // get connection type (of type "lecm-connect-types:connection-type") ...
-         *         final NodeRef atype = srv.getTargetAssocs(connector, DocumentConnectionService.ASSOC_CONNECTION_TYPE).get(0).getTargetRef();
          */
         private List<NodeRef> findSystemConnections(NodeRef docId) {
             final NodeService srv = getServices().getServiceRegistry().getNodeService();
             /* получение списка Связей службой документальных связей ... */
             final NodeRef linksRef = getServices().getDocumentConnectionService().getRootFolder(docId); // получить ссылку на "Связи"
 
-            final QName qnConnection = QName.createQName("lecm-connect:connection", getServices().getServiceRegistry().getNamespaceService());
-            final List<ChildAssociationRef> connectionsList = srv.getChildAssocs(linksRef, new HashSet<QName>(Arrays.asList(qnConnection)));
+            final List<ChildAssociationRef> connectionsList =
+                    srv.getChildAssocs(linksRef, new HashSet<QName>(Arrays.asList(DocumentConnectionService.TYPE_CONNECTION)));
             if (connectionsList == null) {
                 return null;
             }
@@ -205,51 +128,47 @@ public class DSProviderContractsDeltaById extends DSProviderSearchQueryReportBas
         /**
          * Загрузка данных документа
          *
-         * @param docInfo
          * @param isInMainDoc true, если надо брать атрибуты помеченные в конфигурации
          *                    флажками "inMainDoc"
          */
-        private void loadDocInfo(NodeInfo docInfo, boolean isInMainDoc) {
+        private Map<String, Serializable> loadDocInfo(NodeRef docInfo, boolean isInMainDoc) {
+            final Map<String, Serializable> resProps = new HashMap<String, Serializable>();
+
             if (conf().getMetaFields() == null) {
-                return;
+                return resProps;
             }
 
 			/* читаем свойства документа целиком */
-            final Map<QName, Serializable> props = getServices().getServiceRegistry().getNodeService().getProperties(docInfo.nodeRef);
-
-			/* проходим по всем сконфигурированным свойствам, выбираем нужные */
-            if (props == null) {
-                return;
-            }
+            final Map<QName, Serializable> props = getServices().getServiceRegistry().getNodeService().getProperties(docInfo);
 
             final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
             for (Map.Entry<String, DataFieldColumn> e : conf().getMetaFields().entrySet()) {
                 final DataFieldColumn fld = e.getValue();
-                final boolean hasInMainDoc = fld.hasXAttributes() && fld.getAttributes().containsKey("inMainDoc");
+                final boolean hasInMainDoc = fld.hasXAttributes() && fld.getAttributes().containsKey(IN_MAIN_DOC);
                 if (hasInMainDoc == isInMainDoc) {
                     final String link = fld.getValueLink();
                     // данные получаем либо непосредственно из атрибутов, либо по ссылкам
                     final Serializable value = (ReportDSContextImpl.isCalcField(link))
-                            ? /* по ссылке */ getServices().getSubstitudeService().formatNodeTitle(docInfo.nodeRef, link)
+                            ? /* по ссылке */ getServices().getSubstitudeService().formatNodeTitle(docInfo, link)
                             : props.get(QName.createQName(link, ns));
-                    docInfo.props.put(fld.getName(), value);
+                    resProps.put(fld.getName(), value);
                 }
             }
+
+            return resProps;
         }
 
         @Override
-        protected Map<String, Serializable> getReportContextProps(
-                LinkedDocumentInfo item) {
+        protected Map<String, Serializable> getReportContextProps(Map<String, Serializable> item) {
             final Map<String, Serializable> result = new HashMap<String, Serializable>();
 
             // DONE: move the data from main & linked documents ...
             for (Map.Entry<String, DataFieldColumn> e : conf().getMetaFields().entrySet()) {
                 final DataFieldColumn fld = e.getValue();
                 final String reportColName = fld.getName();
-                if (item.docInfo.props.containsKey(reportColName))
-                    result.put(reportColName, item.docInfo.props.get(reportColName));
-                else if (item.connectionInfo.props.containsKey(reportColName))
-                    result.put(reportColName, item.connectionInfo.props.get(reportColName));
+                if (item.containsKey(reportColName)) {
+                    result.put(reportColName, item.get(reportColName));
+                }
             }
             return result;
         }
