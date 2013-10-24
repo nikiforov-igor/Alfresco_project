@@ -224,7 +224,7 @@ LogicECM.module = LogicECM.module || {};
                         if (oResults.redirect != null && oResults.redirect != "null") {
                             document.location.href = Alfresco.constants.URL_PAGECONTEXT + oResults.redirect;
                         } else {
-                            document.location.reload();
+                            document.location.href = document.location.href;
                         }
                     } else {
                         Alfresco.util.PopupManager.displayPrompt(
@@ -363,7 +363,7 @@ LogicECM.module = LogicECM.module || {};
                     },
                     onSuccess:{
                         fn:function (response) {
-                            document.location.reload();
+                            document.location.href = document.location.href;
                         },
                         scope:this
                     }
