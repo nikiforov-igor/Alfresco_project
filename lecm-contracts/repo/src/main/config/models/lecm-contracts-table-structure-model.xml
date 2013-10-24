@@ -12,7 +12,6 @@
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/contract/table-structure/1.0" prefix="lecm-contract-table-structure"/>
-
     </namespaces>
 
     <types>
@@ -39,7 +38,12 @@
                 <property name="lecm-contract-table-structure:end-date">
                     <type>d:date</type>
                 </property>
-	            <!-- Дата окончания этапа -->
+	            <!-- Сумма по этапу -->
+	            <property name="lecm-contract-table-structure:stage-amount">
+		            <type>d:float</type>
+		            <default>0.00</default>
+	            </property>
+	            <!-- Категория вложений -->
 	            <property name="lecm-contract-table-structure:attachments-temp-assoc-category">
 		            <type>d:text</type>
 		            <default>Этапы</default>
@@ -100,8 +104,43 @@
                     </target>
                 </association>
             </associations>
-
         </type>
+	    <type name="lecm-contract-table-structure:stage-total">
+		    <title>Table structure stages total row</title>
+		    <parent>lecm-document:tableDataTotalRow</parent>
+
+		    <properties>
+			    <!-- Минимальная дата начала этапа -->
+			    <property name="lecm-contract-table-structure:start-date-min">
+				    <type>d:date</type>
+			    </property>
+			    <!-- Максимальная дата окончания этапа -->
+			    <property name="lecm-contract-table-structure:end-date-max">
+				    <type>d:date</type>
+			    </property>
+
+			    <!-- Минимальная сумма по этапу -->
+			    <property name="lecm-contract-table-structure:stage-amount-min">
+				    <type>d:float</type>
+				    <default>0.00</default>
+			    </property>
+			    <!-- Максимальная сумма по этапу -->
+			    <property name="lecm-contract-table-structure:stage-amount-max">
+				    <type>d:float</type>
+				    <default>0.00</default>
+			    </property>
+			    <!-- Средняя сумма по этапу -->
+			    <property name="lecm-contract-table-structure:stage-amount-avg">
+				    <type>d:float</type>
+				    <default>0.00</default>
+			    </property>
+			    <!-- Общая сумма по этапам -->
+			    <property name="lecm-contract-table-structure:stage-amount-total">
+				    <type>d:float</type>
+				    <default>0.00</default>
+			    </property>
+		    </properties>
+	    </type>
     </types>
     <aspects>
         <aspect name="lecm-contract-table-structure:table-stages-aspect">
@@ -117,6 +156,17 @@
                         <class>lecm-contract-table-structure:stage</class>
                         <mandatory>false</mandatory>
                         <many>true</many>
+                    </target>
+                </association>
+	            <association name="lecm-contract-table-structure:stages-assoc-total">
+                    <source>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>lecm-contract-table-structure:stage-total</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
                     </target>
                 </association>
             </associations>

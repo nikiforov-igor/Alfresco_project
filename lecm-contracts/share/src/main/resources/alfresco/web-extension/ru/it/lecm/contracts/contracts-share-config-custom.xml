@@ -1384,6 +1384,7 @@
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-amount" force="true"/>
                     <show id="lecm-contract-table-structure:status-assoc" />
                     <show id="lecm-contract-table-structure:responsible-assoc" />
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
@@ -1422,6 +1423,7 @@
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-amount" force="true"/>
                     <show id="lecm-contract-table-structure:status-assoc" />
                     <show id="lecm-contract-table-structure:responsible-assoc" />
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
@@ -1450,6 +1452,7 @@
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-amount" force="true"/>
                     <show id="lecm-contract-table-structure:status-assoc" />
                     <show id="lecm-contract-table-structure:responsible-assoc" />
                 </field-visibility>

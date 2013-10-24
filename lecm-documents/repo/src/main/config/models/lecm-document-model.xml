@@ -161,6 +161,10 @@
             <title>Logic ECM Base Document table row</title>
             <parent>cm:cmobject</parent>
         </type>
+		<type name="lecm-document:tableDataTotalRow">
+            <title>Logic ECM Base Document table total row</title>
+            <parent>cm:cmobject</parent>
+        </type>
     </types>
     <aspects>
         <aspect name="lecm-document:tableDataAspect"/>
