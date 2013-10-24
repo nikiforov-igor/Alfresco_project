@@ -19,9 +19,7 @@
 -->
 <!-- creates a java.util.Properties instance with values loaded from the supplied location -->
 <beans>
-<bean id="IMProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-  <property name="location" value="classpath:alfresco/module/${artifactId}/lecm-im.properties"/>
-</bean>
+
     <!-- Registration of orgStructure models
     <bean id="${groupId}.${artifactId}.orgStructureBootstrap" parent="dictionaryModelBootstrap"
           depends-on="dictionaryBootstrap">
@@ -41,11 +39,20 @@
         <!--<property name="nodeService" ref="nodeService"/>-->
     <!--</bean>-->
 
+    <bean id="defaultProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:alfresco/module/${artifactId}/lecm-im.properties"/>
+    </bean>
+
+    <bean id="propertiesBean" class="ru.it.lecm.im.PropertiesBean" init-method="init">
+        <property name="defaultProperties" ref="defaultProperties"/>
+        <property name="globalProperties" ref="global-properties"/>
+    </bean>
+
     <bean id="createIMUserPolicy" class="ru.it.lecm.im.repo.policy.CreateProsodyUserPolicy" init-method="init">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="nodeService" ref="nodeService"/>
-        <property name="properties" ref="IMProps"/>
+        <property name="properties" ref="propertiesBean"/>
     </bean>
 
     <bean id="webscript.ru.it.lecm.im.bosh.post" class="ru.it.lecm.im.bosh.BoshWebScript" parent="webscript">
@@ -53,7 +60,7 @@
     </bean>
 
     <bean id="webscript.ru.it.lecm.im.proxy.bosh.post" class="ru.it.lecm.im.bosh.BoshProxyWebScript" parent="webscript">
-        <property name="properties" ref="IMProps"/>
+        <property name="properties" ref="propertiesBean"/>
     </bean>
 
     <bean id="palladiumLogic" class="ru.it.lecm.im.bosh.PalladiumLogic"/>

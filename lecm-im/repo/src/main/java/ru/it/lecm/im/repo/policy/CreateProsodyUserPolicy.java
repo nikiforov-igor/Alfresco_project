@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.net.URLEncoder;
 import java.util.Properties;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import ru.it.lecm.im.PropertiesBean;
 
 public class CreateProsodyUserPolicy implements NodeServicePolicies.OnUpdateNodePolicy {
 
@@ -30,14 +31,14 @@ public class CreateProsodyUserPolicy implements NodeServicePolicies.OnUpdateNode
     private PolicyComponent policyComponent;
     private OrgstructureBean orgstructureBean;
     private NodeService nodeService;
-    private Properties properties;
+    private PropertiesBean properties;
 
-    public void setProperties(Properties properties) {
+    public void setProperties(PropertiesBean properties) {
         this.properties = properties;
     }
 
     public final void init () {
-        if(Boolean.parseBoolean(properties.getProperty("lecmim.enabled"))){
+        if(properties.isActive()){
             try
             {
                 PropertyCheck.mandatory(this, "policyComponent", policyComponent);

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.im.PropertiesBean;
 
 /**
  Скрипт для проксирования обращений к BOSH-сервису
@@ -20,22 +21,22 @@ import org.slf4j.LoggerFactory;
 public class BoshProxyWebScript extends AbstractWebScript {
 
     private final static Logger logger = LoggerFactory.getLogger(BoshProxyWebScript.class);
-    private Properties properties;
+    private PropertiesBean properties;
 
-    public void setProperties(Properties properties) {
+    public void setProperties(PropertiesBean properties) {
         this.properties = properties;
     }
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-        if(!Boolean.parseBoolean(properties.getProperty("lecmim.enabled"))){
+        if(!properties.isActive()){
             String response = "Messenger is disabled.";
             res.setStatus(500);
             res.getWriter().write(response);
             res.getWriter().flush();
         } else {
             HttpClient client = new HttpClient();
-            String bindURL = properties.getProperty("lecmim.bind");
+            String bindURL = properties.getBindURL();
             PostMethod method = new PostMethod(bindURL);
             String[] headerNames = req.getHeaderNames();
             for (String headerName : headerNames) {
