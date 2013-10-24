@@ -23,36 +23,8 @@ import java.util.Map;
  * Time: 11:51
  */
 public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements DocumentFrequencyAnalysisService {
-
-   /* private ServiceRegistry serviceRegistry;
-    private SearchService searchService;
-    private OrgstructureBean orgstructureService;
-    private SubstitudeBean substituteService;
-    private PersonService personService;
-    private AuthenticationService authService;*/
-
     private NodeRef ROOT;
     private OrgstructureBean orgstructureService;
-
-    /*public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        this.serviceRegistry = serviceRegistry;
-    }
-
-    public void setSearchService(SearchService searchService) {
-        this.searchService = searchService;
-    }
-
-    public void setSubstituteService(SubstitudeBean substituteService) {
-        this.substituteService = substituteService;
-    }
-
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
-    }
-
-    public void setAuthService(AuthenticationService authService) {
-        this.authService = authService;
-    }*/
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -72,7 +44,7 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
     }
 
     @Override
-    public Map<String, Long> getFrequenciesCounts(NodeRef employee, String docType) {
+    public Map<String, Long> getFrequenciesCountsByDocType(NodeRef employee, String docType) {
         List<AssociationRef> freqUnitsAssocs = nodeService.getSourceAssocs(employee, ASSOC_UNIT_EMPLOYEE);
         Map<String, Long> freqs = new HashMap<String, Long>();
         for (AssociationRef freqUnitsAssoc : freqUnitsAssocs) {
@@ -87,24 +59,12 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
         return freqs;
     }
 
-    @Override
-    public void updateFrequencyCount(NodeRef employee, String docType, String actionId, Long newCount) {
-        NodeRef freqUnit = getOrCreateFrequencyUnit(employee, docType, actionId);
-        if (freqUnit != null) {
-            updateFrequencyCount(freqUnit, newCount);
-        }
-    }
-
     public void updateFrequencyCount(NodeRef employee, String docType, String actionId) {
         NodeRef freqUnit = getOrCreateFrequencyUnit(employee, docType, actionId);
         if (freqUnit != null) {
             Long current = (Long) nodeService.getProperty(freqUnit, PROP_UNIT_COUNT);
-            updateFrequencyCount(freqUnit, current + 1);
+            nodeService.setProperty(freqUnit, PROP_UNIT_COUNT, current + 1);
         }
-    }
-
-    private void updateFrequencyCount(NodeRef fuRef, Long newCount) {
-        nodeService.setProperty(fuRef, PROP_UNIT_COUNT, newCount);
     }
 
     @Override

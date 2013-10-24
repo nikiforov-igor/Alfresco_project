@@ -25,9 +25,7 @@ public interface DocumentFrequencyAnalysisService {
 
     Long getFrequencyCount(NodeRef employee, String docType, String actionId);
 
-    Map<String, Long> getFrequenciesCounts(NodeRef employee, String docType);
-
-    void updateFrequencyCount(NodeRef employee, String docType, String actionId, Long newCount);
+    Map<String, Long> getFrequenciesCountsByDocType(NodeRef employee, String docType);
 
     void updateFrequencyCount(NodeRef employee, String docType, String actionId);
 

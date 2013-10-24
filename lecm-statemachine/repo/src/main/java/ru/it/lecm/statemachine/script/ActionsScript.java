@@ -135,6 +135,9 @@ public class ActionsScript extends DeclarativeWebScript {
         NodeService nodeService = serviceRegistry.getNodeService();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
         List<WorkflowPath> paths = workflowService.getWorkflowPaths(statemachineId);
+
+        Map<String, Long> counts = getActionsCounts(nodeRef);
+
         for (WorkflowPath path : paths) {
             List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
             for (WorkflowTask task : tasks) {
@@ -166,9 +169,13 @@ public class ActionsScript extends DeclarativeWebScript {
                                 }
 
                                 Map<String, String> variables = helper.getInputVariablesMap(statemachineId, state.getVariables().getInput());
-                                long count = getActionCount(nodeRef, state.getActionId());
 
                                 if (!hideAction) {
+                                    Long count = counts.get(state.getActionId());
+                                    if (count == null) {
+                                        count = 0L;
+                                    }
+
                                     HashMap<String, Object> resultState = new HashMap<String, Object>();
                                     resultState.put("type", "trans");
                                     resultState.put("actionId", state.getActionId());
@@ -206,9 +213,12 @@ public class ActionsScript extends DeclarativeWebScript {
                                 }
 
                                 Map<String, String> variables = helper.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
-                                long count = getActionCount(nodeRef, entity.getId());
 
                                 if (!hideAction) {
+                                    Long count = counts.get(entity.getId());
+                                    if (count == null) {
+                                        count = 0L;
+                                    }
                                     HashMap<String, Object> workflow = new HashMap<String, Object>();
                                     workflow.put("type", "user");
                                     workflow.put("actionId", entity.getId());
@@ -233,17 +243,17 @@ public class ActionsScript extends DeclarativeWebScript {
         return result;
     }
 
-    private long getActionCount(NodeRef nodeRef, String id) {
+    private Map<String, Long> getActionsCounts(NodeRef nodeRef) {
         NodeService nodeService = serviceRegistry.getNodeService();
         QName type = nodeService.getType(nodeRef);
         String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
 
         NodeRef employee = orgstructureService.getCurrentEmployee();
-        long count = 0;
+        Map<String, Long> counts = new HashMap<String, Long>();
         if (employee != null) {
-            count = frequencyAnalysisService.getFrequencyCount(employee, shortTypeName, id);
+            counts = frequencyAnalysisService.getFrequenciesCountsByDocType(employee, shortTypeName);
         }
-        return count;
+        return counts;
     }
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
