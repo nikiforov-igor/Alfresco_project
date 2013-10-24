@@ -17,10 +17,14 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: AIvkin
@@ -74,6 +78,9 @@ public class DocumentTablePolicy implements
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
 				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "beforeDeleteNode"));
+
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateTableDataRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	/**
@@ -143,5 +150,21 @@ public class DocumentTablePolicy implements
 		if (categoryName != null) {
 			documentAttachmentsService.deleteAttachment(assoc.getTargetRef());
 		}
+	}
+
+	/**
+	 * Создание связи на стока табличных данных
+	 */
+	public void onCreateTableDataRow(AssociationRef associationRef) {
+		NodeRef documentRef = associationRef.getSourceRef();
+		NodeRef documentTableDataRef = associationRef.getTargetRef();
+
+		if (documentTableService.isDocumentTableData(documentTableDataRef)) {
+			checkCreateTotalRow(documentRef, associationRef.getTypeQName());
+		}
+	}
+
+	private void checkCreateTotalRow(NodeRef totalRow, QName assocType) {
+
 	}
 }
