@@ -12,7 +12,6 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
-import ru.it.lecm.reports.jasper.DSProviderSearchQueryReportBase;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 
@@ -25,7 +24,7 @@ import java.util.*;
  * @author rabdullin
  */
 public class DSProviderContractsDeltaById extends GenericDSProviderBase {
-    private static final Logger logger = LoggerFactory.getLogger(DSProviderSearchQueryReportBase.class);
+    private static final Logger logger = LoggerFactory.getLogger(DSProviderContractsDeltaById.class);
     public static final String IN_MAIN_DOC = "inMainDoc";
 
     @SuppressWarnings("unsed")

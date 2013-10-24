@@ -9,8 +9,8 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.contracts.reports.DSProdiverApprovalSummaryByPeriod.ApproveQNameHelper;
+import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
-import ru.it.lecm.reports.jasper.DSProviderSearchQueryReportBase;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.Utils;
@@ -26,33 +26,30 @@ import java.util.*;
  *
  * @author rabdullin
  */
-public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
-    private static final Logger logger = LoggerFactory.getLogger(DSProviderApprovalById.class);
-    private static final String XMLNODE_STATUS_DISPLAYNAMES = "statuses.valueDisplay";
-    final static String TYPE_APPROVAL_LIST = "lecm-al:approval-list";
+public class DSProviderApprovalById extends GenericDSProviderBase {
 
-    public DSProviderApprovalById() {
-        super();
-        setPreferedType(TYPE_APPROVAL_LIST);
+    private static final Logger logger = LoggerFactory.getLogger(DSProviderApprovalById.class);
+
+    private static final String XMLNODE_STATUS_DISPLAYNAMES = "statuses.valueDisplay";
+
+    protected NodeRef nodeRef;
+
+    public NodeRef nodeRef() {
+        return nodeRef;
+    }
+
+    public String getNodeRef() {
+        return (nodeRef == null) ? null : nodeRef.toString();
+    }
+
+    public void setNodeRef(String value) {
+        this.nodeRef = (value == null || value.trim().length() == 0)
+                ? null : new NodeRef(value);
     }
 
     protected void setXMLDefaults(Map<String, Object> defaults) {
         super.setXMLDefaults(defaults);
         defaults.put(XMLNODE_STATUS_DISPLAYNAMES, null);
-    }
-
-    @Override
-    /**
-     * Формируется запрос вида:
-     * TYPE:"lecm-al:approval-list" AND ID:"workspace://SpacesStore/11a08758-6eb7-450f-9f17-3f168d981629"
-     */
-    protected String buildQueryText() {
-        // выполнить проверку заполнения Id узла
-        if (getNodeRef() == null) {
-            throw new RuntimeException("NodeRef not specified");
-        }
-
-        return super.buildQueryText();
     }
 
     @Override
@@ -121,9 +118,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
         final static String JRName_DOC_APPROVE_START = "col_AproveList.ApproveStart";
         final static String JRName_DOC_APPROVE_END = "col_AproveList.ApproveEnd";
 
-        final static String JRName_EXEC_FIRSTNAME = "col_ExecEmployee.FirstName";
-        final static String JRName_EXEC_MIDDLENAME = "col_ExecEmployee.MiddleName";
-        final static String JRName_EXEC_LASTNAME = "col_ExecEmployee.LastName";
+        final static String JRName_EXEC_EMPLOYEE = "col_ExecEmployee";
 
         final static String JRName_EXEC_STAFF_ID = "col_ExecEmployee.StaffPosition.Id";
         final static String JRName_EXEC_STAFF_NAME = "col_ExecEmployee.StaffPosition.Name";
@@ -131,9 +126,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
         final static String JRName_EXEC_OU_ID = "col_ExecEmployee.Unit.Id";
         final static String JRName_EXEC_OU_NAME = "col_ExecEmployee.Unit.Name";
 
-        final static String JRName_ITEM_FIRSTNAME = "col_Item.Employee.FirstName";
-        final static String JRName_ITEM_MIDDLENAME = "col_Item.Employee.MiddleName";
-        final static String JRName_ITEM_LASTNAME = "col_Item.Employee.LastName";
+        final static String JRName_ITEM_EMPLOYEE = "col_Item.Employee";
 
         final static String JRName_ITEM_APPROVE_RESULT = "col_Item.ApproveResult";
         final static String JRName_ITEM_APPROVE_NOTES = "col_Item.ApproveNotes";
@@ -162,9 +155,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
                 result.put(JRName_DOC_APPROVE_END, item.docInfo.docEndApprove);
 
                 if (item.docInfo.docExecutor != null) {
-                    result.put(JRName_EXEC_FIRSTNAME, item.docInfo.docExecutor.firstName);
-                    result.put(JRName_EXEC_MIDDLENAME, item.docInfo.docExecutor.middleName);
-                    result.put(JRName_EXEC_LASTNAME, item.docInfo.docExecutor.lastName);
+                    result.put(JRName_EXEC_EMPLOYEE, item.docInfo.docExecutor.ФамилияИО());
 
                     result.put(JRName_EXEC_STAFF_ID
                             , (item.docInfo.docExecutor.staffId != null) ? item.docInfo.docExecutor.staffId.getId() : "");
@@ -176,9 +167,7 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
                 }
             }
 
-            result.put(JRName_ITEM_FIRSTNAME, item.firstName);
-            result.put(JRName_ITEM_MIDDLENAME, item.middleName);
-            result.put(JRName_ITEM_LASTNAME, item.lastName);
+            result.put(JRName_ITEM_EMPLOYEE, item.ФамилияИО());
 
             result.put(JRName_ITEM_APPROVE_RESULT, item.approveResult);
             result.put(JRName_ITEM_APPROVE_NOTES, item.approveNotes);
@@ -229,7 +218,6 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
 
                      /* получение данных из основного документа */
                     final NodeRef mainDocRef = ApproveQNameHelper.getMainDocByApproveListId(approveListId, nodeSrv);
-                    // final Map<QName, Serializable> docProps = nodeSrv.getProperties(mainDocRef); // если надо станет несколько свойств получать
 
                     docInfo.docProjectNumber = Utils.coalesce(nodeSrv.getProperty(mainDocRef, approveQNames.QFLD_DOC_PROJECTNUM), "");
 
@@ -239,7 +227,6 @@ public class DSProviderApprovalById extends DSProviderSearchQueryReportBase {
                         docInfo.docExecutor = new BasicEmployeeInfo(executorId);
                         docInfo.docExecutor.loadProps(nodeSrv, getServices().getOrgstructureService());
                     }
-
 
                     // получение списка ...
                     final List<ChildAssociationRef> childItems = nodeSrv.getChildAssocs(approveListId, approveQNames.childApproveSet);

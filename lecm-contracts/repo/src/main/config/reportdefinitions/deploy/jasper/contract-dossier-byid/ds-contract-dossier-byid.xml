@@ -23,7 +23,7 @@
         <l18>
             <item key="RU_RU" value="Досье договора"/>
         </l18>
-        <provider mnem="DSProviderSearchQueryReportBase" javaClass="ru.it.lecm.reports.generators.GenericDSProviderBase" >
+        <provider mnem="DSContactDossierProvider" javaClass="ru.it.lecm.reports.generators.GenericDSProviderBase" >
            <l18>
                <item key="RU_RU" value="Провайдер Jasper отчётов: Досье договора"/>
            </l18>

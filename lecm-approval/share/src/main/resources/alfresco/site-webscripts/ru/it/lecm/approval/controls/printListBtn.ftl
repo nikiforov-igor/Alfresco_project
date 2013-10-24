@@ -15,7 +15,7 @@
 
 			window.LogicECM.util.printNode = window.LogicECM.util.printNode || function(nodeRef) {
 				Alfresco.util.Ajax.jsonGet({
-					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/report/${reportId}?nodeRef=" + encodeURI(nodeRef),
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/report/${reportId}?ID=" + encodeURI(nodeRef),
 					successCallback: {
 						fn: function ApprovalListPrint_onSuccess(response) {
 							window.open(window.location.protocol + "//" + window.location.host + response.serverResponse.responseText, "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");

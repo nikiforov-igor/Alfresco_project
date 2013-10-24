@@ -80,12 +80,6 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 		</provider>
 
 		<template filename="approval-list.jrxml"/>
-
-		<datasource.descriptor mnem="datasource-approval">
-			<l18> <item key="RU_RU" value="81a7ffa8-7fe4-4df6-8556-e11e77fd0727"/>
-			</l18>
-		</datasource.descriptor>
-
 	</report.descriptor>
 
 	<query.descriptor>
@@ -94,15 +88,11 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 		<pgsize>-1</pgsize>
 		<allVersions>true</allVersions>
 
-		<!-- <preferedType>lecm-contract:document</preferedType> -->
-		<preferedType></preferedType>
+		<preferedType>lecm-al:approval-list</preferedType>
 
 		<isMultiRow>false</isMultiRow>
-		<isCustom>true</isCustom>
-		<!--
-			select * from lecm:documents
-			select * from lecm-al:approval-list as approvals
-		  -->
+		<isCustom>false</isCustom>
+
 		<queryText><![CDATA[]]></queryText>
 
 		<flags>
@@ -124,25 +114,17 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 	  -->
 	<statuses.valueDisplay>
 		<map>
-			<!-- 
-				<item key=""><![CDATA[ ]]></item>
-			  -->
-			<item key="NO_DECISION" value="решение пока не принято"/>
-
-			<item key="APPROVED" value="согласован"/>
-			<item key="APPROVED_WITH_REMARK" value="согласован с замечанием"/>
-			<item key="APPROVED_FORCE" value="согласование принудительно завершено"/>
-
-			<item key="REJECTED" value="отклонен"/>
-			<item key="REJECTED_FORCE" value="отозван с согласования"/>
-
-			<item key="REASSIGNED" value="переназначить"/>
-
+			<item key="NO_DECISION" value="Нет решения"/>
+			<item key="APPROVED" value="Согласовано"/>
+			<item key="APPROVED_WITH_REMARK" value="Согласован с замечанием"/>
+			<item key="APPROVED_FORCE" value="Согласование принудительно завершено"/>
+			<item key="REJECTED" value="Отклонено"/>
+			<item key="REJECTED_FORCE" value="Отозван с согласования"/>
+			<item key="REASSIGNED" value="Переназначить"/>
 		</map>
 	</statuses.valueDisplay>
 
 	<fields>
-
 		<field order="1"  alfrescoType="d:text"  javaValueClass="java.lang.String"
 				jrFldName="ID"  queryFldName="{{ID}}">
 				displayName="ID документа"
@@ -150,7 +132,6 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				<item key="RU_RU" value="ID документа"/>
 			</l18>
 		</field>
-
 
 		<!-- "lecm-contract:document": Регистрационный номер проекта договора-->
 		<field queryFldName="{lecm-contract:regNumProject}"
@@ -178,15 +159,9 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				displayName="Дата согласования по документу" javaValueClass="date"/>
 
 		<!-- Для Сотрудника-Исполнителя: ФИО -->
-		<field queryFldName="{ExecEmployee{lecm-orgstr:employee-first-name}}"
-				jrFldName="col_ExecEmployee.FirstName"
-				displayName="Имя Исполнителя" />
-		<field queryFldName="{ExecEmployee{lecm-orgstr:employee-last-name}}"
-				jrFldName="col_ExecEmployee.LastName"
-				displayName="Фамилия Исполнителя" />
-		<field queryFldName="{ExecEmployee{lecm-orgstr:employee-middle-name}}"
-				jrFldName="col_ExecEmployee.MiddleName"
-				displayName="Отчество Исполнителя" />
+		<field queryFldName="{ExecEmployee{lecm-orgstr:employee-short-name}}"
+				jrFldName="col_ExecEmployee"
+				displayName="Исполнитель" />
 
 		<!-- Для Сотрудника-Исполнителя: Должность (!) вычисляемое -->
 		<field queryFldName="{ExecEmployee.StaffPosition{sys:node-uuid}}"
@@ -225,15 +200,9 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				displayName="Дата согласования Сотрудником" javaValueClass="date"/>
 
 		<!-- Для Сотрудника-Согласующего: ФИО -->
-		<field queryFldName="{{ApproveEmployee} is {lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-first-name}}"
-				jrFldName="col_Item.Employee.FirstName"
-				displayName="Имя Согласующего" />
-		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-last-name}"
-				jrFldName="col_Item.Employee.LastName"
-				displayName="Фамилия Согласующего" />
-		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-middle-name}"
-				jrFldName="col_Item.Employee.MiddleName"
-				displayName="Отчество Согласующего" />
+		<field queryFldName="{{ApproveEmployee} is {lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-short-name}}"
+				jrFldName="col_Item.Employee"
+				displayName="Согласующий" />
 
 		<!-- Для Сотрудника-Согласующего: Должность (!) вычисляемое -->
 		<field queryFldName="{ApproveEmployee.StaffPosition{sys:node-uuid}}"
