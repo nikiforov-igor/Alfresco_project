@@ -16,6 +16,8 @@ public interface DocumentTableService {
 	public static final QName TYPE_TABLE_DATA_ROW = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataRow");
 	public static final QName TYPE_TABLE_DATA_TOTAL_ROW = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataTotalRow");
 
+    public static final QName PROP_INDEX_TABLE_ROW = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "indexTableRow");
+
 	public static final String DOCUMENT_TABLES_ROOT_NAME = "Табличные данные";
 	public static final String DOCUMENT_TABLE_TOTAL_ASSOC_POSTFIX = "-total";
 
@@ -83,4 +85,12 @@ public interface DocumentTableService {
 	 * @return ассоциация
 	 */
 	public AssociationRef getDocumentAssocByTableData(NodeRef tableDataRef);
+
+    /**
+     * Присовение индекса табличной записи, MAX+1
+     * @param document документ
+     * @param tableDataRef табличные данные
+     * @param tableDataAssocType тип ассоциации для табличных данных
+     */
+    public void setIndexTableRow(NodeRef document, NodeRef tableDataRef, QName tableDataAssocType);
 }

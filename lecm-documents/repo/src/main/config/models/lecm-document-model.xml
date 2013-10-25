@@ -160,6 +160,18 @@
         <type name="lecm-document:tableDataRow">
             <title>Logic ECM Base Document table row</title>
             <parent>cm:cmobject</parent>
+            <properties>
+                <!-- Порядковй номер -->
+                <property name="lecm-document:indexTableRow">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
         </type>
 		<type name="lecm-document:tableDataTotalRow">
             <title>Logic ECM Base Document table total row</title>

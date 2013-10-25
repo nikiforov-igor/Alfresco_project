@@ -166,7 +166,7 @@
                             <control-param name="allowCreate">true</control-param>
                             <control-param name="allowDelete">true</control-param>
                             <control-param name="allowEdit">true</control-param>
-                            <control-param name="allowExpand">true</control-param>
+                            <control-param name="allowExpand">false</control-param>
                             <control-param name="showActions">true</control-param>
                             <control-param name="height">100</control-param>
                             <!--<control-param name="usePagination">true</control-param>-->
@@ -1450,6 +1450,7 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
+                    <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
