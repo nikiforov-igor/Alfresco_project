@@ -206,16 +206,15 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 
 			if (totalProperties != null && properties != null) {
 				List<NodeRef> tableRows = getTableDataRows(document, tableDataAssocType);
-				if (tableRows != null) {
-					for (QName tableDataProperty: properties) {
-						String tableDataPropertyName = tableDataProperty.toPrefixString(namespaceService);
-						for (QName totalRowProperty: totalProperties) {
-							String totalRowPropertyName = totalRowProperty.toPrefixString(namespaceService);
 
-							if (totalRowPropertyName.startsWith(tableDataPropertyName)) {
-								String postfix = totalRowPropertyName.substring(tableDataPropertyName.length());
-								runCalculator(row, tableRows, tableDataProperty, totalRowProperty, postfix);
-							}
+				for (QName tableDataProperty: properties) {
+					String tableDataPropertyName = tableDataProperty.toPrefixString(namespaceService);
+					for (QName totalRowProperty: totalProperties) {
+						String totalRowPropertyName = totalRowProperty.toPrefixString(namespaceService);
+
+						if (totalRowPropertyName.startsWith(tableDataPropertyName)) {
+							String postfix = totalRowPropertyName.substring(tableDataPropertyName.length());
+							runCalculator(row, tableRows, tableDataProperty, totalRowProperty, postfix);
 						}
 					}
 				}
@@ -253,17 +252,17 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 	}
 
 	private List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType) {
+		List<NodeRef> result = new ArrayList<NodeRef>();
 		if (tableDataAssocType != null) {
 			List<AssociationRef> tableRowsAssoc = nodeService.getTargetAssocs(document, tableDataAssocType);
 			if (tableRowsAssoc != null && tableRowsAssoc.size() > 0) {
-				List<NodeRef> result = new ArrayList<NodeRef>(tableRowsAssoc.size());
+				result = new ArrayList<NodeRef>(tableRowsAssoc.size());
 				for (AssociationRef assoc: tableRowsAssoc) {
 					result.add(assoc.getTargetRef());
 				}
-				return result;
 			}
 		}
-		return null;
+		return result;
 	}
 
 	@Override
