@@ -31,7 +31,8 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 
 	private LecmPermissionService lecmPermissionService;
 	private DictionaryService dictionaryService;
-	private  NamespaceService namespaceService;
+	private NamespaceService namespaceService;
+	private Map<String, TableTotalRowCalculator> calculators;
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
@@ -43,6 +44,10 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
+	}
+
+	public void setCalculators(Map<String, TableTotalRowCalculator> calculators) {
+		this.calculators = calculators;
 	}
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
@@ -191,14 +196,25 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 
 							if (totalRowPropertyName.startsWith(tableDataPropertyName)) {
 								String postfix = totalRowPropertyName.substring(tableDataPropertyName.length());
-
-								//todo run calculator
-								int i = 1 + 2;
+								runCalculator(row, tableRows, tableDataProperty, totalRowProperty, postfix);
 							}
 						}
 					}
 				}
 			}
+		}
+	}
+
+	private void runCalculator(NodeRef row, List<NodeRef> tableRows, QName tableDataProperty, QName totalRowProperty, String postfix) {
+		TableTotalRowCalculator calculator = calculators.get(postfix);
+		if (calculator != null) {
+			List<Serializable> data = new ArrayList<Serializable>();
+			for (NodeRef tableRow: tableRows) {
+				data.add(nodeService.getProperty(tableRow, tableDataProperty));
+			}
+
+			Serializable result = calculator.calculate(data);
+			nodeService.setProperty(row, totalRowProperty, result);
 		}
 	}
 

@@ -523,6 +523,8 @@
         </property>
     </bean>
 
+	<bean id="tableTotalRowCalculatorTotal" class="ru.it.lecm.documents.calculators.TableTotalRowCalculatorTotal"/>
+
 	<bean id="documentTableService" class="ru.it.lecm.documents.beans.DocumentTableServiceImpl"
 	      depends-on="transactionService, nodeService, dictionaryService, lecmPermissionServiceBean">
 		<property name="transactionService" ref="transactionService"/>
@@ -530,6 +532,11 @@
 		<property name="dictionaryService" ref="dictionaryService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="namespaceService" ref="namespaceService"/>
+		<property name="calculators">
+			<map>
+				<entry key="-total" value-ref="tableTotalRowCalculatorTotal"/>
+			</map>
+		</property>
 	</bean>
 
 	<bean id="documentTableScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentTableWebScriptBean"
