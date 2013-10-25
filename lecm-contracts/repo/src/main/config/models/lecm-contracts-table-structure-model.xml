@@ -118,26 +118,9 @@
 			    <property name="lecm-contract-table-structure:end-date-max">
 				    <type>d:date</type>
 			    </property>
-
-			    <!-- Минимальная сумма по этапу -->
-			    <property name="lecm-contract-table-structure:stage-amount-min">
-				    <type>d:float</type>
-				    <default>0.00</default>
-			    </property>
-			    <!-- Максимальная сумма по этапу -->
-			    <property name="lecm-contract-table-structure:stage-amount-max">
-				    <type>d:float</type>
-				    <default>0.00</default>
-			    </property>
-			    <!-- Средняя сумма по этапу -->
-			    <property name="lecm-contract-table-structure:stage-amount-avg">
-				    <type>d:float</type>
-				    <default>0.00</default>
-			    </property>
 			    <!-- Общая сумма по этапам -->
 			    <property name="lecm-contract-table-structure:stage-amount-total">
 				    <type>d:float</type>
-				    <default>0.00</default>
 			    </property>
 		    </properties>
 	    </type>
