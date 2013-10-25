@@ -36,6 +36,9 @@
 <#if field.control.params.showActions??>
     <#assign showActions = field.control.params.showActions/>
 </#if>
+<#if ((form.mode == "view") && (allowExpand == "false"))>
+    <#assign showActions = false/>
+</#if>
 
 <#assign bubblingId = containerId/>
 
