@@ -13,8 +13,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.TableTotalRowCalculator;
 import ru.it.lecm.security.LecmPermissionService;
@@ -28,8 +26,6 @@ import java.util.*;
  * Time: 13:47
  */
 public class DocumentTableServiceImpl extends BaseBean implements DocumentTableService {
-	private final static Logger logger = LoggerFactory.getLogger(DocumentTableServiceImpl.class);
-
 	private LecmPermissionService lecmPermissionService;
 	private DictionaryService dictionaryService;
 	private NamespaceService namespaceService;
@@ -206,15 +202,33 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 
 			if (totalProperties != null && properties != null) {
 				List<NodeRef> tableRows = getTableDataRows(document, tableDataAssocType);
+				Map<NodeRef, Map<QName, Serializable>> tableRowsProperties = new HashMap<NodeRef, Map<QName, Serializable>>();
 
 				for (QName tableDataProperty: properties) {
 					String tableDataPropertyName = tableDataProperty.toPrefixString(namespaceService);
-					for (QName totalRowProperty: totalProperties) {
-						String totalRowPropertyName = totalRowProperty.toPrefixString(namespaceService);
 
-						if (totalRowPropertyName.startsWith(tableDataPropertyName)) {
-							String postfix = totalRowPropertyName.substring(tableDataPropertyName.length());
-							runCalculator(row, tableRows, tableDataProperty, totalRowProperty, postfix);
+					Map<QName, TableTotalRowCalculator> calculators = getAvailableCalculators(tableDataPropertyName, totalProperties);
+					if (calculators != null) {
+						List<Serializable> data = new ArrayList<Serializable>();
+						for (NodeRef tableRow: tableRows) {
+							Map<QName, Serializable> propertiesValue;
+							if (tableRowsProperties.containsKey(tableRow)) {
+								propertiesValue = tableRowsProperties.get(tableRow);
+							} else {
+								propertiesValue = nodeService.getProperties(tableRow);
+								tableRowsProperties.put(tableRow, propertiesValue);
+							}
+							if (propertiesValue != null) {
+								Serializable value = propertiesValue.get(tableDataProperty);
+								if (value != null) {
+									data.add(value);
+								}
+							}
+						}
+
+						for (Map.Entry<QName, TableTotalRowCalculator> entry: calculators.entrySet()) {
+							Serializable result = entry.getValue().calculate(data);
+							nodeService.setProperty(row, entry.getKey(), result);
 						}
 					}
 				}
@@ -222,20 +236,22 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		}
 	}
 
-	private void runCalculator(NodeRef row, List<NodeRef> tableRows, QName tableDataProperty, QName totalRowProperty, String postfix) {
-		TableTotalRowCalculator calculator = calculators.get(postfix);
-		if (calculator != null) {
-			List<Serializable> data = new ArrayList<Serializable>();
-			for (NodeRef tableRow: tableRows) {
-				Serializable value = nodeService.getProperty(tableRow, tableDataProperty);
-				if (value != null) {
-					data.add(value);
+	private Map<QName, TableTotalRowCalculator> getAvailableCalculators(String tableDataPropertyName, Set<QName> totalProperties) {
+		Map<QName, TableTotalRowCalculator> result = new HashMap<QName, TableTotalRowCalculator>();
+		for (QName totalRowProperty: totalProperties) {
+			String totalRowPropertyName = totalRowProperty.toPrefixString(namespaceService);
+
+			if (totalRowPropertyName.startsWith(tableDataPropertyName)) {
+				String postfix = totalRowPropertyName.substring(tableDataPropertyName.length());
+
+				TableTotalRowCalculator calculator = calculators.get(postfix);
+				if (calculator != null) {
+					result.put(totalRowProperty, calculator);
 				}
 			}
-
-			Serializable result = calculator.calculate(data);
-			nodeService.setProperty(row, totalRowProperty, result);
 		}
+
+		return  result;
 	}
 
 	private Set<QName> getAllTypeProperties(QName type) {
