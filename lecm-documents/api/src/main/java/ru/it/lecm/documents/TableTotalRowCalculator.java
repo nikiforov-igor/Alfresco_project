@@ -1,4 +1,4 @@
-package ru.it.lecm.documents.beans;
+package ru.it.lecm.documents;
 
 import java.io.Serializable;
 import java.util.List;

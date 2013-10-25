@@ -3,6 +3,7 @@ package ru.it.lecm.documents.beans;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.documents.TableTotalRowCalculator;
 
 import java.util.List;
 import java.util.Set;
@@ -93,4 +94,11 @@ public interface DocumentTableService {
      * @param tableDataAssocType тип ассоциации для табличных данных
      */
     public void setIndexTableRow(NodeRef document, NodeRef tableDataRef, QName tableDataAssocType);
+
+	/**
+	 * Инициализация нового калькулятора
+	 * @param postfix Постфик для поля
+	 * @param calculator Класс калькулятора
+	 */
+	public void addCalculator(String postfix, TableTotalRowCalculator calculator);
 }

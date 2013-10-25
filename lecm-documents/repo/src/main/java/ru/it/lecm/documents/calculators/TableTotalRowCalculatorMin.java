@@ -2,7 +2,7 @@ package ru.it.lecm.documents.calculators;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.documents.beans.TableTotalRowCalculator;
+import ru.it.lecm.documents.TableTotalRowCalculator;
 
 import java.io.Serializable;
 import java.util.Date;

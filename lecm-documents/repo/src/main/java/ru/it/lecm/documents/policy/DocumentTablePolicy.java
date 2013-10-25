@@ -84,6 +84,9 @@ public class DocumentTablePolicy implements
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateTableDataRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onDeleteTableDataRow", Behaviour.NotificationFrequency.FIRST_EVENT));
 	}
 
 	/**
@@ -194,7 +197,7 @@ public class DocumentTablePolicy implements
 	}
 
 	/**
-	 * Выполнение действий после создания связи документа со строкой табличных данных
+	 * Выполнение действий после создания ассоциации между документом и строкой табличных данных
 	 */
 	public void onCreateTableDataRow(AssociationRef associationRef) {
 		NodeRef documentRef = associationRef.getSourceRef();
@@ -208,6 +211,23 @@ public class DocumentTablePolicy implements
 			documentTableService.recalculateTotalRows(documentRef, totalRows, tableDataType, tableDataAssocType, null);
             //Присвоени максимального индекса
             documentTableService.setIndexTableRow(documentRef, documentTableDataRef, tableDataAssocType);
+		}
+	}
+
+	/**
+	 * Выполнение действий после удаления ассоциации между документом и строкой табличных данных
+	 */
+	public void onDeleteTableDataRow(AssociationRef associationRef) {
+		NodeRef documentRef = associationRef.getSourceRef();
+		NodeRef documentTableDataRef = associationRef.getTargetRef();
+
+		if (documentTableService.isDocumentTableData(documentTableDataRef)) {
+			QName tableDataType = nodeService.getType(documentTableDataRef);
+			QName tableDataAssocType = associationRef.getTypeQName();
+
+			//Пересчёт результирующих строк
+			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataType, tableDataAssocType, true);
+			documentTableService.recalculateTotalRows(documentRef, totalRows, tableDataType, tableDataAssocType, null);
 		}
 	}
 }

@@ -16,6 +16,7 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.documents.TableTotalRowCalculator;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
@@ -32,7 +33,7 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 	private LecmPermissionService lecmPermissionService;
 	private DictionaryService dictionaryService;
 	private NamespaceService namespaceService;
-	private Map<String, TableTotalRowCalculator> calculators;
+	private Map<String, TableTotalRowCalculator> calculators = new HashMap<String, TableTotalRowCalculator>();
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
@@ -44,10 +45,6 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
-	}
-
-	public void setCalculators(Map<String, TableTotalRowCalculator> calculators) {
-		this.calculators = calculators;
 	}
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
@@ -267,5 +264,12 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void addCalculator(String postfix, TableTotalRowCalculator calculator) {
+		if (!calculators.containsKey(postfix)) {
+			calculators.put(postfix, calculator);
+		}
 	}
 }

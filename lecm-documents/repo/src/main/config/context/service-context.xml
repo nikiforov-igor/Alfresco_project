@@ -535,14 +535,6 @@
 		<property name="dictionaryService" ref="dictionaryService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="namespaceService" ref="namespaceService"/>
-		<property name="calculators">
-			<map>
-				<entry key="-total" value-ref="tableTotalRowCalculatorTotal"/>
-				<entry key="-min" value-ref="tableTotalRowCalculatorMin"/>
-				<entry key="-max" value-ref="tableTotalRowCalculatorMax"/>
-				<entry key="-avg" value-ref="tableTotalRowCalculatorAvg"/>
-			</map>
-		</property>
 	</bean>
 
 	<bean id="documentTableScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentTableWebScriptBean"
@@ -566,5 +558,20 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
+	</bean>
+
+	<bean id="documents.tableTotalRowCalculatorInitializer" abstract="true" class="ru.it.lecm.documents.TableTotalRowCalculatorInitializer" init-method="init">
+		<property name="documentTableService" ref="documentTableService"/>
+	</bean>
+
+	<bean id="documents.tableTotalRowCalculatorInitializer.common" parent="documents.tableTotalRowCalculatorInitializer" class="ru.it.lecm.documents.beans.TableTotalRowCalculatorInitializerBean">
+		<constructor-arg>
+			<map>
+				<entry key="-total" value-ref="tableTotalRowCalculatorTotal"/>
+				<entry key="-min" value-ref="tableTotalRowCalculatorMin"/>
+				<entry key="-max" value-ref="tableTotalRowCalculatorMax"/>
+				<entry key="-avg" value-ref="tableTotalRowCalculatorAvg"/>
+			</map>
+		</constructor-arg>
 	</bean>
 </beans>
