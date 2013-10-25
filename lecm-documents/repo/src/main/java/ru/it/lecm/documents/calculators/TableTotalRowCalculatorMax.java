@@ -11,10 +11,10 @@ import java.util.List;
 /**
  * User: AIvkin
  * Date: 25.10.13
- * Time: 10:37
+ * Time: 10:48
  */
-public class TableTotalRowCalculatorMin implements TableTotalRowCalculator {
-	private final static Logger logger = LoggerFactory.getLogger(TableTotalRowCalculatorMin.class);
+public class TableTotalRowCalculatorMax implements TableTotalRowCalculator {
+	private final static Logger logger = LoggerFactory.getLogger(TableTotalRowCalculatorMax.class);
 
 	@Override
 	public Serializable calculate(List<Serializable> data) {
@@ -35,7 +35,7 @@ public class TableTotalRowCalculatorMin implements TableTotalRowCalculator {
 		for (Serializable value: data) {
 			if (value instanceof Number) {
 				Double valueNum = ((Number) value).doubleValue();
-				if (result == null || valueNum < result) {
+				if (result == null || valueNum > result) {
 					result = valueNum;
 				}
 			} else {
@@ -50,7 +50,7 @@ public class TableTotalRowCalculatorMin implements TableTotalRowCalculator {
 		for (Serializable value: data) {
 			if (value instanceof Date) {
 				Date valueDate = (Date) value;
-				if (result == null || valueDate.before(result)) {
+				if (result == null || valueDate.after(result)) {
 					result = valueDate;
 				}
 			} else {

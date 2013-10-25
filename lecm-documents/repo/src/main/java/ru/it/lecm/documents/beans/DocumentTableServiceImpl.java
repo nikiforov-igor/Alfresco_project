@@ -231,7 +231,10 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		if (calculator != null) {
 			List<Serializable> data = new ArrayList<Serializable>();
 			for (NodeRef tableRow: tableRows) {
-				data.add(nodeService.getProperty(tableRow, tableDataProperty));
+				Serializable value = nodeService.getProperty(tableRow, tableDataProperty);
+				if (value != null) {
+					data.add(value);
+				}
 			}
 
 			Serializable result = calculator.calculate(data);

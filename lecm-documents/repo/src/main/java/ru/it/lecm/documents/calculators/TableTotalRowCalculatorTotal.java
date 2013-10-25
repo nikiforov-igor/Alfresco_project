@@ -29,9 +29,9 @@ public class TableTotalRowCalculatorTotal implements TableTotalRowCalculator {
 
 	public Number calculateNumber(List<Serializable> data) {
 		double result = 0;
-		for (Serializable dataNum: data) {
-			if (dataNum instanceof Number) {
-				result += ((Number) dataNum).doubleValue();
+		for (Serializable value: data) {
+			if (value instanceof Number) {
+				result += ((Number) value).doubleValue();
 			} else {
 				logger.warn("Not supported value '" + data.get(0) + "' for calculator " + this.getClass());
 			}

@@ -525,6 +525,7 @@
 
 	<bean id="tableTotalRowCalculatorTotal" class="ru.it.lecm.documents.calculators.TableTotalRowCalculatorTotal"/>
 	<bean id="tableTotalRowCalculatorMin" class="ru.it.lecm.documents.calculators.TableTotalRowCalculatorMin"/>
+	<bean id="tableTotalRowCalculatorMax" class="ru.it.lecm.documents.calculators.TableTotalRowCalculatorMax"/>
 
 	<bean id="documentTableService" class="ru.it.lecm.documents.beans.DocumentTableServiceImpl"
 	      depends-on="transactionService, nodeService, dictionaryService, lecmPermissionServiceBean">
@@ -537,6 +538,7 @@
 			<map>
 				<entry key="-total" value-ref="tableTotalRowCalculatorTotal"/>
 				<entry key="-min" value-ref="tableTotalRowCalculatorMin"/>
+				<entry key="-max" value-ref="tableTotalRowCalculatorMax"/>
 			</map>
 		</property>
 	</bean>
