@@ -87,18 +87,27 @@ public interface DocumentTableService {
 	 */
 	public AssociationRef getDocumentAssocByTableData(NodeRef tableDataRef);
 
-    /**
-     * Присвоение индекса табличной записи, MAX+1
-     * @param document документ
-     * @param tableDataRef табличные данные
-     * @param tableDataAssocType тип ассоциации для табличных данных
-     */
-    public void setIndexTableRow(NodeRef document, NodeRef tableDataRef, QName tableDataAssocType);
-
 	/**
 	 * Инициализация нового калькулятора
 	 * @param postfix Постфик для поля
 	 * @param calculator Класс калькулятора
 	 */
 	public void addCalculator(String postfix, TableTotalRowCalculator calculator);
+
+    /**
+     * Получение списка табличных записей
+     * @param document документ
+     * @param tableDataAssocType  тип ассоциации для табличных данных
+     * @return списка табличных записей
+     */
+    public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType);
+
+    /**
+     * Получение списка табличных записей начиная с определенного индекса
+     * @param document документ
+     * @param tableDataAssocType  тип ассоциации для табличных данных
+     * @param beginIndex
+     * @return список табличных записей
+     */
+    public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType, int beginIndex);
 }

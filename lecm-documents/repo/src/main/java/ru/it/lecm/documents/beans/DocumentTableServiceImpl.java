@@ -127,26 +127,26 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		return null;
 	}
 
-    @Override
-    public void setIndexTableRow(NodeRef documentRef, NodeRef tableDataRef, QName tableDataAssocType) {
-        QName tableDataType = nodeService.getType(tableDataRef);
-        List<NodeRef> tableRowList = findNodesByAssociationRef(documentRef, tableDataAssocType, tableDataType, ASSOCIATION_TYPE.TARGET);
-        if (tableRowList != null) {
-            int maxIndex = 0;
-            int index;
-            String indexStr;
-            for (NodeRef nodeRef : tableRowList) {
-                indexStr = (String)nodeService.getProperty(nodeRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                if (indexStr != null && !indexStr.equals("")){
-                    index = Integer.parseInt(indexStr);
-                    if (maxIndex < index){
-                        maxIndex = index;
-                    }
-                }
-            }
-            nodeService.setProperty(tableDataRef,DocumentTableService.PROP_INDEX_TABLE_ROW, maxIndex+1);
-        }
-    }
+//    @Override
+//    public void setIndexTableRow(NodeRef documentRef, NodeRef tableDataRef, QName tableDataAssocType) {
+//        QName tableDataType = nodeService.getType(tableDataRef);
+//        List<NodeRef> tableRowList = findNodesByAssociationRef(documentRef, tableDataAssocType, tableDataType, ASSOCIATION_TYPE.TARGET);
+//        if (tableRowList != null) {
+//            int maxIndex = 0;
+//            int index;
+//            String indexStr;
+//            for (NodeRef nodeRef : tableRowList) {
+//                indexStr = (String)nodeService.getProperty(nodeRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
+//                if (indexStr != null && !indexStr.equals("")){
+//                    index = Integer.parseInt(indexStr);
+//                    if (maxIndex < index){
+//                        maxIndex = index;
+//                    }
+//                }
+//            }
+//            nodeService.setProperty(tableDataRef,DocumentTableService.PROP_INDEX_TABLE_ROW, maxIndex+1);
+//        }
+//    }
 
     @Override
 	public List<NodeRef> getTableDataTotalRows(NodeRef tableDataRef) {
@@ -251,7 +251,7 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		return null;
 	}
 
-	private List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType) {
+	public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 		if (tableDataAssocType != null) {
 			List<AssociationRef> tableRowsAssoc = nodeService.getTargetAssocs(document, tableDataAssocType);
@@ -265,7 +265,27 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		return result;
 	}
 
-	@Override
+    @Override
+    public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType, int beginIndex) {
+        List<NodeRef> tableRows = getTableDataRows(document, tableDataAssocType);
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        String indexStr;
+        int index;
+        if (tableRows != null){
+            for(NodeRef tableRow : tableRows){
+                indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                if (indexStr != null && !indexStr.equals("")){
+                    index = Integer.parseInt(indexStr);
+                    if (index >= beginIndex){
+                        result.add(tableRow);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
 	public void addCalculator(String postfix, TableTotalRowCalculator calculator) {
 		if (!calculators.containsKey(postfix)) {
 			calculators.put(postfix, calculator);

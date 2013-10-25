@@ -209,9 +209,24 @@ public class DocumentTablePolicy implements
 			//Создание результирующей записи, если она ещё не была создана
 			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataType, tableDataAssocType, true);
 			documentTableService.recalculateTotalRows(documentRef, totalRows, tableDataType, tableDataAssocType, null);
-            //Присвоени максимального индекса
-            documentTableService.setIndexTableRow(documentRef, documentTableDataRef, tableDataAssocType);
-		}
+            //Присвоение максимального индекса
+            List<NodeRef> tableRowList = documentTableService.getTableDataRows(documentRef, tableDataAssocType);
+            if (tableRowList != null) {
+                int maxIndex = 0;
+                int index;
+                String indexStr;
+                for (NodeRef tableRow : tableRowList) {
+                    indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                    if (indexStr != null && !indexStr.equals("")){
+                        index = Integer.parseInt(indexStr);
+                        if (maxIndex < index){
+                            maxIndex = index;
+                        }
+                    }
+                }
+                nodeService.setProperty(documentTableDataRef,DocumentTableService.PROP_INDEX_TABLE_ROW, maxIndex+1);
+		    }
+        }
 	}
 
 	/**
@@ -228,6 +243,26 @@ public class DocumentTablePolicy implements
 			//Пересчёт результирующих строк
 			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataType, tableDataAssocType, true);
 			documentTableService.recalculateTotalRows(documentRef, totalRows, tableDataType, tableDataAssocType, null);
+            //Персчет индексов
+            int index;
+            String indexStr;
+            indexStr = (String)nodeService.getProperty(documentTableDataRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
+            if (indexStr != null && !indexStr.equals("")){
+                index = Integer.parseInt(indexStr);
+                List<NodeRef> tableRowList = documentTableService.getTableDataRows(documentRef, tableDataAssocType, index+1);
+                if (tableRowList != null){
+                    //переприсвоение индексов
+                    for (NodeRef tableRow : tableRowList) {
+                        indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                        if (indexStr != null && !indexStr.equals("")){
+                            index = Integer.parseInt(indexStr);
+                            if (indexStr != null && !indexStr.equals("")){
+                                nodeService.setProperty(tableRow,DocumentTableService.PROP_INDEX_TABLE_ROW, index-1);
+                            }
+                        }
+                    }
+                }
+            }
 		}
 	}
 }
