@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ErrandInfo" pageWidth="575" pageHeight="720" columnWidth="555" leftMargin="0" rightMargin="20" topMargin="0" bottomMargin="0" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
-	<property name="ireport.zoom" value="1.0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ErrandInfo" pageWidth="515" pageHeight="720" columnWidth="515" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="styleOdd" mode="Opaque" backcolor="#F4F5F5">
@@ -17,93 +17,118 @@
 	<field name="endDate" class="java.util.Date"/>
 	<field name="status" class="java.lang.String"/>
 	<field name="responsibleName" class="java.lang.String"/>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
+	<columnHeader>
+		<band height="32">
+			<rectangle>
+				<reportElement uuid="248b6368-8074-46ab-b0e5-a28f0d5200f6" stretchType="RelativeToBandHeight" x="1" y="0" width="514" height="32" backcolor="#DCDCDC"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="dd0a8cb6-064e-4039-a967-7ec7bcf6075e" x="0" y="2" width="90" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" isItalic="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Название"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="77af9b8e-b167-4e0d-84a8-9ee4bc321487" x="90" y="0" width="114" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ответственный"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b9c3a10d-c857-4cf1-ac88-3ed1021d46ea" x="292" y="1" width="110" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Начало"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="31bc6410-27b6-47ad-a2c4-483eb3fa3ac6" x="204" y="2" width="88" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Статус"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f60975e5-7b09-40b9-a56c-60beba4f5759" x="402" y="0" width="113" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Окончание"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="0f6f9483-b3b5-469a-a816-b706035183ba" x="204" y="0" width="1" height="32"/>
+			</line>
+			<line>
+				<reportElement uuid="08f76ec7-e70c-4da5-bc13-369c0b008698" x="292" y="0" width="1" height="32"/>
+			</line>
+			<line>
+				<reportElement uuid="9f08e809-2884-4df6-be52-16a7503b86e0" x="402" y="0" width="1" height="32"/>
+			</line>
+			<line>
+				<reportElement uuid="6f2117dc-5155-4b17-bf2d-c642ff7610f7" x="90" y="0" width="1" height="32"/>
+			</line>
+		</band>
+	</columnHeader>
 	<detail>
-		<band height="100" splitType="Stretch">
+		<band height="25" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{REPORT_COUNT} <= 200]]></printWhenExpression>
-			<rectangle radius="0">
-				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="555" height="100" isPrintWhenDetailOverflows="true" backcolor="#EEECE1"/>
-				<graphicElement>
-					<pen lineWidth="2.0" lineColor="#EEECE1"/>
-				</graphicElement>
+			<rectangle>
+				<reportElement uuid="0849ef73-dfab-4bba-88c3-8271998f7a9d" stretchType="RelativeToBandHeight" x="1" y="0" width="514" height="25" backcolor="#FFFFFF"/>
 			</rectangle>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" x="142" y="9" width="414" height="20" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<reportElement uuid="cf0ce48a-feb0-48b7-9a3c-076d22679eea" positionType="Float" stretchType="RelativeToTallestObject" x="2" y="2" width="89" height="23" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="AtLeast" leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2" tabStopWidth="30"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement uuid="a584fbf2-3bc7-426e-a35f-677b19c6c5e9" positionType="Float" x="38" y="28" width="100" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono"/>
-				</textElement>
-				<text><![CDATA[Ответственный]]></text>
-			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="5db5527c-1abb-4aad-a2d8-e699a7cede33" positionType="Float" x="137" y="28" width="419" height="20" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="AtLeast" leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2" tabStopWidth="30"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($F{responsibleName} == null ? "" : $F{responsibleName})]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="416a29a1-28bb-4cc4-88fd-6ed667c6d643" positionType="Float" x="37" y="48" width="100" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono"/>
-				</textElement>
-				<text><![CDATA[Начало]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8e90d4bc-27a7-4fd3-9fa0-1ceb6fbd57c2" positionType="Float" x="137" y="48" width="118" height="20" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="AtLeast" leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2" tabStopWidth="30"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{startDate}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="90ec68ca-4b29-4369-b738-18d08455d7c2" positionType="Float" x="37" y="68" width="100" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono"/>
-				</textElement>
-				<text><![CDATA[Статус]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="cf0ce48a-feb0-48b7-9a3c-076d22679eea" positionType="Float" x="137" y="68" width="419" height="20" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<reportElement uuid="cf0ce48a-feb0-48b7-9a3c-076d22679eea" positionType="Float" stretchType="RelativeToTallestObject" x="204" y="2" width="88" height="23" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="AtLeast" leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2" tabStopWidth="30"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement uuid="03633d33-8bdc-4b9e-94e5-46449172a86e" positionType="Float" x="38" y="9" width="100" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono"/>
-				</textElement>
-				<text><![CDATA[Название]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="b3d854b1-aee9-4ee2-a5cd-3d764777511a" positionType="Float" x="255" y="48" width="100" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono"/>
-				</textElement>
-				<text><![CDATA[Окончание]]></text>
-			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="5a9ca7b5-22a2-446c-b9b1-76aa54ee9cad" positionType="Float" x="355" y="48" width="118" height="20" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<reportElement uuid="5db5527c-1abb-4aad-a2d8-e699a7cede33" positionType="Float" stretchType="RelativeToTallestObject" x="90" y="2" width="114" height="23" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="AtLeast" leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2" tabStopWidth="30"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{responsibleName} == null ? "" : $F{responsibleName})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8e90d4bc-27a7-4fd3-9fa0-1ceb6fbd57c2" positionType="Float" stretchType="RelativeToTallestObject" x="291" y="2" width="109" height="23" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="AtLeast" leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2" tabStopWidth="30"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{startDate}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5a9ca7b5-22a2-446c-b9b1-76aa54ee9cad" positionType="Float" stretchType="RelativeToTallestObject" x="400" y="2" width="113" height="23" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="AtLeast" leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2" tabStopWidth="30"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{endDate}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement uuid="f42bea64-be2f-4dea-a6f5-b6def29bdb02" x="204" y="0" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement uuid="399ff011-4184-44fd-aa34-db4725516498" x="402" y="0" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement uuid="b64a7d5c-2117-44ff-bc46-2891dc11f33a" x="90" y="0" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement uuid="274e2034-6cc2-47f9-b26a-e6064c375ed6" x="292" y="0" width="1" height="25"/>
+			</line>
 		</band>
 	</detail>
 </jasperReport>
