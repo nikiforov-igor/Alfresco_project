@@ -21,11 +21,6 @@
                 <item key="RU_RU" value="exec-doc-tree"/>
             </l18>
         </template>
-        <datasource.descriptor>
-            <l18>
-                <item key="RU_RU" value="b10c1b42-ad46-4694-b85f-cdaced5f9993"/>
-            </l18>
-        </datasource.descriptor>
     </report.descriptor>
 
 	<query.descriptor>
@@ -34,7 +29,6 @@
 		<pgsize>-1</pgsize>
 		<queryText><![CDATA[]]></queryText>
 		<allVersions>true</allVersions>
-		<!-- <preferedType>{lecm-document:base}</preferedType> -->
 		<preferedType>{lecm-errands:document}</preferedType>
 		<isMultiRow>true</isMultiRow>
 		<isCustom>false</isCustom>

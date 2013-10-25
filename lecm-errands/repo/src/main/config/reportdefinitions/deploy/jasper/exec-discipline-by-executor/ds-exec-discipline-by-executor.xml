@@ -21,11 +21,6 @@
                 <item key="RU_RU" value="exec-discipline-by-executor"/>
             </l18>
         </template>
-        <datasource.descriptor>
-            <l18>
-                <item key="RU_RU" value="b10c1b42-ad46-4694-b85f-cdaced5f9f03"/>
-            </l18>
-        </datasource.descriptor>
     </report.descriptor>
 
     <query.descriptor>
@@ -100,7 +95,7 @@
           так что выносим его для обработки провайдером - помечаем "{{ }}".
           -->
         <field alfrescoType="d:date" order="1" displayName="Период"
-            javaValueClass="java.util.Date" jrFldName="Col_Period" queryFldName="{{Col_Period}}">
+            javaValueClass="java.util.Date" jrFldName="Col_Period" queryFldName="{lecm-errands:start-date}">
             <l18>
                 <item key="RU_RU" value="Период"/>
             </l18>

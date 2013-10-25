@@ -1,10 +1,8 @@
 package ru.it.lecm.errands.reports;
 
-import net.sf.jasperreports.engine.JRException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -12,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.calc.DataGroupCounter;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
@@ -21,7 +18,6 @@ import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 
 import java.io.Serializable;
@@ -44,8 +40,7 @@ import java.util.*;
  *
  * @author rabdullin
  */
-public class ErrandsDisciplineDSProvider
-        extends GenericDSProviderBase {
+public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
 
     private static final Logger logger = LoggerFactory.getLogger(ErrandsDisciplineDSProvider.class);
 
@@ -63,19 +58,16 @@ public class ErrandsDisciplineDSProvider
      * 2) для группировки по Подразделениям, оно ДОЛЖНО СОДЕРЖАТЬ подстроку:
      * DsDisciplineColumnNames.CONTAINS_GROUP_BY_OU ("OrgUnit")
      */
-    final private ErrandsReportFilterParams paramsFilter = new ErrandsReportFilterParams(
-            DsDisciplineColumnNames.COL_PARAM_PERIOD
-            , DsDisciplineColumnNames.COL_PARAM_GROUP_BY
+    final private ErrandsReportFilterParams paramsFilter = new ErrandsReportFilterParams(null,
+            DsDisciplineColumnNames.COL_PARAM_GROUP_BY
             , DsDisciplineColumnNames.CONTAINS_GROUP_BY_OU
             , DsDisciplineColumnNames.COL_PARAM_EXEC_ORGUNIT
     );
-
 
     /**
      * для упрощения работы с QName-объектами
      */
     private LocalQNamesHelper _qnames;
-
 
     final protected LocalQNamesHelper qnames() {
         if (this._qnames == null) {
@@ -92,45 +84,17 @@ public class ErrandsDisciplineDSProvider
         defaults.put(ErrandsReportFilterParams.XMLGROUPBY_SOURCE_MAP, null);
     }
 
-    private void loadConfig() {
-        try {
-            conf().setConfigName(DSXMLProducer.makeDsConfigFileName(this.getReportDescriptor().getMnem()));
-            conf().loadConfig();
-            this.paramsFilter.scanGroupByInfo(conf());
-        } catch (JRException e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
     @Override
     protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
         return new ExecDisciplineJRDataSource(iterator);
     }
 
-
-    @Override
-    protected ResultSet execQuery() {
-        loadConfig();
-        return super.execQuery();
-    }
-
-
     @Override
     protected LucenePreparedQuery buildQuery() {
-
-        final LucenePreparedQuery result = super.buildQuery(); // new LucenePreparedQuery();
+        final LucenePreparedQuery result = super.buildQuery();
 
         final LuceneSearchBuilder builder = new LuceneSearchBuilder(getServices().getServiceRegistry().getNamespaceService());
         builder.emmit(result.luceneQueryText());
-
-        // hasData: становится true после внесения первого любого условия в builder
-        boolean hasData = !builder.isEmpty();
-
-        final DataSourceDescriptor ds = getReportDescriptor().getDsDescriptor();
-        final Date periodStart = paramsFilter.getParamPeriodStart(ds), periodEnd = paramsFilter.getParamPeriodEnd(ds);
-
-		/* Проверка на диапазон для даты выдачи поручения ... */
-        builder.emmitDateIntervalCond((hasData ? " AND " : ""), LocalQNamesHelper.QNFLD_START_DATE.toPrefixString(getServices().getServiceRegistry().getNamespaceService()), periodStart, periodEnd);
 
 		/* Формирование */
         result.setLuceneQueryText(builder.toString());
@@ -147,11 +111,6 @@ public class ErrandsDisciplineDSProvider
          */
         final static String COL_PARAM_GROUP_BY = "Col_GroupBy"; // String значение долно быть в секцииях конфы "groupBy.xxx"
         final static String CONTAINS_GROUP_BY_OU = "OrgUnit"; // подстрока, которая означает группировку по организации
-
-        /**
-         * Период с ... по ...
-         */
-        final static String COL_PARAM_PERIOD = "Col_Period"; // date, PARAM_DELTA
 
         /**
          * Колонка "Cотрудник"
@@ -194,16 +153,10 @@ public class ErrandsDisciplineDSProvider
          */
         final static String COL_COUNT_INTIME = "Col_Count_Intime"; // int
 
-        /** Вычисляемая колонка "Процент исполнения в срок" */
-        // final static String CALC_COL_PERCENTS_INTIME = "Col_Percents_Intime"; // java.lang.Float
-
         /**
          * Колонка "Кол-во поручений, отклонённых руководителем"
          */
         final static String COL_COUNT_BOSS_REFUSED = "Col_Count_Boss_Refused"; // int
-
-        /** Вычисляемая колонка "Процент поручений, отклонённых руководителем" */
-        // final static String CALC_COL_PERCENTS_BOSS_REFUSED = "Col_Percents_Boss_Refused"; // java.lang.Float
 
         /**
          * Колонка "Кол-во важных поручений, неисполненных в срок"
@@ -250,7 +203,7 @@ public class ErrandsDisciplineDSProvider
         final private BasicEmployeeInfo employee;
 
         /* Счётчики данной персоны */
-        final DataGroupCounter counters; // = new DataGroupCounter("");
+        final DataGroupCounter counters;
 
         /**
          * Среднее время исполнения, часов
@@ -337,6 +290,8 @@ public class ErrandsDisciplineDSProvider
             // построить  в groups список объектов сгруппированных по названиям Измерения (ключ в groups)
             // Ключ здесь это Сотрудник или Подразделение, в ~ от группировки (см this.useOUFilter)
             final Map<NodeRef, DisciplineGroupInfo> result = new HashMap<NodeRef, DisciplineGroupInfo>();
+
+            paramsFilter.scanGroupByInfo(conf());
 
             if (context.getRsIter() != null) {
                 final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();

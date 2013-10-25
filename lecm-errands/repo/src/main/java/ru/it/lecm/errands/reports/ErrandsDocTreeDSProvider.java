@@ -1,11 +1,9 @@
 package ru.it.lecm.errands.reports;
 
-import net.sf.jasperreports.engine.JRException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -28,7 +26,6 @@ import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 
 import java.io.Serializable;
@@ -72,6 +69,10 @@ public class ErrandsDocTreeDSProvider extends GenericDSProviderBase {
 
     protected DataFilter newDataFilter() {
         return this.filter.makeAssocFilter();
+    }
+
+    public ErrandsDocTreeParams getConfigDocTreeParams() {
+        return configDocTreeParams;
     }
 
     /**
@@ -214,17 +215,6 @@ public class ErrandsDocTreeDSProvider extends GenericDSProviderBase {
         defaults.put(ErrandsDocTreeParams.XML_TREE_LEVEL_ASSOC, null);
     }
 
-
-    private void loadConfig() {
-        try {
-            conf().setConfigName(DSXMLProducer.makeDsConfigFileName(this.getReportDescriptor().getMnem()));
-            conf().loadConfig();
-            this.configDocTreeParams.scanTreeParams(conf());
-        } catch (JRException e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
     @Override
     protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
         final ExecDocTreeJRDataSource result = new ExecDocTreeJRDataSource(iterator);
@@ -241,12 +231,6 @@ public class ErrandsDocTreeDSProvider extends GenericDSProviderBase {
 
         result.buildJoin();
         return result;
-    }
-
-    @Override
-    protected ResultSet execQuery() {
-        loadConfig();
-        return super.execQuery();
     }
 
     /**
@@ -268,16 +252,6 @@ public class ErrandsDocTreeDSProvider extends GenericDSProviderBase {
          * Колонка "Название"
          */
         final static String COL_DISPLAY_NAME = "Col_DisplayName"; // String
-    }
-
-
-    /**
-     * QName-ссылки на данные Альфреско *************************************
-     */
-    private class LocalQNamesHelper extends ErrandsQNamesHelper {
-        LocalQNamesHelper(NamespaceService ns) {
-            super(ns);
-        }
     }
 
     /**
@@ -490,7 +464,7 @@ public class ErrandsDocTreeDSProvider extends GenericDSProviderBase {
             String displayName = makeDocName(docId);
 
             // повторяющиеся элементы помечаем "звёздочкой"
-            if (isDup) displayName = configDocTreeParams.getDupMarker() + displayName;
+            if (isDup) displayName = getConfigDocTreeParams().getDupMarker() + displayName;
 
 			/* Добавление нового элемента */
             final ItemLeveledInfo docItem = parentNode.addChild(docId, displayName);
@@ -505,7 +479,7 @@ public class ErrandsDocTreeDSProvider extends GenericDSProviderBase {
 
 			/* подгружаем детей ((!) по обратной связи) */
             if (maxDeepLevel != 0) {
-                final String cur_qnameStr = configDocTreeParams.getLeveledAssocQn(level + 1);
+                final String cur_qnameStr = getConfigDocTreeParams().getLeveledAssocQn(level + 1);
 
                 // если явно не задано ассоциации - используем от предыдущего уровня
                 final QName qnCurAssoc = Utils.isStringEmpty(cur_qnameStr) ? qnParentAssoc : QName.createQName(cur_qnameStr, this.ns);
@@ -557,7 +531,7 @@ public class ErrandsDocTreeDSProvider extends GenericDSProviderBase {
             /* Номер ... */
             result.put(DsErrandsDocTreeColumnNames.Col_LEVELED_NUM, item.getLeveledNumberStr());
 			/* Название ... */
-            final String prefix = Utils.dup(configDocTreeParams.getDupMarker(), item.getLevel());
+            final String prefix = Utils.dup(getConfigDocTreeParams().getDupMarker(), item.getLevel());
             result.put(DsErrandsDocTreeColumnNames.COL_DISPLAY_NAME, prefix + item.getDisplayName());
             return result;
         }
@@ -565,6 +539,8 @@ public class ErrandsDocTreeDSProvider extends GenericDSProviderBase {
         @Override
         public int buildJoin() {
             final DocTreeBuilder result = new DocTreeBuilder();
+
+            getConfigDocTreeParams().scanTreeParams(conf());
 
             // проход по данным ...
             if (context.getRsIter() != null) {
