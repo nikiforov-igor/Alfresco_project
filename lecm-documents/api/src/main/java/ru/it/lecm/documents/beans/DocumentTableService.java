@@ -87,7 +87,7 @@ public interface DocumentTableService {
 	public AssociationRef getDocumentAssocByTableData(NodeRef tableDataRef);
 
     /**
-     * Присовение индекса табличной записи, MAX+1
+     * Присвоение индекса табличной записи, MAX+1
      * @param document документ
      * @param tableDataRef табличные данные
      * @param tableDataAssocType тип ассоциации для табличных данных

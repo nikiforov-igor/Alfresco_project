@@ -137,10 +137,10 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
         if (tableRowList != null) {
             int maxIndex = 0;
             int index;
-            String indexStr = "";
+            String indexStr;
             for (NodeRef nodeRef : tableRowList) {
                 indexStr = (String)nodeService.getProperty(nodeRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                if (indexStr != null && indexStr != ""){
+                if (indexStr != null && !indexStr.equals("")){
                     index = Integer.parseInt(indexStr);
                     if (maxIndex < index){
                         maxIndex = index;
