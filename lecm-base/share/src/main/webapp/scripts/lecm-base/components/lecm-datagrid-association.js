@@ -80,7 +80,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
         inputAdded: null,
         inputRemoved: null,
         input: null,
-        selectItems: null,
+        selectItemsTag: null,
         onDataItemCreated: function DataGrid_onDataItemCreated(layer, args) {
             var obj = args[1];
             if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
@@ -117,7 +117,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                                         this.widgets.dataTable.deleteRow(recordTag);
                                         //В selectItems добавляем только что добавленую запись,
                                         //это нужно для поиска по только что добавленному значению
-                                        me.selectItems.value = item.nodeRef;
+                                        me.selectItemsTag.value = item.nodeRef;
                                     }
                                     if (formMode == "create") {
                                         // форма создания
@@ -142,11 +142,11 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                                     } else {
                                         me.inputAdded.value = (me.inputAdded.value == "") ? item.nodeRef : me.inputAdded.value + "," + item.nodeRef;
                                     }
-                                    //В selectItems добавляем только что добавленые записи и которые были,
+                                    //В selectItemsTag добавляем только что добавленые записи и которые были,
                                     //это нужно для поиска по только что добавленным значениям
-                                    me.selectItems.value = me.inputAdded.value + "," + me.input.value;
+                                    me.selectItemsTag.value = me.inputAdded.value + "," + me.input.value;
                                 }
-                                me.filterValues = me.selectItems.value;
+                                me.filterValues = me.selectItemsTag.value;
                                 me._setSearchConfigFilter();
                                 Bubbling.fire("initDatagrid",
                                     {
@@ -188,8 +188,8 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                                         }
                                         //В selectItems добавляем только что добавленые записи и которые были,
                                         //это нужно для поиска по только что добавленным значениям
-                                        me.selectItems.value = me.inputAdded.value + "," + me.input.value;
-                                        me.filterValues = me.selectItems.value;
+                                        me.selectItemsTag.value = me.inputAdded.value + "," + me.input.value;
+                                        me.filterValues = me.selectItemsTag.value;
                                         me._setSearchConfigFilter();
                                         Bubbling.fire("initDatagrid",
                                             {
@@ -198,7 +198,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                                     }
                                     YAHOO.Bubbling.fire("mandatoryControlValueUpdated", me);
                                     this.destroy();
-                                    me.selectItems("selectNone");
+//                                    me.selectItems("selectNone");
                                     fnAfterPrompt.call(me, items);
                                 }
                             },
