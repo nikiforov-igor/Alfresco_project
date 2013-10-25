@@ -121,13 +121,10 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 			List<ChildAssociationRef> dicValues = nodeService.getChildAssocs(obTypeDictionary);
 			for (ChildAssociationRef dicValue : dicValues) {
 				NodeRef record = dicValue.getChildRef();
-				if (!isArchive(record)) {
-					Serializable recordClass = nodeService.getProperty(record, parameter);
-					if (recordClass != null && recordClass.equals(value)) {
-						results.add(record);
-					}
+				Serializable recordClass = nodeService.getProperty(record, parameter);
+				if (recordClass != null && recordClass.equals(value) && !isArchive(record)) {
+					results.add(record);
 				}
-
 			}
 		}
 		return results;
