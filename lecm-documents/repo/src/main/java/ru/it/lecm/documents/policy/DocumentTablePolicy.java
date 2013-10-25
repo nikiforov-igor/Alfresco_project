@@ -22,10 +22,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -156,15 +153,28 @@ public class DocumentTablePolicy implements
 		}
 	}
 
+	/**
+	 * Пересчёт результирующей строки при изменении одной из строк
+	 */
 	public void calculateTotalRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(nodeRef);
 		if (totalRows != null) {
-			documentTableService.recalculateTotalRows(totalRows, getChangedProperties(before, after, nodeService.getType(nodeRef)));
+			AssociationRef documentAssoc = documentTableService.getDocumentAssocByTableData(nodeRef);
+			if (documentAssoc != null) {
+				NodeRef document = documentAssoc.getSourceRef();
+				if (document != null) {
+					QName tableDataType = nodeService.getType(nodeRef);
+					QName tableDataAssocType = documentAssoc.getTypeQName();
+					Set<QName> changedProperties = getChangedProperties(before, after, nodeService.getType(nodeRef));
+
+					documentTableService.recalculateTotalRows(document, totalRows, tableDataType, tableDataAssocType, changedProperties);
+				}
+			}
 		}
 	}
 
-	public List<QName> getChangedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after, QName type) {
-		List<QName> result = new ArrayList<QName>();
+	public Set<QName> getChangedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after, QName type) {
+		Set<QName> result = new HashSet<QName>();
 		TypeDefinition typeDefinition = dictionaryService.getType(type);
 		if (typeDefinition != null) {
 			Map<QName, PropertyDefinition> allProperties = typeDefinition.getProperties();
@@ -182,15 +192,18 @@ public class DocumentTablePolicy implements
 	}
 
 	/**
-	 * Создание связи на стока табличных данных
+	 * Выполнение действий после создания связи документа со строкой табличных данных
 	 */
 	public void onCreateTableDataRow(AssociationRef associationRef) {
 		NodeRef documentRef = associationRef.getSourceRef();
 		NodeRef documentTableDataRef = associationRef.getTargetRef();
 
 		if (documentTableService.isDocumentTableData(documentTableDataRef)) {
+			QName tableDataType = nodeService.getType(documentTableDataRef);
+			QName tableDataAssocType = associationRef.getTypeQName();
 			//Создание результирующей записи, если она ещё не была создана
-			documentTableService.getTableDataTotalRows(documentRef, associationRef.getTypeQName(), true);
+			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataType, tableDataAssocType, true);
+			documentTableService.recalculateTotalRows(documentRef, totalRows, tableDataType, tableDataAssocType, null);
 		}
 	}
 }

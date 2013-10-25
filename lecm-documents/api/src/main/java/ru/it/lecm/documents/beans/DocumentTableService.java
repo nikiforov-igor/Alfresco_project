@@ -1,9 +1,11 @@
 package ru.it.lecm.documents.beans;
 
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: AIvkin
@@ -48,23 +50,37 @@ public interface DocumentTableService {
 	/**
 	 * Пересчёт результирующей строки данных
 	 * @param document документ
+	 * @param tableDataType тип табличных данных
 	 * @param tableDataAssocType тип ассоциации для табличных данных
 	 * @param createIfNotExist создать, если не существует
 	 * @return результирующие строки
 	 */
-	public List<NodeRef> getTableDataTotalRows(NodeRef document, QName tableDataAssocType, boolean createIfNotExist);
+	public List<NodeRef> getTableDataTotalRows(NodeRef document, QName tableDataType, QName tableDataAssocType, boolean createIfNotExist);
 
 	/**
 	 * Пересчёт результирующей строки данных
 	 * @param properties Список атрибутов для пересчёта, если null то будут пересчитаны все свойства
+	 * @param tableDataType тип табличных данных
+	 * @param tableDataAssocType тип ассоциации для табличных данных
 	 * @param row результирующая строка для обновления
+	 * @param document документ
 	 */
-	public void recalculateTotalRow(NodeRef row, List<QName> properties);
+	public void recalculateTotalRow(NodeRef document, NodeRef row, QName tableDataType, QName tableDataAssocType, Set<QName> properties);
 
 	/**
 	 * Пересчёт результирующей строки данных
 	 * @param properties Список атрибутов для пересчёта, если null то будут пересчитаны все свойства
+	 * @param tableDataType тип табличных данных
+	 * @param tableDataAssocType тип ассоциации для табличных данных
 	 * @param rows результирующие строки для обновления
+	 * @param document документ
 	 */
-	public void recalculateTotalRows(List<NodeRef> rows, List<QName> properties);
+	public void recalculateTotalRows(NodeRef document, List<NodeRef> rows, QName tableDataType, QName tableDataAssocType, Set<QName> properties);
+
+	/**
+	 * Получение ассоциации между документом и табличными данными
+	 * @param tableDataRef табличные данные
+	 * @return ассоциация
+	 */
+	public AssociationRef getDocumentAssocByTableData(NodeRef tableDataRef);
 }

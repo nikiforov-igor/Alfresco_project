@@ -5,6 +5,8 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.PropertyDefinition;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -104,7 +106,7 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		return null;
 	}
 
-	private AssociationRef getDocumentAssocByTableData(NodeRef tableDataRef) {
+	public AssociationRef getDocumentAssocByTableData(NodeRef tableDataRef) {
 		if (nodeService.exists(tableDataRef)) {
 			List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(tableDataRef, RegexQNamePattern.MATCH_ALL);
 			if (sourceAssocs != null && sourceAssocs.size() > 0) {
@@ -129,14 +131,14 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		if (documentAssoc != null) {
 			NodeRef document = documentAssoc.getSourceRef();
 
-			return getTableDataTotalRows(document, documentAssoc.getTypeQName(), false);
+			return getTableDataTotalRows(document, nodeService.getType(tableDataRef), documentAssoc.getTypeQName(), false);
 		}
 
 		return null;
 	}
 
 	@Override
-	public List<NodeRef> getTableDataTotalRows(NodeRef document, QName tableDataAssocType, boolean createIfNotExist) {
+	public List<NodeRef> getTableDataTotalRows(NodeRef document, QName tableDataType, QName tableDataAssocType, boolean createIfNotExist) {
 		String tableDataAssocQName = tableDataAssocType.toPrefixString(namespaceService);
 		QName tableDataTotalAssocType = QName.createQName(tableDataAssocQName + DOCUMENT_TABLE_TOTAL_ASSOC_POSTFIX, namespaceService);
 
@@ -152,7 +154,7 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 			} else {
 				NodeRef totalRow = createNode(getRootFolder(document), assocDefinition.getTargetClass().getName(), null, null);
 				nodeService.createAssociation(document, totalRow, tableDataTotalAssocType);
-				recalculateTotalRow(totalRow, null);
+				recalculateTotalRow(document, totalRow, tableDataType, tableDataAssocType, null);
 				List<NodeRef> result = new ArrayList<NodeRef>();
 				result.add(totalRow);
 				return result;
@@ -163,18 +165,67 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 	}
 
 	@Override
-	public void recalculateTotalRows(List<NodeRef> rows, List<QName> properties) {
+	public void recalculateTotalRows(NodeRef document, List<NodeRef> rows, QName tableDataType, QName tableDataAssocType, Set<QName> properties) {
 		if (rows != null) {
 			for (NodeRef row: rows) {
-				recalculateTotalRow(row, properties);
+				recalculateTotalRow(document, row, tableDataType, tableDataAssocType, properties);
 			}
 		}
 	}
 
 	@Override
-	public void recalculateTotalRow(NodeRef row, List<QName> properties) {
+	public void recalculateTotalRow(NodeRef document, NodeRef row, QName tableDataType, QName tableDataAssocType, Set<QName> properties) {
 		if (row != null) {
+			if (properties == null) {
+				properties = getAllTypeProperties(tableDataType);
+			}
+			Set<QName> totalProperties = getAllTypeProperties(nodeService.getType(row));
 
+			if (totalProperties != null && properties != null) {
+				List<NodeRef> tableRows = getTableDataRows(document, tableDataAssocType);
+				if (tableRows != null) {
+					for (QName tableDataProperty: properties) {
+						String tableDataPropertyName = tableDataProperty.toPrefixString(namespaceService);
+						for (QName totalRowProperty: totalProperties) {
+							String totalRowPropertyName = totalRowProperty.toPrefixString(namespaceService);
+
+							if (totalRowPropertyName.startsWith(tableDataPropertyName)) {
+								String postfix = totalRowPropertyName.substring(tableDataPropertyName.length());
+
+								//todo run calculator
+								int i = 1 + 2;
+							}
+						}
+					}
+				}
+			}
 		}
+	}
+
+	private Set<QName> getAllTypeProperties(QName type) {
+		if (type != null) {
+			TypeDefinition typeDefinition = dictionaryService.getType(type);
+			if (typeDefinition != null) {
+				Map<QName, PropertyDefinition> allProperties = typeDefinition.getProperties();
+				if (allProperties != null) {
+					return allProperties.keySet();
+				}
+			}
+		}
+		return null;
+	}
+
+	private List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType) {
+		if (tableDataAssocType != null) {
+			List<AssociationRef> tableRowsAssoc = nodeService.getTargetAssocs(document, tableDataAssocType);
+			if (tableRowsAssoc != null && tableRowsAssoc.size() > 0) {
+				List<NodeRef> result = new ArrayList<NodeRef>(tableRowsAssoc.size());
+				for (AssociationRef assoc: tableRowsAssoc) {
+					result.add(assoc.getTargetRef());
+				}
+				return result;
+			}
+		}
+		return null;
 	}
 }
