@@ -81,6 +81,39 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
         inputRemoved: null,
         input: null,
         selectItemsTag: null,
+
+	    itemType: null,
+	    assocType: null,
+	    documentRef: null,
+
+	    loadTotalRow: function() {
+		    if (this.documentRef != null && this.itemType != null && this.assocType != null) {
+			    var sUrl = sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/getTotalRows" +
+			            "?documentNodeRef=" + encodeURIComponent(this.documentRef) +
+			            "&tableDataType=" + encodeURIComponent(this.itemType) +
+			            "&tableDataAssocType=" + encodeURIComponent(this.assocType);
+			    Alfresco.util.Ajax.jsonGet(
+				    {
+					    url: sUrl,
+					    successCallback: {
+						    fn: function (response) {
+							    var oResults = response.json;
+							    if (oResults != null) {
+
+							    }
+						    },
+						    scope: this
+					    },
+					    failureCallback: {
+						    fn: function (oResponse) {
+
+						    },
+						    scope: this
+					    }
+				    });
+		    }
+	    },
+
         onDataItemCreated: function DataGrid_onDataItemCreated(layer, args) {
             var obj = args[1];
             if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {

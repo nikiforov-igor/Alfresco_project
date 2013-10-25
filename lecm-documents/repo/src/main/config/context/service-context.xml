@@ -548,6 +548,9 @@
 		<property name="nodeService">
 			<ref bean="nodeService"/>
 		</property>
+		<property name="namespaceService">
+			<ref bean="namespaceService"/>
+		</property>
 	</bean>
 
 	<bean  id="documentTablePolicy" class="ru.it.lecm.documents.policy.DocumentTablePolicy"

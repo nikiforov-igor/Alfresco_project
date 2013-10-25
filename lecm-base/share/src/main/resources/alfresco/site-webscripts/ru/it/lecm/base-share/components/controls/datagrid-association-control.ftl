@@ -176,7 +176,11 @@
         datagrid.inputAdded = inputAddedTag;
         datagrid.inputRemoved = inputRemovedTag;
         datagrid.selectItems = selectItemsTag;
+        datagrid.itemType = "${field.endpointType}";
+        datagrid.assocType = "${field.configName}";
+        datagrid.documentRef = "${form.arguments.itemId}";
         datagrid.draw();
+        datagrid.loadTotalRow();
     }
 
     function loadRootNode() {

@@ -241,7 +241,7 @@ public class DocumentTablePolicy implements
 			QName tableDataAssocType = associationRef.getTypeQName();
 
 			//Пересчёт результирующих строк
-			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataType, tableDataAssocType, true);
+			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataType, tableDataAssocType, false);
 			documentTableService.recalculateTotalRows(documentRef, totalRows, tableDataType, tableDataAssocType, null);
             //Персчет индексов
             int index;
