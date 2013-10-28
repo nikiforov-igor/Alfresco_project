@@ -123,6 +123,9 @@
                         allowCreate: ${allowCreate?string},
                         showActionColumn: ${showActions?string},
                         showCheckboxColumn: false
+                        <#if field.control.params.fixedHeader??>
+                            ,fixedHeader: ${field.control.params.fixedHeader}
+                        </#if>
                     }).setMessages(${messages});
 
                     datagrid.draw();

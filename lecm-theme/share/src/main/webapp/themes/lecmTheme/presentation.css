@@ -2584,11 +2584,11 @@ span.person a div.description:empty {
 }
 
 /* Datagrid : table : fixed header - start */
-.yui-skin-lecmTheme div.grid table.fixedHeader thead tr {
+.yui-skin-lecmTheme div.grid table.fixedHeader > thead > tr {
     display: block;
     position: relative;
 }
-.yui-skin-lecmTheme div.grid table.fixedHeader tbody {
+.yui-skin-lecmTheme div.grid table.fixedHeader > tbody {
     width: 100%;
     max-height: 80px;
     overflow: auto;

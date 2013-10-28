@@ -333,6 +333,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             selectedItems: null,
 
             /**
+             * Фиксировать ли заголовок таблицы
+             */
+            fixedHeader: false,
+
+            /**
              * Current actions menu being shown
              *
              * @property currentActionsMenu
@@ -1303,6 +1308,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     this.afterDataGridUpdate[i].call(this);
                 }
                 this.afterDataGridUpdate = [];
+                this.fixHeader();
             },
             /**
              * DataTable set-up and event registration
@@ -2739,6 +2745,28 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        }
 		        fnPrompt.call(this, fnActionRestoreConfirm);
 	        },
+
+            fixHeader: function() {
+                if (this.options.fixedHeader) {
+                    var grid = Dom.get(this.id + "-grid");
+                    var table = Dom.getChildrenBy(grid, function(el) {
+                        return (el.tagName == "TABLE");
+                    })[0];
+                    var ths = Selector.query("thead > tr > th", table);
+                    var tds = Selector.query("tbody > tr > td", table);
+                    var fixCellsWidth = function(cells) {
+                        for (var i = 0; i < cells.length; i++) {
+                            var cell = cells[i];
+                            Dom.setStyle(cell, "width", parseInt(Dom.getStyle(cell, "width")) + "px");
+                        }
+                    };
+
+                    Dom.removeClass(table, "fixedHeader");
+                    fixCellsWidth(ths);
+                    fixCellsWidth(tds);
+                    Dom.addClass(table, "fixedHeader");
+                }
+            },
 
 	        onExportCsv: function DataGrid__onExportCsv(fileName)
 	        {
