@@ -170,7 +170,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                                     }
                                 };
                                 this.afterDataGridUpdate.push(fnAfterUpdate);
-                                this.widgets.dataTable.addRow(item);
+                                this.widgets.dataTable.addRow(item, this.widgets.dataTable.getRecordSet().getRecords().length - 1);
                                 YAHOO.Bubbling.fire("mandatoryControlValueUpdated", response.config.successCallback.scope);
 
                                 // связь 1:1

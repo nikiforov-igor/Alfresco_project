@@ -68,8 +68,9 @@
     background-image: url("/share/res/images/lecm-base/components/triangle_up.png");
 }
 
-.yui-dt tr.total-row,
-.yui-dt tr.total-row td {
+.yui-skin-lecmTheme .datagrid .yui-dt tr.total-row,
+.yui-skin-lecmTheme .datagrid .yui-dt tr.total-row td.yui-dt-asc,
+.yui-skin-lecmTheme .datagrid .yui-dt tr.total-row td.yui-dt-desc {
 	background-color: #a33;
 	color: #fff;
 }
