@@ -170,7 +170,7 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 					result.add(assoc.getTargetRef());
 				}
 				return result;
-			} else {
+			} else if (createIfNotExist) {
 				NodeRef totalRow = createNode(getRootFolder(document), assocDefinition.getTargetClass().getName(), null, null);
 				nodeService.createAssociation(document, totalRow, tableDataTotalAssocType);
 				recalculateTotalRow(document, totalRow, tableDataType, tableDataAssocType, null);
@@ -178,9 +178,8 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 				result.add(totalRow);
 				return result;
 			}
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override
