@@ -87,6 +87,10 @@
 .yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid {
     padding-top: 0;
 }
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid .grid,
+.yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid .grid {
+    height: auto !important;
+}
 
 /* Создание этапа договора */
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit {

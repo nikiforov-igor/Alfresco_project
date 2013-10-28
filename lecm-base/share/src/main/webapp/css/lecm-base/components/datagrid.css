@@ -71,6 +71,7 @@
 .yui-skin-lecmTheme .datagrid .yui-dt tr.total-row,
 .yui-skin-lecmTheme .datagrid .yui-dt tr.total-row td.yui-dt-asc,
 .yui-skin-lecmTheme .datagrid .yui-dt tr.total-row td.yui-dt-desc {
-	background-color: #a33;
-	color: #fff;
+	background-color: #cbcbcb;
+	color: #333;
+    font-weight: bold;
 }

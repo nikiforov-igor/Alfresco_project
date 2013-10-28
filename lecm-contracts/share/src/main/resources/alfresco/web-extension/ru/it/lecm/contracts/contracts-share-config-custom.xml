@@ -169,7 +169,7 @@
                             <control-param name="allowExpand">false</control-param>
                             <control-param name="showActions">true</control-param>
                             <control-param name="height">100</control-param>
-                            <!--<control-param name="usePagination">true</control-param>-->
+                            <control-param name="usePagination">true</control-param>
                             <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
                             <control-param name="startLocationScriptUrl">/lecm/document/tables/api/folder</control-param>
