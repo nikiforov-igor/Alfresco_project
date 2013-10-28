@@ -641,7 +641,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 };
             },
 
-            /**
+	        getRowFormater: function(elTr, oRecord) {
+			    return true;
+		    },
+
+	/**
              * Настраиваемый formatter. Следует при необходимости переопределять именно этот метод, а не getCellFormatter в дочерних гридах
              *
              * @method renderCellDataType
@@ -1190,7 +1194,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         "MSG_ERROR": this.msg("message.error"),
                         "MSG_LOADING" : this.msg("message.loading"),
                         paginator: this.widgets.paginator,
-	                    sortedBy: this.getDatableSortBy(columnDefinitions)
+	                    sortedBy: this.getDatableSortBy(columnDefinitions),
+	                    formatRow: this.getRowFormater
                     });
 
                 // Обновляем значения totalRecords данными из ответа сервера

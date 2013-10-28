@@ -71,3 +71,9 @@
 .form-field.with-grid.grid-control{
     clear: both;
 }
+
+.yui-dt tr.total-row,
+.yui-dt tr.total-row td {
+	background-color: #a33;
+	color: #fff;
+}

@@ -102,7 +102,8 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
 								    var row = oResults[0];
 								    var item = {
 									    itemData: {},
-									    nodeRef: row.nodeRef
+									    nodeRef: row.nodeRef,
+									    type: "total"
 								    };
 
 								    var datagridColumns = this.datagridColumns;
@@ -136,6 +137,13 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
 					    }
 				    });
 		    }
+	    },
+
+	    getRowFormater: function(elTr, oRecord) {
+		    if (oRecord.getData("type") == "total") {
+			    YAHOO.util.Dom.addClass(elTr, 'total-row');
+		    }
+		    return true;
 	    },
 
         onDataItemCreated: function DataGrid_onDataItemCreated(layer, args) {
