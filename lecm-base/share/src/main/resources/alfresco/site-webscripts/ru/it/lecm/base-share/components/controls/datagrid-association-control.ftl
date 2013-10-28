@@ -180,7 +180,6 @@
         datagrid.assocType = "${field.configName}";
         datagrid.documentRef = "${form.arguments.itemId}";
         datagrid.draw();
-        datagrid.loadTotalRow();
     }
 
     function loadRootNode() {

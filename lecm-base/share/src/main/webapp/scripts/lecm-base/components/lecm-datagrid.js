@@ -654,6 +654,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 return null;
             },
 
+	        addFooter: function DataGrid_getCustomAddFooter(){
+		        return null;
+	        },
+
 	        getEmployeeViewByLink: function DataGrid_getEmployeeViewByLink(employeeNodeRef, displayValue) {
 		        if (displayValue.length == 0) {
 			        return "";
@@ -899,6 +903,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				Dom.setStyle(this.id + "-body", "visibility", "visible");
 
                 Bubbling.fire("datagridVisible", this);
+
+	            this.addFooter();
             },
 
             _setupPaginatior: function DataGrid_setupPaginatior() {

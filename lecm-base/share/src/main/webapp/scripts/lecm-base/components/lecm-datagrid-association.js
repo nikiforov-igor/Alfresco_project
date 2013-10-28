@@ -86,7 +86,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
 	    assocType: null,
 	    documentRef: null,
 
-	    loadTotalRow: function() {
+	    addFooter: function() {
 		    if (this.documentRef != null && this.itemType != null && this.assocType != null) {
 			    var sUrl = sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/getTotalRows" +
 			            "?documentNodeRef=" + encodeURIComponent(this.documentRef) +
@@ -98,8 +98,32 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
 					    successCallback: {
 						    fn: function (response) {
 							    var oResults = response.json;
-							    if (oResults != null) {
+							    if (oResults != null && oResults.length > 0) {
+								    var row = oResults[0];
+								    var item = {
+									    itemData: {},
+									    nodeRef: row.nodeRef
+								    };
 
+								    var datagridColumns = this.datagridColumns;
+								    if (datagridColumns != null) {
+										for (var i = 0; i < datagridColumns.length; i++) {
+											var field = datagridColumns[i].name;
+											var totalFields = Object.keys(row.itemData);
+											for (var j = 0; j < totalFields.length; j++) {
+												var totalField = totalFields[j];
+												if (totalField.indexOf(field) == 0) {
+													var value = row.itemData[totalField];
+													item.itemData[datagridColumns[i].formsName] = {
+														value: value,
+														displayValue: value
+													};
+												}
+											}
+										}
+								    }
+
+								    this.widgets.dataTable.addRow(item);
 							    }
 						    },
 						    scope: this
