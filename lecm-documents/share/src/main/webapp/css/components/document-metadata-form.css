@@ -54,3 +54,68 @@
 .yui-skin-lecmTheme div.metadata-form div.form-field {
     float: left;
 }
+
+
+/* Этапы договора */
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .set,
+.yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .set {
+    padding-top: 0.5em;
+}
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .datalist-toolbar,
+.yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .datalist-toolbar {
+    background: rgba(204, 204, 204, .6);
+    overflow: hidden;
+    border: 1px solid #CBCBCB;
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+}
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .datalist-toolbar .left,
+.yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .datalist-toolbar .left {
+    float: left;
+}
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .datalist-toolbar .right,
+.yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .datalist-toolbar .right {
+    float: right;
+}
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .form-field.with-grid,
+.yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .form-field.with-grid {
+    float: none;
+    clear: both;
+    padding-top: 0;
+}
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid,
+.yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid {
+    padding-top: 0;
+}
+
+/* Создание этапа договора */
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit {
+    width: 45em !important;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field div.format-info {
+    clear: both !important;
+    line-height: 12px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplay,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplayInvisible {
+    width: 28em;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplay .person a,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplayInvisible .person a {
+    max-width: 300px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader {
+    margin-top: 5px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader ul.attachments-list {
+    width: 205px;
+    height: 30px;
+    min-height: 30px;
+    margin-right: 15px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader ul.attachments-list li {
+    white-space: nowrap;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader ul.attachments-list li div {
+    width: 150px;
+}

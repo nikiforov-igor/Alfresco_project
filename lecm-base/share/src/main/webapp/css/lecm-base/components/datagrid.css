@@ -68,10 +68,6 @@
     background-image: url("/share/res/images/lecm-base/components/triangle_up.png");
 }
 
-.form-field.with-grid.grid-control{
-    clear: both;
-}
-
 .yui-dt tr.total-row,
 .yui-dt tr.total-row td {
 	background-color: #a33;

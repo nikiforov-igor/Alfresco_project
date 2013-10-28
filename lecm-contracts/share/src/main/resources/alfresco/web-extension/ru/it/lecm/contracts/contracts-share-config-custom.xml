@@ -76,7 +76,7 @@
 				</field-visibility>
                 <appearance>
                     <set id="tab1" appearance="" label-id="label.contracts.main" />
-                    <set id="tab2" appearance="" label-id="label.contracts.stage" />
+                    <set id="contract-stages" appearance="" label-id="label.contracts.stage" /><!-- tab2 -->
                     <set id="contract-info" appearance="" parent="tab1" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <set id="date-conclusion" parent="contract-info" appearance="" />
@@ -160,7 +160,7 @@
                     <field id="lecm-contract:locationRegistration" set="registr-info"/>
                     <field id="lecm-contract:locationContract" set="other"/>
                     <field id="lecm-contract-aspect:reasonDelete-assoc" set="tab1"/>
-                    <field id="lecm-contract-table-structure:stages-assoc" set="tab2">
+                    <field id="lecm-contract-table-structure:stages-assoc" set="contract-stages">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-association-control.ftl">
                             <control-param name="itemType">lecm-contract-table-structure:stage</control-param>
                             <control-param name="allowCreate">true</control-param>
@@ -173,6 +173,7 @@
                             <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
                             <control-param name="startLocationScriptUrl">/lecm/document/tables/api/folder</control-param>
+                            <control-param name="showLabel">false</control-param>
                         </control>
                     </field>
                 </appearance>

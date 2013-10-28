@@ -40,6 +40,11 @@
     <#assign showActions = false/>
 </#if>
 
+<#assign showLabel = true>
+<#if field.control.params.showLabel?? &&  field.control.params.showLabel == "false">
+    <#assign showLabel = false>
+</#if>
+
 <#assign bubblingId = containerId/>
 
 <#assign usePagination = false/>
@@ -235,10 +240,14 @@
     </#if>
 </@comp.baseToolbar>
 
-<div class="form-field with-grid grid-control" id="${controlId}">
-<label for="${controlId}" style="white-space: nowrap; overflow: visible;">${field.label?html}
-    :<#if field.endpointMandatory!false || field.mandatory!false><span
-        class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+<div class="form-field with-grid" id="${controlId}">
+    <#if showLabel>
+        <label for="${controlId}" style="white-space: nowrap; overflow: visible;">${field.label?html}:
+            <#if field.endpointMandatory!false || field.mandatory!false>
+                <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+            </#if>
+        </label>
+    </#if>
 
 <@grid.datagrid containerId false>
 <script type="text/javascript">//<![CDATA[
