@@ -339,6 +339,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 text: this.msg("label.limit_reached")
                             });
                     }
+
+	                me.dataGrid.addFooter();
                 }
 
                 // Обработчик на неудачу

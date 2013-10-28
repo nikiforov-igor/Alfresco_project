@@ -903,8 +903,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				Dom.setStyle(this.id + "-body", "visibility", "visible");
 
                 Bubbling.fire("datagridVisible", this);
-
-	            this.addFooter();
             },
 
             _setupPaginatior: function DataGrid_setupPaginatior() {
