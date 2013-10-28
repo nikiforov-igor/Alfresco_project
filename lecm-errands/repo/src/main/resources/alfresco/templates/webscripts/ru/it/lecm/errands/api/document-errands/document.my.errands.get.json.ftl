@@ -3,7 +3,7 @@
     "errandsCount": "${errandsCount}",
     <#if latestErrandNodeRef?exists>
         "latestErrandNodeRef": "${latestErrandNodeRef}",
-        "latestErrandStartDate": "${latestErrandStartDate?string("dd/MM/yyyy")}",
+        "latestErrandStartDate": "${latestErrandStartDate?string("dd.MM.yyyy")}",
     </#if>
     "errands": [
         <#list myErrands as errand>
@@ -12,8 +12,8 @@
             "description": "${errand.properties["lecm-errands:content"]?string}",
             "title": "${errand.properties["lecm-errands:title"]}",
             "statusMessage": "${errand.properties["lecm-statemachine:status"]}",
-            "dueDate": "${errand.properties["lecm-errands:limitation-date"]?string("dd/MM/yyyy")}",
-            "startDate": "${errand.properties["cm:created"]?string("dd/MM/yyyy")}",
+            "dueDate": "${errand.properties["lecm-errands:limitation-date"]?string("dd.MM.yyyy")}",
+            "startDate": "${errand.properties["cm:created"]?string("dd.MM.yyyy")}",
             "isImportant": "${errand.properties["lecm-errands:is-important"]?string}",
             "isExpired": "${errand.properties["lecm-errands:is-expired"]?string}",
             "executor": "${errand.assocs["lecm-errands:executor-assoc"][0].getNodeRef().toString()}",
