@@ -93,7 +93,7 @@
             bubblingLabel: "${bubblingId}",
             itemType: "${field.control.params.itemType!""}",
             destination: nodeRef,
-        newRowButtonType:<#if form.mode == "view">"inActive"<#else>"defaultActive"</#if>
+        newRowButtonType:<#if form.mode == "view" || field.disabled == true>"inActive"<#else>"defaultActive"</#if>
         });
     }
 
@@ -111,8 +111,8 @@
                     label: "${msg("addresser.expand")}"
                 }
             </#if>
-            <#if ((allowExpand == "true") && (allowEdit == "true") && (form.mode != "view"))>,</#if>
-            <#if ((allowEdit == "true") && (form.mode != "view"))>
+            <#if ((allowExpand == "true") && (allowEdit == "true") && (form.mode != "view") && (field.disabled != true))>,</#if>
+            <#if ((allowEdit == "true") && (form.mode != "view") && (field.disabled != true))>
                 {
                     type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
                     id: "onActionEdit",
@@ -120,8 +120,8 @@
                     label: "${msg("actions.edit")}"
                 }
             </#if>
-            <#if ((allowExpand == "true") && (allowDelete == "true") && (form.mode != "view")) || ((allowEdit == "true") && (allowDelete == "true") && (form.mode != "view"))>,</#if>
-            <#if ((allowDelete == "true") && (form.mode != "view"))>
+            <#if ((allowExpand == "true") && (allowDelete == "true") && (form.mode != "view") && (field.disabled != true)) || ((allowEdit == "true") && (allowDelete == "true") && (form.mode != "view"))>,</#if>
+            <#if ((allowDelete == "true") && (form.mode != "view") && (field.disabled != true))>
                 {
                     type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
                     id: "onActionDelete",
