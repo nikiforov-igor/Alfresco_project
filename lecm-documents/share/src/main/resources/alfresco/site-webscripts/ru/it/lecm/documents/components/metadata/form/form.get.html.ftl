@@ -12,7 +12,7 @@
         function drawForm(nodeRef, htmlId){
             Alfresco.util.Ajax.request(
                     {
-                        url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                        url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
                         dataObj:{
                             htmlid: htmlId,
                             itemKind: "node",

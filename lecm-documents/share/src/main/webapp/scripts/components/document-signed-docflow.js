@@ -117,7 +117,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 							authSimpleDialog.setOptions({
 								width: "50em",
-								templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+								templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 								templateRequestParams: {
 									itemKind: "type",
 									itemId: "lecm-orgstr:employees",
