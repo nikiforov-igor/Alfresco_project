@@ -1458,6 +1458,7 @@
                     <show id="lecm-contract-table-structure:stage-amount" force="true"/>
                     <show id="lecm-contract-table-structure:status-assoc" />
                     <show id="lecm-contract-table-structure:responsible-assoc" />
+                    <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                 </field-visibility>
             </form>
         </forms>

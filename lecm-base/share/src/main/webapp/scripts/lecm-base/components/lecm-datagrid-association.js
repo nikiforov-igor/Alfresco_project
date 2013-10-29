@@ -355,7 +355,53 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
             var infoTag = Dom.getNextSibling(selectItem);
             this.widgets.dataTable.deleteRow(infoTag);
             selectItem.setAttribute('class', selectItem.getAttribute('class').replace("expanded"));
-        }
+        },
+
+	    getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
+		    var html = "";
+		    if (!oRecord) {
+			    oRecord = this.getRecord(elCell);
+		    }
+		    if (!oColumn) {
+			    oColumn = this.getColumn(elCell.parentNode.cellIndex);
+		    }
+
+		    if (oRecord && oColumn) {
+			    if (!oData) {
+				    oData = oRecord.getData("itemData")[oColumn.field];
+			    }
+
+			    if (oData) {
+				    var datalistColumn = grid.datagridColumns[oColumn.key];
+				    if (datalistColumn) {
+					    oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+					    for (var i = 0, ii = oData.length, data; i < ii; i++) {
+						    data = oData[i];
+
+						    var columnContent = "";
+						    switch (datalistColumn.dataType.toLowerCase()) { //  меняем отрисовку для конкретных колонок
+							    case "cm:content":
+								    var fileIcon = Alfresco.util.getFileIcon(data.displayValue, "cm:content", 16);
+								    var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"'/>";
+
+								    columnContent = "<a href=\'" + Alfresco.constants.URL_PAGECONTEXT+'document-attachment?nodeRef='+ data.value +"\'\">" + fileIconHtml + data.displayValue + "</a>";
+								    break;
+							    default:
+								    break;
+						    }
+						    if (columnContent != "") {
+							    html += columnContent;
+
+							    if (i < ii - 1) {
+								    html += "<br />";
+							    }
+						    }
+					    }
+				    }
+			    }
+		    }
+		    return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
+	    }
     }, true)
 
 })();
