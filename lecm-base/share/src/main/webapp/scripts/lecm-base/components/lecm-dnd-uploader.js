@@ -200,7 +200,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 									uploadDirectoryName: this.config.destinationName,
 									destination: this.config.destination,
 									filter: [],
-									mode: this.config.multipleMode ? progressDialog.MODE_MULTI_UPLOAD : progressDialog.MODE_SINGLE_UPDATE,
+									mode: this.config.multipleMode ? progressDialog.MODE_MULTI_UPLOAD : progressDialog.MODE_SINGLE_UPLOAD,
 									thumbnails: "doclib",
 									onFileUploadComplete: this.config.onFileUploadComplete
 								};
