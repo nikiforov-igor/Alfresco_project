@@ -91,35 +91,55 @@
 .yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid .grid {
     height: auto !important;
 }
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid div.grid td.yui-dt-col-assoc_lecm-contract-table-structure_attachments-temp-assoc,
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid div.grid td.yui-dt-col-assoc_lecm-contract-table-structure_attachments-temp-assoc div,
+.yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid div.grid td.yui-dt-col-assoc_lecm-contract-table-structure_attachments-temp-assoc,
+.yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid div.grid td.yui-dt-col-assoc_lecm-contract-table-structure_attachments-temp-assoc div {
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid div.grid td.yui-dt-col-assoc_lecm-contract-table-structure_attachments-temp-assoc div img,
+.yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid div.grid td.yui-dt-col-assoc_lecm-contract-table-structure_attachments-temp-assoc div img {
+    margin-right: 3px;
+}
 
 /* Создание этапа договора */
-.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit {
-    width: 45em !important;
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field label {
+    width: 120px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field input[type="text"],
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field select,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field div.selectone-control select,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field input.autocomplete-input[type="text"],
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplay,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplayInvisible {
+    width: 35em;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+    margin-left: 130px;
 }
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field div.format-info {
     clear: both !important;
     line-height: 12px;
 }
-.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplay,
-.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplayInvisible {
-    width: 28em;
-}
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplay .person a,
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplayInvisible .person a {
-    max-width: 300px;
+    max-width: 390px;
 }
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader {
     margin-top: 5px;
 }
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader ul.attachments-list {
-    width: 205px;
+    width: 300px;
     height: 30px;
     min-height: 30px;
-    margin-right: 15px;
+    margin-right: 12px;
 }
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader ul.attachments-list li {
     white-space: nowrap;
 }
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader ul.attachments-list li div {
-    width: 150px;
+    width: 220px;
 }
