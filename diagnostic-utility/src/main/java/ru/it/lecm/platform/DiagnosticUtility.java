@@ -1,6 +1,11 @@
 package ru.it.lecm.platform;
 
 import com.sun.management.OperatingSystemMXBean;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.commons.httpclient.params.HttpConnectionParams;
+import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
@@ -10,9 +15,11 @@ import sun.management.ManagementFactory;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -31,8 +38,10 @@ public class DiagnosticUtility {
     private final static String SOLR_CONFIGS_ARCHIVE_NAME = File.separator + "solr-configs.zip";
 
     private final static String CONFIG_FILENAME = "utility-properties.cfg";
+    private final static String ALFRESCO_GLOBAL_PROPERTIES = "alfresco-global.properties";
     private final static String ALF_HOME = "ALF_HOME";
     private final static String OUTPUT_DIR = "OUTPUT_DIR";
+    private final static String ADMIN_PASSWORD = "ADMIN_PASSWORD";
     private final static DateFormat LOG_DATE_FMT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     final static private Map<String, String> config = new HashMap<String, String>();
@@ -48,7 +57,7 @@ public class DiagnosticUtility {
         readConfigFile();
 
         if (config.get(OUTPUT_DIR) != null) {
-            File outputFile = new File (config.get(OUTPUT_DIR));
+            File outputFile = new File(config.get(OUTPUT_DIR));
             if (outputFile.exists()) {
                 currentDirectoryPath = config.get(OUTPUT_DIR);
             }
@@ -89,7 +98,102 @@ public class DiagnosticUtility {
     }
 
     private static String checkServer() {
-        return "";
+        StringBuilder result = new StringBuilder();
+        //прочитать и распарсить настроечный файл альфреско
+        String alfrescoRootDirectory = config.get(ALF_HOME);
+        if (alfrescoRootDirectory == null) {
+            result.append("Failed read property \'ALF_HOME\' from config file. Please check utility configuration!").append("\n");
+            return result.toString();
+        }
+
+        File settingsDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "shared", "classes"}));
+        List<File> settingsFile = findFiles(settingsDir, ALFRESCO_GLOBAL_PROPERTIES, false);
+
+        File alfrescoProperties = null;
+        if (settingsFile != null && settingsFile.size() > 0) {
+            alfrescoProperties = settingsFile.get(0);
+        }
+        if (alfrescoProperties == null || !alfrescoProperties.exists()) {
+            result.append("Failed read alfresco-global.properties. Please check utility configuration!").append("\n");
+            return result.toString();
+        }
+
+        Map<String, String> alfPropsMap = new HashMap<String, String>();
+        BufferedReader br = null;
+        try {
+            //инициализируем конфиг из файла
+            br = new BufferedReader(new FileReader(alfrescoProperties));
+            result.append("Read alfresco-global.properties started").append("\n");
+            String row;
+            while ((row = br.readLine()) != null) {
+                if (row.contains("=") && !row.startsWith("#")) {
+                    String[] property = row.split("=");
+                    alfPropsMap.put(property[0], property[1]);
+                    result.append(row).append("\n");
+                }
+            }
+        } catch (Exception e) {
+            log.error("Cannot read alfresco-global.properties file: " + CONFIG_FILENAME);
+        } finally {
+            IOUtils.closeQuietly(br);
+        }
+
+        result.append("\n");
+
+        //Нужные свойства
+        String alfrescoHost = alfPropsMap.get("alfresco.host");
+        String alfrescoPort = alfPropsMap.get("alfresco.port");
+        String alfrescoProtocol = alfPropsMap.get("alfresco.protocol");
+        String alfrescoContext = alfPropsMap.get("alfresco.context");
+
+        String shareHost = alfPropsMap.get("share.host");
+        String sharePort = alfPropsMap.get("share.port");
+        String shareProtocol = alfPropsMap.get("share.protocol");
+        String shareContext = alfPropsMap.get("share.context");
+
+        String dbDriver = alfPropsMap.get("db.driver");
+        String dbUser = alfPropsMap.get("db.username");
+        String dbPass = alfPropsMap.get("db.password");
+        String dbName = alfPropsMap.get("db.name");
+        String dbUrl = alfPropsMap.get("db.url");
+
+        //запрос к tomcat и БД
+        HttpClient httpclient = new HttpClient();
+        httpclient.getParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 5000);
+
+        String requestURL1 = alfrescoProtocol + "://" + alfrescoHost + ":" + alfrescoPort;
+        String requestURL2 = alfrescoProtocol + "://localhost:" + alfrescoPort;
+
+        result.append("Check Tomcat Server...").append("\n");
+        int requestTomcatStatus = sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, result);
+
+        result.append("Check Data Base Server...").append("\n");
+        int requestDBStatus = checkDBConnection(dbDriver, dbUser, dbPass, dbName, dbUrl, result);
+
+        if (requestTomcatStatus != 200 || requestDBStatus != 200) {
+            result.append("Alfresco Server not started. Cannot send request to webapps").append("\n");
+            return result.toString();
+        }
+
+        //request to alfresco
+        result.append("Check Alfresco...").append("\n");
+        requestURL1 = alfrescoProtocol + "://" + alfrescoHost + ":" + alfrescoPort + "/" + alfrescoContext;
+        requestURL2 = alfrescoProtocol + "://localhost:" + alfrescoPort + "/" + alfrescoContext;
+        sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, result);
+
+        //request to share
+        result.append("Check Share...").append("\n");
+        requestURL1 = shareProtocol + "://" + shareHost + ":" + sharePort + "/" + shareContext;
+        requestURL2 = shareProtocol + "://localhost:" + sharePort + "/" + shareContext;
+        sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, result);
+
+        //request to solr
+        result.append("Check Solr...").append("\n");
+        requestURL1 = alfrescoProtocol + "s://" + alfrescoHost + ":" + alfrescoPort + "/solr";
+        requestURL2 = alfrescoProtocol + "s://localhost:" + alfrescoPort + "/solr";
+        sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, result);
+
+        return result.toString();
     }
 
     private static String collectFiles() {
@@ -167,7 +271,7 @@ public class DiagnosticUtility {
         shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF", "classes", "alfresco", "module"}));
         shareConfigs.addAll(findFiles(shareDir, "module.properties", true));
 
-        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF", "classes", "alfresco","web-extension"}));
+        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF", "classes", "alfresco", "web-extension"}));
         shareConfigs.addAll(findFiles(shareDir, ".*-share-config-custom\\.xml", true));
 
         shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF", "classes", "alfresco"}));
@@ -466,7 +570,9 @@ public class DiagnosticUtility {
             createPhaseFinishLogInformation(logText, 2, "OK", "");
 
             //Фаза 3 - Проверка доступности сервера
+            createStartPhaseLogInformation(logText, 3, "Check Server availability\n");
             logText.append(checkServer());
+            createPhaseFinishLogInformation(logText, 3, "OK", "See log for details");
 
             //Фаза 4 - Сбор информации из бизнес-журнала
             logText.append(collectBusinessJournalRecords());
@@ -524,7 +630,9 @@ public class DiagnosticUtility {
             createPhaseFinishLogInformation(logText, 1, systemInfoStr.length() > 0 ? "OK" : "FALSE", "");
 
             //Фаза 2 - Проверка доступности сервера
+            createStartPhaseLogInformation(logText, 2, "Check Server availability\n");
             logText.append(checkServer());
+            createPhaseFinishLogInformation(logText, 2, "OK", "See log for details");
 
             //Фаза 3 - Сбор информации с сервисов
             logText.append(collectOrgstructureInfo());
@@ -579,5 +687,66 @@ public class DiagnosticUtility {
             resultPath += File.separator + part;
         }
         return resultPath;
+    }
+
+    private static int sendRequestToURL(HttpClient client, String[] requestURL, StringBuilder buffer) {
+        int requestStatus = 503;
+        for (String url : requestURL) {
+            GetMethod httpGet = null;
+            try {
+                httpGet = new GetMethod(url);
+                requestStatus = client.executeMethod(httpGet);
+            } catch (Exception e) {
+                log.error("", e);
+            } finally {
+                buffer.append("Send request to URL ").append(url).append(" STATUS ").append(requestStatus).append("\n");
+                if (httpGet != null) {
+                    httpGet.releaseConnection();
+                }
+            }
+            if (requestStatus == 200) { // достучались по адресу
+                break;
+            }
+        }
+        return requestStatus;
+    }
+
+    private static int checkDBConnection(String dbDriver, String dbUser, String dbPass, String dbName, String dbUrl, StringBuilder buffer) {
+        String requestURL;
+        int requestDBStatus = 503;
+        if (dbDriver == null || dbUser == null || dbPass == null || dbName == null || dbUrl == null) {
+            buffer.append("Cannot Send request to DB. Check params").append(". STATUS - ").append(requestDBStatus).append("\n");
+            return requestDBStatus;
+        }
+        requestURL = dbUrl.replace("${db.name}", dbName);
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            Class.forName(dbDriver);
+            con = DriverManager.getConnection(requestURL, dbUser, dbPass);
+            pst = con.prepareStatement("SELECT 1");
+            rs = pst.executeQuery();
+            requestDBStatus = 200;
+        } catch (Exception e) {
+            log.error("", e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException ex) {
+                log.error("", ex);
+            }
+        }
+        buffer.append("Send request to URL ").append(dbUrl).append(" STATUS ").append(requestDBStatus).append("\n");
+        return requestDBStatus;
     }
 }
