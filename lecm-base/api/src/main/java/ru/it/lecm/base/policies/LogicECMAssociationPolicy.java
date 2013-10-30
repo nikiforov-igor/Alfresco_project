@@ -1,7 +1,5 @@
 package ru.it.lecm.base.policies;
 
-import java.io.Serializable;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -13,6 +11,9 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Policy, содержащее логику сохранения текстовых описаний (для последующего поиска по ним) объектов,
@@ -111,19 +112,24 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
 			nodeService.setProperty(record, propertyQName, strOldValue);
 		}
 
-		QName propertyTextQName = QName.createQName(assocQName + "-text-content", namespaceService);
-		propertyDefinition = dictionaryService.getProperty(propertyTextQName);
-		if (propertyDefinition != null) {
-			Serializable oldValue = nodeService.getProperty(record, propertyTextQName);
-			String strOldValue = oldValue != null ? oldValue.toString() : "";
-			Serializable newValue = getSerializable(nodeAssocRef.getTargetRef());
-			String strNewValue = newValue.toString();
-
-			strOldValue = strOldValue.replace(";" + strNewValue, "");
-			strOldValue = strOldValue.replace(strNewValue, "");
-			nodeService.setProperty(record, propertyTextQName, strOldValue);
-		}
+        updateTextContent(record, nodeAssocRef.getTypeQName());
 	}
+
+    protected void updateTextContent(NodeRef nodeRef, QName assocQName) {
+        StringBuilder builder = new StringBuilder();
+        QName propertyTextQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-text-content", namespaceService);
+        PropertyDefinition propertyDefinition = dictionaryService.getProperty(propertyTextQName);
+        if (propertyDefinition != null) {
+            List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, assocQName);
+            for (AssociationRef assoc : assocs) {
+                NodeRef targetRef = assoc.getTargetRef();
+                if (targetRef != null) {
+                    builder.append(getSerializable(targetRef)).append(";");
+                }
+            }
+            nodeService.setProperty(nodeRef, propertyTextQName, builder.toString());
+        }
+    }
 
 	protected Serializable getSerializable(final NodeRef node){
 		return nodeService.getProperty(node, ContentModel.PROP_NAME);
