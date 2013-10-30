@@ -85,10 +85,6 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
 	    itemType: null,
 	    assocType: null,
 	    documentRef: null,
-//        options: {
-//            showOtherActionColumn: false,
-//            otherActions: null
-//        },
         /**
          * Fired by YUI when parent element is available for scripting
          *
@@ -131,7 +127,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                 Bubbling.addDefaultAction("show-more", fnActionHandler, me.options.forceSubscribing);
             }
 
-            if (this.options.showOtherActionColumn){
+            if (!this.options.overrideSortingWith){
                 // Hook action events
                 var fnOtherActionHandler = function DataGrid_fnActionHandler(layer, args)
                 {
@@ -240,7 +236,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                     { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width:80 }
                 );
             }
-            if (this.options.showOtherActionColumn){
+            if (!this.options.overrideSortingWith){
                 // Add actions as last column
                 columnDefinitions.push(
                     { key:"other-actions", label:"", sortable:false, formatter:this.fnRenderCellOtherActions(), width:80 }
@@ -333,7 +329,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                 this.deferredActionsMenu = null;
             }
 
-            if (this.options.showOtherActionColumn){
+            if (!this.options.overrideSortingWith){
                 var elOtherActions = Dom.get(this.id + "-other-actions-" + oArgs.target.id);
                 this.onHighlightRowFunction(oArgs, elOtherActions,(this.id + "-otherActionSet"), (this.id + "-otherMoreActions"));
                 Dom.removeClass(elOtherActions, "hidden");
@@ -494,7 +490,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                 this.deferredActionsMenu = null;
             }
 
-            if (this.options.showOtherActionColumn){
+            if (!this.options.overrideSortingWith){
                 var elOtherActions = Dom.get(this.id + "-other-actions-" + oArgs.target.id);
                 Dom.addClass(elOtherActions, "hidden");
             }

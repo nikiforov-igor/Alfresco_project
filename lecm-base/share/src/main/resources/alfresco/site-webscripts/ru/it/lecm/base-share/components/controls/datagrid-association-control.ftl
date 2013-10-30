@@ -57,6 +57,11 @@
     <#assign attributeForShow = field.control.params.attributeForShow/>
 </#if>
 
+<#assign isSortable = (form.mode == "view")/>
+<#if field.control.params.isSortable?? && (form.mode != "view")>
+    <#assign isSortable = field.control.params.isSortable/>
+</#if>
+
 <#-- Toolbar -->
 <#assign showSearchControl = true/>
 <#if field.control.params.showSearch??>
@@ -68,8 +73,8 @@
     <#assign exSearch = field.control.params.showExSearchBtn/>
 </#if>
 
-<#assign showCreateButton = (form.mode != "view")/>
-<#if field.control.params.showCreateBtn?? && (form.mode != "view")>
+<#assign showCreateButton = true/>
+<#if field.control.params.showCreateBtn??>
     <#assign showCreateButton = field.control.params.showCreateBtn/>
 </#if>
 
@@ -158,7 +163,7 @@
                 actionsConfig: {
                     fullDelete: "${field.control.params.fullDelete!"true"}"
                 },
-                sort: "${field.control.params.sort!""}",
+                sort: "${field.control.params.sort!"lecm-document:indexTableRow"}",
                 searchConfig: null
             },
             bubblingLabel: "${bubblingId}",
@@ -178,7 +183,8 @@
             showOtherActionColumn: true,
             showCheckboxColumn: false,
             attributeForShow: "${attributeForShow?string}",
-            repeating: ${field.repeating?string}
+            repeating: ${field.repeating?string},
+            overrideSortingWith: ${isSortable?string}
         }).setMessages(${messages});
 
         var inputTag = Dom.get("${fieldHtmlId}");
