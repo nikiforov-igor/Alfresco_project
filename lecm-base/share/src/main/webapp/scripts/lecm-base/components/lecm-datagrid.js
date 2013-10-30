@@ -1128,6 +1128,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 searchConfig: datagridMeta.searchConfig,
                                 searchShowInactive: me.options.searchShowInactive,
                                 parent: datagridMeta.nodeRef,
+	                            searchNodes: this.datagridMeta.searchNodes,
                                 itemType: datagridMeta.itemType,
                                 sort:datagridMeta.sort
                             });
@@ -1360,6 +1361,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                     this.search.performSearch({
                         parent: this.datagridMeta.nodeRef,
+	                    searchNodes: this.datagridMeta.searchNodes,
                         searchConfig:searchConfig,
                         searchShowInactive: searchShowInactive,
                         sort:sort
@@ -1367,6 +1369,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 } else { // Поиск без использования SOLR
                     this.search.performSearch({
                         parent: this.datagridMeta.nodeRef,
+	                    searchNodes: this.datagridMeta.searchNodes,
                         itemType: this.datagridMeta.itemType,
                         searchShowInactive: searchShowInactive,
                         sort:sort
@@ -2055,6 +2058,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     searchConfig: this.datagridMeta.searchConfig,
                     searchShowInactive: this.options.searchShowInactive,
                     parent: this.datagridMeta.nodeRef,
+	                searchNodes: this.datagridMeta.searchNodes,
                     itemType: this.datagridMeta.itemType,
                     sort:this.datagridMeta.sort,
                     offset:offset,

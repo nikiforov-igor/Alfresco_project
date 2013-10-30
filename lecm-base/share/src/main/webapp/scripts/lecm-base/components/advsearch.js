@@ -145,6 +145,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                                             this.performSearch({
                                                 parent:this.dataGrid.datagridMeta.nodeRef,
+	                                            searchNodes: this.datagridMeta.searchNodes,
                                                 sort:this.dataGrid.datagridMeta.sort,
                                                 itemType:this.dataGrid.datagridMeta.itemType,
                                                 searchConfig:this.dataGrid.datagridMeta.searchConfig,
@@ -212,6 +213,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     this.performSearch(
                         {
                             searchConfig:sConfig,
+	                        searchNodes: this.datagridMeta.searchNodes,
                             searchShowInactive: me.dataGrid.options.searchShowInactive,
                             sort:me.dataGrid.datagridMeta.sort
                         });
@@ -243,6 +245,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var searchConfig = args.searchConfig,
                     searchShowInactive = args.searchShowInactive,
                     parent = args.parent,
+	                searchNodes = args.searchNodes,
                     itemType = args.itemType,
                     sort = args.sort,
                     offset = args.offset ? args.offset : -1;
@@ -369,7 +372,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this.buildSearchParams(parent, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, offset, successFilter);
+                var searchParams = this.buildSearchParams(parent, searchNodes, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, offset, successFilter);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success:successHandler,
@@ -388,7 +391,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            buildSearchParams:function ADVSearch__buildSearchParams(parent, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset, additionalFilter) {
+            buildSearchParams:function ADVSearch__buildSearchParams(parent, searchNodes, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset, additionalFilter) {
                 // ВСЕГДА должно существовать значение по умолчанию. Для объектов и строк - это должна быть пустая строка
                 if (searchConfig && searchConfig.formData && typeof searchConfig.formData == "object") {
                     searchConfig.formData = YAHOO.lang.JSON.stringify(searchConfig.formData);
@@ -408,6 +411,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 return {
                     params: {
                         parent: parent != null ? parent : "",
+	                    searchNodes: searchNodes != null ? searchNodes.toString() : "",
                         itemType: itemType != null ? itemType : "",
                         searchConfig: searchConfig != null ? YAHOO.lang.JSON.stringify(searchConfig) : "",
                         maxResults: this.dataGrid.options.useDynamicPagination ? this.dataGrid.options.pageSize : this.dataGrid.options.maxResults,

@@ -164,18 +164,8 @@
         var inputAddedTag = Dom.get("${fieldHtmlId}-added");
         var inputRemovedTag = Dom.get("${fieldHtmlId}-removed");
         var selectItemsTag = Dom.get("${controlId}-selectedItems");
-        var filter = "";
-        if (inputTag != null && inputTag.value != "") {
-            var items = inputTag.value.split(",");
-            selectItemsTag.value = inputTag.value;
-            for (var item in items) {
-                filter = filter + " ID:" + items[item].replace(":", "\\:");
-            }
-        }
-        if (filter == "") {
-            filter += "ID:NOT_REF";
-        }
-        datagrid.options.datagridMeta.searchConfig = {filter: (filter.length > 0 ? filter : "")};
+
+	    datagrid.options.datagridMeta.searchNodes = "${field.value?html}".split(",");
         datagrid.filterValues = inputTag.value;
         datagrid.input = inputTag;
         datagrid.inputAdded = inputAddedTag;

@@ -209,6 +209,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }
                     this.modules.dataGrid.search.performSearch({
                         searchConfig: datagridMeta.searchConfig,
+	                    searchNodes: datagridMeta.searchNodes,
                         searchShowInactive: dataGrid.options.searchShowInactive,
                         sort: datagridMeta.sort
                     });

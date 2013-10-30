@@ -281,20 +281,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
             }
         },
         _setSearchConfigFilter: function () {
-            var filterValues = this.filterValues;
-            var filter = "";
-            if (filterValues != null && filterValues != "") {
-                var items = filterValues.split(",");
-                for (var item in items) {
-                    if (items[item] != "") {
-                        filter = filter + " ID:" + items[item].replace(":", "\\:");
-                    }
-                }
-            }
-            if (filter == "") {
-                filter += "ID:NOT_REF";
-            }
-            this.options.datagridMeta.searchConfig = {filter: (filter.length > 0 ? filter : "")};
+            this.options.datagridMeta.searchNodes = this.filterValues.split(",");
         },
         /**
          * Развернуть информацию

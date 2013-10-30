@@ -19,6 +19,7 @@ function main() {
 			nameSubstituteStrings:(pars.get("nameSubstituteStrings") !== null) ? pars.get("nameSubstituteStrings") : null,        
 			showInactive: pars.get("showInactive") == true,
             parent: (pars.get("parent").length() > 0)  ? pars.get("parent") : null,
+			searchNodes: (pars.get("searchNodes").length() > 0)  ? pars.get("searchNodes").split(",") : null,
             itemType:(pars.get("itemType").length() > 0)  ? pars.get("itemType") : null,
             startIndex: pars.has("startIndex") ? parseInt(pars.get("startIndex"), 10) : DEFAULT_INDEX,
             filter: pars.has("filter")  ? pars.get("filter") : null

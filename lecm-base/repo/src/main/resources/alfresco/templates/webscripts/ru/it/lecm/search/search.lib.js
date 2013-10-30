@@ -142,6 +142,7 @@ function getSearchResults(params) {
 	    nameSubstituteStrings = params.nameSubstituteStrings,
         showInactive = params.showInactive,
         parent = params.parent,
+	    searchNodes = params.searchNodes,
         itemType = params.itemType,
         startIndex = params.startIndex,
         pageSize = params.maxResults,
@@ -329,6 +330,18 @@ function getSearchResults(params) {
                 ftsQuery += ' AND PARENT:"' + parent + '"';
             }
 
+	        //фильтр по доступным нодам
+	        if(searchNodes != null) {
+		        var query = "";
+                for (i = 0; i < searchNodes.length; i++) {
+	                query += "ID:" + searchNodes[i].replace(":", "\\:");
+	                if (i < searchNodes.length - 1) {
+		                query += " OR "
+	                }
+                }
+		        ftsQuery += " AND (" + query + ")";
+	        }
+
             if (logger.isLoggingEnabled())
                 logger.log("Query:\r\n" + ftsQuery + "\r\nSortby: " + (sort != null ? sort : ""));
 
@@ -361,6 +374,42 @@ function getSearchResults(params) {
             };
             nodes = search.query(queryDef);
         }
+    } else if(searchNodes != null) {
+	    nodes = [];
+	    var allNodes = [];
+	    for (i = 0; i < searchNodes.length; i++) {
+		    var searchNode = search.findNode(searchNodes[i]);
+		    var active = searchNode.properties["lecm-dic:active"];
+		    if (showInactive || (active == null || active)) {
+			    allNodes.push(searchNode);
+		    }
+	    }
+	    if (allNodes != null) {
+		    allNodes.sort(function(a,b){
+			    var value1 = a.properties[sortField.column];
+			    var value2 = b.properties[sortField.column];
+
+			    if (value1 < value2) {
+					return -1;
+			    } else if (value1 > value2){
+				    return 1;
+			    } else {
+				    return 0;
+			    }
+		    });
+		    if (!sortField.ascending) {
+			    allNodes.reverse();
+		    }
+
+		    var endIndex = startIndex + pageSize;
+		    if (endIndex > allNodes.length){
+			    endIndex = allNodes.length;
+		    }
+
+		    for (i = startIndex; i < endIndex; i++) {
+			    nodes.push(allNodes[i]);
+		    }
+		}
     } else { // ищем не используя SOLR
         nodes = [];
         if (parent != null && parent.length() > 0 && parent != 'NOT_LOAD') {
