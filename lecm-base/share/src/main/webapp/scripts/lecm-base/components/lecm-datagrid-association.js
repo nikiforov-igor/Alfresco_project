@@ -157,7 +157,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                     return true;
                 };
                 Bubbling.addDefaultAction("datagrid-other-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnOtherActionHandler, me.options.forceSubscribing);
-//                Bubbling.addDefaultAction("show-more", fnOtherActionHandler, me.options.forceSubscribing);
+                Bubbling.addDefaultAction("show-more", fnOtherActionHandler, me.options.forceSubscribing);
             }
 
             // Actions module
@@ -348,121 +348,123 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                 this._showVersionLabel(oData.itemData, oArgs.target.id);
             }
 
-            // Inject the correct action elements into the actionsId element
-            if (elActions && !this.showingMoreActions) {
-                // Call through to get the row highlighted by YUI
-                this.widgets.dataTable.onEventHighlightRow.call(this.widgets.dataTable, oArgs);
+            if (oData.type != "total") {
+                // Inject the correct action elements into the actionsId element
+                if (elActions && !this.showingMoreActions) {
+                    // Call through to get the row highlighted by YUI
+                    this.widgets.dataTable.onEventHighlightRow.call(this.widgets.dataTable, oArgs);
 
-                // Clone the actionSet template node from the DOM
-                var record = this.widgets.dataTable.getRecord(oArgs.target.id),
-                    clone = null;
-                if (elActions.firstChild === null){
-                    clone = Dom.get(actionSetId).cloneNode(true);
-                    // Token replacement
-                    clone.innerHTML = YAHOO.lang.substitute(window.unescape(clone.innerHTML), this.getActionUrls(record));
+                    // Clone the actionSet template node from the DOM
+                    var record = this.widgets.dataTable.getRecord(oArgs.target.id),
+                        clone = null;
+                    if (elActions.firstChild === null){
+                        clone = Dom.get(actionSetId).cloneNode(true);
+                        // Token replacement
+                        clone.innerHTML = YAHOO.lang.substitute(window.unescape(clone.innerHTML), this.getActionUrls(record));
 
-                    // Generate an id
-                    clone.id = elActions.id + "_a";
+                        // Generate an id
+                        clone.id = elActions.id + "_a";
 
-                    var actionsDivs = YAHOO.util.Selector.query("div", clone);
-                    for (index = 0; index < actionsDivs.length; index++) {
-                        var actionDiv = actionsDivs[index];
-                        Dom.generateId(actionDiv, actionDiv.className + "-" + oArgs.target.id);
-                    }
-
-                    // Simple view by default
-                    Dom.addClass(clone, "simple");
-
-                    // фильтруем по правам
-                    var userAccess = record.getData("permissions").userAccess,
-                        actionLabels = record.getData("actionLabels") || {};
-
-                    // Remove any actions the user doesn't have permission for
-                    var actions = YAHOO.util.Selector.query("div", clone),
-                        action, aTag, spanTag, actionPermissions, aP, i, ii, j, jj;
-                    if (actions.length > 3) {
-                        this.options.splitActionsAt = 2;
-                    } else {
-                        this.options.splitActionsAt = 3;
-                    }
-                    for (i = 0, ii = actions.length; i < ii; i++) {
-                        action = actions[i];
-                        aTag = action.firstChild;
-                        spanTag = aTag.firstChild;
-                        if (spanTag && actionLabels[action.className]) {
-                            spanTag.innerHTML = $html(actionLabels[action.className]);
+                        var actionsDivs = YAHOO.util.Selector.query("div", clone);
+                        for (index = 0; index < actionsDivs.length; index++) {
+                            var actionDiv = actionsDivs[index];
+                            Dom.generateId(actionDiv, actionDiv.className + "-" + oArgs.target.id);
                         }
 
-                        if (aTag.rel !== "") {
-                            actionPermissions = aTag.rel.split(",");
-                            for (j = 0, jj = actionPermissions.length; j < jj; j++) {
-                                aP = actionPermissions[j];
-                                // Support "negative" permissions
-                                if ((aP.charAt(0) == "~") ? !!userAccess[aP.substring(1)] : !userAccess[aP]) {
-                                    clone.removeChild(action);
-                                    break;
-                                }
-                                if (!this.versionable && (action.attributes[0].nodeValue == "onActionVersion")) {
-                                    clone.removeChild(action);
-                                }
+                        // Simple view by default
+                        Dom.addClass(clone, "simple");
+
+                        // фильтруем по правам
+                        var userAccess = record.getData("permissions").userAccess,
+                            actionLabels = record.getData("actionLabels") || {};
+
+                        // Remove any actions the user doesn't have permission for
+                        var actions = YAHOO.util.Selector.query("div", clone),
+                            action, aTag, spanTag, actionPermissions, aP, i, ii, j, jj;
+                        if (actions.length > 3) {
+                            this.options.splitActionsAt = 2;
+                        } else {
+                            this.options.splitActionsAt = 3;
+                        }
+                        for (i = 0, ii = actions.length; i < ii; i++) {
+                            action = actions[i];
+                            aTag = action.firstChild;
+                            spanTag = aTag.firstChild;
+                            if (spanTag && actionLabels[action.className]) {
+                                spanTag.innerHTML = $html(actionLabels[action.className]);
                             }
-                        }
-                    }
-                    elActions.appendChild(clone);
-                }
 
-                var actionsBlock = elActions.firstChild;
-
-                this.updateActions(actionsBlock, oArgs.target.id, oData);
-
-                // Проверяем сколько у нас осталось действий и нужно ли рисовать "More >" контейнер?
-                var splitAt = this.options.splitActionsAt;
-
-                var getVisibleActions = function(actionsBlock){
-                    var actionsDivs = YAHOO.util.Selector.query("div", actionsBlock);
-                    var visible = [];
-                    for (var j=0; j < actionsDivs.length; j++) {
-                        var testDiv = actionsDivs[j];
-                        if (testDiv.getAttribute("style") != null){
-                            var style = testDiv.getAttribute("style");
-                            var attrs = style.split(";");
-                            for (var k=0; k <  attrs.length; k++){
-                                if (attrs[k].indexOf("display") >= 0){
-                                    var attrDisplay = attrs[k];
-                                    var displayValue = attrDisplay.split(":")[1].trim();
-                                    if (displayValue != "none"){
-                                        visible.push(testDiv);
+                            if (aTag.rel !== "") {
+                                actionPermissions = aTag.rel.split(",");
+                                for (j = 0, jj = actionPermissions.length; j < jj; j++) {
+                                    aP = actionPermissions[j];
+                                    // Support "negative" permissions
+                                    if ((aP.charAt(0) == "~") ? !!userAccess[aP.substring(1)] : !userAccess[aP]) {
+                                        clone.removeChild(action);
+                                        break;
+                                    }
+                                    if (!this.versionable && (action.attributes[0].nodeValue == "onActionVersion")) {
+                                        clone.removeChild(action);
                                     }
                                 }
                             }
-                        } else {
-                            visible.push(testDiv);
+                        }
+                        elActions.appendChild(clone);
+                    }
+
+                    var actionsBlock = elActions.firstChild;
+
+                    this.updateActions(actionsBlock, oArgs.target.id, oData);
+
+                    // Проверяем сколько у нас осталось действий и нужно ли рисовать "More >" контейнер?
+                    var splitAt = this.options.splitActionsAt;
+
+                    var getVisibleActions = function(actionsBlock){
+                        var actionsDivs = YAHOO.util.Selector.query("div", actionsBlock);
+                        var visible = [];
+                        for (var j=0; j < actionsDivs.length; j++) {
+                            var testDiv = actionsDivs[j];
+                            if (testDiv.getAttribute("style") != null){
+                                var style = testDiv.getAttribute("style");
+                                var attrs = style.split(";");
+                                for (var k=0; k <  attrs.length; k++){
+                                    if (attrs[k].indexOf("display") >= 0){
+                                        var attrDisplay = attrs[k];
+                                        var displayValue = attrDisplay.split(":")[1].trim();
+                                        if (displayValue != "none"){
+                                            visible.push(testDiv);
+                                        }
+                                    }
+                                }
+                            } else {
+                                visible.push(testDiv);
+                            }
+                        }
+                        return visible;
+                    }.bind(this);
+
+                    var visibleActions = getVisibleActions(actionsBlock);
+                    var showMoreDiv = null;
+                    for (var k=0; k < visibleActions.length; k++) {
+                        var testDiv = visibleActions[k];
+                        if (Dom.hasClass(testDiv, "onActionShowMore")){
+                            showMoreDiv = testDiv;
+                            break;
                         }
                     }
-                    return visible;
-                }.bind(this);
-
-                var visibleActions = getVisibleActions(actionsBlock);
-                var showMoreDiv = null;
-                for (var k=0; k < visibleActions.length; k++) {
-                    var testDiv = visibleActions[k];
-                    if (Dom.hasClass(testDiv, "onActionShowMore")){
-                        showMoreDiv = testDiv;
-                        break;
-                    }
-                }
-                // actions = YAHOO.util.Selector.query("div", actionsBlock);
-                if (!showMoreDiv && visibleActions.length > 3) {
-                    var moreContainer = Dom.get(moreActionId).cloneNode(true);
-                    var containerDivs = YAHOO.util.Selector.query("div", moreContainer);
-                    // Insert the two necessary DIVs before the splitAt action item
-                    Dom.insertBefore(containerDivs[0], visibleActions[splitAt]);
-                    Dom.insertBefore(containerDivs[1], visibleActions[splitAt]);
-                    // Now make action items after the split, children of the 2nd DIV
-                    var index, moreActions = visibleActions.slice(splitAt);
-                    for (index in moreActions) {
-                        if (moreActions.hasOwnProperty(index)) {
-                            containerDivs[1].appendChild(moreActions[index]);
+                    // actions = YAHOO.util.Selector.query("div", actionsBlock);
+                    if (!showMoreDiv && visibleActions.length > 3) {
+                        var moreContainer = Dom.get(moreActionId).cloneNode(true);
+                        var containerDivs = YAHOO.util.Selector.query("div", moreContainer);
+                        // Insert the two necessary DIVs before the splitAt action item
+                        Dom.insertBefore(containerDivs[0], visibleActions[splitAt]);
+                        Dom.insertBefore(containerDivs[1], visibleActions[splitAt]);
+                        // Now make action items after the split, children of the 2nd DIV
+                        var index, moreActions = visibleActions.slice(splitAt);
+                        for (index in moreActions) {
+                            if (moreActions.hasOwnProperty(index)) {
+                                containerDivs[1].appendChild(moreActions[index]);
+                            }
                         }
                     }
                 }
