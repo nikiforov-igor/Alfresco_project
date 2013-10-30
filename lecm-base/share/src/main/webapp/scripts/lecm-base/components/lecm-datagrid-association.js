@@ -243,7 +243,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
             if (this.options.showOtherActionColumn){
                 // Add actions as last column
                 columnDefinitions.push(
-                    { key:"other-actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellOtherActions(), width:80 }
+                    { key:"other-actions", label:"", sortable:false, formatter:this.fnRenderCellOtherActions(), width:80 }
                 );
             }
             return columnDefinitions;

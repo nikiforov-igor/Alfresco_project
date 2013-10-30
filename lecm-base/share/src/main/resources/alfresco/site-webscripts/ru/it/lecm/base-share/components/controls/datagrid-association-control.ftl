@@ -68,8 +68,8 @@
     <#assign exSearch = field.control.params.showExSearchBtn/>
 </#if>
 
-<#assign showCreateButton = true/>
-<#if field.control.params.showCreateBtn??>
+<#assign showCreateButton = (form.mode != "view")/>
+<#if field.control.params.showCreateBtn?? && (form.mode != "view")>
     <#assign showCreateButton = field.control.params.showCreateBtn/>
 </#if>
 
