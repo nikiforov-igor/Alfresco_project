@@ -49,7 +49,6 @@ ${msg("heading")}
 (function () {
 
     function initDocumentTasks() {
-        console.log("initDocTasks");
         Alfresco.util.createTwister("${id}-heading", "DocumentTasksContent", {
             panel: "${id}-formContainer"
         });
