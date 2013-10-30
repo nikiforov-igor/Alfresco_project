@@ -184,7 +184,8 @@
             showCheckboxColumn: false,
             attributeForShow: "${attributeForShow?string}",
             repeating: ${field.repeating?string},
-            overrideSortingWith: ${isSortable?string}
+            overrideSortingWith: ${isSortable?string},
+            useCookieForSort: false
         }).setMessages(${messages});
 
         var inputTag = Dom.get("${fieldHtmlId}");
