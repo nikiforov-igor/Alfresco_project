@@ -14,20 +14,22 @@
                     parentDoc:"${nodeRef}"
                 }).setMessages(${messages});
 
-            var tasks = new LogicECM.module.Dashlet.Tasks("${id}-controlCenterDashlet").setOptions(
-                    {
-                        nodeRef: "${nodeRef}",
-                        containerId: "${id}_results"
-                    }).setMessages(${messages});
-            tasks.onReady();
+            var tasks = new LogicECM.module.Document.Ajax.Content("${id}_results").setOptions(
+                {
+                    contentURL: Alfresco.constants.URL_PAGECONTEXT + "lecm/components/dashlets/document-my-tasks/content",
+                    requestParams: {
+                        nodeRef: "${nodeRef}"
+                    },
+                    containerId: "${id}_results"
+                }).setMessages(${messages});
         }
 
-        YAHOO.util.Event.onDOMReady(init);
+        YAHOO.util.Event.onContentReady("${id}_results", init);
     })();
     //]]>
 </script>
 
-<div class="dashlet document bordered" id="${id}-controlCenterDashlet">
+<div class="dashlet document bordered">
     <div class="title dashlet-title">
         <span>
             <div style="float:left; margin-right: 4px;">${msg("label.title")}</div>

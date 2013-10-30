@@ -6,7 +6,7 @@
     <@script type="text/javascript" src="${page.url.context}/res/components/document-details/document-metadata.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/dashlets/lecm-errands-dashlet.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/lecm-document-errands.js"></@script>
-    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/lecm-document-my-tasks-dashlet.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/lecm-document-ajax-content.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
     <#-- IMPORTANT for IE ! -->

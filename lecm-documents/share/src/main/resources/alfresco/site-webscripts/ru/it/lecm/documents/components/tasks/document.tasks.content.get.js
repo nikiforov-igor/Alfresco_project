@@ -3,6 +3,8 @@
 
 function main() {
     AlfrescoUtil.param("nodeRef");
+    model.containerHtmlId = args["containerHtmlId"];
+
     var hasPerm = hasPermission(model.nodeRef, PERM_WF_TASK_LIST);
     if (hasPerm) {
         var data = getTasks(model.nodeRef);
