@@ -22,39 +22,41 @@
     //]]>
 </script>
 
-<div class="widget-bordered-panel">
-    <div class="document-metadata-header document-components-panel" id="${id}-results">
-        <h2 id="${id}-heading" class="dark">
-            ${msg("heading")}
-            <span class="alfresco-twister-actions">
-                <a id="${id}-action-expand" href="javascript:void(0);" class="expand" title="${msg("label.expand")}">&nbsp;</a>
-            </span>
-        </h2>
+<#if hasPermission>
+    <div class="widget-bordered-panel">
+        <div class="document-metadata-header document-components-panel" id="${id}-results">
+            <h2 id="${id}-heading" class="dark">
+                ${msg("heading")}
+                <span class="alfresco-twister-actions">
+                    <a id="${id}-action-expand" href="javascript:void(0);" class="expand" title="${msg("label.expand")}">&nbsp;</a>
+                </span>
+            </h2>
 
-        <div id="${id}-formContainer"></div>
+            <div id="${id}-formContainer"></div>
 
-    <script type="text/javascript">
-        //variable is used for expanding dashlet. refactor it?
-        var documentTasksComponent = null;
-    </script>
-    <script type="text/javascript">//<![CDATA[
-    (function () {
-        Alfresco.util.createTwister("${id}-heading", "DocumentTasks", {
-            panel: "${id}-formContainer"
-        });
+        <script type="text/javascript">
+            //variable is used for expanding dashlet. refactor it?
+            var documentTasksComponent = null;
+        </script>
+        <script type="text/javascript">//<![CDATA[
+        (function () {
+            Alfresco.util.createTwister("${id}-heading", "DocumentTasks", {
+                panel: "${id}-formContainer"
+            });
 
-        function init() {
-            documentTasksComponent = new LogicECM.DocumentTasks("${id}").setOptions(
-                    {
-                        nodeRef: "${args.nodeRef}",
-                        title: "${msg('heading')}"
-                    }).setMessages(${messages});
-        }
+            function init() {
+                documentTasksComponent = new LogicECM.DocumentTasks("${id}").setOptions(
+                        {
+                            nodeRef: "${args.nodeRef}",
+                            title: "${msg('heading')}"
+                        }).setMessages(${messages});
+            }
 
-        YAHOO.util.Event.onDOMReady(init);
-    })();
-    //]]>
-    </script>
+            YAHOO.util.Event.onDOMReady(init);
+        })();
+        //]]>
+        </script>
 
+        </div>
     </div>
-</div>
+</#if>
