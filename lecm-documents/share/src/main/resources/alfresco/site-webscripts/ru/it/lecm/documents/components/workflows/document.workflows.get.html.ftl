@@ -42,9 +42,6 @@
                 </span>
             </div>
 
-
-
-
             <script type="text/javascript">
                 var documentWorkflowsComponent = null;
             </script>
