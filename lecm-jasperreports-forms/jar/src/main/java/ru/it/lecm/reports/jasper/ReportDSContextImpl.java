@@ -265,6 +265,11 @@ public class ReportDSContextImpl implements ReportDSContext {
             return (realBean == null) ? null : realBean.getTemplateStringForObject(object);
         }
 
+        @Override
+        public String getTemplateStringForObject(NodeRef object, boolean forList, boolean returnDefaulIfNull) {
+            return (realBean == null) ? null : realBean.getTemplateStringForObject(object, forList, returnDefaulIfNull);
+        }
+
         public String getTemplateStringForObject(NodeRef object, boolean forList) {
             return (realBean == null) ? null : realBean.getTemplateStringForObject(object, forList);
         }

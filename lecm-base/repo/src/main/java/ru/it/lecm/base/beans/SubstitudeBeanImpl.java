@@ -4,7 +4,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -90,9 +89,15 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         return getTemplateStringForObject(object, false);
     }
 
+    @Override
     public String getTemplateStringForObject(NodeRef object, boolean forList) {
+        return getTemplateStringForObject(object, forList, true);
+    }
+
+    @Override
+    public String getTemplateStringForObject(NodeRef object, boolean forList, boolean returnDefaulIfNull) {
         NodeRef objectTypeRef = getObjectTypeRef(object);
-        return getTemplateStringByType(objectTypeRef, forList);
+        return getTemplateStringByType(objectTypeRef, forList, returnDefaulIfNull);
     }
     /**
 	 * Получение значения выражения для элемента.
@@ -424,13 +429,14 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
      * @param objectType - ссылка на тип объекта
      * @return сформированное описание или DEFAULT_OBJECT_TYPE_TEMPLATE, если для типа не задан шаблон
      */
-    private String getTemplateStringByType(NodeRef objectType, boolean forList) {
+    private String getTemplateStringByType(NodeRef objectType, boolean forList, boolean returnDefauktIfNull) {
         if (objectType != null) {
             Object template = nodeService.getProperty(objectType, forList ? PROP_OBJ_TYPE_LIST_TEMPLATE : PROP_OBJ_TYPE_TEMPLATE);
             return template != null ? (String) template : DEFAULT_OBJECT_TYPE_TEMPLATE;
-        } else {
+        } else if (returnDefauktIfNull) {
             return forList ?  DEFAULT_OBJECT_TYPE_LIST_TEMPLATE : DEFAULT_OBJECT_TYPE_TEMPLATE;
         }
+        return null;
     }
 
     public void setDictionaryService(DictionaryBean dictionaryService) {

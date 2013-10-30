@@ -106,5 +106,7 @@ public interface SubstitudeBean {
 	 * @param psedudoProp мнемоника псевдо-свойства или функции (уже без всяких префиксных символов) 
 	 * @return список узлов после выполнения функции (псевдо-свойства)
 	 */
-	public List<NodeRef> getObjectByPseudoProp(NodeRef object, final String psedudoProp); 
+	public List<NodeRef> getObjectByPseudoProp(NodeRef object, final String psedudoProp);
+
+    String getTemplateStringForObject(NodeRef object, boolean forList, boolean returnDefaulIfNull);
 }
