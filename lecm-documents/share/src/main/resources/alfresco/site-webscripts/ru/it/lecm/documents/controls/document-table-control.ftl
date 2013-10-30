@@ -36,7 +36,27 @@
 				mode: "${form.mode?string}",
 				datagridHeight: ${params.height},
 				repeating: ${field.repeating?string},
-				disabled: ${disabled?string}
+				disabled: ${disabled?string},
+                otherActions:[
+                    {
+                        type: "datagrid-action-link-${bubblingId!'documents'}",
+                        id: "onMoveTableRowUp",
+                        permission: "edit",
+                        label: "${msg("actions.tableRowUp")}"
+                    },
+                    {
+                        type: "datagrid-action-link-${bubblingId!'documents'}",
+                        id: "onMoveTableRowDown",
+                        permission: "edit",
+                        label: "${msg("action.tableRowDown")}"
+                    },
+                    {
+                        type: "datagrid-action-link-${bubblingId!'documents'}",
+                        id: "onAddRow",
+                        permission: "edit",
+                        label: "${msg("action.addRow")}"
+                    }
+                ]
 			});
 })();
 //]]></script>
