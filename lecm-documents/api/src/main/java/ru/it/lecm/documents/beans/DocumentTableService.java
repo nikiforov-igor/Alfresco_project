@@ -18,6 +18,7 @@ public interface DocumentTableService {
 	public static final QName TYPE_TABLE_DATA_TOTAL_ROW = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataTotalRow");
 
     public static final QName PROP_INDEX_TABLE_ROW = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "indexTableRow");
+    public static final QName PROP_TABLE_ROW_TEMP = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableRowTemp");
 
 	public static final String DOCUMENT_TABLES_ROOT_NAME = "Табличные данные";
 	public static final String DOCUMENT_TABLE_TOTAL_ASSOC_POSTFIX = "-total";
@@ -105,9 +106,16 @@ public interface DocumentTableService {
     /**
      * Получение списка табличных записей начиная с определенного индекса
      * @param document документ
-     * @param tableDataAssocType  тип ассоциации для табличных данных
-     * @param beginIndex
+     * @param tableDataAssocType тип ассоциации для табличных данных
+     * @param beginIndex номер индекса
      * @return список табличных записей
      */
     public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType, int beginIndex);
+
+    public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType, int beginIndex, int endIndex);
+
+    public boolean isMoveTableRowUp(NodeRef tableRow, String assocTypeStr);
+
+    public boolean isMoveTableRowDown(NodeRef tableRow, String assocTypeStr);
+
 }

@@ -65,4 +65,20 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+
+    public boolean onMoveTableRowUp(String tableNodeRef, String assocType) {
+        org.alfresco.util.ParameterCheck.mandatory("tableNodeRef", tableNodeRef);
+        org.alfresco.util.ParameterCheck.mandatory("assocType", assocType);
+        NodeRef tableRef = new NodeRef(tableNodeRef);
+
+        return this.documentTableService.isMoveTableRowUp(tableRef, assocType);
+    }
+
+    public boolean onMoveTableRowDown(String tableNodeRef, String assocType) {
+        org.alfresco.util.ParameterCheck.mandatory("tableNodeRef", tableNodeRef);
+        org.alfresco.util.ParameterCheck.mandatory("assocType", assocType);
+        NodeRef tableRef = new NodeRef(tableNodeRef);
+
+        return this.documentTableService.isMoveTableRowDown(tableRef, assocType);
+    }
 }

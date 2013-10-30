@@ -301,6 +301,114 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
     }
 
     @Override
+    public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType, int beginIndex, int endIndex) {
+        List<NodeRef> tableRows = getTableDataRows(document, tableDataAssocType, beginIndex);
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        String indexStr;
+        int index;
+        if (tableRows != null) {
+            for(NodeRef tableRow : tableRows){
+                indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                if (indexStr != null && !indexStr.equals("")){
+                    index = Integer.parseInt(indexStr);
+                    if (index <= endIndex){
+                        result.add(tableRow);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean isMoveTableRowUp(final NodeRef tableRow, final String assocTypeStr) {
+
+        AuthenticationUtil.RunAsWork<Boolean> moveUp = new AuthenticationUtil.RunAsWork<Boolean>() {
+            @Override
+            public Boolean doWork() throws Exception {
+                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
+                    @Override
+                    public Boolean execute() throws Throwable {
+                        String indexStr;
+                        int endIndex, index;
+                        List<NodeRef> tableRows;
+                        indexStr = (String) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                        if (indexStr != null && !indexStr.equals("")) {
+                            endIndex = Integer.parseInt(indexStr);
+                            if (endIndex != 1) {
+                                NodeRef document = getDocumentByTableData(tableRow);
+                                QName assocType = QName.createQName(assocTypeStr, namespaceService);
+                                tableRows = getTableDataRows(document, assocType, endIndex - 1, endIndex);
+                                if (tableRows.size() == 2) {
+                                    for (NodeRef row : tableRows) {
+                                        indexStr = (String) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                                        if (indexStr != null && !indexStr.equals("")) {
+                                            index = Integer.parseInt(indexStr);
+                                            if (index == endIndex) {
+                                                nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (endIndex - 1));
+                                            } else {
+                                                nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, endIndex);
+                                            }
+                                        }
+                                    }
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
+                    }
+                });
+            }
+        };
+        return AuthenticationUtil.runAsSystem(moveUp);
+
+    }
+
+    @Override
+    public boolean isMoveTableRowDown(final NodeRef tableRow, final String assocTypeStr) {
+
+        AuthenticationUtil.RunAsWork<Boolean> moveDown = new AuthenticationUtil.RunAsWork<Boolean>() {
+            @Override
+            public Boolean doWork() throws Exception {
+                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
+                    @Override
+                    public Boolean execute() throws Throwable {
+                        String indexStr;
+                        int startIndex, index;
+                        List<NodeRef> tableRows;
+
+                        indexStr = (String) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                        if (indexStr != null && !indexStr.equals("")) {
+                            startIndex = Integer.parseInt(indexStr);
+                            NodeRef document = getDocumentByTableData(tableRow);
+                            QName assocType = QName.createQName(assocTypeStr, namespaceService);
+                            tableRows = getTableDataRows(document, assocType, startIndex, startIndex + 1);
+                            if (tableRows.size() == 2) {
+                                for (NodeRef row : tableRows) {
+                                    indexStr = (String) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                                    if (indexStr != null && !indexStr.equals("")) {
+                                        index = Integer.parseInt(indexStr);
+                                        if (index == startIndex) {
+                                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (startIndex + 1));
+                                        } else {
+                                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, startIndex);
+                                        }
+                                    }
+                                }
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                });
+            }
+        };
+        return AuthenticationUtil.runAsSystem(moveDown);
+
+    }
+
+
+    @Override
 	public void addCalculator(String postfix, TableTotalRowCalculator calculator) {
 		if (!calculators.containsKey(postfix)) {
 			calculators.put(postfix, calculator);

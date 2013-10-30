@@ -161,8 +161,19 @@
             <title>Logic ECM Base Document table row</title>
             <parent>cm:cmobject</parent>
             <properties>
-                <!-- Порядковй номер -->
+                <!-- Порядковый номер -->
                 <property name="lecm-document:indexTableRow">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Поле для хранения временного значения (хранит nodeRef строки после которой нужно вставить запись),
+                 при выполнении действия "Вставить после текущей записи"-->
+                <property name="lecm-document:tableRowTemp">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">

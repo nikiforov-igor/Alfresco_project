@@ -108,7 +108,7 @@
                     type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
                     id: "expandRow",
                     permission: "edit",
-                    label: "${msg("action.expand")}"
+                    label: "${msg("addresser.expand")}"
                 }
             </#if>
             <#if ((allowExpand == "true") && (allowEdit == "true") && (field.disabled != true))>,</#if>
@@ -129,26 +129,6 @@
                     label: "${msg("actions.delete-row")}"
                 }
             </#if>
-            ],
-            otherActions:[
-                                {
-                    type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
-                    id: "onMoveTableRowUp",
-                    permission: "edit",
-                    label: "${msg("actions.tableRowUp")}"
-                },
-                {
-                    type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
-                    id: "onMoveTableRowDown",
-                    permission: "edit",
-                    label: "${msg("action.tableRowDown")}"
-                },
-                {
-                    type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>custom</#if>",
-                    id: "onAddRow",
-                    permission: "edit",
-                    label: "${msg("action.addRow")}"
-                }
             ],
             datagridMeta: {
                 itemType: "${field.control.params.itemType!""}",
@@ -175,7 +155,6 @@
             fixedHeader: ${field.control.params.fixedHeader},
         </#if>
             showActionColumn: ${showActions?string},
-            showOtherActionColumn: true,
             showCheckboxColumn: false,
             attributeForShow: "${attributeForShow?string}",
             repeating: ${field.repeating?string}
@@ -185,8 +164,18 @@
         var inputAddedTag = Dom.get("${fieldHtmlId}-added");
         var inputRemovedTag = Dom.get("${fieldHtmlId}-removed");
         var selectItemsTag = Dom.get("${controlId}-selectedItems");
-
-	    datagrid.options.datagridMeta.searchNodes = "${field.value?html}".split(",");
+        var filter = "";
+        if (inputTag != null && inputTag.value != "") {
+            var items = inputTag.value.split(",");
+            selectItemsTag.value = inputTag.value;
+            for (var item in items) {
+                filter = filter + " ID:" + items[item].replace(":", "\\:");
+            }
+        }
+        if (filter == "") {
+            filter += "ID:NOT_REF";
+        }
+        datagrid.options.datagridMeta.searchConfig = {filter: (filter.length > 0 ? filter : "")};
         datagrid.filterValues = inputTag.value;
         datagrid.input = inputTag;
         datagrid.inputAdded = inputAddedTag;
@@ -207,28 +196,28 @@
         sUrl = Alfresco.constants.PROXY_URI + "${field.control.params.startLocationScriptUrl}?nodeRef=" + nodeRef;
     </#if>
         if (sUrl != "") {
-        Alfresco.util.Ajax.jsonGet(
-                {
-                    url: sUrl,
-                    successCallback: {
-                        fn: function (response) {
-                            var oResults = response.json;
-                            if (oResults != null) {
-                                createToolabar(response.json.nodeRef);
-                                createDataGrid(response.json.nodeRef);
-                            }
+            Alfresco.util.Ajax.jsonGet(
+                    {
+                        url: sUrl,
+                        successCallback: {
+                            fn: function (response) {
+                                var oResults = response.json;
+                                if (oResults != null) {
+                                    createToolabar(response.json.nodeRef);
+                                    createDataGrid(response.json.nodeRef);
+                                }
+                            },
+                            scope: this
                         },
-                        scope: this
-                    },
-                    failureCallback: {
-                        fn: function (oResponse) {
-                            var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-                            this.widgets.dataTable.set("MSG_ERROR", response.message);
-                            this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-                        },
-                        scope: this
-                    }
-                });
+                        failureCallback: {
+                            fn: function (oResponse) {
+                                var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+                                this.widgets.dataTable.set("MSG_ERROR", response.message);
+                                this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+                            },
+                            scope: this
+                        }
+                    });
         }
     }
     function init() {
@@ -252,42 +241,34 @@
 </@comp.baseToolbar>
 
 <div class="form-field with-grid" id="${controlId}">
-    <#if showLabel>
-        <label for="${controlId}" style="white-space: nowrap; overflow: visible;">${field.label?html}:
-            <#if field.endpointMandatory!false || field.mandatory!false>
-                <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
-            </#if>
-        </label>
-    </#if>
+<#if showLabel>
+    <label for="${controlId}" style="white-space: nowrap; overflow: visible;">${field.label?html}:
+        <#if field.endpointMandatory!false || field.mandatory!false>
+            <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+        </#if>
+    </label>
+</#if>
 
 <@grid.datagrid containerId false>
-<script type="text/javascript">//<![CDATA[
-(function () {
-    var Dom = YAHOO.util.Dom;
-    LogicECM.module.Base.DataGridControl_${objectId} = function (htmlId) {
-        LogicECM.module.Base.DataGridControl_${objectId}.superclass.constructor.call(this, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
-        return this;
-    };
+    <script type="text/javascript">//<![CDATA[
+    (function () {
+        var Dom = YAHOO.util.Dom;
+        LogicECM.module.Base.DataGridControl_${objectId} = function (htmlId) {
+            LogicECM.module.Base.DataGridControl_${objectId}.superclass.constructor.call(this, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
+            return this;
+        };
 
-    YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, LogicECM.module.Base.DataGridAssociation, {
-    ${field.control.params.actionsHandler!""}
-    });
-})();
-//]]></script>
-    <div style="display:none">
-        <!-- Action Set "More..." container -->
-        <div id="${containerId}-otherMoreActions">
-            <div class="onActionShowMore"><a href="#" class="show-more" title="${msg("actions.more")}"><span></span></a></div>
-            <div class="more-actions hidden"></div>
-        </div>
-        <div id="${containerId}-otherActionSet" class="action-set simple"></div>
-    </div>
+        YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, LogicECM.module.Base.AssociationDataGrid, {
+        ${field.control.params.actionsHandler!""}
+        });
+    })();
+    //]]></script>
 </@grid.datagrid>
-<div id="${controlId}-container">
-    <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
-    <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
-    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
-    <input type="hidden" id="${controlId}-selectedItems"/>
-</div>
+    <div id="${controlId}-container">
+        <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
+        <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
+        <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
+        <input type="hidden" id="${controlId}-selectedItems"/>
+    </div>
 
 </div>

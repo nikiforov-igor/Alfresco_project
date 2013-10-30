@@ -41,6 +41,15 @@
     min-height: 16px;
     padding: 2px 0 2px 24px;
 }
+.datagrid a.datagrid-other-action-link
+{
+    background-position: 4px 1px;
+    background-repeat: no-repeat;
+    border: 1px solid transparent;
+    display: block;
+    min-height: 16px;
+    padding: 2px 0 2px 24px;
+}
 .datagrid .more-actions a.datagrid-action-link
 {
     border: 1px solid #fff;
@@ -66,6 +75,18 @@
 
 .datagrid .expanded .expandRow a {
     background-image: url("/share/res/images/lecm-base/components/triangle_up.png");
+}
+
+.datagrid .onAddRow a {
+    background-image: url("/share/res/components/images/plus-16.png");
+}
+
+.datagrid .onMoveTableRowUp a {
+    background-image: url("/share/res/images/lecm-base/components/triangle_up.png");
+}
+
+.datagrid .onMoveTableRowDown a {
+    background-image: url("/share/res/images/lecm-base/components/triangle_down.png");
 }
 
 .yui-skin-lecmTheme .datagrid .yui-dt tr.total-row,

@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Переместить табличную запись вниз</shortname>
+    <description>Перенестить табличную запись вниз</description>
+    <url>/lecm/document/tables/api/moveTableRowDown?nodeRef={nodeRef}&amp;assocType={assocType}</url>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+    <format default="json"/>
+</webscript>
