@@ -171,23 +171,28 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
-                <!-- Поле для хранения временного значения (хранит nodeRef строки после которой нужно вставить запись),
-                 при выполнении действия "Вставить после текущей записи"-->
-                <property name="lecm-document:tableRowTemp">
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
             </properties>
         </type>
 		<type name="lecm-document:tableDataTotalRow">
             <title>Logic ECM Base Document table total row</title>
             <parent>cm:cmobject</parent>
         </type>
+		<type name="lecm-document:tableData">
+			<title>Logic ECM Base Document Table</title>
+			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecm-document:tableDataRowType">
+					<type>d:text</type>
+					<default>lecm-document:tableDataRow</default>
+					<index enabled="false"/>
+				</property>
+				<property name="lecm-document:tableDataTotalRowType">
+					<type>d:text</type>
+					<default>lecm-document:tableDataTotalRow</default>
+					<index enabled="false"/>
+				</property>
+			</properties>
+		</type>
     </types>
     <aspects>
         <aspect name="lecm-document:tableDataAspect"/>

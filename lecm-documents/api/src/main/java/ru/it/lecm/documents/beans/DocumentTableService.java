@@ -14,11 +14,13 @@ import java.util.Set;
  * Time: 13:42
  */
 public interface DocumentTableService {
+	public static final QName TYPE_TABLE_DATA = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableData");
 	public static final QName TYPE_TABLE_DATA_ROW = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataRow");
 	public static final QName TYPE_TABLE_DATA_TOTAL_ROW = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataTotalRow");
 
     public static final QName PROP_INDEX_TABLE_ROW = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "indexTableRow");
-    public static final QName PROP_TABLE_ROW_TEMP = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableRowTemp");
+
+	public static final QName ASPECT_TABLE_DATA = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataAspect");
 
 	public static final String DOCUMENT_TABLES_ROOT_NAME = "Табличные данные";
 	public static final String DOCUMENT_TABLE_TOTAL_ASSOC_POSTFIX = "-total";

@@ -5,17 +5,18 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.dictionary.PropertyDefinition;
-import org.alfresco.service.cmr.dictionary.TypeDefinition;
+import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.FileNameValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
@@ -31,7 +32,8 @@ import java.util.Set;
  * Date: 18.10.13
  * Time: 14:24
  */
-public class DocumentTablePolicy implements
+public class DocumentTablePolicy extends BaseBean implements
+		NodeServicePolicies.OnAddAspectPolicy,
 		NodeServicePolicies.OnCreateAssociationPolicy,
 		NodeServicePolicies.OnDeleteAssociationPolicy,
 		NodeServicePolicies.BeforeDeleteNodePolicy {
@@ -41,8 +43,7 @@ public class DocumentTablePolicy implements
 	private PolicyComponent policyComponent;
 	private DocumentTableService documentTableService;
 	private DocumentAttachmentsService documentAttachmentsService;
-	private NodeService nodeService;
-	protected  NamespaceService namespaceService;
+	protected NamespaceService namespaceService;
 	protected DictionaryService dictionaryService;
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
@@ -57,8 +58,9 @@ public class DocumentTablePolicy implements
 		this.documentAttachmentsService = documentAttachmentsService;
 	}
 
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
 	}
 
 	public void setNamespaceService(NamespaceService namespaceService) {
@@ -87,6 +89,12 @@ public class DocumentTablePolicy implements
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
 				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onDeleteTableDataRow", Behaviour.NotificationFrequency.FIRST_EVENT));
+
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnAddAspectPolicy.QNAME,
+				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onAddAspect", Behaviour.NotificationFrequency.FIRST_EVENT));
+
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateDocument", Behaviour.NotificationFrequency.FIRST_EVENT));
 	}
 
 	/**
@@ -263,6 +271,38 @@ public class DocumentTablePolicy implements
                     }
                 }
             }
+		}
+	}
+
+	@Override
+	public void onAddAspect(NodeRef nodeRef, QName aspectTypeQName) {
+   	    if (dictionaryService.isSubClass(aspectTypeQName, DocumentTableService.ASPECT_TABLE_DATA)) {
+	        AspectDefinition aspectDefinition = dictionaryService.getAspect(aspectTypeQName);
+	        Map<QName, AssociationDefinition> associations = aspectDefinition.getAssociations();
+	        if (associations != null) {
+		        for (AssociationDefinition assoc: associations.values()) {
+			        QName assocName = assoc.getName();
+			        ClassDefinition targetClass = assoc.getTargetClass();
+		            if (targetClass != null) {
+			            QName asscoClassName = targetClass.getName();
+			            if (asscoClassName != null && dictionaryService.isSubClass(asscoClassName, DocumentTableService.TYPE_TABLE_DATA)) {
+				            NodeRef rootFolder = documentTableService.getRootFolder(nodeRef);
+				            String nodeName = FileNameValidator.getValidFileName(assocName.toPrefixString(namespaceService));
+
+				            NodeRef tableData = createNode(rootFolder, asscoClassName, nodeName, null);
+				            nodeService.createAssociation(nodeRef, tableData, assocName);
+			            }
+		            }
+		        }
+	        }
+        }
+	}
+
+	public void onCreateDocument(ChildAssociationRef childAssocRef) {
+		NodeRef document = childAssocRef.getChildRef();
+		Set<QName> aspects = nodeService.getAspects(document);
+		for (QName aspect: aspects) {
+			onAddAspect(document, aspect);
 		}
 	}
 }

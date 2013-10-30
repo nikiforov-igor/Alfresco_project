@@ -490,6 +490,7 @@
                 <js src="/scripts/documents/members/lecm-document-members.js"/>
                 <js src="/scripts/grids/doc-members-datagrid.js"/>
                 <js src="/scripts/components/format-packageItems-document.js"/>
+	            <js src="/scripts/documents/tables/lecm-document-table.js"/>
             </dependencies>
             <default-controls>
                 <type name="association:lecm-doc-dic:subjects" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">

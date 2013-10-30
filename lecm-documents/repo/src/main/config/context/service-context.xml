@@ -561,6 +561,7 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
+		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
 	<bean  id="documentTableSearchPolicy" class="ru.it.lecm.documents.policy.DocumentTableSearchPolicy" parent="logicEcmAssociationPolicy"

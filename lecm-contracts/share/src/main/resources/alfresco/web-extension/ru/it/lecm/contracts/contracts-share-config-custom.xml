@@ -161,19 +161,10 @@
                     <field id="lecm-contract:locationContract" set="other"/>
                     <field id="lecm-contract-aspect:reasonDelete-assoc" set="tab1"/>
                     <field id="lecm-contract-table-structure:stages-assoc" set="contract-stages">
-                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-association-control.ftl">
-                            <control-param name="itemType">lecm-contract-table-structure:stage</control-param>
-                            <control-param name="allowCreate">true</control-param>
-                            <control-param name="allowDelete">true</control-param>
-                            <control-param name="allowEdit">true</control-param>
-                            <control-param name="allowExpand">false</control-param>
-                            <control-param name="showActions">true</control-param>
-                            <control-param name="isSortable">false</control-param>
+                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="height">100</control-param>
-                            <control-param name="usePagination">true</control-param>
                             <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
-                            <control-param name="startLocationScriptUrl">/lecm/document/tables/api/folder</control-param>
                             <control-param name="showLabel">false</control-param>
                         </control>
                     </field>
