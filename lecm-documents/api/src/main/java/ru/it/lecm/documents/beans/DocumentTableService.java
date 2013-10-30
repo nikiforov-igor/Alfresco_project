@@ -40,11 +40,18 @@ public interface DocumentTableService {
 	public boolean isDocumentTableData(NodeRef nodeRef);
 
 	/**
+	 * Проверка, что объект является строкой табличных данных документа
+	 * @param nodeRef объект
+	 * @return true если объект является строкой табличных данных документа
+	 */
+	public boolean isDocumentTableDataRow(NodeRef nodeRef);
+
+	/**
 	 * Получения документа для табличных данных
-	 * @param tableDataRef табличные данные
+	 * @param tableDataRowRef строка табличных данных
 	 * @return документ
 	 */
-	public NodeRef getDocumentByTableData(NodeRef tableDataRef);
+	public NodeRef getDocumentByTableDataRow(NodeRef tableDataRowRef);
 
 	/**
 	 * Получение

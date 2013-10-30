@@ -26,6 +26,7 @@ import java.util.*;
  * Time: 13:47
  */
 public class DocumentTableServiceImpl extends BaseBean implements DocumentTableService {
+	private DocumentService documentService;
 	private LecmPermissionService lecmPermissionService;
 	private DictionaryService dictionaryService;
 	private NamespaceService namespaceService;
@@ -41,6 +42,10 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
 	}
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
@@ -81,21 +86,26 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 	}
 
 	@Override
-	public boolean isDocumentTableData(NodeRef nodeRef) {
+	public boolean isDocumentTableDataRow(NodeRef nodeRef) {
 		QName refType = nodeService.getType(nodeRef);
 		return refType != null && dictionaryService.isSubClass(refType, TYPE_TABLE_DATA_ROW);
 	}
 
 	@Override
-	public NodeRef getDocumentByTableData(NodeRef tableDataRef) {
-		if (nodeService.exists(tableDataRef)) {
-			NodeRef tableDataRoot = nodeService.getPrimaryParent(tableDataRef).getParentRef();
-			if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
-				NodeRef document = nodeService.getPrimaryParent(tableDataRoot).getParentRef();
-				if (document != null) {
-					QName testType = nodeService.getType(document);
-					Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
-					if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
+	public boolean isDocumentTableData(NodeRef nodeRef) {
+		QName refType = nodeService.getType(nodeRef);
+		return refType != null && dictionaryService.isSubClass(refType, TYPE_TABLE_DATA);
+	}
+
+	@Override
+	public NodeRef getDocumentByTableDataRow(NodeRef tableDataRowRef) {
+		if (nodeService.exists(tableDataRowRef)) {
+			NodeRef tableDataRef = nodeService.getPrimaryParent(tableDataRowRef).getParentRef();
+			if (isDocumentTableData(tableDataRef)) {
+				NodeRef tableDataRoot = nodeService.getPrimaryParent(tableDataRef).getParentRef();
+				if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
+					NodeRef document = nodeService.getPrimaryParent(tableDataRoot).getParentRef();
+					if (document != null && documentService.isDocument(document)) {
 						return document;
 					}
 				}
@@ -336,7 +346,7 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
                         if (indexStr != null && !indexStr.equals("")) {
                             endIndex = Integer.parseInt(indexStr);
                             if (endIndex != 1) {
-                                NodeRef document = getDocumentByTableData(tableRow);
+                                NodeRef document = getDocumentByTableDataRow(tableRow);
                                 QName assocType = QName.createQName(assocTypeStr, namespaceService);
                                 tableRows = getTableDataRows(document, assocType, endIndex - 1, endIndex);
                                 if (tableRows.size() == 2) {
@@ -380,7 +390,7 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
                         indexStr = (String) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
                         if (indexStr != null && !indexStr.equals("")) {
                             startIndex = Integer.parseInt(indexStr);
-                            NodeRef document = getDocumentByTableData(tableRow);
+                            NodeRef document = getDocumentByTableDataRow(tableRow);
                             QName assocType = QName.createQName(assocTypeStr, namespaceService);
                             tableRows = getTableDataRows(document, assocType, startIndex, startIndex + 1);
                             if (tableRows.size() == 2) {
