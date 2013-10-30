@@ -14,17 +14,17 @@
                     parentDoc:"${nodeRef}"
                 }).setMessages(${messages});
 
-            var tasks = new LogicECM.module.Document.Ajax.Content("${id}_results").setOptions(
+            new LogicECM.module.Document.Ajax.Content("${id}-results").setOptions(
                 {
                     contentURL: Alfresco.constants.URL_PAGECONTEXT + "lecm/components/dashlets/document-my-tasks/content",
                     requestParams: {
                         nodeRef: "${nodeRef}"
                     },
-                    containerId: "${id}_results"
+                    containerId: "${id}-results"
                 }).setMessages(${messages});
         }
 
-        YAHOO.util.Event.onContentReady("${id}_results", init);
+        YAHOO.util.Event.onContentReady("${id}-results", init);
     })();
     //]]>
 </script>
@@ -50,6 +50,6 @@
         </span>
 </div>
 
-<div class="body scrollableList dashlet-body" id="${id}_results"></div>
+<div class="body scrollableList dashlet-body" id="${id}-results"></div>
 
 </div>

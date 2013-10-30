@@ -36,14 +36,14 @@ ${msg("heading")}
     </div>
 
     <#if (data.myTasksTotalCount > 0 && data.myTasksTotalCount > data.myTasksDisplayedCount)>
-        <div class="right-more-link-arrow" onclick="documentTasksComponentNew.onExpand();"></div>
-        <div class="right-more-link" onclick="documentTasksComponentNew.onExpand();">${msg('right.label.more')}</div>
+        <div class="right-more-link-arrow" onclick="documentTasksComponentContent.onExpand();"></div>
+        <div class="right-more-link" onclick="documentTasksComponentContent.onExpand();">${msg('right.label.more')}</div>
         <div style="clear:both;"></div>
     </#if>
 </div>
 
 <script type="text/javascript">
-    var documentTasksComponentNew = null;
+    var documentTasksComponentContent = null;
 </script>
 <script type="text/javascript">//<![CDATA[
 (function () {
@@ -53,7 +53,7 @@ ${msg("heading")}
             panel: "${id}-formContainer"
         });
 
-        documentTasksComponentNew = new LogicECM.DocumentTasks("${id}").setOptions(
+        documentTasksComponentContent = new LogicECM.DocumentTasks("${id}").setOptions(
             {
                 nodeRef: "${args.nodeRef}",
                 title: "${msg('heading')}"

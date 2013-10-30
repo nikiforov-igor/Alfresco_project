@@ -4,7 +4,7 @@
     //<![CDATA[
     (function () {
         function init() {
-            var tasks = new LogicECM.module.Document.Ajax.Content("${id}-results").setOptions(
+            new LogicECM.module.Document.Ajax.Content("${id}-results").setOptions(
                 {
                     contentURL: Alfresco.constants.URL_PAGECONTEXT + "lecm/components/document/document-tasks/content",
                     requestParams: {
