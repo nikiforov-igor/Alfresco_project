@@ -12,6 +12,7 @@ ${msg("heading")}
 </div>
 
 <div id="${id}-formContainer">
+<#if data??>
     <div class="right-tasks-container">
         <#assign maxMainTextLength = 53>
         <#list data.myTasks as task>
@@ -40,6 +41,7 @@ ${msg("heading")}
         <div class="right-more-link" onclick="documentTasksComponentContent.onExpand();">${msg('right.label.more')}</div>
         <div style="clear:both;"></div>
     </#if>
+</#if>
 </div>
 
 <script type="text/javascript">
