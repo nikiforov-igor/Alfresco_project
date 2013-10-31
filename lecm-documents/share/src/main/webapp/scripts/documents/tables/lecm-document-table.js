@@ -40,7 +40,8 @@ LogicECM.module = LogicECM.module || {};
 				messages: null,
 				mode: null,
 				datagridHeight: null,
-				repeating: null
+				repeating: null,
+                isTableSorted: null
 			},
 
 			tableData: null,
@@ -98,32 +99,34 @@ LogicECM.module = LogicECM.module || {};
 							label: this.msg("actions.delete-row")
 						});
 					}
+                    var otherActions = [];
+                    if (!this.options.isTableSorted) {
+                        otherActions.push({
+                            type: actionType,
+                            id: "onMoveTableRowUp",
+                            permission: "edit",
+                            label: this.msg("actions.tableRowUp")
+                        });
+                        otherActions.push({
+                            type: actionType,
+                            id: "onMoveTableRowDown",
+                            permission: "edit",
+                            label: this.msg("action.tableRowDown")
+                        });
+                        otherActions.push({
+                            type: actionType,
+                            id: "onAddRow",
+                            permission: "edit",
+                            label: this.msg("action.addRow")
+                        });
+                    }
 
 					var datagrid = new LogicECM.module.DocumentTableDataGrid(this.options.containerId).setOptions({
 						usePagination: true,
 						showExtendSearchBlock: false,
 						formMode: this.options.mode,
 						actions: actions,
-						otherActions: [
-                            {
-	                            type: actionType,
-								id: "onMoveTableRowUp",
-								permission: "edit",
-								label: this.msg("actions.tableRowUp")
-							},
-			                {
-				                type: actionType,
-								id: "onMoveTableRowDown",
-								permission: "edit",
-								label: this.msg("action.tableRowDown")
-							},
-			                {
-				                type: actionType,
-								id: "onAddRow",
-								permission: "edit",
-								label: this.msg("action.addRow")
-							}
-						],
+						otherActions: otherActions,
 						datagridMeta: {
 							itemType: this.tableData.rowType,
 							datagridFormId: this.options.datagridFormId,
@@ -132,7 +135,7 @@ LogicECM.module = LogicECM.module || {};
 							actionsConfig: {
 								fullDelete: true
 					        },
-							sort: "",
+							sort: "lecm-document:indexTableRow",
 							searchConfig: null
 						},
 						bubblingLabel: this.options.bubblingLabel,
@@ -142,7 +145,9 @@ LogicECM.module = LogicECM.module || {};
 						showCheckboxColumn: false,
 						attributeForShow: this.options.attributeForShow,
 						repeating: this.options.repeating,
-						pageSize: this.tableData.pageSize
+						pageSize: this.tableData.pageSize,
+                        useCookieForSort: false,
+                        overrideSortingWith: this.options.isTableSorted
 					}).setMessages(this.options.messages);
 				}
 

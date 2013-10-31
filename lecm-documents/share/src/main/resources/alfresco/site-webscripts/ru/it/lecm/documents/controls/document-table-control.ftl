@@ -24,6 +24,11 @@
     <#assign showCreateButton = field.control.params.showCreateBtn/>
 </#if>
 
+<#assign isTableSorted = false/>
+<#if field.control.params.isTableSorted??>
+    <#assign isTableSorted = field.control.params.isTableSorted/>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function() {
 	var control = new LogicECM.module.DocumentTable("${fieldHtmlId}").setMessages(${messages});
@@ -39,7 +44,8 @@
 				mode: "${form.mode?string}",
 				datagridHeight: ${params.height},
 				repeating: ${field.repeating?string},
-				disabled: ${field.disabled?string}
+				disabled: ${field.disabled?string},
+                isTableSorted: ${isTableSorted?string}
 			});
 })();
 //]]></script>
