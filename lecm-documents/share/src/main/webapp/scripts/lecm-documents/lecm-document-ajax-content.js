@@ -36,11 +36,14 @@ LogicECM.module.Document.Ajax = LogicECM.module.Document.Ajax|| {};
                     return;
                 }
 
+                Dom.addClass(this.options.containerId, 'lecm-document-content-ajax-loading');
+
                 Alfresco.util.Ajax.request({
                     url: this.options.contentURL,
                     dataObj: this.options.requestParams,
                     successCallback: {
                         fn: function (response) {
+                            Dom.removeClass(this.options.containerId, 'lecm-document-content-ajax-loading');
                             this.contentContainer.innerHTML = response.serverResponse.responseText;
                         },
                         scope: this
