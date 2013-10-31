@@ -24,9 +24,9 @@
     <#assign showCreateButton = field.control.params.showCreateBtn/>
 </#if>
 
-<#assign isTableSorted = false/>
-<#if field.control.params.isTableSorted??>
-    <#assign isTableSorted = field.control.params.isTableSorted/>
+<#assign isTableSortable = false/>
+<#if field.control.params.isTableSortable??>
+    <#assign isTableSortable = field.control.params.isTableSortable/>
 </#if>
 
 <script type="text/javascript">//<![CDATA[
@@ -42,10 +42,8 @@
 				datagridFormId: "${params.datagridFormId!"datagrid"}",
 				attributeForShow: "${attributeForShow}",
 				mode: "${form.mode?string}",
-				datagridHeight: ${params.height},
-				repeating: ${field.repeating?string},
 				disabled: ${field.disabled?string},
-                isTableSorted: ${isTableSorted?string}
+				isTableSortable: ${isTableSortable?string}
 			});
 })();
 //]]></script>

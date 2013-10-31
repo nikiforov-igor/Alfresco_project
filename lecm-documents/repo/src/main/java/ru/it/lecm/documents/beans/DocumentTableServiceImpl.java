@@ -129,27 +129,6 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		return null;
 	}
 
-//    @Override
-//    public void setIndexTableRow(NodeRef documentRef, NodeRef tableDataRef, QName tableDataAssocType) {
-//        QName tableDataType = nodeService.getType(tableDataRef);
-//        List<NodeRef> tableRowList = findNodesByAssociationRef(documentRef, tableDataAssocType, tableDataType, ASSOCIATION_TYPE.TARGET);
-//        if (tableRowList != null) {
-//            int maxIndex = 0;
-//            int index;
-//            String indexStr;
-//            for (NodeRef nodeRef : tableRowList) {
-//                indexStr = (String)nodeService.getProperty(nodeRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
-//                if (indexStr != null && !indexStr.equals("")){
-//                    index = Integer.parseInt(indexStr);
-//                    if (maxIndex < index){
-//                        maxIndex = index;
-//                    }
-//                }
-//            }
-//            nodeService.setProperty(tableDataRef,DocumentTableService.PROP_INDEX_TABLE_ROW, maxIndex+1);
-//        }
-//    }
-
     @Override
 	public List<NodeRef> getTableDataTotalRows(NodeRef tableDataRef) {
 	    QName totalRowType = getTableDataTotalRowType(tableDataRef);

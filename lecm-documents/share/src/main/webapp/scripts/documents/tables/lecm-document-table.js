@@ -39,9 +39,7 @@ LogicECM.module = LogicECM.module || {};
 				disabled: null,
 				messages: null,
 				mode: null,
-				datagridHeight: null,
-				repeating: null,
-                isTableSorted: null
+				isTableSortable: null
 			},
 
 			tableData: null,
@@ -100,7 +98,7 @@ LogicECM.module = LogicECM.module || {};
 						});
 					}
                     var otherActions = [];
-                    if (!this.options.isTableSorted) {
+                    if (!this.options.isTableSortable) {
                         otherActions.push({
                             type: actionType,
                             id: "onMoveTableRowUp",
@@ -139,15 +137,13 @@ LogicECM.module = LogicECM.module || {};
 							searchConfig: null
 						},
 						bubblingLabel: this.options.bubblingLabel,
-						height: this.options.datagridHeight,
 						showActionColumn: true,
 						showOtherActionColumn: true,
 						showCheckboxColumn: false,
 						attributeForShow: this.options.attributeForShow,
-						repeating: this.options.repeating,
 						pageSize: this.tableData.pageSize,
                         useCookieForSort: false,
-                        overrideSortingWith: this.options.isTableSorted
+                        overrideSortingWith: this.options.isTableSortable
 					}).setMessages(this.options.messages);
 				}
 
