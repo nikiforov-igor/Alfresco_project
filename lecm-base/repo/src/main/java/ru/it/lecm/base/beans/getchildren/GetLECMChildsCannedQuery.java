@@ -514,6 +514,10 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 				result = (((QName) pv1).compareTo((QName) pv2));
 			} else if (pv1 instanceof Boolean) {
                 result = (((Boolean) pv1).compareTo((Boolean) pv2));
+			} else if (pv1 instanceof Float) {
+                result = (((Float) pv1).compareTo((Float) pv2));
+			} else if (pv1 instanceof Double) {
+                result = (((Double) pv1).compareTo((Double) pv2));
             } else {
 				// TODO other comparisons
 				throw new RuntimeException("Unsupported sort type: " + pv1.getClass().getName());
