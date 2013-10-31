@@ -75,8 +75,8 @@ public class DocumentTablePolicy extends BaseBean {
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
 				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "deleteTableDataRow"));
 
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateChildAssociationPolicy.QNAME,
-				DocumentTableService.TYPE_TABLE_DATA, ContentModel.ASSOC_CONTAINS, new JavaBehaviour(this, "createTableDataAssoc", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "createTableDataRow", Behaviour.NotificationFrequency.FIRST_EVENT));
 
 //		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 //				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "calculateTotalRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -166,7 +166,7 @@ public class DocumentTablePolicy extends BaseBean {
 		}
 	}
 
-	public void createTableDataAssoc(ChildAssociationRef childAssocRef) {
+	public void createTableDataRow(ChildAssociationRef childAssocRef) {
 		NodeRef tableData = childAssocRef.getParentRef();
 
 		//Пересчёт результирующей строки
@@ -293,7 +293,12 @@ public class DocumentTablePolicy extends BaseBean {
 			            QName asscoClassName = targetClass.getName();
 			            if (asscoClassName != null && dictionaryService.isSubClass(asscoClassName, DocumentTableService.TYPE_TABLE_DATA)) {
 				            NodeRef rootFolder = documentTableService.getRootFolder(nodeRef);
-				            String nodeName = FileNameValidator.getValidFileName(assocName.toPrefixString(namespaceService));
+
+				            String nodeName = assoc.getTitle();
+				            if (nodeName == null) {
+					            nodeName = assocName.toPrefixString(namespaceService);
+				            }
+				            nodeName = FileNameValidator.getValidFileName(nodeName);
 
 				            NodeRef tableData = createNode(rootFolder, asscoClassName, nodeName, null);
 				            nodeService.createAssociation(nodeRef, tableData, assocName);
