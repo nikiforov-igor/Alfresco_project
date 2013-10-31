@@ -157,7 +157,19 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
             AlfrescoTransactionSupport.bindResource(BUSINESS_JOURNAL_POST_TRANSACTION_PENDING_OBJECTS, pendingActions);
         }
 
-        BusinessJournalRecord record = new BusinessJournalRecord(date, initiator, mainObject, eventCategory, defaultDescription, objects);
+        NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
+
+        // заполняем карту плейсхолдеров
+        Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
+        // пытаемся получить объект Категория события по ключу
+        NodeRef category = getEventCategoryByCode(eventCategory);
+        // получаем шаблон описания
+        String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
+        // заполняем шаблон данными
+        String filled = fillTemplateString(templateString, holdersMap);
+
+        String description = getObjectDescription(mainObject);
+        BusinessJournalRecord record = new BusinessJournalRecord(date, employee, mainObject, description, filled, category, defaultDescription, objects);
         pendingActions.add(record);
     }
 
@@ -219,7 +231,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 		return evCategory;
 	}
 
-	private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final NodeRef eventCategory, final List<String> objects, final String description) {
+	private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final String mainObjectDescription, final NodeRef eventCategory, final List<String> objects, final String description) {
 		return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 			@Override
 			public NodeRef execute() throws Throwable {
@@ -246,7 +258,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				properties.put(PROP_BR_RECORD_DATE, date);
 				properties.put(PROP_BR_RECORD_DESC, description);
 				properties.put(PROP_BR_RECORD_INITIATOR, getInitiatorDescription(initiator));
-				properties.put(PROP_BR_RECORD_MAIN_OBJECT, getObjectDescription(mainObject));
+				properties.put(PROP_BR_RECORD_MAIN_OBJECT, mainObjectDescription);
 				if (objects != null && objects.size() > 0) {
 					for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
                         String str = objects.get(i);
@@ -263,12 +275,13 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 				if (initiator != null) {
 					nodeService.createAssociation(result, initiator, ASSOC_BR_RECORD_INITIATOR);
 				}
-				nodeService.createAssociation(result, mainObject, ASSOC_BR_RECORD_MAIN_OBJ);
+                if (mainObject != null) {
+				    nodeService.createAssociation(result, mainObject, ASSOC_BR_RECORD_MAIN_OBJ);
+                }
 
 				// необязательные
 				if (eventCategory != null) {
 					nodeService.createAssociation(result, eventCategory, ASSOC_BR_RECORD_EVENT_CAT);
-
 				}
 				if (objectType != null) {
 					nodeService.createAssociation(result, objectType, ASSOC_BR_RECORD_OBJ_TYPE);
@@ -276,7 +289,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
 				if (objects != null && objects.size() > 0) {
 					for (int j = 0; j < objects.size() && j < MAX_SECONDARY_OBJECTS_COUNT; j++) {
-						if (NodeRef.isNodeRef(objects.get(j))) {
+						if (NodeRef.isNodeRef(objects.get(j)) && nodeService.exists(new NodeRef(objects.get(j)))) {
 							nodeService.createAssociation(result, new NodeRef(objects.get(j)), QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j+1)));
 						}
 					}
@@ -314,6 +327,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private String wrapAsLink(NodeRef link, boolean isInititator) {
 		SysAdminParams params = serviceRegistry.getSysAdminParams();
 		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+        if (!nodeService.exists(link)) {
+            return "";
+        }
 		String description = isInititator ? getInitiatorDescription(link) : getObjectDescription(link);
 		if (link != null) {
             String linkUrl = isLECMDocument(link) ? DOCUMENT_LINK_URL : (isLECMDocumentAttachment(link) ? DOCUMENT_ATTACHMENT_LINK_URL : LINK_URL);
@@ -872,20 +888,9 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
                                     public Void execute() throws Throwable {
                                         for (BusinessJournalRecord record: pendingRecords) {
                                                 try {
-                                                    // получаем текущего пользователя по person
-                                                    NodeRef employee = record.getInitiator() != null ? orgstructureService.getEmployeeByPerson(record.getInitiator()) : null;
-
-                                                    // заполняем карту плейсхолдеров
-                                                    Map<String, String> holdersMap = fillHolders(employee, record.getMainObject(), record.getObjects());
-                                                    // пытаемся получить объект Категория события по ключу
-                                                    NodeRef category = getEventCategoryByCode(record.getEventCategory());
-                                                    // получаем шаблон описания
-                                                    String templateString = getTemplateString(getObjectType(record.getMainObject()), category, record.getDefaultDescription());
-                                                    // заполняем шаблон данными
-                                                    String filled = fillTemplateString(templateString, holdersMap);
 
                                                     // создаем записи
-                                                    createRecord(record.getDate(), employee, record.getMainObject(), category, record.getObjects(), filled);
+                                                    createRecord(record.getDate(), record.getEmployee(), record.getMainObject(), record.getMainObjectDescription(), record.getEventCategory(), record.getObjects(), record.getFilledDescription());
                                                 } catch (Exception ex) {
                                                     logger.error("Could not create business-journal record", ex);
                                                 }
@@ -909,34 +914,38 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
     private class BusinessJournalRecord {
         private Date date;
-        private NodeRef initiator;
+        private NodeRef employee;
         private NodeRef mainObject;
-        private String eventCategory;
+        private NodeRef eventCategory;
         private String defaultDescription;
         private List<String> objects;
+        private String mainObjectDescription;
+        private String filledDescription;
 
-        private BusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
+        private BusinessJournalRecord(Date date, NodeRef employee, NodeRef mainObject, String mainObjectDescription, String filledDescription, NodeRef eventCategory, String defaultDescription, List<String> objects) {
             this.date = date;
-            this.initiator = initiator;
+            this.employee = employee;
             this.mainObject = mainObject;
             this.eventCategory = eventCategory;
             this.defaultDescription = defaultDescription;
             this.objects = objects;
+            this.mainObjectDescription = mainObjectDescription;
+            this.filledDescription = filledDescription;
         }
 
         private Date getDate() {
             return date;
         }
 
-        private NodeRef getInitiator() {
-            return initiator;
+        private NodeRef getEmployee() {
+            return employee;
         }
 
         private NodeRef getMainObject() {
             return mainObject;
         }
 
-        private String getEventCategory() {
+        private NodeRef getEventCategory() {
             return eventCategory;
         }
 
@@ -946,6 +955,14 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
         private List<String> getObjects() {
             return objects;
+        }
+
+        private String getMainObjectDescription() {
+            return mainObjectDescription;
+        }
+
+        private String getFilledDescription() {
+            return filledDescription;
         }
     }
 
