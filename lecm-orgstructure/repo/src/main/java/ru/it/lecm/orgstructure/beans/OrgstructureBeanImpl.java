@@ -368,7 +368,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
                     // получаем руководителя для подразделения
                     bossRef = getUnitBoss(unit);
                     //сотрудник не может быть руководителем у себя (кроме случая, если он руководитель организации)
-                    while (bossRef.equals(employeeRef) && ((unit = getParentUnit(unit)) != null)) {
+                    while (bossRef != null && bossRef.equals(employeeRef) && ((unit = getParentUnit(unit)) != null)) {
                         bossRef = getUnitBoss(unit);
                     }
                 }
