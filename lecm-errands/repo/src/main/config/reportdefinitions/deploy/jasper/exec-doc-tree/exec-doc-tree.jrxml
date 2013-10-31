@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport 
-			xmlns="http://jasperreports.sourceforge.net/jasperreports" 
-			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-			xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports 
-			http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
-			name="exec-doc-tree" 
-			pageWidth="842" pageHeight="595" orientation="Landscape" 
-			whenNoDataType="AllSectionsNoDetail" 
-			columnWidth="802"
-			leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" 
-			isFloatColumnFooter="true" 
-			whenResourceMissingType="Key" 
-			uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="exec-doc-tree" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" whenResourceMissingType="Key" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="118"/>
+	<property name="ireport.y" value="0"/>
 	<property name="dataSource" value="ru.it.lecm.errands.reports.ErrandsDocTreeDSProvider"/>
 	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
@@ -22,29 +10,24 @@
 			<style backcolor="#DCDCDC"/>
 		</conditionalStyle>
 	</style>
-
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["ds-exec-doc-tree.xml"]]></defaultValueExpression>
 	</parameter>
-
-	<queryString> <![CDATA[]]> </queryString>
-
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
 	<field name="Col_baseDocs" class="java.lang.String">
 		<fieldDescription><![CDATA[Выбранные документы]]></fieldDescription>
 	</field>
-
 	<field name="Col_LeveledNum" class="java.lang.String">
 		<fieldDescription><![CDATA[Иерархический номер]]></fieldDescription>
 	</field>
-
 	<field name="Col_DisplayName" class="java.lang.String">
 		<fieldDescription><![CDATA[Название]]></fieldDescription>
 	</field>
-
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-
 	<title>
 		<band height="24" splitType="Stretch">
 			<staticText>
@@ -56,7 +39,6 @@
 			</staticText>
 		</band>
 	</title>
-
 	<pageHeader>
 		<band height="22" splitType="Stretch">
 			<textField>
@@ -68,7 +50,6 @@
 			</textField>
 		</band>
 	</pageHeader>
-
 	<columnHeader>
 		<band height="27" splitType="Stretch">
 			<rectangle>
@@ -83,7 +64,7 @@
 				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="279c1409-10d9-462c-8311-1bbaaae755e4" isPrintRepeatedValues="false" x="65" y="2" width="730" height="24"/>
+				<reportElement uuid="279c1409-10d9-462c-8311-1bbaaae755e4" x="65" y="2" width="730" height="24" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
@@ -91,7 +72,6 @@
 			</textField>
 		</band>
 	</columnHeader>
-
 	<detail>
 		<band height="30" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="true">
@@ -111,15 +91,12 @@
 			</textField>
 		</band>
 	</detail>
-
 	<columnFooter>
 		<band height="1" splitType="Stretch"/>
 	</columnFooter>
-
 	<pageFooter>
 		<band height="1" splitType="Stretch"/>
 	</pageFooter>
-
 	<summary>
 		<band height="1" splitType="Stretch"/>
 	</summary>
