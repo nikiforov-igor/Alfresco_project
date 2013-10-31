@@ -152,6 +152,11 @@
         <aspect name="lecm-contract-table-structure:table-stages-aspect">
             <title>Table structure aspect</title>
             <parent>lecm-document:tableDataAspect</parent>
+            <properties>
+                <property name="lecm-contract-table-structure:stages-assoc-text-content">
+                    <type>d:text</type>
+                </property>
+            </properties>
             <associations>
                 <association name="lecm-contract-table-structure:stages-assoc">
                     <source>

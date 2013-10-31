@@ -98,20 +98,27 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 	public NodeRef getDocumentByTableDataRow(NodeRef tableDataRowRef) {
 		if (nodeService.exists(tableDataRowRef)) {
 			NodeRef tableDataRef = getTableDataByRow(tableDataRowRef);
-			if (tableDataRef != null) {
-				NodeRef tableDataRoot = nodeService.getPrimaryParent(tableDataRef).getParentRef();
-				if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
-					NodeRef document = nodeService.getPrimaryParent(tableDataRoot).getParentRef();
-					if (document != null && documentService.isDocument(document)) {
-						return document;
-					}
-				}
-			}
+			return getDocumentByTableData(tableDataRef);
 		}
 		return null;
 	}
 
-	@Override
+    @Override
+    public NodeRef getDocumentByTableData(NodeRef tableDataRef) {
+        if (tableDataRef != null) {
+            NodeRef tableDataRoot = nodeService.getPrimaryParent(tableDataRef).getParentRef();
+            if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
+                ChildAssociationRef documentToTableDataAssociation = nodeService.getPrimaryParent(tableDataRoot);
+                NodeRef document = documentToTableDataAssociation.getParentRef();
+                if (document != null && documentService.isDocument(document)) {
+                    return documentToTableDataAssociation.getParentRef();
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
 	public NodeRef getTableDataByRow(NodeRef tableDataRowRef) {
 		if (nodeService.exists(tableDataRowRef)) {
 			NodeRef tableDataRef = nodeService.getPrimaryParent(tableDataRowRef).getParentRef();

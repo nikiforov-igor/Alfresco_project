@@ -78,7 +78,7 @@ public class DocumentTablePolicy extends BaseBean {
 				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "createTableDataRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "updatePropertiesOfTotalRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "onUpdatePropertiesOfTableDataRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
 				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "deleteTableDataRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -178,13 +178,20 @@ public class DocumentTablePolicy extends BaseBean {
             }
         }
 
+
+        //Обновление данных для поиска
+        addSearchDescription(tableData, childAssocRef.getChildRef());
 	}
 
-	public void updatePropertiesOfTotalRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+
+
+    public void onUpdatePropertiesOfTableDataRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
 		if (tableData != null) {
 			Set<QName> changedProperties = getChangedProperties(before, after, nodeService.getType(nodeRef));
 			documentTableService.recalculateTotalRows(tableData, changedProperties);
+            //Обновление данных для поиска
+            recalculateSearchDescription(tableData);
 		}
 	}
 
@@ -211,6 +218,8 @@ public class DocumentTablePolicy extends BaseBean {
 
 		//Пересчёт результирующей строки
 		documentTableService.recalculateTotalRows(tableData);
+        //Обновление данных для поиска
+        recalculateSearchDescription(tableData);
 	}
 
 	/**
@@ -299,4 +308,83 @@ public class DocumentTablePolicy extends BaseBean {
 			documentAttachmentsService.deleteAttachment(assoc.getTargetRef());
 		}
 	}
+
+    private void addSearchDescription(NodeRef tableData, NodeRef tableDataRow) {
+        NodeRef document = documentTableService.getDocumentByTableData(tableData);
+        QName documentTableTextContentProperty = getDocumentTableTextContentProperty(tableData);
+        if (documentTableTextContentProperty != null) {
+            Serializable oldValue = nodeService.getProperty(document, documentTableTextContentProperty);
+            StringBuilder strOldValue = new StringBuilder(oldValue != null ? oldValue.toString() : "");
+            String strNewValue = getDataRowContent(tableDataRow);
+            if (!strNewValue.isEmpty() && strOldValue.indexOf(strNewValue) != -1) {
+                strOldValue.append(strNewValue).append(";");
+            }
+            nodeService.setProperty(document, documentTableTextContentProperty, strOldValue.toString());
+        }
+    }
+
+    private void recalculateSearchDescription(NodeRef tableData) {
+        StringBuilder builder = new StringBuilder();
+        NodeRef document = documentTableService.getDocumentByTableData(tableData);
+        QName documentTableTextContentProperty = getDocumentTableTextContentProperty(tableData);
+        if (documentTableTextContentProperty != null) {
+            List<NodeRef> tableDataRows = documentTableService.getTableDataRows(tableData);
+            for (NodeRef tableDataRow : tableDataRows) {
+                if (tableDataRow != null) {
+                    builder.append(getDataRowContent(tableDataRow)).append(";");
+                }
+            }
+            nodeService.setProperty(document, documentTableTextContentProperty, builder.toString());
+        }
+    }
+
+    private QName getDocumentTableTextContentProperty(NodeRef tableData) {
+        NodeRef document = documentTableService.getDocumentByTableData(tableData);
+        QName documentToTableDataAssociation = null;
+        if (document != null) {
+            for (AssociationRef associationRef : nodeService.getSourceAssocs(tableData, RegexQNamePattern.MATCH_ALL)) {
+                if (document.equals(associationRef.getSourceRef())) {
+                    documentToTableDataAssociation = associationRef.getTypeQName();
+                    break;
+                }
+            }
+            if (documentToTableDataAssociation != null) {
+                QName documentTableTextContentProperty = QName.createQName(documentToTableDataAssociation.toPrefixString(namespaceService) + "-text-content", namespaceService);
+                PropertyDefinition propertyDefinition = dictionaryService.getProperty(documentTableTextContentProperty);
+                if (propertyDefinition != null) {
+                    return documentTableTextContentProperty;
+                }
+            }
+        }
+        return null;
+    }
+
+    private String getDataRowContent(NodeRef node) {
+        if (!dictionaryService.isSubClass(nodeService.getType(node), DocumentTableService.TYPE_TABLE_DATA_ROW)) {
+            return "";
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        Map<QName, Serializable> properties = nodeService.getProperties(node);
+        for (Map.Entry<QName, Serializable> propertyEntry : properties.entrySet()) {
+            QName qName = propertyEntry.getKey();
+            if (qName.getNamespaceURI().equals(NamespaceService.SYSTEM_MODEL_1_0_URI)
+                    || qName.equals(ContentModel.PROP_CREATOR)
+                    || qName.equals(ContentModel.PROP_CREATED)
+                    || qName.equals(ContentModel.PROP_MODIFIER)
+                    || qName.equals(ContentModel.PROP_MODIFIED)
+                    || qName.getLocalName().endsWith("-text-content")
+                    || qName.getLocalName().endsWith("-ref")) {
+                continue;
+            }
+            PropertyDefinition propertyDefinition = dictionaryService.getProperty(qName);
+            if (propertyDefinition.isIndexed()) {
+                Serializable value = propertyEntry.getValue();
+                if (value != null)
+                    stringBuilder.append(value).append(" ");
+            }
+        }
+
+        return stringBuilder.length() > 0 ? stringBuilder.substring(0, stringBuilder.length() - 1) : "";
+    }
+
 }

@@ -53,7 +53,14 @@ public interface DocumentTableService {
 	 */
 	public NodeRef getDocumentByTableDataRow(NodeRef tableDataRowRef);
 
-	/**
+    /**
+     * Получения документа для табличных данных
+     * @param tableDataRef табличные данные
+     * @return документ
+     */
+    public NodeRef getDocumentByTableData(NodeRef tableDataRef);
+
+    /**
 	 * Получения табличных данных для строки
 	 * @param tableDataRowRef строка табличных данных
 	 * @return табличные данные

@@ -565,13 +565,6 @@
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
-	<bean  id="documentTableSearchPolicy" class="ru.it.lecm.documents.policy.DocumentTableSearchPolicy" parent="logicEcmAssociationPolicy"
-	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
-        <property name="substitudeService">
-            <ref bean="substitudeService"/>
-        </property>
-	</bean>
-
 	<bean id="documents.tableTotalRowCalculatorInitializer" abstract="true" class="ru.it.lecm.documents.TableTotalRowCalculatorInitializer" init-method="init">
 		<property name="documentTableService" ref="documentTableService"/>
 	</bean>
