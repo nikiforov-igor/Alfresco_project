@@ -64,7 +64,7 @@
 		<fieldDescription><![CDATA[Выдано важных поручений за период]]></fieldDescription>
 	</field>
 	<field name="Col_Count_Closed" class="java.lang.Integer">
-		<fieldDescription><![CDATA[Закрытых всего поручений за период]]></fieldDescription>
+		<fieldDescription><![CDATA[Закрыто всего поручений за период]]></fieldDescription>
 	</field>
 	<field name="Col_Count_Closed_important" class="java.lang.Integer">
 		<fieldDescription><![CDATA[Закрытых важных поручений за период]]></fieldDescription>
@@ -141,7 +141,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Закрытых всего поручений за период (их них важных)"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Закрыто всего поручений за период (их них важных)"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="1ede53b5-ccec-41e6-9dec-bff1bf22dd41" x="366" y="2" width="110" height="164" isPrintWhenDetailOverflows="true"/>

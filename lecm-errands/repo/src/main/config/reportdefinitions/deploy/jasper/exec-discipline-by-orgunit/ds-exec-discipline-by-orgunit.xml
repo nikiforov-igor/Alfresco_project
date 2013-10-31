@@ -152,11 +152,11 @@
         </field>
 
         <field alfrescoType="d:text"
-            displayName="Закрытых всего поручений за период"
+            displayName="Закрыто всего поручений за период"
             javaValueClass="java.lang.Integer"
             jrFldName="Col_Count_Closed" order="6" queryFldName="{{Col_Count_Closed}}">
             <l18>
-                <item key="RU_RU" value="Закрытых всего поручений за период"/>
+                <item key="RU_RU" value="Закрыто всего поручений за период"/>
             </l18>
         </field>
 
