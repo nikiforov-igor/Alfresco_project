@@ -21,7 +21,6 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,11 +30,7 @@ import java.util.Set;
  * Date: 18.10.13
  * Time: 14:24
  */
-public class DocumentTablePolicy extends BaseBean implements
-		NodeServicePolicies.OnAddAspectPolicy,
-		NodeServicePolicies.OnCreateAssociationPolicy,
-		NodeServicePolicies.OnDeleteAssociationPolicy,
-		NodeServicePolicies.BeforeDeleteNodePolicy {
+public class DocumentTablePolicy extends BaseBean {
 
 	final static protected Logger logger = LoggerFactory.getLogger(DocumentTablePolicy.class);
 
@@ -72,16 +67,19 @@ public class DocumentTablePolicy extends BaseBean implements
 
 	final public void init() {
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "onCreateAttachmentAssoc", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "onDeleteAttachmentAssoc", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
-				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "beforeDeleteNode"));
+				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "deleteTableDataRow"));
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "calculateTotalRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateChildAssociationPolicy.QNAME,
+				DocumentTableService.TYPE_TABLE_DATA, ContentModel.ASSOC_CONTAINS, new JavaBehaviour(this, "createTableDataAssoc", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+//		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+//				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "calculateTotalRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 //		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 //				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateTableDataRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -99,8 +97,7 @@ public class DocumentTablePolicy extends BaseBean implements
 	/**
 	 * Добавление связи при создании поручения на основании документа
 	 */
-	@Override
-	public void onCreateAssociation(AssociationRef associationRef) {
+	public void onCreateAttachmentAssoc(AssociationRef associationRef) {
 		NodeRef tableDataRowRef = associationRef.getSourceRef();
 		NodeRef attachmentRef = associationRef.getTargetRef();
 
@@ -140,20 +137,24 @@ public class DocumentTablePolicy extends BaseBean implements
 	 	return null;
 	}
 
-	@Override
-	public void onDeleteAssociation(AssociationRef associationRef) {
+	public void onDeleteAttachmentAssoc(AssociationRef associationRef) {
 		NodeRef documentTableDataRef = associationRef.getSourceRef();
 
 		removeAttachment(documentTableDataRef, associationRef);
 	}
 
-	@Override
-	public void beforeDeleteNode(NodeRef nodeRef) {
+	public void deleteTableDataRow(NodeRef nodeRef) {
 		List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
 		if (assocs != null) {
 			for (AssociationRef assoc: assocs) {
 				removeAttachment(nodeRef, assoc);
 			}
+		}
+
+		//Пересчёт результирующей строки
+		NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
+		if (tableData != null) {
+			documentTableService.recalculateTotalRows(tableData);
 		}
 	}
 
@@ -165,43 +166,50 @@ public class DocumentTablePolicy extends BaseBean implements
 		}
 	}
 
+	public void createTableDataAssoc(ChildAssociationRef childAssocRef) {
+		NodeRef tableData = childAssocRef.getParentRef();
+
+		//Пересчёт результирующей строки
+		documentTableService.recalculateTotalRows(tableData);
+	}
+
 	/**
 	 * Пересчёт результирующей строки при изменении одной из строк
 	 */
-	public void calculateTotalRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(nodeRef);
-		if (totalRows != null) {
-			AssociationRef documentAssoc = documentTableService.getDocumentAssocByTableData(nodeRef);
-			if (documentAssoc != null) {
-				NodeRef document = documentAssoc.getSourceRef();
-				if (document != null) {
-					QName tableDataType = nodeService.getType(nodeRef);
-					QName tableDataAssocType = documentAssoc.getTypeQName();
-					Set<QName> changedProperties = getChangedProperties(before, after, nodeService.getType(nodeRef));
+//	public void calculateTotalRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+//		List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(nodeRef);
+//		if (totalRows != null) {
+//			AssociationRef documentAssoc = documentTableService.getDocumentAssocByTableData(nodeRef);
+//			if (documentAssoc != null) {
+//				NodeRef document = documentAssoc.getSourceRef();
+//				if (document != null) {
+//					QName tableDataType = nodeService.getType(nodeRef);
+//					QName tableDataAssocType = documentAssoc.getTypeQName();
+//					Set<QName> changedProperties = getChangedProperties(before, after, nodeService.getType(nodeRef));
+//
+//					documentTableService.recalculateTotalRows(document, totalRows, tableDataType, tableDataAssocType, changedProperties);
+//				}
+//			}
+//		}
+//	}
 
-					documentTableService.recalculateTotalRows(document, totalRows, tableDataType, tableDataAssocType, changedProperties);
-				}
-			}
-		}
-	}
-
-	public Set<QName> getChangedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after, QName type) {
-		Set<QName> result = new HashSet<QName>();
-		TypeDefinition typeDefinition = dictionaryService.getType(type);
-		if (typeDefinition != null) {
-			Map<QName, PropertyDefinition> allProperties = typeDefinition.getProperties();
-			if (allProperties != null) {
-				for (QName property : allProperties.keySet()) {
-					Object prev = before.get(property);
-					Object cur = after.get(property);
-					if ((cur == null && prev != null) || (cur != null && !cur.equals(prev))) {
-						result.add(property);
-					}
-				}
-			}
-		}
-		return result;
-	}
+//	public Set<QName> getChangedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after, QName type) {
+//		Set<QName> result = new HashSet<QName>();
+//		TypeDefinition typeDefinition = dictionaryService.getType(type);
+//		if (typeDefinition != null) {
+//			Map<QName, PropertyDefinition> allProperties = typeDefinition.getProperties();
+//			if (allProperties != null) {
+//				for (QName property : allProperties.keySet()) {
+//					Object prev = before.get(property);
+//					Object cur = after.get(property);
+//					if ((cur == null && prev != null) || (cur != null && !cur.equals(prev))) {
+//						result.add(property);
+//					}
+//				}
+//			}
+//		}
+//		return result;
+//	}
 
 	/**
 	 * Выполнение действий после создания ассоциации между документом и строкой табличных данных
@@ -273,7 +281,6 @@ public class DocumentTablePolicy extends BaseBean implements
 //		}
 //	}
 
-	@Override
 	public void onAddAspect(NodeRef nodeRef, QName aspectTypeQName) {
    	    if (dictionaryService.isSubClass(aspectTypeQName, DocumentTableService.ASPECT_TABLE_DATA)) {
 	        AspectDefinition aspectDefinition = dictionaryService.getAspect(aspectTypeQName);
@@ -290,6 +297,8 @@ public class DocumentTablePolicy extends BaseBean implements
 
 				            NodeRef tableData = createNode(rootFolder, asscoClassName, nodeName, null);
 				            nodeService.createAssociation(nodeRef, tableData, assocName);
+
+				            documentTableService.createTotalRow(tableData);
 			            }
 		            }
 		        }

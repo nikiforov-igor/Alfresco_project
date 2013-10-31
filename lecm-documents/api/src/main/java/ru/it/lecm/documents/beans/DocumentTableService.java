@@ -19,6 +19,8 @@ public interface DocumentTableService {
 	public static final QName TYPE_TABLE_DATA_TOTAL_ROW = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataTotalRow");
 
     public static final QName PROP_INDEX_TABLE_ROW = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "indexTableRow");
+    public static final QName PROP_TABLE_ROW_TYPE = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataRowType");
+    public static final QName PROP_TABLE_TOTAL_ROW_TYPE = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataTotalRowType");
 
 	public static final QName ASPECT_TABLE_DATA = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataAspect");
 
@@ -54,48 +56,53 @@ public interface DocumentTableService {
 	public NodeRef getDocumentByTableDataRow(NodeRef tableDataRowRef);
 
 	/**
-	 * Получение
+	 * Получения табличных данных для строки
+	 * @param tableDataRowRef строка табличных данных
+	 * @return табличные данные
+	 */
+	public NodeRef getTableDataByRow(NodeRef tableDataRowRef);
+
+	/**
+	 * Получение результирующих строк
 	 * @param tableDataRef табличные данные
-	 * @return документ
+	 * @return результирующие строки
 	 */
 	public List<NodeRef> getTableDataTotalRows(NodeRef tableDataRef);
 
 	/**
-	 * Пересчёт результирующей строки данных
-	 * @param document документ
-	 * @param tableDataType тип табличных данных
-	 * @param tableDataAssocType тип ассоциации для табличных данных
-	 * @param createIfNotExist создать, если не существует
-	 * @return результирующие строки
-	 */
-	public List<NodeRef> getTableDataTotalRows(NodeRef document, QName tableDataType, QName tableDataAssocType, boolean createIfNotExist);
-
-	/**
-	 * Пересчёт результирующей строки данных
-	 * @param properties Список атрибутов для пересчёта, если null то будут пересчитаны все свойства
-	 * @param tableDataType тип табличных данных
-	 * @param tableDataAssocType тип ассоциации для табличных данных
-	 * @param row результирующая строка для обновления
-	 * @param document документ
-	 */
-	public void recalculateTotalRow(NodeRef document, NodeRef row, QName tableDataType, QName tableDataAssocType, Set<QName> properties);
-
-	/**
-	 * Пересчёт результирующей строки данных
-	 * @param properties Список атрибутов для пересчёта, если null то будут пересчитаны все свойства
-	 * @param tableDataType тип табличных данных
-	 * @param tableDataAssocType тип ассоциации для табличных данных
-	 * @param rows результирующие строки для обновления
-	 * @param document документ
-	 */
-	public void recalculateTotalRows(NodeRef document, List<NodeRef> rows, QName tableDataType, QName tableDataAssocType, Set<QName> properties);
-
-	/**
-	 * Получение ассоциации между документом и табличными данными
+	 * Получение строк табличных данных
 	 * @param tableDataRef табличные данные
-	 * @return ассоциация
+	 * @return строки
 	 */
-	public AssociationRef getDocumentAssocByTableData(NodeRef tableDataRef);
+	public List<NodeRef> getTableDataRows(NodeRef tableDataRef);
+
+	/**
+	 * Создание результирующей строки
+	 * @param tableDataRef табличные данные
+	 * @return результирующая строка
+	 */
+	public NodeRef createTotalRow(NodeRef tableDataRef);
+
+	/**
+	 * Пересчёт результирующей строки данных
+	 * @param tableDataRef табличные данные
+	 * @param row результирующая строка для обновления
+	 * @param properties Список атрибутов для пересчёта, если null то будут пересчитаны все свойства
+	 */
+	public void recalculateTotalRow(NodeRef tableDataRef, NodeRef row, Set<QName> properties);
+
+	/**
+	 * Пересчёт результирующей строки данных
+	 * @param tableDataRef табличные данные
+	 * @param properties Список атрибутов для пересчёта, если null то будут пересчитаны все свойства
+	 */
+	public void recalculateTotalRows(NodeRef tableDataRef, Set<QName> properties);
+
+	/**
+	 * Пересчёт результирующей строки данных
+	 * @param tableDataRef табличные данные
+	 */
+	public void recalculateTotalRows(NodeRef tableDataRef);
 
 	/**
 	 * Инициализация нового калькулятора
@@ -105,23 +112,14 @@ public interface DocumentTableService {
 	public void addCalculator(String postfix, TableTotalRowCalculator calculator);
 
     /**
-     * Получение списка табличных записей
-     * @param document документ
-     * @param tableDataAssocType  тип ассоциации для табличных данных
-     * @return списка табличных записей
-     */
-    public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType);
-
-    /**
      * Получение списка табличных записей начиная с определенного индекса
-     * @param document документ
-     * @param tableDataAssocType тип ассоциации для табличных данных
+     * @param tableDataRef табличные данные
      * @param beginIndex номер индекса
      * @return список табличных записей
      */
-    public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType, int beginIndex);
+    public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex);
 
-    public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType, int beginIndex, int endIndex);
+    public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex, int endIndex);
 
     public boolean isMoveTableRowUp(NodeRef tableRow, String assocTypeStr);
 

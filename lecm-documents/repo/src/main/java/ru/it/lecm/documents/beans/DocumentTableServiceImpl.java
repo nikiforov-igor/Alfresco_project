@@ -3,16 +3,13 @@ package ru.it.lecm.documents.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.namespace.RegexQNamePattern;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.TableTotalRowCalculator;
 import ru.it.lecm.security.LecmPermissionService;
@@ -100,8 +97,8 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 	@Override
 	public NodeRef getDocumentByTableDataRow(NodeRef tableDataRowRef) {
 		if (nodeService.exists(tableDataRowRef)) {
-			NodeRef tableDataRef = nodeService.getPrimaryParent(tableDataRowRef).getParentRef();
-			if (isDocumentTableData(tableDataRef)) {
+			NodeRef tableDataRef = getTableDataByRow(tableDataRowRef);
+			if (tableDataRef != null) {
 				NodeRef tableDataRoot = nodeService.getPrimaryParent(tableDataRef).getParentRef();
 				if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
 					NodeRef document = nodeService.getPrimaryParent(tableDataRoot).getParentRef();
@@ -114,20 +111,12 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		return null;
 	}
 
-	public AssociationRef getDocumentAssocByTableData(NodeRef tableDataRef) {
-		if (nodeService.exists(tableDataRef)) {
-			List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(tableDataRef, RegexQNamePattern.MATCH_ALL);
-			if (sourceAssocs != null && sourceAssocs.size() > 0) {
-				for (AssociationRef assoc: sourceAssocs) {
-					NodeRef document = assoc.getSourceRef();
-					if (document != null) {
-						QName testType = nodeService.getType(document);
-						Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
-						if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
-							return assoc;
-						}
-					}
-				}
+	@Override
+	public NodeRef getTableDataByRow(NodeRef tableDataRowRef) {
+		if (nodeService.exists(tableDataRowRef)) {
+			NodeRef tableDataRef = nodeService.getPrimaryParent(tableDataRowRef).getParentRef();
+			if (isDocumentTableData(tableDataRef)) {
+				return tableDataRef;
 			}
 		}
 		return null;
@@ -156,61 +145,94 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 
     @Override
 	public List<NodeRef> getTableDataTotalRows(NodeRef tableDataRef) {
-		AssociationRef documentAssoc = getDocumentAssocByTableData(tableDataRef);
-		if (documentAssoc != null) {
-			NodeRef document = documentAssoc.getSourceRef();
+	    QName totalRowType = getTableDataTotalRowType(tableDataRef);
+	    if (totalRowType != null) {
+		    Set<QName> totalTypes = new HashSet<QName>();
+		    totalTypes.add(totalRowType);
+		    List<ChildAssociationRef> totalRowsAssocs = nodeService.getChildAssocs(tableDataRef, totalTypes);
 
-			return getTableDataTotalRows(document, nodeService.getType(tableDataRef), documentAssoc.getTypeQName(), false);
-		}
+		    if (totalRowsAssocs != null) {
+			    List<NodeRef> result = new ArrayList<NodeRef>();
+			    for (ChildAssociationRef assoc: totalRowsAssocs) {
+					result.add(assoc.getChildRef());
+			    }
+			    return result;
+		    }
+	    }
 
 		return null;
 	}
 
 	@Override
-	public List<NodeRef> getTableDataTotalRows(NodeRef document, QName tableDataType, QName tableDataAssocType, boolean createIfNotExist) {
-		String tableDataAssocQName = tableDataAssocType.toPrefixString(namespaceService);
-		QName tableDataTotalAssocType = QName.createQName(tableDataAssocQName + DOCUMENT_TABLE_TOTAL_ASSOC_POSTFIX, namespaceService);
+	public List<NodeRef> getTableDataRows(NodeRef tableDataRef) {
+		QName totalRowType = getTableDataRowType(tableDataRef);
+		if (totalRowType != null) {
+			Set<QName> totalTypes = new HashSet<QName>();
+			totalTypes.add(totalRowType);
+			List<ChildAssociationRef> totalRowsAssocs = nodeService.getChildAssocs(tableDataRef, totalTypes);
 
-		AssociationDefinition assocDefinition = dictionaryService.getAssociation(tableDataTotalAssocType);
-		if (assocDefinition != null) {
-			List<AssociationRef> totalRowAssocs = nodeService.getTargetAssocs(document, tableDataTotalAssocType);
-			if (totalRowAssocs != null && totalRowAssocs.size() > 0) {
+			if (totalRowsAssocs != null) {
 				List<NodeRef> result = new ArrayList<NodeRef>();
-				for (AssociationRef assoc: totalRowAssocs) {
-					result.add(assoc.getTargetRef());
+				for (ChildAssociationRef assoc: totalRowsAssocs) {
+					result.add(assoc.getChildRef());
 				}
 				return result;
-			} else if (createIfNotExist) {
-				NodeRef totalRow = createNode(getRootFolder(document), assocDefinition.getTargetClass().getName(), null, null);
-				nodeService.createAssociation(document, totalRow, tableDataTotalAssocType);
-				recalculateTotalRow(document, totalRow, tableDataType, tableDataAssocType, null);
-				List<NodeRef> result = new ArrayList<NodeRef>();
-				result.add(totalRow);
-				return result;
 			}
+		}
+
+		return null;
+	}
+
+	public QName getTableDataRowType(NodeRef tableDataRef) {
+		String propType = (String) nodeService.getProperty(tableDataRef, PROP_TABLE_ROW_TYPE);
+		if (propType != null) {
+			return QName.createQName(propType, namespaceService);
+		}
+		return null;
+	}
+
+	public QName getTableDataTotalRowType(NodeRef tableDataRef) {
+		String propType = (String) nodeService.getProperty(tableDataRef, PROP_TABLE_TOTAL_ROW_TYPE);
+		if (propType != null) {
+			return QName.createQName(propType, namespaceService);
 		}
 		return null;
 	}
 
 	@Override
-	public void recalculateTotalRows(NodeRef document, List<NodeRef> rows, QName tableDataType, QName tableDataAssocType, Set<QName> properties) {
-		if (rows != null) {
-			for (NodeRef row: rows) {
-				recalculateTotalRow(document, row, tableDataType, tableDataAssocType, properties);
+	public NodeRef createTotalRow(NodeRef tableDataRef) {
+		QName totalRowType = getTableDataTotalRowType(tableDataRef);
+		if (totalRowType != null) {
+			return createNode(tableDataRef, totalRowType, null, null);
+		}
+		return null;
+	}
+
+	@Override
+	public void recalculateTotalRows(NodeRef tableDataRef) {
+		recalculateTotalRows(tableDataRef, null);
+	}
+
+	@Override
+	public void recalculateTotalRows(NodeRef tableDataRef, Set<QName> properties) {
+		List<NodeRef> totalRows = getTableDataTotalRows(tableDataRef);
+		if (totalRows != null) {
+			for (NodeRef row: totalRows) {
+				recalculateTotalRow(tableDataRef, row, properties);
 			}
 		}
 	}
 
 	@Override
-	public void recalculateTotalRow(NodeRef document, NodeRef row, QName tableDataType, QName tableDataAssocType, Set<QName> properties) {
+	public void recalculateTotalRow(NodeRef tableDataRef, NodeRef row, Set<QName> properties) {
 		if (row != null) {
 			if (properties == null) {
-				properties = getAllTypeProperties(tableDataType);
+				properties = getAllTypeProperties(getTableDataRowType(tableDataRef));
 			}
 			Set<QName> totalProperties = getAllTypeProperties(nodeService.getType(row));
 
 			if (totalProperties != null && properties != null) {
-				List<NodeRef> tableRows = getTableDataRows(document, tableDataAssocType);
+				List<NodeRef> tableRows = getTableDataRows(tableDataRef);
 				Map<NodeRef, Map<QName, Serializable>> tableRowsProperties = new HashMap<NodeRef, Map<QName, Serializable>>();
 
 				for (QName tableDataProperty: properties) {
@@ -276,23 +298,9 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		return null;
 	}
 
-	public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType) {
-		List<NodeRef> result = new ArrayList<NodeRef>();
-		if (tableDataAssocType != null) {
-			List<AssociationRef> tableRowsAssoc = nodeService.getTargetAssocs(document, tableDataAssocType);
-			if (tableRowsAssoc != null && tableRowsAssoc.size() > 0) {
-				result = new ArrayList<NodeRef>(tableRowsAssoc.size());
-				for (AssociationRef assoc: tableRowsAssoc) {
-					result.add(assoc.getTargetRef());
-				}
-			}
-		}
-		return result;
-	}
-
     @Override
-    public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType, int beginIndex) {
-        List<NodeRef> tableRows = getTableDataRows(document, tableDataAssocType);
+    public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex) {
+        List<NodeRef> tableRows = getTableDataRows(tableDataRef);
         List<NodeRef> result = new ArrayList<NodeRef>();
         String indexStr;
         int index;
@@ -311,8 +319,8 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
     }
 
     @Override
-    public List<NodeRef> getTableDataRows(NodeRef document, QName tableDataAssocType, int beginIndex, int endIndex) {
-        List<NodeRef> tableRows = getTableDataRows(document, tableDataAssocType, beginIndex);
+    public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex, int endIndex) {
+        List<NodeRef> tableRows = getTableDataRows(tableDataRef, beginIndex);
         List<NodeRef> result = new ArrayList<NodeRef>();
         String indexStr;
         int index;
@@ -339,32 +347,32 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
                 return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
                     @Override
                     public Boolean execute() throws Throwable {
-                        String indexStr;
-                        int endIndex, index;
-                        List<NodeRef> tableRows;
-                        indexStr = (String) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                        if (indexStr != null && !indexStr.equals("")) {
-                            endIndex = Integer.parseInt(indexStr);
-                            if (endIndex != 1) {
-                                NodeRef document = getDocumentByTableDataRow(tableRow);
-                                QName assocType = QName.createQName(assocTypeStr, namespaceService);
-                                tableRows = getTableDataRows(document, assocType, endIndex - 1, endIndex);
-                                if (tableRows.size() == 2) {
-                                    for (NodeRef row : tableRows) {
-                                        indexStr = (String) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                                        if (indexStr != null && !indexStr.equals("")) {
-                                            index = Integer.parseInt(indexStr);
-                                            if (index == endIndex) {
-                                                nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (endIndex - 1));
-                                            } else {
-                                                nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, endIndex);
-                                            }
-                                        }
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
+//                        String indexStr;
+//                        int endIndex, index;
+//                        List<NodeRef> tableRows;
+//                        indexStr = (String) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+//                        if (indexStr != null && !indexStr.equals("")) {
+//                            endIndex = Integer.parseInt(indexStr);
+//                            if (endIndex != 1) {
+//                                NodeRef document = getDocumentByTableDataRow(tableRow);
+//                                QName assocType = QName.createQName(assocTypeStr, namespaceService);
+//                                tableRows = getTableDataRows(document, assocType, endIndex - 1, endIndex);
+//                                if (tableRows.size() == 2) {
+//                                    for (NodeRef row : tableRows) {
+//                                        indexStr = (String) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+//                                        if (indexStr != null && !indexStr.equals("")) {
+//                                            index = Integer.parseInt(indexStr);
+//                                            if (index == endIndex) {
+//                                                nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (endIndex - 1));
+//                                            } else {
+//                                                nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, endIndex);
+//                                            }
+//                                        }
+//                                    }
+//                                    return true;
+//                                }
+//                            }
+//                        }
                         return false;
                     }
                 });
@@ -383,31 +391,31 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
                 return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
                     @Override
                     public Boolean execute() throws Throwable {
-                        String indexStr;
-                        int startIndex, index;
-                        List<NodeRef> tableRows;
-
-                        indexStr = (String) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                        if (indexStr != null && !indexStr.equals("")) {
-                            startIndex = Integer.parseInt(indexStr);
-                            NodeRef document = getDocumentByTableDataRow(tableRow);
-                            QName assocType = QName.createQName(assocTypeStr, namespaceService);
-                            tableRows = getTableDataRows(document, assocType, startIndex, startIndex + 1);
-                            if (tableRows.size() == 2) {
-                                for (NodeRef row : tableRows) {
-                                    indexStr = (String) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                                    if (indexStr != null && !indexStr.equals("")) {
-                                        index = Integer.parseInt(indexStr);
-                                        if (index == startIndex) {
-                                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (startIndex + 1));
-                                        } else {
-                                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, startIndex);
-                                        }
-                                    }
-                                }
-                                return true;
-                            }
-                        }
+//                        String indexStr;
+//                        int startIndex, index;
+//                        List<NodeRef> tableRows;
+//
+//                        indexStr = (String) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+//                        if (indexStr != null && !indexStr.equals("")) {
+//                            startIndex = Integer.parseInt(indexStr);
+//                            NodeRef document = getDocumentByTableDataRow(tableRow);
+//                            QName assocType = QName.createQName(assocTypeStr, namespaceService);
+//                            tableRows = getTableDataRows(document, assocType, startIndex, startIndex + 1);
+//                            if (tableRows.size() == 2) {
+//                                for (NodeRef row : tableRows) {
+//                                    indexStr = (String) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+//                                    if (indexStr != null && !indexStr.equals("")) {
+//                                        index = Integer.parseInt(indexStr);
+//                                        if (index == startIndex) {
+//                                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (startIndex + 1));
+//                                        } else {
+//                                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, startIndex);
+//                                        }
+//                                    }
+//                                }
+//                                return true;
+//                            }
+//                        }
                         return false;
                     }
                 });

@@ -55,13 +55,13 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
 
 		NodeRef documentRef = new NodeRef(documentNodeRef);
 		if (nodeService.exists(documentRef)) {
-			QName tableDataTypeQName = QName.createQName(tableDataType, namespaceService);
-			QName tableDataAssocTypeQName = QName.createQName(tableDataAssocType, namespaceService);
-
-			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataTypeQName, tableDataAssocTypeQName, false);
-			if (totalRows != null) {
-				return createScriptable(totalRows);
-			}
+//			QName tableDataTypeQName = QName.createQName(tableDataType, namespaceService);
+//			QName tableDataAssocTypeQName = QName.createQName(tableDataAssocType, namespaceService);
+//
+//			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataTypeQName, tableDataAssocTypeQName, false);
+//			if (totalRows != null) {
+//				return createScriptable(totalRows);
+//			}
 		}
 		return null;
 	}
