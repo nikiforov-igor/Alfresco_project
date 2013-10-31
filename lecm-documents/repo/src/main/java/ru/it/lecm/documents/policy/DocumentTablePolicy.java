@@ -163,21 +163,12 @@ public class DocumentTablePolicy extends BaseBean {
         } else {
             // Присвоение максимального индекса
             tableRowList = documentTableService.getTableDataRows(tableData);
+            index = 1;
             if (tableRowList != null) {
-                int maxIndex = 0;
-                for (NodeRef row : tableRowList) {
-                    indexStr = (String)nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                    if (indexStr != null && !indexStr.equals("")){
-                        index = Integer.parseInt(indexStr);
-                        if (maxIndex < index){
-                            maxIndex = index;
-                        }
-                    }
-                }
-                nodeService.setProperty(tableRow,DocumentTableService.PROP_INDEX_TABLE_ROW, maxIndex+1);
+                index = tableRowList.size() + 1;
             }
+            nodeService.setProperty(tableRow,DocumentTableService.PROP_INDEX_TABLE_ROW, index);
         }
-
 
         //Обновление данных для поиска
         addSearchDescription(tableData, childAssocRef.getChildRef());
