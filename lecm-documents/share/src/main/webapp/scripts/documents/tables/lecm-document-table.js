@@ -242,8 +242,16 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 								};
 								this.afterDataGridUpdate.push(fnAfterUpdate);
 
-								var recordsNum = this.widgets.dataTable.getRecordSet().getRecords().length - 1;
-								this.widgets.dataTable.addRow(item, recordsNum > 0 ? recordsNum : 0);
+								var records = this.widgets.dataTable.getRecordSet().getRecords();
+								if (records != null) {
+									for (var i = 0; i < records.length; i++) {
+										if (records[i].getData("type") == "total") {
+											this.widgets.dataTable.deleteRow(records[i]);
+										}
+									}
+								}
+								this.widgets.dataTable.addRow(item);
+								this.addFooter();
 							},
 							scope:this
 						},
