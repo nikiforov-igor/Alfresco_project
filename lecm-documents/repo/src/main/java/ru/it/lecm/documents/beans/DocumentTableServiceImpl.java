@@ -184,17 +184,21 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 	}
 
 	public QName getTableDataRowType(NodeRef tableDataRef) {
-		String propType = (String) nodeService.getProperty(tableDataRef, PROP_TABLE_ROW_TYPE);
-		if (propType != null) {
-			return QName.createQName(propType, namespaceService);
+		if (tableDataRef != null && nodeService.exists(tableDataRef)) {
+			String propType = (String) nodeService.getProperty(tableDataRef, PROP_TABLE_ROW_TYPE);
+			if (propType != null) {
+				return QName.createQName(propType, namespaceService);
+			}
 		}
 		return null;
 	}
 
 	public QName getTableDataTotalRowType(NodeRef tableDataRef) {
-		String propType = (String) nodeService.getProperty(tableDataRef, PROP_TABLE_TOTAL_ROW_TYPE);
-		if (propType != null) {
-			return QName.createQName(propType, namespaceService);
+		if (tableDataRef != null && nodeService.exists(tableDataRef)) {
+			String propType = (String) nodeService.getProperty(tableDataRef, PROP_TABLE_TOTAL_ROW_TYPE);
+			if (propType != null) {
+				return QName.createQName(propType, namespaceService);
+			}
 		}
 		return null;
 	}
