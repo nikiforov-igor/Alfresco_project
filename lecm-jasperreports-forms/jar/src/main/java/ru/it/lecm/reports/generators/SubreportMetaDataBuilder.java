@@ -183,6 +183,11 @@ public class SubreportMetaDataBuilder {
 				}
 				sr.setSourceListExpression(sourceLink);
 
+                // тип данных для вложенного списка полей должен быть указан как
+                // alfrescoType в колонке описания подотчёта ...
+                final String sourceType = parseSubreportLink(reportMainCol.getAlfrescoType());
+                sr.setSourceListType(sourceType);
+
 				// TODO: + beanClass, format, ifEmpty, delimiter
 
 				// тип колонки в основном отчёте, которая соот-вет подотчёту:
@@ -248,6 +253,11 @@ public class SubreportMetaDataBuilder {
 					, reportMainCol.getColumnName()));
 		}
 		srResult.setSourceListExpression(sourceLink);
+
+        // тип данных для вложенного списка полей должен быть указан как
+        // alfrescoType в колонке описания подотчёта ...
+        final String sourceType = parseSubreportLink(reportMainCol.getAlfrescoType());
+        srResult.setSourceListType(sourceType);
 
 		// TODO: + beanClass, format, ifEmpty, delimiter
 

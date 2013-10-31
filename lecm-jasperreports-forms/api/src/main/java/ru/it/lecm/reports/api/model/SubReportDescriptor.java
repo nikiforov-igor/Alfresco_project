@@ -44,6 +44,13 @@ public interface SubReportDescriptor extends ReportDescriptor
 	void setSourceListExpression(String expression);
 
 
+    /**
+     * @return тип вложенных объектов для подотчёта.
+     * <br/> Это QName в короткой форме
+     */
+    String getSourceListType();
+    void setSourceListType(String type);
+
 	/** 
 	 * Имя целевой колонки в основном НД. 
 	 * <br/> Её типом будет либо List<ObjectOfBeanClass>, либо строка, когда 

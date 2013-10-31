@@ -344,14 +344,13 @@ public class SubreportBuilder {
      * @return получить вложенный список у основного объекта и построить для
      *         него результат согласно текущему описателю {@link #subreport} в виде:
      *         <li>   строки, когда используется форматирование,
-     *         <li>   или List-а объектов типа {@link #subreport.beanClassName}
+     *         <li>   или List-а объектов типа #subreport.beanClassName
      */
     public Object buildSubreport(NodeRef docId) {
         final boolean usingFormat = subreport.isUsingFormat();
-        final QName qnAssoc = QName.createQName(subreport.getSourceListExpression(), getNameService());
 
-		/* получение ассоциированного списка ... */
-        final List<NodeRef> children = NodeUtils.findChildrenByAssoc(docId, qnAssoc, getNodeService());
+        /* получение ассоциированного списка ... */
+        List<NodeRef> children = getSubstService().getObjectsByTitle(docId, subreport.getSourceListExpression());
 
         if (children == null || children.isEmpty()) { // нет вложенных ...
             // если исопльзуется форматирование - вернуть его "пустую строку" ...
@@ -364,8 +363,17 @@ public class SubreportBuilder {
 		 */
         final List<Object> result = new ArrayList<Object>();
 
+        final String childType = subreport.getSourceListType();
+
         int i = 0;
         for (NodeRef childId : children) {
+            if (childType != null && !childType.isEmpty()) {
+                //фильтруем по типу
+                String currentType = getNodeService().getType(childId).toPrefixString(getNameService());
+                if (!currentType.equals(childType)) {
+                    continue;
+                }
+            }
             i++; // нумерация от единицы
             final Object item = makeSubItem(childId, String.valueOf(i));
             if (item != null) {

@@ -92,6 +92,7 @@ public class DSXMLProducer {
     public static final String XMLNODE_LIST_SUBREPORTS = "subreports";
     public static final String XMLNODE_SUBREPORT = "subreport";
     public static final String XMLNODE_SUBLIST_SOURCE = "sublist.source";
+    public static final String XMLNODE_SUBLIST_TYPE = "sublist.type";
     public static final String XMLNODE_SUBLIST_ITEM = "sublist.item";
 
     public static final String XMLATTR_SUBREPORT_NAME = "name";
@@ -574,6 +575,10 @@ public class DSXMLProducer {
         // save <list.source> as CDATA ... </>
         XmlHelper.xmlCreateCDataNode(doc, result, XMLNODE_SUBLIST_SOURCE, subreport.getSourceListExpression());
 
+        if (subreport.getSourceListType() != null) {
+            XmlHelper.xmlCreateCDataNode(doc, result, XMLNODE_SUBLIST_TYPE, subreport.getSourceListType());
+        }
+
         // save <list.item beanClass="...">
 
         final Element listItem = doc.createElement(XMLNODE_SUBLIST_ITEM);
@@ -618,6 +623,9 @@ public class DSXMLProducer {
 
         final String source = XmlHelper.findNodeChildValue(srcNodeSubreport, XMLNODE_SUBLIST_SOURCE);
         result.setSourceListExpression(Utils.trimmed(source));
+
+        final String type = XmlHelper.findNodeChildValue(srcNodeSubreport, XMLNODE_SUBLIST_TYPE);
+        result.setSourceListType(Utils.trimmed(type));
 
         if (Utils.isStringEmpty(result.getSourceListExpression()))
             logger.warn(String.format("(!?) Subreport '%s' xml-configured with empty association", result.getMnem()));

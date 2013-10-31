@@ -116,7 +116,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="30" splitType="Stretch">
+		<band height="580" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="d8bb2dda-1473-4a36-bbec-a69fcb797671" x="0" y="0" width="515" height="30"/>
 				<textElement textAlignment="Center">
@@ -124,12 +124,8 @@
 				</textElement>
 				<text><![CDATA[Досье договора]]></text>
 			</staticText>
-		</band>
-	</title>
-	<columnHeader>
-		<band height="550" splitType="Stretch">
 			<frame>
-				<reportElement uuid="5a3e780c-9614-4293-8855-5ca8b458ccb7" stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="50"/>
+				<reportElement uuid="5a3e780c-9614-4293-8855-5ca8b458ccb7" stretchType="RelativeToTallestObject" x="2" y="30" width="515" height="50"/>
 				<rectangle>
 					<reportElement uuid="7b142c8e-40c4-4a75-93cd-2836ca5bbbfd" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="50"/>
 				</rectangle>
@@ -153,7 +149,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="7b241a99-6466-46a9-b8fb-b705f79e8a6b" x="0" y="50" width="515" height="23"/>
+				<reportElement uuid="7b241a99-6466-46a9-b8fb-b705f79e8a6b" x="2" y="80" width="515" height="23"/>
 				<rectangle>
 					<reportElement uuid="916ca629-4206-416c-99fd-fd8943ab9a44" stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="23"/>
 				</rectangle>
@@ -173,7 +169,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="99219f5d-bb7f-499a-aa15-fbf96054ba8f" stretchType="RelativeToTallestObject" x="0" y="73" width="515" height="35"/>
+				<reportElement uuid="99219f5d-bb7f-499a-aa15-fbf96054ba8f" stretchType="RelativeToTallestObject" x="2" y="103" width="515" height="35"/>
 				<rectangle>
 					<reportElement uuid="e603b3ba-48df-478d-968b-04a9b99acf67" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="35"/>
 				</rectangle>
@@ -211,7 +207,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="a7e024c2-7c0d-4563-a908-2eabba6c267b" stretchType="RelativeToTallestObject" x="0" y="108" width="515" height="58"/>
+				<reportElement uuid="a7e024c2-7c0d-4563-a908-2eabba6c267b" stretchType="RelativeToTallestObject" x="2" y="138" width="515" height="58"/>
 				<rectangle>
 					<reportElement uuid="c99370f1-7f29-4257-8b2d-18b96277ae64" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="58"/>
 				</rectangle>
@@ -250,7 +246,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="d6ced645-048e-4cc3-8423-53cb60396192" stretchType="RelativeToTallestObject" x="0" y="166" width="515" height="85"/>
+				<reportElement uuid="d6ced645-048e-4cc3-8423-53cb60396192" stretchType="RelativeToTallestObject" x="2" y="196" width="515" height="85"/>
 				<rectangle>
 					<reportElement uuid="35055d85-4944-41f2-b516-7b5eb48542b4" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="85"/>
 				</rectangle>
@@ -287,7 +283,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="d0712646-b040-4393-b654-d247dcbaca20" x="0" y="251" width="515" height="23"/>
+				<reportElement uuid="d0712646-b040-4393-b654-d247dcbaca20" x="2" y="281" width="515" height="23"/>
 				<rectangle>
 					<reportElement uuid="c3c21fe9-1031-4045-9ccb-12ecac218345" stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="23"/>
 				</rectangle>
@@ -300,7 +296,7 @@
 				</staticText>
 			</frame>
 			<frame>
-				<reportElement uuid="9dd0cb7c-94cc-46c4-99df-ae69983b5551" stretchType="RelativeToTallestObject" x="0" y="274" width="515" height="116"/>
+				<reportElement uuid="9dd0cb7c-94cc-46c4-99df-ae69983b5551" stretchType="RelativeToTallestObject" x="2" y="304" width="515" height="116"/>
 				<rectangle>
 					<reportElement uuid="faf807a9-0dae-469d-9ad4-8f6c2b681bae" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="116"/>
 				</rectangle>
@@ -358,7 +354,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="9c82f862-228b-40dd-afde-fbc6af4de41f" stretchType="RelativeToTallestObject" x="0" y="390" width="515" height="23"/>
+				<reportElement uuid="9c82f862-228b-40dd-afde-fbc6af4de41f" stretchType="RelativeToTallestObject" x="2" y="420" width="515" height="23"/>
 				<rectangle>
 					<reportElement uuid="36352e62-ab07-4cee-9122-43aeaaeaa577" stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="23"/>
 				</rectangle>
@@ -380,7 +376,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="bebaa197-e9c3-493c-9ad5-08c0c794e1ee" stretchType="RelativeToTallestObject" x="0" y="413" width="515" height="85"/>
+				<reportElement uuid="bebaa197-e9c3-493c-9ad5-08c0c794e1ee" stretchType="RelativeToTallestObject" x="2" y="443" width="515" height="85"/>
 				<rectangle>
 					<reportElement uuid="3484b852-5367-46d1-b8a2-5be7d62cea03" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="85"/>
 				</rectangle>
@@ -418,7 +414,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="136656f0-20f8-477a-b7ad-7720cfdb4619" x="0" y="498" width="515" height="23"/>
+				<reportElement uuid="136656f0-20f8-477a-b7ad-7720cfdb4619" x="2" y="528" width="515" height="23"/>
 				<rectangle>
 					<reportElement uuid="8eb34e3c-3c38-4011-b135-1046e4ab7d58" stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="23"/>
 				</rectangle>
@@ -438,7 +434,7 @@
 				</textField>
 			</frame>
 		</band>
-	</columnHeader>
+	</title>
 	<detail>
 		<band height="21" splitType="Stretch">
 			<textField isBlankWhenNull="true">

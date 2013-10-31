@@ -450,14 +450,16 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         List<NodeRef> result = new ArrayList<NodeRef>();
         List<String> nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
         for (String param : nameParams) {
-            NodeRef assocRef = getAssocRefByFormatString(node, param);
-            result.add(assocRef != null ? assocRef : node);
+            List<NodeRef> assocsRef = getAssocsByFormatString(node, param);
+            if (assocsRef != null) {
+                result.addAll(assocsRef);
+            }
         }
         return result;
     }
 
-    private NodeRef getAssocRefByFormatString(NodeRef node, String field) {
-        NodeRef showNode = node;
+    private List<NodeRef> getAssocsByFormatString(NodeRef node, String field) {
+
         List<NodeRef> showNodes = new ArrayList<NodeRef>();
         List<String> transitions = new ArrayList<String>();
 
@@ -471,73 +473,84 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 transitions.add(field.substring(oldFirstIndex + 1, firstIndex));
             }
         }
+
+        final List<NodeRef> nextTransionNodes = new ArrayList<NodeRef>();
+        nextTransionNodes.add(node);
+
         for (String el : transitions) {
             Map<String, String> expressions = getExpression(el);
             if (!expressions.isEmpty()) {
                 el = el.substring(0, el.indexOf(OPEN_EXPRESSIONS_SYMBOL));
             }
-            if (el.indexOf(PARENT_SYMBOL) == 0) {
-                String assocType = el.replace(PARENT_SYMBOL, "");
-                if (!assocType.isEmpty()) {
-                    showNodes = findNodesByAssociationRef(showNode,
-                            QName.createQName(assocType, namespaceService), null, ASSOCIATION_TYPE.SOURCE);
-                    if (showNodes.isEmpty()) {
-                        logger.debug("Не удалось получить список Source ассоциаций для [" + showNode.toString() + "]");
-                        showNode = null;
-                        break;
+
+            Set<NodeRef> filteredResults = new HashSet<NodeRef>();
+
+            for (NodeRef nextNode : nextTransionNodes) {
+                if (el.indexOf(PARENT_SYMBOL) == 0) {
+                    String assocType = el.replace(PARENT_SYMBOL, "");
+                    if (!assocType.isEmpty()) {
+                        showNodes = findNodesByAssociationRef(nextNode,
+                                QName.createQName(assocType, namespaceService), null, ASSOCIATION_TYPE.SOURCE);
+                        if (showNodes.isEmpty()) {
+                            logger.debug("Не удалось получить список Source ассоциаций для [" + nextNode.toString() + "]");
+                            break;
+                        }
+                    } else {
+                        showNodes.add(nodeService.getPrimaryParent(nextNode).getParentRef());
                     }
                 } else {
-                    showNodes.add(nodeService.getPrimaryParent(showNode).getParentRef());
-                }
-            } else {
-                List<NodeRef> temps = findNodesByAssociationRef(showNode, QName.createQName(el, namespaceService), null, ASSOCIATION_TYPE.TARGET);
-                if (temps.isEmpty()) {
-                    List<ChildAssociationRef> childs = nodeService.getChildAssocs(showNode, QName.createQName(el, namespaceService), RegexQNamePattern.MATCH_ALL, false);
-                    for (ChildAssociationRef child : childs) {
-                        showNodes.add(child.getChildRef());
+                    List<NodeRef> temps = findNodesByAssociationRef(nextNode, QName.createQName(el, namespaceService), null, ASSOCIATION_TYPE.TARGET);
+                    if (temps.isEmpty()) {
+                        List<ChildAssociationRef> childs = nodeService.getChildAssocs(nextNode, QName.createQName(el, namespaceService), RegexQNamePattern.MATCH_ALL, false);
+                        for (ChildAssociationRef child : childs) {
+                            showNodes.add(child.getChildRef());
+                        }
+                        if (showNodes.isEmpty()) {
+                            logger.debug("Не удалось получить список Child ассоциаций для [" + nextNode.toString() + "]");
+                            break;
+                        }
+                    } else {
+                        showNodes.addAll(temps);
                     }
-                    if (showNodes.isEmpty()) {
-                        logger.debug("Не удалось получить список Child ассоциаций для [" + showNode.toString() + "]");
-                        showNode = null;
-                        break;
-                    }
-                } else {
-                    showNodes.addAll(temps);
                 }
-            }
-            if (!expressions.isEmpty()) {
-                boolean exist = false;
-                for (NodeRef nodeRef : showNodes) {
-                    boolean expressionsFalse = false;
-                    for (Map.Entry<String, String> entry : expressions.entrySet()) {
-                        Object currentPropertyValue =
-                                nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
-                        if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
-                                || !currentPropertyValue.toString().equals(entry.getValue())) {
-                            expressionsFalse = true;
+                if (!expressions.isEmpty()) {
+                    boolean exist = false;
+                    for (NodeRef nodeRef : showNodes) {
+                        boolean expressionsFalse = false;
+                        for (Map.Entry<String, String> entry : expressions.entrySet()) {
+                            Object currentPropertyValue =
+                                    nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
+                            if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
+                                    || !currentPropertyValue.toString().equals(entry.getValue())) {
+                                expressionsFalse = true;
+                                break;
+                            }
+                        }
+                        if (!isArchive(nodeRef) && !expressionsFalse) {
+                            filteredResults.add(nodeRef);
+                            exist = true;
                             break;
                         }
                     }
-                    if (!isArchive(nodeRef) && !expressionsFalse) {
-                        showNode = nodeRef;
-                        exist = true;
+                    if (!exist) {
+                        logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", nextNode, expressions));
                         break;
                     }
-                }
-                if (!exist) {
-                    logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
-                    showNode = null;
-                    break;
-                }
-            } else if (!showNodes.isEmpty()) {
-                for (NodeRef nodeRef : showNodes) {
-                    if (!isArchive(nodeRef)) {
-                        showNode = nodeRef;
+                } else if (!showNodes.isEmpty()) {
+                    for (NodeRef nodeRef : showNodes) {
+                        if (!isArchive(nodeRef)) {
+                            filteredResults.add(nodeRef);
+                        }
                     }
                 }
+                showNodes.clear();
             }
+
+            nextTransionNodes.clear();
+            nextTransionNodes.addAll(filteredResults);
+            filteredResults.clear();
         }
-        return showNode;
+        return nextTransionNodes;
     }
 
     public void setDocumentService(DocumentService documentService) {

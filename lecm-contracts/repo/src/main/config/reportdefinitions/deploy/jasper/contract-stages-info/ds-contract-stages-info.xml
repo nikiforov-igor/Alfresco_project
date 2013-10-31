@@ -41,9 +41,9 @@
 	<subreport name="stages" destColumnName="Col_Stages" >
 		<!-- ссылка на вложенные задачи -->
 		<sublist.source>
-			<![CDATA[lecm-contract-table-structure:stages-assoc]]>
+			<![CDATA[{lecm-contract-table-structure:stages-assoc/cm:contains/cm:name}]]>
 		</sublist.source>
-
+        <sublist.type><![CDATA[lecm-contract-table-structure:stage]]></sublist.type>
 		<sublist.item beanclass="ru.it.lecm.contracts.reports.wrappers.StageInfoBean">
 			<map>
 				<item key="name"> <![CDATA[lecm-contract-table-structure:name]]> </item>
