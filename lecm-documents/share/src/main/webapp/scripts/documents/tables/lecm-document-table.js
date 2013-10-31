@@ -220,7 +220,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 			}
 		},
 
-		onDataItemCreated:function DataGrid_onDataItemCreated(layer, args) {
+		onDataItemCreated:function (layer, args) {
 			var obj = args[1];
 			if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
 				var nodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
@@ -242,14 +242,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 								};
 								this.afterDataGridUpdate.push(fnAfterUpdate);
 
-								var records = this.widgets.dataTable.getRecordSet().getRecords();
-								if (records != null) {
-									for (var i = 0; i < records.length; i++) {
-										if (records[i].getData("type") == "total") {
-											this.widgets.dataTable.deleteRow(records[i]);
-										}
-									}
-								}
+								this.removeTotalRows();
 								this.widgets.dataTable.addRow(item);
 								this.addFooter();
 							},
@@ -265,6 +258,49 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 							scope:this
 						}
 					});
+			}
+		},
+
+		onDataItemsDeleted: function (layer, args)
+		{
+			var obj = args[1];
+			if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.items !== null))
+			{
+				var recordFound, el,
+					fnCallback = function(record)
+					{
+						return function DataGrid_onDataItemsDeleted_anim()
+						{
+							this.removeTotalRows();
+							this.widgets.dataTable.deleteRow(record);
+							this.addFooter();
+						};
+					};
+
+				for (var i = 0, ii = obj.items.length; i < ii; i++)
+				{
+					recordFound = this._findRecordByParameter(obj.items[i].nodeRef, "nodeRef");
+					if (recordFound !== null)
+					{
+						el = this.widgets.dataTable.getTrEl(recordFound);
+						Alfresco.util.Anim.fadeOut(el,
+							{
+								callback: fnCallback(recordFound),
+								scope: this
+							});
+					}
+				}
+			}
+		},
+
+		removeTotalRows: function() {
+			var records = this.widgets.dataTable.getRecordSet().getRecords();
+			if (records != null) {
+				for (var i = 0; i < records.length; i++) {
+					if (records[i].getData("type") == "total") {
+						this.widgets.dataTable.deleteRow(records[i]);
+					}
+				}
 			}
 		},
 
