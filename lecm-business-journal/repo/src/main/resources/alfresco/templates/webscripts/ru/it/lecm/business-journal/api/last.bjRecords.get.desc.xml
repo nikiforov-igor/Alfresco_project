@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Get Last BJ Records</shortname>
+	<description>Get Last BJ Records</description>
+	<url>/lecm/business-journal/api/last-records?count={count}&amp;includeArchive={includeArchive}</url>
+    <format default="text">extension</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

@@ -267,4 +267,6 @@ public interface BusinessJournalService {
 	boolean isBJEngineer();
 
     List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnLocalName, boolean sortAscending, boolean includeSecondary, boolean showInactive);
+
+    List<NodeRef>  getLastRecords(int maxRecordsCount, boolean includeFromArchive);
 }

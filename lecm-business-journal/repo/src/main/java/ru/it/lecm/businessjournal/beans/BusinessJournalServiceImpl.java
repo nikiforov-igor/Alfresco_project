@@ -798,6 +798,32 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
         return result;
     }
 
+    @Override
+    public List<NodeRef> getLastRecords(int maxRecordsCount, boolean includeFromArchive) {
+        List<NodeRef> records = new ArrayList<NodeRef>(100);
+        ResultSet results = null;
+        String query;
+        SearchParameters sp = new SearchParameters();
+
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+        query = "TYPE:\"" + TYPE_BR_RECORD.toString() + (!includeFromArchive ? "\" AND @lecm\\-dic\\:active: true " : "");
+        sp.addSort("@" + PROP_BR_RECORD_DATE.toString(), false);
+        sp.setQuery(query);
+        sp.setMaxItems(maxRecordsCount);
+        try {
+            results = searchService.query(sp);
+            for (ResultSetRow row : results) {
+                records.add(row.getNodeRef());
+            }
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+        }
+        return records;
+    }
+
     private boolean isLECMDocument(NodeRef document){
         QName testType = nodeService.getType(document);
         Collection<QName> subDocumentTypes = dicService.getSubTypes(TYPE_BASE_DOCUMENT, true);

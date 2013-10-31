@@ -1,7 +1,10 @@
 package ru.it.lecm.platform;
 
 import com.sun.management.OperatingSystemMXBean;
+import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.io.IOUtils;
@@ -25,8 +28,8 @@ import java.util.zip.ZipOutputStream;
 public class DiagnosticUtility {
     private static final transient Logger log = LoggerFactory.getLogger(DiagnosticUtility.class);
 
-    private final static String DIAGNOSTIC_LOG_FILENAME = File.separator + "utility-diagnostic-log.txt";
-    private final static String CONTROL_INFO_FILENAME = File.separator + "utility-control-log.txt";
+    private final static String DIAGNOSTIC_LOG_FILENAME = File.separator + "utility-diagnostic.log";
+    private final static String CONTROL_INFO_FILENAME = File.separator + "utility-control.log";
 
     private final static String LOGS_ARCHIVE_NAME = File.separator + "server-logs.zip";
     private final static String SHARED_CLASSES_ARCHIVE_NAME = File.separator + "server-shared-classes.zip";
@@ -34,6 +37,9 @@ public class DiagnosticUtility {
     private final static String SHARE_CONFIGS_ARCHIVE_NAME = File.separator + "share-configs.zip";
     private final static String TOMCAT_CONFIGS_ARCHIVE_NAME = File.separator + "tomcat-configs.zip";
     private final static String SOLR_CONFIGS_ARCHIVE_NAME = File.separator + "solr-configs.zip";
+
+    private final static String BJ_LOG_FILENAME = File.separator + "business-journal.csv";
+    private final static String GET_BJ_RECORDS_SCRIPT_URL = "/service/lecm/business-journal/api/last-records?count=1000&includeArchive=true";
 
     private final static String CONFIG_FILENAME = "utility-properties.cfg";
     private final static String ALFRESCO_GLOBAL_PROPERTIES = "alfresco-global.properties";
@@ -43,6 +49,7 @@ public class DiagnosticUtility {
     private final static DateFormat LOG_DATE_FMT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     final static private Map<String, String> config = new HashMap<String, String>();
+    final static Map<String, String> alfPropsMap = new HashMap<String, String>();
 
     final static StringBuilder logText = new StringBuilder();
     final static FileFinder finder = new FileFinder();
@@ -119,7 +126,6 @@ public class DiagnosticUtility {
             return result.toString();
         }
 
-        Map<String, String> alfPropsMap = new HashMap<String, String>();
         BufferedReader br = null;
         try {
             //инициализируем конфиг из файла
@@ -142,16 +148,6 @@ public class DiagnosticUtility {
         result.append("\n");
 
         //Нужные свойства
-        String alfrescoHost = alfPropsMap.get("alfresco.host");
-        String alfrescoPort = alfPropsMap.get("alfresco.port");
-        String alfrescoProtocol = alfPropsMap.get("alfresco.protocol");
-        String alfrescoContext = alfPropsMap.get("alfresco.context");
-
-        String shareHost = alfPropsMap.get("share.host");
-        String sharePort = alfPropsMap.get("share.port");
-        String shareProtocol = alfPropsMap.get("share.protocol");
-        String shareContext = alfPropsMap.get("share.context");
-
         String dbDriver = alfPropsMap.get("db.driver");
         String dbUser = alfPropsMap.get("db.username");
         String dbPass = alfPropsMap.get("db.password");
@@ -162,11 +158,8 @@ public class DiagnosticUtility {
         HttpClient httpclient = new HttpClient();
         httpclient.getParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 5000);
 
-        String requestURL1 = alfrescoProtocol + "://" + alfrescoHost + ":" + alfrescoPort;
-        String requestURL2 = alfrescoProtocol + "://localhost:" + alfrescoPort;
-
         result.append("Check Tomcat Server...").append("\n");
-        int requestTomcatStatus = sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, result);
+        int requestTomcatStatus = sendRequestToURL(httpclient, new String[]{concatAfrescoServerURL(), concatAfrescoLocalhostServerURL()}, result);
 
         result.append("Check Data Base Server...").append("\n");
         int requestDBStatus = checkDBConnection(dbDriver, dbUser, dbPass, dbName, dbUrl, result);
@@ -181,15 +174,11 @@ public class DiagnosticUtility {
 
         //request to alfresco
         result.append("Check Alfresco...").append("\n");
-        requestURL1 = alfrescoProtocol + "://" + alfrescoHost + ":" + alfrescoPort + "/" + alfrescoContext;
-        requestURL2 = alfrescoProtocol + "://localhost:" + alfrescoPort + "/" + alfrescoContext;
-        sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, result);
+        sendRequestToURL(httpclient, new String[]{concatAfrescoURL(), concatLocalhostAfrescoURL()}, result);
 
         //request to share
         result.append("Check Share...").append("\n");
-        requestURL1 = shareProtocol + "://" + shareHost + ":" + sharePort + "/" + shareContext;
-        requestURL2 = shareProtocol + "://localhost:" + sharePort + "/" + shareContext;
-        sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, result);
+        sendRequestToURL(httpclient, new String[]{concatShareURL(), concatLocalhostShareURL()}, result);
 
         //request to solr
         //result.append("Check Solr...").append("\n");
@@ -441,11 +430,8 @@ public class DiagnosticUtility {
                     try {
                         out.putNextEntry(new ZipEntry(name));
                         in = new FileInputStream(compressedFile);
-                        while (true) {
-                            int readCount = in.read(buffer);
-                            if (readCount < 0) {
-                                break;
-                            }
+                        int readCount;
+                        while ((readCount = in.read(buffer)) > 0) {
                             out.write(buffer, 0, readCount);
                         }
                         out.closeEntry();
@@ -477,7 +463,86 @@ public class DiagnosticUtility {
     }
 
     private static String collectBusinessJournalRecords() {
-        return "";
+        StringBuilder buffer = new StringBuilder();
+
+        HttpClient client = new HttpClient();
+        client.getParams().setAuthenticationPreemptive(true);
+
+        Credentials adminCredentials = new UsernamePasswordCredentials("admin", config.get(ADMIN_PASSWORD));
+        client.getState().setCredentials(AuthScope.ANY, adminCredentials);
+        String getRecordsScript = concatAfrescoURL() + GET_BJ_RECORDS_SCRIPT_URL;
+
+        createPhaseLogInformation(buffer, "Attempt to connect to URL " + getRecordsScript, null);
+
+        GetMethod httpGet = new GetMethod(getRecordsScript);
+
+        InputStream in = null;
+        OutputStream out = null;
+
+        int status = 500;
+        byte[] bytes = new byte[1024];
+        try {
+            File bjLogFile = new File(currentDirectoryPath + BJ_LOG_FILENAME);
+            if (!bjLogFile.exists()) {
+                bjLogFile.createNewFile();
+            }
+
+            httpGet.setDoAuthentication(true);
+
+            status = client.executeMethod(httpGet);
+
+            in = new BufferedInputStream(httpGet.getResponseBodyAsStream());
+
+            out = new BufferedOutputStream(new FileOutputStream(bjLogFile));
+
+            int readCount;
+            while ((readCount = in.read(bytes)) > 0) {
+                out.write(bytes, 0, readCount);
+            }
+            out.flush();
+        } catch (IOException e) {
+            log.error("", e);
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
+        }
+
+        createPhaseLogInformation(buffer, "Business journal log was " + (200 <=status && status <300 ? "" : "not")
+                + "written to file " + currentDirectoryPath + BJ_LOG_FILENAME, "STATUS CODE " + status);
+        return buffer.toString();
+    }
+
+    private static String concatAfrescoServerURL() {
+        return alfPropsMap.get("alfresco.protocol") + "://" +
+                alfPropsMap.get("alfresco.host") + ":" + alfPropsMap.get("alfresco.port");
+    }
+
+    private static String concatAfrescoLocalhostServerURL() {
+        return alfPropsMap.get("alfresco.protocol") + "://localhost:" + alfPropsMap.get("alfresco.port");
+    }
+
+    private static String concatAfrescoURL() {
+        return alfPropsMap.get("alfresco.protocol") + "://" +
+                alfPropsMap.get("alfresco.host") + ":" + alfPropsMap.get("alfresco.port") + "/" +
+                alfPropsMap.get("alfresco.context");
+    }
+
+    private static String concatLocalhostAfrescoURL() {
+        return alfPropsMap.get("alfresco.protocol") + "://localhost:" +
+                alfPropsMap.get("alfresco.port") + "/" +
+                alfPropsMap.get("alfresco.context");
+    }
+
+    private static String concatShareURL() {
+        return alfPropsMap.get("share.protocol") + "://" +
+                alfPropsMap.get("share.host") + ":" + alfPropsMap.get("share.port") + "/" +
+                alfPropsMap.get("share.context");
+    }
+
+    private static String concatLocalhostShareURL() {
+        return alfPropsMap.get("share.protocol") + "://localhost:" +
+                alfPropsMap.get("share.port") + "/" +
+                alfPropsMap.get("share.context");
     }
 
     private static String collectOrgstructureInfo() {
@@ -679,6 +744,7 @@ public class DiagnosticUtility {
     }
 
     private static void createPhaseFinishLogInformation(StringBuilder buffer, double numberOfPhase, String status, String resultMsg) {
+        log.info(resultMsg != null ? resultMsg : "");
         buffer.append("\n");
         buffer.append(LOG_DATE_FMT.format(new Date())).append(" ");
         buffer.append("PHASE ");
@@ -696,9 +762,11 @@ public class DiagnosticUtility {
         buffer.append("\n").append(LOG_DATE_FMT.format(new Date())).append(" ");
         if (titleMsg != null) {
             buffer.append(titleMsg).append("\n");
+            log.info(titleMsg + "\n");
         }
         if (infoMsg != null) {
             buffer.append(infoMsg).append("\n");
+            log.info(infoMsg + "\n");
         }
     }
 
@@ -720,7 +788,7 @@ public class DiagnosticUtility {
             } catch (Exception e) {
                 log.error("", e);
             } finally {
-                buffer.append("Send request to URL ").append(url).append(" STATUS ").append(requestStatus).append("\n");
+                buffer.append("Send request to URL ").append(url).append(" STATUS ").append(requestStatus).append("\n\n");
                 if (httpGet != null) {
                     httpGet.releaseConnection();
                 }
@@ -767,7 +835,7 @@ public class DiagnosticUtility {
                 log.error("", ex);
             }
         }
-        buffer.append("Send request to URL ").append(dbUrl).append(" STATUS ").append(requestDBStatus).append("\n");
+        buffer.append("Send request to URL ").append(requestURL).append(" STATUS ").append(requestDBStatus).append("\n\n");
         return requestDBStatus;
     }
 }

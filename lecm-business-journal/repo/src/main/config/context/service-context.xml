@@ -284,4 +284,16 @@
             </map>
         </property>
     </bean>
+
+    <bean id="webscript.ru.it.lecm.business-journal.api.last.bjRecords.get"
+          class="ru.it.lecm.businessjournal.script.ExportLastBJRecords"
+          parent="webscript"
+          depends-on="businessJournalService">
+        <property name="nodeService">
+            <ref bean="nodeService" />
+        </property>
+        <property name="businessJournalService">
+            <ref bean="businessJournalService" />
+        </property>
+    </bean>
 </beans>
