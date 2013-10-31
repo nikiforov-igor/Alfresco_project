@@ -783,17 +783,20 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                             if (response.json. isMoveUp == "true") {
                                 var me = response.config.scope;
                                 var rowId = response.serverResponse.argument.config.rowId;
-                                var numSelectItem = me.widgets.dataTable.getTrIndex(rowId);
 
-                                if (numSelectItem != 0){
-                                    var oDataRow1 = me.widgets.dataTable.getRecord(numSelectItem).getData();
-                                    var oDataRow2 = me.widgets.dataTable.getRecord(numSelectItem-1).getData();
+                                var oDataRow1 = me.widgets.dataTable.getRecord(rowId).getData();
+                                var index = eval(oDataRow1.itemData["prop_lecm-document_indexTableRow"].value);
 
-                                    me.widgets.dataTable.deleteRow(numSelectItem);
-                                    me.widgets.dataTable.deleteRow(numSelectItem-1);
+                                if (index != 1) {
+                                    var oDataRow2 = me.widgets.dataTable.getRecord(index-2).getData();
 
-                                    me.widgets.dataTable.addRow(oDataRow1, numSelectItem - 1);
-                                    me.widgets.dataTable.addRow(oDataRow2, numSelectItem);
+                                    // удаляем верхнюю запись
+                                    me.widgets.dataTable.deleteRow(index-1);
+                                    // так как в таблице стало на 1 запись меньше то удаляем с тем же индексом
+                                    me.widgets.dataTable.deleteRow(index-2);
+
+                                    me.widgets.dataTable.addRow(oDataRow1, index-2);
+                                    me.widgets.dataTable.addRow(oDataRow2, index-1);
 
                                     me._itemUpdate(oDataRow1.nodeRef);
                                     me._itemUpdate(oDataRow2.nodeRef);
@@ -824,23 +827,33 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                             if (response.json. isMoveDown == "true") {
                                 var me = response.config.scope;
                                 var rowId = response.serverResponse.argument.config.rowId;
-                                var numSelectItem = me.widgets.dataTable.getTrIndex(rowId);
 
                                 var count = me.widgets.dataTable.getRecordSet()._records.length;
-                                if (numSelectItem+1 < count){
+                                var oDataRow1 = me.widgets.dataTable.getRecord(rowId).getData();
+                                var index = eval(oDataRow1.itemData["prop_lecm-document_indexTableRow"].value);
+                                var moveDown = function(oDataRow1){
+                                    var oDataRow2 = me.widgets.dataTable.getRecord(index).getData();
 
-                                    var oDataRow1 = me.widgets.dataTable.getRecord(numSelectItem).getData();
-                                    var oDataRow2 = me.widgets.dataTable.getRecord(numSelectItem+1).getData();
+                                    me.widgets.dataTable.deleteRow(index);
+                                    me.widgets.dataTable.deleteRow(index-1);
 
-                                    me.widgets.dataTable.deleteRow(numSelectItem + 1);
-                                    me.widgets.dataTable.deleteRow(numSelectItem);
-
-                                    me.widgets.dataTable.addRow(oDataRow2, numSelectItem);
-                                    me.widgets.dataTable.addRow(oDataRow1, numSelectItem + 1);
+                                    me.widgets.dataTable.addRow(oDataRow2, index-1);
+                                    me.widgets.dataTable.addRow(oDataRow1, index);
 
                                     me._itemUpdate(oDataRow1.nodeRef);
                                     me._itemUpdate(oDataRow2.nodeRef);
                                 }
+
+                                if (me.widgets.dataTable.getRecord(count-1).getData().type=="total") {
+                                    if (index!=count) {
+                                        moveDown(oDataRow1);
+                                    }
+                                } else {
+                                    if (index < count) {
+                                        moveDown(oDataRow1);
+                                    }
+                                }
+
                             }
                         }
                     },
