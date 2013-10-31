@@ -48,20 +48,15 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
-	public Scriptable getTableTotalRow(String documentNodeRef, String tableDataType, String tableDataAssocType) {
-		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
-		ParameterCheck.mandatory("tableDataType", tableDataType);
-		ParameterCheck.mandatory("tableDataAssocType", tableDataAssocType);
+	public Scriptable getTableTotalRow(String tableDataRef) {
+		ParameterCheck.mandatory("tableDataRef", tableDataRef);
 
-		NodeRef documentRef = new NodeRef(documentNodeRef);
-		if (nodeService.exists(documentRef)) {
-//			QName tableDataTypeQName = QName.createQName(tableDataType, namespaceService);
-//			QName tableDataAssocTypeQName = QName.createQName(tableDataAssocType, namespaceService);
-//
-//			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataTypeQName, tableDataAssocTypeQName, false);
-//			if (totalRows != null) {
-//				return createScriptable(totalRows);
-//			}
+		NodeRef tableDataNodeRef = new NodeRef(tableDataRef);
+		if (nodeService.exists(tableDataNodeRef) && documentTableService.isDocumentTableData(tableDataNodeRef)) {
+			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(tableDataNodeRef);
+			if (totalRows != null) {
+				return createScriptable(totalRows);
+			}
 		}
 		return null;
 	}

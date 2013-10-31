@@ -64,14 +64,7 @@ LogicECM.module = LogicECM.module || {};
 								},
 								scope: this
 							},
-							failureCallback: {
-								fn: function (oResponse) {
-//									var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-//									this.widgets.dataTable.set("MSG_ERROR", response.message);
-//									this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-								},
-								scope: this
-							}
+							failureMessage: "message.failure"
 						});
 				}
 			},
@@ -152,6 +145,7 @@ LogicECM.module = LogicECM.module || {};
 					}).setMessages(this.options.messages);
 				}
 
+				datagrid.tableDataNodeRef = this.tableData.nodeRef;
 				datagrid.draw();
 			}
 		});
@@ -174,57 +168,56 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 	 * Augment prototype with main class implementation, ensuring overwrite is enabled
 	 */
 	YAHOO.lang.augmentObject(LogicECM.module.DocumentTableDataGrid.prototype, {
+		tableDataNodeRef: null,
+
 		addFooter: function() {
-//			if (this.documentRef != null && this.itemType != null && this.assocType != null) {
-//				var sUrl = sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/getTotalRows" +
-//					"?documentNodeRef=" + encodeURIComponent(this.documentRef) +
-//					"&tableDataType=" + encodeURIComponent(this.itemType) +
-//					"&tableDataAssocType=" + encodeURIComponent(this.assocType);
-//				Alfresco.util.Ajax.jsonGet(
-//					{
-//						url: sUrl,
-//						successCallback: {
-//							fn: function (response) {
-//								var oResults = response.json;
-//								if (oResults != null && oResults.length > 0) {
-//									var row = oResults[0];
-//									var item = {
-//										itemData: {},
-//										nodeRef: row.nodeRef,
-//										type: "total"
-//									};
-//
-//									var datagridColumns = this.datagridColumns;
-//									if (datagridColumns != null) {
-//										for (var i = 0; i < datagridColumns.length; i++) {
-//											var field = datagridColumns[i].name;
-//											var totalFields = Object.keys(row.itemData);
-//											for (var j = 0; j < totalFields.length; j++) {
-//												var totalField = totalFields[j];
-//												if (totalField.indexOf(field) == 0) {
-//													var value = row.itemData[totalField];
-//													item.itemData[datagridColumns[i].formsName] = {
-//														value: value,
-//														displayValue: value
-//													};
-//												}
-//											}
-//										}
-//									}
-//
-//									this.widgets.dataTable.addRow(item);
-//								}
-//							},
-//							scope: this
-//						},
-//						failureCallback: {
-//							fn: function (oResponse) {
-//
-//							},
-//							scope: this
-//						}
-//					});
-//			}
+			if (this.tableDataNodeRef != null) {
+				var sUrl = sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/getTotalRows?tableDataRef=" + encodeURIComponent(this.tableDataNodeRef);
+				Alfresco.util.Ajax.jsonGet(
+					{
+						url: sUrl,
+						successCallback: {
+							fn: function (response) {
+								var oResults = response.json;
+								if (oResults != null && oResults.length > 0) {
+									var row = oResults[0];
+									var item = {
+										itemData: {},
+										nodeRef: row.nodeRef,
+										type: "total"
+									};
+
+									var datagridColumns = this.datagridColumns;
+									if (datagridColumns != null) {
+										for (var i = 0; i < datagridColumns.length; i++) {
+											var field = datagridColumns[i].name;
+											var totalFields = Object.keys(row.itemData);
+											for (var j = 0; j < totalFields.length; j++) {
+												var totalField = totalFields[j];
+												if (totalField.indexOf(field) == 0) {
+													var value = row.itemData[totalField];
+													item.itemData[datagridColumns[i].formsName] = {
+														value: value,
+														displayValue: value
+													};
+												}
+											}
+										}
+									}
+
+									this.widgets.dataTable.addRow(item);
+								}
+							},
+							scope: this
+						},
+						failureCallback: {
+							fn: function (oResponse) {
+
+							},
+							scope: this
+						}
+					});
+			}
 		},
 
 		getRowFormater: function(elTr, oRecord) {
