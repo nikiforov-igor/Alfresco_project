@@ -772,7 +772,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
             Alfresco.util.Ajax.jsonRequest(
                 {
                     method: Alfresco.util.Ajax.GET,
-                    url: Alfresco.constants.PROXY_URI + "lecm/document/tables/api/moveTableRowUp?nodeRef=" + arguments[0].nodeRef + "&assocType=" + this.assocType,
+                    url: Alfresco.constants.PROXY_URI + "lecm/document/tables/api/moveTableRowUp?nodeRef=" + arguments[0].nodeRef,
                     successCallback: {
                         fn: function (response) {
                             if (response.json. isMoveUp == "true") {
@@ -813,7 +813,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
             Alfresco.util.Ajax.jsonRequest(
                 {
                     method: Alfresco.util.Ajax.GET,
-                    url: Alfresco.constants.PROXY_URI + "lecm/document/tables/api/moveTableRowDown?nodeRef=" + arguments[0].nodeRef + "&assocType=" + this.assocType,
+                    url: Alfresco.constants.PROXY_URI + "lecm/document/tables/api/moveTableRowDown?nodeRef=" + arguments[0].nodeRef,
                     successCallback: {
                         fn: function (response) {
                             if (response.json. isMoveDown == "true") {
@@ -873,9 +873,9 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     var numSelectItem = this.widgets.dataTable.getTrIndex(rowId);
                     var oDataRow = this.widgets.dataTable.getRecord(numSelectItem).getData();
                     if (oDataRow) {
-                        var tempIndexTag = Dom.get(this.id + "-createDetails_prop_lecm-document_tempIndexTableRow-added");
+                        var tempIndexTag = Dom.get(this.id + "-createDetails_lecm-document_IndexTableRow-added");
                         if (tempIndexTag) {
-                            tempIndexTag.value = oDataRow.nodeRef;
+                            tempIndexTag.value = numSelectItem+1;
                         }
                     }
                 };
@@ -924,6 +924,38 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                             scope:this
                         }
                     }).show();
+            }
+        },
+        _itemUpdate:function DataGrid_onDataItemCreated(nodeRef) {
+            if (this._hasEventInterest(this.bubblingLabel) && (this.nodeRef !== null)) {
+                var nodeRef = new Alfresco.util.NodeRef(nodeRef);
+                // Reload the node's metadata
+                Alfresco.util.Ajax.jsonPost(
+                    {
+                        url:Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + nodeRef.uri,
+                        dataObj:this._buildDataGridParams(),
+                        successCallback:{
+                            fn:function DataGrid_onDataItemCreated_refreshSuccess(response) {
+                                var me = response.config.successCallback.scope;
+                                YAHOO.Bubbling.fire("dataItemUpdated",
+                                    {
+                                        item: response.json.item,
+                                        bubblingLabel: me.options.bubblingLabel
+                                    });
+                            },
+                            scope:this
+                        },
+                        failureCallback:{
+                            fn:function DataGrid_onDataItemCreated_refreshFailure(response) {
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text:this.msg("message.details.failure")
+                                    });
+                            },
+                            scope:this
+                        },
+                        scope:this
+                    });
             }
         }
 	}, true)

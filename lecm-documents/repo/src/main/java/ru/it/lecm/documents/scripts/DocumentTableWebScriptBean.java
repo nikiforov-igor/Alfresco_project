@@ -4,7 +4,6 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -61,19 +60,17 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
-    public boolean onMoveTableRowUp(String tableNodeRef, String assocType) {
-        org.alfresco.util.ParameterCheck.mandatory("tableNodeRef", tableNodeRef);
-        org.alfresco.util.ParameterCheck.mandatory("assocType", assocType);
-        NodeRef tableRef = new NodeRef(tableNodeRef);
+    public boolean onMoveTableRowUp(String tableRowStr) {
+        org.alfresco.util.ParameterCheck.mandatory("tableRowStr", tableRowStr);
+        NodeRef tableRow = new NodeRef(tableRowStr);
 
-        return this.documentTableService.isMoveTableRowUp(tableRef, assocType);
+        return this.documentTableService.moveTableRowUp(tableRow);
     }
 
-    public boolean onMoveTableRowDown(String tableNodeRef, String assocType) {
-        org.alfresco.util.ParameterCheck.mandatory("tableNodeRef", tableNodeRef);
-        org.alfresco.util.ParameterCheck.mandatory("assocType", assocType);
-        NodeRef tableRef = new NodeRef(tableNodeRef);
+    public boolean onMoveTableRowDown(String tableRowStr) {
+        org.alfresco.util.ParameterCheck.mandatory("tableRowStr", tableRowStr);
+        NodeRef tableRow = new NodeRef(tableRowStr);
 
-        return this.documentTableService.isMoveTableRowDown(tableRef, assocType);
+        return this.documentTableService.moveTableRowDown(tableRow);
     }
 }

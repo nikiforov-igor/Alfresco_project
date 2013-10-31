@@ -1462,7 +1462,7 @@
                     <show id="lecm-contract-table-structure:status-assoc" />
                     <show id="lecm-contract-table-structure:responsible-assoc" />
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
-                    <show id="lecm-document:tempIndexTableRow" />
+                    <show id="lecm-document:indexTableRow" />
 
                 </field-visibility>
                 <appearance>
@@ -1482,7 +1482,7 @@
                             <control-param name="showUploadNewVersion">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:tempIndexTableRow" >
+                    <field id="lecm-document:indexTableRow" >
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                 </appearance>

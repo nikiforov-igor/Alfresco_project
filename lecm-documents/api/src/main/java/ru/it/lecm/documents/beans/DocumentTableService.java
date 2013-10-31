@@ -1,6 +1,5 @@
 package ru.it.lecm.documents.beans;
 
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.TableTotalRowCalculator;
@@ -118,10 +117,29 @@ public interface DocumentTableService {
      */
     public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex);
 
+    /**
+     * Получение списка табличных записей начиная с определенного индекса
+     * @param tableDataRef табличные данные
+     * @param beginIndex номер начального индекса
+     * @param endIndex номер конечного индекса
+     * @return список табличных записей
+     */
     public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex, int endIndex);
 
-    public boolean isMoveTableRowUp(NodeRef tableRow, String assocTypeStr);
+    /**
+     * Переместить запись вверх, присвоить текущей табличной записи номер предыдущей табличной записи,
+     * а предыдущей присвоить номер текущей
+     * @param tableRow строка табличных данных
+     * @return true или false
+     */
+    public boolean moveTableRowUp(NodeRef tableRow);
 
-    public boolean isMoveTableRowDown(NodeRef tableRow, String assocTypeStr);
+    /**
+     * Переместить запись вниз, присвоить текущей табличной записи номер следующей табличной записи,
+     * а следующей присвоить номер текущей
+     * @param tableRow строка табличных данных
+     * @return true или false
+     */
+    public boolean moveTableRowDown(NodeRef tableRow);
 
 }
