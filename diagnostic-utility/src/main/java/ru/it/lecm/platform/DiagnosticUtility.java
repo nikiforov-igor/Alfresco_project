@@ -3,9 +3,7 @@ package ru.it.lecm.platform;
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
-import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
@@ -51,6 +49,8 @@ public class DiagnosticUtility {
 
     private static String currentDirectoryPath = ".";
 
+    private static boolean isServerAvailable = false;
+
     public static void main(String[] args) {
         BasicConfigurator.configure();
         // считываем конфигурационный файл. сохраняем параметры в config
@@ -66,6 +66,7 @@ public class DiagnosticUtility {
         // более читаемая директория - файлы будем собирать туда
         currentDirectoryPath = currentDirectoryPath + File.separator + "utility-results-" + new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
         new File(currentDirectoryPath).mkdirs();
+
         //создаем диагностический файл и пишем в него инфу
         createDiagnosticFile();
 
@@ -172,7 +173,10 @@ public class DiagnosticUtility {
 
         if (requestTomcatStatus != 200 || requestDBStatus != 200) {
             result.append("Alfresco Server not started. Cannot send request to webapps").append("\n");
+            isServerAvailable = false;
             return result.toString();
+        } else {
+            isServerAvailable = true;
         }
 
         //request to alfresco
@@ -188,10 +192,10 @@ public class DiagnosticUtility {
         sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, result);
 
         //request to solr
-        result.append("Check Solr...").append("\n");
-        requestURL1 = alfrescoProtocol + "s://" + alfrescoHost + ":" + alfrescoPort + "/solr";
-        requestURL2 = alfrescoProtocol + "s://localhost:" + alfrescoPort + "/solr";
-        sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, result);
+        //result.append("Check Solr...").append("\n");
+        //requestURL1 = alfrescoProtocol + "s://" + alfrescoHost + ":" + alfrescoPort + "/solr";
+        //requestURL2 = alfrescoProtocol + "s://localhost:" + alfrescoPort + "/solr";
+        //sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, result);
 
         return result.toString();
     }
@@ -552,38 +556,49 @@ public class DiagnosticUtility {
                     append("-------------------------------------------------").
                     append("\n");
 
-            log.info("Start gathering information...");
-
             //Фаза 1 - Получение системных переменных и параметров сервера
             createStartPhaseLogInformation(logText, 1, "Get System Information\n");
-
             String systemInfoStr = collectSystemInformation(true);
             logText.append(systemInfoStr);
-
             createPhaseFinishLogInformation(logText, 1, systemInfoStr.length() > 0 ? "OK" : "FALSE", "");
+
+            writeToFile(out);
 
             //Фаза 2 - Сканирование файлов сервера
             createStartPhaseLogInformation(logText, 2, "Scanning Alfresco server files");
-
             logText.append(collectFiles());
-
             createPhaseFinishLogInformation(logText, 2, "OK", "");
+
+            writeToFile(out);
 
             //Фаза 3 - Проверка доступности сервера
             createStartPhaseLogInformation(logText, 3, "Check Server availability\n");
             logText.append(checkServer());
             createPhaseFinishLogInformation(logText, 3, "OK", "See log for details");
 
-            //Фаза 4 - Сбор информации из бизнес-журнала
-            logText.append(collectBusinessJournalRecords());
+            writeToFile(out);
 
-            out.print(logText.toString());
-            out.flush();
+            //Фаза 4 - Сбор информации из бизнес-журнала
+            if (isServerAvailable) {
+                createStartPhaseLogInformation(logText, 4, "Collect Business Journal information");
+                logText.append(collectBusinessJournalRecords());
+                createPhaseFinishLogInformation(logText, 4, "OK", "Collect Business Journal information finished");
+                writeToFile(out);
+            } else {
+                logText.append("Server is not available. Cannot collect business journal records.");
+                writeToFile(out);
+            }
         } catch (IOException ex) {
             throw new RuntimeException("Cannot save log!!!", ex);
         } finally {
             IOUtils.closeQuietly(out);
         }
+    }
+
+    private static void writeToFile(PrintWriter out) {
+        out.print(logText.toString());
+        out.flush();
+        logText.delete(0, logText.length()); // очищаем буфер
     }
 
     private static void createControlFile() {
@@ -610,7 +625,7 @@ public class DiagnosticUtility {
 
             //начало записи в лог
             //начало записи в лог
-            logText.delete(0, logText.length() - 1); // очищаем буфер
+            logText.delete(0, logText.length()); // очищаем буфер
 
             logText.append(LOG_DATE_FMT.format(new Date())).
                     append(" Start gathering information...").
@@ -623,22 +638,28 @@ public class DiagnosticUtility {
             //Фаза 1 - Получение системных переменных и параметров сервера
             //Фаза 1 - Получение системных переменных и параметров сервера
             createStartPhaseLogInformation(logText, 1, "Get System Information\n");
-
             String systemInfoStr = collectSystemInformation(false);
             logText.append(systemInfoStr);
-
             createPhaseFinishLogInformation(logText, 1, systemInfoStr.length() > 0 ? "OK" : "FALSE", "");
+
+            writeToFile(out);
 
             //Фаза 2 - Проверка доступности сервера
             createStartPhaseLogInformation(logText, 2, "Check Server availability\n");
             logText.append(checkServer());
             createPhaseFinishLogInformation(logText, 2, "OK", "See log for details");
+            writeToFile(out);
 
             //Фаза 3 - Сбор информации с сервисов
-            logText.append(collectOrgstructureInfo());
-
-            out.print(logText.toString());
-            out.flush();
+            if (isServerAvailable) {
+                createStartPhaseLogInformation(logText, 3, "Collect orgStructure information\n");
+                logText.append(collectOrgstructureInfo());
+                createPhaseFinishLogInformation(logText, 3, "OK", "Collect orgStructure information finished");
+                writeToFile(out);
+            } else {
+                logText.append("Server is not available. Cannot collect orgStructure information.");
+                writeToFile(out);
+            }
         } catch (IOException ex) {
             throw new RuntimeException("Cannot save log!!!", ex);
         } finally {

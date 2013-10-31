@@ -72,6 +72,7 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.12</version>
+            <scope>compile</scope>
         </dependency>
         <!--<dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -82,22 +83,8 @@
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
+            <scope>compile</scope>
         </dependency>
-        <!--<dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>8.2-504.jdbc3</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.26</version>
-        </dependency>-->
     </dependencies>
 
     <build>
@@ -109,7 +96,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>java.ru.it.lecm.platform.DiagnosticUtility</mainClass>
+                            <mainClass>ru.it.lecm.platform.DiagnosticUtility</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -123,7 +110,7 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-            <!--<plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <archive>
@@ -144,7 +131,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
