@@ -9,8 +9,6 @@
 <#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 <#assign bubblingId = containerId/>
 
-<#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
-
 <#assign showLabel = true>
 <#if params.showLabel?? &&  params.showLabel == "false">
     <#assign showLabel = false>
@@ -19,6 +17,11 @@
 <#assign attributeForShow = ""/>
 <#if params.attributeForShow??>
     <#assign attributeForShow = params.attributeForShow/>
+</#if>
+
+<#assign showCreateButton = true/>
+<#if field.control.params.showCreateBtn??>
+    <#assign showCreateButton = field.control.params.showCreateBtn/>
 </#if>
 
 <script type="text/javascript">//<![CDATA[
@@ -36,13 +39,14 @@
 				mode: "${form.mode?string}",
 				datagridHeight: ${params.height},
 				repeating: ${field.repeating?string},
-				disabled: ${disabled?string}
+				disabled: ${field.disabled?string}
 			});
 })();
 //]]></script>
 
 <div id="${toolbarId}">
 	<@comp.baseToolbar toolbarId true true false>
+        <#if showCreateButton>
 	    <div class="new-row">
 	        <span id="${toolbarId}-newRowButton" class="yui-button yui-push-button">
 	           <span class="first-child">
@@ -50,6 +54,7 @@
 	           </span>
 	        </span>
 	    </div>
+        </#if>
 	</@comp.baseToolbar>
 </div>
 
