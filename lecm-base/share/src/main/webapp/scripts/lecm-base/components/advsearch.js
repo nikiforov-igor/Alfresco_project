@@ -213,7 +213,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     this.performSearch(
                         {
                             searchConfig:sConfig,
-	                        searchNodes: this.datagridMeta.searchNodes,
+	                        searchNodes: me.dataGrid.datagridMeta.searchNodes,
                             searchShowInactive: me.dataGrid.options.searchShowInactive,
                             sort:me.dataGrid.datagridMeta.sort
                         });

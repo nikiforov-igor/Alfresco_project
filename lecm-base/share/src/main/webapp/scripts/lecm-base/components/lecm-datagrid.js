@@ -1185,7 +1185,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	                    }
 	                }
 
-	                var params = me.search.buildSearchParams(me.datagridMeta.nodeRef,
+	                var params = me.search.buildSearchParams(me.datagridMeta.nodeRef, null,
 	                    me.datagridMeta.itemType, sort, me.datagridMeta.searchConfig, me.dataRequestFields.join(","),
 	                    me.dataRequestNameSubstituteStrings.join(","), me.options.searchShowInactive, oState.pagination.recordOffset, successFilter);
 	                return YAHOO.lang.JSON.stringify(params);
