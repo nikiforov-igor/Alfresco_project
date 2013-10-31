@@ -21,6 +21,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -66,6 +67,23 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	final public void init() {
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnAddAspectPolicy.QNAME,
+				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onAddAspect", Behaviour.NotificationFrequency.FIRST_EVENT));
+
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateDocument", Behaviour.NotificationFrequency.FIRST_EVENT));
+
+
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "createTableDataRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "updatePropertiesOfTotalRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "deleteTableDataRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "onCreateAttachmentAssoc", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
@@ -73,25 +91,85 @@ public class DocumentTablePolicy extends BaseBean {
 				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "onDeleteAttachmentAssoc", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
-				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "deleteTableDataRow"));
+				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "beforeDeleteTableDataRow"));
+	}
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "createTableDataRow", Behaviour.NotificationFrequency.FIRST_EVENT));
+	public void onAddAspect(NodeRef nodeRef, QName aspectTypeQName) {
+		if (dictionaryService.isSubClass(aspectTypeQName, DocumentTableService.ASPECT_TABLE_DATA)) {
+			AspectDefinition aspectDefinition = dictionaryService.getAspect(aspectTypeQName);
+			Map<QName, AssociationDefinition> associations = aspectDefinition.getAssociations();
+			if (associations != null) {
+				for (AssociationDefinition assoc: associations.values()) {
+					QName assocName = assoc.getName();
+					ClassDefinition targetClass = assoc.getTargetClass();
+					if (targetClass != null) {
+						QName asscoClassName = targetClass.getName();
+						if (asscoClassName != null && dictionaryService.isSubClass(asscoClassName, DocumentTableService.TYPE_TABLE_DATA)) {
+							NodeRef rootFolder = documentTableService.getRootFolder(nodeRef);
 
-//		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-//				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "calculateTotalRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+							String nodeName = assoc.getTitle();
+							if (nodeName == null) {
+								nodeName = assocName.toPrefixString(namespaceService);
+							}
+							nodeName = FileNameValidator.getValidFileName(nodeName);
 
-//		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-//				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateTableDataRow", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-//
-//		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-//				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onDeleteTableDataRow", Behaviour.NotificationFrequency.FIRST_EVENT));
+							NodeRef tableData = createNode(rootFolder, asscoClassName, nodeName, null);
+							nodeService.createAssociation(nodeRef, tableData, assocName);
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnAddAspectPolicy.QNAME,
-				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onAddAspect", Behaviour.NotificationFrequency.FIRST_EVENT));
+							documentTableService.createTotalRow(tableData);
+						}
+					}
+				}
+			}
+		}
+	}
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateDocument", Behaviour.NotificationFrequency.FIRST_EVENT));
+	public void onCreateDocument(ChildAssociationRef childAssocRef) {
+		NodeRef document = childAssocRef.getChildRef();
+		Set<QName> aspects = nodeService.getAspects(document);
+		for (QName aspect: aspects) {
+			onAddAspect(document, aspect);
+		}
+	}
+
+	public void createTableDataRow(ChildAssociationRef childAssocRef) {
+		NodeRef tableData = childAssocRef.getParentRef();
+
+		//Пересчёт результирующей строки
+		documentTableService.recalculateTotalRows(tableData);
+	}
+
+	public void updatePropertiesOfTotalRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
+		if (tableData != null) {
+			Set<QName> changedProperties = getChangedProperties(before, after, nodeService.getType(nodeRef));
+			documentTableService.recalculateTotalRows(tableData, changedProperties);
+		}
+	}
+
+	public Set<QName> getChangedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after, QName type) {
+		Set<QName> result = new HashSet<QName>();
+		TypeDefinition typeDefinition = dictionaryService.getType(type);
+		if (typeDefinition != null) {
+			Map<QName, PropertyDefinition> allProperties = typeDefinition.getProperties();
+			if (allProperties != null) {
+				for (QName property : allProperties.keySet()) {
+					Object prev = before.get(property);
+					Object cur = after.get(property);
+					if ((cur == null && prev != null) || (cur != null && !cur.equals(prev))) {
+						result.add(property);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	public void deleteTableDataRow(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
+		NodeRef tableData = childAssocRef.getParentRef();
+
+		//Пересчёт результирующей строки
+		documentTableService.recalculateTotalRows(tableData);
 	}
 
 	/**
@@ -143,18 +221,12 @@ public class DocumentTablePolicy extends BaseBean {
 		removeAttachment(documentTableDataRef, associationRef);
 	}
 
-	public void deleteTableDataRow(NodeRef nodeRef) {
+	public void beforeDeleteTableDataRow(NodeRef nodeRef) {
 		List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
 		if (assocs != null) {
 			for (AssociationRef assoc: assocs) {
 				removeAttachment(nodeRef, assoc);
 			}
-		}
-
-		//Пересчёт результирующей строки
-		NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
-		if (tableData != null) {
-			documentTableService.recalculateTotalRows(tableData);
 		}
 	}
 
@@ -165,51 +237,6 @@ public class DocumentTablePolicy extends BaseBean {
 			documentAttachmentsService.deleteAttachment(assoc.getTargetRef());
 		}
 	}
-
-	public void createTableDataRow(ChildAssociationRef childAssocRef) {
-		NodeRef tableData = childAssocRef.getParentRef();
-
-		//Пересчёт результирующей строки
-		documentTableService.recalculateTotalRows(tableData);
-	}
-
-	/**
-	 * Пересчёт результирующей строки при изменении одной из строк
-	 */
-//	public void calculateTotalRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-//		List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(nodeRef);
-//		if (totalRows != null) {
-//			AssociationRef documentAssoc = documentTableService.getDocumentAssocByTableData(nodeRef);
-//			if (documentAssoc != null) {
-//				NodeRef document = documentAssoc.getSourceRef();
-//				if (document != null) {
-//					QName tableDataType = nodeService.getType(nodeRef);
-//					QName tableDataAssocType = documentAssoc.getTypeQName();
-//					Set<QName> changedProperties = getChangedProperties(before, after, nodeService.getType(nodeRef));
-//
-//					documentTableService.recalculateTotalRows(document, totalRows, tableDataType, tableDataAssocType, changedProperties);
-//				}
-//			}
-//		}
-//	}
-
-//	public Set<QName> getChangedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after, QName type) {
-//		Set<QName> result = new HashSet<QName>();
-//		TypeDefinition typeDefinition = dictionaryService.getType(type);
-//		if (typeDefinition != null) {
-//			Map<QName, PropertyDefinition> allProperties = typeDefinition.getProperties();
-//			if (allProperties != null) {
-//				for (QName property : allProperties.keySet()) {
-//					Object prev = before.get(property);
-//					Object cur = after.get(property);
-//					if ((cur == null && prev != null) || (cur != null && !cur.equals(prev))) {
-//						result.add(property);
-//					}
-//				}
-//			}
-//		}
-//		return result;
-//	}
 
 	/**
 	 * Выполнение действий после создания ассоциации между документом и строкой табличных данных
@@ -280,42 +307,4 @@ public class DocumentTablePolicy extends BaseBean {
 //            }
 //		}
 //	}
-
-	public void onAddAspect(NodeRef nodeRef, QName aspectTypeQName) {
-   	    if (dictionaryService.isSubClass(aspectTypeQName, DocumentTableService.ASPECT_TABLE_DATA)) {
-	        AspectDefinition aspectDefinition = dictionaryService.getAspect(aspectTypeQName);
-	        Map<QName, AssociationDefinition> associations = aspectDefinition.getAssociations();
-	        if (associations != null) {
-		        for (AssociationDefinition assoc: associations.values()) {
-			        QName assocName = assoc.getName();
-			        ClassDefinition targetClass = assoc.getTargetClass();
-		            if (targetClass != null) {
-			            QName asscoClassName = targetClass.getName();
-			            if (asscoClassName != null && dictionaryService.isSubClass(asscoClassName, DocumentTableService.TYPE_TABLE_DATA)) {
-				            NodeRef rootFolder = documentTableService.getRootFolder(nodeRef);
-
-				            String nodeName = assoc.getTitle();
-				            if (nodeName == null) {
-					            nodeName = assocName.toPrefixString(namespaceService);
-				            }
-				            nodeName = FileNameValidator.getValidFileName(nodeName);
-
-				            NodeRef tableData = createNode(rootFolder, asscoClassName, nodeName, null);
-				            nodeService.createAssociation(nodeRef, tableData, assocName);
-
-				            documentTableService.createTotalRow(tableData);
-			            }
-		            }
-		        }
-	        }
-        }
-	}
-
-	public void onCreateDocument(ChildAssociationRef childAssocRef) {
-		NodeRef document = childAssocRef.getChildRef();
-		Set<QName> aspects = nodeService.getAspects(document);
-		for (QName aspect: aspects) {
-			onAddAspect(document, aspect);
-		}
-	}
 }

@@ -25,7 +25,6 @@ public interface DocumentTableService {
 	public static final QName ASPECT_TABLE_DATA = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "tableDataAspect");
 
 	public static final String DOCUMENT_TABLES_ROOT_NAME = "Табличные данные";
-	public static final String DOCUMENT_TABLE_TOTAL_ASSOC_POSTFIX = "-total";
 
 	/**
 	 * Получение папки с табличными данными для документра
