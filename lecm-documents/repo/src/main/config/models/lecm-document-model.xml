@@ -188,7 +188,6 @@
 				</property>
 				<property name="lecm-document:tableDataTotalRowType">
 					<type>d:text</type>
-					<default>lecm-document:tableDataTotalRow</default>
 					<index enabled="false"/>
 				</property>
 			</properties>
