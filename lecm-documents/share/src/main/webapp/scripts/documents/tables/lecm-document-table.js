@@ -220,6 +220,46 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 			}
 		},
 
+		onDataItemCreated:function DataGrid_onDataItemCreated(layer, args) {
+			var obj = args[1];
+			if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
+				var nodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
+				// Reload the node's metadata
+				Alfresco.util.Ajax.jsonPost(
+					{
+						url:Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + nodeRef.uri,
+						dataObj:this._buildDataGridParams(),
+						successCallback:{
+							fn:function DataGrid_onDataItemCreated_refreshSuccess(response) {
+								this.versionable = response.json.versionable;
+								var item = response.json.item;
+								var fnAfterUpdate = function DataGrid_onDataItemCreated_refreshSuccess_fnAfterUpdate() {
+									var recordFound = this._findRecordByParameter(item.nodeRef, "nodeRef");
+									if (recordFound !== null) {
+										var el = this.widgets.dataTable.getTrEl(recordFound);
+										Alfresco.util.Anim.pulse(el);
+									}
+								};
+								this.afterDataGridUpdate.push(fnAfterUpdate);
+
+								var recordsNum = this.widgets.dataTable.getRecordSet().getRecords().length - 1;
+								this.widgets.dataTable.addRow(item, recordsNum > 0 ? recordsNum : 0);
+							},
+							scope:this
+						},
+						failureCallback:{
+							fn:function DataGrid_onDataItemCreated_refreshFailure(response) {
+								Alfresco.util.PopupManager.displayMessage(
+									{
+										text:this.msg("message.create.refresh.failure")
+									});
+							},
+							scope:this
+						}
+					});
+			}
+		},
+
 		getRowFormater: function(elTr, oRecord) {
 			if (oRecord.getData("type") == "total") {
 				YAHOO.util.Dom.addClass(elTr, 'total-row');
