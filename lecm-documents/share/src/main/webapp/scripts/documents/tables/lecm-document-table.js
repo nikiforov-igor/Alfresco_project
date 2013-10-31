@@ -50,7 +50,7 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			loadTableData: function() {
-				if (this.options.currentValue != null) {
+				if (this.options.currentValue != null && this.options.currentValue.length > 0) {
 					var sUrl = sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/getData?nodeRef=" + encodeURIComponent(this.options.currentValue);
 					Alfresco.util.Ajax.jsonGet(
 						{
