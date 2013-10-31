@@ -142,6 +142,9 @@
 			    <property name="lecm-document:tableDataTotalRowType">
 				    <default>lecm-contract-table-structure:stage-total</default>
 			    </property>
+			    <property name="lecm-document:pageSize">
+				    <default>5</default>
+			    </property>
 		    </overrides>
 	    </type>
     </types>

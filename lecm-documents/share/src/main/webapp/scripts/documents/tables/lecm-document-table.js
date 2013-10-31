@@ -141,7 +141,8 @@ LogicECM.module = LogicECM.module || {};
 						showOtherActionColumn: true,
 						showCheckboxColumn: false,
 						attributeForShow: this.options.attributeForShow,
-						repeating: this.options.repeating
+						repeating: this.options.repeating,
+						pageSize: this.tableData.pageSize
 					}).setMessages(this.options.messages);
 				}
 
