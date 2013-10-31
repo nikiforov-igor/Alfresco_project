@@ -857,7 +857,6 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
             if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
                 var destination = orgMetadata.nodeRef;
                 var itemType = orgMetadata.itemType;
-                var rowID = arguments[1].id;
 
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
@@ -870,12 +869,12 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                         Dom.addClass(contId, itemType.replace(":", "_") + "_edit");
                     }
                     var rowId = p_dialog.options.onSuccess.rowId;
-                    var numSelectItem = this.widgets.dataTable.getTrIndex(rowId);
-                    var oDataRow = this.widgets.dataTable.getRecord(numSelectItem).getData();
+                    var oDataRow = this.widgets.dataTable.getRecord(rowId);
                     if (oDataRow) {
                         var tempIndexTag = Dom.get(this.id + "-createDetails_prop_lecm-document_indexTableRow-added");
                         if (tempIndexTag) {
-                            tempIndexTag.value = numSelectItem+1;
+                            var index = eval(oDataRow.getData().itemData["prop_lecm-document_indexTableRow"].value);
+                            tempIndexTag.value = index+1;
                         }
                     }
                 };
