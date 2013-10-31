@@ -155,9 +155,7 @@ public class DocumentTablePolicy extends BaseBean {
                         indexStr = (String)nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
                         if (indexStr != null && !indexStr.equals("")){
                             index = Integer.parseInt(indexStr);
-                            if (!indexStr.equals("")){
-                                nodeService.setProperty(row,DocumentTableService.PROP_INDEX_TABLE_ROW, index+1);
-                            }
+                            nodeService.setProperty(row,DocumentTableService.PROP_INDEX_TABLE_ROW, index+1);
                         }
                     }
                 }
@@ -271,6 +269,27 @@ public class DocumentTablePolicy extends BaseBean {
 				removeAttachment(nodeRef, assoc);
 			}
 		}
+        //Персчет индексов
+        int index;
+        String indexStr;
+        NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
+        if (tableData != null) {
+            indexStr = (String)nodeService.getProperty(nodeRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
+            if (indexStr != null && !indexStr.equals("")){
+                index = Integer.parseInt(indexStr);
+                List<NodeRef> tableRowList = documentTableService.getTableDataRows(tableData, index+1);
+                if (tableRowList != null){
+                    //переприсвоение индексов
+                    for (NodeRef tableRow : tableRowList) {
+                        indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                        if (indexStr != null && !indexStr.equals("")){
+                            index = Integer.parseInt(indexStr);
+                            nodeService.setProperty(tableRow,DocumentTableService.PROP_INDEX_TABLE_ROW, index-1);
+                        }
+                    }
+                }
+            }
+        }
 	}
 
 	public void removeAttachment(NodeRef documentTableDataRef, AssociationRef assoc) {
@@ -280,74 +299,4 @@ public class DocumentTablePolicy extends BaseBean {
 			documentAttachmentsService.deleteAttachment(assoc.getTargetRef());
 		}
 	}
-
-	/**
-	 * Выполнение действий после создания ассоциации между документом и строкой табличных данных
-	 */
-//	public void onCreateTableDataRow(AssociationRef associationRef) {
-//		NodeRef documentRef = associationRef.getSourceRef();
-//		NodeRef documentTableDataRef = associationRef.getTargetRef();
-//
-//		if (documentTableService.isDocumentTableDataRow(documentTableDataRef)) {
-//			QName tableDataType = nodeService.getType(documentTableDataRef);
-//			QName tableDataAssocType = associationRef.getTypeQName();
-//			//Создание результирующей записи, если она ещё не была создана
-//			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataType, tableDataAssocType, true);
-//			documentTableService.recalculateTotalRows(documentRef, totalRows, tableDataType, tableDataAssocType, null);
-//            //Присвоение максимального индекса
-//            List<NodeRef> tableRowList = documentTableService.getTableDataRows(documentRef, tableDataAssocType);
-//            if (tableRowList != null) {
-//                int maxIndex = 0;
-//                int index;
-//                String indexStr;
-//                for (NodeRef tableRow : tableRowList) {
-//                    indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-//                    if (indexStr != null && !indexStr.equals("")){
-//                        index = Integer.parseInt(indexStr);
-//                        if (maxIndex < index){
-//                            maxIndex = index;
-//                        }
-//                    }
-//                }
-//                nodeService.setProperty(documentTableDataRef,DocumentTableService.PROP_INDEX_TABLE_ROW, maxIndex+1);
-//		    }
-//        }
-//	}
-
-	/**
-	 * Выполнение действий после удаления ассоциации между документом и строкой табличных данных
-	 */
-//	public void onDeleteTableDataRow(AssociationRef associationRef) {
-//		NodeRef documentRef = associationRef.getSourceRef();
-//		NodeRef documentTableDataRef = associationRef.getTargetRef();
-//
-//		if (documentTableService.isDocumentTableDataRow(documentTableDataRef)) {
-//			QName tableDataType = nodeService.getType(documentTableDataRef);
-//			QName tableDataAssocType = associationRef.getTypeQName();
-//
-//			//Пересчёт результирующих строк
-//			List<NodeRef> totalRows = documentTableService.getTableDataTotalRows(documentRef, tableDataType, tableDataAssocType, false);
-//			documentTableService.recalculateTotalRows(documentRef, totalRows, tableDataType, tableDataAssocType, null);
-//            //Персчет индексов
-//            int index;
-//            String indexStr;
-//            indexStr = (String)nodeService.getProperty(documentTableDataRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
-//            if (indexStr != null && !indexStr.equals("")){
-//                index = Integer.parseInt(indexStr);
-//                List<NodeRef> tableRowList = documentTableService.getTableDataRows(documentRef, tableDataAssocType, index+1);
-//                if (tableRowList != null){
-//                    //переприсвоение индексов
-//                    for (NodeRef tableRow : tableRowList) {
-//                        indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-//                        if (indexStr != null && !indexStr.equals("")){
-//                            index = Integer.parseInt(indexStr);
-//                            if (indexStr != null && !indexStr.equals("")){
-//                                nodeService.setProperty(tableRow,DocumentTableService.PROP_INDEX_TABLE_ROW, index-1);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//		}
-//	}
 }

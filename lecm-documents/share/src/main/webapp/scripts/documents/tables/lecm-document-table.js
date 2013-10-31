@@ -291,6 +291,10 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 							});
 					}
 				}
+                var object = {
+                    datagridMeta: this.datagridMeta
+                };
+                YAHOO.Bubbling.fire("activeGridChanged", object);
 			}
 		},
 
@@ -619,7 +623,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                 this._showVersionLabel(oData.itemData, oArgs.target.id);
             }
 
-            if (oData.type != "total") {
+            if ((oData != undefined) && (oData.type != "total")) {
                 // Inject the correct action elements into the actionsId element
                 if (elActions && !this.showingMoreActions) {
                     // Call through to get the row highlighted by YUI
