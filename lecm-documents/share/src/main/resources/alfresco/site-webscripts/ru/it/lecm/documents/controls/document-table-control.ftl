@@ -9,11 +9,6 @@
 <#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 <#assign bubblingId = containerId/>
 
-<#assign showLabel = true>
-<#if params.showLabel?? &&  params.showLabel == "false">
-    <#assign showLabel = false>
-</#if>
-
 <#assign attributeForShow = ""/>
 <#if params.attributeForShow??>
     <#assign attributeForShow = params.attributeForShow/>
@@ -63,14 +58,6 @@
 </div>
 
 <div class="form-field with-grid" id="${controlId}">
-    <#if showLabel>
-        <label for="${controlId}" style="white-space: nowrap; overflow: visible;">${field.label?html}:
-            <#if field.endpointMandatory!false || field.mandatory!false>
-                <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
-            </#if>
-        </label>
-    </#if>
-
 	<@grid.datagrid containerId false>
 	    <div style="display:none">
 	        <!-- Action Set "More..." container -->
