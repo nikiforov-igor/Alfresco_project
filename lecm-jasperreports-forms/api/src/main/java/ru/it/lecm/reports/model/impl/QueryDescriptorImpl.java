@@ -3,219 +3,204 @@ package ru.it.lecm.reports.model.impl;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
 import org.springframework.util.StringUtils;
 import ru.it.lecm.reports.api.model.QueryDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 
-public class QueryDescriptorImpl
-		extends MnemonicNamedItem
-		implements QueryDescriptor 
-{
-	private static final long serialVersionUID = 1L;
+public class QueryDescriptorImpl extends MnemonicNamedItem implements QueryDescriptor {
+    private static final long serialVersionUID = 1L;
 
-	private String text;
-	private int offset, limit, pgSize;
-	private boolean allVersions = true;
+    private String text;
+    private int offset, limit, pgSize;
+    private boolean allVersions = true;
 
-	// private String preferedNodeType;
-	private List<String> supportedNodeTypes;
+    private List<String> supportedNodeTypes;
 
-	private boolean emptyTypeMatchesAny = false;
+    @Override
+    public String getPreferedNodeType() {
+        // первый элемент из supportedNodeTypes
+        return (supportedNodeTypes == null || supportedNodeTypes.isEmpty()) ? null : supportedNodeTypes.get(0);
+    }
 
-	/** @return: true, если принимать свой пустой preferedNodeType за подходящий к ЛЮБОМУ внешнему,
-	 * false: по-умолчанию считать свой пустой тип не соот-щим НИЧКАКОМУ внешнему, кроме пустого.
-	 */
-	public boolean isEmptyTypeMatchesAny() {
-		return emptyTypeMatchesAny;
-	}
+    @Override
+    public void setPreferedNodeType(String value) {
+        List<String> newSupportedList = null;
+        if (value != null && value.length() > 0) {
+            final String[] items = value.split("\\s*[,;]\\s*");
+            if (items != null) {
+                newSupportedList = Arrays.asList(items);
+            }
+        }
+        this.setSupportedNodeTypes(newSupportedList);
+    }
 
-	/** true, если принимать пустой внешний тип за подходящий к preferedNodeType */
-	public void setEmptyTypeMatchesAny(boolean value) {
-		this.emptyTypeMatchesAny = value;
-	}
+    @Override
+    public List<String> getSupportedNodeTypes() {
+        return supportedNodeTypes;
+    }
 
-	@Override
-	public String getPreferedNodeType() {
-		// return preferedNodeType;
-		// первый элемент из supportedNodeTypes
-		return (supportedNodeTypes == null || supportedNodeTypes.isEmpty())
-				? null : supportedNodeTypes.get(0);
-	}
+    @Override
+    public void setSupportedNodeTypes(List<String> values) {
+        this.supportedNodeTypes = values;
+        if (this.supportedNodeTypes != null) { // отфильтруем и оставим только непустые
+            for (Iterator<String> ii = this.supportedNodeTypes.iterator(); ii.hasNext(); ) {
+                final String s = ii.next();
+                if (s == null || s.trim().length() == 0) {
+                    // убираем пустое
+                    ii.remove();
+                }
+            }
+        }
+    }
 
-	@Override
-	public void setPreferedNodeType(String value) {
-		// this.preferedNodeType = value;
-		List<String> newSupportedList = null;
-		if (value != null && value.length() > 0) {
-			final String[] items = value.split("\\s*[,;]\\s*");
-			if (items != null)
-				newSupportedList = Arrays.asList(items);
-		}
-		this.setSupportedNodeTypes(newSupportedList);
-	}
+    @Override
+    public String getText() {
+        return this.text;
+    }
 
-	@Override
-	public List<String> getSupportedNodeTypes() {
-		return supportedNodeTypes;
-	}
+    @Override
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	@Override
-	public void setSupportedNodeTypes(List<String> values) {
-		this.supportedNodeTypes = values;
-		if (this.supportedNodeTypes != null){ // отфильтруем и оставим только непустые
-			for( Iterator<String> ii = this.supportedNodeTypes.iterator(); ii.hasNext(); ) {
-				final String s = ii.next();
-				if (s == null || s.trim().length() == 0) // убираем пустое 
-					ii.remove();
-			}
-		}
-	}
+    @Override
+    public int getOffset() {
+        return this.offset;
+    }
 
-	@Override
-	public String getText() {
-		return this.text;
-	}
+    @Override
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
 
-	@Override
-	public void setText(String text) {
-		this.text = text;
-	}
+    @Override
+    public int getLimit() {
+        return this.limit;
+    }
 
-	@Override
-	public int getOffset() {
-		return this.offset;
-	}
+    @Override
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
 
-	@Override
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
+    @Override
+    public int getPgSize() {
+        return this.pgSize;
+    }
 
-	@Override
-	public int getLimit() {
-		return this.limit;
-	}
+    @Override
+    public void setPgSize(int pgSize) {
+        this.pgSize = pgSize;
+    }
 
-	@Override
-	public void setLimit(int limit) {
-		this.limit = limit;
-	}
+    @Override
+    public boolean isAllVersions() {
+        return this.allVersions;
+    }
 
-	@Override
-	public int getPgSize() {
-		return this.pgSize;
-	}
+    @Override
+    public void setAllVersions(boolean flag) {
+        this.allVersions = flag;
+    }
 
-	@Override
-	public void setPgSize(int pgSize) {
-		this.pgSize = pgSize;
-	}
+    @Override
+    public boolean isTypeSupported(String qname) {
+        final boolean isOuterEmpty = Utils.isStringEmpty(qname);
+        if (isOuterEmpty) {
+            // если проверяется пустой внешний тип - считаем что он подходит к любому внутреннему
+            return true;
+        }
 
-	@Override
-	public boolean isAllVersions() {
-		return this.allVersions;
-	}
+        final boolean isInnerEmpty = Utils.isStringEmpty(getPreferedNodeType());
+        if (isInnerEmpty) {
+            // если this-тип не заполнен -> считаем что он подходит к любому внутреннему
+            return true;
+        }
 
-	@Override
-	public void setAllVersions(boolean flag) {
-		this.allVersions = flag;
-	}
+        // здесь оба не пустые
 
-	@Override
-	public boolean isTypeSupported(String qname) {
+        if (getSupportedNodeTypes() == null) {
+            return false;
+        }
 
-		final boolean isOuterEmpty = Utils.isStringEmpty(qname);
-		if (isOuterEmpty) // если проверяется пустой внешний тип - считаем что он подходит к любому внутреннему
-			return true;
-
-		final boolean isInnerEmpty = Utils.isStringEmpty(getPreferedNodeType());
-		if (isInnerEmpty) 
-			// если this-тип не заполнен -> вернуть флажок "считать ли свой 
-			// пустой тип равным любому внешнему"
-			return isEmptyTypeMatchesAny(); 
-
-		// здесь оба не пустые 
-
-		if (getSupportedNodeTypes() == null)
-			return false;
-
-		for(String s : getSupportedNodeTypes()) {
-			if (s.equalsIgnoreCase(qname))
-				// совпадение типа (с точностью до регистра)
-				return true;
-		}
+        for (String s : getSupportedNodeTypes()) {
+            if (s.equalsIgnoreCase(qname)) {
+                // совпадение типа (с точностью до регистра)
+                return true;
+            }
+        }
 
 		/* точного соот-вия нет - проверяем вхождение */
-		// (NOTE: можно подумать, чтобы иметь набор SET<QName>)
-		// return getPreferedNodeType().toLowerCase().contains(qname.toLowerCase());
-		for(String s : getSupportedNodeTypes()) {
-			if (s.toLowerCase().contains(qname.toLowerCase()))
-				return true;
-		}
+        // (NOTE: можно подумать, чтобы иметь набор SET<QName>)
+        for (String s : getSupportedNodeTypes()) {
+            if (s.toLowerCase().contains(qname.toLowerCase())) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + limit;
-		result = prime * result + offset;
-		result = prime * result + pgSize;
-		result = prime * result + ((supportedNodeTypes == null) ? 0 : supportedNodeTypes.hashCode());
-		result = prime * result + ((text == null) ? 0 : text.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + limit;
+        result = prime * result + offset;
+        result = prime * result + pgSize;
+        result = prime * result + ((supportedNodeTypes == null) ? 0 : supportedNodeTypes.hashCode());
+        result = prime * result + ((text == null) ? 0 : text.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		final QueryDescriptorImpl other = (QueryDescriptorImpl) obj;
-		if (limit != other.limit)
-			return false;
-		if (offset != other.offset)
-			return false;
-		if (pgSize != other.pgSize)
-			return false;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final QueryDescriptorImpl other = (QueryDescriptorImpl) obj;
+        if (limit != other.limit)
+            return false;
+        if (offset != other.offset)
+            return false;
+        if (pgSize != other.pgSize)
+            return false;
 
-		if (this.supportedNodeTypes == null) {
-			if (other.supportedNodeTypes != null)
-				return false;
-		} else if (!Arrays.equals( this.supportedNodeTypes.toArray(), other.supportedNodeTypes.toArray())) {
-			return false;
-		}
+        if (this.supportedNodeTypes == null) {
+            if (other.supportedNodeTypes != null)
+                return false;
+        } else if (!Arrays.equals(this.supportedNodeTypes.toArray(), other.supportedNodeTypes.toArray())) {
+            return false;
+        }
 
-		if (text == null) {
-			if (other.text != null)
-				return false;
-		} else if (!text.equals(other.text))
-			return false;
+        if (text == null) {
+            if (other.text != null)
+                return false;
+        } else if (!text.equals(other.text))
+            return false;
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append( String.format( "QueryDescriptorImpl [ mnem '%s'", getMnem()) );
-		builder.append(", offset ").append(offset);
-		builder.append(", limit ").append(limit);
-		builder.append(", pgSize ").append(pgSize);
-		builder.append(", preferedNodeType ").append(getPreferedNodeType());
-		builder.append(", supportedNodeTypes ").append(
-				getSupportedNodeTypes() == null 
-						? "NULL"
-						: StringUtils.collectionToCommaDelimitedString(getSupportedNodeTypes())
-		);
-		builder.append( String.format( "\n\t\t\t<text>\n'%s'\n\t\t\t<text>", text) );
-		builder.append("\n\t\t]");
-		return builder.toString();
-	}
-
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("QueryDescriptorImpl [ mnem '%s'", getMnem()));
+        builder.append(", offset ").append(offset);
+        builder.append(", limit ").append(limit);
+        builder.append(", pgSize ").append(pgSize);
+        builder.append(", preferedNodeType ").append(getPreferedNodeType());
+        builder.append(", supportedNodeTypes ").append(
+                getSupportedNodeTypes() == null
+                        ? "NULL"
+                        : StringUtils.collectionToCommaDelimitedString(getSupportedNodeTypes())
+        );
+        builder.append(String.format("\n\t\t\t<text>\n'%s'\n\t\t\t<text>", text));
+        builder.append("\n\t\t]");
+        return builder.toString();
+    }
 }
