@@ -356,3 +356,13 @@ div.yui-panel.form-container .form-fields {
 .document-components-panel .alfresco-twister-actions .refresh:active {
     opacity: 1;
 }
+
+.lecm-document-content-ajax-loading {
+    background-image: url(/share/res/images/lecm-documents/ajax-loader.gif);
+    background-repeat: no-repeat;
+    width: 99%;
+    height: 40px;
+    margin: 3px;
+    background-position-x: center;
+}
+

@@ -32,7 +32,9 @@
                 </span>
             </h2>
 
-            <div id="${id}-formContainer"></div>
+            <div id="${id}-formContainer">
+                <div class="lecm-document-content-ajax-loading"></div>
+            </div>
 
         <script type="text/javascript">
             //variable is used for expanding dashlet. refactor it?

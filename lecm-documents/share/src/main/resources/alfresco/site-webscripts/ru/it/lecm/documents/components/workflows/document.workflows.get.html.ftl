@@ -33,7 +33,9 @@
             </h2>
 
             <div id="${id}-formContainer">
-                <div class="right-workflows-container" id="${id}-results"></div>
+                <div class="right-workflows-container" id="${id}-results">
+                    <div class="lecm-document-content-ajax-loading"></div>
+                </div>
 
                 <span id="${id}-right-more-link-container" style="display: none">
                     <div class="right-more-link-arrow" onclick="documentWorkflowsComponent.onExpand();"></div>

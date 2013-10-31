@@ -51,6 +51,8 @@
             </span>
         </div>
 
-        <div class="body scrollableList dashlet-body" id="${id}-results"></div>
+        <div class="body scrollableList dashlet-body" id="${id}-results">
+            <div class="lecm-document-content-ajax-loading"></div>
+        </div>
     </div>
 </#if>
