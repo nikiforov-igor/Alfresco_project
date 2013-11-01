@@ -835,6 +835,9 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 
                                     me.widgets.dataTable.addRow(oDataRow2, index);
                                     me.widgets.dataTable.addRow(oDataRow1, index+1);
+
+	                                me._itemUpdate(oDataRow1.nodeRef);
+	                                me._itemUpdate(oDataRow2.nodeRef);
                                 }
                             }
                         }
