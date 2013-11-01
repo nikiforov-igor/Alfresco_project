@@ -563,6 +563,8 @@
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
 	<bean id="documents.tableTotalRowCalculatorInitializer" abstract="true" class="ru.it.lecm.documents.TableTotalRowCalculatorInitializer" init-method="init">

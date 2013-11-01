@@ -5,6 +5,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -16,15 +17,14 @@ import org.alfresco.util.FileNameValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -40,6 +40,9 @@ public class DocumentTablePolicy extends BaseBean {
 	private DocumentAttachmentsService documentAttachmentsService;
 	protected NamespaceService namespaceService;
 	protected DictionaryService dictionaryService;
+	private BusinessJournalService businessJournalService;
+
+	private String lastTransactionId = "";
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -64,6 +67,10 @@ public class DocumentTablePolicy extends BaseBean {
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
+	}
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
 	}
 
 	final public void init() {
@@ -99,7 +106,7 @@ public class DocumentTablePolicy extends BaseBean {
 			AspectDefinition aspectDefinition = dictionaryService.getAspect(aspectTypeQName);
 			Map<QName, AssociationDefinition> associations = aspectDefinition.getAssociations();
 			if (associations != null) {
-				for (AssociationDefinition assoc: associations.values()) {
+				for (AssociationDefinition assoc : associations.values()) {
 					QName assocName = assoc.getName();
 					ClassDefinition targetClass = assoc.getTargetClass();
 					if (targetClass != null) {
@@ -127,57 +134,85 @@ public class DocumentTablePolicy extends BaseBean {
 	public void onCreateDocument(ChildAssociationRef childAssocRef) {
 		NodeRef document = childAssocRef.getChildRef();
 		Set<QName> aspects = nodeService.getAspects(document);
-		for (QName aspect: aspects) {
+		for (QName aspect : aspects) {
 			onAddAspect(document, aspect);
 		}
 	}
 
-    public void createTableDataRow(ChildAssociationRef childAssocRef) {
-        NodeRef tableData = childAssocRef.getParentRef();
-        NodeRef tableRow = childAssocRef.getChildRef();
+	public void createTableDataRow(ChildAssociationRef childAssocRef) {
+		NodeRef tableData = childAssocRef.getParentRef();
+		NodeRef tableRow = childAssocRef.getChildRef();
 
-        //Пересчёт результирующей строки
-        documentTableService.recalculateTotalRows(tableData);
-        Integer index;
-        List<NodeRef> tableRowList;
+		//Пересчёт результирующей строки
+		documentTableService.recalculateTotalRows(tableData);
+		Integer index;
+		List<NodeRef> tableRowList;
 
-        //Пересчет индекса строки
-        index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-        if (index != null) {
-            // Пересчет индекса с текущей строки
-            tableRowList = documentTableService.getTableDataRows(tableData, index);
-            if (tableRowList != null) {
-                //переприсвоение индексов
-                for (NodeRef row : tableRowList) {
-                    if (!tableRow.equals(row)) {
-                        index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                        nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, index + 1);
-                    }
-                }
-            }
-        } else {
-            // Присвоение максимального индекса
-            tableRowList = documentTableService.getTableDataRows(tableData);
-            index = 1;
-            if (tableRowList != null) {
-                index = tableRowList.size();
-            }
-            nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, index);
-        }
+		//Пересчет индекса строки
+		index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+		if (index != null) {
+			// Пересчет индекса с текущей строки
+			tableRowList = documentTableService.getTableDataRows(tableData, index);
+			if (tableRowList != null) {
+				//переприсвоение индексов
+				for (NodeRef row : tableRowList) {
+					if (!tableRow.equals(row)) {
+						index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+						nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, index + 1);
+					}
+				}
+			}
+		} else {
+			// Присвоение максимального индекса
+			tableRowList = documentTableService.getTableDataRows(tableData);
+			index = 1;
+			if (tableRowList != null) {
+				index = tableRowList.size();
+			}
+			nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, index);
+		}
 
-        //Обновление данных для поиска
-        addSearchDescription(tableData, childAssocRef.getChildRef());
+		//Обновление данных для поиска
+		addSearchDescription(tableData, childAssocRef.getChildRef());
+
+		//Логгирование в бизнес-журнал
+		NodeRef document = documentTableService.getDocumentByTableData(tableData);
+		if (document != null) {
+			List<String> objects = new ArrayList<String>();
+			objects.add(tableRow.toString());
+			objects.add(tableData.toString());
+			businessJournalService.log(document, EventCategory.ADD, "#initiator добавил запись #object1 в таблицу #object2 документа #mainobject", objects);
+		}
 	}
 
-
-
-    public void onUpdatePropertiesOfTableDataRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+	public void onUpdatePropertiesOfTableDataRow(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
 		if (tableData != null) {
 			Set<QName> changedProperties = getChangedProperties(before, after, nodeService.getType(nodeRef));
 			documentTableService.recalculateTotalRows(tableData, changedProperties);
-            //Обновление данных для поиска
-            recalculateSearchDescription(tableData);
+			//Обновление данных для поиска
+			recalculateSearchDescription(tableData);
+
+			//Логгирование в бизнес-журнал
+			if (before.size() == after.size()) {
+				NodeRef document = documentTableService.getDocumentByTableData(tableData);
+
+				if (document != null) {
+					logEditTableDataRow(document, tableData, nodeRef);
+				}
+			}
+		}
+	}
+
+	public void logEditTableDataRow(NodeRef document, NodeRef tableData, NodeRef tableDataRow) {
+		String transactionId = AlfrescoTransactionSupport.getTransactionId();
+		if (!this.lastTransactionId.equals(transactionId)) {
+			this.lastTransactionId = transactionId;
+
+			List<String> objects = new ArrayList<String>();
+			objects.add(tableDataRow.toString());
+			objects.add(tableData.toString());
+			businessJournalService.log(document, EventCategory.EDIT, "#initiator изменил запись #object1 в таблице #object2 документа #mainobject", objects);
 		}
 	}
 
@@ -204,8 +239,8 @@ public class DocumentTablePolicy extends BaseBean {
 
 		//Пересчёт результирующей строки
 		documentTableService.recalculateTotalRows(tableData);
-        //Обновление данных для поиска
-        recalculateSearchDescription(tableData);
+		//Обновление данных для поиска
+		recalculateSearchDescription(tableData);
 	}
 
 	/**
@@ -215,11 +250,12 @@ public class DocumentTablePolicy extends BaseBean {
 		NodeRef tableDataRowRef = associationRef.getSourceRef();
 		NodeRef attachmentRef = associationRef.getTargetRef();
 
-		String categoryName = getCategoryNameByTableDataRow(tableDataRowRef, associationRef.getTypeQName());
+		NodeRef document = documentTableService.getDocumentByTableDataRow(tableDataRowRef);
+		if (document != null) {
 
-		if (categoryName != null) {
-			NodeRef document = documentTableService.getDocumentByTableDataRow(tableDataRowRef);
-			if (document != null) {
+			String categoryName = getCategoryNameByTableDataRow(tableDataRowRef, associationRef.getTypeQName());
+
+			if (categoryName != null) {
 				NodeRef categoryRef = documentAttachmentsService.getCategory(categoryName, document);
 				//категории могли быть ещё не созданы,
 				// тогда они создаются и заново пытаемся получить категорию
@@ -229,10 +265,16 @@ public class DocumentTablePolicy extends BaseBean {
 				}
 
 				if (categoryRef != null) {
-					String name = nodeService.getProperty (attachmentRef, ContentModel.PROP_NAME).toString ();
-					QName assocQname = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, name);
+					String name = nodeService.getProperty(attachmentRef, ContentModel.PROP_NAME).toString();
+					QName assocQname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
 					nodeService.moveNode(attachmentRef, categoryRef, ContentModel.ASSOC_CONTAINS, assocQname);
 				}
+			}
+
+			//Логгирование в бизнес-журнал
+			NodeRef tableData = documentTableService.getTableDataByRow(tableDataRowRef);
+			if (tableData != null) {
+				logEditTableDataRow(document, tableData, tableDataRowRef);
 			}
 		}
 	}
@@ -248,36 +290,54 @@ public class DocumentTablePolicy extends BaseBean {
 				return (String) categoryName;
 			}
 		}
-	 	return null;
+		return null;
 	}
 
 	public void onDeleteAttachmentAssoc(AssociationRef associationRef) {
-		NodeRef documentTableDataRef = associationRef.getSourceRef();
+		NodeRef tableDataRow = associationRef.getSourceRef();
 
-		removeAttachment(documentTableDataRef, associationRef);
+		removeAttachment(tableDataRow, associationRef);
+
+		//Логгирование в бизнес-журнал
+		NodeRef tableData = documentTableService.getTableDataByRow(tableDataRow);
+		if (tableData != null) {
+			NodeRef document = documentTableService.getDocumentByTableData(tableData);
+			if (document != null) {
+				logEditTableDataRow(document, tableData, tableDataRow);
+			}
+		}
 	}
 
-    public void beforeDeleteTableDataRow(NodeRef nodeRef) {
-        List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
-        if (assocs != null) {
-            for (AssociationRef assoc : assocs) {
-                removeAttachment(nodeRef, assoc);
-            }
-        }
-        //Пересчёт индексов
-        int index;
-        NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
-        if (tableData != null) {
-            index = (Integer) nodeService.getProperty(nodeRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
-            List<NodeRef> tableRowList = documentTableService.getTableDataRows(tableData, index + 1);
-            if (tableRowList != null) {
-                //переприсвоение индексов
-                for (NodeRef tableRow : tableRowList) {
-                    index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                    nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, index - 1);
-                }
-            }
-        }
+	public void beforeDeleteTableDataRow(NodeRef nodeRef) {
+		List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+		if (assocs != null) {
+			for (AssociationRef assoc : assocs) {
+				removeAttachment(nodeRef, assoc);
+			}
+		}
+		//Пересчёт индексов
+		int index;
+		NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
+		if (tableData != null) {
+			index = (Integer) nodeService.getProperty(nodeRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
+			List<NodeRef> tableRowList = documentTableService.getTableDataRows(tableData, index + 1);
+			if (tableRowList != null) {
+				//переприсвоение индексов
+				for (NodeRef tableRow : tableRowList) {
+					index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+					nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, index - 1);
+				}
+			}
+
+			//Логгирование в бизнес-журнал
+			NodeRef document = documentTableService.getDocumentByTableData(tableData);
+			if (document != null) {
+				List<String> objects = new ArrayList<String>();
+				objects.add(nodeRef.toString());
+				objects.add(tableData.toString());
+				businessJournalService.log(document, EventCategory.DELETE, "#initiator удалил запись #object1 в таблице #object2 документа #mainobject", objects);
+			}
+		}
 	}
 
 	public void removeAttachment(NodeRef documentTableDataRef, AssociationRef assoc) {
@@ -288,82 +348,82 @@ public class DocumentTablePolicy extends BaseBean {
 		}
 	}
 
-    private void addSearchDescription(NodeRef tableData, NodeRef tableDataRow) {
-        NodeRef document = documentTableService.getDocumentByTableData(tableData);
-        QName documentTableTextContentProperty = getDocumentTableTextContentProperty(tableData);
-        if (documentTableTextContentProperty != null) {
-            Serializable oldValue = nodeService.getProperty(document, documentTableTextContentProperty);
-            StringBuilder strOldValue = new StringBuilder(oldValue != null ? oldValue.toString() : "");
-            String strNewValue = getDataRowContent(tableDataRow);
-            if (!strNewValue.isEmpty() && strOldValue.indexOf(strNewValue) != -1) {
-                strOldValue.append(strNewValue).append(";");
-            }
-            nodeService.setProperty(document, documentTableTextContentProperty, strOldValue.toString());
-        }
-    }
+	private void addSearchDescription(NodeRef tableData, NodeRef tableDataRow) {
+		NodeRef document = documentTableService.getDocumentByTableData(tableData);
+		QName documentTableTextContentProperty = getDocumentTableTextContentProperty(tableData);
+		if (documentTableTextContentProperty != null) {
+			Serializable oldValue = nodeService.getProperty(document, documentTableTextContentProperty);
+			StringBuilder strOldValue = new StringBuilder(oldValue != null ? oldValue.toString() : "");
+			String strNewValue = getDataRowContent(tableDataRow);
+			if (!strNewValue.isEmpty() && strOldValue.indexOf(strNewValue) != -1) {
+				strOldValue.append(strNewValue).append(";");
+			}
+			nodeService.setProperty(document, documentTableTextContentProperty, strOldValue.toString());
+		}
+	}
 
-    private void recalculateSearchDescription(NodeRef tableData) {
-        StringBuilder builder = new StringBuilder();
-        NodeRef document = documentTableService.getDocumentByTableData(tableData);
-        QName documentTableTextContentProperty = getDocumentTableTextContentProperty(tableData);
-        if (documentTableTextContentProperty != null) {
-            List<NodeRef> tableDataRows = documentTableService.getTableDataRows(tableData);
-            for (NodeRef tableDataRow : tableDataRows) {
-                if (tableDataRow != null) {
-                    builder.append(getDataRowContent(tableDataRow)).append(";");
-                }
-            }
-            nodeService.setProperty(document, documentTableTextContentProperty, builder.toString());
-        }
-    }
+	private void recalculateSearchDescription(NodeRef tableData) {
+		StringBuilder builder = new StringBuilder();
+		NodeRef document = documentTableService.getDocumentByTableData(tableData);
+		QName documentTableTextContentProperty = getDocumentTableTextContentProperty(tableData);
+		if (documentTableTextContentProperty != null) {
+			List<NodeRef> tableDataRows = documentTableService.getTableDataRows(tableData);
+			for (NodeRef tableDataRow : tableDataRows) {
+				if (tableDataRow != null) {
+					builder.append(getDataRowContent(tableDataRow)).append(";");
+				}
+			}
+			nodeService.setProperty(document, documentTableTextContentProperty, builder.toString());
+		}
+	}
 
-    private QName getDocumentTableTextContentProperty(NodeRef tableData) {
-        NodeRef document = documentTableService.getDocumentByTableData(tableData);
-        QName documentToTableDataAssociation = null;
-        if (document != null) {
-            for (AssociationRef associationRef : nodeService.getSourceAssocs(tableData, RegexQNamePattern.MATCH_ALL)) {
-                if (document.equals(associationRef.getSourceRef())) {
-                    documentToTableDataAssociation = associationRef.getTypeQName();
-                    break;
-                }
-            }
-            if (documentToTableDataAssociation != null) {
-                QName documentTableTextContentProperty = QName.createQName(documentToTableDataAssociation.toPrefixString(namespaceService) + "-text-content", namespaceService);
-                PropertyDefinition propertyDefinition = dictionaryService.getProperty(documentTableTextContentProperty);
-                if (propertyDefinition != null) {
-                    return documentTableTextContentProperty;
-                }
-            }
-        }
-        return null;
-    }
+	private QName getDocumentTableTextContentProperty(NodeRef tableData) {
+		NodeRef document = documentTableService.getDocumentByTableData(tableData);
+		QName documentToTableDataAssociation = null;
+		if (document != null) {
+			for (AssociationRef associationRef : nodeService.getSourceAssocs(tableData, RegexQNamePattern.MATCH_ALL)) {
+				if (document.equals(associationRef.getSourceRef())) {
+					documentToTableDataAssociation = associationRef.getTypeQName();
+					break;
+				}
+			}
+			if (documentToTableDataAssociation != null) {
+				QName documentTableTextContentProperty = QName.createQName(documentToTableDataAssociation.toPrefixString(namespaceService) + "-text-content", namespaceService);
+				PropertyDefinition propertyDefinition = dictionaryService.getProperty(documentTableTextContentProperty);
+				if (propertyDefinition != null) {
+					return documentTableTextContentProperty;
+				}
+			}
+		}
+		return null;
+	}
 
-    private String getDataRowContent(NodeRef node) {
-        if (!dictionaryService.isSubClass(nodeService.getType(node), DocumentTableService.TYPE_TABLE_DATA_ROW)) {
-            return "";
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        Map<QName, Serializable> properties = nodeService.getProperties(node);
-        for (Map.Entry<QName, Serializable> propertyEntry : properties.entrySet()) {
-            QName qName = propertyEntry.getKey();
-            if (qName.getNamespaceURI().equals(NamespaceService.SYSTEM_MODEL_1_0_URI)
-                    || qName.equals(ContentModel.PROP_CREATOR)
-                    || qName.equals(ContentModel.PROP_CREATED)
-                    || qName.equals(ContentModel.PROP_MODIFIER)
-                    || qName.equals(ContentModel.PROP_MODIFIED)
-                    || qName.getLocalName().endsWith("-text-content")
-                    || qName.getLocalName().endsWith("-ref")) {
-                continue;
-            }
-            PropertyDefinition propertyDefinition = dictionaryService.getProperty(qName);
-            if (propertyDefinition.isIndexed()) {
-                Serializable value = propertyEntry.getValue();
-                if (value != null)
-                    stringBuilder.append(value).append(" ");
-            }
-        }
+	private String getDataRowContent(NodeRef node) {
+		if (!dictionaryService.isSubClass(nodeService.getType(node), DocumentTableService.TYPE_TABLE_DATA_ROW)) {
+			return "";
+		}
+		StringBuilder stringBuilder = new StringBuilder();
+		Map<QName, Serializable> properties = nodeService.getProperties(node);
+		for (Map.Entry<QName, Serializable> propertyEntry : properties.entrySet()) {
+			QName qName = propertyEntry.getKey();
+			if (qName.getNamespaceURI().equals(NamespaceService.SYSTEM_MODEL_1_0_URI)
+					|| qName.equals(ContentModel.PROP_CREATOR)
+					|| qName.equals(ContentModel.PROP_CREATED)
+					|| qName.equals(ContentModel.PROP_MODIFIER)
+					|| qName.equals(ContentModel.PROP_MODIFIED)
+					|| qName.getLocalName().endsWith("-text-content")
+					|| qName.getLocalName().endsWith("-ref")) {
+				continue;
+			}
+			PropertyDefinition propertyDefinition = dictionaryService.getProperty(qName);
+			if (propertyDefinition.isIndexed()) {
+				Serializable value = propertyEntry.getValue();
+				if (value != null)
+					stringBuilder.append(value).append(" ");
+			}
+		}
 
-        return stringBuilder.length() > 0 ? stringBuilder.substring(0, stringBuilder.length() - 1) : "";
-    }
+		return stringBuilder.length() > 0 ? stringBuilder.substring(0, stringBuilder.length() - 1) : "";
+	}
 
 }
