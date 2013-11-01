@@ -114,7 +114,7 @@
 						(@fileNameLo/@fileNameUp аналогично)
 					// @root		(!) корневой каталог использовать не разрешается
 		  -->
-		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileNameLo" />
+		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileName" />
 	</bean>
 
 	<!-- Хранилище в файловой системе "из поставки" для макетов/моделей 
@@ -174,7 +174,7 @@
 						(@fileNameLo/@fileNameUp аналогично)
 					// @root		(!) корневой каталог использовать не разрешается
 		  -->
-		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileNameLo" />
+		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileName" />
 	</bean>
 
 	<!-- Хранилище в файловой системе для подотчётов.
@@ -198,7 +198,7 @@
 						subReportName
 							files
 		  -->
-		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileNameLo" />
+		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileName" />
 	</bean>
 
 	<!-- 
