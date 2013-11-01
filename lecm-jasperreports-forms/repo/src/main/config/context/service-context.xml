@@ -144,7 +144,7 @@
 					// @root		(!) корневой каталог использовать не разрешается
 			(!) Здесь зависимости от "кода отчёта" в форматной строке нет, т.к. это шаблоны
 		  -->
-		<property name="storeStructurePathFmt" value="/@reporTypeLo/@fileNameLo" />
+		<property name="storeStructurePathFmt" value="/@reporTypeLo/@fileName" />
 	</bean>
 
 
