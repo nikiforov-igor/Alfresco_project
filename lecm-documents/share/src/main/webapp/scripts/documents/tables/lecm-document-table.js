@@ -273,9 +273,10 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 					{
 						return function DataGrid_onDataItemsDeleted_anim()
 						{
-							this.removeTotalRows();
-							this.widgets.dataTable.deleteRow(record);
-							this.addFooter();
+							Bubbling.fire("datagridRefresh",
+								{
+									bubblingLabel:this.options.bubblingLabel
+								});
 						};
 					};
 
@@ -292,10 +293,6 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 							});
 					}
 				}
-                var object = {
-                    datagridMeta: this.datagridMeta
-                };
-                YAHOO.Bubbling.fire("activeGridChanged", object);
 			}
 		},
 
@@ -907,10 +904,10 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                         onSuccess:{
                             fn:function DataGrid_onActionCreate_success(response) {
                                 var me = response.config.successCallback.scope.options.onSuccess.scope;
-                                var obj = {
-                                    datagridMeta: me.datagridMeta
-                                };
-                                YAHOO.Bubbling.fire("activeGridChanged", obj);
+	                            Bubbling.fire("datagridRefresh",
+		                            {
+			                            bubblingLabel:me.options.bubblingLabel
+		                            });
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
                                         text: this.msg("message.save.success")
