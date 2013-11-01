@@ -105,15 +105,18 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 
     @Override
     public NodeRef getDocumentByTableData(NodeRef tableDataRef) {
-        if (tableDataRef != null) {
-            NodeRef tableDataRoot = nodeService.getPrimaryParent(tableDataRef).getParentRef();
-            if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
-                ChildAssociationRef documentToTableDataAssociation = nodeService.getPrimaryParent(tableDataRoot);
-                NodeRef document = documentToTableDataAssociation.getParentRef();
-                if (document != null && documentService.isDocument(document)) {
-                    return documentToTableDataAssociation.getParentRef();
-                }
-            }
+        if (tableDataRef != null && nodeService.exists(tableDataRef)) {
+	        ChildAssociationRef tableDataRootAssoc = nodeService.getPrimaryParent(tableDataRef);
+	        if (tableDataRootAssoc != null) {
+	            NodeRef tableDataRoot = tableDataRootAssoc.getParentRef();
+	            if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
+	                ChildAssociationRef documentToTableDataAssociation = nodeService.getPrimaryParent(tableDataRoot);
+	                NodeRef document = documentToTableDataAssociation.getParentRef();
+	                if (document != null && documentService.isDocument(document)) {
+	                    return documentToTableDataAssociation.getParentRef();
+	                }
+	            }
+	        }
         }
         return null;
     }
