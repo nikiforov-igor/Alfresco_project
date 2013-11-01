@@ -141,7 +141,7 @@ LogicECM.module = LogicECM.module || {};
 						showOtherActionColumn: true,
 						showCheckboxColumn: false,
 						attributeForShow: this.options.attributeForShow,
-						pageSize: this.tableData.pageSize,
+						pageSize: this.tableData.pageSize != null && this.tableData.pageSize > 0 ? this.tableData.pageSize : 10,
                         useCookieForSort: false,
                         overrideSortingWith: this.options.isTableSortable
 					}).setMessages(this.options.messages);
