@@ -153,6 +153,7 @@ public class ParameterMapper {
         if (value == null || value.length() == 0) {
             return null;
         }
+        value = value.replaceAll(",", ".");
         return value.indexOf(".") > 0 ? Double.valueOf(value) : Long.valueOf(value);
     }
 
