@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
+import ru.it.lecm.wcalendar.calendar.ICalendar;
 
 public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExtension {
 
@@ -46,6 +47,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 	private ApprovalListService approvalListService;
 	private OrgstructureBean orgstructureService;
 	private IWorkCalendar workCalendarService;
+	private ICalendar wCalendarService;
 
 	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
 		this.workCalendarService = workCalendarService;
@@ -65,6 +67,10 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+	public void setwCalendarService(ICalendar wCalendarService) {
+		this.wCalendarService = wCalendarService;
 	}
 
 	public JSONObject getCurrentEmployeeInfo() {
@@ -678,6 +684,7 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 		Date effectiveDueDate = new Date(priorDueDate.getTime());
 		NodeRef employeeNode = getEmployeeFromAssigneeListItem(assigneeListItem);
 		boolean employeePresent = false;
+		Calendar calendar = Calendar.getInstance();
 		while (!employeePresent) {
 			try {
 				employeePresent = workCalendarService.getEmployeeAvailability(employeeNode, effectiveDueDate);
@@ -687,6 +694,11 @@ public class ApprovalServiceJavascriptExtension extends BaseScopableProcessorExt
 			}
 			if (!employeePresent) {
 				effectiveDueDate = DateUtils.addDays(effectiveDueDate, 1);
+				calendar.setTime(effectiveDueDate);
+				int year = calendar.get(Calendar.YEAR);
+				if (!wCalendarService.isCalendarExists(year)) {
+					break;
+				}
 			}
 		}
 		setAssigneeListItemDueDate(assigneeListItem, effectiveDueDate);

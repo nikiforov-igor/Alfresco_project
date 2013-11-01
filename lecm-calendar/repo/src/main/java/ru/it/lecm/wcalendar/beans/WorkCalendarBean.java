@@ -1,5 +1,10 @@
 package ru.it.lecm.wcalendar.beans;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -9,12 +14,6 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -50,8 +49,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 		NodeRef schedule = getScheduleOrParentSchedule(node);
 		if (schedule == null) {
 			logger.trace("No schedule associated with employee {} nor with it's parent OUs!", node);
-            //TODO: Временное решения бага ALF-1631
-			return true;
+			return false;
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
 
