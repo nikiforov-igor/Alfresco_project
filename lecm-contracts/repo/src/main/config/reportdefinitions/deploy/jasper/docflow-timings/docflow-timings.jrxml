@@ -65,37 +65,37 @@
 		<fieldDescription><![CDATA[Измерение.Название]]></fieldDescription>
 	</field>
 	<variable name="colAvg1" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count1}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count1} != null ? $F{col_Count1} : 0]]></variableExpression>
 	</variable>
 	<variable name="colAvg2" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count2}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count2} != null ? $F{col_Count2} : 0]]></variableExpression>
 	</variable>
 	<variable name="colAvg3" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count3}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count3} != null ? $F{col_Count3} : 0]]></variableExpression>
 	</variable>
 	<variable name="colAvg4" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count4}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count4} != null ? $F{col_Count4} : 0]]></variableExpression>
 	</variable>
 	<variable name="colAvg5" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count5}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count5} != null ? $F{col_Count5} : 0]]></variableExpression>
 	</variable>
 	<variable name="colAvg6" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count6}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count6} != null ? $F{col_Count6} : 0]]></variableExpression>
 	</variable>
 	<variable name="colAvg7" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count7}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count7} != null ? $F{col_Count7} : 0]]></variableExpression>
 	</variable>
 	<variable name="colAvg8" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count8}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count8} != null ? $F{col_Count8} : 0]]></variableExpression>
 	</variable>
 	<variable name="colAvg9" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count9}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count9} != null ? $F{col_Count9} : 0]]></variableExpression>
 	</variable>
 	<variable name="colAvg10" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count10}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count10} != null ? $F{col_Count10} : 0]]></variableExpression>
 	</variable>
 	<variable name="colAvg11" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{col_Count11}]]></variableExpression>
+		<variableExpression><![CDATA[$F{col_Count11} != null ? $F{col_Count11} : 0]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -301,7 +301,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count1} != null ? $F{col_Count1} : 0]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="0540390a-1d4a-425e-94fd-cba55ad840b5" stretchType="RelativeToBandHeight" x="195" y="2" width="33" height="20"/>
@@ -309,7 +309,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count2}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count2} != null ? $F{col_Count2} : 0]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="18c1ff17-fd8f-495d-84a4-88e5e3b52b5d" stretchType="RelativeToBandHeight" x="230" y="2" width="33" height="20"/>
@@ -317,7 +317,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count3}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count3} != null ? $F{col_Count3} : 0]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="16d04a8b-5f73-4f50-b514-aa24b6a8f501" stretchType="RelativeToTallestObject" x="265" y="2" width="33" height="20" isPrintWhenDetailOverflows="true"/>
@@ -325,7 +325,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count4}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count4} != null ? $F{col_Count4} : 0]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="7fe3fbca-e8e2-431c-b0d1-35a9f6eba3e9" stretchType="RelativeToTallestObject" x="300" y="2" width="33" height="20" isPrintWhenDetailOverflows="true"/>
@@ -333,7 +333,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count5}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count5} != null ? $F{col_Count5} : 0]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="22eefe53-6554-492a-bcd3-2459eca02fce" x="335" y="2" width="33" height="20"/>
@@ -341,7 +341,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count6}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count6} != null ? $F{col_Count6} : 0]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="b8fc6c50-c272-4fda-86c8-c18a502c3205" x="370" y="2" width="33" height="20" isPrintWhenDetailOverflows="true"/>
@@ -349,7 +349,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count7}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count7} != null ? $F{col_Count7} : 0]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="162c66d3-b03a-4ebd-b64e-4a80c322e4fc" stretchType="RelativeToBandHeight" x="405" y="2" width="33" height="20"/>
@@ -357,7 +357,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count8}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count8} != null ? $F{col_Count8} : 0]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="748b5062-555e-4240-b03e-5fcf77d985da" stretchType="RelativeToBandHeight" x="440" y="2" width="33" height="20"/>
@@ -365,7 +365,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count9}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count9} != null ? $F{col_Count9} : 0]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="5dd1356a-84d0-4a40-90cd-ec660330259b" stretchType="RelativeToBandHeight" x="475" y="2" width="33" height="20"/>
@@ -373,7 +373,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count10}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count10} != null ? $F{col_Count10} : 0]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="4660b700-a289-4f85-b475-8e412f6e53ec" stretchType="RelativeToBandHeight" x="510" y="2" width="33" height="20"/>
@@ -381,7 +381,7 @@
 						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{col_Count11}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{col_Count11} != null ? $F{col_Count11} : 0]]></textFieldExpression>
 				</textField>
 			</frame>
 			<line>
