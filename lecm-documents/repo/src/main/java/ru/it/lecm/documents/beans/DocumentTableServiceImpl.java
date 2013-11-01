@@ -296,7 +296,6 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
     public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex) {
         List<NodeRef> tableRows = getTableDataRows(tableDataRef);
         List<NodeRef> result = new ArrayList<NodeRef>();
-        String indexStr;
         int index;
         if (tableRows != null) {
             for (NodeRef tableRow : tableRows) {
@@ -313,7 +312,6 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
     public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex, int endIndex) {
         List<NodeRef> tableRows = getTableDataRows(tableDataRef, beginIndex);
         List<NodeRef> result = new ArrayList<NodeRef>();
-//        String indexStr;
         int index;
         if (tableRows != null) {
             for (NodeRef tableRow : tableRows) {
@@ -338,37 +336,31 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
                         int indexStr;
                         int endIndex, index;
                         List<NodeRef> tableRows;
-                        indexStr = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-//                        if (indexStr != null) {
-                            endIndex = indexStr;
-                            if (endIndex != 1) {
-                                NodeRef tableDataRef = getTableDataByRow(tableRow);
-                                    if (tableDataRef != null){
-                                        tableRows = getTableDataRows(tableDataRef, endIndex - 1, endIndex);
-                                        if (tableRows.size() == 2) {
-                                        for (NodeRef row : tableRows) {
-                                            indexStr = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-//                                            if (indexStr != null && !indexStr.equals("")) {
-                                                index = indexStr;
-                                                if (index == endIndex) {
-                                                    nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (endIndex - 1));
-                                                } else {
-                                                    nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, endIndex);
-                                                }
-//                                            }
-                                        }
-                                        return true;
+                        endIndex = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                        if (endIndex != 1) {
+                            NodeRef tableDataRef = getTableDataByRow(tableRow);
+                            if (tableDataRef != null) {
+                                tableRows = getTableDataRows(tableDataRef, endIndex - 1, endIndex);
+                                if (tableRows.size() == 2) {
+                                    for (NodeRef row : tableRows) {
+                                        indexStr = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                                        index = indexStr;
+                                        if (index == endIndex) {
+                                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (endIndex - 1));
+                                        } else {
+                                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, endIndex);
                                         }
                                     }
+                                    return true;
+                                }
                             }
-//                        }
+                        }
                         return false;
                     }
                 });
             }
         };
         return AuthenticationUtil.runAsSystem(moveUp);
-
     }
 
     @Override
@@ -404,7 +396,6 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
             }
         };
         return AuthenticationUtil.runAsSystem(moveDown);
-
     }
 
 
