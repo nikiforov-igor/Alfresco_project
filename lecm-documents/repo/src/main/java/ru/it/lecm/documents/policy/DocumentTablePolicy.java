@@ -132,31 +132,26 @@ public class DocumentTablePolicy extends BaseBean {
 		}
 	}
 
-	public void createTableDataRow(ChildAssociationRef childAssocRef) {
-		NodeRef tableData = childAssocRef.getParentRef();
+    public void createTableDataRow(ChildAssociationRef childAssocRef) {
+        NodeRef tableData = childAssocRef.getParentRef();
         NodeRef tableRow = childAssocRef.getChildRef();
 
-		//Пересчёт результирующей строки
-		documentTableService.recalculateTotalRows(tableData);
-        int index;
+        //Пересчёт результирующей строки
+        documentTableService.recalculateTotalRows(tableData);
+        Integer index;
         List<NodeRef> tableRowList;
-        String indexStr;
 
         //Пересчет индекса строки
-        indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-        if (indexStr != null && !indexStr.equals("")) {
+        index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+        if (index != null) {
             // Пересчет индекса с текущей строки
-            index = Integer.parseInt(indexStr);
             tableRowList = documentTableService.getTableDataRows(tableData, index);
-            if (tableRowList != null){
+            if (tableRowList != null) {
                 //переприсвоение индексов
                 for (NodeRef row : tableRowList) {
-                    if (!tableRow.equals(row)){
-                        indexStr = (String)nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                        if (indexStr != null && !indexStr.equals("")){
-                            index = Integer.parseInt(indexStr);
-                            nodeService.setProperty(row,DocumentTableService.PROP_INDEX_TABLE_ROW, index+1);
-                        }
+                    if (!tableRow.equals(row)) {
+                        index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                        nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, index + 1);
                     }
                 }
             }
@@ -167,7 +162,7 @@ public class DocumentTablePolicy extends BaseBean {
             if (tableRowList != null) {
                 index = tableRowList.size() + 1;
             }
-            nodeService.setProperty(tableRow,DocumentTableService.PROP_INDEX_TABLE_ROW, index);
+            nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, index);
         }
 
         //Обновление данных для поиска
@@ -262,31 +257,24 @@ public class DocumentTablePolicy extends BaseBean {
 		removeAttachment(documentTableDataRef, associationRef);
 	}
 
-	public void beforeDeleteTableDataRow(NodeRef nodeRef) {
-		List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
-		if (assocs != null) {
-			for (AssociationRef assoc: assocs) {
-				removeAttachment(nodeRef, assoc);
-			}
-		}
-        //Персчет индексов
+    public void beforeDeleteTableDataRow(NodeRef nodeRef) {
+        List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+        if (assocs != null) {
+            for (AssociationRef assoc : assocs) {
+                removeAttachment(nodeRef, assoc);
+            }
+        }
+        //Пересчёт индексов
         int index;
-        String indexStr;
         NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
         if (tableData != null) {
-            indexStr = (String)nodeService.getProperty(nodeRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
-            if (indexStr != null && !indexStr.equals("")){
-                index = Integer.parseInt(indexStr);
-                List<NodeRef> tableRowList = documentTableService.getTableDataRows(tableData, index+1);
-                if (tableRowList != null){
-                    //переприсвоение индексов
-                    for (NodeRef tableRow : tableRowList) {
-                        indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                        if (indexStr != null && !indexStr.equals("")){
-                            index = Integer.parseInt(indexStr);
-                            nodeService.setProperty(tableRow,DocumentTableService.PROP_INDEX_TABLE_ROW, index-1);
-                        }
-                    }
+            index = (Integer) nodeService.getProperty(nodeRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
+            List<NodeRef> tableRowList = documentTableService.getTableDataRows(tableData, index + 1);
+            if (tableRowList != null) {
+                //переприсвоение индексов
+                for (NodeRef tableRow : tableRowList) {
+                    index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                    nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, index - 1);
                 }
             }
         }

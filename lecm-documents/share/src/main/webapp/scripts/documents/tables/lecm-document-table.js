@@ -773,7 +773,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                 Dom.addClass(elOtherActions, "hidden");
             }
         },
-        onMoveTableRowUp: function () {
+        onMoveTableRowUp: function (me, asset, owner, actionsConfig, confirmFunction) {
             Alfresco.util.Ajax.jsonRequest(
                 {
                     method: Alfresco.util.Ajax.GET,
@@ -785,18 +785,18 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                                 var rowId = response.serverResponse.argument.config.rowId;
 
                                 var oDataRow1 = me.widgets.dataTable.getRecord(rowId).getData();
-                                var index = eval(oDataRow1.itemData["prop_lecm-document_indexTableRow"].value);
+                                var index = me.widgets.dataTable.getRecordIndex(rowId);
 
-                                if (index != 1) {
-                                    var oDataRow2 = me.widgets.dataTable.getRecord(index-2).getData();
+                                if (index != 0) {
+                                    var oDataRow2 = me.widgets.dataTable.getRecord(index-1).getData();
 
                                     // удаляем верхнюю запись
                                     me.widgets.dataTable.deleteRow(index-1);
                                     // так как в таблице стало на 1 запись меньше то удаляем с тем же индексом
-                                    me.widgets.dataTable.deleteRow(index-2);
+                                    me.widgets.dataTable.deleteRow(index-1);
 
-                                    me.widgets.dataTable.addRow(oDataRow1, index-2);
-                                    me.widgets.dataTable.addRow(oDataRow2, index-1);
+                                    me.widgets.dataTable.addRow(oDataRow1, index-1);
+                                    me.widgets.dataTable.addRow(oDataRow2, index);
 
                                     me._itemUpdate(oDataRow1.nodeRef);
                                     me._itemUpdate(oDataRow2.nodeRef);
@@ -813,11 +813,11 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                         }
                     },
                     scope: this,
-                    rowId: arguments[1].id
+                    rowId: asset.id
 
                 });
         },
-        onMoveTableRowDown: function () {
+        onMoveTableRowDown: function (me, asset, owner, actionsConfig, confirmFunction) {
             Alfresco.util.Ajax.jsonRequest(
                 {
                     method: Alfresco.util.Ajax.GET,
@@ -827,33 +827,18 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                             if (response.json. isMoveDown == "true") {
                                 var me = response.config.scope;
                                 var rowId = response.serverResponse.argument.config.rowId;
+                                var oDataRow1 = me.widgets.dataTable.getRecord(rowId).getData();
+                                var index = me.widgets.dataTable.getRecordIndex(rowId);
 
                                 var count = me.widgets.dataTable.getRecordSet()._records.length;
-                                var oDataRow1 = me.widgets.dataTable.getRecord(rowId).getData();
-                                var index = eval(oDataRow1.itemData["prop_lecm-document_indexTableRow"].value);
-                                var moveDown = function(oDataRow1){
-                                    var oDataRow2 = me.widgets.dataTable.getRecord(index).getData();
-
+                                if (index < count) {
+                                    var oDataRow2 = me.widgets.dataTable.getRecord(index+1).getData();
                                     me.widgets.dataTable.deleteRow(index);
-                                    me.widgets.dataTable.deleteRow(index-1);
+                                    me.widgets.dataTable.deleteRow(index);
 
-                                    me.widgets.dataTable.addRow(oDataRow2, index-1);
-                                    me.widgets.dataTable.addRow(oDataRow1, index);
-
-                                    me._itemUpdate(oDataRow1.nodeRef);
-                                    me._itemUpdate(oDataRow2.nodeRef);
+                                    me.widgets.dataTable.addRow(oDataRow2, index);
+                                    me.widgets.dataTable.addRow(oDataRow1, index+1);
                                 }
-
-                                if (me.widgets.dataTable.getRecord(count-1).getData().type=="total") {
-                                    if (index!=count) {
-                                        moveDown(oDataRow1);
-                                    }
-                                } else {
-                                    if (index < count) {
-                                        moveDown(oDataRow1);
-                                    }
-                                }
-
                             }
                         }
                     },
@@ -866,11 +851,11 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                         }
                     },
                     scope: this,
-                    rowId: arguments[1].id
+                    rowId: asset.id
 
                 });
         },
-        onAddRow: function() {
+        onAddRow: function(me, asset, owner, actionsConfig, confirmFunction) {
             var orgMetadata = this.modules.dataGrid.datagridMeta;
             if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
                 var destination = orgMetadata.nodeRef;
@@ -932,7 +917,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                                     });
                             },
                             scope:this,
-                            rowId: arguments[1].id
+                            rowId: asset.id
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {

@@ -163,7 +163,7 @@
             <properties>
                 <!-- Порядковый номер -->
                 <property name="lecm-document:indexTableRow">
-                    <type>d:text</type>
+                    <type>d:int</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>

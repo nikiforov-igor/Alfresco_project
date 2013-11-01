@@ -129,6 +129,7 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 		return null;
 	}
 
+
     @Override
 	public List<NodeRef> getTableDataTotalRows(NodeRef tableDataRef) {
 	    QName totalRowType = getTableDataTotalRowType(tableDataRef);
@@ -294,14 +295,11 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
         List<NodeRef> result = new ArrayList<NodeRef>();
         String indexStr;
         int index;
-        if (tableRows != null){
-            for(NodeRef tableRow : tableRows){
-                indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                if (indexStr != null && !indexStr.equals("")){
-                    index = Integer.parseInt(indexStr);
-                    if (index >= beginIndex){
-                        result.add(tableRow);
-                    }
+        if (tableRows != null) {
+            for (NodeRef tableRow : tableRows) {
+                index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                if (index >= beginIndex) {
+                    result.add(tableRow);
                 }
             }
         }
@@ -312,16 +310,13 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
     public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex, int endIndex) {
         List<NodeRef> tableRows = getTableDataRows(tableDataRef, beginIndex);
         List<NodeRef> result = new ArrayList<NodeRef>();
-        String indexStr;
+//        String indexStr;
         int index;
         if (tableRows != null) {
-            for(NodeRef tableRow : tableRows){
-                indexStr = (String)nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                if (indexStr != null && !indexStr.equals("")){
-                    index = Integer.parseInt(indexStr);
-                    if (index <= endIndex){
-                        result.add(tableRow);
-                    }
+            for (NodeRef tableRow : tableRows) {
+                index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                if (index <= endIndex) {
+                    result.add(tableRow);
                 }
             }
         }
@@ -337,33 +332,33 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
                 return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
                     @Override
                     public Boolean execute() throws Throwable {
-                        String indexStr;
+                        int indexStr;
                         int endIndex, index;
                         List<NodeRef> tableRows;
-                        indexStr = (String) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                        if (indexStr != null && !indexStr.equals("")) {
-                            endIndex = Integer.parseInt(indexStr);
+                        indexStr = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+//                        if (indexStr != null) {
+                            endIndex = indexStr;
                             if (endIndex != 1) {
                                 NodeRef tableDataRef = getTableDataByRow(tableRow);
                                     if (tableDataRef != null){
                                         tableRows = getTableDataRows(tableDataRef, endIndex - 1, endIndex);
                                         if (tableRows.size() == 2) {
                                         for (NodeRef row : tableRows) {
-                                            indexStr = (String) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                                            if (indexStr != null && !indexStr.equals("")) {
-                                                index = Integer.parseInt(indexStr);
+                                            indexStr = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+//                                            if (indexStr != null && !indexStr.equals("")) {
+                                                index = indexStr;
                                                 if (index == endIndex) {
                                                     nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (endIndex - 1));
                                                 } else {
                                                     nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, endIndex);
                                                 }
-                                            }
+//                                            }
                                         }
                                         return true;
+                                        }
                                     }
-                                }
                             }
-                        }
+//                        }
                         return false;
                     }
                 });
@@ -382,29 +377,22 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
                 return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
                     @Override
                     public Boolean execute() throws Throwable {
-                        String indexStr;
                         int startIndex, index;
                         List<NodeRef> tableRows;
-                        indexStr = (String) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                        if (indexStr != null && !indexStr.equals("")) {
-                            startIndex = Integer.parseInt(indexStr);
-                            NodeRef tableDataRef = getTableDataByRow(tableRow);
-                            if (tableDataRef != null) {
-                                tableRows = getTableDataRows(tableDataRef, startIndex, startIndex + 1);
-                                if (tableRows.size() == 2) {
-                                    for (NodeRef row : tableRows) {
-                                        indexStr = (String) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                                        if (indexStr != null && !indexStr.equals("")) {
-                                            index = Integer.parseInt(indexStr);
-                                            if (index == startIndex) {
-                                                nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (startIndex + 1));
-                                            } else {
-                                                nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, startIndex);
-                                            }
-                                        }
+                        startIndex = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                        NodeRef tableDataRef = getTableDataByRow(tableRow);
+                        if (tableDataRef != null) {
+                            tableRows = getTableDataRows(tableDataRef, startIndex, startIndex + 1);
+                            if (tableRows.size() == 2) {
+                                for (NodeRef row : tableRows) {
+                                    index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                                    if (index == startIndex) {
+                                        nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (startIndex + 1));
+                                    } else {
+                                        nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, startIndex);
                                     }
-                                    return true;
                                 }
+                                return true;
                             }
                         }
                         return false;
