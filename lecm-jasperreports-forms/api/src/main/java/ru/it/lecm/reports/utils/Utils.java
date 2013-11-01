@@ -362,7 +362,7 @@ public class Utils {
         // add " ... [X TO Y]"
         final String stMIN = ArgsHelper.dateToStr(from, "MIN");
         final String stMAX = ArgsHelper.dateToStr(upto, "MAX");
-        return " @" + fldName + ":[" + stMIN + " TO " + stMAX + "]";
+        return " ISNULL:\"" + fldName + "\" OR " + "@" + fldName + ":[" + stMIN + " TO " + stMAX + "]";
     }
 
     /**
@@ -393,7 +393,7 @@ public class Utils {
         //  используем формат без разделителя, чтобы нормально выполнялся строковый поиск ...
         final String stMIN = (from != null) ? String.format("%12.0f", from.doubleValue()) : "MIN";
         final String stMAX = (upto != null) ? String.format("%12.0f", upto.doubleValue()) : "MAX";
-        return " @" + fldName + ":[" + stMIN + " TO " + stMAX + "]";
+        return " ISNULL:\"" + fldName + "\" OR " + "@" + fldName + ":[" + stMIN + " TO " + stMAX + "]";
     }
 
 
@@ -413,7 +413,7 @@ public class Utils {
 
         // final StringBuilder result = new StringBuilder();
         final boolean isSpecialName = "TYPE ID".contains(fldName);
-
+        //result.append("( ISNULL:\"" + fldName + "\") OR ( ");
         result.append("( ");
         boolean addOR = false;
         for (String value : values) {
