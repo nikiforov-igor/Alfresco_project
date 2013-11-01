@@ -160,7 +160,7 @@ public class DocumentTablePolicy extends BaseBean {
             tableRowList = documentTableService.getTableDataRows(tableData);
             index = 1;
             if (tableRowList != null) {
-                index = tableRowList.size() + 1;
+                index = tableRowList.size();
             }
             nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, index);
         }
