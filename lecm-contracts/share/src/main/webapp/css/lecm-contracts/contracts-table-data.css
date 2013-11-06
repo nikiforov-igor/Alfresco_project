@@ -1,0 +1,15 @@
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_start-date,
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_start-date div {
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_end-date,
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_end-date div {
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
