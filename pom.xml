@@ -106,6 +106,7 @@
         <module>lecm-errands</module>
         <module>lecm-permission-exp</module>
         <module>lecm-signed-docflow</module>
+        <module>lecm-diagnostic-utility</module>
     </modules>
 	<scm>
 		<connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
