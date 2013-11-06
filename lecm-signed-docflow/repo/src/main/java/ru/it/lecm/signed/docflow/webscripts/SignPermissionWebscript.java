@@ -43,7 +43,7 @@ public class SignPermissionWebscript extends DeclarativeWebScript {
 		String userName = req.getParameter("userName");
 		NodeRef employee = orgstructureService.getEmployeeByPerson(userName);
 
-		boolean hasBR = orgstructureService.isEmployeeHasBusinessRole(employee, roleId, true, true);
+		boolean hasBR = orgstructureService.isEmployeeHasBusinessRole(employee, roleId, true, false);
 		boolean isBoss = orgstructureService.isBoss(employee, true);
 		JSONObject jsonRes = new JSONObject();
 		try {
