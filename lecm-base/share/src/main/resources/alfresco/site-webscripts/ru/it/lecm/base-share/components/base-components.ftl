@@ -44,7 +44,7 @@ showExSeacrhBtn(необязательный) - добавить(показыв�
 
 		<div class="right" <#if !showSearchBlock>style="display:none"</#if>>
             <span id="${id}-searchInput" class="search-input">
-				<input type="text" id="${id}-full-text-search" value="" onclick="event.stopPropagation()">
+				<input type="text" id="${id}-full-text-search" value="">
 	            <a href="javascript:void(0);" id="${id}-clearSearchInput"  class="clear-search">
 		            <span>&nbsp;</span>
 	            </a>
