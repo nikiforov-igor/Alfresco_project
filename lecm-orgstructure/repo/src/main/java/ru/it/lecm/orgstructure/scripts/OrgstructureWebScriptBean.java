@@ -215,6 +215,18 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		}
 	}
 
+    /**
+     *
+     */
+    public ScriptNode getEmployeesDirectory() {
+        NodeRef employees = orgstructureService.getEmployeesDirectory();
+        if (employees != null) {
+            return new ScriptNode(employees, serviceRegistry, getScope());
+        } else {
+            return null;
+        }
+    }
+
 	/**
 	 * Возвращает ноду логотипа Организации
 	 */
@@ -758,7 +770,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		return orgstructureService.isDelegationEngineer (new NodeRef (employeeRef));
 	}
 
-	public boolean hasSubordinate (final String bossRef, final String subordinateRef) {
+	public boolean hasSubogetrdinate (final String bossRef, final String subordinateRef) {
 		return orgstructureService.hasSubordinate (new NodeRef (bossRef), new NodeRef (subordinateRef));
 	}
 

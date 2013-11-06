@@ -327,7 +327,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	private String wrapAsLink(NodeRef link, boolean isInititator) {
 		SysAdminParams params = serviceRegistry.getSysAdminParams();
 		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-        if (!nodeService.exists(link)) {
+        if (link != null && !nodeService.exists(link)) {
             return "";
         }
 		String description = isInititator ? getInitiatorDescription(link) : getObjectDescription(link);
@@ -346,7 +346,11 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 	 */
 	@Override
 	public String getObjectDescription(NodeRef object) {
-        return substituteService.getObjectDescription(object);
+        if (object != null) {
+            return substituteService.getObjectDescription(object);
+        } else {
+            return "";
+        }
 	}
 
 	private String getInitiatorDescription(NodeRef initiator) {

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.management.ManagementFactory;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -49,6 +50,9 @@ public class DiagnosticUtility {
     //Файл с логом бизнес-журнала
     private final static String BJ_LOG_FILENAME = File.separator + "business-journal.csv";
     private final static String GET_BJ_RECORDS_SCRIPT_URL = "/service/lecm/business-journal/api/last-records?count=1000&includeArchive=true";
+
+    //Скрипт выдачи информации по пользователям
+    private final static String GET_USERS_INFO_SCRIPT_URL = "/service/lecm/orgstructure/api/getUsersInfo";
 
     //файл с конфигом утилиты
     private final static String CONFIG_FILENAME = "utility-properties.cfg";
@@ -235,6 +239,8 @@ public class DiagnosticUtility {
         String dbPass = alfPropsMap.get("db.password");
         String dbName = alfPropsMap.get("db.name");
         String dbUrl = alfPropsMap.get("db.url");
+        String dbHost = alfPropsMap.get("db.host");
+        String dbPort = alfPropsMap.get("db.port");
 
         //запрос к tomcat и БД
         HttpClient httpclient = new HttpClient();
@@ -244,7 +250,7 @@ public class DiagnosticUtility {
         int requestTomcatStatus = sendRequestToURL(httpclient, new String[]{concatAfrescoServerURL(), concatAfrescoLocalhostServerURL()}, logText);
 
         logText.append("Check Data Base Server...").append("\n");
-        int requestDBStatus = checkDBConnection(dbDriver, dbUser, dbPass, dbName, dbUrl, logText);
+        int requestDBStatus = checkDBConnection(dbDriver, dbHost, dbPort, dbUser, dbPass, dbName, dbUrl, logText);
 
         if (requestTomcatStatus != 200 || requestDBStatus != 200) {
             logText.append("Alfresco Server not started. Cannot send request to webapps").append("\n");
@@ -262,10 +268,8 @@ public class DiagnosticUtility {
         sendRequestToURL(httpclient, new String[]{concatShareURL(), concatLocalhostShareURL()}, logText);
 
         //request to solr
-        //logText.append("Check Solr...").append("\n");
-        //requestURL1 = alfrescoProtocol + "s://" + alfrescoHost + ":" + alfrescoPort + "/solr";
-        //requestURL2 = alfrescoProtocol + "s://localhost:" + alfrescoPort + "/solr";
-        //sendRequestToURL(httpclient, new String[]{requestURL1, requestURL2}, logText);
+        logText.append("Check Solr...").append("\n");
+        sendRequestToURL(httpclient, new String[]{concatSolrURL(), concatLocalhostSolrURL()}, logText);
 
         return true;
     }
@@ -624,8 +628,56 @@ public class DiagnosticUtility {
                 alfPropsMap.get("share.context");
     }
 
+
+    private static String concatSolrURL() {
+        return "https://" +
+                alfPropsMap.get("alfresco.host") + ":" + alfPropsMap.get("solr.port.ssl") + "/solr";
+    }
+
+    private static String concatLocalhostSolrURL() {
+        return "https://localhost:" +
+                alfPropsMap.get("solr.port.ssl") + "/solr";
+    }
+
     private static String collectOrgstructureInfo() {
-        return "";
+        HttpClient client = new HttpClient();
+        client.getParams().setAuthenticationPreemptive(true);
+
+        Credentials adminCredentials = new UsernamePasswordCredentials("admin", config.get(ADMIN_PASSWORD));
+        client.getState().setCredentials(AuthScope.ANY, adminCredentials);
+        String getRecordsScript = concatAfrescoURL() + GET_USERS_INFO_SCRIPT_URL;
+
+        createPhaseLogInformation(logText, "Attempt to connect to URL " + getRecordsScript, null);
+
+        GetMethod httpGet = new GetMethod(getRecordsScript);
+
+        InputStream in = null;
+        OutputStream out = null;
+
+        int status = 500;
+        byte[] bytes = new byte[1024];
+        try {
+            out = new ByteArrayOutputStream();
+
+            httpGet.setDoAuthentication(true);
+            status = client.executeMethod(httpGet);
+            in = new BufferedInputStream(httpGet.getResponseBodyAsStream());
+
+            int readCount;
+            while ((readCount = in.read(bytes)) > 0) {
+                out.write(bytes, 0, readCount);
+            }
+            out.flush();
+        } catch (IOException e) {
+            log.error("", e);
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
+        }
+
+        createPhaseLogInformation(logText, "Users Info log was " + (200 <= status && status < 300 ? "" : "not")
+                + "written to file " + currentDirectoryPath + CONTROL_INFO_FILENAME, "STATUS CODE " + status);
+        return out.toString();
     }
 
     private static boolean collectSystemInformation(boolean onlyInetParams) {
@@ -721,6 +773,7 @@ public class DiagnosticUtility {
                 logText.append("Сервер недоступен. Невозможно собрать записи бизнес-журнала.");
                 writeToFile(out);
             }
+
         } catch (IOException ex) {
             throw new RuntimeException("Не удалось сохранить лог-файл!", ex);
         } finally {
@@ -899,6 +952,8 @@ public class DiagnosticUtility {
             try {
                 httpGet = new GetMethod(url);
                 requestStatus = client.executeMethod(httpGet);
+            } catch (SSLHandshakeException e1) {
+
             } catch (Exception e) {
                 log.error("", e);
             } finally {
@@ -907,21 +962,23 @@ public class DiagnosticUtility {
                     httpGet.releaseConnection();
                 }
             }
-            if (requestStatus == 200) { // достучались по адресу
+            if (requestStatus == 200 || requestStatus == 503) { // достучались по адресу
                 break;
             }
         }
         return requestStatus;
     }
 
-    private static int checkDBConnection(String dbDriver, String dbUser, String dbPass, String dbName, String dbUrl, StringBuilder buffer) {
+    private static int checkDBConnection(String dbDriver, String dbHost, String dbPort, String dbUser, String dbPass, String dbName, String dbUrl, StringBuilder buffer) {
         String requestURL;
         int requestDBStatus = 503;
-        if (dbDriver == null || dbUser == null || dbPass == null || dbName == null || dbUrl == null) {
+        if (dbHost == null || dbDriver == null || dbUser == null || dbPass == null || dbName == null || dbUrl == null) {
             buffer.append("Cannot Send request to DB. Check params").append(". STATUS - ").append(requestDBStatus).append("\n");
             return requestDBStatus;
         }
         requestURL = dbUrl.replace("${db.name}", dbName);
+        requestURL = requestURL.replace("${db.host}", dbHost);
+        requestURL = requestURL.replace("${db.port}", dbPort);
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
