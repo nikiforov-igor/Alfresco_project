@@ -68,7 +68,7 @@ public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
         if (justInTime) {
             return docDesc + " не исполнено в установленный срок. Работа с ним завершена, поручение переходит в статус \"Не исполнено\"";
         } else {
-            return "Обратите внимание: " + docDesc + " не исполнено в установленный срок.";
+            return "Обратите внимание: поручение " + docDesc + " не исполнено в установленный срок.";
         }
     }
 
