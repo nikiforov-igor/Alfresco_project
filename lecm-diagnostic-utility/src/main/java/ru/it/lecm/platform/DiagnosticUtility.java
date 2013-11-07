@@ -977,13 +977,21 @@ public class DiagnosticUtility {
     private static int checkDBConnection(String dbDriver, String dbHost, String dbPort, String dbUser, String dbPass, String dbName, String dbUrl, StringBuilder buffer) {
         String requestURL;
         int requestDBStatus = 503;
-        if (dbHost == null || dbDriver == null || dbUser == null || dbPass == null || dbName == null || dbUrl == null) {
+        if (dbDriver == null || dbUser == null || dbPass == null || dbUrl == null) {
             buffer.append("Cannot Send request to DB. Check params").append(". STATUS - ").append(requestDBStatus).append("\n");
             return requestDBStatus;
         }
-        requestURL = dbUrl.replace("${db.name}", dbName);
-        requestURL = requestURL.replace("${db.host}", dbHost);
-        requestURL = requestURL.replace("${db.port}", dbPort);
+
+        requestURL = dbUrl;
+        if (dbName != null) {
+            requestURL = requestURL.replace("${db.name}", dbName);
+        }
+        if (dbHost != null) {
+            requestURL = requestURL.replace("${db.host}", dbHost);
+        }
+        if (dbHost != null) {
+            requestURL = requestURL.replace("${db.port}", dbPort);
+        }
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
