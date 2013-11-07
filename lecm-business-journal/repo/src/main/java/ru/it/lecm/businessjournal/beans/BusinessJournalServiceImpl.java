@@ -811,7 +811,7 @@ public class BusinessJournalServiceImpl extends BaseBean implements  BusinessJou
 
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-        query = "TYPE:\"" + TYPE_BR_RECORD.toString() + (!includeFromArchive ? "\" AND @lecm\\-dic\\:active: true " : "");
+        query = "TYPE:\"" + TYPE_BR_RECORD.toString() + "\"" + (!includeFromArchive ? " AND @lecm\\-dic\\:active: true " : "");
         sp.addSort("@" + PROP_BR_RECORD_DATE.toString(), false);
         sp.setQuery(query);
         sp.setMaxItems(maxRecordsCount);
