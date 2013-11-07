@@ -38,6 +38,7 @@ public interface ErrandsService {
     public static final QName PROP_ERRANDS_END_DATE = QName.createQName(ERRANDS_NAMESPACE_URI, "end-date");
     public static final QName PROP_ERRANDS_EXECUTION_REPORT = QName.createQName(ERRANDS_NAMESPACE_URI, "execution-report");
     public static final QName PROP_ERRANDS_NUMBER = QName.createQName(ERRANDS_NAMESPACE_URI, "number");
+    public static final QName PROP_ERRANDS_JUST_IN_TIME = QName.createQName(ERRANDS_NAMESPACE_URI, "just-in-time");
 
 	public static final QName SETTINGS_PROP_MODE_CHOOSING_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-mode-choosing-executors");
 	public static final String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION = "ORGANIZATION";

@@ -64,8 +64,12 @@ public class EveryDayStatusExecutor extends ActionExecuterAbstractBase {
 
     private String getNotificationDescription(NodeRef document) {
         String docDesc = errandsService.wrapperLink(document, nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(), BaseBean.DOCUMENT_LINK_URL);
-        String desc = docDesc + " не исполнено в установленный срок! Дальнейшая работа с ним невозможна!";
-        return desc;
+        Boolean justInTime = (Boolean) nodeService.getProperty(document, ErrandsService.PROP_ERRANDS_JUST_IN_TIME);
+        if (justInTime) {
+            return docDesc + " не исполнено в установленный срок. Работа с ним завершена, поручение переходит в статус \"Не исполнено\"";
+        } else {
+            return "Обратите внимание: " + docDesc + " не исполнено в установленный срок.";
+        }
     }
 
     /**

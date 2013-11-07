@@ -171,7 +171,7 @@ public class EveryDayStatusShedule extends AbstractScheduledAction {
         statuses.add("!Черновик");
         statuses.add("!Исполнено");
 
-        filters = "@lecm\\-errands\\:just\\-in\\-time: false AND @lecm\\-errands\\:is\\-expired: false";
+        filters = "@lecm\\-errands\\:is\\-expired: false";
         // Фильтр по датам
         QName dateProperty = ErrandsService.PROP_ERRANDS_LIMITATION_DATE;
 
