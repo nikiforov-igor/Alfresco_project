@@ -150,7 +150,9 @@
                 <includes>
                     <include>utility-properties.cfg</include>
                     <include>diagnostic.bat</include>
+                    <include>checkSum.bat</include>
                     <include>diagnostic.sh</include>
+                    <include>checkSum.sh</include>
                 </includes>
             </resource>
         </resources>

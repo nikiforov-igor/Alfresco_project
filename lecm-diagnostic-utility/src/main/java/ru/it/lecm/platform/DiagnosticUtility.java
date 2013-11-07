@@ -52,6 +52,7 @@ public class DiagnosticUtility {
     private final static String GET_BJ_RECORDS_SCRIPT_URL = "/service/lecm/business-journal/api/last-records?count=1000&includeArchive=true";
 
     //Скрипт выдачи информации по пользователям
+    private final static String ORG_LOG_FILENAME = File.separator + "orgstructure.txt";
     private final static String GET_USERS_INFO_SCRIPT_URL = "/service/lecm/orgstructure/api/getUsersInfo";
 
     //файл с конфигом утилиты
@@ -88,28 +89,28 @@ public class DiagnosticUtility {
             File controlFile = null,
                     hashFile = null;
 
-            System.out.print("Введите полный путь к целевому файлу: ");
+            System.out.print("Input the full path of the control file: ");
             if (sc.hasNext()) {
                 String targetFilePath = sc.nextLine();
                 controlFile = new File(targetFilePath);
                 if (!controlFile.exists()) {
-                    log.error("Не удается найти указанный файл: " + targetFilePath);
+                    log.error("Cannot find file: " + targetFilePath);
                     return;
                 }
             }
 
-            System.out.print("Введите полный путь к хэш файлу: ");
+            System.out.print("Input the full path of the md5 file: ");
             if (sc.hasNext()) {
                 String hashFilePath = sc.nextLine();
                 hashFile = new File(hashFilePath);
                 if (!hashFile.exists()) {
-                    log.error("Не удается найти указанный файл: " + hashFilePath);
+                    log.error("Cannot find file: " + hashFilePath);
                     return;
                 }
             }
 
             boolean isEquals = checkMD5Sum(controlFile, hashFile);
-            System.out.print("Результат: MD5 суммы " + (!isEquals ? " не " : "") + "совпадают");
+            System.out.print("Result: MD5 sum " + (!isEquals ? " not " : "") + "equals");
         } else {
             // считываем конфигурационный файл. сохраняем параметры в config
             readConfigFile();
@@ -145,13 +146,13 @@ public class DiagnosticUtility {
 
     private static boolean checkMD5Sum(File controlFile, File hashFile) {
         if (!controlFile.exists() || !hashFile.exists()) {
-            log.error("Не удается найти указанные файл(ы): " + controlFile.getAbsolutePath() + "," + hashFile.getAbsolutePath());
+            log.error("Could not find the specified file(s): " + controlFile.getAbsolutePath() + "," + hashFile.getAbsolutePath());
             return false;
         }
 
         String actualMD5Sum = getMD5Sum(controlFile);
 
-        log.info("MD5 сумма контрольного файла равна " + actualMD5Sum);
+        log.info("MD5 checksum file equal to " + actualMD5Sum);
 
         String md5FromFile = "";
         try {
@@ -159,7 +160,7 @@ public class DiagnosticUtility {
             if (scanner.hasNext()) {
                 md5FromFile = scanner.next();
             }
-            log.info("Проверочная MD5 сумма равна " + actualMD5Sum);
+            log.info("Verification checksum is equal to " + actualMD5Sum);
         } catch (IOException ex) {
             log.error("", ex);
         }
@@ -657,7 +658,12 @@ public class DiagnosticUtility {
         int status = 500;
         byte[] bytes = new byte[1024];
         try {
-            out = new ByteArrayOutputStream();
+            File orgFile = new File(currentDirectoryPath + ORG_LOG_FILENAME);
+            if (!orgFile.exists()) {
+                orgFile.createNewFile();
+            }
+
+            out = new BufferedOutputStream(new FileOutputStream(orgFile));
 
             httpGet.setDoAuthentication(true);
             status = client.executeMethod(httpGet);
