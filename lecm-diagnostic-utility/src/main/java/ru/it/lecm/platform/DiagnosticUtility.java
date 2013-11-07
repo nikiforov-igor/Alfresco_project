@@ -989,7 +989,7 @@ public class DiagnosticUtility {
         if (dbHost != null) {
             requestURL = requestURL.replace("${db.host}", dbHost);
         }
-        if (dbHost != null) {
+        if (dbPort != null) {
             requestURL = requestURL.replace("${db.port}", dbPort);
         }
         Connection con = null;
