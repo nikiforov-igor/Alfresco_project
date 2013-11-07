@@ -699,21 +699,26 @@ public class DiagnosticUtility {
             //Проц, Память и прочее
             createPhaseLogInformation(logText, "Получение системных переменных", null);
 
-            OperatingSystemMXBean systemBean = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean());
-            long totalMemorySize = systemBean.getTotalPhysicalMemorySize();
-            long freeMemorySize = systemBean.getFreePhysicalMemorySize();
+            try {
+                OperatingSystemMXBean systemBean = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean());
+                long totalMemorySize = systemBean.getTotalPhysicalMemorySize();
+                long freeMemorySize = systemBean.getFreePhysicalMemorySize();
 
-            logText.append("Всего памяти = ").append(totalMemorySize / (1024 * 1024)).append(" MB \n");
-            logText.append("Свободно памяти = ").append(freeMemorySize / (1024 * 1024)).append(" MB \n");
-            File currentDirectory = new File(currentDirectoryPath);
-            logText.append("Свободно места на жестком диске = ").append(currentDirectory.getFreeSpace()).append(" Byte \n\n");
+                logText.append("Всего памяти = ").append(totalMemorySize / (1024 * 1024)).append(" MB \n");
+                logText.append("Свободно памяти = ").append(freeMemorySize / (1024 * 1024)).append(" MB \n");
+                File currentDirectory = new File(currentDirectoryPath);
+                logText.append("Свободно места на жестком диске = ").append(currentDirectory.getFreeSpace()).append(" Byte \n\n");
 
-            // Системные переменные
-            Map<String, String> systemVars = System.getenv();
-            for (String key : systemVars.keySet()) {
-                logText.append("\'").append(key).append("\'").append(" = ").append(systemVars.get(key)).append("\n");
+                // Системные переменные
+                Map<String, String> systemVars = System.getenv();
+                for (String key : systemVars.keySet()) {
+                    logText.append("\'").append(key).append("\'").append(" = ").append(systemVars.get(key)).append("\n");
+                }
+                success = true;
+            } catch (Exception e) {
+                createPhaseLogInformation(logText, "Не удалось получить системные переменные", null);
+                success = false;
             }
-            success = true;
         }
 
         return success;
