@@ -7,19 +7,17 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.management.ManagementFactory;
 
-import javax.net.ssl.SSLHandshakeException;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
-import java.security.SecureRandom;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,12 +30,9 @@ import java.util.zip.ZipOutputStream;
 public class DiagnosticUtility {
     private static final transient Logger log = LoggerFactory.getLogger(DiagnosticUtility.class);
 
-    //Файл с логом диагностики
-    private final static String DIAGNOSTIC_LOG_FILENAME = File.separator + "utility-diagnostic.log";
-
     //Контрольные Файлы
-    private final static String CONTROL_INFO_FILENAME = File.separator + "utility-control.log";
-    private final static String CONTROL_INFO_HASH_FILENAME = File.separator + "utility-control.md5";
+    private final static String CONTROL_INFO_FILENAME = "utility.log";
+    private final static String CONTROL_INFO_HASH_FILENAME = File.separator + "utility.md5";
 
     //Названия архивов
     private final static String LOGS_ARCHIVE_NAME = File.separator + "server-logs.zip";
@@ -67,9 +62,6 @@ public class DiagnosticUtility {
     private final static Map<String, String> config = new HashMap<String, String>();
     private final static Map<String, String> alfPropsMap = new HashMap<String, String>();
 
-    //буфер
-    private final static StringBuilder logText = new StringBuilder();
-
     //вспомогательный объект
     private final static FileFinder finder = new FileFinder();
 
@@ -81,8 +73,6 @@ public class DiagnosticUtility {
     private final static String SALT = "ac19625a23bd1fa61874694464ac9066";
 
     public static void main(String[] args) {
-        BasicConfigurator.configure();
-
         if (args != null && args.length > 0 && args[0].equals("checkSum")) {
             Scanner sc = new Scanner(System.in);
 
@@ -113,6 +103,8 @@ public class DiagnosticUtility {
             System.out.print("Result: MD5 sum " + (!isEquals ? " not " : "") + "equals");
         } else {
             // считываем конфигурационный файл. сохраняем параметры в config
+            log.info("Diagnostic Utility started");
+
             readConfigFile();
 
             //устанавливаем директорию куда будем сохранять результаты
@@ -128,18 +120,14 @@ public class DiagnosticUtility {
             currentDirectoryPath =
                     currentDirectoryPath + File.separator + "diagnostic-results-" + new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
 
+            log.info("Diagnostic Utility Output Path set to {}", currentDirectoryPath);
+
             boolean logDirectory = new File(currentDirectoryPath).mkdirs();
             if (logDirectory) {
-                //создаем диагностический файл и пишем в него инфу
-                try {
-                    createDiagnosticFile();
-                } catch (IOException ex) {
-                    log.error("", ex);
-                }
-                //создаем контрольный файл и пишем в него инфу
-                createControlFile();
+                //запускаем диагностику
+                startDiagnostic();
             } else {
-                log.error("Не удалось создать директорию для сохранения результатов!");
+                log.error("Error! Unable to create a directory to store the results!");
             }
         }
     }
@@ -169,11 +157,12 @@ public class DiagnosticUtility {
     }
 
     private static void readConfigFile() {
+        log.info("Start reading config file");
         BufferedReader br = null;
         try {
             File configFile = new File(CONFIG_FILENAME);
             if (!configFile.exists()) {
-                log.error("Ошибка! Не удалось найти конфигурационный файл: " + CONFIG_FILENAME);
+                log.error("Error! Could not find a config file: " + CONFIG_FILENAME);
             } else {
                 //инициализируем конфиг из файла
                 br = new BufferedReader(new FileReader(configFile));
@@ -187,17 +176,18 @@ public class DiagnosticUtility {
                 }
             }
         } catch (Exception ex) {
-            log.error("Ошибка при чтении конфигурационного файла: " + CONFIG_FILENAME, ex);
+            log.error("An error occurred while reading the configuration file: " + CONFIG_FILENAME, ex);
         } finally {
             IOUtils.closeQuietly(br);
         }
+        log.info("Reading config file finished");
     }
 
     private static boolean checkServer() {
         //прочитать и распарсить настроечный файл альфреско
         String alfrescoRootDirectory = config.get(ALF_HOME);
         if (alfrescoRootDirectory == null) {
-            logText.append("Failed read property \'ALF_HOME\' from config file. Please check utility configuration!").append("\n");
+            log.error("Failed read property 'alf_home' from config file. Please check utility configuration!");
             return false;
         }
 
@@ -209,7 +199,7 @@ public class DiagnosticUtility {
             alfrescoProperties = settingsFile.get(0);
         }
         if (alfrescoProperties == null || !alfrescoProperties.exists()) {
-            logText.append("Failed read alfresco-global.properties. Please check utility configuration!").append("\n");
+            log.error("Failed read alfresco-global.properties. Please check utility configuration!");
             return false;
         }
 
@@ -217,22 +207,20 @@ public class DiagnosticUtility {
         try {
             //инициализируем конфиг из файла
             br = new BufferedReader(new FileReader(alfrescoProperties));
-            logText.append("Read alfresco-global.properties started").append("\n");
+            log.info("Read alfresco-global.properties started");
             String row;
             while ((row = br.readLine()) != null) {
                 if (row.contains("=") && !row.startsWith("#")) {
                     String[] property = row.split("=");
                     alfPropsMap.put(property[0], property[1]);
-                    logText.append(row).append("\n");
+                    log.info(row);
                 }
             }
         } catch (Exception e) {
-            log.error("Cannot read alfresco-global.properties file: " + CONFIG_FILENAME);
+            log.error("Cannot read alfresco-global.properties file: " + CONFIG_FILENAME, e);
         } finally {
             IOUtils.closeQuietly(br);
         }
-
-        logText.append("\n");
 
         //Нужные свойства
         String dbDriver = alfPropsMap.get("db.driver");
@@ -247,99 +235,129 @@ public class DiagnosticUtility {
         HttpClient httpclient = new HttpClient();
         httpclient.getParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 5000);
 
-        logText.append("Check Tomcat Server...").append("\n");
-        int requestTomcatStatus = sendRequestToURL(httpclient, new String[]{concatAfrescoServerURL(), concatAfrescoLocalhostServerURL()}, logText);
+        log.info("Check Tomcat Server...");
+        int requestTomcatStatus = sendRequestToURL(httpclient, new String[]{concatAfrescoServerURL(), concatAfrescoLocalhostServerURL()});
 
-        logText.append("Check Data Base Server...").append("\n");
-        int requestDBStatus = checkDBConnection(dbDriver, dbHost, dbPort, dbUser, dbPass, dbName, dbUrl, logText);
+        log.info("Check Data Base Server...");
+        int requestDBStatus = checkDBConnection(dbDriver, dbHost, dbPort, dbUser, dbPass, dbName, dbUrl);
 
         if (requestTomcatStatus != 200 || requestDBStatus != 200) {
-            logText.append("Alfresco Server not started. Cannot send request to webapps").append("\n");
+            log.error("Alfresco Server not started. Tomcat Status: {}, DB Server Status: {}.", requestTomcatStatus, requestDBStatus);
             isServerAvailable = false;
         } else {
             isServerAvailable = true;
+
+            //request to alfresco
+            log.info("Check Alfresco...");
+            int status1, status2;
+            status1 = sendRequestToURL(httpclient, new String[]{concatAfrescoURL(), concatLocalhostAfrescoURL()});
+
+            //request to share
+            log.info("Check Share...");
+            status2 = sendRequestToURL(httpclient, new String[]{concatShareURL(), concatLocalhostShareURL()});
+
+            //request to solr
+            log.info("Check Solr...");
+            sendRequestToURL(httpclient, new String[]{concatSolrURL(), concatLocalhostSolrURL()});
+
+            return (status1 != 503 && status2 != 503);
         }
 
-        //request to alfresco
-        logText.append("Check Alfresco...").append("\n");
-        sendRequestToURL(httpclient, new String[]{concatAfrescoURL(), concatLocalhostAfrescoURL()}, logText);
-
-        //request to share
-        logText.append("Check Share...").append("\n");
-        sendRequestToURL(httpclient, new String[]{concatShareURL(), concatLocalhostShareURL()}, logText);
-
-        //request to solr
-        logText.append("Check Solr...").append("\n");
-        sendRequestToURL(httpclient, new String[]{concatSolrURL(), concatLocalhostSolrURL()}, logText);
-
-        return true;
+        return false;
     }
 
-    private static String collectFiles() {
-        StringBuilder logText = new StringBuilder();
+    private static boolean collectFiles() {
         long numberOfArchivedFiles = 0;
 
         String alfrescoRootDirectory = config.get(ALF_HOME);
         if (alfrescoRootDirectory == null) {
-            logText.append("Failed read property \'ALF_HOME\' from config file. Please check utility configuration!").append("\n");
-            return logText.toString();
+            log.error("Failed read property 'alf_home' from config file. Please check utility configuration!");
+            return false;
         }
 
         File alfRoot = new File(alfrescoRootDirectory);
         if (!alfRoot.exists()) {
-            logText.append("Failed read Alfresco Root Directory by Path: ").append(alfrescoRootDirectory).append("\n");
-            return logText.toString();
+            log.error("Failed read Alfresco Root Directory by Path: {}", alfrescoRootDirectory);
+            return false;
         }
         // Далее log files
-        numberOfArchivedFiles += collectLogFiles(logText, alfrescoRootDirectory);
-
+        try {
+            numberOfArchivedFiles += collectLogFiles(alfrescoRootDirectory);
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
         // Далее properties и xml из shared/classes
-        numberOfArchivedFiles += collectSharedFiles(logText, alfrescoRootDirectory);
+        try {
+            numberOfArchivedFiles += collectSharedFiles(alfrescoRootDirectory);
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
 
         // Далее solr files
-        numberOfArchivedFiles += collectSolrFiles(logText, alfrescoRootDirectory);
+        try {
+            numberOfArchivedFiles += collectSolrFiles(alfrescoRootDirectory);
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
 
         // Далее конфиги томката
-        numberOfArchivedFiles += collectTomcatConfigs(logText, alfrescoRootDirectory);
+        try {
+            numberOfArchivedFiles += collectTomcatConfigs(alfrescoRootDirectory);
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
 
         // И наконец проходим по альфреско и шаре
-        numberOfArchivedFiles += collectAlfrescoFiles(logText, alfrescoRootDirectory);
-        numberOfArchivedFiles += collectShareFiles(logText, alfrescoRootDirectory);
+        try {
+            numberOfArchivedFiles += collectAlfrescoFiles(alfrescoRootDirectory);
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
+        try {
+            numberOfArchivedFiles += collectShareFiles(alfrescoRootDirectory);
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
 
-        createPhaseLogInformation(logText, "Collect files completed. All archived Files:" + numberOfArchivedFiles, null);
-        return logText.toString();
+        log.info("All archived Files: {}", numberOfArchivedFiles);
+        return true;
     }
 
-    private static long collectLogFiles(StringBuilder result, String alfrescoRootDirectory) {
+    private static long collectLogFiles(String alfrescoRootDirectory) {
+        log.info("Archive log files started");
+
         List<File> alfrescoLogs = new ArrayList<File>();
         alfrescoLogs.addAll(findFiles(alfrescoRootDirectory, ".*\\.log", true));
 
-        return writeFilesToArchive(result, "Archive log-files started...",
-                alfrescoLogs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + LOGS_ARCHIVE_NAME));
+        return writeFilesToArchive(alfrescoLogs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + LOGS_ARCHIVE_NAME));
     }
 
-    private static long collectSharedFiles(StringBuilder result, String alfrescoRootDirectory) {
+    private static long collectSharedFiles(String alfrescoRootDirectory) {
+        log.info("Archive files from shared/classes directory started");
+
         List<File> alfrescoSharedClasses = new ArrayList<File>();
         File sharedClassesDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "shared", "classes"}));
 
         alfrescoSharedClasses.addAll(findFiles(sharedClassesDir, ".*\\.xml", true));
         alfrescoSharedClasses.addAll(findFiles(sharedClassesDir, ".*\\.properties", true));
 
-        return writeFilesToArchive(result, "Archive files from shared/classes directory started...",
-                alfrescoSharedClasses, new File(alfrescoRootDirectory), new File(currentDirectoryPath + SHARED_CLASSES_ARCHIVE_NAME));
+        return writeFilesToArchive(alfrescoSharedClasses, new File(alfrescoRootDirectory), new File(currentDirectoryPath + SHARED_CLASSES_ARCHIVE_NAME));
     }
 
-    private static long collectTomcatConfigs(StringBuilder result, String alfrescoRootDirectory) {
+    private static long collectTomcatConfigs(String alfrescoRootDirectory) {
+        log.info("Archive tomcat config files started");
+
         List<File> tomcatConfigs = new ArrayList<File>();
         File tomcatDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "conf"}));
 
         tomcatConfigs.addAll(findFiles(tomcatDir, "", true));
 
-        return writeFilesToArchive(result, "Archive tomcat config files started...",
-                tomcatConfigs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + TOMCAT_CONFIGS_ARCHIVE_NAME));
+        return writeFilesToArchive(tomcatConfigs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + TOMCAT_CONFIGS_ARCHIVE_NAME));
     }
 
-    private static long collectShareFiles(StringBuilder result, String alfrescoRootDirectory) {
+    private static long collectShareFiles(String alfrescoRootDirectory) {
+        log.info("Archive Share config files started");
+
         List<File> shareConfigs = new ArrayList<File>();
         File shareDir;
 
@@ -362,11 +380,12 @@ public class DiagnosticUtility {
         shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF"}));
         shareConfigs.addAll(findFiles(shareDir, ".*\\.xml", false));
 
-        return writeFilesToArchive(result, "Archive Share config files started...",
-                shareConfigs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + SHARE_CONFIGS_ARCHIVE_NAME));
+        return writeFilesToArchive(shareConfigs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + SHARE_CONFIGS_ARCHIVE_NAME));
     }
 
-    private static long collectSolrFiles(StringBuilder result, String alfrescoRootDirectory) {
+    private static long collectSolrFiles(String alfrescoRootDirectory) {
+        log.info("Archive solr files started");
+
         List<File> solrFiles = new ArrayList<File>();
         File solrWorkSpaceDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"alf_data", "solr", "workspace-SpacesStore"}));
         solrFiles.addAll(findFiles(solrWorkSpaceDir, "", true));
@@ -377,11 +396,12 @@ public class DiagnosticUtility {
         File solrConfigDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "solr", "WEB-INF"}));
         solrFiles.addAll(findFiles(solrConfigDir, ".*\\.xml", true));
 
-        return writeFilesToArchive(result, "Archive solr files started...",
-                solrFiles, new File(alfrescoRootDirectory), new File(currentDirectoryPath + SOLR_CONFIGS_ARCHIVE_NAME));
+        return writeFilesToArchive(solrFiles, new File(alfrescoRootDirectory), new File(currentDirectoryPath + SOLR_CONFIGS_ARCHIVE_NAME));
     }
 
-    private static long collectAlfrescoFiles(StringBuilder result, String alfrescoRootDirectory) {
+    private static long collectAlfrescoFiles(String alfrescoRootDirectory) {
+        log.info("Archive Alfresco config files started");
+
         List<File> alfrescoConfigs = new ArrayList<File>();
         File alfrescoDir;
 
@@ -442,7 +462,7 @@ public class DiagnosticUtility {
         alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "workflow"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        return writeFilesToArchive(result, "Archive Alfresco config files started...", alfrescoConfigs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + ALFRESCO_CONFIGS_ARCHIVE_NAME));
+        return writeFilesToArchive(alfrescoConfigs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + ALFRESCO_CONFIGS_ARCHIVE_NAME));
     }
 
     private static List<File> findFiles(File rootDirectory, String template, boolean searchInSubDirs) {
@@ -472,7 +492,7 @@ public class DiagnosticUtility {
         return new ArrayList<File>();
     }
 
-    private static long writeFilesToArchive(final StringBuilder buf, final String phaseDesc, final List<File> filesToWrite, final File alfrescoRoot, final File zipFile) {
+    private static long writeFilesToArchive(final List<File> filesToWrite, final File alfrescoRoot, final File zipFile) {
         long numberOfArchivedFiles = 0;
 
         Deque<File> queue = new LinkedList<File>();
@@ -523,7 +543,7 @@ public class DiagnosticUtility {
                         out.closeEntry();
                         numberOfArchivedFiles++;
                     } catch (Exception ex) {
-                        log.error("Some problem occured", ex);
+                        log.error(ex.getMessage(), ex);
                     } finally {
                         IOUtils.closeQuietly(in);
                     }
@@ -537,18 +557,18 @@ public class DiagnosticUtility {
         } finally {
             IOUtils.closeQuietly(out);
         }
-        StringBuilder result = new StringBuilder();
         if (isOk && zipFile.exists()) {
-            result.append("Number of files archived: ").append(numberOfArchivedFiles).append("\n");
-            result.append("Resulted archive created! File Path: ").append(zipFile.getAbsolutePath());
+            log.info("Number of files archived: {}", numberOfArchivedFiles);
+            log.info("Resulted archive created by path: {}", zipFile.getAbsolutePath());
+        } else {
+            log.error("Some error occured! Unable to archive files");
         }
-
-        createPhaseLogInformation(buf, phaseDesc, result.toString());
 
         return numberOfArchivedFiles;
     }
 
-    private static void collectBusinessJournalRecords() {
+    private static boolean collectBusinessJournalRecords() {
+        boolean success = true;
 
         HttpClient client = new HttpClient();
         client.getParams().setAuthenticationPreemptive(true);
@@ -557,7 +577,7 @@ public class DiagnosticUtility {
         client.getState().setCredentials(AuthScope.ANY, adminCredentials);
         String getRecordsScript = concatAfrescoURL() + GET_BJ_RECORDS_SCRIPT_URL;
 
-        createPhaseLogInformation(logText, "Attempt to connect to URL " + getRecordsScript, null);
+        log.info("Attempt to connect to URL {}", getRecordsScript);
 
         GetMethod httpGet = new GetMethod(getRecordsScript);
 
@@ -577,7 +597,6 @@ public class DiagnosticUtility {
             status = client.executeMethod(httpGet);
 
             in = new BufferedInputStream(httpGet.getResponseBodyAsStream());
-
             out = new BufferedOutputStream(new FileOutputStream(bjLogFile));
 
             int readCount;
@@ -587,13 +606,14 @@ public class DiagnosticUtility {
             out.flush();
         } catch (IOException e) {
             log.error("", e);
+            success = false;
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);
         }
 
-        createPhaseLogInformation(logText, "Business journal log was " + (200 <= status && status < 300 ? "" : "not")
-                + "written to file " + currentDirectoryPath + BJ_LOG_FILENAME, "STATUS CODE " + status);
+        log.info("Business journal log was " + (200 <= status && status < 300 ? "" : "not") + "written to file " + currentDirectoryPath + BJ_LOG_FILENAME);
+        return success;
     }
 
     private static String concatAfrescoServerURL() {
@@ -629,7 +649,6 @@ public class DiagnosticUtility {
                 alfPropsMap.get("share.context");
     }
 
-
     private static String concatSolrURL() {
         return "https://" +
                 alfPropsMap.get("alfresco.host") + ":" + alfPropsMap.get("solr.port.ssl") + "/solr";
@@ -640,7 +659,8 @@ public class DiagnosticUtility {
                 alfPropsMap.get("solr.port.ssl") + "/solr";
     }
 
-    private static String collectOrgstructureInfo() {
+    private static boolean collectOrgstructureInfo() {
+        boolean success = true;
         HttpClient client = new HttpClient();
         client.getParams().setAuthenticationPreemptive(true);
 
@@ -648,7 +668,7 @@ public class DiagnosticUtility {
         client.getState().setCredentials(AuthScope.ANY, adminCredentials);
         String getRecordsScript = concatAfrescoURL() + GET_USERS_INFO_SCRIPT_URL;
 
-        createPhaseLogInformation(logText, "Attempt to connect to URL " + getRecordsScript, null);
+        log.info("Attempt to connect to URL {}", getRecordsScript);
 
         GetMethod httpGet = new GetMethod(getRecordsScript);
 
@@ -676,211 +696,59 @@ public class DiagnosticUtility {
             out.flush();
         } catch (IOException e) {
             log.error("", e);
+            success = false;
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);
         }
 
-        createPhaseLogInformation(logText, "Users Info log was " + (200 <= status && status < 300 ? "" : "not")
-                + "written to file " + currentDirectoryPath + CONTROL_INFO_FILENAME, "STATUS CODE " + status);
-        return out.toString();
-    }
-
-    private static boolean collectSystemInformation(boolean onlyInetParams) {
-        // IP адрес сервера
-        createPhaseLogInformation(logText, "Получение сетевой информации о сервере", null);
-        boolean success = false;
-        InetAddress addr;
-        try {
-            addr = InetAddress.getLocalHost();
-            logText.append("IP адрес: ").append(addr.getHostAddress()).append("\n");
-            //logText.append("Canonic Name: ").append(addr.getCanonicalHostName()).append("\n");
-            logText.append("Имя: ").append(addr.getHostName()).append("\n");
-            success = true;
-        } catch (UnknownHostException e) {
-            log.error(e.getMessage(), e);
-        }
-
-        if (!onlyInetParams) {
-            //Проц, Память и прочее
-            createPhaseLogInformation(logText, "Получение системных переменных", null);
-
-            try {
-                OperatingSystemMXBean systemBean = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean());
-                long totalMemorySize = systemBean.getTotalPhysicalMemorySize();
-                long freeMemorySize = systemBean.getFreePhysicalMemorySize();
-
-                logText.append("Всего памяти = ").append(totalMemorySize / (1024 * 1024)).append(" MB \n");
-                logText.append("Свободно памяти = ").append(freeMemorySize / (1024 * 1024)).append(" MB \n");
-                File currentDirectory = new File(currentDirectoryPath);
-                logText.append("Свободно места на жестком диске = ").append(currentDirectory.getFreeSpace()).append(" Byte \n\n");
-
-                // Системные переменные
-                Map<String, String> systemVars = System.getenv();
-                for (String key : systemVars.keySet()) {
-                    logText.append("\'").append(key).append("\'").append(" = ").append(systemVars.get(key)).append("\n");
-                }
-                success = true;
-            } catch (Exception e) {
-                createPhaseLogInformation(logText, "Не удалось получить системные переменные", null);
-                success = false;
-            }
-        }
+        log.info("Users Info log was " + (200 <= status && status < 300 ? "" : "not") + "written to file " + currentDirectoryPath + CONTROL_INFO_FILENAME);
 
         return success;
     }
 
-    private static void createDiagnosticFile() throws IOException {
-        File diagnosticFile = new File(currentDirectoryPath + DIAGNOSTIC_LOG_FILENAME);
-
-        boolean isDiagnosticFileCreated;
-        isDiagnosticFileCreated = diagnosticFile.exists() || diagnosticFile.createNewFile();
-        if (!isDiagnosticFileCreated) {
-            throw new RuntimeException("Не удалось создать файл для сохранения диагностической информации!" + diagnosticFile.getAbsolutePath());
-        }
-
-        PrintWriter out = null;
+    private static boolean collectSystemInformation() {
+        // IP адрес сервера
+        log.info("Getting a network server information");
+        boolean success1, success2;
+        InetAddress addr;
         try {
-            out = new PrintWriter(new FileOutputStream(diagnosticFile));
-
-            //начало записи в лог
-            logText.delete(0, logText.length()); // очищаем буфер
-
-            logText.append(LOG_DATE_FMT.format(new Date())).
-                    append(" Начат сбор диагностической информации...").
-                    append("\n").
-                    append("-------------------------------------------------").
-                    append("\n");
-
-            writeToFile(out);
-
-            boolean success;
-
-            //Фаза 1 - Получение системных переменных и параметров сервера
-            createStartPhaseLogInformation(logText, 1, "Сбор системной информации");
-            success = collectSystemInformation(true);
-            createPhaseFinishLogInformation(logText, 1, success  ? "Успех" : "Неудача", "");
-            writeToFile(out);
-
-            //Фаза 2 - Сканирование файлов сервера
-            createStartPhaseLogInformation(logText, 2, "Сканирование файлов Alfresco и Share");
-            collectFiles();
-            createPhaseFinishLogInformation(logText, 2, "OK", "");
-            writeToFile(out);
-
-            //Фаза 3 - Проверка доступности сервера
-            createStartPhaseLogInformation(logText, 3, "Проверка доступности сервера\n");
-            success = checkServer();
-            createPhaseFinishLogInformation(logText, 3, success  ? "Успех" : "Неудача", "");
-            writeToFile(out);
-
-            //Фаза 4 - Сбор информации из бизнес-журнала
-            if (isServerAvailable) {
-                createStartPhaseLogInformation(logText, 4, "Начат сбор записей бизнес-журнала");
-                collectBusinessJournalRecords();
-                createPhaseFinishLogInformation(logText, 4, "OK", "Сбор записей бизнес-журнала завершен");
-                writeToFile(out);
-            } else {
-                logText.append("Сервер недоступен. Невозможно собрать записи бизнес-журнала.");
-                writeToFile(out);
-            }
-
-        } catch (IOException ex) {
-            throw new RuntimeException("Не удалось сохранить лог-файл!", ex);
-        } finally {
-            IOUtils.closeQuietly(out);
+            addr = InetAddress.getLocalHost();
+            log.info("Server IP - {}", addr.getHostAddress());
+            log.info("Server Name - {}", addr.getHostName());
+            success1 = true;
+        } catch (UnknownHostException e) {
+            success1 = false;
+            log.error("Unable to get network server information", e.getMessage());
         }
-    }
+        log.info("Getting a network server information. Status: {}", formatStatusString(success1));
 
-    private static void writeToFile(PrintWriter out) {
-        out.print(logText.toString());
-        out.flush();
-        logText.delete(0, logText.length()); // очищаем буфер
-    }
 
-    private static void createControlFile() {
-        File controlFile = new File(currentDirectoryPath + CONTROL_INFO_FILENAME);
-
-        boolean isControlFileCreated;
+        log.info("Getting system variables");
         try {
-            isControlFileCreated = controlFile.exists() || controlFile.createNewFile();
-            if (!isControlFileCreated) {
-                throw new IOException("Cannot create control file");
+            OperatingSystemMXBean systemBean = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean());
+            long totalMemorySize = systemBean.getTotalPhysicalMemorySize();
+            long freeMemorySize = systemBean.getFreePhysicalMemorySize();
+
+            log.info("Total Memory - {}", totalMemorySize / (1024 * 1024) + " MB");
+            log.info("Free Memory - {}", freeMemorySize / (1024 * 1024) + " MB");
+
+            File currentDirectory = new File(currentDirectoryPath);
+            log.info("Free hard disk space - {}", currentDirectory.getFreeSpace() + " Byte");
+
+            // Системные переменные
+            Map<String, String> systemVars = System.getenv();
+            for (String key : systemVars.keySet()) {
+                log.info("{} = {}", key, systemVars.get(key));
             }
-        } catch (IOException ex) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Cannot create log controlFile: ").
-                    append(CONTROL_INFO_FILENAME).
-                    append(" in directory ").
-                    append(currentDirectoryPath);
-            throw new RuntimeException(sb.toString());
+            success2 = true;
+        } catch (Exception e) {
+            log.error("Unable to get system variables", e.getMessage());
+            success2 = false;
         }
+        log.info("Getting system variables. Status: {}", formatStatusString(success2));
 
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(new FileOutputStream(controlFile));
-
-            //начало записи в лог
-            //начало записи в лог
-            logText.delete(0, logText.length()); // очищаем буфер
-
-            logText.append(LOG_DATE_FMT.format(new Date())).
-                    append(" Начат сбор контрольной информации...").
-                    append("\n").
-                    append("-------------------------------------------------").
-                    append("\n");
-
-            writeToFile(out);
-
-            //Фаза 1 - Получение системных переменных и параметров сервера
-            createStartPhaseLogInformation(logText, 1, "Получение системной информации\n");
-            boolean success = collectSystemInformation(false);
-            createPhaseFinishLogInformation(logText, 1, success ? "Успех" : "Неудача", "");
-
-            writeToFile(out);
-
-            //Фаза 2 - Проверка доступности сервера
-            createStartPhaseLogInformation(logText, 2, "Check Server availability\n");
-            logText.append(checkServer());
-            createPhaseFinishLogInformation(logText, 2, "OK", "See log for details");
-            writeToFile(out);
-
-            //Фаза 3 - Сбор информации с сервисов
-            if (isServerAvailable) {
-                createStartPhaseLogInformation(logText, 3, "Collect orgStructure information\n");
-                logText.append(collectOrgstructureInfo());
-                createPhaseFinishLogInformation(logText, 3, "OK", "Collect orgStructure information finished");
-                writeToFile(out);
-            } else {
-                logText.append("Server is not available. Cannot collect orgStructure information.");
-                writeToFile(out);
-            }
-
-            out.flush();
-
-        } catch (IOException ex) {
-            throw new RuntimeException("Cannot save log!!!", ex);
-        } finally {
-            IOUtils.closeQuietly(out);
-        }
-
-        String md5Sum = getMD5Sum(controlFile);
-        PrintWriter outCoded = null;
-        try {
-            File controlHashFile = new File(currentDirectoryPath + CONTROL_INFO_HASH_FILENAME);
-            if (!controlHashFile.exists()) {
-                controlHashFile.createNewFile();
-            }
-
-            outCoded = new PrintWriter(controlHashFile);
-            if (md5Sum != null) {
-                outCoded.write(md5Sum);
-            }
-        } catch (Exception ex) {
-            log.error("", ex);
-        } finally {
-            IOUtils.closeQuietly(outCoded);
-        }
+        return success1 || success2;
     }
 
     private static String getMD5Sum(File controlFile) {
@@ -902,7 +770,7 @@ public class DiagnosticUtility {
             byte[] hash = md.digest();
             checksum = new BigInteger(1, hash).toString(16);
         } catch (Exception ioEx) {
-            log.error("", ioEx);
+            log.error(ioEx.getMessage(), ioEx);
         } finally {
             IOUtils.closeQuietly(inNotCoded);
         }
@@ -956,19 +824,18 @@ public class DiagnosticUtility {
         return resultPath;
     }
 
-    private static int sendRequestToURL(HttpClient client, String[] requestURL, StringBuilder buffer) {
+    private static int sendRequestToURL(HttpClient client, String[] requestURL) {
         int requestStatus = 503;
         for (String url : requestURL) {
+            log.info("Try connect to URL: {}", url);
             GetMethod httpGet = null;
             try {
                 httpGet = new GetMethod(url);
                 requestStatus = client.executeMethod(httpGet);
-            } catch (SSLHandshakeException e1) {
-
             } catch (Exception e) {
-                log.error("", e);
+                log.error("Unable connect to URL", e);
             } finally {
-                buffer.append("Send request to URL ").append(url).append(" STATUS ").append(requestStatus).append("\n\n");
+                log.info("Send request to URL {}. Status Code = {}", url, requestStatus);
                 if (httpGet != null) {
                     httpGet.releaseConnection();
                 }
@@ -980,11 +847,11 @@ public class DiagnosticUtility {
         return requestStatus;
     }
 
-    private static int checkDBConnection(String dbDriver, String dbHost, String dbPort, String dbUser, String dbPass, String dbName, String dbUrl, StringBuilder buffer) {
+    private static int checkDBConnection(String dbDriver, String dbHost, String dbPort, String dbUser, String dbPass, String dbName, String dbUrl) {
         String requestURL;
         int requestDBStatus = 503;
         if (dbDriver == null || dbUser == null || dbPass == null || dbUrl == null) {
-            buffer.append("Cannot Send request to DB. Check params").append(". STATUS - ").append(requestDBStatus).append("\n");
+            log.error("Cannot Send request to DB. Check db params");
             return requestDBStatus;
         }
 
@@ -998,6 +865,7 @@ public class DiagnosticUtility {
         if (dbPort != null) {
             requestURL = requestURL.replace("${db.port}", dbPort);
         }
+
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -1025,23 +893,99 @@ public class DiagnosticUtility {
                 log.error("", ex);
             }
         }
-        buffer.append("Send request to URL ").append(requestURL).append(" STATUS ").append(requestDBStatus).append("\n\n");
+        log.info("Send request to DB Server to URL {}. Status: {}", requestURL, requestDBStatus);
         return requestDBStatus;
     }
 
-    private static byte[] getSalt() {
-        SecureRandom sr;
+    private static void startDiagnostic() {
+        log.info("Started collecting diagnostic information ...");
+        boolean success;
+        //Фаза 1 - Получение системных переменных и параметров сервера
         try {
-            sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
-
-            byte[] salt = new byte[16];
-            sr.nextBytes(salt);
-
-            return salt;
-        } catch (Exception e) {
-            log.error("", e);
+            log.info("Phase 1 - Collecting system information");
+            success = collectSystemInformation();
+            log.info("Phase 1 - Collecting system information finished. Phase result is {}", formatStatusString(success));
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
         }
 
-        return null;
+        //Фаза 2 - Сканирование файлов сервера
+        try {
+            log.info("Phase 2 - Scanning files");
+            success = collectFiles();
+            log.info("Phase 2 - Scanning files finished. Phase result is {}", formatStatusString(success));
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+        }
+
+        //Фаза 3 - Проверка доступности сервера
+        try {
+            log.info("Phase 3 - Checking the availability of the server");
+            success = checkServer();
+            log.info("Phase 3 - Checking the availability of the server finished. Phase result is {}", formatStatusString(success));
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+        }
+
+        if (isServerAvailable) {
+            //Фаза 4 - Сбор информации из бизнес-журнала
+            try {
+                log.info("Phase 4 - Collecting business journal records");
+                success = collectBusinessJournalRecords();
+                log.info("Phase 4 - Collecting business journal records. Phase result is {}", formatStatusString(success));
+            } catch (Exception ex) {
+                log.error(ex.getMessage());
+            }
+            //Фаза 5 - Проверка доступности сервера
+            try {
+                log.info("Phase 5 - Collecting orgstructure info");
+                success = collectOrgstructureInfo();
+                log.info("Phase 5 - Collecting orgstructure info. Phase result is {}", formatStatusString(success));
+            } catch (Exception ex) {
+                log.error(ex.getMessage());
+            }
+        } else {
+            log.warn("Server is unavailable. Unable to collect the business journal records and orgstructure info");
+        }
+
+        log.info("Last Phase - Encode control log file");
+        try {
+            File controlFile = new File(CONTROL_INFO_FILENAME);
+            if (!controlFile.exists()) {
+                log.error("Check file paths. Unable to find control file");
+                return;
+            }
+            File destFile = new File(currentDirectoryPath + File.separator + CONTROL_INFO_FILENAME);
+
+            //копируем наш лог из рабочей директории к остальным файлам
+            FileUtils.copyFile(controlFile, destFile);
+
+            //считаем хеш сумму для рабочей копии лога
+            String md5Sum = getMD5Sum(destFile);
+
+            //сохраняем кеш в рабочую директорию
+            PrintWriter outCoded = null;
+            try {
+                File controlHashFile = new File(currentDirectoryPath + CONTROL_INFO_HASH_FILENAME);
+                if (!controlHashFile.exists()) {
+                    controlHashFile.createNewFile();
+                }
+
+                outCoded = new PrintWriter(controlHashFile);
+                if (md5Sum != null) {
+                    outCoded.write(md5Sum);
+                }
+            } catch (Exception ex) {
+                log.error("", ex);
+            } finally {
+                IOUtils.closeQuietly(outCoded);
+            }
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
+    }
+
+    private static String formatStatusString(boolean success) {
+        return success ? "SUCCESS" : "FAILURE";
     }
 }

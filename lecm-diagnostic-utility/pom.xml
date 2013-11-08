@@ -46,16 +46,16 @@
             <artifactId>commons-codec</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
+        </dependency>-->
+        <!--<dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
             <scope>compile</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -67,17 +67,6 @@
             <version>1.5.11</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.12</version>
-            <scope>compile</scope>
-        </dependency>
-        <!--<dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.1.1</version>
-        </dependency>-->
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -154,6 +143,13 @@
                     <include>diagnostic.sh</include>
                     <include>checkSum.sh</include>
                 </includes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**README-*</exclude>
+                </excludes>
             </resource>
         </resources>
     </build>
