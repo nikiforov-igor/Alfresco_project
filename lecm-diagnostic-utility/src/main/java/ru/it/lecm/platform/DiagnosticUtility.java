@@ -111,7 +111,7 @@ public class DiagnosticUtility {
             if (config.get(OUTPUT_DIR) != null) {
                 File outputFile = new File(config.get(OUTPUT_DIR));
                 if (outputFile.exists()) {
-                    currentDirectoryPath = config.get(OUTPUT_DIR);
+                    currentDirectoryPath = outputFile.getAbsolutePath();
                 }
             }
 
