@@ -19,7 +19,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.sql.*;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
@@ -68,39 +67,39 @@ public class DiagnosticUtility {
     private static String currentDirectoryPath = ".";
     private static boolean isServerAvailable = false;
 
-    private final static DateFormat LOG_DATE_FMT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
     private final static String SALT = "ac19625a23bd1fa61874694464ac9066";
 
     public static void main(String[] args) {
         if (args != null && args.length > 0 && args[0].equals("checkSum")) {
             Scanner sc = new Scanner(System.in);
 
-            File controlFile = null,
-                    hashFile = null;
+            File controlFileDir = null,
+                    controlFile,
+                    hashFile;
 
-            System.out.print("Input the full path of the control file: ");
+            System.out.print("Input the directory path with utility files: ");
             if (sc.hasNext()) {
                 String targetFilePath = sc.nextLine();
-                controlFile = new File(targetFilePath);
-                if (!controlFile.exists()) {
+                controlFileDir = new File(targetFilePath);
+                if (!controlFileDir.exists()) {
                     log.error("Cannot find file: " + targetFilePath);
                     return;
                 }
-            }
-
-            System.out.print("Input the full path of the md5 file: ");
-            if (sc.hasNext()) {
-                String hashFilePath = sc.nextLine();
-                hashFile = new File(hashFilePath);
-                if (!hashFile.exists()) {
-                    log.error("Cannot find file: " + hashFilePath);
+                if (!controlFileDir.isDirectory()) {
+                    log.error("File by Path: {} is not Directory!", targetFilePath);
                     return;
                 }
             }
 
-            boolean isEquals = checkMD5Sum(controlFile, hashFile);
-            System.out.print("Result: MD5 sum " + (!isEquals ? " not " : "") + "equals");
+            if (controlFileDir != null) {
+                controlFile = new File(controlFileDir.getAbsolutePath() + File.separator + CONTROL_INFO_FILENAME);
+                hashFile = new File(controlFileDir.getAbsolutePath() + File.separator + CONTROL_INFO_HASH_FILENAME);
+
+                boolean isEquals = checkMD5Sum(controlFile, hashFile);
+                System.out.print("Result: MD5 sum " + (!isEquals ? " NOT " : "") + "EQUALS");
+            } else {
+                log.error("Directory is NULL");
+            }
         } else {
             // считываем конфигурационный файл. сохраняем параметры в config
             log.info("Diagnostic Utility started");
@@ -140,7 +139,7 @@ public class DiagnosticUtility {
 
         String actualMD5Sum = getMD5Sum(controlFile);
 
-        log.info("MD5 checksum file equal to " + actualMD5Sum);
+        //log.info("MD5 checksum file is equal to " + actualMD5Sum);
 
         String md5FromFile = "";
         try {
@@ -776,44 +775,6 @@ public class DiagnosticUtility {
         }
 
         return checksum;
-    }
-
-    private static void createStartPhaseLogInformation(StringBuilder buffer, double numberOfPhase, String description) {
-        log.info(description != null ? description : "");
-        buffer.append(LOG_DATE_FMT.format(new Date())).append(" ");
-        buffer.append("Этап ");
-        if (numberOfPhase > 0) {
-            buffer.append(numberOfPhase);
-        }
-        buffer.append(" запущен! ").append("\n");
-        buffer.append(description).append("\n");
-    }
-
-    private static void createPhaseFinishLogInformation(StringBuilder buffer, double numberOfPhase, String status, String resultMsg) {
-        log.info(resultMsg != null ? resultMsg : "");
-        buffer.append("\n");
-        buffer.append(LOG_DATE_FMT.format(new Date())).append(" ");
-        buffer.append("Этап ");
-        if (numberOfPhase > 0) {
-            buffer.append(numberOfPhase);
-        }
-        buffer.append(" завершен. Статус выполнения ").append(status).append("\n");
-        if (resultMsg != null && !resultMsg.isEmpty()) {
-            buffer.append(resultMsg).append("\n");
-        }
-        buffer.append("-------------------------------------------------").append("\n");
-    }
-
-    private static void createPhaseLogInformation(StringBuilder buffer, String titleMsg, String infoMsg) {
-        buffer.append("\n").append(LOG_DATE_FMT.format(new Date())).append(" ");
-        if (titleMsg != null) {
-            buffer.append(titleMsg).append("\n");
-            log.info(titleMsg + "\n");
-        }
-        if (infoMsg != null) {
-            buffer.append(infoMsg).append("\n");
-            log.info(infoMsg + "\n");
-        }
     }
 
     private static String buildFilePath(String root, String[] parts) {
