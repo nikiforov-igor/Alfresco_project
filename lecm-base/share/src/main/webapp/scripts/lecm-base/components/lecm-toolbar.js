@@ -178,7 +178,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
             // по нажатию на кнопку Поиск
-            onSearchClick: function BaseToolbar_onSearch() {
+            onSearchClick: function BaseToolbar_onSearch(e, obj) {
                 var searchTerm = Dom.get(this.id + "-full-text-search").value;
 
                 var dataGrid = this.modules.dataGrid;
@@ -217,6 +217,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 } else {
                     this.onClearSearch();
                 }
+
+	            if (obj && obj[1]) {
+		            obj[1].preventDefault();
+	            }
             },
 
             // клик на Атрибутивном Поиске

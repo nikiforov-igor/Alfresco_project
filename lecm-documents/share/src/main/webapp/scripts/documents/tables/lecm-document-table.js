@@ -19,7 +19,7 @@ LogicECM.module = LogicECM.module || {};
 (function()
 {
 	var Dom = YAHOO.util.Dom;
-
+	var Bubbling = YAHOO.Bubbling;
 
 	LogicECM.module.DocumentTable = function (fieldHtmlId)
 	{
@@ -156,6 +156,9 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  || {};
 
 (function () {
+
+	var Dom = YAHOO.util.Dom;
+	var Bubbling = YAHOO.Bubbling;
 
 	LogicECM.module.DocumentTableDataGrid = function (htmlId) {
 		return LogicECM.module.DocumentTableDataGrid.superclass.constructor.call(this, htmlId);
