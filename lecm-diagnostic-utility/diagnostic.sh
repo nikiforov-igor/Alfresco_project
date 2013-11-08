@@ -2,7 +2,7 @@
 file="./utility-properties.cfg"
 while read line
 do
-    var=$(echo $line | sed -e 's/.$//' | awk -F"=" '{a = $1 "=\"" $2 "\""; print a}')
+    var=$(echo $line | sed -e 's/\r$//' | awk -F"=" '{a = $1 "=\"" $2 "\""; print a}')
     eval $var
 done < $file
 
