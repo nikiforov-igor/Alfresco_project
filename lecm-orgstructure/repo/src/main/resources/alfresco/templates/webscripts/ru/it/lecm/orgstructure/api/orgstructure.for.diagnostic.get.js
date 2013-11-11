@@ -6,12 +6,40 @@ if (employees != null) {
         var middleName = employee.properties["lecm-orgstr:employee-middle-name"];
         var lastName = employee.properties["lecm-orgstr:employee-last-name"];
         var login = orgstructure.getEmployeeLogin(employee);
-        var roles = orgstructure.getEmployeeOnlyBusinessRoles(employee.nodeRef.toString());
+
+        var direct = orgstructure.getEmployeeDirectRoles(employee.nodeRef.toString());
+        var unit = orgstructure.getEmployeeUnitRoles(employee.nodeRef.toString());
+        var workgroup = orgstructure.getEmployeeWGRoles(employee.nodeRef.toString());
+        var position = orgstructure.getEmployeeDPRoles(employee.nodeRef.toString());
         var delegate = orgstructure.getEmployeeDelegatedBusinessRoles(employee.nodeRef.toString());
 
-        var resultRoles =[];
-        for each (var role in roles) {
-            resultRoles.push({
+        var directRoles =[];
+        for each (var role in direct) {
+            directRoles.push({
+                "roleName": role.properties["cm:name"],
+                "roleCode": role.properties["lecm-orgstr:business-role-identifier"]
+            });
+        }
+
+        var unitRoles =[];
+        for each (var role in unit) {
+            unitRoles.push({
+                "roleName": role.properties["cm:name"],
+                "roleCode": role.properties["lecm-orgstr:business-role-identifier"]
+            });
+        }
+
+        var workgroupRoles =[];
+        for each (var role in workgroup) {
+            workgroupRoles.push({
+                "roleName": role.properties["cm:name"],
+                "roleCode": role.properties["lecm-orgstr:business-role-identifier"]
+            });
+        }
+
+        var positionRoles =[];
+        for each (var role in position) {
+            positionRoles.push({
                 "roleName": role.properties["cm:name"],
                 "roleCode": role.properties["lecm-orgstr:business-role-identifier"]
             });
@@ -29,7 +57,10 @@ if (employees != null) {
             "middleName": middleName,
             "lastName": lastName,
             "login": login,
-            "roles": resultRoles,
+            "direct": directRoles,
+            "unit": unitRoles,
+            "workgroup": workgroupRoles,
+            "position": positionRoles,
             "delegateRoles": resultDelegates
         });
     }

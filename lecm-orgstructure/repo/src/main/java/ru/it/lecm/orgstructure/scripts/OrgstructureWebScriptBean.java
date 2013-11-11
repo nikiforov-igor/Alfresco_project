@@ -818,6 +818,57 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     }
 
     /**
+     * Роли назначенные сотруднику
+     * @param employeeRef
+     * @return
+     */
+    public Scriptable getEmployeeDirectRoles(String employeeRef) {
+        NodeRef employee = new NodeRef(employeeRef);
+        Set<NodeRef> roles = new HashSet<NodeRef>();
+        roles.addAll(orgstructureService.getEmployeeDirectRoles(employee));
+        return createScriptable(new ArrayList<NodeRef>(roles));
+    }
+
+    /**
+     * Роли назначенные сотруднику через подразделения
+     *
+     * @param employeeRef
+     * @return
+     */
+    public Scriptable getEmployeeUnitRoles(String employeeRef) {
+        NodeRef employee = new NodeRef(employeeRef);
+        Set<NodeRef> roles = new HashSet<NodeRef>();
+        roles.addAll(orgstructureService.getEmployeeUnitRoles(employee));
+        return createScriptable(new ArrayList<NodeRef>(roles));
+    }
+
+    /**
+     * Роли назначенные сотруднику через рабочую группу
+     *
+     * @param employeeRef
+     * @return
+     */
+    public Scriptable getEmployeeWGRoles(String employeeRef) {
+        NodeRef employee = new NodeRef(employeeRef);
+        Set<NodeRef> roles = new HashSet<NodeRef>();
+        roles.addAll(orgstructureService.getEmployeeWGRoles(employee));
+        return createScriptable(new ArrayList<NodeRef>(roles));
+    }
+
+    /**
+     * Роли назначенные сотруднику через должностную позицию
+     *
+     * @param employeeRef
+     * @return
+     */
+    public Scriptable getEmployeeDPRoles(String employeeRef) {
+        NodeRef employee = new NodeRef(employeeRef);
+        Set<NodeRef> roles = new HashSet<NodeRef>();
+        roles.addAll(orgstructureService.getEmployeeDPRoles(employee));
+        return createScriptable(new ArrayList<NodeRef>(roles));
+    }
+
+    /**
      * Получение корневой папки из оргструктуры по ее типу
      * @param rootType тип папки (ROOT Map<String, Integer>)
      * @return
