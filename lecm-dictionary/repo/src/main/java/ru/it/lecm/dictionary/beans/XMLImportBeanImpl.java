@@ -324,7 +324,8 @@ public class XMLImportBeanImpl implements XMLImportBean {
                     && xmlr.getLocalName().equals(ExportNamespace.TAG_PROPERTY)) {
                 propName = xmlr.getAttributeValue("", ExportNamespace.ATTR_NAME);
                 xmlr.next();
-                if (XMLStreamConstants.CHARACTERS == xmlr.getEventType()) {
+                if (XMLStreamConstants.CHARACTERS == xmlr.getEventType()
+                        || XMLStreamConstants.CDATA == xmlr.getEventType()) {
                     value = xmlr.getText();
                     properties.put(QName.createQName(propName, namespaceService), value);
                     xmlr.nextTag();
