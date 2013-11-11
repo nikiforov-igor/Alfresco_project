@@ -140,13 +140,12 @@
 	<!-- Описания полей  данных в наборе -->
 	<fields>
         <field alfrescoType="d:text" order="0" displayName="Измерение"
-               javaValueClass="java.lang.String" jrFldName="groupBy" queryFldName="groupBy">
+               javaValueClass="java.lang.String" jrFldName="groupBy" queryFldName="contractor|Контрагент,contractKind|Вид,contractTheme|Тематика,initiator|Инициатор">
             <l18>
                 <item key="RU_RU" value="Измерение"/>
             </l18>
             <parameter mnem="PARAM_TYPE_VALUE" paramType="PARAM_TYPE_VALUE">
                 <l18> <item key="RU_RU" value="Значение"/> </l18>
-                <bound1>contractor|Контрагент,contractKind|Вид,contractTheme|Тематика,initiator|Инициатор</bound1>
             </parameter>
         </field>
 

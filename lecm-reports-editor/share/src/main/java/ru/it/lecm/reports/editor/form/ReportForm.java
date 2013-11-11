@@ -193,8 +193,16 @@ public class ReportForm extends FormUIGet {
                         defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
                     }
                 }
-                if (column.getParameterValue().getBound1() != null && !column.getParameterValue().getBound1().toString().isEmpty()){
-                    allowedValues = column.getParameterValue().getBound1().toString().split(",");
+                String columnExpression = column.getExpression();
+                if (columnExpression != null && !columnExpression.isEmpty()){
+                    if (!columnExpression.startsWith("{")) {// не вычисляемое значение, значит либо константа, либо список значений
+                        if (!columnExpression.contains(",")) { // константа
+                            allowedValues = new String[1];
+                            allowedValues[0] = columnExpression;
+                        } else {
+                            allowedValues = columnExpression.split(",");
+                        }
+                    }
                 }
             }
 

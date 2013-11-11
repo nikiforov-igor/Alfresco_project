@@ -734,7 +734,7 @@ public class DSXMLProducer {
         final Element result = doc.createElement(nodeName);
 
         result.setAttribute(XMLATTR_JR_FLDNAME, column.getColumnName());
-        result.setAttribute(XMLATTR_EXPRESSION, column.getExpression());
+        result.setAttribute(XMLATTR_QUERY_FLDNAME, column.getExpression());
         result.setAttribute(XMLATTR_DISPLAYNAME, column.get("ru", ""));
         if (column.getOrder() != 0) {
             result.setAttribute(XMLATTR_ORDER, String.valueOf(column.getOrder()));

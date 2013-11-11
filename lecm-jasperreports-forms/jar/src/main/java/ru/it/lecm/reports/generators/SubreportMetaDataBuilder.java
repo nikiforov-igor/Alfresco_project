@@ -171,32 +171,6 @@ public class SubreportMetaDataBuilder {
 				// подотчёт называем также что и его колонка ...
 				newSubreports.put(reportName, sr);
 				sr.setDestColumnName(reportName); // целевая колонка
-
-				// источник данных для вложенного списка полей должен быть
-				// указан как expression в колонке описания подотчёта
-				final String sourceLink = parseSubreportLink(reportMainCol.getExpression());
-				if (Utils.isStringEmpty(sourceLink)) {
-					// если ссылки не указано - поругаемся ...
-					throw new RuntimeException(String.format(
-							"Column '%s' defines subreport. But main subreport definition at column '%s'\n did not define expression '{{subreport::child-assoc}}' for subreport list"
-							, srcCol.getColumnName(), reportMainCol.getColumnName()));
-				}
-				sr.setSourceListExpression(sourceLink);
-
-                // тип данных для вложенного списка полей должен быть указан как
-                // alfrescoType в колонке описания подотчёта ...
-                final String sourceType = parseSubreportLink(reportMainCol.getAlfrescoType());
-                sr.setSourceListType(sourceType);
-
-				// TODO: + beanClass, format, ifEmpty, delimiter
-
-				// тип колонки в основном отчёте, которая соот-вет подотчёту:
-				//    String, если используется форматирование
-				//    List, иначе
-				final Class<?> classOfMainReportColumn = (sr.isUsingFormat())
-						? String.class
-								: List.class;
-				reportMainCol.setClassName(classOfMainReportColumn.getName());
 			}
 
 
@@ -244,7 +218,7 @@ public class SubreportMetaDataBuilder {
 
 		// источник данных для вложенного списка полей должен быть указан как
 		// expression в колонке описания подотчёта ...
-		final String sourceLink = parseSubreportLink(reportMainCol.getExpression());
+		final String sourceLink = reportMainCol.getExpression();
 		if (Utils.isStringEmpty(sourceLink)) {
 			// если ссылки не указано - поругаемся ...
 			throw new RuntimeException(String.format(
@@ -256,7 +230,7 @@ public class SubreportMetaDataBuilder {
 
         // тип данных для вложенного списка полей должен быть указан как
         // alfrescoType в колонке описания подотчёта ...
-        final String sourceType = parseSubreportLink(reportMainCol.getAlfrescoType());
+        final String sourceType = reportMainCol.getAlfrescoType();
         srResult.setSourceListType(sourceType);
 
 		// TODO: + beanClass, format, ifEmpty, delimiter

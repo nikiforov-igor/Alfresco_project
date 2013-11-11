@@ -8,7 +8,7 @@
         <div class="new-row">
             <span id="${id}-toolbar-newTemplateButton" class="yui-button yui-push-button">
                    <span class="first-child">
-                      <button type="button" title="Новый">Новый</button>
+                      <button type="button" title="Загрузить">Загрузить</button>
                    </span>
             </span>
         </div>

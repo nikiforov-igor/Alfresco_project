@@ -32,6 +32,7 @@
                 <bubblingLabel>report-templates</bubblingLabel>
                 <showActions>true</showActions>
                 <attributeForShow>none</attributeForShow>
+                <fullDelete>true</fullDelete>
                 <parent>/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Шаблоны</parent>
             </properties>
         </component>
