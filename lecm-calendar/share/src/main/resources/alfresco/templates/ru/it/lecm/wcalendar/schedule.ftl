@@ -45,6 +45,7 @@ LogicECM.module.WCalendar.Const.ROLES = LogicECM.module.WCalendar.Const.ROLES ||
 LogicECM.module.WCalendar.Schedule.SCHEDULE_CONTAINER = LogicECM.module.WCalendar.Schedule.SCHEDULE_CONTAINER || scheduleContainer;
 LogicECM.module.WCalendar.Schedule.SCHEDULE_LABEL = LogicECM.module.WCalendar.Schedule.SCHEDULE_LABEL || "scheduleDatagrid";
 
+LogicECM.module.WCalendar.Schedule.ORGANIZATION_NODE_REF = "${orgNodeRef}"
 //]]></script>
 </@>
 

@@ -21,7 +21,6 @@ import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
-import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
 import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
@@ -37,6 +36,7 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 	// Получить логгер, чтобы писать, что с нами происходит.
 
 	private final static Logger logger = LoggerFactory.getLogger(ScheduleBean.class);
+	private NodeRef defaultCalendar;
 
 	@Override
 	public ICommonWCalendar getWCalendarDescriptor() {
@@ -57,6 +57,10 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
+		defaultCalendar = getScheduleByOrgSubject(orgstructureService.getOrganization());
+		if (defaultCalendar == null) {
+			this.defaultCalendar = createDefaultCalendar();
+		}
 
 		// Создание контейнера (если не существует).
 		AuthenticationUtil.runAsSystem(this);
@@ -136,7 +140,7 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 				QName scheduleEmployeeAssocCMNameQName = QName.createQName(SCHEDULE_NAMESPACE, scheduleEmployeeAssocCMNameStr + "_schedule");
 				DateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
-				// нам не нужно дожидаться страшной ошибки при попытке создания уже существующего расписания
+		// нам не нужно дожидаться страшной ошибки при попытке создания уже существующего расписания
 				// срыгнем эксепш пораньше
 				if (isScheduleAssociated(scheduleEmployeeAssoc)) {
 					throw new WebScriptException(scheduleEmployeeAssoc.toString() + " already has schedule!");
@@ -262,7 +266,7 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 		return scheduleElements;
 	}
 
-	// проверяет, подходит ли день под правила повторяемости для расписаний по дням месяца и недели
+    // проверяет, подходит ли день под правила повторяемости для расписаний по дням месяца и недели
 	// используется только в generateScheduleElements
 	private boolean ifDayToBeAdded(ISpecialScheduleRaw scheduleRawData, Calendar calendar) {
 		boolean result;
@@ -302,7 +306,12 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 
 	@Override
 	public NodeRef getScheduleByOrgSubject(NodeRef node) {
-		return findNodeByAssociationRef(node, ASSOC_SCHEDULE_EMPLOYEE_LINK, TYPE_SCHEDULE, ASSOCIATION_TYPE.SOURCE);
+		NodeRef schedule = findNodeByAssociationRef(node, ASSOC_SCHEDULE_EMPLOYEE_LINK, TYPE_SCHEDULE, ASSOCIATION_TYPE.SOURCE);
+		if (schedule == null) {
+			return defaultCalendar;
+		} else {
+			return schedule;
+		}
 	}
 
 	@Override
@@ -332,10 +341,11 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 		NodeRef orgSubj = getOrgSubjectBySchedule(node);
 		String messageTemplate = null;
 		String scheduleType = getScheduleType(node);
-                
-                if (scheduleType.equals(ISchedule.SCHEDULE_TYPE_SPECIAL) && category.equals(CalendarCategory.NEW_SHEDULE))
-                    category = CalendarCategory.NEW_INDIVIDUAL_SHEDULE;
-                
+
+		if (scheduleType.equals(ISchedule.SCHEDULE_TYPE_SPECIAL) && category.equals(CalendarCategory.NEW_SHEDULE)) {
+			category = CalendarCategory.NEW_INDIVIDUAL_SHEDULE;
+		}
+
 		if (orgSubj == null) {
 			return;
 		}
@@ -441,7 +451,6 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 		return (String) nodeService.getProperty(node, PROP_SCHEDULE_STD_END);
 	}
 
-
 	// класс для представления элементов графика: первый и последний рабочий день в серии
 	private class ScheduleElemetObject {
 
@@ -464,4 +473,45 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 			this.end = end;
 		}
 	}
+
+	// Создание календаря по умолчанию
+	private NodeRef createDefaultCalendar() {
+		NodeRef defaultSchedule;
+
+		defaultSchedule = transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+
+			@Override
+			public NodeRef execute() throws Throwable {
+				ChildAssociationRef createdScheduleChildRef;
+				QName assocName = QName.createQName(SCHEDULE_NAMESPACE, "defaultOrgSchedule");
+				Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+
+				DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+				properties.put(PROP_SCHEDULE_TYPE, "COMMON");
+				properties.put(PROP_SCHEDULE_STD_BEGIN, "08:00");
+				properties.put(PROP_SCHEDULE_STD_END, "17:00");
+
+				try {
+					createdScheduleChildRef = nodeService.createNode(getWCalendarContainer(), ContentModel.ASSOC_CONTAINS,
+							assocName, TYPE_SCHEDULE, properties);
+				} catch (Exception ex) {
+					throw new WebScriptException("Unable to create node", ex);
+				}
+
+				NodeRef createdScheduleNode = createdScheduleChildRef.getChildRef();
+				try {
+					// привязываем ноду расписания к сотруднику или подразделеню
+					nodeService.createAssociation(createdScheduleNode, orgstructureService.getOrganization(), ASSOC_SCHEDULE_EMPLOYEE_LINK);
+				} catch (Exception ex) {
+					throw new WebScriptException("Unable to link newly created " + createdScheduleNode.toString() + " with organization", ex);
+				}
+				return createdScheduleNode;
+
+			}
+		});
+
+		return defaultSchedule;
+	}
+
 }

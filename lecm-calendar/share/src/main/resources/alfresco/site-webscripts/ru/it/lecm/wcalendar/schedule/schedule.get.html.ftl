@@ -5,6 +5,19 @@
 
 <script type="text/javascript">//<![CDATA[
 
+function notDefaultSchedule(oData) {
+	debugger;
+	var rowNodeRef,
+		orgNodeRef;
+
+	orgNodeRef = LogicECM.module.WCalendar.Schedule.ORGANIZATION_NODE_REF;
+	rowNodeRef = oData.itemData["assoc_lecm-sched_sched-employee-link-assoc"].value;
+    if(rowNodeRef == orgNodeRef) {
+    	return false;
+    }
+    return true;
+};
+
 var datagrid = new LogicECM.module.WCalendar.Schedule.DataGrid("${id}");
 datagrid.setOptions({
 	usePagination:true,
@@ -17,7 +30,8 @@ datagrid.setOptions({
 		type:"datagrid-action-link-${bubblingLabel!"scheduleDatagrid"}",
 		id:"onActionDelete",
 		permission:"delete",
-		label:"${msg("actions.delete-row")}"
+		label:"${msg("actions.delete-row")}",
+		evaluator: notDefaultSchedule
         }
 	]
 });

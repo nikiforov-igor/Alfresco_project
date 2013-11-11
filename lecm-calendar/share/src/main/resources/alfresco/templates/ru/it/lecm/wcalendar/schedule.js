@@ -15,3 +15,11 @@ if (scheduleContainer.status == 200) {
 		model.isBoss = nativeObject.isBoss;
 	}
 }
+//Получаем nodeRef организации для корректного отображения действия в датагриде
+var organization = remote.connect("alfresco").get("/lecm/orgstructure/api/getOrganization");
+model.orgNodeRef = "";
+if(organization.status == 200) {
+    organizationJson = eval("(" + organization + ")");
+    model.orgNodeRef = organizationJson.nodeRef;
+}
+
