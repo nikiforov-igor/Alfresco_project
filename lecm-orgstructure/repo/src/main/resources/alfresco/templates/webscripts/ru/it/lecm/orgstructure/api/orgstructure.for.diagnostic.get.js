@@ -6,7 +6,7 @@ if (employees != null) {
         var middleName = employee.properties["lecm-orgstr:employee-middle-name"];
         var lastName = employee.properties["lecm-orgstr:employee-last-name"];
         var login = orgstructure.getEmployeeLogin(employee);
-        var roles = orgstructure.getEmployeeBusinessRoles(employee.nodeRef.toString());
+        var roles = orgstructure.getEmployeeOnlyBusinessRoles(employee.nodeRef.toString());
         var delegate = orgstructure.getEmployeeDelegatedBusinessRoles(employee.nodeRef.toString());
 
         var resultRoles =[];
