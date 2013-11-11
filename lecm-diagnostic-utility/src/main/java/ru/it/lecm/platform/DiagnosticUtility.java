@@ -212,7 +212,7 @@ public class DiagnosticUtility {
                 if (row.contains("=") && !row.startsWith("#")) {
                     String[] property = row.split("=");
                     alfPropsMap.put(property[0], property[1]);
-                    log.info(row);
+                    //log.info(row);
                 }
             }
         } catch (Exception e) {
