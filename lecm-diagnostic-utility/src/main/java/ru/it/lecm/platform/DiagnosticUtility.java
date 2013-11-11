@@ -167,7 +167,7 @@ public class DiagnosticUtility {
                 br = new BufferedReader(new FileReader(configFile));
                 String row;
                 while ((row = br.readLine()) != null) {
-                    log.info(row);
+                    //log.info(row);
                     String[] property = row.split("=");
                     if (property.length == 2) {
                         config.put(property[0], property[1]);
