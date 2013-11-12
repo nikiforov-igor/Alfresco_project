@@ -47,7 +47,9 @@ public class DiagnosticUtility {
 
     //Скрипт выдачи информации по пользователям
     private final static String ORG_LOG_FILENAME = File.separator + "orgstructure.txt";
+    private final static String ORG_DIAGRAM_FILENAME = File.separator + "orgstructure.png";
     private final static String GET_USERS_INFO_SCRIPT_URL = "/service/lecm/orgstructure/api/getUsersInfo";
+    private final static String GET_ORG_DIAGRAM_SCRIPT_URL = "/service/lecm/orgstructure/diagram";
 
     //файл с конфигом утилиты
     private final static String CONFIG_FILENAME = "utility-properties.cfg";
@@ -709,6 +711,53 @@ public class DiagnosticUtility {
         return orgFile;
     }
 
+    private static File collectOrgstructureDiagramInfo() {
+        HttpClient client = new HttpClient();
+        client.getParams().setAuthenticationPreemptive(true);
+
+        Credentials adminCredentials = new UsernamePasswordCredentials("admin", config.get(ADMIN_PASSWORD));
+        client.getState().setCredentials(AuthScope.ANY, adminCredentials);
+        String getRecordsScript = concatAfrescoURL() + GET_ORG_DIAGRAM_SCRIPT_URL;
+
+        log.info("Attempt to connect to URL {}", getRecordsScript);
+
+        GetMethod httpGet = new GetMethod(getRecordsScript);
+
+        InputStream in = null;
+        OutputStream out = null;
+
+        int status = 500;
+        byte[] bytes = new byte[1024];
+        File orgDiagramFile = null;
+        try {
+            orgDiagramFile = new File(currentDirectoryPath + ORG_DIAGRAM_FILENAME);
+            if (!orgDiagramFile.exists()) {
+                orgDiagramFile.createNewFile();
+            }
+
+            out = new BufferedOutputStream(new FileOutputStream(orgDiagramFile));
+
+            httpGet.setDoAuthentication(true);
+            status = client.executeMethod(httpGet);
+            in = new BufferedInputStream(httpGet.getResponseBodyAsStream());
+
+            int readCount;
+            while ((readCount = in.read(bytes)) > 0) {
+                out.write(bytes, 0, readCount);
+            }
+            out.flush();
+        } catch (IOException e) {
+            log.error("", e);
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
+        }
+
+        log.info("Users Info log was " + (200 <= status && status < 300 ? "" : "not"));
+
+        return orgDiagramFile;
+    }
+
     private static boolean collectSystemInformation() {
         // IP адрес сервера
         log.info("Getting a network server information");
@@ -865,6 +914,7 @@ public class DiagnosticUtility {
         List<File> dataFiles = new ArrayList<File>();
         File bjLogFile = null;
         File orgstructureFile = null;
+        File orgstructureDiagramFile = null;
         File controlFile = null;
 
         String alfrescoRootDirectory = config.get(ALF_HOME);
@@ -919,6 +969,14 @@ public class DiagnosticUtility {
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
+            //Фаза 6 - Диаграмма организайии
+            try {
+                log.info("Phase 6 - Download organization diagram");
+                orgstructureDiagramFile = collectOrgstructureDiagramInfo();
+                log.info("Phase 6 - Download organization diagram. Phase result is {}", formatStatusString(orgstructureDiagramFile != null));
+            } catch (Exception ex) {
+                log.error(ex.getMessage());
+            }
         } else {
             log.warn("Server is unavailable. Unable to collect the business journal records and orgstructure info");
         }
@@ -933,18 +991,28 @@ public class DiagnosticUtility {
         if (dataFiles == null) {
             log.error("Data can't be collected!");
         }
+        //Добавляем собранную информацию к логам
         if (bjLogFile != null) {
             dataFiles.add(bjLogFile);
         }
         if (orgstructureFile != null) {
             dataFiles.add(orgstructureFile);
         }
+        if (orgstructureDiagramFile != null) {
+            dataFiles.add(orgstructureDiagramFile);
+        }
+
         writeFilesToArchive(dataFiles, new File(alfrescoRootDirectory), data);
+
+        //Удаляем временные файлы
         if (bjLogFile != null) {
             bjLogFile.delete();
         }
         if (orgstructureFile != null) {
             orgstructureFile.delete();
+        }
+        if (orgstructureDiagramFile != null) {
+            orgstructureDiagramFile.delete();
         }
         //создаем контрольный файл
         try {
