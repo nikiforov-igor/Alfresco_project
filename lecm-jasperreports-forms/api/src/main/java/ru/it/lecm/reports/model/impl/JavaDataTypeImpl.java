@@ -33,6 +33,7 @@ public class JavaDataTypeImpl
 		, INTEGER(java.lang.Integer.class.getName())
 		, FLOAT(java.lang.Float.class.getName())
 		, NUMERIC(java.lang.Number.class.getName())
+        , LIST(java.util.List.class.getName())
 		;
 
 		final private JavaDataType javaDataType;

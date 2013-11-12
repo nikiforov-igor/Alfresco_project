@@ -597,10 +597,11 @@ public class XmlHelper {
             return;
         }
         for (Map.Entry<String, String> e : map.entrySet()) {
-            final Element node = doc.createElement(xmlItemName);
+            //= doc.createElement(xmlItemName);
+            final Element node  = XmlHelper.xmlCreateCDataNode(doc, destParent, xmlItemName, e.getValue());
             node.setAttribute(xmlKeyName, e.getKey());
-            node.setAttribute(xmlValueName, e.getValue());
-            destParent.appendChild(node);
+            //node.setAttribute(xmlValueName, e.getValue());
+            //destParent.appendChild(node);
         }
     }
 

@@ -36,53 +36,6 @@ public class SubreportMetaDataBuilder {
 	final static public String SUFFIX_SUBREPORT_COLUMN = ".sub.";
 
 	/**
-	 * Регулярное выражение для выборки Текста из конструкций вида:
-	 * "subreport::Текст"
-	 * "{subreport::Текст}"
-	 * "{{subreport::Текст}}"
-	 * т.е. тег "subreport::", нужный текст и допустимы необязательные одна-две
-	 * скобки "{" в начале и одна-две "}" в конце.
-	 * достаточная группировка: самого Текста и после Текста.
-	 * <hr/>
-	 * <br/> Пример разбора <b>'subreport::ссылка'</b>
-	 * <br/>    выражением regexp '[{]{0,2}subreport[:][:]([^}]+)([}]{0,2})'
-	 * <br/>    matches as:
-	 * <b>
-	 * <li> group[0]		'subreport::ссылка'
-	 * <li>	group[1]		'ссылка:a'
-	 * </b>
-	 */
-	final static public String REGEXP_SUBREPORTLINK = "[{]{0,2}subreport[:][:]([^}]+)([}]{0,2})";
-
-	/**
-	 * группа для ссылки в выражении {@link #REGEXP_SUBREPORTLINK}
-	 */
-	final static public int GRPINDEX__SUBREPORTLINK = 1;
-
-	/**
-	 * Выполнить разбор строки вида:
-	 * "subreport::ссылка"
-	 * "{subreport::ссылка}"
-	 * "{{subreport::ссылка}}"
-	 * т.е. тег "subreport::" и нужная ссылка (из букв, цифр, минуса,
-	 * подчёркивания, двоеточия, возможно запятых, точки-с-запятой и пр,
-	 * кроме '{'/'}'), и допустимы необязательные одна-две скобки "{" в начале
-	 * и одна-две "}" в конце.
-	 *
-	 * @param sublink
-	 * @return ссылка, если sublink удовлетворяет синтаксису, или null иначе.
-	 */
-	public final static String parseSubreportLink(String sublink) {
-		if (sublink == null || sublink.isEmpty()) {
-			return null;
-		}
-		final Pattern REG_EXP = Pattern.compile(REGEXP_SUBREPORTLINK);
-		final Matcher m = REG_EXP.matcher(sublink);
-
-		return m.matches() ? m.group(GRPINDEX__SUBREPORTLINK) : null;
-	}
-
-	/**
 	 * Разборать имя колонки, если она относится к подотчёту.
 	 * <br/> Имя колонки подотчёта имеет вид:
 	 * <br/> <b> "ИмяПодотчёта .sub. ИмяКолонки" </b>
@@ -129,74 +82,74 @@ public class SubreportMetaDataBuilder {
 	 * @param desc описатель НД
 	 * @return null, если нет подотчётов или непустой список описаний подотчётов.
 	 */
-	public static List<SubReportDescriptor> scanSubreports(DataSourceDescriptor desc) {
-		if (desc == null || desc.getColumns() == null || desc.getColumns().isEmpty()) {
-			return null;
-		}
+    public static List<SubReportDescriptor> scanSubreports(DataSourceDescriptor desc) {
+        if (desc == null || desc.getColumns() == null || desc.getColumns().isEmpty()) {
+            return null;
+        }
 
-		final Map<String, SubReportDescriptorImpl> newSubreports = new LinkedHashMap<String, SubReportDescriptorImpl>();
+        final Map<String, SubReportDescriptorImpl> newSubreports = new LinkedHashMap<String, SubReportDescriptorImpl>();
 
 		/*
-		 *  выбираем все колонки, которые содержат ".sub." в именах, считая
+         *  выбираем все колонки, которые содержат ".sub." в именах, считая
 		 *  что это части "SubReportName.sub.ColName" ...
 		 */
-		for (ColumnDescriptor srcCol : desc.getColumns()) {
+        for (ColumnDescriptor srcCol : desc.getColumns()) {
 			/* выделение имени отчёта и названия колонки */
-			final String reportName, subfieldName;
+            final String reportName, subfieldName;
 
-			final String[] parts = parseSubreportColName(srcCol.getColumnName());
-			if (parts == null) {
-				// не является колонкой подотчёта
-				continue;
-			}
+            final String[] parts = parseSubreportColName(srcCol.getColumnName());
+            if (parts == null) {
+                // не является колонкой подотчёта
+                continue;
+            }
 
-			reportName = parts[0];
-			subfieldName = parts[1];
+            reportName = parts[0];
+            subfieldName = parts[1];
 
 			/* получение описателя подотчёта ... */
-			final SubReportDescriptorImpl sr;
+            final SubReportDescriptorImpl sr;
 
-			if (newSubreports.containsKey(reportName)) { // уже был ...
-				sr = newSubreports.get(reportName);
-			} else { // такой подотчёт ещё не встречался - создать ...
+            if (newSubreports.containsKey(reportName)) { // уже был ...
+                sr = newSubreports.get(reportName);
+            } else { // такой подотчёт ещё не встречался - создать ...
+                // колонка подотчёта должна иметься в основном отчёте отдельно ...
+                final ColumnDescriptor reportMainCol = desc.findColumnByName(reportName);
+                if (reportMainCol == null) {
+                    throw new RuntimeException(String.format("Column '%s' defines subreport. But there is no main column '%s' for the subreport itself", srcCol.getColumnName(), reportName));
+                }
+                final ColumnDescriptor sourceColumn = desc.findColumnByName(reportName + SUFFIX_SUBREPORT_COLUMN + "source");
+                final ColumnDescriptor typeColumn = desc.findColumnByName(reportName + SUFFIX_SUBREPORT_COLUMN + "type");
+                final ColumnDescriptor beanClassColumn = desc.findColumnByName(reportName + SUFFIX_SUBREPORT_COLUMN + "beanClass");
+                sr = createSubreportDesc(reportMainCol, sourceColumn, typeColumn, beanClassColumn, srcCol);
 
-				// колонка подотчёта должна иметься в основном отчёте отдельно ...
-				final ColumnDescriptor reportMainCol = desc.findColumnByName(reportName);
-				if (reportMainCol == null) {
-					throw new RuntimeException(String.format("Column '%s' defines subreport. But there is no main column '%s' for the subreport itself", srcCol.getColumnName(), reportName));
-				}
-				sr = createSubreportDesc(reportMainCol, srcCol);
-
-				// (!) Создание ообъекта подотчёта
-				// подотчёт называем также что и его колонка ...
-				newSubreports.put(reportName, sr);
-				sr.setDestColumnName(reportName); // целевая колонка
-			}
-
+                newSubreports.put(reportName, sr);
+            }
 
 			/* создание новой колонки ... */
-			if (sr.getDsDescriptor().findColumnByName(subfieldName) != null) {
-				// повтор определения колонки подотчёта ...
-				logger.warn(String.format("Column '%s' of subreport '%s' is defined several times -> only first one applied", subfieldName, reportName));
-				continue;
-			}
+            if (sr.getDsDescriptor().findColumnByName(subfieldName) != null) {
+                // повтор определения колонки подотчёта ...
+                logger.warn(String.format("Column '%s' of subreport '%s' is defined several times -> only first one applied", subfieldName, reportName));
+                continue;
+            }
 
-			final ColumnDescriptorImpl newSubrepCol = new ColumnDescriptorImpl(subfieldName, SupportedTypes.STRING);
-			newSubrepCol.assign(srcCol);
+            if (!subfieldName.equals("source") && !subfieldName.equals("type") && !subfieldName.equals("beanClass")) {
+                final ColumnDescriptorImpl newSubrepCol = new ColumnDescriptorImpl(subfieldName, SupportedTypes.STRING);
+                newSubrepCol.assign(srcCol);
 
-			sr.getDsDescriptor().getColumns().add(newSubrepCol); // добавление в описатель
+                sr.getDsDescriptor().getColumns().add(newSubrepCol); // добавление в описатель
 
 			/* обновление/формирование sourceMap для subreport */
-			if (sr.getSubItemsSourceMap() == null) {
-				sr.setSubItemsSourceMap(new HashMap<String, String>());
-			}
-			// NOTE: (!) здесь используем "усечённое" название колонки subfieldName,
-			// которое не содержит ".sub.", вместо полного srcCol.getColumnName()
-			sr.getSubItemsSourceMap().put(newSubrepCol.getColumnName(), srcCol.getExpression());
-		} // for
+                if (sr.getSubItemsSourceMap() == null) {
+                    sr.setSubItemsSourceMap(new HashMap<String, String>());
+                }
+                // NOTE: (!) здесь используем "усечённое" название колонки subfieldName,
+                // которое не содержит ".sub.", вместо полного srcCol.getColumnName()
+                sr.getSubItemsSourceMap().put(newSubrepCol.getColumnName(), srcCol.getExpression());
+            }
+        } // for
 
-		return (newSubreports.isEmpty()) ? null : new ArrayList<SubReportDescriptor>(newSubreports.values());
-	}
+        return (newSubreports.isEmpty()) ? null : new ArrayList<SubReportDescriptor>(newSubreports.values());
+    }
 
 	/**
 	 * Создание подотчёта на основании колонки НД (колонки отчёта с его же мнемоническим названием)
@@ -206,43 +159,56 @@ public class SubreportMetaDataBuilder {
 	 *                      информационный характер
 	 * @return
 	 */
-	private static SubReportDescriptorImpl createSubreportDesc(final ColumnDescriptor reportMainCol
-			, final ColumnDescriptor subSrcCol) {
-		// колонка подотчёта должна иметься в основном отчёте явно и отдельно ...
-		// подотчёт называем также что и его колонка ...
-		final String reportName = reportMainCol.getColumnName();
+    private static SubReportDescriptorImpl createSubreportDesc(final ColumnDescriptor reportMainCol,
+                                                               final ColumnDescriptor sourceColumn,
+                                                               final ColumnDescriptor typeColumn,
+                                                               final ColumnDescriptor beanClassColumn,
+                                                               final ColumnDescriptor subSrcCol) {
+        // колонка подотчёта должна иметься в основном отчёте явно и отдельно ...
+        // подотчёт называем также что и его колонка ...
+        final String reportName = reportMainCol.getColumnName();
 
-		// !) Создание ообъекта подотчёта
-		final SubReportDescriptorImpl srResult = new SubReportDescriptorImpl(reportName);
-		srResult.setDestColumnName(reportName); // целевая колонка - это главная колонка отчёта
+        // !) Создание ообъекта подотчёта
+        final SubReportDescriptorImpl srResult = new SubReportDescriptorImpl(reportName);
+        srResult.setDestColumnName(reportName); // целевая колонка - это главная колонка отчёта
 
-		// источник данных для вложенного списка полей должен быть указан как
-		// expression в колонке описания подотчёта ...
-		final String sourceLink = reportMainCol.getExpression();
-		if (Utils.isStringEmpty(sourceLink)) {
-			// если ссылки не указано - поругаемся ...
-			throw new RuntimeException(String.format(
-					"Column '%s' defines subreport. But main subreport definition at column '%s'\n did not define expression '{{subreport::child-assoc}}' for subreport list"
-					, (subSrcCol != null ? subSrcCol.getColumnName() : "NULL")
-					, reportMainCol.getColumnName()));
-		}
-		srResult.setSourceListExpression(sourceLink);
+        // источник данных для вложенного списка полей должен быть указан как дополнительна колонка в основном отчете
+        // expression в колонке описания подотчёта ...
+        String sourceLink = reportMainCol.getExpression();
+        if (sourceColumn != null) {
+            sourceLink = sourceColumn.getExpression();
+        }
+        if (Utils.isStringEmpty(sourceLink)) {
+            // если ссылки не указано - поругаемся ...
+            throw new RuntimeException(String.format(
+                    "Column '%s' defines subreport. But main subreport definition at column '%s'\n did not define expression '{{subreport::child-assoc}}' for subreport list"
+                    , (subSrcCol != null ? subSrcCol.getColumnName() : "NULL")
+                    , reportMainCol.getColumnName()));
+        }
+        srResult.setSourceListExpression(sourceLink);
 
-        // тип данных для вложенного списка полей должен быть указан как
-        // alfrescoType в колонке описания подотчёта ...
-        final String sourceType = reportMainCol.getAlfrescoType();
+        // тип данных для вложенного списка полей должен быть указан как доп колонка в основном отчете
+        String sourceType = null;
+        if (typeColumn != null) {
+            sourceType = typeColumn.getExpression();
+        }
         srResult.setSourceListType(sourceType);
 
-		// TODO: + beanClass, format, ifEmpty, delimiter
+        // TODO: + beanClass, format, ifEmpty, delimiter
+        String beanClass = null;
+        if (beanClassColumn != null) {
+            beanClass = beanClassColumn.getExpression();
+            srResult.setBeanClassName(beanClass);
+        }
 
-		// тип колонки в основном отчёте, которая соот-вет подотчёту:
-		//    String, если используется форматирование
-		//    List, иначе
-		final Class<?> classOfMainReportColumn = (srResult.isUsingFormat())
-						? String.class
-						: List.class;
-		reportMainCol.setClassName(classOfMainReportColumn.getName());
+        // тип колонки в основном отчёте, которая соот-вет подотчёту:
+        //    String, если используется форматирование
+        //    List, иначе
+        final Class<?> classOfMainReportColumn = (srResult.isUsingFormat())
+                ? String.class
+                : List.class;
+        reportMainCol.setClassName(classOfMainReportColumn.getName());
 
-		return srResult;
-	}
+        return srResult;
+    }
 }
