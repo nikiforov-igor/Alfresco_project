@@ -7,7 +7,6 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +31,7 @@ public class DiagnosticUtility {
     //Контрольные Файлы
     private final static String CONTROL_INFO_FILENAME = "utility.log";
     private final static String CONTROL_INFO_HASH_FILENAME = File.separator + "utility.md5";
+    private final static String RESULT_FILENAME = File.separator + "utility.zip";
 
     //Названия архивов
     private final static String LOGS_ARCHIVE_NAME = File.separator + "server-logs.zip";
@@ -65,6 +65,7 @@ public class DiagnosticUtility {
     private final static FileFinder finder = new FileFinder();
 
     private static String currentDirectoryPath = ".";
+    private static String resultsDirectory = ".";
     private static boolean isServerAvailable = false;
 
     private final static String SALT = "ac19625a23bd1fa61874694464ac9066";
@@ -92,7 +93,7 @@ public class DiagnosticUtility {
             }
 
             if (controlFileDir != null) {
-                controlFile = new File(controlFileDir.getAbsolutePath() + File.separator + CONTROL_INFO_FILENAME);
+                controlFile = new File(controlFileDir.getAbsolutePath() + File.separator + RESULT_FILENAME);
                 hashFile = new File(controlFileDir.getAbsolutePath() + File.separator + CONTROL_INFO_HASH_FILENAME);
 
                 boolean isEquals = checkMD5Sum(controlFile, hashFile);
@@ -116,18 +117,19 @@ public class DiagnosticUtility {
             }
 
             // более читаемая директория - файлы будем собирать туда
-            currentDirectoryPath =
-                    currentDirectoryPath + File.separator + "diagnostic-results-" + new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
-
             log.info("Diagnostic Utility Output Path set to {}", currentDirectoryPath);
-
-            boolean logDirectory = new File(currentDirectoryPath).mkdirs();
-            if (logDirectory) {
-                //запускаем диагностику
-                startDiagnostic();
-            } else {
-                log.error("Error! Unable to create a directory to store the results!");
+            resultsDirectory = currentDirectoryPath + File.separator + "diagnostic-results-" + new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
+            File dataDirectory = new File(resultsDirectory);
+            if (!dataDirectory.exists()) {
+                boolean logDirectory = dataDirectory.mkdirs();
+                if (!logDirectory) {
+                    log.error("Error! Unable to create a directory to store the results!");
+                    return;
+                }
             }
+            //запускаем диагностику
+            File data = new File(resultsDirectory + File.separator + RESULT_FILENAME);
+            startDiagnostic(data);
         }
     }
 
@@ -265,73 +267,72 @@ public class DiagnosticUtility {
         return false;
     }
 
-    private static boolean collectFiles() {
-        long numberOfArchivedFiles = 0;
+    private static List<File> collectFiles() {
 
         String alfrescoRootDirectory = config.get(ALF_HOME);
         if (alfrescoRootDirectory == null) {
             log.error("Failed read property 'alf_home' from config file. Please check utility configuration!");
-            return false;
+            return null;
         }
 
         File alfRoot = new File(alfrescoRootDirectory);
         if (!alfRoot.exists()) {
             log.error("Failed read Alfresco Root Directory by Path: {}", alfrescoRootDirectory);
-            return false;
+            return null;
         }
+
+        List<File> dataFiles = new ArrayList<File>();
         // Далее log files
         try {
-            numberOfArchivedFiles += collectLogFiles(alfrescoRootDirectory);
+            dataFiles.addAll(collectLogFiles(alfrescoRootDirectory));
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
         // Далее properties и xml из shared/classes
         try {
-            numberOfArchivedFiles += collectSharedFiles(alfrescoRootDirectory);
+            dataFiles.addAll(collectSharedFiles(alfrescoRootDirectory));
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
 
         // Далее solr files
         try {
-            numberOfArchivedFiles += collectSolrFiles(alfrescoRootDirectory);
+            dataFiles.addAll(collectSolrFiles(alfrescoRootDirectory));
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
 
         // Далее конфиги томката
         try {
-            numberOfArchivedFiles += collectTomcatConfigs(alfrescoRootDirectory);
+            dataFiles.addAll(collectTomcatConfigs(alfrescoRootDirectory));
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
 
         // И наконец проходим по альфреско и шаре
         try {
-            numberOfArchivedFiles += collectAlfrescoFiles(alfrescoRootDirectory);
+            dataFiles.addAll(collectAlfrescoFiles(alfrescoRootDirectory));
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
         try {
-            numberOfArchivedFiles += collectShareFiles(alfrescoRootDirectory);
+            dataFiles.addAll(collectShareFiles(alfrescoRootDirectory));
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
-
-        log.info("All archived Files: {}", numberOfArchivedFiles);
-        return true;
+        return dataFiles;
     }
 
-    private static long collectLogFiles(String alfrescoRootDirectory) {
+    private static List<File> collectLogFiles(String alfrescoRootDirectory) {
         log.info("Archive log files started");
 
         List<File> alfrescoLogs = new ArrayList<File>();
         alfrescoLogs.addAll(findFiles(alfrescoRootDirectory, ".*\\.log", true));
 
-        return writeFilesToArchive(alfrescoLogs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + LOGS_ARCHIVE_NAME));
+        return alfrescoLogs;
     }
 
-    private static long collectSharedFiles(String alfrescoRootDirectory) {
+    private static List<File> collectSharedFiles(String alfrescoRootDirectory) {
         log.info("Archive files from shared/classes directory started");
 
         List<File> alfrescoSharedClasses = new ArrayList<File>();
@@ -340,10 +341,10 @@ public class DiagnosticUtility {
         alfrescoSharedClasses.addAll(findFiles(sharedClassesDir, ".*\\.xml", true));
         alfrescoSharedClasses.addAll(findFiles(sharedClassesDir, ".*\\.properties", true));
 
-        return writeFilesToArchive(alfrescoSharedClasses, new File(alfrescoRootDirectory), new File(currentDirectoryPath + SHARED_CLASSES_ARCHIVE_NAME));
+        return alfrescoSharedClasses;
     }
 
-    private static long collectTomcatConfigs(String alfrescoRootDirectory) {
+    private static List<File> collectTomcatConfigs(String alfrescoRootDirectory) {
         log.info("Archive tomcat config files started");
 
         List<File> tomcatConfigs = new ArrayList<File>();
@@ -351,10 +352,10 @@ public class DiagnosticUtility {
 
         tomcatConfigs.addAll(findFiles(tomcatDir, "", true));
 
-        return writeFilesToArchive(tomcatConfigs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + TOMCAT_CONFIGS_ARCHIVE_NAME));
+        return tomcatConfigs;
     }
 
-    private static long collectShareFiles(String alfrescoRootDirectory) {
+    private static List<File> collectShareFiles(String alfrescoRootDirectory) {
         log.info("Archive Share config files started");
 
         List<File> shareConfigs = new ArrayList<File>();
@@ -379,10 +380,10 @@ public class DiagnosticUtility {
         shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF"}));
         shareConfigs.addAll(findFiles(shareDir, ".*\\.xml", false));
 
-        return writeFilesToArchive(shareConfigs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + SHARE_CONFIGS_ARCHIVE_NAME));
+        return shareConfigs;
     }
 
-    private static long collectSolrFiles(String alfrescoRootDirectory) {
+    private static List<File> collectSolrFiles(String alfrescoRootDirectory) {
         log.info("Archive solr files started");
 
         List<File> solrFiles = new ArrayList<File>();
@@ -395,10 +396,10 @@ public class DiagnosticUtility {
         File solrConfigDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "solr", "WEB-INF"}));
         solrFiles.addAll(findFiles(solrConfigDir, ".*\\.xml", true));
 
-        return writeFilesToArchive(solrFiles, new File(alfrescoRootDirectory), new File(currentDirectoryPath + SOLR_CONFIGS_ARCHIVE_NAME));
+        return solrFiles;
     }
 
-    private static long collectAlfrescoFiles(String alfrescoRootDirectory) {
+    private static List<File> collectAlfrescoFiles(String alfrescoRootDirectory) {
         log.info("Archive Alfresco config files started");
 
         List<File> alfrescoConfigs = new ArrayList<File>();
@@ -461,7 +462,7 @@ public class DiagnosticUtility {
         alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "workflow"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        return writeFilesToArchive(alfrescoConfigs, new File(alfrescoRootDirectory), new File(currentDirectoryPath + ALFRESCO_CONFIGS_ARCHIVE_NAME));
+        return alfrescoConfigs;
     }
 
     private static List<File> findFiles(File rootDirectory, String template, boolean searchInSubDirs) {
@@ -519,7 +520,12 @@ public class DiagnosticUtility {
             while (!queue.isEmpty()) {
                 File compressedFile = queue.pop();
 
-                String name = finder.getRelativePath(alfrescoRoot, compressedFile);
+                String name;
+                if (compressedFile.getAbsolutePath().startsWith(alfrescoRoot.getAbsolutePath())) {
+                    name = finder.getRelativePath(alfrescoRoot, compressedFile);
+                } else {
+                    name = compressedFile.getName();
+                }
 
                 if (compressedFile.isDirectory()) {
                     File[] childFiles = compressedFile.listFiles();
@@ -566,9 +572,7 @@ public class DiagnosticUtility {
         return numberOfArchivedFiles;
     }
 
-    private static boolean collectBusinessJournalRecords() {
-        boolean success = true;
-
+    private static File collectBusinessJournalRecords() {
         HttpClient client = new HttpClient();
         client.getParams().setAuthenticationPreemptive(true);
 
@@ -585,8 +589,9 @@ public class DiagnosticUtility {
 
         int status = 500;
         byte[] bytes = new byte[1024];
+        File bjLogFile = null;
         try {
-            File bjLogFile = new File(currentDirectoryPath + BJ_LOG_FILENAME);
+            bjLogFile = new File(currentDirectoryPath + BJ_LOG_FILENAME);
             if (!bjLogFile.exists()) {
                 bjLogFile.createNewFile();
             }
@@ -605,14 +610,13 @@ public class DiagnosticUtility {
             out.flush();
         } catch (IOException e) {
             log.error("", e);
-            success = false;
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);
         }
 
-        log.info("Business journal log was " + (200 <= status && status < 300 ? "" : "not") + "written to file " + currentDirectoryPath + BJ_LOG_FILENAME);
-        return success;
+        log.info("Business journal log was " + (200 <= status && status < 300 ? "" : "not"));
+        return bjLogFile;
     }
 
     private static String concatAfrescoServerURL() {
@@ -658,8 +662,7 @@ public class DiagnosticUtility {
                 alfPropsMap.get("solr.port.ssl") + "/solr";
     }
 
-    private static boolean collectOrgstructureInfo() {
-        boolean success = true;
+    private static File collectOrgstructureInfo() {
         HttpClient client = new HttpClient();
         client.getParams().setAuthenticationPreemptive(true);
 
@@ -676,8 +679,9 @@ public class DiagnosticUtility {
 
         int status = 500;
         byte[] bytes = new byte[1024];
+        File orgFile = null;
         try {
-            File orgFile = new File(currentDirectoryPath + ORG_LOG_FILENAME);
+            orgFile = new File(currentDirectoryPath + ORG_LOG_FILENAME);
             if (!orgFile.exists()) {
                 orgFile.createNewFile();
             }
@@ -695,15 +699,14 @@ public class DiagnosticUtility {
             out.flush();
         } catch (IOException e) {
             log.error("", e);
-            success = false;
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);
         }
 
-        log.info("Users Info log was " + (200 <= status && status < 300 ? "" : "not") + "written to file " + currentDirectoryPath + CONTROL_INFO_FILENAME);
+        log.info("Users Info log was " + (200 <= status && status < 300 ? "" : "not"));
 
-        return success;
+        return orgFile;
     }
 
     private static boolean collectSystemInformation() {
@@ -858,7 +861,18 @@ public class DiagnosticUtility {
         return requestDBStatus;
     }
 
-    private static void startDiagnostic() {
+    private static void startDiagnostic(File data) {
+        List<File> dataFiles = new ArrayList<File>();
+        File bjLogFile = null;
+        File orgstructureFile = null;
+        File controlFile = null;
+
+        String alfrescoRootDirectory = config.get(ALF_HOME);
+        if (alfrescoRootDirectory == null) {
+            log.error("Failed read property 'alf_home' from config file. Please check utility configuration!");
+            return;
+        }
+
         log.info("Started collecting diagnostic information ...");
         boolean success;
         //Фаза 1 - Получение системных переменных и параметров сервера
@@ -873,8 +887,8 @@ public class DiagnosticUtility {
         //Фаза 2 - Сканирование файлов сервера
         try {
             log.info("Phase 2 - Scanning files");
-            success = collectFiles();
-            log.info("Phase 2 - Scanning files finished. Phase result is {}", formatStatusString(success));
+            dataFiles = collectFiles();
+            log.info("Phase 2 - Scanning files finished. Phase result is {}", formatStatusString(dataFiles != null));
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
@@ -892,16 +906,16 @@ public class DiagnosticUtility {
             //Фаза 4 - Сбор информации из бизнес-журнала
             try {
                 log.info("Phase 4 - Collecting business journal records");
-                success = collectBusinessJournalRecords();
-                log.info("Phase 4 - Collecting business journal records. Phase result is {}", formatStatusString(success));
+                bjLogFile = collectBusinessJournalRecords();
+                log.info("Phase 4 - Collecting business journal records. Phase result is {}", formatStatusString(bjLogFile != null));
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
-            //Фаза 5 - Проверка доступности сервера
+            //Фаза 5 - сбор информации об оргструктуре
             try {
                 log.info("Phase 5 - Collecting orgstructure info");
-                success = collectOrgstructureInfo();
-                log.info("Phase 5 - Collecting orgstructure info. Phase result is {}", formatStatusString(success));
+                orgstructureFile = collectOrgstructureInfo();
+                log.info("Phase 5 - Collecting orgstructure info. Phase result is {}", formatStatusString(orgstructureFile != null));
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
@@ -910,24 +924,37 @@ public class DiagnosticUtility {
         }
 
         log.info("Last Phase - Encode control log file");
+        controlFile = new File(CONTROL_INFO_FILENAME);
+        if (!controlFile.exists()) {
+            log.error("Check file paths. Unable to find control file");
+            return;
+        }
+
+        if (dataFiles == null) {
+            log.error("Data can't be collected!");
+        }
+        if (bjLogFile != null) {
+            dataFiles.add(bjLogFile);
+        }
+        if (orgstructureFile != null) {
+            dataFiles.add(orgstructureFile);
+        }
+        writeFilesToArchive(dataFiles, new File(alfrescoRootDirectory), data);
+        if (bjLogFile != null) {
+            bjLogFile.delete();
+        }
+        if (orgstructureFile != null) {
+            orgstructureFile.delete();
+        }
+        //создаем контрольный файл
         try {
-            File controlFile = new File(CONTROL_INFO_FILENAME);
-            if (!controlFile.exists()) {
-                log.error("Check file paths. Unable to find control file");
-                return;
-            }
-            File destFile = new File(currentDirectoryPath + File.separator + CONTROL_INFO_FILENAME);
-
-            //копируем наш лог из рабочей директории к остальным файлам
-            FileUtils.copyFile(controlFile, destFile);
-
-            //считаем хеш сумму для рабочей копии лога
-            String md5Sum = getMD5Sum(destFile);
+            //считаем хеш сумму для лога
+            String md5Sum = getMD5Sum(data);
 
             //сохраняем кеш в рабочую директорию
             PrintWriter outCoded = null;
             try {
-                File controlHashFile = new File(currentDirectoryPath + CONTROL_INFO_HASH_FILENAME);
+                File controlHashFile = new File(resultsDirectory + CONTROL_INFO_HASH_FILENAME);
                 if (!controlHashFile.exists()) {
                     controlHashFile.createNewFile();
                 }
@@ -944,6 +971,7 @@ public class DiagnosticUtility {
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
+
     }
 
     private static String formatStatusString(boolean success) {
