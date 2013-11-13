@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.management.ManagementFactory;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -772,6 +773,8 @@ public class DiagnosticUtility {
             try {
                 httpGet = new GetMethod(url);
                 requestStatus = client.executeMethod(httpGet);
+            } catch (SSLHandshakeException e) {
+                log.error("Check connection without certificate. Right status is 503");
             } catch (Exception e) {
                 log.error("Unable connect to URL", e);
             } finally {
