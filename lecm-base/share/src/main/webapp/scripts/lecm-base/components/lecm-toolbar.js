@@ -398,7 +398,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         parent: datagridMeta.nodeRef,
                         itemType: datagridMeta.itemType,
                         searchConfig: datagridMeta.searchConfig,
-                        searchShowInactive: dataGrid.options.searchShowInactive
+                        searchShowInactive: dataGrid.options.searchShowInactive,
+	                    sort: datagridMeta.sort
                     });
                     if (!datagridMeta.searchConfig || !datagridMeta.searchConfig.fullTextSearch) {
                         YAHOO.Bubbling.fire("hideFilteredLabel");
