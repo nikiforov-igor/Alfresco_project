@@ -21,6 +21,8 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -696,6 +698,9 @@ public class DiagnosticUtility {
         }
         log.info("Getting a network server information. Status: {}", formatStatusString(success1));
 
+        log.info("Getting CPU info");
+        getCPUInfo();
+
 
         log.info("Getting system variables");
         try {
@@ -830,6 +835,75 @@ public class DiagnosticUtility {
         }
         log.info("Send request to DB Server to URL {}. Status: {}", requestURL, requestDBStatus);
         return requestDBStatus;
+    }
+
+    private static void getCPUInfo() {
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            getWindowsCPUInfo();
+        } else {
+            getLinuxCPUInfo();
+        }
+    }
+
+    private static void getWindowsCPUInfo() {
+        InputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            Process process = Runtime.getRuntime().exec("WMIC CPU Get Name,NumberOfCores,NumberOfLogicalProcessors /Format:List");
+            is = process.getInputStream();
+            os = new ByteArrayOutputStream();
+            int readCount;
+            byte[] bytes = new byte[8 * 1024];
+            while ((readCount = is.read(bytes)) > 0) {
+                os.write(bytes, 0, readCount);
+            }
+            os.flush();
+            Pattern p = Pattern.compile("Name=(.*?)\nNumberOfCores=(.*?)\nNumberOfLogicalProcessors=(.*?)\n", Pattern.DOTALL);
+            Matcher m = p.matcher(os.toString());
+            int count = 1;
+            while (m.find()) {
+                log.info("CPU " + count);
+                log.info("\t\tName " + m.group(1).replace("\r", ""));
+                log.info("\t\tNumberOfCores " + m.group(2).replace("\r", ""));
+                log.info("\t\tNumberOfLogicalProcessors " + m.group(3).replace("\r", ""));
+                count++;
+            }
+        } catch (IOException e) {
+            log.info("CPUs info is not available");
+        } finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
+    private static void getLinuxCPUInfo() {
+        InputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            Process process = Runtime.getRuntime().exec("cat /proc/cpuinfo");
+            is = process.getInputStream();
+            os = new ByteArrayOutputStream();
+            int readCount;
+            byte[] bytes = new byte[8 * 1024];
+            while ((readCount = is.read(bytes)) > 0) {
+                os.write(bytes, 0, readCount);
+            }
+            os.flush();
+            Pattern p = Pattern.compile("model name\\s*?:(.*?)\n.*?cpu cores\\s*?:(.*?)\n", Pattern.DOTALL);
+            Matcher m = p.matcher(os.toString());
+            int count = 1;
+            while (m.find()) {
+                log.info("CPU " + count);
+                log.info("\t\tName " + m.group(1).trim());
+                log.info("\t\tNumberOfCores " + m.group(2).trim());
+                count++;
+            }
+        } catch (IOException e) {
+            log.info("CPUs info is not available");
+        } finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
     }
 
     private static void startDiagnostic(File data) {
