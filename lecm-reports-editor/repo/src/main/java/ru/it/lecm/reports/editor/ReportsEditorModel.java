@@ -26,4 +26,5 @@ public class ReportsEditorModel {
     public final static QName ASSOC_REPORT_TEMPLATE_FILE = QName.createQName(REPORTS_EDITOR_URI, "reportTemplateFile");
 
     public final static QName PROP_REPORT_DESCRIPTOR_IS_DEPLOYED = QName.createQName(REPORTS_EDITOR_URI, "reportIsDeployed");
+    public final static QName PROP_REPORT_DESRIPTOR_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportCode");
 }

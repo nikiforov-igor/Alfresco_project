@@ -82,6 +82,15 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
                     nodeService.setAssociations(parent, ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_REPORT_TYPE, types);
                 }
 
+                Object existTemplateName = nodeService.getProperty(childAssociationRef.getChildRef(), QName.createQName(ReportsEditorModel.REPORTS_EDITOR_URI, "reportTemplateFile-text-content"));
+                String templateName;
+                if (existTemplateName == null) {
+                    templateName= nodeService.getProperty(parent, ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE) + "-template";
+                } else {
+                    templateName = existTemplateName + "-template";
+                }
+
+                nodeService.setProperty(childAssociationRef.getChildRef(), ContentModel.PROP_NAME, templateName);
                 //копируем файл с шаблоном из общей директории в отчет (или генерим новый на основании источника данных)
                 copyTemplateFile(childAssociationRef.getChildRef(), parent);
             }

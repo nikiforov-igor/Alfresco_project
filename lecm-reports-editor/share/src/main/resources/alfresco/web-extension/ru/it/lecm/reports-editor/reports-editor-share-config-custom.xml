@@ -108,12 +108,10 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportTemplateType"/>
                     <show id="lecm-rpeditor:reportTemplateFile"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="label.report.displayName"/>
                     <field id="lecm-rpeditor:reportTemplateType">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
@@ -125,9 +123,7 @@
                     </field>
                     <field id="lecm-rpeditor:reportTemplateFile">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">
-                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Шаблоны/cm:Файлы
-                            </control-param>
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -155,12 +151,10 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportTemplateType"/>
                     <show id="lecm-rpeditor:reportTemplateFile"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="label.report.displayName"/>
                     <field id="lecm-rpeditor:reportTemplateType">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
@@ -172,9 +166,7 @@
                     </field>
                     <field id="lecm-rpeditor:reportTemplateFile">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">
-                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Шаблоны
-                            </control-param>
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                         </control>
                     </field>
                 </appearance>
