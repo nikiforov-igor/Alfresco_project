@@ -1010,6 +1010,8 @@ public class DiagnosticUtility {
             dataFiles.add(aclTreeFile);
         }
 
+        dataFiles.add(new File(currentDirectoryPath + File.separator + CONTROL_INFO_FILENAME));
+
         writeFilesToArchive(dataFiles, new File(alfrescoRootDirectory), data);
 
         //Удаляем временные файлы
