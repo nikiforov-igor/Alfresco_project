@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" 
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
-		name="@RDesc.mnem"
-		orientation="Landscape"
-		whenNoDataType="AllSectionsNoDetail"
-		pageWidth="842" pageHeight="595"
-		columnWidth="802"
-		leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
-		uuid="@GUID">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+        name="@RDesc.mnem" pageWidth="842" pageHeight="595" orientation="Landscape"
+        whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+        uuid="@GUID">
 
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -22,11 +18,11 @@
 	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
-			<style backcolor="#DCDCDC"/>
+			<style backcolor="#D2EAF1"/>
 		</conditionalStyle>
 	</style>
 	<parameter name="CMIS_QUERY" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["select * from lecm-contract:document as Contract"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select * from lecm-document:base as Document"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["ds-@RDesc.mnem@@.xml"]]></defaultValueExpression>
@@ -37,54 +33,53 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<!-- 
+
+<!--
 			Общий вид макрорасширяемого блока
 		<prototype>
 			<macro.vars>
-					<var name="" value="" type="" startCalc="" preCalc="" postCalc="" /> 
-					<var> 
+					<var name="" value="" type="" startCalc="" preCalc="" postCalc="" />
+					<var>
 						<calc.expressions>
 							<start .../>
 							<pre ... />
 							<post ... />
-						</calc.expressions> 
-					</var> 
+						</calc.expressions>
+					</var>
 			</macro.vars>
 			<macro.body.field>
-				... 
+				...
 			</macro.body.field>
 		</prototype>
 	-->
 	<prototype>
-			<macro.body.field>
-				<field name="@FLD.desc.columnName" class="@FLD.desc.dataType.className">
-					<fieldDescription><![CDATA[@FLD.desc.default]]></fieldDescription>
-				</field>
-			</macro.body.field>
+        <macro.body.field>
+            <field name="@FLD.desc.columnName" class="@FLD.desc.dataType.className">
+                <fieldDescription><![CDATA[@FLD.desc.default]]></fieldDescription>
+            </field>
+        </macro.body.field>
 	</prototype>
 
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="29" splitType="Stretch">
-			<!-- Текст с названием отчёта -->
+		<band height="17" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="800" height="29"/>
+				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="800" height="17"/>
 				<textElement>
-					<font fontName="DejaVu Sans" size="20" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans" size="14" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[@RDesc.default]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch">
-			<!-- номер страницы -->
+		<band height="18" splitType="Stretch">
 			<textField>
-				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="10" width="141" height="20"/>
+				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="2" width="141" height="14"/>
 				<textElement textAlignment="Left">
-					<font fontName="DejaVu Serif" pdfEncoding="Cp1251"/>
+					<font fontName="DejaVu Sans Mono" isBold="false" pdfEncoding="Cp1251"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Стр "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -92,87 +87,100 @@
 	</pageHeader>
 	<columnHeader>
 		<band height="30" splitType="Stretch">
-			<rectangle>
-				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" x="1" y="1" width="800" height="29" backcolor="#DCDCDC"/>
-			</rectangle>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="d2334534-0ee4-43cb-82d6-fd1d4e4ed21a" mode="Opaque" x="0" y="0" width="30" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
+			</textField>
 
-				<!-- Номер текущей строки -->
-				<textField pattern= "" isBlankWhenNull="true">
-					<reportElement uuid="d2334534-0ee4-43cb-82d6-fd1d4e4ed21a" x="2" y="2" width="30" height="26" isPrintWhenDetailOverflows="true"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2"/>
-					</textElement>
-					<textFieldExpression><![CDATA["№"]]></textFieldExpression>
-				</textField>
-
-			<prototype>
+            <prototype>
 				<macro.vars>
 					<var name="CWIDTH" value="120" />
-					<var name="CHEIGHT" value="26" />
-					<var name="CTOP" value="2" />
-					<var name="CLEFT" value="35" type="int" postCalc="@+CWIDTH" />
+					<var name="CHEIGHT" value="30" />
+					<var name="CTOP" value="0" />
+					<var name="CLEFT" value="30" type="int" postCalc="@+CWIDTH" />
 					<var name="fontName" value="DejaVu Sans Mono" />
 					<var name="fontSize" value="10" />
 				</macro.vars>
 
 				<macro.body.field>
 					<textField isBlankWhenNull="true">
-						<reportElement uuid="@GUID" isPrintRepeatedValues="false" 
+						<reportElement uuid="@GUID" mode="Opaque" isPrintWhenDetailOverflows="true"
+                                forecolor="#FFFFFF" backcolor="#4BACC6"
 								x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT"/>
-
+                        <box>
+                            <pen lineWidth="0.5" lineColor="#78C0D4"/>
+                            <topPen lineWidth="0.5" lineColor="#78C0D4"/>
+                            <leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+                            <bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+                            <rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+                        </box>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
-							<font fontName="@fontName" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+							<font fontName="@fontName" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                            <paragraph leftIndent="5"/>
 						</textElement>
-			
 						<textFieldExpression><![CDATA["@FLD.desc.default"]]></textFieldExpression>
 					</textField>
 				</macro.body.field>
 			</prototype>
-
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="30" splitType="Stretch">
-			<!--
-			<printWhenExpression><![CDATA[$V{REPORT_COUNT} <= 200]]></printWhenExpression>
-			  -->
-			<frame>
-				<reportElement uuid="1e092e56-8305-48da-8ce3-c4deba187eda" style="styleOdd" x="1" y="1" width="800" height="29"/>
+		<band height="26" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a" style="styleOdd" x="0" y="0" width="30" height="26" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
 
-				<textField pattern= "" isBlankWhenNull="true">
-					<reportElement uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a" x="2" y="2" width="30" height="26" isPrintWhenDetailOverflows="true"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-						<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
-				</textField>
+            <prototype>
+                <macro.vars>
+                    <var name="CWIDTH" value="120" />
+                    <var name="CHEIGHT" value="26" />
+                    <var name="CTOP" value="0" />
+                    <var name="CLEFT" value="30" type="int" postCalc="@+CWIDTH" />
+                    <var name="fontName" value="DejaVu Sans Mono" />
+                    <var name="fontSize" value="10" />
+                </macro.vars>
 
-				<prototype>
-					<macro.vars>
-						<var name="CWIDTH" value="120" />
-						<var name="CHEIGHT" value="26" />
-						<var name="CTOP" value="2" />
-						<var name="CLEFT" value="35" type="int" postCalc="@+CWIDTH" />
-						<var name="fontName" value="DejaVu Sans Mono" />
-						<var name="fontSize" value="10" />
-					</macro.vars>
-
-					<macro.body.field>
-						<textField isBlankWhenNull="true">
-							<reportElement uuid="@GUID" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT"/>
-
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font fontName="@fontName" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-							</textElement>
-			
-							<textFieldExpression><![CDATA[$F{@FLD.desc.columnName}]]></textFieldExpression>
-						</textField>
-					</macro.body.field>
-				</prototype>
-
-			</frame>
+                <macro.body.field>
+                    <textField isBlankWhenNull="true">
+                        <reportElement uuid="@GUID" style="styleOdd" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT"/>
+                        <box>
+                            <pen lineWidth="0.5" lineColor="#78C0D4"/>
+                            <topPen lineWidth="0.5" lineColor="#78C0D4"/>
+                            <leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+                            <bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+                            <rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+                        </box>
+                        <textElement textAlignment="Left" verticalAlignment="Middle">
+                            <font fontName="@fontName" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                            <paragraph leftIndent="5"/>
+                        </textElement>
+                        <textFieldExpression><![CDATA[$F{@FLD.desc.columnName}]]></textFieldExpression>
+                    </textField>
+                </macro.body.field>
+			</prototype>
 		</band>
 	</detail>
 	<columnFooter>
