@@ -863,9 +863,9 @@ public class DiagnosticUtility {
             int count = 1;
             while (m.find()) {
                 log.info("CPU " + count);
-                log.info("\t\tName " + m.group(1).replace("\r", ""));
-                log.info("\t\tNumberOfCores " + m.group(2).replace("\r", ""));
-                log.info("\t\tNumberOfLogicalProcessors " + m.group(3).replace("\r", ""));
+                log.info("\t\tName: " + m.group(1).replace("\r", ""));
+                log.info("\t\tNumberOfCores: " + m.group(2).replace("\r", ""));
+                log.info("\t\tNumberOfLogicalProcessors: " + m.group(3).replace("\r", ""));
                 count++;
             }
         } catch (IOException e) {
@@ -894,8 +894,8 @@ public class DiagnosticUtility {
             int count = 1;
             while (m.find()) {
                 log.info("CPU " + count);
-                log.info("\t\tName " + m.group(1).trim());
-                log.info("\t\tNumberOfCores " + m.group(2).trim());
+                log.info("\t\tName: " + m.group(1).trim());
+                log.info("\t\tNumberOfCores: " + m.group(2).trim());
                 count++;
             }
         } catch (IOException e) {
