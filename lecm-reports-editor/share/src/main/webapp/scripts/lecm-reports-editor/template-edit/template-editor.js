@@ -40,7 +40,7 @@
 
         items: [],
 
-        formId: "",
+        formId: "uploadTemplate",
 
         markAsNewTemplate: function (isNew) {
             this.isNewTemplate = isNew;
@@ -315,7 +315,7 @@
             this.isCopy = false;
             this.formMode = "create";
             this.itemKind = "type";
-            this.formId = "";
+            this.formId = "uploadTemplate";
             this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId}, false);
         },
 
