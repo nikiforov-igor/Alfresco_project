@@ -344,7 +344,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 									var fileIcon = Alfresco.util.getFileIcon(data.displayValue, "cm:content", 16);
 									var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"'/>";
 
-									columnContent = "<a href=\'" + Alfresco.constants.URL_PAGECONTEXT+'document-attachment?nodeRef='+ data.value +"\'\">" + fileIconHtml + data.displayValue + "</a>";
+									columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"document-attachment?nodeRef="+ data.value +"' title='" + data.displayValue + "'>" + fileIconHtml + data.displayValue + "</a>";
 									break;
 								default:
 									break;
