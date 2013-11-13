@@ -48,8 +48,10 @@ public class DiagnosticUtility {
     //Скрипт выдачи информации по пользователям
     private final static String ORG_LOG_FILENAME = File.separator + "orgstructure.txt";
     private final static String ORG_DIAGRAM_FILENAME = File.separator + "orgstructure.png";
+    private final static String ORG_ACL_TREE_FILENAME = File.separator + "aclTree.txt";
     private final static String GET_USERS_INFO_SCRIPT_URL = "/service/lecm/orgstructure/api/getUsersInfo";
     private final static String GET_ORG_DIAGRAM_SCRIPT_URL = "/service/lecm/orgstructure/diagram";
+    private final static String GET_ACL_TREE_URL = "/service/lecm/documents/aclTree";
 
     //файл с конфигом утилиты
     private final static String CONFIG_FILENAME = "utility-properties.cfg";
@@ -575,50 +577,7 @@ public class DiagnosticUtility {
     }
 
     private static File collectBusinessJournalRecords() {
-        HttpClient client = new HttpClient();
-        client.getParams().setAuthenticationPreemptive(true);
-
-        Credentials adminCredentials = new UsernamePasswordCredentials("admin", config.get(ADMIN_PASSWORD));
-        client.getState().setCredentials(AuthScope.ANY, adminCredentials);
-        String getRecordsScript = concatAfrescoURL() + GET_BJ_RECORDS_SCRIPT_URL;
-
-        log.info("Attempt to connect to URL {}", getRecordsScript);
-
-        GetMethod httpGet = new GetMethod(getRecordsScript);
-
-        InputStream in = null;
-        OutputStream out = null;
-
-        int status = 500;
-        byte[] bytes = new byte[1024];
-        File bjLogFile = null;
-        try {
-            bjLogFile = new File(currentDirectoryPath + BJ_LOG_FILENAME);
-            if (!bjLogFile.exists()) {
-                bjLogFile.createNewFile();
-            }
-
-            httpGet.setDoAuthentication(true);
-
-            status = client.executeMethod(httpGet);
-
-            in = new BufferedInputStream(httpGet.getResponseBodyAsStream());
-            out = new BufferedOutputStream(new FileOutputStream(bjLogFile));
-
-            int readCount;
-            while ((readCount = in.read(bytes)) > 0) {
-                out.write(bytes, 0, readCount);
-            }
-            out.flush();
-        } catch (IOException e) {
-            log.error("", e);
-        } finally {
-            IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(out);
-        }
-
-        log.info("Business journal log was " + (200 <= status && status < 300 ? "" : "not"));
-        return bjLogFile;
+        return getFileFromURL(GET_BJ_RECORDS_SCRIPT_URL, currentDirectoryPath + BJ_LOG_FILENAME);
     }
 
     private static String concatAfrescoServerURL() {
@@ -665,59 +624,24 @@ public class DiagnosticUtility {
     }
 
     private static File collectOrgstructureInfo() {
-        HttpClient client = new HttpClient();
-        client.getParams().setAuthenticationPreemptive(true);
-
-        Credentials adminCredentials = new UsernamePasswordCredentials("admin", config.get(ADMIN_PASSWORD));
-        client.getState().setCredentials(AuthScope.ANY, adminCredentials);
-        String getRecordsScript = concatAfrescoURL() + GET_USERS_INFO_SCRIPT_URL;
-
-        log.info("Attempt to connect to URL {}", getRecordsScript);
-
-        GetMethod httpGet = new GetMethod(getRecordsScript);
-
-        InputStream in = null;
-        OutputStream out = null;
-
-        int status = 500;
-        byte[] bytes = new byte[1024];
-        File orgFile = null;
-        try {
-            orgFile = new File(currentDirectoryPath + ORG_LOG_FILENAME);
-            if (!orgFile.exists()) {
-                orgFile.createNewFile();
-            }
-
-            out = new BufferedOutputStream(new FileOutputStream(orgFile));
-
-            httpGet.setDoAuthentication(true);
-            status = client.executeMethod(httpGet);
-            in = new BufferedInputStream(httpGet.getResponseBodyAsStream());
-
-            int readCount;
-            while ((readCount = in.read(bytes)) > 0) {
-                out.write(bytes, 0, readCount);
-            }
-            out.flush();
-        } catch (IOException e) {
-            log.error("", e);
-        } finally {
-            IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(out);
-        }
-
-        log.info("Users Info log was " + (200 <= status && status < 300 ? "" : "not"));
-
-        return orgFile;
+        return getFileFromURL(GET_USERS_INFO_SCRIPT_URL, currentDirectoryPath + ORG_LOG_FILENAME);
     }
 
     private static File collectOrgstructureDiagramInfo() {
+        return getFileFromURL(GET_ORG_DIAGRAM_SCRIPT_URL, currentDirectoryPath + ORG_DIAGRAM_FILENAME);
+    }
+
+    private static File collectAclTree() {
+        return getFileFromURL(GET_ACL_TREE_URL, currentDirectoryPath + ORG_ACL_TREE_FILENAME);
+    }
+
+    private static File getFileFromURL(String alfrescoServiceURL, String resultFileName) {
         HttpClient client = new HttpClient();
         client.getParams().setAuthenticationPreemptive(true);
 
         Credentials adminCredentials = new UsernamePasswordCredentials("admin", config.get(ADMIN_PASSWORD));
         client.getState().setCredentials(AuthScope.ANY, adminCredentials);
-        String getRecordsScript = concatAfrescoURL() + GET_ORG_DIAGRAM_SCRIPT_URL;
+        String getRecordsScript = concatAfrescoURL() + alfrescoServiceURL;
 
         log.info("Attempt to connect to URL {}", getRecordsScript);
 
@@ -728,14 +652,14 @@ public class DiagnosticUtility {
 
         int status = 500;
         byte[] bytes = new byte[1024];
-        File orgDiagramFile = null;
+        File receivedFile = null;
         try {
-            orgDiagramFile = new File(currentDirectoryPath + ORG_DIAGRAM_FILENAME);
-            if (!orgDiagramFile.exists()) {
-                orgDiagramFile.createNewFile();
+            receivedFile = new File(resultFileName);
+            if (!receivedFile.exists()) {
+                receivedFile.createNewFile();
             }
 
-            out = new BufferedOutputStream(new FileOutputStream(orgDiagramFile));
+            out = new BufferedOutputStream(new FileOutputStream(receivedFile));
 
             httpGet.setDoAuthentication(true);
             status = client.executeMethod(httpGet);
@@ -752,10 +676,8 @@ public class DiagnosticUtility {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);
         }
-
-        log.info("Users Info log was " + (200 <= status && status < 300 ? "" : "not"));
-
-        return orgDiagramFile;
+        log.info("Data from " + alfrescoServiceURL + " received with status " + status);
+        return receivedFile;
     }
 
     private static boolean collectSystemInformation() {
@@ -915,6 +837,7 @@ public class DiagnosticUtility {
         File bjLogFile = null;
         File orgstructureFile = null;
         File orgstructureDiagramFile = null;
+        File aclTreeFile = null;
         File controlFile = null;
 
         String alfrescoRootDirectory = config.get(ALF_HOME);
@@ -969,11 +892,19 @@ public class DiagnosticUtility {
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
-            //Фаза 6 - Диаграмма организайии
+            //Фаза 6 - Диаграмма организации
             try {
                 log.info("Phase 6 - Download organization diagram");
                 orgstructureDiagramFile = collectOrgstructureDiagramInfo();
                 log.info("Phase 6 - Download organization diagram. Phase result is {}", formatStatusString(orgstructureDiagramFile != null));
+            } catch (Exception ex) {
+                log.error(ex.getMessage());
+            }
+            //Фаза 7 - Дерево прав
+            try {
+                log.info("Phase 7 - Download acl tree");
+                aclTreeFile = collectAclTree();
+                log.info("Phase 7 - Download acl tree. Phase result is {}", formatStatusString(orgstructureDiagramFile != null));
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
@@ -1001,6 +932,9 @@ public class DiagnosticUtility {
         if (orgstructureDiagramFile != null) {
             dataFiles.add(orgstructureDiagramFile);
         }
+        if (aclTreeFile != null) {
+            dataFiles.add(aclTreeFile);
+        }
 
         writeFilesToArchive(dataFiles, new File(alfrescoRootDirectory), data);
 
@@ -1013,6 +947,9 @@ public class DiagnosticUtility {
         }
         if (orgstructureDiagramFile != null) {
             orgstructureDiagramFile.delete();
+        }
+        if (aclTreeFile != null) {
+            aclTreeFile.delete();
         }
         //создаем контрольный файл
         try {
