@@ -2598,3 +2598,9 @@ span.person a div.description:empty {
     display: block;
 }
 /* Datagrid : table : fixed header - end */
+
+.datalist-toolbar .new-row span.first-child
+{
+	background: url(/share/res/components/images/add-row-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
+}

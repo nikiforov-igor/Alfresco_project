@@ -49,7 +49,7 @@
 	    <div class="new-row">
 	        <span id="${toolbarId}-newRowButton" class="yui-button yui-push-button">
 	           <span class="first-child">
-	              <button type="button" title="${msg("label.create-row.title")}">${msg("label.create-row.title")}</button>
+	              <button type="button" title="${msg("label.table.row.create.title")}">${msg("label.table.row.create.title")}</button>
 	           </span>
 	        </span>
 	    </div>
