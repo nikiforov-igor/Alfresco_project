@@ -83,10 +83,12 @@
 
 .datagrid .onMoveTableRowUp a {
     background-image: url("/share/res/images/lecm-base/components/triangle_up.png");
+	background-position: 4px 4px;
 }
 
 .datagrid .onMoveTableRowDown a {
     background-image: url("/share/res/images/lecm-base/components/triangle_down.png");
+	background-position: 4px 4px;
 }
 
 .yui-skin-lecmTheme .datagrid .yui-dt tr.total-row,
