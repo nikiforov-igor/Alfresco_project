@@ -28,7 +28,7 @@
 		<defaultValueExpression><![CDATA["ds-@RDesc.mnem@@.xml"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["reportdefinitions/deploy/jasper/@RDesc.mnem/subreports/"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[]]>
@@ -181,6 +181,22 @@
                     </textField>
                 </macro.body.field>
 			</prototype>
+
+            <subreports-prototype>
+                <macro.vars>
+                    <var name="CWIDTH" value="800" />
+                    <var name="CHEIGHT" value="0" />
+                    <var name="CTOP" value="26" />
+                    <var name="CLEFT" value="0"/>
+                </macro.vars>
+                <macro.body.field>
+                    <subreport isUsingCache="true">
+                        <reportElement uuid="@GUID" positionType="Float" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT" isPrintWhenDetailOverflows="true"/>
+                        <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{@SUB.desc.destColumnName})]]></dataSourceExpression>
+                        <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@.jasper"]]></subreportExpression>
+                    </subreport>
+                </macro.body.field>
+			</subreports-prototype>
 		</band>
 	</detail>
 	<columnFooter>

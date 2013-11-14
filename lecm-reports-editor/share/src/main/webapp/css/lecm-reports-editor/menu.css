@@ -14,6 +14,10 @@
     background: url("/share/res/images/lecm-reports-editor/template-edit-32.png") no-repeat scroll 4px 4px;
 }
 
+#lecm-menu #menu-buttons #menu-buttons-subReportsBtn span.first-child {
+    background: url("/share/res/images/lecm-reports-editor/parameter-type-list-32.png") no-repeat scroll 4px 4px;
+}
+
 #lecm-menu #menu-buttons #menu-buttons-deployReportBtn span.first-child {
     background: url("/share/res/images/lecm-reports-editor/deploy-report_32.png") no-repeat scroll 4px 4px;
 }

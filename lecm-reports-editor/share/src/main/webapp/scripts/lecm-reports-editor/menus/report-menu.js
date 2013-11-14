@@ -54,6 +54,12 @@
             };
             this.widgets.deployReportBtn = Alfresco.util.createYUIButton(this, "deployReportBtn", onButtonClick5, {});
 
+            var onButtonClick6 = function (e) {
+                window.location.href = window.location.protocol + "//" + window.location.host +
+                    Alfresco.constants.URL_PAGECONTEXT + "report-subreports?reportId=" + context.reportId;
+            };
+            this.widgets.subReportsBtn = Alfresco.util.createYUIButton(this, "subReportsBtn", onButtonClick6, {});
+
         },
 
         _deployReport: function () {

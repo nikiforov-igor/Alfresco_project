@@ -1,10 +1,7 @@
 package ru.it.lecm.reports.model.DAO;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.InvalidNodeRefException;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceService;
@@ -24,9 +21,7 @@ import ru.it.lecm.utils.LuceneSearchBuilder;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ReportEditorDAOImpl implements ReportEditorDAO {
 
@@ -58,8 +53,13 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
         final ReportDescriptorImpl result = new ReportDescriptorImpl();
         setProps_RD(result, map, id);
+        setSubReports(result, id);
 
         return result;
+    }
+
+    protected void setSubReports(ReportDescriptorImpl result, NodeRef id) {
+        result.setSubreports(scanSubreports(id));
     }
 
     @Override
@@ -139,8 +139,8 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
     }
 
     /**
-     * @param map Map<QName, Serializable>
-     * @param propName String
+     * @param map          Map<QName, Serializable>
+     * @param propName     String
      * @param defaultValue Boolean
      * @return Boolean nullable value
      */
@@ -149,8 +149,8 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
     }
 
     /**
-     * @param map Map<QName, Serializable>
-     * @param propName String
+     * @param map          Map<QName, Serializable>
+     * @param propName     String
      * @param defaultValue Boolean
      * @return none-null boolean value
      */
@@ -171,7 +171,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
         setL18Name(result, map);
 
-        setProps_Query(result.getFlags(), map);
+        setFlags(result.getFlags(), map);
 
         final NodeService nodeService = getServices().getServiceRegistry().getNodeService();
         final NamespaceService ns = getNamespaceService();
@@ -181,9 +181,11 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         result.setReportTemplate(createReportTemplate(LucenePreparedQuery.getAssocTarget(node, ASSOC_REPORT_TEMLATE, nodeService, ns)));
 
         result.setDSDescriptor(createDSDescriptor(LucenePreparedQuery.getAssocChildByType(node, TYPE_REPORT_DATASOURCE, nodeService, ns)));
+
+        result.setSubReport(getBoolean(map, PROP_T_REPORT_IS_SUB, false));
     }
 
-    protected void setProps_Query(ReportFlags result, Map<QName, Serializable> map) {
+    protected void setFlags(ReportFlags result, Map<QName, Serializable> map) {
         result.setMnem(null);
 
         result.setText(getString(map, PROP_T_REPORT_QUERY));
@@ -193,6 +195,19 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         result.setLimit(getInt(map, PROP_I_REPORT_QUERY_LIMIT, LucenePreparedQuery.QUERYROWS_UNLIMITED));
         result.setOffset(getInt(map, PROP_I_REPORT_QUERY_OFFSET, 0));
         result.setPgSize(getInt(map, PROP_I_REPORT_QUERY_PGSIZE, LucenePreparedQuery.QUERYPG_ALL));
+
+        String customFlags = getString(map, PROP_T_REPORT_FLAGS);
+        if (customFlags != null) {
+            String[] cfStr = customFlags.split(";");
+            if (cfStr.length > 0) {
+                for (String flagStr : cfStr) {
+                    String[] flag = flagStr.split("=");
+                    if (flag.length == 2) {
+                        result.flags().add(new NamedValueImpl(flag[0], flag[1]));
+                    }
+                }
+            }
+        }
     }
 
     protected ReportType createReportType(NodeRef node) {
@@ -288,7 +303,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         }
     }
 
-    protected ColumnDescriptor createColumnDescriptor(NodeRef node) {
+    public ColumnDescriptor createColumnDescriptor(NodeRef node) {
         if (node == null) {
             return null;
         }
@@ -378,7 +393,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
 
         // TODO: (tag ALF_TYPES) Получение типа ассоциации альфреско и типа данных Альфреско
-		/*
+        /*
 		const : String АТРИБУТ_С_ТИПОМ_АЛЬФРЕСКО = "", АТРИБУТ_С_ТИПОМ_АССОЦИАЦИИ_АЛЬФРЕСКО = "", АТРИБУТ_С_ВИДОМ_АССОЦИАЦИИ_АЛЬФРЕСКО = "";
 
 		result.setAlfrescoType( getString(map, АТРИБУТ_С_ТИПОМ_АЛЬФРЕСКО)); 
@@ -429,5 +444,97 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
     public NamespaceService getNamespaceService() {
         return getServices().getServiceRegistry().getNamespaceService();
+    }
+
+    public NodeService getNodeService() {
+        return getServices().getServiceRegistry().getNodeService();
+    }
+
+    public List<SubReportDescriptor> scanSubreports(NodeRef mainReport) {
+        if (mainReport == null) {
+            return null;
+        }
+
+        final Set<SubReportDescriptorImpl> subReports = new LinkedHashSet<SubReportDescriptorImpl>();
+
+        NodeService nodeService = getNodeService();
+
+        Set<QName> descriptors = new HashSet<QName>();
+        descriptors.add(QName.createQName(TYPE_ReportDescriptor, getNamespaceService()));
+
+        List<ChildAssociationRef> childDescriptorsList = nodeService.getChildAssocs(mainReport, descriptors);
+        for (ChildAssociationRef childAssociationRef : childDescriptorsList) {
+            NodeRef subReport = childAssociationRef.getChildRef();
+            ReportDescriptor subreportDesc = getReportDescriptor(subReport);
+
+            final SubReportDescriptorImpl sr = transferReportToSubReport(subreportDesc);
+            if (sr != null) {
+                subReports.add(sr);
+            }
+        }
+
+        return (subReports.isEmpty()) ? null : new ArrayList<SubReportDescriptor>(subReports);
+    }
+
+    private SubReportDescriptorImpl transferReportToSubReport(ReportDescriptor subreportDesc) {
+        final String reportName = subreportDesc.getMnem();
+
+        // !) Создание ообъекта подотчёта
+        final SubReportDescriptorImpl srResult = new SubReportDescriptorImpl(reportName);
+        srResult.setDestColumnName(reportName); // целевая колонка - это главная колонка отчёта
+
+        // источник данных для вложенного списка полей должен быть указан как query
+        String sourceLink = subreportDesc.getFlags().getText();
+        if (Utils.isStringEmpty(sourceLink)) {
+            //TODO точка расширения получения источника для подотчета
+        }
+
+        srResult.setSourceListExpression(sourceLink);
+
+        // тип данных для вложенного списка полей должен быть указан в поле Использовать для типов
+        String sourceType = subreportDesc.getFlags().getPreferedNodeType();
+        srResult.setSourceListType(sourceType);
+
+        // TODO: + beanClass, format, ifEmpty, delimiter
+        Map<String, String> customFlags = subreportDesc.getFlags().getFlagsMap();
+        if (customFlags != null && customFlags.size() > 0) {
+            String beanClass = customFlags.get("beanClass");
+            if (beanClass != null) {
+                srResult.setBeanClassName(beanClass);
+            }
+
+            ItemsFormatDescriptorImpl formatDesc = new ItemsFormatDescriptorImpl();
+
+            String format = customFlags.get("format");
+            if (format != null) {
+                formatDesc.setFormatString(format);
+            }
+
+            String ifEmpty = customFlags.get("ifEmpty");
+            if (ifEmpty != null) {
+                formatDesc.setIfEmptyTag(ifEmpty);
+            }
+
+            String delimiter = customFlags.get("delimiter");
+            if (delimiter != null) {
+                formatDesc.setItemsDelimiter(delimiter);
+            }
+
+            srResult.setItemsFormat(formatDesc);
+        }
+
+        List<ColumnDescriptor> subreportColumns = subreportDesc.getDsDescriptor().getColumns();
+        for (ColumnDescriptor subreportColumn : subreportColumns) {
+            //TODO сюда можно добавить обработку каких-то "особых" столбцов
+            srResult.getDsDescriptor().getColumns().add(subreportColumn);
+
+            /* обновление/формирование sourceMap для subreport */
+            if (srResult.getSubItemsSourceMap() == null) {
+                srResult.setSubItemsSourceMap(new HashMap<String, String>());
+            }
+            srResult.getSubItemsSourceMap().put(subreportColumn.getColumnName(), subreportColumn.getExpression());
+        }
+
+        return srResult;
     }
 }

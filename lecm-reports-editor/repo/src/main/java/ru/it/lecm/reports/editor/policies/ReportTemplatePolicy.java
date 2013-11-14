@@ -128,12 +128,13 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
         NodeRef templateFile;
         if (targetAssocs != null && !targetAssocs.isEmpty()) {
             templateFile = targetAssocs.get(0).getTargetRef();  //файл шаблона задан - используем
+            templateFile = copyService.copyAndRename(templateFile, report, ContentModel.ASSOC_CONTAINS, null, false);
         } else {
             templateFile = reportsManager.produceDefaultTemplate(report);   //файл шаблона не задан - генерируем по источнику данных
         }
-        NodeRef newTemplateFile = copyService.copyAndRename(templateFile, report, ContentModel.ASSOC_CONTAINS, null, false);
-        if (newTemplateFile != null) {
-            nodeService.setAssociations(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(newTemplateFile));
+
+        if (templateFile != null) {
+            nodeService.setAssociations(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(templateFile));
         }
     }
 }

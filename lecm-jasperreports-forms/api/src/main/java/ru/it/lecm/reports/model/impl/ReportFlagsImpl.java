@@ -1,6 +1,9 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ru.it.lecm.reports.api.model.NamedValue;
@@ -150,7 +153,19 @@ public class ReportFlagsImpl
 		this.custom = flag;
 	}
 
-	@Override
+    @Override
+    public Map<String, String> getFlagsMap() {
+        Map<String, String> flagsMap = new HashMap<String, String>();
+        Set<NamedValue> flags = flags();
+
+        for (NamedValue flag : flags) {
+            flagsMap.put(flag.getMnem(), flag.getValue());
+        }
+
+        return flagsMap;
+    }
+
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();

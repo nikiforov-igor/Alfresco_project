@@ -604,7 +604,6 @@ public class ReportsManagerImpl implements ReportsManager {
         }
 
         checkReportDescData(desc);
-        checkSubreports(desc);
         setDefaults(desc);
 
         // создание ds-файла ...
@@ -630,25 +629,6 @@ public class ReportsManagerImpl implements ReportsManager {
     private void checkReportDescData(ReportDescriptor desc) {
         if (desc.getMnem() == null || desc.getMnem().trim().isEmpty()) {
             throw new RuntimeException(String.format("Report descriptor must have mnemo code"));
-        }
-    }
-
-    /**
-     * Если нет явно заданного списка подотчётов desc.subreports - cформировать
-     * его на основе линейного списка колонок НД.
-     */
-    private void checkSubreports(ReportDescriptor desc) {
-        /** формирование Subreports из общего линейного списка колонок */
-        if (desc.getSubreports() == null) { // (!) только если подотчётов ещё нет
-            final List<SubReportDescriptor> srlist = SubreportMetaDataBuilder.scanSubreports(desc.getDsDescriptor());
-            if (srlist != null) {
-                logger.info(String.format("Report '%s': found %s subreports", desc.getMnem(), srlist.size()));
-                desc.setSubreports(srlist);
-            } else {
-                logger.info(String.format("Report '%s': no subreports found", desc.getMnem()));
-            }
-        } else {
-            logger.info(String.format("Report '%s' contains %s subreports", desc.getMnem(), desc.getSubreports().size()));
         }
     }
 

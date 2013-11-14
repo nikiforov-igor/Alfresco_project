@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -80,6 +81,19 @@ public class ReportsEditorService extends BaseBean {
 
     public List<NodeRef> getTemplates() {
         return getElements(getTemplatesRootFolder(), ReportsEditorModel.TYPE_REPORT_TEMPLATE);
+    }
+
+    public List<NodeRef> getDataColumnTypeByClass(String className) {
+        List<NodeRef> results = new ArrayList<NodeRef>();
+        NodeRef typesDictionary = nodeService.getChildByName(getDictionariesRootFolder(), ContentModel.ASSOC_CONTAINS, "Тип столбцов");
+        List<NodeRef> dicElements = getElements(typesDictionary, ReportsEditorModel.TYPE_REPORT_COLUMN_TYPE);
+        for (NodeRef dicElement : dicElements) {
+            Serializable recordClass = nodeService.getProperty(dicElement, ReportsEditorModel.PROP_REPORT_COLUMN_TYPE_CLASS);
+            if (recordClass != null && recordClass.equals(className) && !isArchive(dicElement)) {
+                results.add(dicElement);
+            }
+        }
+        return results;
     }
 
     private List<NodeRef> getElements(NodeRef parent, QName type) {

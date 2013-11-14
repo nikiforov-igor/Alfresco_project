@@ -2,14 +2,7 @@ package ru.it.lecm.reports.model.impl;
 
 import java.util.List;
 
-import ru.it.lecm.reports.api.model.DataSourceDescriptor;
-import ru.it.lecm.reports.api.model.L18able;
-import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.ReportFlags;
-import ru.it.lecm.reports.api.model.ReportProviderDescriptor;
-import ru.it.lecm.reports.api.model.ReportTemplate;
-import ru.it.lecm.reports.api.model.ReportType;
-import ru.it.lecm.reports.api.model.SubReportDescriptor;
+import ru.it.lecm.reports.api.model.*;
 import ru.it.lecm.reports.utils.Utils;
 
 public class ReportDescriptorImpl
@@ -26,12 +19,10 @@ public class ReportDescriptorImpl
 	private ReportFlags flags;
 	private List<SubReportDescriptor> subreports;
 
+    private boolean subReport = false;
+
 	public ReportDescriptorImpl() {
 		super();
-	}
-
-	public ReportDescriptorImpl(String mnem, L18able name) {
-		super(mnem, name);
 	}
 
 	public ReportDescriptorImpl(String mnem) {
@@ -96,22 +87,29 @@ public class ReportDescriptorImpl
 	@Override
 	public List<SubReportDescriptor> getSubreports() {
 		return subreports;
-		// ItemsFormatDescriptor
 	}
 
 	@Override
-	public void setSubreports(List<SubReportDescriptor> list) {
-		this.subreports = list;
+    public void setSubreports(List<SubReportDescriptor> list) {
+        this.subreports = list;
+        // пропишем подотчётам владельца ...
+        if (this.subreports != null) {
+            for (SubReportDescriptor item : this.subreports) {
+                String destColumn = item.getDestColumnName();
+                ColumnDescriptor cd = dsDescriptor.findColumnByName(destColumn);
+                if (cd != null) {
+                    // тип колонки в основном отчёте, которая соот-вет подотчёту:
+                    //    String, если используется форматирование
+                    //    List, иначе
+                    final Class<?> classOfMainReportColumn = (item.isUsingFormat()) ? String.class : List.class;
+                    cd.setClassName(classOfMainReportColumn.getName());
+                }
+                item.setOwnerReport(this);
+            }
+        }
+    }
 
-		// пропишем подотчётам владельца ...
-		if (this.subreports != null) {
-			for(SubReportDescriptor item: this.subreports) {
-				item.setOwnerReport(this);
-			}
-		}
-	}
-
-	@Override
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
@@ -179,4 +177,11 @@ public class ReportDescriptorImpl
 		return builder.toString();
 	}
 
+    public boolean isSubReport() {
+        return subReport;
+    }
+
+    public void setSubReport(boolean subReport) {
+        this.subReport = subReport;
+    }
 }

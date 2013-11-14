@@ -34,7 +34,7 @@ public class SubreportMetaDataBuilder {
 	 * часть имени составного колонки, которая является частью отчёта
 	 */
 	final static public String SUFFIX_SUBREPORT_COLUMN = ".sub.";
-
+    final static public String REGEXP_SUBREPORTLINK = "[{]{0,2}subreport[:][:]([^}]+)([}]{0,2})";
 	/**
 	 * Разборать имя колонки, если она относится к подотчёту.
 	 * <br/> Имя колонки подотчёта имеет вид:
@@ -82,19 +82,19 @@ public class SubreportMetaDataBuilder {
 	 * @param desc описатель НД
 	 * @return null, если нет подотчётов или непустой список описаний подотчётов.
 	 */
-    public static List<SubReportDescriptor> scanSubreports(DataSourceDescriptor desc) {
+    /*public static List<SubReportDescriptor> scanSubreports(DataSourceDescriptor desc) {
         if (desc == null || desc.getColumns() == null || desc.getColumns().isEmpty()) {
             return null;
         }
 
         final Map<String, SubReportDescriptorImpl> newSubreports = new LinkedHashMap<String, SubReportDescriptorImpl>();
 
-		/*
+		*//*
          *  выбираем все колонки, которые содержат ".sub." в именах, считая
 		 *  что это части "SubReportName.sub.ColName" ...
-		 */
+		 *//*
         for (ColumnDescriptor srcCol : desc.getColumns()) {
-			/* выделение имени отчёта и названия колонки */
+			*//* выделение имени отчёта и названия колонки *//*
             final String reportName, subfieldName;
 
             final String[] parts = parseSubreportColName(srcCol.getColumnName());
@@ -106,7 +106,7 @@ public class SubreportMetaDataBuilder {
             reportName = parts[0];
             subfieldName = parts[1];
 
-			/* получение описателя подотчёта ... */
+			*//* получение описателя подотчёта ... *//*
             final SubReportDescriptorImpl sr;
 
             if (newSubreports.containsKey(reportName)) { // уже был ...
@@ -125,7 +125,7 @@ public class SubreportMetaDataBuilder {
                 newSubreports.put(reportName, sr);
             }
 
-			/* создание новой колонки ... */
+			*//* создание новой колонки ... *//*
             if (sr.getDsDescriptor().findColumnByName(subfieldName) != null) {
                 // повтор определения колонки подотчёта ...
                 logger.warn(String.format("Column '%s' of subreport '%s' is defined several times -> only first one applied", subfieldName, reportName));
@@ -138,7 +138,7 @@ public class SubreportMetaDataBuilder {
 
                 sr.getDsDescriptor().getColumns().add(newSubrepCol); // добавление в описатель
 
-			/* обновление/формирование sourceMap для subreport */
+			*//* обновление/формирование sourceMap для subreport *//*
                 if (sr.getSubItemsSourceMap() == null) {
                     sr.setSubItemsSourceMap(new HashMap<String, String>());
                 }
@@ -149,7 +149,7 @@ public class SubreportMetaDataBuilder {
         } // for
 
         return (newSubreports.isEmpty()) ? null : new ArrayList<SubReportDescriptor>(newSubreports.values());
-    }
+    }*/
 
 	/**
 	 * Создание подотчёта на основании колонки НД (колонки отчёта с его же мнемоническим названием)

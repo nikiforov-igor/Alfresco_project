@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<title>Редактор отчетов - Настройка вложенных отчетов</title>
+	<description>Настройка вложенных отчетов</description>
+	<template-instance>report-subreports</template-instance>
+	<authentication>user</authentication>
+</page>

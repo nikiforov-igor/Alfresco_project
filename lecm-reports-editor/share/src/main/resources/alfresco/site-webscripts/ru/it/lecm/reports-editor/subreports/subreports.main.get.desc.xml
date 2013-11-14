@@ -1,0 +1,7 @@
+<webscript>
+	<shortname>Reports Editor Module SubReports</shortname>
+	<description>Reports Editor Module SubReports</description>
+	<url>/lecm/reports-editor/subreports</url>
+	<format default="html">extension</format>
+	<authentication>user</authentication>
+</webscript>

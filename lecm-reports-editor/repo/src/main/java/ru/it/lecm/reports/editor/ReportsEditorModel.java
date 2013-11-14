@@ -26,5 +26,11 @@ public class ReportsEditorModel {
     public final static QName ASSOC_REPORT_TEMPLATE_FILE = QName.createQName(REPORTS_EDITOR_URI, "reportTemplateFile");
 
     public final static QName PROP_REPORT_DESCRIPTOR_IS_DEPLOYED = QName.createQName(REPORTS_EDITOR_URI, "reportIsDeployed");
+    public final static QName PROP_REPORT_DESCRIPTOR_IS_SUBREPORT = QName.createQName(REPORTS_EDITOR_URI, "reportIsSubReport");
     public final static QName PROP_REPORT_DESRIPTOR_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportCode");
+    public final static QName PROP_REPORT_COLUMN_TYPE_CLASS = QName.createQName(REPORTS_EDITOR_URI, "reportColumnTypeClass");
+
+    public final static QName PROP_REPORT_DATA_COLUMN_CODE = QName.createQName(REPORTS_EDITOR_URI, "dataColumnCode");
+    public final static QName PROP_REPORT_DATA_COLUMN_EXPRESSION = QName.createQName(REPORTS_EDITOR_URI, "dataColumnExpression");
+    public final static QName ASSOC_REPORT_DATA_COLUMN_COLUMN_TYPE = QName.createQName(REPORTS_EDITOR_URI, "columnTypeAssoc");
 }

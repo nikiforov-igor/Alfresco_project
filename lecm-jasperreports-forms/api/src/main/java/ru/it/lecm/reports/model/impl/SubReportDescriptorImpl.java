@@ -117,4 +117,9 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl implements Sub
         return (Utils.isStringEmpty(this.beanClassName)
                 || VAL_BEANCLASS_BYFORMAT.equalsIgnoreCase(this.beanClassName)) && (this.itemsFormat != null);
     }
+
+    @Override
+    public boolean isSubReport() {
+        return true;
+    }
 }

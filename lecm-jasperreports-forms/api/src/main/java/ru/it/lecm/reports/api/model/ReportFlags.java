@@ -1,5 +1,8 @@
 package ru.it.lecm.reports.api.model;
 
+import java.io.Serializable;
+import java.util.Map;
+
 public interface ReportFlags extends FlagsExtendable, QueryDescriptor {
 
 	/**
@@ -14,4 +17,6 @@ public interface ReportFlags extends FlagsExtendable, QueryDescriptor {
 	 */
 	boolean isCustom();
 	void setCustom(boolean flag);
+
+    Map<String, String> getFlagsMap();
 }

@@ -190,6 +190,11 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <property name="lecm-rpeditor:reportIsSubReport">
+                    <title>Is Subreport</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-rpeditor:reportTypeAssoc">
@@ -226,6 +231,9 @@
                     </target>
                 </association>
             </associations>
+            <mandatory-aspects>
+                <aspect>lecm-rpeditor:reportExtFlagsAspect</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Набор данных -->
