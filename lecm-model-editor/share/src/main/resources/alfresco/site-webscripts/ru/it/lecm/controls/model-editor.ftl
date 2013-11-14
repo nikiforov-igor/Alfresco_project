@@ -19,6 +19,7 @@
 	<div id="${fieldHtmlId}_categoryDlg"></div>
 	<div id="${fieldHtmlId}_attributesDlg"></div>
 	<div id="${fieldHtmlId}_associationsDlg"></div>
+	<div id="${fieldHtmlId}_tablesDlg"></div>
 
 	<script type="text/javascript">//<![CDATA[
 	(function()
@@ -51,6 +52,8 @@
 			<div id="${fieldHtmlId}_attributes" class="form-container form-field"></div>
 			<label><b>Ассоциации<b/></label>
 			<div id="${fieldHtmlId}_associations" class="form-container form-field"></div>
+			<label><b>Таблицы<b/></label>
+			<div id="${fieldHtmlId}_tables" class="form-container form-field"></div>
 		</div>
 		<!-- Debug -->	
 		<pre id="${fieldHtmlId}_console"></pre>

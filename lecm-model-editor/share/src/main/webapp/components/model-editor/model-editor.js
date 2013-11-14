@@ -22,6 +22,7 @@ IT.component = IT.component || {};
 		categoryArray : [],		
 		attributesArray : [],
 		associationsArray : [],
+		tablesArray : [],
 		namespaces : [],
 		                       
 		options : {
@@ -71,6 +72,17 @@ IT.component = IT.component || {};
 			this.associationsDialog.hide();
 			Bubbling.fire("mandatoryControlValueUpdated", this);
 		},//onHideAssociationsDialog
+		onShowTablesDialog : function() {
+			this.tablesDialog.show();
+		},//onShowTablesDialog
+		//Обработчик события <ScopeID>hideEditDialog
+		onHideTablesDialog : function(layer, args) {
+			var validation = args[1], data = {};
+			for(var i in validation.args) { data[validation.args[i].name] = validation.args[i].value; }
+			this.widgets.tablesDataTable.addRow(data, 0);
+			this.tablesDialog.hide();
+			Bubbling.fire("mandatoryControlValueUpdated", this);
+		},//onHideTablesDialog
 		//Обработчик системного события onContentReady (ждет появления контента на странице)
 		onReady : function ModelEditor_onReady() {
 			Alfresco.logger.debug("Model-editor: ID - " + this.id + ", NodeRef - " + this.options.nodeRef + ", Form ID - " + this.options.formId + ", User - "+this.options.currentUser);
@@ -101,15 +113,35 @@ IT.component = IT.component || {};
 					if(YAHOO.lang.isArray(this.modelObject.model.types.type)) {
 						this.typeTitle = this.modelObject.model.types.type[0].title
 						if(YAHOO.lang.isObject(this.modelObject.model.types.type[0]["mandatory-aspects"])) {
-							if(this.modelObject.model.types.type[0]["mandatory-aspects"].aspect==="lecm-document-aspects:rateable") {
+							if(YAHOO.lang.isArray(this.modelObject.model.types.type[0]["mandatory-aspects"].aspect)) {
+								for(var v in this.modelObject.model.types.type[0]["mandatory-aspects"].aspect) {
+									if(this.modelObject.model.types.type[0]["mandatory-aspects"].aspect[v]==="lecm-document-aspects:rateable") {
+										this.rating = "true";
+									} else if(this.modelObject.model.types.type[0]["mandatory-aspects"].aspect[v]==="lecm-signed-docflow:docflowable") {
+										this.signed = "true";
+									}
+								}
+							} else if(this.modelObject.model.types.type[0]["mandatory-aspects"].aspect==="lecm-document-aspects:rateable") {
 								this.rating = "true";
+							} else if(this.modelObject.model.types.type[0]["mandatory-aspects"].aspect==="lecm-signed-docflow:docflowable") {
+								this.signed = "true";
 							}
 						}
 					} else if(YAHOO.lang.isObject(this.modelObject.model.types.type)) {
 						this.typeTitle = this.modelObject.model.types.type.title;
 						if(YAHOO.lang.isObject(this.modelObject.model.types.type["mandatory-aspects"])) {
-							if(this.modelObject.model.types.type["mandatory-aspects"].aspect==="lecm-document-aspects:rateable") {
+							if(YAHOO.lang.isArray(this.modelObject.model.types.type["mandatory-aspects"].aspect)) {
+								for(var v in this.modelObject.model.types.type["mandatory-aspects"].aspect) {
+									if(this.modelObject.model.types.type["mandatory-aspects"].aspect[v]==="lecm-document-aspects:rateable") {
+										this.rating = "true";
+									} else if(this.modelObject.model.types.type["mandatory-aspects"].aspect[v]==="lecm-signed-docflow:docflowable") {
+										this.signed = "true";
+									}
+								}
+							} else if(this.modelObject.model.types.type["mandatory-aspects"].aspect==="lecm-document-aspects:rateable") {
 								this.rating = "true";
+							} else if(this.modelObject.model.types.type["mandatory-aspects"].aspect==="lecm-signed-docflow:docflowable") {
+								this.signed = "true";
 							}
 						}
 					}
@@ -141,6 +173,44 @@ IT.component = IT.component || {};
 									}
 								}
 							}
+							//АРМ
+							if(c[i]._name.indexOf(":arm-url-constraint")!==-1) {
+								if(YAHOO.lang.isArray(c[i].parameter)) {
+									for(var p in c[i].parameter) {
+										if(c[i].parameter[p]._name==="armUrl") {
+											if(YAHOO.lang.isString(c[i].parameter[p].value)){
+												this.armUrl = c[i].parameter[p].value;
+											}
+										}
+									}
+								}
+								if(YAHOO.lang.isObject(c[i].parameter)) {
+									if(c[i].parameter._name==="armUrl") {
+										if(YAHOO.lang.isString(c[i].parameter.value)){
+											this.armUrl = c[i].parameter.value;
+										}
+									}
+								}
+							}
+							//Автор
+							//if(c[i]._name.indexOf(":author-property-constraint")!==-1) {
+							//	if(YAHOO.lang.isArray(c[i].parameter)) {
+							//		for(var p in c[i].parameter) {
+							//			if(c[i].parameter[p]._name==="authorProperty") {
+							//				if(YAHOO.lang.isString(c[i].parameter[p].value)){
+							//					this.authorProperty = c[i].parameter[p].value;
+							//				}
+							//			}
+							//		}
+							//	}
+							//	if(YAHOO.lang.isObject(c[i].parameter)) {
+							//		if(c[i].parameter._name==="authorProperty") {
+							//			if(YAHOO.lang.isString(c[i].parameter.value)){
+							//				this.authorProperty = c[i].parameter.value;
+							//			}
+							//		}
+							//	}
+							//}
 							//Категории вложений
 							if(c[i]._name.indexOf(":attachment-categories")!==-1) {
 								if(YAHOO.lang.isArray(c[i].parameter)) {
@@ -198,6 +268,44 @@ IT.component = IT.component || {};
 							}
 						}
 					}
+					//АРМ
+					if(c._name.indexOf(":arm-url-constraint")!==-1) {
+						if(YAHOO.lang.isArray(c.parameter)) {
+							for(var p in c.parameter) {
+								if(c.parameter[p]._name==="armUrl") {
+									if(YAHOO.lang.isString(c.parameter[p].value)){
+										this.armUrl = c.parameter[p].value;
+									}
+								}
+							}
+						}
+						if(YAHOO.lang.isObject(c.parameter)) {
+							if(c.parameter._name==="armUrl") {
+								if(YAHOO.lang.isString(c.parameter.value)){
+									this.armUrl = c.parameter.value;
+								}
+							}
+						}
+					}
+					//Автор
+					//if(c._name.indexOf(":author-property-constraint")!==-1) {
+					//	if(YAHOO.lang.isArray(c.parameter)) {
+					//		for(var p in c.parameter) {
+					//			if(c.parameter[p]._name==="authorProperty") {
+					//				if(YAHOO.lang.isString(c.parameter[p].value)){
+					//					this.authorProperty = c.parameter[p].value;
+					//				}
+					//			}
+					//		}
+					//	}
+					//	if(YAHOO.lang.isObject(c.parameter)) {
+					//		if(c.parameter._name==="authorProperty") {
+					//			if(YAHOO.lang.isString(c.parameter.value)){
+					//				this.authorProperty = c.parameter.value;
+					//			}
+					//		}
+					//	}
+					//}
 					//Категории вложения
 					if(c._name.indexOf(":attachment-categories")!==-1) {
 						if(YAHOO.lang.isArray(c.parameter)) {
@@ -297,6 +405,45 @@ IT.component = IT.component || {};
 			}
 			this.attributesArray = tmpAttributesArray;
 			this.associationsArray = tmpAssociationsArray;
+			//Tables
+			var tmpTablesArray = [];
+			if(YAHOO.lang.isObject(this.modelObject.model.types)) {
+				if(YAHOO.lang.isArray(this.modelObject.model.types.type)) {
+					if(YAHOO.lang.isObject(this.modelObject.model.types.type[0]["mandatory-aspects"].aspect)) {
+						var a = this.modelObject.model.types.type[0]["mandatory-aspects"].aspect;
+						if (a instanceof Array) {
+							for (var i = 0, n = a.length; i < n; i++) {
+								if(a[i]&&a[i].indexOf("table")!==-1) {
+									tmpTablesArray.push({"table":a[i]});
+								}
+							}
+						} else {
+							if(a&&a.indexOf("table")!==-1) {
+								tmpTablesArray.push({"table":a});
+							}
+						}
+					}
+				}
+				if(YAHOO.lang.isObject(this.modelObject.model.types.type)) {
+					//associations
+					if(YAHOO.lang.isObject(this.modelObject.model.types.type["mandatory-aspects"])) {
+						var a = this.modelObject.model.types.type["mandatory-aspects"].aspect;
+						if (a instanceof Array) {
+							for (var i = 0, n = a.length; i < n; i++) {
+								if(a[i]&&a[i].indexOf("table")!==-1) {
+									tmpTablesArray.push({"table":a[i]});
+								}
+							}
+						} else {
+							if(a&&a.indexOf("table")!==-1) {
+								tmpTablesArray.push({"table":a});
+							}
+						}
+					}
+				}
+			}
+			
+			this.tablesArray = tmpTablesArray;
 						
 		},//_initObjects
 		//Обработчик событий валидации формы (заполняет скрытое поле для отправки контента вместе с формой)
@@ -332,10 +479,22 @@ IT.component = IT.component || {};
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.alfresco.org/model/system/1.0","_prefix":"sys"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/logicECM/document/1.0","_prefix":"lecm-document"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/document/aspects/1.0","_prefix":"lecm-document-aspects"});
+				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/model/signed-docflow/1.0","_prefix":"lecm-signed-docflow"});
 				var records = args.widgets.associationsDataTable.getRecordSet().getRecords();
 				for(var i in records) {
 					var rec = records[i];
 					var clazz = rec.getData("class");
+					var NS = clazz.substr(0,clazz.indexOf(":"));
+					//TODO: Как по NS определять его URL?
+					for(var n in args.namespaces) {
+						if(args.namespaces[n].prefix==NS)
+							args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
+					}
+				}
+				var records = args.widgets.tablesDataTable.getRecordSet().getRecords();
+				for(var i in records) {
+					var rec = records[i];
+					var clazz = rec.getData("table");
 					var NS = clazz.substr(0,clazz.indexOf(":"));
 					//TODO: Как по NS определять его URL?
 					for(var n in args.namespaces) {
@@ -379,6 +538,26 @@ IT.component = IT.component || {};
 						parameter: {
 							_name:"presentString",
 							value:args.presentString
+						}
+					});
+				}
+				if(args.armUrl && args.armUrl.length>0) {
+					args.modelObject.model.constraints.constraint.push({
+						_name:namespace+":arm-url-constraint",
+						_type:"ru.it.lecm.documents.constraints.ArmUrlConstraint",
+						parameter: {
+							_name:"armUrl",
+							value:args.armUrl
+						}
+					});
+				}
+				if(args.authorProperty && args.authorProperty.length>0) {
+					args.modelObject.model.constraints.constraint.push({
+						_name:namespace+":author-property-constraint",
+						_type:"ru.it.lecm.documents.constraints.AuthorPropertyConstraint",
+						parameter: {
+							_name:"authorProperty",
+							value:args.authorProperty
 						}
 					});
 				}
@@ -456,11 +635,21 @@ IT.component = IT.component || {};
 			
 			//rating
 			args.modelObject.model.types.type["mandatory-aspects"] = {};
-			
+			args.modelObject.model.types.type["mandatory-aspects"].aspect = [];
 			if(args.rating==="true") {
 				if(YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])){
-					args.modelObject.model.types.type["mandatory-aspects"].aspect = "lecm-document-aspects:rateable";
+					args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-document-aspects:rateable");
 				}
+			}
+			if(args.signed==="true") {
+				if(YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])){
+					args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-signed-docflow:docflowable");
+				}
+			}
+			var records = args.widgets.tablesDataTable.getRecordSet().getRecords();
+			for(var i in records) {
+				var rec = records[i];
+				args.modelObject.model.types.type["mandatory-aspects"].aspect.push((rec.getData("table")||""));
 			}
 			
 			//json2xml
@@ -488,11 +677,47 @@ IT.component = IT.component || {};
 			if(args.widgets.categoriesDataTable.getRecordSet().getLength()>0) return true;
 			if(args.widgets.attributesDataTable.getRecordSet().getLength()>0) return true;
 			if(args.widgets.associationsDataTable.getRecordSet().getLength()>0) return true;
+			if(args.widgets.tablesDataTable.getRecordSet().getLength()>0) return true;
 			return false;
 		},//_validate
 		//Получение списка типов для ассоциаций
+		_populateTables : function ContentControl__populateTables(callback) {
+			var onSuccessTables = function ContentControl__populateTables_onSuccess(response) {
+				var r = response.json;
+				var dTables = [""];
+				for(j in r) {
+					dTables.push({label:r[j].title+" - "+r[j].name,value:r[j].name});
+				}
+				
+				//Ассоциации
+				this.tablesDialogEl = [
+		                            { name: "table", label: "Таблица", type:"select", options: dTables, showdefault: false }
+		                        ];
+
+				this.tablesColumnDefs = [ 
+		                            { className: "viewmode-label", key:"table", label:"Таблица", dropdownOptions : dTables, formatter: "dropdown", width : 737, maxAutoWidth : 737 },
+		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 } 
+		                        ];
+				this.tablesResponseSchema = { fields : [{key : "table"}] };
+				
+				if (callback && callback.successCallback) {
+					Dom.get(this.id+"_loading").setAttribute("style", "display:none");
+					Dom.get(this.id+"_props").setAttribute("style", "display:block");
+					callback.successCallback.fn.call(callback.successCallback.scope);
+				}
+			}
+			var onFailureTables = function ContentControl__populateTables_onFailure(response) {
+				
+			};// onFailure
+			Alfresco.util.Ajax.request({
+				url : Alfresco.constants.PROXY_URI + "api/classes/lecm-document_tableDataAspect/subclasses?r=false",//"api/dictionary",
+				method : "GET",
+				successCallback : { fn : onSuccessTables, scope : this },
+				failureCallback : { fn : onFailureTables, scope : this }
+			});// request
+		},
 		_populateAssoc : function ContentControl__populateAssoc(callback) {
-			var onSuccessAssoc = function ContentControl_populateContent_onSuccess(response) {
+			var onSuccessAssoc = function ContentControl__populateAssoc_onSuccess(response) {
 				var r = response.json;
 				var dAssociations = [""];
 				var dTypes = ["",{label:"Любой",value:"d:any"},{label:"Текст",value:"d:text"},{label:"Контент",value:"d:content"},{label:"Целое",value:"d:int"},{label:"Дл.целое",value:"d:long"},{label:"Дробное",value:"d:float"},{label:"Дл.дробное",value:"d:double"},{label:"Дата",value:"d:date"},{label:"Дата/время",value:"d:datetime"},{label:"Булево",value:"d:boolean"},{label:"Имя типа",value:"d:qname"},{label:"Ссылка",value:"d:noderef"},{label:"Категория",value:"d:category"}];
@@ -545,15 +770,16 @@ IT.component = IT.component || {};
 					if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: calling callback");
 					Dom.get(this.id+"_loading").setAttribute("style", "display:none");
 					Dom.get(this.id+"_props").setAttribute("style", "display:block");
-					callback.successCallback.fn.call(callback.successCallback.scope);
+					callback.successCallback.fn.call(callback.successCallback.scope, { successCallback : { fn : this._renderEditor, scope : this } });
 				}
 			};// onSuccess
 			var onFailureAssoc = function ContentControl_populateContent_onFailure(response) {
 				
 			};// onFailure
-				
+			//api/classes/cm_cmobject/subclasses?r=true
+			//api/classes/cm_content/subclasses?r=false
 			Alfresco.util.Ajax.request({
-				url : Alfresco.constants.PROXY_URI + "api/classes/cm_content/subclasses?r=false",//"api/dictionary",
+				url : Alfresco.constants.PROXY_URI + "api/classes/cm_cmobject/subclasses?r=true",//"api/dictionary",
 				method : "GET",
 				successCallback : { fn : onSuccessAssoc, scope : this },
 				failureCallback : { fn : onFailureAssoc, scope : this }
@@ -573,7 +799,7 @@ IT.component = IT.component || {};
 					//render form
 					if (callback && callback.successCallback) {
 						if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: calling callback");
-						callback.successCallback.fn.call(callback.successCallback.scope, { successCallback : { fn : this._renderEditor, scope : this } } );
+						callback.successCallback.fn.call(callback.successCallback.scope, { successCallback : { fn : this._populateTables, scope : this } } );
 					}
 				};// onSuccess
 				// Failure handler
@@ -599,7 +825,7 @@ IT.component = IT.component || {};
 				//render form
 				if (callback && callback.successCallback) {
 					if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: calling callback");
-					callback.successCallback.fn.call(callback.successCallback.scope, { successCallback : { fn : this._renderEditor, scope : this } } );
+					callback.successCallback.fn.call(callback.successCallback.scope, { successCallback : { fn : this._populateTables, scope : this } } );
 				}
 			}// if
 			
@@ -691,6 +917,15 @@ IT.component = IT.component || {};
             	underlay: "shadow", close: true, visible: false, draggable: false,
 	            elements: this.associationsDialogEl });
 		    this.associationsDialog.render();
+		    //tablesDialog
+			this.tablesDialogId = this.id+"_tablesDlg";
+			Bubbling.on(this.tablesDialogId+"showEditDialog", this.onShowTablesDialog, this);
+			Bubbling.on(this.tablesDialogId+"hideEditDialog", this.onHideTablesDialog, this);
+		    this.tablesDialog = new IT.widget.Dialog(this.tablesDialogId,
+		    	{width: "300px", modal:true, fixedcenter: true, constraintoviewport: true,
+            	underlay: "shadow", close: true, visible: false, draggable: false,
+	            elements: this.tablesDialogEl });
+		    this.tablesDialog.render();
 			//Описание
 			var oSpan = document.createElement("span");
 			var input = new IT.widget.Input({ name: "description", label: "<b>Описание модели</b>", value: (this.description||""), help:"Описание модели"} );
@@ -706,14 +941,31 @@ IT.component = IT.component || {};
 			var input = new IT.widget.Input({ name: "presentString", label: "<b>Шаблон строки представления</b>", value: (this.presentString||""), help:"Шаблон строки представления" });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
+			//АРМ
+			var oSpan = document.createElement("span");
+			var input = new IT.widget.Input({ name: "armUrl", label: "<b>Страница списка документов</b>", value: (this.armUrl||""), help:"Страница списка документов" });
+			input.render(oSpan);
+			Dom.get(this.id+"_title").appendChild(oSpan);
+			//Автор
+			//var oSpan = document.createElement("span");
+			//var input = new IT.widget.Input({ name: "authorProperty", label: "<b>Автор</b>", value: (this.authorProperty||""), help:"Автор" });
+			//input.render(oSpan);
+			//Dom.get(this.id+"_title").appendChild(oSpan);
+			
 			//Шаблон строки представления для списка
 			//var oSpan = document.createElement("span");
 			//var input = new IT.widget.Input({ name: "listPresentString", label: "Шаблон строки представления для списка", value: (this.listPresentString||"") });
 			//input.render(oSpan);
 			//Dom.get(this.id+"_title").appendChild(oSpan);
+			
 			//Рейтингуемый
 			var oSpan = document.createElement("span");
 			var input = new IT.widget.Select({ name: "rating", label: "<b>Рейтингуемый</b>", help:"Рейтингуемый", options: [{label:"Да",value:"true"},{label:"Нет",value:"false"}], value: (this.rating||"false"), showdefault: false });
+			input.render(oSpan);
+			Dom.get(this.id+"_title").appendChild(oSpan);
+			//ЮЗД
+			var oSpan = document.createElement("span");
+			var input = new IT.widget.Select({ name: "signed", label: "<b>Участвует в ЮЗД</b>", help:"Участвует в ЮЗД", options: [{label:"Да",value:"true"},{label:"Нет",value:"false"}], value: (this.signed||"false"), showdefault: false });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Категории вложений
@@ -767,6 +1019,21 @@ IT.component = IT.component || {};
                 oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.associationsDialogId+"showEditDialog"); }, obj: this, scope: this });
 			}
             Dom.get(this.id+"_associations").appendChild(associationsAddSpan);
+            //Таблицы
+			this.widgets.tablesDataSource = new YAHOO.util.DataSource(this.tablesArray,{responseSchema:this.tablesResponseSchema});
+			this.widgets.tablesDataTable = new YAHOO.widget.DataTable(this.id+"_tables", this.tablesColumnDefs, this.widgets.tablesDataSource);
+			this.widgets.tablesDataTable.subscribe('cellClickEvent',this._deleteRow);
+			this.widgets.tablesDataTable.on("dropdownChangeEvent", function(args) {
+				var e = args.event, t = args.target, r = this.getRecord(t), c = this.getColumn(this.getCellIndex(t.parentNode));
+				r.setData(c.key, t.value);
+			});
+            var tablesAddSpan = document.createElement("span");
+			if (Button) {
+                oYUIButton = new Button({ label: "Добавить", type: "button" });
+                oYUIButton.appendTo(tablesAddSpan);
+                oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.tablesDialogId+"showEditDialog"); }, obj: this, scope: this });
+			}
+            Dom.get(this.id+"_tables").appendChild(tablesAddSpan);
 //            ////////////////////////////////////// Debug /////////////////////////////////////////////////////////
 //			this.widgets.button = Alfresco.util.createYUIButton(this,null,
 //				function(n, v) {
