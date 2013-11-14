@@ -75,6 +75,19 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 
 			this.initButton();
             this.initHighLighter();
+
+			Alfresco.util.Ajax.request(
+				{
+					url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/config/init?reset=false",
+					dataObj:{},
+					successCallback:{
+						fn:function (response) {
+							var i = 1 + 2;
+						}
+					},
+					failureMessage:"message.failure",
+					execScripts:true
+				});
 		},
 
         initHighLighter : function () {
