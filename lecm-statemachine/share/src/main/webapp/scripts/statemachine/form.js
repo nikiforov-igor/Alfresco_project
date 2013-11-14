@@ -40,6 +40,7 @@ LogicECM.module = LogicECM.module || {};
 
 	YAHOO.extend(LogicECM.module.StartWorkflow, Alfresco.component.Base, {
 		taskId: null,
+        doubleClickLock: false,
         options: {
             nodeRef: null
         },
@@ -94,7 +95,9 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		show: function showWorkflowForm(action) {
-            this._showSplash()
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
+            this._showSplash();
             var url = Alfresco.constants.PROXY_URI + "/lecm/statemachine/actions?documentNodeRef=" + this.options.nodeRef + "&actionId=" + action.actionId + "&taskId=" + this.taskId;
             callback = {
                 success:function (oResponse) {
@@ -102,6 +105,7 @@ LogicECM.module = LogicECM.module || {};
                     var oResults = eval("(" + oResponse.responseText + ")");
                     var parent = oResponse.argument.parent
                     if (oResults.errors != null && oResults.errors.length > 0) {
+                        parent.doubleClickLock = false;
                         viewDialog = new LogicECM.module.EditFieldsConfirm("confirm-edit-fields");
                         viewDialog.show(parent.options.nodeRef, action.label, oResults.errors, oResults.fields);
                         return;
@@ -164,6 +168,7 @@ LogicECM.module = LogicECM.module || {};
                         } else {
                             Dom.addClass(contId, "no-form-type");
                         }
+                        me.doubleClickLock = false;
                     }
                 },
                 doBeforeFormSubmit: {
@@ -205,6 +210,7 @@ LogicECM.module = LogicECM.module || {};
                             isDefault: true
                         }]
                 });
+            this.doubleClickLock = false;
         },
 
 		_chooseState:function (type, taskId, formResponse, actionId) {
