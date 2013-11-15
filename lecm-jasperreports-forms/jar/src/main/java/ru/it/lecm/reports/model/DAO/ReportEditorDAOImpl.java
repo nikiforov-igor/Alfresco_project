@@ -480,7 +480,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         final String reportName = subreportDesc.getMnem();
 
         // !) Создание ообъекта подотчёта
-        final SubReportDescriptorImpl srResult = new SubReportDescriptorImpl(reportName);
+        final SubReportDescriptorImpl srResult = new SubReportDescriptorImpl(subreportDesc);
         srResult.setDestColumnName(reportName); // целевая колонка - это главная колонка отчёта
 
         // источник данных для вложенного списка полей должен быть указан как query
@@ -523,7 +523,9 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             srResult.setItemsFormat(formatDesc);
         }
 
-        List<ColumnDescriptor> subreportColumns = subreportDesc.getDsDescriptor().getColumns();
+        List<ColumnDescriptor> subreportColumns = new ArrayList<ColumnDescriptor>();
+        subreportColumns.addAll(subreportDesc.getDsDescriptor().getColumns());
+
         for (ColumnDescriptor subreportColumn : subreportColumns) {
             //TODO сюда можно добавить обработку каких-то "особых" столбцов
             srResult.getDsDescriptor().getColumns().add(subreportColumn);

@@ -148,7 +148,7 @@ public class DSXMLProducer {
             }
 
 			/* параметры запроса в xml-секции "query" */
-            final Element nodeQuery = xmlCreateFlagsNode(doc, XMLNODE_QUERYDESC, desc.getFlags());
+            final Element nodeQuery = xmlCreateFlagsNode(doc, XMLNODE_QUERYDESC, desc);
             if (nodeQuery != null) {
                 rootElem.appendChild(nodeQuery);
             }
@@ -979,7 +979,8 @@ public class DSXMLProducer {
         return result;
     }
 
-    private static Element xmlCreateFlagsNode(Document doc, String xmlNodeQueryDesc, ReportFlags flags) {
+    private static Element xmlCreateFlagsNode(Document doc, String xmlNodeQueryDesc, ReportDescriptor descriptor) {
+        ReportFlags flags = descriptor.getFlags();
         if (flags == null) {
             return null;
         }
@@ -1000,7 +1001,7 @@ public class DSXMLProducer {
 
 
         XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_MULTIROW, flags.isMultiRow());
-        XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_ISCUSTOM, flags.isCustom());
+        XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_ISCUSTOM, (flags.isCustom() || descriptor.isSubReport()));
 
 		/* включение атрибутов */
 

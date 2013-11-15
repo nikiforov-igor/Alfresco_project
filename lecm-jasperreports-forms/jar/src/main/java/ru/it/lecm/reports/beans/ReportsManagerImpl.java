@@ -420,6 +420,11 @@ public class ReportsManagerImpl implements ReportsManager {
     @Override
     public void registerReportDescriptor(ReportDescriptor desc) {
         if (desc != null) {
+            if (desc.getSubreports() != null) {
+                for (SubReportDescriptor subReportDescriptor : desc.getSubreports()) {
+                    registerReportDescriptor(subReportDescriptor);
+                }
+            }
             createDsFile(desc); // создание ds-xml
             saveReportTemplate(desc); // сохранение шаблонов отчёта и подотчётов
             getDescriptors().put(desc.getMnem(), desc);
@@ -464,13 +469,13 @@ public class ReportsManagerImpl implements ReportsManager {
         }
 
         // рекурсивно для подотчётов ...
-        if (desc.getSubreports() != null) {
+        /*if (desc.getSubreports() != null) {
             for (SubReportDescriptor sr : desc.getSubreports()) {
                 // TODO: шаблоны для подотчётов надо сгенерировать ТАМ же где основной отчёт
                 // TODO: при построении подотчётов придётся выгрузить файлы подотчётов на диск, а значит и основной отчёт тоже.
                 setDefaults(sr);
             } // for sr
-        }
+        }*/
     }
 
     /**
@@ -543,11 +548,11 @@ public class ReportsManagerImpl implements ReportsManager {
             logger.debug(String.format("Report '%s': provider notified", desc.getMnem()));
 
             // рекурсивно для подотчётов ...
-            if (desc.getSubreports() != null) {
+            /*if (desc.getSubreports() != null) {
                 for (SubReportDescriptor sr : desc.getSubreports()) {
                     saveReportTemplate(sr);
                 } // for sr
-            }
+            }*/
 
         } catch (Throwable ex) {
             final String msg = String.format(

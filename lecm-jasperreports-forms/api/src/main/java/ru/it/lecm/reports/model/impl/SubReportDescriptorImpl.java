@@ -21,6 +21,18 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl implements Sub
 	public SubReportDescriptorImpl() {
 	}
 
+    public SubReportDescriptorImpl(ReportDescriptor descriptor) {
+        this.setL18Name(((ReportDescriptorImpl) descriptor).getL18Name());
+        this.setMnem(descriptor.getMnem());
+        this.setProviderDescriptor(descriptor.getProviderDescriptor());
+        this.setDSDescriptor(descriptor.getDsDescriptor());
+        this.setFlags(descriptor.getFlags());
+        this.setReportTemplate(descriptor.getReportTemplate());
+        this.setReportType(descriptor.getReportType());
+        this.setSubReport(true);
+        this.setSubreports(descriptor.getSubreports());
+    }
+
     public SubReportDescriptorImpl(String reportName) {
         super(reportName);
     }
