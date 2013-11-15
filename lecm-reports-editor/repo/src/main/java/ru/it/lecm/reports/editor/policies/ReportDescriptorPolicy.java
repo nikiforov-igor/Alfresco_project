@@ -11,10 +11,10 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
-import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.editor.ReportsEditorModel;
 import ru.it.lecm.reports.editor.ReportsEditorService;
 
@@ -26,7 +26,10 @@ import java.util.*;
  * Date: 14.11.13
  * Time: 11:19
  */
-public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodePolicy {
+public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodePolicy,
+        NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnDeleteNodePolicy {
+    final static protected Logger logger = LoggerFactory.getLogger(ReportDescriptorPolicy.class);
+
     protected PolicyComponent policyComponent;
     protected NamespaceService namespaceService;
     protected NodeService nodeService;
@@ -57,6 +60,10 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
     public final void init() {
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ReportsEditorModel.TYPE_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                ReportsEditorModel.TYPE_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+/*        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+                ReportsEditorModel.TYPE_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onDeleteNode"))*/;
     }
 
     @Override
@@ -128,5 +135,40 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
 
     public void setReportEditorDAOBean(ReportEditorDAO reportEditorDAOBean) {
         this.reportEditorDAOBean = reportEditorDAOBean;
+    }
+
+    @Override
+    public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        NodeRef mainReport = nodeService.getPrimaryParent(nodeRef).getParentRef();
+        QName parentType = nodeService.getType(mainReport);
+        if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
+            Object beforeCode = before.get(ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
+            Object afterCode = after.get(ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
+            if (beforeCode != null && !afterCode.equals(beforeCode)) { // Код изменился - обработаем название колонки
+                try {
+                    // получаем набор данных основного отчета
+                    NodeRef mainDS = null;
+                    Set<QName> source = new HashSet<QName>();
+                    source.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
+                    List<ChildAssociationRef> sourcesList = nodeService.getChildAssocs(mainReport, source);
+                    if (sourcesList.size() > 0) { // есть набор данных - получаем его
+                        mainDS = sourcesList.get(0).getChildRef();
+                    }
+                    if (mainDS != null) {
+                        NodeRef subColumn = nodeService.getChildByName(mainDS, ContentModel.ASSOC_CONTAINS, beforeCode.toString());
+                        if (subColumn != null) {
+                            nodeService.setProperty(subColumn, ReportsEditorModel.PROP_REPORT_DATA_COLUMN_CODE, afterCode.toString());
+                        }
+                    }
+                } catch (Exception ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDeleteNode(ChildAssociationRef childAssociationRef, boolean b) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }
