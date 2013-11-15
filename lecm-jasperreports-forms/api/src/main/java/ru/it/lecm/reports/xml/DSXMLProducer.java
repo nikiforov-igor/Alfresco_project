@@ -201,9 +201,6 @@ public class DSXMLProducer {
      * @return поток с обновлёнными данными
      */
     public static ReportDescriptor parseDSXML(InputStream data, final String streamName) {
-        if (data == null) {
-
-        }
         logger.debug("reading ds-xml " + streamName);
 
         try {
@@ -227,7 +224,7 @@ public class DSXMLProducer {
             result.setFlags(parseReportFlags(rootElem, XMLNODE_QUERYDESC));
 
             // NOTE: когда появятся доп характеристики query внутри desc - сохранить их тут
-			/* параметры cmis-соединения в xml-секции "cmis" */
+            /* параметры cmis-соединения в xml-секции "cmis" */
 
             parseColumns(result.getDsDescriptor().getColumns(), rootElem, streamName);
 

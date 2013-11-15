@@ -17,6 +17,7 @@
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
                     <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
                     <show id="lecm-rpeditor:reportQuery"/>
+                    <show id="lecm-rpeditor:reportExtFlags"/>
                     <!--<show id="lecm-rpeditor:reportQueryOffset"/>
                     <show id="lecm-rpeditor:reportQueryLimit"/>
                     <show id="lecm-rpeditor:reportQueryPgSize"/>
@@ -551,4 +552,20 @@
             </form>
         </forms>
     </config>
+
+    <config evaluator="aspect" condition="lecm-rpeditor:reportExtFlagsAspect">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-rpeditor:reportExtFlags" for-mode="edit"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-rpeditor:reportExtFlags">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
 </alfresco-config>

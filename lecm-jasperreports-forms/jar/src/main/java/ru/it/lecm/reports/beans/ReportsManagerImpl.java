@@ -149,8 +149,12 @@ public class ReportsManagerImpl implements ReportsManager {
         final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
         try {
             if (docType == null && reportType == null) {
-                // не задано фильтрование -> вернуть сразу всё целиком ...
-                found.addAll(list.values());
+                // не задано фильтрование -> вернуть сразу всё целиком ... без подотчетов
+                for (ReportDescriptor desc : list.values()) {
+                    if (!desc.isSubReport()) {
+                        found.add(desc);
+                    }
+                }
             } else {
                 for (ReportDescriptor desc : list.values()) {
                     final boolean okDocType = (desc.getFlags() == null) || desc.getFlags().isTypeSupported(docType);
@@ -160,7 +164,7 @@ public class ReportsManagerImpl implements ReportsManager {
                             || desc.getReportType().getMnem() == null) // не задан тип отчёта шаблона -> подходит к любому
                             || reportType.equalsIgnoreCase(desc.getReportType().getMnem()); // совпадение типа
 
-                    if (okDocType && okRType) {
+                    if (okDocType && okRType && !desc.isSubReport()) {
                         found.add(desc);
                     }
                 }

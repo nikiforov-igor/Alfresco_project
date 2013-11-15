@@ -58,6 +58,9 @@ public class Utils {
         if (s == null) {
             return null;
         }
+        if (s.isEmpty()) {
+            return s;
+        }
         final int b = (s.charAt(0) == '"') ? 1 : 0;
         int e = s.length();
         if (s.charAt(e - 1) == QUOTE) {

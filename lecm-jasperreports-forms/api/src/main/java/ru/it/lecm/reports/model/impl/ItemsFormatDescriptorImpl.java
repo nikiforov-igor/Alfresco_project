@@ -10,7 +10,7 @@ public class ItemsFormatDescriptorImpl
 {
 	private static final long serialVersionUID = 1L;
 
-	private String formatString, itemsDelimiter = "\n", ifEmptyTag = "";
+	private String formatString, itemsDelimiter = ",", ifEmptyTag = "";
 
 	@Override
 	public String toString() {
