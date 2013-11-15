@@ -768,8 +768,8 @@ IT.component = IT.component || {};
 				
 				if (callback && callback.successCallback) {
 					if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: calling callback");
-					Dom.get(this.id+"_loading").setAttribute("style", "display:none");
-					Dom.get(this.id+"_props").setAttribute("style", "display:block");
+					//Dom.get(this.id+"_loading").setAttribute("style", "display:none");
+					//Dom.get(this.id+"_props").setAttribute("style", "display:block");
 					callback.successCallback.fn.call(callback.successCallback.scope, { successCallback : { fn : this._renderEditor, scope : this } });
 				}
 			};// onSuccess
@@ -820,8 +820,8 @@ IT.component = IT.component || {};
 				this.modelObject = { model:{} };
 				this._initObjects();
 				
-				Dom.get(this.id+"_loading").setAttribute("style", "display:none");
-				Dom.get(this.id+"_props").setAttribute("style", "display:block");
+				//Dom.get(this.id+"_loading").setAttribute("style", "display:none");
+				//Dom.get(this.id+"_props").setAttribute("style", "display:block");
 				//render form
 				if (callback && callback.successCallback) {
 					if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: calling callback");
