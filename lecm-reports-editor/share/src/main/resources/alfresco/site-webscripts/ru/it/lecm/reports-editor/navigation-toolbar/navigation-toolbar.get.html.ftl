@@ -4,7 +4,7 @@
 
 <script type="text/javascript">//<![CDATA[
 function init() {
-    var editor = new LogicECM.module.ReportsEditor.Footer("${toolbarId}").setMessages(${messages}).setOptions({
+    var editor = new LogicECM.module.ReportsEditor.NavigationBar("${toolbarId}").setMessages(${messages}).setOptions({
     <#if previousButton == true>
         previousButton: true,
     </#if>

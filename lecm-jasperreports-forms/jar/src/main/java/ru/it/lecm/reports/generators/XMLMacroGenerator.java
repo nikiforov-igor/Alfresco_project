@@ -114,8 +114,11 @@ public class XMLMacroGenerator {
     /**
      * узел с описанием блока с прототипом ...
      */
-    private static final String XMLNODE_PROTOTYPE = "prototype";
+    private static final String XMLNODE_PROTOTYPE = "prototype-";
 
+    private static final String PROTO_SUBREPORTS = "subreports";
+    private static final String PROTO_FIELDS = "fields";
+    private static final String PROTO_COLUMNS = "columns";
     /**
      * узел с описанием переменных в блоке прототипа ...
      */
@@ -134,11 +137,6 @@ public class XMLMacroGenerator {
     private static final String XMLATTR_VAR_PRE_CALC = "preCalc";
     private static final String XMLATTR_VAR_POST_CALC = "postCalc";
     private static final String XMLATTR_VAR_TYPE = "type";
-
-    /**
-     * узел с описанием блока с прототипом ...
-     */
-    private static final String XMLNODE_SUBREPORTS = "subreports-prototype";
 
     /**
      * внутри выраждения для фаз в виде: <фаза value="xxx"/> или <фаза>xxx</фаза>
@@ -293,10 +291,9 @@ public class XMLMacroGenerator {
             doMacroExpand(srcNode, curDictionary);
         }
 
-        final boolean flagIsMacros = XMLNODE_PROTOTYPE.equalsIgnoreCase(srcNode.getNodeName());
-        final boolean flagIsSubReportMacros = XMLNODE_SUBREPORTS.equalsIgnoreCase(srcNode.getNodeName());
+        final boolean flagIsMacros = srcNode.getNodeName() != null && srcNode.getNodeName().contains(XMLNODE_PROTOTYPE);
 
-        if (flagIsMacros || flagIsSubReportMacros) {
+        if (flagIsMacros) {
             // встречен очередной макоподстановочный узел - его надо будет расширять отдельно ...
             processMacroNode(srcNode, destDoc, curDictionary);
         } else { // обычный узел - отработка детей ...
@@ -466,16 +463,16 @@ public class XMLMacroGenerator {
             throw new RuntimeException(String.format("Main XML document node cannot be '%s'", XMLNODE_PROTOTYPE));
         }
 
-        final boolean flagIsMacros = XMLNODE_PROTOTYPE.equalsIgnoreCase(srcMacroNode.getNodeName());
-        final boolean flagIsSubReportMacros = XMLNODE_SUBREPORTS.equalsIgnoreCase(srcMacroNode.getNodeName());
-
         final MacroBlock block = new MacroBlock(destDoc, parentVars);
         block.parseNode(srcMacroNode);
 
-        if (flagIsMacros) {
-            /* УЗЕЛ - ЭТО МАКРОС ДЛЯ КОЛОНКИ */
-            block.doListMacroExpantion(reportDesc.getDsDescriptor().getColumns());
-        } else if (flagIsSubReportMacros) {
+            /* УЗЕЛ - ЭТО МАКРОС */
+        //проверяем какой из макросов будем обрабатывать
+        if (srcMacroNode.getNodeName().endsWith(PROTO_FIELDS)) {
+            block.doListMacroExpantion(reportDesc.getDsDescriptor().getColumns(), true);
+        } else if (srcMacroNode.getNodeName().endsWith(PROTO_COLUMNS)) {
+            block.doListMacroExpantion(reportDesc.getDsDescriptor().getColumns(), false);
+        } else if (srcMacroNode.getNodeName().endsWith(PROTO_SUBREPORTS)) {
             block.doSubListMacroExtension(reportDesc.getSubreports());
         }
     }
@@ -525,17 +522,20 @@ public class XMLMacroGenerator {
          * Выполнить XML-макроподстановку для всех колонок из указанного списка.
          * (!) XML Узел "prototype" с описанием будет УДАЛЁН АВТОМАТОМ.
          */
-        public void doListMacroExpantion(List<ColumnDescriptor> columns) {
+        public void doListMacroExpantion(List<ColumnDescriptor> columns, boolean includeSubColumns) {
             if (columns != null) {
                 // применяем к каждой колонке НД макросы из всех вложенных child-узлов nodeMacros ...
                 int index = -1;
                 this.curVars.calcAllNext(CalcPhase.start); // инициализация ...
 
                 for (ColumnDescriptor colDesc : columns) {
-                    //if (colDesc.getExpression() != null && !colDesc.getExpression().matches(SubreportMetaDataBuilder.REGEXP_SUBREPORTLINK)) {
-                        index++;
-                        this.doColumnMacroExpantion(colDesc, index);
-                    //}
+                    if (!includeSubColumns &&
+                            colDesc.getExpression() != null &&
+                            colDesc.getExpression().matches(SubreportMetaDataBuilder.REGEXP_SUBREPORTLINK)){
+                        continue;
+                    }
+                    index++;
+                    this.doColumnMacroExpantion(colDesc, index);
                 }
             }
 

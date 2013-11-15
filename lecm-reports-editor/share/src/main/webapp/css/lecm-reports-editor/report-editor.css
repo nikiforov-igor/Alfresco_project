@@ -73,7 +73,8 @@ report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
     margin: 5px;
 }
 
-#bd #lecm-content-main div[id*="reports-editor-toolbar"], #bd #lecm-content-main div[id*="template-edit"], #bd #lecm-content-main div[id*="source-edit"]{
+#bd #lecm-content-main div[id*="reports-editor-toolbar"], #bd #lecm-content-main div[id*="template-edit"], #bd #lecm-content-main div[id*="source-edit"],
+#bd #lecm-content-main div[id*="report-settings"],#bd #lecm-content-main div[id*="report-subreports"]{
     margin:0;
 }
 

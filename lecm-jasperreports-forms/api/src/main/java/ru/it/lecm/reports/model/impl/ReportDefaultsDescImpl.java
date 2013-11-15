@@ -9,16 +9,19 @@ public class ReportDefaultsDescImpl
 {
 	private static final long serialVersionUID = 1L;
 
-	private String generationTemplate, fileExtension;
+	private String generationTemplate;
+    private String subReportGenerationTemplate;
+    private String fileExtension;
 
 	public ReportDefaultsDescImpl() {
 		super();
 	}
 
-	public ReportDefaultsDescImpl(String fileExtension, String generationTemplate) {
+	public ReportDefaultsDescImpl(String fileExtension, String generationTemplate, String subReportGenerationTemplate) {
 		super();
 		this.fileExtension = fileExtension;
 		this.generationTemplate = generationTemplate;
+        this.subReportGenerationTemplate = subReportGenerationTemplate;
 	}
 
 	/**
@@ -54,4 +57,11 @@ public class ReportDefaultsDescImpl
 		this.generationTemplate = template;
 	}
 
+    public String getSubReportGenerationTemplate() {
+        return subReportGenerationTemplate;
+    }
+
+    public void setSubReportGenerationTemplate(String subReportGenerationTemplate) {
+        this.subReportGenerationTemplate = subReportGenerationTemplate;
+    }
 }

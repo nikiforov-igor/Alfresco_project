@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
         name="@RDesc.mnem" pageWidth="842" pageHeight="595" orientation="Landscape"
-        whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+        whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0"
         uuid="@GUID">
 
 	<property name="ireport.zoom" value="1.0"/>
@@ -63,28 +63,6 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="17" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="800" height="17"/>
-				<textElement>
-					<font fontName="DejaVu Sans" size="14" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-				</textElement>
-				<text><![CDATA[@RDesc.default]]></text>
-			</staticText>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="18" splitType="Stretch">
-			<textField>
-				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="2" width="141" height="14"/>
-				<textElement textAlignment="Left">
-					<font fontName="DejaVu Sans Mono" isBold="false" pdfEncoding="Cp1251"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Стр "+$V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-		</band>
-	</pageHeader>
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="true">
@@ -199,13 +177,4 @@
 			</prototype-subreports>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="10" splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="10" splitType="Stretch"/>
-	</pageFooter>
-	<summary>
-		<band height="10" splitType="Stretch"/>
-	</summary>
 </jasperReport>

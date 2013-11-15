@@ -24,6 +24,7 @@ LogicECM.module.ReportsEditor.SETTINGS =
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage showToolbar=show>
+    <@region id="navigation-toolbar" scope="template" />
     <@region id="reports-editor-toolbar" scope="template" />
     <@region id="content" scope="template" />
 </@bpage.basePage>

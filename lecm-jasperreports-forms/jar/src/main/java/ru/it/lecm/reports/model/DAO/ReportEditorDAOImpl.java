@@ -196,7 +196,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         result.setOffset(getInt(map, PROP_I_REPORT_QUERY_OFFSET, 0));
         result.setPgSize(getInt(map, PROP_I_REPORT_QUERY_PGSIZE, LucenePreparedQuery.QUERYPG_ALL));
 
-        String customFlags = getString(map, PROP_T_REPORT_FLAGS);
+        String customFlags = getString(map, PROP_T_REPORT_FLAGS).replaceAll("\\n", "").replaceAll("\\r","");
         if (customFlags != null) {
             String[] cfStr = customFlags.split(";");
             if (cfStr.length > 0) {

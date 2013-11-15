@@ -35,6 +35,7 @@ public class ReportsManagerImpl implements ReportsManager {
     final public static String DEFAULT_REPORT_TYPE = ReportType.RTYPE_MNEMO_JASPER;
     final public static String DEFAULT_REPORT_EXTENSION = ".jrxml";
     final public static String DEFAULT_REPORT_TEMPLATE = "jreportCommonTemplate.jrxml.gen";
+    final public static String DEFAULT_SUB_REPORT_TEMPLATE = "sub-jreportCommonTemplate.jrxml.gen";
 
     /**
      * Список зарегистрирванных отчётов
@@ -254,7 +255,7 @@ public class ReportsManagerImpl implements ReportsManager {
             this.reportDefaults = new HashMap<String, ReportDefaultsDesc>();
 
             // автодобавление для умолчания:
-            final ReportDefaultsDesc jdesc = new ReportDefaultsDescImpl(DEFAULT_REPORT_EXTENSION, DEFAULT_REPORT_TEMPLATE);
+            final ReportDefaultsDesc jdesc = new ReportDefaultsDescImpl(DEFAULT_REPORT_EXTENSION, DEFAULT_REPORT_TEMPLATE, DEFAULT_SUB_REPORT_TEMPLATE);
             this.reportDefaults.put(DEFAULT_REPORT_TYPE, jdesc);
         }
         return this.reportDefaults;
@@ -778,8 +779,8 @@ public class ReportsManagerImpl implements ReportsManager {
 
         // получение названия файла-шаблона для генерации
         final String templateFileName = (defaults != null)
-                ? defaults.getGenerationTemplate() // название шаблона из установок по-умолчанию для данного типа отчёта
-                : DEFAULT_REPORT_TEMPLATE;
+                ? (!reportDesc.isSubReport() ? defaults.getGenerationTemplate() : defaults.getSubReportGenerationTemplate()) // название шаблона из установок по-умолчанию для данного типа отчёта
+                : (!reportDesc.isSubReport() ? DEFAULT_REPORT_TEMPLATE : DEFAULT_SUB_REPORT_TEMPLATE );
         id.setFileName(templateFileName);
 
         // загрузка макета шаблона ...

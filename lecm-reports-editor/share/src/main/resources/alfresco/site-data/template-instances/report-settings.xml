@@ -24,7 +24,7 @@
         </component>
         <!-- Report Editor Toolbar -->
         <component>
-            <region-id>reports-editor-toolbar</region-id>
+            <region-id>navigation-toolbar</region-id>
             <url>/lecm/reports-editor-toolbar</url>
             <properties>
                 <!-- Доступность кнопки -->

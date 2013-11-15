@@ -18,7 +18,6 @@ public interface ReportDefaultsDesc {
 
 	/**
 	 * Макет для генерации шаблона отчёта ("шаблон шаблона")
-	 * @return
 	 */
 	public String getGenerationTemplate();
 
@@ -26,4 +25,14 @@ public interface ReportDefaultsDesc {
 	 * Макет для генерации шаблона отчёта ("шаблон шаблона")
 	 */
 	public void setGenerationTemplate(String template);
+
+    /**
+     * Макет для генерации шаблона отчёта ("шаблон шаблона")
+     */
+    public String getSubReportGenerationTemplate();
+
+    /**
+     * Макет для генерации шаблона отчёта ("шаблон шаблона")
+     */
+    public void setSubReportGenerationTemplate(String template);
 }

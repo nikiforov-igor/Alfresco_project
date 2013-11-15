@@ -230,6 +230,7 @@
 			<bean class="ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl">
 				<property name="fileExtension" value=".jrxml" />
 				<property name="generationTemplate" value="jreportCommonTemplate.jrxml.gen" />
+				<property name="subReportGenerationTemplate" value="sub-jreportCommonTemplate.jrxml.gen" />
 			</bean>
 		</property>
 
@@ -237,6 +238,7 @@
 			<bean class="ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl">
 				<property name="fileExtension" value=".odt" />
 				<property name="generationTemplate" value="ooreportCommonTemplate.odt.gen" />
+				<property name="subReportGenerationTemplate" value="ooreportCommonTemplate.odt.gen" />
 			</bean>
 		</property>
 	</bean>
