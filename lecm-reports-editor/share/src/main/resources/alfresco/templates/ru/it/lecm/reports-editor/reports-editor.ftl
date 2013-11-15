@@ -14,9 +14,18 @@ LogicECM.module.ReportsEditor.SETTINGS =
     <#else>
         {}
     </#if>;
+LogicECM.module.ReportsEditor.REPORT_SETTINGS =
+    <#if reportSettings?? >
+    ${reportSettings}
+    <#else>
+    {}
+    </#if>;
+
     <#if page.url.args.reportId?? && page.url.args.reportId != "">
         LogicECM.module.ReportsEditor.SETTINGS.REPORT_PATH =
-            LogicECM.module.ReportsEditor.SETTINGS.REPORT_PATH ? LogicECM.module.ReportsEditor.SETTINGS.REPORT_PATH : "${reportPath?js_string}";
+            LogicECM.module.ReportsEditor.SETTINGS.REPORT_PATH ?
+                    LogicECM.module.ReportsEditor.SETTINGS.REPORT_PATH :
+                    LogicECM.module.ReportsEditor.REPORT_SETTINGS.path;
     </#if>
 //]]></script>
 </@>

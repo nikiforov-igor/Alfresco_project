@@ -3,10 +3,8 @@ if (settings.status == 200) {
     model.settings = settings;
 }
 if (page.url.args.reportId) {
-    var rPath = remote.connect("alfresco").get("/lecm/reports-editor/getReportPath?reportId=" + page.url.args.reportId);
-    if (rPath.status == 200) {
-        model.reportPath = rPath;
-    } else {
-        model.reportPath = "";
+    var setStr = remote.connect("alfresco").get("/lecm/reports-editor/getReportSettings?reportId=" + page.url.args.reportId);
+    if (setStr.status == 200) {
+        model.reportSettings = setStr;
     }
 }

@@ -26,8 +26,13 @@
             var context = this;
 
             var onButtonClick1 = function (e) {
-                window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "reports-editor";
+                if (LogicECM.module.ReportsEditor.REPORT_SETTINGS && LogicECM.module.ReportsEditor.REPORT_SETTINGS.isSubReport == "true") {
+                    window.location.href = window.location.protocol + "//" + window.location.host +
+                        Alfresco.constants.URL_PAGECONTEXT + "report-settings?reportId=" + LogicECM.module.ReportsEditor.REPORT_SETTINGS.parentReport;
+                } else {
+                    window.location.href = window.location.protocol + "//" + window.location.host +
+                        Alfresco.constants.URL_PAGECONTEXT + "reports-editor";
+                }
             };
             this.widgets.reportsListBtn = Alfresco.util.createYUIButton(this, "reportsListBtn", onButtonClick1, {});
 

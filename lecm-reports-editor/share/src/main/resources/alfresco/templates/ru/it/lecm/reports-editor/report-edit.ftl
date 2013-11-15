@@ -9,6 +9,13 @@ LogicECM.module.ReportsEditor.SETTINGS =
     <#else>
         {}
     </#if>;
+    LogicECM.module.ReportsEditor.REPORT_SETTINGS =
+        <#if reportSettings?? >
+        ${reportSettings}
+        <#else>
+        {}
+        </#if>;
+
 //]]></script>
 </@>
 

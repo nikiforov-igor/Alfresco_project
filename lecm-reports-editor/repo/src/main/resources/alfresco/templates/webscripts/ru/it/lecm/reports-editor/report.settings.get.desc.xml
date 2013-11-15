@@ -1,7 +1,7 @@
 <webscript>
     <shortname>Report Template</shortname>
     <description>Report Template</description>
-    <url>/lecm/reports-editor/getReportPath?reportId={reportId}</url>
+    <url>/lecm/reports-editor/getReportSettings?reportId={reportId}</url>
     <format default="json">extension</format>
     <authentication>user</authentication>
     <transaction>none</transaction>
