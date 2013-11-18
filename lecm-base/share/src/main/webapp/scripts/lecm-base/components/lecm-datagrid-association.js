@@ -85,6 +85,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
 	    itemType: null,
 	    assocType: null,
 	    documentRef: null,
+        doubleClickLock: false,
         /**
          * Fired by YUI when parent element is available for scripting
          *
@@ -873,6 +874,8 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                 });
         },
         onAddRow: function() {
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
             var orgMetadata = this.modules.dataGrid.datagridMeta;
             if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
                 var destination = orgMetadata.nodeRef;
@@ -898,6 +901,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                             tempIndexTag.value = oDataRow.nodeRef;
                         }
                     }
+                    this.doubleClickLock = false;
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -933,6 +937,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                                         {
                                             text: this.msg("message.save.success")
                                         });
+                                    this.doubleClickLock = false;
                             },
                             scope:this,
                             rowId: arguments[1].id
@@ -940,6 +945,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
                                 this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
+                                this.doubleClickLock = false;
                             },
                             scope:this
                         }

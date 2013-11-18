@@ -53,11 +53,15 @@ LogicECM.module.Members = LogicECM.module.Members || {};
 
             currentMembers: [],
 
+            doubleClickLock: false,
+
             onReady: function () {
                 this.memberButton = Alfresco.util.createYUIButton(this, this.id + "-addMember-button", this.onAdd.bind(this), {}, Dom.get(this.id + "-addMember-button"));
             },
 
             onAdd: function (e, p_obj) {
+                if (this.doubleClickLock) return;
+                this.doubleClickLock = true;
                 this.currentMembers = [];
                 var membersRefsDivs = Dom.getElementsByClassName('member-ref');
                 for (var index in membersRefsDivs) {
@@ -70,6 +74,7 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                     Alfresco.util.populateHTML(
                         [ p_dialog.id + "-form-container_h", this.msg("label.member.add.title") ]
                     );
+                    this.doubleClickLock = false;
                     /*var added = p_dialog.dialog.form['assoc_lecm-doc-members_employee-assoc_added'];
                     if (added != null) {
                         added.value = this.currentMembers.join(",")
@@ -121,6 +126,7 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                                     {
                                         text: this.msg("message.member.add.success")
                                     });
+                                this.doubleClickLock = false;
                             },
                             scope: this
                         },
@@ -130,6 +136,7 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                                     {
                                         text: this.msg("message.member.add.failure")
                                     });
+                                this.doubleClickLock = false;
                             },
                             scope: this
                         }

@@ -2,6 +2,8 @@
 
 (function() {
 
+    var doubleClickLock = false;
+
     var grandPermissionsAndGetPerson = function (form, formToReportProperties){
         var dataObj = {
             taskID : "",
@@ -84,6 +86,8 @@
 	};
 
     var payLoad = function(){
+        if (doubleClickLock) return;
+        doubleClickLock = true;
         var templateUrl = "lecm/components/form"
                 + "?itemKind={itemKind}"
                 + "&itemId={itemId}"
@@ -101,6 +105,7 @@
             formId: "reassign-override-form"
         });
 
+        var me = this;
         var editDetails = new Alfresco.module.SimpleDialog("${fieldHtmlId}-dialogOverride");
         editDetails.setOptions({
             width: "50em",
@@ -118,12 +123,25 @@
                     btn._button.hidden = "hidden";
                     LogicECM.CurrentModules.employeesAssocAutoComplete.setOptions( { multipleSelectMode: false } );
                     LogicECM.CurrentModules.employeesAssocTreeView.setOptions( { multipleSelectMode: false } );
+                    me.doubleClickLock = false;
                 },
                 scope: editDetails
             },
             doBeforeAjaxRequest: {
                 fn: grandPermissionsAndGetPerson,
                 scope : this
+            },
+            onSuccess:{
+                fn:function (response) {
+                    this.doubleClickLock = false;
+                },
+                scope:this
+            },
+            onFailure: {
+                fn:function (response) {
+                    this.doubleClickLock = false;
+                },
+                scope:this
             }
         }).show();
     };

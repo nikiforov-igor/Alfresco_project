@@ -59,6 +59,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
         cDoc:null,
         treeContainer:'dictionary',
         rootNode:null,
+        doubleClickLock: false,
         options:{
             templateUrl:null,
             actionUrl:null,
@@ -318,6 +319,8 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
          * @param event {object}
          */
         _editNode:function editNodeByEvent(event) {
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
             var templateUrl = this._createUrl("edit", event.node.data.nodeRef);
             new Alfresco.module.SimpleDialog("form-dialog").setOptions({
                 width:"40em",
@@ -334,6 +337,13 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                             event.node.focus();
                             makeDraggable();
                         }.bind(this));
+                        this.doubleClickLock = false;
+                    },
+                    scope:this
+                },
+                onFailure: {
+                    fn:function (response) {
+                        this.doubleClickLock = false;
                     },
                     scope:this
                 }
@@ -351,6 +361,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
+            this.doubleClickLock = false;
         }
     });
 

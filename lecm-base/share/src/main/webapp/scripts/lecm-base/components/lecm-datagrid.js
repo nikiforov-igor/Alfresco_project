@@ -2390,6 +2390,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     if (item.type && item.type != "") {
                         Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
                     }
+                    this.doubleClickLock = false;
                 };
 
 				var templateUrl = "lecm/components/form"
@@ -2464,6 +2465,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
             showCreateDialog:function (meta, callback, successMessage) {
+                if (editDialogOpening) return;
+                editDialogOpening = true;
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                     var addMsg = meta.addMessage;
@@ -2474,6 +2477,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     if (meta.itemType && meta.itemType != "") {
                         Dom.addClass(contId, meta.itemType.replace(":", "_") + "_edit");
                     }
+                    this.doubleClickLock = false;
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -2518,12 +2522,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                             text: this.msg(successMessage ? successMessage : "message.save.success")
                                         });
                                 }
+                                editDialogOpening = false;
                             },
                             scope:this
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
                                 this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
+                                editDialogOpening = false;
                             },
                             scope:this
                         }

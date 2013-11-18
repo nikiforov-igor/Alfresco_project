@@ -44,6 +44,9 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
     YAHOO.lang.augmentObject(LogicECM.module.DocumentsJournal.DataGrid.prototype, {
+
+        doubleClickLock: false,
+
         getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
             var html = "";
             // Populate potentially missing parameters
@@ -174,12 +177,15 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
             };
         },
         showCreateDialog:function (meta) {
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
             // Intercept before dialog show
             var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                 var addMsg = meta.addMessage;
                 Alfresco.util.populateHTML(
                     [ p_dialog.id + "-form-container_h", addMsg ? addMsg : this.msg("label.create-row.title") ]
                 );
+                this.doubleClickLock = false;
             };
 
             var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -212,6 +218,7 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
                                 });
                             window.location.href = window.location.protocol + "//" + window.location.host +
                                 Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + response.json.persistedObject;
+                            this.doubleClickLock = false;
                         },
                         scope:this
                     },
@@ -221,6 +228,7 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
                                 {
                                     text:this.msg("message.save.failure")
                                 });
+                            this.doubleClickLock = false;
                         },
                         scope:this
                     }

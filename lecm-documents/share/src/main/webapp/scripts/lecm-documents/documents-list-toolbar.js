@@ -37,6 +37,8 @@
                 createDialogClass: ""
             },
 
+            doubleClickLock: false,
+
             _initButtons: function() {
                 this.toolbarButtons[this.options.newRowButtonType].newDocumentButton = Alfresco.util.createYUIButton(this, "newDocumentButton", this.onNewRow,
                     {
@@ -54,6 +56,8 @@
             },
 
             showCreateDialog: function (meta) {
+                if (this.doubleClickLock) return;
+                this.doubleClickLock = true;
                 // Intercept before dialog show
                 var me = this;
                 var doBeforeDialogShow = function (p_form, p_dialog) {
@@ -72,6 +76,7 @@
                     if (me.options.createDialogClass != "") {
                         Dom.addClass(contId, me.options.createDialogClass);
                     }
+                    this.doubleClickLock = false;
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -104,6 +109,7 @@
                                     });
                                 window.location.href = window.location.protocol + "//" + window.location.host +
                                     Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + response.json.persistedObject;
+                                this.doubleClickLock = false;
                             },
                             scope: this
                         },
@@ -113,6 +119,7 @@
                                     {
                                         text: this.msg("message.save.failure")
                                     });
+                                this.doubleClickLock = false;
                             },
                             scope: this
                         }

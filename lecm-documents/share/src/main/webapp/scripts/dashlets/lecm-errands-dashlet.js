@@ -14,6 +14,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
 
     YAHOO.extend(LogicECM.module.Errands.dashlet.Errands, Alfresco.component.Base,
         {
+            doubleClickLock: false,
             options: {
                 itemType: "lecm-errands:document",
                 destination: null,
@@ -21,6 +22,8 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
             },
 
             onAddErrandClick: function Errands_onAddErrandsClick(args) {
+                if (this.doubleClickLock) return;
+                this.doubleClickLock = true;
                 var destination = this.options.destination,
                     itemType = this.options.itemType;
 
@@ -31,6 +34,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                     );
                     Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
                     Dom.addClass(p_dialog.id + "-form-container", "lecm-errands_document");
+                    this.doubleClickLock = false;
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}",
@@ -64,6 +68,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                                     });
                                 window.location.href = window.location.protocol + "//" + window.location.host +
                                     Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + response.json.persistedObject;
+                                this.doubleClickLock = false;
                             },
                             scope: this
                         },
@@ -73,6 +78,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                                     {
                                         text: this.msg("message.save.failure")
                                     });
+                                this.doubleClickLock = false;
                             },
                             scope: this
                         }

@@ -1,4 +1,5 @@
 /**
+/**
 * LogicECM root namespace.
     *
 * @namespace LogicECM
@@ -100,6 +101,8 @@ LogicECM.module = LogicECM.module || {};
 
 	        defaultValue: null,
 
+            doubleClickLock: false,
+
             setOptions: function AssociationSelectOne_setOptions(obj)
             {
                 LogicECM.module.AssociationSelectOne.superclass.setOptions.call(this, obj);
@@ -171,6 +174,8 @@ LogicECM.module = LogicECM.module || {};
 	        },
 
             showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
+                if (this.doubleClickLock) return;
+                this.doubleClickLock = true;
                 var templateUrl = this.generateCreateNewUrl(this.options.parentNodeRef, this.options.itemType);
 
                 new Alfresco.module.SimpleDialog("create-new-form-dialog-" + this.eventGroup).setOptions({
@@ -185,6 +190,13 @@ LogicECM.module = LogicECM.module || {};
                         fn:function (response) {
                             this.options.selectedValueNodeRef = response.json.persistedObject;
                             this.populateSelect();
+                            this.doubleClickLock = false;
+                        },
+                        scope:this
+                    },
+                    onFailure: {
+                        fn:function (response) {
+                            this.doubleClickLock = false;
                         },
                         scope:this
                     }
@@ -196,6 +208,7 @@ LogicECM.module = LogicECM.module || {};
                 Alfresco.util.populateHTML(
                     [ p_dialog.id + "-form-container_h", fileSpan]
                 );
+                this.doubleClickLock = false;
             },
 
             generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef, itemType) {

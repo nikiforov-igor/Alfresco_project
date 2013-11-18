@@ -33,6 +33,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			rootRef: null,
 
+            doubleClickLock: false,
+
 			onReady: function()
 			{
 				this.loadConnectionsFolder();
@@ -89,6 +91,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			},
 
 			onConnect: function(e, p_obj) {
+                if (this.doubleClickLock) return;
+                this.doubleClickLock = true;
 				if (this.rootRef != null) {
 					var me = this;
 					// Intercept before dialog show
@@ -105,6 +109,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						if (primaryDocumentInput != null) {
 							primaryDocumentInput.value = this.options.documentNodeRef;
 						}
+                        this.doubleClickLock = false;
 					};
 
 					var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&ignoreNodes={ignoreNodes}&showCancelButton=true",
@@ -138,6 +143,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 										{
 											text:this.msg("message.connection.add.success")
 										});
+                                    this.doubleClickLock = false;
 								},
 								scope:this
 							},
@@ -147,6 +153,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 										{
 											text:this.msg("message.connection.add.failure")
 										});
+                                    this.doubleClickLock = false;
 								},
 								scope:this
 							}

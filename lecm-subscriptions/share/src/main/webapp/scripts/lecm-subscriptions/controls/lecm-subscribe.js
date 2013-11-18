@@ -61,6 +61,8 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
 			currentEmployee: null,
 
+            doubleClickLock: false,
+
 			onReady: function()
 			{
 				this.loadSubscriptionsRoot();
@@ -168,12 +170,15 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 			},
 
 			onSubscribe: function(e, p_obj) {
+                if (this.doubleClickLock) return;
+                this.doubleClickLock = true;
 				var me = this;
 				// Intercept before dialog show
 				var doBeforeDialogShow = function(p_form, p_dialog) {
 					Alfresco.util.populateHTML(
 						[ p_dialog.id + "-form-container_h", this.msg("label.subscribe.title") ]
 					);
+                    this.doubleClickLock = false;
 				};
 
 				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -206,6 +211,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 									{
 										text:this.msg("message.save.subscribe.success")
 									});
+                                this.doubleClickLock = false;
 							},
 							scope:this
 						},
@@ -215,6 +221,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 									{
 										text:this.msg("message.save.subscribe.failure")
 									});
+                                this.doubleClickLock = false;
 							},
 							scope:this
 						},

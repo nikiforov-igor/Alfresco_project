@@ -61,6 +61,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     YAHOO.extend(LogicECM.module.OrgStructure.Tree, Alfresco.component.Base, {
         tree:null,
         selectedNode:null,
+        doubleClickLock: false,
         options: {
             itemType: null,
             nodeType: null,
@@ -279,6 +280,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             if (this.selectedNode.data.type == "lecm-orgstr:structure") {
                 return;
             }
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
             var templateUrl = this._createUrl("edit", this.selectedNode.data.nodeRef);
             new Alfresco.module.SimpleDialog("editNode-dialog").setOptions({
                 width:"50em",
@@ -295,6 +298,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             this.onExpandComplete(null);
                             this._treeNodeSelected(this.selectedNode);
                         }.bind(this));
+                        this.doubleClickLock = false;
+                    },
+                    scope:this
+                },
+                onFailure: {
+                    fn:function (response) {
+                        this.doubleClickLock = false;
                     },
                     scope:this
                 }
@@ -302,6 +312,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
 
         _addNode:function editNodeByEvent(event) {
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
             var templateUrl = this._createUrl("create", this.selectedNode.data.nodeRef, this.options.nodeType);
             new Alfresco.module.SimpleDialog("addUnit-dialog").setOptions({
                 width:"50em",
@@ -317,6 +329,13 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             {
                                 nodeRef:response.json.persistedObject
                             });
+                        this.doubleClickLock = false;
+                    },
+                    scope:this
+                },
+                onFailure: {
+                    fn:function (response) {
+                        this.doubleClickLock = false;
                     },
                     scope:this
                 }
@@ -350,6 +369,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             Alfresco.util.populateHTML(
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
+            this.doubleClickLock = false;
         },
 
         onNewNodeCreated:function Tree_onNewUnitCreated(layer, args) {

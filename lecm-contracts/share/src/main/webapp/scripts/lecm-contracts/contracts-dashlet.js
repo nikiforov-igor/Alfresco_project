@@ -41,6 +41,8 @@
                 destination: null
             },
 
+            doubleClickLock: false,
+
             contractsList: null,
 
             link: "contracts-main",
@@ -227,6 +229,8 @@
             },
 
             onAddContractClick: function Contracts_onAddContractClick(){
+                if (this.doubleClickLock) return;
+                this.doubleClickLock = true;
                 var destination = this.options.destination,
                     itemType = this.options.itemType;
 
@@ -236,6 +240,7 @@
                         [ p_dialog.id + "-form-container_h", this.msg("label.create-row.title") ]
                     );
                     Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+                    this.doubleClickLock = false;
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -268,6 +273,7 @@
                                     });
                                 window.location.href = window.location.protocol + "//" + window.location.host +
                                     Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + response.json.persistedObject;
+                                this.doubleClickLock = false;
                             },
                             scope: this
                         },
@@ -277,6 +283,7 @@
                                     {
                                         text: this.msg("message.save.failure")
                                     });
+                                this.doubleClickLock = false;
                             },
                             scope: this
                         }

@@ -175,6 +175,8 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 	YAHOO.lang.augmentObject(LogicECM.module.DocumentTableDataGrid.prototype, {
 		tableDataNodeRef: null,
 
+        doubleClickLock: false,
+
 		addFooter: function() {
 			if (this.tableDataNodeRef != null) {
 				var sUrl = sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/getTotalRows?tableDataRef=" + encodeURIComponent(this.tableDataNodeRef);
@@ -859,6 +861,8 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                 });
         },
         onAddRow: function(me, asset, owner, actionsConfig, confirmFunction) {
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
             var orgMetadata = this.modules.dataGrid.datagridMeta;
             if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
                 var destination = orgMetadata.nodeRef;
@@ -883,6 +887,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                             tempIndexTag.value = index+1;
                         }
                     }
+                    this.doubleClickLock = false;
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -918,6 +923,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                                     {
                                         text: this.msg("message.save.success")
                                     });
+                                this.doubleClickLock = false;
                             },
                             scope:this,
                             rowId: asset.id
@@ -925,6 +931,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
                                 this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
+                                this.doubleClickLock = true;
                             },
                             scope:this
                         }

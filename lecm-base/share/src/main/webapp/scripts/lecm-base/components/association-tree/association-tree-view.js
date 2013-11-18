@@ -67,6 +67,8 @@ LogicECM.module = LogicECM.module || {};
 
         isSearch: false,
 
+        doubleClickLock: false,
+
 		options:
 		{
             showCreateNewLink: true,
@@ -184,6 +186,8 @@ LogicECM.module = LogicECM.module || {};
 		},
 
         showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
             var templateRequestParams = this.generateCreateNewParams(this.options.rootNodeRef, this.options.itemType);
 			templateRequestParams["createNewMessage"] = this.options.createNewMessage;
 
@@ -201,6 +205,13 @@ LogicECM.module = LogicECM.module || {};
                     fn:function (response) {
                         this.addSelectedItem(response.json.persistedObject);
                         this._updateItems(this.options.rootNodeRef, "");
+                        this.doubleClickLock = false;
+                    },
+                    scope:this
+                },
+                onFailure: {
+                    fn:function (response) {
+                        this.doubleClickLock = false;
                     },
                     scope:this
                 }
@@ -864,6 +875,8 @@ LogicECM.module = LogicECM.module || {};
             // Hook create new item action click events (for Compact mode)
             var fnCreateNewItemHandler = function AssociationTreeViewer__createControls_fnCreateNewItemHandler(layer, args)
             {
+                if (this.doubleClickLock) return;
+                this.doubleClickLock = true;
                 var templateRequestParams = me.generateCreateNewParams(me.currentNode.data.nodeRef, me.options.itemType);
 				templateRequestParams["createNewMessage"] = me.options.createNewMessage;
 
@@ -881,6 +894,13 @@ LogicECM.module = LogicECM.module || {};
                         fn:function (response) {
                             me.addSelectedItem(response.json.persistedObject);
                             me._updateItems(me.currentNode.data.nodeRef, "");
+                            me.doubleClickLock = false;
+                        },
+                        scope:this
+                    },
+                    onFailure: {
+                        fn:function (response) {
+                            me.doubleClickLock = false;
                         },
                         scope:this
                     }
@@ -915,6 +935,7 @@ LogicECM.module = LogicECM.module || {};
             if (this.options.createDialogClass != "") {
                 Dom.addClass(p_dialog.id + "-form-container", this.options.createDialogClass);
             }
+            this.doubleClickLock = false;
         },
 
         /**

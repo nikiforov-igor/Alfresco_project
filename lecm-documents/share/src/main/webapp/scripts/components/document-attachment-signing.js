@@ -43,6 +43,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		newId: null,
 		signingContainer: null,
 		exchangeContainer: null,
+        doubleClickLock: false,
 		onReady: function() {
 			var id = this.newId ? this.newId : this.id;
 
@@ -54,6 +55,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		},
 
 		onViewSignature: function(event) {
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
 			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
 
 			form.setOptions({
@@ -71,6 +74,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				destroyOnHide: true,
 				doBeforeDialogShow:{
 					fn: function( p_form, p_dialog ) {
+                        this.doubleClickLock = false;
 						p_dialog.dialog.setHeader("Просмотр информации о подписях");
 						p_form.doBeforeFormSubmit = {
 							fn: function() {
@@ -78,16 +82,24 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							},
 							scope: p_form
 						};
-					}
+					},
+                    scope: this
 				},
 				onFailure: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
 							text: "Не удалось получить информацию о подписях"
 						});
+                        this.doubleClickLock = false;
 					},
 					scope: this
-				}
+				},
+                onSuccess:{
+                    fn:function (response) {
+                        this.doubleClickLock = false;
+                    },
+                    scope:this
+                }
 			});
 
 			form.show();

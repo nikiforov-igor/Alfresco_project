@@ -45,6 +45,8 @@
 
         formId: "",
 
+        doubleClickLock: false,
+
         markAsNewSource: function (isNew) {
             this.isNewSource = isNew;
         },
@@ -228,6 +230,8 @@
         },
 
         _showCreateForm: function (meta) {
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
             var doBeforeDialogShow = function (p_form, p_dialog) {
                 var createMsg = (this.isCopy) ? this.msg("label.save-as-source.title") : this.msg("label.create-column.title");
                 Alfresco.util.populateHTML(
@@ -240,6 +244,7 @@
                     this._setInputValue('-createColumnDetails_prop_cm_name',"");
                     this._setInputValue('-createColumnDetails_prop_lecm-rpeditor_dataSourceCode',"");
                 }
+                this.doubleClickLock = false;
             };
 
             var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",

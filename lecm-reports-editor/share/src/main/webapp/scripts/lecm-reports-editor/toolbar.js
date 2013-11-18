@@ -13,6 +13,7 @@
                 searchButtonsType: 'defaultActive',
                 newRowButtonType: 'defaultActive'
             },
+            doubleClickLock: false,
 
             _initButtons: function() {
                 this.toolbarButtons[this.options.newRowButtonType].newDocumentButton = Alfresco.util.createYUIButton(this, 'newElementButton', this.onNewRow,
@@ -32,6 +33,8 @@
             },
 
             showCreateDialog: function (meta, successMessage) {
+                if (this.doubleClickLock) return;
+                this.doubleClickLock = true;
                 var me = this;
                 var doBeforeDialogShow = function (p_form, p_dialog) {
                     var addMsg = meta.addMessage;
@@ -45,6 +48,7 @@
                     );
 
                     Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+                    this.doubleClickLock = false;
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -79,6 +83,7 @@
                                     {
                                         text: this.msg(successMessage ? successMessage : "message.save.success")
                                     });
+                                this.doubleClickLock = false;
                             },
                             scope:this
                         },
@@ -88,6 +93,7 @@
                                     {
                                         text: this.msg("message.save.failure")
                                     });
+                                this.doubleClickLock = false;
                             },
                             scope: this
                         }

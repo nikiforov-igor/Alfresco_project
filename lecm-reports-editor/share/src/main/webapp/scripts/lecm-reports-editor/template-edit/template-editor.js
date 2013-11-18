@@ -42,6 +42,8 @@
 
         formId: "uploadTemplate",
 
+        doubleClickLock: false,
+
         markAsNewTemplate: function (isNew) {
             this.isNewTemplate = isNew;
         },
@@ -73,6 +75,8 @@
         },
 
         _showCreateForm: function (meta) {
+            if (this.doubleClickLock) return;
+            this.doubleClickLock = true;
             var doBeforeDialogShow = function (p_form, p_dialog) {
                 var defaultMsg = this.msg("label.create-template.title");
                 Alfresco.util.populateHTML(
@@ -89,6 +93,7 @@
                         htmlItem.setAttribute("value", "");
                     }
                 }
+                this.doubleClickLock = false;
             };
 
             var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -152,6 +157,7 @@
                                 });
 
                             this.toolbarButtons.newTemplateSaveButton.set("disabled", this.isCopy);
+                            this.doubleClickLock = false;
                         },
                         scope: this
                     },
@@ -161,6 +167,7 @@
                                 {
                                     text: this.msg("message.save.failure")
                                 });
+                            this.doubleClickLock = false;
                         },
                         scope: this
                     }
