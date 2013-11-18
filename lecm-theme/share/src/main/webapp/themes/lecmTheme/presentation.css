@@ -587,7 +587,7 @@ h4 .lighter
     max-width: 440px;
 }
 
-.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe):not(.full-width) {
     max-width: 100%;
     clear: none;
     margin-left: 160px;
@@ -595,7 +595,7 @@ h4 .lighter
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.yui-skin-lecmTheme .yui-panel div.form-field > div.help-text:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+.yui-skin-lecmTheme .yui-panel div.form-field > div.help-text:not(.datagrid):not(.viewmode-field):not(.subscribe):not(.full-width) {
     clear: both;
 }
 
@@ -1920,7 +1920,7 @@ div.autocompleteCurrentValueDisplayInvisible,
     font-size: 99%;
 }
 
-.yui-skin-lecmTheme div.yui-panel div.form-field > div.object-finder.inlineable:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+.yui-skin-lecmTheme div.yui-panel div.form-field > div.object-finder.inlineable:not(.datagrid):not(.viewmode-field):not(.subscribe):not(.full-width) {
     float: left;
     margin: 0;
 }

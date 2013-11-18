@@ -3,6 +3,7 @@
 		<forms>
 			<dependencies>
 				<js src="/scripts/lecm-forms-editor/lecm-forms-attribute-table.js"/>
+				<js src="/scripts/lecm-forms-editor/lecm-forms-attributes-table-toolbar.js"/>
 			</dependencies>
 		</forms>
 	</config>
