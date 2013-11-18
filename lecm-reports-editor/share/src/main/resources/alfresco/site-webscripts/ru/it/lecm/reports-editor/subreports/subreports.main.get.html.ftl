@@ -326,6 +326,7 @@
                         datagridMeta: {
                             itemType: "lecm-rpeditor:reportDescriptor",
                             nodeRef: "${page.url.args.reportId}",
+                            datagridFormId: "sub-datagrid",
                             actionsConfig: {
                                 fullDelete: true,
                                 trash: false

@@ -18,10 +18,6 @@
                     <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
                     <show id="lecm-rpeditor:reportQuery"/>
                     <show id="lecm-rpeditor:reportExtFlags"/>
-                    <!--<show id="lecm-rpeditor:reportQueryOffset"/>
-                    <show id="lecm-rpeditor:reportQueryLimit"/>
-                    <show id="lecm-rpeditor:reportQueryPgSize"/>
-                    <show id="lecm-rpeditor:reportExtFlags"/>-->
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
@@ -77,6 +73,7 @@
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
                     <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
                     <show id="lecm-rpeditor:reportQuery"/>
+                    <show id="lecm-rpeditor:reportExtFlags"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
@@ -128,6 +125,17 @@
                     <show id="lecm-rpeditor:reportDocType"/>
                     <show id="lecm-rpeditor:reportTypeAssoc"/>
                     <show id="lecm-rpeditor:reportIsDeployed"/>
+                    <show id="lecm-rpeditor:reportCode"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+            <form id="sub-datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportDocType"/>
+                    <show id="lecm-rpeditor:reportTypeAssoc"/>
                     <show id="lecm-rpeditor:reportCode"/>
                 </field-visibility>
                 <appearance>
@@ -588,6 +596,16 @@
     <config evaluator="aspect" condition="lecm-rpeditor:reportExtFlagsAspect">
         <forms>
             <form>
+                <field-visibility>
+                    <show id="lecm-rpeditor:reportExtFlags" for-mode="edit"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-rpeditor:reportExtFlags">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+            <form id="subReport">
                 <field-visibility>
                     <show id="lecm-rpeditor:reportExtFlags" for-mode="edit"/>
                 </field-visibility>
