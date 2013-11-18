@@ -51,6 +51,8 @@ public class FieldTypesConfigElement extends ConfigElementAdapter {
 		Map<String, TypeConfigElement> otherElements = otherTypes.getFieldTypesMap();
 		Map<String, TypeConfigElement> thisElements = this.getFieldTypesMap();
 
+		result.setFieldTypesMap(thisElements);
+
 		for (Map.Entry<String, TypeConfigElement> entry : otherElements.entrySet()) {
 			String id = entry.getKey();
 			TypeConfigElement otherElement = entry.getValue();
