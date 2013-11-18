@@ -21,13 +21,17 @@
 		<type name="lecm-forms-editor:form">
 			<parent>cm:folder</parent>
 			<properties>
-				<property name="lecm-forms-editor:form-id">
+				<property name="lecm-forms-editor:form-evaluator">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
+				<property name="lecm-forms-editor:form-id">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 				<property name="lecm-forms-editor:form-template">
 					<type>d:text</type>
-					<mandatory>true</mandatory>
+					<mandatory>false</mandatory>
 				</property>
 			</properties>
 		</type>
