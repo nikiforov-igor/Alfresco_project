@@ -150,7 +150,13 @@ public class DocumentTablePolicy extends BaseBean {
 
 		//Пересчет индекса строки
 		index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-		if (index != null) {
+        // олучение максимального индекса
+        tableRowList = documentTableService.getTableDataRows(tableData);
+        int maxIndex = 1;
+        if (tableRowList != null) {
+            maxIndex = tableRowList.size();
+        }
+		if (index != null && index < maxIndex) { //индекс не может быть больше максимального - чтобы не было разрывов
 			// Пересчет индекса с текущей строки
 			tableRowList = documentTableService.getTableDataRows(tableData, index);
 			if (tableRowList != null) {
@@ -163,13 +169,7 @@ public class DocumentTablePolicy extends BaseBean {
 				}
 			}
 		} else {
-			// Присвоение максимального индекса
-			tableRowList = documentTableService.getTableDataRows(tableData);
-			index = 1;
-			if (tableRowList != null) {
-				index = tableRowList.size();
-			}
-			nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, index);
+			nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, maxIndex);
 		}
 
 		//Обновление данных для поиска
