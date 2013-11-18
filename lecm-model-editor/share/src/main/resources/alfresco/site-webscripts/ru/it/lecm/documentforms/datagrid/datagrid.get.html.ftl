@@ -33,7 +33,8 @@
 							],
 							bubblingLabel: "${bubblingLabel!''}",
 							showCheckboxColumn: false,
-							attributeForShow: "cm:name"
+							attributeForShow: "cm:name",
+							editFormWidth: "70em"
 						}).setMessages(${messages});
 			}
 

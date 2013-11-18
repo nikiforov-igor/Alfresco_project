@@ -6,7 +6,7 @@
 <#assign toolbarId = fieldHtmlId + "-toolbar-" + aDateTime?iso_utc>
 
 <#if field.control.params.bubblingLabel??>
-	<#assign bubblingId = field.control.params.bubblingLabel/>
+	<#assign bubblingId = field.control.params.bubblingLabel + aDateTime?iso_utc/>
 <#else>
 	<#assign bubblingId = "custom"/>
 </#if>

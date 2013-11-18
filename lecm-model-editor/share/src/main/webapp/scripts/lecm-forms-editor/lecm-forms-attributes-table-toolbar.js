@@ -22,10 +22,19 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
     YAHOO.lang.augmentObject(LogicECM.module.FormsEditor.AttributesTableToolbar.prototype,
         {
             _initButtons: function () {
-                this.toolbarButtons["defaultActive"].newRowButton = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow,
+                this.toolbarButtons["defaultActive"].newRowButton = Alfresco.util.createYUIButton(this, "newRowButton", this.addFieldsFromModel,
                     {
                         value: "create"
                     });
-            }
+            },
+
+	        addFieldsFromModel: function BaseToolbar_onNewRow(e, p_obj) {
+		        var orgMetadata = this.modules.dataGrid.datagridMeta;
+		        if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
+			        var destination = orgMetadata.nodeRef;
+			        var itemType = orgMetadata.itemType;
+			        this.modules.dataGrid.showCreateDialog({itemType: itemType, nodeRef: destination});
+		        }
+	        }
         }, true);
 })();
