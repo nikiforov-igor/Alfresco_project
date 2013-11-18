@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+	<template-type>ru/it/lecm/docforms/list</template-type>
+	<components>
+		<component>
+			<region-id>title</region-id>
+			<url>/components/title/simple-title</url>
+			<properties>
+				<title>Редактор форм {doctype}</title>
+			</properties>
+		</component>
+
+		<!--Datagrid -->
+		<component>
+			<region-id>datagrid</region-id>
+			<url>/lecm/documentforms/datagrid</url>
+			<properties>
+				<doctype>{doctype}</doctype>
+			</properties>
+		</component>
+
+		<!-- Toolbar -->
+		<component>
+			<region-id>toolbar</region-id>
+			<url>/lecm/documentforms/toolbar</url>
+			<properties>
+				<doctype>{doctype}</doctype>
+			</properties>
+		</component>
+	</components>
+</template-instance>

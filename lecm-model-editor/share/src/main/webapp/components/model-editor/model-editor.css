@@ -1,6 +1,12 @@
-.models td.yui-dt-last .yui-dt-liner a.delete
+.models .yui-dt-liner a.delete
 {
-   background-image: url(../images/delete-16.png);
+   background: transparent url(../images/delete-16.png) no-repeat scroll center center;
+   cursor: pointer;
+   padding-right: 15px;
+}
+.models .yui-dt-liner a.edit-form
+{
+   background: transparent url(../images/edit-16.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models td.yui-dt-last .yui-dt-liner a

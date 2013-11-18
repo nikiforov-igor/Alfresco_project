@@ -87,7 +87,8 @@ IT.component = IT.component || {};
          // DataTable column defintions
          var columnDefinitions = [{key: "displayName", label: "Модель документа", sortable: false, formatter:this._formatActions, width: 250, maxAutoWidth: 250},
                                   {key: "active", label: "Активна", sortable: false, formatter:this._formatActive, width: 100, maxAutoWidth: 100},
-                                  {key: "delete", label: "", sortable: false, formatter:this._formatDelete, width: 15, maxAutoWidth: 15}];//, {key: "nodeRef", label: "Ссылка", sortable: false}];
+                                  {key: "delete", label: "", sortable: false, formatter:this._formatDelete, width: 15, maxAutoWidth: 15},//, {key: "nodeRef", label: "Ссылка", sortable: false}];
+                                  {key: "edit-form", label: "", sortable: false, formatter:this._formatEditForm, width: 15, maxAutoWidth: 15}];//, {key: "nodeRef", label: "Ссылка", sortable: false}];
 
          // DataTable definition
          this.widgets.dataTable = new YAHOO.widget.DataTable(this.id + "-body", columnDefinitions, this.widgets.dataSource,{
@@ -127,6 +128,15 @@ IT.component = IT.component || {};
 				deleteLink.innerHTML = "&nbsp;";
 				el.appendChild(deleteLink);
 			//}
+      },
+	   _formatEditForm: function (el, oRecord, oColumn, oData, oDataTable) {
+			var editFormLink = document.createElement("a");
+			Dom.addClass(editFormLink, "edit-form");
+	        editFormLink.innerHTML = "&nbsp;";
+		    var modelName = oRecord.getData("fileName");
+		    modelName = modelName + "NS:" + modelName;
+		    editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-forms-list?doctype=" + modelName;
+			el.appendChild(editFormLink);
       },
       _deleteRow: function(oArgs) {
 		    var target = oArgs.target;
