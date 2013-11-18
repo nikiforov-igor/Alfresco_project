@@ -28,13 +28,30 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
                     });
             },
 
-	        addFieldsFromModel: function BaseToolbar_onNewRow(e, p_obj) {
+	        addFieldsFromModel: function (e, p_obj) {
+		        this.loadFields();
+
 		        var orgMetadata = this.modules.dataGrid.datagridMeta;
 		        if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
 			        var destination = orgMetadata.nodeRef;
 			        var itemType = orgMetadata.itemType;
 			        this.modules.dataGrid.showCreateDialog({itemType: itemType, nodeRef: destination});
 		        }
+	        },
+
+	        loadFields: function() {
+//		        Alfresco.util.Ajax.jsonGet(
+//			        {
+//				        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/root?modelName=" + encodeURIComponent(""),
+//				        successCallback: {
+//					        fn: function (response) {
+//						        var oResults = response.json;
+//
+//					        },
+//					        scope: this
+//				        },
+//				        failureMessage: "message.failure"
+//			        });
 	        }
         }, true);
 })();

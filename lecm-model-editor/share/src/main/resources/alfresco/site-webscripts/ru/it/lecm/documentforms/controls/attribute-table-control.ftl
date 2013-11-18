@@ -26,7 +26,7 @@
 //]]></script>
 
 <div class="form-field with-grid">
-	<div id="${toolbarId}" class="full-width">
+	<div id="${toolbarId}" class="subscribe">
 		<@comp.baseToolbar toolbarId true false false>
 			<div class="new-row">
 		        <span id="${toolbarId}-newRowButton" class="yui-button yui-push-button">
@@ -38,7 +38,7 @@
 		</@comp.baseToolbar>
 	</div>
 
-	<div id="${datagridId}" class="full-width">
+	<div id="${datagridId}" class="subscribe">
 		<@grid.datagrid datagridId false>
 			<script type="text/javascript">//<![CDATA[
 			(function () {
