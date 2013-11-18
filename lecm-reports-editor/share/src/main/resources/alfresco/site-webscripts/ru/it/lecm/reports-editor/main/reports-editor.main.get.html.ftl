@@ -365,6 +365,8 @@
                             htmlid: htmlId,
                             itemKind: "node",
                             itemId: "${page.url.args.reportId}",
+                            formId: ((LogicECM.module.ReportsEditor.REPORT_SETTINGS && LogicECM.module.ReportsEditor.REPORT_SETTINGS.isSubReport == "true")
+                                    ? "subReport": ""),
                             mode: "edit",
                             submitType: "json",
                             showSubmitButton: "true"
