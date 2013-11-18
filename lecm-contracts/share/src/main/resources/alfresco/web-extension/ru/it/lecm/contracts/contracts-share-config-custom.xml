@@ -1374,24 +1374,21 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecm-contract-table-structure:stage-status"/>
+                    <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
+                    <show id="lecm-contract-table-structure:start-date-real" force="true"/>
+                    <show id="lecm-contract-table-structure:end-date-real" force="true"/>
                     <show id="lecm-contract-table-structure:stage-amount" force="true"/>
-                    <show id="lecm-contract-table-structure:status-assoc" />
+                    <show id="lecm-contract-table-structure:stage-currency-assoc" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-comment"/>
                     <show id="lecm-contract-table-structure:responsible-assoc" />
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-contract-table-structure:status-assoc" >
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Статусы_x0020_этапов</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-contract-table-structure:stage-status" read-only="true"/>
                     <field id="lecm-contract-table-structure:attachments-temp-assoc" >
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
@@ -1399,7 +1396,10 @@
 	                        <control-param name="showUploadNewVersion">true</control-param>
                         </control>
                     </field>
-                </appearance>
+                    <field id="lecm-contract-table-structure:stage-comment">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                </appearance>                           -
             </form>
             <form id="table-structure-info">
                 <field-visibility>
@@ -1413,30 +1413,26 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
                     <show id="lecm-contract-table-structure:stage-amount" force="true"/>
-                    <show id="lecm-contract-table-structure:status-assoc" />
+                    <show id="lecm-contract-table-structure:stage-currency-assoc" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-comment" force="true"/>
                     <show id="lecm-contract-table-structure:responsible-assoc" />
-                    <show id="lecm-contract-table-structure:attachments-temp-assoc" />
+                    <!--<show id="lecm-contract-table-structure:attachments-temp-assoc" />-->
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-contract-table-structure:status-assoc" >
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Статусы_x0020_этапов</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-contract-table-structure:attachments-temp-assoc" >
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
-                            <control-param name="directoryName">label.contracts.attachments</control-param>
-	                        <control-param name="showUploadNewVersion">false</control-param>
-                        </control>
+                    <!--<field id="lecm-contract-table-structure:attachments-temp-assoc" >-->
+                        <!--<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">-->
+                            <!--<control-param name="uploadDirectoryPath">{usertemp}</control-param>-->
+                            <!--<control-param name="directoryName">label.contracts.attachments</control-param>-->
+	                        <!--<control-param name="showUploadNewVersion">false</control-param>-->
+                        <!--</control>-->
+                    <!--</field>-->
+                    <field id="lecm-contract-table-structure:stage-comment">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -1444,13 +1440,16 @@
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
+                    <show id="lecm-contract-table-structure:totalAmountWithCurrency" force="true"/>
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
-                    <show id="lecm-contract-table-structure:stage-amount" force="true"/>
-                    <show id="lecm-contract-table-structure:status-assoc" />
+                    <show id="lecm-contract-table-structure:stage-status" />
                     <show id="lecm-contract-table-structure:responsible-assoc" />
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-contract-table-structure:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                </appearance>
             </form>
             <form id="addTableRow">
                 <field-visibility>
@@ -1458,31 +1457,26 @@
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
                     <show id="lecm-contract-table-structure:stage-amount" force="true"/>
-                    <show id="lecm-contract-table-structure:status-assoc" />
+                    <show id="lecm-contract-table-structure:stage-currency-assoc" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-comment" force="true"/>
                     <show id="lecm-contract-table-structure:responsible-assoc" />
-                    <show id="lecm-contract-table-structure:attachments-temp-assoc" />
+                    <!--<show id="lecm-contract-table-structure:attachments-temp-assoc" />-->
                     <show id="lecm-document:indexTableRow" />
 
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-contract-table-structure:status-assoc" >
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Статусы_x0020_этапов</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-contract-table-structure:attachments-temp-assoc" >
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
-                            <control-param name="directoryName">label.contracts.attachments</control-param>
-                            <control-param name="showUploadNewVersion">false</control-param>
-                        </control>
-                    </field>
+                    <!--<field id="lecm-contract-table-structure:attachments-temp-assoc" >-->
+                        <!--<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">-->
+                            <!--<control-param name="uploadDirectoryPath">{usertemp}</control-param>-->
+                            <!--<control-param name="directoryName">label.contracts.attachments</control-param>-->
+                            <!--<control-param name="showUploadNewVersion">false</control-param>-->
+                        <!--</control>-->
+                    <!--</field>-->
                     <field id="lecm-document:indexTableRow" >
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+                    </field>
+                    <field id="lecm-contract-table-structure:stage-comment">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                 </appearance>
             </form>
