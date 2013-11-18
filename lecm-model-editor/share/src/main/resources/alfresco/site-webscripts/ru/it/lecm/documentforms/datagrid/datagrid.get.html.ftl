@@ -8,7 +8,12 @@
 			<!-- include base datagrid markup-->
 		<@grid.datagrid id=id showViewForm=true>
 			<script type="text/javascript">//<![CDATA[
-			function init() {
+			function initFormEditor() {
+				createFormsDatagrid();
+				showFormsDatagrid();
+			}
+
+			function createFormsDatagrid() {
 				new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination: false,
@@ -31,7 +36,34 @@
 						}).setMessages(${messages});
 			}
 
-			YAHOO.util.Event.onDOMReady(init);
+			function showFormsDatagrid() {
+				Alfresco.util.Ajax.jsonGet(
+						{
+							url: Alfresco.constants.PROXY_URI + "/lecm/docforms/root?modelName=" + encodeURIComponent("${doctype!""}"),
+							successCallback: {
+								fn: function (response) {
+									var oResults = response.json;
+									if (oResults != null && oResults.nodeRef != null) {
+										YAHOO.Bubbling.fire("activeGridChanged",
+											{
+												datagridMeta:{
+													itemType: "lecm-forms-editor:form",
+													nodeRef: oResults.nodeRef,
+													actionsConfig:{
+														fullDelete:true
+													}
+												},
+												bubblingLabel: "${bubblingLabel!''}"
+											});
+									}
+								},
+								scope: this
+							},
+							failureMessage: "message.failure"
+						});
+			}
+
+			YAHOO.util.Event.onDOMReady(initFormEditor);
 			//]]></script>
 		</@grid.datagrid>
 		</div>
