@@ -7,6 +7,7 @@
 		<property name="configs">
 			<list>
 				<value>classpath:alfresco/web-extension/ru/it/lecm/base/base-share-config-custom.xml</value>
+                                <value>classpath:alfresco/web-extension/ru/it/lecm/base/controls.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -27,5 +28,13 @@
 	<bean id="webscript.ru.it.lecm.base-share.config.init.get" class="ru.it.lecm.base.scripts.RepoConfigInitializer" parent="webscript">
 		<property name="configService" ref="web.config" />
 		<property name="scriptRemote" ref="webscripts.script.remote" />
+	</bean>
+
+        <bean id="formsConfigService" class="ru.it.lecm.base.formsConfig.FormsConfig">
+		<property name="configService" ref="web.config" />
+	</bean>
+
+        <bean id="webscript.ru.it.lecm.base-share.formControls.getControlsById.get" class="ru.it.lecm.base.scripts.FormsConfigWebscript" parent="webscript">
+		<property name="formsConfigService" ref="formsConfigService" />
 	</bean>
 </beans>

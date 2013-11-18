@@ -1,0 +1,51 @@
+<alfresco-config>
+    <config>
+    	<field-types>
+	        <field-type id="lecm-orgstr:employee" localName="Сотрудник">
+	            <control id="test" template="some/path/test" localName="Самый простой контрол">
+	                <param id="some_param1" localName="Некий параметр1" mandatory="false" visible="true">some value1</param>
+	                <param id="some_param2" localName="Некий параметр2" mandatory="true" visible="false">some value2</param>
+	                <param id="some_param3" localName="Некий параметр3" mandatory="false" visible="true">some value3</param>
+	                <param id="some_param4" localName="Некий параметр4" mandatory="true" visible="false">some value4</param>
+	            </control>
+	            <control id="Overrided" template="some/path/test" localName="Самый простой контрол">
+	                <param id="some_param1" localName="Некий параметр1" mandatory="false" visible="true">some value1</param>
+	                <param id="some_param2" localName="Некий параметр2" mandatory="true" visible="false">some value2</param>
+	                <param id="some_param3" localName="Некий параметр3" mandatory="false" visible="true">some value3</param>
+	                <param id="some_param4" localName="Некий параметр4" mandatory="true" visible="false">some value4</param>
+	            </control>
+	        </field-type>
+    	</field-types>
+    </config>
+
+    <config>
+        <field-types>
+	        <field-type id="lecm-orgstr:employee2" localName="Сотрудник">
+	            <control id="test" template="some/path/test" localName="Самый простой контрол">
+	                <param id="some_param1" localName="Некий параметр1" mandatory="false" visible="true" defaultValue="lol">some value1</param>
+	                <param id="some_param2" localName="Некий параметр2" mandatory="true" visible="false">some value2</param>
+	                <param id="some_param3" localName="Некий параметр3" mandatory="false" visible="true">some value3</param>
+	                <param id="some_param4" localName="Некий параметр4" mandatory="true" visible="false">some value4</param>
+	            </control>
+	            <control id="test2" template="some/path/test" localName="Самый простой контрол">
+	                <param id="some_param1" localName="Некий параметр1" mandatory="false" visible="true">some value1</param>
+	                <param id="some_param2" localName="Некий параметр2" mandatory="true" visible="false">some value2</param>
+	                <param id="some_param3" localName="Некий параметр3" mandatory="false" visible="true">some value3</param>
+	                <param id="some_param4" localName="Некий параметр4" mandatory="true" visible="false">some value4</param>
+	            </control>
+	        </field-type>
+	        <field-type id="lecm-orgstr:employee" localName="Сотрудник">
+	            <control id="SomeNewControl" template="some/path/test" localName="Самый простой контрол">
+	                <param id="some_param1" localName="Некий параметр1" mandatory="false" visible="true">some value1</param>
+	                <param id="some_param2" localName="Некий параметр2" mandatory="true" visible="false">some value2</param>
+	                <param id="some_param3" localName="Некий параметр3" mandatory="false" visible="true">some value3</param>
+	                <param id="some_param4" localName="Некий параметр4" mandatory="true" visible="false">some value4</param>
+	            </control>
+	            <control id="Overrided" template="some/path/test" localName="Самый простой контрол">
+	                <param id="some_param1" localName="Некий параметр1" mandatory="false" visible="true">some value1</param>
+	            </control>
+	        </field-type>
+    	</field-types>
+
+    </config>
+</alfresco-config>
