@@ -5,4 +5,17 @@
 	<bean id="webscript.ru.it.lecm.namespaces.get" class="ru.it.lecm.NamespacesGet" parent="webscript">
       <property name="namespaceService" ref="NamespaceService"/>
 	</bean>
+
+	<bean id="formsEditor.modelBootstrap" parent="dictionaryModelBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-forms-editor-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/forms-editor</value>
+			</list>
+		</property>
+	</bean>
 </beans>
