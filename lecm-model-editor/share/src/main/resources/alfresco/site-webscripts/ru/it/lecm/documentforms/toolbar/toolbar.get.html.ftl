@@ -4,16 +4,16 @@
 
 <script type="text/javascript">//<![CDATA[
 function init() {
-    <#--new LogicECM.module.Subscriptions.Toolbar("${id}").setMessages(${messages}).setOptions({-->
-	    <#--bubblingLabel: "${bubblingLabel!''}",-->
-        <#--searchActive: true-->
-    <#--});-->
+    new LogicECM.module.FormsEditor.Toolbar("${id}").setMessages(${messages}).setOptions({
+	    bubblingLabel: "${bubblingLabel!''}",
+        searchActive: true
+    });
 }
 YAHOO.util.Event.onDOMReady(init);
 //]]></script>
 <@comp.baseToolbar id true false false>
 	<div class="new-row">
-        <span id="${id}-newFowmButton" class="yui-button yui-push-button">
+        <span id="${id}-newFormButton" class="yui-button yui-push-button">
            <span class="first-child">
               <button type="button" title="${msg("button.new-form")}">${msg("button.new-form")}</button>
            </span>

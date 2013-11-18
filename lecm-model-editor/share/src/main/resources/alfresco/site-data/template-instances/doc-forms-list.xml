@@ -16,6 +16,7 @@
 			<url>/lecm/documentforms/datagrid</url>
 			<properties>
 				<doctype>{doctype}</doctype>
+				<bubblingLabel>forms-editor</bubblingLabel>
 			</properties>
 		</component>
 
@@ -25,6 +26,7 @@
 			<url>/lecm/documentforms/toolbar</url>
 			<properties>
 				<doctype>{doctype}</doctype>
+				<bubblingLabel>forms-editor</bubblingLabel>
 			</properties>
 		</component>
 	</components>

@@ -8,33 +8,30 @@
 			<!-- include base datagrid markup-->
 		<@grid.datagrid id=id showViewForm=true>
 			<script type="text/javascript">//<![CDATA[
-				function init() {
-				<#--new LogicECM.module.Base.DataGrid('${id}').setOptions(-->
-				<#--{-->
-				<#--usePagination:true,-->
-				<#--showExtendSearchBlock:true,-->
-				<#--actions: [-->
-				<#--{-->
-				<#--type:"datagrid-action-link-${bubblingLabel!''}",-->
-				<#--id:"onActionEdit",-->
-				<#--permission:"edit",-->
-				<#--label:"${msg("actions.edit")}"-->
-				<#--},-->
-				<#--{-->
-				<#--type:"datagrid-action-link-${bubblingLabel!''}",-->
-				<#--id:"onActionDelete",-->
-				<#--permission:"delete",-->
-				<#--label:"${msg("actions.delete-row")}"-->
-				<#--}-->
-				<#--],-->
-				<#--bubblingLabel: "${bubblingLabel!''}",-->
-				<#--showCheckboxColumn: true,-->
-				<#--attributeForShow:"cm:name",-->
-				<#--advSearchFormId: "${advSearchFormId!''}"-->
-				<#--}).setMessages(${messages});-->
-				}
+			function init() {
+				new LogicECM.module.Base.DataGrid('${id}').setOptions(
+						{
+							usePagination: false,
+							actions: [
+								{
+									type: "datagrid-action-link-${bubblingLabel!''}",
+									id: "onActionEdit",
+									permission: "edit",
+									label: "${msg("actions.edit")}"
+								},
+								{
+									type: "datagrid-action-link-${bubblingLabel!''}",
+									id: "onActionDelete",
+									permission: "delete",
+									label: "${msg("actions.delete-row")}"
+								}
+							],
+							bubblingLabel: "${bubblingLabel!''}",
+							attributeForShow: "cm:name"
+						}).setMessages(${messages});
+			}
 
-				YAHOO.util.Event.onDOMReady(init);
+			YAHOO.util.Event.onDOMReady(init);
 			//]]></script>
 		</@grid.datagrid>
 		</div>
