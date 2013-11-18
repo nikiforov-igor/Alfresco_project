@@ -329,7 +329,12 @@ public class ReportDSContextImpl implements ReportDSContext {
                     startPos++; // если после "@AUTHOR" есть символ '/' его тоже убираем
                 }
                 final String shortFmt = "{" + groupText.substring(startPos, groupText.length() - 1);
-                fmt = fmt.replace(groupText, realBean.formatNodeTitle(authorNode, shortFmt));
+                if (shortFmt.equals("{}")) {
+                    fmt = fmt.replace(groupText, realBean.getObjectDescription(authorNode));
+                } else {
+                    fmt = fmt.replace(groupText, realBean.formatNodeTitle(authorNode, shortFmt));
+                }
+
             }
             return realBean.formatNodeTitle(node, fmt);
         }
