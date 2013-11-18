@@ -66,8 +66,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         $combine = Alfresco.util.combinePaths,
         $userProfile = Alfresco.util.userProfileLink;
 
-    var editDialogOpening = false;
-
     /**
      * DataGrid constructor.
      *
@@ -106,12 +104,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
         Bubbling.on("changeFilter", this.onFilterChanged, this);
         Bubbling.on("reСreateDatagrid", this.onReCreateDatagrid, this);
-        // Во время закрытия диалогового окна сбрасываем параметр в false
-        Bubbling.on("formContainerDestroyed", function() {
-            if (editDialogOpening) {
-                editDialogOpening = false;
-            }
-        });
 
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onGridTypeChanged"],
@@ -310,7 +302,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  */
                 nowrapColumns: [],
 
-	            useCookieForSort: true
+	            useCookieForSort: true,
+
+	            editFormWidth: "50em"
             },
 
             currentFilter: null,
@@ -2376,10 +2370,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             onActionEdit:function DataGrid_onActionEdit(item) {
                 // Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку редактирования)
-                if (editDialogOpening) {
+	            if (this.editDialogOpening) {
                     return;
                 }
-                editDialogOpening = true;
+                this.editDialogOpening = true;
                 var me = this;
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
@@ -2390,7 +2384,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     if (item.type && item.type != "") {
                         Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
                     }
-                    this.doubleClickLock = false;
+	                me.editDialogOpening = false;
                 };
 
 				var templateUrl = "lecm/components/form"
@@ -2415,7 +2409,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
                 editDetails.setOptions(
                     {
-                        width:"50em",
+                        width: this.options.editFormWidth,
                         templateUrl:url,
                         actionUrl:null,
                         destroyOnHide:true,
@@ -2433,6 +2427,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 								Alfresco.util.PopupManager.displayMessage({
 									text:this.msg("message.details.success")
 								});
+	                            this.editDialogOpening = false;
                             },
                             scope:this
                         },
@@ -2442,6 +2437,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                     {
                                         text:this.msg("message.details.failure")
                                     });
+	                            this.editDialogOpening = false;
                             },
                             scope:this
                         }
@@ -2465,8 +2461,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
             showCreateDialog:function (meta, callback, successMessage) {
-                if (editDialogOpening) return;
-                editDialogOpening = true;
+                if (this.editDialogOpening) return;
+	            this.editDialogOpening = true;
+	            var me = this;
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                     var addMsg = meta.addMessage;
@@ -2477,7 +2474,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     if (meta.itemType && meta.itemType != "") {
                         Dom.addClass(contId, meta.itemType.replace(":", "_") + "_edit");
                     }
-                    this.doubleClickLock = false;
+                    me.editDialogOpening = false;
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -2522,14 +2519,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                             text: this.msg(successMessage ? successMessage : "message.save.success")
                                         });
                                 }
-                                editDialogOpening = false;
+                                this.editDialogOpening = false;
                             },
                             scope:this
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
                                 this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
-                                editDialogOpening = false;
+	                            this.editDialogOpening = false;
                             },
                             scope:this
                         }
