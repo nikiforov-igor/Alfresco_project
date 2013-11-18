@@ -32,6 +32,7 @@
 								}
 							],
 							bubblingLabel: "${bubblingLabel!''}",
+							showCheckboxColumn: false,
 							attributeForShow: "cm:name"
 						}).setMessages(${messages});
 			}

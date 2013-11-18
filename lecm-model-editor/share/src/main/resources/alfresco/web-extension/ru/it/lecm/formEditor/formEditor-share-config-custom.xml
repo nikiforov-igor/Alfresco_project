@@ -1,4 +1,12 @@
 <alfresco-config>
+	<config>
+		<forms>
+			<dependencies>
+				<js src="/scripts/lecm-forms-editor/lecm-forms-attribute-table.js"/>
+			</dependencies>
+		</forms>
+	</config>
+
 	<config evaluator="node-type" condition="lecm-forms-editor:form">
 		<forms>
 			<form>
@@ -6,7 +14,16 @@
 					<show id="lecm-forms-editor:form-evaluator"/>
 					<show id="lecm-forms-editor:form-id"/>
 					<show id="lecm-forms-editor:form-template"/>
+					<show id="lecm-forms-editor:form-attributes"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-forms-editor:form-attributes">
+						<control template="/ru/it/lecm/documentforms/controls/attribute-table-control.ftl">
+							<control-param name="height">100</control-param>
+							<control-param name="bubblingLabel">lecm-form-editor-attributes</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -20,11 +37,6 @@
 					<show id="lecm-forms-editor:form-template"/>
 				</field-visibility>
 			</form>
-		</forms>
-	</config>
-
-	<config evaluator="model-type" condition="lecm-forms-editor:form">
-		<forms>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="lecm-forms-editor:form-evaluator"/>
@@ -32,6 +44,46 @@
 					<show id="lecm-forms-editor:form-template"/>
 				</field-visibility>
             </form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-forms-editor:attr">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-forms-editor:attr-title"/>
+					<show id="lecm-forms-editor:attr-name"/>
+					<show id="lecm-forms-editor:attr-index"/>
+					<show id="lecm-forms-editor:attr-set"/>
+					<show id="lecm-forms-editor:attr-tab"/>
+					<show id="lecm-forms-editor:attr-control"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-forms-editor:attr">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-forms-editor:attr-title"/>
+					<show id="lecm-forms-editor:attr-name"/>
+					<show id="lecm-forms-editor:attr-index"/>
+					<show id="lecm-forms-editor:attr-set"/>
+					<show id="lecm-forms-editor:attr-tab"/>
+					<show id="lecm-forms-editor:attr-control"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-forms-editor:attr-title"/>
+					<show id="lecm-forms-editor:attr-name"/>
+					<show id="lecm-forms-editor:attr-index"/>
+					<show id="lecm-forms-editor:attr-set"/>
+					<show id="lecm-forms-editor:attr-tab"/>
+					<show id="lecm-forms-editor:attr-control"/>
+				</field-visibility>
+			</form>
 		</forms>
 	</config>
 </alfresco-config>
