@@ -1448,7 +1448,7 @@
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-contract-table-structure:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
+                    <field id="lecm-contract-table-structure:totalAmountWithCurrency" label-id="stage.totalAmount" substituteString="{lecm-contract-table-structure:stage-amount} {lecm-contract-table-structure:stage-currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
             <form id="addTableRow">
