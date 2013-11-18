@@ -12,6 +12,8 @@ import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ReportDSContextImpl implements ReportDSContext {
     private ServiceRegistry serviceRegistry;
@@ -139,7 +141,7 @@ public class ReportDSContextImpl implements ReportDSContext {
      * если первый символ "{", то является.
      */
     public static boolean isCalcField(final String fldName) {
-        return (fldName != null) && fldName.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL);
+        return (fldName != null) && fldName.contains(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) && fldName.contains(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL);
     }
 
     /**
@@ -238,8 +240,8 @@ public class ReportDSContextImpl implements ReportDSContext {
          * префикс расширенного синтаксиса
          * предполагается что строка вся целиком будет окружена: "{{ ... }}"
          */
-        final public static String XSYNTAX_MARKER = "{{";
-
+        final public static String XSYNTAX_MARKER_OPEN = "{{";
+        final public static String XSYNTAX_MARKER_CLOSE = "}}";
         /**
          * префикс доп функции: сейчас используется пока только для @AUTHOR.REF
          */
@@ -294,7 +296,7 @@ public class ReportDSContextImpl implements ReportDSContext {
         }
 
         protected boolean isExtendedSyntax(String fmt) {
-            return (fmt != null) && fmt.startsWith(XSYNTAX_MARKER);
+            return (fmt != null) && fmt.contains(XSYNTAX_MARKER_OPEN) && fmt.contains(XSYNTAX_MARKER_CLOSE);
         }
 
         @Override
@@ -308,26 +310,28 @@ public class ReportDSContextImpl implements ReportDSContext {
          * только @AUTHOR.REF, чтобы выполнить получение автора и применить к
          * нему отсавшуюся часть выражения.
          */
-        protected String extendedFormatNodeTitle(final NodeRef node, final String fmt) {
+        protected String extendedFormatNodeTitle(final NodeRef node, String fmt) {
             // NOTE: here new features can be implemented
-            final String begAuthorRef = XSYNTAX_MARKER + PREFIX_XFUNC + AUTHORREF;
-            if (fmt != null && fmt.startsWith(begAuthorRef)) {
+            String begAuthorRef = "\\{\\{@AUTHOR.*?}}";
+            Pattern authorPattern = Pattern.compile(begAuthorRef);
+            //создаем Matcher
+            Matcher m = authorPattern.matcher(fmt);
+            NodeRef authorNode = null;
+            while (m.find()) {
                 // замена node на узел Автора
-                final List<NodeRef> list = realBean.getObjectByPseudoProp(node, AUTHOR);
-                final NodeRef authNode = (list != null && !list.isEmpty()) ? list.get(0) : null;
-
-                // убираем из строки fmt одну пару скобок: {{@AUTHOR.REF/...}}  -> {...}
-                // скорректировать и сделать более точно можно при условии скана ВСЕХ вхождений @XXX:
-                // while (...) {fmt = fmt.substring(1, 1+ fmt.indexOf("}}")) + ...; ...}
-                int startPos = begAuthorRef.length();
-                if (fmt.charAt(startPos) == '/') {
-                    startPos++; // если после "@AUTHOR.REF" есть символ '/' его тоже убираем
+                if (authorNode == null) {
+                    final List<NodeRef> list = realBean.getObjectByPseudoProp(node, AUTHOR);
+                    authorNode = (list != null && !list.isEmpty()) ? list.get(0) : null;
                 }
-                // убираем в начале "{{@AUTHOR.REF/" и последюю скобку ...
-                final String shortFmt = "{" + fmt.substring(startPos, fmt.length() - 1);
-                return realBean.formatNodeTitle(authNode, shortFmt);
+                String groupText = m.group();
+                int startPos = "{{@AUTHOR".length();
+                if (groupText.charAt(startPos) == '/') {
+                    startPos++; // если после "@AUTHOR" есть символ '/' его тоже убираем
+                }
+                final String shortFmt = "{" + groupText.substring(startPos, groupText.length() - 1);
+                fmt = fmt.replace(groupText, realBean.formatNodeTitle(authorNode, shortFmt));
             }
-            return fmt;
+            return realBean.formatNodeTitle(node, fmt);
         }
     }
 }
