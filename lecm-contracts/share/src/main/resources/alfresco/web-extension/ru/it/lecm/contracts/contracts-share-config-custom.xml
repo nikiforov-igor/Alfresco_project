@@ -1489,7 +1489,6 @@
             </form>
             <form id="stages-dashlet">
                 <field-visibility>
-                    <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:stage-status"/>
                 </field-visibility>
