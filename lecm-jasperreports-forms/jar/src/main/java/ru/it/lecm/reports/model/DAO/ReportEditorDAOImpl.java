@@ -524,12 +524,8 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             srResult.setItemsFormat(formatDesc);
         }
 
-        List<ColumnDescriptor> subreportColumns = new ArrayList<ColumnDescriptor>();
-        subreportColumns.addAll(subreportDesc.getDsDescriptor().getColumns());
-
-        for (ColumnDescriptor subreportColumn : subreportColumns) {
+        for (ColumnDescriptor subreportColumn : srResult.getDsDescriptor().getColumns()) {
             //TODO сюда можно добавить обработку каких-то "особых" столбцов
-            srResult.getDsDescriptor().getColumns().add(subreportColumn);
 
             /* обновление/формирование sourceMap для subreport */
             if (srResult.getSubItemsSourceMap() == null) {
