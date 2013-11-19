@@ -54,9 +54,7 @@
 	-->
 	<prototype-fields>
         <macro.body.field>
-            <field name="@FLD.desc.columnName" class="@FLD.desc.dataType.className">
-                <fieldDescription><![CDATA[@FLD.desc.default]]></fieldDescription>
-            </field>
+            <field name="@FLD.desc.columnName" class="@FLD.desc.dataType.className"/>
         </macro.body.field>
 	</prototype-fields>
 
