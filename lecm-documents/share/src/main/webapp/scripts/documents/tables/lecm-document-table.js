@@ -24,6 +24,8 @@ LogicECM.module = LogicECM.module || {};
 	LogicECM.module.DocumentTable = function (fieldHtmlId)
 	{
 		LogicECM.module.DocumentTable.superclass.constructor.call(this, "LogicECM.module.DocumentTable", fieldHtmlId, [ "container", "datasource"]);
+        YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
+        YAHOO.Bubbling.on("dataItemCreated", this.onAfterCreate, this);
 		return this;
 	};
 
@@ -39,14 +41,49 @@ LogicECM.module = LogicECM.module || {};
 				disabled: null,
 				messages: null,
 				mode: null,
-				isTableSortable: null
+				isTableSortable: null,
+                externalCreateId: null,
+                refreshAfterCreate: false
 			},
+
+            datagrid: null,
 
 			tableData: null,
 
 			onReady: function(){
 				this.loadTableData();
 			},
+
+            // инициализация грида
+            onInitDataGrid: function(layer, args) {
+                var datagrid = args[1].datagrid;
+                if ((!this.options.bubblingLabel || !datagrid.options.bubblingLabel) || this.options.bubblingLabel == datagrid.options.bubblingLabel) {
+                    this.dataGrid = datagrid;
+                    YAHOO.Bubbling.unsubscribe("initDatagrid", this.onInitDataGrid, this);
+                }
+            },
+
+            // инициализация грида
+            onAfterCreate: function(layer, args) {
+                if (this.options.refreshAfterCreate) {
+                    Bubbling.fire("datagridRefresh",
+                        {
+                            bubblingLabel: this.options.bubblingLabel
+                        });
+                }
+            },
+
+            /**
+             * New Row button click handler
+             */
+            onNewRow: function(e, p_obj) {
+                var orgMetadata = this.dataGrid.datagridMeta;
+                if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
+                    var destination = orgMetadata.nodeRef;
+                    var itemType = orgMetadata.itemType;
+                    this.dataGrid.showCreateDialog({itemType: itemType, nodeRef: destination});
+                }
+            },
 
 			loadTableData: function() {
 				if (this.options.currentValue != null && this.options.currentValue.length > 0) {
@@ -60,6 +97,7 @@ LogicECM.module = LogicECM.module || {};
 
 									this.createToolbar();
 									this.createDataGrid();
+                                    this.externalCreateButton();
 								},
 								scope: this
 							},
@@ -69,15 +107,21 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			createToolbar: function() {
-				if (this.tableData != null && this.tableData.rowType != null) {
+				if (this.tableData != null && this.tableData.rowType != null && this.options.toolbarId != null) {
 					new LogicECM.module.Base.Toolbar(null, this.options.toolbarId).setMessages(this.options.messages).setOptions({
 						bubblingLabel: this.options.bubblingLabel,
 						itemType: this.tableData.rowType,
 						destination: this.tableData.nodeRef,
-						newRowButtonType: this.options.disabled ? "inActive" : "defaultActive"
+						newRowButtonType: this.options.disabled ? "inActive" : "defaultActive",
 					});
 				}
 			},
+
+            externalCreateButton: function() {
+                if (this.options.externalCreateId != null && this.options.externalCreateId != "") {
+                    YAHOO.util.Event.on(this.options.externalCreateId, "click", this.onNewRow, this, true);
+                }
+            },
 
 			createDataGrid: function() {
 				if (this.tableData != null && this.tableData.rowType != null) {

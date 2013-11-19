@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Этапы договора</shortname>
+    <description>Компонент "Этапы договора"</description>
+    <family>document-dashlet</family>
+    <url>/lecm/contracts/dashlets/stages</url>
+</webscript>

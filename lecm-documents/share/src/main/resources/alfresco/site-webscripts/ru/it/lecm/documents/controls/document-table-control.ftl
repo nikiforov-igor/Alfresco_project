@@ -14,6 +14,16 @@
     <#assign attributeForShow = params.attributeForShow/>
 </#if>
 
+<#assign toolbar = "true"/>
+<#if params.toolbar??>
+    <#assign toolbar = params.toolbar/>
+</#if>
+
+<#assign refreshAfterCreate = "false"/>
+<#if params.refreshAfterCreate??>
+    <#assign refreshAfterCreate = params.refreshAfterCreate/>
+</#if>
+
 <#assign showCreateButton = true/>
 <#if field.control.params.showCreateBtn??>
     <#assign showCreateButton = field.control.params.showCreateBtn/>
@@ -32,17 +42,21 @@
 				currentValue: "${field.value!""}",
 				messages: ${messages},
 				bubblingLabel: "${bubblingId}",
+                <#if toolbar == "true">
 				toolbarId: "${toolbarId}",
+                </#if>
 				containerId: "${containerId}",
 				datagridFormId: "${params.datagridFormId!"datagrid"}",
 				attributeForShow: "${attributeForShow}",
 				mode: "${form.mode?string}",
 				disabled: ${field.disabled?string},
-				isTableSortable: ${isTableSortable?string}
+				isTableSortable: ${isTableSortable?string},
+                externalCreateId: "${form.arguments.externalCreateId!""}",
+                refreshAfterCreate: ${refreshAfterCreate?string}
 			});
 })();
 //]]></script>
-
+<#if toolbar == "true">
 <div id="${toolbarId}">
 	<@comp.baseToolbar toolbarId true true false>
         <#if showCreateButton>
@@ -56,6 +70,7 @@
         </#if>
 	</@comp.baseToolbar>
 </div>
+</#if>
 
 <div class="form-field with-grid" id="${controlId}">
 	<@grid.datagrid containerId false>
