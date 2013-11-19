@@ -9,6 +9,7 @@ import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentTableService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,5 +73,18 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
         NodeRef tableRow = new NodeRef(tableRowStr);
 
         return this.documentTableService.moveTableRowDown(tableRow);
+    }
+
+    public Scriptable getTableDataRows(String tableDataRef) {
+        ParameterCheck.mandatory("tableDataRef", tableDataRef);
+
+        NodeRef tableDataNodeRef = new NodeRef(tableDataRef);
+        if (nodeService.exists(tableDataNodeRef) && documentTableService.isDocumentTableData(tableDataNodeRef)) {
+            List<NodeRef> tableDataRows = documentTableService.getTableDataRows(tableDataNodeRef);
+            if (tableDataRows != null) {
+                return createScriptable(tableDataRows);
+            }
+        }
+        return createScriptable(new ArrayList<NodeRef>());
     }
 }

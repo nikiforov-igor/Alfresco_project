@@ -125,7 +125,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
         showForm: function showForm_action(action) {
-            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}";
+            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}&nodeRef={nodeRef}";
             if (action.isForm) {
                 templateUrl = YAHOO.lang.substitute(templateUrl, {
                     itemKind: "type",
@@ -138,7 +138,8 @@ LogicECM.module = LogicECM.module || {};
                 });
             } else {
                 templateUrl = YAHOO.lang.substitute(templateUrl, {
-                    itemKind:"workflow",
+                    nodeRef: this.options.nodeRef,
+                    itemKind: "workflow",
                     itemId:action.workflowId,
                     mode:"create",
                     submitType:"json",
