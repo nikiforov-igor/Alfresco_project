@@ -3,6 +3,7 @@ package ru.it.lecm.documents.policy;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
@@ -36,6 +37,7 @@ public class DocumentTablePolicy extends BaseBean {
 	final static protected Logger logger = LoggerFactory.getLogger(DocumentTablePolicy.class);
 
 	private PolicyComponent policyComponent;
+    private BehaviourFilter behaviourFilter;
 	private DocumentTableService documentTableService;
 	private DocumentAttachmentsService documentAttachmentsService;
 	protected NamespaceService namespaceService;
@@ -164,7 +166,12 @@ public class DocumentTablePolicy extends BaseBean {
 				for (NodeRef row : tableRowList) {
 					if (!tableRow.equals(row)) {
 						index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-						nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, index + 1);
+                        try {
+                            behaviourFilter.disableBehaviour(row);//блокируем повторный вызов
+                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, index + 1);
+                        } finally {
+                            behaviourFilter.enableBehaviour(row);
+                        }
 					}
 				}
 			}
@@ -192,8 +199,12 @@ public class DocumentTablePolicy extends BaseBean {
 			documentTableService.recalculateTotalRows(tableData, changedProperties);
 			//Обновление данных для поиска
 			recalculateSearchDescription(tableData);
-
-			//Логгирование в бизнес-журнал
+            //Обновление индексов строк
+            Integer oldIndex = (Integer) before.get(DocumentTableService.PROP_INDEX_TABLE_ROW);
+            Integer newIndex = (Integer) after.get(DocumentTableService.PROP_INDEX_TABLE_ROW);
+            int newIndexInt = changeRowIndex(nodeRef, tableData, oldIndex, newIndex);
+            after.put(DocumentTableService.PROP_INDEX_TABLE_ROW, newIndexInt);
+            //Логгирование в бизнес-журнал
 			if (before.size() == after.size()) {
 				NodeRef document = documentTableService.getDocumentByTableData(tableData);
 
@@ -204,7 +215,46 @@ public class DocumentTablePolicy extends BaseBean {
 		}
 	}
 
-	public void logEditTableDataRow(NodeRef document, NodeRef tableData, NodeRef tableDataRow) {
+    private int changeRowIndex(NodeRef rowRef, NodeRef tableData, Integer oldIndex, Integer newIndex) {
+        //Получение максимального индекса
+        List<NodeRef> tableRowList = documentTableService.getTableDataRows(tableData);
+        int maxIndex = 1;
+        if (tableRowList != null) {
+            maxIndex = tableRowList.size();
+        }
+        int newIndexInt = newIndex != null ? newIndex : maxIndex;
+        //проверка границ индекса
+        if (newIndexInt < 1) {
+            newIndexInt = 1;
+        } else if (newIndexInt > maxIndex) {
+            newIndexInt = maxIndex;
+        }
+        int oldIndexInt = oldIndex != null ? oldIndex : newIndex;
+        //если индекс поменялся
+        if (oldIndexInt != newIndexInt) {
+            int fromIndex = oldIndexInt < newIndexInt ? oldIndexInt : newIndexInt;
+            int toIndex = oldIndexInt < newIndexInt ? newIndexInt : oldIndexInt;
+            int direction = oldIndexInt < newIndexInt ? -1 : 1;
+            List<NodeRef> tableRowListToChange = documentTableService.getTableDataRows(tableData, fromIndex, toIndex);
+            //двигаем остальные записи
+            for (NodeRef row : tableRowListToChange) {
+                if (!rowRef.equals(row)) {
+                    Integer index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                    try {
+                        behaviourFilter.disableBehaviour(row);//блокируем повторный вызов
+                        nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, index + direction);
+                    } finally {
+                        behaviourFilter.enableBehaviour(row);
+                    }
+                }
+            }
+            //запись нового индекса
+            nodeService.setProperty(rowRef, DocumentTableService.PROP_INDEX_TABLE_ROW, newIndexInt);
+        }
+        return newIndexInt;
+    }
+
+    public void logEditTableDataRow(NodeRef document, NodeRef tableData, NodeRef tableDataRow) {
 		String transactionId = AlfrescoTransactionSupport.getTransactionId();
 		if (!this.lastTransactionId.equals(transactionId)) {
 			this.lastTransactionId = transactionId;
@@ -325,7 +375,12 @@ public class DocumentTablePolicy extends BaseBean {
 				//переприсвоение индексов
 				for (NodeRef tableRow : tableRowList) {
 					index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-					nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, index - 1);
+                    try {
+                        behaviourFilter.disableBehaviour(tableRow);//блокируем повторный вызов
+                        nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, index - 1);
+                    } finally {
+                        behaviourFilter.enableBehaviour(tableRow);
+                    }
 				}
 			}
 
@@ -426,4 +481,7 @@ public class DocumentTablePolicy extends BaseBean {
 		return stringBuilder.length() > 0 ? stringBuilder.substring(0, stringBuilder.length() - 1) : "";
 	}
 
+    public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+        this.behaviourFilter = behaviourFilter;
+    }
 }

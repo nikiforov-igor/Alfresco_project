@@ -296,11 +296,11 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
     public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex) {
         List<NodeRef> tableRows = getTableDataRows(tableDataRef);
         List<NodeRef> result = new ArrayList<NodeRef>();
-        int index;
+        Serializable index;
         if (tableRows != null) {
             for (NodeRef tableRow : tableRows) {
-                index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                if (index >= beginIndex) {
+                index = nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                if (index != null && (Integer) index >= beginIndex) {
                     result.add(tableRow);
                 }
             }
@@ -312,11 +312,11 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
     public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex, int endIndex) {
         List<NodeRef> tableRows = getTableDataRows(tableDataRef, beginIndex);
         List<NodeRef> result = new ArrayList<NodeRef>();
-        int index;
+        Serializable index;
         if (tableRows != null) {
             for (NodeRef tableRow : tableRows) {
-                index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                if (index <= endIndex) {
+                index = nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                if (index != null && (Integer) index <= endIndex) {
                     result.add(tableRow);
                 }
             }
@@ -333,29 +333,13 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
                 return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
                     @Override
                     public Boolean execute() throws Throwable {
-                        int indexStr;
-                        int endIndex, index;
-                        List<NodeRef> tableRows;
-                        endIndex = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                        if (endIndex != 1) {
-                            NodeRef tableDataRef = getTableDataByRow(tableRow);
-                            if (tableDataRef != null) {
-                                tableRows = getTableDataRows(tableDataRef, endIndex - 1, endIndex);
-                                if (tableRows.size() == 2) {
-                                    for (NodeRef row : tableRows) {
-                                        indexStr = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                                        index = indexStr;
-                                        if (index == endIndex) {
-                                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (endIndex - 1));
-                                        } else {
-                                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, endIndex);
-                                        }
-                                    }
-                                    return true;
-                                }
-                            }
+                        int index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                        if (index != 1) {
+                            nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, (index - 1));
+                            return true;
+                        } else {
+                            return false;
                         }
-                        return false;
                     }
                 });
             }
@@ -372,25 +356,15 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
                 return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
                     @Override
                     public Boolean execute() throws Throwable {
-                        int startIndex, index;
-                        List<NodeRef> tableRows;
-                        startIndex = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                        int index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
                         NodeRef tableDataRef = getTableDataByRow(tableRow);
-                        if (tableDataRef != null) {
-                            tableRows = getTableDataRows(tableDataRef, startIndex, startIndex + 1);
-                            if (tableRows.size() == 2) {
-                                for (NodeRef row : tableRows) {
-                                    index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                                    if (index == startIndex) {
-                                        nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, (startIndex + 1));
-                                    } else {
-                                        nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, startIndex);
-                                    }
-                                }
-                                return true;
-                            }
+                        List<NodeRef> tableRows = getTableDataRows(tableDataRef);
+                        if (tableRows != null && index < tableRows.size()) {
+                            nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, (index + 1));
+                            return true;
+                        } else {
+                            return false;
                         }
-                        return false;
                     }
                 });
             }

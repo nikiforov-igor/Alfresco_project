@@ -557,6 +557,7 @@
 	<bean  id="documentTablePolicy" class="ru.it.lecm.documents.policy.DocumentTablePolicy"
 	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
+		<property name="behaviourFilter" ref="policyBehaviourFilter"/>
 		<property name="documentTableService" ref="documentTableService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="nodeService" ref="nodeService"/>
