@@ -19,6 +19,7 @@
                             itemId:nodeRef,
                             formId: "",
                             mode:"view"
+                            <#if args.setId?? >, setId: "${args.setId}"</#if>
                         },
                         successCallback:{
                             fn:function(response){

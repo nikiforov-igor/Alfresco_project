@@ -82,15 +82,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 });
             },
 
-            onExpand: function () {
+            onExpand: function (tabId) {
                 // Load the form
+                var data = {
+                    htmlid: "documentMetadata-" + this.options.nodeRef,
+                    nodeRef: this.options.nodeRef
+                };
+                if (tabId != null) {
+                    data.setId = tabId;
+                }
                 Alfresco.util.Ajax.request(
                     {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/metadata",
-                        dataObj: {
-                            htmlid: "documentMetadata-" + this.options.nodeRef,
-                            nodeRef: this.options.nodeRef
-                        },
+                        dataObj: data,
                         successCallback: {
                             fn: function (response) {
                                 this.expandView(response.serverResponse.responseText);
