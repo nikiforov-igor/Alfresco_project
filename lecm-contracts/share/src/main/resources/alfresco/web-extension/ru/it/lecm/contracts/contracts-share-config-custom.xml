@@ -1388,7 +1388,7 @@
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-contract-table-structure:stage-status" read-only="true"/>
+                    <field id="lecm-contract-table-structure:stage-status"/>
                     <field id="lecm-contract-table-structure:attachments-temp-assoc" >
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
