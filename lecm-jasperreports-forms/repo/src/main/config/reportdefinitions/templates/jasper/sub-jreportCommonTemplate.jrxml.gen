@@ -54,7 +54,9 @@
 	-->
 	<prototype-fields>
         <macro.body.field>
-            <field name="@FLD.desc.columnName" class="@FLD.desc.dataType.className"/>
+            <field name="@FLD.desc.columnName" class="@FLD.desc.dataType.className">
+                <fieldDescription><![CDATA[@FLD.desc.default]]></fieldDescription>
+            </field>
         </macro.body.field>
 	</prototype-fields>
 
@@ -168,7 +170,7 @@
                 <macro.body.field>
                     <subreport isUsingCache="true">
                         <reportElement uuid="@GUID" positionType="Float" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT" isPrintWhenDetailOverflows="true"/>
-                        <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{@SUB.desc.destColumnName})]]></dataSourceExpression>
+                        <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{@SUB.desc.destColumnName}, false)]]></dataSourceExpression>
                         <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@/@SUB.desc.destColumnName@@.jasper"]]></subreportExpression>
                     </subreport>
                 </macro.body.field>
