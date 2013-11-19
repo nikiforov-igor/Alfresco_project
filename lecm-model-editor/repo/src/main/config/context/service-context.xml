@@ -29,6 +29,7 @@
 	      depends-on="nodeService, transactionService">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="namespaceService" ref="namespaceService"/>
 		<property name="folders">
 			<map>
 				<entry key="#{FORMS_EDITOR_ROOT_ID}" value="#{FORMS_EDITOR_ROOT_NAME}"/>
@@ -44,6 +45,9 @@
 		</property>
 		<property name="formsEditorService">
 			<ref bean="formsEditorService"/>
+		</property>
+		<property name="dictionaryService">
+			<ref bean="dictionaryService"/>
 		</property>
 	</bean>
 </beans>

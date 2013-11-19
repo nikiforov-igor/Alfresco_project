@@ -4,6 +4,7 @@
 <#assign aDateTime = .now>
 <#assign datagridId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 <#assign toolbarId = fieldHtmlId + "-toolbar-" + aDateTime?iso_utc>
+<#assign addFieldsFormId = toolbarId + "-addFieldsForm">
 
 <#if field.control.params.bubblingLabel??>
 	<#assign bubblingId = field.control.params.bubblingLabel + aDateTime?iso_utc/>
@@ -19,13 +20,14 @@
 		});
 
 		new LogicECM.module.FormsEditor.AttributesTableToolbar("${toolbarId}").setMessages(${messages}).setOptions({
-			bubblingLabel: "${bubblingId}"
+			bubblingLabel: "${bubblingId}",
+			itemNodeRef: "${form.arguments.itemId}"
 		});
 	}
 	YAHOO.util.Event.onDOMReady(initControl);
 //]]></script>
 
-<div class="form-field with-grid">
+<div class="form-field with-grid form-attribute-table">
 	<div id="${toolbarId}" class="subscribe">
 		<@comp.baseToolbar toolbarId true false false>
 			<div class="new-row">
@@ -67,5 +69,24 @@
 			})();
 			//]]></script>
 		</@grid.datagrid>
+	</div>
+
+	<div id="${addFieldsFormId}" class="yui-panel">
+		<div id="${addFieldsFormId}-head" class="hd">${msg("logicecm.view")}</div>
+		<div id="${addFieldsFormId}-body" class="bd">
+			<div id="${addFieldsFormId}-content" style="height: 350px;	overflow-y: auto;"></div>
+			<div class="bdft">
+				<span id="${addFieldsFormId}-add" class="yui-button yui-push-button">
+	                <span class="first-child">
+	                    <button type="button" tabindex="1">${msg("button.add")}</button>
+	                </span>
+	            </span>
+	            <span id="${addFieldsFormId}-cancel" class="yui-button yui-push-button">
+	                <span class="first-child">
+	                    <button type="button" tabindex="0">${msg("button.close")}</button>
+	                </span>
+	            </span>
+			</div>
+		</div>
 	</div>
 </div>
