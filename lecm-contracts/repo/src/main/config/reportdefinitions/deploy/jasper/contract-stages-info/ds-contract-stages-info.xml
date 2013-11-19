@@ -59,8 +59,8 @@
 
     <fields>
         <!-- Инициатор договора == Автор "lecm-orgstr:employee" -->
-        <field jrFldName="col_Initiator" queryFldName="{{@AUTHOR.REF/lecm-orgstr:employee-short-name}}" displayName="Инициатор" />
-        <field jrFldName="col_Initiator.Phone" queryFldName="{{@AUTHOR.REF/lecm-orgstr:employee-phone}}" displayName="Инициатор.Телефон" />
+        <field jrFldName="col_Initiator" queryFldName="{{@AUTHOR/lecm-orgstr:employee-short-name}}" displayName="Инициатор" />
+        <field jrFldName="col_Initiator.Phone" queryFldName="{{@AUTHOR/lecm-orgstr:employee-phone}}" displayName="Инициатор.Телефон" />
 
         <!-- Статус -->
         <field jrFldName="col_Status" queryFldName="{lecm-statemachine:status}" displayName="Статус" />
