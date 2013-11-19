@@ -12,6 +12,7 @@ import ru.it.lecm.modelEditor.beans.FormsEditorBeanImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: AIvkin
@@ -20,14 +21,9 @@ import java.util.Map;
  */
 public class FormsEditorWebScriptBean extends BaseWebScript {
 	private FormsEditorBeanImpl formsEditorService;
-	private DictionaryService dictionaryService;
 
 	public void setFormsEditorService(FormsEditorBeanImpl formsEditorService) {
 		this.formsEditorService = formsEditorService;
-	}
-
-	public void setDictionaryService(DictionaryService dictionaryService) {
-		this.dictionaryService = dictionaryService;
 	}
 
 	/**
@@ -51,22 +47,12 @@ public class FormsEditorWebScriptBean extends BaseWebScript {
 	 */
 	public List<PropertyDefinition> getAvailableFormFields(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
-		List<PropertyDefinition> fields = new ArrayList<PropertyDefinition>();
 
 		NodeRef ref = new NodeRef(nodeRef);
 		if (formsEditorService.isForm(ref)) {
-			QName model = formsEditorService.getFormModelType(ref);
-			if (model != null) {
-				TypeDefinition type = dictionaryService.getType(model);
-				if (type != null) {
-					Map<QName, PropertyDefinition> properties = type.getProperties();
-					if (properties != null) {
-						fields.addAll(properties.values());
-					}
-				}
-			}
+			return formsEditorService.getNotExistFormFields(ref);
 		}
-		return fields;
+		return null;
 	}
 
 	/**
@@ -80,17 +66,8 @@ public class FormsEditorWebScriptBean extends BaseWebScript {
 
 		NodeRef ref = new NodeRef(nodeRef);
 		if (formsEditorService.isForm(ref)) {
-			QName model = formsEditorService.getFormModelType(ref);
-			if (model != null) {
-				TypeDefinition type = dictionaryService.getType(model);
-				if (type != null) {
-					Map<QName, AssociationDefinition> associations = type.getAssociations();
-					if (associations != null) {
-						fields.addAll(associations.values());
-					}
-				}
-			}
+			return formsEditorService.getNotExistFormAttributes(ref);
 		}
-		return fields;
+		return null;
 	}
 }
