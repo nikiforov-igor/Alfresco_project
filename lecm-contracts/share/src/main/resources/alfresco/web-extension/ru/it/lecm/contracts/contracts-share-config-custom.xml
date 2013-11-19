@@ -1420,7 +1420,6 @@
                     <show id="lecm-contract-table-structure:stage-amount" force="true"/>
                     <show id="lecm-contract-table-structure:stage-currency-assoc" force="true"/>
                     <show id="lecm-contract-table-structure:stage-comment"/>
-                    <show id="lecm-contract-table-structure:responsible-assoc" />
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                 </field-visibility>
                 <appearance>
@@ -1456,7 +1455,6 @@
                     <show id="lecm-contract-table-structure:stage-amount" force="true"/>
                     <show id="lecm-contract-table-structure:stage-currency-assoc" force="true"/>
                     <show id="lecm-contract-table-structure:stage-comment" force="true"/>
-                    <show id="lecm-contract-table-structure:responsible-assoc" />
                     <!--<show id="lecm-contract-table-structure:attachments-temp-assoc" />-->
                 </field-visibility>
                 <appearance>
@@ -1480,7 +1478,6 @@
                     <show id="lecm-contract-table-structure:start-date" force="true"/>
                     <show id="lecm-contract-table-structure:end-date" force="true"/>
                     <show id="lecm-contract-table-structure:stage-status" />
-                    <show id="lecm-contract-table-structure:responsible-assoc" />
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
                 </field-visibility>
                 <appearance>
@@ -1501,7 +1498,6 @@
                     <show id="lecm-contract-table-structure:stage-amount" force="true"/>
                     <show id="lecm-contract-table-structure:stage-currency-assoc" force="true"/>
                     <show id="lecm-contract-table-structure:stage-comment" force="true"/>
-                    <show id="lecm-contract-table-structure:responsible-assoc" />
                     <!--<show id="lecm-contract-table-structure:attachments-temp-assoc" />-->
                     <show id="lecm-document:indexTableRow" />
 
