@@ -7,6 +7,7 @@
 package ru.it.lecm.base.formsConfig.elements.fieldElement;
 
 import java.util.HashMap;
+import java.util.Map;
 import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.element.ConfigElementAdapter;
 import ru.it.lecm.base.formsConfig.elements.controlElement.ControlConfigElement;
@@ -64,11 +65,21 @@ public class TypeConfigElement extends ConfigElementAdapter{
 		TypeConfigElement otherElement = (TypeConfigElement) configElement;
 		TypeConfigElement result = new TypeConfigElement();
 
-		result.setId(otherElement.getId());
-		result.setLocalName(otherElement.getLocalName());
+		result.setId(this.getId());
+		result.setLocalName(this.getLocalName());
 
 		result.controlsMap.putAll(this.getControlsMap());
-		result.controlsMap.putAll(otherElement.getControlsMap());
+		Map<String, ControlConfigElement> thisControls = this.getControlsMap();
+		Map<String, ControlConfigElement> otherControls = otherElement.getControlsMap();
+		for (Map.Entry<String, ControlConfigElement> entry : otherControls.entrySet()) {
+			String id = entry.getKey();
+			ControlConfigElement controlConfigElement = entry.getValue();
+			if(!thisControls.containsKey(id)) {
+				result.addControl(controlConfigElement);
+			}
+		}
+
+//		result.controlsMap.putAll(otherElement.getControlsMap());
 		return result;
 	}
 
