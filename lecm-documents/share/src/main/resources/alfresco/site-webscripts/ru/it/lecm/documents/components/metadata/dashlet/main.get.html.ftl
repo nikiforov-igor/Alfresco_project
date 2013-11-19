@@ -51,7 +51,7 @@
 				}
 			}
         }
-        Event.onDOMReady(init);
+        Event.onContentReady("${id}_container", init, true);
     })();
     //]]>
 </script>

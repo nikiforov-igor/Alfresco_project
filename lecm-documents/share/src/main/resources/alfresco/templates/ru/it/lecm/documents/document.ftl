@@ -21,8 +21,8 @@
 
     <#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
         <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-metadata.css" />
-        <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-form.css" />
     </#if>
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-form.css" />
 
     <@templateHtmlEditorAssets />
     <script type="text/javascript">
@@ -58,16 +58,7 @@
                     <#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
                         <@region id="errand-form" scope="template"/>
                     <#else>
-                        <div class="yui-gd grid columnSize2">
-                            <div class="yui-u first column1">
-                                <@region id="metadata" scope="template"/>
-	                            <@region id="members" scope="template"/>
-                            </div>
-                            <div class="yui-u column2">
-                                <@region id="attachments" scope="template"/>
-	                        <@region id="tasks" scope="template"/>
-                            </div>
-                        </div>
+                        <@region id="dashlet-panel" scope="template"/>
                     </#if>
 	                <@region id="rating" scope="template"/>
 	                <@region id="comments" scope="template"/>

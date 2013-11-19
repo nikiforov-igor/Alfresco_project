@@ -42,7 +42,7 @@
 		            </#if>
 	            ];
 
-                YAHOO.util.Event.onDOMReady(function (){
+                YAHOO.util.Event.onContentReady("${id}-attachment-categories", function (){
                     select = Dom.get("${id}-attachment-categories");
                     var selectValue = "";
                     if (select != null && select.value != null) {
@@ -106,7 +106,7 @@
                     }).setMessages(${messages});
 
                     datagrid.draw();
-                });
+                }, true);
 
                 function onCategoriesSelectChange() {
                     var selectValue = "";

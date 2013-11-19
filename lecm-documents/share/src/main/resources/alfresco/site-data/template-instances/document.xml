@@ -36,6 +36,29 @@
          </sub-components>
       </component>
 
+       <!-- Панель дашлетов -->
+      <component>
+           <region-id>dashlet-panel</region-id>
+           <sub-components>
+               <sub-component id="default">
+                   <evaluations>
+                       <evaluation>
+                           <url>/lecm/components/form</url>
+                           <properties>
+                               <itemKind>node</itemKind>
+                               <itemId>{nodeRef}</itemId>
+                               <mode>view</mode>
+                               <submitType>json</submitType>
+                               <formId>main-page-dashlets</formId>
+                               <showCancelButton>false</showCancelButton>
+                               <showSubmitButton>false</showSubmitButton>
+                           </properties>
+                       </evaluation>
+                   </evaluations>
+               </sub-component>
+           </sub-components>
+       </component>
+
        <!-- Основные сведения -->
        <component>
            <region-id>metadata</region-id>

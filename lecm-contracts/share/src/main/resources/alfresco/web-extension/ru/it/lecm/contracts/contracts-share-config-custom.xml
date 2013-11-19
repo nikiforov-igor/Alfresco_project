@@ -222,6 +222,42 @@
                     <field id="lecm-document:deprive-right" label-id="contract.deprive.right" />
                 </appearance>
             </form>
+            <form id="main-page-dashlets">
+                <field-visibility>
+                    <show id="line1"/>
+                    <show id="line2"/>
+                </field-visibility>
+                <appearance>
+                    <field id="line1">
+                        <control template="/ru/it/lecm/documents/controls/document-dashlet-control.ftl">
+                            <control-param name="first">/lecm/components/dashlets/document-main</control-param>
+                            <control-param name="second">/lecm/contracts/dashlets/stages</control-param>
+                        </control>
+                    </field>
+                    <field id="line2">
+                        <control template="/ru/it/lecm/documents/controls/document-dashlet-control.ftl">
+                            <control-param name="first">/lecm/components/dashlets/document-attachments</control-param>
+                            <control-param name="second">/lecm/components/dashlets/document-my-tasks</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="contract-stages">
+                <field-visibility>
+                    <show id="lecm-contract-table-structure:stages-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-contract-table-structure:stages-assoc">
+                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                            <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
+                            <control-param name="datagridFormId">stages-dashlet</control-param>
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="toolbar">false</control-param>
+                            <control-param name="refreshAfterCreate">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
 		</forms>
 	</config>
 
@@ -1450,6 +1486,13 @@
                 <appearance>
                     <field id="lecm-contract-table-structure:totalAmountWithCurrency" label-id="stage.totalAmount" substituteString="{lecm-contract-table-structure:stage-amount} {lecm-contract-table-structure:stage-currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
+            </form>
+            <form id="stages-dashlet">
+                <field-visibility>
+                    <show id="lecm-document:indexTableRow" force="true"/>
+                    <show id="lecm-contract-table-structure:name" force="true"/>
+                    <show id="lecm-contract-table-structure:stage-status"/>
+                </field-visibility>
             </form>
             <form id="addTableRow">
                 <field-visibility>
