@@ -1448,6 +1448,7 @@
     <config evaluator="model-type" condition="lecm-contract-table-structure:stage">
         <forms>
             <form>
+                <create-form template="/ru/it/lecm/contracts/forms/stage-create-form.ftl" />
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>
