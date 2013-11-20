@@ -143,3 +143,18 @@
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader ul.attachments-list li div {
     width: 220px;
 }
+
+/* Создание этапа договора: новое представление */
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table.presentation, /* Поле ввода комментария */
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table div.form-field input[type="text"],
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .autocomplete-block .autocompleteCurrentValueDisplayInvisible {
+	width: 100%;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table div.form-field input.autocomplete-input[type="text"] {
+	width: 255px;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table td {
+	vertical-align: top;
+}
