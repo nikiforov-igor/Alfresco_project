@@ -299,6 +299,13 @@
     <bean id="contractsOnCreateAssocsPolicy" class="ru.it.lecm.contracts.policies.ContractsOnCreateAssocsPolicy" parent="logicEcmAssociationPolicy"
           init-method="init"/>
 
+    <bean id="contractStagesPolicy" class="ru.it.lecm.contracts.policies.ContractStagesPolicy"
+          depends-on="contracts.LogicEcmContractsTableStructureBootstrap"
+          init-method="init">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="policyComponent" ref="policyComponent"/>
+    </bean>
+
     <bean id="webscript.ru.it.lecm.contracts.substitute.string.get" class="ru.it.lecm.contracts.AssociationSubstituteString" parent="webscript">
         <property name="substituteService" ref="substitudeService"/>
     </bean>
