@@ -84,6 +84,9 @@
 					<show id="lecm-forms-editor:attr-tab"/>
 					<show id="lecm-forms-editor:attr-control"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-forms-editor:attr-name" read-only="true"/>
+				</appearance>
 			</form>
 		</forms>
 	</config>
