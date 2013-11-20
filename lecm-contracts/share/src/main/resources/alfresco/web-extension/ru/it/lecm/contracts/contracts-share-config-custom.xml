@@ -1435,7 +1435,7 @@
                     <field id="lecm-contract-table-structure:stage-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                </appearance>                           -
+                </appearance>
             </form>
             <form id="table-structure-info">
                 <field-visibility>
