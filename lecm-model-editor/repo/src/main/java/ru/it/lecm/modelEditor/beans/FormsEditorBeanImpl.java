@@ -42,7 +42,12 @@ public class FormsEditorBeanImpl extends BaseBean {
 	public static final QName PROP_FORM_ID = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "form-id");
 	public static final QName PROP_FORM_TEMPLATE = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "form-template");
 
+	public static final QName PROP_ATTR_INDEX = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-index");
 	public static final QName PROP_ATTR_NAME = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-name");
+	public static final QName PROP_ATTR_TITLE = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-title");
+	public static final QName PROP_ATTR_TAB = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-tab");
+	public static final QName PROP_ATTR_SET = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-set");
+	public static final QName PROP_ATTR_CONTROL = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-control");
 
 	public static final String FORMS_EDITOR_ROOT_ID = "FORMS_EDITOR_ROOT_ID";
 	public static final String FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME = "Формы";
@@ -209,7 +214,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return result;
 	}
 
-	public void cleanFolder(NodeRef folder) {
+	private void cleanFolder(NodeRef folder) {
 		List<ChildAssociationRef> childs = nodeService.getChildAssocs(folder);
 		if (childs != null) {
 			for (ChildAssociationRef assoc : childs) {
@@ -292,7 +297,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return out.toString();
 	}
 
-	public void writeForm(XMLStreamWriter xmlw, NodeRef form, String modelName) throws XMLStreamException {
+	private void writeForm(XMLStreamWriter xmlw, NodeRef form, String modelName) throws XMLStreamException {
 		String evaluator = (String) nodeService.getProperty(form, PROP_FORM_EVALUATOR);
 	    if (evaluator != null) {
 		    xmlw.writeStartElement("config");
@@ -310,6 +315,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 		    List<NodeRef> fields = getFormFields(form);
 
 		    writeFieldsVisibility(xmlw, fields);
+		    writeAppearance(xmlw, fields);
 
 		    xmlw.writeEndElement();
 		    xmlw.writeEndElement();
@@ -318,13 +324,31 @@ public class FormsEditorBeanImpl extends BaseBean {
 	    }
 	}
 
-	public void writeFieldsVisibility(XMLStreamWriter xmlw, List<NodeRef> fields) throws XMLStreamException {
+	private void writeFieldsVisibility(XMLStreamWriter xmlw, List<NodeRef> fields) throws XMLStreamException {
 		xmlw.writeStartElement("field-visibility");
 		if (fields != null) {
 			for (NodeRef field: fields) {
 			    xmlw.writeStartElement("show");
 				String attrName = (String) nodeService.getProperty(field, PROP_ATTR_NAME);
 				xmlw.writeAttribute("id", attrName);
+			    xmlw.writeEndElement();
+			}
+		}
+		xmlw.writeEndElement();
+	}
+
+	private void writeAppearance(XMLStreamWriter xmlw, List<NodeRef> fields) throws XMLStreamException {
+		xmlw.writeStartElement("appearance");
+		if (fields != null) {
+			for (NodeRef field: fields) {
+			    xmlw.writeStartElement("field");
+
+				String attrName = (String) nodeService.getProperty(field, PROP_ATTR_NAME);
+				xmlw.writeAttribute("id", attrName);
+
+				String attrLabel = (String) nodeService.getProperty(field, PROP_ATTR_TITLE);
+				xmlw.writeAttribute("label", attrLabel);
+
 			    xmlw.writeEndElement();
 			}
 		}
