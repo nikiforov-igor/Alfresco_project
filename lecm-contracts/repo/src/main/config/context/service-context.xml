@@ -284,6 +284,64 @@
         <property name="contractsService" ref="contractService"/>
     </bean>
 
+    <!-- Оповещении о наступленни даты начала/конца этапа -->
+    <bean id="contractsStageDateNotificationExecutor" class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="contractsService" ref="contractService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="documentTableService" ref="documentTableService"/>
+    </bean>
+
+    <bean id="contractsStageDateNotificationSchedule" class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationSchedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="onServerStart">
+            <value>true</value>
+        </property>
+        <property name="cronExpression">
+            <value>0 0 5 */1 * ?</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */15 * * * ?</value>
+        </property>
+        <property name="jobName">
+            <value>contracts-stage-notifications-job</value>
+        </property>
+        <property name="jobGroup">
+            <value>contracts-stage-notifications</value>
+        </property>
+        <property name="triggerName">
+            <value>contracts-stage-notifications-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>contracts-stage-notifications</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="documentService" ref="documentService"/>
+    </bean>
+
+    <!-- #Оповещении о наступленни даты начала/конца этапа# -->
+
 	<bean id="contracts.LogicEcmContractsTaggedCounterRegistrator"
 	      parent="regNumbersTaggedCounterRegistrator"
 	      depends-on="contracts.LogicEcmContractsBootstrap">

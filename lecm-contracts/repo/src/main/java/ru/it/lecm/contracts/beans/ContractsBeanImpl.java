@@ -36,6 +36,8 @@ public class ContractsBeanImpl extends BaseBean {
     public static final QName PROP_STAGE_STATUS = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "stage-status");
     public static final QName PROP_STAGE_START_DATE_REAL = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "start-date-real");
     public static final QName PROP_STAGE_END_DATE_REAL = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "end-date-real");
+    public static final QName PROP_STAGE_START_DATE = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "start-date");
+    public static final QName PROP_STAGE_END_DATE = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "end-date");
 
     public static final QName ASSOC_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "document-assoc");
 	public static final QName ASSOC_CONTRACT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "typeContract-assoc");
