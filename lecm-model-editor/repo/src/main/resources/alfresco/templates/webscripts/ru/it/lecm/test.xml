@@ -1,0 +1,23 @@
+<alfresco-config>
+	<config evaluator="node-type" condition="officialNoteNS:officialNote">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="officialNoteNS:summaryContent"/>
+					<show id="officialNoteNS:title"/>
+					<show id="officialNoteNS:answer"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="model-type" condition="officialNoteNS:officialNote">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="officialNoteNS:summaryContent"/>
+					<show id="officialNoteNS:title"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+</alfresco-config>

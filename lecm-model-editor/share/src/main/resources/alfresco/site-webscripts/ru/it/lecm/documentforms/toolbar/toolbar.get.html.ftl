@@ -6,6 +6,7 @@
 function init() {
     new LogicECM.module.FormsEditor.Toolbar("${id}").setMessages(${messages}).setOptions({
 	    bubblingLabel: "${bubblingLabel!''}",
+	    doctype: "${doctype!''}",
         searchActive: true
     });
 }

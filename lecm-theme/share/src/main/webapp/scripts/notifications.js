@@ -82,7 +82,6 @@ LogicECM.module.Header = LogicECM.module.Header || {};
 					dataObj:{},
 					successCallback:{
 						fn:function (response) {
-							var i = 1 + 2;
 						}
 					},
 					failureMessage:"message.failure",

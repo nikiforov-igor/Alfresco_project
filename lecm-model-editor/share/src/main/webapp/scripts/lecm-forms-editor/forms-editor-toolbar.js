@@ -26,6 +26,38 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
                     {
                         value: "create"
                     });
-            }
+
+	            this.toolbarButtons["defaultActive"].deployButton = Alfresco.util.createYUIButton(this, "deployFormsButton", this.deployModel);
+            },
+
+	        deployModel: function() {
+		        var me = this;
+		        Alfresco.util.Ajax.jsonGet(
+			        {
+				        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/deploy?modelName=" + encodeURIComponent(this.options.doctype),
+				        successCallback: {
+					        fn: function (response) {
+						        var oResults = response.json;
+						        if (oResults != null && oResults.success) {
+							        Alfresco.util.Ajax.request(
+								        {
+									        url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/config/init?reset=true",
+									        dataObj:{},
+									        successCallback:{
+										        fn:function (response) {
+											        Alfresco.util.PopupManager.displayMessage({
+												        text: me.msg("message.deploy.success")
+											        });
+										        }
+									        },
+									        failureMessage:"message.failure"
+								        });
+						        }
+					        },
+					        scope: this
+				        },
+				        failureMessage: "message.failure"
+			        });
+	        }
         }, true);
 })();

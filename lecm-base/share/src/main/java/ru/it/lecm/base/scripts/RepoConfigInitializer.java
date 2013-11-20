@@ -43,6 +43,11 @@ public class RepoConfigInitializer extends DeclarativeWebScript {
 			Response response = scriptRemote.connect("alfresco").get(url);
 			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
 				StringConfigSource cs = new StringConfigSource(response.getResponse());
+
+				if (reset != null && reset.equals("true")) {
+					this.configService.reset();
+				}
+
 				this.configService.appendConfig(cs);
 
 				this.hasBeenInitialized = true;

@@ -23,17 +23,18 @@
 	</bean>
 
 	<util:constant id="FORMS_EDITOR_ROOT_ID" static-field="ru.it.lecm.modelEditor.beans.FormsEditorBeanImpl.FORMS_EDITOR_ROOT_ID"/>
-	<util:constant id="FORMS_EDITOR_ROOT_NAME" static-field="ru.it.lecm.modelEditor.beans.FormsEditorBeanImpl.FORMS_EDITOR_ROOT_NAME"/>
 
 	<bean id="formsEditorService" class="ru.it.lecm.modelEditor.beans.FormsEditorBeanImpl" parent="baseBean"
 	      depends-on="nodeService, transactionService">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="repository" ref="repositoryHelper"/>
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
 		<property name="folders">
 			<map>
-				<entry key="#{FORMS_EDITOR_ROOT_ID}" value="#{FORMS_EDITOR_ROOT_NAME}"/>
+				<entry key="#{FORMS_EDITOR_ROOT_ID}" value="Сервис Реадктор форм"/>
 			</map>
 		</property>
 	</bean>
