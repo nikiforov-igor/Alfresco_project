@@ -34,7 +34,7 @@
 		<property name="configService" ref="web.config" />
 	</bean>
 
-        <bean id="webscript.ru.it.lecm.base-share.formControls.getControlsById.get" class="ru.it.lecm.base.scripts.FormsConfigWebscript" parent="webscript">
+        <bean id="webscript.ru.it.lecm.base-share.formsConfig.getFormsConfig.get" class="ru.it.lecm.base.scripts.FormsConfigWebscript" parent="webscript">
 		<property name="formsConfigService" ref="formsConfigService" />
 	</bean>
 </beans>

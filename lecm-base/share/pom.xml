@@ -17,6 +17,11 @@
 		and include them in the AMP, they are provided by Alfresco
 	-->
 	<dependencies>
+            <dependency>
+		<groupId>org.codehaus.jackson</groupId>
+		<artifactId>jackson-mapper-asl</artifactId>
+		<version>1.9.13</version>
+            </dependency>
         <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-share</artifactId>

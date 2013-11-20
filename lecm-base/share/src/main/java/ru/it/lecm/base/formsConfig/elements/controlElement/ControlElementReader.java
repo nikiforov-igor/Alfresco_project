@@ -13,6 +13,7 @@ import static ru.it.lecm.base.formsConfig.Constants.*;
 
 
 /**
+ * Ридер для элемента <control>
  *
  * @author ikhalikov
  */

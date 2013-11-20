@@ -1,5 +1,6 @@
 <webscript>
   <shortname>Get controls by type id</shortname>
   <description>Get controls by type id</description>
-  <url>/lecm/forms/config/getControlsById</url>
+  <url>/lecm/forms/getConfig</url>
+  <format default="json"/>
 </webscript>

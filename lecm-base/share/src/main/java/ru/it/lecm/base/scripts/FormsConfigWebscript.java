@@ -9,16 +9,17 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.base.formsConfig.FormsConfig;
-import ru.it.lecm.base.formsConfig.elements.controlElement.ControlConfigElement;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.extensions.webscripts.WebScriptException;
-import ru.it.lecm.base.formsConfig.elements.controlElement.ParamConfigElement;
+import ru.it.lecm.base.formsConfig.elements.fieldElement.TypeConfigElement;
+import ru.it.lecm.base.formsConfig.elements.formLayoutElement.FormLayoutConfigElement;
+import ru.it.lecm.base.formsConfig.elements.formTypeElement.FormTypeConfigElement;
 
 /**
  *
@@ -27,64 +28,71 @@ import ru.it.lecm.base.formsConfig.elements.controlElement.ParamConfigElement;
 public class FormsConfigWebscript extends DeclarativeWebScript {
 
 	private final static Log logger = LogFactory.getLog(FormsConfigWebscript.class);
+	private final ObjectMapper jsonMapper = new ObjectMapper();
+	private FormsConfig formsConfigService;
 
 	public void setFormsConfigService(FormsConfig formsConfigService) {
 		this.formsConfigService = formsConfigService;
 	}
 
-	private FormsConfig formsConfigService;
-
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 
 		Map<String, Object> result = new HashMap<String, Object>();
-		String typeId = req.getParameter("typeId");
+		String action = req.getParameter("action");
 
+		if (action == null) {
+			logger.error("FormsConfigWebscript was called with empty parametr");
+			throw new WebScriptException("FormsConfigWebscript was called with empty parametr");
+		}
+
+		jsonMapper.configure(SerializationConfig.Feature.AUTO_DETECT_FIELDS, false);
+		jsonMapper.configure(SerializationConfig.Feature.AUTO_DETECT_GETTERS, false);
+		jsonMapper.configure(SerializationConfig.Feature.DEFAULT_VIEW_INCLUSION, false);
+		jsonMapper.configure(SerializationConfig.Feature.WRITE_NULL_MAP_VALUES, true);
+
+		try {
+			if (action.equals("getControlsById")) {
+				result.put("result", executeGetControlsByTypeAction(req));
+			} else if (action.equals("getFormLayouts")) {
+				result.put("result", executeGetFormsLayoutsAction());
+			} else if (action.equals("getFormTypes")) {
+				result.put("result", executeGetFormsTypesAction());
+			}
+		} catch (Exception ex) {
+			logger.error("Somethig goes wrong while executing FormsConfigWebscript");
+		}
+
+		return result;
+	}
+
+	private String executeGetControlsByTypeAction(WebScriptRequest req) throws Exception {
+		String typeId = req.getParameter("typeId");
 		if (typeId == null) {
 			logger.error("FormsConfigWebscript was called with empty parametr");
 			throw new WebScriptException("FormsConfigWebscript was called with empty parametr");
 		}
-		try {
-			result.put("result", executeGetControlsByTypeAction(typeId));
-		} catch (Exception ex) {
-			logger.error("Somethig goes wrong while processing method executeGetControlsByTypeAction", ex);
+		TypeConfigElement typeInfo = formsConfigService.getTypeInfoById(typeId);
+		if(typeInfo == null) {
+			return "[]";
 		}
-		return result;
+		return jsonMapper.writeValueAsString(typeInfo.getControlsAsList());
 	}
 
-	private JSONArray executeGetControlsByTypeAction(String typeId) throws Exception {
-		Map<String, ControlConfigElement> controls = formsConfigService.getControlsByType(typeId);
-		JSONArray jsonRes = new JSONArray();
-		if(controls == null){
-			return jsonRes;
+	private String executeGetFormsLayoutsAction() throws Exception {
+		Map<String, FormLayoutConfigElement> layouts = formsConfigService.getFullFormsLayoutsMap();
+		if(layouts == null) {
+			return "[]";
 		}
-		JSONObject control = new JSONObject();
-		for (Map.Entry<String, ControlConfigElement> entry : controls.entrySet()) {
-			control = new JSONObject();
-			String id = entry.getKey();
-			ControlConfigElement controlConfigElement = entry.getValue();
-			control.put("id", id);
-			control.put("localName", controlConfigElement.getDisplayName());
-			control.put("templatePath", controlConfigElement.getTemplatePath());
+		return jsonMapper.writeValueAsString(layouts.values());
+	}
 
-			Map<String, ParamConfigElement> params = controlConfigElement.getParamsMap();
-			JSONArray jsonParamsArray = new JSONArray();
-			for (Map.Entry<String, ParamConfigElement> param : params.entrySet()) {
-				String paramId = param.getKey();
-				ParamConfigElement paramConfigElement = param.getValue();
-				JSONObject jsonParam = new JSONObject();
-				jsonParam.put("id", paramId);
-				jsonParam.put("localName", paramConfigElement.getLocalName());
-				jsonParam.put("visible", paramConfigElement.isVisible());
-				jsonParam.put("mandatory", paramConfigElement.isMandatory());
-				jsonParam.put("value", paramConfigElement.getValue());
-				jsonParamsArray.put(jsonParam);
-			}
-			control.put("params", jsonParamsArray);
-			jsonRes.put(control);
+	private String executeGetFormsTypesAction() throws Exception {
+		Map<String, FormTypeConfigElement> types = formsConfigService.getFullFormsTypesMap();
+		if(types == null) {
+			return "[]";
 		}
+		return jsonMapper.writeValueAsString(types.values());
 
-
-		return jsonRes;
 	}
 }

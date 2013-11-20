@@ -1,8 +1,13 @@
 <alfresco-config>
     <config>
     	<field-types>
-	        <field-type id="lecm-orgstr:employee" localName="Сотрудник">
-	            <control id="test" template="some/path/test" localName="Самый простой контрол">
+	        <field-type id="lecm-sched:std-begin" localName="Начало">
+	            <control id="sched-begin-control" template="/ru/it/lecm/wcalendar/controls/time-picker.ftl" localName="Контрол выбора времени">
+	                <param id="style" localName="Стиль" mandatory="true" visible="true">position: relative;</param>
+	            </control>
+	        </field-type>
+                <field-type id="lecm-orgstr:employee" localName="Сотрудник">
+	            <control id="SomeNewControl" template="some/path/test" localName="Самый простой контрол">
 	                <param id="some_param1" localName="Некий параметр1" mandatory="false" visible="true">some value1</param>
 	                <param id="some_param2" localName="Некий параметр2" mandatory="true" visible="false">some value2</param>
 	                <param id="some_param3" localName="Некий параметр3" mandatory="false" visible="true">some value3</param>
@@ -10,12 +15,15 @@
 	            </control>
 	            <control id="Overrided" template="some/path/test" localName="Самый простой контрол">
 	                <param id="some_param1" localName="Некий параметр1" mandatory="false" visible="true">some value1</param>
-	                <param id="some_param2" localName="Некий параметр2" mandatory="true" visible="false">some value2</param>
-	                <param id="some_param3" localName="Некий параметр3" mandatory="false" visible="true">some value3</param>
-	                <param id="some_param4" localName="Некий параметр4" mandatory="true" visible="false">some value4</param>
 	            </control>
 	        </field-type>
     	</field-types>
+        <forms-info>
+    		<form-type id="uniq" evaluatorType="model-type" localName="Форма создания" formId="datagrid/search/..." />
+                <form-type id="uniq2" evaluatorType="node-type" localName="Форма редактирования" formId="datagrid/search/..." />
+    		<form-layout id="uniq" localName="В одну колонку" template="/some/path/template1.ftl" />
+                <form-layout id="uniq2" localName="В две колонки" template="/some/path/template2.ftl" />
+    	</forms-info>
     </config>
 
     <config>

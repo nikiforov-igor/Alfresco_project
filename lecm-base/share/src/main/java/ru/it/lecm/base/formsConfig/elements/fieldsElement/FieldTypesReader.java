@@ -14,6 +14,7 @@ import static ru.it.lecm.base.formsConfig.Constants.*;
 
 
 /**
+ * Ридер для корневого элемента <field-types>
  *
  * @author ikhalikov
  */

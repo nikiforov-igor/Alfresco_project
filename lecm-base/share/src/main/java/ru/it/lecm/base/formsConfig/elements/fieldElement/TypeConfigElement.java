@@ -6,8 +6,12 @@
 
 package ru.it.lecm.base.formsConfig.elements.fieldElement;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.element.ConfigElementAdapter;
 import ru.it.lecm.base.formsConfig.elements.controlElement.ControlConfigElement;
@@ -15,14 +19,24 @@ import static ru.it.lecm.base.formsConfig.Constants.*;
 
 
 /**
+ * POJO для элементов <field-type>
  *
  * @author ikhalikov
  */
 public class TypeConfigElement extends ConfigElementAdapter{
 
+	private final static Log logger = LogFactory.getLog(TypeConfigElement.class);
+
+	@JsonProperty
 	private String id;
+	@JsonProperty
 	private String localName;
 	private HashMap<String, ControlConfigElement> controlsMap = new HashMap<String, ControlConfigElement>();
+
+	@JsonProperty("controls")
+	public Collection<ControlConfigElement> getControlsAsList(){
+		return this.controlsMap.values();
+	}
 
 	public void setLocalName(String localName) {
 		this.localName = localName;
@@ -76,10 +90,11 @@ public class TypeConfigElement extends ConfigElementAdapter{
 			ControlConfigElement controlConfigElement = entry.getValue();
 			if(!thisControls.containsKey(id)) {
 				result.addControl(controlConfigElement);
+			} else {
+				logger.warn("Founded duplicate control with id = " + id);
 			}
 		}
 
-//		result.controlsMap.putAll(otherElement.getControlsMap());
 		return result;
 	}
 

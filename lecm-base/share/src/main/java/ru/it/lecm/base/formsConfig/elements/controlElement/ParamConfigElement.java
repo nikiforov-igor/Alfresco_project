@@ -6,6 +6,7 @@
 
 package ru.it.lecm.base.formsConfig.elements.controlElement;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.element.ConfigElementAdapter;
 
@@ -16,6 +17,7 @@ import org.springframework.extensions.config.element.ConfigElementAdapter;
 public class ParamConfigElement extends ConfigElementAdapter{
 
 	private static final String PARAM_ID = "param";
+	@JsonProperty
 	private String id;
 
 	public void setId(String id) {
@@ -25,8 +27,11 @@ public class ParamConfigElement extends ConfigElementAdapter{
 	public String getId() {
 		return id;
 	}
+	@JsonProperty
 	private String localName;
+	@JsonProperty
 	private boolean mandatory;
+	@JsonProperty
 	private boolean visible;
 
 	public ParamConfigElement(String name) {
@@ -43,6 +48,7 @@ public class ParamConfigElement extends ConfigElementAdapter{
 	}
 
 	@Override
+	@JsonProperty
 	public String getValue(){
 		return this.value;
 	}
@@ -75,6 +81,9 @@ public class ParamConfigElement extends ConfigElementAdapter{
 		this.mandatory = mandatory;
 	}
 
+	/*
+	Так как слияние параметров не планируется, то и метод пустой
+	*/
 	@Override
 	public ConfigElement combine(ConfigElement configElement) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

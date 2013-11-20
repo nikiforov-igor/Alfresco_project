@@ -14,6 +14,7 @@ import ru.it.lecm.base.formsConfig.elements.controlElement.ControlElementReader;
 import static ru.it.lecm.base.formsConfig.Constants.*;
 
 /**
+ * Ридер для элементов <field-type>
  *
  * @author ikhalikov
  */

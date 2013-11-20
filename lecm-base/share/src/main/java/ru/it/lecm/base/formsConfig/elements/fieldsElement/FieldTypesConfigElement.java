@@ -8,6 +8,8 @@ package ru.it.lecm.base.formsConfig.elements.fieldsElement;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.element.ConfigElementAdapter;
 import ru.it.lecm.base.formsConfig.elements.fieldElement.TypeConfigElement;
@@ -15,10 +17,13 @@ import static ru.it.lecm.base.formsConfig.Constants.*;
 
 
 /**
+ * POJO для корневого элемента <field-types>
  *
  * @author ikhalikov
  */
 public class FieldTypesConfigElement extends ConfigElementAdapter {
+
+	private final static Log logger = LogFactory.getLog(FieldTypesConfigElement.class);
 
 	private Map<String, TypeConfigElement> fieldTypesMap = new HashMap<String, TypeConfigElement>();
 
@@ -59,6 +64,7 @@ public class FieldTypesConfigElement extends ConfigElementAdapter {
 			TypeConfigElement thisElement = thisElements.get(id);
 			if(thisElements.containsKey(id)){
 				result.addType((TypeConfigElement) thisElement.combine(otherElement));
+				logger.warn("Founded duplicate element field-type with id = " + id + ". Performing controls combine");
 			} else {
 				result.addType(otherElement);
 			}
