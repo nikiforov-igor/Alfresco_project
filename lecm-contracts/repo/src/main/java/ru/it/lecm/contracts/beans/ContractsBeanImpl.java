@@ -23,12 +23,19 @@ import java.util.*;
 public class ContractsBeanImpl extends BaseBean {
 	public static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
 	public static final String ADDITIONAL_DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/additional-document/1.0";
+	public static final String CONTRACT_TABLES_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/table-structure/1.0";
 	public static final String CONTRACT_DIC_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/dictionaries/1.0";
 
 	public static final QName TYPE_CONTRACTS_DOCUMENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
 	public static final QName TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocument");
+	public static final QName TYPE_CONTRACT_STAGE = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "stage");
+
     public static final QName PROP_START_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "startDate");
     public static final QName PROP_END_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "endDate");
+
+    public static final QName PROP_STAGE_STATUS = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "stage-status");
+    public static final QName PROP_STAGE_START_DATE_REAL = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "start-date-real");
+    public static final QName PROP_STAGE_END_DATE_REAL = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "end-date-real");
 
     public static final QName ASSOC_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "document-assoc");
 	public static final QName ASSOC_CONTRACT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "typeContract-assoc");
