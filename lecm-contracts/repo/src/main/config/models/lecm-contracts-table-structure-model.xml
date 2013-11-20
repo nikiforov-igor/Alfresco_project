@@ -79,6 +79,11 @@
 	            <property name="lecm-contract-table-structure:stage-status">
 		            <type>d:text</type>
 		            <default>Не начат</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                     <constraints>
                         <constraint ref="lecm-contract-table-structure:stage-status-constraint"/>
                     </constraints>
