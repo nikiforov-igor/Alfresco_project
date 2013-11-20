@@ -380,6 +380,10 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 	private void writeAppearance(XMLStreamWriter xmlw, List<NodeRef> fields) throws XMLStreamException {
 		xmlw.writeStartElement("appearance");
+		List<String> sets = getSets(fields);
+
+		writeSets(xmlw, sets);
+
 		if (fields != null) {
 			for (NodeRef field: fields) {
 			    xmlw.writeStartElement("field");
@@ -390,9 +394,38 @@ public class FormsEditorBeanImpl extends BaseBean {
 				String attrLabel = (String) nodeService.getProperty(field, PROP_ATTR_TITLE);
 				xmlw.writeAttribute("label", attrLabel);
 
+				String tab = (String) nodeService.getProperty(field, PROP_ATTR_TAB);
+				if (tab != null && tab.trim().length() > 0 && sets.contains(tab)) {
+					xmlw.writeAttribute("set", "tab" + sets.indexOf(tab));
+				}
+
 			    xmlw.writeEndElement();
 			}
 		}
 		xmlw.writeEndElement();
+	}
+
+	private void writeSets(XMLStreamWriter xmlw, List<String> sets) throws XMLStreamException {
+		if (sets != null) {
+			for (int i = 0; i < sets.size(); i++) {
+				xmlw.writeStartElement("set");
+				xmlw.writeAttribute("id", "tab" + i);
+				xmlw.writeAttribute("label", sets.get(i));
+				xmlw.writeEndElement();
+			}
+		}
+	}
+
+	private List<String> getSets(List<NodeRef> fields) {
+		List<String> result = new ArrayList<String>();
+//		Map<String, String> result = new LinkedHashMap<String, String>();
+//		result.put(null, null);
+		for (NodeRef field: fields) {
+			String tab = (String) nodeService.getProperty(field, PROP_ATTR_TAB);
+			if (tab != null && tab.trim().length() > 0 && !result.contains(tab)) {
+				result.add(tab);
+			}
+		}
+		return result;
 	}
 }
