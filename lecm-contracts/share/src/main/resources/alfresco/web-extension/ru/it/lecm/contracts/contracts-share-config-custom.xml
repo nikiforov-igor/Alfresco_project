@@ -1422,6 +1422,7 @@
                     <show id="lecm-contract-table-structure:stage-currency-assoc" force="true"/>
                     <show id="lecm-contract-table-structure:stage-comment"/>
                     <show id="lecm-contract-table-structure:attachments-temp-assoc" />
+                    <show id="lecm-contract-table-structure:status-buttons" />
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contract-table-structure:stage-status"/>
@@ -1434,6 +1435,9 @@
                     </field>
                     <field id="lecm-contract-table-structure:stage-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecm-contract-table-structure:status-buttons">
+                        <control template="/ru/it/lecm/contracts/controls/status-buttons.ftl"/>
                     </field>
                 </appearance>
             </form>
