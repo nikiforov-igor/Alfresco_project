@@ -212,7 +212,12 @@
         <forms-info>
     		<form-type evaluatorType="model-type" localName="Форма создания" />
       		<form-type evaluatorType="node-type" localName="Форма редактирования" />
-		      <form-type id="datagrid" evaluatorType="node-type" localName="Таблица" />
+		      <form-type id="datagrid" evaluatorType="model-type" localName="Таблица" />
+		      <form-type id="search" evaluatorType="model-type" localName="Аттрибутивный поиск" />
+		      <form-type id="workflow-form" evaluatorType="model-type" localName="Форма создания из машины состояний" />
+		      <form-type id="statemachine-editable-fields" evaluatorType="model-type" localName="Настройка машины состояний" />
+		      <form-type id="document-dashlet" evaluatorType="node-type" localName="Дашлет" />
+		      <form-type id="document" evaluatorType="node-type" localName="Правая область" />
 		      <form-layout localName="В одну колонку" template=""/>
 		      <form-layout localName="В две колонки" template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
 		      <form-layout localName="С вкладками" template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />

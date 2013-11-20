@@ -3,16 +3,13 @@ package ru.it.lecm.modelEditor.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
+import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.modelEditor.beans.FormsEditorBeanImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * User: AIvkin
@@ -79,5 +76,19 @@ public class FormsEditorWebScriptBean extends BaseWebScript {
 	public boolean deployModel(String modelName) {
 		ParameterCheck.mandatory("modelName", modelName);
 		return formsEditorService.deployModel(modelName);
+	}
+
+	/**
+	 * Развернуть модель
+	 * @param modelName название модели
+	 * @return true - если форма успешно развёрнута
+	 */
+	public Scriptable getModelForms(String modelName) {
+		ParameterCheck.mandatory("modelName", modelName);
+		List<NodeRef> modelForms = formsEditorService.getModelForms(modelName);
+		if (modelForms != null) {
+			return createScriptable(modelForms);
+		}
+		return null;
 	}
 }

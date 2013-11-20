@@ -4,6 +4,7 @@
 			<dependencies>
 				<js src="/scripts/lecm-forms-editor/lecm-forms-attribute-table.js"/>
 				<js src="/scripts/lecm-forms-editor/lecm-forms-attributes-table-toolbar.js"/>
+				<js src="/scripts/lecm-forms-editor/lecm-form-type.js"/>
 			</dependencies>
 		</forms>
 	</config>
@@ -18,13 +19,21 @@
 					<show id="lecm-forms-editor:form-attributes"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-forms-editor:form-evaluator" label-id="label.form.type">
+						<control template="/ru/it/lecm/documentforms/controls/form-type-control.ftl">
+							<control-param name="fromIdField">prop_lecm-forms-editor_form-id</control-param>
+						</control>
+					</field>
+					<field id="lecm-forms-editor:form-id">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
 					<field id="lecm-forms-editor:form-template">
 						<control template="/ru/it/lecm/documentforms/controls/form-layout-control.ftl"/>
 					</field>
 					<field id="lecm-forms-editor:form-attributes">
 						<control template="/ru/it/lecm/documentforms/controls/attribute-table-control.ftl">
 							<control-param name="height">100</control-param>
-							<control-param name="bubblingLabel">lecm-form-editor-attributes</control-param>
+							<control-param name="bubblingLabel">prop_lecm-forms-editor_form-evaluator</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -41,6 +50,14 @@
 					<show id="lecm-forms-editor:form-template"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-forms-editor:form-evaluator" label-id="label.form.type">
+						<control template="/ru/it/lecm/documentforms/controls/form-type-control.ftl">
+							<control-param name="fromIdField">prop_lecm-forms-editor_form-id</control-param>
+						</control>
+					</field>
+					<field id="lecm-forms-editor:form-id">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
 					<field id="lecm-forms-editor:form-template">
 						<control template="/ru/it/lecm/documentforms/controls/form-layout-control.ftl"/>
 					</field>
