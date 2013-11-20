@@ -15,6 +15,7 @@ import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.FileNameValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -244,7 +245,14 @@ public class FormsEditorBeanImpl extends BaseBean {
 								cleanFolder(rootFolder);
 
 								for (NodeRef form : forms) {
-									NodeRef configNode = createNode(rootFolder, ContentModel.TYPE_CONTENT, null, null);
+									String nodeName = (String) nodeService.getProperty(form, PROP_FORM_EVALUATOR);
+									String formId = (String) nodeService.getProperty(form, PROP_FORM_ID);
+									if (formId != null && formId.trim().length() > 0) {
+										nodeName += "_" + formId;
+									}
+									nodeName = FileNameValidator.getValidFileName(nodeName);
+
+									NodeRef configNode = createNode(rootFolder, ContentModel.TYPE_CONTENT, nodeName, null);
 
 									ContentService contentService = serviceRegistry.getContentService();
 									ContentWriter writer = contentService.getWriter(configNode, ContentModel.PROP_CONTENT, true);
@@ -310,6 +318,19 @@ public class FormsEditorBeanImpl extends BaseBean {
 		    String formId = (String) nodeService.getProperty(form, PROP_FORM_ID);
 		    if (formId != null && formId.trim().length() > 0) {
 			    xmlw.writeAttribute("id", formId);
+		    }
+
+		    String formTemplate = (String) nodeService.getProperty(form, PROP_FORM_TEMPLATE);
+		    if (formTemplate != null && formTemplate.trim().length() > 0) {
+			    xmlw.writeStartElement("edit-form");
+			    xmlw.writeAttribute("template", formTemplate);
+			    xmlw.writeEndElement();
+			    xmlw.writeStartElement("view-form");
+			    xmlw.writeAttribute("template", formTemplate);
+			    xmlw.writeEndElement();
+			    xmlw.writeStartElement("create-form");
+			    xmlw.writeAttribute("template", formTemplate);
+			    xmlw.writeEndElement();
 		    }
 
 		    List<NodeRef> fields = getFormFields(form);
