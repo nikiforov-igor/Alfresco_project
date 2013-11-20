@@ -17,19 +17,9 @@ import static ru.it.lecm.base.formsConfig.Constants.*;
  */
 public class FormLayoutConfigElement extends ConfigElementAdapter{
 	@JsonProperty
-	private String id;
-	@JsonProperty
 	private String localName;
 	@JsonProperty
 	private String template;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getLocalName() {
 		return localName;

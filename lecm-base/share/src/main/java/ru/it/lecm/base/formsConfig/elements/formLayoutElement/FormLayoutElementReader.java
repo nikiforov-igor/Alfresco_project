@@ -13,7 +13,7 @@ import static ru.it.lecm.base.formsConfig.Constants.*;
 
 /**
  * Ридер для элемента <form-layout>
- * 
+ *
  * @author ikhalikov
  */
 public class FormLayoutElementReader implements ConfigElementReader{
@@ -26,7 +26,6 @@ public class FormLayoutElementReader implements ConfigElementReader{
 
 		FormLayoutConfigElement result = new FormLayoutConfigElement();
 
-		result.setId(element.attributeValue(ATTR_ID));
 		result.setLocalName(element.attributeValue(ATTR_LOCAL_NAME));
 		result.setTemplate(element.attributeValue(ATTR_TEMPLATE));
 

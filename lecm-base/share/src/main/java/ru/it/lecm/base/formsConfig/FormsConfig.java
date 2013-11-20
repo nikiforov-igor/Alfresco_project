@@ -5,6 +5,9 @@
  */
 package ru.it.lecm.base.formsConfig;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,9 +29,9 @@ public class FormsConfig {
 	private final static Log logger = LogFactory.getLog(FormsConfig.class);
 
 	private ConfigService configService;
-	private Map<String, TypeConfigElement> fullTypeControlsMap;
-	private Map<String, FormTypeConfigElement> fullFormsTypesMap;
-	private Map<String, FormLayoutConfigElement> fullFormsLayoutsMap;
+	private Map<String, TypeConfigElement> fullTypeControlsMap = new HashMap<String, TypeConfigElement>();
+	private List<FormTypeConfigElement> fullFormsTypesList = new ArrayList<FormTypeConfigElement>();
+	private List<FormLayoutConfigElement> fullFormsLayoutsList = new ArrayList<FormLayoutConfigElement>();
 	private boolean initialized = false;
 
 	public void setConfigService(ConfigService configService) {
@@ -48,18 +51,18 @@ public class FormsConfig {
 	 * Возвращает мапу объектов, представляющих типы форм
 	 * @return
 	 */
-	public Map<String, FormTypeConfigElement> getFullFormsTypesMap() {
+	public List<FormTypeConfigElement> getFullFormsTypesMap() {
 		if (!initialized) init();
-		return fullFormsTypesMap;
+		return fullFormsTypesList;
 	}
 
 	/**
 	 * Возвращает мапу объектов, представляющих правила отображения форм
 	 * @return
 	 */
-	public Map<String, FormLayoutConfigElement> getFullFormsLayoutsMap() {
+	public List<FormLayoutConfigElement> getFullFormsLayoutsMap() {
 		if (!initialized) init();
-		return fullFormsLayoutsMap;
+		return fullFormsLayoutsList;
 	}
 
 	public void init() {
@@ -73,8 +76,8 @@ public class FormsConfig {
 
 		FormsInfoConfigElement formsInfo = (FormsInfoConfigElement) configResult.getConfigElement(FORMS_INFO_ID);
 		if (formsInfo != null) {
-			fullFormsTypesMap = formsInfo.getFormTypeElements();
-			fullFormsLayoutsMap = formsInfo.getFormLayoutElements();
+			fullFormsTypesList = formsInfo.getFormTypeElements();
+			fullFormsLayoutsList = formsInfo.getFormLayoutElements();
 		} else {
 			logger.info("Cannot find config for " + FORMS_INFO_ID);
 		}

@@ -127,14 +127,27 @@
 			        <param id="showCreateNewButton" localName="" mandatory="false" visible="false">false</param>
 	            </control>
 	        </field-type>
+
+	        <field-type id="association:lecm-errands-dic:errand-titles" localName="Заголовки поручений">
+	            <control id="association:lecm-errands-dic:errand-titles-default-control" template="" localName="Выбор заголовка">
+	            	<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</param>
+                    <param id="itemType">lecm-errands-dic:errand-titles</param>
+                    <param id="nameSubstituteString">{cm:name}</param>
+                    <param id="notSelectedOptionShow">true</param>
+                    <param id="notSelectedOptionLabel"> </param>
+                    <param id="showCreateNewLink">false</param>
+                    <param id="showCreateNewButton">false</param>
+	            </control>
+	        </field-type>
     	</field-types>
 
         <forms-info>
-    		<form-type id="create-form" evaluatorType="model-type" localName="Форма создания" />
-    		<form-type id="edit-form" evaluatorType="node-type" localName="Форма редактирования" />
-    		<form-layout id="one-column" localName="В одну колонку" template="" />
-    		<form-layout id="two-columns" localName="В две колонки" template="" />
-    		<form-layout id="with-tabs" localName="С вкладками" template="" />
+    		<form-type evaluatorType="model-type" localName="Форма создания" />
+      		<form-type evaluatorType="node-type" localName="Форма редактирования" />
+		      <form-type id="datagrid" evaluatorType="node-type" localName="Таблица" />
+		      <form-layout localName="В одну колонку" />
+		      <form-layout localName="В две колонки" template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
+		      <form-layout localName="С вкладками" template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
     	</forms-info>
 
     </config>

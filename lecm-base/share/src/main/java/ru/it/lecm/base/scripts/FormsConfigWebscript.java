@@ -6,6 +6,7 @@
 package ru.it.lecm.base.scripts;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -73,26 +74,16 @@ public class FormsConfigWebscript extends DeclarativeWebScript {
 			throw new WebScriptException("FormsConfigWebscript was called with empty parametr");
 		}
 		TypeConfigElement typeInfo = formsConfigService.getTypeInfoById(typeId);
-		if(typeInfo == null) {
-			return "[]";
-		}
 		return jsonMapper.writeValueAsString(typeInfo.getControlsAsList());
 	}
 
 	private String executeGetFormsLayoutsAction() throws Exception {
-		Map<String, FormLayoutConfigElement> layouts = formsConfigService.getFullFormsLayoutsMap();
-		if(layouts == null) {
-			return "[]";
-		}
-		return jsonMapper.writeValueAsString(layouts.values());
+		List<FormLayoutConfigElement> layouts = formsConfigService.getFullFormsLayoutsMap();
+		return jsonMapper.writeValueAsString(layouts);
 	}
 
 	private String executeGetFormsTypesAction() throws Exception {
-		Map<String, FormTypeConfigElement> types = formsConfigService.getFullFormsTypesMap();
-		if(types == null) {
-			return "[]";
-		}
-		return jsonMapper.writeValueAsString(types.values());
-
+		List<FormTypeConfigElement> types = formsConfigService.getFullFormsTypesMap();
+		return jsonMapper.writeValueAsString(types);
 	}
 }

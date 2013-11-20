@@ -6,7 +6,9 @@
 
 package ru.it.lecm.base.formsConfig.elements.formsInfoElement;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.element.ConfigElementAdapter;
@@ -21,22 +23,22 @@ import ru.it.lecm.base.formsConfig.elements.formTypeElement.FormTypeConfigElemen
  */
 public class FormsInfoConfigElement extends ConfigElementAdapter{
 
-	private Map<String, FormTypeConfigElement> formTypeElements = new HashMap<String, FormTypeConfigElement>();
-	private Map<String, FormLayoutConfigElement> formLayoutElements = new HashMap<String, FormLayoutConfigElement>();
+	private List<FormTypeConfigElement> formTypeElements = new ArrayList<FormTypeConfigElement>();
+	private List<FormLayoutConfigElement> formLayoutElements = new ArrayList<FormLayoutConfigElement>();
 
-	public Map<String, FormTypeConfigElement> getFormTypeElements() {
+	public List<FormTypeConfigElement> getFormTypeElements() {
 		return formTypeElements;
 	}
 
-	public void setFormTypeElements(Map<String, FormTypeConfigElement> formTypeElements) {
+	public void setFormTypeElements(List<FormTypeConfigElement> formTypeElements) {
 		this.formTypeElements = formTypeElements;
 	}
 
-	public Map<String, FormLayoutConfigElement> getFormLayoutElements() {
+	public List<FormLayoutConfigElement> getFormLayoutElements() {
 		return formLayoutElements;
 	}
 
-	public void setFormLayoutElements(Map<String, FormLayoutConfigElement> formLayoutElements) {
+	public void setFormLayoutElements(List<FormLayoutConfigElement> formLayoutElements) {
 		this.formLayoutElements = formLayoutElements;
 	}
 
@@ -49,11 +51,11 @@ public class FormsInfoConfigElement extends ConfigElementAdapter{
 	}
 
 	public void addFormLayout(FormLayoutConfigElement el) {
-		this.formLayoutElements.put(el.getId(), el);
+		this.formLayoutElements.add(el);
 	}
 
 	public void addFormType(FormTypeConfigElement el) {
-		this.formTypeElements.put(el.getId(), el);
+		this.formTypeElements.add(el);
 	}
 
 	@Override
@@ -61,30 +63,17 @@ public class FormsInfoConfigElement extends ConfigElementAdapter{
 		FormsInfoConfigElement otherFormsInfo = (FormsInfoConfigElement) configElement;
 		FormsInfoConfigElement result = new FormsInfoConfigElement();
 
-		Map<String, FormTypeConfigElement> thisTypeElements = this.getFormTypeElements();
-		Map<String, FormLayoutConfigElement> thisLayoutElements = this.getFormLayoutElements();
+		List<FormTypeConfigElement> thisTypeElements = this.getFormTypeElements();
+		List<FormLayoutConfigElement> thisLayoutElements = this.getFormLayoutElements();
+
+		List<FormTypeConfigElement> otherTypeElements = otherFormsInfo.getFormTypeElements();
+		List<FormLayoutConfigElement> otherLayoutElements = otherFormsInfo.getFormLayoutElements();
+
+		thisTypeElements.addAll(otherTypeElements);
+		thisLayoutElements.addAll(otherLayoutElements);
 
 		result.setFormLayoutElements(thisLayoutElements);
 		result.setFormTypeElements(thisTypeElements);
-
-		Map<String, FormTypeConfigElement> otherTypeElements = otherFormsInfo.getFormTypeElements();
-		Map<String, FormLayoutConfigElement> otherLayoutElements = otherFormsInfo.getFormLayoutElements();
-
-		for (Map.Entry<String, FormLayoutConfigElement> entry : otherLayoutElements.entrySet()) {
-			String id = entry.getKey();
-			FormLayoutConfigElement layoutConfigElement = entry.getValue();
-			if(!thisLayoutElements.containsKey(id)) {
-				result.addFormLayout(layoutConfigElement);
-			}
-		}
-
-		for (Map.Entry<String, FormTypeConfigElement> entry : otherTypeElements.entrySet()) {
-			String id = entry.getKey();
-			FormTypeConfigElement typeConfigElement = entry.getValue();
-			if(!thisTypeElements.containsKey(id)) {
-				result.addFormType(typeConfigElement);
-			}
-		}
 
 		return result;
 	}
