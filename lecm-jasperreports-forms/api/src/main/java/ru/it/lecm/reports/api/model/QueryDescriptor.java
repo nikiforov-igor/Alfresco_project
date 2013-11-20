@@ -7,6 +7,9 @@ public interface QueryDescriptor extends Mnemonicable {
 	String getText();
 	void setText(String text);
 
+    String getSort();
+    void setSort(String sort);
+
 	int getOffset();
 	void setOffset(int value);
 

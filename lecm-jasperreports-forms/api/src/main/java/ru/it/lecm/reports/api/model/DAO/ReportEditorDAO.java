@@ -34,6 +34,9 @@ public interface ReportEditorDAO {
     final static public String PROP_B_REPORT_MULTIPLICITY = "lecm-rpeditor:reportObjectsMultiplicity";
 
     final static public String PROP_T_REPORT_QUERY = "lecm-rpeditor:reportQuery";
+
+    final static public String PROP_T_REPORT_QUERY_SORT = "lecm-rpeditor:reportQuerySort";
+
     final static public String PROP_I_REPORT_QUERY_OFFSET = "lecm-rpeditor:reportQueryOffset";
     final static public String PROP_I_REPORT_QUERY_LIMIT = "lecm-rpeditor:reportQueryLimit";
 

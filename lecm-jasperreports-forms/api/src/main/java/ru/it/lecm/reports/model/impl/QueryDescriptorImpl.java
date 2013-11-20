@@ -12,6 +12,7 @@ public class QueryDescriptorImpl extends MnemonicNamedItem implements QueryDescr
     private static final long serialVersionUID = 1L;
 
     private String text;
+    private String sort;
     private int offset, limit, pgSize;
     private boolean allVersions = true;
 
@@ -56,6 +57,16 @@ public class QueryDescriptorImpl extends MnemonicNamedItem implements QueryDescr
     @Override
     public void setText(String text) {
         this.text = text;
+    }
+
+    @Override
+    public String getSort() {
+        return this.sort;
+    }
+
+    @Override
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 
     @Override

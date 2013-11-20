@@ -176,6 +176,11 @@
                     <type>d:int</type>
                     <default>-1</default>
                 </property>
+                <property name="lecm-rpeditor:reportQuerySort">
+                    <title>Report Query Sorting</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
                 <property name="lecm-rpeditor:reportTypeAssoc-text-content">
                     <title>Report Type Assoc Text</title>
                     <type>d:text</type>

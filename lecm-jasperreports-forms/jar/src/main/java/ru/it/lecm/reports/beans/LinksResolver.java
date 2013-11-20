@@ -1,14 +1,15 @@
 package ru.it.lecm.reports.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.jasper.ProxySubstitudeBean;
+import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
 import ru.it.lecm.reports.utils.ArgsHelper;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class LinksResolver {
@@ -119,6 +120,51 @@ public class LinksResolver {
             }
         }
         return value;
+    }
+
+    public Iterator sortObjects(Iterator<ResultSetRow> iterator, String sorting, ReportDSContextImpl context) {
+        Iterator result = iterator;
+        if (sorting != null && !sorting.isEmpty() && iterator.hasNext()) {
+            String[] sortSettings = sorting.split(",");
+
+            TreeMap<MultiplySortObject, Set<org.alfresco.service.cmr.search.ResultSetRow>> treeMap = new TreeMap<MultiplySortObject, Set<ResultSetRow>>();
+
+            while (iterator.hasNext()) {
+                ResultSetRow next = iterator.next();
+                context.setCurNodeRef(next.getNodeRef());
+
+                MultiplySortObject sortedObj = new MultiplySortObject();
+
+                for (String sortSetting : sortSettings) {
+                    String[] sortArray = sortSetting.split("\\|");
+                    String columnCode = sortArray[0];
+                    boolean asc = true; //ASC
+                    if (sortArray.length == 2) {
+                        asc = sortArray[1].equalsIgnoreCase("ASC");
+                    }
+
+                    Object property = context.getPropertyValueByJRField(columnCode);
+                    String propertyStr = "";
+                    if (property != null) {
+                        propertyStr = property.toString();
+                    }
+                    sortedObj.addSort(propertyStr, asc);
+                }
+
+                if (treeMap.get(sortedObj) == null) {
+                    treeMap.put(sortedObj, new HashSet<ResultSetRow>());
+                }
+                treeMap.get(sortedObj).add(next);
+            }
+
+            List<ResultSetRow> list = new ArrayList<ResultSetRow>();
+            for (MultiplySortObject multiplySortObject : treeMap.keySet()) {
+                list.addAll(treeMap.get(multiplySortObject));
+            }
+            result = list.iterator();
+        }
+
+        return result;
     }
 }
 

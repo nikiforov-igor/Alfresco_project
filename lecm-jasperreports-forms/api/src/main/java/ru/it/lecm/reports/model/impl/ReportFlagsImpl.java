@@ -43,7 +43,17 @@ public class ReportFlagsImpl
 		queryDesc().setText(text);
 	}
 
-	@Override
+    @Override
+    public String getSort() {
+        return queryDesc().getSort();
+    }
+
+    @Override
+    public void setSort(String sort) {
+        queryDesc().setSort(sort);
+    }
+
+    @Override
 	public void setPreferedNodeType(String value) {
 		queryDesc().setPreferedNodeType(value);
 	}

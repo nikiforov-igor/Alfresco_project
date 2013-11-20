@@ -270,8 +270,15 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
             }
         }
 
+        Iterator<ResultSetRow> iterator = alfrescoResult.iterator();
+
+        final ReportDSContextImpl context = new ReportDSContextImpl();
+        fillContext(context);
+
+        iterator = resolver.sortObjects(iterator, alfrescoQuery.getSortSettings(), context);
+
         // Create a new data source
-        final AlfrescoJRDataSource dataSource = newJRDataSource(alfrescoResult.iterator());
+        final AlfrescoJRDataSource dataSource = newJRDataSource(iterator);
         fillContext(dataSource.getContext());
 
         return dataSource;

@@ -1,9 +1,5 @@
 package ru.it.lecm.reports.generators;
 
-import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.util.*;
-
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -11,15 +7,19 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.SubReportDescriptor;
 import ru.it.lecm.reports.api.model.SubReportDescriptor.ItemsFormatDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
+import ru.it.lecm.reports.beans.MultiplySortObject;
 import ru.it.lecm.reports.jasper.utils.MacrosHelper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.NodeUtils;
+
+import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.util.*;
 
 /**
  * Построитель для подотчётов на основе {@link SubReportDescriptor}.
@@ -93,6 +93,18 @@ public class SubreportBuilder {
 
     public SubReportDescriptor getSubreport() {
         return subreport;
+    }
+
+    public NodeService getNodeService() {
+        return (resolver == null) ? null : resolver.getServices().getServiceRegistry().getNodeService();
+    }
+
+    public NamespaceService getNameService() {
+        return (resolver == null) ? null : resolver.getServices().getServiceRegistry().getNamespaceService();
+    }
+
+    public SubstitudeBean getSubstService() {
+        return (resolver == null) ? null : resolver.getServices().getSubstitudeService();
     }
 
     /**
@@ -188,24 +200,13 @@ public class SubreportBuilder {
         return result;
     }
 
-    /**
-     * Из указанного узла Альфреско получить бин или отформатированную строку по атрибутам.
-     *
-     * @param subItemId  узел Альфреско
-     * @param subItemNum порядковый номер subItemId в родительском списке
-     *                   <br/> используется для присвоения свойству {SubReportDescriptor.BEAN_PROPNAME_COL_ROWNUM} бина.
-     * @return <li>если указан класс бина - создаётся бин и его свойствам
-     *         присваиваются значения согласно this.beanFields и this.beanLists,</li>
-     *         <li>иначе воз-ся строка, полученная форматированием атрибутов по {subreport.itemsFormat.formatString}.</li>
-     */
-    protected Object makeSubItem(NodeRef subItemId, String subItemNum) {
-        final Map<String, Object> args = gatherSubItemInfo(subItemId);
+    protected Object makeSubItem(Map<String, Object> args, int subItemNum) {
         if (args == null) {
             return null;
         }
 
         // автоматически вносим нумератор строки
-        args.put(SubReportDescriptor.BEAN_PROPNAME_COL_ROWNUM, subItemNum);
+        args.put(SubReportDescriptor.BEAN_PROPNAME_COL_ROWNUM, String.valueOf(subItemNum));
 
         if (subreport.isUsingFormat()) { /* форматирование всех свойств объекта в строку ... */
             final String resultStr = formatArgs(args);
@@ -362,23 +363,64 @@ public class SubreportBuilder {
 
         final Set<String> childTypes = subreport.getSourceListType();
 
-        int i = 0;
-        List<NodeRef> unsortedRefs = new ArrayList<NodeRef>();
+        List<Map<String, Object>> unsortedSubs = new ArrayList<Map<String, Object>>();
         for (NodeRef childId : children) {
             if (childTypes != null && !childTypes.isEmpty()) {
                 //фильтруем по типу
                 String currentType = getNodeService().getType(childId).toPrefixString(getNameService());
                 if (childTypes.contains(currentType)) {
-                    unsortedRefs.add(childId);
+                    unsortedSubs.add(gatherSubItemInfo(childId));
                 }
             } else {
-                unsortedRefs.add(childId);
+                unsortedSubs.add(gatherSubItemInfo(childId));
             }
         } // for
 
-        for (NodeRef unsortedRef : unsortedRefs) {
+        List<Map<String, Object>> sortedSubs;
+
+        String sortSettings = subreport.getFlags().getSort();
+        if (sortSettings != null && !sortSettings.isEmpty()) {
+            String[] sortSettingsArr = sortSettings.split(",");
+            TreeMap<MultiplySortObject, Set<Map<String, Object>>> treeMap = new TreeMap<MultiplySortObject, Set<Map<String, Object>>>();
+
+            for (Map<String, Object> current : unsortedSubs) {
+                MultiplySortObject sortedObj = new MultiplySortObject();
+
+                for (String sortSetting : sortSettingsArr) {
+                    String[] sortArray = sortSetting.split("\\|");
+                    String columnCode = sortArray[0];
+                    boolean asc = true; //ASC
+                    if (sortArray.length == 2) {
+                        asc = sortArray[1].equalsIgnoreCase("ASC");
+                    }
+
+                    Object property = current.get(columnCode);
+                    String propertyStr = "";
+                    if (property != null) {
+                        propertyStr = property.toString();
+                    }
+                    sortedObj.addSort(propertyStr, asc);
+                }
+
+                if (treeMap.get(sortedObj) == null) {
+                    treeMap.put(sortedObj, new HashSet<Map<String, Object>>());
+                }
+                treeMap.get(sortedObj).add(current);
+            }
+
+            List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+            for (MultiplySortObject multiplySortObject : treeMap.keySet()) {
+                list.addAll(treeMap.get(multiplySortObject));
+            }
+            sortedSubs = list;
+        } else {
+            sortedSubs = unsortedSubs;
+        }
+
+        int i = 0;
+        for (Map<String, Object> sortedSub : sortedSubs) {
             i++; // нумерация от единицы
-            final Object item = makeSubItem(unsortedRef, String.valueOf(i));
+            final Object item = makeSubItem(sortedSub, i);
             if (item != null) {
                 result.add(item);
             }
@@ -431,18 +473,5 @@ public class SubreportBuilder {
             }
         }
     }
-
-    private NodeService getNodeService() {
-        return (resolver == null) ? null : resolver.getServices().getServiceRegistry().getNodeService();
-    }
-
-    private NamespaceService getNameService() {
-        return (resolver == null) ? null : resolver.getServices().getServiceRegistry().getNamespaceService();
-    }
-
-    private SubstitudeBean getSubstService() {
-        return (resolver == null) ? null : resolver.getServices().getSubstitudeService();
-    }
-
 }
 

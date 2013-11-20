@@ -67,6 +67,8 @@ public class LucenePreparedQuery {
     // колонки со сложными условиями (доступ к данных через ассоциации)
     final private List<ColumnDescriptor> argsByLinks = new ArrayList<ColumnDescriptor>();
 
+    private String sortSettings = null;
+
     /**
      * колонки со сложными условиями (доступ к данным через ассоциации)
      */
@@ -101,6 +103,10 @@ public class LucenePreparedQuery {
 
     public void setAlfrescoSearch(SearchParameters search) {
         this.alfrescoSearch = search;
+    }
+
+    public String getSortSettings() {
+        return sortSettings;
     }
 
     @Override
@@ -160,7 +166,13 @@ public class LucenePreparedQuery {
             hasData = true;
         }
 
-        if (reportDescriptor.getFlags().getText() != null && !reportDescriptor.getFlags().getText().isEmpty()) {
+        String querySort = reportDescriptor.getFlags().getSort();
+        if (querySort != null && !querySort.isEmpty()) {
+            result.sortSettings = querySort;
+        }
+
+        String queryText = reportDescriptor.getFlags().getText();
+        if (queryText!= null && !queryText.isEmpty()) {
             bquery.emmit(hasData ? " AND " : "").emmit(reportDescriptor.getFlags().getText());
             hasData = true;
         }

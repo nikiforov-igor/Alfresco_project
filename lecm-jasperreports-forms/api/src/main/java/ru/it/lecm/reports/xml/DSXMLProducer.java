@@ -50,6 +50,7 @@ public class DSXMLProducer {
     public static final String XMLNODE_QUERY_LIMIT = "limit";
     public static final String XMLNODE_QUERY_PGSIZE = "pgsize";
     public static final String XMLNODE_QUERY_TEXT = "queryText";
+    public static final String XMLNODE_QUERY_SORT = "querySort";
     public static final String XMLNODE_QUERY_ALLVERSIONS = "allVersions";
     public static final String XMLNODE_QUERY_MULTIROW = "isMultiRow";
     public static final String XMLNODE_QUERY_ISCUSTOM = "isCustom";
@@ -92,6 +93,7 @@ public class DSXMLProducer {
     public static final String XMLNODE_LIST_SUBREPORTS = "subreports";
     public static final String XMLNODE_SUBREPORT = "subreport";
     public static final String XMLNODE_SUBLIST_SOURCE = "sublist.source";
+    public static final String XMLNODE_SUBLIST_SORT = "sublist.sort";
     public static final String XMLNODE_SUBLIST_TYPE = "sublist.type";
     public static final String XMLNODE_SUBLIST_ITEM = "sublist.item";
 
@@ -584,6 +586,10 @@ public class DSXMLProducer {
             XmlHelper.xmlCreateCDataNode(doc, result, XMLNODE_SUBLIST_TYPE, sourceTypeList.toString());
         }
 
+        if (subreport.getFlags() != null && subreport.getFlags().getSort() != null && !subreport.getFlags().getSort().isEmpty()) {
+            XmlHelper.xmlCreateCDataNode(doc, result, XMLNODE_SUBLIST_SORT, subreport.getFlags().getSort());
+        }
+
         // save <list.item beanClass="...">
 
         final Element listItem = doc.createElement(XMLNODE_SUBLIST_ITEM);
@@ -631,6 +637,9 @@ public class DSXMLProducer {
 
         final String types = XmlHelper.findNodeChildValue(srcNodeSubreport, XMLNODE_SUBLIST_TYPE);
         result.setSourceListType(Utils.trimmed(types));
+
+        final String sortSettings = XmlHelper.findNodeChildValue(srcNodeSubreport, XMLNODE_SUBLIST_SORT);
+        result.getFlags().setSort(Utils.trimmed(sortSettings));
 
         if (Utils.isStringEmpty(result.getSourceListExpression()))
             logger.warn(String.format("(!?) Subreport '%s' xml-configured with empty association", result.getMnem()));
@@ -1000,6 +1009,7 @@ public class DSXMLProducer {
         XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_PGSIZE, flags.getPgSize());
 
         XmlHelper.xmlCreateCDataNode(doc, result, XMLNODE_QUERY_TEXT, flags.getText());
+        XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_SORT, flags.getSort());
         XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_ALLVERSIONS, flags.isAllVersions());
 
         final String values = (flags.getSupportedNodeTypes() == null)
@@ -1034,6 +1044,8 @@ public class DSXMLProducer {
         result.setPgSize(XmlHelper.getNodeAsInt(curNode, XMLNODE_QUERY_PGSIZE, result.getPgSize()));
 
         result.setText(XmlHelper.getNodeAsText(curNode, XMLNODE_QUERY_TEXT, result.getText()));
+        result.setSort(XmlHelper.getNodeAsText(curNode, XMLNODE_QUERY_SORT, result.getSort()));
+
         result.setAllVersions(XmlHelper.getNodeAsBool(curNode, XMLNODE_QUERY_ALLVERSIONS, result.isAllVersions()));
         result.setPreferedNodeType(XmlHelper.getNodeAsText(curNode, XMLNODE_QUERY_PREFEREDTYPE
                 , (result.getSupportedNodeTypes() == null ? null : StringUtils.collectionToCommaDelimitedString(result.getSupportedNodeTypes())))

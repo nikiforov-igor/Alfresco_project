@@ -17,6 +17,7 @@
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
                     <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
                     <show id="lecm-rpeditor:reportQuery"/>
+                    <show id="lecm-rpeditor:reportQuerySort"/>
                     <show id="lecm-rpeditor:reportExtFlags"/>
                 </field-visibility>
                 <appearance>
@@ -73,6 +74,7 @@
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
                     <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
                     <show id="lecm-rpeditor:reportQuery"/>
+                    <show id="lecm-rpeditor:reportQuerySort"/>
                     <show id="lecm-rpeditor:reportExtFlags"/>
                 </field-visibility>
                 <appearance>

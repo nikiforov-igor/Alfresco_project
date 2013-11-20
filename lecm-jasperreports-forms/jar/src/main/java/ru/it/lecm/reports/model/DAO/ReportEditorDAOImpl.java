@@ -189,6 +189,9 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         result.setMnem(null);
 
         result.setText(getString(map, PROP_T_REPORT_QUERY));
+
+        result.setSort(getString(map, PROP_T_REPORT_QUERY_SORT));
+
         result.setPreferedNodeType(getString(map, PROP_T_REPORT_DOCTYPE));
         result.setMultiRow(getBool(map, PROP_B_REPORT_MULTIPLICITY, true));
 
