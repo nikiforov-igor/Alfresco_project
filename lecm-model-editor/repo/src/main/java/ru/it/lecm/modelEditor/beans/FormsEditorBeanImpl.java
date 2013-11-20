@@ -16,6 +16,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
+import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -380,7 +381,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 	private void writeAppearance(XMLStreamWriter xmlw, List<NodeRef> fields) throws XMLStreamException {
 		xmlw.writeStartElement("appearance");
-		List<String> sets = getSets(fields);
+		Map<String, List<String>> sets = getSets(fields);
 
 		writeSets(xmlw, sets);
 
@@ -395,8 +396,25 @@ public class FormsEditorBeanImpl extends BaseBean {
 				xmlw.writeAttribute("label", attrLabel);
 
 				String tab = (String) nodeService.getProperty(field, PROP_ATTR_TAB);
-				if (tab != null && tab.trim().length() > 0 && sets.contains(tab)) {
-					xmlw.writeAttribute("set", "tab" + sets.indexOf(tab));
+				if (tab != null && tab.trim().length() == 0) {
+					tab = null;
+				}
+
+				List<String> tabSets = sets.get(tab);
+
+				int tabIndex = 0;
+				for (String temp: sets.keySet()) {
+					if ((temp == null && tab == null) || (temp != null && tab != null && temp.equals(tab))) {
+						break;
+					}
+					tabIndex++;
+				}
+
+				String set = (String) nodeService.getProperty(field, PROP_ATTR_SET);
+				if (set != null && set.trim().length() > 0) {
+					xmlw.writeAttribute("set", "tab" + tabIndex + "set" + tabSets.indexOf(set));
+				} else if (tab != null) {
+					xmlw.writeAttribute("set", "tab" + tabIndex);
 				}
 
 			    xmlw.writeEndElement();
@@ -405,25 +423,52 @@ public class FormsEditorBeanImpl extends BaseBean {
 		xmlw.writeEndElement();
 	}
 
-	private void writeSets(XMLStreamWriter xmlw, List<String> sets) throws XMLStreamException {
+	private void writeSets(XMLStreamWriter xmlw, Map<String, List<String>> sets) throws XMLStreamException {
 		if (sets != null) {
-			for (int i = 0; i < sets.size(); i++) {
-				xmlw.writeStartElement("set");
-				xmlw.writeAttribute("id", "tab" + i);
-				xmlw.writeAttribute("label", sets.get(i));
-				xmlw.writeEndElement();
+			int tabIndex = 0;
+			for (String tab: sets.keySet()) {
+				List<String> tabSets = sets.get(tab);
+
+				if (tab != null) {
+					xmlw.writeStartElement("set");
+					xmlw.writeAttribute("id", "tab" + tabIndex);
+					xmlw.writeAttribute("label", tab);
+					xmlw.writeEndElement();
+				}
+
+				for (int i = 0; i < tabSets.size(); i++) {
+					xmlw.writeStartElement("set");
+					xmlw.writeAttribute("id", "tab" + tabIndex + "set" + i);
+					xmlw.writeAttribute("label", tabSets.get(i));
+					if (tab != null) {
+						xmlw.writeAttribute("parent", "tab" + tabIndex);
+					}
+					xmlw.writeEndElement();
+				}
+
+				tabIndex++;
 			}
 		}
 	}
 
-	private List<String> getSets(List<NodeRef> fields) {
-		List<String> result = new ArrayList<String>();
-//		Map<String, String> result = new LinkedHashMap<String, String>();
-//		result.put(null, null);
+	private Map<String, List<String>> getSets(List<NodeRef> fields) {
+		Map<String, List<String>> result = new LinkedHashMap<String, List<String>>();
+		result.put(null, new ArrayList<String>());
 		for (NodeRef field: fields) {
 			String tab = (String) nodeService.getProperty(field, PROP_ATTR_TAB);
-			if (tab != null && tab.trim().length() > 0 && !result.contains(tab)) {
-				result.add(tab);
+			if (tab != null && tab.trim().length() == 0) {
+				tab = null;
+			}
+			if (!result.containsKey(tab)) {
+				result.put(tab, new ArrayList<String>());
+			}
+
+			String set = (String) nodeService.getProperty(field, PROP_ATTR_SET);
+			if (set != null && set.trim().length() > 0) {
+				List<String> tabSets = result.get(tab);
+				if (!tabSets.contains(set)) {
+					tabSets.add(set);
+				}
 			}
 		}
 		return result;
