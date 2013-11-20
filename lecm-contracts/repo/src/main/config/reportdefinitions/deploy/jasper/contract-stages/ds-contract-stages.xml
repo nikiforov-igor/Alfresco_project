@@ -67,7 +67,7 @@
     </fields>
     <subreports>
         <subreport destColumnName="stages" name="stages">
-            <sublist.source><![CDATA[{lecm-contract-table-structure:stages-assoc/cm:contains/cm:name}]]></sublist.source>
+            <sublist.source><![CDATA[{lecm-contract-table-structure:stages-assoc/cm:contains/}]]></sublist.source>
             <sublist.type><![CDATA[lecm-contract-table-structure:stage]]></sublist.type>
             <sublist.item beanclass="">
                 <map>

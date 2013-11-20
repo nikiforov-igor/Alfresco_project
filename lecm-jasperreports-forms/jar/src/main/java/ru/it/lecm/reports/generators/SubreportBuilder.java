@@ -2,10 +2,7 @@ package ru.it.lecm.reports.generators;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -196,10 +193,10 @@ public class SubreportBuilder {
      *
      * @param subItemId  узел Альфреско
      * @param subItemNum порядковый номер subItemId в родительском списке
-     *                   <br/> используется для присвоения свойству {@link SubReportDescriptor.BEAN_PROPNAME_COL_ROWNUM} бина.
+     *                   <br/> используется для присвоения свойству {SubReportDescriptor.BEAN_PROPNAME_COL_ROWNUM} бина.
      * @return <li>если указан класс бина - создаётся бин и его свойствам
      *         присваиваются значения согласно this.beanFields и this.beanLists,</li>
-     *         <li>иначе воз-ся строка, полученная форматированием атрибутов по {@link #subreport.itemsFormat.formatString}.</li>
+     *         <li>иначе воз-ся строка, полученная форматированием атрибутов по {subreport.itemsFormat.formatString}.</li>
      */
     protected Object makeSubItem(NodeRef subItemId, String subItemNum) {
         final Map<String, Object> args = gatherSubItemInfo(subItemId);
@@ -270,7 +267,7 @@ public class SubreportBuilder {
      *
      * @param subItemId NodeRef
      * @return <b>ключ</b> = название колонки или свойства,
-     *         <br/><b>значение</b> = соот-щий объект, полученный по ссылке для колонки согласно {@link #subreport.subItemsSourceMap}
+     *         <br/><b>значение</b> = соот-щий объект, полученный по ссылке для колонки согласно {subItemsSourceMap}
      */
     protected Map<String, Object> gatherSubItemInfo(NodeRef subItemId) {
         PropertyCheck.mandatory(this, "resolver", resolver);
@@ -298,7 +295,7 @@ public class SubreportBuilder {
                 for (String sourceLink : sourceLinks) {
                     sourceLink = sourceLink.trim();
                     if (sourceLink.length() > 0) {
-                        final Object value = NodeUtils.getByLink(sourceLink, subItemId, props, resolver, logger, propName);
+                        final Object value = NodeUtils.getByLink(sourceLink, subItemId, props, resolver);
                         if (value != null && !((value instanceof String) && ((String) value).length() == 0)) {
                             // found non-null / not-empty
                             fldValue = value;
@@ -322,7 +319,7 @@ public class SubreportBuilder {
                 if (children != null && !children.isEmpty()) {
                     final List<String> list = new ArrayList<String>();
                     for (NodeRef childId : children) {
-                        final Object val = NodeUtils.getByLink(src.dataPath, childId, resolver, logger, propName);
+                        final Object val = NodeUtils.getByLink(src.dataPath, childId, resolver);
                         if (val != null) {
                             list.add(Utils.coalesce(val, ""));
                         }
@@ -363,23 +360,29 @@ public class SubreportBuilder {
 		 */
         final List<Object> result = new ArrayList<Object>();
 
-        final String childType = subreport.getSourceListType();
+        final Set<String> childTypes = subreport.getSourceListType();
 
         int i = 0;
+        List<NodeRef> unsortedRefs = new ArrayList<NodeRef>();
         for (NodeRef childId : children) {
-            if (childType != null && !childType.isEmpty()) {
+            if (childTypes != null && !childTypes.isEmpty()) {
                 //фильтруем по типу
                 String currentType = getNodeService().getType(childId).toPrefixString(getNameService());
-                if (!currentType.equals(childType)) {
-                    continue;
+                if (childTypes.contains(currentType)) {
+                    unsortedRefs.add(childId);
                 }
+            } else {
+                unsortedRefs.add(childId);
             }
+        } // for
+
+        for (NodeRef unsortedRef : unsortedRefs) {
             i++; // нумерация от единицы
-            final Object item = makeSubItem(childId, String.valueOf(i));
+            final Object item = makeSubItem(unsortedRef, String.valueOf(i));
             if (item != null) {
                 result.add(item);
             }
-        } // for
+        }
 
         if (usingFormat) { // форматирование всех вложенных в одну строку ...
             return Utils.getAsString(result, subreport.getItemsFormat().getItemsDelimiter());
@@ -405,8 +408,6 @@ public class SubreportBuilder {
          * Присвоить ссылку вида:
          * "{ассоциация1/...путь...}"
          * скобки в начале и в конце необязательны
-         *
-         * @param svalue
          */
         public void parseSourceLink(String svalue) {
             final int ibeg = (svalue.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL))

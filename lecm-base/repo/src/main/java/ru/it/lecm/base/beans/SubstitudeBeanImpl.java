@@ -99,6 +99,40 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         NodeRef objectTypeRef = getObjectTypeRef(object);
         return getTemplateStringByType(objectTypeRef, forList, returnDefaulIfNull);
     }
+
+    @Override
+    public Object getNodeFieldByFormat(NodeRef node, String formatString) {
+        return getNodeFieldByFormat(node, formatString, null, null);
+    }
+
+    @Override
+    public Object getNodeFieldByFormat(final NodeRef node, final String formatString, final String dateFormat, final Integer timeZoneOffset) {
+        final AuthenticationUtil.RunAsWork<Object> substitudeString = new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                if (node == null) {
+                    return null;
+                }
+                String dFormat = dateFormat;
+                if (dFormat == null) {
+                    dFormat = getDateFormat();
+                }
+                String result = formatString;
+                List<String> nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
+                if (nameParams.size() > 1) { // сложная строка (не одно поле), значит у нас на выходе будет строка
+                    for (String param : nameParams) {
+                        result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param, dFormat, timeZoneOffset).toString());
+                    }
+                } else if (nameParams.size() == 1) {
+                    return getSubstitudeField(node, nameParams.get(0), dFormat, timeZoneOffset);
+                }
+
+                return result;
+            }
+        };
+        return AuthenticationUtil.runAsSystem(substitudeString);
+    }
+
     /**
 	 * Получение значения выражения для элемента.
 	 * Элементы в выражениях разделяются специальными символами (@see SPLIT_TRANSITIONS_SYMBOL)

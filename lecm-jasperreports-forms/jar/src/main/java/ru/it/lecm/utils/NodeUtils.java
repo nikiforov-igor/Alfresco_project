@@ -1,10 +1,5 @@
 package ru.it.lecm.utils;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -14,8 +9,14 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.slf4j.Logger;
-
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.beans.LinksResolver;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Утилитки для работы с узлами.
@@ -23,6 +24,8 @@ import ru.it.lecm.reports.beans.LinksResolver;
  * @author rabdullin
  */
 public class NodeUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(NodeUtils.class);
 
     private NodeUtils() {
     }
@@ -174,23 +177,14 @@ public class NodeUtils {
      * <br/>Если значение НЕ содержит "{}", то предполагается что это обычный
      * атрибут, иначе - форматированный для SubstitudeService
      * <br/> Пример:
-     * <br/		final Object value = getByLink(sourceLink, subItemId, props, nodeService, nameService, substService, propName);
      *
      * @param sourceLink String
      * @param docId      NodeRef
      * @param props      список свойств объекта, если null, то свойство будет загружаться непосредственно
      * @param resolver   LinksResolver
-     * @param logger     для журналирования, м.б. null
-     * @param info       пояснения по получемому значению для журналирования ошибок
      * @return полученное значение
      */
-    public static Object getByLink(String sourceLink
-            , NodeRef docId
-            , Map<QName, Serializable> props
-            , LinksResolver resolver
-            , Logger logger
-            , String info) {
-
+    public static Object getByLink(String sourceLink, NodeRef docId, Map<QName, Serializable> props, LinksResolver resolver) {
         if (sourceLink == null) {
             return null;
         }
@@ -200,21 +194,29 @@ public class NodeUtils {
             return null;
         }
 
+        final NodeService nodeService = resolver.getServices().getServiceRegistry().getNodeService();
+        final NamespaceService ns = resolver.getServices().getServiceRegistry().getNamespaceService();
+
         Object value;
         try {
             if (resolver.isSubstCalcExpr(sourceLink)) {
                 // форматируем значение вида "{a/b/c...}"
-                value = resolver.evaluateLinkExpr(docId, sourceLink);
+                Map<String, Object> propsMap = new HashMap<String, Object>();
+                if (props != null) {
+                    for (QName qName : props.keySet()) {
+                        propsMap.put(qName.toPrefixString(ns), props.get(qName));
+                    }
+                }
+                value = resolver.evaluateLinkExpr(docId, sourceLink, null, propsMap);
             } else { // простое значение выбираем в свойствах
-                final NodeService nodeService = resolver.getServices().getServiceRegistry().getNodeService();
-                final NamespaceService ns = resolver.getServices().getServiceRegistry().getNamespaceService();
+
                 final QName qname = QName.createQName(sourceLink, ns);
                 value = (props != null) ? props.get(qname) : nodeService.getProperty(docId, qname);
             }
         } catch (Throwable ex) {
             if (logger != null) {
-                final String msg = String.format("Ignoring problem getting property '%s'\n\t for docId %s \n\t by link '%s' -> ignored \n\t %s"
-                        , info, docId, sourceLink, ex.getMessage());
+                final String msg = String.format("Ignoring problem getting property \n\t for docId %s \n\t by link '%s' -> ignored \n\t %s"
+                        , docId, sourceLink, ex.getMessage());
                 logger.error(msg, ex);
             }
             value = null;
@@ -222,11 +224,7 @@ public class NodeUtils {
         return value;
     }
 
-    public static Object getByLink(String sourceLink
-            , NodeRef docId
-            , LinksResolver resolver
-            , Logger logger
-            , String info) {
-        return getByLink(sourceLink, docId, null, resolver, logger, info);
+    public static Object getByLink(String sourceLink, NodeRef docId, LinksResolver resolver) {
+        return getByLink(sourceLink, docId, null, resolver);
     }
 }

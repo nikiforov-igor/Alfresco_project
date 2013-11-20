@@ -140,7 +140,7 @@ public class ParameterMapper {
         // аналогично нужно гарантировать колонку с TYPE, когда есть такой параметр или тип задан явно ...
         if (args.containsKey(DataSourceDescriptor.COLNAME_TYPE)) {
             ensureDataColumn(reportDesc.getDsDescriptor(), args.get(DataSourceDescriptor.COLNAME_TYPE), DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.STRING);
-        } else if (reportDesc.getFlags() != null && !Utils.isStringEmpty(reportDesc.getFlags().getPreferedNodeType())) {
+        } else if (reportDesc.getFlags() != null && !reportDesc.getFlags().getSupportedNodeTypes().isEmpty()) {
             ensureDataColumn(reportDesc.getDsDescriptor()
                     , StringUtils.collectionToCommaDelimitedString(reportDesc.getFlags().getSupportedNodeTypes())
                     , DataSourceDescriptor.COLNAME_TYPE

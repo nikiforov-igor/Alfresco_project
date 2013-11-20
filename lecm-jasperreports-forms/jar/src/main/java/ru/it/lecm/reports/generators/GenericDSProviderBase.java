@@ -288,7 +288,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
             context.setRegistryService(getServices().getServiceRegistry());
             context.setJrSimpleProps(getColumnNames(this.alfrescoQuery.argsByProps()));
             context.setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
-
+            context.setResolver(this.resolver);
             // фильтр данных ...
             context.setFilter(newDataFilter());
         }

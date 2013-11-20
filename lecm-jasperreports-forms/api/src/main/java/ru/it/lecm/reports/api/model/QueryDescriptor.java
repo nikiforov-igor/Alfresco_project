@@ -20,15 +20,6 @@ public interface QueryDescriptor extends Mnemonicable {
 	void setAllVersions(boolean value);
 
 	/**
-	 * (необ) Предпочитаемый тип документов в выборке
-	 * <br/> Имеет вид qname-ссылки на тип, например: "lecm-contract:document"
-	 * <br/> см также {@link #getSupportedNodeTypes} - его первый элемент является
-	 * результатом для preferedNodeType
-	 * @return
-	 */
-	String getPreferedNodeType();
-
-	/**
 	 * Можно присвоить сразу список - несколько значений через запятую или тчк-с-з.
 	 * Фактически вызовет {@link #setSupportedNodeTypes}.
 	 * @param value

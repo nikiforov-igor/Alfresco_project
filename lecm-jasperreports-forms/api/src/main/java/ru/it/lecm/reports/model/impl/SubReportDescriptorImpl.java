@@ -4,15 +4,16 @@ import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.SubReportDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 
-import java.util.Map;
+import java.util.*;
 
 public class SubReportDescriptorImpl extends ReportDescriptorImpl implements SubReportDescriptor {
     private static final long serialVersionUID = 1L;
 
     private String sourceListExpression,
             destColumnName,
-            beanClassName,
-            sourceListType;
+            beanClassName;
+
+    private Set<String> sourceTypes = new HashSet<String>();
 
     private ItemsFormatDescriptor itemsFormat;
     private Map<String, String> subItemsSourceMap;
@@ -64,13 +65,25 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl implements Sub
     }
 
     @Override
-    public String getSourceListType() {
-        return sourceListType;
+    public Set<String> getSourceListType() {
+        return sourceTypes;
     }
 
     @Override
-    public void setSourceListType(String type) {
-        this.sourceListType = type;
+    public void setSourceListType(Set<String> types) {
+        for (String type : types) {
+            if (type != null && !type.isEmpty()) {
+                this.sourceTypes.add(type);
+            }
+        }
+    }
+
+    public void setSourceListType(String types) {
+        if (types != null && !types.isEmpty()) {
+            String[] typesArray = types.split(",");
+            List<String> typesList = Arrays.asList(typesArray);
+            setSourceListType(new HashSet<String>(typesList));
+        }
     }
 
     @Override

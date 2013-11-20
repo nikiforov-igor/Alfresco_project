@@ -572,8 +572,16 @@ public class DSXMLProducer {
         // save <list.source> as CDATA ... </>
         XmlHelper.xmlCreateCDataNode(doc, result, XMLNODE_SUBLIST_SOURCE, subreport.getSourceListExpression());
 
-        if (subreport.getSourceListType() != null) {
-            XmlHelper.xmlCreateCDataNode(doc, result, XMLNODE_SUBLIST_TYPE, subreport.getSourceListType());
+        if (subreport.getSourceListType() != null && !subreport.getSourceListType().isEmpty()) {
+            StringBuilder sourceTypeList = new StringBuilder();
+            for (String type : subreport.getSourceListType()) {
+                sourceTypeList.append(type).append(",");
+            }
+            if (sourceTypeList.length() > 1) {
+                sourceTypeList.delete(sourceTypeList.length() - 1, sourceTypeList.length());
+            }
+
+            XmlHelper.xmlCreateCDataNode(doc, result, XMLNODE_SUBLIST_TYPE, sourceTypeList.toString());
         }
 
         // save <list.item beanClass="...">
@@ -621,8 +629,8 @@ public class DSXMLProducer {
         final String source = XmlHelper.findNodeChildValue(srcNodeSubreport, XMLNODE_SUBLIST_SOURCE);
         result.setSourceListExpression(Utils.trimmed(source));
 
-        final String type = XmlHelper.findNodeChildValue(srcNodeSubreport, XMLNODE_SUBLIST_TYPE);
-        result.setSourceListType(Utils.trimmed(type));
+        final String types = XmlHelper.findNodeChildValue(srcNodeSubreport, XMLNODE_SUBLIST_TYPE);
+        result.setSourceListType(Utils.trimmed(types));
 
         if (Utils.isStringEmpty(result.getSourceListExpression()))
             logger.warn(String.format("(!?) Subreport '%s' xml-configured with empty association", result.getMnem()));

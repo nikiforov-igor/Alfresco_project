@@ -7,16 +7,14 @@ import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.ReportDSContext;
-import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
-import ru.it.lecm.reports.utils.ArgsHelper;
+import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.utils.Utils;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ReportDSContextImpl implements ReportDSContext {
     private ServiceRegistry serviceRegistry;
+
     final private ProxySubstitudeBean substitudeService = new ProxySubstitudeBean();
 
     private DataFilter filter; // может быть NULL
@@ -28,6 +26,8 @@ public class ReportDSContextImpl implements ReportDSContext {
     private NodeRef curNodeRef;
     private Iterator<ResultSetRow> rsIter;
     private ResultSetRow rsRow;
+
+    private LinksResolver resolver = new LinksResolver();
 
     public void clear() {
         curProps = null;
@@ -167,176 +167,16 @@ public class ReportDSContextImpl implements ReportDSContext {
         // получаем нативное название данных
         final DataFieldColumn fld = metaFields.get(reportColumnName);
         final String fldAlfName = (fld != null && fld.getValueLink() != null) ? fld.getValueLink() : reportColumnName;
+        final String fldJavaClass = (fld != null && fld.getValueClass() != null) ? fld.getValueClassName() : null;
 
-		/* если название имеется среди готовых свойств (прогруженных или вычисленных заранее) ... */
-        if (curProps != null) {
-            if (curProps.containsKey(fldAlfName)) {
-                return curProps.get(fldAlfName);
-            }
-        }
-
-        // (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
-        // (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
-        Object value;
-        if (isCalcField(fldAlfName)) {
-            value = substitudeService.formatNodeTitle(curNodeRef, fldAlfName);
-        } else {
-            value = fldAlfName;
-        }
-
-        if (value == null) {
-            return null;
-        }
-
-        // типизация value согласно описанию ...
-        if ((fld != null) && (fld.getValueClass() != null)) {
-            // учёт реального типа данных ...
-            final JavaDataTypeImpl.SupportedTypes type = JavaDataTypeImpl.SupportedTypes.findType(fld.getValueClassName());
-            if (type == null) {
-                // type may be Map/List or any other ...
-                return value;
-            } else {
-                final String strValue = value.toString();
-                switch (type) {
-                    case DATE: {
-                        value = (strValue.isEmpty()) ? null : ArgsHelper.tryMakeDate(strValue, null);
-                        break;
-                    }
-                    case BOOL: {
-                        value = Boolean.valueOf(strValue);
-                        break;
-                    }
-                    case FLOAT: {
-                        value = (strValue.isEmpty()) ? null : Float.valueOf(strValue);
-                        break;
-                    }
-                    case INTEGER: {
-                        value = (strValue.isEmpty()) ? null : Integer.valueOf(strValue);
-                        break;
-                    }
-                    default: { // case STRING or other:
-                        value = strValue;
-                        break;
-                    }
-                } // switch
-            }
-        }
-
-        return value;
+        return getResolver().evaluateLinkExpr(curNodeRef, fldAlfName, fldJavaClass, curProps);
     }
 
-    /**
-     * ProxySubstitudeBean cейчас отрабатывет расширеные выражения для функции
-     * formatNodeTitle, в дальнейшем можно добавить макросы, встроенные
-     * функции и пр.
-     * Расширеный синтаксис выражений маркируется парами "{{" в начале строки и
-     * закрывающей "}}", вместо обычных "{" и "}".
-     *
-     * @author rabdullin
-     */
-    private class ProxySubstitudeBean implements SubstitudeBean {
+    public LinksResolver getResolver() {
+        return resolver;
+    }
 
-        /**
-         * префикс расширенного синтаксиса
-         * предполагается что строка вся целиком будет окружена: "{{ ... }}"
-         */
-        final public static String XSYNTAX_MARKER_OPEN = "{{";
-        final public static String XSYNTAX_MARKER_CLOSE = "}}";
-        /**
-         * префикс доп функции: сейчас используется пока только для @AUTHOR.REF
-         */
-        final public static String PREFIX_XFUNC = "@";
-
-        final public static String AUTHORREF = AUTHOR + ".REF";
-
-        SubstitudeBean realBean; // имплементация нативного бина, который организует "хождение" по ссылкам
-
-        public ProxySubstitudeBean() {
-            super();
-        }
-
-        public void setRealBean(SubstitudeBean realBean) {
-            this.realBean = realBean;
-        }
-
-        public String getObjectDescription(NodeRef object) {
-            return (realBean == null) ? null : realBean.getObjectDescription(object);
-        }
-
-        public String getTemplateStringForObject(NodeRef object) {
-            return (realBean == null) ? null : realBean.getTemplateStringForObject(object);
-        }
-
-        @Override
-        public String getTemplateStringForObject(NodeRef object, boolean forList, boolean returnDefaulIfNull) {
-            return (realBean == null) ? null : realBean.getTemplateStringForObject(object, forList, returnDefaulIfNull);
-        }
-
-        public String getTemplateStringForObject(NodeRef object, boolean forList) {
-            return (realBean == null) ? null : realBean.getTemplateStringForObject(object, forList);
-        }
-
-        public List<NodeRef> getObjectsByTitle(NodeRef object, String formatTitle) {
-            return (realBean == null) ? null : realBean.getObjectsByTitle(object, formatTitle);
-        }
-
-        public String formatNodeTitle(NodeRef node, String fmt, String dateFormat, Integer timeZoneOffset) {
-            if (fmt == null) {
-                return null;
-            }
-            if (isExtendedSyntax(fmt)) {
-                return extendedFormatNodeTitle(node, fmt);
-            }
-            return (realBean == null) ? null : realBean.formatNodeTitle(node, fmt, dateFormat, timeZoneOffset);
-        }
-
-        @Override
-        public String formatNodeTitle(NodeRef node, String formatString) {
-            return formatNodeTitle(node, formatString, null, null);
-        }
-
-        protected boolean isExtendedSyntax(String fmt) {
-            return (fmt != null) && fmt.contains(XSYNTAX_MARKER_OPEN) && fmt.contains(XSYNTAX_MARKER_CLOSE);
-        }
-
-        @Override
-        public List<NodeRef> getObjectByPseudoProp(NodeRef object, String psedudoProp) {
-            return (realBean == null) ? null : realBean.getObjectByPseudoProp(object, psedudoProp);
-        }
-
-        /**
-         * Функция расширенной обработки. Вызывается когда выражение начинается
-         * с двойной фигурной скобки. Здесь сейчас отрабатывает дополнительно
-         * только @AUTHOR.REF, чтобы выполнить получение автора и применить к
-         * нему отсавшуюся часть выражения.
-         */
-        protected String extendedFormatNodeTitle(final NodeRef node, String fmt) {
-            // NOTE: here new features can be implemented
-            String begAuthorRef = "\\{\\{@AUTHOR.*?}}";
-            Pattern authorPattern = Pattern.compile(begAuthorRef);
-            //создаем Matcher
-            Matcher m = authorPattern.matcher(fmt);
-            NodeRef authorNode = null;
-            while (m.find()) {
-                // замена node на узел Автора
-                if (authorNode == null) {
-                    final List<NodeRef> list = realBean.getObjectByPseudoProp(node, AUTHOR);
-                    authorNode = (list != null && !list.isEmpty()) ? list.get(0) : null;
-                }
-                String groupText = m.group();
-                int startPos = "{{@AUTHOR".length();
-                if (groupText.charAt(startPos) == '/') {
-                    startPos++; // если после "@AUTHOR" есть символ '/' его тоже убираем
-                }
-                final String shortFmt = "{" + groupText.substring(startPos, groupText.length() - 1);
-                if (shortFmt.equals("{}")) {
-                    fmt = fmt.replace(groupText, realBean.getObjectDescription(authorNode));
-                } else {
-                    fmt = fmt.replace(groupText, realBean.formatNodeTitle(authorNode, shortFmt));
-                }
-
-            }
-            return realBean.formatNodeTitle(node, fmt);
-        }
+    public void setResolver(LinksResolver resolver) {
+        this.resolver = resolver;
     }
 }

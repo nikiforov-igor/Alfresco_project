@@ -109,4 +109,8 @@ public interface SubstitudeBean {
 	public List<NodeRef> getObjectByPseudoProp(NodeRef object, final String psedudoProp);
 
     String getTemplateStringForObject(NodeRef object, boolean forList, boolean returnDefaulIfNull);
+
+    public Object getNodeFieldByFormat(NodeRef node, String formatString);
+
+    public Object getNodeFieldByFormat(NodeRef node, String formatString, String dateFormat, Integer timeZoneOffset);
 }

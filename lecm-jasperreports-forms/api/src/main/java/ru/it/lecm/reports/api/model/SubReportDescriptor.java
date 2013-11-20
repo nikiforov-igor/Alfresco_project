@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.api.model;
 
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -48,8 +49,8 @@ public interface SubReportDescriptor extends ReportDescriptor
      * @return тип вложенных объектов для подотчёта.
      * <br/> Это QName в короткой форме
      */
-    String getSourceListType();
-    void setSourceListType(String type);
+    Set<String> getSourceListType();
+    void setSourceListType(Set<String> types);
 
 	/** 
 	 * Имя целевой колонки в основном НД. 

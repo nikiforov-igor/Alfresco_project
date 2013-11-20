@@ -44,11 +44,6 @@ public class ReportFlagsImpl
 	}
 
 	@Override
-	public String getPreferedNodeType() {
-		return queryDesc().getPreferedNodeType();
-	}
-
-	@Override
 	public void setPreferedNodeType(String value) {
 		queryDesc().setPreferedNodeType(value);
 	}

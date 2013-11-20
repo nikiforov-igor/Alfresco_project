@@ -18,12 +18,6 @@ public class QueryDescriptorImpl extends MnemonicNamedItem implements QueryDescr
     private List<String> supportedNodeTypes;
 
     @Override
-    public String getPreferedNodeType() {
-        // первый элемент из supportedNodeTypes
-        return (supportedNodeTypes == null || supportedNodeTypes.isEmpty()) ? null : supportedNodeTypes.get(0);
-    }
-
-    @Override
     public void setPreferedNodeType(String value) {
         List<String> newSupportedList = null;
         if (value != null && value.length() > 0) {
@@ -112,16 +106,8 @@ public class QueryDescriptorImpl extends MnemonicNamedItem implements QueryDescr
             return true;
         }
 
-        final boolean isInnerEmpty = Utils.isStringEmpty(getPreferedNodeType());
-        if (isInnerEmpty) {
-            // если this-тип не заполнен -> считаем что он подходит к любому внутреннему
-            return true;
-        }
-
-        // здесь оба не пустые
-
         if (getSupportedNodeTypes() == null) {
-            return false;
+            return true;
         }
 
         for (String s : getSupportedNodeTypes()) {
@@ -193,7 +179,6 @@ public class QueryDescriptorImpl extends MnemonicNamedItem implements QueryDescr
         builder.append(", offset ").append(offset);
         builder.append(", limit ").append(limit);
         builder.append(", pgSize ").append(pgSize);
-        builder.append(", preferedNodeType ").append(getPreferedNodeType());
         builder.append(", supportedNodeTypes ").append(
                 getSupportedNodeTypes() == null
                         ? "NULL"

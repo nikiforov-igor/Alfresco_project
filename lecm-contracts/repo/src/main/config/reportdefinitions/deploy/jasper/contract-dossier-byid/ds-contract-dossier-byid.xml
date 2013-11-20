@@ -36,7 +36,7 @@
 		<limit>-1</limit>
 		<pgsize>-1</pgsize>
 		<allVersions>true</allVersions>
-		<preferedType>{lecm-contract:document}</preferedType>
+		<preferedType>lecm-contract:document</preferedType>
 		<isMultiRow>false</isMultiRow>
 		<isCustom>false</isCustom>
 		<queryText><![CDATA[]]></queryText>

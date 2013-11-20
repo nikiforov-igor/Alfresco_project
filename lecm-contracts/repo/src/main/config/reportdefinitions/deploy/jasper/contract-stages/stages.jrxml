@@ -22,7 +22,7 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="col_Number" class="java.lang.String"/>
+	<field name="col_Number" class="java.lang.Integer"/>
 	<field name="col_Title" class="java.lang.String"/>
 	<field name="col_Status" class="java.lang.String"/>
 	<field name="col_Sum" class="java.lang.String"/>
