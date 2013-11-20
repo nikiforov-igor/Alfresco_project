@@ -18,6 +18,9 @@
 					<show id="lecm-forms-editor:form-attributes"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-forms-editor:form-template">
+						<control template="/ru/it/lecm/documentforms/controls/form-layout-control.ftl"/>
+					</field>
 					<field id="lecm-forms-editor:form-attributes">
 						<control template="/ru/it/lecm/documentforms/controls/attribute-table-control.ftl">
 							<control-param name="height">100</control-param>
@@ -37,6 +40,11 @@
 					<show id="lecm-forms-editor:form-id"/>
 					<show id="lecm-forms-editor:form-template"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-forms-editor:form-template">
+						<control template="/ru/it/lecm/documentforms/controls/form-layout-control.ftl"/>
+					</field>
+				</appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>

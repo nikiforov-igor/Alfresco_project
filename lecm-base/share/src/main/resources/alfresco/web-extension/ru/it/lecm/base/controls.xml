@@ -139,7 +139,7 @@
                     <param id="showCreateNewButton">false</param>
 	            </control>
 	        </field-type>
-------
+
 	        <field-type id="association:lecm-doc-dic:subjects" localName="Тематика справочника">
 	            <control id="association:lecm-doc-dic:subjects-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор тематики справочника">
 	            	<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</param>
@@ -213,7 +213,7 @@
     		<form-type evaluatorType="model-type" localName="Форма создания" />
       		<form-type evaluatorType="node-type" localName="Форма редактирования" />
 		      <form-type id="datagrid" evaluatorType="node-type" localName="Таблица" />
-		      <form-layout localName="В одну колонку" />
+		      <form-layout localName="В одну колонку" template=""/>
 		      <form-layout localName="В две колонки" template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
 		      <form-layout localName="С вкладками" template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
     	</forms-info>
