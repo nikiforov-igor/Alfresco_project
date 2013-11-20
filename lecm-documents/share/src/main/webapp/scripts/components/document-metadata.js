@@ -82,7 +82,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 });
             },
 
-            onExpand: function (tabId) {
+            onExpandTab: function (tabId) {
+                this.expand(tabId);
+            },
+
+            onExpand: function () {
+                this.expand(null);
+            },
+
+            expand: function (tabId) {
                 // Load the form
                 var data = {
                     htmlid: "documentMetadata-" + this.options.nodeRef,

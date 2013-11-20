@@ -60,7 +60,7 @@
             </div>
         </span>
         <span class="lecm-dashlet-actions">
-            <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMetadataComponent.onExpand('contract-stages')" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
+            <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMetadataComponent.onExpandTab('contract-stages')" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
 		</span>
     </div>
     <div class="dashlet-contract-stages body scrollableList dashlet-body" id="${id}_results">
