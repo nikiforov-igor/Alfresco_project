@@ -105,7 +105,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return null;
 	}
 
-	public List<NodeRef> getFormFields(NodeRef nodeRef) {
+	public List<NodeRef> getFormFields(NodeRef nodeRef, boolean sort) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 		List<ChildAssociationRef> childs = nodeService.getChildAssocs(nodeRef);
 		if (childs != null) {
@@ -116,12 +116,32 @@ public class FormsEditorBeanImpl extends BaseBean {
 				}
 			}
 		}
+
+		if (sort) {
+			Comparator<NodeRef> comparator = new Comparator<NodeRef>() {
+				public int compare(NodeRef ref1, NodeRef ref2) {
+					Integer index1 = (Integer) nodeService.getProperty(ref1, PROP_ATTR_INDEX);
+					Integer index2 = (Integer) nodeService.getProperty(ref2, PROP_ATTR_INDEX);
+
+					if (index1 == null) {
+						return index2 == null ? 0 : 1;
+					} else if (index2 == null) {
+						return -1;
+					} else {
+						return index1.compareTo(index2);
+					}
+				}
+			};
+
+			Collections.sort(result, comparator);
+		}
+
 		return result;
 	}
 
 	public Set<String> getFormFieldsName(NodeRef nodeRef) {
 		Set<String> result = new HashSet<String>();
-		List<NodeRef> fields = getFormFields(nodeRef);
+		List<NodeRef> fields = getFormFields(nodeRef, false);
 		if (fields != null) {
 			for (NodeRef field : fields) {
 				result.add((String) nodeService.getProperty(field, PROP_ATTR_NAME));
@@ -333,7 +353,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 			    xmlw.writeEndElement();
 		    }
 
-		    List<NodeRef> fields = getFormFields(form);
+		    List<NodeRef> fields = getFormFields(form, true);
 
 		    writeFieldsVisibility(xmlw, fields);
 		    writeAppearance(xmlw, fields);
