@@ -8,7 +8,7 @@ public enum JasperReportTargetFileType {
 	PDF( "application/pdf", ".pdf")
 	, RTF( "application/rtf", ".rtf")
 	, DOC( "application/msword", ".doc")
-
+    , DOCX( "application/msword", ".docx")
 	, XML( "text/xml", ".xml")
 	, XLS( "application/vnd.ms-excel", ".xls")
 

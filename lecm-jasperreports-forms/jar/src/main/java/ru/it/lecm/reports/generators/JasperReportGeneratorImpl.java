@@ -175,6 +175,9 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
 			case RTF:
 				exportReportToStream(new JRRtfExporter(), jPrint, outputStream);
 				break;
+            case DOC:
+                exportReportToStream(new JRDocxExporter(), jPrint, outputStream);
+                break;
 			case DOCX:
 				exportReportToStream(new JRDocxExporter(), jPrint, outputStream);
 				break;
