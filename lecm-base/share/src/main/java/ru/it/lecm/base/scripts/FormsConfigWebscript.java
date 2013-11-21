@@ -74,7 +74,11 @@ public class FormsConfigWebscript extends DeclarativeWebScript {
 			throw new WebScriptException("FormsConfigWebscript was called with empty parametr");
 		}
 		TypeConfigElement typeInfo = formsConfigService.getTypeInfoById(typeId);
-		return jsonMapper.writeValueAsString(typeInfo.getControlsAsList());
+		if (typeInfo != null) {
+			return jsonMapper.writeValueAsString(typeInfo.getControlsAsList());
+		} else {
+			return "{}";
+		}
 	}
 
 	private String executeGetFormsLayoutsAction() throws Exception {

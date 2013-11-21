@@ -91,4 +91,18 @@ public class FormsEditorWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+
+	/**
+	 * Получение типа для атрибута
+	 * @param nodeRef атрибут
+	 * @return тип атрибута
+	 */
+	public String getFieldType(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		NodeRef ref = new NodeRef(nodeRef);
+		if (formsEditorService.isFormAttribute(ref)) {
+			return formsEditorService.getFieldType(ref);
+		}
+		return null;
+	}
 }

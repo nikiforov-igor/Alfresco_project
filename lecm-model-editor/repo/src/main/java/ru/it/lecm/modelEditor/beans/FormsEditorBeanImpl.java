@@ -16,7 +16,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
-import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -189,6 +188,26 @@ public class FormsEditorBeanImpl extends BaseBean {
 			}
 		}
 		return result;
+	}
+
+	public String getFieldType(NodeRef field) {
+		String attrName = (String) nodeService.getProperty(field, PROP_ATTR_NAME);
+		if (attrName != null) {
+			QName attrQName = QName.createQName(attrName, namespaceService);
+			if (attrQName != null) {
+				PropertyDefinition attrDefinition = dictionaryService.getProperty(attrQName);
+				if (attrDefinition != null) {
+					return attrDefinition.getDataType().getName().toPrefixString(namespaceService);
+				} else {
+					AssociationDefinition attrAssocDefinition = dictionaryService.getAssociation(attrQName);
+					if (attrAssocDefinition != null) {
+						return attrAssocDefinition.getTargetClass().getName().toPrefixString(namespaceService);
+					}
+				}
+			}
+		}
+
+		return null;
 	}
 
 	/**

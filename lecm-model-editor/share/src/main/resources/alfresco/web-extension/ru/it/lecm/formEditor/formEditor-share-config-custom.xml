@@ -5,6 +5,7 @@
 				<js src="/scripts/lecm-forms-editor/lecm-forms-attribute-table.js"/>
 				<js src="/scripts/lecm-forms-editor/lecm-forms-attributes-table-toolbar.js"/>
 				<js src="/scripts/lecm-forms-editor/lecm-form-type.js"/>
+				<js src="/scripts/lecm-forms-editor/lecm-form-field-component.js"/>
 			</dependencies>
 		</forms>
 	</config>
@@ -90,6 +91,9 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-forms-editor:attr-name" read-only="true"/>
+					<field id="lecm-forms-editor:attr-control">
+						<control template="/ru/it/lecm/documentforms/controls/form-field-component-control.ftl"/>
+					</field>
 				</appearance>
 			</form>
 		</forms>
