@@ -1411,6 +1411,7 @@
     <config evaluator="node-type" condition="lecm-contract-table-structure:stage">
         <forms>
             <form>
+                <edit-form template="/ru/it/lecm/contracts/forms/stage-create-edit-form.ftl" />
                 <field-visibility>
                     <show id="lecm-contract-table-structure:stage-status"/>
                     <show id="lecm-document:indexTableRow" force="true"/>
@@ -1426,7 +1427,9 @@
                     <show id="lecm-contract-table-structure:status-buttons" />
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-contract-table-structure:stage-status"/>
+                    <field id="lecm-contract-table-structure:stage-status">
+						<control template="/ru/it/lecm/base-share/components/controls/view-text-control.ftl"/>
+					</field>
                     <field id="lecm-contract-table-structure:attachments-temp-assoc" >
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
@@ -1453,7 +1456,7 @@
     <config evaluator="model-type" condition="lecm-contract-table-structure:stage">
         <forms>
             <form>
-                <create-form template="/ru/it/lecm/contracts/forms/stage-create-form.ftl" />
+                <create-form template="/ru/it/lecm/contracts/forms/stage-create-edit-form.ftl" />
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-contract-table-structure:name" force="true"/>

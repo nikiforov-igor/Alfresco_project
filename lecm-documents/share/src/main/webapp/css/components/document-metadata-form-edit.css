@@ -15,6 +15,11 @@
     text-align: right;
     margin: 0;
 }
+
+.yui-skin-lecmTheme .yui-panel table div.form-field div.viewmode-field span.viewmode-label {
+    width: auto;
+}
+
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.viewmode-field span.viewmode-value {
     max-width: 200px;
     padding-left: 0;
