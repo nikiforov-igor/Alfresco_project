@@ -16,6 +16,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -436,10 +439,49 @@ public class FormsEditorBeanImpl extends BaseBean {
 					xmlw.writeAttribute("set", "tab" + tabIndex);
 				}
 
+				writeControl(xmlw, field);
+
 			    xmlw.writeEndElement();
 			}
 		}
 		xmlw.writeEndElement();
+	}
+
+	private void writeControl(XMLStreamWriter xmlw, NodeRef field) throws XMLStreamException {
+		String control = (String) nodeService.getProperty(field, PROP_ATTR_CONTROL);
+		if (control != null && control.trim().length() > 0) {
+			try {
+				JSONObject json = new JSONObject(control);
+				xmlw.writeStartElement("control");
+
+				String template = json.getString("template");
+				if (template != null) {
+					xmlw.writeAttribute("template", template);
+				}
+
+				JSONArray params = json.getJSONArray("params");
+				if (params != null) {
+					for (int i = 0; i < params.length(); i++) {
+						String name = params.getJSONObject(i).getString("name");
+						if (name != null) {
+							xmlw.writeStartElement("control-param");
+							xmlw.writeAttribute("name", name);
+
+							String value = params.getJSONObject(i).getString("value");
+							if (value != null) {
+								xmlw.writeCharacters(value);
+							}
+
+							xmlw.writeEndElement();
+						}
+					}
+				}
+
+				xmlw.writeEndElement();
+			} catch (JSONException e) {
+				logger.error("Error parse control JSON", e);
+			}
+		}
 	}
 
 	private void writeSets(XMLStreamWriter xmlw, Map<String, List<String>> sets) throws XMLStreamException {
