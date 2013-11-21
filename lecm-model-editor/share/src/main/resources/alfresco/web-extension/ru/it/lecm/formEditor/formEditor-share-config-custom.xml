@@ -65,10 +65,14 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
+					<show id="lecm-forms-editor:form-type"/>
 					<show id="lecm-forms-editor:form-evaluator"/>
 					<show id="lecm-forms-editor:form-id"/>
 					<show id="lecm-forms-editor:form-template"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-forms-editor:form-type" label-id="label.form.type"/>
+				</appearance>
             </form>
 		</forms>
 	</config>

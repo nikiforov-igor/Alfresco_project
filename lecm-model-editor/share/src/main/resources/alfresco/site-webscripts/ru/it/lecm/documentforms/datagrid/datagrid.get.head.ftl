@@ -8,6 +8,4 @@
 <@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/versions.js"></@script>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/modules/document-details/historic-properties-viewer.css" />
 
-<!-- Tree -->
-<@link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
-
+<@script type="text/javascript" src="${page.url.context}/scripts/lecm-forms-editor/lecm-forms-datagrid.js"></@script>

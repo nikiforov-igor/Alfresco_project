@@ -8,13 +8,15 @@
 			<!-- include base datagrid markup-->
 		<@grid.datagrid id=id showViewForm=true>
 			<script type="text/javascript">//<![CDATA[
+			var datagrid;
+
 			function initFormEditor() {
 				createFormsDatagrid();
 				showFormsDatagrid();
 			}
 
 			function createFormsDatagrid() {
-				new LogicECM.module.Base.DataGrid('${id}').setOptions(
+				datagrid = new LogicECM.module.FormsEditor.DataGrid('${id}').setOptions(
 						{
 							usePagination: false,
 							actions: [
@@ -34,6 +36,7 @@
 							bubblingLabel: "${bubblingLabel!''}",
 							showCheckboxColumn: false,
 							attributeForShow: "cm:name",
+							excludeColumns: ["lecm-forms-editor:form-evaluator", "lecm-forms-editor:form-id"],
 							editFormWidth: "70em"
 						}).setMessages(${messages});
 			}
@@ -46,17 +49,14 @@
 								fn: function (response) {
 									var oResults = response.json;
 									if (oResults != null && oResults.nodeRef != null) {
-										YAHOO.Bubbling.fire("activeGridChanged",
-											{
-												datagridMeta:{
-													itemType: "lecm-forms-editor:form",
-													nodeRef: oResults.nodeRef,
-													actionsConfig:{
-														fullDelete:true
-													}
-												},
-												bubblingLabel: "${bubblingLabel!''}"
-											});
+										datagrid.options.datagridMeta = {
+											itemType: "lecm-forms-editor:form",
+											nodeRef: oResults.nodeRef,
+											actionsConfig:{
+												fullDelete:true
+											}
+										};
+										datagrid.draw();
 									}
 								},
 								scope: this
