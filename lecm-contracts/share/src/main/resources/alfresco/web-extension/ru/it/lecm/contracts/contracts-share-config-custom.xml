@@ -226,19 +226,12 @@
             <form id="main-page-dashlets">
                 <field-visibility>
                     <show id="line1"/>
-                    <show id="line2"/>
                 </field-visibility>
                 <appearance>
                     <field id="line1">
                         <control template="/ru/it/lecm/documents/controls/document-dashlet-control.ftl">
-                            <control-param name="first">/lecm/components/dashlets/document-main</control-param>
-                            <control-param name="second">/lecm/components/dashlets/document-attachments</control-param>
-                        </control>
-                    </field>
-                    <field id="line2">
-                        <control template="/ru/it/lecm/documents/controls/document-dashlet-control.ftl">
-                            <control-param name="first">/lecm/contracts/dashlets/stages</control-param>
-                            <control-param name="second">/lecm/components/dashlets/document-my-tasks</control-param>
+                            <control-param name="first">/lecm/components/dashlets/document-main;/lecm/contracts/dashlets/stages</control-param>
+                            <control-param name="second">/lecm/components/dashlets/document-attachments;/lecm/components/dashlets/document-my-tasks</control-param>
                         </control>
                     </field>
                 </appearance>
