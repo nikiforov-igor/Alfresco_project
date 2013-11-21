@@ -16,6 +16,13 @@
                 <property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
                 <property name="lecm-busjournal:objectType-list-template">статус: {lecm-statemachine:status}, автор : {!~AUTHOR}</property>
             </item>
+            <item name="cm:Этап договора" type="lecm-busjournal:objectType">
+                <property name="cm:name">Этап договора</property>
+                <property name="lecm-busjournal:objectType-code">LECM_CONTRACT_STAGE</property>
+                <property name="lecm-busjournal:objectType-class">lecm-contract-table-structure:stage</property>
+                <property name="lecm-busjournal:objectType-template">{lecm-contract-table-structure:name}</property>
+                <property name="lecm-busjournal:objectType-list-template">{lecm-contract-table-structure:name}</property>
+            </item>
         </items>
     </item>
 </items>
