@@ -110,7 +110,7 @@ public class OpenOfficeTemplateGenerator {
 	public static com.sun.star.frame.XStorable saveDocAs(final XComponent xCompDoc, final String destUrl) throws IOException {
 		// автоматически определим формат rtf по расширению ...
 		final boolean isRtf = (destUrl != null) && destUrl.endsWith(".rtf");
-		final boolean isDoc = (destUrl != null) && destUrl.endsWith(".doc");
+		final boolean isDoc = (destUrl != null) && (destUrl.endsWith(".doc") || destUrl.endsWith(".docx"));
 		// сохранение ...
 		com.sun.star.frame.XStorable resultStorable = null;
 		if (xCompDoc != null) {
