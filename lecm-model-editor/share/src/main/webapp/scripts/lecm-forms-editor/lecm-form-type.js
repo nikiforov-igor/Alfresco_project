@@ -119,8 +119,8 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 	    onSelectChange: function() {
 		    var select = Dom.get(this.id);
 		    var formIdField = select.form[this.options.fromIdField];
-		    if (formIdField != null && select.selectedOptions.length == 1) {
-			    var value = select.selectedOptions[0].innerHTML;
+		    if (formIdField != null ) {
+			    var value = select[select.selectedIndex].innerHTML;
 
 			    formIdField.value = this.formIds[value];
 		    }
