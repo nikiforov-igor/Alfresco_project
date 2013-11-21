@@ -1,12 +1,12 @@
 <#import "/org/alfresco/components/form/form.lib.ftl" as formLib />
 <#if form.mode == "edit">
 <#assign id=args.htmlid/>
-    <span id="${fieldHtmlId}-start-job" class="yui-button yui-push-button">
+    <span id="${fieldHtmlId}-start-job" class="yui-button yui-push-button" style="float: left;">
         <span class="first-child">
             <button type="button">${msg("label.contracts.start-stage")}</button>
         </span>
     </span>
-    <span id="${fieldHtmlId}-end-job" class="yui-button yui-push-button">
+    <span id="${fieldHtmlId}-end-job" class="yui-button yui-push-button" style="float: left;">
         <span class="first-child">
             <button type="button">${msg("label.contracts.end-stage")}</button>
         </span>
