@@ -7,7 +7,7 @@ package ru.it.lecm.reports.api;
 public enum JasperReportTargetFileType {
 	PDF( "application/pdf", ".pdf")
 	, RTF( "application/rtf", ".rtf")
-	, DOCX( "application/msword", ".docx")
+	, DOC( "application/msword", ".doc")
 
 	, XML( "text/xml", ".xml")
 	, XLS( "application/vnd.ms-excel", ".xls")

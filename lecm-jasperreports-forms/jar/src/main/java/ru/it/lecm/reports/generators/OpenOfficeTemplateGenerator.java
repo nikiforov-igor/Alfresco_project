@@ -49,6 +49,7 @@ public class OpenOfficeTemplateGenerator {
 	private static final String FILTERTAG_FOR_STAR_OFFICE_XML_WRITER = "StarOffice XML (Writer)";
 
 	private static final String FILTERTAG_FOR_RTF = "Rich Text Format";
+	private static final String FILTERTAG_FOR_DOC = "MS Word 97";
 
 	/**
 	 * Флажок для свойства документа, который только и позволит сохранить
@@ -109,7 +110,7 @@ public class OpenOfficeTemplateGenerator {
 	public static com.sun.star.frame.XStorable saveDocAs(final XComponent xCompDoc, final String destUrl) throws IOException {
 		// автоматически определим формат rtf по расширению ...
 		final boolean isRtf = (destUrl != null) && destUrl.endsWith(".rtf");
-
+		final boolean isDoc = (destUrl != null) && destUrl.endsWith(".doc");
 		// сохранение ...
 		com.sun.star.frame.XStorable resultStorable = null;
 		if (xCompDoc != null) {
@@ -117,7 +118,8 @@ public class OpenOfficeTemplateGenerator {
 
 			final PropertyValue[] storeProps = new PropertyValue[2];
 			storeProps[0] = newPropertyValue("Overwrite", Boolean.TRUE);
-			storeProps[1] = newPropertyValue("FilterName", (isRtf ? FILTERTAG_FOR_RTF : FILTERTAG_FOR_STAR_OFFICE_XML_WRITER));
+            String filterName = (isRtf ? FILTERTAG_FOR_RTF : (isDoc ? FILTERTAG_FOR_DOC : FILTERTAG_FOR_STAR_OFFICE_XML_WRITER));
+			storeProps[1] = newPropertyValue("FilterName", filterName);
 
 			if (destUrl != null) {
 				resultStorable.storeAsURL(destUrl, storeProps);

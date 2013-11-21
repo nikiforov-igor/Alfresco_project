@@ -75,7 +75,7 @@ public class DSProviderOOfficeBase extends GenericDSProviderBase {
 			*/
             final PropertyValue[] storeProps = new PropertyValue[1];
             storeProps[0].Name = "FilterName";
-            storeProps[0].Value = "Rich Text Format";
+            storeProps[0].Value = "MS Word 97";
             xStorable.storeAsURL(sSaveUrl, storeProps);
             logger.info("\nDocument \"" + sLoadUrl + "\" saved under \"" + sSaveUrl + "\"\n");
         }

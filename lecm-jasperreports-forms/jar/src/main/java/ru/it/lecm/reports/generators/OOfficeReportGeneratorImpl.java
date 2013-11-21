@@ -65,7 +65,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	/**
 	 * Целевой формат отчёта по-умолчанию
 	 */
-	private static final JasperReportTargetFileType DEFAULT_TARGET = JasperReportTargetFileType.RTF;
+	private static final JasperReportTargetFileType DEFAULT_TARGET = JasperReportTargetFileType.DOC;
 
 	/**
 	 * "Что сгенерировать" = название колонки (типа строка) с целевым форматом файла после генератора
