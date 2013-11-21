@@ -47,7 +47,7 @@
 	<select id="${fieldHtmlId}-select" <#if disabled>disabled="true"</#if>>
 		<option>${msg("label.control.default")}</option>
 	</select>
-	<table><tbody id="${fieldHtmlId}-params"></tbody></table>
+	<table class="formFieldControlParamsTable"><tbody id="${fieldHtmlId}-params"></tbody></table>
 	<div id="${fieldHtmlId}-hidden-params"></div>
 </#if>
 </div>

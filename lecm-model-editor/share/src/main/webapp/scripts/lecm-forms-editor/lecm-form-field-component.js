@@ -124,7 +124,13 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 							var param = conf.params[i];
 							if (param.visible){
 								var paramsHtml = "<tr>";
-								paramsHtml += "<td>" + param.localName + "</td>";
+								paramsHtml += "<td>";
+								paramsHtml += param.localName;
+								if (param.mandatory) {
+									paramsHtml += "<span class='mandatory-indicator'>*</span>";
+								}
+								paramsHtml += "</td>";
+
 								paramsHtml += "<td>";
 								paramsHtml += "<input type='text' id='" + param.id + "' value='" + param.value + "' class='formFieldControlParams'/>";
 								paramsHtml += "</td>";

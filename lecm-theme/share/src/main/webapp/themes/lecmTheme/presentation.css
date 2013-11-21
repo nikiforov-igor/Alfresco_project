@@ -2604,3 +2604,12 @@ span.person a div.description:empty {
 	background: url(/share/res/components/images/add-row-16.png) no-repeat 12px 4px;
 	padding-left: 24px;
 }
+
+div.form-field input[type="text"].formFieldControlParams {
+	width: 100%;
+}
+
+div.form-field table.formFieldControlParamsTable {
+	padding-left: 160px;
+	width: 520px;
+}
