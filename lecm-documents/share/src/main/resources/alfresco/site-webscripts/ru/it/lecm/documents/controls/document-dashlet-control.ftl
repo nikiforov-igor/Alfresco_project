@@ -22,6 +22,7 @@
             dashletNumber++;
             var container = Dom.get(dashletContainerId);
             var childElement = document.createElement("div");
+            childElement.id = dashletContainerId + dashletNumber;
             container.appendChild(childElement);
             Alfresco.util.Ajax.request(
                 {
@@ -29,7 +30,7 @@
                     dataObj:{
                         nodeRef: nodeRef,
                         view: "view",
-                        htmlid: dashletContainerId
+                        htmlid: dashletContainerId + dashletNumber
                     },
                     successCallback:{
                         fn:function(response){
