@@ -13,6 +13,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
@@ -78,10 +79,21 @@ public class FormsEditorBeanImpl extends BaseBean {
 	}
 
 	public NodeRef getModelsDeployRootFolder() {
-		NodeRef folder = getFolder(repository.getCompanyHome(), FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME);
-		if (folder == null) {
-			folder = createFolder(repository.getCompanyHome(), FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME);
+		NodeRef folder = null;
+
+		List<ChildAssociationRef> dictionaryAssocs = nodeService.getChildAssocs(
+				repository.getCompanyHome(),
+				ContentModel.ASSOC_CONTAINS,
+				QName.createQName(NamespaceService.APP_MODEL_1_0_URI, "dictionary"));
+
+		if (dictionaryAssocs.size() == 1) {
+			NodeRef parent = dictionaryAssocs.get(0).getChildRef();
+			folder = getFolder(parent, FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME);
+			if (folder == null) {
+				folder = createFolder(parent, FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME);
+			}
 		}
+
 		return folder;
 	}
 

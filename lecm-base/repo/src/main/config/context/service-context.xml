@@ -291,7 +291,7 @@
 
 		<property name="repoFoldersUrls">
 			<list>
-				<value>workspace://SpacesStore/${spaces.company_home.childname}/cm:Формы//*</value>
+				<value>workspace://SpacesStore/${spaces.company_home.childname}/app:dictionary/cm:Формы//*</value>
 			</list>
 		</property>
 	</bean>
