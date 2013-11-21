@@ -348,6 +348,10 @@ public class Utils {
      * @return условие проверки вхождения даты в диапазон или NULL, если обе даты NULL
      */
     public static String emmitDateIntervalCheck(String fldName, Date from, Date upto) {
+        return emmitDateIntervalCheck(fldName, from, upto, false);
+    }
+
+    public static String emmitDateIntervalCheck(String fldName, Date from, Date upto, boolean includeNullValue) {
         final boolean needEmmition = (from != null || upto != null);
         if (!needEmmition) {
             return null;
@@ -365,7 +369,7 @@ public class Utils {
         // add " ... [X TO Y]"
         final String stMIN = ArgsHelper.dateToStr(from, "MIN");
         final String stMAX = ArgsHelper.dateToStr(upto, "MAX");
-        return " ISNULL:\"" + fldName + "\" OR " + "@" + fldName + ":[" + stMIN + " TO " + stMAX + "]";
+        return (includeNullValue ? " ISNULL:\"@" +fldName + "\" OR " : "@") + fldName + ":[" + stMIN + " TO " + stMAX + "]";
     }
 
     /**

@@ -127,23 +127,16 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
 
         applyPeriodParams(ds);
 
-        final String condStart =
-                Utils.emmitDateIntervalCheck(Utils.luceneEncode(LocalQNamesHelper.QNFLD_START_DATE.toPrefixString(namespaceService)), periodStart, periodEnd);
+        //final String condStart =
+        //        Utils.emmitDateIntervalCheck(Utils.luceneEncode(LocalQNamesHelper.QNFLD_START_DATE.toPrefixString(namespaceService)), periodStart, periodEnd, false);
         final String condEnd =
-                Utils.emmitDateIntervalCheck(Utils.luceneEncode(LocalQNamesHelper.QNFLD_END_DATE.toPrefixString(namespaceService)), periodStart, periodEnd);
+                Utils.emmitDateIntervalCheck(Utils.luceneEncode(LocalQNamesHelper.QNFLD_END_DATE.toPrefixString(namespaceService)), periodStart, periodEnd, false);
 
-        final boolean hasStart = !Utils.isStringEmpty(condStart);
+        //final boolean hasStart = !Utils.isStringEmpty(condStart);
         final boolean hasEnd = !Utils.isStringEmpty(condEnd);
 
-        if (hasStart || hasEnd) {
-            final String condBoth;
-            if (hasStart && hasEnd) {
-                condBoth = String.format("\n\t( (%s) OR (%s) )\n\t", condStart, condEnd);
-            } else if (hasStart) {
-                condBoth = String.format("\n\t(%s)\n\t", condStart);
-            } else { // here  (true == hasEnd) ...
-                condBoth = String.format("\n\t(%s)\n\t", condEnd);
-            }
+        if (hasEnd) {
+            final String condBoth = String.format("\n\t(%s)\n\t", condEnd);
             builder.emmit(hasData ? " AND " : "").emmit(condBoth);
         }
 
