@@ -123,20 +123,20 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 						for (var i = 0; i < conf.params.length; i++) {
 							var param = conf.params[i];
 							if (param.visible){
-								var paramsHtml = "<tr>";
-								paramsHtml += "<td>";
-								paramsHtml += param.localName;
+								var tr = document.createElement("tr");
+
+								var td1 = document.createElement("td");
+								td1.innerHTML = param.localName;
 								if (param.mandatory) {
-									paramsHtml += "<span class='mandatory-indicator'>*</span>";
+									td1.innerHTML += "<span class='mandatory-indicator'>*</span>";
 								}
-								paramsHtml += "</td>";
+								tr.appendChild(td1);
 
-								paramsHtml += "<td>";
-								paramsHtml += "<input type='text' id='" + param.id + "' value='" + param.value + "' class='formFieldControlParams'/>";
-								paramsHtml += "</td>";
-								paramsHtml += "</tr>";
+								var td2 = document.createElement("td");
+								td2.innerHTML = "<input type='text' id='" + param.id + "' value='" + param.value + "' class='formFieldControlParams'/>";
+								tr.appendChild(td2);
 
-								tableParams.innerHTML += paramsHtml;
+								tableParams.appendChild(tr);
 
 								YAHOO.util.Event.onAvailable(param.id, this.attachChangeParamsListener, param.id, this);
 							} else {
