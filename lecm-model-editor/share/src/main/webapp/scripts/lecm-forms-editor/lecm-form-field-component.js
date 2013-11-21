@@ -19,6 +19,8 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 
 (function() {
+	var Dom = YAHOO.util.Dom;
+
 	LogicECM.module.FormsEditor.FieldComponent = function (fieldHtmlId)
 	{
 		LogicECM.module.FormsEditor.FieldComponent.superclass.constructor.call(this, "LogicECM.module.FormsEditor.FieldComponent", fieldHtmlId, [ "container"]);
@@ -38,6 +40,8 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 		config: null,
 
 		onReady: function() {
+			YAHOO.util.Event.on(this.id + "-select", "change", this.onSelectChange, this, true);
+
 			this.getTargetType();
 		},
 
@@ -76,7 +80,105 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 
 		applyConfig: function() {
 			if (this.config != null) {
+				var select = Dom.get(this.id + "-select");
 
+				for (var i = 0; i < this.config.length; i++) {
+					var conf = this.config[i];
+
+					var option = document.createElement("option");
+					option.value = conf.templatePath;
+					option.innerHTML = conf.displayName;
+					if (this.options.value != null && this.options.value.template == conf.templatePath) {
+						option.selected = true;
+
+						var valueParams = this.options.value.params;
+						var confParams = conf.params;
+						if (valueParams != null && confParams != null) {
+							for (var j = 0; j < confParams.length; j++) {
+								for (var k = 0; k < valueParams.length; k++) {
+									if (valueParams[k].name == confParams[j].id) {
+										confParams[j].value = valueParams[k].value;
+									}
+								}
+							}
+						}
+					}
+					select.appendChild(option);
+				}
+				this.onSelectChange();
+			}
+		},
+
+		onSelectChange: function() {
+			var select = Dom.get(this.id + "-select");
+			if (select != null) {
+				var tableParams = Dom.get(this.id + "-params");
+				var hiddenParams = Dom.get(this.id + "-hidden-params");
+				if (tableParams != null && hiddenParams != null) {
+					tableParams.innerHTML = "";
+					hiddenParams.innerHTML = "";
+
+					var conf = this.config[select.selectedIndex -1];
+					if (conf != null && conf.params != null) {
+						for (var i = 0; i < conf.params.length; i++) {
+							var param = conf.params[i];
+							if (param.visible){
+								var paramsHtml = "<tr>";
+								paramsHtml += "<td>" + param.localName + "</td>";
+								paramsHtml += "<td>";
+								paramsHtml += "<input type='text' id='" + param.id + "' value='" + param.value + "' class='formFieldControlParams'/>";
+								paramsHtml += "</td>";
+								paramsHtml += "</tr>";
+
+								tableParams.innerHTML += paramsHtml;
+
+								YAHOO.util.Event.onAvailable(param.id, this.attachChangeParamsListener, param.id, this);
+							} else {
+								hiddenParams.innerHTML += "<input type='hidden' id='" + param.id + "' value='" + param.value + "' class='formFieldControlParams'>";
+							}
+						}
+					}
+				}
+			}
+
+			this.updateComponentValue();
+		},
+
+		attachChangeParamsListener: function(id)
+		{
+			YAHOO.util.Event.on(id, 'change', this.updateComponentValue, {}, this);
+		},
+
+		updateComponentValue: function() {
+			var el = Dom.get(this.id);
+			if (el != null) {
+				var value = "";
+				var select = Dom.get(this.id + "-select");
+				if (select != null) {
+					var conf = this.config[select.selectedIndex -1];
+					if (conf != null) {
+						var obj = {
+							template: conf.templatePath,
+							displayName: conf.displayName,
+							params: []
+						};
+
+						if (conf.params != null) {
+							for (var i = 0; i < conf.params.length; i++) {
+								var paramEl = Dom.get(conf.params[i].id);
+
+								if (paramEl != null) {
+									obj.params.push({
+										name: conf.params[i].id,
+										value: paramEl.value
+									});
+								}
+							}
+						}
+						value = JSON.stringify(obj);
+					}
+				}
+				el.value = value;
 			}
 		}
 	});

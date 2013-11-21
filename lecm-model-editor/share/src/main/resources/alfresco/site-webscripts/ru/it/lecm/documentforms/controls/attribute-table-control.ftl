@@ -14,11 +14,6 @@
 
 <script type="text/javascript">//<![CDATA[
 	function initControl() {
-		new LogicECM.module.FormsEditor.AttributesTable("${datagridId}-body").setMessages(${messages}).setOptions({
-			bubblingLabel: "${bubblingId}",
-			itemNodeRef: "${form.arguments.itemId}"
-		});
-
 		new LogicECM.module.FormsEditor.AttributesTableToolbar("${toolbarId}").setMessages(${messages}).setOptions({
 			bubblingLabel: "${bubblingId}",
 			itemNodeRef: "${form.arguments.itemId}"
@@ -45,7 +40,7 @@
 			<script type="text/javascript">//<![CDATA[
 			(function () {
 				YAHOO.util.Event.onDOMReady(function (){
-					new LogicECM.module.Base.DataGrid('${datagridId}').setOptions({
+					var datagrid = new LogicECM.module.FormsEditor.AttributesDatagrid('${datagridId}').setOptions({
 						usePagination: false,
 						actions: [
 								{
@@ -61,9 +56,18 @@
 									label: "${msg("actions.delete-row")}"
 								}
 						],
+						datagridMeta:{
+							itemType: "lecm-forms-editor:attr",
+							nodeRef: "${form.arguments.itemId}",
+							actionsConfig:{
+								fullDelete:true
+							}
+						},
 						bubblingLabel: "${bubblingId}",
 						showCheckboxColumn: false
 					}).setMessages(${messages});
+
+					datagrid.draw();
 				});
 
 			})();

@@ -16,7 +16,9 @@
 		</#if>
 
 		itemNodeRef: "${form.arguments.itemId!''}",
-		value: "${field.value!''}"
+		<#if (field.value?? && field.value?length > 0)>
+			value: ${field.value}
+		</#if>
 	});
 })();
 //]]></script>
@@ -41,6 +43,11 @@
 	</div>
 <#else>
 	<label for="${fieldHtmlId}">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-	<input id="${fieldHtmlId}" type="text" name="${field.name}" <#if disabled>disabled="true"</#if> value="${field.value?html}"/>
+	<input id="${fieldHtmlId}" type="hidden" name="${field.name}" <#if disabled>disabled="true"</#if>/>
+	<select id="${fieldHtmlId}-select" <#if disabled>disabled="true"</#if>>
+		<option>${msg("label.control.default")}</option>
+	</select>
+	<table><tbody id="${fieldHtmlId}-params"></tbody></table>
+	<div id="${fieldHtmlId}-hidden-params"></div>
 </#if>
 </div>

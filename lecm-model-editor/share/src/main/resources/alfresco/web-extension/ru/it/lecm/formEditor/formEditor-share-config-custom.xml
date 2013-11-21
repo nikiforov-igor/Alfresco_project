@@ -2,7 +2,7 @@
 	<config>
 		<forms>
 			<dependencies>
-				<js src="/scripts/lecm-forms-editor/lecm-forms-attribute-table.js"/>
+				<js src="/scripts/lecm-forms-editor/lecm-forms-attribute-datagrid.js"/>
 				<js src="/scripts/lecm-forms-editor/lecm-forms-attributes-table-toolbar.js"/>
 				<js src="/scripts/lecm-forms-editor/lecm-form-type.js"/>
 				<js src="/scripts/lecm-forms-editor/lecm-form-field-component.js"/>
