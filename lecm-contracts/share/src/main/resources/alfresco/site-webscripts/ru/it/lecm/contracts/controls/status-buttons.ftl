@@ -1,4 +1,5 @@
 <#import "/org/alfresco/components/form/form.lib.ftl" as formLib />
+<#if form.mode == "edit">
 <#assign id=args.htmlid/>
     <span id="${fieldHtmlId}-start-job" class="yui-button yui-push-button">
         <span class="first-child">
@@ -53,3 +54,4 @@
     Event.onContentReady(panelId, init);
 }) ();
 //]]></script>
+</#if>
