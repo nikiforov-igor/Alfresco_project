@@ -96,6 +96,7 @@ public class ContractStageDateNotificationExecutor extends ActionExecuterAbstrac
 
         Object stageStartDate = nodeService.getProperty(row, ContractsBeanImpl.PROP_STAGE_START_DATE);
         Object stageEndDate = nodeService.getProperty(row, ContractsBeanImpl.PROP_STAGE_END_DATE);
+        Object stageStatus = nodeService.getProperty(row, ContractsBeanImpl.PROP_STAGE_STATUS);
         Integer index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
         String docDesc = contractsService.wrapperLink(document, nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(), BaseBean.DOCUMENT_LINK_URL);
 
@@ -120,9 +121,9 @@ public class ContractStageDateNotificationExecutor extends ActionExecuterAbstrac
         }
 
         String desc = null;
-        if (normalStartDate != null && startPoint.equals(normalStartDate)) {
+        if (normalStartDate != null && startPoint.equals(normalStartDate) && "Не начат".equals(stageStatus)) {
             desc = "Сегодня запланировано начало работ по этапу № " + index + " к договору " + docDesc;
-        } else if (normalEndDate != null && endPoint.equals(normalEndDate)){
+        } else if (normalEndDate != null && endPoint.equals(normalEndDate) && !"Закрыт".equals(stageStatus)){
             desc = "Сегодня запланировано окончание работ по этапу № " + index + " к договору " + docDesc;
         }
         return desc;
