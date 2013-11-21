@@ -25,7 +25,6 @@ LogicECM.module = LogicECM.module || {};
 	{
 		LogicECM.module.DocumentTable.superclass.constructor.call(this, "LogicECM.module.DocumentTable", fieldHtmlId, [ "container", "datasource"]);
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-        YAHOO.Bubbling.on("dataItemCreated", this.onAfterCreate, this);
 		return this;
 	};
 
@@ -194,7 +193,8 @@ LogicECM.module = LogicECM.module || {};
 
 				datagrid.tableDataNodeRef = this.tableData.nodeRef;
 				datagrid.draw();
-			}
+                YAHOO.Bubbling.on("dataItemCreated", this.onAfterCreate, this);
+            }
 		});
 })();
 
