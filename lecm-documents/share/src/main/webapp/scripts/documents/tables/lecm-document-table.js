@@ -43,7 +43,8 @@ LogicECM.module = LogicECM.module || {};
 				mode: null,
 				isTableSortable: null,
                 externalCreateId: null,
-                refreshAfterCreate: false
+                refreshAfterCreate: false,
+                showActions: true
 			},
 
             datagrid: null,
@@ -142,7 +143,7 @@ LogicECM.module = LogicECM.module || {};
 						});
 					}
                     var otherActions = [];
-                    if (!this.options.isTableSortable) {
+                    if (!this.options.isTableSortable && this.options.showActions) {
                         otherActions.push({
                             type: actionType,
                             id: "onMoveTableRowUp",
@@ -181,7 +182,7 @@ LogicECM.module = LogicECM.module || {};
 							searchConfig: null
 						},
 						bubblingLabel: this.options.bubblingLabel,
-						showActionColumn: true,
+						showActionColumn: this.options.showActions,
 						showOtherActionColumn: true,
 						showCheckboxColumn: false,
 						attributeForShow: this.options.attributeForShow,

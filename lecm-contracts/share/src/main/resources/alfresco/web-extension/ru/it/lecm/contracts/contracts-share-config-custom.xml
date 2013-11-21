@@ -255,6 +255,7 @@
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="toolbar">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
+                            <control-param name="showActions">false</control-param>
                         </control>
                     </field>
                 </appearance>

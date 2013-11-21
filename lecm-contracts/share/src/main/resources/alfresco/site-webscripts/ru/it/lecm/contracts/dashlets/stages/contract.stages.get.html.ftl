@@ -55,12 +55,12 @@
             <div class="total-tasks-count">
                 <span class="lecm-dashlet-actions">
                     <a id="${id}-action-add" href="javascript:void(0);" class="add"
-                       title="${msg("dashlet.add.errand.tooltip")}">Добавить этап</a>
+                       title="${msg("dashlet.contract.stages.add.tooltip")}">Добавить этап</a>
                 </span>
             </div>
         </span>
         <span class="lecm-dashlet-actions">
-            <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMetadataComponent.onExpandTab('contract-stages')" class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
+            <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMetadataComponent.onExpandTab('contract-stages')" class="expand" title="${msg("dashlet.contract.stages.expand.tooltip")}">&nbsp</a>
 		</span>
     </div>
     <div class="dashlet-contract-stages body scrollableList dashlet-body" id="${id}_results">

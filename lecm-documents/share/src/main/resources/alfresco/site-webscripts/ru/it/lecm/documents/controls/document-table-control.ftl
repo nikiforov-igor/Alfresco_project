@@ -24,6 +24,11 @@
     <#assign refreshAfterCreate = params.refreshAfterCreate/>
 </#if>
 
+<#assign showActions = "true"/>
+<#if params.showActions??>
+    <#assign showActions = params.showActions/>
+</#if>
+
 <#assign showCreateButton = true/>
 <#if field.control.params.showCreateBtn??>
     <#assign showCreateButton = field.control.params.showCreateBtn/>
@@ -52,7 +57,8 @@
 				disabled: ${field.disabled?string},
 				isTableSortable: ${isTableSortable?string},
                 externalCreateId: "${form.arguments.externalCreateId!""}",
-                refreshAfterCreate: ${refreshAfterCreate?string}
+                refreshAfterCreate: ${refreshAfterCreate?string},
+                showActions: ${showActions?string}
 			});
 })();
 //]]></script>
