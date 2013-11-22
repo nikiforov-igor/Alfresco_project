@@ -141,8 +141,10 @@ LogicECM.module = LogicECM.module || {};
 							label: this.msg("actions.delete-row")
 						});
 					}
-                    var otherActions = [];
+                    var splitActionAt = actions.length;
+
                     if (!this.options.isTableSortable && this.options.showActions) {
+                        var otherActions = [];
                         otherActions.push({
                             type: actionType,
                             id: "onMoveTableRowUp",
@@ -161,6 +163,9 @@ LogicECM.module = LogicECM.module || {};
                             permission: "edit",
                             label: this.msg("action.addRow")
                         });
+
+                        actions = actions.concat(otherActions);
+                        splitActionAt = actions.length;
                     }
 
 					var datagrid = new LogicECM.module.DocumentTableDataGrid(this.options.containerId).setOptions({
@@ -168,7 +173,7 @@ LogicECM.module = LogicECM.module || {};
 						showExtendSearchBlock: false,
 						formMode: this.options.mode,
 						actions: actions,
-						otherActions: otherActions,
+                        splitActionsAt: splitActionAt,
 						datagridMeta: {
 							itemType: this.tableData.rowType,
 							datagridFormId: this.options.datagridFormId,
@@ -428,6 +433,10 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
         {
             var me = this;
 
+            if (this.options.actions.length > this.showActionsCount) {
+                this.showActionsCount = this.options.splitActionsAt;
+            }
+
             if (this.options.showActionColumn){
                 // Hook action events
                 var fnActionHandler = function DataGrid_fnActionHandler(layer, args)
@@ -567,7 +576,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
             if (this.options.showActionColumn){
                 // Add actions as last column
                 columnDefinitions.push(
-                    { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width:80 }
+                    { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width: Math.round(26.7 * this.showActionsCount) }
                 );
             }
             if (!this.options.overrideSortingWith && this.options.otherActions != null && this.options.otherActions.length > 0){
@@ -714,11 +723,11 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                         // Remove any actions the user doesn't have permission for
                         var actions = YAHOO.util.Selector.query("div", clone),
                             action, aTag, spanTag, actionPermissions, aP, i, ii, j, jj;
-                        if (actions.length > 3) {
-                            this.options.splitActionsAt = 2;
-                        } else {
-                            this.options.splitActionsAt = 3;
+
+                        if (actions.length > this.options.splitActionsAt) {
+                            this.options.splitActionsAt = this.options.splitActionsAt - 2;
                         }
+
                         for (i = 0, ii = actions.length; i < ii; i++) {
                             action = actions[i];
                             aTag = action.firstChild;

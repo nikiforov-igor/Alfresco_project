@@ -307,6 +307,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	            editFormWidth: "50em"
             },
 
+            showActionsCount: 3,
+
             currentFilter: null,
 
             /**
@@ -737,6 +739,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             onReady: function DataGrid_onReady()
             {
                 var me = this;
+                if (this.options.actions.length > this.showActionsCount) {
+                    this.showActionsCount = this.options.splitActionsAt;
+                }
+
 
                 if (this.options.showActionColumn){
                     // Hook action events
@@ -1066,7 +1072,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 if (this.options.showActionColumn){
                     // Add actions as last column
                     columnDefinitions.push(
-                        { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width:80 }
+                        { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width: Math.round(26.7 * this.showActionsCount) }
                     );
                 }
                 return columnDefinitions;
@@ -1608,10 +1614,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         // Remove any actions the user doesn't have permission for
                         var actions = YAHOO.util.Selector.query("div", clone),
                             action, aTag, spanTag, actionPermissions, aP, i, ii, j, jj;
-                        if (actions.length > 3) {
-                            this.options.splitActionsAt = 2;
-                        } else {
-                            this.options.splitActionsAt = 3;
+
+                        if (actions.length > this.options.splitActionsAt) {
+                            this.options.splitActionsAt = this.options.splitActionsAt - 2;
                         }
                         for (i = 0, ii = actions.length; i < ii; i++) {
                             action = actions[i];
