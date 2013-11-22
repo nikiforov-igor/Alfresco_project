@@ -63,7 +63,7 @@
 
         onInitDataGrid: function (layer, args) {
             var datagrid = args[1].datagrid;
-            if (datagrid.options.bubblingLabel == "source-columns") {
+            if (datagrid.options.bubblingLabel == "editSourceColumns") {
                 this.columnsDataGrid = datagrid;
             }
         },
@@ -297,7 +297,7 @@
                                 YAHOO.Bubbling.fire("dataItemCreated",
                                     {
                                         nodeRef: response.json.persistedObject,
-                                        bubblingLabel: "source-columns"
+                                        bubblingLabel: "editSourceColumns"
                                     });
                                 this.toolbarButtons.saveAsButton.set("disabled",false);
                             }
@@ -340,18 +340,23 @@
                     },
                     sort: "lecm-rpeditor:dataColumnCode|true"
                 },
-                bubblingLabel: "source-columns"
+                bubblingLabel: "editSourceColumns"
             });
         },
 
-        _toolbarButtonActivate: function() {
-                this.toolbarButtons.saveAsButton.set("disabled", (this.columnsDataGrid.modules.dataGrid.totalRecords === 0));
+        _toolbarButtonActivate: function (layer, args) {
+            var obj = args[1];
+            if (this.columnsDataGrid) {
+                if (!obj || obj == this.columnsDataGrid.options.bubblingLabel) {
+                    this.toolbarButtons.saveAsButton.set("disabled", (this.columnsDataGrid.modules.dataGrid.totalRecords === 0));
+                }
+            }
         },
 
         _onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args) {
             var obj = args[1];
             if (this.columnsDataGrid) {
-                if (!obj.bubblingLabel || obj.bubblingLabel == this.columnsDataGrid.options.bubblingLabel) {
+                if (!obj || obj == this.columnsDataGrid.options.bubblingLabel) {
                     var items = this.columnsDataGrid.getSelectedItems();
                     for (var index in this.groupActions) {
                         if (this.groupActions.hasOwnProperty(index)) {

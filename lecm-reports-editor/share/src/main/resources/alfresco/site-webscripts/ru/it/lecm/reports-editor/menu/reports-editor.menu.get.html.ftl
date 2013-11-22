@@ -11,7 +11,9 @@ selected = args.selected!"reportsList"/>
         <@comp.baseMenuButton "editDataSource" msg('lecm.reports-editor.editSource.btn') selected/>
         <@comp.baseMenuButton "subReports" msg('lecm.reports-editor.subReports.btn') selected/>
         <@comp.baseMenuButton "editTemplate" msg('lecm.reports-editor.editTemplate.btn') selected/>
-        <@comp.baseMenuButton "deployReport" msg('lecm.reports-editor.deploy.btn') selected/>
+        <#if !reportSettings?? || (reportSettings?? && reportSettings.isSubReport == "false")>
+            <@comp.baseMenuButton "deployReport" msg('lecm.reports-editor.deploy.btn') selected/>
+        </#if>
     </@comp.baseMenu>
 
 <script type="text/javascript">//<![CDATA[

@@ -79,19 +79,19 @@
                                     overrideSortingWith: false,
                                     actions: [
                                         {
-                                            type: "datagrid-action-link-source-columns",
+                                            type: "datagrid-action-link-editSourceColumns",
                                             id: "onActionEdit",
                                             permission: "edit",
                                             label: "${msg("actions.edit")}"
                                         },
                                         {
-                                            type: "datagrid-action-link-source-columns",
+                                            type: "datagrid-action-link-editSourceColumns",
                                             id: "onActionDelete",
                                             permission: "delete",
                                             label: "${msg("actions.delete-row")}"
                                         }
                                     ],
-                                    bubblingLabel: "source-columns",
+                                    bubblingLabel: "editSourceColumns",
                                     showCheckboxColumn: true
                                 }).setMessages(${messages});
 
@@ -106,7 +106,7 @@
                                     },
                                     sort: "lecm-rpeditor:dataColumnCode|true"
                                 },
-                                bubblingLabel: "source-columns"
+                                bubblingLabel: "editSourceColumns"
                             });
                         });
                     }

@@ -185,7 +185,7 @@
         _onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args) {
             var obj = args[1];
             if (this.columnsDataGrid) {
-                if (!obj.bubblingLabel || obj.bubblingLabel == this.columnsDataGrid.options.bubblingLabel) {
+                if (!obj || obj == this.columnsDataGrid.options.bubblingLabel) {
                     var items = this.columnsDataGrid.getSelectedItems();
                     for (var index in this.groupActions) {
                         if (this.groupActions.hasOwnProperty(index)) {

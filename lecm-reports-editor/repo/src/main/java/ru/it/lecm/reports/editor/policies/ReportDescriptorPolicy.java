@@ -155,7 +155,8 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
                         mainDS = sourcesList.get(0).getChildRef();
                     }
                     if (mainDS != null) {
-                        NodeRef subColumn = nodeService.getChildByName(mainDS, ContentModel.ASSOC_CONTAINS, beforeCode.toString());
+                        String columnName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+                        NodeRef subColumn = nodeService.getChildByName(mainDS, ContentModel.ASSOC_CONTAINS, columnName);
                         if (subColumn != null) {
                             nodeService.setProperty(subColumn, ReportsEditorModel.PROP_REPORT_DATA_COLUMN_CODE, afterCode.toString());
                         }
