@@ -451,7 +451,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                 Bubbling.addDefaultAction("show-more", fnActionHandler, me.options.forceSubscribing);
             }
 
-            if (!this.options.overrideSortingWith){
+            if (!this.options.overrideSortingWith && me.options.otherActions != null && me.options.otherActions.length > 0){
                 // Hook action events
                 var fnOtherActionHandler = function DataGrid_fnActionHandler(layer, args)
                 {
@@ -560,7 +560,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width:80 }
                 );
             }
-            if (!this.options.overrideSortingWith){
+            if (!this.options.overrideSortingWith && this.options.otherActions != null && this.options.otherActions.length > 0){
                 // Add actions as last column
                 columnDefinitions.push(
                     { key:"other-actions", label:"", sortable:false, formatter:this.fnRenderCellOtherActions(), width:80 }
@@ -625,7 +625,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                 onSetupActions(this.options.actions, this.id + "-actionSet","datagrid-action-link ");
             }
 
-            if (this.options.otherActions != null) {
+            if (this.options.otherActions != null && this.options.otherActions.length > 0) {
                 onSetupActions(this.options.otherActions, this.id + "-otherActionSet","datagrid-other-action-link ");
             }
         },
