@@ -1491,7 +1491,15 @@
                 <field-visibility>
                     <show id="lecm-contract-table-structure:name" force="true"/>
                     <show id="lecm-contract-table-structure:stage-status"/>
+                    <show id="lecm-contract-table-structure:totalAmountWithCurrency"/>
+                    <show id="lecm-contract-table-structure:end-date"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-contract-table-structure:name" />
+                    <field id="lecm-contract-table-structure:stage-status" />
+                    <field id="lecm-contract-table-structure:totalAmountWithCurrency" label-id="stage.totalAmount" substituteString="{lecm-contract-table-structure:stage-amount} {lecm-contract-table-structure:stage-currency-assoc/lecm-currency:alphabetic-code}"/>
+                    <field id="lecm-contract-table-structure:end-date" />
+                </appearance>
             </form>
             <form id="addTableRow">
                 <field-visibility>
