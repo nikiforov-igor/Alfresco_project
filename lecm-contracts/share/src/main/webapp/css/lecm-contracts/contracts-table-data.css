@@ -13,3 +13,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_stage-status,
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_stage-status div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
