@@ -366,3 +366,11 @@ div.yui-panel.form-container .form-fields {
     background-position-x: center;
 }
 
+.dashlet div.form-container .form-fields {
+    padding: 0;
+}
+
+.dashlet .datagrid .datagrid-bar {
+    margin: 0;
+}
+
