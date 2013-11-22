@@ -10,8 +10,9 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl implements Sub
     private static final long serialVersionUID = 1L;
 
     private String sourceListExpression,
-            destColumnName,
-            beanClassName;
+            destColumnName;
+
+    private String beanClassName = HashMap.class.getName();
 
     private Set<String> sourceTypes = new HashSet<String>();
 

@@ -507,6 +507,8 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             String beanClass = customFlags.get("beanClass");
             if (beanClass != null) {
                 srResult.setBeanClassName(beanClass);
+            } else {
+                srResult.setBeanClassName(HashMap.class.getName());
             }
 
             ItemsFormatDescriptorImpl formatDesc = new ItemsFormatDescriptorImpl();

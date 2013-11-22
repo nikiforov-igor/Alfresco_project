@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.reports.generators.SubreportBuilder;
 import ru.it.lecm.reports.jasper.ProxySubstitudeBean;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
@@ -32,7 +33,10 @@ public class LinksResolver {
      * @return true, если является.
      */
     public boolean isSubstCalcExpr(final String expression) {
-        return (expression != null) && expression.contains(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) && expression.contains(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL);
+        return (expression != null) &&
+                expression.contains(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) &&
+                expression.contains(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) &&
+                !expression.matches(SubreportBuilder.REGEXP_SUBREPORTLINK);
     }
 
     /**

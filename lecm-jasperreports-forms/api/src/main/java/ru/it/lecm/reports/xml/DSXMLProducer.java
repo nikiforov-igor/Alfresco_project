@@ -650,6 +650,8 @@ public class DSXMLProducer {
         if (nodeItem != null) {
             if (nodeItem.hasAttribute(XMLATTR_BEANCLASS)) {
                 result.setBeanClassName(nodeItem.getAttribute(XMLATTR_BEANCLASS));
+            } else {
+                result.setBeanClassName(HashMap.class.getName());
             }
 
 			/* формат <format ... > */
