@@ -436,6 +436,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
             if (this.options.actions.length > this.showActionsCount) {
                 this.showActionsCount = this.options.splitActionsAt;
             }
+            this.splitActionsAtStore = this.options.splitActionsAt;
 
             if (this.options.showActionColumn){
                 // Hook action events
@@ -724,8 +725,8 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                         var actions = YAHOO.util.Selector.query("div", clone),
                             action, aTag, spanTag, actionPermissions, aP, i, ii, j, jj;
 
-                        if (actions.length > this.options.splitActionsAt) {
-                            this.options.splitActionsAt = this.options.splitActionsAt - 2;
+                        if (actions.length > this.splitActionsAtStore) {
+                            this.options.splitActionsAt = this.splitActionsAtStore - 1;
                         }
 
                         for (i = 0, ii = actions.length; i < ii; i++) {

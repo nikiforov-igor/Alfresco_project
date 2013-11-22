@@ -308,6 +308,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
             showActionsCount: 3,
+            splitActionsAtStore: 3,
 
             currentFilter: null,
 
@@ -742,6 +743,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 if (this.options.actions.length > this.showActionsCount) {
                     this.showActionsCount = this.options.splitActionsAt;
                 }
+                this.splitActionsAtStore = this.options.splitActionsAt;
 
 
                 if (this.options.showActionColumn){
@@ -1615,8 +1617,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         var actions = YAHOO.util.Selector.query("div", clone),
                             action, aTag, spanTag, actionPermissions, aP, i, ii, j, jj;
 
-                        if (actions.length > this.options.splitActionsAt) {
-                            this.options.splitActionsAt = this.options.splitActionsAt - 2;
+                        if (actions.length > this.splitActionsAtStore) {
+                            this.options.splitActionsAt = this.splitActionsAtStore - 1;
                         }
                         for (i = 0, ii = actions.length; i < ii; i++) {
                             action = actions[i];
