@@ -385,6 +385,16 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 						for (var i = 0, ii = oData.length, data; i < ii; i++) {
 							data = oData[i];
 
+                            //статус
+                            if (datalistColumn.name.toLowerCase().indexOf("status") > -1) {
+                                var tr = elCell.parentElement.parentElement;
+                                var children = tr.children;
+                                for (var i = 0; i < children.length; i++) {
+                                    children[i].setAttribute("status", data.value);
+                                }
+
+                            }
+
 							var columnContent = "";
 							switch (datalistColumn.dataType.toLowerCase()) { //  меняем отрисовку для конкретных колонок
 								case "cm:content":
