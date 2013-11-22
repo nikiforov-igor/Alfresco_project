@@ -50,7 +50,7 @@
                         window.location = window.location + <#if isDocListPage>"&"<#else>"?"</#if> + preference;
                 } else {
                     <#if defaultFilter?? && defaultKey??>
-                        window.location = window.location + "?query=" + "${defaultFilter}" + "&formId=" + "${defaultKey}";
+                        window.location = window.location + <#if isDocListPage>"&"<#else>"?"</#if> + "query=" + "${defaultFilter}" + "&formId=" + "${defaultKey}";
                     </#if>
                 }
         </#if>
