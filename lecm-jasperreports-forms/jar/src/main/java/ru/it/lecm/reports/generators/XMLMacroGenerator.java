@@ -161,7 +161,6 @@ public class XMLMacroGenerator {
      */
     private static final String VNAME_RDesc = "RDesc";
 
-    final static public String REGEXP_SUBREPORTLINK = "[{]{0,2}subreport[:][:]([^}]+)([}]{0,2})";
     /**
      * активный описатель отчёта
      */
@@ -532,7 +531,7 @@ public class XMLMacroGenerator {
                 for (ColumnDescriptor colDesc : columns) {
                     if (!includeSubColumns &&
                             colDesc.getExpression() != null &&
-                            colDesc.getExpression().matches(REGEXP_SUBREPORTLINK)){
+                            colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)){
                         continue;
                     }
                     index++;

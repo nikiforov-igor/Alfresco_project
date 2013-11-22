@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.ContentReader;
 
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportType;
+import ru.it.lecm.reports.api.model.SubReportDescriptor;
 
 /**
  * Хранилище файлов для службы построения отчётов.
@@ -116,9 +117,19 @@ public interface ReportContentDAO {
 		 * @return
 		 */
 		public static IdRContent createId( ReportDescriptor desc, String fileName) {
-			return (desc == null) 
-						? null 
-						: createId(desc.getReportType(), desc.getMnem(), fileName);
+            if (desc == null) {
+                return null;
+            }
+            if (!(desc instanceof SubReportDescriptor)) {
+                return createId(desc.getReportType(), desc.getMnem(), fileName);
+            } else{
+                // для подотчетов, если тип не задан - берем из родительского отчета
+                ReportType reportType = desc.getReportType();
+                if (reportType == null) {
+                    reportType = ((SubReportDescriptor) desc).getOwnerReport().getReportType();
+                }
+                return createId(reportType, desc.getMnem(), fileName);
+            }
 		}
 
 		public IdRContent(ReportType reportType, String reportMnemo, String fileName)

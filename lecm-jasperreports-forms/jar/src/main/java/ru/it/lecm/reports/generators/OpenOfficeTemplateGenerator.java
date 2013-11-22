@@ -1,27 +1,6 @@
 package ru.it.lecm.reports.generators;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-
-import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
-
-import org.alfresco.util.PropertyCheck;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
-import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.utils.Utils;
-
-import com.sun.star.beans.Property;
-import com.sun.star.beans.PropertyAttribute;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.XPropertyContainer;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertySetInfo;
+import com.sun.star.beans.*;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.document.XDocumentProperties;
@@ -36,6 +15,19 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.DateTime;
+import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
+import org.alfresco.util.PropertyCheck;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.SubReportDescriptor;
+import ru.it.lecm.reports.utils.Utils;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Генератор шаблонов документов для OpenOffice-отчётов: формируется документ с
@@ -155,101 +147,97 @@ public class OpenOfficeTemplateGenerator {
 	 *                      null, если сохранить надо под прежним именем.
 	 * @param author        если не null, то автор, которого надо прописать.
 	 */
-	public void odtAddColumnsAsDocCustomProps(OpenOfficeConnection connection,
-			ReportDescriptor desc, String srcOODocUrl, String destSaveAsUrl,
-			String author) {
-		final boolean needSaveAs = !Utils.isStringEmpty(destSaveAsUrl);
-		logger.debug(String.format(
-				"\n\t add DS columns into openOffice document '%s' %s"
-				, srcOODocUrl
-				, (needSaveAs ? String.format("\n\t as '%s'", destSaveAsUrl) : "")
-				));
+    public void odtAddColumnsAsDocCustomProps(OpenOfficeConnection connection,
+                                              ReportDescriptor desc, String srcOODocUrl, String destSaveAsUrl,
+                                              String author) {
+        final boolean needSaveAs = !Utils.isStringEmpty(destSaveAsUrl);
+        logger.debug(String.format(
+                "\n\t add DS columns into openOffice document '%s' %s"
+                , srcOODocUrl
+                , (needSaveAs ? String.format("\n\t as '%s'", destSaveAsUrl) : "")
+        ));
 
-		PropertyCheck.mandatory(this, "connection", connection);
-		PropertyCheck.mandatory(this, "templateUrl", srcOODocUrl);
-		// PropertyCheck.mandatory(this, "saveUrl", destOdtUrl);
+        PropertyCheck.mandatory(this, "connection", connection);
+        PropertyCheck.mandatory(this, "templateUrl", srcOODocUrl);
+        PropertyCheck.mandatory(this, "reportDesc", desc);
+        PropertyCheck.mandatory(this, "dataSource", desc.getDsDescriptor());
+        PropertyCheck.mandatory(this, "columns", desc.getDsDescriptor().getColumns());
 
-		PropertyCheck.mandatory(this, "reportDesc", desc);
-		PropertyCheck.mandatory(this, "dataSource", desc.getDsDescriptor());
-		PropertyCheck.mandatory(this, "columns", desc.getDsDescriptor().getColumns());
-
-		// авто-соединение
-		// if (!connection.isConnected()) connection.connect();
-
-		String stage = "create desktop";
-		try {
-			final XComponentLoader xLoaderDesktop = connection.getDesktop();
+        String stage = "Create Desktop";
+        try {
+            final XComponentLoader xLoaderDesktop = connection.getDesktop();
 
 			/* (1) Open the document */
-			stage = String.format("opening openOffice document '%s'", srcOODocUrl);
-			final XComponent xCompDoc = openDoc(xLoaderDesktop, srcOODocUrl);
-
-			// final com.sun.star.beans.XPropertySet docProps = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCompDoc);
-			// dumpProperties( String.format( "\nProperties of document \"%s\":\n\t", srcOdtUrl), docProps);
+            stage = String.format("Opening openOffice document '%s'", srcOODocUrl);
+            final XComponent xCompDoc = openDoc(xLoaderDesktop, srcOODocUrl);
 
 			/* (2) добавление свойств */
-			{
-				// final XTextDocument document = UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class, xCompDoc);
-				// final XDocumentPropertiesSupplier xDocInfoSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, document);
+            stage = String.format("Get openOffice properties of document '%s'", srcOODocUrl);
+            final XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
+            final XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
+            final XPropertyContainer userPropsContainer = xDocProps.getUserDefinedProperties();
 
-				stage = String.format("get openOffice properties of document '%s'", srcOODocUrl);
-				final XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
-				final XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
-				final XPropertyContainer userPropsContainer = xDocProps.getUserDefinedProperties();
+            if (author != null) {
+                xDocProps.setAuthor(author);
+            }
+            //TODO DBashmakov Всегда добавлять строковые значения в отчет? Или типизированные?
+            for (ColumnDescriptor col : desc.getDsDescriptor().getColumns()) {
+                stage = String.format("Add property '%s' with expression '%s'", col.getColumnName(), col.getExpression());
+                if (col.getExpression() != null) {
+                    if (col.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {//если колонка - подотчет
+                        List<SubReportDescriptor> subReportsList = desc.getSubreports();
+                        if (subReportsList != null) {
+                            String subReportCode = col.getColumnName();
+                            for (SubReportDescriptor subReportDescriptor : subReportsList) {
+                                if (subReportDescriptor.getMnem().equals(subReportCode)) { // нашли нужный подотчет - добавляем его к параметрам
+                                    userPropsContainer.addProperty(subReportCode, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, subReportCode);
 
-				if (author != null) {
-					stage = String.format("set openOffice property Author='%s'\n\t of document '%s'", author, srcOODocUrl);
-					xDocProps.setAuthor(author);
-					logger.debug(stage);
-				}
+                                    // вытаскиваем все его поля
+                                    List<ColumnDescriptor> subReportColumns = subReportDescriptor.getDsDescriptor().getColumns();
+                                    if (subReportColumns != null) {
+                                        for (ColumnDescriptor subReportColumn : subReportColumns) {
+                                            Object value = getTypedDefaultValue(subReportColumn);
+                                            userPropsContainer.addProperty(subReportCode + "." + subReportColumn.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
 
-				/*
-				 * stage = String.format( "set openOffice property createDate of document '%s'", srcOdtUrl);
-				 * com.sun.star.util.DateTime dt = new DateTime(now); xDocProps.setCreationDate(dt);
-				 */
-
-				for (ColumnDescriptor col : desc.getDsDescriptor().getColumns()) {
-					stage = String.format("(!) fail to directly add property '%s' with expression '%s'", col.getColumnName(), col.getExpression());
-					final Object value = getTypedDefaultValue(col);
-					userPropsContainer.addProperty(col.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
-				} // for ColumnDescriptor
-
-				// final XPropertySet userPropSet = UnoRuntime.queryInterface(XPropertySet.class, userPropsContainer);
-				// dumpProperties( String.format( "\nCustom properties of document \"%s\":\n\t", srcOdtUrl), userPropSet);
-			}
+                    } else {
+                        Object value = getTypedDefaultValue(col);
+                        userPropsContainer.addProperty(col.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
+                    }
+                }
+            }
 
 			/* (3) Сохранение */
-			{
-				final String docInfo = (needSaveAs) ? String.format("\n\t as '%s'", destSaveAsUrl) : "";
-				stage = String.format("saving openOffice document\n\t '%s' %s", srcOODocUrl, docInfo);
-				final com.sun.star.frame.XStorable xStorable = saveDocAs(xCompDoc, destSaveAsUrl);
-				if (xStorable != null)
-					logger.debug(String.format("\nDocument '%s' saved %s \n", srcOODocUrl, docInfo));
-			}
+            final String docInfo = (needSaveAs) ? String.format("\n\t as '%s'", destSaveAsUrl) : "";
+            stage = String.format("Saving openOffice document\n\t '%s' %s", srcOODocUrl, docInfo);
+            final com.sun.star.frame.XStorable xStorable = saveDocAs(xCompDoc, destSaveAsUrl);
+            if (xStorable != null) {
+                logger.debug(String.format("\nDocument '%s' saved %s \n", srcOODocUrl, docInfo));
+            }
 
 			/* (4) Закрыть Документ */
-			stage = String.format("closing openOffice document '%s'", srcOODocUrl);
-			closeDoc(xCompDoc);
-
-			stage = null;
-		} catch (Throwable ex) {
-			final String msg = String.format("fail at stage\n\t %s\n\t error %s", stage, ex.getMessage());
-			logger.error(msg, ex);
-			if (ex instanceof DisposedException)
-				throw (DisposedException) ex;
-			throw new RuntimeException(msg, ex);
-		}
-	}
+            stage = String.format("Closing openOffice document '%s'", srcOODocUrl);
+            closeDoc(xCompDoc);
+        } catch (Throwable ex) {
+            final String msg = String.format("fail at stage\n\t %s\n\t error %s", stage, ex.getMessage());
+            logger.error(msg, ex);
+            if (ex instanceof DisposedException) {
+                throw (DisposedException) ex;
+            }
+            throw new RuntimeException(msg, ex);
+        }
+    }
 
 
 	/**
 	 * Задать свойства для атрибутов документа
 	 *
 	 * @param props         задаваемые значения (ключи - имена атрибутов)
-	 * @param connection
-	 * @param desc
-	 * @param srcOODocUrl
-	 * @param destSaveAsUrl
 	 * @param author        автор изменений
 	 */
 	public void odtSetColumnsAsDocCustomProps(Map<String, Object> props
@@ -274,7 +262,21 @@ public class OpenOfficeTemplateGenerator {
 			stage = String.format("opening openOffice document '%s'", srcOODocUrl);
 			final XComponent xCompDoc = openDoc(xLoaderDesktop, srcOODocUrl);
 
-			/* (2) обновление существующих свойств ... */
+            /*XTextTablesSupplier tablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, xCompDoc);
+
+            XTextTable stagesTab = getTable(tablesSupplier, "col_Stages");
+            //stagesTab.getRows().insertByIndex(stagesTab.getRows().getCount(), 1);
+
+            for (int i = 1; i <= stagesTab.getRows().getCount(); i++) {
+                for (int j = 0; j < stagesTab.getColumns().getCount(); j++) {
+                    String cellName = String.valueOf((char)('A' + j)) + i;
+                    XCell cell = stagesTab.getCellByName(cellName);
+                    XText text = UnoRuntime.queryInterface(XText.class, cell);
+                    text.setString((char)('A' + j) + "TEST" + i);
+                }
+            }*/
+
+            /* (2) обновление существующих свойств ... */
 
 			stage = String.format("get openOffice properties of document '%s'", srcOODocUrl);
 
@@ -409,8 +411,6 @@ public class OpenOfficeTemplateGenerator {
 	/**
 	 * Присвоение значения openOffice-атрибуту свойства с учётом его типа.
 	 *
-	 * @param docProperties
-	 * @param propName
 	 * @param propValue     присваиваемое значение, конвертируется в целевой тип.
 	 * @throws UnknownPropertyException
 	 * @throws PropertyVetoException
@@ -502,42 +502,16 @@ public class OpenOfficeTemplateGenerator {
 		return result;
 	}
 
-	public static StringBuilder dumpProperties(String info, XPropertySet docProps) {
-		final StringBuilder result = new StringBuilder();
-		if (info != null) {
-			result.append(info);
-		}
-		if (info != null) {
-			final XPropertySetInfo pset = docProps.getPropertySetInfo();
-			final Property[] properties = (pset != null) ? pset.getProperties() : null;
-			if (properties == null) {
-				result.append("\t properties are null");
-			} else {
-				result.append(String.format("\t properties count: %s", properties.length));
-				for (int i = 0; i < properties.length; i++) {
-					try {
-						final Property p = properties[i];
-						result.append(String.format("\n\t[%s] '%s'=", i + 1, p.Name));
-						result.append(String.format(
-								"'%s'\n\t\t short flags: %s\n\t\t type: %s"
-								, Utils.coalesce(docProps.getPropertyValue(p.Name), "NULL")
-								, p.Attributes
-								, Utils.coalesce((p.Type != null) ? p.Type.getZClass() : null, "Type=NULL")
-								));
-					} catch (Throwable ex) {
-						result.append(String.format("\n Error: %s\n", ex.getMessage()));
-					}
-				} // for
-				result.append("\n");
-			}
-		} // if (info != null)
-		return result;
-	}
-
 	public static PropertyValue newPropertyValue(String propName, Object propVal) {
 		final PropertyValue result = new PropertyValue();
 		result.Name = propName;
 		result.Value = propVal;
 		return result;
 	}
+
+    /*private XTextTable getTable(XTextTablesSupplier tablesSupplier, String tableName) throws NoSuchElementException, WrappedTargetException {
+        XNameAccess xNamedTables = tablesSupplier.getTextTables();
+        Object table = xNamedTables.getByName(tableName);
+        return (XTextTable) UnoRuntime.queryInterface(XTextTable.class, table);
+    }*/
 }

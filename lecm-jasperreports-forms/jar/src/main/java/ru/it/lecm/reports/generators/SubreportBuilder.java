@@ -40,6 +40,8 @@ public class SubreportBuilder {
 
     final public static Class<?> DEFAULT_BEANCLASS = HashMap.class;
 
+    final static public String REGEXP_SUBREPORTLINK = "[{]{0,2}subreport[:][:]([^}]+)([}]{0,2})";
+
     private static final Logger logger = LoggerFactory.getLogger(SubreportBuilder.class);
 
     final private SubReportDescriptor subreport;

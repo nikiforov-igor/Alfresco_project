@@ -497,7 +497,9 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
         // тип данных для вложенного списка полей должен быть указан в поле Использовать для типов
         List<String> sourceTypes = subreportDesc.getFlags().getSupportedNodeTypes();
-        srResult.setSourceListType(new HashSet<String>(sourceTypes));
+        if (sourceTypes != null) {
+            srResult.setSourceListType(new HashSet<String>(sourceTypes));
+        }
 
         // TODO: + beanClass, format, ifEmpty, delimiter
         Map<String, String> customFlags = subreportDesc.getFlags().getFlagsMap();

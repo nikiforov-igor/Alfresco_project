@@ -249,7 +249,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 								final String urlWork = toUrl(workFile, connection);
 								final String urlSaveAs = null; // если надо задать название файла другим ...
 
-								final String author = "lecm user";
+								final String author = "LECM USER";
 
 								/* Добавление атрибутов из колонок данных и сохранение в urlSave... */
 								final OpenOfficeTemplateGenerator ooGen = new OpenOfficeTemplateGenerator();

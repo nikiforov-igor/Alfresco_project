@@ -657,6 +657,10 @@ public class ReportsManagerImpl implements ReportsManager {
         }
 
         checkReportDescData(desc);
+        if (desc instanceof SubReportDescriptor && desc.getReportType().getMnem() == null) {
+            return;
+        }
+
         setDefaults(desc);
 
         // создание ds-файла ...
