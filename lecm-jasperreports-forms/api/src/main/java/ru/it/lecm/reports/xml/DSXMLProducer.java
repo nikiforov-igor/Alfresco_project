@@ -595,8 +595,6 @@ public class DSXMLProducer {
         final Element listItem = doc.createElement(XMLNODE_SUBLIST_ITEM);
         result.appendChild(listItem);
 
-        listItem.setAttribute(XMLATTR_BEANCLASS, subreport.getBeanClassName());
-
 			/* отгрузка формата <format ... > */
         xmlCreateItemsFormat(doc, listItem, XMLNODE_FORMAT, subreport.getItemsFormat());
 
@@ -648,12 +646,6 @@ public class DSXMLProducer {
         // load <list.item beanClass="...">
         final Element nodeItem = XmlHelper.findNodeByName(srcNodeSubreport, XMLNODE_SUBLIST_ITEM);
         if (nodeItem != null) {
-            if (nodeItem.hasAttribute(XMLATTR_BEANCLASS)) {
-                result.setBeanClassName(nodeItem.getAttribute(XMLATTR_BEANCLASS));
-            } else {
-                result.setBeanClassName(HashMap.class.getName());
-            }
-
 			/* формат <format ... > */
             final Element nodeFormat = XmlHelper.findNodeByName(nodeItem, XMLNODE_FORMAT);
             if (nodeFormat != null) {
@@ -663,7 +655,6 @@ public class DSXMLProducer {
                     logger.warn(String.format("Subreport '%s' has format when bean class is configured -> format ignored"
                             + "\n\t bean class using: '%s'\n\t format will be ignored ignored: '%s'"
                             , result.getMnem()
-                            , result.getBeanClassName()
                             , result.getItemsFormat()
                     ));
                 }

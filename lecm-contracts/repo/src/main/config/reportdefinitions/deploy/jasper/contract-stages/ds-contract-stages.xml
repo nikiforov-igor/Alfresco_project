@@ -70,7 +70,7 @@
             <sublist.source><![CDATA[{lecm-contract-table-structure:stages-assoc/cm:contains/}]]></sublist.source>
             <sublist.type><![CDATA[lecm-contract-table-structure:stage]]></sublist.type>
             <sublist.sort><![CDATA[col_Number|ASC]]></sublist.sort>
-            <sublist.item beanclass="">
+            <sublist.item>
                 <map>
                     <item key="col_StartDate_Plan"><![CDATA[lecm-contract-table-structure:start-date]]></item>
                     <item key="col_Title"><![CDATA[{lecm-contract-table-structure:name}]]></item>

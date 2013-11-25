@@ -31,12 +31,6 @@ public interface SubReportDescriptor extends ReportDescriptor
 	public static final String BEAN_PROPNAME_COL_ROWNUM = "colRownum";
 
 	/**
-	 * значение класса бина для случая использования простого форматирования
-	 * (вместо формирования списка бинов)
-	 */ 
-	public static final String VAL_BEANCLASS_BYFORMAT = "byFormat";
-
-	/**
 	 * @return источник получения списка вложенных объектов для подотчёта.
 	 * <br/> Обычно это исходная ассоциация в объкете главного набора данных,
 	 * из которой надо будет получить список вложений.
@@ -59,14 +53,6 @@ public interface SubReportDescriptor extends ReportDescriptor
 	 */
 	String getDestColumnName();
 	void setDestColumnName(String columnName);
-
-	/**
-	 * Класс бина или Map, который должен обеспечить хранение строки подотчёта.
-	 * Если не указан, то предполагается "java.util.Map".
-	 * @return
-	 */
-	String getBeanClassName();
-	void setBeanClassName(String beanClassName);
 
 	/**
 	 * @return <li> true, если ассоциированный список должен быть отформатирован

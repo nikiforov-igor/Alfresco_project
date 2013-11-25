@@ -13,12 +13,10 @@ import ru.it.lecm.reports.api.model.SubReportDescriptor;
 import ru.it.lecm.reports.api.model.SubReportDescriptor.ItemsFormatDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.MultiplySortObject;
-import ru.it.lecm.reports.jasper.utils.MacrosHelper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.NodeUtils;
 
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
@@ -37,9 +35,6 @@ import java.util.*;
  * @author rabdullin
  */
 public class SubreportBuilder {
-
-    final public static Class<?> DEFAULT_BEANCLASS = HashMap.class;
-
     final static public String REGEXP_SUBREPORTLINK = "[{]{0,2}subreport[:][:]([^}]+)([}]{0,2})";
 
     private static final Logger logger = LoggerFactory.getLogger(SubreportBuilder.class);
@@ -165,43 +160,6 @@ public class SubreportBuilder {
         } // for i
     }
 
-    /**
-     * @return true, если текущий класс бина это интерфейс Map или класс HashMap
-     *         или если класс не задан
-     */
-    final public boolean beanClassIsMap() {
-        return Utils.isStringEmpty(subreport.getBeanClassName())
-                || subreport.getBeanClassName().equals(Map.class.getName())
-                || subreport.getBeanClassName().equals(HashMap.class.getName());
-    }
-
-    /**
-     * Создать пустой бин для задачи (согласно beanClass)
-     */
-    protected Object createInfoBean() {
-        Object result = null;
-        try {
-            if (!Utils.isStringEmpty(subreport.getBeanClassName())) {
-                final Constructor<?> cons = Class.forName(subreport.getBeanClassName()).getConstructor();
-                result = cons.newInstance();
-            }
-        } catch (Throwable ex) {
-            // при ошбиках создаём по-умолчанию ...
-            final String msg = String.format("Cannot create bean configured as class '%s' -> using default %s\n"
-                    , subreport.getBeanClassName(), DEFAULT_BEANCLASS.getName());
-            logger.error(msg, ex);
-        }
-
-        if (result == null) {
-            try {
-                result = DEFAULT_BEANCLASS.getConstructor().newInstance();
-            } catch (Throwable t) {
-                throw new RuntimeException(String.format("Cannot create bean by default type '%s'", DEFAULT_BEANCLASS.getName()));
-            }
-        }
-        return result;
-    }
-
     protected Object makeSubItem(Map<String, Object> args, int subItemNum) {
         if (args == null) {
             return null;
@@ -215,35 +173,7 @@ public class SubreportBuilder {
             return Utils.expandFromCharPairs(resultStr);
         }
 
-        if (beanClassIsMap()) {
-            // если требуется обычный Map/HashMap -> уже готово
             return args;
-        }
-
-		/* иначе -> создание бина ... */
-
-        final Object resultBean = createInfoBean(); // Create bean
-        assignProperties(resultBean, args);
-        return resultBean;
-    }
-
-    /**
-     * Заполнить бин свойствами. Если Бин это мапа, то заполнение короткое.
-     *
-     * @param destBean Object
-     * @param args     Map<String, Object
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    protected void assignProperties(final Object destBean, final Map<String, Object> args) {
-        if (destBean instanceof Map) {
-            /* Если создан потомок Map - выполняем его заполнение напрямую */
-            ((Map) destBean).putAll(args);
-        } else {  /* заполнение "честного" бина */
-            for (final Map.Entry<String, Object> e : args.entrySet()) {
-                final String propName = e.getKey();
-                MacrosHelper.safeSetBeanProperty(destBean, propName, e.getValue(), logger);
-            }
-        }
     }
 
     /**

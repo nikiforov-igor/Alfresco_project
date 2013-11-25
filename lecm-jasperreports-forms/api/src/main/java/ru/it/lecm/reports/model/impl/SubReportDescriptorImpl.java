@@ -2,7 +2,6 @@ package ru.it.lecm.reports.model.impl;
 
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.SubReportDescriptor;
-import ru.it.lecm.reports.utils.Utils;
 
 import java.util.*;
 
@@ -11,8 +10,6 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl implements Sub
 
     private String sourceListExpression,
             destColumnName;
-
-    private String beanClassName = HashMap.class.getName();
 
     private Set<String> sourceTypes = new HashSet<String>();
 
@@ -35,19 +32,13 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl implements Sub
         this.setSubreports(descriptor.getSubreports());
     }
 
-    public SubReportDescriptorImpl(String reportName) {
-        super(reportName);
-    }
-
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         builder.append("SubReportDescriptorImpl [");
         builder.append("ownerReport '").append((ownerReport == null) ? "null" : ownerReport.getMnem()).append("'");
         builder.append("destColumn '").append(destColumnName).append("'");
-        // builder.append(", tagIfEmpty '").append(tagIfEmpty).append("'");
         builder.append("\n\t, sourceListExpression '").append(sourceListExpression).append("'");
-        builder.append("\n\t, beanClassName '").append(beanClassName).append("'");
         builder.append("\n\t, itemsFormat ").append(itemsFormat);
         builder.append("\n\t, subItemsSourceMap [").append(subItemsSourceMap).append("]");
         builder.append("\n\t, reportDescriptor ").append(super.toString());
@@ -98,16 +89,6 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl implements Sub
     }
 
     @Override
-    public String getBeanClassName() {
-        return beanClassName;
-    }
-
-    @Override
-    public void setBeanClassName(String beanClassName) {
-        this.beanClassName = beanClassName;
-    }
-
-    @Override
     public ItemsFormatDescriptor getItemsFormat() {
         return itemsFormat;
     }
@@ -139,9 +120,7 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl implements Sub
 
     @Override
     public boolean isUsingFormat() {
-        // класс бина не указан, равен сигнатуре И задан формат
-        return (Utils.isStringEmpty(this.beanClassName)
-                || VAL_BEANCLASS_BYFORMAT.equalsIgnoreCase(this.beanClassName)) && (this.itemsFormat != null);
+        return this.itemsFormat != null;
     }
 
     @Override

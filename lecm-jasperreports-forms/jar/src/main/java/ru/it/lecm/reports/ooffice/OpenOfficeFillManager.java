@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.ooffice;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.generators.OpenOfficeTemplateGenerator;
+import ru.it.lecm.reports.generators.SubreportBuilder;
 
 public class OpenOfficeFillManager {
 
@@ -34,7 +36,6 @@ public class OpenOfficeFillManager {
      * @param dataSource набор данных
      * @param urlSrc     исходный файл openOffice (".odt")
      * @param urlSaveAs  целевой файл (может иметь другой формат, например, ".rtf")
-     * @return
      * @throws JRException
      */
     public void fill(
@@ -58,16 +59,18 @@ public class OpenOfficeFillManager {
             if (dataSource.next()) {
                 /* получение данных из текущей строки ... */
                 for (ColumnDescriptor colDesc : report.getDsDescriptor().getColumns()) {
-                    final Object value = dataSource.getFieldValue(DataFieldColumn.createDataField(colDesc));
+                    Object value = dataSource.getFieldValue(DataFieldColumn.createDataField(colDesc));
+                    if (value == null && colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
+                        // пустой подотчет - вместо null подсовываем пустой список
+                        value = new ArrayList();
+                    }
                     props.put(colDesc.getColumnName(), value);
                 }
             }
         }
 
-		final String author = null;
-
         final OpenOfficeTemplateGenerator ooGen = new OpenOfficeTemplateGenerator();
-		ooGen.odtSetColumnsAsDocCustomProps(props, getConnection(), report, urlSrc, urlSaveAs, author);
+		ooGen.odtSetColumnsAsDocCustomProps(props, getConnection(), report, urlSrc, urlSaveAs, null);
     }
 
 }

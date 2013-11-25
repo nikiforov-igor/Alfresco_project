@@ -504,13 +504,6 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         // TODO: + beanClass, format, ifEmpty, delimiter
         Map<String, String> customFlags = subreportDesc.getFlags().getFlagsMap();
         if (customFlags != null && customFlags.size() > 0) {
-            String beanClass = customFlags.get("beanClass");
-            if (beanClass != null) {
-                srResult.setBeanClassName(beanClass);
-            } else {
-                srResult.setBeanClassName(HashMap.class.getName());
-            }
-
             ItemsFormatDescriptorImpl formatDesc = new ItemsFormatDescriptorImpl();
 
             String format = customFlags.get("format");

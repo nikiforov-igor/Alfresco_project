@@ -48,7 +48,7 @@ public class OpenOfficeTemplateGenerator {
     private static final String FILTERTAG_FOR_RTF = "Rich Text Format";
     private static final String FILTERTAG_FOR_DOC = "MS Word 97";
 
-    private static String dateFormat = "dd.MM.yyyy";
+    private static final String DD_MM_YYYY = "dd.MM.yyyy";
 
     /**
      * Флажок для свойства документа, который только и позволит сохранить
@@ -70,40 +70,22 @@ public class OpenOfficeTemplateGenerator {
     /**
      * Открыть указанный openOffice-файл
      *
-     * @param desktop
-     * @return
      * @throws IllegalArgumentException
      * @throws IOException
      */
     public static XComponent openDoc(XComponentLoader desktop, String srcUrl) throws IOException, IllegalArgumentException {
         /* (1) Open the document */
         final int searchFlags = 0;
-        final XComponent xCompDoc = desktop.loadComponentFromURL(
+        return desktop.loadComponentFromURL(
                 srcUrl,
                 "_blank",
                 searchFlags,
                 new PropertyValue[]{newPropertyValue("Hidden", Boolean.TRUE)});
-        return xCompDoc;
-    }
-
-    /**
-     * Сохранить указанный документ по своим текущим именем
-     *
-     * @param xCompDoc
-     * @return
-     * @throws IOException
-     */
-    public static com.sun.star.frame.XStorable saveDoc(final XComponent xCompDoc)
-            throws IOException {
-        return saveDocAs(xCompDoc, null);
     }
 
     /**
      * Сохранить указанный документ по именем
      *
-     * @param xCompDoc
-     * @param destUrl
-     * @return
      * @throws IOException
      */
     public static com.sun.star.frame.XStorable saveDocAs(final XComponent xCompDoc, final String destUrl) throws IOException {
@@ -187,34 +169,32 @@ public class OpenOfficeTemplateGenerator {
             if (author != null) {
                 xDocProps.setAuthor(author);
             }
-            //TODO DBashmakov Всегда добавлять строковые значения в отчет? Или типизированные?
             for (ColumnDescriptor col : desc.getDsDescriptor().getColumns()) {
                 stage = String.format("Add property '%s' with expression '%s'", col.getColumnName(), col.getExpression());
                 if (col.getExpression() != null) {
-                    if (col.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {//если колонка - подотчет
+                    if (!col.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {//если колонка - не подотчет
+                        Object value = getTypedDefaultValue(col);
+                        userPropsContainer.addProperty(col.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
+                    } else {
                         List<SubReportDescriptor> subReportsList = desc.getSubreports();
                         if (subReportsList != null) {
                             String subReportCode = col.getColumnName();
                             for (SubReportDescriptor subReportDescriptor : subReportsList) {
                                 if (subReportDescriptor.getMnem().equals(subReportCode)) { // нашли нужный подотчет - добавляем его к параметрам
                                     userPropsContainer.addProperty(subReportCode, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, subReportCode);
-                                    userPropsContainer.addProperty(subReportCode + ".class", DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, subReportDescriptor.getBeanClassName());
                                     // вытаскиваем все его поля
                                     List<ColumnDescriptor> subReportColumns = subReportDescriptor.getDsDescriptor().getColumns();
                                     if (subReportColumns != null) {
                                         for (ColumnDescriptor subReportColumn : subReportColumns) {
                                             String value = subReportCode + "." + subReportColumn.getColumnName();
-                                            userPropsContainer.addProperty(value, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + value + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL);
+                                            userPropsContainer.addProperty(value, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE,
+                                                    SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + value + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL);
                                         }
                                     }
                                     break;
                                 }
                             }
                         }
-
-                    } else {
-                        Object value = getTypedDefaultValue(col);
-                        userPropsContainer.addProperty(col.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
                     }
                 }
             }
@@ -315,7 +295,7 @@ public class OpenOfficeTemplateGenerator {
                             }
                         } catch (Throwable t) {
                             /*
-							 * это не страшно: например, сюда падаем с com.sun.star.lang.IllegalArgumentException
+                             * это не страшно: например, сюда падаем с com.sun.star.lang.IllegalArgumentException
 							 * при присвоении типизированному свойству значения NULL (например, для Дат)
 							 */
                             mustLog = true;
@@ -401,7 +381,7 @@ public class OpenOfficeTemplateGenerator {
         } else if (java.lang.Double.class.getName().equals(col.getDataType().className())) {
             value = (double) 0;
         } else { // иначе - просто присвоим выражение
-            value = col.getExpression();
+            value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + col.getColumnName() + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
         }
         return value;
     }
@@ -417,48 +397,52 @@ public class OpenOfficeTemplateGenerator {
      */
     public static void assignTypedProperty(final XPropertySet docProperties, final String propName, final Object propValue)
             throws UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException {
-        // присвоение NULL всегда прокатит ...
         if (propValue == null) {
-            docProperties.setPropertyValue(propName, null);
+            docProperties.setPropertyValue(propName, "");
             return;
         }
 
-        final String sPropValue = (propValue instanceof String) ? (String) propValue : null;
+        final String sPropValue = String.valueOf(propValue);
 
         // проверяем фактический тип аргумента ...
         final Property pi = docProperties.getPropertySetInfo().getPropertyByName(propName);
         com.sun.star.uno.Type t = pi.Type;
-        if (sPropValue != null) {
-            // при присвоении строки будем выполнять конвертирование в целевой тип ...
-            if (t.equals(Type.STRING)) {
-                docProperties.setPropertyValue(propName, propValue);
-                return;
-            } else if (t.equals(Type.BOOLEAN)) {
-                docProperties.setPropertyValue(propName, Boolean.valueOf(sPropValue.trim()));
-                return;
-            } else if (t.equals(Type.BYTE)) {
-                docProperties.setPropertyValue(propName, Byte.valueOf(sPropValue.trim()));
-                return;
-            } else if (t.equals(Type.SHORT) || t.equals(Type.UNSIGNED_SHORT)) { // 2х байтный
-                docProperties.setPropertyValue(propName, Short.valueOf(sPropValue.trim()));
-                return;
-            } else if (t.equals(Type.LONG) || t.equals(Type.UNSIGNED_LONG)) { // 4х байтный
-                docProperties.setPropertyValue(propName, Integer.valueOf(sPropValue.trim()));
-                return;
-            } else if (t.equals(Type.HYPER) || t.equals(Type.UNSIGNED_HYPER)) { // 8и байтный
-                docProperties.setPropertyValue(propName, Long.valueOf(sPropValue.trim()));
-                return;
-            } else if (t.equals(Type.FLOAT)) {
-                docProperties.setPropertyValue(propName, Float.valueOf(sPropValue.trim()));
-                return;
-            } else if (t.equals(Type.DOUBLE)) {
-                docProperties.setPropertyValue(propName, Double.valueOf(sPropValue.trim()));
-                return;
-            } else if (t.equals(Type.CHAR)) {
-                final char ch = (sPropValue.length() == 0) ? '\00' : sPropValue.charAt(0);
-                docProperties.setPropertyValue(propName, ch);
+        // при присвоении строки будем выполнять конвертирование в целевой тип ...
+        if (t.equals(Type.STRING)) {
+            if (propValue instanceof java.util.Date) {
+                // дату преобразуем в строку согласно формату
+                DateFormat dFormat = new SimpleDateFormat(DD_MM_YYYY);
+                String dateStr = dFormat.format(propValue);
+                docProperties.setPropertyValue(propName, dateStr);
                 return;
             }
+            docProperties.setPropertyValue(propName, sPropValue);
+            return;
+        } else if (t.equals(Type.BOOLEAN)) {
+            docProperties.setPropertyValue(propName, Boolean.valueOf(sPropValue.trim()));
+            return;
+        } else if (t.equals(Type.BYTE)) {
+            docProperties.setPropertyValue(propName, Byte.valueOf(sPropValue.trim()));
+            return;
+        } else if (t.equals(Type.SHORT) || t.equals(Type.UNSIGNED_SHORT)) { // 2х байтный
+            docProperties.setPropertyValue(propName, Short.valueOf(sPropValue.trim()));
+            return;
+        } else if (t.equals(Type.LONG) || t.equals(Type.UNSIGNED_LONG)) { // 4х байтный
+            docProperties.setPropertyValue(propName, Integer.valueOf(sPropValue.trim()));
+            return;
+        } else if (t.equals(Type.HYPER) || t.equals(Type.UNSIGNED_HYPER)) { // 8и байтный
+            docProperties.setPropertyValue(propName, Long.valueOf(sPropValue.trim()));
+            return;
+        } else if (t.equals(Type.FLOAT)) {
+            docProperties.setPropertyValue(propName, Float.valueOf(sPropValue.trim()));
+            return;
+        } else if (t.equals(Type.DOUBLE)) {
+            docProperties.setPropertyValue(propName, Double.valueOf(sPropValue.trim()));
+            return;
+        } else if (t.equals(Type.CHAR)) {
+            final char ch = (sPropValue.length() == 0) ? '\00' : sPropValue.charAt(0);
+            docProperties.setPropertyValue(propName, ch);
+            return;
         }
 
         // здесь propValue уже не строки ...
@@ -520,7 +504,7 @@ public class OpenOfficeTemplateGenerator {
 
                             Object valueToWrite = objMap.get(subColumnCode);
                             if (valueToWrite instanceof Date) {
-                                DateFormat dFormat = new SimpleDateFormat(dateFormat);
+                                DateFormat dFormat = new SimpleDateFormat(DD_MM_YYYY);
                                 valueToWrite = dFormat.format(valueToWrite);
                             }
                             text.setString(valueToWrite != null ? String.valueOf(valueToWrite) : "");
@@ -528,17 +512,6 @@ public class OpenOfficeTemplateGenerator {
                             text.setString(columnsExpressions[j]);
                         }
                     }
-                } else {
-                    /*Class elementsClass = Map.class;
-                    if (docProps.getPropertySetInfo().hasPropertyByName(propName + ".class")){
-                        try {
-                            String elementsClassName = (String)docProps.getPropertyValue(propName + ".class");
-                            elementsClass = Class.forName(elementsClassName);
-                        }  catch (Exception e) {
-                            logger.error(e.getMessage(), e);
-                        }
-                    }
-                    elementsClass.cast(listObject);*/
                 }
             }
         }
@@ -549,7 +522,6 @@ public class OpenOfficeTemplateGenerator {
     /**
      * Преобразование даты в office-DateTime
      *
-     * @param d
      * @return null, если d = null и преобразованную дату иначе (часовой пояс
      *         новой даты будет соот-ть часовому поясу d).
      */
