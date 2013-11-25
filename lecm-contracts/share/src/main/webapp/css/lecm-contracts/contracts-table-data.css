@@ -28,3 +28,99 @@
 .yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt .yui-dt-data td[status="В работе"], .datagrid .grid.yui-dt .yui-dt-data td[status="В работе"] {
     color: blue;
 }
+
+/* Создание этапа договора */
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field label {
+    width: 120px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field input[type="text"],
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field select,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field div.selectone-control select,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field input.autocomplete-input[type="text"],
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplay,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplayInvisible {
+    width: 35em;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+    margin-left: 130px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field div.format-info {
+    clear: both !important;
+    line-height: 12px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplay .person a,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplayInvisible .person a {
+    max-width: 390px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader {
+    margin-top: 5px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader ul.attachments-list {
+    width: 300px;
+    height: 30px;
+    min-height: 30px;
+    margin-right: 12px;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader ul.attachments-list li {
+    white-space: nowrap;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .dnd-uploader ul.attachments-list li div {
+    width: 220px;
+}
+
+/* Создание этапа договора: новое представление */
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table.view-stage td {
+    width: 33%;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table.presentation, /* Поле ввода комментария */
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table div.form-field input[type="text"],
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .autocomplete-block .autocompleteCurrentValueDisplayInvisible {
+    width: 100%;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .price-control,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .price-sum,
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .price-currency {
+    overflow: hidden;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .price-control .price-currency div.form-field label {
+    display: none;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .price-control div.selectone-control {
+    margin-left: 10px !important;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .price-control div.selectone-control select {
+    width: 125px;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .price-control div.form-field input[type="text"] {
+    width: 140px;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .price-sum {
+    width: 270px;
+    float: left;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .price-currency {
+    width: 255px;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table div.form-field input.autocomplete-input[type="text"] {
+    width: 255px;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table td {
+    vertical-align: top;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field div.viewmode-field span.viewmode-value {
+}
+
+.yui-skin-lecmTheme .yui-panel table.view-stage tr td {
+    width: 33%;
+}

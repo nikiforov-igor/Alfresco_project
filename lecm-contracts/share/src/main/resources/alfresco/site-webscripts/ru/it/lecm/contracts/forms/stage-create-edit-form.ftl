@@ -23,15 +23,16 @@
 <#-- /Fields -->
 
 <#assign inEditMode = form.mode == "edit">
+<#assign inEditOrViewMode = (form.mode == "edit" || form.mode == "view")>
 
 <div id="${formContainerId}">
 <#if formUI == "true">
 	<@formLib.renderFormsRuntime formId = formId />
 </#if>
 <@formLib.renderFormContainer formId = formId>
-	<table>
+	<table class="${form.mode}-stage">
 		<tbody>
-		<#if inEditMode>
+		<#if inEditOrViewMode>
 		<tr>
 			<td colspan="3"><@formLib.renderField field = form.fields[propStatus] /></td>
 			<input id="${htmlId}_${propStatus}" name="${propStatus}" value="${form.fields[propStatus].value}" type="hidden"/>
@@ -42,7 +43,7 @@
 			<td><@formLib.renderField field = form.fields[propStartDate] /></td>
 			<td><@formLib.renderField field = form.fields[propEndDate] /></td>
 		</tr>
-		<#if inEditMode>
+		<#if inEditOrViewMode>
 		<tr>
 			<td></td>
 			<td><@formLib.renderField field = form.fields[propStartDateReal] /></td>
@@ -53,17 +54,24 @@
 			<td colspan="3"><@formLib.renderField field = form.fields[propName] /></td>
 		</tr>
 		<tr>
-			<td><@formLib.renderField field = form.fields[propAmount] /></td>
-			<td colspan="2">
-				<div style="margin-top: 25px;">
-					<@formLib.renderField field = form.fields[assocCurrency] />
-				</div>
+			<td colspan="3">
+				<#list form.structure as item>
+					<#if item.id == "price">
+						<#include "${item.template}" />
+						<#break>
+					</#if>
+				</#list>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<@formLib.renderField field = form.fields[propComment] />
 			</td>
 		</tr>
 		</tbody>
 	</table>
-	<@formLib.renderField field = form.fields[propComment] />
-	<#if inEditMode>
+
+	<#if inEditOrViewMode>
 		<@formLib.renderField field = form.fields[assocAttachments] />
 	</#if>
 </@>
