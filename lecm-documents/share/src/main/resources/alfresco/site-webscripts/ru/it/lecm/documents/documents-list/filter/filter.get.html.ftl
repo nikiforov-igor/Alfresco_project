@@ -19,7 +19,7 @@
 <#assign isDocListPage = false/>
 <#if page.url.args.doctype?? && page.url.args.doctype != "">
     <#assign isDocListPage = true/>
-</#if>
+</#if>               datagrid_
 <#if page.url.args.formId?? && page.url.args.formId != "">
     <#assign formId = page.url.args.formId/>
 </#if>
@@ -155,7 +155,7 @@
                                             var filterStr = _generatePropertyFilterStr(String(this.id), "${args.filterProperty!'lecm-statemachine:status'}");
                                             var archiveFolders = _generatePathsFilterStr(LogicECM.module.Documents.SETTINGS.archivePath);
 
-                                            var formId = "datagrid_" + this.id;
+                                            var formId = (("datagrid_" + this.id).split(" ").join("_"));
 
                                             var statusesFilter = "";
                                             <#if args.includedStatuses?? && (args.includedStatuses?length > 0)>
