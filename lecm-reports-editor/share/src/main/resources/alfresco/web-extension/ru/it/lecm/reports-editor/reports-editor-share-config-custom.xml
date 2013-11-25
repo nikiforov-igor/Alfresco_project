@@ -72,7 +72,6 @@
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
-                    <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
                     <show id="lecm-rpeditor:reportQuery"/>
                     <show id="lecm-rpeditor:reportQuerySort"/>
                     <show id="lecm-rpeditor:reportExtFlags"/>
@@ -124,6 +123,7 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
                     <show id="lecm-rpeditor:reportTypeAssoc"/>
                     <show id="lecm-rpeditor:reportIsDeployed"/>
@@ -136,12 +136,25 @@
             <form id="sub-datagrid">
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-rpeditor:reportDocType"/>
-                    <show id="lecm-rpeditor:reportTypeAssoc"/>
                     <show id="lecm-rpeditor:reportCode"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+            <form id="subReport">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportCode"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                    <field id="lecm-rpeditor:reportCode">
+                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                 </appearance>
             </form>
         </forms>

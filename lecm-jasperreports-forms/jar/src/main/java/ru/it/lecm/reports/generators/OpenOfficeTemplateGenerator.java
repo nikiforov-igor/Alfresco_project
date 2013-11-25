@@ -173,7 +173,7 @@ public class OpenOfficeTemplateGenerator {
                 stage = String.format("Add property '%s' with expression '%s'", col.getColumnName(), col.getExpression());
                 if (col.getExpression() != null) {
                     if (!col.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {//если колонка - не подотчет
-                        Object value = getTypedDefaultValue(col);
+                        String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + col.getColumnName() + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
                         userPropsContainer.addProperty(col.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
                     } else {
                         List<SubReportDescriptor> subReportsList = desc.getSubreports();
@@ -181,7 +181,7 @@ public class OpenOfficeTemplateGenerator {
                             String subReportCode = col.getColumnName();
                             for (SubReportDescriptor subReportDescriptor : subReportsList) {
                                 if (subReportDescriptor.getMnem().equals(subReportCode)) { // нашли нужный подотчет - добавляем его к параметрам
-                                    userPropsContainer.addProperty(subReportCode, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, subReportCode);
+                                    userPropsContainer.addProperty(subReportCode, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, col.getExpression());
                                     // вытаскиваем все его поля
                                     List<ColumnDescriptor> subReportColumns = subReportDescriptor.getDsDescriptor().getColumns();
                                     if (subReportColumns != null) {
@@ -365,7 +365,8 @@ public class OpenOfficeTemplateGenerator {
     protected Object getTypedDefaultValue(ColumnDescriptor col) {
         final Object value;
         if (java.util.Date.class.getName().equals(col.getDataType().className())) {
-            value = newDateTime(new Date()); // сегодня
+            DateFormat dFormat = new SimpleDateFormat(DD_MM_YYYY);
+            value = dFormat.format(new Date());
         } else if (java.lang.Boolean.class.getName().equals(col.getDataType().className())) {
             value = Boolean.FALSE;
         } else if (java.lang.Byte.class.getName().equals(col.getDataType().className())) {

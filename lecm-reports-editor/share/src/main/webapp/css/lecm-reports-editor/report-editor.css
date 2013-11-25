@@ -116,3 +116,15 @@ div[id*="reports-editor-navigation-toolbar"] .toolbar
     background: url("../../images/lecm-dictionary/xml-file-16.png") no-repeat scroll 5px 5px transparent;
     cursor: pointer;
 }
+
+div[id*="report-settings"] div.form-field input[type="text"],
+div[id*="report-settings"] div.form-field select,
+div[id*="report-settings"] .yui-skin-lecmTheme .yui-panel div.form-field textarea {
+    min-height: 26px;
+    max-height: 100px;
+    width: 30em;
+    margin: 0;
+    border-width: 1px;
+    position: inherit;
+    font-size: 99%;
+}

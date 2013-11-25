@@ -31,6 +31,7 @@
 function init() {
     new LogicECM.module.ReportsEditor.Toolbar("${id}").setMessages(${messages}).setOptions({
         bubblingLabel: "${args.bubblingLabel!'reports'}",
+        createFormId: "${args.createFormId!''}",
         <#if newRowButtonType??>
             newRowButtonType:"${newRowButtonType}"
         </#if>

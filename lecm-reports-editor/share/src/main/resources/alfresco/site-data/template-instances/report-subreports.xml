@@ -19,6 +19,7 @@
                 <bubblingLabel>subReports</bubblingLabel>
                 <showSearch>false</showSearch>
                 <showCreateBtn>true</showCreateBtn>
+                <createFormId>subReport</createFormId>
                 <newRowLabel>label.new-subreport.btn</newRowLabel>
                 <newRowDialogTitle>label.create-subreport.title</newRowDialogTitle>
             </properties>

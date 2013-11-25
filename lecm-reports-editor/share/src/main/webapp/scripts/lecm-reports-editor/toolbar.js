@@ -9,6 +9,7 @@
         {
             options: {
                 bubblingLabel: null,
+                createFormId: '',
                 newRowDialogTitle: 'label.create-row.title',
                 searchButtonsType: 'defaultActive',
                 newRowButtonType: 'defaultActive'
@@ -28,7 +29,7 @@
                 if (meta != null && meta.nodeRef.indexOf(":") > 0) {
                     var destination = meta.nodeRef;
                     var itemType = meta.itemType;
-                    this.showCreateDialog({itemType: itemType, nodeRef: destination});
+                    this.showCreateDialog({itemType: itemType, nodeRef: destination, createFormId:this.options.createFormId}, null);
                 }
             },
 
