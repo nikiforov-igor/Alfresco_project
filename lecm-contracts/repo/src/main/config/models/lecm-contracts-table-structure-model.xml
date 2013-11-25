@@ -72,7 +72,7 @@
                 </property>
 	            <!-- Сумма по этапу -->
 	            <property name="lecm-contract-table-structure:stage-amount">
-		            <type>d:float</type>
+		            <type>d:double</type>
 		            <default>0.00</default>
 	            </property>
 	            <!-- Статус этапа -->
