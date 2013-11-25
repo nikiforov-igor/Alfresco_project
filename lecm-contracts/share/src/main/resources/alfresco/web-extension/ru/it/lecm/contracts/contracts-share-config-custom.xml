@@ -408,7 +408,7 @@
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                 </appearance>
             </form>
-            <form id="datagrid_Проект_зарегистирован">
+            <form id="datagrid_Проект_зарегистрирован">
                 <field-visibility>
                     <show id="lecm-contract:regNumProject"/>
                     <show id="lecm-contract:dateRegProjectContracts"/>
