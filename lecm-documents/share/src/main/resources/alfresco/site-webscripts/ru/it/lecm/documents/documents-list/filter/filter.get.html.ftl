@@ -19,7 +19,7 @@
 <#assign isDocListPage = false/>
 <#if page.url.args.doctype?? && page.url.args.doctype != "">
     <#assign isDocListPage = true/>
-</#if>               datagrid_
+</#if>
 <#if page.url.args.formId?? && page.url.args.formId != "">
     <#assign formId = page.url.args.formId/>
 </#if>
