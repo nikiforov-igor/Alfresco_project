@@ -12,7 +12,7 @@ if (args.newValue == undefined || args.newValue.length == 0
     }
 
     var query = "TYPE:\"" + typeName + "\" AND @" + args.propertyName.replace(":", "\\:") + ":\"" + args.newValue + "\" "
-                + " AND ((NOT ASPECT:\"lecm-dic:aspect_active\") OR (@lecm-dic\\:active:true)) ";
+                + " AND (ISNULL:\"lecm-dic\\:active\" OR @lecm-dic\\:active:true) ";
     var nodes = search.luceneSearch(query);
 
     model.isUnique = (nodes.length > 0) ? "false" : "true";
