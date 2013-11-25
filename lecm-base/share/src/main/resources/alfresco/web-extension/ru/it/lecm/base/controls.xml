@@ -33,8 +33,8 @@
 			        <param id="treeNodeSubstituteString" localName="" mandatory="false" visible="false">{lecm-orgstr:element-short-name}</param>
 			        <param id="treeNodeTitleSubstituteString" localName="" mandatory="false" visible="false">{cm:name}</param>
 			        <param id="plane" localName="" mandatory="false" visible="false">false</param>
-			        <param id="showCreateNewLink" localName="" mandatory="false" visible="false">false</param>
-			        <param id="showCreateNewButton" localName="" mandatory="false" visible="false">false</param>
+			        <param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true">false</param>
+			        <param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 			        <param id="showSelectedItemsPath" localName="" mandatory="false" visible="false">false</param>
 			    </control>
 	        </field-type>
@@ -48,10 +48,10 @@
 			        <param id="treeNodeTitleSubstituteString" localName="" mandatory="false" visible="false">{cm:name}</param>
 			        <param id="treeItemType" localName="" mandatory="false" visible="false">lecm-orgstr:organization-unit</param>
 			        <param id="plane" localName="" mandatory="false" visible="false">false</param>
-			        <param id="showCreateNewLink" localName="" mandatory="false" visible="false">false</param>
-			        <param id="showCreateNewButton" localName="" mandatory="false" visible="false">false</param>
+			        <param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true">false</param>
+			        <param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 			        <param id="showSelectedItemsPath" localName="" mandatory="false" visible="false">false</param>
-			        <param id="showSearch" localName="" mandatory="false" visible="false">false</param>
+			        <param id="showSearch" localName="Показывать поиск" mandatory="false" visible="true">false</param>
 	            </control>
 	        </field-type>
 
@@ -59,8 +59,8 @@
 	            <control id="lecm-orgstr:workGroup-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор рабочей группы">
 	                <param id="startLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</param>
 			        <param id="nameSubstituteString" localName="" mandatory="false" visible="false">{cm:name}</param>
-			        <param id="showCreateNewLink" localName="" mandatory="false" visible="false">false</param>
-			        <param id="showCreateNewButton" localName="" mandatory="false" visible="false">false</param>
+			        <param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true">false</param>
+			        <param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 	            </control>
 	        </field-type>
 
@@ -68,8 +68,8 @@
 	            <control id="lecm-orgstr:workRole-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор рабочей роли">
 	                <param id="startLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</param>
 			        <param id="nameSubstituteString" localName="" mandatory="false" visible="false">{cm:name}</param>
-			        <param id="showCreateNewLink" localName="" mandatory="false" visible="false">false</param>
-			        <param id="showCreateNewButton" localName="" mandatory="false" visible="false">false</param>
+			        <param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true">false</param>
+			        <param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 	            </control>
 	        </field-type>
 
@@ -78,8 +78,8 @@
 	            	<param id="rootLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Виды_x0020_документов</param>
                     <param id="nameSubstituteString" localName="" mandatory="false" visible="false">{cm:name}</param>
                     <param id="plane" localName="" mandatory="false" visible="false">true</param>
-                    <param id="showCreateNewLink" localName="" mandatory="false" visible="false">false</param>
-                    <param id="showCreateNewButton" localName="" mandatory="false" visible="false">false</param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 	            </control>
 	        </field-type>
 
@@ -87,8 +87,8 @@
 	            <control id="lecm-busjournal:objectType-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор объекта журнала">
 	            	<param id="startLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тип_x0020_объекта</param>
                     <param id="nameSubstituteString" localName="" mandatory="false" visible="false">{cm:name}</param>
-                    <param id="showCreateNewLink" localName="" mandatory="false" visible="false">false</param>
-                    <param id="showCreateNewButton" localName="" mandatory="false" visible="false">false</param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 	            </control>
 	        </field-type>
 
@@ -96,8 +96,8 @@
 	            <control id="lecm-busjournal:eventCategory-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор категории события">
 	            	<param id="startLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Категория_x0020_события</param>
                     <param id="nameSubstituteString" localName="" mandatory="false" visible="false">{cm:name}</param>
-                    <param id="showCreateNewLink" localName="" mandatory="false" visible="false">false</param>
-                    <param id="showCreateNewButton" localName="" mandatory="false" visible="false">false</param>
+                    <param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true">false</param>
+                    <param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 	            </control>
 	        </field-type>
 
@@ -113,8 +113,8 @@
 	            <control id="lecm-connect-types:connection-type-default-control" template="" localName="Выбор типа связи документа">
 	            	<param id="startLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типы_x0020_связи</param>
 			        <param id="nameSubstituteString" localName="" mandatory="false" visible="false">{cm:name}</param>
-			        <param id="showCreateNewLink" localName="" mandatory="false" visible="false">false</param>
-			        <param id="showCreateNewButton" localName="" mandatory="false" visible="false">false</param>
+			        <param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true">false</param>
+			        <param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true">false</param>
 	            </control>
 	        </field-type>
 
@@ -125,16 +125,16 @@
                     <param id="nameSubstituteString">{cm:name}</param>
                     <param id="notSelectedOptionShow">true</param>
                     <param id="notSelectedOptionLabel"> </param>
-                    <param id="showCreateNewLink">false</param>
-                    <param id="showCreateNewButton">false</param>
+                    <param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
+                    <param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
 	            </control>
 	        </field-type>
 
 	        <field-type id="lecm-doc-dic:subjects" localName="Тематика справочника">
 	            <control id="lecm-doc-dic:subjects-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор тематики справочника">
 	            	<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</param>
-                    <param id="showCreateNewLink">false</param>
-                    <param id="showCreateNewButton">false</param>
+                    <param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
+                    <param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
                     <param id="nameSubstituteString">{cm:name}</param>
                     <param id="itemType">lecm-doc-dic:subjects</param>
 	            </control>
@@ -152,8 +152,8 @@
 	        <field-type id="lecm-contract-dic:contract-type" localName="Вид договора">
 	            <control id="lecm-contract-dic:contract-type-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор вида договора">
 	            	<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</param>
-                    <param id="showCreateNewLink">false</param>
-                    <param id="showCreateNewButton">false</param>
+                    <param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
+                    <param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
                     <param id="nameSubstituteString">{cm:name}</param>
                     <param id="itemType">lecm-contract-dic:contract-type</param>
 	            </control>
@@ -162,8 +162,8 @@
 	        <field-type id="lecm-contract-dic:contract-documents-type" localName="Вид документа к договору">
 	            <control id="lecm-contract-dic:contract-documents-type-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор вида документа к договору">
 	            	<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа_x0020_к_x0020_договору</param>
-                    <param id="showCreateNewLink">false</param>
-                    <param id="showCreateNewButton">false</param>
+                    <param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
+                    <param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
                     <param id="nameSubstituteString">{cm:name}</param>
                     <param id="itemType">lecm-contract-dic:contract-documents-type</param>
 	            </control>
@@ -172,8 +172,8 @@
 	        <field-type id="lecm-currency:currency" localName="Валюты">
 	            <control id="lecm-currency:currency-default-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор валюты">
 	            	<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</param>
-                    <param id="showCreateNewLink">false</param>
-                    <param id="showCreateNewButton">false</param>
+                    <param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
+                    <param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
                     <param id="nameSubstituteString">{cm:name}</param>
                     <param id="itemType">lecm-currency:currency</param>
 	            </control>
@@ -183,16 +183,16 @@
 	            <control id="lecm-contractor:contractor-type-default-control" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl" localName="Выбор контрагента">
 	            	<param id="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</param>
                     <param id="nameSubstituteString">{cm:name}</param>
-                    <param id="showCreateNewLink">false</param>
-                    <param id="showCreateNewButton">false</param>
+                    <param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
+                    <param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
 	            </control>
 	        </field-type>
 
 	        <field-type id="lecm-representative:representative-type" localName="Представитель">
 	            <control id="lecm-representative:representative-type-default-control" template="" localName="Выбор представителя">
 	            	<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Представители</param>
-                    <param id="showCreateNewLink">false</param>
-                    <param id="showCreateNewButton">false</param>
+                    <param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
+                    <param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
                     <param id="nameSubstituteString">{cm:name}</param>
                     <param id="itemType">lecm-representative:representative-type</param>
 	            </control>
