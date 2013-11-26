@@ -70,6 +70,7 @@ function getData()
       try
       {
          item = Evaluator.run(node, fields, substituteFields == null ? null : substituteFields.split(","));
+         item.type = node.getTypeShort();
          if (node.hasAspect("cm:versionable")) {
             versionable = true;
          }
