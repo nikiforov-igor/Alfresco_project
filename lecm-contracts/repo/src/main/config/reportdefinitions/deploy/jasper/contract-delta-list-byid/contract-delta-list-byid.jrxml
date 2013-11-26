@@ -61,7 +61,7 @@
 	<field name="col_Item.DocName" class="java.lang.String">
 		<fieldDescription><![CDATA[Вложение.ТипДокумента]]></fieldDescription>
 	</field>
-	<field name="col_Item.StatusDate" class="java.lang.String">
+	<field name="col_Item.StatusDate" class="java.util.Date">
 		<fieldDescription><![CDATA[Вложение.Дата смены статус]]></fieldDescription>
 	</field>
 	<field name="col_Item.Status" class="java.lang.String">
