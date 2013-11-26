@@ -3,17 +3,21 @@
 	var viewDialog = null;
 
 	function viewAttributes(nodeRef, setId, title) {
+		var obj = {
+			htmlid:nodeRef.replace("workspace://SpacesStore/","").replace("-",""),
+			itemKind:"node",
+			itemId:nodeRef,
+			formId:"${formId}",
+			mode:"view"
+		};
+		if (setId != null) {
+			obj.setId = setId;
+		}
+
 		Alfresco.util.Ajax.request(
 				{
 					url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-					dataObj:{
-						htmlid:nodeRef.replace("workspace://SpacesStore/","").replace("-",""),
-						itemKind:"node",
-						itemId:nodeRef,
-						formId:"${formId}",
-						mode:"view",
-						setId: (setId != undefined && setId != null) ? setId : "common"
-					},
+					dataObj: obj,
 					successCallback:{
                         fn:function(response) {
                             var formEl = Dom.get("${formId}-content");
