@@ -115,8 +115,8 @@
 	</columnHeader>
 	<detail>
 		<band height="26" splitType="Stretch">
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a" style="styleOdd" x="0" y="0" width="30" height="26" isPrintWhenDetailOverflows="true"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a" style="styleOdd" x="0" y="0" width="30" height="26" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -142,8 +142,8 @@
                 </macro.vars>
 
                 <macro.body.field>
-                    <textField isBlankWhenNull="true">
-                        <reportElement uuid="@GUID" style="styleOdd" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT"/>
+                    <textField isBlankWhenNull="true" isStretchWithOverflow="true">
+                        <reportElement stretchType="RelativeToTallestObject" uuid="@GUID" style="styleOdd" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT"/>
                         <box>
                             <pen lineWidth="0.5" lineColor="#78C0D4"/>
                             <topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -159,22 +159,23 @@
                     </textField>
                 </macro.body.field>
 			</prototype-columns>
-
-            <prototype-subreports>
-                <macro.vars>
-                    <var name="CWIDTH" value="800" />
-                    <var name="CHEIGHT" value="0" />
-                    <var name="CTOP" value="26" />
-                    <var name="CLEFT" value="0"/>
-                </macro.vars>
-                <macro.body.field>
+		</band>
+        <prototype-subreports>
+            <macro.vars>
+                <var name="CWIDTH" value="800" />
+                <var name="CHEIGHT" value="26" />
+                <var name="CTOP" value="0" />
+                <var name="CLEFT" value="0"/>
+            </macro.vars>
+            <macro.body.field>
+                <band height="26" splitType="Stretch">
                     <subreport isUsingCache="true">
-                        <reportElement uuid="@GUID" positionType="Float" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT" isPrintWhenDetailOverflows="true"/>
+                        <reportElement uuid="@GUID" positionType="Float" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT" stretchType="RelativeToTallestObject" isPrintWhenDetailOverflows="true"/>
                         <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{@SUB.desc.destColumnName}, false)]]></dataSourceExpression>
                         <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@/@SUB.desc.destColumnName@@.jasper"]]></subreportExpression>
                     </subreport>
-                </macro.body.field>
-			</prototype-subreports>
-		</band>
+                </band>
+            </macro.body.field>
+        </prototype-subreports>
 	</detail>
 </jasperReport>
