@@ -15,6 +15,7 @@ import org.springframework.extensions.config.Config;
 import org.springframework.extensions.config.ConfigService;
 import ru.it.lecm.base.formsConfig.elements.fieldsElement.FieldTypesConfigElement;
 import static ru.it.lecm.base.formsConfig.Constants.*;
+import ru.it.lecm.base.formsConfig.elements.controlElement.ControlConfigElement;
 import ru.it.lecm.base.formsConfig.elements.fieldElement.TypeConfigElement;
 import ru.it.lecm.base.formsConfig.elements.formLayoutElement.FormLayoutConfigElement;
 import ru.it.lecm.base.formsConfig.elements.formTypeElement.FormTypeConfigElement;
@@ -96,7 +97,11 @@ public class FormsConfig {
 		}
 
 		TypeConfigElement typeConfig = fullTypeControlsMap.get(typeId);
-		return typeConfig;
+		TypeConfigElement assocConfig = fullTypeControlsMap.get(OBJECT_ELEMENT_ID);
+		if(typeConfig == null) {
+			return assocConfig;
+		}
+		return (TypeConfigElement) typeConfig.combine(assocConfig);
 	}
 
 }

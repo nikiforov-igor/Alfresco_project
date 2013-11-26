@@ -27,4 +27,6 @@ public final class Constants {
 	public static final String ATTR_EVALUATOR_TYPE = "evaluatorType";
 	public static final String ATTR_FORM_ID = "formId";
 
+	public static final String OBJECT_ELEMENT_ID = "cm:object";
+
 }
