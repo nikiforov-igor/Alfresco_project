@@ -295,4 +295,9 @@
 			</list>
 		</property>
 	</bean>
+
+        <bean id="webscript.ru.it.lecm.formsConfig.getTypeParents.get" class="ru.it.lecm.base.scripts.FormsConfigWebScriptBean" parent="webscript">
+		<property name="dictionaryService" ref="DictionaryService" />
+                <property name="nameSpaceService" ref="NamespaceService" />
+	</bean>
 </beans>

@@ -11,11 +11,15 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.extensions.config.Config;
 import org.springframework.extensions.config.ConfigService;
+import org.springframework.extensions.webscripts.ScriptRemote;
+import org.springframework.extensions.webscripts.connector.Response;
+import org.springframework.extensions.webscripts.connector.ResponseStatus;
 import ru.it.lecm.base.formsConfig.elements.fieldsElement.FieldTypesConfigElement;
 import static ru.it.lecm.base.formsConfig.Constants.*;
-import ru.it.lecm.base.formsConfig.elements.controlElement.ControlConfigElement;
 import ru.it.lecm.base.formsConfig.elements.fieldElement.TypeConfigElement;
 import ru.it.lecm.base.formsConfig.elements.formLayoutElement.FormLayoutConfigElement;
 import ru.it.lecm.base.formsConfig.elements.formTypeElement.FormTypeConfigElement;
@@ -30,6 +34,11 @@ public class FormsConfig {
 	private final static Log logger = LogFactory.getLog(FormsConfig.class);
 
 	private ConfigService configService;
+	private ScriptRemote scriptRemote;
+
+	public void setScriptRemote(ScriptRemote scriptRemote) {
+		this.scriptRemote = scriptRemote;
+	}
 	private Map<String, TypeConfigElement> fullTypeControlsMap = new HashMap<String, TypeConfigElement>();
 	private List<FormTypeConfigElement> fullFormsTypesList = new ArrayList<FormTypeConfigElement>();
 	private List<FormLayoutConfigElement> fullFormsLayoutsList = new ArrayList<FormLayoutConfigElement>();
@@ -41,28 +50,37 @@ public class FormsConfig {
 
 	/**
 	 * Возвращает мапу объектов, представляющих типы полей
+	 *
 	 * @return
 	 */
 	public Map<String, TypeConfigElement> getFullTypeControlsMap() {
-		if (!initialized) init();
+		if (!initialized) {
+			init();
+		}
 		return fullTypeControlsMap;
 	}
 
 	/**
 	 * Возвращает мапу объектов, представляющих типы форм
+	 *
 	 * @return
 	 */
 	public List<FormTypeConfigElement> getFullFormsTypesMap() {
-		if (!initialized) init();
+		if (!initialized) {
+			init();
+		}
 		return fullFormsTypesList;
 	}
 
 	/**
 	 * Возвращает мапу объектов, представляющих правила отображения форм
+	 *
 	 * @return
 	 */
 	public List<FormLayoutConfigElement> getFullFormsLayoutsMap() {
-		if (!initialized) init();
+		if (!initialized) {
+			init();
+		}
 		return fullFormsLayoutsList;
 	}
 
@@ -88,20 +106,50 @@ public class FormsConfig {
 
 	/**
 	 * Возвращает объект, содержащий конфиг для данного типа
+	 *
 	 * @param typeId
 	 * @return
 	 */
-	public TypeConfigElement getTypeInfoById(String typeId) {
+	public TypeConfigElement getTypeInfoById(String typeId, boolean inherited) {
 		if (!initialized) {
 			init();
 		}
 
 		TypeConfigElement typeConfig = fullTypeControlsMap.get(typeId);
-		TypeConfigElement assocConfig = fullTypeControlsMap.get(OBJECT_ELEMENT_ID);
-		if(typeConfig == null) {
-			return assocConfig;
+		if(typeConfig == null){
+			return null;
 		}
-		return (TypeConfigElement) typeConfig.combine(assocConfig);
+		if (inherited) {
+			List<TypeConfigElement> parents = getParents(typeId);
+			for (TypeConfigElement parent : parents) {
+				typeConfig.inherit(parent);
+			}
+		}
+		return typeConfig;
+	}
+
+	public List<TypeConfigElement> getParents(String typeName) {
+		List<TypeConfigElement> result = new ArrayList<TypeConfigElement>();
+
+		String url = "/lecm/formConfig/getParents?typeName=" + typeName;
+		Response response = scriptRemote.connect("alfresco").get(url);
+		try {
+			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
+				JSONArray jsonResponse = new JSONArray(response.getResponse());
+				for (int i = 0; i < jsonResponse.length(); i++) {
+					TypeConfigElement el = fullTypeControlsMap.get(jsonResponse.get(i));
+					if (el != null) {
+						result.add(el);
+					}
+				}
+			} else {
+				logger.warn("Cannot get result from server");
+			}
+		} catch (JSONException e) {
+			logger.warn("Cannot get result from server", e);
+		}
+		return result;
+
 	}
 
 }

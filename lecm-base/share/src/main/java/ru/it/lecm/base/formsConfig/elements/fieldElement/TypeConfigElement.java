@@ -74,6 +74,21 @@ public class TypeConfigElement extends ConfigElementAdapter{
 		this.controlsMap.put(control.getId(), control);
 	}
 
+	public void inherit(TypeConfigElement parent){
+		Map<String, ControlConfigElement> thisControls = this.getControlsMap();
+		Map<String, ControlConfigElement> parentControls = parent.getControlsMap();
+		for (Map.Entry<String, ControlConfigElement> entry : parentControls.entrySet()) {
+			String id = entry.getKey();
+			ControlConfigElement controlConfigElement = entry.getValue();
+			controlConfigElement.setParent(parent.getId());
+			if(!thisControls.containsKey(id)) {
+				this.addControl(controlConfigElement);
+			} else {
+				logger.warn("Founded duplicate control with id = " + id);
+			}
+		}
+	}
+
 	@Override
 	public ConfigElement combine(ConfigElement configElement) {
 		TypeConfigElement otherElement = (TypeConfigElement) configElement;
@@ -94,7 +109,6 @@ public class TypeConfigElement extends ConfigElementAdapter{
 				logger.warn("Founded duplicate control with id = " + id);
 			}
 		}
-
 		return result;
 	}
 

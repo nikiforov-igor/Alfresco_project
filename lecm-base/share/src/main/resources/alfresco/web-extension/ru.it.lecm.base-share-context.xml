@@ -32,6 +32,7 @@
 
         <bean id="formsConfigService" class="ru.it.lecm.base.formsConfig.FormsConfig">
 		<property name="configService" ref="web.config" />
+                <property name="scriptRemote" ref="webscripts.script.remote" />
 	</bean>
 
         <bean id="webscript.ru.it.lecm.base-share.formsConfig.getFormsConfig.get" class="ru.it.lecm.base.scripts.FormsConfigWebscript" parent="webscript">

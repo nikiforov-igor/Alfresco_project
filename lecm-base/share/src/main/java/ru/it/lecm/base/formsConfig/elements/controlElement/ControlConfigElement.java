@@ -22,6 +22,16 @@ public class ControlConfigElement extends ConfigElementAdapter{
 	@JsonProperty
 	private String id;
 	@JsonProperty
+	private String parent;
+
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
+	@JsonProperty
 	private String displayName;
 	@JsonProperty
 	private String templatePath;
