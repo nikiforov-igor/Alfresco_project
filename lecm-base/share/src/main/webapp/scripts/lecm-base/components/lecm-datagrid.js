@@ -740,7 +740,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             onReady: function DataGrid_onReady()
             {
                 var me = this;
-                if (this.options.actions.length > this.showActionsCount) {
+                if (this.options.actions != null && this.options.actions.length > this.showActionsCount) {
                     this.showActionsCount = this.options.splitActionsAt;
                 }
                 this.splitActionsAtStore = this.options.splitActionsAt;
