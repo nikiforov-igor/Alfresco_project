@@ -1,4 +1,4 @@
-<#import "../../../org/alfresco/slingshot/datalists/item.lib.ftl" as itemLib />
+<#import "../../../ru/it/lecm/search/item.lib.ftl" as itemLib />
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
    "versionable": ${data.versionable?string},
