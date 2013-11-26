@@ -128,3 +128,23 @@ div[id*="report-settings"] .yui-skin-lecmTheme .yui-panel div.form-field textare
     position: inherit;
     font-size: 99%;
 }
+
+.yui-skin-lecmTheme div[id*="report-settings"] .form-fields {
+    background: none repeat scroll 0 0 #F4F6FE;
+    margin-bottom: 5px;
+    overflow: hidden;
+    border: 1px solid #808080;
+    padding: 0.25em 0.25em;
+}
+
+.yui-skin-lecmTheme div[id*="report-settings"]  .form-container {
+    margin: 1em;
+}
+
+.yui-skin-lecmTheme div[id*="report-settings"] .set {
+    margin: 0.7em;
+}
+
+#bd #lecm-content-main div[id*="report-settings"] div[id*="reportForm"]{
+    margin:0 5px;
+}
