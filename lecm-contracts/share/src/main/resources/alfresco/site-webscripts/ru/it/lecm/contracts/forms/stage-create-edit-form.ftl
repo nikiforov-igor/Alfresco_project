@@ -23,7 +23,8 @@
 <#-- /Fields -->
 
 <#assign inEditMode = form.mode == "edit">
-<#assign inEditOrViewMode = (form.mode == "edit" || form.mode == "view")>
+<#assign inViewMode = form.mode == "view">
+<#assign inEditOrViewMode = (inEditMode || inViewMode)>
 
 <div id="${formContainerId}">
 <#if formUI == "true">
@@ -133,9 +134,6 @@
 		function init() {
 			YAHOO.Bubbling.unsubscribe("afterFormRuntimeInit", init);
 
-			if(inCreateMode)
-				return false;
-
 			addCustomButtons();
 			updateButtonStyles();
 			addSubmitElements();
@@ -156,8 +154,9 @@
 
 			dialog = Alfresco.util.ComponentManager.get(htmlId),
 
-			inCreateMode = ${(!inEditMode)?string};
+			inEditMode = ${inEditMode?string};
 
-		Bubbling.on("afterFormRuntimeInit", init);
+		if(inEditMode)
+			Bubbling.on("afterFormRuntimeInit", init);
 	})();
 </script>
