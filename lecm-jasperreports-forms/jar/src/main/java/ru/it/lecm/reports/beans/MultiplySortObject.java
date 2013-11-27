@@ -1,14 +1,13 @@
 package ru.it.lecm.reports.beans;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MultiplySortObject implements Comparable {
-    private List<Object> columnValues = new ArrayList<Object>(5);
+    private List<Comparable> columnValues = new ArrayList<Comparable>(5);
     private List<Boolean> sortDirs = new ArrayList<Boolean>(5);
 
-    public void addSort(Object value, boolean dir) {
+    public void addSort(Comparable value, boolean dir) {
         columnValues.add(value);
         sortDirs.add(dir);
     }
@@ -22,9 +21,9 @@ public class MultiplySortObject implements Comparable {
         MultiplySortObject o2 = (MultiplySortObject) o;
 
         for (int i = 0; i < this.columnValues.size(); i++) {
-            Object value1 = this.columnValues.get(i);
+            Comparable value1 = this.columnValues.get(i);
             boolean sortDir1 = this.sortDirs.get(i);
-            Object value2 = null;
+            Comparable value2 = null;
             try {
                 value2 = o2.columnValues.get(i);
             } catch (IndexOutOfBoundsException ignored) {
@@ -37,19 +36,7 @@ public class MultiplySortObject implements Comparable {
                 return 1;
             }
 
-            int comp = 0;
-
-            if (value1 instanceof String) {
-                comp = value1.toString().compareTo(value2.toString());
-            } else if (value1 instanceof Date) {
-                comp = ((Date) value1).compareTo((Date) value2);
-            } else if (value1 instanceof Integer) {
-                comp = ((Integer) value1).compareTo((Integer) value2);
-            } else if (value1 instanceof Float) {
-                comp = ((Float) value1).compareTo((Float) value2);
-            } else if (value1 instanceof Boolean) {
-                comp = ((Boolean) value1).compareTo((Boolean) value2);
-            }
+            int comp =  value1.compareTo(value2);
 
             if (comp == 0) { // первые значения равны - переходим к следующим
                 continue;
