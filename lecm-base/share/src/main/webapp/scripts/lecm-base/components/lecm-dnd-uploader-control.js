@@ -351,7 +351,7 @@ LogicECM.control = LogicECM.control || {};
 
 						if (elAttachments != null) {
 							var fileIcon = Alfresco.util.getFileIcon(fileName, "cm:content", 16);
-							var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"'/>";
+							var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"' width='16' height='16'/>";
 							fileName = "<div>" + fileName + "</div>"
 							var row = fileIconHtml + fileName;
 							if (!item.justUpload) {

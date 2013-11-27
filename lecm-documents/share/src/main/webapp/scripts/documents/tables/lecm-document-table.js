@@ -404,7 +404,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 							switch (datalistColumn.dataType.toLowerCase()) { //  меняем отрисовку для конкретных колонок
 								case "cm:content":
 									var fileIcon = Alfresco.util.getFileIcon(data.displayValue, "cm:content", 16);
-									var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"'/>";
+									var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"' width='16' height='16'/>";
 
 									columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"document-attachment?nodeRef="+ data.value +"' title='" + data.displayValue + "'>" + fileIconHtml + data.displayValue + "</a>";
 									break;
