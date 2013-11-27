@@ -6,6 +6,8 @@
         var Dom = YAHOO.util.Dom,
             Event = YAHOO.util.Event;
 
+        var stageViewDialog = null;
+
         function openPreview(nodeRef) {
             Alfresco.util.Ajax.request(
                     {
@@ -22,14 +24,14 @@
                             fn:function(response) {
                                 var formEl = Dom.get("${formId}-content");
                                 formEl.innerHTML = response.serverResponse.responseText;
-                                if (viewDialog != null) {
+                                if (stageViewDialog != null) {
                                     Dom.setStyle("${formId}", "display", "block");
                                     var message ="${msg("logicecm.view")}";
                                     var titleElement = Dom.get("${formId}-head");
                                     if (titleElement) {
                                         titleElement.innerHTML = message;
                                     }
-                                    viewDialog.show();
+                                    stageViewDialog.show();
                                 }
                             }
                         },
@@ -75,12 +77,17 @@
 
         }
 
+        function hideStageDialog() {
+            stageViewDialog.hide();
+        }
+
         function init() {
-            viewDialog = Alfresco.util.createYUIPanel("${formId}",
+            stageViewDialog = Alfresco.util.createYUIPanel("${formId}",
                     {
                         width: "50em"
                     });
-            YAHOO.Bubbling.on("hidePanel", hideViewDialog);
+            YAHOO.Bubbling.on("hidePanel", hideStageDialog);
+            Alfresco.util.createYUIButton(null, "", hideStageDialog, { label: "${msg("button.close")}", title: "${msg("button.close")}" }, "${formId}-cancel");
             drawStages("${args.nodeRef}");
         }
         Event.onContentReady("${id}_container", init, true);
@@ -95,7 +102,7 @@
         <div class="bdft">
 	            <span id="${formId}-cancel" class="yui-button yui-push-button">
 	                <span class="first-child">
-	                    <button type="button" tabindex="0" onclick="hideViewDialog();">${msg("button.close")}</button>
+	                    <button type="button" tabindex="0" onclick="hideStageDialog();">${msg("button.close")}</button>
 	                </span>
 	            </span>
         </div>
