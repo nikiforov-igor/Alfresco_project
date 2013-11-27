@@ -86,9 +86,8 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 					var conf = this.config[i];
 
 					var option = document.createElement("option");
-					option.value = conf.templatePath;
 					option.innerHTML = conf.displayName;
-					if (this.options.value != null && this.options.value.template == conf.templatePath) {
+					if (this.options.value != null && this.options.value.id == conf.id) {
 						option.selected = true;
 
 						var valueParams = this.options.value.params;
@@ -166,6 +165,7 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 						var obj = {
 							template: conf.templatePath,
 							displayName: conf.displayName,
+							id: conf.id,
 							params: []
 						};
 
