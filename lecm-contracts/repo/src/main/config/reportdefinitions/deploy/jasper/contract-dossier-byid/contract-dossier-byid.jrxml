@@ -4,12 +4,6 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="dataSource" value="ru.it.lecm.reports.generators.GenericDSProviderBase"/>
-	<parameter name="CMIS_XMLCONFIG" class="java.lang.String">
-		<defaultValueExpression><![CDATA["ds-contract-dossier-byid.xml"]]></defaultValueExpression>
-	</parameter>
-	<queryString>
-		<![CDATA[]]>
-	</queryString>
 	<field name="col_ConclusionDate" class="java.util.Date">
 		<fieldDescription><![CDATA[Дата заключения]]></fieldDescription>
 	</field>
@@ -106,20 +100,21 @@
 	<field name="col_Contragent.fullname" class="java.lang.String">
 		<fieldDescription><![CDATA[Контрагент.Полное наименование]]></fieldDescription>
 	</field>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
 	<title>
-		<band height="577" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="d8bb2dda-1473-4a36-bbec-a69fcb797671" x="0" y="0" width="515" height="23"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="d8bb2dda-1473-4a36-bbec-a69fcb797671" x="0" y="0" width="515" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Serif" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Досье договора]]></text>
 			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="577" splitType="Stretch">
 			<frame>
-				<reportElement uuid="b1507f14-91f1-4e2f-9a65-44294be67861" stretchType="RelativeToTallestObject" x="0" y="23" width="515" height="50"/>
+				<reportElement uuid="b1507f14-91f1-4e2f-9a65-44294be67861" stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="50"/>
 				<rectangle>
 					<reportElement uuid="af12cc86-5052-422a-9c23-80a925b71b67" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="50"/>
 				</rectangle>
@@ -127,7 +122,7 @@
 					<reportElement uuid="d9ef702e-7970-4723-a873-f856fd6f9bcc" stretchType="RelativeToBandHeight" x="256" y="0" width="1" height="50"/>
 				</line>
 				<textField isStretchWithOverflow="true">
-					<reportElement uuid="b147e370-5cae-43c5-92e3-5b277c5196b6" x="265" y="4" width="240" height="20"/>
+					<reportElement uuid="b147e370-5cae-43c5-92e3-5b277c5196b6" x="262" y="4" width="246" height="20"/>
 					<textElement textAlignment="Left">
 						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
@@ -143,7 +138,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="376d3009-4c47-4380-a5a1-1af3c69aa43f" x="0" y="73" width="515" height="23"/>
+				<reportElement uuid="376d3009-4c47-4380-a5a1-1af3c69aa43f" x="0" y="50" width="515" height="23"/>
 				<rectangle>
 					<reportElement uuid="aeaa7d17-69a0-4fcf-b50e-e6f919212975" stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="23"/>
 				</rectangle>
@@ -155,7 +150,7 @@
 					<text><![CDATA[Текущий статус:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="8c4c74fa-24c9-4a2c-a28b-de1670df9bac" x="111" y="4" width="394" height="16"/>
+					<reportElement uuid="8c4c74fa-24c9-4a2c-a28b-de1670df9bac" x="111" y="4" width="397" height="16"/>
 					<textElement>
 						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
@@ -163,7 +158,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="2e8ece70-3065-4d17-b938-57b170880737" stretchType="RelativeToTallestObject" x="0" y="96" width="515" height="35"/>
+				<reportElement uuid="2e8ece70-3065-4d17-b938-57b170880737" stretchType="RelativeToTallestObject" x="0" y="73" width="515" height="35"/>
 				<rectangle>
 					<reportElement uuid="75d13101-7d48-4cb1-9ac8-3087a426cebe" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="35"/>
 				</rectangle>
@@ -178,7 +173,7 @@
 					<textFieldExpression><![CDATA["Сумма договора"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="075f7fac-6c99-4b22-b3db-8ee34e818f87" stretchType="RelativeToTallestObject" x="105" y="4" width="150" height="20"/>
+					<reportElement uuid="075f7fac-6c99-4b22-b3db-8ee34e818f87" stretchType="RelativeToTallestObject" x="105" y="4" width="145" height="20"/>
 					<textElement>
 						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
@@ -186,7 +181,7 @@
 + " "+ (($F{col_SumUnits} == null) ? "" : $F{col_SumUnits})]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="d4fc1788-3d96-47bd-85a2-6a41c5831ce3" x="260" y="4" width="115" height="31"/>
+					<reportElement uuid="d4fc1788-3d96-47bd-85a2-6a41c5831ce3" x="262" y="4" width="113" height="31"/>
 					<textElement textAlignment="Left">
 						<font fontName="DejaVu Sans Mono" isBold="true"/>
 					</textElement>
@@ -201,7 +196,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="ff599af0-4236-4fa3-b877-b82b25cd165c" stretchType="RelativeToTallestObject" x="0" y="131" width="515" height="58"/>
+				<reportElement uuid="ff599af0-4236-4fa3-b877-b82b25cd165c" stretchType="RelativeToTallestObject" x="0" y="108" width="515" height="58"/>
 				<rectangle>
 					<reportElement uuid="7dc4505c-5230-4cc1-ab7f-fff12aaae72b" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="58"/>
 				</rectangle>
@@ -209,7 +204,7 @@
 					<reportElement uuid="64391a72-9167-46b7-b3f1-5a6f6281c586" stretchType="RelativeToBandHeight" x="256" y="0" width="1" height="58"/>
 				</line>
 				<textField>
-					<reportElement uuid="caf78eab-f56e-4602-8717-6554bbb96900" x="5" y="5" width="250" height="20"/>
+					<reportElement uuid="caf78eab-f56e-4602-8717-6554bbb96900" x="5" y="5" width="245" height="20"/>
 					<textElement textAlignment="Left">
 						<font fontName="DejaVu Sans Mono" isBold="true"/>
 					</textElement>
@@ -240,7 +235,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="0ec4a022-f043-40a7-8146-4e549f5933a1" stretchType="RelativeToTallestObject" x="0" y="189" width="515" height="85"/>
+				<reportElement uuid="0ec4a022-f043-40a7-8146-4e549f5933a1" stretchType="RelativeToTallestObject" x="0" y="166" width="515" height="85"/>
 				<rectangle>
 					<reportElement uuid="5cb21450-03ba-41e6-b3c6-6456f7b37ed2" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="85"/>
 				</rectangle>
@@ -248,14 +243,14 @@
 					<reportElement uuid="04a4719f-3ac5-4a0a-b8dc-2800160454f4" stretchType="RelativeToBandHeight" x="256" y="0" width="1" height="85"/>
 				</line>
 				<textField>
-					<reportElement uuid="48d8f2c8-1ae3-489a-b103-8431a579461c" x="5" y="5" width="250" height="20"/>
+					<reportElement uuid="48d8f2c8-1ae3-489a-b103-8431a579461c" x="5" y="5" width="245" height="20"/>
 					<textElement textAlignment="Left">
 						<font fontName="DejaVu Sans Mono" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA["Контрагент:"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="bbc5a4b4-d75d-4898-9ec2-4705f1ecc357" stretchType="RelativeToTallestObject" x="5" y="29" width="250" height="20"/>
+					<reportElement uuid="bbc5a4b4-d75d-4898-9ec2-4705f1ecc357" stretchType="RelativeToTallestObject" x="5" y="29" width="245" height="20"/>
 					<textElement>
 						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
@@ -277,12 +272,12 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="faf72e13-cd90-4680-8ebf-65871fe74a3f" x="0" y="274" width="515" height="23"/>
+				<reportElement uuid="faf72e13-cd90-4680-8ebf-65871fe74a3f" x="0" y="251" width="515" height="23"/>
 				<rectangle>
 					<reportElement uuid="8997e67e-b7c0-48f8-84f6-9b8ff91cd4fb" stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="23"/>
 				</rectangle>
 				<staticText>
-					<reportElement uuid="a0a1a833-9f61-468d-9d4f-c21fe038736b" x="273" y="3" width="200" height="20"/>
+					<reportElement uuid="a0a1a833-9f61-468d-9d4f-c21fe038736b" x="262" y="3" width="243" height="20"/>
 					<textElement>
 						<font fontName="DejaVu Sans Mono" isBold="true"/>
 					</textElement>
@@ -290,7 +285,7 @@
 				</staticText>
 			</frame>
 			<frame>
-				<reportElement uuid="caa63423-c24c-4b7d-8bd4-1c7354e0c622" stretchType="RelativeToTallestObject" x="0" y="297" width="515" height="116"/>
+				<reportElement uuid="caa63423-c24c-4b7d-8bd4-1c7354e0c622" stretchType="RelativeToTallestObject" x="0" y="274" width="515" height="116"/>
 				<rectangle>
 					<reportElement uuid="44f533c2-a91a-4b7d-97fa-05f1ce710bb3" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="116"/>
 				</rectangle>
@@ -310,9 +305,9 @@
 						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_Contragent.Bankname} == null) ? "" : $F{col_Contragent.Bankname})
-+ (($F{col_Contragent.BIK} == null) ? "" : "БИК " + $F{col_Contragent.BIK})
-+ (($F{col_Contragent.CorrAccount} == null) ? "" : "кор.счет "+ $F{col_Contragent.CorrAccount})
-+ (($F{col_Contragent.TransactAccount} == null) ? "" : "р/с " + $F{col_Contragent.TransactAccount})]]></textFieldExpression>
++ (($F{col_Contragent.BIK} == null) ? "" : ", БИК " + $F{col_Contragent.BIK})
++ (($F{col_Contragent.CorrAccount} == null) ? "" : ", кор.счет "+ $F{col_Contragent.CorrAccount})
++ (($F{col_Contragent.TransactAccount} == null) ? "" : ", р/с " + $F{col_Contragent.TransactAccount})]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="434cb946-c0cf-4935-9081-26b763b5cad2" x="177" y="4" width="160" height="20"/>
@@ -348,7 +343,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="fd8dfec4-a8a5-4aa9-ab7c-7eacabdffa5f" stretchType="RelativeToTallestObject" x="0" y="413" width="515" height="23"/>
+				<reportElement uuid="fd8dfec4-a8a5-4aa9-ab7c-7eacabdffa5f" stretchType="RelativeToTallestObject" x="0" y="390" width="515" height="23"/>
 				<rectangle>
 					<reportElement uuid="b093227b-b6dc-4399-b277-560ff76e64b1" stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="23"/>
 				</rectangle>
@@ -360,17 +355,17 @@
 					<text><![CDATA[Подписант со стороны контрагента:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="7fe9b72c-c870-4cb7-85e7-9e6105351902" x="205" y="2" width="300" height="20"/>
+					<reportElement uuid="7fe9b72c-c870-4cb7-85e7-9e6105351902" x="205" y="2" width="303" height="20"/>
 					<textElement>
 						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( $F{col_Executor.Family} == null ? "" : $F{col_Executor.Family})
-+ ($F{col_Executor.Name} == null ? "" : "."+ $F{col_Executor.Name})
-+ ($F{col_Executor.Otchestvo} == null ? "" : "."+ $F{col_Executor.Otchestvo})]]></textFieldExpression>
++ ($F{col_Executor.Name} == null ? "" : " " + $F{col_Executor.Name})
++ ($F{col_Executor.Otchestvo} == null ? "" : " " + $F{col_Executor.Otchestvo})]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="99545a39-bdf8-4b40-a004-82b370a2dcd0" stretchType="RelativeToTallestObject" x="0" y="436" width="515" height="85"/>
+				<reportElement uuid="99545a39-bdf8-4b40-a004-82b370a2dcd0" stretchType="RelativeToTallestObject" x="0" y="413" width="515" height="85"/>
 				<rectangle>
 					<reportElement uuid="94e1b5c6-0394-4b8c-8f14-3494fa8c3d0f" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="85"/>
 				</rectangle>
@@ -400,7 +395,7 @@
 					<textFieldExpression><![CDATA["Бессрочный: "]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="d51c8d45-4812-4ace-9d43-4d542d7e1252" x="341" y="3" width="116" height="20"/>
+					<reportElement uuid="d51c8d45-4812-4ace-9d43-4d542d7e1252" x="341" y="3" width="167" height="20"/>
 					<textElement textAlignment="Left">
 						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
@@ -408,7 +403,7 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement uuid="2aa831eb-9b56-4b92-8940-b2a24b0f6ea5" x="0" y="521" width="515" height="23"/>
+				<reportElement uuid="2aa831eb-9b56-4b92-8940-b2a24b0f6ea5" x="0" y="498" width="515" height="23"/>
 				<rectangle>
 					<reportElement uuid="ab843cb4-2789-410c-9267-a33350b71ac4" stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="23"/>
 				</rectangle>
@@ -428,23 +423,5 @@
 				</textField>
 			</frame>
 		</band>
-	</title>
-	<pageHeader>
-		<band height="35" splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band height="2" splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band height="2" splitType="Stretch"/>
 	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band splitType="Stretch"/>
-	</pageFooter>
-	<summary>
-		<band height="3" splitType="Stretch"/>
-	</summary>
 </jasperReport>

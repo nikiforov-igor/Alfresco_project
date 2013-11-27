@@ -53,25 +53,12 @@
 		</flags>
 	</query.descriptor>
 
-	<cmis.connection>
-		<url>http://localhost:8080/alfresco/service/cmis</url>
-		<username>admin</username>
-		<password>111</password>
-	</cmis.connection>
-
 	<fields>
 		<!-- Данные по "Виду договора" (с типом "lecm-contract-dic:contract-type") -->
 		<field jrFldName="col_DocString" queryFldName="{lecm-document:present-string}"
 			displayName="Строка представления"
 			inMainDoc="true">
         </field>
-
-		<field jrFldName="col_Contragent.name"  queryFldName="{lecm-contract:partner-assoc/lecm-contractor:shortname}"
-				displayName="Контрагент.Короткое"
-				inMainDoc="true"/>
-		<field jrFldName="col_Contragent.phone" queryFldName="{lecm-contract:partner-assoc/lecm-contractor:phone}"
-				displayName="Контрагент.Тел"
-				inMainDoc="true"/>
 
 		<!-- атрибуты для таблицы вложенных файлов надо обозначать 
 			относительно связи с типом "lecm-connect:connection"
