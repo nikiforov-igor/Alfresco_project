@@ -15,4 +15,9 @@ for each (var row in data) {
     }
 }
 
+result.sort(function(a, b)
+{
+	return (a.number < b.number) ? -1 : (a.number > b.number) ? 1 : 0;
+});
+
 model.result = jsonUtils.toJSONString(result);
