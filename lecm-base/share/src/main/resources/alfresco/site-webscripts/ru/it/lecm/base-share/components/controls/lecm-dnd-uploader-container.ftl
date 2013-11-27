@@ -12,6 +12,11 @@
 		<#assign showUploadNewVersion = true/>
 	</#if>
 
+	<#assign checkRights = false/>
+	<#if params.checkRights?? && params.checkRights == "true">
+		<#assign checkRights = true/>
+	</#if>
+
 	<script type="text/javascript">//<![CDATA[
 	(function() {
 		var control = new LogicECM.control.DndUploader("${fieldHtmlId}").setMessages(${messages});
@@ -23,13 +28,15 @@
 					autoSubmit: ${autoSubmit?string},
 					showUploadNewVersion: ${showUploadNewVersion?string},
 					directoryName: "${msg(params.directoryNameCode)}",
+					checkRights: ${checkRights?string},
+					itemNodeRef: "${form.arguments.itemId}",
 					currentValue: "${field.value!""}"
 				});
 	})();
 	//]]></script>
 
 	<#if !disabled>
-	    <div id="${fieldHtmlId}-uploader-block" class="uploader-block">
+	    <div id="${fieldHtmlId}-uploader-block" class="uploader-block <#if checkRights>hidden</#if>">
 	        <fieldset>
 	            <legend>${msg("label.add-file")}</legend>
 	            <img id="${fieldHtmlId}-uploader-button" src="/share/res/images/lecm-base/components/plus.png" alt="" class="uploader-button">  <br/>

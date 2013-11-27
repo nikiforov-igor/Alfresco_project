@@ -1441,6 +1441,7 @@
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">label.contracts.attachments</control-param>
                             <control-param name="showUploadNewVersion">true</control-param>
+                            <control-param name="checkRights">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-contract-table-structure:stage-comment">

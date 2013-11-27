@@ -33,27 +33,25 @@ LogicECM.control = LogicECM.control || {};
 		{
 			options:{
 				disabled: false,
-
 				uploadDirectoryPath: null,
-
 				multipleMode: true,
-
 				directoryName: true,
-
 				autoSubmit: false,
-
 				currentValue: "",
-
-				showUploadNewVersion: false
+				showUploadNewVersion: false,
+				checkRights: false,
+				itemNodeRef: false
 			},
 
 			currentValueHtmlId: "",
-
 			rootNodeRef: null,
-
 			fileUpload: null,
-
 			selectedItems: null,
+
+			hasViewContentRight: null,
+			hasAddContentRight: null,
+			hasDeleteContentRight: null,
+			hasNewVersionContentRight: null,
 
 			onReady:function () {
 				if (!this.options.disabled) {
@@ -62,7 +60,40 @@ LogicECM.control = LogicECM.control || {};
 
 					Event.on(this.id + "-uploader-button", "click", this.showUploader, null, this);
 				}
-				this.loadSelectedItems();
+				if (this.options.checkRights) {
+					this.loadPermissions();
+				} else {
+					this.loadSelectedItems();
+				}
+			},
+
+			loadPermissions: function() {
+				Alfresco.util.Ajax.jsonGet(
+					{
+						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/security/api/getPermissions?nodeRef=" + encodeURIComponent(this.options.itemNodeRef) + "&permissions=" + encodeURIComponent("_lecmPerm_ContentList,_lecmPerm_ContentAddVer,_lecmPerm_ContentAdd,_lecmPerm_ContentDelete"),
+						successCallback:
+						{
+							fn: function (response) {
+								var oResults = response.json;
+								if (oResults != null && oResults.length == 4) {
+									this.hasViewContentRight = response.json[0];
+									this.hasNewVersionContentRight = response.json[1];
+									this.hasAddContentRight = response.json[2];
+									this.hasDeleteContentRight = response.json[3];
+
+									if (this.hasViewContentRight) {
+										this.loadSelectedItems();
+									}
+
+									if (this.hasAddContentRight) {
+										Dom.removeClass(this.id + "-uploader-block", "hidden");
+									}
+								}
+							},
+							scope: this
+						},
+						failureMessage: "message.failure"
+					});
 			},
 
 			loadRootNode: function () {
@@ -359,17 +390,19 @@ LogicECM.control = LogicECM.control || {};
 							}
 
 							if (!this.options.disabled) {
-								if (this.options.showUploadNewVersion) {
+								if (this.options.showUploadNewVersion && (this.options.checkRights && this.hasNewVersionContentRight)) {
 									var iconNewVersionId = "attachment-newVersion-" + nodeRef;
 									row += "<img id='" + iconNewVersionId + "' src='" + Alfresco.constants.URL_RESCONTEXT
 										+ "/components/documentlibrary/actions/document-upload-new-version-16.png' class='newVersion-icon'/>";
 									Event.onAvailable(iconNewVersionId, this.attachUploadNewVersionClickListener, item, this);
 								}
 
-								var iconRemoveId = "attachment-remove-" + nodeRef;
-								row += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
-									+ "components/images/delete-16.png' class='remove-icon'/>";
-								Event.onAvailable(iconRemoveId, this.attachRemoveItemClickListener, item, this);
+								if (this.options.checkRights && this.hasDeleteContentRight) {
+									var iconRemoveId = "attachment-remove-" + nodeRef;
+									row += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
+										+ "components/images/delete-16.png' class='remove-icon'/>";
+									Event.onAvailable(iconRemoveId, this.attachRemoveItemClickListener, item, this);
+								}
 							}
 
 							var rowId = "attachment-" + nodeRef;
