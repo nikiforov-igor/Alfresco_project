@@ -40,7 +40,8 @@ LogicECM.control = LogicECM.control || {};
 				currentValue: "",
 				showUploadNewVersion: false,
 				checkRights: false,
-				itemNodeRef: false
+				itemNodeRef: false,
+                suppressRefreshEvent: false
 			},
 
 			currentValueHtmlId: "",
@@ -225,7 +226,8 @@ LogicECM.control = LogicECM.control || {};
 						{
 							fn: this.fileUploadComplete,
 							scope: this
-						}
+						},
+                        suppressRefreshEvent: this.options.suppressRefreshEvent
 					};
 					this.fileUpload.show(uploadConfig);
 				}
@@ -332,7 +334,8 @@ LogicECM.control = LogicECM.control || {};
 											description: description,
 											extensions: extensions
 										}],
-									mode: this.fileUpload.MODE_SINGLE_UPDATE
+									mode: this.fileUpload.MODE_SINGLE_UPDATE,
+                                    suppressRefreshEvent: this.options.suppressRefreshEvent
 								};
 
 								this.fileUpload.show(singleUpdateConfig);

@@ -1,4 +1,4 @@
-<#macro renderDndUploaderContainerHTML fieldHtmlId field form>
+<#macro renderDndUploaderContainerHTML fieldHtmlId field form suppressRefreshEvent="false">
 	<#assign params = field.control.params/>
 	<#assign disabled = form.mode == "view">
 
@@ -30,7 +30,8 @@
 					directoryName: "${msg(params.directoryNameCode)}",
 					checkRights: ${checkRights?string},
 					itemNodeRef: "${form.arguments.itemId}",
-					currentValue: "${field.value!""}"
+					currentValue: "${field.value!""}",
+                    suppressRefreshEvent: ${suppressRefreshEvent?string}
 				});
 	})();
 	//]]></script>

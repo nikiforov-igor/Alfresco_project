@@ -13,6 +13,10 @@
     <#if params.showAttsLabel?? && params.showAttsLabel == "false">
         <#assign showAttsLabel = false/>
     </#if>
+    <#assign suppressRefreshEvent = false/>
+    <#if params.suppressRefreshEvent?? && params.suppressRefreshEvent == "true">
+        <#assign suppressRefreshEvent = true/>
+    </#if>
     <#if params.showAttsList?? && params.showAttsList == "false">
         <#assign showAttsList = false/>
     </#if>
@@ -23,5 +27,5 @@
         <ul id="${fieldHtmlId}-attachments" class="attachments-list"></ul>
     </#if>
 
-	<@renderDndUploaderContainerHTML fieldHtmlId field form/>
+	<@renderDndUploaderContainerHTML fieldHtmlId field form suppressRefreshEvent/>
 </div>
