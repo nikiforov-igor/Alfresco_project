@@ -60,7 +60,7 @@ public class SubreportBuilder {
      * <br/>   значения = описание для построения списка
      * </b>
      */
-    protected Map<String, AssocListInfo> beanLists;
+    protected Map<String, String> beanLists;
 
     public SubreportBuilder(SubReportDescriptor subReportDesc, LinksResolver resolver) {
         super();
@@ -122,7 +122,7 @@ public class SubreportBuilder {
         }
 
         this.beanFields = new HashMap<String, String[]>();
-        this.beanLists = new HashMap<String, AssocListInfo>();
+        this.beanLists = new HashMap<String, String>();
 
         for (Map.Entry<String, String> e : cfg.entrySet()) {
             final String propName = Utils.trimmed(e.getKey()); // ключ = название свойства
@@ -141,10 +141,7 @@ public class SubreportBuilder {
             if (propName.startsWith(ItemsFormatDescriptor.LIST_MARKER)) {
                 // списочное значение ...
                 final String propNameOnly = propName.substring(ItemsFormatDescriptor.LIST_MARKER.length()); // имя без "звёздочки"
-
-                final AssocListInfo info = new AssocListInfo();
-                info.parseSourceLink(svalue);
-                this.beanLists.put(propNameOnly, info);
+                this.beanLists.put(propNameOnly, svalue);
                 continue;
             }
 
@@ -242,24 +239,11 @@ public class SubreportBuilder {
 
 		/* Отдельные списки (например, сюда попадут Соисполнители) */
         if (beanLists != null) {
-            for (Map.Entry<String, AssocListInfo> ent : beanLists.entrySet()) {
+            for (Map.Entry<String, String> ent : beanLists.entrySet()) {
                 final String propName = ent.getKey();
-                final AssocListInfo src = ent.getValue();
-
-                final QName assocRef = QName.createQName(src.assocQName, getNameService());
-                final List<NodeRef> children = NodeUtils.findChildrenByAssoc(subItemId, assocRef, getNodeService());
-
-                if (children != null && !children.isEmpty()) {
-                    final List<String> list = new ArrayList<String>();
-                    for (NodeRef childId : children) {
-                        final Object val = NodeUtils.getByLink(src.dataPath, childId, resolver);
-                        if (val != null) {
-                            list.add(Utils.coalesce(val, ""));
-                        }
-                    } // for
-
-                    values.put(propName, list); // (!) присвоение списочного свойства
-                } // if
+                final String src = ent.getValue();
+                Object subList = buildSubreport(subItemId, src);
+                values.put(propName, subList != null ? subList  : new ArrayList());
             } // for
         }
 
@@ -276,11 +260,11 @@ public class SubreportBuilder {
      *         <li>   строки, когда используется форматирование,
      *         <li>   или List-а объектов типа #subreport.beanClassName
      */
-    public Object buildSubreport(NodeRef docId) {
+    public Object buildSubreport(NodeRef docId, String sourceListExpression) {
         final boolean usingFormat = subreport.isUsingFormat();
 
         /* получение ассоциированного списка ... */
-        List<NodeRef> children = getSubstService().getObjectsByTitle(docId, subreport.getSourceListExpression());
+        List<NodeRef> children = getSubstService().getObjectsByTitle(docId, sourceListExpression);
 
         if (children == null || children.isEmpty()) { // нет вложенных ...
             // если исопльзуется форматирование - вернуть его "пустую строку" ...
@@ -363,46 +347,6 @@ public class SubreportBuilder {
 
         // использование как списка бинов ...
         return result;
-    }
-
-    protected static class AssocListInfo {
-        /**
-         * ассоциация относительно Задачи (без символов {})
-         */
-        public String assocQName;
-
-        /**
-         * оставшаяся часть в виде "{...}" для получения данных,
-         * задаётся относительно объектов из списка ассоциации assocQName.
-         */
-        public String dataPath;
-
-        /**
-         * Присвоить ссылку вида:
-         * "{ассоциация1/...путь...}"
-         * скобки в начале и в конце необязательны
-         */
-        public void parseSourceLink(String svalue) {
-            final int ibeg = (svalue.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL))
-                    ? SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL.length() // после открывающей скобки, если она есть
-                    : 0;
-            final int iend = (svalue.endsWith(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL))
-                    ? svalue.length() - SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL.length() // до закрывающей скобки (без неё)
-                    : svalue.length();
-            int posDelim = svalue.indexOf(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL);
-            if (posDelim < 0) {
-                // нет "/" - считаем что указана только ассоциация и выводить надо будет "cm:name"
-                this.assocQName = svalue.substring(ibeg, iend);
-                this.dataPath = "cm:name";
-            } else { // есть "/"
-                this.assocQName = svalue.substring(ibeg, posDelim); // от начала до разделителя
-                this.dataPath = svalue.substring(posDelim + SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL.length(), iend); // после разделителя до конца
-            }
-            if (this.dataPath != null && this.dataPath.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL)) {
-                // оборачиваем скобками, если путь ещё остаётся сложнее просто свойства ...
-                this.dataPath = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + this.dataPath + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
-            }
-        }
     }
 }
 

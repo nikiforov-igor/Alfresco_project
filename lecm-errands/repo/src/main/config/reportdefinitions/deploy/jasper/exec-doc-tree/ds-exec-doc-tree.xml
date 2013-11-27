@@ -9,14 +9,12 @@
                 <item key="RU_RU" value="Jasper"/>
             </l18>
         </type>
-        <provider
-            javaClass="ru.it.lecm.errands.reports.ErrandsDocTreeDSProvider" mnem="PROVIDER_DOCTREE_ERRANDS">
+        <provider javaClass="ru.it.lecm.reports.generators.GenericDSProviderBase" mnem="PROV_GENERIC_PROVIDER">
             <l18>
-                <item key="RU_RU" value="Провайдер дерева Поручений Документа"/>
+                <item key="RU_RU"><![CDATA[genericProvider]]></item>
             </l18>
         </provider>
-        <template
-            filename="exec-doc-tree.jrxml" mnem="exec-doc-tree">
+        <template filename="exec-doc-tree.jrxml" mnem="exec-doc-tree">
             <l18>
                 <item key="RU_RU" value="exec-doc-tree"/>
             </l18>
@@ -56,21 +54,21 @@
 						(см также формат уровня levelShift)
 		
 	  -->
-	<tree.formats>
+	<!--<tree.formats>
 		<map>
-			<!-- На каждом уровне вложенности поручения добавляется этот отступ -->
+			&lt;!&ndash; На каждом уровне вложенности поручения добавляется этот отступ &ndash;&gt;
 			<item key="levelShift" value="\t" />
 			<item key="cycleMarker" value="*" />
 
-			<!-- Сейчас выводимые данные форматируются по типу Альфреско - как положено в SubstitudeBean.getObjectDescription -->
-			<!-- формат выводимой строки для Поручения (отсносительно Поручения)
+			&lt;!&ndash; Сейчас выводимые данные форматируются по типу Альфреско - как положено в SubstitudeBean.getObjectDescription &ndash;&gt;
+			&lt;!&ndash; формат выводимой строки для Поручения (отсносительно Поручения)
 			<item key="fmtErrandReport">
 				<![CDATA[@levelTab {"lecm-errands:title"} {"lecm-errands:is-important"} от {cm:created}, Инициатор {lecm-errands:initiator-assoc/cm:name}]]>
 			</item>
-			-->
+			&ndash;&gt;
 
 		</map>
-	</tree.formats>
+	</tree.formats>-->
 
 	<!-- ассоциации для получения следующего уровня вложенности Поручений:
 		level.1: относительно документа "cm:document" (нулевой уровень)
@@ -79,43 +77,58 @@
 		Если уровень явно не указан, то используется последний родительский (ближайший сверху).
 	
 	  -->
-	<tree.levelAssoc>
+	<!--<tree.levelAssoc>
 		<map>
-			<!-- Ссылка из Поручения на Основание (документ или поручение), если есть (M1 от поручения к родителю)
+			&lt;!&ndash; Ссылка из Поручения на Основание (документ или поручение), если есть (M1 от поручения к родителю)
 				target: lecm-document:base
-			  -->
+			  &ndash;&gt;
 			<item key="level.1">
 				<![CDATA[lecm-errands:additional-document-assoc]]>
 			</item>
 		</map>
-	</tree.levelAssoc>
+	</tree.levelAssoc>-->
 
 	<fields>
+        <!-- Параметры -->
+        <field alfrescoType="lecm-document:base" order="0" displayName="Выбранные документы"
+				javaValueClass="java.lang.String" jrFldName="ID">
+            <l18>
+                <item key="RU_RU" value="Выбранные документы"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
+                <l18> <item key="RU_RU" value="Список"/> </l18>
+            </parameter>
+        </field>
 
-		<field alfrescoType="lecm-document:base" order="0" displayName="Выбранные документы"
-				javaValueClass="java.lang.String" jrFldName="Col_baseDocs" queryFldName="{ID}">
-			<l18>
-				<item key="RU_RU" value="Выбранные документы"/>
-			</l18>
-			<parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
-				<l18> <item key="RU_RU" value="Список"/> </l18>
-			</parameter>
-		</field>
+        <!-- Подменяем тип документов - ищем любые документы -->
+        <field queryFldName="lecm-document:base" jrFldName="TYPE" displayName="Тип" javaValueClass="java.lang.String"/>
 
-		<field alfrescoType="d:text" order="0" displayName="Иерархический номер"
-				javaValueClass="java.lang.String" jrFldName="Col_LeveledNum" queryFldName="{{Col_LeveledNum}}">
-			<l18>
-				<item key="RU_RU" value="Иерархический номер"/>
-			</l18>
-		</field>
-
+        <!-- Поля -->
 		<field alfrescoType="d:text" displayName="Название"
-				jrFldName="Col_DisplayName" order="2" queryFldName="{{Col_DisplayName}}">
+				jrFldName="Col_DisplayName" queryFldName="{lecm-document:present-string}">
 			<l18>
 				<item key="RU_RU" value="Название"/>
 			</l18>
 		</field>
 
+        <field alfrescoType="d:text" displayName="Дочерние поручения"
+               javaValueClass="java.util.List" jrFldName="Doc_Errands" queryFldName="{{subreport::Doc_Errands}}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Этапы]]></item>
+            </l18>
+        </field>
 	</fields>
 
+    <subreports>
+        <subreport destColumnName="Doc_Errands" name="Doc_Errands">
+            <sublist.source><![CDATA[{..lecm-errands:additional-document-assoc/}]]></sublist.source>
+            <sublist.type><![CDATA[lecm-errands:document]]></sublist.type>
+            <sublist.item>
+                <map>
+                    <item key="col_Name"><![CDATA[{lecm-document:present-string}]]></item>
+                    <item key="*col_SubErrands"><![CDATA[{..lecm-errands:additional-document-assoc/}]]></item>
+                </map>
+            </sublist.item>
+        </subreport>
+    </subreports>
 </ds.config>

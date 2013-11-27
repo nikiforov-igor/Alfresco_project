@@ -189,16 +189,17 @@ public class ParameterMapper {
             destValue = value;
         } else {
             if (result.getExpression() != null && !result.getExpression().isEmpty()) {
-                value = result.getExpression();
-            }
-            if (value instanceof String) {
-                if (!Utils.isStringEmpty((String) value)) {
-                    destValue = value;
-                }
-            } else if (value instanceof String[]) {
-                final String[] arr = (String[]) value;
-                if (arr.length > 0 && !Utils.isStringEmpty(arr[0])) {
-                    destValue = arr[0];
+                destValue = result.getExpression();
+            } else {
+                if (value instanceof String) {
+                    if (!Utils.isStringEmpty((String) value)) {
+                        destValue = value;
+                    }
+                } else if (value instanceof String[]) {
+                    final String[] arr = (String[]) value;
+                    if (arr.length > 0 && !Utils.isStringEmpty(arr[0])) {
+                        destValue = arr;
+                    }
                 }
             }
         }
@@ -207,7 +208,7 @@ public class ParameterMapper {
                 final ParameterTypedValueImpl ptv = new ParameterTypedValueImpl(colName);
                 result.setParameterValue(ptv);
             }
-            result.getParameterValue().setBound1(value);
+            result.getParameterValue().setBound1(destValue);
         }
         return result;
     }

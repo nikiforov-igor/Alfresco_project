@@ -1,12 +1,7 @@
 package ru.it.lecm.reports.generators;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
@@ -293,15 +288,17 @@ public class LucenePreparedQuery {
         return result;
     }
 
+    private static StringBuilder makeValueCond(String propertyName, ParameterTypedValue parType) {
+        return makeValueCond(propertyName, parType, false, null);
+    }
+
     /**
      * Сгенерировать условие для проверки атрибута
      *
      * @param propertyName атрибут Альфреско (строка вида "тип:поле")
      * @param parType      параметр, с которым надо сгенерировать условие
-     * @return
      */
-    private static StringBuilder makeValueCond(String propertyName, ParameterTypedValue parType) {
-
+    private static StringBuilder makeValueCond(String propertyName, ParameterTypedValue parType, boolean splitValue, String delimiter) {
         if (parType == null || propertyName == null) {
             return null;
         }
@@ -360,9 +357,24 @@ public class LucenePreparedQuery {
                 if (bound1 == null) {
                     values = null;
                 } else if (bound1 instanceof String[]) {
-                    values = (String[]) bound1;
+                    if (splitValue) {
+                        Set<String> valuesSet = new HashSet<String>();
+                        for (String bound : (String[]) bound1) {
+                            if (bound != null && !bound.isEmpty()) {
+                                String[] boundVs = bound.split(delimiter);
+                                Collections.addAll(valuesSet, boundVs);
+                            }
+                        }
+                        values = valuesSet.toArray(new String[valuesSet.size()]);
+                    } else {
+                        values = (String[]) bound1;
+                    }
                 } else {
-                    values = new String[]{bound1.toString()};
+                    if (splitValue) {
+                        values = bound1.toString().split(delimiter);
+                    } else {
+                        values = new String[]{bound1.toString()};
+                    }
                 }
 
                 Utils.emmitValuesInsideList(cond, luceneFldName, values);
@@ -679,11 +691,8 @@ public class LucenePreparedQuery {
             boolean hasId = false;
 
             final ColumnDescriptor colWithID = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_ID);
-			if (	colWithID != null
-					&& colWithID.getParameterValue() != null
-					&& !colWithID.getParameterValue().isEmpty()
-			) {
-                final StringBuilder idCond = makeValueCond("ID", colWithID.getParameterValue());
+            if (colWithID != null && colWithID.getParameterValue() != null && !colWithID.getParameterValue().isEmpty() ) {
+                final StringBuilder idCond = makeValueCond("ID", colWithID.getParameterValue(),true, ",");
                 if (idCond != null && idCond.length() > 0) {
                     final String sCond = idCond.toString().replace("@ID", "ID"); // замена обычной ссылки на атрибут, ссылкой на тип
                     bquery.emmit((hasType ? " AND" : "") + " (" + sCond + ")");

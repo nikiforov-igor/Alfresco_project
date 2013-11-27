@@ -435,6 +435,6 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
 
 		/* получение ассоциированного списка и построение ... */
         final SubreportBuilder builder = new SubreportBuilder(subreport, resolver);
-        return builder.buildSubreport(docId);
+        return builder.buildSubreport(docId, builder.getSubreport().getSourceListExpression());
     }
 }

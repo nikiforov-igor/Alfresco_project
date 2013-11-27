@@ -195,6 +195,7 @@ public class Utils {
         if (s != null && s.length() > 0)
             while (count > 0) {
                 result.append(s);
+                count--;
             }
         return result.toString();
     }

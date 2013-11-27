@@ -3,68 +3,55 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<property name="dataSource" value="ru.it.lecm.errands.reports.ErrandsDocTreeDSProvider"/>
+	<property name="dataSource" value="ru.it.lecm.reports.generators.GenericDSProviderBase"/>
 	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
 			<style backcolor="#DCDCDC"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["ds-exec-doc-tree.xml"]]></defaultValueExpression>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/reportdefinitions/deploy/jasper/exec-doc-tree/"]]></defaultValueExpression>
 	</parameter>
-	<queryString>
-		<![CDATA[]]>
-	</queryString>
-	<field name="Col_baseDocs" class="java.lang.String">
-		<fieldDescription><![CDATA[Выбранные документы]]></fieldDescription>
-	</field>
-	<field name="Col_LeveledNum" class="java.lang.String">
-		<fieldDescription><![CDATA[Иерархический номер]]></fieldDescription>
-	</field>
 	<field name="Col_DisplayName" class="java.lang.String">
 		<fieldDescription><![CDATA[Название]]></fieldDescription>
 	</field>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
+	<field name="Doc_Errands" class="java.util.List"/>
 	<title>
-		<band height="24" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="801" height="24"/>
-				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans" size="20" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="802" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="18" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<text><![CDATA[Дерево Поручений Документов]]></text>
+				<text><![CDATA[Дерево Поручений]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="22" splitType="Stretch">
+		<band height="25" splitType="Stretch">
 			<textField>
-				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="0" width="141" height="20"/>
-				<textElement textAlignment="Left">
-					<font fontName="DejaVu Serif" pdfEncoding="Cp1251"/>
+				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="0" width="255" height="25">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Стр "+$V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Страница "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="27" splitType="Stretch">
-			<rectangle>
-				<reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" x="1" y="1" width="800" height="24" backcolor="#DCDCDC"/>
-			</rectangle>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="d2334534-0ee4-43cb-82d6-fd1d4e4ed21a" x="2" y="2" width="60" height="24" isPrintWhenDetailOverflows="true"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
-			</textField>
+		<band height="30" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="279c1409-10d9-462c-8311-1bbaaae755e4" x="65" y="2" width="730" height="24" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="279c1409-10d9-462c-8311-1bbaaae755e4" mode="Opaque" x="0" y="0" width="802" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
@@ -74,30 +61,30 @@
 	</columnHeader>
 	<detail>
 		<band height="30" splitType="Stretch">
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement uuid="d2334534-0ee4-77cb-82d6-fd1d4e4ed21a" x="2" y="2" width="60" height="24" isPrintWhenDetailOverflows="true"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="279c1409-10d9-772c-8311-1bbaaae755e4" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="802" height="30" isPrintWhenDetailOverflows="true" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Col_LeveledNum}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="279c1409-10d9-772c-8311-1bbaaae755e4" isPrintRepeatedValues="false" x="65" y="2" width="730" height="24"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Col_DisplayName}]]></textFieldExpression>
 			</textField>
 		</band>
+		<band height="30">
+			<subreport isUsingCache="true">
+				<reportElement uuid="bc643abf-da8b-4422-a592-67156b5abdf8" positionType="Float" mode="Opaque" x="0" y="0" width="802" height="30" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="errand_Level">
+					<subreportParameterExpression><![CDATA[0]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{Doc_Errands}, false)]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "doc_Errands.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
 	</detail>
-	<columnFooter>
-		<band height="1" splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="1" splitType="Stretch"/>
-	</pageFooter>
-	<summary>
-		<band height="1" splitType="Stretch"/>
-	</summary>
 </jasperReport>
