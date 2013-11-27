@@ -98,19 +98,19 @@ public class LinksResolver {
                 String strValue = value.toString();
                 switch (type) {
                     case DATE: {
-                        value = (strValue.isEmpty()) ? null : ArgsHelper.tryMakeDate(strValue, null);
+                        value = (value instanceof  Date ? value : ArgsHelper.tryMakeDate(strValue, null));
                         break;
                     }
                     case BOOL: {
-                        value = Boolean.valueOf(strValue);
+                        value = (value instanceof  Boolean ? value : Boolean.valueOf(strValue));
                         break;
                     }
                     case FLOAT: {
-                        value = (strValue.isEmpty()) ? null : Float.valueOf(strValue);
+                        value = (value instanceof  Float ? value : Float.valueOf(strValue));
                         break;
                     }
                     case INTEGER: {
-                        value = (strValue.isEmpty()) ? null : Integer.valueOf(strValue);
+                        value = (value instanceof  Integer ? value : Integer.valueOf(strValue));
                         break;
                     }
                     case LIST: {

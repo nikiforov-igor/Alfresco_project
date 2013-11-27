@@ -38,11 +38,6 @@
         <queryText><![CDATA[]]></queryText>
 	</query.descriptor>
 
-	<cmis.connection>
-		<url>http://localhost:8080/alfresco/service/cmis</url>
-		<username>admin</username>
-	</cmis.connection>
-
 	<fields>
         <!-- параметры -->
 		<!-- Период - начало и конец -->
@@ -59,13 +54,12 @@
                 </label2>
             </parameter>
         </field>
-
         <field queryFldName="lecm-al:approval-list" jrFldName="TYPE" displayName="Тип" javaValueClass="java.lang.String"/>
 
-        <field queryFldName="{period.start}" jrFldName="col_Period.Start" displayName="Начало периода" javaValueClass="java.util.Date"/>
-        <field queryFldName="{period.end}" jrFldName="col_Period.End" displayName="Конец периода" javaValueClass="java.util.Date"/>
+        <!-- Поля -->
+        <field queryFldName="{col_Period.Start}" jrFldName="col_Period.Start" displayName="Начало периода" javaValueClass="java.util.Date"/>
+        <field queryFldName="{col_Period.End}" jrFldName="col_Period.End" displayName="Конец периода" javaValueClass="java.util.Date"/>
 
-        <!-- данные в отчете -->
 		<!-- Фамилия И.О. Сотрудника-->
 		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-short-name}"
 				jrFldName="col_Employee"

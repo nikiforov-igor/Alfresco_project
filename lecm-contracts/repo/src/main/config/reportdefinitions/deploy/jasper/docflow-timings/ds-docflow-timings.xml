@@ -52,13 +52,6 @@
         <queryText><![CDATA[]]></queryText>
 	</query.descriptor>
 
-	<!-- параметры соединения с Альфреско (пока не используются) -->
-	<cmis.connection>
-		<url>http://localhost:8080/alfresco/service/cmis</url>
-		<username>admin</username>
-		<password>111</password>
-	</cmis.connection>
-
 	<!--
 		groupby.formats: Описания для группирования строк из НД, полученного после сбора всех договоров.
 		(!) Ключи "key" - это значения параметра формирования отчёта "reportGroupBy"
