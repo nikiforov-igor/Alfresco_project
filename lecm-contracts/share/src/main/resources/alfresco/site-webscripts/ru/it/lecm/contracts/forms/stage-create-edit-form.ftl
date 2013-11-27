@@ -156,7 +156,19 @@
 
 			inEditMode = ${inEditMode?string};
 
-		if(inEditMode)
+		if(inEditMode) {
 			Bubbling.on("afterFormRuntimeInit", init);
+        }
+        <#if !inViewMode>
+        new LogicECM.DateRange("${formId}").setOptions({
+            startDateHtmlId: "${htmlId}_${propStartDate}",
+            endDateHtmlId: "${htmlId}_${propEndDate}"
+        }).setMessages(${messages});
+
+        new LogicECM.DateRange("${formId}").setOptions({
+            startDateHtmlId: "${htmlId}_${propStartDateReal}",
+            endDateHtmlId: "${htmlId}_${propEndDateReal}"
+        }).setMessages(${messages});
+        </#if>
 	})();
 </script>
