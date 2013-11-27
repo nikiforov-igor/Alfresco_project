@@ -148,11 +148,10 @@ public class LinksResolver {
                     }
 
                     Object property = context.getPropertyValueByJRField(columnCode);
-                    String propertyStr = "";
                     if (property != null) {
-                        propertyStr = property.toString();
+                        property = "";
                     }
-                    sortedObj.addSort(propertyStr, asc);
+                    sortedObj.addSort(property, asc);
                 }
 
                 if (treeMap.get(sortedObj) == null) {
