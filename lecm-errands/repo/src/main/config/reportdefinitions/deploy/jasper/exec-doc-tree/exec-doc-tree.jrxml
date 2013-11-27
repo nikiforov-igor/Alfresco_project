@@ -52,10 +52,11 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Название"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Документ"]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
@@ -70,8 +71,9 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Col_DisplayName}]]></textFieldExpression>
 			</textField>

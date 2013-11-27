@@ -33,7 +33,7 @@
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono"/>
-					<paragraph firstLineIndent="20"/>
+					<paragraph firstLineIndent="30"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Name}]]></textFieldExpression>
 			</textField>
