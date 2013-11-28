@@ -22,8 +22,8 @@
 	<field name="col_SubErrands" class="java.util.List"/>
 	<detail>
 		<band height="26" splitType="Stretch">
-			<textField isStretchWithOverflow="true">
-				<reportElement uuid="a2fb6c46-3698-467e-8c14-9b06e12fd228" x="0" y="0" width="802" height="26" isRemoveLineWhenBlank="true"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a2fb6c46-3698-467e-8c14-9b06e12fd228" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="802" height="26" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -35,12 +35,12 @@
 					<font fontName="DejaVu Sans Mono"/>
 					<paragraph firstLineIndent="30"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{col_Name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{col_Name} != null ? $F{col_Name} : "Не задано"]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="30">
 			<subreport isUsingCache="true">
-				<reportElement uuid="d6b8a8a1-d8f9-45ac-b5c4-d4aadd8a996f" isPrintRepeatedValues="false" mode="Opaque" x="0" y="0" width="802" height="30" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="d6b8a8a1-d8f9-45ac-b5c4-d4aadd8a996f" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="802" height="30" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{col_SubErrands},false)]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "doc_Errands.jasper"]]></subreportExpression>
 			</subreport>

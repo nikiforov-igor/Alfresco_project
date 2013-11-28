@@ -80,7 +80,7 @@
 		</band>
 		<band height="30">
 			<subreport isUsingCache="true">
-				<reportElement uuid="bc643abf-da8b-4422-a592-67156b5abdf8" positionType="Float" mode="Opaque" x="0" y="0" width="802" height="30" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="bc643abf-da8b-4422-a592-67156b5abdf8" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="802" height="30" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
 				<subreportParameter name="errand_Level">
 					<subreportParameterExpression><![CDATA[0]]></subreportParameterExpression>
 				</subreportParameter>
