@@ -53,6 +53,15 @@ public class ArgsHelper {
         return null;
     }
 
+    public static Number tryMakeNumber(String value) {
+        if (Utils.isStringEmpty(value)){
+            return null;
+        }
+
+        value = value.replaceAll(",", ".");
+        return value.indexOf(".") > 0 ? Double.valueOf(value) : Long.valueOf(value);
+    }
+
     public static String dateToStr(final Date value, final String ifNULL) {
         return (value != null) ? DateFormatISO8601.format(value) : ifNULL;
     }
@@ -82,7 +91,7 @@ public class ArgsHelper {
      *
      * @return непустой список [NodeRef] или null, если строка пуста
      */
-    public static List<NodeRef> makeNodeRefs(String value, String destInfoTag) {
+    public static List<NodeRef> makeNodeRefs(String value) {
         if (Utils.isStringEmpty(value)) {
             return null;
         }
@@ -91,9 +100,7 @@ public class ArgsHelper {
         try {
             final String[] items = value.split("[;,]");
             if (items != null) {
-                int i = -1;
                 for (String s : items) {
-                    i++;
                     final NodeRef ref = makeNodeRef(s);
                     if (ref != null) {
                         result.add(ref);
@@ -101,7 +108,7 @@ public class ArgsHelper {
                 }
             }
         } catch (Throwable e) {
-            logger.error(String.format("Invalid nodeRef values '%s' for field '%s' -> ignored as NULL list", value, destInfoTag), e);
+            logger.error(String.format("Invalid nodeRef values '%s' for field -> ignored as NULL list", value), e);
             return null;
         }
         return result.isEmpty() ? null : result;

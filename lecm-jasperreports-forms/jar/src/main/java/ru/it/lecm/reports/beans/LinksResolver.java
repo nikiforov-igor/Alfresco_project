@@ -8,7 +8,6 @@ import ru.it.lecm.reports.generators.SubreportBuilder;
 import ru.it.lecm.reports.jasper.ProxySubstitudeBean;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
-import ru.it.lecm.reports.utils.ArgsHelper;
 
 import java.util.*;
 
@@ -37,19 +36,6 @@ public class LinksResolver {
                 expression.contains(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) &&
                 expression.contains(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) &&
                 !expression.matches(SubreportBuilder.REGEXP_SUBREPORTLINK);
-    }
-
-    /**
-     * Выполнить разименование указанной ссылки и приведение типа.
-     *
-     * @param docId          id узла, относительно которого задано выражение
-     * @param linkExpression выражение для разименования
-     *                       ключь здесь - само выражение, если под таким ключом будет элемент, то
-     *                       именно его значение станет результатом.
-     * @return вычисленное выражение
-     */
-    public Object evaluateLinkExpr(NodeRef docId, String linkExpression) {
-        return evaluateLinkExpr(docId, linkExpression, null, new HashMap<String, Object>());
     }
 
     /**
@@ -90,37 +76,11 @@ public class LinksResolver {
 
         // типизация value согласно указанному классу ...
         if (!ru.it.lecm.reports.utils.Utils.isStringEmpty(destClassName)) {
-            // TODO: метод для восстановления реального типа данных ...
             final JavaDataTypeImpl.SupportedTypes type = JavaDataTypeImpl.SupportedTypes.findType(destClassName);
             if (type == null) {
                 return value;
             } else {
-                String strValue = value.toString();
-                switch (type) {
-                    case DATE: {
-                        value = (value instanceof  Date ? value : ArgsHelper.tryMakeDate(strValue, null));
-                        break;
-                    }
-                    case BOOL: {
-                        value = (value instanceof  Boolean ? value : Boolean.valueOf(strValue));
-                        break;
-                    }
-                    case FLOAT: {
-                        value = (value instanceof  Float ? value : Float.valueOf(strValue));
-                        break;
-                    }
-                    case INTEGER: {
-                        value = (value instanceof  Integer ? value : Integer.valueOf(strValue));
-                        break;
-                    }
-                    case LIST: {
-                        break;
-                    }
-                    default: { // case STRING:
-                        value = strValue;
-                        break;
-                    }
-                } // switch
+                return type.getValueByRealType(value);
             }
         }
         return value;

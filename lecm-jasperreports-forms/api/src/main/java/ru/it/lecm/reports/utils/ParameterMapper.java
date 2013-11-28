@@ -150,22 +150,11 @@ public class ParameterMapper {
 
 
     static public Object getNumericAutoTypedValue(String value) {
-        if (value == null || value.length() == 0) {
-            return null;
-        }
-        value = value.replaceAll(",", ".");
-        return value.indexOf(".") > 0 ? Double.valueOf(value) : Long.valueOf(value);
+        return ArgsHelper.tryMakeNumber(value);
     }
 
     static public Date getDateValue(String paramValue) {
-        try {
-            if (paramValue != null && paramValue.length() > 0) {
-                return DATE_FORMAT.parse(paramValue);
-            }
-        } catch (ParseException ignored) {
-            log.warn(String.format("Value string '%s' is not correct date was ignored and set as NULL.\n\t Last error was: ", paramValue));
-        }
-        return null;
+        return ArgsHelper.tryMakeDate(paramValue, null);
     }
 
     /**
@@ -216,10 +205,6 @@ public class ParameterMapper {
 
     /**
      * Получение названия аргумента, который соот-ет параметризации колонки.
-     * Для параметров списков и значений будет получено конечное название,
-     * для интервалов - корневое, а реальные значения образуются из него
-     * добавлением окончаний "_lo" и "_hi".
-     *
      * @param colDesc колонка, для которой получить название "её" аргумента
      * @return NULL, если колонка не является параметризуемой,
      *         иначе мнемоника параметра, а если она не задана - название колонки (columnName).
