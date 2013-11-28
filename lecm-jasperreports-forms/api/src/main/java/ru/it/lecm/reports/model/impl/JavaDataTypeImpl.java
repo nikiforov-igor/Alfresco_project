@@ -45,6 +45,9 @@ public class JavaDataTypeImpl
         DOUBLE(Double.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
+                if (value == null || value.toString().isEmpty()) {
+                    return  null;
+                }
                 return (value instanceof Double ? value : Double.valueOf(value.toString()));
             }
         },
@@ -52,6 +55,9 @@ public class JavaDataTypeImpl
         LONG(Long.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
+                if (value == null || value.toString().isEmpty()) {
+                    return  null;
+                }
                 return (value instanceof Long ? value : Long.valueOf(value.toString()));
             }
         },
@@ -59,6 +65,9 @@ public class JavaDataTypeImpl
         INTEGER(Integer.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
+                if (value == null || value.toString().isEmpty()) {
+                    return  null;
+                }
                 return (value instanceof Integer ? value : Integer.valueOf(value.toString()));
             }
         },
@@ -66,6 +75,9 @@ public class JavaDataTypeImpl
         FLOAT(Float.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
+                if (value == null || value.toString().isEmpty()) {
+                    return  null;
+                }
                 return (value instanceof Float ? value : Float.valueOf(value.toString()));
             }
         },
@@ -73,6 +85,9 @@ public class JavaDataTypeImpl
         NUMERIC(java.lang.Number.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
+                if (value == null || value.toString().isEmpty()) {
+                    return  null;
+                }
                 return (value instanceof Number ? value : Long.valueOf(value.toString()));
             }
         },
