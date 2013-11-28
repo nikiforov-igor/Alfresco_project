@@ -42,6 +42,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			initUploader:function (config) {
 				this.config = config;
+				this.config = YAHOO.lang.merge(this.config, config);
 				this.container = Dom.get(this.id);
 
 				if (!this.config.disabled) {

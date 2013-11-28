@@ -1,0 +1,43 @@
+.from-with-preview .yui-g .yui-u.first {
+	width: 700px;
+}
+
+.from-with-preview .yui-g .yui-u {
+	width: 180px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > label,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field div.viewmode-field span.viewmode-label {
+	width: 100px;
+	text-align: left;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview  div.form-field input[type=text],
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview  div.form-field div.selectone-control select,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview  div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
+	width: 130px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
+	width: 130px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+	margin-left: 0;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .web-preview .previewer {
+	text-align: center;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .web-preview .previewer.WebPreviewer {
+	height: auto;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .web-preview embed {
+	height: 500px;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .web-preview .previewer.PdfJs {
+	max-height: 500px !important;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .web-preview .previewer.PdfJs .viewer.documentView {
+	max-height: 500px !important;
+}

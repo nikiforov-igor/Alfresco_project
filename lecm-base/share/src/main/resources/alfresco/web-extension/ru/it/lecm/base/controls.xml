@@ -36,6 +36,13 @@
 	            </control>
     		</field-type>
 
+		    <field-type id="cm:content" localName="Вложения">
+			    <control id="uploader-with-preview-control" template="/ru/it/lecm/base-share/components/controls/lecm-uploader-with-preview-control.ftl" localName="Загрузчик файлов">
+				    <param id="uploadDirectoryPath" localName="Директория загрузки" mandatory="true" visible="true">{userhome}</param>
+				    <param id="directoryName" localName="Название директории" mandatory="true" visible="true"></param>
+			    </control>
+		    </field-type>
+
 		    <field-type id="d:text" localName="Текст">
 			    <control id="cm:assoc-auto-text-control" template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl" localName="Выбор ассоциаций с автодополнением (текстовое поле)">
 				    <param id="startLocation" visible="true" localName="Начальная директория"></param>
@@ -275,6 +282,7 @@
 	        <form-layout localName="В одну колонку" template=""/>
 	        <form-layout localName="В две колонки" template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
 	        <form-layout localName="С вкладками" template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+	        <form-layout localName="С предпросмотром" template="/ru/it/lecm/base-share/components/form-with-preview.ftl" />
     	</forms-info>
 
     </config>
