@@ -37,8 +37,8 @@
 				<span class="drag-tip">${msg("label.drag-file")}</span>
 			</fieldset>
 		</div>
-		<div id="${fieldHtmlId}-uploader-preview-container">
-
-		</div>
 	</#if>
+	<div id="${fieldHtmlId}-uploader-preview-container">
+
+	</div>
 </div>
