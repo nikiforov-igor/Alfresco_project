@@ -23,6 +23,7 @@ function main() {
 	        } else {
 	            model.documentName = document.name;
 	        }
+			model.allAttachments = getAllDocumentAttachments(document.nodeRef);
 		}
 	}
 	model.hasViewListPerm = hasViewListPerm;
@@ -30,6 +31,18 @@ function main() {
 
 function getDocumentByAttachments(nodeRef, defaultValue) {
 	var url = '/lecm/document/attachments/api/getDocumentByAttachment?nodeRef=' + nodeRef;
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
+		if (defaultValue !== undefined) {
+			return defaultValue;
+		}
+		return null;
+	}
+	return eval('(' + result + ')');
+}
+
+function getAllDocumentAttachments(nodeRef, defaultValue) {
+	var url = '/lecm/document/attachments/api/get?documentNodeRef=' + nodeRef + "&showEmptyCategory=true";
 	var result = remote.connect("alfresco").get(url);
 	if (result.status != 200) {
 		if (defaultValue !== undefined) {

@@ -1,5 +1,6 @@
 var documentNodeRef = args['documentNodeRef'];
 var count = parseInt(args['count']);
+var showEmptyCategory = args['showEmptyCategory'];
 var lockStatus = {};
 
 var categories = documentAttachments.getCategories(documentNodeRef);
@@ -8,12 +9,12 @@ var hasNext = false;
 var k = 0;
 if (categories != null) {
 	for (var i = 0; i < categories.length; i++) {
-		if (k <= count) {
+		if (k <= count || isNaN(count)) {
 			var attachments = categories[i].getChildren();
-			if (attachments != null && attachments.length > 0) {
+			if (attachments != null && (attachments.length > 0 || (showEmptyCategory != null && showEmptyCategory == "true"))) {
 				var showAttachments = [];
 				for (var j = 0; j < attachments.length; j++) {
-					if (k < count) {
+					if (k < count || isNaN(count)) {
 						var attachment = attachments[j];
 						var aspects = attachment.aspects;
 						var locked = false;

@@ -24,7 +24,25 @@
 
 			<!-- Title and Version -->
 			<h1 class="thin dark">
-				${displayName}
+				<select id="all-attachments-select" onchange="window.location = location.protocol + '//' + location.host + location.pathname + '?nodeRef=' + this.options[this.selectedIndex].value">
+					<#if allAttachments?? && allAttachments.items??>
+						<#list allAttachments.items as item>
+							<#if item.category??>
+							    <optgroup label="${item.category.name!""}">
+									<#if item.attachments??>
+										<#list item.attachments as attachment>
+											<option value="${attachment.nodeRef}" <#if attachment.nodeRef == nodeRef>selected="selected"</#if>>
+												${attachment.name!""}
+											</option>
+										</#list>
+									</#if>
+							    </optgroup>
+							</#if>
+						</#list>
+					<#else>
+						<option value="${nodeRef}">${displayName}</option>
+					</#if>
+				</select>
 			</h1>
             <div class="second-row">
                 <#--<#assign modifyUser = node.properties["lecm-document:modifier"]!"">-->
