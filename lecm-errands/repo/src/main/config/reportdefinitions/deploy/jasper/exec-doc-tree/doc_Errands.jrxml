@@ -21,9 +21,9 @@
 	</field>
 	<field name="col_SubErrands" class="java.util.List"/>
 	<detail>
-		<band height="26" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a2fb6c46-3698-467e-8c14-9b06e12fd228" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="802" height="26" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="a2fb6c46-3698-467e-8c14-9b06e12fd228" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="802" height="30" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>

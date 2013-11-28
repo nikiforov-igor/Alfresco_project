@@ -63,7 +63,7 @@
 	<detail>
 		<band height="30" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="279c1409-10d9-772c-8311-1bbaaae755e4" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="802" height="30" isPrintWhenDetailOverflows="true" backcolor="#CCCCCC"/>
+				<reportElement uuid="279c1409-10d9-772c-8311-1bbaaae755e4" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="802" height="30" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" backcolor="#CCCCCC"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
