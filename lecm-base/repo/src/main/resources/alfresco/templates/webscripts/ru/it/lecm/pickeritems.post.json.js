@@ -53,6 +53,9 @@ function main()
          if (itemValueType == "nodeRef")
          {
             result = search.findNode(item);
+            if (result != null && result.getStoreType() == "archive") {
+                result = null;
+            }
          }
          else if (itemValueType == "xpath")
          {
