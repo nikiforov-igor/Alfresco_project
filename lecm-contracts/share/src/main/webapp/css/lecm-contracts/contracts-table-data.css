@@ -139,3 +139,8 @@
 .yui-skin-lecmTheme .yui-panel table.view-stage .price-currency .viewmode-label {
     display: none;
 }
+
+.yui-skin-lecmTheme .yui-panel table.view-stage tr.view-stage-dates .viewmode-value {
+	width: 200px;
+}
+

@@ -45,7 +45,7 @@
 			<td><@formLib.renderField field = form.fields[propEndDate] /></td>
 		</tr>
 		<#if inEditOrViewMode>
-		<tr>
+		<tr class="${form.mode}-stage-dates">
 			<td></td>
 			<td><@formLib.renderField field = form.fields[propStartDateReal] /></td>
 			<td><@formLib.renderField field = form.fields[propEndDateReal] /></td>
