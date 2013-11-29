@@ -38,7 +38,12 @@
 			</fieldset>
 		</div>
 	</#if>
-	<div id="${fieldHtmlId}-uploader-preview-container">
-
-	</div>
+	<div id="${fieldHtmlId}-uploader-preview-container"></div>
+	<#if !disabled>
+		<div id="${fieldHtmlId}-uploader-remove" class="uploader-remove-button">
+			<a href="javascript:void(0);" id="${fieldHtmlId}-uploader-remove-link">
+				${msg("label.file-assoc.delete")}<img src="${url.context}/res/components/images/delete-16.png"/>
+			</a>
+		</div>
+	</#if>
 </div>

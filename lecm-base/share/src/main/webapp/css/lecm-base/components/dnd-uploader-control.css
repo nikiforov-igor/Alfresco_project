@@ -79,3 +79,7 @@
 	line-height: 16px;
 	display: inline-block;
 }
+div.form-field.dnd-uploader div.uploader-remove-button {
+	clear: both !important;
+	display: none;
+}

@@ -54,6 +54,7 @@ LogicECM.control = LogicECM.control || {};
 					this.loadRootNode();
 
 					Event.on(this.id + "-uploader-button", "click", this.showUploader, null, this);
+					Event.on(this.id + "-uploader-remove-link", "click", this.onRemoveClick, null, this);
 				}
 				this.loadSelectedItems();
 			},
@@ -229,17 +230,6 @@ LogicECM.control = LogicECM.control || {};
 				}
 			},
 
-			attachRemoveItemClickListener: function(node) {
-				Event.addListener("attachment-remove-" + node.nodeRef, "click", this.removeSelectedElement, node, this);
-			},
-
-			removeSelectedElement: function(event, node) {
-				delete this.selectedItems[node.nodeRef];
-				this.updateSelectedItems();
-				this.updateFormFields();
-				this.updateFormUI();
-			},
-
 			canPreviewShow: function() {
 				return Object.keys(this.selectedItems).length > 0;
 			},
@@ -247,6 +237,7 @@ LogicECM.control = LogicECM.control || {};
 			updateFormUI: function() {
 				Dom.setStyle(Dom.get(this.id + "-uploader-block"), "display", !this.canPreviewShow() ? "block" : "none");
 				Dom.setStyle(Dom.get(this.id + "-uploader-preview-container"), "display", this.canPreviewShow() ? "block" : "none");
+				Dom.setStyle(Dom.get(this.id + "-uploader-remove"), "display", this.canPreviewShow() ? "block" : "none");
 			},
 
 			updateSelectedItems: function AssociationAutoComplete_updateSelectedItems() {
@@ -328,8 +319,7 @@ LogicECM.control = LogicECM.control || {};
 				return selectedItems;
 			},
 
-			getAddedItems: function()
-			{
+			getAddedItems: function() {
 				var addedItems = [],
 					currentItems = Alfresco.util.arrayToObject(this.options.currentValue.split(","));
 
@@ -346,8 +336,7 @@ LogicECM.control = LogicECM.control || {};
 				return addedItems;
 			},
 
-			getRemovedItems: function()
-			{
+			getRemovedItems: function() {
 				var removedItems = [],
 					currentItems = Alfresco.util.arrayToObject(this.options.currentValue.split(","));
 
@@ -362,6 +351,13 @@ LogicECM.control = LogicECM.control || {};
 					}
 				}
 				return removedItems;
+			},
+
+			onRemoveClick: function () {
+				this.selectedItems = [];
+				this.updateSelectedItems();
+				this.updateFormFields();
+				this.updateFormUI();
 			}
 		});
 })();
