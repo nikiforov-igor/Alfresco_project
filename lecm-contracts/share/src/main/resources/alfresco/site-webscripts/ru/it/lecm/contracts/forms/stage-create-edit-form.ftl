@@ -80,6 +80,7 @@
 
 <script type="text/javascript">
 	(function() {
+		<#if inEditMode>
 		function addCustomButtons() {
 			var buttonsContainer = Dom.get("${buttonsContainerId}"),
 				inputStatus = Dom.get(htmlId + "_${propStatus}"),
@@ -138,8 +139,6 @@
 			updateButtonStyles();
 			addSubmitElements();
 			reverseSubscribers();
-
-			return true;
 		}
 
 		var closeButton,
@@ -152,23 +151,20 @@
 
 			htmlId = "${htmlId}",
 
-			dialog = Alfresco.util.ComponentManager.get(htmlId),
+			dialog = Alfresco.util.ComponentManager.get(htmlId);
 
-			inEditMode = ${inEditMode?string};
+		Bubbling.on("afterFormRuntimeInit", init);
+		</#if>
+		<#if !inViewMode>
+		new LogicECM.DateRange("${formId}").setOptions({
+			startDateHtmlId: "${htmlId}_${propStartDate}",
+			endDateHtmlId: "${htmlId}_${propEndDate}"
+		}).setMessages(${messages});
 
-		if(inEditMode) {
-			Bubbling.on("afterFormRuntimeInit", init);
-        }
-        <#if !inViewMode>
-        new LogicECM.DateRange("${formId}").setOptions({
-            startDateHtmlId: "${htmlId}_${propStartDate}",
-            endDateHtmlId: "${htmlId}_${propEndDate}"
-        }).setMessages(${messages});
-
-        new LogicECM.DateRange("${formId}").setOptions({
-            startDateHtmlId: "${htmlId}_${propStartDateReal}",
-            endDateHtmlId: "${htmlId}_${propEndDateReal}"
-        }).setMessages(${messages});
-        </#if>
+		new LogicECM.DateRange("${formId}").setOptions({
+			startDateHtmlId: "${htmlId}_${propStartDateReal}",
+			endDateHtmlId: "${htmlId}_${propEndDateReal}"
+		}).setMessages(${messages});
+		</#if>
 	})();
 </script>

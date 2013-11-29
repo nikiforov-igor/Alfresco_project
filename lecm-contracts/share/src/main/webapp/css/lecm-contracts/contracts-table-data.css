@@ -124,3 +124,18 @@
 .yui-skin-lecmTheme .yui-panel table.view-stage tr td {
     width: 33%;
 }
+
+.yui-skin-lecmTheme .yui-panel table.view-stage .price-control,
+.yui-skin-lecmTheme .yui-panel table.view-stage .price-sum,
+.yui-skin-lecmTheme .yui-panel table.view-stage .price-currency {
+    overflow: hidden;
+}
+
+.yui-skin-lecmTheme .yui-panel table.view-stage .price-sum {
+    float: left;
+    width: 195px;
+}
+
+.yui-skin-lecmTheme .yui-panel table.view-stage .price-currency .viewmode-label {
+    display: none;
+}
