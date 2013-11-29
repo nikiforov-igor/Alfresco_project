@@ -304,7 +304,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	            useCookieForSort: true,
 
-	            editFormWidth: "50em"
+	            editFormWidth: "50em",
+
+                refreshAfterCreate: false
             },
 
             showActionsCount: 3,
@@ -1913,38 +1915,42 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             onDataItemCreated:function DataGrid_onDataItemCreated(layer, args) {
                 var obj = args[1];
                 if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
-                    var nodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
-                    // Reload the node's metadata
-                    Alfresco.util.Ajax.jsonPost(
-                        {
-                            url:Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + nodeRef.uri,
-                            dataObj:this._buildDataGridParams(),
-                            successCallback:{
-                                fn:function DataGrid_onDataItemCreated_refreshSuccess(response) {
-                                    this.versionable = response.json.versionable;
-                                    var item = response.json.item;
-                                    var fnAfterUpdate = function DataGrid_onDataItemCreated_refreshSuccess_fnAfterUpdate() {
-                                        var recordFound = this._findRecordByParameter(item.nodeRef, "nodeRef");
-                                        if (recordFound !== null) {
-                                            var el = this.widgets.dataTable.getTrEl(recordFound);
-                                            Alfresco.util.Anim.pulse(el);
-                                        }
-                                    };
-                                    this.afterDataGridUpdate.push(fnAfterUpdate);
-                                    this.widgets.dataTable.addRow(item);
+                    if (!this.options.refreshAfterCreate) {
+                        var nodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
+                        // Reload the node's metadata
+                        Alfresco.util.Ajax.jsonPost(
+                            {
+                                url:Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + nodeRef.uri,
+                                dataObj:this._buildDataGridParams(),
+                                successCallback:{
+                                    fn:function DataGrid_onDataItemCreated_refreshSuccess(response) {
+                                        this.versionable = response.json.versionable;
+                                        var item = response.json.item;
+                                        var fnAfterUpdate = function DataGrid_onDataItemCreated_refreshSuccess_fnAfterUpdate() {
+                                            var recordFound = this._findRecordByParameter(item.nodeRef, "nodeRef");
+                                            if (recordFound !== null) {
+                                                var el = this.widgets.dataTable.getTrEl(recordFound);
+                                                Alfresco.util.Anim.pulse(el);
+                                            }
+                                        };
+                                        this.afterDataGridUpdate.push(fnAfterUpdate);
+                                        this.widgets.dataTable.addRow(item);
+                                    },
+                                    scope:this
                                 },
-                                scope:this
-                            },
-                            failureCallback:{
-                                fn:function DataGrid_onDataItemCreated_refreshFailure(response) {
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text:this.msg("message.create.refresh.failure")
-                                        });
-                                },
-                                scope:this
-                            }
-                        });
+                                failureCallback:{
+                                    fn:function DataGrid_onDataItemCreated_refreshFailure(response) {
+                                        Alfresco.util.PopupManager.displayMessage(
+                                            {
+                                                text:this.msg("message.create.refresh.failure")
+                                            });
+                                    },
+                                    scope:this
+                                }
+                            });
+                    } else {
+                        this.onDataGridRefresh(layer, args);
+                    }
                 }
             },
 
