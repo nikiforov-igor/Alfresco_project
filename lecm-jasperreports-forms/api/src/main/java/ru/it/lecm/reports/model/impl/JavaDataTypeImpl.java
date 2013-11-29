@@ -3,7 +3,9 @@ package ru.it.lecm.reports.model.impl;
 import ru.it.lecm.reports.api.model.JavaDataType;
 import ru.it.lecm.reports.utils.ArgsHelper;
 
+import java.sql.Types;
 import java.util.*;
+
 /**
  * Тип данных java в шаблонах.
  * Предполагается использование через регламентированный набор поддерживаемых
@@ -46,7 +48,7 @@ public class JavaDataTypeImpl
             @Override
             public Object getValueByRealType(Object value) {
                 if (value == null || value.toString().isEmpty()) {
-                    return  null;
+                    return null;
                 }
                 return (value instanceof Double ? value : Double.valueOf(value.toString()));
             }
@@ -56,7 +58,7 @@ public class JavaDataTypeImpl
             @Override
             public Object getValueByRealType(Object value) {
                 if (value == null || value.toString().isEmpty()) {
-                    return  null;
+                    return null;
                 }
                 return (value instanceof Long ? value : Long.valueOf(value.toString()));
             }
@@ -66,7 +68,7 @@ public class JavaDataTypeImpl
             @Override
             public Object getValueByRealType(Object value) {
                 if (value == null || value.toString().isEmpty()) {
-                    return  null;
+                    return null;
                 }
                 return (value instanceof Integer ? value : Integer.valueOf(value.toString()));
             }
@@ -76,7 +78,7 @@ public class JavaDataTypeImpl
             @Override
             public Object getValueByRealType(Object value) {
                 if (value == null || value.toString().isEmpty()) {
-                    return  null;
+                    return null;
                 }
                 return (value instanceof Float ? value : Float.valueOf(value.toString()));
             }
@@ -86,7 +88,7 @@ public class JavaDataTypeImpl
             @Override
             public Object getValueByRealType(Object value) {
                 if (value == null || value.toString().isEmpty()) {
-                    return  null;
+                    return null;
                 }
                 return (value instanceof Number ? value : Long.valueOf(value.toString()));
             }
@@ -136,6 +138,44 @@ public class JavaDataTypeImpl
                 }
             }
             return null; // NOT FOUND
+        }
+
+        public static SupportedTypes findTypeBySQL(int sqlTypeCode) {
+            switch (sqlTypeCode) {
+                case Types.VARCHAR: {
+                    return SupportedTypes.STRING;
+                }
+                case Types.BIGINT: {
+                    return SupportedTypes.LONG;
+                }
+                case Types.BOOLEAN: {
+                    return SupportedTypes.BOOL;
+                }
+                case Types.DATE: {
+                    return SupportedTypes.DATE;
+                }
+                case Types.DOUBLE: {
+                    return SupportedTypes.DOUBLE;
+                }
+                case Types.FLOAT: {
+                    return SupportedTypes.FLOAT;
+                }
+                case Types.INTEGER: {
+                    return SupportedTypes.INTEGER;
+                }
+                case Types.NUMERIC: {
+                    return SupportedTypes.NUMERIC;
+                }
+                case Types.SMALLINT: {
+                    return SupportedTypes.INTEGER;
+                }
+                case Types.NULL: {
+                    return SupportedTypes.NULL;
+                }
+                default: {
+                    return SupportedTypes.STRING;
+                }
+            }
         }
     }
 }

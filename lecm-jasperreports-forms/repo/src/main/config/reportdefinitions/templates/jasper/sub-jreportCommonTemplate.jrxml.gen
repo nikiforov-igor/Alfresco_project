@@ -10,9 +10,6 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 
-	<!--
-	  <property name="dataSource" value="ru.it.lecm.reports.generators.GenericDSProviderBase"/>
-	  -->
 	<property name="dataSource" value="@RDesc.providerDescriptor.className" />
 
 	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
@@ -21,21 +18,18 @@
 			<style backcolor="#D2EAF1"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="CMIS_QUERY" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["select * from lecm-document:base as Document"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["ds-@RDesc.mnem@@.xml"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["reportdefinitions/deploy/subreports/jasper/"]]></defaultValueExpression>
 	</parameter>
-	<queryString>
-		<![CDATA[]]>
-	</queryString>
+	<queryString language="SQL">
+    		<![CDATA[@QUERY]]>
+    </queryString>
 
 <!--
-			Общий вид макрорасширяемого блока
+	    Общий вид макрорасширяемого блока
 		<prototype>
 			<macro.vars>
 					<var name="" value="" type="" startCalc="" preCalc="" postCalc="" />
@@ -60,9 +54,6 @@
         </macro.body.field>
 	</prototype-fields>
 
-	<background>
-		<band splitType="Stretch"/>
-	</background>
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="true">
@@ -168,13 +159,24 @@
                 <var name="CLEFT" value="0"/>
             </macro.vars>
             <macro.body.field>
-                <band height="26" splitType="Stretch">
-                    <subreport isUsingCache="true">
-                        <reportElement uuid="@GUID" positionType="Float" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT" stretchType="RelativeToTallestObject" isPrintWhenDetailOverflows="true"/>
-                        <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{@SUB.desc.destColumnName}, false)]]></dataSourceExpression>
-                        <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@/@SUB.desc.destColumnName@@.jasper"]]></subreportExpression>
-                    </subreport>
-                </band>
+                <macro.body.field.case expression="!@RDesc.SQLDataSource">
+                    <band height="26" splitType="Stretch">
+                        <subreport isUsingCache="true">
+                            <reportElement uuid="@GUID" positionType="Float" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT" stretchType="RelativeToTallestObject" isPrintWhenDetailOverflows="true"/>
+                            <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{@SUB.desc.destColumnName}, false)]]></dataSourceExpression>
+                            <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@/@SUB.desc.destColumnName@@.jasper"]]></subreportExpression>
+                        </subreport>
+                    </band>
+                </macro.body.field.case>
+                <macro.body.field.case expression="@RDesc.SQLDataSource">
+                    <band height="26" splitType="Stretch">
+                        <subreport isUsingCache="true">
+                            <reportElement uuid="@GUID" positionType="Float" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT" stretchType="RelativeToTallestObject" isPrintWhenDetailOverflows="true"/>
+                            <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+                            <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@/@SUB.desc.destColumnName@@.jasper"]]></subreportExpression>
+                        </subreport>
+                    </band>
+                </macro.body.field.case>
             </macro.body.field>
         </prototype-subreports>
 	</detail>

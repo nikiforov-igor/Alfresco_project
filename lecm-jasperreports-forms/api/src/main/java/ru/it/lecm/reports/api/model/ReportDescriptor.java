@@ -60,4 +60,6 @@ public interface ReportDescriptor extends Mnemonicable, L18able {
 	}
 
     boolean isSubReport();
+
+    boolean isSQLDataSource();
 }

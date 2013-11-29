@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.generators;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -10,6 +11,8 @@ import org.w3c.dom.NodeList;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.SubReportDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
+import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.XmlHelper;
 
@@ -17,10 +20,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Макрогенератор xml/jrxml на основе txml-шаблонов.
@@ -129,6 +133,8 @@ public class XMLMacroGenerator {
      */
     private static final String XMLNODE_PROTOTYPE_BODY_FIELD = "macro.body.field";
 
+    private static final String XMLNODE_PROTOTYPE_BODY_FIELD_CASE =  "macro.body.field.case";
+
     /**
      * узел с описанием переменной ...
      */
@@ -148,6 +154,7 @@ public class XMLMacroGenerator {
      * название переменной для auto-Guid
      */
     private static final String VNAME_GUID = "GUID";
+    private static final String VNAME_QUERY = "QUERY";
 
     /**
      * название переменной для auto cell field
@@ -160,11 +167,15 @@ public class XMLMacroGenerator {
      * название переменной для auto report desc
      */
     private static final String VNAME_RDesc = "RDesc";
+    public static final String XML_PROTOTYPE_BODY_CASE_EXPR = "expression";
+    public static final String XML_CASE_EXPR_NOT_SYMBOL = "!";
 
     /**
      * активный описатель отчёта
      */
     private ReportDescriptor reportDesc;
+
+    private BasicDataSource dataSourceContext;
 
     /**
      * Глобальные переменные для генерации.
@@ -173,15 +184,9 @@ public class XMLMacroGenerator {
      */
     private MacroValues globals;
 
-    public XMLMacroGenerator(ReportDescriptor rdesc) {
+    public XMLMacroGenerator(ReportDescriptor rdesc, BasicDataSource ds) {
         setReportDesc(rdesc);
-    }
-
-    /**
-     * активный описатель отчёта
-     */
-    public ReportDescriptor getReportDesc() {
-        return reportDesc;
+        this.dataSourceContext = ds;
     }
 
     /**
@@ -211,6 +216,7 @@ public class XMLMacroGenerator {
 
             // добавление стандартных функций
             destVars.addVar(VNAME_GUID, new GuidAutoValue());
+            destVars.addVar(VNAME_QUERY, new QueryAutoValue(reportDesc.getFlags() != null ? reportDesc.getFlags().getText() : ""));
         }
     }
 
@@ -228,14 +234,8 @@ public class XMLMacroGenerator {
         logger.debug(String.format("macro expanding template xml '%s' ...", streamNameInfo));
 
 		/*(@) обновление мета-части описания ... */
-        // return JRXMLProducer.updateJRXML(templateStm, streamName, getReportDesc());
-
         //  xml-генерация по шаблону ...
         try {
-            //	final InputSource src = new InputSource(xml);
-            //	src.setEncoding("UTF-8");
-            //	logger.info("Encodig set as: "+ src.getEncoding());
-
             final Document docResult = XmlHelper.parseDOMDocument(templateStm);
             processNode(docResult.getDocumentElement(), docResult, this.globals);
 
@@ -245,7 +245,6 @@ public class XMLMacroGenerator {
             logger.info(String.format("macro expantion SUCCESSFULL from template xml '%s' ...", streamNameInfo));
 
             return result;
-
         } catch (Throwable t) {
             final String msg = String.format("Problem macro expanding template xml '%s' ...", streamNameInfo);
             logger.error(msg, t);
@@ -392,8 +391,7 @@ public class XMLMacroGenerator {
         if (logger.isDebugEnabled())
             logger.debug(String.format("changing xml node '%s' value:\n\t from '%s'\n\t to '%s'", item.getNodeName(), value, result));
 
-        // item.setTextContent( result);
-        item.setNodeValue(result);
+       item.setNodeValue(result);
 
         return result;
     }
@@ -401,7 +399,6 @@ public class XMLMacroGenerator {
     /**
      * Выделение в строке всех макро подвыражений вида "@abc" (с возможными точками внутри)
      *
-     * @param value
      * @return инициализированный список подвыражений (с символами '@' в начале)
      */
     private static List<String> findMacroses(String value) {
@@ -466,12 +463,12 @@ public class XMLMacroGenerator {
         final MacroBlock block = new MacroBlock(destDoc, parentVars);
         block.parseNode(srcMacroNode);
 
-            /* УЗЕЛ - ЭТО МАКРОС */
+        /* УЗЕЛ - ЭТО МАКРОС */
         //проверяем какой из макросов будем обрабатывать
         if (srcMacroNode.getNodeName().endsWith(PROTO_FIELDS)) {
-            block.doListMacroExpantion(reportDesc.getDsDescriptor().getColumns(), true);
+            block.doListMacroExpansion(reportDesc, true);
         } else if (srcMacroNode.getNodeName().endsWith(PROTO_COLUMNS)) {
-            block.doListMacroExpantion(reportDesc.getDsDescriptor().getColumns(), false);
+            block.doListMacroExpansion(reportDesc, false);
         } else if (srcMacroNode.getNodeName().endsWith(PROTO_SUBREPORTS)) {
             block.doSubListMacroExtension(reportDesc.getSubreports());
         }
@@ -500,21 +497,51 @@ public class XMLMacroGenerator {
 
         /**
          * Загрузить описание из xml узла типа "prototype"
-         * (!) Сам узел не будет удаляться из документа автоматом в doListMacroExpantion, иначе это надо сделать внешним кодом.
-         * (!) Генерация по описанию будет выполняться только при явном вызове doListMacroExpantion.
+         * (!) Сам узел не будет удаляться из документа автоматом в doListMacroExpansion, иначе это надо сделать внешним кодом.
+         * (!) Генерация по описанию будет выполняться только при явном вызове doListMacroExpansion.
          *
          * @param asrcMacroPrototype узел с прототипом
          */
         public void parseNode(Node asrcMacroPrototype) {
-            this.srcMacroPrototype = asrcMacroPrototype;
-            this.destParent = this.srcMacroPrototype.getParentNode();
-            this.srcTemplate = XmlHelper.findNodeByName(asrcMacroPrototype, XMLNODE_PROTOTYPE_BODY_FIELD);
+            srcMacroPrototype = asrcMacroPrototype;
+            destParent = srcMacroPrototype.getParentNode();
 
-			/* ПЕРЕМЕННЫЕ И КОНСТАНТЫ*/
-            this.srcVars = XmlHelper.findNodeByName(this.srcMacroPrototype, XMLNODE_PROTOTYPE_VARS);
+            Element templateNode = XmlHelper.findNodeByName(asrcMacroPrototype, XMLNODE_PROTOTYPE_BODY_FIELD);
+            List<Node> caseNodes = XmlHelper.findNodesList(templateNode, XMLNODE_PROTOTYPE_BODY_FIELD_CASE);
+            if (caseNodes == null || caseNodes.isEmpty()) { // нет условий - просто идем по всем вложенным тегами прототипа
+                srcTemplate = templateNode;
+            } else {
+                for (Node caseNode : caseNodes) {
+                    String caseExpression = null;
+                    Node expressionAttr = caseNode.getAttributes().getNamedItem(XML_PROTOTYPE_BODY_CASE_EXPR);
+                    if (expressionAttr != null) {
+                        caseExpression = expressionAttr.getNodeValue();
+                    }
+                    if (caseExpression != null && !caseExpression.isEmpty()) {
+                        boolean isAccept;
+                        if (caseExpression.startsWith(XML_CASE_EXPR_NOT_SYMBOL)){
+                            caseExpression = caseExpression.substring(XML_CASE_EXPR_NOT_SYMBOL.length());
+                            isAccept = !Boolean.valueOf(globals.calcExpr(getPureCalcExpression(caseExpression)).toString());
+                        } else {
+                            isAccept = Boolean.valueOf(globals.calcExpr(getPureCalcExpression(caseExpression)).toString());
+                        }
+                        if (isAccept) {
+                            this.srcTemplate = caseNode;
+                            break;
+                        }
+                    }
+                }
+            }
 
-            this.curVars = parseVars(this.srcVars);
-            this.curVars.setOuterMacro(this.parentVars);
+            if (srcTemplate == null) { // ничего не подошло - используем шаблон
+                srcTemplate = templateNode;
+            }
+
+            /* ПЕРЕМЕННЫЕ И КОНСТАНТЫ*/
+            srcVars = XmlHelper.findNodeByName(srcMacroPrototype, XMLNODE_PROTOTYPE_VARS);
+
+            curVars = parseVars(srcVars);
+            curVars.setOuterMacro(parentVars);
         }
 
 
@@ -522,20 +549,60 @@ public class XMLMacroGenerator {
          * Выполнить XML-макроподстановку для всех колонок из указанного списка.
          * (!) XML Узел "prototype" с описанием будет УДАЛЁН АВТОМАТОМ.
          */
-        public void doListMacroExpantion(List<ColumnDescriptor> columns, boolean includeSubColumns) {
-            if (columns != null) {
-                // применяем к каждой колонке НД макросы из всех вложенных child-узлов nodeMacros ...
+        public void doListMacroExpansion(ReportDescriptor descriptor, boolean includeSubColumns) {
+            if (descriptor != null) {
                 int index = -1;
-                this.curVars.calcAllNext(CalcPhase.start); // инициализация ...
+                if (!descriptor.isSQLDataSource()) {//берем поля из набора данных
+                    List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
+                    if (columns != null) {
+                        // применяем к каждой колонке НД макросы из всех вложенных child-узлов nodeMacros ...
+                        this.curVars.calcAllNext(CalcPhase.start); // инициализация ...
 
-                for (ColumnDescriptor colDesc : columns) {
-                    if (!includeSubColumns &&
-                            colDesc.getExpression() != null &&
-                            colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)){
-                        continue;
+                        for (ColumnDescriptor colDesc : columns) {
+                            if (!includeSubColumns &&
+                                    colDesc.getExpression() != null &&
+                                    colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
+                                continue;
+                            }
+                            index++;
+                            this.doColumnMacroExpansion(colDesc, index);
+                        }
                     }
-                    index++;
-                    this.doColumnMacroExpantion(colDesc, index);
+                } else {
+                    Connection connection;
+                    ResultSet resultSet;
+                    PreparedStatement statement;
+                    try {
+                        connection = dataSourceContext.getConnection();
+                        String query = reportDesc.getFlags().getText() + (reportDesc.getFlags().getText().contains("LIMIT") ? "" : " LIMIT 1");
+                        statement = connection.prepareStatement(query);
+
+                        resultSet = statement.executeQuery();
+
+                        int columnCount = resultSet.getMetaData().getColumnCount();
+                        for (int i = 1; i <= columnCount; i++) {
+                            String columnName = resultSet.getMetaData().getColumnName(i);
+                            int columnType = resultSet.getMetaData().getColumnType(i);
+
+                            index++;
+                            ColumnDescriptor colDesc = new ColumnDescriptorImpl(columnName, JavaDataTypeImpl.SupportedTypes.findTypeBySQL(columnType));
+                            colDesc.regItem(Locale.getDefault().getCountry(), columnName);
+                            this.doColumnMacroExpansion(colDesc, index);
+                        }
+                    } catch (SQLException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+
+                    /*if (includeSubColumns) {
+                        List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
+                        for (ColumnDescriptor colDesc : columns) {
+                            index++;
+                            if (colDesc.getExpression() != null &&
+                                    colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
+                                this.doColumnMacroExpansion(colDesc, index);
+                            }
+                        }
+                    }*/
                 }
             }
 
@@ -543,7 +610,7 @@ public class XMLMacroGenerator {
             this.destParent.removeChild(this.srcMacroPrototype);
         }
 
-        private void doColumnMacroExpantion(ColumnDescriptor colDesc, int index) {
+        private void doColumnMacroExpansion(ColumnDescriptor colDesc, int index) {
             // автоматическая переменная для колокни данных
             curVars.addVar(VNAME_FLD, new ColumnDescValue(index, colDesc)); // "FLD"
 
@@ -565,7 +632,7 @@ public class XMLMacroGenerator {
             curVars.calcAllNext(CalcPhase.post); // обновить текущие значения "на месте" ...
         }
 
-        private void doSubReportMacroExpantion(SubReportDescriptor subReport, int index) {
+        private void doSubReportMacroExpansion(SubReportDescriptor subReport, int index) {
             // автоматическая переменная для колокни данных
             curVars.addVar(VNAME_SUBREPORT, new SubReportDescValue(index, subReport)); // "SUB"
 
@@ -595,7 +662,7 @@ public class XMLMacroGenerator {
 
                 for (SubReportDescriptor sub : subReports) {
                     index++;
-                    this.doSubReportMacroExpantion(sub, index);
+                    this.doSubReportMacroExpansion(sub, index);
                 }
             }
 
@@ -695,33 +762,13 @@ public class XMLMacroGenerator {
         private Map<String, MacroValue> variables; // свои переменные
         private MacroValues outerMacro; // переменные выше по вложенности/"выше по стеку"
 
-        public MacroValues() {
-        }
-
-        /**
-         * Склонировать значения другого массива
-         */
-        public MacroValues(MacroValues otherToClone) {
-            super();
-            cloneVars(getVars(), (otherToClone != null) ? otherToClone.variables : null);
-        }
-
-        protected static void cloneVars(Map<String, MacroValue> dest,
-                                        Map<String, MacroValue> src) {
-            if (src == null || src.isEmpty())
-                return;
-
-            for (Map.Entry<String, MacroValue> e : src.entrySet()) {
-                dest.put(e.getKey(), e.getValue().cloneValue());
-            }
-        }
-
         /**
          * Получить проинициализированный список переменных
          */
         public Map<String, MacroValue> getVars() {
-            if (variables == null)
+            if (variables == null) {
                 variables = new HashMap<String, MacroValue>();
+            }
             return variables;
         }
 
@@ -739,7 +786,6 @@ public class XMLMacroGenerator {
          * @return true, если указанный объект-переменная находится в этом списке
          */
         public boolean contains(MacroValue var) {
-            // return this.getVars().values().contains(var);
             return (var != null) && (this.findVar(var.name(), false) == var);
         }
 
@@ -751,15 +797,15 @@ public class XMLMacroGenerator {
          *                      при true, будет выполнен поиск в outerMacro.
          */
         public MacroValue findVar(String varName, boolean searchInOuter) {
-            if (varName != null)
+            if (varName != null) {
                 varName = varName.toLowerCase();
-            if (this.variables != null && this.variables.containsKey(varName))
+            }
+            if (this.variables != null && this.variables.containsKey(varName)) {
                 return this.variables.get(varName); // FOUND locally
+            }
 
             // try find outer ...
-            return (searchInOuter && this.getOuterMacro() != null)
-                    ? this.getOuterMacro().findVar(varName, true)
-                    : null;
+            return (searchInOuter && this.getOuterMacro() != null) ? this.getOuterMacro().findVar(varName, true) : null;
         }
 
         /**
@@ -780,8 +826,9 @@ public class XMLMacroGenerator {
          * Добавить новое значение в список с именем newVar.name, null пропускаются.
          */
         public void addVar(MacroValue newVar) {
-            if (newVar != null)
+            if (newVar != null){
                 addVar(newVar.name(), newVar);
+            }
         }
 
         /**
@@ -794,10 +841,13 @@ public class XMLMacroGenerator {
          */
         public void addVar(String varName, MacroValue newVar) {
             if (newVar != null) {
-                if (varName != null)
+                if (varName != null) {
                     varName = varName.toLowerCase();
-                if (newVar.name() == null) // задать имя переменной, если оно не было указано
+                }
+                if (newVar.name() == null)  {
+                    // задать имя переменной, если оно не было указано
                     newVar.setName(varName);
+                }
                 getVars().put(varName, newVar);
             }
         }
@@ -822,8 +872,9 @@ public class XMLMacroGenerator {
          *                 математические выражение для вычислений относительно текущего значения value
          */
         public Object calcExpr(MacroValue curValue, String expr) {
-            if (expr == null || expr.trim().length() == 0)
+            if (expr == null || expr.trim().length() == 0) {
                 return expr;
+            }
 
             expr = expr.trim();
             final Object curVal = (curValue == null) ? null : curValue.getValue();
@@ -865,8 +916,9 @@ public class XMLMacroGenerator {
         }
 
         private static Double getAsDoubleSafely(Object v, Double vDefault) {
-            if (v instanceof Number)
+            if (v instanceof Number) {
                 return ((Number) v).doubleValue();
+            }
             // конвертирование в число через строковое представление ...
             Double result = vDefault;
             if (v != null) {
@@ -887,10 +939,13 @@ public class XMLMacroGenerator {
          *             вычислений using reflections)
          */
         public Object calcExpr(String expr) {
-            if (expr == null || expr.trim().length() == 0)
+            if (expr == null || expr.trim().length() == 0) {
                 return expr;
-            if (MacroValue.PFX_REF_MARKER.equals(expr)) // замена двойных @ на пусто
+            }
+            if (MacroValue.PFX_REF_MARKER.equals(expr)) {
+                // замена двойных @ на пусто
                 return "";
+            }
             final int i = expr.indexOf('.');
             final String varname, tail;
             if (i < 0) {// точки нет - всё выражение это название переменной
@@ -904,7 +959,6 @@ public class XMLMacroGenerator {
             final MacroValue foundvar = this.findVar(varname, true); // используем поиск у себя и "снаружи"
             if (foundvar == null) {
                 logger.warn(String.format("Variable '%s' not found -> value used as '%s'", varname, expr));
-                // return varname + ( tail != null ? "." + tail : "");
                 return expr;
             }
             return reflectExpr(foundvar, tail);
@@ -916,16 +970,20 @@ public class XMLMacroGenerator {
          * @param expr выражение в стиле spring для получения свойств переменной или null/пусто для получения значения переменной.
          */
         public static Object reflectExpr(MacroValue var, String expr) {
-            if (var == null)
+            if (var == null) {
                 return null;
+            }
 
-            if (Utils.isStringEmpty(expr)) // если не задано выражение -> значение самой переменной
+            if (Utils.isStringEmpty(expr)) {
+                // если не задано выражение -> значение самой переменной
                 return var.getValue();
+            }
 
             // применяем рефлексию к (!) контейнерному значению
             final Object container = var.getReflectContainer();
-            if (container == null)
+            if (container == null) {
                 return null;
+            }
             final String msg = String.format("%s failed for container class %s", expr, container.getClass().getName());
             try {
                 return PropertyUtils.getProperty(container, expr.trim());
@@ -990,7 +1048,6 @@ public class XMLMacroGenerator {
 
         @Override
         public String toString() {
-            // return String.format( "%s(%s -> %s)", name(), type, (type == null) ? "NULL" : type.getSimpleName() );
             return String.format("%s(%s)", name(), type);
         }
 
@@ -1002,13 +1059,15 @@ public class XMLMacroGenerator {
          *         null сохраняется как был, если type null или ANY, то тоже сохраняется.
          */
         public Object convert(Object v) {
-            if (v == null || this == ANY || this.type == null)
+            if (v == null || this == ANY || this.type == null) {
                 return v;
+            }
 
             // преобразование в строку ...
             final String sv = v.toString();
-            if (this == STRING || sv == null)
+            if (this == STRING || sv == null) {
                 return sv;
+            }
 
             // преобразование в Double ...
             final Double dv = Double.parseDouble(sv.trim());
@@ -1093,11 +1152,6 @@ public class XMLMacroGenerator {
         void setExpression(CalcPhase phase, String expr);
 
         /**
-         * создать объект - копию
-         */
-        MacroValue cloneValue();
-
-        /**
          * Вычисление следующего значения согласно своим установкам и приданному списку
          *
          * @param list приданный список значений (для ссылок на них)
@@ -1111,8 +1165,7 @@ public class XMLMacroGenerator {
      *
      * @author rabdullin
      */
-    static class MacroVarBase
-            implements MacroValue, Serializable {
+    static class MacroVarBase implements MacroValue, Serializable {
         private static final long serialVersionUID = 1L;
 
         private String name;
@@ -1251,15 +1304,6 @@ public class XMLMacroGenerator {
             getExprMap().put(phase, (expression != null && expression.length() == 0) ? null : expression);
         }
 
-        @Override
-        public MacroValue cloneValue() {
-            try {
-                return this.clone();
-            } catch (Exception e) {
-                throw new RuntimeException(String.format("Fail to clone item %s of class %s", this.name(), this.getClass()), e);
-            }
-        }
-
         /**
          * здесь вычисляет значение на основании своего заданного для фазы выражения:
          * а) если выражение пустое НИЧЕГО не меняется,
@@ -1322,6 +1366,43 @@ public class XMLMacroGenerator {
     }
 
     /**
+     * КЛасс для вычисления GUIDов
+     */
+    static class QueryAutoValue extends MacroVarBase {
+        private static final long serialVersionUID = 1L;
+
+        private String queryText;
+
+        private QueryAutoValue(String query) {
+            super();
+            this.queryText = query;
+        }
+
+        @Override
+        public QueryAutoValue clone() {
+            return new QueryAutoValue(this.name());
+        }
+
+        @Override
+        public Object getValue() {
+            return queryText;
+        }
+
+        @Override
+        public void setValue(Object value) {
+            this.queryText = value.toString();
+        }
+
+        @Override
+        /**
+         * Вычислительный контейнер - сам объект.
+         */
+        public Object getReflectContainer() {
+            return this;
+        }
+    }
+
+    /**
      * Контейнер для получения свойств другого объекта.
      * Здесь выражение value является не константой, а ссылочным выражением
      * относительно базового объекта (base), наример, "abc.def".
@@ -1331,19 +1412,11 @@ public class XMLMacroGenerator {
      *
      * @author rabdullin
      */
-    public class RefMacroVar<T>
-            extends MacroVarBase {
+    public class RefMacroVar<T> extends MacroVarBase {
         private static final long serialVersionUID = 1L;
 
         private T base;
         private String expression;// последнее выражение присвоенное в calcNext
-
-        public RefMacroVar() {
-        }
-
-        public RefMacroVar(String name) {
-            this(name, null);
-        }
 
         public RefMacroVar(String name, T obj) {
             super(name, null);
@@ -1447,14 +1520,6 @@ public class XMLMacroGenerator {
         private ColumnDescriptor desc;
         private int index;
 
-        public ColumnDescXtender() {
-            super();
-        }
-
-        public ColumnDescXtender(ColumnDescriptor desc) {
-            this(-1, desc);
-        }
-
         public ColumnDescXtender(int colIndex, ColumnDescriptor desc) {
             super();
             this.desc = desc;
@@ -1487,12 +1552,8 @@ public class XMLMacroGenerator {
             super(name, new ColumnDescXtender(index, coldesc));
         }
 
-        public ColumnDescValue(ColumnDescriptor coldesc) {
-            this(-1, coldesc);
-        }
-
         public ColumnDescValue(int index, ColumnDescriptor coldesc) {
-            this(coldesc == null ? null : coldesc.getColumnName(), -1, coldesc);
+            this(coldesc == null ? null : coldesc.getColumnName(), index, coldesc);
         }
 
     }
@@ -1500,14 +1561,6 @@ public class XMLMacroGenerator {
     public class SubReportDescXtender extends RectXtender {
         private SubReportDescriptor desc;
         private int index;
-
-        public SubReportDescXtender() {
-            super();
-        }
-
-        public SubReportDescXtender(SubReportDescriptor desc) {
-            this(-1, desc);
-        }
 
         public SubReportDescXtender(int colIndex, SubReportDescriptor desc) {
             super();
@@ -1540,12 +1593,8 @@ public class XMLMacroGenerator {
             super(name, new SubReportDescXtender(index, desc));
         }
 
-        public SubReportDescValue(SubReportDescriptor desc) {
-            this(-1, desc);
-        }
-
         public SubReportDescValue(int index, SubReportDescriptor desc) {
-            this(desc == null ? null : desc.getMnem(), -1, desc);
+            this(desc == null ? null : desc.getMnem(), index, desc);
         }
     }
 }

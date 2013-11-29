@@ -181,6 +181,11 @@ public class ReportDescriptorImpl
         return subReport;
     }
 
+    @Override
+    public boolean isSQLDataSource() {
+        return getProviderDescriptor() != null && getProviderDescriptor().getMnem().equals("SQL_PROVIDER");
+    }
+
     public void setSubReport(boolean subReport) {
         this.subReport = subReport;
     }

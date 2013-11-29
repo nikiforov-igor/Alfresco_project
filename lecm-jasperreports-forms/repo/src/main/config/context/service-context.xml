@@ -34,6 +34,7 @@
 		<property name="services" ref="wksKeeper"/>
 		<property name="resolver" ref="linksResolverBean"/>
 		<property name="reportsManagerBeanName" value="reportsManager"/>
+        <property name="targetDataSource" ref="dataSource" />
 	</bean>
 
 	<bean id="reportOpenOfficeConnection" class="net.sf.jooreports.openoffice.connection.SocketOpenOfficeConnection">
@@ -49,6 +50,7 @@
 		<property name="ooConnectedStrictly" value="false" />
 		<property name="maxConnectionRetries" value="2" />
 		<property name="connection" ref="reportOpenOfficeConnection" />
+        <property name="targetDataSource" ref="dataSource" />
 	</bean>
 
 	<bean id="reportEditorDAOBean" class="ru.it.lecm.reports.model.DAO.ReportEditorDAOImpl" init-method="init">

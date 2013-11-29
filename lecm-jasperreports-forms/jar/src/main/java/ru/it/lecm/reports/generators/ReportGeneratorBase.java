@@ -12,6 +12,7 @@ import net.sf.jasperreports.engine.JRDataSourceProvider;
 
 import org.alfresco.service.ServiceRegistry;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -34,6 +35,8 @@ import ru.it.lecm.reports.utils.Utils;
  */
 public abstract class ReportGeneratorBase implements ReportGenerator, ApplicationContextAware {
     private static final transient Logger log = LoggerFactory.getLogger(ReportGeneratorBase.class);
+
+    private BasicDataSource targetDataSource;
 
     /**
      * префикс названия для конвертирующего свойства
@@ -83,12 +86,19 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
         this.resolver = resolver;
     }
 
+    public BasicDataSource getTargetDataSource() {
+        return targetDataSource;
+    }
+
+    public void setTargetDataSource(BasicDataSource targetDataSource) {
+        this.targetDataSource = targetDataSource;
+    }
     /**
      * Предполагается, что входной поток это xml-макет для генератора ru.it.lecm.reports.generators.XMLMacroGenerator
      */
     @Override
     public byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc) {
-        final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(desc);
+        final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(desc, getTargetDataSource());
         final ByteArrayOutputStream result = xmlGenerator.xmlGenerateByTemplate(
                 new ByteArrayInputStream(maketData), "template for report " + desc.getMnem());
         return (result != null) ? result.toByteArray() : null;
@@ -124,6 +134,10 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
                 adsp.setReportDescriptor(reportDesc);
                 adsp.setReportManager(this.getReportsManager());
                 adsp.setResolver(this.getResolver());
+
+                if (resultProvider instanceof SQLProvider) {
+                    ((SQLProvider)resultProvider).setBaseDataSource(getTargetDataSource());
+                }
             }
 
             assignProviderProps(resultProvider, parameters, reportDesc);
