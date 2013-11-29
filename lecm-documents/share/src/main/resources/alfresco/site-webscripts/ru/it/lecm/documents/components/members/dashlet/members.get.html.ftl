@@ -38,6 +38,6 @@
 				}
 			}
 		}
-		YAHOO.util.Event.onDOMReady(init);
+		YAHOO.util.Event.onContentReady("${id}-action-experts-doc", init, true);
 	})();
 //]]></script>

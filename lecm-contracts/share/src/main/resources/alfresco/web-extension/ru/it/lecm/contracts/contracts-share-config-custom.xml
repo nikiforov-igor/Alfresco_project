@@ -1085,6 +1085,19 @@
                     <field id="lecm-document:deprive-right" label-id="contract.deprive.right" />
                 </appearance>
             </form>
+            <form id="main-page-dashlets">
+                <field-visibility>
+                    <show id="line1"/>
+                </field-visibility>
+                <appearance>
+                    <field id="line1">
+                        <control template="/ru/it/lecm/documents/controls/document-dashlet-control.ftl">
+                            <control-param name="first">/lecm/components/dashlets/document-main;/lecm/components/dashlets/document-members</control-param>
+                            <control-param name="second">/lecm/components/dashlets/document-attachments;/lecm/components/dashlets/document-my-tasks</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 

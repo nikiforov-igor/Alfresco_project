@@ -54,7 +54,7 @@
             }
         }
 
-        YAHOO.util.Event.onDOMReady(init);
+        YAHOO.util.Event.onContentReady("${el}", init, true);
     })();
     //]]>
     </script>
