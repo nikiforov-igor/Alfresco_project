@@ -587,9 +587,9 @@ public class XMLMacroGenerator {
                 PreparedStatement statement;
                 try {
                     connection = dataSourceContext.getConnection();
-                    String query = descriptor.getFlags().getText() + (descriptor.getFlags().getText().contains("LIMIT") ? "" : " LIMIT 1");
+                    String query = descriptor.getFlags().getText();
                     statement = connection.prepareStatement(query);
-
+                    statement.setMaxRows(1);
                     resultSet = statement.executeQuery();
 
                     int columnCount = resultSet.getMetaData().getColumnCount();
