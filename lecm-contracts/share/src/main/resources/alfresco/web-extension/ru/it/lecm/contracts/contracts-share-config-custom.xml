@@ -3,6 +3,7 @@
 		<forms>
 			<dependencies>
 				<js src="/scripts/lecm-contracts/constraints/contracts-currency-validator.js"/>
+				<js src="/scripts/lecm-contracts/get-stage-delete-message.js"/>
 			</dependencies>
 
             <default-controls>
@@ -166,6 +167,7 @@
                             <control-param name="datagridFormId">datagrid</control-param>
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
+                            <control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>
                         </control>
                     </field>
                 </appearance>

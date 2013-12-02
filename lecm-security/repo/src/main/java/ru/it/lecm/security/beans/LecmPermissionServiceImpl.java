@@ -336,7 +336,7 @@ public class LecmPermissionServiceImpl
 
 	@Override
 	public boolean hasPermission(final String permission, final NodeRef node) {
-		return hasPermission(permission, node,  authService.getCurrentUserName());
+		return hasPermission(permission, node,  AuthenticationUtil.getRunAsUser());
 	}
 
 	@Override

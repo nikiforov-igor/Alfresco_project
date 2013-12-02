@@ -6,7 +6,9 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -359,11 +361,24 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public void beforeDeleteTableDataRow(NodeRef nodeRef) {
-		List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+		final NodeRef tableDataRow = nodeRef;
+		final List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
 		if (assocs != null) {
-			for (AssociationRef assoc : assocs) {
-				removeAttachment(nodeRef, assoc);
-			}
+			AuthenticationUtil.runAsSystem (new AuthenticationUtil.RunAsWork<Void>() {
+				@Override
+				public Void doWork() throws Exception {
+					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+					return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+						@Override
+						public Void execute() throws Throwable {
+							for (AssociationRef assoc : assocs) {
+								removeAttachment(tableDataRow, assoc);
+							}
+							return null;
+						}
+					}, false, true);
+				}
+			});
 		}
 		//Пересчёт индексов
 		int index;

@@ -58,6 +58,9 @@
 				isTableSortable: ${isTableSortable?string},
                 externalCreateId: "${form.arguments.externalCreateId!""}",
                 refreshAfterCreate: ${refreshAfterCreate?string},
+				<#if params.deleteMessageFunction??>
+					deleteMessageFunction: "${params.deleteMessageFunction}",
+				</#if>
                 showActions: ${showActions?string}
 			});
 })();

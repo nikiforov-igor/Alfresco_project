@@ -43,7 +43,8 @@ LogicECM.module = LogicECM.module || {};
 				isTableSortable: null,
                 externalCreateId: null,
                 refreshAfterCreate: false,
-                showActions: true
+                showActions: true,
+				deleteMessageFunction: true
 			},
 
             datagrid: null,
@@ -188,6 +189,7 @@ LogicECM.module = LogicECM.module || {};
 				}
 
 				datagrid.tableDataNodeRef = this.tableData.nodeRef;
+				datagrid.deleteMessageFunction = this.options.deleteMessageFunction;
 				datagrid.draw();
             }
 		});
@@ -214,6 +216,8 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 	 */
 	YAHOO.lang.augmentObject(LogicECM.module.DocumentTableDataGrid.prototype, {
 		tableDataNodeRef: null,
+
+		deleteMessageFunction: null,
 
         doubleClickLock: false,
 
@@ -1028,7 +1032,50 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                         scope:this
                     });
             }
-        }
+        },
+
+		onDelete_Prompt: function(fnAfterPrompt,me,items,itemsString){
+			var text;
+			if (this.deleteMessageFunction != null) {
+				text = this._executeFunctionByName(this.deleteMessageFunction, items, itemsString);
+			} else {
+				text = (items.length > 1) ? this.msg("message.confirm.delete.group.description", items.length) : this.msg("message.confirm.delete.description", itemsString);
+			}
+
+			Alfresco.util.PopupManager.displayPrompt(
+				{
+					title:this.msg("message.confirm.delete.title", items.length),
+					text: text,
+					buttons:[
+						{
+							text:this.msg("button.delete"),
+							handler:function DataGridActions__onActionDelete_delete() {
+								this.destroy();
+								me.selectItems("selectNone");
+								fnAfterPrompt.call(me, items);
+							}
+						},
+						{
+							text:this.msg("button.cancel"),
+							handler:function DataGridActions__onActionDelete_cancel() {
+								this.destroy();
+							},
+							isDefault:true
+						}
+					]
+				});
+		},
+
+		_executeFunctionByName: function(functionName) {
+			var args = Array.prototype.slice.call(arguments).splice(1);
+			var namespaces = functionName.split(".");
+			var func = namespaces.pop();
+			var context = window
+			for(var i = 0; i < namespaces.length; i++) {
+				context = context[namespaces[i]];
+			}
+			return context[func].apply(this, args);
+		}
 	}, true)
 
 })();
