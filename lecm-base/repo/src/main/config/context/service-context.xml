@@ -300,4 +300,11 @@
 		<property name="dictionaryService" ref="DictionaryService" />
                 <property name="nameSpaceService" ref="NamespaceService" />
 	</bean>
+
+    <bean id="lecm.view.bootstrap" class="ru.it.lecm.base.dbviews.DBViewBootstrap"
+            abstract="true" init-method="bootstrapViews">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="dictionaryService" ref="DictionaryService" />
+        <property name="namespaceService" ref="NamespaceService" />
+    </bean>
 </beans>
