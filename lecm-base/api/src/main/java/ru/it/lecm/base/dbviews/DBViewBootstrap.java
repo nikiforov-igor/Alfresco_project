@@ -117,11 +117,11 @@ public class DBViewBootstrap {
 
         }
 
-        allPropsSql.append("SELECT node_id");
+        allPropsSql.append("SELECT node_id, uuid");
         allPropsSql.append(columnsSql);
 
         allPropsSql.append(" FROM (\n" +
-                "SELECT node_id");
+                "SELECT node_id, uuid");
         allPropsSql.append(propsSql);
 
         allPropsSql.append(" FROM (SELECT \n" +
@@ -160,7 +160,7 @@ public class DBViewBootstrap {
                 "  type_qname.local_name = '");
         allPropsSql.append(typeQName.getLocalName());
         allPropsSql.append("') all_props) needed_prop_list\n" +
-                "GROUP BY node_id;");
+                "GROUP BY node_id, uuid;");
 
 
         Connection connection = null;
