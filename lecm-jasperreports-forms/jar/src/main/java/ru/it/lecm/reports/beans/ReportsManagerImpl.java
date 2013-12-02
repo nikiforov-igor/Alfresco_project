@@ -20,6 +20,7 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.api.model.*;
 import ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl;
+import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
@@ -171,7 +172,7 @@ public class ReportsManagerImpl implements ReportsManager {
             }
         } finally {
             // сортируем описания по алфавиту
-            Collections.sort(found, new ReportDescriptor.Comparator_ПоАлфавиту());
+            Collections.sort(found, new Comparator_ByAlphabet());
         }
         return found;
     }
@@ -205,7 +206,7 @@ public class ReportsManagerImpl implements ReportsManager {
             }
         }
         // сортируем описания по алфавиту
-        Collections.sort(resultedReports, new ReportDescriptor.Comparator_ПоАлфавиту());
+        Collections.sort(resultedReports, new Comparator_ByAlphabet());
         return resultedReports;
     }
 
@@ -369,13 +370,6 @@ public class ReportsManagerImpl implements ReportsManager {
         return ifound;
     }
 
-    public void setDescriptors(List<ReportDescriptor> list) {
-        this.descriptors = null;
-        if (list != null)
-            for (ReportDescriptor desc : list)
-                registerReportDescriptor(desc);
-    }
-
     public void init() {
         if (getDescriptors() != null && getDescriptors().size() > 0) {
             if (logger.isInfoEnabled()) // отобразить только названия шаблонов ...
@@ -394,14 +388,16 @@ public class ReportsManagerImpl implements ReportsManager {
             availableDescriptors.addAll(getDescriptors().values());
 
             for (ReportDescriptor availableDescriptor : availableDescriptors) {
-                List<SubReportDescriptor> subReports = availableDescriptor.getSubreports();
+                List<ReportDescriptor> subReports = availableDescriptor.getSubreports();
                 if (subReports != null && !subReports.isEmpty()) {
-                    for (SubReportDescriptor subReport : subReports) {
-                        String subCode = subReport.getDestColumnName();
-                        if (subCode != null && !subCode.isEmpty()) {
-                            ReportDescriptor subReportDesc = getDescriptors().get(subCode);
-                            if (subReportDesc != null) {
-                                copyTemplate(subReportDesc, this.contentRepositoryDAO, this.subreportFileDAO, false);
+                    for (ReportDescriptor subReport : subReports) {
+                        if (subReport instanceof SubReportDescriptorImpl) {
+                            String subCode = ((SubReportDescriptorImpl)subReport).getDestColumnName();
+                            if (subCode != null && !subCode.isEmpty()) {
+                                ReportDescriptor subReportDesc = getDescriptors().get(subCode);
+                                if (subReportDesc != null) {
+                                    copyTemplate(subReportDesc, this.contentRepositoryDAO, this.subreportFileDAO, false);
+                                }
                             }
                         }
                     }
@@ -440,7 +436,7 @@ public class ReportsManagerImpl implements ReportsManager {
     public void registerReportDescriptor(ReportDescriptor desc) {
         if (desc != null) {
             if (desc.getSubreports() != null) {
-                for (SubReportDescriptor subReportDescriptor : desc.getSubreports()) {
+                for (ReportDescriptor subReportDescriptor : desc.getSubreports()) {
                     registerReportDescriptor(subReportDescriptor);
                 }
             }
@@ -489,7 +485,7 @@ public class ReportsManagerImpl implements ReportsManager {
 
         // рекурсивно для подотчётов ...
         /*if (desc.getSubreports() != null) {
-            for (SubReportDescriptor sr : desc.getSubreports()) {
+            for (SubReportDescriptorImpl sr : desc.getSubreports()) {
                 // TODO: шаблоны для подотчётов надо сгенерировать ТАМ же где основной отчёт
                 // TODO: при построении подотчётов придётся выгрузить файлы подотчётов на диск, а значит и основной отчёт тоже.
                 setDefaults(sr);
@@ -508,7 +504,7 @@ public class ReportsManagerImpl implements ReportsManager {
 
         // подотчёт если есть родительский отчёт ...
         final boolean isSubreport =
-                (desc instanceof SubReportDescriptor) && desc.isSubReport();
+                (desc instanceof SubReportDescriptorImpl) && desc.isSubReport();
 
         // (!) подотчёты сохраняем еще и  в отдельное (файловое) хранилище ...
         final ReportContentDAO storage = this.contentRepositoryDAO;
@@ -657,7 +653,7 @@ public class ReportsManagerImpl implements ReportsManager {
         }
 
         checkReportDescData(desc);
-        if (desc instanceof SubReportDescriptor && desc.getReportType().getMnem() == null) {
+        if (desc instanceof SubReportDescriptorImpl && desc.getReportType().getMnem() == null) {
             return;
         }
 
@@ -897,4 +893,28 @@ public class ReportsManagerImpl implements ReportsManager {
         reporter.produceReport(result, reportDesc, args, storage);
         return result;
     }
+
+    /**
+     * Сортировка по-умолчанию для списков Дескрипторов отчёта будет по алфавиту по названиям (кодам).
+     * Здесь null-значения будут ниже в списке ("тяжёлые").
+     */
+    static class Comparator_ByAlphabet implements Comparator<ReportDescriptor>
+    {
+        @Override
+        public int compare(ReportDescriptor rd1, ReportDescriptor rd2) {
+            if (rd1 == rd2)
+                return 0;
+            final String name1 = Utils.nonblank( rd1.getDefault(), rd1.getMnem());
+            final String name2 = Utils.nonblank( rd2.getDefault(), rd2.getMnem());
+            // null == null, null > any other
+            if (name1 == null)
+                return (name2 == null) ? 0 : 1;
+            if (name2 == null)
+                return -1; // x < null
+
+            // here name1 <> null, name2 <> null ...
+            return name1.compareToIgnoreCase(name2);
+        }
+    }
+
 }

@@ -13,8 +13,6 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.editor.ReportsEditorModel;
 import ru.it.lecm.reports.editor.ReportsEditorService;
 
@@ -27,19 +25,13 @@ import java.util.*;
  * Time: 11:19
  */
 public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodePolicy,
-        NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnDeleteNodePolicy {
+        NodeServicePolicies.OnUpdatePropertiesPolicy {
     final static protected Logger logger = LoggerFactory.getLogger(ReportDescriptorPolicy.class);
 
     protected PolicyComponent policyComponent;
     protected NamespaceService namespaceService;
     protected NodeService nodeService;
-    private ReportsManager reportsManager;
     private ReportsEditorService reportsEditorService;
-    private ReportEditorDAO reportEditorDAOBean;
-
-    public void setReportsManager(ReportsManager reportsManager) {
-        this.reportsManager = reportsManager;
-    }
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
@@ -62,8 +54,6 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
                 ReportsEditorModel.TYPE_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ReportsEditorModel.TYPE_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-/*        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
-                ReportsEditorModel.TYPE_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onDeleteNode"))*/;
     }
 
     @Override
@@ -133,10 +123,6 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
         return column;
     }
 
-    public void setReportEditorDAOBean(ReportEditorDAO reportEditorDAOBean) {
-        this.reportEditorDAOBean = reportEditorDAOBean;
-    }
-
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         NodeRef mainReport = nodeService.getPrimaryParent(nodeRef).getParentRef();
@@ -166,10 +152,5 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
                 }
             }
         }
-    }
-
-    @Override
-    public void onDeleteNode(ChildAssociationRef childAssociationRef, boolean b) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

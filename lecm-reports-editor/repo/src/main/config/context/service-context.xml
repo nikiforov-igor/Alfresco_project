@@ -152,10 +152,6 @@
         <property name="namespaceService">
             <ref bean="namespaceService"/>
         </property>
-        <property name="reportEditorDAOBean">
-            <ref bean="reportEditorDAOBean"/>
-        </property>
-        <property name="reportsManager" ref="reportsManager"/>
         <property name="reportsEditorService">
             <ref bean="reportsEditorService"/>
         </property>

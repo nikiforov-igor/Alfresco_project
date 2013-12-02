@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.model.*;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
+import ru.it.lecm.reports.beans.ReportsManagerImpl;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.model.impl.*;
@@ -28,21 +29,31 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
     private static final transient Logger log = LoggerFactory.getLogger(ReportEditorDAOImpl.class);
 
     private WKServiceKeeper services;
-
-    public void init() {
-        log.info("initialized " + this.getClass());
-    }
+    private ReportsManagerImpl reportsManager;
 
     public WKServiceKeeper getServices() {
         return services;
+    }
+
+    public void setReportsManager(ReportsManagerImpl reportsManager) {
+        this.reportsManager = reportsManager;
     }
 
     public void setServices(WKServiceKeeper services) {
         this.services = services;
     }
 
+    public void init() {
+        log.info("initialized " + this.getClass());
+    }
+
     @Override
     public ReportDescriptor getReportDescriptor(NodeRef id) {
+        return getReportDescriptor(id, false);
+    }
+
+    @Override
+    public ReportDescriptor getReportDescriptor(NodeRef id, boolean withoutSubs) {
         final Map<QName, Serializable> map;
         try {
             map = getServices().getServiceRegistry().getNodeService().getProperties(id);
@@ -51,14 +62,34 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             return null;
         }
 
-        final ReportDescriptorImpl result = new ReportDescriptorImpl();
+        ReportDescriptor result = getRegisteredReport(getString(map, PROP_T_REPORT_CODE));
+        if (result == null) {
+            boolean isSubReport = getBoolean(map, PROP_T_REPORT_IS_SUB, false);
+            result = !isSubReport ? new ReportDescriptorImpl() : new SubReportDescriptorImpl();
+        }
+
         setProps_RD(result, map, id);
-        setSubReports(result, id);
+
+        if (!withoutSubs) {
+            setSubReports(result, id);
+        }
 
         return result;
     }
 
-    protected void setSubReports(ReportDescriptorImpl result, NodeRef id) {
+    private ReportDescriptor getRegisteredReport(String reportCode) {
+        if (reportCode != null) {
+            List<ReportDescriptor> regDescriptors = reportsManager.getRegisteredReports();
+            for (ReportDescriptor regDescriptor : regDescriptors) {
+                if (regDescriptor.getMnem().equals(reportCode)) {
+                    return regDescriptor;
+                }
+            }
+        }
+        return null;
+    }
+
+    protected void setSubReports(ReportDescriptor result, NodeRef id) {
         result.setSubreports(scanSubreports(id));
     }
 
@@ -166,7 +197,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         result.regItem(getString(map, "sys:locale", "ru"), getString(map, propName));
     }
 
-    protected void setProps_RD(ReportDescriptorImpl result, Map<QName, Serializable> map, NodeRef node) {
+    protected void setProps_RD(ReportDescriptor result, Map<QName, Serializable> map, NodeRef node) {
         result.setMnem(getString(map, PROP_T_REPORT_CODE));
 
         setL18Name(result, map);
@@ -183,6 +214,60 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         result.setDSDescriptor(createDSDescriptor(LucenePreparedQuery.getAssocChildByType(node, TYPE_REPORT_DATASOURCE, nodeService, ns)));
 
         result.setSubReport(getBoolean(map, PROP_T_REPORT_IS_SUB, false));
+
+        if (result.isSubReport() && result instanceof SubReportDescriptorImpl) {
+            SubReportDescriptorImpl subResult = (SubReportDescriptorImpl)result;
+            final String reportName = result.getMnem();
+            subResult.setDestColumnName(reportName); // целевая колонка - это главная колонка отчёта
+
+            // источник данных для вложенного списка полей должен быть указан как query
+            String sourceLink = result.getFlags().getText();
+            if (Utils.isStringEmpty(sourceLink)) {
+                //TODO точка расширения получения источника для подотчета
+            }
+            subResult.setSourceListExpression(sourceLink);
+
+            // тип данных для вложенного списка полей должен быть указан в поле Использовать для типов
+            List<String> sourceTypes = result.getFlags().getSupportedNodeTypes();
+            if (sourceTypes != null) {
+                subResult.setSourceListType(new HashSet<String>(sourceTypes));
+            }
+
+            Map<String, String> customFlags = result.getFlags().getFlagsMap();
+            if (customFlags != null && customFlags.size() > 0) {
+                ItemsFormatDescriptor formatDesc = new ItemsFormatDescriptorImpl();
+
+                String format = customFlags.get("format");
+                if (format != null) {
+                    formatDesc.setFormatString(format);
+                }
+
+                String ifEmpty = customFlags.get("ifEmpty");
+                if (ifEmpty != null) {
+                    formatDesc.setIfEmptyTag(ifEmpty);
+                }
+
+                String delimiter = customFlags.get("delimiter");
+                if (delimiter != null) {
+                    formatDesc.setItemsDelimiter(delimiter);
+                }
+
+                subResult.setItemsFormat(formatDesc);
+            }
+
+            for (ColumnDescriptor subreportColumn : result.getDsDescriptor().getColumns()) {
+                //TODO сюда можно добавить обработку каких-то "особых" столбцов
+                if (subResult.getSubItemsSourceMap() == null) {
+                    subResult.setSubItemsSourceMap(new HashMap<String, String>());
+                }
+                subResult.getSubItemsSourceMap().put(subreportColumn.getColumnName(), subreportColumn.getExpression());
+            }
+
+            //установим родителя
+            NodeRef parentReport = getNodeService().getPrimaryParent(node).getParentRef();
+            ReportDescriptor parent = getReportDescriptor(parentReport, true); // не включаем подочтеты сюда! нужен только "макет основного отчета"
+            subResult.setOwnerReport(parent);
+        }
     }
 
     protected void setFlags(ReportFlags result, Map<QName, Serializable> map) {
@@ -454,12 +539,12 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         return getServices().getServiceRegistry().getNodeService();
     }
 
-    public List<SubReportDescriptor> scanSubreports(NodeRef mainReport) {
+    public List<ReportDescriptor> scanSubreports(NodeRef mainReport) {
         if (mainReport == null) {
             return null;
         }
 
-        final Set<SubReportDescriptorImpl> subReports = new LinkedHashSet<SubReportDescriptorImpl>();
+        final Set<ReportDescriptor> subReports = new LinkedHashSet<ReportDescriptor>();
 
         NodeService nodeService = getNodeService();
 
@@ -470,70 +555,10 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         for (ChildAssociationRef childAssociationRef : childDescriptorsList) {
             NodeRef subReport = childAssociationRef.getChildRef();
             ReportDescriptor subreportDesc = getReportDescriptor(subReport);
-
-            final SubReportDescriptorImpl sr = transferReportToSubReport(subreportDesc);
-            if (sr != null) {
-                subReports.add(sr);
+            if (subreportDesc != null) {
+                subReports.add(subreportDesc);
             }
         }
-
-        return (subReports.isEmpty()) ? null : new ArrayList<SubReportDescriptor>(subReports);
-    }
-
-    private SubReportDescriptorImpl transferReportToSubReport(ReportDescriptor subreportDesc) {
-        final String reportName = subreportDesc.getMnem();
-
-        // !) Создание ообъекта подотчёта
-        final SubReportDescriptorImpl srResult = new SubReportDescriptorImpl(subreportDesc);
-        srResult.setDestColumnName(reportName); // целевая колонка - это главная колонка отчёта
-
-        // источник данных для вложенного списка полей должен быть указан как query
-        String sourceLink = subreportDesc.getFlags().getText();
-        if (Utils.isStringEmpty(sourceLink)) {
-            //TODO точка расширения получения источника для подотчета
-        }
-
-        srResult.setSourceListExpression(sourceLink);
-
-        // тип данных для вложенного списка полей должен быть указан в поле Использовать для типов
-        List<String> sourceTypes = subreportDesc.getFlags().getSupportedNodeTypes();
-        if (sourceTypes != null) {
-            srResult.setSourceListType(new HashSet<String>(sourceTypes));
-        }
-
-        // TODO: + beanClass, format, ifEmpty, delimiter
-        Map<String, String> customFlags = subreportDesc.getFlags().getFlagsMap();
-        if (customFlags != null && customFlags.size() > 0) {
-            ItemsFormatDescriptorImpl formatDesc = new ItemsFormatDescriptorImpl();
-
-            String format = customFlags.get("format");
-            if (format != null) {
-                formatDesc.setFormatString(format);
-            }
-
-            String ifEmpty = customFlags.get("ifEmpty");
-            if (ifEmpty != null) {
-                formatDesc.setIfEmptyTag(ifEmpty);
-            }
-
-            String delimiter = customFlags.get("delimiter");
-            if (delimiter != null) {
-                formatDesc.setItemsDelimiter(delimiter);
-            }
-
-            srResult.setItemsFormat(formatDesc);
-        }
-
-        for (ColumnDescriptor subreportColumn : srResult.getDsDescriptor().getColumns()) {
-            //TODO сюда можно добавить обработку каких-то "особых" столбцов
-
-            /* обновление/формирование sourceMap для subreport */
-            if (srResult.getSubItemsSourceMap() == null) {
-                srResult.setSubItemsSourceMap(new HashMap<String, String>());
-            }
-            srResult.getSubItemsSourceMap().put(subreportColumn.getColumnName(), subreportColumn.getExpression());
-        }
-
-        return srResult;
+        return (subReports.isEmpty()) ? null : new ArrayList<ReportDescriptor>(subReports);
     }
 }

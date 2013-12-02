@@ -55,6 +55,7 @@
 
 	<bean id="reportEditorDAOBean" class="ru.it.lecm.reports.model.DAO.ReportEditorDAOImpl" init-method="init">
 		<property name="services" ref="wksKeeper"/>
+        <property name="reportsManager" ref="reportsManager"/>
 	</bean>
 
 	<!--  RSF == Report Service Folder -->

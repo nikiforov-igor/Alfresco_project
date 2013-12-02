@@ -10,9 +10,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.SubReportDescriptor;
 import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
 import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
+import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.XmlHelper;
 
@@ -123,6 +123,7 @@ public class XMLMacroGenerator {
     private static final String PROTO_SUBREPORTS = "subreports";
     private static final String PROTO_FIELDS = "fields";
     private static final String PROTO_COLUMNS = "columns";
+    private static final String PROTO_PARAMS = "params";
     /**
      * узел с описанием переменных в блоке прототипа ...
      */
@@ -162,6 +163,8 @@ public class XMLMacroGenerator {
     private static final String VNAME_FLD = "FLD";
 
     private static final String VNAME_SUBREPORT = "SUB";
+
+    private static final String VNAME_PARAM = "PARAM";
 
     /**
      * название переменной для auto report desc
@@ -465,7 +468,9 @@ public class XMLMacroGenerator {
 
         /* УЗЕЛ - ЭТО МАКРОС */
         //проверяем какой из макросов будем обрабатывать
-        if (srcMacroNode.getNodeName().endsWith(PROTO_FIELDS)) {
+        if (srcMacroNode.getNodeName().endsWith(PROTO_PARAMS)) {
+            block.doParamsListMacroExpansion(reportDesc);
+        } else if (srcMacroNode.getNodeName().endsWith(PROTO_FIELDS)) {
             block.doListMacroExpansion(reportDesc, true);
         } else if (srcMacroNode.getNodeName().endsWith(PROTO_COLUMNS)) {
             block.doListMacroExpansion(reportDesc, false);
@@ -551,58 +556,66 @@ public class XMLMacroGenerator {
          */
         public void doListMacroExpansion(ReportDescriptor descriptor, boolean includeSubColumns) {
             if (descriptor != null) {
-                int index = -1;
-                if (!descriptor.isSQLDataSource()) {//берем поля из набора данных
-                    List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
-                    if (columns != null) {
-                        // применяем к каждой колонке НД макросы из всех вложенных child-узлов nodeMacros ...
-                        this.curVars.calcAllNext(CalcPhase.start); // инициализация ...
+                expansionColumns(descriptor, includeSubColumns, VNAME_FLD);
+            }
 
-                        for (ColumnDescriptor colDesc : columns) {
-                            if (!includeSubColumns &&
-                                    colDesc.getExpression() != null &&
-                                    colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
-                                continue;
-                            }
-                            index++;
-                            this.doColumnMacroExpansion(colDesc, index);
+			/* убрать прототип из документа через родителя ... */
+            this.destParent.removeChild(this.srcMacroPrototype);
+        }
+
+        private void expansionColumns(ReportDescriptor descriptor, boolean includeSubColumns, String macroKey) {
+            int index = -1;
+            if (!descriptor.isSQLDataSource()) {//берем поля из набора данных
+                List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
+                if (columns != null) {
+                    // применяем к каждой колонке НД макросы из всех вложенных child-узлов nodeMacros ...
+                    this.curVars.calcAllNext(CalcPhase.start); // инициализация ...
+
+                    for (ColumnDescriptor colDesc : columns) {
+                        if (!includeSubColumns &&
+                                colDesc.getExpression() != null &&
+                                colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
+                            continue;
                         }
+                        index++;
+                        this.doColumnMacroExpansion(macroKey, colDesc, index);
                     }
-                } else {
-                    Connection connection;
-                    ResultSet resultSet;
-                    PreparedStatement statement;
-                    try {
-                        connection = dataSourceContext.getConnection();
-                        String query = reportDesc.getFlags().getText() + (reportDesc.getFlags().getText().contains("LIMIT") ? "" : " LIMIT 1");
-                        statement = connection.prepareStatement(query);
+                }
+            } else {
+                Connection connection;
+                ResultSet resultSet;
+                PreparedStatement statement;
+                try {
+                    connection = dataSourceContext.getConnection();
+                    String query = reportDesc.getFlags().getText() + (reportDesc.getFlags().getText().contains("LIMIT") ? "" : " LIMIT 1");
+                    statement = connection.prepareStatement(query);
 
-                        resultSet = statement.executeQuery();
+                    resultSet = statement.executeQuery();
 
-                        int columnCount = resultSet.getMetaData().getColumnCount();
-                        for (int i = 1; i <= columnCount; i++) {
-                            String columnName = resultSet.getMetaData().getColumnName(i);
-                            int columnType = resultSet.getMetaData().getColumnType(i);
+                    int columnCount = resultSet.getMetaData().getColumnCount();
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnName = resultSet.getMetaData().getColumnName(i);
+                        int columnType = resultSet.getMetaData().getColumnType(i);
 
-                            index++;
-                            ColumnDescriptor colDesc = new ColumnDescriptorImpl(columnName, JavaDataTypeImpl.SupportedTypes.findTypeBySQL(columnType));
-                            colDesc.regItem(Locale.getDefault().getCountry(), columnName);
-                            this.doColumnMacroExpansion(colDesc, index);
-                        }
-                    } catch (SQLException e) {
-                        logger.error(e.getMessage(), e);
+                        index++;
+                        ColumnDescriptor colDesc = new ColumnDescriptorImpl(columnName, JavaDataTypeImpl.SupportedTypes.findTypeBySQL(columnType));
+                        colDesc.regItem(Locale.getDefault().getCountry(), columnName);
+                        this.doColumnMacroExpansion(macroKey, colDesc, index);
                     }
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        }
 
-                    /*if (includeSubColumns) {
-                        List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
-                        for (ColumnDescriptor colDesc : columns) {
-                            index++;
-                            if (colDesc.getExpression() != null &&
-                                    colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
-                                this.doColumnMacroExpansion(colDesc, index);
-                            }
-                        }
-                    }*/
+        public void doParamsListMacroExpansion(ReportDescriptor descriptor) {
+            if (descriptor != null) {
+                if (descriptor.isSubReport() && descriptor instanceof SubReportDescriptorImpl) {//для подотчетов только!!
+                    SubReportDescriptorImpl subReport = (SubReportDescriptorImpl)descriptor;
+                    ReportDescriptor parentReport = subReport.getOwnerReport();
+                    if (parentReport != null) {
+                        expansionColumns(parentReport, false, VNAME_PARAM);
+                    }
                 }
             }
 
@@ -610,9 +623,9 @@ public class XMLMacroGenerator {
             this.destParent.removeChild(this.srcMacroPrototype);
         }
 
-        private void doColumnMacroExpansion(ColumnDescriptor colDesc, int index) {
+        private void doColumnMacroExpansion(final String macroKey, ColumnDescriptor colDesc, int index) {
             // автоматическая переменная для колокни данных
-            curVars.addVar(VNAME_FLD, new ColumnDescValue(index, colDesc)); // "FLD"
+            curVars.addVar(macroKey, new ColumnDescValue(index, colDesc)); // "FLD"
 
             // вычисление значений перед генерацией ...
             curVars.calcAllNext(CalcPhase.pre); // применить авто-назначения ...
@@ -632,7 +645,7 @@ public class XMLMacroGenerator {
             curVars.calcAllNext(CalcPhase.post); // обновить текущие значения "на месте" ...
         }
 
-        private void doSubReportMacroExpansion(SubReportDescriptor subReport, int index) {
+        private void doSubReportMacroExpansion(SubReportDescriptorImpl subReport, int index) {
             // автоматическая переменная для колокни данных
             curVars.addVar(VNAME_SUBREPORT, new SubReportDescValue(index, subReport)); // "SUB"
 
@@ -654,15 +667,17 @@ public class XMLMacroGenerator {
             curVars.calcAllNext(CalcPhase.post); // обновить текущие значения "на месте" ...
         }
 
-        public void doSubListMacroExtension(List<SubReportDescriptor> subReports) {
+        public void doSubListMacroExtension(List<ReportDescriptor> subReports) {
             if (subReports != null) {
                 // применяем к каждой колонке НД макросы из всех вложенных child-узлов nodeMacros ...
                 int index = -1;
                 this.curVars.calcAllNext(CalcPhase.start); // инициализация ...
 
-                for (SubReportDescriptor sub : subReports) {
-                    index++;
-                    this.doSubReportMacroExpansion(sub, index);
+                for (ReportDescriptor sub : subReports) {
+                    if (sub instanceof SubReportDescriptorImpl) {
+                        index++;
+                        this.doSubReportMacroExpansion((SubReportDescriptorImpl)sub, index);
+                    }
                 }
             }
 
@@ -1559,20 +1574,20 @@ public class XMLMacroGenerator {
     }
 
     public class SubReportDescXtender extends RectXtender {
-        private SubReportDescriptor desc;
+        private SubReportDescriptorImpl desc;
         private int index;
 
-        public SubReportDescXtender(int colIndex, SubReportDescriptor desc) {
+        public SubReportDescXtender(int colIndex, SubReportDescriptorImpl desc) {
             super();
             this.desc = desc;
             this.index = colIndex;
         }
 
-        public SubReportDescriptor getDesc() {
+        public SubReportDescriptorImpl getDesc() {
             return desc;
         }
 
-        public void setDesc(SubReportDescriptor desc) {
+        public void setDesc(SubReportDescriptorImpl desc) {
             this.desc = desc;
         }
 
@@ -1589,11 +1604,11 @@ public class XMLMacroGenerator {
     public class SubReportDescValue extends RefMacroVar<SubReportDescXtender> {
         private static final long serialVersionUID = 1L;
 
-        public SubReportDescValue(String name, int index, SubReportDescriptor desc) {
+        public SubReportDescValue(String name, int index, SubReportDescriptorImpl desc) {
             super(name, new SubReportDescXtender(index, desc));
         }
 
-        public SubReportDescValue(int index, SubReportDescriptor desc) {
+        public SubReportDescValue(int index, SubReportDescriptorImpl desc) {
             this(desc == null ? null : desc.getMnem(), index, desc);
         }
     }

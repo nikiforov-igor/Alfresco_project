@@ -8,7 +8,6 @@ import ru.it.lecm.reports.api.model.*;
 import ru.it.lecm.reports.api.model.AlfrescoAssocInfo.AssocKind;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.ParameterType.Type;
-import ru.it.lecm.reports.api.model.SubReportDescriptor.ItemsFormatDescriptor;
 import ru.it.lecm.reports.model.impl.*;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -231,7 +230,7 @@ public class DSXMLProducer {
             parseColumns(result.getDsDescriptor().getColumns(), rootElem, streamName);
 
             // подотчёты
-            final List<SubReportDescriptor> subreports = parseSubreportsList(rootElem, XMLNODE_LIST_SUBREPORTS, XMLNODE_SUBREPORT);
+            final List<ReportDescriptor> subreports = parseSubreportsList(rootElem, XMLNODE_LIST_SUBREPORTS, XMLNODE_SUBREPORT);
             result.setSubreports(subreports);
 
             logger.debug("load SUCCESSFULL from ds-xml " + streamName);
@@ -435,7 +434,7 @@ public class DSXMLProducer {
      */
     private static void xmlAddSubreportsList(Document doc, Element destRoot,
                                              String xmlNodeListName, String xmlNodeItemName,
-                                             List<SubReportDescriptor> srcSubReports) {
+                                             List<ReportDescriptor> srcSubReports) {
         if (srcSubReports == null || srcSubReports.isEmpty()) {
             return;
         }
@@ -444,13 +443,15 @@ public class DSXMLProducer {
         destRoot.appendChild(nodeFields);
 
 		/* вывод колонок ... */
-        for (SubReportDescriptor sdesc : srcSubReports) {
-            final Element nodeColItem = xmlCreateSubreportNode(doc, xmlNodeItemName, sdesc);
-            nodeFields.appendChild(nodeColItem);
+        for (ReportDescriptor sdesc : srcSubReports) {
+            if (sdesc instanceof SubReportDescriptorImpl) {
+                final Element nodeColItem = xmlCreateSubreportNode(doc, xmlNodeItemName, (SubReportDescriptorImpl)sdesc);
+                nodeFields.appendChild(nodeColItem);
+            }
         }
     }
 
-    private static List<SubReportDescriptor> parseSubreportsList(Element srcRoot,
+    private static List<ReportDescriptor> parseSubreportsList(Element srcRoot,
                                                                  String xmlNodeListName, String xmlNodeItemName) {
         // чтение мета-описаний полей ...
         final Element subreportsNode = (Element) XmlHelper.findNodeByAttr(srcRoot, xmlNodeListName, null, null);
@@ -462,14 +463,14 @@ public class DSXMLProducer {
         return parseSubreports(subreportsNodeList);
     }
 
-    private static List<SubReportDescriptor> parseSubreports(List<Node> subreportsNodeList) {
+    private static List<ReportDescriptor> parseSubreports(List<Node> subreportsNodeList) {
         if (subreportsNodeList == null || subreportsNodeList.isEmpty()) {
             return null;
         }
 
-        final List<SubReportDescriptor> result = new ArrayList<SubReportDescriptor>();
+        final List<ReportDescriptor> result = new ArrayList<ReportDescriptor>();
         for (Node node : subreportsNodeList) {
-            final SubReportDescriptorImpl desc = parseSubReportDescriptor((Element) node);
+            final SubReportDescriptorImpl desc = parseSubReportDescriptorImpl((Element) node);
             if (desc != null) {
                 result.add(desc);
             }
@@ -561,7 +562,7 @@ public class DSXMLProducer {
         } // for i
     }
 
-    private static Element xmlCreateSubreportNode(Document doc, String nodeName, SubReportDescriptor subreport) {
+    private static Element xmlCreateSubreportNode(Document doc, String nodeName, SubReportDescriptorImpl subreport) {
         if (subreport == null) {
             return null;
         }
@@ -607,13 +608,13 @@ public class DSXMLProducer {
 
 
         // отгрузка обычных атрибутов ReportDescriptor ...
-        xmlCreateReportDescNode(doc, XMLNODE_REPORT_DS, subreport);
+        xmlCreateReportDescNode(doc, XMLNODE_REPORTDESC, subreport);
 
         return result;
     }
 
     @SuppressWarnings({"unchecked"})
-    private static SubReportDescriptorImpl parseSubReportDescriptor(Element srcNodeSubreport) {
+    private static SubReportDescriptorImpl parseSubReportDescriptorImpl(Element srcNodeSubreport) {
         if (srcNodeSubreport == null) {
             return null;
         }
@@ -671,7 +672,7 @@ public class DSXMLProducer {
         }
 
         // отгрузка обычных атрибутов ReportDescriptor ...
-        parseReportDesc(result, srcNodeSubreport, XMLNODE_REPORT_DS);
+        parseReportDesc(result, srcNodeSubreport, XMLNODE_REPORTDESC);
 
         return result;
     }
@@ -702,7 +703,7 @@ public class DSXMLProducer {
             return null;
         }
 
-        final ItemsFormatDescriptorImpl result = new ItemsFormatDescriptorImpl();
+        final ItemsFormatDescriptor result = new ItemsFormatDescriptorImpl();
 
         // строка форматирования свойств из CData или value ...
         result.setFormatString(Utils.dequote(Utils.trimmed(XmlHelper.getTagContent(srcNode))));

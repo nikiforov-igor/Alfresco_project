@@ -127,6 +127,14 @@ public interface ReportEditorDAO {
     ReportDescriptor getReportDescriptor(NodeRef id);
 
     /**
+     * Получить "Описатеть отчёта" по id узла типа "lecm-rpeditor:reportDescriptor"
+     *
+     * @param id узел Альфреско (типа "lecm-rpeditor:reportDescriptor")
+     * @return описатель отчёта или null, если его нет
+     */
+    ReportDescriptor getReportDescriptor(NodeRef id, boolean withoutSubs);
+
+    /**
      * Получить описатеть отчёта по названию
      *
      * @param mnemo мнемонический код отчёта (уникальный)

@@ -2,7 +2,7 @@ package ru.it.lecm.reports.model.impl;
 
 import java.io.Serializable;
 
-import ru.it.lecm.reports.api.model.SubReportDescriptor.ItemsFormatDescriptor;
+import ru.it.lecm.reports.api.model.ItemsFormatDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 
 public class ItemsFormatDescriptorImpl
@@ -52,5 +52,4 @@ public class ItemsFormatDescriptorImpl
 	public void setItemsDelimiter(String delimiter) {
 		this.itemsDelimiter = delimiter;
 	}
-
 }

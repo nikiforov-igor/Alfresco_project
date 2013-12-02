@@ -21,7 +21,6 @@ import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.SubReportDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
@@ -31,6 +30,7 @@ import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
+import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
@@ -409,9 +409,11 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
 
             if (result) {
                 if (getReportDescriptor().getSubreports() != null) {  // прогрузка вложенных subreports ...
-                    for (SubReportDescriptor subreport : getReportDescriptor().getSubreports()) {
-                        final Object stringOrBean = prepareSubReport(docId, subreport, resolver);
-                        context.getCurNodeProps().put(getAlfAttrNameByJRKey(subreport.getDestColumnName()), stringOrBean);
+                    for (ReportDescriptor subreport : getReportDescriptor().getSubreports()) {
+                        if (subreport instanceof SubReportDescriptorImpl) {
+                            final Object stringOrBean = prepareSubReport(docId, (SubReportDescriptorImpl)subreport, resolver);
+                            context.getCurNodeProps().put(getAlfAttrNameByJRKey(((SubReportDescriptorImpl)subreport).getDestColumnName()), stringOrBean);
+                        }
                     }
                 }
             }
@@ -422,12 +424,12 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
     /**
      * Подготовить данные подотчёта по ассоциированныму списку subreport:
      *
-     * @param subreport SubReportDescriptor
+     * @param subreport SubReportDescriptorImpl
      * @return <li> ОДНУ строку, если subreport должен форматироваться (строка будет
      *         состоять из форматированных всех элементов ассоциированного списка),
      *         <li> или список бинов List[Object] - по одному на каждую строку
      */
-    private static Object prepareSubReport(NodeRef docId, SubReportDescriptor subreport, LinksResolver resolver) {
+    private static Object prepareSubReport(NodeRef docId, SubReportDescriptorImpl subreport, LinksResolver resolver) {
         if (Utils.isStringEmpty(subreport.getSourceListExpression())) {
             logger.warn(String.format("Subreport '%s' has empty association", subreport.getMnem()));
             return null;

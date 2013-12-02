@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.SubReportDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 
 import java.text.DateFormat;
@@ -176,10 +175,10 @@ public class OpenOfficeTemplateGenerator {
                         String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + col.getColumnName() + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
                         userPropsContainer.addProperty(col.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
                     } else {
-                        List<SubReportDescriptor> subReportsList = desc.getSubreports();
+                        List<ReportDescriptor> subReportsList = desc.getSubreports();
                         if (subReportsList != null) {
                             String subReportCode = col.getColumnName();
-                            for (SubReportDescriptor subReportDescriptor : subReportsList) {
+                            for (ReportDescriptor subReportDescriptor : subReportsList) {
                                 if (subReportDescriptor.getMnem().equals(subReportCode)) { // нашли нужный подотчет - добавляем его к параметрам
                                     userPropsContainer.addProperty(subReportCode, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, col.getExpression());
                                     // вытаскиваем все его поля

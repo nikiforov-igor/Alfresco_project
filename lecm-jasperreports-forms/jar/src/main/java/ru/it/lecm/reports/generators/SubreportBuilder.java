@@ -8,11 +8,11 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.reports.api.model.ItemsFormatDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.SubReportDescriptor;
-import ru.it.lecm.reports.api.model.SubReportDescriptor.ItemsFormatDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.MultiplySortObject;
+import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.NodeUtils;
 
@@ -20,12 +20,12 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * Построитель для подотчётов на основе {@link SubReportDescriptor}.
+ * Построитель для подотчётов на основе {@link SubReportDescriptorImpl}.
  * <br/> Выполняется сбор свойств по всем узлам из вложенного в основной документ списка.
  * <br/> Результатом будет:
  * <li> либо <b> ОДНА отформатированная СТРОКА </b>
  * <li> либо <b> СПИСОК бинов. </b>
- * <br/> Описатели подотчётов {@link SubReportDescriptor} являются частью
+ * <br/> Описатели подотчётов {@link SubReportDescriptorImpl} являются частью
  * {@link ReportDescriptor} и отнаследованы от него.
  * <br/> имеют:
  * <li> класс бина или формат в случае единой строки,</li>
@@ -39,7 +39,7 @@ public class SubreportBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(SubreportBuilder.class);
 
-    final private SubReportDescriptor subreport;
+    final private SubReportDescriptorImpl subreport;
     final private LinksResolver resolver;
 
     /**
@@ -62,7 +62,7 @@ public class SubreportBuilder {
      */
     protected Map<String, String> beanLists;
 
-    public SubreportBuilder(SubReportDescriptor subReportDesc, LinksResolver resolver) {
+    public SubreportBuilder(SubReportDescriptorImpl subReportDesc, LinksResolver resolver) {
         super();
         this.subreport = subReportDesc;
         this.resolver = resolver;
@@ -88,7 +88,7 @@ public class SubreportBuilder {
         return builder.toString();
     }
 
-    public SubReportDescriptor getSubreport() {
+    public SubReportDescriptorImpl getSubreport() {
         return subreport;
     }
 
@@ -163,7 +163,7 @@ public class SubreportBuilder {
         }
 
         // автоматически вносим нумератор строки
-        args.put(SubReportDescriptor.BEAN_PROPNAME_COL_ROWNUM, String.valueOf(subItemNum));
+        args.put(SubReportDescriptorImpl.BEAN_PROPNAME_COL_ROWNUM, String.valueOf(subItemNum));
 
         if (subreport.isUsingFormat()) { /* форматирование всех свойств объекта в строку ... */
             final String resultStr = formatArgs(args);

@@ -24,6 +24,14 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["reportdefinitions/deploy/subreports/jasper/"]]></defaultValueExpression>
 	</parameter>
+	<prototype-params>
+        <macro.body.field>
+            <macro.body.field.case expression="@RDesc.SQLDataSource">
+                <parameter name="@PARAM.desc.columnName" class="@PARAM.desc.dataType.className" isForPrompting="false"/>
+            </macro.body.field.case>
+            <macro.body.field.case expression="@RDesc.SQLDataSource"/>
+        </macro.body.field>
+    </prototype-params>
 	<queryString language="SQL">
     		<![CDATA[@QUERY]]>
     </queryString>
@@ -172,6 +180,13 @@
                     <band height="26" splitType="Stretch">
                         <subreport isUsingCache="true">
                             <reportElement uuid="@GUID" positionType="Float" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT" stretchType="RelativeToTallestObject" isPrintWhenDetailOverflows="true"/>
+                            <prototype-fields>
+                                <macro.body.field>
+                                    <subreportParameter name="@FLD.desc.columnName">
+                                        <subreportParameterExpression><![CDATA[$F{@FLD.desc.columnName}]]></subreportParameterExpression>
+                                    </subreportParameter>
+                                </macro.body.field>
+                            </prototype-fields>
                             <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
                             <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@/@SUB.desc.destColumnName@@.jasper"]]></subreportExpression>
                         </subreport>
