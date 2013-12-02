@@ -587,7 +587,7 @@ public class XMLMacroGenerator {
                 PreparedStatement statement;
                 try {
                     connection = dataSourceContext.getConnection();
-                    String query = reportDesc.getFlags().getText() + (reportDesc.getFlags().getText().contains("LIMIT") ? "" : " LIMIT 1");
+                    String query = descriptor.getFlags().getText() + (descriptor.getFlags().getText().contains("LIMIT") ? "" : " LIMIT 1");
                     statement = connection.prepareStatement(query);
 
                     resultSet = statement.executeQuery();
