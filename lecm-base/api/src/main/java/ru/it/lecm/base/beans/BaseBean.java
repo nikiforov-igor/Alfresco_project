@@ -2,8 +2,10 @@ package ru.it.lecm.base.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.repo.model.filefolder.HiddenAspect;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AuthenticationService;
@@ -22,7 +24,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
-import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 
 /**
  * User: AIvkin
@@ -63,6 +64,7 @@ public abstract class BaseBean implements InitializingBean {
 	protected TransactionService transactionService;
     protected ServiceRegistry serviceRegistry;
 	protected AuthenticationService authService;
+    private HiddenAspect hiddenAspect;
 
 	protected static enum ASSOCIATION_TYPE {
 		SOURCE,
@@ -75,6 +77,8 @@ public abstract class BaseBean implements InitializingBean {
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
+        hiddenAspect = new HiddenAspect();
+        hiddenAspect.setNodeService(nodeService);
 	}
 
 	public void setTransactionService(TransactionService transactionService) {
@@ -426,4 +430,13 @@ public abstract class BaseBean implements InitializingBean {
 		};
 		return AuthenticationUtil.runAsSystem(raw);
 	}
+
+    /**
+     * Скрывает указанную ноду. Нода перестает отрисовываться в репозитории и индексироваться.
+     * При применении к папке на вложенные ноды НЕ ДЕЙСТВУЕТ
+     * @param nodeRef идентификатор ноды, которую требуется скрыть
+     */
+    protected void hideNode(NodeRef nodeRef) {
+        hiddenAspect.hideNode(nodeRef);
+    }
 }
