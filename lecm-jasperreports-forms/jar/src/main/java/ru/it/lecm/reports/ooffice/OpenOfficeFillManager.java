@@ -31,6 +31,7 @@ public class OpenOfficeFillManager {
     /**
      * Выполнить заполнение данными указанного отчёта файла openOffice
      *
+     *
      * @param report     отчёт
      * @param parameters параметры
      * @param dataSource набор данных
@@ -40,7 +41,7 @@ public class OpenOfficeFillManager {
      */
     public void fill(
             ReportDescriptor report
-            , Map<String, String[]> parameters
+            , Map<String, Object> parameters
             , JRDataSource dataSource
             , String urlSrc
             , String urlSaveAs
@@ -54,6 +55,10 @@ public class OpenOfficeFillManager {
         for (ColumnDescriptor colDesc : report.getDsDescriptor().getColumns()) {
             props.put(colDesc.getColumnName(), colDesc.getExpression());
         }
+
+        /*for (String key : parameters.keySet()) {
+            props.put(key, parameters.get(key));
+        }*/
 
         if (dataSource != null) {
             if (dataSource.next()) {

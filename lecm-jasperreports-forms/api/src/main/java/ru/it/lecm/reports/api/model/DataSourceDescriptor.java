@@ -25,7 +25,7 @@ public interface DataSourceDescriptor extends Mnemonicable, L18able {
 	 * если его нет, тогда будет просмотрена параметр-колонка "nodeRef" 
 	 */
 	final static public String COLNAME_ID = "ID";
-	// final static public String COLNAME_NODEREF = "nodeRef";
+	final static public String COLNAME_NODE_ID = "NODE_ID";
 
 	/**
 	 * "Что сгенерировать" = название колонки (типа строка) с целевым форматом файла
@@ -35,20 +35,17 @@ public interface DataSourceDescriptor extends Mnemonicable, L18able {
 
 	/**
 	 * Описания колонок данного НД.
-	 * @return
 	 */
 	List<ColumnDescriptor> getColumns();
 
 	/**
 	 * Найти описание колонки по названию-мнемонике
-	 * @param colName
 	 * @return найденную колонку или null
 	 */
 	ColumnDescriptor findColumnByName(String colName);
 
 	/**
 	 * Найти описание колонки по названию-мнемонике её параметра
-	 * @param colName
 	 * @return найденную колонку или null
 	 */
 	ColumnDescriptor findColumnByParameter(String paramName);

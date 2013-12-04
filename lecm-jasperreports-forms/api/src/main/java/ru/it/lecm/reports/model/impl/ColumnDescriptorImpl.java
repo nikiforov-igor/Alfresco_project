@@ -35,7 +35,7 @@ public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDes
     }
 
     public ColumnDescriptorImpl(String colname, SupportedTypes type) {
-        super(((type == null) ? null : type.javaDataType().className()), colname);
+        super(((type == null) ? null : type.javaDataType().getClassName()), colname);
         this.dataType = (type == null) ? null : type.javaDataType();
     }
 
@@ -161,16 +161,16 @@ public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDes
             return;
         }
         this.dataType = value;
-        setClassName((this.dataType == null) ? null : this.dataType.className());
+        setClassName((this.dataType == null) ? null : this.dataType.getClassName());
     }
 
     @Override
     public void setClassName(String valueClazz) {
-        if (Utils.isSafelyEquals(className(), valueClazz)) {
+        if (Utils.isSafelyEquals(getClassName(), valueClazz)) {
             return;
         }
         super.setClassName(valueClazz);
-        final SupportedTypes t = JavaDataTypeImpl.SupportedTypes.findType(className());
+        final SupportedTypes t = JavaDataTypeImpl.SupportedTypes.findType(getClassName());
         setDataType(t == null ? null : t.javaDataType());
     }
 

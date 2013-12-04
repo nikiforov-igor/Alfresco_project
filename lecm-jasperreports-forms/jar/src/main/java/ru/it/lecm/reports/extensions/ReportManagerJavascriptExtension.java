@@ -103,7 +103,7 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
      * @param args          аргументы для построения отчёта
      * @return nodeRef созданного узла
      */
-    public ScriptNode buildReportAndSave(final String reportCode, final String destFolderRef, Map<String, String[]> args) {
+    public ScriptNode buildReportAndSave(final String reportCode, final String destFolderRef, Map<String, String> args) {
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
         PropertyCheck.mandatory(this, "reportCode", reportCode);
         PropertyCheck.mandatory(this, "destFolderRef", destFolderRef);

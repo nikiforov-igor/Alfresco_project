@@ -23,6 +23,7 @@ import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
+import ru.it.lecm.reports.api.model.ReportFileDataImpl;
 import ru.it.lecm.reports.model.DAO.FileReportContentDAOBean;
 import ru.it.lecm.reports.ooffice.OpenOfficeFillManager;
 import ru.it.lecm.reports.utils.ArgsHelper;
@@ -86,32 +87,8 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 		checkConnection();
 	}
 
-	/**
-	 * true, если openOffice доступен и connection.connected
-	 * при проверке, если соединение отсутствует и {@link #ooConnectedStrictly is true}
-	 * , то поднимается исключение, иначе принимает false.
-	 */
-	public boolean isOoAvailable() {
-		return ooAvailable;
-	}
-
-	/**
-	 * true, если надо строго поддерживать соединение
-	 */
-	public boolean isOoConnectedStrictly() {
-		return ooConnectedStrictly;
-	}
-
 	public void setOoConnectedStrictly(boolean ooConnectedStrictly) {
 		this.ooConnectedStrictly = ooConnectedStrictly;
-	}
-
-	/**
-	 * максимальное кол-во дополнительных попыток соединиться с OOffice
-	 * (одна = один раз основная проверка + одна дополнительная)
-	 */
-	public int getMaxConnectionRetries() {
-		return maxConnectionRetries;
 	}
 
 	public void setMaxConnectionRetries(int maxConnectionRetries) {
@@ -279,18 +256,19 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	/**
 	 * Найти целевой формат в параметрах ...
 	 *
-	 * @param requestParameters
-	 * @return
+	 *
+     *
 	 */
 	// DONE: (?) разрешить задавать формат в колонках данных (константой или выражением)
-	private JasperReportTargetFileType findTargetArg(final Map<String, String[]> requestParameters) {
+	private JasperReportTargetFileType findTargetArg(final Map<String, Object> requestParameters) {
 		final String value = ArgsHelper.findArg(requestParameters, COLNAME_TARGETFORMAT, null);
 		return JasperReportTargetFileType.findByName(value, DEFAULT_TARGET);
 	}
 
 	@Override
-	public void produceReport(ReportFileData buildResult, ReportDescriptor reportDesc, Map<String, String[]> parameters, ReportContentDAO rptContent)
+	public ReportFileData produceReport(ReportDescriptor reportDesc, Map<String, Object> parameters, ReportContentDAO rptContent)
 			throws IOException {
+        ReportFileData buildResult = new ReportFileDataImpl();
 		PropertyCheck.mandatory(this, "services", getServices());
 		PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 		PropertyCheck.mandatory(this, "reportsDesc", reportDesc);
@@ -331,7 +309,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 				buildResult.setEncoding("UTF-8");
 				buildResult.setData(null);
 				/* создание Провайдера */
-				final String dataSourceClass = reportDesc.getProviderDescriptor().className();
+				final String dataSourceClass = reportDesc.getProviderDescriptor().getClassName();
 				final JRDataSourceProvider dsProvider = super.createDsProvider(reportDesc, dataSourceClass, parameters);
 
 				/* построение отчёта */
@@ -355,16 +333,18 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 				ooFile.delete();
 			}
 		}
+        return buildResult;
 	}
 
 	/**
 	 * Создание отчёта
 	 *
-	 * @param srcOOFile   исходный файл с openOffice-шаблоном отчёта
-	 * @param destDocFile целевой файл (например, *.rtf)
-	 * @param target      целевой формат (пока не поддерживается кроме rtf)
-	 * @param dsProvider
-	 * @throws JRException
+	 *
+     *
+     * @param srcOOFile   исходный файл с openOffice-шаблоном отчёта
+     * @param destDocFile целевой файл (например, *.rtf)
+     * @param target      целевой формат (пока не поддерживается кроме rtf)
+     * @throws JRException
 	 */
 	private byte[] generateReport(
 			final File srcOOFile
@@ -372,7 +352,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 			, final JasperReportTargetFileType target
 			, final ReportDescriptor report
 			, final JRDataSourceProvider dsProvider
-			, final Map<String, String[]> requestParameters) throws JRException {
+			, final Map<String, Object> requestParameters) throws JRException {
 		logger.debug("Generating report " + report.getMnem() + " ...");
 
 		if (srcOOFile == null) {
@@ -439,8 +419,6 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	 * Выполнить указанное действие, с несколькими повторами при ошибках openOffice-соединения
 	 * См также {@link #maxConnectionRetries}
 	 *
-	 * @param todo
-	 * @return
 	 */
 	protected <TResult> TResult openOfficeExecWithRetry(Job<TResult> todo) {
 		int retryCount = 0;

@@ -24,8 +24,22 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["reportdefinitions/deploy/subreports/jasper/"]]></defaultValueExpression>
 	</parameter>
+
+	<prototype-params>
+            <macro.body.field>
+                <macro.body.field.case expression="@RDesc.SQLDataSource">
+                    <parameter name="@PARAM.desc.columnName" class="@PARAM.desc.dataType.className" isForPrompting="false"/>
+                </macro.body.field.case>
+                <macro.body.field.case expression="!@RDesc.SQLDataSource"/>
+            </macro.body.field>
+    </prototype-params>
+
+	<parameter name="PREPARED_QUERY" class="java.lang.String" isForPrompting="false">
+        <defaultValueExpression><![CDATA["@QUERY"]]></defaultValueExpression>
+    </parameter>
+
 	<queryString language="SQL">
-		<![CDATA[@QUERY]]>
+		<![CDATA[$P!{PREPARED_QUERY}]]>
 	</queryString>
 
 <!--

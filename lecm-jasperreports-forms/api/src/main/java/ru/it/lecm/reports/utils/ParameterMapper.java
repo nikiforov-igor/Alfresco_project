@@ -1,25 +1,21 @@
 package ru.it.lecm.reports.utils;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType.Type;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
+import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
 import ru.it.lecm.reports.model.impl.JavaDataTypeImpl.SupportedTypes;
 import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
+
+import java.util.*;
 
 /**
  * Распределитель request-аргументов по параметрам описателя отчёта.
@@ -30,31 +26,37 @@ public class ParameterMapper {
 
     public static final String DATE_RANGE = "-date-range";
     public static final String NUMBER_RANGE = "-range";
-    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    public static final String RANGE_LO_POSTFIX = "_lo";
+    public static final String RANGE_HI_POSTFIX = "_hi";
+    public static final String IDS_POSTFIX = "_ids";
 
     /**
      * Задать параметры из списка. Подразумевается, что параметры имеют названия
      * совпадающие с названиями параметра колонки данных из описателя reportDesc.getDsDescriptor.
      *
      * @param reportDesc ReportDescriptor
-     * @param args       Map<String, String[]>
+     * @param args       Map<String, String>
      */
-    public static void assignParameters(ReportDescriptor reportDesc, Map<String, String[]> args) {
+    public static Map<String, Object> assignParameters(ReportDescriptor reportDesc, Map<String, String> args, NodeService nodeService) {
+        Map<String, Object> argsMap = new HashMap<String, Object>();
         if (args == null || reportDesc == null || reportDesc.getDsDescriptor() == null) {
-            return;
+            return null;
         }
 
+        //добавляем значения по умолчанию
+        argsMap.putAll(args);
+
         for (ColumnDescriptor colDesc : reportDesc.getDsDescriptor().getColumns()) {
-            String argRootName = getArgRootName(colDesc);// colDesc.getColumnName();
+            String argParamName = getArgRootName(colDesc);
             /*
              * Если колонка НЕ описана как параметр, но значение ей передаётся в
 			 * аргументах, считаем что она задана как константа.
 			 */
-            if (colDesc.getParameterValue() == null) { // колонка не описана как параметр ...
+            if (argParamName == null) { // колонка не описана как параметр ...
                 // проверка на наличие данных в строке параметров - CONSTANT VALUE
                 if (args.containsKey(colDesc.getColumnName())) {
-                    final String[] argv = args.get(colDesc.getColumnName());
-                    final String value = (argv != null && argv.length > 0) ? argv[0] : null;
+                    final String argv = args.get(colDesc.getColumnName());
+                    final String value = (argv != null) ? argv : null;
                     log.info(String.format(
                             "Arguments list contains data for report column '%s' that is not marked as parameter -> column set as constant:"
                                     + "\n\t default column expression: '%s'"
@@ -72,20 +74,28 @@ public class ParameterMapper {
             switch (colDesc.getParameterValue().getType()) {
                 case RANGE: {
                     // проверяем диапозон дат
-                    final String dateRangeParam = argRootName + DATE_RANGE;
+                    final String dateRangeParam = argParamName + DATE_RANGE;
                     boolean isDateRange = false;
                     boolean isNumberRange = false;
                     if (args.containsKey(dateRangeParam)) {
-                        //добавляем в список параметр обработанный ключ
-                        args.put(argRootName, args.get(dateRangeParam));
+                        //добавляем в список параметр - обработанный ключ
+                        args.put(argParamName, args.get(dateRangeParam));
                         args.remove(dateRangeParam);
+
+                        // удаляем обработанное строкове значение "range1|range2"
+                        argsMap.remove(dateRangeParam);
+
                         isDateRange = true;
                     } else {
                         // не нашли параметра - пробуем получить диапозон для чисел
-                        final String numberRangeParam = argRootName + NUMBER_RANGE;
+                        final String numberRangeParam = argParamName + NUMBER_RANGE;
                         if (args.containsKey(numberRangeParam)) {
                             //добавляем в список параметр обработанный ключ
-                            args.put(argRootName, args.get(numberRangeParam));
+                            args.put(argParamName, args.get(numberRangeParam));
+
+                            // удаляем обработанное строкове значение "range1|range2"
+                            argsMap.remove(numberRangeParam);
+
                             args.remove(numberRangeParam);
                             isNumberRange = true;
                         }
@@ -93,38 +103,62 @@ public class ParameterMapper {
                     Object bound1 = null;
                     Object bound2 = null;
                     if ((isDateRange || isNumberRange)) {
-                        if (args.containsKey(argRootName)) {
-                            final String[] paramValue = args.get(argRootName)[0].split("\\|");
+                        if (args.containsKey(argParamName)) {
+                            final String[] paramValue = args.get(argParamName).split("\\|");
                             if (isDateRange) {
                                 bound1 = getDateValue(paramValue[0]);
-                                if (paramValue.length >= 2)
+                                if (paramValue.length >= 2) {
                                     bound2 = getDateValue(paramValue[1]);
+                                }
                             } else {
                                 bound1 = getNumericAutoTypedValue(paramValue[0]);
-                                if (paramValue.length >= 2)
+                                if (paramValue.length >= 2) {
                                     bound2 = getNumericAutoTypedValue(paramValue[1]);
+                                }
                             }
                         }
                     }
                     colDesc.getParameterValue().setBound1(bound1);
                     colDesc.getParameterValue().setBound2(bound2);
+
+                    // диапазонов добавляем  действительные значение границ!
+                    argsMap.put(argParamName + RANGE_LO_POSTFIX, bound1);
+                    argsMap.put(argParamName + RANGE_HI_POSTFIX, bound2);
+
                     break;
                 }
                 case VALUE:
                 case LIST:
                     Object bound = null;
-                    if (args.containsKey(argRootName)) {
-                        final String[] paramValue = args.get(argRootName);
-                        if (paramValue != null && (paramValue.length > 0)) {
+                    if (args.containsKey(argParamName)) {
+                        final String paramValue = args.get(argParamName);
+                        if (paramValue != null) {
                             if (colDesc.getParameterValue().getType() == Type.VALUE) {
                                 // для простых значений явно зададим один элемент
-                                bound = paramValue[0];
+                                bound = paramValue;
+
+                                JavaDataTypeImpl.SupportedTypes type = null;
+                                String destClassName = colDesc.getDataType().getClassName();
+                                if (!ru.it.lecm.reports.utils.Utils.isStringEmpty(destClassName)) {
+                                    type = JavaDataTypeImpl.SupportedTypes.findType(destClassName);
+                                }
+
+                                if (type != null) {
+                                    argsMap.put(argParamName, type.getValueByRealType(!paramValue.isEmpty() ? paramValue : null));
+                                }
+
+                                if (NodeRef.isNodeRef(paramValue)) { // для REF добавляем еще и node_id
+                                    Long node_id = (Long) nodeService.getProperty(new NodeRef(paramValue), ContentModel.PROP_NODE_DBID);
+                                    argsMap.put(argParamName + IDS_POSTFIX, node_id);
+                                }
                             } else {
-                                bound = paramValue[0].split(",");
+                                bound = paramValue.split("[,;]");
+                                argsMap.put(argParamName, SupportedTypes.LIST.getValueByRealType(!paramValue.isEmpty() ? bound : null));
+                                argsMap.put(argParamName + IDS_POSTFIX, getIdsList((List<String>) SupportedTypes.LIST.getValueByRealType(!paramValue.isEmpty() ? bound : null), nodeService));
                             }
                         }
                     }
-                    colDesc.getParameterValue().setBound1(bound);
+                    colDesc.getParameterValue().setBound1(bound); // единичное значение или String[]
                     break;
                 default: // непонятный тип - сообщение об ошибке и игнор ...
                     log.error(String.format("Unsupported parameter type '%s' skipped", Utils.coalesce(colDesc.getParameterValue().getType(), "NULL")));
@@ -135,19 +169,40 @@ public class ParameterMapper {
         if (args.containsKey(DataSourceDescriptor.COLNAME_ID)) {
             // нужно гарантировать колонку с ID, когда есть такой параметр ...
             ensureDataColumn(reportDesc.getDsDescriptor(), args.get(DataSourceDescriptor.COLNAME_ID), DataSourceDescriptor.COLNAME_ID, SupportedTypes.STRING);
+
+            Object refs = SupportedTypes.LIST.getValueByRealType(args.get(DataSourceDescriptor.COLNAME_ID));
+            argsMap.put(DataSourceDescriptor.COLNAME_ID, refs);
+            argsMap.put(DataSourceDescriptor.COLNAME_NODE_ID, getIdsList((List<String>)refs, nodeService));
         }
 
         // аналогично нужно гарантировать колонку с TYPE, когда есть такой параметр или тип задан явно ...
         if (args.containsKey(DataSourceDescriptor.COLNAME_TYPE)) {
             ensureDataColumn(reportDesc.getDsDescriptor(), args.get(DataSourceDescriptor.COLNAME_TYPE), DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.STRING);
+            argsMap.put(DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.LIST.getValueByRealType(args.get(DataSourceDescriptor.COLNAME_TYPE)));
         } else if (reportDesc.getFlags() != null && !reportDesc.getFlags().getSupportedNodeTypes().isEmpty()) {
-            ensureDataColumn(reportDesc.getDsDescriptor()
-                    , StringUtils.collectionToCommaDelimitedString(reportDesc.getFlags().getSupportedNodeTypes())
-                    , DataSourceDescriptor.COLNAME_TYPE
-                    , SupportedTypes.STRING);
+            String typesStr = StringUtils.collectionToCommaDelimitedString(reportDesc.getFlags().getSupportedNodeTypes());
+            ensureDataColumn(reportDesc.getDsDescriptor(), typesStr, DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.STRING);
+            argsMap.put(DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.LIST.getValueByRealType(typesStr));
         }
+
+        return argsMap;
     }
 
+
+    static private List<Long> getIdsList(List<String> refsValue, NodeService nodeService) {
+        List<Long> nodeIds = null;
+        if (refsValue != null) {
+            nodeIds = new ArrayList<Long>();
+            if (!((List) refsValue).isEmpty()) {
+                for (String nodeRef : refsValue) {
+                    if (NodeRef.isNodeRef(nodeRef)) {
+                        nodeIds.add((Long) nodeService.getProperty(new NodeRef(nodeRef), ContentModel.PROP_NODE_DBID));
+                    }
+                }
+            }
+        }
+        return nodeIds;
+    }
 
     static public Object getNumericAutoTypedValue(String value) {
         return ArgsHelper.tryMakeNumber(value);

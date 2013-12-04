@@ -107,13 +107,12 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
     /**
      * Создать объект указанного класса, потттом
      *
-     * @param reportDesc
-     * @param dataSourceClass
-     * @param parameters
+     *
+     *
      * @return созданный объект заказанного класса
      * @throws IOException
      */
-    protected JRDataSourceProvider createDsProvider(ReportDescriptor reportDesc, final String dataSourceClass, Map<String, String[]> parameters )
+    protected JRDataSourceProvider createDsProvider(ReportDescriptor reportDesc, final String dataSourceClass, Map<String, Object> parameters )
             throws IOException {
         final String failMsg = "Can not instantiate DataSourceProvider of class <" + dataSourceClass + ">";
         JRDataSourceProvider resultProvider;
@@ -162,6 +161,8 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
      * 1) по совпадению названий параметров и свойств провайдера
      * 2) по сконфигурированному списку алиасов для этого провайдера
      *
+     *
+     *
      * @param destProvider  целевой Провайдер
      * @param srcParameters список параметров
      * @param srcReportDesc текущий описатель Отчёта, для получения из его флагов списка алиасов
@@ -170,7 +171,7 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
      * @throws InvocationTargetException
      */
     protected void assignProviderProps(JRDataSourceProvider destProvider,
-                                       Map<String, String[]> srcParameters, ReportDescriptor srcReportDesc)
+                                       Map<String, Object> srcParameters, ReportDescriptor srcReportDesc)
             throws IllegalAccessException, InvocationTargetException {
         if (srcParameters != null && destProvider != null) {
             // присвоение сконфигурированных алиасов ...
@@ -188,9 +189,9 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
      * значение = возможные синонимы в параметрах.
      * см также ArgsHelper.assignParameters
      */
-    protected Map<String, String[]> getPropertiesAliases(ReportDescriptor reportDesc) {
+    protected Map<String, String> getPropertiesAliases(ReportDescriptor reportDesc) {
         // выбираем из флагов дескриптора ...
-        final Map<String, String[]> result = getPropertiesAliases((reportDesc == null) ? null : reportDesc.getFlags());
+        final Map<String, String> result = getPropertiesAliases((reportDesc == null) ? null : reportDesc.getFlags());
 
         if (reportDesc != null && log.isDebugEnabled()) {
             log.debug(String.format("Found parameters' aliases for provider %s:\n\t%s", reportDesc.getClass(), result));
@@ -202,16 +203,15 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
     /**
      * Получить в списке reportFlags.flags() объекты относящиеся к свойствам.
      *
-     * @param reportFlags
-     * @return
+     *
      */
-    protected Map<String, String[]> getPropertiesAliases(ReportFlags reportFlags) {
+    protected Map<String, String> getPropertiesAliases(ReportFlags reportFlags) {
         // выбираем из флагов дескриптора ...
         if (reportFlags == null || reportFlags.flags() == null) {
             return null;
         }
 
-        final Map<String, String[]> result = new HashMap<String, String[]>(reportFlags.flags().size());
+        final Map<String, String> result = new HashMap<String, String>(reportFlags.flags().size());
 
         // сканируем параметры-флаги вида "property.XXX"
         for (NamedValue item : reportFlags.flags()) {
@@ -219,14 +219,10 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
                 if (item.getMnem().toLowerCase().startsWith(PFX_PROPERTY_ITEM)) {
                     // это описание конвертирования ...
                     final String propName = item.getMnem().substring(PFX_PROPERTY_ITEM.length()); // часть строки после префикса это имя свойства (возможно вложенного)
-                    final String[] aliases = (Utils.isStringEmpty(item.getValue())) ? null : item.getValue().split("[,;]");
+                    final String aliases = (Utils.isStringEmpty(item.getValue())) ? null : item.getValue();
                     if (aliases != null) {
-                        for (int i = 0; i < aliases.length; i++) {
-                            if (aliases[i] != null)
-                                aliases[i] = aliases[i].trim();
-                        }
+                        result.put(propName, aliases);
                     }
-                    result.put(propName, aliases);
                 }
             }
         }

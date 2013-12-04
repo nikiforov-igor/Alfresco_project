@@ -77,6 +77,8 @@
                                     useDynamicPagination: false,
                                     showExtendSearchBlock: false,
                                     overrideSortingWith: false,
+                                    editForm: (LogicECM.module.ReportsEditor.REPORT_SETTINGS && LogicECM.module.ReportsEditor.REPORT_SETTINGS.isSQLReport == "true")
+                                            ? "sql-provider-column" : "",
                                     actions: [
                                         {
                                             type: "datagrid-action-link-editSourceColumns",

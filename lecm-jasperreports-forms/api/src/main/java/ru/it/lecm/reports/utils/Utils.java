@@ -1,36 +1,13 @@
 package ru.it.lecm.reports.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import java.io.*;
+import java.util.*;
 
 
 public class Utils {
-
-    final static Logger logger = LoggerFactory.getLogger(Utils.class);
-
     final public static char QUOTE = '\"';
     private static final char CH_WALL = '\\'; // символ экранировки
 
@@ -124,17 +101,6 @@ public class Utils {
     }
 
     /**
-     * Get value, replacing empty one it by default value.
-     *
-     * @param obj String
-     * @param defIfEmpty String
-     * @return @param(obj) if it is not empty, otherwise @param(defIfEmpty).
-     */
-    public static String nvl(Object obj, String defIfEmpty) {
-        return coalesce(obj, defIfEmpty);
-    }
-
-    /**
      * Вернуть первое непустое строковое представление элементов списка.
      *
      * @param values String
@@ -190,17 +156,6 @@ public class Utils {
         return (s == null) ? null : s.trim();
     }
 
-    public static String dup(String s, int count) {
-        final StringBuilder result = new StringBuilder();
-        if (s != null && s.length() > 0)
-            while (count > 0) {
-                result.append(s);
-                count--;
-            }
-        return result.toString();
-    }
-
-
     /**
      * Проверить что строка начинается с указанной строки и имеет ровно одно вхождение
      *
@@ -240,35 +195,6 @@ public class Utils {
     public static boolean isSafelyEquals(Object a, Object b) {
         return (a == b) || ((a != null) && (b != null) && a.equals(b));
     }
-
-    /**
-     * Журналирование данных.
-     *
-     * @param dest  целевой буфер для вывода
-     * @param props список свойств для журналирования
-     * @param info  сообщение, выводится в журнал если не null
-     */
-    public static StringBuilder dumpAlfData(final StringBuilder dest, final Map<?, ?> props, final String info) {
-        final StringBuilder result = (dest != null) ? dest : new StringBuilder();
-        if (info != null) {
-            result.append(info);
-        }
-        result.append("\n");
-        if (props != null) {
-            result.append(String.format("\t[%s]\t %25s\t %s\n", 'n', "fldName", "value"));
-            int i = 0;
-            for (@SuppressWarnings("rawtypes") Map.Entry e : props.entrySet()) {
-                i++;
-                result.append(String.format("\t[%d]\t %25s\t '%s'\n", i, e.getKey(), nvl(e.getValue(), "NULL")));
-            }
-        }
-        return result;
-    }
-
-    public static StringBuilder dumpAlfData(final Map<?, ?> props, final String info) {
-        return dumpAlfData(new StringBuilder(), props, info);
-    }
-
 
     /**
      * Make string enumeration of the items as list with delimiters.
@@ -439,48 +365,6 @@ public class Utils {
         return true;
     }
 
-
-    /**
-     * Сгенерировать условие для единичного параметра (кавыки " добавляются здесь).
-     * Если параметр не задан (null) - поднимается исключение с сообщением errMsg, если raiseIfNull=true.
-     *
-     * @param bquery      текст запроса для добавления
-     * @param column ColumnDescriptor
-     * @param prefix      текст перед добавляемым условием
-     * @param errMsg      сообщение, выводимое при пустом параметре и raiseIfNull = true
-     * @param raiseIfNull true, чтобы поднять исключение когда параметр не задан
-     * @return true, если условия по параметру было добавлено
-     *         и false, когда raiseIfNull = false или исключение иначе
-     */
-    public static boolean emmitParamCondition(final StringBuilder bquery
-            , ColumnDescriptor column
-            , final String prefix
-            , final String errMsg
-            , boolean raiseIfNull) {
-        if (column == null || column.getParameterValue().isEmpty()) {
-            if (raiseIfNull) {
-                throw new RuntimeException(errMsg);
-            }
-            return false;
-        }
-        bquery.append(prefix).append(Utils.quoted(column.getParameterValue().getBound1().toString()));
-        return true;
-    }
-
-
-    /**
-     * Сгенерировать условие для единичного параметра (кавыки " добавляются здесь).
-     * Если параметр не задан ничего не добавляется.
-     *
-     * @param bquery текст запроса для добавления
-     * @param column ColumnDescriptor
-     * @param prefix текст перед добавляемым условием
-     * @return true, если условия по параметру было добавлено и false иначе
-     */
-    public static boolean emmitParamCondition(final StringBuilder bquery, ColumnDescriptor column, final String prefix) {
-        return emmitParamCondition(bquery, column, prefix, null, false);
-    }
-
     /**
      * Вычислить длительность в днях между парой дат
      *
@@ -490,81 +374,12 @@ public class Utils {
      * @return разницу в днях (возможно нецелое значение) между двумя датами;
      *         значение по-умолчанию воз-ся если одна из дат или обе null.
      */
-    final public static float calcDurationInDays(Date startAt, Date endAt, float defaultValue) {
-        if (startAt == null || endAt == null)
+    public static float calcDurationInDays(Date startAt, Date endAt, float defaultValue) {
+        if (startAt == null || endAt == null) {
             return defaultValue;
+        }
         final double duration_ms = (endAt.getTime() - startAt.getTime());
         return (float) (duration_ms / MILLIS_PER_DAY);
-    }
-
-    /**
-     * По  названию класса вернуть известный класс или defaultClass.
-     *
-     * @param vClazz проверяемое название класса - полное имя типа или алиас
-     * @return  Class
-     */
-    public static Class<?> getJavaClassByName(final String vClazz, final Class<?> defaultClass) {
-        Class<?> byAlias = findKnownType(vClazz);
-        if (byAlias != null) {
-            return byAlias;
-        }
-
-        // не найдено синононима -> ищем по полному имени
-        if (vClazz != null) {
-            try {
-                return Class.forName(vClazz);
-            } catch (ClassNotFoundException ex) {
-                // ignore class name fail by default
-                logger.warn(String.format("Unknown java class '%s' -> used as '%s'", vClazz, defaultClass));
-            }
-        }
-
-        return defaultClass;
-    }
-
-    // для возможности задавать типы алиасами
-    private static Map<String, Class<?>> knownTypes = null;
-
-    /**
-     * По короткому названию класса вернуть известный класс или null, если такого не зарегистрировано.
-     *
-     * @param vClazzAlias проверяемый алиас класса
-     * @return Class
-     */
-    private static Class<?> findKnownType(String vClazzAlias) {
-        if (vClazzAlias == null) {
-            return null;
-        }
-
-        if (knownTypes == null) {
-            knownTypes = new HashMap<String, Class<?>>();
-
-            // TODO: (RUSA) вынести всё это в бины
-
-            knownTypes.put("integer", Integer.class);
-            knownTypes.put("int", Integer.class);
-
-            knownTypes.put("bool", Boolean.class);
-            knownTypes.put("boolean", Boolean.class);
-            // knownTypes.put("yesno", Boolean.class);
-            // knownTypes.put("logical", Boolean.class);
-
-            knownTypes.put("long", Long.class);
-            knownTypes.put("longint", Long.class);
-
-            knownTypes.put("id", String.class);
-            knownTypes.put("string", String.class);
-
-            knownTypes.put("date", Date.class);
-
-            knownTypes.put("numeric", Number.class);
-            knownTypes.put("number", Number.class);
-            knownTypes.put("float", Float.class);
-            knownTypes.put("double", Double.class);
-        }
-
-        final String skey = vClazzAlias.toLowerCase();
-        return (knownTypes.containsKey(skey)) ? knownTypes.get(skey) : null;
     }
 
     /**
@@ -604,20 +419,6 @@ public class Utils {
      */
     public static float getDurationInHours(long duration_ms) {
         return ((float) duration_ms) / MILLIS_PER_HOUR;
-    }
-
-    /**
-     * Вычислить разницу двух дат в часах. Если одна из дат NULL, воз-ся 0.
-     *
-     * @param start начало
-     * @param end   конец
-     * @return float
-     */
-    public static float getDurationInHours(Date start, Date end) {
-        if (start == null || end == null) {
-            return 0;
-        }
-        return getDurationInHours(end.getTime() - start.getTime());
     }
 
     @SuppressWarnings("unchecked")
@@ -695,7 +496,7 @@ public class Utils {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static void saveDataToFile(File destFile, final byte[] srcData) throws FileNotFoundException, IOException {
+    public static void saveDataToFile(File destFile, final byte[] srcData) throws IOException {
         // сохранение контента в файл ...
         final OutputStream out = new FileOutputStream(destFile);
         try {
@@ -731,7 +532,6 @@ public class Utils {
      * IO-исключения обёрнуты как rtm-exceptions.
      *
      * @param srcFile исходный файл для загрузки
-     * @param errInfo сообщение при ошибках
      * @return byte[]
      */
     public static byte[] loadFileAsData(File srcFile) throws IOException {

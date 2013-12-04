@@ -13,15 +13,12 @@ import java.util.*;
  *
  * @author rabdullin
  */
-public class JavaDataTypeImpl
-        extends JavaClassableImpl
-        implements JavaDataType {
+public class JavaDataTypeImpl extends JavaClassableImpl implements JavaDataType {
     private static final long serialVersionUID = 1L;
 
     protected JavaDataTypeImpl(String className) {
         super(className);
     }
-
 
     /**
      * Набор типов поддерживаемых для шаблонов.
@@ -97,7 +94,11 @@ public class JavaDataTypeImpl
         LIST(List.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
-                return (value instanceof List ? value : new ArrayList<Object>().add(value));
+                return ((value instanceof List || value == null )?
+                        value :
+                        (value instanceof String[] ?
+                                new ArrayList<Object>(Arrays.asList((String[])value)) :
+                                new ArrayList<Object>(Arrays.asList(value.toString().split("[,;]]")))));
             }
         };
 
@@ -112,7 +113,7 @@ public class JavaDataTypeImpl
         }
 
         public Object getValueByRealType(Object value) {
-            return value.toString();
+            return value != null ? value.toString() : null;
         }
 
         public static SupportedTypes findType(String clazzName) {
@@ -121,7 +122,7 @@ public class JavaDataTypeImpl
                 for (SupportedTypes t : values()) {
                     if (clazzName.equalsIgnoreCase(t.name()) // X совпадает с name полностью
                             || (t.javaDataType != null
-                            && clazzName.equalsIgnoreCase(t.javaDataType.className()) // X совпадает с "длинным типом" ...
+                            && clazzName.equalsIgnoreCase(t.javaDataType.getClassName()) // X совпадает с "длинным типом" ...
                     )
                             )
                         return t; // FOUNDS
@@ -131,7 +132,7 @@ public class JavaDataTypeImpl
                 for (SupportedTypes t : values()) {
                     if (t.name().toLowerCase().startsWith(clazzName.toLowerCase()) // name начинается с X ...
                             || (t.javaDataType != null
-                            && t.javaDataType.className().toLowerCase().contains(("." + clazzName).toLowerCase()) // "длинный тип" содержит ".X"
+                            && t.javaDataType.getClassName().toLowerCase().contains(("." + clazzName).toLowerCase()) // "длинный тип" содержит ".X"
                     )
                             )
                         return t; // FOUNDS

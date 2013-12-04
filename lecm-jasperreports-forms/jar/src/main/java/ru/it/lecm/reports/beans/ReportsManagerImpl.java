@@ -482,15 +482,6 @@ public class ReportsManagerImpl implements ReportsManager {
                     , (def != null) ? def.getGenerationTemplate() : DEFAULT_REPORT_TEMPLATE // makeGenTemplateFileName(...)
             ));
         }
-
-        // рекурсивно для подотчётов ...
-        /*if (desc.getSubreports() != null) {
-            for (SubReportDescriptorImpl sr : desc.getSubreports()) {
-                // TODO: шаблоны для подотчётов надо сгенерировать ТАМ же где основной отчёт
-                // TODO: при построении подотчётов придётся выгрузить файлы подотчётов на диск, а значит и основной отчёт тоже.
-                setDefaults(sr);
-            } // for sr
-        }*/
     }
 
     /**
@@ -508,7 +499,7 @@ public class ReportsManagerImpl implements ReportsManager {
 
         // (!) подотчёты сохраняем еще и  в отдельное (файловое) хранилище ...
         final ReportContentDAO storage = this.contentRepositoryDAO;
-        final ReportContentDAO subReportStorage = this.subreportFileDAO;
+        final ReportContentDAO subReportStorage = getSubreportFileDAO();
 
         final String rtag = getReportTypeTag(desc.getReportType());
         final ReportDefaultsDesc def = getReportDefaults().get(rtag);
@@ -534,7 +525,7 @@ public class ReportsManagerImpl implements ReportsManager {
                     // сохранение в хранилище
                     storage.storeContent(id, new ByteArrayInputStream(templateRawData));
                     if (isSubreport) {//сохраняем подотчет и в файловую систему!
-                        subreportFileDAO.storeContent(id, new ByteArrayInputStream(templateRawData));
+                        getSubreportFileDAO().storeContent(id, new ByteArrayInputStream(templateRawData));
                     }
                 }
             }
@@ -865,7 +856,7 @@ public class ReportsManagerImpl implements ReportsManager {
     }
 
     @Override
-    public ReportFileData generateReport(String reportName, Map<String, String[]> args) throws IOException {
+    public ReportFileData generateReport(String reportName, Map<String, String> args) throws IOException {
         ReportDescriptor reportDesc = this.getRegisteredReportDescriptor(reportName);
         if (reportDesc == null) {
             throw new RuntimeException(String.format("Report descriptor '%s' not accessible (possibly report is not registered !?)", reportName));
@@ -879,19 +870,18 @@ public class ReportsManagerImpl implements ReportsManager {
             throw new RuntimeException(String.format("Report '%s' storage point is unknown (possibly report is not registered !?)", reportName));
         }
 
-        ParameterMapper.assignParameters(reportDesc, args);
-
-        final String rtype = Utils.coalesce(reportDesc.getReportType().getMnem(), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
+        // (1) передача параметров из запроса в ReportDescriptor на основании их типов
+        // (2) расширение списка пришедших параметров: для диапазонов - добавление крайних значений, для ID - добавить доп поле node_id (для SQL запросов)
+        Map<String, Object> paramsMap = ParameterMapper.assignParameters(reportDesc, args, serviceRegistry.getNodeService());
 
         // получение провайдера ...
-        final ReportGenerator reporter = this.getReportGenerators().get(rtype);
+        final String rType = Utils.coalesce(reportDesc.getReportType().getMnem(), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
+        final ReportGenerator reporter = this.getReportGenerators().get(rType);
         if (reporter == null) {
-            throw new RuntimeException(String.format("Unsupported report kind '%s': no provider registered", rtype));
+            throw new RuntimeException(String.format("Unsupported report kind '%s': no provider registered", rType));
         }
 
-        final ReportFileData result = new ReportFileDataImpl();
-        reporter.produceReport(result, reportDesc, args, storage);
-        return result;
+        return reporter.produceReport(reportDesc, paramsMap, storage);
     }
 
     /**

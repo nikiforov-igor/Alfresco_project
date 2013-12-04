@@ -10,21 +10,19 @@ public interface ReportGenerator {
 
 	/**
 	 * Построить отчёт по его мнемоническому названию и параметрам
-	 * @param result выходной ответ
-	 * @param reportDesc описатель отчёта (null, если нет описателя - "hardcoded report")
-	 * @param parameters параметры (обычно это request-параметры).
-	 * подразумевается что названия параметров в этом списке совпадают с мнемоникой
-	 * соот-щих колонок набора данных, который соот-ет шаблону reportName.
-	 * Если это не так, тогда провайдер "сам" должен разбираться "что и куда"
-	 * надо назначить.
-	 * @param rptContent
-	 * @throws IOException
+	 *
+     *
+     *
+     *
+     * @param reportDesc описатель отчёта (null, если нет описателя - "hardcoded report")
+     * @param parameters параметры (обычно это request-параметры).
+     * подразумевается что названия параметров в этом списке совпадают с мнемоникой
+     * соот-щих колонок набора данных, который соот-ет шаблону reportName.
+     * Если это не так, тогда провайдер "сам" должен разбираться "что и куда"
+     * надо назначить.
+     * @throws IOException
 	 */
-	void produceReport( ReportFileData result
-			, ReportDescriptor reportDesc
-			, Map<String, String[]> parameters
-			, ReportContentDAO rptContent
-	) throws IOException;
+	ReportFileData produceReport(ReportDescriptor reportDesc, Map<String, Object> parameters, ReportContentDAO rptContent) throws IOException;
 
 
 	/**

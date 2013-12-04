@@ -17,6 +17,7 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.ReportFileDataImpl;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -40,10 +41,11 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
     private static final transient Logger log = LoggerFactory.getLogger(JasperReportGeneratorImpl.class);
 
     @Override
-    public void produceReport(ReportFileData result, ReportDescriptor reportDesc, Map<String, String[]> parameters, ReportContentDAO rptContent)
-            throws IOException {
+    public ReportFileData produceReport(ReportDescriptor reportDesc, Map<String, Object> parameters, ReportContentDAO rptContent) throws IOException {
         PropertyCheck.mandatory(this, "services", getServices());
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
+
+        ReportFileData result = new ReportFileDataImpl();
 
         final String reportFileName = String.format("%s.jasper", reportDesc.getMnem());
 
@@ -84,6 +86,8 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
             IOUtils.closeQuietly(stm);
             IOUtils.closeQuietly(outputStream);
         }
+
+        return result;
     }
 
     /**
@@ -100,13 +104,13 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
      * Найти целевой формат в параметрах ...
      */
     // DONE: (?) разрешить задавать формат в колонках данных (константой или выражением)
-    private JasperReportTargetFileType findTargetArg(final Map<String, String[]> requestParameters, ReportDescriptor reportDesc) {
+    private JasperReportTargetFileType findTargetArg(final Map<String, Object> requestParameters, ReportDescriptor reportDesc) {
         String value = ArgsHelper.findArg(requestParameters, COLNAME_TARGETFORMAT, null);
         if (Utils.isStringEmpty(value)) {
             if (reportDesc != null) {
-                final ColumnDescriptor coldesc = reportDesc.getDsDescriptor().findColumnByName(COLNAME_TARGETFORMAT);
-                if (coldesc != null) {
-                    value = coldesc.getExpression();
+                final ColumnDescriptor colDesc = reportDesc.getDsDescriptor().findColumnByName(COLNAME_TARGETFORMAT);
+                if (colDesc != null) {
+                    value = colDesc.getExpression();
                 }
             }
         }
@@ -125,7 +129,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
     }
 
     private void generateReport(JasperReportTargetFileType target, OutputStream outputStream, JasperReport report,
-                                JRDataSourceProvider dataSourceProvider, Map<String, String[]> requestParameters)
+                                JRDataSourceProvider dataSourceProvider, Map<String, Object> requestParameters)
             throws IllegalArgumentException, JRException, ClassNotFoundException, SQLException {
         log.debug("Generating report " + report.getName() + " ...");
 
@@ -136,22 +140,16 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
         JasperPrint jPrint;
         Connection conn = null;
         try {
+            final Map<String, Object> reportParameters = new HashMap<String, Object>();
+            reportParameters.putAll(requestParameters);
+
+            final JasperFillManager fillManager = JasperFillManager.getInstance(DefaultJasperReportsContext.getInstance());
+
             if (!(dataSourceProvider instanceof SQLProvider)) {
                 final JRDataSource dataSource = dataSourceProvider.create(report);
-
-                final JasperFillManager fillManager = JasperFillManager.getInstance(DefaultJasperReportsContext.getInstance());
-
-                final Map<String, Object> reportParameters = new HashMap<String, Object>();
-                reportParameters.putAll(requestParameters);
-
                 jPrint = fillManager.fill(report, reportParameters, dataSource);
             } else {// SQL
                 conn = getTargetDataSource().getConnection();
-                final JasperFillManager fillManager = JasperFillManager.getInstance(DefaultJasperReportsContext.getInstance());
-
-                final Map<String, Object> reportParameters = new HashMap<String, Object>();
-                reportParameters.putAll(requestParameters);
-
                 jPrint = fillManager.fill(report, reportParameters, conn);
             }
 

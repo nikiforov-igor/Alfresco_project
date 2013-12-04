@@ -24,7 +24,6 @@ public interface ReportsManager {
 	 *    2) хранимые в виде ds-xml файлов (поставка)
 	 *    3) зарегенные в виде бинов (сконфигурированные spring-beans)
 	 * @param reportMnemoName мнемонический код отчёта (уникальный)
-	 * @return
 	 */
 	ReportDescriptor getRegisteredReportDescriptor(String reportMnemoName);
 
@@ -55,7 +54,6 @@ public interface ReportsManager {
 
 	/**
 	 * Зарегистрировать указанный описатель отчёта. Создать ds-xml.
-	 * @param rdesc
 	 */
 	void registerReportDescriptor(ReportDescriptor rdesc);
 
@@ -63,7 +61,6 @@ public interface ReportsManager {
 	/**
 	 * Зарегистрировать отчёт, созданный редактором отчётов ("lecm-reports-editor"), указав его id.
 	 * Доступ к данным будет выполняться через reportDAO.
-	 * @param rdescId
 	 */
 	void registerReportDescriptor(NodeRef rdescId);
 
@@ -71,39 +68,20 @@ public interface ReportsManager {
 	 * Обратная к registerReportDescriptor.
 	 * Если отчёт стандартный из поставки, то он становится недоступен только до 
 	 * следующей перезагрузки приложения.
-	 * @param reportCode
 	 */
 	void unregisterReportDescriptor(String reportCode);
 
 
 	/**
-	 * Загрузить данные ds-файла указанного шаблона
-	 * @param reportCode
-	 * @return
+	 * Загрузить данные ds-файла указанного шаблонаn
 	 */
 	byte[] loadDsXmlBytes(String reportCode);
 
 
 	/**
 	 * Сформировать шаблон по-умолчанию для НД указанного описателя отчёта
-	 * @param reportRef
-	 * @return
 	 */
 	NodeRef produceDefaultTemplate(NodeRef reportRef);
-
-	/**
-	 * Вернуть каталог, в котором располагается шаблоны отчётов указанного типа
-	 * @param reportType
-	 * @return
-	 */
-	// String getReportTemplateFileDir(ReportType reportType);
-
-	/**
-	 * Вернуть название ds-xml файла, в котором располагается -описание указанного отчёта
-	 * @param reportCode
-	 * @return
-	 */
-	// String getDsRelativeFileName(String reportCode);
 
 	/**
 	 * @return не NULL список [ReportTypeMnemonic -> ReportGenerator]
@@ -127,8 +105,6 @@ public interface ReportsManager {
 
 	/**
 	 * Вернуть хранилище, которое содержит указанный описатель или NULL
-	 * @param reportDesc
-	 * @return
 	 */
 	ReportContentDAO findContentDAO(ReportDescriptor reportDesc);
 
@@ -143,17 +119,14 @@ public interface ReportsManager {
 	 * Содать отчёт
 	 * @param reportCode код отчёта
 	 * @param args параметры
-	 * @return
 	 * @throws IOException 
 	 */
-	ReportFileData generateReport( final String reportCode, Map<String, String[]> args) throws IOException;
+	ReportFileData generateReport( final String reportCode, Map<String, String> args) throws IOException;
 
 	/**
 	 * Сохранить данные в указанной папке репозитория.
 	 * Сохраняет как обычный дочерний "cm:content" c именем и содержанием файла.
-	 * Mime-тип будет определяться автоматом по расширению файла, если srcData.mimeType == null. 
-	 * @param srcData
-	 * @param destParentRef
+	 * Mime-тип будет определяться автоматом по расширению файла, если srcData.mimeType == null.
 	 * @return созданный id узла
 	 */
 	NodeRef storeAsContent(ReportFileData srcData, NodeRef destParentRef);

@@ -61,7 +61,7 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
                 int columnType = resultSet.getMetaData().getColumnType(i);
 
                 JRDesignField field = new JRDesignField();
-                field.setValueClassName(JavaDataTypeImpl.SupportedTypes.findTypeBySQL(columnType).javaDataType().className());
+                field.setValueClassName(JavaDataTypeImpl.SupportedTypes.findTypeBySQL(columnType).javaDataType().getClassName());
                 field.setName(columnName);
 
                 fields.add(field);

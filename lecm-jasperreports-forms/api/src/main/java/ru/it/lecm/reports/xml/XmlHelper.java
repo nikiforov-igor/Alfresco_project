@@ -15,22 +15,17 @@ import org.xml.sax.SAXException;
 import ru.it.lecm.reports.api.model.JavaClassable;
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.Mnemonicable;
-import ru.it.lecm.reports.model.impl.L18Value;
 import ru.it.lecm.reports.utils.Utils;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.Validator;
-import java.io.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -57,11 +52,6 @@ public class XmlHelper {
     public static final String XMLNODE_MAP = "map";
     public static final String XMLNODE_LIST = "list";
 
-    private static final DateFormat FORMAT_DATE = new SimpleDateFormat("yyyyMMdd");
-
-    private static final String ATTR_DATE_STYLE = "style";
-    private static final String ATTR_V_DATE_RELATIVE = "relative";
-    private static final String ATTR_V_DATE_CURYEAR = "currentYear";
     final private static String xmlItemName = "item", xmlKeyName = "key", xmlValueName = "value";
 
     final private static Logger logger = LoggerFactory.getLogger(XmlHelper.class);
@@ -201,25 +191,6 @@ public class XmlHelper {
         return (Element) found.get(0);
     }
 
-
-    /**
-     * Найти первый встреченный дочерний узел с именем из указанного списка
-     *
-     * @param scanFor названия узлов, которые надо найти
-     */
-    public static Node tryFindNextToFieldsXmlSection(Element node, String[] scanFor) {
-        final NodeList list = node.getChildNodes();
-        if (list != null) {
-            final List<String> what = Arrays.asList(scanFor);
-            for (int i = 0; i < list.getLength(); i++) {
-                final Node child = list.item(i);
-                if (what.contains(child.getNodeName()))
-                    return child; // FOUND
-            }
-        }
-        return null; // NOT FOUND
-    }
-
     /**
      * Получить текстовый контент узла (из вложенного CDATA, или простого текста).
      * Для атрибутов возвращается их value.
@@ -250,23 +221,12 @@ public class XmlHelper {
         return (result != null) ? result.getSingleNodeValue() : null;
     }
 
-    public static boolean getAttributeBoolean(Element elem, String attr) {
-        final String val = getAttributeString(elem, attr);
-        return (val == null) ? null : Boolean.valueOf(val);
-    }
-
-    public static String getAttributeString(final Element elem, final String attrName) {
-        final XPathEvaluator xpath = new XPathEvaluatorImpl();
-        final XPathResult result = (XPathResult) xpath.evaluate(attrName, elem, null, XPathResult.STRING_TYPE, null);
-        return result.getStringValue();
-    }
-
     public static void xmlAddClassNameAttr(Element result, JavaClassable jclazz, String xmlAttrName, String defaultAttrValue) {
-        if (jclazz != null && jclazz.className() != null) {
-            if (defaultAttrValue != null && jclazz.className().equals(defaultAttrValue)) {
+        if (jclazz != null && jclazz.getClassName() != null) {
+            if (defaultAttrValue != null && jclazz.getClassName().equals(defaultAttrValue)) {
                 return; // совпадает со значением по-умолчанию
             }
-            result.setAttribute(xmlAttrName, jclazz.className());
+            result.setAttribute(xmlAttrName, jclazz.getClassName());
         }
     }
 
@@ -340,139 +300,6 @@ public class XmlHelper {
         return null; // NOT FOUND
     }
 
-    /**
-     * Получить значение даты заданной в XML узле как со стилем или непосредственно.
-     * xml-формат дат со стилем (т.е. при наличии атрибута "style"):
-     * или относительная
-     * <x style="relative">+days</x>
-     * или
-     * <x style="relative">-days</x>
-     * или
-     * <x style="currentYear"/>
-     * При отсутсивии атрибута "style" принимается что дата задана непосредственно в виде:
-     * <x>YYYYMMDD</x>
-     *
-     * @param node xml-описание с атрибутом стиль или без него
-     * @return типизированная дата (с учётом стиля) или исключение при
-     *         неподдерживаемом стиле или ошибках разбора
-     * @throws ParseException
-     */
-    public static Date getNodeAsDate(Node node) throws ParseException {
-        if (node == null) {
-            return null;
-        }
-
-        final String valueText = getTagContent(node);
-        if (!((Element) node).hasAttribute(ATTR_DATE_STYLE)) {
-            // если нет утрибута стиля даты -> указана сама дата
-            if (valueText == null) {
-                throw new ParseException("Null value is invalid for the date", 0);
-            }
-
-            return FORMAT_DATE.parse(valueText);
-        }
-
-        final String sdate = ((Element) node).getAttribute(ATTR_DATE_STYLE);
-        if (ATTR_V_DATE_RELATIVE.equals(sdate)) { // указан стиль "относительная дата"
-            if (valueText == null) {
-                throw new ParseException("Null value is invalid for the relative date", 0);
-            }
-
-            final String offset = valueText.trim();
-
-            // (RuSA) check "relative offset MUST start with +/-"
-            // (don't ask me why) ...
-            if (-1 == "+-".indexOf(offset.charAt(0))) {
-                throw new ParseException("Invalid offset for current date: " + offset, 0);
-            }
-
-            final double days = Double.parseDouble(offset);
-            final Date date = new Date();
-            date.setTime(date.getTime() + Math.round(days * 24 * 60 * 60 * 1000));
-            return date;
-        } else if (ATTR_V_DATE_CURYEAR.equals(sdate)) {
-            final Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_YEAR, 1);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            return calendar.getTime();
-        }
-        throw new ParseException("Unknown date style: " + sdate, 0);
-    }
-
-    /**
-     * Checks whether given file correspond to given schema
-     *
-     * @param file   source file
-     * @param schema schema instance
-     * @throws SAXException
-     */
-    public static void validateFile(File file, Schema schema) throws SAXException {
-        try {
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(file));
-        } catch (SAXException ex) {
-            logger.error("Input document is invalid", ex);
-            throw ex;
-        } catch (IOException ex) {
-            logger.error("Error during source file validation", ex);
-            throw new IllegalStateException(ex);
-        }
-    }
-
-    /**
-     * Checks whether given file correspond to given schema
-     *
-     * @param stream stream contained file
-     * @param schema schema instance
-     * @throws SAXException
-     */
-    public static void validateFile(InputStream stream, Schema schema) throws SAXException {
-        try {
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(stream));
-        } catch (SAXException ex) {
-            logger.error("Input document is invalid", ex);
-            throw ex;
-        } catch (IOException ex) {
-            logger.error("Error during source file validation", ex);
-            throw new IllegalStateException(ex);
-        }
-    }
-
-    /**
-     * Transforms given file according to given transformer.
-     *
-     * @param file            source file that should be transformed
-     * @param fileTransformer transformation according to that transformer will be done
-     * @return result of transformation represented by stream
-     */
-    public static ByteArrayOutputStream transformFile(File file, Transformer fileTransformer) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            fileTransformer.transform(new StreamSource(file), new StreamResult(out));
-        } catch (TransformerException ex) {
-            logger.error("Error during transformation of file "
-                    + file.getName());
-            return null;
-        }
-        return out;
-    }
-
-    public static ByteArrayOutputStream transformFile(InputStream stream,
-                                                      Transformer fileTransformer) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            fileTransformer.transform(new StreamSource(stream), new StreamResult(out));
-        } catch (TransformerException ex) {
-            logger.error("Error during transformation");
-            return null;
-        }
-        return out;
-    }
-
     public static Document parseDOMDocument(InputStream inputStream) {
         Document document = null;
         try {
@@ -501,18 +328,6 @@ public class XmlHelper {
     }
 
     /**
-     * Creates <code>Document</code> instance that represents DOM structure of
-     * given source represented by stream.
-     *
-     * @param source source file according to that <code>Document</code> will be created
-     * @return Document instance
-     */
-    public static Document parseDOMDocument(ByteArrayOutputStream source) {
-        final InputStream inputStream = new ByteArrayInputStream(source.toByteArray());
-        return parseDOMDocument(inputStream);
-    }
-
-    /**
      * Serializes given DOM Document to XML file.
      *
      * @param document DOM document
@@ -536,7 +351,6 @@ public class XmlHelper {
     /**
      * Гарантировать наличие элемента первого уровня, в который вложено всё остальное.
      *
-     * @param doc
      * @return существующий или добавленный элемент
      */
     public static Element ensureRoot(Document doc, String nodeName) {
@@ -661,7 +475,6 @@ public class XmlHelper {
     /**
      * Из указанного узла выбрать list, map или значение.
      *
-     * @param node
      * @return List, если у node имеется вложенный узел <list>
      *         Map, если имеется у node имеется вложенный узел <map>
      *         и простое текстовое значение иначе
@@ -716,12 +529,6 @@ public class XmlHelper {
 
         xmlAddMapItems(doc, result, srcItem.getL18items());
 
-        return result;
-    }
-
-    public static L18able getNodeAsL18(Element srcRoot) {
-        final L18Value result = new L18Value();
-        parseL18(result, srcRoot, "l18");
         return result;
     }
 

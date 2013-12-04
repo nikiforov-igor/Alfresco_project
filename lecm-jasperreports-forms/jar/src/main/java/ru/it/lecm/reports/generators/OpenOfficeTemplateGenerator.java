@@ -341,51 +341,6 @@ public class OpenOfficeTemplateGenerator {
         }
     }
 
-    /*
-     * TODO: стоит сделать преобразование простых expression в целевой тип
-     * (для ссылок не надо), чтобы также упростить присвоение типизированной
-     * строки для assignTypedProperty.
-     * Object getTypedValue( Class destType, String value) { ... код получения типизированного значения из value ...}
-     *
-     * Object getTypedDefaultValue(ColumnDescriptor col) {
-     * 		final Class<?> colType = Class.forName(col.getDataType().className());
-     * 		try {
-     * 			return getTypesValue( colType, col.getExpression());
-     * 		} catch(ConvertException ex) {
-     * 			return (colType.equals(java.util.Date.class)) ? newDateTime( new Date()) : getTypesValue( colType, "0");
-     * 		}
-     */
-	/*
-	 * особенность OpenOffice: типизированные данные не могут быть NULL, так 
-	 * что если у колонки тип дата, то надо чтобы объект тоже был датой, 
-	 * а числа должны быть числами. 
-	 * Формируем здесь правильные типы для значений.
-	 */
-    protected Object getTypedDefaultValue(ColumnDescriptor col) {
-        final Object value;
-        if (java.util.Date.class.getName().equals(col.getDataType().className())) {
-            DateFormat dFormat = new SimpleDateFormat(DD_MM_YYYY);
-            value = dFormat.format(new Date());
-        } else if (java.lang.Boolean.class.getName().equals(col.getDataType().className())) {
-            value = Boolean.FALSE;
-        } else if (java.lang.Byte.class.getName().equals(col.getDataType().className())) {
-            value = (byte) 0;
-        } else if (java.lang.Short.class.getName().equals(col.getDataType().className())) {
-            value = (short) 0;
-        } else if (java.lang.Integer.class.getName().equals(col.getDataType().className())) {
-            value = 0;
-        } else if (java.lang.Long.class.getName().equals(col.getDataType().className())) {
-            value = (long) 0;
-        } else if (java.lang.Float.class.getName().equals(col.getDataType().className())) {
-            value = (float) 0;
-        } else if (java.lang.Double.class.getName().equals(col.getDataType().className())) {
-            value = (double) 0;
-        } else { // иначе - просто присвоим выражение
-            value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + col.getColumnName() + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
-        }
-        return value;
-    }
-
     /**
      * Присвоение значения openOffice-атрибуту свойства с учётом его типа.
      *

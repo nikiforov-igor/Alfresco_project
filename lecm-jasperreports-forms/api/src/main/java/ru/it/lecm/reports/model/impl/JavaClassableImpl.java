@@ -29,14 +29,9 @@ public class JavaClassableImpl
 		this.className = className;
 	}
 
-	@Override
-	public String className() {
-		return this.className;
-	}
-
 	/** for reflection work */
 	public String getClassName() {
-		return className();
+		return this.className;
 	}
 
 	@Override

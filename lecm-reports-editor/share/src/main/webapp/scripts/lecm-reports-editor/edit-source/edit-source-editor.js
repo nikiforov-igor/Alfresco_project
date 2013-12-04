@@ -196,11 +196,14 @@
         _onNewColumn: function () {
             this.isCopy = false;
             if (this.dataSourceId) {
+                var formId =
+                    (LogicECM.module.ReportsEditor.REPORT_SETTINGS && LogicECM.module.ReportsEditor.REPORT_SETTINGS.isSQLReport == "true") ? "sql-provider-column" : "";
                 this._showCreateForm({
                     itemType: "lecm-rpeditor:reportDataColumn",
                     nodeRef: this.dataSourceId,
                     itemKind: "type",
-                    formMode: "create"
+                    formMode: "create",
+                    formId: formId
                 });
             } else {
                 Alfresco.util.PopupManager.displayMessage({

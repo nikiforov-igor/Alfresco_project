@@ -67,54 +67,6 @@ public class ArgsHelper {
     }
 
     /**
-     * @param value       значение NodeRef
-     * @return сформированный NodeRef или null если строка пуста
-     */
-    public static NodeRef makeNodeRef(String value) {
-        if (Utils.isStringEmpty(value) || value.trim().length() == 0) {
-            return null;
-        }
-
-        NodeRef result;
-        try {
-            result = new NodeRef(value.trim());
-        } catch (Throwable e) {
-            logger.error(String.format("unexpected nodeRef value '%s' -> ignored as NULL", value), e);
-            result = null;
-        }
-        return result;
-    }
-
-    /**
-     * По строковому списку id узлов получить список NodeRef.
-     * Разделители в списке запятая или точка с запятой.
-     *
-     * @return непустой список [NodeRef] или null, если строка пуста
-     */
-    public static List<NodeRef> makeNodeRefs(String value) {
-        if (Utils.isStringEmpty(value)) {
-            return null;
-        }
-
-        final List<NodeRef> result = new ArrayList<NodeRef>();
-        try {
-            final String[] items = value.split("[;,]");
-            if (items != null) {
-                for (String s : items) {
-                    final NodeRef ref = makeNodeRef(s);
-                    if (ref != null) {
-                        result.add(ref);
-                    }
-                }
-            }
-        } catch (Throwable e) {
-            logger.error(String.format("Invalid nodeRef values '%s' for field -> ignored as NULL list", value), e);
-            return null;
-        }
-        return result.isEmpty() ? null : result;
-    }
-
-    /**
      * Найти в списке аргументов (обычно для request-запроса) указанное значение,
      * а если его нет или он пустой, то использовать значение по-умолчанию.
      *
@@ -122,11 +74,11 @@ public class ArgsHelper {
      * @param argName   название искомого аргумента
      * @param ifDefault значение по-умолчанию
      */
-    static public String[] findArgs(final Map<String, String[]> args, String argName, String[] ifDefault) {
+    static public String findArgs(final Map<String, Object> args, String argName, String ifDefault) {
         if (args.containsKey(argName)) {
-            final String[] values = args.get(argName);
-            if (values != null && values.length > 0) {
-                return values; // ret found
+            final String value = String.valueOf(args.get(argName));
+            if (value != null) {
+                return value; // ret found
             }
         }
         return ifDefault; // use default
@@ -140,9 +92,9 @@ public class ArgsHelper {
      * @param argName   название искомого аргумента
      * @param ifDefault значение по-умолчанию
      */
-    static public String findArg(final Map<String, String[]> args, String argName, String ifDefault) {
-        final String[] values = findArgs(args, argName, null);
-        return (values != null) ? values[0] : ifDefault;
+    static public String findArg(final Map<String, Object> args, String argName, String ifDefault) {
+        final String value = findArgs(args, argName, null);
+        return (value != null) ? value : ifDefault;
     }
 
     /**
@@ -159,8 +111,8 @@ public class ArgsHelper {
      * @throws IllegalAccessException
      */
     public static void assignParameters(final Object destBean,
-                                        final Map<String, String[]> propertiesAliases,
-                                        final Map<String, String[]> srcParameters
+                                        final Map<String, String> propertiesAliases,
+                                        final Map<String, Object> srcParameters
     ) throws IllegalAccessException, InvocationTargetException {
         if (destBean == null
                 || propertiesAliases == null || propertiesAliases.isEmpty()
@@ -169,21 +121,21 @@ public class ArgsHelper {
             return;
 
         // строим карту реально имеющихся параметров ...
-        final Map<String, String[]> result = new HashMap<String, String[]>();
+        final Map<String, String> result = new HashMap<String, String>();
 
         // проход по списку синонимов ...
-        for (Map.Entry<String, String[]> epropAlias : propertiesAliases.entrySet()) {
+        for (Map.Entry<String, String> epropAlias : propertiesAliases.entrySet()) {
             final String beanPropName = epropAlias.getKey();
-            final String[] aliases = epropAlias.getValue();
-            if (aliases == null || aliases.length == 0) {
+            final String aliases = epropAlias.getValue();
+            if (aliases == null) {
                 // пропускаем пустые ...
                 continue;
             }
 
             // до первого совпадения по имени в параметрах ...
-            for (String name : aliases) {
+            for (String name : aliases.split("[,;]")) {
                 if (srcParameters.containsKey(name)) { // найден синоним среди параметров ...
-                    result.put(beanPropName, srcParameters.get(name));
+                    result.put(beanPropName, String.valueOf(srcParameters.get(name)));
                     break;
                 }
             } // for name

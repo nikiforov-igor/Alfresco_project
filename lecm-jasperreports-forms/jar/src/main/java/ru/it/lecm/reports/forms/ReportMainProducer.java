@@ -53,18 +53,18 @@ public class ReportMainProducer extends AbstractWebScript {
      * @param params Map<String, String[]>
      * @param msg String
      */
-    private static void logParameters(final Map<String, String[]> params, final String msg) {
+    private static void logParameters(final Map<String, String> params, final String msg) {
         final StringBuilder infosb = new StringBuilder();
         if (msg != null) {
             infosb.append(msg);
         }
         int i = 0;
         if (params != null) {
-            for (Map.Entry<String, String[]> entry : params.entrySet()) {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
                 ++i;
                 final String paramName = entry.getKey();
-                final String[] value = entry.getValue();
-                infosb.append(String.format("\t[%d]\t'%s' \t'%s'\n", i, paramName, Utils.coalesce(Utils.getAsString(value), "NULL")));
+                final String value = entry.getValue();
+                infosb.append(String.format("\t[%d]\t'%s' \t'%s'\n", i, paramName, Utils.coalesce(value)));
             }
         }
         log.info(String.format("Call report maker with args count=%d:\n %s", i, infosb.toString()));
@@ -78,10 +78,10 @@ public class ReportMainProducer extends AbstractWebScript {
      * @param webScriptRequest WebScriptRequest
      * @return  Map
      */
-    public static Map<String, String[]> getRequestParameters(WebScriptRequest webScriptRequest) {
-        final Map<String, String[]> result = new HashMap<String, String[]>();
+    public static Map<String, String> getRequestParameters(WebScriptRequest webScriptRequest) {
+        final Map<String, String> result = new HashMap<String, String>();
         for (String paramName : webScriptRequest.getParameterNames()) {
-            String[] value = webScriptRequest.getParameterValues(paramName);
+            String value = webScriptRequest.getParameter(paramName);
             result.put(paramName, value);
         }
         return result;
@@ -101,7 +101,7 @@ public class ReportMainProducer extends AbstractWebScript {
         final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
         final String reportName = Utils.coalesce(templateParams.get("report"), templateParams.get("reportCode"));
 
-        final Map<String, String[]> requestParameters = getRequestParameters(webScriptRequest);
+        final Map<String, String> requestParameters = getRequestParameters(webScriptRequest);
         if (log.isInfoEnabled()) {
             logParameters(requestParameters, String.format("Processing report '%s' with args: \n", reportName));
         }

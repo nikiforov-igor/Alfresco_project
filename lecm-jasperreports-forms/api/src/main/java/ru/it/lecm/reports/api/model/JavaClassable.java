@@ -8,9 +8,8 @@ public interface JavaClassable {
 
 	/**
 	 * Название Java-класса.
-	 * @return
 	 */
-	String className();
+	String getClassName();
 
 	void setClassName(String value);
 }

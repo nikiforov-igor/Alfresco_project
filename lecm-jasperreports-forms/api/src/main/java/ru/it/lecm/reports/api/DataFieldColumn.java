@@ -30,7 +30,6 @@ public class DataFieldColumn extends JRDesignField {
 
 	/**
 	 * Строка для получения значения через ассоциации или просто qname-название поля
-	 * @return
 	 */
 	public String getValueLink() {
 		return valueLink;
@@ -38,20 +37,6 @@ public class DataFieldColumn extends JRDesignField {
 
 	public void setValueLink(String valueLink) {
 		this.valueLink = valueLink;
-	}
-
-	/**
-	 * @return если применяется trim при вставке значений в список attributes.
-	 */
-	public boolean isEnUseAttributesTrim() {
-		return enUseAttributesTrim;
-	}
-
-	/**
-	 * @param enableTrim true, чтобы применять trim при вставке значений в список flags.
-	 */
-	public void setEnUseAttributesTrim(boolean enableTrim) {
-		this.enUseAttributesTrim = enableTrim;
 	}
 
 	/**
@@ -80,54 +65,43 @@ public class DataFieldColumn extends JRDesignField {
 		this.attributes.put(name, ( (!enUseAttributesTrim || value == null) ? value : value.trim()) );
 	}
 
-	/**
-	 * Получить значение флага
-	 * @param name название флага
-	 * @param defaultValue значение если флага нет или его значение NULL
-	 * @return найденное значение флага (если оно не NULL) или defaultValue, иначе.
-	 */
-	public String getFlag(final String name, final String defaultValue) {
-		final String found = (attributes != null && attributes.containsKey(name)) ? attributes.get(name) : null;
-		return (found != null) ? found : defaultValue;
-	}
-
 	@Override
 	public String toString() {
 		return String.format( "%s(link: %s, '%s' %s)", super.getName(), valueLink
-				, super.getDescription(), (attributes == null ? "" : attributes.toString())
-		);
+				, super.getDescription(), (attributes == null ? "" : attributes.toString()));
 	}
 
 	public static DataFieldColumn createDataField(ColumnDescriptor colDesc) {
-		if (colDesc == null)
-			return null;
+		if (colDesc == null) {
+            return null;
+        }
 
 		final DataFieldColumn result = new DataFieldColumn();
 		result.setName( colDesc.getColumnName());
 		result.setDescription( colDesc.getDefault());
 
 		/* значение ... */
-		// if (colDesc.getExpression() != null && colDesc.getExpression().length() > 0)
 		if (colDesc.getParameterValue() != null) {
 			// если параметризован ...
-			if (colDesc.getParameterValue().getBound1() != null)
-				result.setValueLink( String.format( "%s", colDesc.getParameterValue().getBound1()) );
-			else
-				result.setValueLink( colDesc.getExpression());
+			if (colDesc.getParameterValue().getBound1() != null) {
+                result.setValueLink( String.format( "%s", colDesc.getParameterValue().getBound1()) );
+            } else {
+                result.setValueLink( colDesc.getExpression());
+            }
 		} else { // не параметр ...
 			result.setValueLink( colDesc.getExpression());
 		}
 
 		/* тип ... */
 		try {
-			if (colDesc.getDataType() != null && colDesc.getDataType().className() != null) {
-				result.setValueClass( Class.forName(colDesc.getDataType().className()) );
+			if (colDesc.getDataType() != null && colDesc.getDataType().getClassName() != null) {
+				result.setValueClass( Class.forName(colDesc.getDataType().getClassName()) );
 			} else {
-				result.setValueClass( Class.forName(colDesc.className()) );
+				result.setValueClass( Class.forName(colDesc.getClassName()) );
 			}
 		} catch (ClassNotFoundException ex) {
 			final String msg = String.format( "Column '%s' has invalid value class type: '%s' "
-					, colDesc.getColumnName(), colDesc.className());
+					, colDesc.getColumnName(), colDesc.getClassName());
 			// logger.error(msg, ex);
 			throw new UnsupportedOperationException( msg, ex);
 		}

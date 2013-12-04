@@ -267,7 +267,6 @@
                 <property name="lecm-rpeditor:dataColumnExpression">
                     <title>Data Column Expression</title>
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
                 </property>
                 <property name="lecm-rpeditor:dataColumnClass">
                     <title>Data Column Alfresco Class</title>

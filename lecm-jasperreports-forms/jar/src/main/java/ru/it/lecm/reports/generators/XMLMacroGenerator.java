@@ -9,10 +9,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
 import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
+import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.XmlHelper;
 
@@ -211,7 +213,6 @@ public class XMLMacroGenerator {
      * Ввести в указанный список автоматические переменные.
      * Сейчас вносится алиас для активного описателя отчёта: reportDesc под именем "RDesc"
      *
-     * @param destVars
      */
     protected void initAutoVars(MacroValues destVars) {
         if (this.reportDesc != null) {
@@ -608,14 +609,88 @@ public class XMLMacroGenerator {
             }
         }
 
+        private void expansionParamColumns(ReportDescriptor descriptor, String macroKey) {
+            int index = -1;
+            List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
+            if (columns != null) {
+                // применяем к каждой колонке НД макросы из всех вложенных child-узлов nodeMacros ...
+                this.curVars.calcAllNext(CalcPhase.start); // инициализация ...
+
+                for (ColumnDescriptor colDesc : columns) {
+                    if (colDesc.getParameterValue() == null) {
+                        continue; //учитываем только параметры
+                    }
+                    switch (colDesc.getParameterValue().getType()) {
+                        case RANGE: {
+                            // добавляем два параметра - нижний диапазон + верхний диапазон
+                            String columnName = colDesc.getColumnName();
+
+                            //(1)
+                            colDesc.setColumnName(columnName + ParameterMapper.RANGE_LO_POSTFIX);
+                            index++;
+                            this.doColumnMacroExpansion(macroKey, colDesc, index);
+
+                            //(2)
+                            colDesc.setColumnName(columnName + ParameterMapper.RANGE_HI_POSTFIX);
+                            index++;
+                            this.doColumnMacroExpansion(macroKey, colDesc, index);
+
+                            colDesc.setColumnName(columnName);
+                            break;
+                        }
+                        case VALUE: {
+                            //TODO учесть что значением может быть NodeRef?
+                            index++;
+                            this.doColumnMacroExpansion(macroKey, colDesc, index);
+                            break;
+                        }
+                        case LIST: {
+                            // добавляем два параметра - обычный + с постфиксом _ids (с заменой типа на List)
+                            String className = colDesc.getClassName();
+                            String columnName = colDesc.getColumnName();
+
+                            //(1)
+                            colDesc.setClassName(JavaDataTypeImpl.SupportedTypes.LIST.name());
+                            index++;
+                            this.doColumnMacroExpansion(macroKey, colDesc, index);
+
+                            //(2)
+                            colDesc.setColumnName(columnName + ParameterMapper.IDS_POSTFIX);
+                            index++;
+                            this.doColumnMacroExpansion(macroKey, colDesc, index);
+
+                            colDesc.setColumnName(columnName);
+                            colDesc.setClassName(className);
+                            break;
+                        }
+
+                    }
+                }
+
+                //помимо колонок-параметров нужно добавить еще и СПЕЦ параметры
+                if (!descriptor.getFlags().isMultiRow()) { //карточка объекта - значит будет присутсовать ID
+                    ColumnDescriptor idColumn = new ColumnDescriptorImpl(DataSourceDescriptor.COLNAME_ID, JavaDataTypeImpl.SupportedTypes.STRING);
+                    ColumnDescriptor idNodeColumn = new ColumnDescriptorImpl(DataSourceDescriptor.COLNAME_NODE_ID, JavaDataTypeImpl.SupportedTypes.LONG);
+                    //(1)
+                    index++;
+                    this.doColumnMacroExpansion(macroKey, idColumn, index);
+                    //(2)
+                    index++;
+                    this.doColumnMacroExpansion(macroKey, idNodeColumn, index);
+                }
+            }
+        }
+
         public void doParamsListMacroExpansion(ReportDescriptor descriptor) {
             if (descriptor != null) {
                 if (descriptor.isSubReport() && descriptor instanceof SubReportDescriptorImpl) {//для подотчетов только!!
                     SubReportDescriptorImpl subReport = (SubReportDescriptorImpl)descriptor;
                     ReportDescriptor parentReport = subReport.getOwnerReport();
-                    if (parentReport != null) {
+                    if (parentReport != null) {// для подотчета параметрами будут считаться поля из родительского отчета
                         expansionColumns(parentReport, false, VNAME_PARAM);
                     }
+                } else {
+                    expansionParamColumns(descriptor, VNAME_PARAM);
                 }
             }
 
@@ -625,7 +700,7 @@ public class XMLMacroGenerator {
 
         private void doColumnMacroExpansion(final String macroKey, ColumnDescriptor colDesc, int index) {
             // автоматическая переменная для колокни данных
-            curVars.addVar(macroKey, new ColumnDescValue(index, colDesc)); // "FLD"
+            curVars.addVar(macroKey, new ColumnDescValue(index, colDesc)); // "FLD", "PARAM"
 
             // вычисление значений перед генерацией ...
             curVars.calcAllNext(CalcPhase.pre); // применить авто-назначения ...
@@ -1400,7 +1475,7 @@ public class XMLMacroGenerator {
 
         @Override
         public Object getValue() {
-            return queryText;
+            return queryText.replaceAll("\"", "\\\\\\\\\"");
         }
 
         @Override
