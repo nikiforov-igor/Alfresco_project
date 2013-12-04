@@ -1,7 +1,6 @@
 package ru.it.lecm.reports.model.impl;
 
-import ru.it.lecm.reports.api.model.L18able;
-import ru.it.lecm.reports.api.model.NamedValue;
+import ru.it.lecm.reports.api.model.Mnemonicable;
 import ru.it.lecm.reports.api.model.Valueable;
 
 /**
@@ -9,38 +8,20 @@ import ru.it.lecm.reports.api.model.Valueable;
  * @author rabdullin
  *
  */
-public class NamedValueImpl extends MnemonicNamedItem implements NamedValue {
+public class NamedValue extends MnemonicNamedItem implements Mnemonicable, Valueable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Valueable value;
 
-	public NamedValueImpl() {
-		super();
-	}
-
-	public NamedValueImpl(String mnem, L18able name) {
-		super(mnem, name);
-	}
-
-	public NamedValueImpl(String mnem) {
+	public NamedValue(String mnem) {
 		super(mnem);
 	}
 
-	public NamedValueImpl(String mnem, String value) {
+	public NamedValue(String mnem, String value) {
 		this(mnem);
 		setValue(value);
 	}
-
-/*
-	@Override
-	public int hashCode() {
-		final int factor = 63;
-		int result = super.hashCode();
-		result += result * factor + ((value == null) ? 0 : value.hashCode());
-		return result;
-	}
- */
 
 	@Override
 	public boolean equals(Object x) {
@@ -53,7 +34,7 @@ public class NamedValueImpl extends MnemonicNamedItem implements NamedValue {
 		if (x.getClass().equals(this.getClass()))
 			return false;
 
-		final NamedValueImpl other = (NamedValueImpl) x;
+		final NamedValue other = (NamedValue) x;
 		if (other.value == null) 
 			return this.value == null;
 
@@ -63,7 +44,7 @@ public class NamedValueImpl extends MnemonicNamedItem implements NamedValue {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append( String.format( "\n\t\t NamedValueImpl['%s'='%s']\n", getMnem(), value));
+		builder.append( String.format( "\n\t\t NamedValue['%s'='%s']\n", getMnem(), value));
 		return builder.toString();
 	}
 

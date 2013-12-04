@@ -54,11 +54,6 @@ public class BasicEmployeeInfo {
      */
     public NodeRef unitId = null;
 
-    /**
-     * характеристики связанного системного пользователя
-     */
-    public String userLogin = null;
-
     public BasicEmployeeInfo(NodeRef employeeId) {
         super();
         this.employeeId = employeeId;
@@ -119,15 +114,6 @@ public class BasicEmployeeInfo {
      */
     public String Фамилия() {
         return Utils.coalesce(lastName, "");
-    }
-
-    /**
-     * @return (none null) Первая буква фамилии в верхнем регистре или пусто
-     */
-    public String ФамилияИнициал() {
-        return (Utils.isStringEmpty(lastName))
-                ? ""
-                : lastName.toUpperCase().substring(0, 1);
     }
 
     /**

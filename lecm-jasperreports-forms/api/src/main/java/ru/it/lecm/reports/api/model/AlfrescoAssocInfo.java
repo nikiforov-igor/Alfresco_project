@@ -11,7 +11,6 @@ public interface AlfrescoAssocInfo {
 	/**
 	 * Тип связи Альфреско, наример, для ассоциации "Контрагенты" 
 	 * "lecm-contract:partner-assoc"
-	 * @return
 	 */
 	String getAssocTypeName();
 	void setAssocTypeName(String typeName);

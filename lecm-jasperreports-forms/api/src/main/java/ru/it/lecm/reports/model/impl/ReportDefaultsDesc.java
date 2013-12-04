@@ -2,22 +2,18 @@ package ru.it.lecm.reports.model.impl;
 
 import java.io.Serializable;
 
-import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
-
-public class ReportDefaultsDescImpl 
-		implements ReportDefaultsDesc, Serializable
-{
+public class ReportDefaultsDesc implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String generationTemplate;
     private String subReportGenerationTemplate;
     private String fileExtension;
 
-	public ReportDefaultsDescImpl() {
+	public ReportDefaultsDesc() {
 		super();
 	}
 
-	public ReportDefaultsDescImpl(String fileExtension, String generationTemplate, String subReportGenerationTemplate) {
+	public ReportDefaultsDesc(String fileExtension, String generationTemplate, String subReportGenerationTemplate) {
 		super();
 		this.fileExtension = fileExtension;
 		this.generationTemplate = generationTemplate;
@@ -27,7 +23,6 @@ public class ReportDefaultsDescImpl
 	/**
 	 * Расширение шаблона отчёта (с точкой в начале). Например, для Jasper это ".jrxml"
 	 */
-	@Override
 	public String getFileExtension() {
 		return fileExtension;
 	}
@@ -35,16 +30,13 @@ public class ReportDefaultsDescImpl
 	/**
 	 * Расширение шаблона отчёта (с точкой в начале). Например, для Jasper это ".jrxml"
 	 */
-	@Override
 	public void setFileExtension(String fileExtension) {
 		this.fileExtension = fileExtension;
 	}
 
 	/**
 	 * Шаблон для генерации шаблона отчёта ("шаблон шаблона")
-	 * @return
 	 */
-	@Override
 	public String getGenerationTemplate() {
 		return generationTemplate;
 	}
@@ -52,7 +44,6 @@ public class ReportDefaultsDescImpl
 	/**
 	 * Шаблон для генерации шаблона отчёта ("шаблон шаблона")
 	 */
-	@Override
 	public void setGenerationTemplate(String template) {
 		this.generationTemplate = template;
 	}

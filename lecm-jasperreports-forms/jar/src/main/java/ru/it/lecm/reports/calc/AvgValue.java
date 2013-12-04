@@ -24,7 +24,6 @@ public class AvgValue {
 
 	/**
 	 * Название данной переменной
-	 * @return
 	 */
 	public String getTag() {
 		return tag;
@@ -54,7 +53,6 @@ public class AvgValue {
 
 	/**
 	 * Скорректировать среднее значение с учётом очердного "замера"
-	 * @param value
 	 */
 	public void adjust(float value) {
 		if (++count == 1) { // первая порция данных

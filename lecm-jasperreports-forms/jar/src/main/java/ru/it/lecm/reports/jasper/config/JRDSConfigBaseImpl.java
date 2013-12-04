@@ -1,15 +1,10 @@
 package ru.it.lecm.reports.jasper.config;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.*;
 import ru.it.lecm.reports.api.DataFieldColumn;
-import ru.it.lecm.reports.jasper.utils.MacrosHelper;
+import ru.it.lecm.reports.utils.Utils;
+
+import java.util.*;
 
 /**
  * Реализация для хранения параметров в виде конфы (см args).
@@ -32,8 +27,6 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
     /**
      * Добавить поле с именем из jr-report файла
      *
-     * @param jrFldName
-     * @return
      */
     public DataFieldColumn addField(String jrFldName) {
         DataFieldColumn result = (this.getArgMetaFeilds().contains(jrFldName))
@@ -49,8 +42,6 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
     /**
      * Добавить указанное поле
      *
-     * @param jrFld
-     * @return
      */
     public void addField(DataFieldColumn jrFld) {
         if (jrFld != null) {
@@ -98,7 +89,6 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
     /**
      * Загрузить значения параметров, имена которых имеются в args
      *
-     * @param params
      * @throws JRException
      */
     public void setArgsByJRParams(Map<String, ?> params) throws JRException {
@@ -111,7 +101,7 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
             if (params.containsKey(name)) {
                 final Object jrparam = params.get(name);
                 if (jrparam != null) {
-                    final String value = MacrosHelper.getJRParameterValue(jrparam);
+                    final String value = getJRParameterValue(jrparam);
                     this.args.put(name, value);
                 }
             }
@@ -121,10 +111,8 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
     /**
      * Получить указанный аргумент в виде строки
      *
-     * @param argName
      * @param defaultStr значение по-умолчанию, когда нет аргумента argName или
      *                   он типа список/коллекция
-     * @return
      */
     public String getstr(final String argName, final String defaultStr) {
         if (getArgs().containsKey(argName)) {
@@ -143,9 +131,7 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
     /**
      * Получить указанный аргумент в виде целого
      *
-     * @param argName
      * @param defaultInt значение по-умолчанию, когда нет аргумента argName
-     * @return
      */
     public int getint(final String argName, final int defaultInt) {
         if (getArgs().containsKey(argName)) {
@@ -160,7 +146,6 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
     /**
      * Получить указанный аргумент в виде списка
      *
-     * @param argName
      * @param defaultList значение по-умолчанию, когда нет аргумента argName
      * @return список или defaultList, если нет такого или он другого типа
      */
@@ -176,7 +161,6 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
     /**
      * Получить указанный аргумент в виде списка
      *
-     * @param argName
      * @return список или Null, если нет такого или он другого типа
      */
     @SuppressWarnings("rawtypes")
@@ -187,7 +171,6 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
     /**
      * Получить указанный аргумент в виде мапы
      *
-     * @param argName
      * @param defaultMap значение по-умолчанию, когда нет аргумента argName
      * @return список или defaultMap, если нет такого или он другого типа
      */
@@ -202,6 +185,54 @@ public class JRDSConfigBaseImpl implements JRDSConfig {
 
     public Map<String, Object> getMap(final String argName) {
         return getMap(argName, null);
+    }
+
+    /**
+     * Выполнить макроподстановки в значение valuen
+     */
+    public static String process(Map<String, String> macros, String value) {
+        if (macros == null || value == null || (value.indexOf('<') == -1)) {
+            return value;
+        }
+
+        for (Map.Entry<String, String> e : macros.entrySet()) {
+            if (e.getKey() != null) {
+                value = value.replaceAll("<" + e.getKey() + ">", e.getValue());
+                if (value.indexOf('<') == -1) // больше нет макросов -> конец ц
+                    break; // for
+            }
+        } // for
+        return value;
+    }
+
+    /**
+     * Получение значения JR-параметра в виде строки.
+     * Праметры типа JRValueParameter отрабатываются через их value-значения.
+     *
+     * @param jrparam      параметр
+     * @param defaultValue значение по-умолчанию
+     */
+    public static String getJRParameterValue(Object jrparam, String defaultValue) {
+        String result = null;
+        if (jrparam instanceof JRValueParameter) {
+            final Object value = ((JRValueParameter) jrparam).getValue();
+            if (value != null) {
+                result = value.toString();
+            }
+        }
+        if (jrparam instanceof JRParameter) {
+            final JRExpression expr = ((JRParameter) jrparam).getDefaultValueExpression();
+            if (expr != null) {
+                result = expr.getText();
+            }
+        } else {
+            result = jrparam.toString();
+        }
+        return Utils.dequote((result != null) ? result : defaultValue);
+    }
+
+    public static String getJRParameterValue(Object jrparam) {
+        return getJRParameterValue(jrparam, null);
     }
 }
 

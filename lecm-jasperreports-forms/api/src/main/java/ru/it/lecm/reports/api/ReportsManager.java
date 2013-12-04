@@ -3,9 +3,10 @@ package ru.it.lecm.reports.api;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
-import ru.it.lecm.reports.api.model.ReportDefaultsDesc;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.ReportType;
+import ru.it.lecm.reports.api.model.ReportFileData;
+import ru.it.lecm.reports.model.impl.ReportDefaultsDesc;
+import ru.it.lecm.reports.model.impl.ReportType;
 
 import java.io.IOException;
 import java.util.List;
@@ -112,7 +113,7 @@ public interface ReportsManager {
 	 * Список умочаний для указанного типа отчёта
 	 * @return не NULL список [key=ReportType.Mnem -> value={ file_Extension + template_of_template}]
 	 */
-	ReportDefaultsDesc getReportDefaultsDesc(ReportType rtype);
+    ReportDefaultsDesc getReportDefaultsDesc(ReportType rtype);
 
 
 	/**

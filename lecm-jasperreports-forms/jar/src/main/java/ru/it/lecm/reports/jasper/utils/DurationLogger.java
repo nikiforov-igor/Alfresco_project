@@ -49,14 +49,12 @@ import org.slf4j.Logger;
  * 		date			дата "dd/mm/yy" (без времени суток)
  * 		date_hhmmss		дата до секунд ("dd/mm/yyyy hh:mm:ss")
  *
- * см также метод {@link markDuration}
  */
 public class DurationLogger {
 
 	public static final String TAG_TOO_SLOW = "(!) TOO SLOW";
 
 	public static final String DURATION_MS = "duration, ms: {t}";
-	public static final String DURATION_FILL_S = "start at {start,date_hhmmss}, stop at {stop,date_hhmmss}, duration {t}";
 
 	/**
 	 * Значение по-умолчанию (в мс) для длительностей, которые принимаются "большими"
@@ -64,8 +62,8 @@ public class DurationLogger {
 	public static final long DEFAULT_WARN_DURATION_MS = 2000;
 
 	private long ms_start, ms_end; // мс в нормальном времени
-	private long nano_start, nano_end; // нс в локальном времени для JVM
-	private long warn_duration_ms = DEFAULT_WARN_DURATION_MS; // 2 сек считаем по-умолчанию большим времени
+	private long nano_start;
+    private long warn_duration_ms = DEFAULT_WARN_DURATION_MS; // 2 сек считаем по-умолчанию большим времени
 
 //	private org.apache.log4j.Logger logger;
 //	/**
@@ -100,7 +98,7 @@ public class DurationLogger {
 	 * @param nanotime время в нс
 	 * @return время в мс
 	 */
-	public static final long toMillis( long nanotime) {
+	public static long toMillis( long nanotime) {
 		return nanotime / 1000000;
 	}
 
@@ -109,7 +107,7 @@ public class DurationLogger {
 	 * @param millies время в мс
 	 * @return время в нс
 	 */
-	public static final long toNanos( long millies) {
+	public static long toNanos( long millies) {
 		return millies * 1000000;
 	}
 
@@ -118,38 +116,8 @@ public class DurationLogger {
 	 * @param nanotime время в нс
 	 * @return время в сек
 	 */
-	public static final long toSeconds( long nanotime) {
+	public static long toSeconds( long nanotime) {
 		return nanotime / 1000000000;
-	}
-
-	/**
-	 * @return текущее время в мс, которое считается "большим" для длительности,
-	 * при его превышении выдаётся WARN во время журанлирвоания {@link logCtrlDuration}
-	 */
-	public long getWarn_duration_ms() {
-		return warn_duration_ms;
-	}
-
-	/**
-	 * @param warn_duration_ms время в мс, которое считается "большим" для длительности,
-	 * при его превышении выдаётся WARN во время журанлирвоания {@link logCtrlDuration}
-	 */
-	public void setWarn_duration_ms(long warn_duration_ms) {
-		this.warn_duration_ms = warn_duration_ms;
-	}
-
-	/**
-	 * @return текущее время начала замера, в мс
-	 */
-	public long getMs_start() {
-		return ms_start;
-	}
-
-	/**
-	 * @return текущее время конца замера, в мс
-	 */
-	public long getMs_end() {
-		return ms_end;
 	}
 
 	/**
@@ -158,7 +126,6 @@ public class DurationLogger {
 	 */
 	public long markStart() {
 		this.nano_start = System.nanoTime();
-		// return toMillis(this.nano_start);
 		return this.ms_start = System.currentTimeMillis();
 	}
 
@@ -168,31 +135,9 @@ public class DurationLogger {
 	 * @return длительность в нс, замер продолжается
 	 */
 	public long calcDurationNanos() {
-		this.nano_end = System.nanoTime();
+        long nano_end = System.nanoTime();
 		this.ms_end = System.currentTimeMillis();
 		return nano_end - nano_start;
-	}
-
-	/**
-	 * Выполнить вывод длительности с миллисекундах от последнего маркера начала
-//	 * @return длительность в мс, текущий замер времени НЕ начинается и продолжается.
-	 * @return отформатированная строка с замером, текущий замер времени продолжается.
-	 */
-	public String logDuration() {
-		return fmtDuration(DURATION_MS);
-	}
-
-
-	/**
-	 * Работает аналогично logDuration, но автоматом начинает НОВЫЙ ЗАМЕР времени.
-	 * @param fmt форматная строка для вывода замера (см параметры для fmtDuration::fmt)
-	 * @return отформатированная строка с замером, текущий замер времени продолжается.
-//	 * @return длительность последней операции в мс
-	 */
-	public String logDurationAndStart(String fmt) {
-		final String msg = fmtDuration(fmt);
-		markStart();
-		return msg; // return duration_ms;
 	}
 
 	/**
@@ -281,7 +226,7 @@ public class DurationLogger {
 	 * Если длительность превышает значение warn_duration_ms сообщение
 	 * выводится на уроне WARN иначе на уровне DEBUG.
 	 * @param log целевой журнал
-	 * @param fmt форматная строка (см. форматы для {@link DurationLogger.fmtDuration})
+	 * @param fmt форматная строка (см. форматы)
 	 * @param startNew true, если надо начать новый замер после этого
 	 * @return длительность последней операции в мс
 	 */
@@ -308,7 +253,7 @@ public class DurationLogger {
 	 * Если длительность превышает значение warn_duration_ms, то сообщение
 	 * выводится на уроне WARN иначе на уровне DEBUG.
 	 * @param log целевой журнал
-	 * @param fmt форматная строка (см. форматы для {@link DurationLogger.fmtDuration})
+	 * @param fmt форматная строка (см. формат)
 	 * @return длительность последней операции в мс
 	 */
 	public long logCtrlDuration(Logger log, String fmt) {
@@ -320,7 +265,7 @@ public class DurationLogger {
 
 	/**
 	 * Получить список аргументов для замены макросов (в разных написаниях)
-	 * см их использование в javadoc для {@link logDuration}
+	 * см их использование в javadoc
 	 * @param nanos три времени в нс: [0] начало [1] конец [2] длительность, нс
 	 * @return мап с ключом что заменять (например, "{s:}"
 	 */
@@ -376,22 +321,20 @@ public class DurationLogger {
 			subst[i][0] = subst[i][ (i == 2) ? /*msec*/ 2 : /*date*/ 7];
 
 			final String[] tags = TAGS[i]; // список синонимов для соот-щей переменной Начала или Конца, или Длительности
-			for(int j = 0; j < tags.length; j++) {
-				final String tag = tags[j]; // например, "s"/"start"
-
-				for (int ii = 0; ii < UNITS.length; ii++) {
-					final String value = subst[i][ii];
-					// для разных синонимов замена будет одна и та же ...
-					for (int jj = 0; jj < UNITS[ii].length; jj++) {
-						final String macro =
-								"[{]"
-								+ tag
-								+ (DurationLogger.UNITS[ii][jj].length() > 0 ? ","+DurationLogger.UNITS[ii][jj] : "")
-								+ "[}]";
-						substData.put( macro, value);
-					}
-				}
-			}
+            for (final String tag : tags) {
+                for (int ii = 0; ii < UNITS.length; ii++) {
+                    final String value = subst[i][ii];
+                    // для разных синонимов замена будет одна и та же ...
+                    for (int jj = 0; jj < UNITS[ii].length; jj++) {
+                        final String macro =
+                                "[{]"
+                                        + tag
+                                        + (DurationLogger.UNITS[ii][jj].length() > 0 ? "," + DurationLogger.UNITS[ii][jj] : "")
+                                        + "[}]";
+                        substData.put(macro, value);
+                    }
+                }
+            }
 		}
 		return substData;
 	}
@@ -406,24 +349,23 @@ public class DurationLogger {
 	 * @param todo выполняемое действие
 	 * @return время выполнения в мс
 	 */
-	final static public long exec(Logger log, String infoFmt, long normal_time_ms
+	static public long exec(Logger log, String infoFmt, long normal_time_ms
 			, Runnable todo)
 	{
 		final DurationLogger d = new DurationLogger(normal_time_ms);
 		todo.run();
-		final long duration_ms = d.logCtrlDuration(log, infoFmt);
-		return duration_ms;
+        return d.logCtrlDuration(log, infoFmt);
 	}
 
 	/**
 	 * Замерить время выполнения метода, вывести сообщение с замером времени,
-	 * если время превышает предел {@link DEFAULT_WARN_DURATION_MS} - вывести прудупреждение.
+	 * если время превышает предел  - вывести прудупреждение.
 	 * @param log журнал, в который выполнять логирование
 	 * @param infoFmt формат выводимого сообщения (см возможные параметры в fmtDuration)
 	 * @param todo выполняемое действие
 	 * @return время выполнения в мс
 	 */
-	final static public long exec(Runnable todo, Logger log, String infoFmt) {
+	static public long exec(Runnable todo, Logger log, String infoFmt) {
 		return exec(log, infoFmt, DEFAULT_WARN_DURATION_MS, todo);
 	}
 }

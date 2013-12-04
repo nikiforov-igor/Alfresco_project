@@ -53,11 +53,6 @@ public class ReportDSContextImpl implements ReportDSContext {
         this.serviceRegistry = serviceRegistry;
     }
 
-    @Override
-    public SubstitudeBean getSubstitudeService() {
-        return substitudeService;
-    }
-
     public void setSubstitudeService(SubstitudeBean substitudeServiceBean) {
         this.substitudeService.setRealBean(substitudeServiceBean);
     }

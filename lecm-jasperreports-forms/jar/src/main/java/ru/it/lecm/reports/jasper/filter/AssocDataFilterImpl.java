@@ -1,17 +1,15 @@
 package ru.it.lecm.reports.jasper.filter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
-
 import ru.it.lecm.reports.api.AssocDataFilter;
 import ru.it.lecm.reports.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Фильтр данных для отфильтровывания объектов по ассоциациям (уровень
@@ -27,7 +25,7 @@ public class AssocDataFilterImpl implements AssocDataFilter {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("AssocDataFilter [ assoc count: ");
-		builder.append( (assocList == null) ? "NULL" : assocList.size() ).append("\n\t ");
+		builder.append(assocList.size()).append("\n\t ");
         builder.append(Utils.getAsString(assocList, "\n\t"));
         builder.append("\n]");
         return builder.toString();
@@ -48,10 +46,6 @@ public class AssocDataFilterImpl implements AssocDataFilter {
     @Override
     public void addAssoc(AssocDesc desc) {
         assocList.add(desc);
-    }
-
-    public void addAssoc(AssocKind kind, QName type, QName assocType, NodeRef id) {
-        addAssoc(new AssocDesc(kind, assocType, id, type));
     }
 
     @Override

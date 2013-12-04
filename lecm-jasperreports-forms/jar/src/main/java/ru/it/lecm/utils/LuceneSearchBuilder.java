@@ -1,15 +1,12 @@
 package ru.it.lecm.utils;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-
 import ru.it.lecm.reports.utils.Utils;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 
 /**
@@ -53,10 +50,6 @@ public class LuceneSearchBuilder {
         return nameService;
     }
 
-    public void setNameService(NamespaceService nameService) {
-        this.nameService = nameService;
-    }
-
     public StringBuilder getQuery() {
         if (bquery == null) {
             bquery = new StringBuilder();
@@ -66,10 +59,6 @@ public class LuceneSearchBuilder {
 
     public void setQuery(StringBuilder bquery) {
         this.bquery = bquery;
-    }
-
-    protected boolean emmitOneTypeCond(final String typeName, String prefix) {
-        return emmitOneTypeCond(typeName, prefix, true);
     }
 
     protected boolean emmitOneTypeCond(final String typeName, String prefix, boolean strictCond) {
@@ -151,44 +140,6 @@ public class LuceneSearchBuilder {
         return true;
     }
 
-    public boolean emmitTypeCond(final QName qType) {
-        return emmitTypeCond(qType, null, true);
-    }
-
-    /**
-     * Добавить провеку на соот-вие id узла
-     *
-     * @param nodeRef узел, если NULL ничего не добавляется
-     * @param prefix  префикс, добавляемый перед условием на тип  (например " AND")
-     *                , может быть NULL
-     * @return true, если условие было добавлено
-     */
-    public boolean emmitIdCond(final NodeRef nodeRef, final String prefix) {
-        return nodeRef != null && emmitIdCond(nodeRef.toString(), prefix);
-    }
-
-    public boolean emmitIdCond(final NodeRef nodeRef) {
-        return emmitIdCond(nodeRef, null);
-    }
-
-    /**
-     * Добавить провеку на соот-вие id узла
-     *
-     * @param sNodeRef ref строка узла, если NULL ничего не добавляется
-     * @param prefix   префикс, добавляемый перед условием на тип  (например " AND")
-     *                 , может быть NULL
-     * @return true, если условие было добавлено
-     */
-    public boolean emmitIdCond(final String sNodeRef, final String prefix) {
-        if (sNodeRef == null) {
-            return false;
-        }
-        if (prefix != null)
-            getQuery().append(prefix);
-        getQuery().append(" ID:").append(Utils.quoted(sNodeRef));
-        return true;
-    }
-
     /**
      * Выполнить вставку условия для проверки равенства поля указанной константе.
      * Экранированные кавычки для значения добавляются автоматически.
@@ -211,49 +162,6 @@ public class LuceneSearchBuilder {
                 .append(":\"")
                 .append(value.toString())
                 .append("\"");
-        return true;
-    }
-
-    /**
-     * Выполнить вставку условия для проверки нахождения числа внутри интервала
-     *
-     * @param prefix вставляется перед сгенерированным условием, если оно будет получено
-     * @param fld    ссылка на поле (экранирование '-' и ':' не требуется)
-     * @param lower  граница снизу или Null
-     * @param upper  граница сверху или Null
-     * @return true, если условие было добавлено (т.е. если задана хотя бы одна граница)
-     */
-    public boolean emmitNumericIntervalCond(final String prefix, final String fld, Number lower, Number upper) {
-        final String cond = Utils.emmitNumericIntervalCheck(Utils.luceneEncode(fld), lower, upper);
-        if (cond == null) {
-            return false;
-        }
-        if (prefix != null) {
-            getQuery().append(prefix);
-        }
-        getQuery().append(" ").append(cond);
-        return true;
-    }
-
-
-    /**
-     * Выполнить вставку условия для проверки нахождения даты внутри интервала
-     *
-     * @param prefix вставляется перед сгенерированным условием, если оно будет получено
-     * @param fld    ссылка на поле (экранирование '-' и ':' не требуется)
-     * @param after  дата после которой или Null
-     * @param before дата перед которой или Null
-     * @return true, если условие было добавлено (т.е. если задана хотя бы одна дата)
-     */
-    public boolean emmitDateIntervalCond(final String prefix, final String fld, Date after, Date before) {
-        final String cond = Utils.emmitDateIntervalCheck(Utils.luceneEncode(fld), after, before);
-        if (cond == null) {
-            return false;
-        }
-        if (prefix != null) {
-            getQuery().append(prefix);
-        }
-        getQuery().append(" ").append(cond);
         return true;
     }
 

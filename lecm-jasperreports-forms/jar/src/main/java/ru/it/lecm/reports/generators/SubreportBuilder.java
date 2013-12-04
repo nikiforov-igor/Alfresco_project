@@ -8,7 +8,7 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.reports.api.model.ItemsFormatDescriptor;
+import ru.it.lecm.reports.model.impl.ItemsFormatDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.MultiplySortObject;

@@ -1,21 +1,21 @@
 package ru.it.lecm.reports.model.impl;
 
-import java.io.Serializable;
-
-import ru.it.lecm.reports.api.model.ItemsFormatDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 
-public class ItemsFormatDescriptorImpl
-		implements ItemsFormatDescriptor, Serializable
+import java.io.Serializable;
+
+public class ItemsFormatDescriptor
+		implements Serializable
 {
 	private static final long serialVersionUID = 1L;
+    public static final String LIST_MARKER = "*";
 
-	private String formatString, itemsDelimiter = ",", ifEmptyTag = "";
+    private String formatString, itemsDelimiter = ",", ifEmptyTag = "";
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("ItemsFormatDescriptorImpl [");
+		builder.append("ItemsFormatDescriptor [");
 		builder.append("ifEmptyTag '").append( Utils.expandToCharPairs(ifEmptyTag)).append("'");
 		builder.append(", delimiter '").append( Utils.expandToCharPairs(itemsDelimiter)).append("'");
 		builder.append(", format '").append( Utils.expandToCharPairs(formatString)).append("'");
@@ -23,32 +23,26 @@ public class ItemsFormatDescriptorImpl
 		return builder.toString();
 	}
 
-	@Override
 	public String getIfEmptyTag() {
 		return ifEmptyTag;
 	}
 
-	@Override
 	public void setIfEmptyTag(String ifEmptyTag) {
 		this.ifEmptyTag = ifEmptyTag;
 	}
 
-	@Override
 	public String getFormatString() {
 		return formatString;
 	}
 
-	@Override
 	public void setFormatString(String formatString) {
 		this.formatString = formatString;
 	}
 
-	@Override
 	public String getItemsDelimiter() {
 		return itemsDelimiter;
 	}
 
-	@Override
 	public void setItemsDelimiter(String delimiter) {
 		this.itemsDelimiter = delimiter;
 	}

@@ -10,7 +10,7 @@ import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
-import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
+import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.utils.Utils;
 
 import java.sql.Connection;
@@ -61,7 +61,7 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
                 int columnType = resultSet.getMetaData().getColumnType(i);
 
                 JRDesignField field = new JRDesignField();
-                field.setValueClassName(JavaDataTypeImpl.SupportedTypes.findTypeBySQL(columnType).javaDataType().getClassName());
+                field.setValueClassName(JavaDataType.SupportedTypes.findTypeBySQL(columnType).javaDataType().getClassName());
                 field.setName(columnName);
 
                 fields.add(field);

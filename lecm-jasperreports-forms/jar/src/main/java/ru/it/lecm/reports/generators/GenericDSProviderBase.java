@@ -19,7 +19,7 @@ import ru.it.lecm.reports.api.AssocDataFilter;
 import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
@@ -380,8 +380,6 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
                                 result.addAssoc(new AssocDataFilter.AssocDesc(kind, qnAssocType, targetType, idsTarget));
                             }
                         }
-                    } else {
-                        // TODO добавить обратку более сложных ссылок
                     }
                 }
             } catch (Exception ignored) {

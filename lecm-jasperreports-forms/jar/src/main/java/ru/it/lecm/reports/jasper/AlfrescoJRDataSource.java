@@ -155,9 +155,7 @@ public class AlfrescoJRDataSource implements JRDataSource {
         final HashMap<String, Object> result = new HashMap<String, Object>();
         if (this.context.getJrSimpleProps() != null) {
             // все свойства включаем в набор с пустыми значениями
-            int i = 0;
             for (String fldName : this.context.getJrSimpleProps()) {
-                i++;
                 if (!ReportDSContextImpl.isCalcField(fldName)) { // обычное поле
                     result.put(fldName, null);
                 }

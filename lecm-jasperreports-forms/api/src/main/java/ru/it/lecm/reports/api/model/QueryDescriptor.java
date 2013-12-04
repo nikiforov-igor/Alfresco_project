@@ -25,7 +25,6 @@ public interface QueryDescriptor extends Mnemonicable {
 	/**
 	 * Можно присвоить сразу список - несколько значений через запятую или тчк-с-з.
 	 * Фактически вызовет {@link #setSupportedNodeTypes}.
-	 * @param value
 	 */
 	void setPreferedNodeType(String value);
 
@@ -36,14 +35,13 @@ public interface QueryDescriptor extends Mnemonicable {
 	List<String> getSupportedNodeTypes();
 
 	/**
-	 * @values Список типов, которые данные дескриптов может обслуживать 
+	 * Список типов, которые данные дескриптов может обслуживать
 	 */
 	void setSupportedNodeTypes(List<String> values);
 
 	/**
 	 * Вернуть true, если указанный тип поддерживается данным дескриптором (отчётом)
 	 * @param qname короткое или полное название типма
-	 * @return
 	 */
 	boolean isTypeSupported(String qname);
 }

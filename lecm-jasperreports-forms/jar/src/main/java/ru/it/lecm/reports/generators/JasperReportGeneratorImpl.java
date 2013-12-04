@@ -11,13 +11,12 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
-import ru.it.lecm.reports.api.ReportFileData;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.ReportFileDataImpl;
+import ru.it.lecm.reports.api.model.ReportFileData;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -45,7 +44,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
         PropertyCheck.mandatory(this, "services", getServices());
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 
-        ReportFileData result = new ReportFileDataImpl();
+        ReportFileData result = new ReportFileData();
 
         final String reportFileName = String.format("%s.jasper", reportDesc.getMnem());
 

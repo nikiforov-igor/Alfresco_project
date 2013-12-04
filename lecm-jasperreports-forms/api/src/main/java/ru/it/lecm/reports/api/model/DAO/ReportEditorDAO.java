@@ -2,9 +2,9 @@ package ru.it.lecm.reports.api.model.DAO;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.ReportTemplate;
+import ru.it.lecm.reports.model.impl.ReportTemplate;
 
 /**
  * Служба получения дексрипторов отчётов lecm-редактора отчётов из Альфреско

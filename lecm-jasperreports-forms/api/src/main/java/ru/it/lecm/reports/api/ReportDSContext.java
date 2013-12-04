@@ -1,11 +1,9 @@
 package ru.it.lecm.reports.api;
 
-import java.util.Map;
-
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 
-import ru.it.lecm.base.beans.SubstitudeBean;
+import java.util.Map;
 
 /**
  * Контекст выполнения для НД отчёта.
@@ -18,7 +16,6 @@ public interface ReportDSContext {
 
 	/** "well-known" Службы */
 	public ServiceRegistry getRegistryService();
-	public SubstitudeBean getSubstitudeService();
 
 	/** фильтр ассоциированных данных */
 	public DataFilter getFilter();

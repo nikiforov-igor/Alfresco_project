@@ -1,17 +1,6 @@
 package ru.it.lecm.reports.jasper.config;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import net.sf.jasperreports.engine.JRException;
-
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -19,13 +8,18 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
 import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
-import ru.it.lecm.reports.jasper.utils.MacrosHelper;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.reports.xml.XmlHelper;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Реализация для чтения конфы args из XML.
@@ -44,38 +38,16 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
     // параметр в this.args с названием файла XML конфигурации
     final static public String TAG_CONFIGNAME = "xmlconfigName";
 
-    /**
-     * Call-back для реакции на загрузку конфы или для выполнения сложной
-     * прогрузки конфы
-     *
-     * @author rabdullin
-     */
-    public interface ConfigListener {
-        /**
-         * Загрузить из указанного узла
-         *
-         * @param rootElem
-         * @param info     инфорация по читаемому потоку
-         */
-        void onLoad(Element rootElem, String info);
-    }
-
     private ReportsManager reportManager;
-    private Set<ConfigListener> cfgListeners;
 
     /**
      * Создание конфигуратора, с загрузкой необходимых конфигурационных файлов из указанного хранилища
      *
-     * @param mgr
      */
     public JRDSConfigXML(ReportsManager mgr) {
         super();
         this.reportManager = mgr;
     }
-
-	/* Fields Descriptors - look at DSXMLProducer */
-
-    final static String JR_COLNAMEPREFIX = "COL_"; // префикс названий колонок для передачи в jasper
 
     @Override
     protected void setDefaults(Map<String, Object> defaults) {
@@ -110,10 +82,6 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
         return reportManager;
     }
 
-    public void setReportManager(ReportsManager reportMgr) {
-        this.reportManager = reportMgr;
-    }
-
     static final String PARAM_CMIS_XMLCONFIG = "CMIS_XMLCONFIG";
 
     /**
@@ -131,7 +99,7 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
             if (jrparam == null) {
                 throw new RuntimeException(String.format("Paramter '%s' cannot be empty or must be absent", PARAM_CMIS_XMLCONFIG));
             }
-            final String configName = MacrosHelper.getJRParameterValue(jrparam);
+            final String configName = getJRParameterValue(jrparam);
             getArgs().put(TAG_CONFIGNAME, configName);
             loadConfig();
             return;
@@ -168,9 +136,6 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
         return false; // if errors
     }
 
-    /**
-     * @param xml
-     */
 /* 
  * XML Example:
 <?xml version="1.0" encoding="UTF-8"?>
@@ -232,41 +197,10 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
 
             // чтение мета-описаний полей ...
             xmlGetMetaFields(rootElem, info);
-
-            // call-back
-            notifyXmlConfigListeners(rootElem, info);
-
         } catch (Throwable t) {
             final String msg = "Problem loading " + info;
             logger.error(msg, t);
             throw new RuntimeException(msg, t);
-        }
-    }
-
-
-    private void notifyXmlConfigListeners(Element rootElem, String info) {
-        if (cfgListeners != null) {
-            for (ConfigListener conf : cfgListeners) {
-                conf.onLoad(rootElem, info);
-            } // for
-        }
-    }
-
-    public void addListener(ConfigListener listener) {
-        if (listener == null) {
-            return;
-        }
-
-        if (this.cfgListeners == null) {
-            this.cfgListeners = new HashSet<ConfigListener>(1);
-        }
-        this.cfgListeners.add(listener);
-    }
-
-
-    public void remListener(ConfigListener listener) {
-        if ((listener != null) && (this.cfgListeners != null)) {
-            this.cfgListeners.remove(listener);
         }
     }
 

@@ -6,13 +6,12 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType.Type;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
-import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
-import ru.it.lecm.reports.model.impl.JavaDataTypeImpl.SupportedTypes;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.JavaDataType;
+import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
 
 import java.util.*;
@@ -137,10 +136,10 @@ public class ParameterMapper {
                                 // для простых значений явно зададим один элемент
                                 bound = paramValue;
 
-                                JavaDataTypeImpl.SupportedTypes type = null;
+                                JavaDataType.SupportedTypes type = null;
                                 String destClassName = colDesc.getDataType().getClassName();
                                 if (!ru.it.lecm.reports.utils.Utils.isStringEmpty(destClassName)) {
-                                    type = JavaDataTypeImpl.SupportedTypes.findType(destClassName);
+                                    type = JavaDataType.SupportedTypes.findType(destClassName);
                                 }
 
                                 if (type != null) {
@@ -227,7 +226,7 @@ public class ParameterMapper {
         ColumnDescriptor result = dsDesc.findColumnByName(colName);
         Object destValue = null;
         if (result == null) { // создание новой колонки ...
-            result = new ColumnDescriptorImpl(colName, colType);
+            result = new ColumnDescriptor(colName, colType);
 
             dsDesc.getColumns().add(result);
             destValue = value;

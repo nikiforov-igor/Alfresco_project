@@ -11,7 +11,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.utils.Utils;

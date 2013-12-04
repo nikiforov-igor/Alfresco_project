@@ -11,7 +11,7 @@ import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
 import org.alfresco.util.PropertyCheck;
 
 import ru.it.lecm.reports.api.DataFieldColumn;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.generators.OpenOfficeTemplateGenerator;
 import ru.it.lecm.reports.generators.SubreportBuilder;
@@ -57,6 +57,7 @@ public class OpenOfficeFillManager {
         }
 
         /*for (String key : parameters.keySet()) {
+            //TODO точка передачи параметров в OpenOffice отчет
             props.put(key, parameters.get(key));
         }*/
 

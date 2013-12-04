@@ -3,12 +3,8 @@ package ru.it.lecm.reports.model.impl;
 import java.util.Set;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
-import ru.it.lecm.reports.api.model.FlagsExtendable;
-import ru.it.lecm.reports.api.model.JavaDataType;
-import ru.it.lecm.reports.api.model.NamedValue;
-import ru.it.lecm.reports.api.model.ParameterTypedValue;
-import ru.it.lecm.reports.model.impl.JavaDataTypeImpl.SupportedTypes;
+import ru.it.lecm.reports.api.model.*;
+import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
 
 /**
@@ -17,7 +13,7 @@ import ru.it.lecm.reports.utils.Utils;
  *
  * @author rabdullin
  */
-public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDescriptor {
+public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable, L18able, FlagsExtendable, Comparable<ru.it.lecm.reports.model.impl.ColumnDescriptor> {
     private static final long serialVersionUID = 1L;
 
     private JavaDataType dataType;
@@ -30,16 +26,16 @@ public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDes
 
     private int order = 0;
 
-    public ColumnDescriptorImpl() {
+    public ColumnDescriptor() {
         super();
     }
 
-    public ColumnDescriptorImpl(String colname, SupportedTypes type) {
+    public ColumnDescriptor(String colname, SupportedTypes type) {
         super(((type == null) ? null : type.javaDataType().getClassName()), colname);
         this.dataType = (type == null) ? null : type.javaDataType();
     }
 
-    public ColumnDescriptorImpl(String colname) {
+    public ColumnDescriptor(String colname) {
         this(colname, null);
     }
 
@@ -70,7 +66,7 @@ public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDes
             return false;
         if (getClass() != obj.getClass())
             return false;
-        final ColumnDescriptorImpl other = (ColumnDescriptorImpl) obj;
+        final ColumnDescriptor other = (ColumnDescriptor) obj;
 
         if (this.isSpecial() != other.isSpecial())
             return false;
@@ -111,7 +107,7 @@ public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDes
 
     @Override
     public String toString() {
-        return "ColumnDescriptorImpl ["
+        return "ColumnDescriptor ["
                 + "colname '" + getColumnName() + "'"
                 + ", dataType " + dataType
                 + (isSpecial() ? ", special" : "")
@@ -130,32 +126,37 @@ public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDes
         return this.flagsExtendable;
     }
 
-    @Override
+    /**
+     * Мнемоника колонки - для использования как ссылка на колонку в конфигурации,
+     * request-аргументах (если не задано явно название праметра)
+     */
     public String getColumnName() {
         return getMnem();
     }
 
-    @Override
     public void setColumnName(String columnName) {
         setMnem(columnName);
     }
 
-    @Override
+    /**
+     * Выражение в терминах Провайдера НД для получения значения колонки.
+     * Сейчас используется так:
+     *    1) значения внутри одианрых "{...}" принимаются за ссылки на поля или ассоциации,
+     *    2) значения внутри двойных "{{...}}" - данные для провайдера
+     *    3) другие воспринимаются как константы
+     */
     public String getExpression() {
         return this.expression;
     }
 
-    @Override
     public void setExpression(String value) {
         this.expression = value;
     }
 
-    @Override
     public JavaDataType getDataType() {
         return this.dataType;
     }
 
-    @Override
     public void setDataType(JavaDataType value) {
         if (Utils.isSafelyEquals(this.dataType, value)) {
             return;
@@ -170,26 +171,23 @@ public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDes
             return;
         }
         super.setClassName(valueClazz);
-        final SupportedTypes t = JavaDataTypeImpl.SupportedTypes.findType(getClassName());
+        final SupportedTypes t = JavaDataType.SupportedTypes.findType(getClassName());
         setDataType(t == null ? null : t.javaDataType());
     }
 
-    @Override
     public ParameterTypedValue getParameterValue() {
         return this.parameterTypedValue;
     }
 
-    @Override
     public void setParameterValue(ParameterTypedValue value) {
         this.parameterTypedValue = value;
     }
 
-    @Override
+    /** связанный тип параметра альфреско */
     public String getAlfrescoType() {
         return this.alfrescoType;
     }
 
-    @Override
     public void setAlfrescoType(String alfrescoType) {
         this.alfrescoType = alfrescoType;
     }
@@ -206,16 +204,22 @@ public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDes
         }
     }
 
-    @Override
+    /**
+     * Является ли колонка спецальной, например, константой для запроса или
+     * чем-то подобным. По-умолчанию false. Специальные колонки не включаются
+     * автоматом в шаблоны отчётов в часть вывода.
+     */
     public boolean isSpecial() {
         return this.special;
     }
 
-    @Override
     public void setSpecial(boolean flag) {
         this.special = flag;
     }
 
+    /**
+     * Порядковый номер в списке выбора параметров (сравнение тоже в порядке order)
+     */
     public int getOrder() {
         return order;
     }
@@ -225,11 +229,10 @@ public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDes
     }
 
     @Override
-    public int compareTo(ColumnDescriptor other) {
+    public int compareTo(ru.it.lecm.reports.model.impl.ColumnDescriptor other) {
         return this.getOrder() - other.getOrder();
     }
 
-    @Override
     public String getQNamedExpression() {
         if (this.expression == null) {
             return null;
@@ -237,14 +240,12 @@ public class ColumnDescriptorImpl extends JavaClassableImpl implements ColumnDes
         return this.expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
     }
 
-    public void assign(ColumnDescriptor srcCol) {
+    public void assign(ru.it.lecm.reports.model.impl.ColumnDescriptor srcCol) {
         if (srcCol.getDataType() != null) {
             this.setDataType(srcCol.getDataType());
         }
 
-        if (srcCol instanceof ColumnDescriptorImpl) {
-            this.setL18Name(((ColumnDescriptorImpl) srcCol).getL18Name());
-        }
+        this.setL18Name((srcCol).getL18Name());
 
         this.setExpression(srcCol.getExpression());
         this.setSpecial(srcCol.isSpecial());

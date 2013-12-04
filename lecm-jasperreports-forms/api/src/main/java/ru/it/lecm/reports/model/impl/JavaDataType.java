@@ -1,10 +1,15 @@
 package ru.it.lecm.reports.model.impl;
 
-import ru.it.lecm.reports.api.model.JavaDataType;
+import ru.it.lecm.reports.api.model.JavaClassable;
+import ru.it.lecm.reports.api.model.L18able;
+import ru.it.lecm.reports.api.model.Mnemonicable;
 import ru.it.lecm.reports.utils.ArgsHelper;
 
 import java.sql.Types;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Тип данных java в шаблонах.
@@ -13,10 +18,10 @@ import java.util.*;
  *
  * @author rabdullin
  */
-public class JavaDataTypeImpl extends JavaClassableImpl implements JavaDataType {
+public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mnemonicable, L18able {
     private static final long serialVersionUID = 1L;
 
-    protected JavaDataTypeImpl(String className) {
+    protected JavaDataType(String className) {
         super(className);
     }
 
@@ -105,7 +110,7 @@ public class JavaDataTypeImpl extends JavaClassableImpl implements JavaDataType 
         final private JavaDataType javaDataType;
 
         private SupportedTypes(String clazzName) {
-            javaDataType = (clazzName != null) ? new JavaDataTypeImpl(clazzName) : null;
+            javaDataType = (clazzName != null) ? new JavaDataType(clazzName) : null;
         }
 
         public JavaDataType javaDataType() {

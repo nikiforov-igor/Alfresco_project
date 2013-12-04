@@ -11,7 +11,6 @@ import org.alfresco.service.namespace.QName;
  */
 public interface AssocDataFilter extends DataFilter {
 
-
 	/**
 	 * Типы ассоциации
 	 */
@@ -23,18 +22,13 @@ public interface AssocDataFilter extends DataFilter {
 	}
 
 	/**
-	 * Добавить условие для ассоциации 
-	 * @param type тип на другом конце связи или Null 
-	 * @param assocType тип связи-ассоциации
-	 * @param idAssoc связанный узел
-	 * @param kind вид самой связи
+	 * Добавить условие для ассоциации
 	 */
 	void addAssoc( AssocDesc desc);
 
 
 	/**
 	 * Получить текущий набор фильтруемых связей (сформированный addAssoc)
-	 * @return
 	 */
 	List<AssocDesc> getAssocList();
 
@@ -52,14 +46,6 @@ public interface AssocDataFilter extends DataFilter {
 		public final List<NodeRef> ids;
 		public final AssocKind kind; // true = child association descriptor, false = parent
 
-		public AssocDesc(AssocKind kind, QName assocType, NodeRef id, QName type) {
-			this(kind, assocType, type, id == null ? null : Arrays.asList(id));
-		}
-
-		public AssocDesc(AssocKind kind, QName assoctype, NodeRef toId) {
-			this(kind, assoctype, toId, (QName) null);
-		}
-
 		/**
 	 	* Добавить список из допустимых вариантов объектов на втором конце
 		 */
@@ -74,7 +60,6 @@ public interface AssocDataFilter extends DataFilter {
 
 		/**
 		 * Проверить входит ли указанный узел в допустимые для данного описания.
-		 * @param id
 		 * @return true, если id присутсвует в перечисленных/допустимых узлах,
 		 * т.е. содержится в this.ids или когда this.ids == null.
 		 */

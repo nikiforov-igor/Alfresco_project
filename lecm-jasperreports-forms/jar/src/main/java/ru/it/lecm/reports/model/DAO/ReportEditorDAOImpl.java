@@ -15,7 +15,9 @@ import ru.it.lecm.reports.beans.ReportsManagerImpl;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.model.impl.*;
-import ru.it.lecm.reports.model.impl.JavaDataTypeImpl.SupportedTypes;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.ItemsFormatDescriptor;
+import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 
@@ -222,9 +224,9 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
             // источник данных для вложенного списка полей должен быть указан как query
             String sourceLink = result.getFlags().getText();
-            if (Utils.isStringEmpty(sourceLink)) {
+            /*if (Utils.isStringEmpty(sourceLink)) {
                 //TODO точка расширения получения источника для подотчета
-            }
+            }*/
             subResult.setSourceListExpression(sourceLink);
 
             // тип данных для вложенного списка полей должен быть указан в поле Использовать для типов
@@ -235,7 +237,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
             Map<String, String> customFlags = result.getFlags().getFlagsMap();
             if (customFlags != null && customFlags.size() > 0) {
-                ItemsFormatDescriptor formatDesc = new ItemsFormatDescriptorImpl();
+                ItemsFormatDescriptor formatDesc = new ItemsFormatDescriptor();
 
                 String format = customFlags.get("format");
                 if (format != null) {
@@ -292,7 +294,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
                 for (String flagStr : cfStr) {
                     String[] flag = flagStr.split("=");
                     if (flag.length == 2) {
-                        result.flags().add(new NamedValueImpl(flag[0], flag[1]));
+                        result.flags().add(new NamedValue(flag[0], flag[1]));
                     }
                 }
             }
@@ -306,7 +308,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
         final Map<QName, Serializable> map = getServices().getServiceRegistry().getNodeService().getProperties(node);
 
-        final ReportTypeImpl result = new ReportTypeImpl();
+        final ReportType result = new ReportType();
         if (map != null) {
             result.setMnem(getString(map, PROP_T_RTYPE_CODE));
             setL18Name(result, map);
@@ -315,12 +317,12 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         return result;
     }
 
-    protected ReportProviderDescriptorImpl createReportProvider(NodeRef node) {
+    protected ReportProviderDescriptor createReportProvider(NodeRef node) {
         if (node == null) {
             return null;
         }
 
-        final ReportProviderDescriptorImpl result = new ReportProviderDescriptorImpl();
+        final ReportProviderDescriptor result = new ReportProviderDescriptor();
         final Map<QName, Serializable> map = getServices().getServiceRegistry().getNodeService().getProperties(node);
         if (map != null) {
             result.setMnem(getString(map, PROP_T_RPROVIDER_CODE));
@@ -330,14 +332,14 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         return result;
     }
 
-    protected ReportTemplateImpl createReportTemplate(NodeRef node) {
+    protected ReportTemplate createReportTemplate(NodeRef node) {
         if (node == null) {
             return null;
         }
 
         final NodeService nodeService = getServices().getServiceRegistry().getNodeService();
 
-        final ReportTemplateImpl result = new ReportTemplateImpl();
+        final ReportTemplate result = new ReportTemplate();
         setProps_ReportTemplate(result, nodeService.getProperties(node), node);
         return result;
     }
@@ -396,7 +398,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         if (node == null) {
             return null;
         }
-        final ColumnDescriptorImpl result = new ColumnDescriptorImpl();
+        final ColumnDescriptor result = new ColumnDescriptor();
         setProps_DataColumn(result, node);
         return result;
     }

@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.reports.api.ReportFileData;
 import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.api.model.ReportFileData;
 
 public class ReportManagerJavascriptExtension extends BaseWebScript {
     public final static String REPORTS_EDITOR_URI = "http://www.it.ru/logicECM/reports/editor/1.0";

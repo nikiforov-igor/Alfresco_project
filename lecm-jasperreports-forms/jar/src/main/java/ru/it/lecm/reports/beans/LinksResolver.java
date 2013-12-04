@@ -7,7 +7,7 @@ import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.generators.SubreportBuilder;
 import ru.it.lecm.reports.jasper.ProxySubstitudeBean;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
-import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
+import ru.it.lecm.reports.model.impl.JavaDataType;
 
 import java.util.*;
 
@@ -76,7 +76,7 @@ public class LinksResolver {
 
         // типизация value согласно указанному классу ...
         if (!ru.it.lecm.reports.utils.Utils.isStringEmpty(destClassName)) {
-            final JavaDataTypeImpl.SupportedTypes type = JavaDataTypeImpl.SupportedTypes.findType(destClassName);
+            final JavaDataType.SupportedTypes type = JavaDataType.SupportedTypes.findType(destClassName);
             if (type == null) {
                 return value;
             } else {

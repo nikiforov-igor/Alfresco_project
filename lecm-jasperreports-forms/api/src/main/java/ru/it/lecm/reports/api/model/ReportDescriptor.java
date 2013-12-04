@@ -1,5 +1,10 @@
 package ru.it.lecm.reports.api.model;
 
+import ru.it.lecm.reports.model.impl.ReportFlags;
+import ru.it.lecm.reports.model.impl.ReportProviderDescriptor;
+import ru.it.lecm.reports.model.impl.ReportTemplate;
+import ru.it.lecm.reports.model.impl.ReportType;
+
 import java.util.List;
 
 public interface ReportDescriptor extends Mnemonicable, L18able {

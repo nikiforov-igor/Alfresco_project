@@ -1,7 +1,5 @@
 package ru.it.lecm.reports.model.impl;
 
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
-import ru.it.lecm.reports.api.model.ItemsFormatDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 
 import java.util.*;

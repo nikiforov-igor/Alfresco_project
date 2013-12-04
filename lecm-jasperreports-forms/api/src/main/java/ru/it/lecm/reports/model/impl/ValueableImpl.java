@@ -8,16 +8,10 @@ public class ValueableImpl implements Valueable, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-
 	private String value;
 
 	public ValueableImpl() {
 		super();
-	}
-
-	public ValueableImpl(String value) {
-		super();
-		this.value = value;
 	}
 
 	public String getValue() {
@@ -53,9 +47,7 @@ public class ValueableImpl implements Valueable, Serializable {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		// builder.append("value ");
 		builder.append(value);
 		return builder.toString();
 	}
-	
 }

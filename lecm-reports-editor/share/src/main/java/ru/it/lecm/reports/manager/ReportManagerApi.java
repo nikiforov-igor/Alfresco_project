@@ -1,9 +1,5 @@
 package ru.it.lecm.reports.manager;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
@@ -12,15 +8,15 @@ import org.json.JSONObject;
 import org.springframework.extensions.webscripts.ScriptRemote;
 import org.springframework.extensions.webscripts.connector.Response;
 import org.springframework.extensions.webscripts.connector.ResponseStatus;
-
 import ru.it.lecm.reports.api.ReportInfo;
-import ru.it.lecm.reports.api.ScriptApiReportManager;
 import ru.it.lecm.reports.model.impl.L18Value;
-import ru.it.lecm.reports.model.impl.ReportTypeImpl;
+import ru.it.lecm.reports.model.impl.ReportType;
 
-public class ReportManagerApi
-		implements ScriptApiReportManager
-{
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ReportManagerApi {
 
 	private final static Log logger = LogFactory.getLog(ReportManagerApi.class);
 
@@ -30,7 +26,6 @@ public class ReportManagerApi
 		this.scriptRemote = scriptRemote;
 	}
 
-	@Override
 	public boolean deployReport(String reportDescNode) {
 		final String url = "/lecm/reports/rptmanager/deployReport?reportDescNode="+ reportDescNode;
 		final Response response = scriptRemote.connect("alfresco").get(url);
@@ -46,7 +41,6 @@ public class ReportManagerApi
 		throw new RuntimeException( errmsg);
 	}
 
-	@Override
 	public boolean undeployReport(String reportCode) {
 		final String url = "/lecm/reports/rptmanager/undeployReport?reportCode="+ reportCode;
 		final Response response = scriptRemote.connect("alfresco").get(url);
@@ -62,7 +56,6 @@ public class ReportManagerApi
 		throw new RuntimeException( errmsg);
 	}
 
-	@Override
 	public InputStream getDsXmlBytes(String reportCode) {
 		final String url = "/lecm/reports/rptmanager/dsXmlBytes?reportCode=" + reportCode;
 		final Response response = scriptRemote.connect("alfresco").get(url);
@@ -72,7 +65,6 @@ public class ReportManagerApi
 		return response.getResponseStream();
 	}
 
-	@Override
 	public InputStream generateReportTemplate(String reportRef) {
 		final String url = "/lecm/reports/rptmanager/generateReportTemplate?reportRef=" + reportRef;
 
@@ -83,7 +75,6 @@ public class ReportManagerApi
 		return response.getResponseStream();
 	}
 
-	@Override
 	public List<ReportInfo> getRegisteredReports(String docType, String reportType) {
 		final String url = "/lecm/reports/rptmanager/registeredReports";//?docType=" + docType + "&reportType=" + reportType;
 		final Response response = scriptRemote.connect("alfresco").get(url);
@@ -96,7 +87,7 @@ public class ReportManagerApi
 				JSONArray reportInfoArray = (JSONArray) resultJson.get("list");
 				for (int i = 0; i < reportInfoArray.length(); i++) {
 					JSONObject ri = (JSONObject) reportInfoArray.get(i);
-					ReportInfo riFromReq = new ReportInfo(new ReportTypeImpl(ri.getString("reportType"), new L18Value()), ri.getString("code"));
+					ReportInfo riFromReq = new ReportInfo(new ReportType(ri.getString("reportType"), new L18Value()), ri.getString("code"));
 					riFromReq.setDocumentType(ri.getString("docType"));
 					riFromReq.setReportName(ri.getString("name"));
 					results.add(riFromReq);

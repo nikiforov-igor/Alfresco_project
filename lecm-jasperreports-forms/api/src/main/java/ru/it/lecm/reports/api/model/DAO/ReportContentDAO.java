@@ -5,7 +5,7 @@ import java.io.InputStream;
 import org.alfresco.service.cmr.repository.ContentReader;
 
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.ReportType;
+import ru.it.lecm.reports.model.impl.ReportType;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 
 /**
@@ -41,9 +41,7 @@ public interface ReportContentDAO {
 	void setReadonly(boolean value);
 
 	/**
-	 * проверить существование объекта 
-	 * @param id
-	 * @return
+	 * проверить существование объекта
 	 */
 	boolean exists(IdRContent id);
 
@@ -51,7 +49,6 @@ public interface ReportContentDAO {
 	 * Удалить контент, если он существует, иначе ничего не происходит.
 	 * <br/> (!) При readonly = true поднимается исключение.
 	 * <br/> (!) Если файл id.fileName указан как "*", то удаляется весь каталог id.reportMnemo;
-	 * @param id
 	 */
 	void delete(IdRContent id); // throws java.io.IOException;
 
@@ -65,8 +62,6 @@ public interface ReportContentDAO {
 
 	/**
 	 * Сохранить объект. Если одноимённый уже существует - переписать.
-	 * @param id
-	 * @param stm
 	 */
 	void storeContent(IdRContent id, InputStream stm);
 
@@ -80,7 +75,6 @@ public interface ReportContentDAO {
 
 	/**
 	 * Вернуть id рутового объекта (для репозитория это NodeRef для файлов - файловый путь root)
-	 * @return
 	 */
 	String getRoot();
 
@@ -99,10 +93,7 @@ public interface ReportContentDAO {
 
 		/**
 		 * Создание id по трём его составляющим
-		 * @param reportType
-		 * @param reportMnemo
 		 * @param fileName имя файла, если пустое или null, то вместо него используется маска "*"
-		 * @return
 		 */
 		public static IdRContent createId( ReportType reportType, String reportMnemo, String fileName) {
 			if (fileName == null || fileName.trim().length() == 0)
@@ -114,7 +105,6 @@ public interface ReportContentDAO {
 		 * Создать id указанного файла отчёта
 		 * @param desc описатель, если null, воз-ся Null
 		 * @param fileName имя файла, если пустое или null, то вместо него используется маска "*"
-		 * @return
 		 */
 		public static IdRContent createId( ReportDescriptor desc, String fileName) {
             if (desc == null) {
@@ -204,10 +194,6 @@ public interface ReportContentDAO {
 
 		public String getReportMnemo() {
 			return reportMnemo;
-		}
-
-		public void setReportMnemo(String reportMnemo) {
-			this.reportMnemo = reportMnemo;
 		}
 
 		public String getFileName() {

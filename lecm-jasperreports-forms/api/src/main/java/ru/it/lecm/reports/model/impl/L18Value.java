@@ -31,8 +31,7 @@ public class L18Value implements L18able, Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((l18items == null) ? 0 : l18items.hashCode());
+		result = prime * result + (l18items.hashCode());
 		return result;
 	}
 
@@ -45,24 +44,17 @@ public class L18Value implements L18able, Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		final L18Value other = (L18Value) obj;
-		if (l18items == null) {
-			if (other.l18items != null)
-				return false;
-		} else if (!l18items.equals(other.l18items))
-			return false;
-		return true;
-	}
+        return l18items.equals(other.l18items);
+    }
 
 
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("L18 [");
-		builder.append( l18items == null ? "NULL" : "count "+ l18items.size() + " ");
-		if (l18items != null) {
-			builder.append(l18items.toString());
-		}
-		builder.append("]");
+		builder.append("count ").append(l18items.size()).append(" ");
+        builder.append(l18items.toString());
+        builder.append("]");
 		return builder.toString();
 	}
 
@@ -72,7 +64,6 @@ public class L18Value implements L18able, Serializable {
 	 *   1) выполняется перевод в верхний регистр
 	 *   2) короткие локали вида "X" дополняются до "X-X"
 	 *   3) null или пустая строка остаётся как null.
-	 * @param locale
 	 * @return нормализованная локаль вида "страна-регион", например, "RU-RU" или "EN-US"
 	 */
 	public static String getNormalizedLocale(String locale) {
@@ -90,7 +81,6 @@ public class L18Value implements L18able, Serializable {
 	 *    значение = перевод для этой локали.
 	 * Если имеется ключ Null - то он является локалью по-умолчанию (defaultLocale).
 	 * Единственное значение в l18items (с любым ключом-локалью) - тоже будет приниматься как значение по-умолчанию.
-	 * @return
 	 */
 	@Override
 	public Map<String, String> getL18items() {
@@ -131,8 +121,7 @@ public class L18Value implements L18able, Serializable {
 	 * Найти перевод в указанной локали, если точного соот-вия для локали не будет
 	 * попытаться найти значений по-умолчанию, если его нет - вернуть l18default
 	 * @param l18default значение по-умолчанию (если нет явно заданной null-локали
-	 * для l18items или кол-во элементов в l18items отлично от единственного) 
-	 * @param locale
+	 * для l18items или кол-во элементов в l18items отлично от единственного)
 	 * @return перевевёденное значение для указанной локали
 	 */
 	@Override
@@ -150,8 +139,7 @@ public class L18Value implements L18able, Serializable {
 	 * Вернуть значение перевода по-умолчанию:
 	 *    если имеется локаль==null, воз-ся её перевод,
 	 *    иначе если в переводах ровно одно значение (с любой локалью) - воз-ся оно,
-	 *    иначе вернуть null 
-	 * @return
+	 *    иначе вернуть null
 	 */
 	protected String getDefaultLocaleTranslation() {
 		String result = null;
@@ -166,7 +154,6 @@ public class L18Value implements L18able, Serializable {
 
 	/**
 	 * Найти перевод в указанной локали (регистр симолвов локали роли не играет).
-	 * @param locale
 	 * @return перевевёденное значение для локали, если не найдено воз-ся null.
 	 */
 	protected String findTranslated(String locale) {

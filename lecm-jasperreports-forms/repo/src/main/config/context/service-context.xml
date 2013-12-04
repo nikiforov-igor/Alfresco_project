@@ -65,8 +65,8 @@
 	<util:constant id="RSF_REPORT_TYPES_ID" static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.RS_FOLDER_REPORT_TYPES_ID"/>
 	<util:constant id="RSF_REPORT_TYPES_NAME" static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.RS_FOLDER_REPORT_TYPES_NAME"/>
 
-	<util:constant id="RSF_RTYPE_JASPER_ID" static-field="ru.it.lecm.reports.api.model.ReportType.RTYPE_MNEMO_JASPER"/>
-	<util:constant id="RSF_RTYPE_OOFFICE_ID" static-field="ru.it.lecm.reports.api.model.ReportType.RTYPE_MNEMO_OOFFICE"/>
+	<util:constant id="RSF_RTYPE_JASPER_ID" static-field="ru.it.lecm.reports.model.impl.ReportType.RTYPE_MNEMO_JASPER"/>
+	<util:constant id="RSF_RTYPE_OOFFICE_ID" static-field="ru.it.lecm.reports.model.impl.ReportType.RTYPE_MNEMO_OOFFICE"/>
 
 
 	<!-- Хранение в репозитории файлов для отчётов (xml-шаблоны, jasper и пр) -->
@@ -230,7 +230,7 @@
 		<property name="reportGenerators[OOFFICE]" ref="ooReportGenerator"/>
 
 		<property name="reportDefaults[JASPER]">
-			<bean class="ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl">
+			<bean class="ru.it.lecm.reports.model.impl.ReportDefaultsDesc">
 				<property name="fileExtension" value=".jrxml" />
 				<property name="generationTemplate" value="jreportCommonTemplate.jrxml.gen" />
 				<property name="subReportGenerationTemplate" value="sub-jreportCommonTemplate.jrxml.gen" />
@@ -238,7 +238,7 @@
 		</property>
 
 		<property name="reportDefaults[OOFFICE]">
-			<bean class="ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl">
+			<bean class="ru.it.lecm.reports.model.impl.ReportDefaultsDesc">
 				<property name="fileExtension" value=".odt" />
 				<property name="generationTemplate" value="ooreportCommonTemplate.odt.gen" />
 				<property name="subReportGenerationTemplate" value="ooreportCommonTemplate.odt.gen" />

@@ -21,9 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
-import ru.it.lecm.reports.model.impl.ReportTypeImpl;
+import ru.it.lecm.reports.model.impl.ReportType;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.NodeUtils;
 
@@ -274,7 +273,7 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
                         ));
                     }
 
-                    final IdRContent id = new IdRContent(new ReportTypeImpl(names[1]), names[2], nameNode);
+                    final IdRContent id = new IdRContent(new ReportType(names[1]), names[2], nameNode);
                     enumerator.lookAtItem(id);
                 }
             }

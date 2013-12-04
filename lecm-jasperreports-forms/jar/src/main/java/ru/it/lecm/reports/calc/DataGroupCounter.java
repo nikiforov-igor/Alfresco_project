@@ -89,7 +89,6 @@ public class DataGroupCounter {
 	 * Воз-ся увеличенный счётчик.
 	 * @param attrName название атрибута
 	 * @param delta увеличение
-	 * @return
 	 */
 	public int incCounter(final String attrName, int delta) {
 		// корректировка общей суммы
@@ -109,7 +108,6 @@ public class DataGroupCounter {
 	 * Увеличить счётчик, связанный с указанным атрибутом, на единицу.
 	 * Воз-ся увеличенный счётчик.
 	 * @param attrName название атрибута
-	 * @return
 	 */
 	public int incCounter(final String attrName) {
 		return incCounter(attrName, 1);
@@ -133,7 +131,6 @@ public class DataGroupCounter {
 
 	/**
 	 * Создать счётчики для указанных атрибутов
-	 * @param colNames
 	 */
 	public void regAttributes( String ... colNames) {
 		if (colNames != null)

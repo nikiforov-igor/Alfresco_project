@@ -3,7 +3,7 @@ package ru.it.lecm.reports.model.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.utils.ParameterMapper;
@@ -19,14 +19,6 @@ public class DataSourceDescriptorImpl
 
 	public DataSourceDescriptorImpl() {
 		super();
-	}
-
-	public DataSourceDescriptorImpl(String mnem, L18able name) {
-		super(mnem, name);
-	}
-
-	public DataSourceDescriptorImpl(String mnem) {
-		super(mnem);
 	}
 
 	@Override

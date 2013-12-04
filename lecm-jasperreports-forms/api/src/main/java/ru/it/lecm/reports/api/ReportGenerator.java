@@ -5,6 +5,7 @@ import java.util.Map;
 
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
+import ru.it.lecm.reports.api.model.ReportFileData;
 
 public interface ReportGenerator {
 

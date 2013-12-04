@@ -20,15 +20,10 @@ public class ParameterTypedValueImpl
 	private Object[] bounds;
 	private Type type = Type.VALUE;
 	private boolean required = false;
-	// private String alfrescoType;
 	private AlfrescoAssocInfo alfrescoAssoc;
 
 	public ParameterTypedValueImpl() {
 		super();
-	}
-
-	public ParameterTypedValueImpl(String mnem, L18able name) {
-		super(mnem, name);
 	}
 
 	public ParameterTypedValueImpl(String mnem) {
@@ -139,9 +134,7 @@ public class ParameterTypedValueImpl
 
 	/**
 	 * Проверить является ли граничное значение пустым.
-	 * Здесь принимается что пустыми будет NULL, + для строковых пустая trim() строка. 
-	 * @param value
-	 * @return
+	 * Здесь принимается что пустыми будет NULL, + для строковых пустая trim() строка.
 	 */
 	public static boolean isBoundEmpty(Object value) {
 		return (value == null) 

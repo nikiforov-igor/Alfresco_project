@@ -14,10 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.URLDecoder;
 
-import ru.it.lecm.reports.api.model.ReportType;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.beans.ReportsManagerImpl;
-import ru.it.lecm.reports.model.impl.ReportTypeImpl;
+import ru.it.lecm.reports.model.impl.ReportType;
 import ru.it.lecm.reports.utils.Utils;
 
 public class FileReportContentDAOBean implements ReportContentDAO {
@@ -139,13 +138,6 @@ public class FileReportContentDAOBean implements ReportContentDAO {
     /**
      * корневая папка (относительно ./classes)
      */
-    public String getRootDir() {
-        return rootDir;
-    }
-
-    /**
-     * корневая папка (относительно ./classes)
-     */
     public void setRootDir(String rootDir) {
         this.rootDir = Utils.nonblank(rootDir, "/");
 
@@ -155,16 +147,6 @@ public class FileReportContentDAOBean implements ReportContentDAO {
         }
     }
 
-    /**
-     * форматная строка для формирования полного пути к файлу (относительно rootDir)
-     * Можно использовать поля из класса IdContent. Например:
-     * "/@reporType/@reportMnemo/@fileName"
-     * (см также makeAbsFile и DEFAULT_STORE_STRUC_FMT)
-     */
-    public String getStoreStructurePathFmt() {
-        return storeStructurePathFmt;
-    }
-
     public void setStoreStructurePathFmt(String storeStructurePathFmt) {
         this.storeStructurePathFmt = Utils.coalesce(storeStructurePathFmt, DEFAULT_NULL_FMT);
     }
@@ -172,7 +154,6 @@ public class FileReportContentDAOBean implements ReportContentDAO {
     /**
      * Гарантировать наличие родительских каталогов указанного файла
      *
-     * @param f
      */
     static void ensureParents(File f) {
         if (f == null) {
@@ -384,7 +365,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
                     continue;
                 }
 
-                final ReportType rtype = new ReportTypeImpl(flType.getName());
+                final ReportType rtype = new ReportType(flType.getName());
                 final File[] freports = flType.listFiles();
                 if (freports == null) {
                     continue;

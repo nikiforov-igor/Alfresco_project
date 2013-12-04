@@ -18,12 +18,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
-import ru.it.lecm.reports.api.ReportFileData;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
-import ru.it.lecm.reports.api.model.ReportFileDataImpl;
+import ru.it.lecm.reports.api.model.ReportFileData;
 import ru.it.lecm.reports.model.DAO.FileReportContentDAOBean;
 import ru.it.lecm.reports.ooffice.OpenOfficeFillManager;
 import ru.it.lecm.reports.utils.ArgsHelper;
@@ -268,7 +267,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	@Override
 	public ReportFileData produceReport(ReportDescriptor reportDesc, Map<String, Object> parameters, ReportContentDAO rptContent)
 			throws IOException {
-        ReportFileData buildResult = new ReportFileDataImpl();
+        ReportFileData buildResult = new ReportFileData();
 		PropertyCheck.mandatory(this, "services", getServices());
 		PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 		PropertyCheck.mandatory(this, "reportsDesc", reportDesc);

@@ -1,11 +1,11 @@
 package ru.it.lecm.reports.api;
 
+import net.sf.jasperreports.engine.design.JRDesignField;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.NamedValue;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import net.sf.jasperreports.engine.design.JRDesignField;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
-import ru.it.lecm.reports.api.model.NamedValue;
 
 /**
  * DataFieldColumn это jasper-поле + дополнительные поля.
@@ -22,9 +22,7 @@ public class DataFieldColumn extends JRDesignField {
 	private String valueLink;
 	private Map<String, String> attributes; // дополнительные флаги или атрибуты
 
-	private boolean enUseAttributesTrim = true; // применять trim для значений атрибутов
-
-	public DataFieldColumn() {
+    public DataFieldColumn() {
 		super();
 	}
 
@@ -62,7 +60,7 @@ public class DataFieldColumn extends JRDesignField {
 	public void addFlag(final String name, final String value) {
 		if (this.attributes == null)
 			this.attributes = new LinkedHashMap<String, String>();
-		this.attributes.put(name, ( (!enUseAttributesTrim || value == null) ? value : value.trim()) );
+        this.attributes.put(name, ( (value == null) ? value : value.trim()));
 	}
 
 	@Override

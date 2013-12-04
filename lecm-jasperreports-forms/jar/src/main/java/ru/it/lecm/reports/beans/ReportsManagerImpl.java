@@ -11,7 +11,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.reports.api.ReportFileData;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
@@ -19,7 +18,8 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.ContentEnumerator;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.api.model.*;
-import ru.it.lecm.reports.model.impl.ReportDefaultsDescImpl;
+import ru.it.lecm.reports.model.impl.ReportDefaultsDesc;
+import ru.it.lecm.reports.model.impl.ReportType;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
@@ -255,7 +255,7 @@ public class ReportsManagerImpl implements ReportsManager {
             this.reportDefaults = new HashMap<String, ReportDefaultsDesc>();
 
             // автодобавление для умолчания:
-            final ReportDefaultsDesc jdesc = new ReportDefaultsDescImpl(DEFAULT_REPORT_EXTENSION, DEFAULT_REPORT_TEMPLATE, DEFAULT_SUB_REPORT_TEMPLATE);
+            final ReportDefaultsDesc jdesc = new ReportDefaultsDesc(DEFAULT_REPORT_EXTENSION, DEFAULT_REPORT_TEMPLATE, DEFAULT_SUB_REPORT_TEMPLATE);
             this.reportDefaults.put(DEFAULT_REPORT_TYPE, jdesc);
         }
         return this.reportDefaults;
@@ -713,7 +713,7 @@ public class ReportsManagerImpl implements ReportsManager {
             return null;
         }
 
-        final ReportFileDataImpl templateFileData = new ReportFileDataImpl();
+        final ReportFileData templateFileData = new ReportFileData();
 
         final byte[] contentBytes = generateReportTemplate(desc); // (!) ГЕНЕРАЦИЯ
         templateFileData.setData(contentBytes);

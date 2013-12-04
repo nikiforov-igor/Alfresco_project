@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.api.model;
 
 import java.util.List;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 
 /**
  * Описатель набора данных.

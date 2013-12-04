@@ -6,11 +6,12 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
-import ru.it.lecm.reports.api.model.ReportTemplate;
+import ru.it.lecm.reports.api.model.L18able;
+import ru.it.lecm.reports.api.model.Mnemonicable;
 
-public class ReportTemplateImpl
+public class ReportTemplate
 		extends MnemonicNamedItem
-		implements ReportTemplate
+		implements Mnemonicable, L18able
 {
 	private static final long serialVersionUID = 1L;
 
@@ -20,38 +21,23 @@ public class ReportTemplateImpl
 	// private InputStream dataStream;
 	private byte[] data;
 
-	public ReportTemplateImpl() {
+	public ReportTemplate() {
 		super();
 	}
 
-	public ReportTemplateImpl(String fileName, InputStream dataStream) {
-		super();
-		this.fileName = fileName;
-		setData(dataStream);
-	}
-
-	public ReportTemplateImpl(String fileName) {
-		this( fileName, null);
-	}
-
-
-	@Override
 	public String getFileName() {
 		return this.fileName;
 	}
 
-	@Override
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
 
-	@Override
 	public InputStream getData() {
 		// return this.dataStream;
 		return (this.data != null) ? new ByteArrayInputStream(this.data) : null;
 	}
 
-	@Override
 	public void setData(InputStream stm) {
 		// this.dataStream = stm;
 		if (stm == null) {
@@ -68,7 +54,7 @@ public class ReportTemplateImpl
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append( "ReportTemplateImpl [ ");
+		builder.append( "ReportTemplate [ ");
 		builder.append( String.format( "fileName= '%s'" , fileName));
 		builder.append( ", data ");builder.append( data ==  null ? "null" : data.length + " bytes");
 		builder.append( ", ").append(super.toString());

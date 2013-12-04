@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
@@ -136,8 +136,6 @@ public class LucenePreparedQuery {
      * в текст запроса)
      * Выполняется проверка заполнения обязательных параметров, с поднятием исключений при ошибках.
      *
-     * @param reportDescriptor
-     * @return
      */
     public static LucenePreparedQuery prepareQuery(final ReportDescriptor reportDescriptor, ServiceRegistry registry) {
         final NamespaceService ns = (registry == null) ? null : registry.getNamespaceService();
@@ -404,12 +402,9 @@ public class LucenePreparedQuery {
     /**
      * Загрузить свойства  узлов, указанных в НД
      *
-     * @param rset
      * @param info     название (пояснение) для загружаемых данных
      * @param minCount минимальное кол-во (включительно)
      * @param maxCount максимальное кол-во зависимостей (включительно) (-1 = UNLIMITED)
-     * @param nodeSrv
-     * @return
      */
     static public List<Map<QName, Serializable>> loadNodeProps(ResultSet rset,
                                                                String info, int minCount, int maxCount, final NodeService nodeSrv) {
@@ -427,8 +422,6 @@ public class LucenePreparedQuery {
     /**
      * Загрузить свойства  узлов, указанных в НД
      *
-     * @param rset
-     * @return
      */
     static public List<Map<QName, Serializable>> loadNodeProps(ResultSet rset, final NodeService nodeSrv) {
         if (rset == null) {
@@ -445,31 +438,12 @@ public class LucenePreparedQuery {
         return result.isEmpty() ? null : result;
     }
 
-
-    /**
-     * Загрузить список одну или ноль дочернюю запись
-     *
-     * @param node
-     * @param assocType заказанный тип связи "детишек", если null -> не ограничено
-     * @param nodeSrv
-     * @param nameSrv
-     * @return null, одну запись или исключение, если найдено более одной
-     */
-    public static NodeRef getAssocChild(NodeRef node, String assocType
-            , NodeService nodeSrv, NamespaceService nameSrv) {
-        final List<NodeRef> found = getAssocChildren(node, assocType, 0, 1, nodeSrv, nameSrv);
-        return (found != null) ? found.get(0) : null;
-    }
-
     /**
      * Загрузить список дочерних записей состоящий из указанного кол-ва элементов
      *
-     * @param node
      * @param assocType заказанный тип связи "детишек", если null -> не ограничено
      * @param minCount  минимальное кол-во (включительно)
      * @param maxCount  максимальное кол-во зависимостей (включительно) (-1 = UNLIMITED)
-     * @param nodeSrv
-     * @param nameSrv
      * @return непустой список "детишек" узла нужного типа, NULL если нет ни
      *         одного и разрешено minCount = 0 или исключение, если найдено неверное
      *         кол-во "детишек"
@@ -487,10 +461,7 @@ public class LucenePreparedQuery {
     /**
      * Загрузить список дочерних записей по типу связи
      *
-     * @param node
      * @param assocType заказанный тип связи "детишек", если null -> не ограничено
-     * @param nodeSrv
-     * @param nameSrv
      * @return непустой список "детишек" узла нужного типа или NULL
      */
     public static List<NodeRef> getAssocChildren(NodeRef node
@@ -514,9 +485,6 @@ public class LucenePreparedQuery {
     /**
      * Загрузить список дочерних записей по типу дочерних узлов
      *
-     * @param node
-     * @param nodeSrv
-     * @param nameSrv
      * @return непустой список "детишек" узла нужного типа или NULL
      */
     public static List<NodeRef> getAssocChildrenByType(NodeRef node
@@ -541,9 +509,6 @@ public class LucenePreparedQuery {
     /**
      * Загрузить список одну или ноль дочернюю запись
      *
-     * @param node
-     * @param nodeSrv
-     * @param nameSrv
      * @return null, одну запись или исключение, если найдено более одной
      */
     public static NodeRef getAssocChildByType(NodeRef node, String type
@@ -557,10 +522,7 @@ public class LucenePreparedQuery {
     /**
      * Загрузить список одну или ноль дочернюю запись
      *
-     * @param node
      * @param assocType заказанный тип связи "детишек", если null -> не ограничено
-     * @param nodeSrv
-     * @param nameSrv
      * @return null, одну запись или исключение, если найдено более одной
      */
     public static NodeRef getAssocTarget(NodeRef node, String assocType
@@ -572,10 +534,6 @@ public class LucenePreparedQuery {
     /**
      * Загрузить список дочерних записей состоящий из указанного кол-ва элементов
      *
-     * @param node
-     * @param assocType заказанный тип связи "детишек"
-     * @param nodeSrv
-     * @param nameSrv
      * @return непустой список "детишек" узла нужного типа, NULL если нет ни одного
      */
     public static List<NodeRef> getAssocTargets(NodeRef node
@@ -593,12 +551,9 @@ public class LucenePreparedQuery {
     /**
      * Загрузить список дочерних записей состоящий из указанного кол-ва элементов
      *
-     * @param node
      * @param assocType заказанный тип связи "детишек"
      * @param minCount  минимальное кол-во (включительно)
      * @param maxCount  максимальное кол-во зависимостей (включительно) (-1 = UNLIMITED)
-     * @param nodeSrv
-     * @param nameSrv
      * @return непустой список "детишек" узла нужного типа, NULL если нет ни
      *         одного и разрешено minCount = 0 или исключение, если найдено неверное
      *         кол-во "детишек"
@@ -620,11 +575,6 @@ public class LucenePreparedQuery {
     /**
      * Выполнить поиск по указанному запросу
      *
-     * @param bquery
-     * @param skipCountOffset
-     * @param queryItemsLimit
-     * @param searchService
-     * @return
      */
     static public ResultSet execFindQuery(final LuceneSearchBuilder bquery, int skipCountOffset, int queryItemsLimit, final SearchService searchService) {
         if (bquery == null || bquery.isEmpty()) {
@@ -662,8 +612,6 @@ public class LucenePreparedQuery {
      * в зависимости от isMultiRow().
      * При отстутсвии параметров поднимается исключение.
      *
-     * @param bquery
-     * @param reportDescriptor
      */
     private static void makeMasterCondition(final LuceneSearchBuilder bquery, ReportDescriptor reportDescriptor) {
         if (reportDescriptor != null && reportDescriptor.getDsDescriptor() != null) {

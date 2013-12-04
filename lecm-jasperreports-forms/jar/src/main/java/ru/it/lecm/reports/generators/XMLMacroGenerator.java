@@ -8,11 +8,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import ru.it.lecm.reports.api.model.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.model.impl.ColumnDescriptorImpl;
-import ru.it.lecm.reports.model.impl.JavaDataTypeImpl;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
@@ -599,7 +598,7 @@ public class XMLMacroGenerator {
                         int columnType = resultSet.getMetaData().getColumnType(i);
 
                         index++;
-                        ColumnDescriptor colDesc = new ColumnDescriptorImpl(columnName, JavaDataTypeImpl.SupportedTypes.findTypeBySQL(columnType));
+                        ColumnDescriptor colDesc = new ColumnDescriptor(columnName, JavaDataType.SupportedTypes.findTypeBySQL(columnType));
                         colDesc.regItem(Locale.getDefault().getCountry(), columnName);
                         this.doColumnMacroExpansion(macroKey, colDesc, index);
                     }
@@ -650,7 +649,7 @@ public class XMLMacroGenerator {
                             String columnName = colDesc.getColumnName();
 
                             //(1)
-                            colDesc.setClassName(JavaDataTypeImpl.SupportedTypes.LIST.name());
+                            colDesc.setClassName(JavaDataType.SupportedTypes.LIST.name());
                             index++;
                             this.doColumnMacroExpansion(macroKey, colDesc, index);
 
@@ -669,8 +668,8 @@ public class XMLMacroGenerator {
 
                 //помимо колонок-параметров нужно добавить еще и СПЕЦ параметры
                 if (!descriptor.getFlags().isMultiRow()) { //карточка объекта - значит будет присутсовать ID
-                    ColumnDescriptor idColumn = new ColumnDescriptorImpl(DataSourceDescriptor.COLNAME_ID, JavaDataTypeImpl.SupportedTypes.STRING);
-                    ColumnDescriptor idNodeColumn = new ColumnDescriptorImpl(DataSourceDescriptor.COLNAME_NODE_ID, JavaDataTypeImpl.SupportedTypes.LONG);
+                    ColumnDescriptor idColumn = new ColumnDescriptor(DataSourceDescriptor.COLNAME_ID, JavaDataType.SupportedTypes.STRING);
+                    ColumnDescriptor idNodeColumn = new ColumnDescriptor(DataSourceDescriptor.COLNAME_NODE_ID, JavaDataType.SupportedTypes.LONG);
                     //(1)
                     index++;
                     this.doColumnMacroExpansion(macroKey, idColumn, index);

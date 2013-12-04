@@ -7,9 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-import ru.it.lecm.reports.api.ReportFileData;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.beans.ReportBeansLocator;
+import ru.it.lecm.reports.api.model.ReportFileData;
 import ru.it.lecm.reports.utils.Utils;
 
 import java.io.IOException;
@@ -105,9 +104,6 @@ public class ReportMainProducer extends AbstractWebScript {
         if (log.isInfoEnabled()) {
             logParameters(requestParameters, String.format("Processing report '%s' with args: \n", reportName));
         }
-
-        // локатору закинем текущее значение менеджера ...
-        ReportBeansLocator.setReportsManager(getReportsManager());
 
 		/* Вариант "права побоку": построение от имени системы */
         //TODO дыра в системе. По какой-то причине было сделано, чтобы документы попадали в отчет без проверки прав

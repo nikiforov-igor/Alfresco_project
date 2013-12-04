@@ -9,6 +9,8 @@ import ru.it.lecm.reports.api.model.AlfrescoAssocInfo.AssocKind;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.ParameterType.Type;
 import ru.it.lecm.reports.model.impl.*;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.ItemsFormatDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -98,11 +100,6 @@ public class DSXMLProducer {
 
     public static final String XMLATTR_SUBREPORT_NAME = "name";
     public static final String XMLATTR_DESTCOLUMN_NAME = "destColumnName";
-
-    /**
-     * название атрибута, в котором указан класс бина для элемента строки subreport
-     */
-    public static final String XMLATTR_BEANCLASS = "beanclass";
 
     /**
      * описание формата
@@ -318,7 +315,7 @@ public class DSXMLProducer {
             return null;
         }
 
-        final ReportTypeImpl result = new ReportTypeImpl();
+        final ReportType result = new ReportType();
         XmlHelper.parseStdMnemoItem(result, srcNodeRType);
         return result;
     }
@@ -339,7 +336,7 @@ public class DSXMLProducer {
             return null;
         }
 
-        final ReportProviderDescriptorImpl result = new ReportProviderDescriptorImpl();
+        final ReportProviderDescriptor result = new ReportProviderDescriptor();
         XmlHelper.parseStdMnemoItem(result, srcNodeProvider);
 
         // java-класс провайдера ...
@@ -367,7 +364,7 @@ public class DSXMLProducer {
             return null;
         }
 
-        final ReportTemplateImpl result = new ReportTemplateImpl();
+        final ReportTemplate result = new ReportTemplate();
         XmlHelper.parseStdMnemoItem(result, srcNodeTemplate);
 
         if (srcNodeTemplate.hasAttribute(XMLATTR_FILENAME)) {
@@ -540,7 +537,7 @@ public class DSXMLProducer {
             // фильтра нет или значение не фильтруется
             final boolean isStdName = (stdSkipArgs != null) && stdSkipArgs.contains(n.getNodeName());
             if (!isStdName) {
-                destFlags.add(new NamedValueImpl(n.getNodeName(), XmlHelper.getTagContent(n)));
+                destFlags.add(new NamedValue(n.getNodeName(), XmlHelper.getTagContent(n)));
             }
         } // for i
     }
@@ -557,7 +554,7 @@ public class DSXMLProducer {
             // фильтра нет или значение не фильтруется
             final boolean isStdName = (stdSkipArgs != null) && stdSkipArgs.contains(n.getNodeName());
             if (!isStdName) {
-                destFlags.add(new NamedValueImpl(n.getNodeName(), XmlHelper.getTagContent(n)));
+                destFlags.add(new NamedValue(n.getNodeName(), XmlHelper.getTagContent(n)));
             }
         } // for i
     }
@@ -654,7 +651,7 @@ public class DSXMLProducer {
 
                 if (result.getItemsFormat() != null && !result.isUsingFormat()) {
                     logger.warn(String.format("Subreport '%s' has format when bean class is configured -> format ignored"
-                            + "\n\t bean class using: '%s'\n\t format will be ignored ignored: '%s'"
+                            + "\n\t format will be ignored ignored: '%s'"
                             , result.getMnem()
                             , result.getItemsFormat()
                     ));
@@ -677,7 +674,7 @@ public class DSXMLProducer {
         return result;
     }
 
-    private static Element xmlCreateItemsFormat(Document doc, Element parentNode, String nodeName, ItemsFormatDescriptor itemsFormat) {
+    private static Element xmlCreateItemsFormat(Document doc, Element parentNode, String nodeName, ru.it.lecm.reports.model.impl.ItemsFormatDescriptor itemsFormat) {
         if (itemsFormat == null) {
             return null;
         }
@@ -698,12 +695,12 @@ public class DSXMLProducer {
         return result;
     }
 
-    private static ItemsFormatDescriptor parseItemsFormat(Element srcNode) {
+    private static ru.it.lecm.reports.model.impl.ItemsFormatDescriptor parseItemsFormat(Element srcNode) {
         if (srcNode == null) {
             return null;
         }
 
-        final ItemsFormatDescriptor result = new ItemsFormatDescriptorImpl();
+        final ru.it.lecm.reports.model.impl.ItemsFormatDescriptor result = new ItemsFormatDescriptor();
 
         // строка форматирования свойств из CData или value ...
         result.setFormatString(Utils.dequote(Utils.trimmed(XmlHelper.getTagContent(srcNode))));
@@ -797,7 +794,6 @@ public class DSXMLProducer {
 
         final LinkedHashMap<String, ColumnDescriptor> result = new LinkedHashMap<String, ColumnDescriptor>(10);
 
-        final StringBuilder sb = new StringBuilder();
         int i = 0;
         for (Node node : fieldsNodes) {
             i++;
@@ -826,7 +822,7 @@ public class DSXMLProducer {
             jrFldname = nameUnique;
 
             // добавление новой jr-колонки
-            final ColumnDescriptor column = new ColumnDescriptorImpl(jrFldname);
+            final ColumnDescriptor column = new ColumnDescriptor(jrFldname);
             result.put(column.getColumnName(), column);
 
             if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_QUERY_FLDNAME)) {
@@ -1031,7 +1027,7 @@ public class DSXMLProducer {
             return null;
         }
 
-        final ReportFlagsImpl result = new ReportFlagsImpl();
+        final ReportFlags result = new ReportFlags();
 
         result.setOffset(XmlHelper.getNodeAsInt(curNode, XMLNODE_QUERY_OFFSET, result.getOffset()));
         result.setLimit(XmlHelper.getNodeAsInt(curNode, XMLNODE_QUERY_LIMIT, result.getLimit()));
