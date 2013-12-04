@@ -5,6 +5,7 @@
 	<#assign month = calendarHeader?keys?sort>
 	<#assign curMonth = curMonthConst>
 	<#assign reasonsNames = reasons?keys>
+	<#assign curYear = curYearConst>
 
 	<div id="summary-table-container">
 		<table class="reasons-legend">
@@ -32,17 +33,18 @@
 							<td>
 								<table>
 									<tr>
-									<#list month as m>
-										<td colspan="${calendarHeader[m]?size}" >
-											<span style="display: inline-block; overflow: hidden; white-space: nowrap; max-width: ${calendarHeader[m]?size*21}px;">
-												${monthNames[m]}
+									<#list month as yearAndMonth>
+										<#assign monthNumber = yearAndMonth?substring(yearAndMonth?index_of("m"))>
+										<td colspan="${calendarHeader[yearAndMonth]?size}" >
+											<span style="display: inline-block; overflow: hidden; white-space: nowrap; max-width: ${calendarHeader[yearAndMonth]?size*21}px;">
+												${monthNames[monthNumber]}
 											</span>
 										</td>
 									</#list>
 									</tr>
 									<tr class="diagramm-row">
-									<#list month as m>
-										<#list calendarHeader[m] as day>
+									<#list month as yearAndMonth>
+										<#list calendarHeader[yearAndMonth] as day>
 										<td>${day?string("00")}</td>
 										</#list>
 									</#list>
@@ -60,6 +62,7 @@
 						<#list employees?sort as employee>
 						<#assign prevMonthSize = 0>
 						<#assign curMonth = curMonthConst>
+						<#assign curYear = curYearConst>
 							<tr <#if (employee_index % 2 == 1) >class="yui-dt-odd" </#if> >
 								<td class="row-id">${employee_index + 1}</td>
 								<td class="employee-name">${employee}</td>
@@ -67,11 +70,15 @@
 									<table cellspacing="0" width="100%">
 										<tr class="diagramm-row">
 										<#list result[employee] as day>
-											<#assign curMonthStr = "m" + curMonth?string>
+											<#assign curMonthStr = "y" + curYear + "m" + curMonth?string>
 											<td <#if (day?length > 0)>style="background-color: ${day}; color: ${day}; border-color: ${day};"</#if>>&nbsp;</td>
 											<#if (day_index == (calendarHeader[curMonthStr]?size + prevMonthSize - 1)) >
 												<#assign curMonth = curMonth + 1>
 												<#assign prevMonthSize =  prevMonthSize + calendarHeader[curMonthStr]?size>
+												<#if curMonth == 12>
+													<#assign curMonth = 0>
+													<#assign curYear = curYear + 1>
+												</#if>
 											</#if>
 										</#list>
 										</tr>

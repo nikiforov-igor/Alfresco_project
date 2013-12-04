@@ -38,11 +38,12 @@
 	}
 
 	for (i = 0; i < daysNumber; i++) {
-		var month = today.getMonth();
-		if (!calendarHeader["m" + month.toString()]) {
-			calendarHeader["m" + month.toString()] = [];
+		var month = today.getMonth(),
+			monthStr = "y" + today.getYear().toString() + "m" + month.toString();
+		if (!calendarHeader[monthStr]) {
+			calendarHeader[monthStr] = [];
 		}
-		calendarHeader["m" + month.toString()].push(today.getDate());
+		calendarHeader[monthStr].push(today.getDate());
 
 
 		for (var employeeName in data) {
@@ -71,6 +72,7 @@
 
 	today = new Date();
 	model.curMonthConst = today.getMonth();
+	model.curYearConst = today.getYear();
 	model.monthNames = monthNames;
 	model.calendarHeader = calendarHeader;
 	model.result = result;

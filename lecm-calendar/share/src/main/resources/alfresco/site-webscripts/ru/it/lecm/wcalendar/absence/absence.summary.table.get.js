@@ -34,6 +34,7 @@
 			searchConfig: "",
 			maxResults: 9999,
 			sort: "cm:name|true",
+			searchNodes: "",
 			fields: "lecm-absence_abscent-employee-assoc,lecm-absence_begin,lecm-absence_end,lecm-absence_unlimited,lecm-absence_abscence-reason-assoc",
 			nameSubstituteStrings: ",,,,",
 			showInactive: false
@@ -77,18 +78,19 @@
 			} else {
 				reasons[key].color = "#000000";
 			}
-			
+
 		}
 
 		var today = new Date();
 		var calendarHeader = {};
 
 		for (i = 0; i < daysAmount; i++) {
-			var month = today.getMonth();
-			if (!calendarHeader["m"+month.toString()]) {
-				calendarHeader["m"+month.toString()] = [];
+			var month = today.getMonth(),
+				monthStr = "y" + today.getYear().toString() + "m" + month.toString();
+			if (!calendarHeader[monthStr]) {
+				calendarHeader[monthStr] = [];
 			}
-			calendarHeader["m"+month.toString()].push(today.getDate());
+			calendarHeader[monthStr].push(today.getDate());
 			today.setDate(today.getDate() + 1);
 		}
 
@@ -124,6 +126,7 @@
 		model.curMonthConst = today.getMonth();
 		model.monthNames = monthNames;
 		model.calendarHeader = calendarHeader;
+		model.curYearConst = today.getYear();
 		model.reasons = reasons;
 		model.result = result;
 	} else {
