@@ -132,7 +132,9 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
                             Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
                             properties.put(ContentModel.PROP_NAME, DOCUMENT_MEMBERS_ROOT_NAME);
                             ChildAssociationRef childAssoc = nodeService.createNode(document, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
-                            return childAssoc.getChildRef();
+                            NodeRef nodeRef = childAssoc.getChildRef();
+                            hideNode(nodeRef, true);
+                            return nodeRef;
                         } else {
                             return membersFolder;
                         }

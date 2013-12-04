@@ -125,6 +125,7 @@ public class DocumentTablePolicy extends BaseBean {
 							nodeName = FileNameValidator.getValidFileName(nodeName);
 
 							NodeRef tableData = createNode(rootFolder, asscoClassName, nodeName, null);
+                            hideNode(tableData, true);
 							nodeService.createAssociation(nodeRef, tableData, assocName);
 
 							documentTableService.createTotalRow(tableData);

@@ -2,7 +2,6 @@ package ru.it.lecm.base.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
-import org.alfresco.repo.model.filefolder.HiddenAspect;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
@@ -64,7 +63,6 @@ public abstract class BaseBean implements InitializingBean {
 	protected TransactionService transactionService;
     protected ServiceRegistry serviceRegistry;
 	protected AuthenticationService authService;
-    private HiddenAspect hiddenAspect;
 
 	protected static enum ASSOCIATION_TYPE {
 		SOURCE,
@@ -77,8 +75,6 @@ public abstract class BaseBean implements InitializingBean {
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
-        hiddenAspect = new HiddenAspect();
-        hiddenAspect.setNodeService(nodeService);
 	}
 
 	public void setTransactionService(TransactionService transactionService) {
@@ -436,7 +432,24 @@ public abstract class BaseBean implements InitializingBean {
      * При применении к папке на вложенные ноды НЕ ДЕЙСТВУЕТ
      * @param nodeRef идентификатор ноды, которую требуется скрыть
      */
-    protected void hideNode(NodeRef nodeRef) {
-        hiddenAspect.hideNode(nodeRef);
+    protected void hideNode(NodeRef nodeRef, boolean disableNodeIndex) {
+        Map<QName, Serializable> props = new HashMap<QName, Serializable>(1);
+        props.put(ContentModel.PROP_VISIBILITY_MASK, 0);
+        nodeService.addAspect(nodeRef, ContentModel.ASPECT_HIDDEN, props);
+        if (disableNodeIndex) {
+            disableNodeIndex(nodeRef);
+        }
+    }
+
+    /**
+     * Отключить индексирование ноды.
+     * При применении к папке на вложенные ноды НЕ ДЕЙСТВУЕТ
+     * @param nodeRef идентификатор ноды
+     */
+    protected void disableNodeIndex(NodeRef nodeRef) {
+        Map<QName, Serializable> props = new HashMap<QName, Serializable>(2);
+        props.put(ContentModel.PROP_IS_INDEXED, Boolean.FALSE);
+        props.put(ContentModel.PROP_IS_CONTENT_INDEXED, Boolean.FALSE);
+        nodeService.addAspect(nodeRef, ContentModel.ASPECT_INDEX_CONTROL, props);
     }
 }

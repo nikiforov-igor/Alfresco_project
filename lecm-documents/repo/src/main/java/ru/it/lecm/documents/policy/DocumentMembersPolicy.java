@@ -136,6 +136,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		NodeRef member = childAssocRef.getChildRef();
 		NodeRef document = nodeService.getPrimaryParent(childAssocRef.getParentRef()).getParentRef();
 		nodeService.createAssociation(document, member, DocumentMembersService.ASSOC_DOC_MEMBERS);
+        hideNode(member, true);
 	}
 
 	@Override

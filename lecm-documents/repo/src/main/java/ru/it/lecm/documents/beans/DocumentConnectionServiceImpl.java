@@ -74,6 +74,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
                             properties.put(ContentModel.PROP_NAME, attachmentsRootName);
                             ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
                             attachmentsRef = associationRef.getChildRef();
+                            hideNode(attachmentsRef, true);
                         }
 						return attachmentsRef;
 					}
@@ -355,6 +356,8 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		nodeService.createAssociation(connectionNodeRef, primaryDocumentNodeRef, ASSOC_PRIMARY_DOCUMENT);
 		nodeService.createAssociation(connectionNodeRef, connectedDocumentNodeRef, ASSOC_CONNECTED_DOCUMENT);
 		nodeService.createAssociation(connectionNodeRef, typeNodeRef, ASSOC_CONNECTION_TYPE);
+
+        hideNode(connectionNodeRef, true);
 
 		return connectionNodeRef;
 	}

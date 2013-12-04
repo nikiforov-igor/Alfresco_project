@@ -80,8 +80,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
                             properties.put(ContentModel.PROP_NAME, attachmentsRootName);
                             ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
                             attachmentsRef = associationRef.getChildRef();
-                            //скрываем папку и не индексируем ее свойства
-                            hideNode(attachmentsRef);
+                            //не индексируем свойства папки
+                            disableNodeIndex(attachmentsRef);
                         }
                         return attachmentsRef;
                     }
@@ -145,8 +145,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
                                 properties.put(ContentModel.PROP_NAME, category);
                                 ChildAssociationRef associationRef = nodeService.createNode(attachmentRootRef, assocTypeQName, assocQName, nodeTypeQName, properties);
                                 categoryFolderRef = associationRef.getChildRef();
-                                //скрываем папку и не индексируем ее свойства
-                                hideNode(categoryFolderRef);
+                                //не индексируем свойства папки
+                                disableNodeIndex(categoryFolderRef);
                             }
 	                        return categoryFolderRef;
 	                    }

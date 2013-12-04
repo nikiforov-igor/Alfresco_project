@@ -73,6 +73,7 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
 							properties.put(ContentModel.PROP_NAME, attachmentsRootName);
 							ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 							attachmentsRef = associationRef.getChildRef();
+                            hideNode(attachmentsRef, true);
 						}
 						return attachmentsRef;
 					}
