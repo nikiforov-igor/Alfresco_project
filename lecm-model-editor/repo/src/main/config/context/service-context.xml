@@ -34,7 +34,7 @@
 		<property name="dictionaryService" ref="dictionaryService"/>
 		<property name="folders">
 			<map>
-				<entry key="#{FORMS_EDITOR_ROOT_ID}" value="Сервис Реадктор форм"/>
+				<entry key="#{FORMS_EDITOR_ROOT_ID}" value="Сервис Редактор форм"/>
 			</map>
 		</property>
 	</bean>
