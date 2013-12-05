@@ -33,7 +33,7 @@
                 newRowDialogTitle: "label.create-row.title",
                 searchButtonsType: 'defaultActive',
                 newRowButtonType: 'defaultActive',
-                createDialogWidth: "70em",
+                createDialogWidth: "80em",
                 createDialogClass: ""
             },
 
