@@ -38,6 +38,16 @@
                 <property name="lecm-rpeditor:reportColumnTypeCode">COLUMN_TYPE_FLOAT</property>
                 <property name="lecm-rpeditor:reportColumnTypeClass">java.lang.Float</property>
             </item>
+            <item name="cm:Long" type="lecm-rpeditor:reportColumnType">
+                <property name="cm:name">Long</property>
+                <property name="lecm-rpeditor:reportColumnTypeCode">COLUMN_TYPE_LONG</property>
+                <property name="lecm-rpeditor:reportColumnTypeClass">java.lang.Long</property>
+            </item>
+            <item name="cm:Double" type="lecm-rpeditor:reportColumnType">
+                <property name="cm:name">Double</property>
+                <property name="lecm-rpeditor:reportColumnTypeCode">COLUMN_TYPE_DOUBLE</property>
+                <property name="lecm-rpeditor:reportColumnTypeClass">java.lang.Double</property>
+            </item>
         </items>
     </item>
 </items>
