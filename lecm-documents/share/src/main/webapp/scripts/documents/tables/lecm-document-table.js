@@ -188,7 +188,9 @@ LogicECM.module = LogicECM.module || {};
 					}).setMessages(this.options.messages);
 				}
 
-				datagrid.tableDataNodeRef = this.tableData.nodeRef;
+                if (this.tableData != null) {
+                    datagrid.tableDataNodeRef = this.tableData.nodeRef;
+                }
 				datagrid.deleteMessageFunction = this.options.deleteMessageFunction;
 				datagrid.draw();
             }
