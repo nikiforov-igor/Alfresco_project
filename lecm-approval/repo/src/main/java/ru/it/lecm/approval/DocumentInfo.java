@@ -3,6 +3,7 @@ package ru.it.lecm.approval;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -21,9 +22,9 @@ class DocumentInfo extends BaseBean {
 	private String documentLink;
 	private final static Logger logger = LoggerFactory.getLogger(DocumentInfo.class);
 
-	DocumentInfo(final NodeRef bpmPackage, OrgstructureBean orgstructureService, ServiceRegistry serviceRegistry) {
+	DocumentInfo(final NodeRef bpmPackage, OrgstructureBean orgstructureService, NodeService nodeService, ServiceRegistry serviceRegistry) {
+		this.nodeService = nodeService;
 		this.serviceRegistry = serviceRegistry;
-		this.nodeService = serviceRegistry.getNodeService();
 		documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
 		documentLink = "<a href=\"javascript:void(0);\"></a>";
 		if (documentRef != null) {

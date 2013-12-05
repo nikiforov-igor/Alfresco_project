@@ -659,7 +659,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			return assumedExecutor;
 		}
 		Map<NodeRef, NodeRef> businessRoleToTrustee = getBusinessRoleToTrusteeByDelegationOpts(delegationOpts, true);
-		if (businessRoleToTrustee == null) {
+		if (businessRoleToTrustee.isEmpty()) {
 			return assumedExecutor;
 		}
 
@@ -735,16 +735,16 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 					if (activeOnly) {
 						String taskID = getTaskIDByDelegatedTask(delegatedTask);
 						WorkflowTask task = workflowService.getTaskById(taskID);
-                                                if(task != null){
-                                                    Map<QName, Serializable> properties = task.getProperties();
-                                                    QName bpmStatus = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "status");
-                                                    String taskStatus = (String) properties.get(bpmStatus);
-                                                    if ("Not Yet Started".equals(taskStatus) || "In Progress".equals(taskStatus) || "On Hold".equals(taskStatus)) {
-                                                            result.add(delegatedTask);
-                                                    }
-                                                } else {
-                                                        logger.error("Task is null.");
-                                                    }
+						if (task != null) {
+							Map<QName, Serializable> properties = task.getProperties();
+							QName bpmStatus = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "status");
+							String taskStatus = (String) properties.get(bpmStatus);
+							if ("Not Yet Started".equals(taskStatus) || "In Progress".equals(taskStatus) || "On Hold".equals(taskStatus)) {
+								result.add(delegatedTask);
+							}
+						} else {
+							logger.error("Task is null.");
+						}
 					} else {
 						result.add(delegatedTask);
 					}
@@ -760,7 +760,9 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		NodeRef result = null;
 		try {
 			NodeRef assumedExecutor = getAssumedExecutorByDelegatedTask(delegatedTask);
+			NodeRef effectiveExecutor = getEffectiveExecutorByDelegatedTask(delegatedTask);
 			String taskID = getTaskIDByDelegatedTask(delegatedTask);
+			revokeTaskPermissions(taskID, effectiveExecutor);
 			assignTaskToEmployee(taskID, assumedExecutor);
 			Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 			properties.put(IS_ACTIVE, false);
@@ -792,7 +794,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		String userName = (String) nodeService.getProperty(personForEmployee, ContentModel.PROP_USERNAME);
 		properties.put(ContentModel.PROP_OWNER, userName);
 		workflowService.updateTask(taskID, properties, null, null);
-		grandTaskPermissions(taskID, employeeRef);
+		grantTaskPermissions(taskID, employeeRef);
 	}
 
 	private void sendNewTaskNotification(final NodeRef employeeRef, final String taskID) {
@@ -812,7 +814,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		notificationsService.sendNotification(notification);
 	}
 
-	private void grandTaskPermissions(String taskID, NodeRef employeeNodeRef) {
+	private void grantTaskPermissions(String taskID, NodeRef employeeNodeRef) {
 		List<NodeRef> packageContents = workflowService.getPackageContents(taskID);
 		for (NodeRef node : packageContents) {
 			if (dictionaryServiceAlfresco.isSubClass(nodeService.getType(node), DocumentService.TYPE_BASE_DOCUMENT)) {
@@ -821,6 +823,17 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 					LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(REVIEWER_PERMISSION_GROUP);
 					lecmPermissionService.grantAccess(pgGranting, node, employeeNodeRef.getId());
 				}
+			}
+		}
+	}
+
+	private void revokeTaskPermissions(String taskID, NodeRef employeeNodeRef) {
+		List<NodeRef> packageContents = workflowService.getPackageContents(taskID);
+		for (NodeRef node : packageContents) {
+			if (dictionaryServiceAlfresco.isSubClass(nodeService.getType(node), DocumentService.TYPE_BASE_DOCUMENT)) {
+					LecmPermissionService.LecmPermissionGroup pgRevoking = lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Reviewer");
+					lecmPermissionService.revokeAccess(pgRevoking, node, employeeNodeRef.getId());
+
 			}
 		}
 	}

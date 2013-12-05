@@ -348,8 +348,26 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	}
 
 	@Override
+	public void revokeReviewerPermissions(NodeRef employeeRef, NodeRef bpmPackage) {
+		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
+		if (Utils.isDocument(documentRef)) {
+			this.revokeReviewerPermissionsInternal(employeeRef, documentRef);
+		}
+	}
+
+	@Override
+	public void revokeReviewerPermissionsInternal(NodeRef employeeRef, NodeRef documentRef) {
+		if (documentRef != null) {
+			LecmPermissionService.LecmPermissionGroup pgRevoking = lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Reviewer");
+			lecmPermissionService.revokeAccess(pgRevoking, documentRef, employeeRef.getId());
+		} else {
+			logger.error("There is no any lecm-contract:document in bpm:package. Permissions won't be revoked");
+		}
+	}
+
+	@Override
 	public void notifyApprovalStarted(NodeRef employeeRef, Date dueDate, NodeRef bpmPackage) {
-		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, serviceRegistry);
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
 
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(employeeRef);
@@ -367,7 +385,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	@Override
 	public void notifyFinalDecision(final String decisionCode, final NodeRef bpmPackage) {
-		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, serviceRegistry);
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
 
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(documentService.getDocumentAuthor(docInfo.getDocumentRef()));
@@ -441,7 +459,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	@Override
 	public void notifyAssigneesDeadline(final String processInstanceId, final NodeRef bpmPackage) {
 		try {
-			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, serviceRegistry);
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
 
 			WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
 			taskQuery.setProcessId(processInstanceId);
@@ -479,7 +497,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final VariableScope variableScope) {
 		try {
 			boolean isDocumentApproval = Utils.isDocument(Utils.getDocumentFromBpmPackage(bpmPackage));
-			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, serviceRegistry);
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
 			Set<NodeRef> recipients = new HashSet<NodeRef>();
 			recipients.add(docInfo.getInitiatorRef());
 			WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
@@ -623,6 +641,9 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
         logDecision(approvalListRef, taskDecision);
 
 		execution.setVariable("taskDecision", decision);
+
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
+		revokeReviewerPermissions(employeeRef, bpmPackage);
     }
 
 	private Map<String, String> addDecision(final Map<String, String> decisionMap, TaskDecision taskDecision) {
@@ -647,7 +668,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	private NodeRef getTempAssigneesListaFolder() {
 		return getFolder(TEMP_ASSIGNEES_LISTS_FOLDER);
 	}
-	
+
 	@Override
 	public List<NodeRef> createAssigneesList(NodeRef assigneesListNode, DelegateExecution execution) {
 		NodeRef tempAssigneesList;

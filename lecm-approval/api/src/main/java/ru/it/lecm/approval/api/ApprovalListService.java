@@ -73,7 +73,7 @@ public interface ApprovalListService {
 	 * раздать всем участникам процесса согласования права
 	 * LECM_BASIC_PG_Reviewer
 	 *
-	 * @param employees
+	 * @param employeeRef
 	 * @param documentRef
 	 */
 	void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef);
@@ -116,5 +116,21 @@ public interface ApprovalListService {
 
 	void deleteTempAssigneesList(DelegateExecution execution);
 
-    void completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate);
+	void completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate);
+
+	/**
+	 * Отобрать права LECM_BASIC_PG_Reviewer после завершения задачи
+	 *
+	 * @param employeeRef
+	 * @param bpmPackage
+	 */
+	void revokeReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
+
+	/**
+	 * Отобрать права LECM_BASIC_PG_Reviewer после завершения задачи
+	 *
+	 * @param employeeRef
+	 * @param documentRef
+	 */
+	void revokeReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef);
 }
