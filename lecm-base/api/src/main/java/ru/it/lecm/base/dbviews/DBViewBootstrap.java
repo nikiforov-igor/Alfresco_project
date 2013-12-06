@@ -88,6 +88,8 @@ public class DBViewBootstrap {
                 valueColumn = "float_value";
             } else if ("java.lang.Long".equals(javaClassName)) {
                 valueColumn = "long_value";
+            } else if ("java.lang.Integer".equals(javaClassName)) {
+                valueColumn = "long_value";
             } else if ("java.lang.Boolean".equals(javaClassName)) {
                 valueColumn = "boolean_value";
             }
