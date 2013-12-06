@@ -138,10 +138,13 @@ LogicECM.module = LogicECM.module || {};
             },
 
             setCreateNewFormDialogTitle: function (p_form, p_dialog) {
-                var fileSpan = '<span class="light">Create new</span>';
-                Alfresco.util.populateHTML(
-                    [ p_dialog.id + "-form-container_h", fileSpan]
-                );
+				var message;
+				if ( this.options.createNewMessage ) {
+					message = this.options.createNewMessage;
+				} else {
+					message = this.msg("dialog.createNew.title");
+				}
+				p_dialog.dialog.setHeader(message);
             },
 
             _loadParentNode: function AssociationTreeViewer__loadRootNode() {
