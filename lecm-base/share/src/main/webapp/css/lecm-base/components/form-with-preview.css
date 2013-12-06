@@ -1,4 +1,8 @@
 .from-with-preview .yui-g .yui-u.first {
+	width: 700px;
+}
+
+.documents-list-create-dialog-container .from-with-preview .yui-g .yui-u.first {
 	width: 815px;
 }
 
