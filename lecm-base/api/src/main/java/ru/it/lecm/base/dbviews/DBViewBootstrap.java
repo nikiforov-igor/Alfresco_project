@@ -92,6 +92,8 @@ public class DBViewBootstrap {
                 valueColumn = "long_value";
             } else if ("java.lang.Boolean".equals(javaClassName)) {
                 valueColumn = "boolean_value";
+            } else {
+                log.warn("Value column not defined for '{}' - '{}'", prefixedName, javaClassName);
             }
 
             if (valueColumn != null) {
