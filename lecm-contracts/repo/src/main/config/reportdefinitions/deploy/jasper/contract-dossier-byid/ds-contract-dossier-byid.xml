@@ -40,10 +40,6 @@
 		<isMultiRow>false</isMultiRow>
 		<isCustom>false</isCustom>
 		<queryText><![CDATA[]]></queryText>
-		<flags>
-				<!-- соответствия входных параметров (values) свойствам бина провайдера (keys) -->
-				<property.nodeRef> <![CDATA[ID;id]]> </property.nodeRef>
-		</flags>
 	</query.descriptor>
 
 	<cmis.connection>

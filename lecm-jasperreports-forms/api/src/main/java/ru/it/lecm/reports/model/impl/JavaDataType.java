@@ -103,7 +103,7 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
                         value :
                         (value instanceof String[] ?
                                 new ArrayList<Object>(Arrays.asList((String[])value)) :
-                                new ArrayList<Object>(Arrays.asList(value.toString().split("[,;]]")))));
+                                new ArrayList<Object>(Arrays.asList(value.toString().split("[,;]")))));
             }
         };
 

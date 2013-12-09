@@ -168,10 +168,16 @@ public class ParameterMapper {
         if (args.containsKey(DataSourceDescriptor.COLNAME_ID)) {
             // нужно гарантировать колонку с ID, когда есть такой параметр ...
             ensureDataColumn(reportDesc.getDsDescriptor(), args.get(DataSourceDescriptor.COLNAME_ID), DataSourceDescriptor.COLNAME_ID, SupportedTypes.STRING);
-
-            Object refs = SupportedTypes.LIST.getValueByRealType(args.get(DataSourceDescriptor.COLNAME_ID));
-            argsMap.put(DataSourceDescriptor.COLNAME_ID, refs);
-            argsMap.put(DataSourceDescriptor.COLNAME_NODE_ID, getIdsList((List<String>)refs, nodeService));
+            String[] refs = args.get(DataSourceDescriptor.COLNAME_ID).split("[,;]");
+            if (refs.length > 1) { // несколько REF
+                Object ref = SupportedTypes.LIST.getValueByRealType(args.get(DataSourceDescriptor.COLNAME_ID));
+                argsMap.put(DataSourceDescriptor.COLNAME_ID, ref);
+                argsMap.put(DataSourceDescriptor.COLNAME_NODE_ID, getIdsList((List<String>) ref, nodeService));
+            } else if (refs.length == 1) {
+                Object ref = SupportedTypes.STRING.getValueByRealType(args.get(DataSourceDescriptor.COLNAME_ID));
+                argsMap.put(DataSourceDescriptor.COLNAME_ID, ref);
+                argsMap.put(DataSourceDescriptor.COLNAME_NODE_ID, getId((String)ref, nodeService));
+            }
         }
 
         // аналогично нужно гарантировать колонку с TYPE, когда есть такой параметр или тип задан явно ...
@@ -194,13 +200,21 @@ public class ParameterMapper {
             nodeIds = new ArrayList<Long>();
             if (!((List) refsValue).isEmpty()) {
                 for (String nodeRef : refsValue) {
-                    if (NodeRef.isNodeRef(nodeRef)) {
-                        nodeIds.add((Long) nodeService.getProperty(new NodeRef(nodeRef), ContentModel.PROP_NODE_DBID));
-                    }
+                    nodeIds.add(getId(nodeRef, nodeService));
                 }
             }
         }
         return nodeIds;
+    }
+
+    static private Long getId(String refValue, NodeService nodeService) {
+        Long nodeId = null;
+        if (refValue != null) {
+            if (NodeRef.isNodeRef(refValue)) {
+                nodeId = (Long) nodeService.getProperty(new NodeRef(refValue), ContentModel.PROP_NODE_DBID);
+            }
+        }
+        return nodeId;
     }
 
     static public Object getNumericAutoTypedValue(String value) {

@@ -135,8 +135,8 @@ public class ArgsHelper {
 
             // до первого совпадения по имени в параметрах ...
             for (String name : aliases.split("[,;]")) {
-                if (srcParameters.containsKey(name)) { // найден синоним среди параметров ...
-                    result.put(beanPropName, String.valueOf(srcParameters.get(name)));
+                if (srcParameters.containsKey(name.trim())) { // найден синоним среди параметров ...
+                    result.put(beanPropName, String.valueOf(srcParameters.get(name.trim())));
                     break;
                 }
             } // for name
