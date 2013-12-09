@@ -480,6 +480,8 @@
     <config evaluator="node-type" condition="lecm-rpeditor:reportDataColumn">
         <forms>
             <form>
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:dataColumnCode"/>
@@ -490,9 +492,12 @@
                     <show id="lecm-rpeditor:dataColumnOrder"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="label.report.displayName"/>
-                    <field id="lecm-rpeditor:dataColumnCode"/>
-                    <field id="lecm-rpeditor:columnTypeAssoc" >
+                    <set id="settings" appearance="" label-id="report-column.settings" />
+                    <set id="parameter" appearance="" label-id="report-column.parameter" />
+
+                    <field id="cm:name" label-id="label.report.displayName" set="settings"/>
+                    <field id="lecm-rpeditor:dataColumnCode" set="settings"/>
+                    <field id="lecm-rpeditor:columnTypeAssoc" set="settings">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -501,10 +506,10 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-rpeditor:dataColumnExpression" mandatory="true">
+                    <field id="lecm-rpeditor:dataColumnExpression" mandatory="true" set="settings">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
                     </field>
-                    <field id="lecm-rpeditor:columnParameterTypeAssoc">
+                    <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -514,7 +519,7 @@
                             <control-param name="changeItemsFireAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
                     </field>
-                    <field id="lecm-rpeditor:dataColumnClass">
+                    <field id="lecm-rpeditor:dataColumnClass" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">lecm/base/types</control-param>
@@ -522,9 +527,12 @@
                             <control-param name="updateOnAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
                     </field>
+                    <field id="lecm-rpeditor:dataColumnOrder" set="parameter"/>
                 </appearance>
             </form>
             <form id="sql-provider-column">
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:dataColumnCode"/>
@@ -534,9 +542,12 @@
                     <show id="lecm-rpeditor:dataColumnOrder"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="label.report.displayName"/>
-                    <field id="lecm-rpeditor:dataColumnCode"/>
-                    <field id="lecm-rpeditor:columnTypeAssoc" >
+                    <set id="settings" appearance="" label-id="report-column.settings" />
+                    <set id="parameter" appearance="" label-id="report-column.parameter" />
+
+                    <field id="cm:name" label-id="label.report.displayName" set="settings"/>
+                    <field id="lecm-rpeditor:dataColumnCode" set="settings"/>
+                    <field id="lecm-rpeditor:columnTypeAssoc" set="settings">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -545,7 +556,10 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-rpeditor:columnParameterTypeAssoc">
+                    <field id="lecm-rpeditor:dataColumnExpression" mandatory="false" set="settings">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
+                    <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -555,7 +569,7 @@
                             <control-param name="changeItemsFireAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
                     </field>
-                    <field id="lecm-rpeditor:dataColumnClass">
+                    <field id="lecm-rpeditor:dataColumnClass" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">lecm/base/types</control-param>
@@ -563,6 +577,7 @@
                             <control-param name="updateOnAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
                     </field>
+                    <field id="lecm-rpeditor:dataColumnOrder" set="parameter"/>
                 </appearance>
             </form>
         </forms>
@@ -571,6 +586,7 @@
     <config evaluator="model-type" condition="lecm-rpeditor:reportDataColumn">
         <forms>
             <form>
+                <create-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:dataColumnCode"/>
@@ -581,9 +597,12 @@
                     <show id="lecm-rpeditor:dataColumnOrder"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="label.report.displayName"/>
-                    <field id="lecm-rpeditor:dataColumnCode" />
-                    <field id="lecm-rpeditor:columnTypeAssoc">
+                    <set id="settings" appearance="" label-id="report-column.settings" />
+                    <set id="parameter" appearance="" label-id="report-column.parameter" />
+
+                    <field id="cm:name" label-id="label.report.displayName" set="settings"/>
+                    <field id="lecm-rpeditor:dataColumnCode" set="settings"/>
+                    <field id="lecm-rpeditor:columnTypeAssoc" set="settings">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -592,10 +611,10 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-rpeditor:dataColumnExpression" mandatory="true">
+                    <field id="lecm-rpeditor:dataColumnExpression" set="settings" mandatory="true">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
                     </field>
-                    <field id="lecm-rpeditor:columnParameterTypeAssoc">
+                    <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter" >
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -605,7 +624,7 @@
                             <control-param name="changeItemsFireAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
                     </field>
-                    <field id="lecm-rpeditor:dataColumnClass">
+                    <field id="lecm-rpeditor:dataColumnClass" set="parameter" >
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">lecm/base/types</control-param>
@@ -613,6 +632,7 @@
                             <control-param name="updateOnAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
                     </field>
+                    <field id="lecm-rpeditor:dataColumnOrder" set="parameter"/>
                 </appearance>
             </form>
             <form id="short-datagrid">
@@ -627,6 +647,7 @@
                 </appearance>
             </form>
             <form id="sql-provider-column">
+                <create-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:dataColumnCode"/>
@@ -636,9 +657,12 @@
                     <show id="lecm-rpeditor:dataColumnOrder"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="label.report.displayName"/>
-                    <field id="lecm-rpeditor:dataColumnCode" />
-                    <field id="lecm-rpeditor:columnTypeAssoc">
+                    <set id="settings" appearance="" label-id="report-column.settings" />
+                    <set id="parameter" appearance="" label-id="report-column.parameter" />
+
+                    <field id="cm:name" label-id="label.report.displayName" set="settings"/>
+                    <field id="lecm-rpeditor:dataColumnCode" set="settings"/>
+                    <field id="lecm-rpeditor:columnTypeAssoc" set="settings">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_столбцов</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -647,7 +671,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-rpeditor:columnParameterTypeAssoc">
+                    <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -657,7 +681,7 @@
                             <control-param name="changeItemsFireAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
                     </field>
-                    <field id="lecm-rpeditor:dataColumnClass">
+                    <field id="lecm-rpeditor:dataColumnClass" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">lecm/base/types</control-param>
@@ -665,6 +689,7 @@
                             <control-param name="updateOnAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
                     </field>
+                    <field id="lecm-rpeditor:dataColumnOrder" set="parameter"/>
                 </appearance>
             </form>
             <form id="datagrid">
