@@ -1,9 +1,5 @@
 package ru.it.lecm.businessjournal.schedule;
 
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.List;
-
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.service.cmr.action.Action;
@@ -13,7 +9,13 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.businessjournal.beans.BusinessJournalRecord;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * @author dbashmakov
@@ -100,7 +102,12 @@ public class BusinessJournalArchiveSchedule extends AbstractScheduledAction {
 		int days = Integer.valueOf(getArchiverSettings().getDeep());
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DATE, -days);
-		return businessJournalService.getRecordsByInterval(null, calendar.getTime());
+        List<BusinessJournalRecord> records = businessJournalService.getRecordsByInterval(null, calendar.getTime());
+        for (BusinessJournalRecord record : records) {
+            boolean success = businessJournalService.moveRecordToArchive(record.getNodeId());
+            logger.debug(String.format("Результат перемещения записи в архив: [%s] - успех [%s]", record.getNodeId(), success));
+        }
+        return new ArrayList<NodeRef>();
 	}
 
 	@Override

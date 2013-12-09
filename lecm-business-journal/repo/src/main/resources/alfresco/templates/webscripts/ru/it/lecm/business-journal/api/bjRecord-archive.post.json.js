@@ -13,7 +13,7 @@ function main() {
                 };
 
                 try {
-                    result.success = businessJournal.archiveRecord(nodeRef);
+                    result.success = businessJournal.archiveRecord(parseInt(nodeRef));
                 }
                 catch (e) {
                     result.success = false;
@@ -26,10 +26,10 @@ function main() {
             if (dateArchiveTo != null) {
                 items = businessJournal.findOldRecords(dateArchiveTo);
                 for (item in items) {
-                    nodeRef = items[item].getNodeRef().toString();
+                    nodeRef = items[item].getNodeId();
                     result =
                     {
-                        nodeRef: nodeRef,
+                        nodeRef: nodeRef.toString(),
                         action: "archiveRecord",
                         success: false
                     };

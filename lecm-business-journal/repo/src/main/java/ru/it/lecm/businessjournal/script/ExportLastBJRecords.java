@@ -1,14 +1,15 @@
 package ru.it.lecm.businessjournal.script;
 
 import com.csvreader.CsvWriter;
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import ru.it.lecm.businessjournal.beans.BusinessJournalRecord;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 
 import java.io.IOException;
@@ -78,39 +79,50 @@ public class ExportLastBJRecords extends AbstractWebScript {
             wr.write("Доп. объект 4");
             wr.write("Доп. объект 5");
             wr.endRecord();
-            List<NodeRef> bjRecordbjRecords = businessJournalService.getLastRecords(recordsCount, includeArchiveRecords);
+            List<BusinessJournalRecord> bjRecordbjRecords = businessJournalService.getLastRecords(recordsCount, includeArchiveRecords);
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-            for (NodeRef bjRecord : bjRecordbjRecords) {
-                Date reportDate = (Date) nodeService.getProperty(bjRecord, BusinessJournalService.PROP_BR_RECORD_DATE);
+            for (BusinessJournalRecord bjRecord : bjRecordbjRecords) {
+                Date reportDate = bjRecord.getDate();
                 wr.write(format.format(reportDate));
 
-                String reportDescription = (String) nodeService.getProperty(bjRecord, BusinessJournalService.PROP_BR_RECORD_DESC);
+                String reportDescription = bjRecord.getRecordDescription();
                 reportDescription = reportDescription.replaceAll("<a[^>]*>", "");
                 reportDescription = reportDescription.replaceAll("</a>", "");
                 wr.write(reportDescription);
 
-                String category = (String) nodeService.getProperty(bjRecord, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-evCategory-assoc-text-content"));
+                String category;
+                if (bjRecord.getEventCategory() != null) {
+                    category = (String) nodeService.getProperty(bjRecord.getEventCategory(), ContentModel.PROP_NAME);
+                } else {
+                    category = "unknown";
+                }
                 wr.write(category);
 
-                String type = (String) nodeService.getProperty(bjRecord, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-objType-assoc-text-content"));
+                NodeRef objectType = businessJournalService.getObjectType(bjRecord.getMainObject());
+                String type;
+                if (objectType != null) {
+                    type = (String) nodeService.getProperty(objectType, ContentModel.PROP_NAME);
+                } else {
+                    type = nodeService.getType(bjRecord.getMainObject()).getPrefixString().replace(":", "_");
+                }
                 wr.write(type);
 
-                String mainObject = (String) nodeService.getProperty(bjRecord, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-mainObject-assoc-ref"));
+                String mainObject = bjRecord.getMainObject().toString();
                 wr.write(mainObject);
 
-                String obj1 = (String) nodeService.getProperty(bjRecord, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-secondaryObj1-assoc-ref"));
+                String obj1 = bjRecord.getObject1();
                 wr.write(obj1);
 
-                String obj2 = (String) nodeService.getProperty(bjRecord, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-secondaryObj2-assoc-ref"));
+                String obj2 = bjRecord.getObject2();
                 wr.write(obj2);
 
-                String obj3 = (String) nodeService.getProperty(bjRecord, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-secondaryObj3-assoc-ref"));
+                String obj3 = bjRecord.getObject3();
                 wr.write(obj3);
 
-                String obj4 = (String) nodeService.getProperty(bjRecord, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-secondaryObj4-assoc-ref"));
+                String obj4 = bjRecord.getObject4();
                 wr.write(obj4);
 
-                String obj5 = (String) nodeService.getProperty(bjRecord, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-secondaryObj5-assoc-ref"));
+                String obj5 = bjRecord.getObject5();
                 wr.write(obj5);
 
                 wr.endRecord();

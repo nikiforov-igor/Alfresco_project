@@ -3,7 +3,9 @@ package ru.it.lecm.subscriptions.schedule;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.action.Action;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -12,17 +14,22 @@ import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.businessjournal.beans.BusinessJournalRecord;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.notifications.beans.Notification;
+import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.subscriptions.beans.SubscriptionsService;
 
+import java.io.Serializable;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: PMelnikov
@@ -37,8 +44,10 @@ public class BusinessJournalSchedule extends AbstractScheduledAction {
 	 */
 	private SearchService searchService;
 	private NodeService nodeService;
-
-	private NamespaceService namespaceService;
+    private NamespaceService namespaceService;
+    private NotificationsService notificationsService;
+    private OrgstructureBean orgstructureService;
+    private SubscriptionsService subscriptionsService;
 
 	/*
 	 * The cron expression
@@ -97,7 +106,19 @@ public class BusinessJournalSchedule extends AbstractScheduledAction {
 		this.businessJournalService = businessJournalService;
 	}
 
-	/**
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
+    public void setNotificationsService(NotificationsService notificationsService) {
+        this.notificationsService = notificationsService;
+    }
+
+    public void setSubscriptionsService(SubscriptionsService subscriptionsService) {
+        this.subscriptionsService = subscriptionsService;
+    }
+
+    /**
 	 * Set the node service.
 	 *
 	 * @param nodeService
@@ -158,38 +179,169 @@ public class BusinessJournalSchedule extends AbstractScheduledAction {
 	 */
 	@Override
 	public List<NodeRef> getNodes() {
-		NodeRef businessJournalRoot = businessJournalService.getBusinessJournalDirectory();
-		String path = nodeService.getPath(businessJournalRoot).toPrefixString(namespaceService);
-		String type = BusinessJournalService.TYPE_BR_RECORD.toPrefixString(namespaceService);
-		String aspect = SubscriptionsService.ASPECT_SUBSCRIBED.toPrefixString(namespaceService);
+        RetryingTransactionHelper transactionHelper = getTransactionService().getRetryingTransactionHelper();
+        transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+            @Override
+            public Object execute() throws Throwable {
+                NodeRef root = subscriptionsService.getSubscriptionRootRef();
+                if (nodeService.hasAspect(root, SubscriptionsService.ASPECT_LAST_RECORD_ID)) {
+                    Long lastId = (Long) nodeService.getProperty(root, SubscriptionsService.PROP_LAST_RECORD_ID);
+                    List<BusinessJournalRecord> nodes = businessJournalService.getRecordsAfter(lastId);
+                    for (BusinessJournalRecord record : nodes) {
+                        executeSubscription(record);
+                        nodeService.setProperty(root, SubscriptionsService.PROP_LAST_RECORD_ID, record.getNodeId());
+                    }
 
-		SearchParameters parameters = new SearchParameters();
-		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
-		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type +"\" AND NOT EXACTASPECT:\"" + aspect + "\"");
-		ArrayList<NodeRef> result = new ArrayList<NodeRef>();
-		ResultSet resultSet = null;
-		try {
-			resultSet = searchService.query(parameters);
-			for (ResultSetRow row : resultSet) {
-				NodeRef node = row.getNodeRef();
-				if (!nodeService.hasAspect(node, SubscriptionsService.ASPECT_SUBSCRIBED)) {
-					result.add(node);
-				}
-			}
-		} catch (LuceneQueryParserException e) {
-		} catch (Exception e1) {
-			logger.error("Error while getting business journal's records without sending notification for subscribe", e1);
-		} finally {
-			if (resultSet != null) {
-				resultSet.close();
-			}
-		}
-
-		return result;
+                } else {
+                    List<BusinessJournalRecord> nodes = businessJournalService.getRecordsAfter(0L);
+                    Long lastId = 0L;
+                    if (nodes.size() > 0) {
+                        lastId = nodes.get(nodes.size() - 1).getNodeId();
+                    }
+                    Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+                    props.put(SubscriptionsService.PROP_LAST_RECORD_ID, lastId);
+                    nodeService.addAspect(root, SubscriptionsService.ASPECT_LAST_RECORD_ID, props);
+                }
+                return null;
+            }
+        }, false, true);
+		return new ArrayList<NodeRef>();
 	}
 
-	/* (non-Javadoc)
+    protected void executeSubscription(BusinessJournalRecord record) {
+        String author = record.getInitiatorText();
+        NodeRef initiator = record.getInitiator();
+        String description = record.getRecordDescription();
+        Date date = record.getDate();
+        NodeRef mainObject = record.getMainObject();
+
+        Set<NodeRef> subscriptions = new HashSet<NodeRef>();
+        subscriptions.addAll(findSubscriptionsToType(record.getObjectType(), record.getEventCategory()));
+        subscriptions.addAll(findSubscriptionsToInitiator(initiator));
+
+        //При подписке на сотрудника и рабочую группу в нее должны попадать не те записи Б-Ж, в которых данный сотрудник является основным объектом, а те, в которых он является инициатором
+        if (nodeService.exists(mainObject) && !this.orgstructureService.isEmployee(mainObject) && !this.orgstructureService.isWorkGroup(mainObject)) {
+            //добавляем подписки на объект
+            subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(mainObject));
+        }
+        sendNotificationsBySubscriptions(subscriptions, author, initiator, description, mainObject, date);
+    }
+
+    //обработка подписок на действия сотрудника/группы/подразделения
+    private Set<NodeRef> findSubscriptionsToInitiator(NodeRef initiator) {
+        Set<NodeRef> subscriptions = new HashSet<NodeRef>();
+        if (initiator == null || !nodeService.exists(initiator)) {
+            return subscriptions;
+        }
+        //заполнение списка возможных объектов подписки по инициатору
+        Set<NodeRef> initiators = new HashSet<NodeRef>();
+        initiators.add(initiator);
+        //рабочие группы, в которые входит инициатор
+        List<NodeRef> workGroups = orgstructureService.getEmployeeWorkGroups(initiator);
+        initiators.addAll(workGroups);
+        //подразделения, в которые входит инициатор (включая родительские)
+        List<NodeRef> units = orgstructureService.getEmployeeUnits(initiator, false);
+        for (NodeRef unit : units) {
+            initiators.add(unit);
+            while ((unit = orgstructureService.getParentUnit(unit)) != null) {
+                if (!initiators.add(unit)) {
+                    break;
+                }
+            }
+        }
+
+        for (NodeRef initRef : initiators) {
+            subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(initRef));
+        }
+        return subscriptions;
+    }
+
+    private void sendNotificationsBySubscriptions(Set<NodeRef> subscriptions, String author, NodeRef initiatorRef, String description, NodeRef mainObject, Date date) {
+        for (NodeRef subscription : subscriptions) {
+            List<NodeRef> notificationTypes = assocsToCollection(subscription, SubscriptionsService.ASSOC_NOTIFICATION_TYPE);
+            List<NodeRef> employees = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_EMPLOYEE);
+            List<NodeRef> positions = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_POSITION);
+            List<NodeRef> units = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_ORGANIZATION_UNIT);
+            List<NodeRef> workgroups = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_WORK_GROUP);
+            List<NodeRef> businessRoles = assocsToCollection(subscription, SubscriptionsService.ASSOC_DESTINATION_BUSINESS_ROLE);
+            Notification notification = new Notification();
+            notification.setObjectRef(mainObject);
+            notification.setAuthor(author);
+            notification.setInitiatorRef(initiatorRef);
+            notification.setDescription(description);
+            notification.setFormingDate(date);
+            notification.setTypeRefs(notificationTypes);
+            notification.setRecipientEmployeeRefs(employees);
+            notification.setRecipientPositionRefs(positions);
+            notification.setRecipientOrganizationUnitRefs(units);
+            notification.setRecipientWorkGroupRefs(workgroups);
+            notification.setRecipientBusinessRoleRefs(businessRoles);
+            notificationsService.sendNotification(notification);
+        }
+    }
+
+    private Set<NodeRef> findSubscriptionsToType(NodeRef byType, NodeRef byCategory) {
+        NodeRef subscriptionsRoot = subscriptionsService.getSubscriptionRootRef();
+        String path = nodeService.getPath(subscriptionsRoot).toPrefixString(namespaceService);
+        String type = SubscriptionsService.TYPE_SUBSCRIPTION_TO_TYPE.toPrefixString(namespaceService);
+
+        String subscriptionType = SubscriptionsService.ASSOC_OBJECT_TYPE.toPrefixString(namespaceService) + "-ref";
+        String subscriptionCategory = SubscriptionsService.ASSOC_EVENT_CATEGORY.toPrefixString(namespaceService) + "-ref";
+
+        String typeAttribute = "@" + subscriptionType.replace(":", "\\:");
+        String categoryAttribute = "@" + subscriptionCategory.replace(":", "\\:");
+
+        String query = " +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"";
+
+        query += " AND (ISNULL:" + subscriptionType.replace(":", "\\:") + " OR "
+                + typeAttribute + ":\"\"";
+
+        if (byType != null) {
+            query += " OR (" + typeAttribute + ":\"" + byType.toString() + "\"";
+            query += " AND (ISNULL:" + subscriptionCategory.replace(":", "\\:")
+                    + " OR " + categoryAttribute + ":\"\"";
+            if (byCategory != null) {
+                query += " OR " + categoryAttribute + ":\"" + byCategory.toString() + "\"";
+            }
+            query += "))";
+        }
+
+        query += ")";
+
+        SearchParameters parameters = new SearchParameters();
+        parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
+        parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        parameters.setQuery(query);
+        ResultSet resultSet = null;
+        Set<NodeRef> subscriptions = new HashSet<NodeRef>();
+        try {
+            resultSet = searchService.query(parameters);
+            for (ResultSetRow row : resultSet) {
+                subscriptions.add(row.getNodeRef());
+            }
+        } catch (LuceneQueryParserException ignored) {
+        } catch (Exception e1) {
+            logger.error("Error while send notification for business journal's record", e1);
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+        }
+        return subscriptions;
+    }
+
+    private List<NodeRef> assocsToCollection(NodeRef parent, QName assocName) {
+        ArrayList<NodeRef> result = new ArrayList<NodeRef>();
+        List<AssociationRef> refs = nodeService.getTargetAssocs(parent, assocName);
+        for (AssociationRef ref : refs) {
+            NodeRef assocNodeRef = ref.getTargetRef();
+            result.add(assocNodeRef);
+        }
+        return result;
+    }
+
+
+    /* (non-Javadoc)
 	 * @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getAction(org.alfresco.service.cmr.repository.NodeRef)
 	 */
 	@Override

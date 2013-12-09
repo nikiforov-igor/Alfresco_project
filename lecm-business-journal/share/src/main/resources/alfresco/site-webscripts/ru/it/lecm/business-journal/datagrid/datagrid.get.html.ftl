@@ -30,7 +30,8 @@
                                     }
 								}
 							],
-							bubblingLabel: "${bubblingLabel!"bj-records"}",
+                            dataSource: "/lecm/business-journal/ds/main",
+                            bubblingLabel: "${bubblingLabel!"bj-records"}",
 							showCheckboxColumn: true,
 							attributeForShow:"lecm-busjournal:bjRecord-date"
 						}).setMessages(${messages});
@@ -40,10 +41,8 @@
                         datagridMeta: {
                             itemType: "lecm-busjournal:bjRecord",
 	                        nodeRef: LogicECM.module.BusinessJournal.CONTAINER,
-                            sort:"lecm-busjournal:bjRecord-date|desc",
-                            searchConfig: {
-                                filter: '+PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Бизнес-журнал//*"'
-                            }
+                            sort:"lecm-busjournal:bjRecord-date|desc"
+
                         },
                         bubblingLabel: "bj-records"
                     });

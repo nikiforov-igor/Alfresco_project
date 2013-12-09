@@ -5,17 +5,16 @@ import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.businessjournal.beans.BusinessJournalRecord;
 import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
 import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author dbashmakov
@@ -43,8 +42,8 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
 	}
 
 	public Scriptable getRecordsByInterval(long start, long end) {
-		List<NodeRef> refs = service.getRecordsByInterval(getDateFromLong(start), getDateFromLong(end));
-		return createScriptable(refs);
+		List<BusinessJournalRecord> refs = service.getRecordsByInterval(getDateFromLong(start), getDateFromLong(end));
+		return Context.getCurrentContext().newArray(getScope(), createScriptRecord(refs).toArray());
 	}
 
 	public ScriptNode getRecord(String recordRef) {
@@ -91,11 +90,24 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
                 start = calendar.getTime();
             }
         }
-        List<NodeRef> refs = service.getRecordsByParams(objectTypes, start, now, whoseKey, Boolean.parseBoolean(checkMainObject), skipCountInt, maxItemsInt);
-        return createScriptable(refs);
+        List<BusinessJournalRecord> refs = service.getRecordsByParams(objectTypes, start, now, whoseKey, Boolean.parseBoolean(checkMainObject), skipCountInt, maxItemsInt);
+        return Context.getCurrentContext().newArray(getScope(), createScriptRecord(refs).toArray());
     }
 
-	public ScriptNode getDirectory() {
+    public Scriptable getRecords(String sort, Integer startIndex, Integer maxResults, Scriptable filter, Boolean andFilter, Boolean includeArchived) {
+        String[] sortSet = sort.split("\\|");
+        BusinessJournalRecord.Field field = BusinessJournalRecord.Field.fromFieldName(sortSet[0]);
+        boolean ascending = Boolean.valueOf(sortSet[1]);
+        List<BusinessJournalRecord> result = service.getRecords(field, ascending, startIndex, maxResults, getFilter(filter), andFilter, includeArchived);
+        return Context.getCurrentContext().newArray(getScope(), createScriptRecord(result).toArray());
+    }
+
+    public Long getRecordsCount(Scriptable filter, Boolean andFilter, Boolean includeArchived) {
+        Map<BusinessJournalRecord.Field, String> filterObject = getFilter(filter);
+        return service.getRecordsCount(filterObject, andFilter, includeArchived);
+    }
+
+    public ScriptNode getDirectory() {
 		try {
 			NodeRef ref = service.getBusinessJournalDirectory();
 			return new ScriptNode(ref, serviceRegistry, getScope());
@@ -104,6 +116,21 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
 		}
 	}
 
+    private Map<BusinessJournalRecord.Field, String> getFilter(Scriptable filter) {
+        HashMap<BusinessJournalRecord.Field, String> result = new HashMap<BusinessJournalRecord.Field, String>();
+        if (filter != null) {
+            Object[] ids = filter.getIds();
+            for (Object id1 : ids) {
+                String id = (String) id1;
+                String value = ScriptableObject.getProperty(filter, id).toString();
+                if (id.endsWith("-date-range")) {
+                    id = id.replace("-date-range", "");
+                }
+                result.put(BusinessJournalRecord.Field.fromFieldName(id), value);
+            }
+        }
+        return result;
+    }
     private Date getDateFromLong(long longDate) {
         if (longDate != -1) {
             Calendar calendar = Calendar.getInstance();
@@ -118,13 +145,8 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
 		return service.getObjectDescription(ref);
 	}
 
-	public boolean archiveRecord(String recordRef) {
-		boolean result = false;
-		NodeRef ref = new NodeRef(recordRef);
-		if (service.isBJRecord(ref)) {
-			result = service.moveRecordToArchive(ref);
-		}
-		return result;
+	public boolean archiveRecord(Long recordId) {
+		return service.moveRecordToArchive(recordId);
 	}
 
 	public ScriptNode getArchiveDirectory() {
@@ -140,8 +162,8 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
 
-            List<NodeRef> refs = service.getRecordsByInterval(null, date);
-            return createScriptable(refs);
+            List<BusinessJournalRecord> refs = service.getRecordsByInterval(null, date);
+            return Context.getCurrentContext().newArray(getScope(), createScriptRecord(refs).toArray());
         } catch (ParseException e) {
             throw new ScriptException("Неверный формат даты!", e);
         }
@@ -150,17 +172,17 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
     public Scriptable getHistory(String nodeRef, String sortColumnName, boolean ascending, boolean showSecondary, boolean showInactive) {
         ParameterCheck.mandatory("parentRef", nodeRef);
         NodeRef ref = new NodeRef(nodeRef);
-        List<NodeRef> records = service.getHistory(ref, sortColumnName, ascending, showSecondary, showInactive);
+        List<BusinessJournalRecord> records = service.getHistory(ref, sortColumnName, ascending, showSecondary, showInactive);
 
-        return createScriptable(records);
+        return Context.getCurrentContext().newArray(getScope(), createScriptRecord(records).toArray());
     }
 
     public Scriptable getStatusHistory(String nodeRef, String sortColumnName, boolean ascending) {
         ParameterCheck.mandatory("parentRef", nodeRef);
         NodeRef ref = new NodeRef(nodeRef);
-        List<NodeRef> records = service.getStatusHistory(ref, sortColumnName, ascending);
+        List<BusinessJournalRecord> records = service.getStatusHistory(ref, sortColumnName, ascending);
 
-        return createScriptable(records);
+        return Context.getCurrentContext().newArray(getScope(), createScriptRecord(records).toArray());
     }
 
 	public void setArchiverSettings(BusinessJournalArchiverSettings archiverSettings) {
@@ -172,7 +194,45 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
 		return new ScriptNode(settings, serviceRegistry, getScope());
 	}
 
-	public boolean isBJEngeneer() {
+    public BusinessJournalScriptRecord getNodeById(Long nodeId){
+        return createScriptRecord(service.getNodeById(nodeId));
+    }
+
+    public boolean isBJEngeneer() {
 		return service.isBJEngineer();
 	}
+
+    private List<BusinessJournalScriptRecord> createScriptRecord(List<BusinessJournalRecord> records) {
+        List<BusinessJournalScriptRecord> result = new ArrayList<BusinessJournalScriptRecord>();
+        for (BusinessJournalRecord record : records) {
+            BusinessJournalScriptRecord resultRecord = createScriptRecord(record);
+            if (resultRecord != null) {
+                result.add(resultRecord);
+            }
+        }
+        return result;
+    }
+
+    private BusinessJournalScriptRecord createScriptRecord(BusinessJournalRecord record) {
+        if (record == null) {
+            return null;
+        } else {
+            BusinessJournalScriptRecord scriptRecord = new BusinessJournalScriptRecord(
+                    record.getNodeId(),
+                    record.getDate(),
+                    record.getInitiator() != null ? new ScriptNode(record.getInitiator(), serviceRegistry, getScope()) : null,
+                    new ScriptNode(record.getMainObject(), serviceRegistry, getScope()),
+                    new ScriptNode(record.getObjectType(), serviceRegistry, getScope()),
+                    record.getMainObjectDescription(),
+                    record.getRecordDescription(),
+                    new ScriptNode(record.getEventCategory(), serviceRegistry, getScope()),
+                    record.getObjects(),
+                    record.isActive());
+            scriptRecord.setObjectTypeText(record.getObjectTypeText());
+            scriptRecord.setEventCategoryText(record.getEventCategoryText());
+            scriptRecord.setInitiatorText(record.getInitiatorText());
+            return scriptRecord;
+        }
+    }
+
 }

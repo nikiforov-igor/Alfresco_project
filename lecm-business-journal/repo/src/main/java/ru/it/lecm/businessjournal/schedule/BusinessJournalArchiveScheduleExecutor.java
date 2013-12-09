@@ -1,7 +1,5 @@
 package ru.it.lecm.businessjournal.schedule;
 
-import java.util.List;
-
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
@@ -9,6 +7,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+
+import java.util.List;
 
 /**
  * @author dbashmakov
@@ -22,8 +22,6 @@ public class BusinessJournalArchiveScheduleExecutor extends ActionExecuterAbstra
 
 	@Override
 	protected void executeImpl(Action action, NodeRef nodeRef) {
-		boolean success =businessJournalService.moveRecordToArchive(nodeRef);
-		logger.debug(String.format("Результат перемещения записи в архив: [%s] - успех [%s]", nodeRef, success));
 	}
 
 	@Override

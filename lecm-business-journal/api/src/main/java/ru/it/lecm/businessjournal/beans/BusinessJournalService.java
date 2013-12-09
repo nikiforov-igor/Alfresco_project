@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dbashmakov
@@ -204,47 +205,12 @@ public interface BusinessJournalService {
 	 */
 	NodeRef getBusinessJournalDirectory();
 
-	/**
-	 * Метод, возвращающий список ссылок на записи бизнес-журнала, сформированные за заданный период
-	 *
-	 * @param begin - начальная дата
-	 * @param end   - конечная дата
-	 * @return список ссылок
-	 */
-	List<NodeRef> getRecordsByInterval(Date begin, Date end);
-
-	/**
+    /**
 	 * Метод, проверяющий что заданная нода является записью бизнес-журнала
 	 *
 	 * @return true/false
 	 */
 	boolean isBJRecord(NodeRef ref);
-
-	/**
-	 * Метод, возвращающий список ссылок на записи заданного типа(типов),
-	 * сформированные за заданный период с учетом инициатора
-	 * @param objectTypeRefs    - тип объекта (или типы, разделенные запятой)
-	 * @param begin             - начальная дата
-	 * @param end               - конечная дата
-	 * @param whoseKey          - дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
-	 * @param checkMainObject   - проверять ли доступность основного объекта
-	 * @return список ссылок
-	 */
-    List<NodeRef> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject);
-
-    /**
-     * Метод, возвращающий список ссылок на записи заданного типа(типов),
-     * сформированные за заданный период с учетом инициатора
-     * @param objectTypeRefs    - тип объекта (или типы, разделенные запятой)
-     * @param begin             - начальная дата
-     * @param end               - конечная дата
-     * @param whoseKey          - дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
-     * @param checkMainObject   - проверять ли доступность основного объекта
-     * @param skipCount   - пропустить первые skipCount записей
-     * @param maxItems   - ограничить размер выдачи
-     * @return список ссылок
-     */
-    List<NodeRef> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject, Integer skipCount, Integer maxItems);
 
     /**
 	 * Метод, возвращающий директорию c архивными записями
@@ -252,21 +218,81 @@ public interface BusinessJournalService {
 	 */
 	NodeRef getBusinessJournalArchiveDirectory();
 
-	/**
-	 * Метод, перемещающий заданную запись в архив
-	 * @return boolean результат выполнения операции
-	 */
-	boolean moveRecordToArchive(NodeRef record);
-
-    List<NodeRef> getStatusHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending);
-
-	/**
+    /**
 	 * Является ли текущий пользователь технологом бизнес-журнала
 	 * @return true если является
 	 */
 	boolean isBJEngineer();
 
-    List<NodeRef> getHistory(NodeRef nodeRef, String sortColumnLocalName, boolean sortAscending, boolean includeSecondary, boolean showInactive);
+    /**
+     * Метод, возвращающий ссылку на объект справочника "Тип объекта" для заданного объекта
+     *
+     * @param nodeRef - ссылка на объект
+     * @return ссылка на объект справочника или NULL
+     */
+    public NodeRef getObjectType(NodeRef nodeRef);
 
-    List<NodeRef>  getLastRecords(int maxRecordsCount, boolean includeFromArchive);
+    /**
+     * Метод, возвращающий список ссылок на записи бизнес-журнала, сформированные за заданный период
+     *
+     * @param begin - начальная дата
+     * @param end   - конечная дата
+     * @return список ссылок
+     */
+    abstract List<BusinessJournalRecord> getRecordsByInterval(Date begin, Date end);
+
+    /**
+     * Метод, возвращающий список ссылок на записи заданного типа(типов),
+     * сформированные за заданный период с учетом инициатора
+     *
+     * @param objectTypeRefs  - тип объекта (или типы, разделенные запятой)
+     * @param begin           - начальная дата
+     * @param end             - конечная дата
+     * @param whoseKey        - дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
+     * @param checkMainObject - проверять ли доступность основного объекта
+     * @return список ссылок
+     */
+    List<BusinessJournalRecord> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject);
+
+    /**
+     * Метод, возвращающий список ссылок на записи заданного типа(типов),
+     * сформированные за заданный период с учетом инициатора
+     *
+     * @param objectTypeRefs  - тип объекта (или типы, разделенные запятой)
+     * @param begin           - начальная дата
+     * @param end             - конечная дата
+     * @param whoseKey        - дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
+     * @param checkMainObject - проверять ли доступность основного объекта
+     * @param skipCount       - пропустить первые skipCount записей
+     * @param maxItems        - ограничить размер выдачи
+     * @return список ссылок
+     */
+    List<BusinessJournalRecord> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject, Integer skipCount, Integer maxItems);
+
+    /**
+     * Метод, перемещающий заданную запись в архив
+     *
+     * @return boolean результат выполнения операции
+     */
+    public boolean moveRecordToArchive(final Long recordId);
+
+    public BusinessJournalRecord getNodeById(Long nodeId);
+
+    List<BusinessJournalRecord> getStatusHistory(NodeRef nodeRef, String sortColumnLocalName, boolean sortAscending);
+
+    List<BusinessJournalRecord> getHistory(NodeRef nodeRef, String sortColumnLocalName, boolean sortAscending, boolean includeSecondary, boolean showInactive);
+
+    List<BusinessJournalRecord> getLastRecords(int maxRecordsCount, boolean includeFromArchive);
+
+    List<BusinessJournalRecord> getRecords(BusinessJournalRecord.Field sortField, boolean ascending, int startIndex, int maxResults, Map<BusinessJournalRecord.Field, String> filter, boolean andFilter, boolean includeArchived);
+
+    Long getRecordsCount(Map<BusinessJournalRecord.Field, String> filter, boolean andFilter, boolean includeArchived);
+
+    /**
+     * Выбор не обработанных записей бизнес-журнала
+     * @param lastRecordId
+     * @return
+     */
+    List<BusinessJournalRecord> getRecordsAfter(Long lastRecordId);
+
 }

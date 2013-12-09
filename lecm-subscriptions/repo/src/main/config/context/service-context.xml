@@ -104,7 +104,14 @@
 		<property name="businessJournalService">
 			<ref bean="businessJournalService"/>
 		</property>
-		<property name="transactionService">
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="subscriptionsService">
+            <ref bean="subscriptionsService"/>
+        </property>
+        <property name="notificationsService">
+            <ref bean="notificationsService"/>
+        </property>
+        <property name="transactionService">
 			<ref bean="TransactionService"/>
 		</property>
 		<property name="runAsUser">

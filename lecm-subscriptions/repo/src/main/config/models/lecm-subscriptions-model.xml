@@ -293,5 +293,13 @@
 		<aspect name="lecm-subscr:subscribedAspect">
 			<title>Subscribed Aspect</title>
 		</aspect>
+        <aspect name="lecm-subscr:lastRecordIdAspect">
+            <properties>
+                <property name="lecm-subscr:lastRecordId">
+                    <title>Last Business Journal Record Id</title>
+                    <type>d:long</type>
+                </property>
+            </properties>
+        </aspect>
 	</aspects>
 </model>

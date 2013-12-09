@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Business Journal Record</shortname>
+    <description>Business Journal Record</description>
+    <url>/lecm/business-journal/component/record</url>
+    <format default="json">argument</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

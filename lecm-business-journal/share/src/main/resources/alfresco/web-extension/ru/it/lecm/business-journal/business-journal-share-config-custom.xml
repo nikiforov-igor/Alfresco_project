@@ -201,29 +201,8 @@
     <config evaluator="model-type" condition="lecm-busjournal:bjRecord">
         <forms>
             <form>
-                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <view-form template="/ru/it/lecm/business-journal/components/controls/view-form.ftl" />
                 <field-visibility>
-                    <show id="lecm-busjournal:bjRecord-date"/>
-                    <show id="lecm-busjournal:bjRecord-description"/>
-                    <show id="lecm-busjournal:bjRecord-initiator"/>
-                    <show id="lecm-busjournal:bjRecord-mainObject"/>
-
-                    <show id="lecm-busjournal:bjRecord-initiator-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-mainObject-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-evCategory-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-objType-assoc"/>
-
-                    <show id="lecm-busjournal:bjRecord-secondaryObj1-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj1"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj2-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj2"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj3-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj3"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj4-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj4"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj5-assoc"/>
-                    <show id="lecm-busjournal:bjRecord-secondaryObj5"/>
                 </field-visibility>
             </form>
             <form id="datagrid">

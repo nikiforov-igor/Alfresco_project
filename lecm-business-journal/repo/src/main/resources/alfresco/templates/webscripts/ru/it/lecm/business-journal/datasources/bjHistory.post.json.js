@@ -1,5 +1,5 @@
-<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/evaluator.lib.js">
-<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/search.lib.js">
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/business-journal/datasources/bjEvaluator.lib.js">
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/business-journal/datasources/bjSearch.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">
 const DEFAULT_MAX_RESULTS = 3000;
 function main() {

@@ -20,6 +20,44 @@ LogicECM.module = LogicECM.module || {};
  */
 LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 
+LogicECM.module.BusinessJournal.view = function(nodeId) {
+    var obj = {
+        itemKind:"type",
+        itemId: "lecm-busjournal:bjRecord",
+        destination: null,
+        mode:"view",
+        submitType:"json",
+        formId: "view-node-form",
+        nodeId: nodeId,
+        htmlid: "view-node-form-htmlid",
+        showSubmitButton: false
+    };
+
+    Alfresco.util.Ajax.request(
+        {
+            url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+            dataObj: obj,
+            successCallback:{
+                fn:function(response) {
+                    var formEl = Dom.get("view-node-form-content");
+                    formEl.innerHTML = response.serverResponse.responseText;
+                    if (viewDialog != null) {
+                        Dom.setStyle("view-node-form", "display", "block");
+                        var message = "Просмотр";
+                        var titleElement = Dom.get("view-node-form-form-head");
+                        if (titleElement) {
+                            titleElement.innerHTML = message;
+                        }
+                        viewDialog.show();
+                    }
+                }
+            },
+            failureMessage:"message.failure",
+            execScripts:true
+        });
+    return false;
+};
+
 (function () {
 
     LogicECM.module.BusinessJournal.DataGrid = function (containerId) {
@@ -118,7 +156,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                             }
                             if (columnContent != "") {
                                 if (grid.options.attributeForShow != null && datalistColumn.name == grid.options.attributeForShow) {
-                                    html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + columnContent + "</a>";
+                                    html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.BusinessJournal.view(\'" + oRecord.getData("nodeRef") + "\')\">" + columnContent + "</a>";
                                 } else {
                                     html += columnContent;
                                 }

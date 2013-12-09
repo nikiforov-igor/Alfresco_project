@@ -2,10 +2,10 @@
 [
     <#list records as record>
         {
-            "date": "${record.properties["lecm-busjournal:bjRecord-date"]?datetime?string("MM/dd/yyyy HH:mm:ss")}",
-            "record": "${record.properties["lecm-busjournal:bjRecord-description"]}",
-            "initiator": "${record.properties["lecm-busjournal:bjRecord-initiator"]!""}",
-            "initiatorRef": "${record.properties["lecm-busjournal:bjRecord-initiator-assoc-ref"]!""}"
+            "date": "${record.getDate()?datetime?string("MM/dd/yyyy HH:mm:ss")}",
+            "record": "${record.getRecordDescription()}",
+            "initiator": "${record.getInitiator()!""}",
+            "initiatorRef": <#if record.getInitiator()??>"${record.getInitiator().nodeRef}"<#else>""</#if>
         }
         <#if record_has_next>,</#if>
     </#list>
