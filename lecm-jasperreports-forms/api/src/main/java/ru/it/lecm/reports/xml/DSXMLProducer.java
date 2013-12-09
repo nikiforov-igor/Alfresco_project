@@ -630,6 +630,7 @@ public class DSXMLProducer {
 
         final String source = XmlHelper.findNodeChildValue(srcNodeSubreport, XMLNODE_SUBLIST_SOURCE);
         result.setSourceListExpression(Utils.trimmed(source));
+        result.getFlags().setText(Utils.trimmed(source));
 
         final String types = XmlHelper.findNodeChildValue(srcNodeSubreport, XMLNODE_SUBLIST_TYPE);
         result.setSourceListType(Utils.trimmed(types));

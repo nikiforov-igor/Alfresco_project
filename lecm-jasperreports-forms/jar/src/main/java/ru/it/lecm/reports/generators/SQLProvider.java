@@ -42,9 +42,9 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
 
     @Override
     public JRField[] getFields(JasperReport report) throws JRException, UnsupportedOperationException {
-        Connection connection;
-        ResultSet resultSet;
-        PreparedStatement statement;
+        Connection connection = null;
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
         try {
             connection = basicDataSource.getConnection();
             String query = reportDescriptor.getFlags().getText() + " LIMIT 1";
@@ -69,6 +69,28 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
             return fields.toArray(new JRField[fields.size()]);
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
         }
         return new JRField[0];
     }

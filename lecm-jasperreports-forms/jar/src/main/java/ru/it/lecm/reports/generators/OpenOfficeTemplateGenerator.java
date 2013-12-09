@@ -22,13 +22,19 @@ import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.DateTime;
 import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.Utils;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -59,11 +65,16 @@ public class OpenOfficeTemplateGenerator {
 
     private static final Logger logger = LoggerFactory.getLogger(OpenOfficeTemplateGenerator.class);
 
+    private final BasicDataSource dataSource;
+    final private OpenOfficeConnection connection;
+
     /**
      * активный описатель отчёта
      */
-    public OpenOfficeTemplateGenerator() {
+    public OpenOfficeTemplateGenerator(OpenOfficeConnection connection, BasicDataSource dateSource) {
         super();
+        this.dataSource = dateSource;
+        this.connection = connection;
     }
 
     /**
@@ -168,27 +179,49 @@ public class OpenOfficeTemplateGenerator {
             if (author != null) {
                 xDocProps.setAuthor(author);
             }
-            for (ColumnDescriptor col : desc.getDsDescriptor().getColumns()) {
-                stage = String.format("Add property '%s' with expression '%s'", col.getColumnName(), col.getExpression());
-                if (col.getExpression() != null) {
-                    if (!col.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {//если колонка - не подотчет
-                        String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + col.getColumnName() + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
-                        userPropsContainer.addProperty(col.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
-                    } else {
-                        List<ReportDescriptor> subReportsList = desc.getSubreports();
-                        if (subReportsList != null) {
+            //основные колонки - не подотчеты!
+            if (!desc.isSQLDataSource()) {
+                for (ColumnDescriptor col : desc.getDsDescriptor().getColumns()) {
+                    stage = String.format("Add property '%s' with expression '%s'", col.getColumnName(), col.getExpression());
+                    if (col.getExpression() != null) {
+                        if (!col.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {//если колонка - не подотчет
+                            String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + col.getColumnName() + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
+                            userPropsContainer.addProperty(col.getColumnName(), DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
+                        }
+                    }
+                }
+            } else {
+                addPropsFromSQLToContainer(desc, userPropsContainer);
+                //дополнительно добавляем поле с SQL запросом
+                userPropsContainer.addProperty(desc.getMnem() + "-query",
+                        DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, desc.getFlags().getText());
+            }
+
+            //обработаем подотчеты отдельно
+            List<ReportDescriptor> subReportsList = desc.getSubreports();
+            if (subReportsList != null) {
+                for (ColumnDescriptor col : desc.getDsDescriptor().getColumns()) {
+                    if (col.getExpression() != null) {
+                        if (col.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {//если колонка - подотчет
                             String subReportCode = col.getColumnName();
                             for (ReportDescriptor subReportDescriptor : subReportsList) {
                                 if (subReportDescriptor.getMnem().equals(subReportCode)) { // нашли нужный подотчет - добавляем его к параметрам
-                                    userPropsContainer.addProperty(subReportCode, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, col.getExpression());
+                                    userPropsContainer.addProperty(subReportCode,
+                                            DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, col.getExpression());
                                     // вытаскиваем все его поля
                                     List<ColumnDescriptor> subReportColumns = subReportDescriptor.getDsDescriptor().getColumns();
-                                    if (subReportColumns != null) {
+                                    if (subReportColumns != null) { // вариант, когда подотчет не SQL
                                         for (ColumnDescriptor subReportColumn : subReportColumns) {
                                             String value = subReportCode + "." + subReportColumn.getColumnName();
                                             userPropsContainer.addProperty(value, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE,
                                                     SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + value + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL);
                                         }
+                                    }
+                                    if (subReportDescriptor.isSQLDataSource()) {  // вариант, когда подотчет SQL
+                                        addPropsFromSQLToContainer(subReportDescriptor, userPropsContainer);
+                                        //дополнительно добавляем поле с SQL запросом
+                                        userPropsContainer.addProperty(subReportDescriptor.getMnem() + "-query",
+                                                DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, subReportDescriptor.getFlags().getText());
                                     }
                                     break;
                                 }
@@ -219,23 +252,67 @@ public class OpenOfficeTemplateGenerator {
         }
     }
 
+    private void addPropsFromSQLToContainer(ReportDescriptor desc, XPropertyContainer userPropsContainer)
+            throws PropertyExistException, IllegalTypeException, IllegalArgumentException {
+        Connection sqlConnection = null;
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        try {
+            sqlConnection = dataSource.getConnection();
+            String query = desc.getFlags().getText();
+            statement = sqlConnection.prepareStatement(query);
+            statement.setMaxRows(1);
+            resultSet = statement.executeQuery();
+
+            int columnCount = resultSet.getMetaData().getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = resultSet.getMetaData().getColumnName(i);
+
+                String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + columnName + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
+                userPropsContainer.addProperty(desc instanceof SubReportDescriptorImpl ? (desc.getMnem() + "." + columnName) : columnName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            if (sqlConnection != null) {
+                try {
+                    sqlConnection.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        }
+    }
+
 
     /**
      * Задать свойства для атрибутов документа
      *
-     * @param props  задаваемые значения (ключи - имена атрибутов)
-     * @param author автор изменений
+     * @param props             задаваемые значения (ключи - имена атрибутов). Акутальные значения для обычных провайдеров, дефолтные - для SQL
+     * @param requestParameters список параметров из запроса
+     * @param author            автор изменений
      */
-    public void odtSetColumnsAsDocCustomProps(Map<String, Object> props
-            , OpenOfficeConnection connection
-            , ReportDescriptor desc
-            , String srcOODocUrl
-            , String destSaveAsUrl
-            , String author) {
+    public void odtSetColumnsAsDocCustomProps(Map<String, Object> props, Map<String, Object> requestParameters, ReportDescriptor desc,
+                                              String srcOODocUrl, String destSaveAsUrl, String author) {
 
         final boolean needSaveAs = !Utils.isStringEmpty(destSaveAsUrl);
 
         PropertyCheck.mandatory(this, "connection", connection);
+        PropertyCheck.mandatory(this, "basicDataSource", dataSource);
         PropertyCheck.mandatory(this, "templateUrl", srcOODocUrl);
         PropertyCheck.mandatory(this, "reportDesc", desc);
 
@@ -251,19 +328,13 @@ public class OpenOfficeTemplateGenerator {
             /* (2) обновление существующих свойств ... */
             stage = String.format("Get openOffice properties of document '%s'", srcOODocUrl);
 
-            final XDocumentProperties xDocProps;
-
             final XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xCompDoc);
-            xDocProps = xDocPropsSuppl.getDocumentProperties();
-
-            final XPropertySet docProperties;
-            final XPropertyContainer docPropertyContainer;
+            final XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
 
             final XDocumentInfoSupplier xDocInfoSuppl = UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xCompDoc);
             final XDocumentInfo docInfo = xDocInfoSuppl.getDocumentInfo();
-            docProperties = UnoRuntime.queryInterface(XPropertySet.class, docInfo);
-
-            docPropertyContainer = UnoRuntime.queryInterface(XPropertyContainer.class, docInfo);
+            final XPropertySet docProperties = UnoRuntime.queryInterface(XPropertySet.class, docInfo);
+            final XPropertyContainer docPropertyContainer = UnoRuntime.queryInterface(XPropertyContainer.class, docInfo);
 
             if (author != null) {
                 stage = String.format("Set openOffice property Author='%s'\n\t of document '%s'", author, srcOODocUrl);
@@ -275,6 +346,11 @@ public class OpenOfficeTemplateGenerator {
             boolean mustLog = false; // true, чтобы обязательно зажурналировать список присвоений из sb
             try {
                 if (props != null) {
+                    if (desc.isSQLDataSource()) { // для SQL провайдеров - получаем реальные значения вместо плейсхолдеров
+                        getSQLPropsValue(desc, requestParameters, docProperties, props);
+                    }
+
+                    //тут props точно заполнены для любого провайдера - передаем их в документ!
                     int i = 0;
                     for (Map.Entry<String, Object> item : props.entrySet()) {
                         final String propName = item.getKey();
@@ -287,7 +363,7 @@ public class OpenOfficeTemplateGenerator {
                                 if (!(propValue instanceof List)) {
                                     assignTypedProperty(docProperties, propName, propValue);
                                 } else { // значение список - отрабатываем его как таблицу
-                                    assignTableProperty(xCompDoc, docProperties, propName, (ArrayList) propValue);
+                                    assignTableProperty(xCompDoc, docProperties, propName, (List<Map>) propValue);
                                 }
                             } else {
                                 docPropertyContainer.addProperty(propName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, propValue);
@@ -303,8 +379,9 @@ public class OpenOfficeTemplateGenerator {
                         }
 
                     }
-                } else
+                } else {
                     sb.append("no row properties");
+                }
 
             } finally {
                 if (logger.isDebugEnabled() || mustLog) {
@@ -315,8 +392,7 @@ public class OpenOfficeTemplateGenerator {
                 }
             }
 
-			/* (3) Сохранение */
-
+            /* (3) Сохранение */
             final String docInfoStr = (needSaveAs) ? String.format("\n\t as '%s'", destSaveAsUrl) : "";
             stage = String.format("saving openOffice document\n\t '%s' %s", srcOODocUrl, docInfoStr);
 
@@ -339,6 +415,167 @@ public class OpenOfficeTemplateGenerator {
             }
             throw new RuntimeException(msg, ex);
         }
+    }
+
+    private void getSQLPropsValue(ReportDescriptor desc, Map<String, Object> paramsToQuery, XPropertySet docProperties, Map<String, Object> propsToAssign) {
+        Connection sqlConnection = null;
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+
+        try {
+            sqlConnection = dataSource.getConnection();
+
+            //1 Получаем Query - берем либо базовую, либо заполненную из параметров (если там есть такое свойство)
+            String baseQuery = getQueryString(desc, paramsToQuery, docProperties);
+
+            logger.debug("SQL query to execute: " +  baseQuery);
+
+            //2 Выполняем запрос
+            statement = sqlConnection.prepareStatement(baseQuery);
+            statement.setMaxRows(1); // для office у нас может быть одно значение!
+            resultSet = statement.executeQuery();
+
+            //3 Получить актуальные значения. пропускаем подотчеты
+            while (resultSet.next()) {
+                for (String propName : propsToAssign.keySet()) { // в props список всех нужных полей со значениями по умолчанию
+                    if (!(propsToAssign.get(propName) instanceof List)) {
+                        Object value = resultSet.getObject(propName);
+                        propsToAssign.put(propName, value); //подменяем на реальные значения!
+                    }
+                }
+            }
+
+            //обработаем подотчеты отдельно
+            List<ReportDescriptor> subReportsList = desc.getSubreports();
+            if (subReportsList != null && !subReportsList.isEmpty()) {
+                for (ReportDescriptor subReport : subReportsList) {
+                    propsToAssign.put(subReport.getMnem(), getSubList((SubReportDescriptorImpl) subReport, propsToAssign, docProperties));
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            if (sqlConnection != null) {
+                try {
+                    sqlConnection.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    private List<Map> getSubList(SubReportDescriptorImpl subReport, Map<String, Object> propsToAssign, XPropertySet docProperties) {
+        Connection sqlConnection = null;
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+
+        List<Map> result = new ArrayList<Map>();
+        try {
+            sqlConnection = dataSource.getConnection();
+
+            //1 Получаем Query - берем либо базовую, либо заполненную из параметров (если там есть такое свойство)
+            String baseQuery = getQueryString(subReport, propsToAssign, docProperties);
+
+            logger.debug("SQL query to execute: " + baseQuery);
+
+            //2 Выполняем запрос
+            statement = sqlConnection.prepareStatement(baseQuery);
+            resultSet = statement.executeQuery();
+
+            //3 Получить актуальные значения.
+            int columnCount = resultSet.getMetaData().getColumnCount();
+
+            while (resultSet.next()) {
+                Map<String, Object> subObject = new HashMap<String, Object>();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = resultSet.getMetaData().getColumnName(i);
+                    Object value = resultSet.getObject(columnName);
+                    subObject.put(columnName, value);
+                }
+                result.add(subObject);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            if (sqlConnection != null) {
+                try {
+                    sqlConnection.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        }
+        return result;
+    }
+
+    private String getQueryString(ReportDescriptor reportDesc, Map<String, Object> propsToAssign, XPropertySet docProperties) throws UnknownPropertyException, WrappedTargetException {
+        String baseQuery = reportDesc.getFlags().getText();
+
+        final boolean isQueryPresent = docProperties.getPropertySetInfo().hasPropertyByName(reportDesc.getMnem() + "-query");
+        if (isQueryPresent) {
+            final Object queryProp = docProperties.getPropertyValue(reportDesc.getMnem() + "-query");
+            //параметризуем query
+            baseQuery = insertParamsToQuery(queryProp.toString(), propsToAssign);
+        }
+        return baseQuery;
+    }
+
+    private String insertParamsToQuery(String baseQuery, Map<String, Object> requestParameters) {
+        if (baseQuery != null && requestParameters != null) {
+            for (String param : requestParameters.keySet()) {
+                //TODO возможно придется добавить обработку по типам
+                if (baseQuery.contains("$P{" + param + "}")) {
+                    if (requestParameters.get(param) instanceof List) {
+                        String resultedValue = "";
+                        for (Object value : (List) requestParameters.get(param)) {
+                            resultedValue += resultedValue +
+                                    (resultedValue.length() > 0 ? "," : "") +
+                                    (value instanceof String ?
+                                            ("\'" + value + "\'") :
+                                            String.valueOf(value));
+                        }
+                        if (resultedValue.length() > 0) {
+                            baseQuery = baseQuery.replaceAll("\\$P\\{" + param + "\\}", resultedValue);
+                        }
+                    } else {
+                        baseQuery = baseQuery.replaceAll("\\$P\\{" + param + "\\}",
+                                (requestParameters.get(param) instanceof String ?
+                                        ("\'" + requestParameters.get(param) + "\'") :
+                                        String.valueOf(requestParameters.get(param))));
+                    }
+                }
+            }
+        }
+        return baseQuery;
     }
 
     /**
@@ -412,7 +649,7 @@ public class OpenOfficeTemplateGenerator {
         docProperties.setPropertyValue(propName, propValue);
     }
 
-    public static void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List listObjects) {
+    public static void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects) {
         XTextTablesSupplier tablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, xDoc);
 
         XTextTable xDocTable = TableManager.getTable(tablesSupplier, propName);

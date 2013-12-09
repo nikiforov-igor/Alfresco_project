@@ -582,9 +582,9 @@ public class XMLMacroGenerator {
                     }
                 }
             } else {
-                Connection connection;
-                ResultSet resultSet;
-                PreparedStatement statement;
+                Connection connection = null;
+                ResultSet resultSet = null;
+                PreparedStatement statement = null;
                 try {
                     connection = dataSourceContext.getConnection();
                     String query = descriptor.getFlags().getText();
@@ -604,6 +604,28 @@ public class XMLMacroGenerator {
                     }
                 } catch (SQLException e) {
                     logger.error(e.getMessage(), e);
+                } finally {
+                    if (resultSet != null) {
+                        try {
+                            resultSet.close();
+                        } catch (SQLException e) {
+                            logger.error(e.getMessage(), e);
+                        }
+                    }
+                    if (statement != null) {
+                        try {
+                            statement.close();
+                        } catch (SQLException e) {
+                            logger.error(e.getMessage(), e);
+                        }
+                    }
+                    if (connection != null) {
+                        try {
+                            connection.close();
+                        } catch (SQLException e) {
+                            logger.error(e.getMessage(), e);
+                        }
+                    }
                 }
             }
         }

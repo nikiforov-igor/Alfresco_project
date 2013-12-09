@@ -228,7 +228,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 								final String author = "LECM USER";
 
 								/* Добавление атрибутов из колонок данных и сохранение в urlSave... */
-								final OpenOfficeTemplateGenerator ooGen = new OpenOfficeTemplateGenerator();
+								final OpenOfficeTemplateGenerator ooGen = new OpenOfficeTemplateGenerator(getConnection(), getTargetDataSource());
 								ooGen.odtAddColumnsAsDocCustomProps(getConnection(), desc, urlWork, urlSaveAs, author);
 
 								/** чтение файла в виде буфера ... */
@@ -372,7 +372,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 						final String urlSaveAs = toUrl(destDocFile, connection);
 
 						/* Добавление атрибутов из колонок данных и сохранение в urlSave... */
-						final OpenOfficeFillManager filler = new OpenOfficeFillManager(getConnection());
+						final OpenOfficeFillManager filler = new OpenOfficeFillManager(getConnection(), getTargetDataSource());
 						try {
 							filler.fill(report, requestParameters, dataSource, urlSrc, urlSaveAs);
 						} catch (JRException ex) {
