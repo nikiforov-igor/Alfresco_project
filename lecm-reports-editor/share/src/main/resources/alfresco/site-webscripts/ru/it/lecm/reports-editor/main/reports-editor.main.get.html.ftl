@@ -66,6 +66,7 @@
                                         },
                                         failure: function (oResponse) {
                                             oResponse.argument.parent._hideSplash();
+                                            alert(oResponse.responseText);
                                             Alfresco.util.PopupManager.displayMessage(
                                                     {
                                                         text: "При удалении отчета произошла ошибка",
@@ -123,6 +124,7 @@
                                         },
                                         failure: function (oResponse) {
                                             oResponse.argument.parent._hideSplash();
+                                            alert(oResponse.responseText);
                                             Alfresco.util.PopupManager.displayMessage(
                                                     {
                                                         text: "При регистрации отчета произошла ошибка",
