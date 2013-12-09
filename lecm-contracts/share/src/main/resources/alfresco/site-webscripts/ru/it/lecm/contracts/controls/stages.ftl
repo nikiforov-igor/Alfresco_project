@@ -47,7 +47,7 @@
                     var resultMessage = "";
                     var oResults = eval("(" + oResponse.responseText + ")");
                     if (oResults != null && oResults.length > 0) {
-                        resultMessage = "<div><b>У договора имеются не закрытые этапы:</b></div>"
+                        resultMessage = "<div><b>У договора имеются незакрытые этапы:</b></div>"
                         for (var rowIndex in oResults) {
                             var row = oResults[rowIndex];
                             resultMessage += "<div style='padding-left: 10px;'>Этап № " + row.number + ", <i><a href='javascript:void(0);' id='preview_" + row.nodeRef + "'>" + row.title + "</a></i></div>"
