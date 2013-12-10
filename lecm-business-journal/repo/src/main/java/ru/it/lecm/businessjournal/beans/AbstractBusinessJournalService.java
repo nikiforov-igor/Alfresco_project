@@ -255,52 +255,56 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     }
 
     public void log(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final String defaultDescription, final List<String> objects) {
-        if (mainObject == null) {
-            logger.warn("Main Object not set!");
-            return;
-        }
-        BusinessJournalServiceImpl.IgnoredCounter counter = threadSettings.get();
-        if (counter != null) {
-            if (counter.isIgnored()) {
-                counter.execute();
+        try {
+            if (mainObject == null) {
+                logger.warn("Main Object not set!");
                 return;
-            } else {
-                counter.execute();
             }
-        }
-
-
-        NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
-
-        // заполняем карту плейсхолдеров
-        Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
-        // пытаемся получить объект Категория события по ключу
-        NodeRef category = getEventCategoryByCode(eventCategory);
-        // получаем шаблон описания
-        String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
-        // заполняем шаблон данными
-        String recorDescription = fillTemplateString(templateString, holdersMap);
-
-        String mainObjectDescription = getObjectDescription(mainObject);
-        List<String> objectsDescription = new ArrayList<String>();
-        if (objects != null && objects.size() > 0) {
-            for (int i = 0; i < objects.size() && i < 5; i++) {
-                String str = objects.get(i);
-                String objectDescription = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
-                objectsDescription.add(objectDescription);
+            IgnoredCounter counter = threadSettings.get();
+            if (counter != null) {
+                if (counter.isIgnored()) {
+                    counter.execute();
+                    return;
+                } else {
+                    counter.execute();
+                }
             }
+
+
+            NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
+
+            // заполняем карту плейсхолдеров
+            Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
+            // пытаемся получить объект Категория события по ключу
+            NodeRef category = getEventCategoryByCode(eventCategory);
+            // получаем шаблон описания
+            String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
+            // заполняем шаблон данными
+            String recorDescription = fillTemplateString(templateString, holdersMap);
+
+            String mainObjectDescription = getObjectDescription(mainObject);
+            List<String> objectsDescription = new ArrayList<String>();
+            if (objects != null && objects.size() > 0) {
+                for (int i = 0; i < objects.size() && i < 5; i++) {
+                    String str = objects.get(i);
+                    String objectDescription = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
+                    objectsDescription.add(objectDescription);
+                }
+            }
+
+            NodeRef objectType = getObjectType(mainObject);
+            BusinessJournalRecord record = new BusinessJournalRecord(date, employee, mainObject, objectType, mainObjectDescription, recorDescription, category, objectsDescription, true);
+
+            //Описание инициатора
+            record.setInitiatorText(getInitiatorDescription(initiator));
+            //Описание категории
+            record.setEventCategoryText(category != null ? nodeService.getProperty(category, ContentModel.PROP_NAME).toString() : eventCategory);
+            //Описание типа
+            record.setObjectTypeText(objectType != null ? nodeService.getProperty(objectType, ContentModel.PROP_NAME).toString() : "");
+            this.log(record);
+        } catch (Exception e) {
+            logger.warn("Can not create BJ record", e);
         }
-
-        NodeRef objectType = getObjectType(mainObject);
-        BusinessJournalRecord record = new BusinessJournalRecord(date, employee, mainObject, objectType, mainObjectDescription, recorDescription, category, objectsDescription, true);
-
-        //Описание инициатора
-        record.setInitiatorText(getInitiatorDescription(initiator));
-        //Описание категории
-        record.setEventCategoryText(nodeService.getProperty(category, ContentModel.PROP_NAME).toString());
-        //Описание типа
-        record.setObjectTypeText(nodeService.getProperty(objectType, ContentModel.PROP_NAME).toString());
-        this.log(record);
 
     }
 
