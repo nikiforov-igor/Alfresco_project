@@ -4,17 +4,12 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.json.JSONArray;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.contractors.api.Contractors;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.json.JSONArray;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+
+import java.util.*;
 
 public class ContractorsBean extends BaseBean implements Contractors {
 
@@ -46,7 +41,7 @@ public class ContractorsBean extends BaseBean implements Contractors {
 
             Boolean isPrimary = (Boolean) nodeService.getProperty(representative, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "link-to-representative-association-is-primary"));
 
-            if(isPrimary) {
+            if(Boolean.TRUE.equals(isPrimary)) {
                 nodeService.setProperty(representative, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "link-to-representative-association-is-primary"), false);
                 isPrimaryChanged = true;
             }
