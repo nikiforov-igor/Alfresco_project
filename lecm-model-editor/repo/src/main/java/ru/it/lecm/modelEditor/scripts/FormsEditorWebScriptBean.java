@@ -63,7 +63,7 @@ public class FormsEditorWebScriptBean extends BaseWebScript {
 
 		NodeRef ref = new NodeRef(nodeRef);
 		if (formsEditorService.isForm(ref)) {
-			return formsEditorService.getNotExistFormAttributes(ref);
+			return formsEditorService.getNotExistFormAssociations(ref);
 		}
 		return null;
 	}

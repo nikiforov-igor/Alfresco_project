@@ -13,10 +13,8 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.FileNameValidator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,6 +76,10 @@ public class FormsEditorBeanImpl extends BaseBean {
 		this.repository = repository;
 	}
 
+	/**
+	 * Получения папки для развёртывания форм
+	 * @return папка для развёртывания форм
+	 */
 	public NodeRef getModelsDeployRootFolder() {
 		NodeRef folder = null;
 
@@ -97,18 +99,33 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return folder;
 	}
 
+	/**
+	 * Проверка, что элемент является формой
+	 * @param ref идентификатор элемента
+	 * @return true, если элемент является формой
+	 */
 	public boolean isForm(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_FORM);
 		return isProperType(ref, types);
 	}
 
+	/**
+	 * Проверка, что элемент является аттрибутом формой
+	 * @param ref идентификатор элемента
+	 * @return true, если элемент является аттрибутом формой
+	 */
 	public boolean isFormAttribute(NodeRef ref) {
 		Set<QName> types = new HashSet<QName>();
 		types.add(TYPE_FORM_ATTRIBUTE);
 		return isProperType(ref, types);
 	}
 
+	/**
+	 * Получение названия модели для формы
+	 * @param nodeRef
+	 * @return
+	 */
 	public QName getFormModelType(NodeRef nodeRef) {
 		ChildAssociationRef parent = nodeService.getPrimaryParent(nodeRef);
 		if (parent != null) {
@@ -120,6 +137,12 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return null;
 	}
 
+	/**
+	 * Получение аттрибутов формы
+	 * @param nodeRef форма
+	 * @param sort если true, то аттрибуты будут отсотрированы по индексу
+	 * @return список аттрибутов формы
+	 */
 	public List<NodeRef> getFormFields(NodeRef nodeRef, boolean sort) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 		List<ChildAssociationRef> childs = nodeService.getChildAssocs(nodeRef);
@@ -154,6 +177,11 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return result;
 	}
 
+	/**
+	 * Получение названий аттрибутов для формы
+	 * @param nodeRef идентификатор формы
+	 * @return названия всех аттрибутов формы
+	 */
 	public Set<String> getFormFieldsName(NodeRef nodeRef) {
 		Set<String> result = new HashSet<String>();
 		List<NodeRef> fields = getFormFields(nodeRef, false);
@@ -165,6 +193,11 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return result;
 	}
 
+	/**
+	 * Получение полей для типа модели, которые ещё не были добавлены на форму
+	 * @param nodeRef инентификатор формы
+	 * @return поля модели, которые ещё не были добавлены на форму
+	 */
 	public List<PropertyDefinition> getNotExistFormFields(NodeRef nodeRef) {
 		List<PropertyDefinition> result = new ArrayList<PropertyDefinition>();
 		QName model = getFormModelType(nodeRef);
@@ -185,7 +218,12 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return result;
 	}
 
-	public List<AssociationDefinition> getNotExistFormAttributes(NodeRef nodeRef) {
+	/**
+	 * Получение ассоциаций для типа модели, которые ещё не были добавлены на форму
+	 * @param nodeRef инентификатор формы
+	 * @return ассоциации модели, которые ещё не были добавлены на форму
+	 */
+	public List<AssociationDefinition> getNotExistFormAssociations(NodeRef nodeRef) {
 		List<AssociationDefinition> result = new ArrayList<AssociationDefinition>();
 		QName model = getFormModelType(nodeRef);
 		if (model != null) {
@@ -205,6 +243,11 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return result;
 	}
 
+	/**
+	 * Получение названия типа аттрибута
+	 * @param field идентификатор аттрибута
+	 * @return если аттрибут, то его title. Если ассоциация, то title его целевого класса
+	 */
 	public String getFieldType(NodeRef field) {
 		String attrName = (String) nodeService.getProperty(field, PROP_ATTR_NAME);
 		if (attrName != null) {
@@ -226,13 +269,22 @@ public class FormsEditorBeanImpl extends BaseBean {
 	}
 
 	/**
+	 * Получение названия модели для сохранения в репозитории
+	 * @param modelName название модели
+	 * @return Название, подходящее для сохранения элементов в репозитории
+	 */
+	public String getModelFileName(String modelName) {
+		return modelName.replace(":", "_");
+	}
+
+	/**
 	 * Получение папки с формами для модели
 	 *
 	 * @param modelName имя модели
 	 * @return NodeRef папки модели
 	 */
 	public NodeRef getModelRootFolder(String modelName) {
-		String folderName = modelName.replace(":", "_");
+		String folderName = getModelFileName(modelName);
 		NodeRef parent = getServiceRootFolder();
 		NodeRef folder = getFolder(parent, folderName);
 		if (folder == null) {
@@ -242,17 +294,21 @@ public class FormsEditorBeanImpl extends BaseBean {
 		}
 	}
 
-	public NodeRef getModelDeployRootFolder(String modelName) {
-		String folderName = modelName.replace(":", "_");
+	/**
+	 * Получение элемента с конфигом для модели
+	 * @param modelName название модели
+	 * @return элемент с конфигом модели
+	 */
+	public NodeRef getModelConfigNode(String modelName) {
 		NodeRef parent = getModelsDeployRootFolder();
-		NodeRef folder = getFolder(parent, folderName);
-		if (folder == null) {
-			return createFolder(parent, folderName);
-		} else {
-			return folder;
-		}
+		return nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, getModelFileName(modelName));
 	}
 
+	/**
+	 * Получение всех форм для модели
+	 * @param modelName название модели
+	 * @return список форм модели
+	 */
 	public List<NodeRef> getModelForms(String modelName) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 		NodeRef modelRoot = getModelRootFolder(modelName);
@@ -270,15 +326,6 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return result;
 	}
 
-	private void cleanFolder(NodeRef folder) {
-		List<ChildAssociationRef> childs = nodeService.getChildAssocs(folder);
-		if (childs != null) {
-			for (ChildAssociationRef assoc : childs) {
-				nodeService.removeChild(folder, assoc.getChildRef());
-			}
-		}
-	}
-
 	/**
 	 * Развернуть модель
 	 *
@@ -286,78 +333,74 @@ public class FormsEditorBeanImpl extends BaseBean {
 	 * @return true - если форма успешно развёрнута
 	 */
 	public boolean deployModel(final String modelName) {
-		final List<NodeRef> forms = getModelForms(modelName);
-		if (forms != null) {
-			final NodeRef rootFolder = getModelDeployRootFolder(modelName);
-			if (rootFolder != null) {
-				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-					@Override
-					public Object doWork() throws Exception {
-						RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-						return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-							@Override
-							public Object execute() throws Throwable {
-								cleanFolder(rootFolder);
-
-								for (NodeRef form : forms) {
-									String nodeName = (String) nodeService.getProperty(form, PROP_FORM_EVALUATOR);
-									String formId = (String) nodeService.getProperty(form, PROP_FORM_ID);
-									if (formId != null && formId.trim().length() > 0) {
-										nodeName += "_" + formId;
-									}
-									nodeName = FileNameValidator.getValidFileName(nodeName);
-
-									NodeRef configNode = createNode(rootFolder, ContentModel.TYPE_CONTENT, nodeName, null);
-
-									ContentService contentService = serviceRegistry.getContentService();
-									ContentWriter writer = contentService.getWriter(configNode, ContentModel.PROP_CONTENT, true);
-									if (writer != null) {
-										writer.setEncoding("UTF-8");
-										writer.setMimetype(MimetypeMap.MIMETYPE_XML);
-
-										writer.putContent(getFormConfig(form, modelName));
-									}
-								}
-								return null;
+		final NodeRef rootFolder = getModelsDeployRootFolder();
+		if (rootFolder != null) {
+			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+				@Override
+				public Object doWork() throws Exception {
+					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+					return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+						@Override
+						public Object execute() throws Throwable {
+							NodeRef existConfig = getModelConfigNode(modelName);
+							if (existConfig != null) {
+								nodeService.removeChild(rootFolder, existConfig);
 							}
-						}, false, true);
-					}
-				});
-			}
+
+							NodeRef configNode = createNode(rootFolder, ContentModel.TYPE_CONTENT, getModelFileName(modelName), null);
+							ContentService contentService = serviceRegistry.getContentService();
+							ContentWriter writer = contentService.getWriter(configNode, ContentModel.PROP_CONTENT, true);
+
+							if (writer != null) {
+								writer.setEncoding("UTF-8");
+								writer.setMimetype(MimetypeMap.MIMETYPE_XML);
+								writer.putContent(getModelConfig(modelName));
+							}
+							return null;
+						}
+					}, false, true);
+				}
+			});
 		}
 		return true;
 	}
 
-	public String getFormConfig(NodeRef form, String modelName) {
-		StringWriter out = null;
-		XMLStreamWriter xmlw = null;
-		try{
-			out = new StringWriter();
-			xmlw = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
-			xmlw.writeStartElement("alfresco-config");
+	private String getModelConfig(String modelName) {
+		List<NodeRef> forms = getModelForms(modelName);
+		if (forms != null) {
+			StringWriter out = null;
+			XMLStreamWriter xmlw = null;
+			try{
+				out = new StringWriter();
+				xmlw = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
+				xmlw.writeStartElement("alfresco-config");
 
-			writeForm(xmlw, form, modelName);
+				for (NodeRef form : forms) {
+					writeForm(xmlw, form, modelName);
+				}
 
-			xmlw.writeEndElement();
-		} catch (XMLStreamException e) {
-			logger.error("Error get form config", e);
-		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					logger.error("Error get form config", e);
+				xmlw.writeEndElement();
+			} catch (XMLStreamException e) {
+				logger.error("Error get form config", e);
+			} finally {
+				if (out != null) {
+					try {
+						out.close();
+					} catch (IOException e) {
+						logger.error("Error get form config", e);
+					}
+				}
+				if (xmlw != null) {
+					try {
+						xmlw.close();
+					} catch (XMLStreamException e) {
+						logger.error("Error get form config", e);
+					}
 				}
 			}
-			if (xmlw != null) {
-				try {
-					xmlw.close();
-				} catch (XMLStreamException e) {
-					logger.error("Error get form config", e);
-				}
-			}
+			return out.toString();
 		}
-		return out.toString();
+		return null;
 	}
 
 	private void writeForm(XMLStreamWriter xmlw, NodeRef form, String modelName) throws XMLStreamException {
