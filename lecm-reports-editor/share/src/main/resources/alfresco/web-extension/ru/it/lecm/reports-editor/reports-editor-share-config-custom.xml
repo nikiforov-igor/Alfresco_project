@@ -537,6 +537,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:dataColumnCode"/>
                     <show id="lecm-rpeditor:columnTypeAssoc"/>
+                    <show id="lecm-rpeditor:dataColumnExpression"/>
                     <show id="lecm-rpeditor:columnParameterTypeAssoc"/>
                     <show id="lecm-rpeditor:dataColumnClass"/>
                     <show id="lecm-rpeditor:dataColumnOrder"/>

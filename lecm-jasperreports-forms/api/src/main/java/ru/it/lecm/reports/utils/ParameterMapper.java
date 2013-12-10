@@ -168,15 +168,16 @@ public class ParameterMapper {
         if (args.containsKey(DataSourceDescriptor.COLNAME_ID)) {
             // нужно гарантировать колонку с ID, когда есть такой параметр ...
             ensureDataColumn(reportDesc.getDsDescriptor(), args.get(DataSourceDescriptor.COLNAME_ID), DataSourceDescriptor.COLNAME_ID, SupportedTypes.STRING);
-            String[] refs = args.get(DataSourceDescriptor.COLNAME_ID).split("[,;]");
+
+            String[] refs = args.get(DataSourceDescriptor.COLNAME_ID).trim().split("[,;]");
             if (refs.length > 1) { // несколько REF
-                Object ref = SupportedTypes.LIST.getValueByRealType(args.get(DataSourceDescriptor.COLNAME_ID));
-                argsMap.put(DataSourceDescriptor.COLNAME_ID, ref);
-                argsMap.put(DataSourceDescriptor.COLNAME_NODE_ID, getIdsList((List<String>) ref, nodeService));
+                Object refsList = SupportedTypes.LIST.getValueByRealType(refs);
+                argsMap.put(DataSourceDescriptor.COLNAME_ID, refsList);
+                argsMap.put(DataSourceDescriptor.COLNAME_NODE_ID, getIdsList((List<String>) refsList, nodeService));
             } else if (refs.length == 1) {
-                Object ref = SupportedTypes.STRING.getValueByRealType(args.get(DataSourceDescriptor.COLNAME_ID));
-                argsMap.put(DataSourceDescriptor.COLNAME_ID, ref);
-                argsMap.put(DataSourceDescriptor.COLNAME_NODE_ID, getId((String)ref, nodeService));
+                Object refValue = SupportedTypes.STRING.getValueByRealType(refs[0]);
+                argsMap.put(DataSourceDescriptor.COLNAME_ID, refValue);
+                argsMap.put(DataSourceDescriptor.COLNAME_NODE_ID, getId((String)refValue, nodeService));
             }
         }
 

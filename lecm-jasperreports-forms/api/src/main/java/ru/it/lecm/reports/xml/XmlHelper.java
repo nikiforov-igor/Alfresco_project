@@ -207,7 +207,7 @@ public class XmlHelper {
         final XPathEvaluator xpath = new XPathEvaluatorImpl();
         final XPathResult result = (XPathResult) xpath.evaluate("text()",
                 tag, null, XPathResult.STRING_TYPE, null);
-        return (result != null) ? result.getStringValue() : null;
+        return (result != null) ? result.getStringValue().trim() : null;
     }
 
 

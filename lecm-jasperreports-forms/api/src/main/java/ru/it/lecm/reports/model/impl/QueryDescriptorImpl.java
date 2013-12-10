@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +17,7 @@ public class QueryDescriptorImpl extends MnemonicNamedItem implements QueryDescr
     private int offset, limit, pgSize;
     private boolean allVersions = true;
 
-    private List<String> supportedNodeTypes;
+    private List<String> supportedNodeTypes = new ArrayList<String>();
 
     @Override
     public void setPreferedNodeType(String value) {
