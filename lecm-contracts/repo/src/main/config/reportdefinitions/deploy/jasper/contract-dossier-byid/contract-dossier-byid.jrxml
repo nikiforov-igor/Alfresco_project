@@ -314,7 +314,7 @@
 					<textElement textAlignment="Left">
 						<font fontName="DejaVu Sans Mono" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Местонахождение юр. адрес"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Местонахождение юр. адрес:"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="2dc6a433-92a1-4236-8957-90b3b8870a13" x="177" y="24" width="160" height="20"/>
@@ -331,7 +331,7 @@
 					<textElement textAlignment="Left">
 						<font fontName="DejaVu Sans Mono" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Фактический адрес, телефон:"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Фактический адрес:"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="c4cda64d-d79b-4ef3-9ded-5c09961c7b37" x="348" y="24" width="160" height="20"/>
