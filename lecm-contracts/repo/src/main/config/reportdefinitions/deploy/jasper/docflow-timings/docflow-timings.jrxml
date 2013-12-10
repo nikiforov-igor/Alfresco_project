@@ -10,6 +10,8 @@
 			<style backcolor="#E2DFD6"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="dateReg_lo" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="dateReg_hi" class="java.util.Date" isForPrompting="false"/>
 	<field name="col_MeasureTag" class="java.lang.String">
 		<fieldDescription><![CDATA[Измерение.Название]]></fieldDescription>
 	</field>
@@ -116,12 +118,12 @@
 					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
-				<textFieldExpression><![CDATA[( ($F{col_DateReg.From} == null)
-	&& ($F{col_DateReg.To} == null)
+				<textFieldExpression><![CDATA[( ($P{dateReg_lo} == null)
+	&& ($P{dateReg_hi} == null)
 ) ? ""
 :	"Период"
-	+ (($F{col_DateReg.From} == null) ? "" : " с "+ (new SimpleDateFormat("dd.MM.yyyy")).format($F{col_DateReg.From}))
-	+ (($F{col_DateReg.To} == null) ? "" : " по "+ (new SimpleDateFormat("dd.MM.yyyy")).format($F{col_DateReg.To}))]]></textFieldExpression>
+	+ (($P{dateReg_lo} == null) ? "" : " с "+ (new SimpleDateFormat("dd.MM.yyyy")).format($P{dateReg_lo}))
+	+ (($P{dateReg_hi} == null) ? "" : " по "+ (new SimpleDateFormat("dd.MM.yyyy")).format($P{dateReg_hi}))]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

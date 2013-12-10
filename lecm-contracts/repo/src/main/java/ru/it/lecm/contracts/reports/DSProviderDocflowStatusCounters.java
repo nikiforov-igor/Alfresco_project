@@ -9,7 +9,6 @@ import ru.it.lecm.reports.calc.DataGroupCounter;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
-import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.statemachine.StatemachineModel;
 
@@ -67,12 +66,6 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
      */
     final static String COLNAME_MEASURE_TAG = "col_MeasureTag";
 
-    /**
-     * Дата регистрации с ... по ...
-     */
-    final static String COLNAME_DATEREG_FROM = "col_DateReg.From";
-    final static String COLNAME_DATEREG_TO = "col_DateReg.To";
-
     final static String COLNAME_STATUS_FMT = "col_Status%d"; // колонка с названием i-го статуса
     final static String COLNAME_COUNTER_FMT = "col_Count%d"; // колонка с количеством найденных строк в i-м статусе
     final static String COLVALUE_ALL_OTHER = "All other"; // "Все остальные статусы"
@@ -81,8 +74,6 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
      * Вариант групировки.
      */
     private String groupBy;
-
-    private Date dateRegStart, dateRegEnd; // дата регистрации проекта договора
 
     public DSProviderDocflowStatusCounters() {
         super();
@@ -96,15 +87,6 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
     @SuppressWarnings("unused")
     public void setGroupBy(String groupBy) {
         this.groupBy = groupBy;
-    }
-
-    @SuppressWarnings("unused")
-    public void setDateReg(final String value) {
-        final String[] paramValue = value.split("\\|");
-        dateRegStart = ArgsHelper.tryMakeDate(paramValue[0], "dateRegStart");
-        if (paramValue.length >= 2) {
-            dateRegEnd = ArgsHelper.tryMakeDate(paramValue[1], "dateRegEnd");
-        }
     }
 
     @Override
@@ -251,10 +233,6 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
 			/* Название ... */
             result.put(COLNAME_TAG, item.getGroupTag());
             result.put(COLNAME_MEASURE_TAG, nameForTag);
-
-			/* Дата регистрации с ... по ... */
-            result.put(COLNAME_DATEREG_FROM, dateRegStart);
-            result.put(COLNAME_DATEREG_TO, dateRegEnd);
 
 			/* Счётчики ... */
             @SuppressWarnings("unchecked")

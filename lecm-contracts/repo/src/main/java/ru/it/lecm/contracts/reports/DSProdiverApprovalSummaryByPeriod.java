@@ -17,7 +17,6 @@ import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
-import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 
@@ -33,8 +32,6 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
 
     private static final Logger logger = LoggerFactory.getLogger(DSProdiverApprovalSummaryByPeriod.class);
 
-    private Date periodStartDate, periodEndDate;
-
     final static String VALUE_STATUS_NOTREADY = "NO_DECISION";
     final static String FLD_DOC_PROJECTNUM = "lecm-contract:regNumProject"; // <!-- Регистрационный номер проекта договора-->
 
@@ -48,18 +45,6 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
     final static String JRName_MISSED_APPROVES_COUNT = "col_Employee.MissedApproves"; // Кол-во просроченных согласований
     final static String JRName_AVG_APPROVE_DAYS = "col_Employee.AvgApproved"; // Средний срок согласований, дней
     final static String JRName_AVG_MISSED_DAYS = "col_Employee.AvgMissed"; // Средний срок просрочки, дней
-    final static String JRName_PERIOD_START = "col_Period.Start";
-    final static String JRName_PERIOD_END = "col_Period.End";
-
-
-    @SuppressWarnings("unused")
-    public void setPeriodDate(final String value) {
-        final String[] paramValue = value.split("\\|");
-        periodStartDate = ArgsHelper.tryMakeDate(paramValue[0], "periodStartDate");
-        if (paramValue.length >= 2) {
-            periodEndDate = ArgsHelper.tryMakeDate(paramValue[1], "periodEndDate");
-        }
-    }
 
     @Override
     protected LucenePreparedQuery buildQuery() {
@@ -247,11 +232,6 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
             result.put(getAlfAttrNameByJRKey(JRName_MISSED_APPROVES_COUNT), item.missedApproves.getCount());
             result.put(getAlfAttrNameByJRKey(JRName_AVG_MISSED_DAYS), roundToHumanRead(item.missedApproves.getAvg()));
             result.put(getAlfAttrNameByJRKey(JRName_AVG_APPROVE_DAYS), roundToHumanRead(item.normalApproves.getAvg()));
-
-            // период согласования включаем как данные
-            final Date now = new Date();
-            result.put(getAlfAttrNameByJRKey(JRName_PERIOD_START), (periodStartDate != null) ? periodStartDate : null);
-            result.put(getAlfAttrNameByJRKey(JRName_PERIOD_END), (periodEndDate != null) ? periodEndDate : now);
 
             return result;
         }
