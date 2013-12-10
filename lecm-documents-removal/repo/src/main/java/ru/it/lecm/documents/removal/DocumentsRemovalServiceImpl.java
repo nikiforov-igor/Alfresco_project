@@ -1,14 +1,31 @@
 package ru.it.lecm.documents.removal;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.policy.BehaviourFilter;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
  *
@@ -16,8 +33,21 @@ import ru.it.lecm.documents.beans.DocumentService;
  */
 public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
-	DictionaryService dictionaryService;
-	NodeService nodeService;
+	private final static Logger logger = LoggerFactory.getLogger(DocumentsRemovalServiceImpl.class);
+	private final static String MEMBERS_TEMPLATE = "Пользователи были исключены из участников и лишены прав доступа к документу #mainobject";
+	private final static String WORKFLOWS_TEMPLATE = "Все бизнес-процессы, в которых участвовал документ #mainobject остановлены";
+	private final static String CONNECTIONS_TEMPLATE = "Связи документа #mainobject с другими документами разорваны";
+	private final static String OTHERS_TEMPLATE = "Ассоциации документа #mainobject с прочими объектами системы удалены";
+	private final static String DOCUMENT_TEMPLATE = "Документ #mainobject полностью удален из системы";
+
+	private DictionaryService dictionaryService;
+	private NodeService nodeService;
+	private BehaviourFilter behaviourFilter;
+	private DocumentMembersService documentMembersService;
+	private LecmPermissionService lecmPermissionService;
+	private StateMachineServiceBean stateMachineService;
+	private BusinessJournalService businessJournalService;
+
 
 	public void setDictionaryService(final DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
@@ -25,6 +55,26 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
+	}
+
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+		this.behaviourFilter = behaviourFilter;
+	}
+
+	public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+		this.documentMembersService = documentMembersService;
+	}
+
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
+
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
+	}
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
 	}
 
 	private void removeAssociations(final List<AssociationRef> assocs) {
@@ -35,6 +85,7 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
 	@Override
 	public void purge(final NodeRef documentRef) {
+		//проверяем что это действительно документ
 		QName documentType = nodeService.getType(documentRef);
 		boolean isDocument = dictionaryService.isSubClass(documentType, DocumentService.TYPE_BASE_DOCUMENT);
 		if (!isDocument) {
@@ -42,8 +93,85 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 			String msg = String.format(template, documentRef, documentType, DocumentService.TYPE_BASE_DOCUMENT);
 			throw new AlfrescoRuntimeException(msg);
 		}
-		//пробуем удалить все ассоциации без разбора
-		removeAssociations(nodeService.getTargetAssocs(documentRef, RegexQNamePattern.MATCH_ALL));
-		removeAssociations(nodeService.getSourceAssocs(documentRef, RegexQNamePattern.MATCH_ALL));
+		//проверяем что мы есть админ, причем совсем админ ???
+		String user = AuthenticationUtil.getFullyAuthenticatedUser();
+
+		try {
+			behaviourFilter.disableBehaviour(documentRef);
+			logger.debug("All policies for document {} are deactivated!", documentRef);
+
+			//лишаем участников документа всех прав связанных с этим документом
+			List<NodeRef> members = documentMembersService.getDocumentMembers(documentRef);
+			for (NodeRef member : members) {
+				LecmPermissionGroup permissionGroup = documentMembersService.getMemberPermissionGroup(documentRef);
+				List<AssociationRef> assocs = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
+				NodeRef employeeRef = assocs.get(0).getTargetRef();
+				List<String> roles = lecmPermissionService.getEmployeeRoles(documentRef, employeeRef);
+				for (String role : roles) {
+					lecmPermissionService.revokeAccess(permissionGroup, documentRef, employeeRef.getId());
+					lecmPermissionService.revokeDynamicRole(role, documentRef, employeeRef.getId());
+				}
+			}
+			//logger.debug("Пользователи были исключены из участников и лишены прав на этот документ");
+			businessJournalService.log(user, documentRef, EventCategory.DELETE, MEMBERS_TEMPLATE, null);
+
+			//останавливаем все workflow в которых участвует этот документ
+			List<WorkflowInstance> workflows = stateMachineService.getDocumentWorkflows(documentRef);
+			Set<String> definitions = new HashSet<String>();
+			for (WorkflowInstance workflow : workflows) {
+				definitions.add(workflow.getDefinition().getId());
+			}
+			stateMachineService.terminateWorkflowsByDefinitionId(documentRef, new ArrayList<String>(definitions), null, null);
+//			logger.debug("Все бизнес процессы в которых участвовал документ остановлены");
+			businessJournalService.log(user, documentRef, EventCategory.DELETE, WORKFLOWS_TEMPLATE, null);
+
+			//удаляем все связи какие есть
+			//разгребаем все ассоциации которые есть по категориям
+			//уведомления
+			//бизнес журнал
+			//прочие ассоциации
+			List<AssociationRef> allAssocs = new ArrayList<AssociationRef>();
+			List<AssociationRef> connectionAssocs = new ArrayList<AssociationRef>(); //ассоциации на связи
+			List<AssociationRef> businessJournalAssocs = new ArrayList<AssociationRef>(); //ассоциации на бизнес-журнал
+			List<AssociationRef> notificationAssocs = new ArrayList<AssociationRef>(); //ассоциации на уведомления
+			List<AssociationRef> otherAssocs = new ArrayList<AssociationRef>(); //все остальное
+			allAssocs.addAll(nodeService.getTargetAssocs(documentRef, RegexQNamePattern.MATCH_ALL));
+			allAssocs.addAll(nodeService.getSourceAssocs(documentRef, RegexQNamePattern.MATCH_ALL));
+			for (AssociationRef assoc : allAssocs) {
+				QName assocType = assoc.getTypeQName();
+				String namespaceURI = assocType.getNamespaceURI();
+				if (DocumentConnectionService.DOCUMENT_CONNECTIONS_NAMESPACE_URI.equals(namespaceURI)) {
+					//связи
+					connectionAssocs.add(assoc);
+				} else if (BusinessJournalService.BJ_NAMESPACE_URI.equals(namespaceURI)) {
+					//бизнес журнал
+					businessJournalAssocs.add(assoc);
+				} else if (NotificationsService.NOTIFICATIONS_NAMESPACE_URI.equals(namespaceURI)) {
+					//уведомления
+					notificationAssocs.add(assoc);
+				} else {
+					//прочее
+					otherAssocs.add(assoc);
+				}
+			}
+			//удаляем связи
+			removeAssociations(connectionAssocs);
+//			logger.debug("Связи с другими документами удалены");
+			businessJournalService.log(user, documentRef, EventCategory.DELETE, CONNECTIONS_TEMPLATE, null);
+			//удаляем прочие ассоциации
+			removeAssociations(otherAssocs);
+//			logger.debug("Ассоциации с прочими объектами системы удалены");
+			businessJournalService.log(user, documentRef, EventCategory.DELETE, OTHERS_TEMPLATE, null);
+
+			//удаляем сам документ
+			nodeService.addAspect(documentRef, ContentModel.ASPECT_TEMPORARY, null);
+			nodeService.deleteNode(documentRef);
+
+			//сообщаем об удалении в бизнес журнал
+			businessJournalService.log(user, documentRef, EventCategory.DELETE, DOCUMENT_TEMPLATE, null);
+
+		} finally {
+			behaviourFilter.enableBehaviour(documentRef);
+		}
 	}
 }

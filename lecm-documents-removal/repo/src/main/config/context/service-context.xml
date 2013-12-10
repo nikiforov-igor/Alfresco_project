@@ -6,5 +6,10 @@
 
 	<bean id="documentsRemovalService" class="ru.it.lecm.documents.removal.DocumentsRemovalServiceImpl"
 		  p:dictionaryService-ref="dictionaryService"
-		  p:nodeService-ref="nodeService"/>
+		  p:nodeService-ref="nodeService"
+		  p:behaviourFilter-ref="policyBehaviourFilter"
+		  p:documentMembersService-ref="documentMembersService"
+		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
+		  p:stateMachineService-ref="stateMachineHelper"
+		  p:businessJournalService-ref="businessJournalService"/>
 </beans>
