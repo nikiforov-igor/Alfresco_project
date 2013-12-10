@@ -1,7 +1,7 @@
 <webscript>
 	<shortname>Deploy model</shortname>
 	<description>Deploy model</description>
-	<url>/lecm/docforms/deploy?modelName={modelName}</url>
+	<url>/lecm/docforms/generate?modelName={modelName}</url>
 	<format default="json">extension</format>
 	<authentication>user</authentication>
 	<transaction>none</transaction>

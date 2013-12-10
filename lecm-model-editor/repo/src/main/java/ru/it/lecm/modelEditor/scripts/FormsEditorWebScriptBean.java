@@ -69,13 +69,13 @@ public class FormsEditorWebScriptBean extends BaseWebScript {
 	}
 
 	/**
-	 * Развернуть модель
+	 * Сгенерировать формы модели
 	 * @param modelName название модели
 	 * @return true - если форма успешно развёрнута
 	 */
-	public boolean deployModel(String modelName) {
+	public boolean generateModelForms(String modelName) {
 		ParameterCheck.mandatory("modelName", modelName);
-		return formsEditorService.deployModel(modelName);
+		return formsEditorService.generateModelForms(modelName);
 	}
 
 	/**

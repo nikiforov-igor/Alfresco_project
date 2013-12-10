@@ -21,6 +21,14 @@ YAHOO.util.Event.onDOMReady(init);
         </span>
 	</div>
 	<div class="divider"></div>
+	<div class="generate-forms">
+        <span id="${id}-generateFormsButton" class="yui-button yui-push-button">
+           <span class="first-child">
+              <button type="button" title="${msg("button.generate-forms")}">${msg("button.generate-forms")}</button>
+           </span>
+        </span>
+	</div>
+	<div class="divider"></div>
 	<div class="deploy-forms">
         <span id="${id}-deployFormsButton" class="yui-button yui-push-button">
            <span class="first-child">

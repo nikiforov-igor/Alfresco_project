@@ -327,12 +327,12 @@ public class FormsEditorBeanImpl extends BaseBean {
 	}
 
 	/**
-	 * Развернуть модель
+	 * Сгенерировать формы модели
 	 *
 	 * @param modelName название модели
-	 * @return true - если форма успешно развёрнута
+	 * @return true - если формы успешно сгенерированы
 	 */
-	public boolean deployModel(final String modelName) {
+	public boolean generateModelForms(final String modelName) {
 		final NodeRef rootFolder = getModelsDeployRootFolder();
 		if (rootFolder != null) {
 			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {

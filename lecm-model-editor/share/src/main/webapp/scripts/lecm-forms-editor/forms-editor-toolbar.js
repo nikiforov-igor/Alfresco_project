@@ -27,37 +27,47 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
                         value: "create"
                     });
 
-	            this.toolbarButtons["defaultActive"].deployButton = Alfresco.util.createYUIButton(this, "deployFormsButton", this.deployModel);
+	            this.toolbarButtons["defaultActive"].deployButton = Alfresco.util.createYUIButton(this, "generateFormsButton", this.generateModelForms);
+
+	            this.toolbarButtons["defaultActive"].deployButton = Alfresco.util.createYUIButton(this, "deployFormsButton", this.deployForms);
             },
 
-	        deployModel: function() {
+	        generateModelForms: function() {
 		        var me = this;
 		        Alfresco.util.Ajax.jsonGet(
 			        {
-				        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/deploy?modelName=" + encodeURIComponent(this.options.doctype),
+				        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/generate?modelName=" + encodeURIComponent(this.options.doctype),
 				        successCallback: {
 					        fn: function (response) {
 						        var oResults = response.json;
 						        if (oResults != null && oResults.success) {
-							        Alfresco.util.Ajax.request(
-								        {
-									        url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/config/init?reset=true",
-									        dataObj:{},
-									        successCallback:{
-										        fn:function (response) {
-											        Alfresco.util.PopupManager.displayMessage({
-												        text: me.msg("message.deploy.success")
-											        });
-										        }
-									        },
-									        failureMessage:"message.failure"
-								        });
+							        Alfresco.util.PopupManager.displayMessage({
+								        text: me.msg("message.generate.success")
+							        });
 						        }
 					        },
 					        scope: this
 				        },
 				        failureMessage: "message.failure"
 			        });
+	        },
+
+	        deployForms: function() {
+		        var me = this;
+		        Alfresco.util.Ajax.request(
+			        {
+				        url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/config/init?reset=true",
+				        dataObj:{},
+				        successCallback:{
+					        fn:function (response) {
+						        Alfresco.util.PopupManager.displayMessage({
+							        text: me.msg("message.deploy.success")
+						        });
+					        }
+				        },
+				        failureMessage:"message.failure"
+			        });
+
 	        }
         }, true);
 })();
