@@ -779,7 +779,7 @@ IT.component = IT.component || {};
 			//api/classes/cm_cmobject/subclasses?r=true
 			//api/classes/cm_content/subclasses?r=false
 			Alfresco.util.Ajax.request({
-				url : Alfresco.constants.PROXY_URI + "api/classes/cm_content/subclasses?r=false",//"api/dictionary",
+				url : Alfresco.constants.PROXY_URI + "lecm/api/classes/cm_cmobject/subclasses?r=true",//"api/dictionary",
 				method : "GET",
 				successCallback : { fn : onSuccessAssoc, scope : this },
 				failureCallback : { fn : onFailureAssoc, scope : this }
