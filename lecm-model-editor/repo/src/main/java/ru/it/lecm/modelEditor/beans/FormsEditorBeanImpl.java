@@ -274,7 +274,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 	 * @return Название, подходящее для сохранения элементов в репозитории
 	 */
 	public String getModelFileName(String modelName) {
-		return modelName.replace(":", "_");
+		return modelName.replace(":", "_") + ".xml";
 	}
 
 	/**
@@ -284,7 +284,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 	 * @return NodeRef папки модели
 	 */
 	public NodeRef getModelRootFolder(String modelName) {
-		String folderName = getModelFileName(modelName);
+		String folderName = modelName.replace(":", "_");
 		NodeRef parent = getServiceRootFolder();
 		NodeRef folder = getFolder(parent, folderName);
 		if (folder == null) {

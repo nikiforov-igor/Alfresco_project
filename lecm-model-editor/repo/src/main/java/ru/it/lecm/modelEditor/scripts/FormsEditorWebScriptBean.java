@@ -38,6 +38,32 @@ public class FormsEditorWebScriptBean extends BaseWebScript {
 	}
 
 	/**
+	 * Получения папки для развёртывания форм
+	 * @return папка для развёртывания форм
+	 */
+	public ScriptNode getModelsDeployRootFolder() {
+		NodeRef folder = formsEditorService.getModelsDeployRootFolder();
+		if (folder != null) {
+			return new ScriptNode(folder, serviceRegistry, getScope());
+		}
+		return null;
+	}
+
+	/**
+	 * Получение элемента с конфигом для модели
+	 * @param modelName имя модели
+	 * @return элемент с конфигом модели
+	 */
+	public ScriptNode getModelConfigNode(String modelName) {
+		ParameterCheck.mandatory("modelName", modelName);
+		NodeRef node = formsEditorService.getModelConfigNode(modelName);
+		if (node != null) {
+			return new ScriptNode(node, serviceRegistry, getScope());
+		}
+		return null;
+	}
+
+	/**
 	 * Получение всех полей модели
 	 * @param nodeRef форма
 	 * @return список полей модели

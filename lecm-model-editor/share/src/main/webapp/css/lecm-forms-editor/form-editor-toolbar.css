@@ -1,0 +1,19 @@
+.datalist-toolbar .generate-forms span.first-child {
+	background: url(/share/res/components/documentlibrary/images/create-content-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
+}
+
+.datalist-toolbar .deploy-forms span.first-child {
+	background: url(/share/res/themes/lecmTheme/images/refresh-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
+}
+
+.datalist-toolbar .download-config span.first-child {
+	background: url(/share/res/components/documentlibrary/actions/document-download-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
+}
+
+.datalist-toolbar .upload-config span.first-child {
+	background: url(/share/res/components/documentlibrary/images/upload-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
+}

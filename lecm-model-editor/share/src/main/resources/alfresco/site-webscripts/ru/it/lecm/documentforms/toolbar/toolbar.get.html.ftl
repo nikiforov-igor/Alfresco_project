@@ -36,4 +36,20 @@ YAHOO.util.Event.onDOMReady(init);
            </span>
         </span>
 	</div>
+	<div class="divider"></div>
+	<div class="download-config">
+        <span id="${id}-downloadConfigButton" class="yui-button yui-push-button">
+           <span class="first-child">
+              <button type="button" title="${msg("button.download-config")}">${msg("button.download-config")}</button>
+           </span>
+        </span>
+	</div>
+	<div class="divider"></div>
+	<div class="upload-config">
+        <span id="${id}-uploadConfigButton" class="yui-button yui-push-button">
+           <span class="first-child">
+              <button type="button" title="${msg("button.upload-config")}">${msg("button.upload-config")}</button>
+           </span>
+        </span>
+	</div>
 </@comp.baseToolbar>
