@@ -227,14 +227,18 @@ public class DocumentTablePolicy extends BaseBean {
         }
         int newIndexInt = newIndex != null ? newIndex : maxIndex;
         //проверка границ индекса
+        boolean changed = false;
         if (newIndexInt < 1) {
             newIndexInt = 1;
+            changed = true;
         } else if (newIndexInt > maxIndex) {
             newIndexInt = maxIndex;
+            changed = true;
         }
-        int oldIndexInt = oldIndex != null ? oldIndex : newIndex;
+        int oldIndexInt = (oldIndex != null) ? oldIndex : newIndexInt;
         //если индекс поменялся
         if (oldIndexInt != newIndexInt) {
+            changed = true;
             int fromIndex = oldIndexInt < newIndexInt ? oldIndexInt : newIndexInt;
             int toIndex = oldIndexInt < newIndexInt ? newIndexInt : oldIndexInt;
             int direction = oldIndexInt < newIndexInt ? -1 : 1;
@@ -252,6 +256,8 @@ public class DocumentTablePolicy extends BaseBean {
                 }
             }
             //запись нового индекса
+        }
+        if (changed) {
             nodeService.setProperty(rowRef, DocumentTableService.PROP_INDEX_TABLE_ROW, newIndexInt);
         }
         return newIndexInt;
