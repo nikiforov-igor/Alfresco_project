@@ -42,7 +42,10 @@
     width: 35em;
 }
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
-    margin-left: 130px;
+    margin: 0;
+    line-height: normal;
+    width: 100%;
+    white-space: pre-wrap;
 }
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field div.format-info {
     clear: both !important;

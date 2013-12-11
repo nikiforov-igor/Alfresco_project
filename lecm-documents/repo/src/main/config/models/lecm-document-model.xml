@@ -14,6 +14,13 @@
 		<namespace uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
 	</namespaces>
 
+	<constraints>
+		<constraint name="lecm-document:index-table-row-constraint" type="REGEX">
+			<parameter name="expression"><value>^[0-9]+$</value></parameter>
+			<parameter name="requiresMatch"><value>true</value></parameter>
+		</constraint>
+	</constraints>
+
 	<types>
 		<type name="lecm-document:base">
 			<title>Logic ECM Base Document</title>
@@ -170,6 +177,9 @@
                         <stored>false</stored>
                         <tokenised>both</tokenised>
                     </index>
+                    <constraints>
+                        <constraint ref="lecm-document:index-table-row-constraint" />
+                    </constraints>
                 </property>
             </properties>
         </type>
