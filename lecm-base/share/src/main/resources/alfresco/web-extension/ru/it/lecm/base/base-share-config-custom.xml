@@ -145,18 +145,14 @@
 				<js src="/scripts/knockout.min.js" />
 
 	            <!--Web preview-->
-	            <css src="/components/preview/web-preview.css" />
 	            <js src="/components/preview/web-preview.js" />
-	            <css src="/components/preview/WebPreviewerHTML.css" />
 	            <js src="/components/preview/WebPreviewer.js" />
 	            <js src="/js/flash/extMouseWheel.js" />
 	            <js src="/components/preview/FlashFox.js" />
 	            <js src="/components/preview/StrobeMediaPlayback.js" />
 	            <js src="/components/preview/Video.js" />
-	            <css src="/components/preview/Audio.css" />
 	            <js src="/components/preview/Audio.js" />
 	            <js src="/components/preview/Flash.js" />
-	            <css src="/components/preview/Image.css" />
 	            <js src="/components/preview/Image.js" />
 	            <js src="/extras/components/preview/web-preview-extend.js" />
 	            <js src="/extras/components/preview/PdfJs.js" />
@@ -164,8 +160,6 @@
 	            <js src="/extras/components/preview/pdfjs/compatibility.js" />
 	            <js src="/extras/components/preview/pdfjs/pdf.js" />
 	            <js src="/extras/components/preview/spin.js" />
-	            <css src="/extras/components/preview/viewer-common.css" />
-	            <css src="/extras/components/preview/PdfJs.css" />
             </dependencies>
 
             <constraint-handlers>

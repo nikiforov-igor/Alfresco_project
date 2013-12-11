@@ -16,3 +16,10 @@
 @import "/share/res/css/lecm-base/components/tree-picker.css";
 @import "/share/res/css/lecm-base/components/contractors.css";
 @import "/share/res/css/lecm-base/components/form-with-preview.css";
+
+@import "/share/res/components/preview/web-preview.css";
+@import "/share/res/components/preview/WebPreviewerHTML.css";
+@import "/share/res/components/preview/Audio.css";
+@import "/share/res/components/preview/Image.css";
+@import "/share/res/extras/components/preview/viewer-common.css";
+@import "/share/res/extras/components/preview/PdfJs.css";
