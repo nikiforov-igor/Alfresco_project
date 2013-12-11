@@ -281,6 +281,7 @@
 	        <form-type id="statemachine-editable-fields" evaluatorType="model-type" localName="Настройка машины состояний" />
 	        <form-type id="document-dashlet" evaluatorType="node-type" localName="Дашлет" />
 	        <form-type id="document" evaluatorType="node-type" localName="Правая область" />
+	        <form-type id="main-page-dashlets" evaluatorType="node-type" localName="Главная страница" />
 	        <form-layout localName="В одну колонку" template=""/>
 	        <form-layout localName="В две колонки" template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
 	        <form-layout localName="С вкладками" template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />

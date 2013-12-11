@@ -55,6 +55,10 @@ public class FormsEditorBeanImpl extends BaseBean {
 	public static final String FORMS_EDITOR_ROOT_ID = "FORMS_EDITOR_ROOT_ID";
 	public static final String FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME = "Формы";
 
+	public static final String DASHLETS_EVALUATOR = "node-type";
+	public static final String DASHLETS_FORM_ID = "main-page-dashlets";
+	public static final String DEFAULT_DASHLETS_TEMPLATE= "/ru/it/lecm/documents/controls/document-dashlet-control.ftl";
+
 	private NamespaceService namespaceService;
 	private DictionaryService dictionaryService;
 	private Repository repository;
@@ -123,8 +127,8 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 	/**
 	 * Получение названия модели для формы
-	 * @param nodeRef
-	 * @return
+	 * @param nodeRef идентификатор формы
+	 * @return тип модели
 	 */
 	public QName getFormModelType(NodeRef nodeRef) {
 		ChildAssociationRef parent = nodeService.getPrimaryParent(nodeRef);
@@ -375,8 +379,19 @@ public class FormsEditorBeanImpl extends BaseBean {
 				xmlw = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
 				xmlw.writeStartElement("alfresco-config");
 
+				boolean existDashletsForm = false;
 				for (NodeRef form : forms) {
 					writeForm(xmlw, form, modelName);
+
+					String evaluator = (String) nodeService.getProperty(form, PROP_FORM_EVALUATOR);
+					String formId = (String) nodeService.getProperty(form, PROP_FORM_ID);
+					if (DASHLETS_EVALUATOR.equals(evaluator) && DASHLETS_FORM_ID.equals(formId)) {
+						existDashletsForm = true;
+					}
+				}
+
+				if (!existDashletsForm) {
+					writeDefaultDashletsForm(xmlw, modelName);
 				}
 
 				xmlw.writeEndElement();
@@ -565,6 +580,44 @@ public class FormsEditorBeanImpl extends BaseBean {
 				tabIndex++;
 			}
 		}
+	}
+
+	private void writeDefaultDashletsForm(XMLStreamWriter xmlw, String modelName) throws XMLStreamException {
+		xmlw.writeStartElement("config");
+		xmlw.writeAttribute("evaluator", DASHLETS_EVALUATOR);
+		xmlw.writeAttribute("condition", modelName);
+
+		xmlw.writeStartElement("forms");
+		xmlw.writeStartElement("form");
+		xmlw.writeAttribute("id", DASHLETS_FORM_ID);
+
+		xmlw.writeStartElement("field-visibility");
+		xmlw.writeStartElement("show");
+		xmlw.writeAttribute("id", "line1");
+		xmlw.writeEndElement();
+		xmlw.writeEndElement();
+
+		xmlw.writeStartElement("appearance");
+		xmlw.writeStartElement("field");
+		xmlw.writeAttribute("id", "line1");
+		xmlw.writeStartElement("control");
+		xmlw.writeAttribute("template", DEFAULT_DASHLETS_TEMPLATE);
+		xmlw.writeStartElement("control-param");
+		xmlw.writeAttribute("name", "first");
+		xmlw.writeCharacters("/lecm/components/dashlets/document-main;/lecm/components/dashlets/document-members");
+		xmlw.writeEndElement();
+		xmlw.writeStartElement("control-param");
+		xmlw.writeAttribute("name", "second");
+		xmlw.writeCharacters("/lecm/components/dashlets/document-attachments;/lecm/components/dashlets/document-my-tasks");
+		xmlw.writeEndElement();
+		xmlw.writeEndElement();
+		xmlw.writeEndElement();
+		xmlw.writeEndElement();
+
+		xmlw.writeEndElement();
+		xmlw.writeEndElement();
+
+		xmlw.writeEndElement();
 	}
 
 	private Map<String, List<String>> getSets(List<NodeRef> fields) {
