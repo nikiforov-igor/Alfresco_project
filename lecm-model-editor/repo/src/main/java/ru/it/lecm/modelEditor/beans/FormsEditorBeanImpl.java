@@ -55,6 +55,8 @@ public class FormsEditorBeanImpl extends BaseBean {
 	public static final String FORMS_EDITOR_ROOT_ID = "FORMS_EDITOR_ROOT_ID";
 	public static final String FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME = "Формы";
 
+	public static final String FAKE_ATTRIBUTE_TYPE = "fake";
+
 	public static final String DASHLETS_EVALUATOR = "node-type";
 	public static final String DASHLETS_FORM_ID = "main-page-dashlets";
 	public static final String DEFAULT_DASHLETS_TEMPLATE= "/ru/it/lecm/documents/controls/document-dashlet-control.ftl";
@@ -264,6 +266,8 @@ public class FormsEditorBeanImpl extends BaseBean {
 					AssociationDefinition attrAssocDefinition = dictionaryService.getAssociation(attrQName);
 					if (attrAssocDefinition != null) {
 						return attrAssocDefinition.getTargetClass().getName().toPrefixString(namespaceService);
+					} else {
+						return FAKE_ATTRIBUTE_TYPE;
 					}
 				}
 			}

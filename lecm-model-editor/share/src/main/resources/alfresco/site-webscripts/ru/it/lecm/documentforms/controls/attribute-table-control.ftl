@@ -32,6 +32,13 @@
 		           </span>
 		        </span>
 			</div>
+			<div class="new-row">
+		        <span id="${toolbarId}-newFakeRowButton" class="yui-button yui-push-button">
+		           <span class="first-child">
+		              <button type="button" title="${msg("label.form.attributeTable.fake.field.add.title")}">${msg("label.form.attributeTable.fake.field.add.title")}</button>
+		           </span>
+		        </span>
+			</div>
 		</@comp.baseToolbar>
 	</div>
 
