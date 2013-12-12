@@ -4,7 +4,10 @@
 <![endif]-->
 <input id="yui-history-field" type="hidden" />
 <script type="text/javascript">//<![CDATA[
-   new IT.component.ModelList('${id}');
+	function init() {
+		new LogicECM.module.ModelEditor.ModelList("${id}").setMessages(${messages});
+	}
+	YAHOO.util.Event.onDOMReady(init);
 //]]></script>
 <div id="${id}-body" class="datagrid models">
    
