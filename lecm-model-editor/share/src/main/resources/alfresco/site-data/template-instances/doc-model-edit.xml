@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-   <template-type>org/alfresco/edit-metadata</template-type>
-   <components>
+	<template-type>ru/it/lecm/docmodel/doc-model-edit</template-type>
+	<components>
 
-      <component>
+		<component>
 			<region-id>title</region-id>
 			<url>/components/title/simple-title</url>
 			<properties>
@@ -11,44 +11,26 @@
 			</properties>
 		</component>
 
-      <!-- Site Navigation -->
-      <component>
-         <region-id>navigation</region-id>
-         <sub-components>
-            <sub-component id="default">
-               <evaluations>
-                  <!-- if in site: Site navigation -->
-                  <evaluation id="site">
-                     <evaluators>
-                        <evaluator type="site.component.evaluator"/>
-                     </evaluators>
-                     <url>/components/navigation/collaboration-navigation</url>
-                  </evaluation>
-               </evaluations>
-            </sub-component>
-         </sub-components>
-      </component>
+		<!-- Edit Metadata Form Manager -->
+		<component>
+			<region-id>edit-metadata-mgr</region-id>
+			<url>/lecm/documentmodel/form-mgr/doc-model-edit-mgr</url>
+		</component>
 
-      <!-- Edit Metadata Form Manager -->
-      <component>
-         <region-id>edit-metadata-mgr</region-id>
-         <url>/lecm/documentmodel/form-mgr/doc-model-edit-mgr</url>
-      </component>
+		<!-- Edit Metadata Form -->
+		<component>
+			<region-id>edit-metadata</region-id>
+			<url>/components/form</url>
+			<properties>
+				<itemKind>node</itemKind>
+				<itemId>{nodeRef}</itemId>
+				<formId>{formId}</formId>
+				<mode>edit</mode>
+				<submitType>json</submitType>
+				<showCaption>true</showCaption>
+				<showCancelButton>true</showCancelButton>
+			</properties>
+		</component>
 
-      <!-- Edit Metadata Form -->
-      <component>
-         <region-id>edit-metadata</region-id>
-         <url>/components/form</url>
-         <properties>
-            <itemKind>node</itemKind>
-            <itemId>{nodeRef}</itemId>
-            <formId>{formId}</formId>
-            <mode>edit</mode>
-            <submitType>json</submitType>
-            <showCaption>true</showCaption>
-            <showCancelButton>true</showCancelButton>
-         </properties>
-      </component>
-
-   </components>
+	</components>
 </template-instance>

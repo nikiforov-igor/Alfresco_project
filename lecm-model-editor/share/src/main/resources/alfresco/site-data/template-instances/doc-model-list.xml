@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-	<template-type>ru/it/lecm/docmodel/list</template-type>
+	<template-type>ru/it/lecm/docmodel/doc-model-list</template-type>
 	<components>
 		<component>
 			<region-id>title</region-id>
@@ -18,6 +18,6 @@
 			<url>/lecm/documentmodel/data-lists/datagrid</url>
 		</component>
 		<!-- Menu -->
-		
+
 	</components>
 </template-instance>
