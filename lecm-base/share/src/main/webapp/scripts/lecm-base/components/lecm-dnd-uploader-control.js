@@ -393,14 +393,14 @@ LogicECM.control = LogicECM.control || {};
 							}
 
 							if (!this.options.disabled) {
-								if (this.options.showUploadNewVersion && (this.options.checkRights && this.hasNewVersionContentRight)) {
+								if (this.options.showUploadNewVersion && (!this.options.checkRights || this.hasNewVersionContentRight)) {
 									var iconNewVersionId = "attachment-newVersion-" + nodeRef;
 									row += "<img id='" + iconNewVersionId + "' src='" + Alfresco.constants.URL_RESCONTEXT
 										+ "/components/documentlibrary/actions/document-upload-new-version-16.png' class='newVersion-icon'/>";
 									Event.onAvailable(iconNewVersionId, this.attachUploadNewVersionClickListener, item, this);
 								}
 
-								if (this.options.checkRights && this.hasDeleteContentRight) {
+								if (!this.options.checkRights || this.hasDeleteContentRight) {
 									var iconRemoveId = "attachment-remove-" + nodeRef;
 									row += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
 										+ "components/images/delete-16.png' class='remove-icon'/>";
