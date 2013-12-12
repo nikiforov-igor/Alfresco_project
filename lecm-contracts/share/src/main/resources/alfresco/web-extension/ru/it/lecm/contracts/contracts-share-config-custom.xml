@@ -1502,7 +1502,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:indexTableRow" help="Номер этапа должен быть целым числомle"/>
+                    <field id="lecm-document:indexTableRow" help="Номер этапа должен быть целым числом"/>
                     <!--<field id="lecm-contract-table-structure:attachments-temp-assoc" >-->
                         <!--<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">-->
                             <!--<control-param name="uploadDirectoryPath">{usertemp}</control-param>-->

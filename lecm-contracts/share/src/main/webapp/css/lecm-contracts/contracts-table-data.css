@@ -41,11 +41,13 @@
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit .autocomplete-block .autocompleteCurrentValueDisplayInvisible {
     width: 35em;
 }
-.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
-    margin: 0;
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field div.help-text {
     line-height: normal;
     width: 100%;
-    white-space: pre-wrap;
+    white-space: pre-wrap !important;
+}
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+    margin: 0;
 }
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field div.format-info {
     clear: both !important;
