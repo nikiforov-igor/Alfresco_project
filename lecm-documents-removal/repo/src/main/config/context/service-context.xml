@@ -11,5 +11,6 @@
 		  p:documentMembersService-ref="documentMembersService"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
 		  p:stateMachineService-ref="stateMachineHelper"
-		  p:businessJournalService-ref="businessJournalService"/>
+		  p:businessJournalService-ref="businessJournalService"
+		  p:documentAttachmentsService-ref="documentAttachmentsService"/>
 </beans>

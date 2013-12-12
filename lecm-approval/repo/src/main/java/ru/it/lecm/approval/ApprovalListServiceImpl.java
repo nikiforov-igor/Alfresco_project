@@ -335,7 +335,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 			NodeRef member = documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, "LECM_BASIC_PG_Reviewer");
 			if (member == null) { // сотрудник уже добавлен как участник - значит просто раздаем доп права
 				LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Reviewer");
-				lecmPermissionService.grantAccess(pgGranting, documentRef, employeeRef.getId());
+				lecmPermissionService.grantAccess(pgGranting, documentRef, employeeRef);
 			}
 			if (logger.isTraceEnabled()) {
 				String employeeName = (String) nodeService.getProperty(employeeRef, ContentModel.PROP_NAME);
@@ -359,7 +359,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	public void revokeReviewerPermissionsInternal(NodeRef employeeRef, NodeRef documentRef) {
 		if (documentRef != null) {
 			LecmPermissionService.LecmPermissionGroup pgRevoking = lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Reviewer");
-			lecmPermissionService.revokeAccess(pgRevoking, documentRef, employeeRef.getId());
+			lecmPermissionService.revokeAccess(pgRevoking, documentRef, employeeRef);
 		} else {
 			logger.error("There is no any lecm-contract:document in bpm:package. Permissions won't be revoked");
 		}

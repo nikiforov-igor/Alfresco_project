@@ -24,6 +24,9 @@ import ru.it.lecm.security.events.IOrgStructureNotifiers;
 import javax.naming.AuthenticationException;
 import javax.naming.InvalidNameException;
 import java.util.*;
+import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 public class LecmPermissionServiceImpl
 		implements LecmPermissionService, InitializingBean
@@ -39,15 +42,15 @@ public class LecmPermissionServiceImpl
 
 	/*
 	 * если потребуется прозрачное присвоение БР "по факту" - т.е. выдавать
-	 * автоматически личную БР при прописывании сотрудника в ACL узла 
+	 * автоматически личную БР при прописывании сотрудника в ACL узла
 	 * (документа) при вызове метода grantDynamicRole
-	 */ 
-	private IOrgStructureNotifiers orgStructureNotifiers; 
+	 */
+	private IOrgStructureNotifiers orgStructureNotifiers;
 
 	private final SgNameResolver sgnm = new SgNameResolver(logger);
 
-	/* 
-	 * флаги наследования родительских полномочий для статического 
+	/*
+	 * флаги наследования родительских полномочий для статического
 	 * и динамического случая выдачи прав
 	 */
 	private boolean staticInheritParentPermissions = false;
@@ -252,7 +255,7 @@ public class LecmPermissionServiceImpl
 		final String key = makeNamedKey( lecmPermissionName);
 
 		// DONE: check via real list of permissions
-		final LecmPermission result = 
+		final LecmPermission result =
 				(allPermissions.containsKey(key)) ? allPermissions.get(key) : null;
 				if (result == null) {
 					// // allPermissions.put( key, new LecmPermissionImpl(lecmPermissionName));
@@ -292,7 +295,7 @@ public class LecmPermissionServiceImpl
 		if (lecmGroupName == null)
 			return null;
 
-		// созданные кешируем для единообразия, со врменем можно будет 
+		// созданные кешируем для единообразия, со врменем можно будет
 		// инициализировать список по данным xml-настроек permissionService.
 		final String key = makeNamedKey(lecmGroupName);
 		if (allGroups == null) {
@@ -303,7 +306,7 @@ public class LecmPermissionServiceImpl
 			initAllGroups(); // кешируем ...
 		}
 
-		final LecmPermissionGroup result = 
+		final LecmPermissionGroup result =
 				(allGroups.containsKey(key)) ? allGroups.get(key) : null;
 				if (result == null) {
 					// // allGroups.put( key, new LecmPermissionGroupImpl(lecmGroupName));
@@ -437,7 +440,7 @@ public class LecmPermissionServiceImpl
 		final SGPrivateBusinessRole posBRME = Types.SGKind.getSGMyRolePos(employeeId, roleCode);
 
 		// оповещение основной службы о личном присвоении БР (создание "теневой группы" )
-		if (this.orgStructureNotifiers != null) { 
+		if (this.orgStructureNotifiers != null) {
 			final SGPrivateMeOfUser posMe = Types.SGKind.getSGMeOfUser(employeeId, null);
 			this.orgStructureNotifiers.orgBRAssigned(roleCode, posMe);
 		}
@@ -482,22 +485,20 @@ public class LecmPermissionServiceImpl
     }
 
     @Override
-	public void revokeDynamicRole(String roleCode, NodeRef nodeRef,
-			String employeeId) {
+	public void revokeDynamicRole(String roleCode, NodeRef nodeRef, String employeeId) {
 		final String authority = sgnm.makeFullBRMEAuthName(employeeId, roleCode);
 		permissionService.clearPermission( nodeRef, authority);
 		logger.debug(String.format("Dynamic role '%s' for employee '%s' revoked from document '%s'", roleCode, employeeId, nodeRef));
 	}
 
 	@Override
-	public void grantAccess(LecmPermissionGroup permissionGroup, NodeRef nodeRef,
-			String employeeId) 
-	{
-		final SGPosition posUserSpec = Types.SGKind.getSGSpecialUserRole(employeeId, permissionGroup, nodeRef);
+	public void grantAccess(LecmPermissionGroup permissionGroup, NodeRef nodeRef, NodeRef employeeRef) {
+		String userLogin = getEmployeeLogin(employeeRef);
+		final SGPosition posUserSpec = Types.SGKind.getSGSpecialUserRole(employeeRef.getId(), permissionGroup, nodeRef, userLogin);
 
 		// оповещение основной службы о личном присвоении новой группы
-		if (this.orgStructureNotifiers != null) { 
-			final SGPrivateMeOfUser posMe = Types.SGKind.getSGMeOfUser(employeeId, null);
+		if (this.orgStructureNotifiers != null) {
+			final SGPrivateMeOfUser posMe = Types.SGKind.getSGMeOfUser(employeeRef.getId(), userLogin);
 			this.orgStructureNotifiers.sgInclude(posMe, posUserSpec);
 		}
 
@@ -506,9 +507,9 @@ public class LecmPermissionServiceImpl
 	}
 
 	@Override
-	public void revokeAccess(LecmPermissionGroup permissionGroup, NodeRef nodeRef,
-			String employeeId) {
-		final SGPosition posUserSpec = Types.SGKind.getSGSpecialUserRole(employeeId, permissionGroup, nodeRef);
+	public void revokeAccess(LecmPermissionGroup permissionGroup, NodeRef nodeRef, NodeRef employeeRef) {
+		String userLogin = getEmployeeLogin(employeeRef);
+		final SGPosition posUserSpec = Types.SGKind.getSGSpecialUserRole(employeeRef.getId(), permissionGroup, nodeRef, userLogin);
 		revokeAccessByPosition(permissionGroup, nodeRef, posUserSpec);
 	}
 
@@ -628,20 +629,20 @@ public class LecmPermissionServiceImpl
 	 * Представлене для группы lecm-полномочий системы.
 	 * Список таких групп полномочий жёстко связан с permissionDfinitions.xml Альфреско
 	 * (см стд серсвис PermissionService).
-	 * Выделен отдельный класс, чтобы можно было runtime-контролировать 
-	 * корректность используемых названий групп и точно параметризовать методы 
-	 * интерфейса LecmPermissionService вместо многозначного String. 
-	 * Создание объектов типа см. LecmPermissionService.getPerm() 
+	 * Выделен отдельный класс, чтобы можно было runtime-контролировать
+	 * корректность используемых названий групп и точно параметризовать методы
+	 * интерфейса LecmPermissionService вместо многозначного String.
+	 * Создание объектов типа см. LecmPermissionService.getPerm()
 	 */
 	class LecmPermissionGroupImpl
 	extends PrefixedNameKeeper
 	implements LecmPermissionGroup
 	{
 		/**
-		 * @param fullLecmPermGroupName полное название lecm-группы полномочий (включая префикс PFX_LECM_ROLE = "LECM_BASIC_PG_"), 
+		 * @param fullLecmPermGroupName полное название lecm-группы полномочий (включая префикс PFX_LECM_ROLE = "LECM_BASIC_PG_"),
 		 * название соот-щего permissionSet Альфреско будет точно таким же.
 		 * Например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
-		 * @throws InvalidNameException 
+		 * @throws InvalidNameException
 		 */
 		public LecmPermissionGroupImpl(String fullLecmPermGroupName) {
 			super(LecmPermissionGroup.PFX_LECM_ROLE, fullLecmPermGroupName);
@@ -658,9 +659,9 @@ public class LecmPermissionServiceImpl
 	 * Представлене для отдельного lecm-разрешения системы.
 	 * Список таких разрешений жёстко связан с permissionDfinitions.xml Альфреско
 	 * (см стд серсвис PermissionService).
-	 * Выделен отдельный класс, чтобы можно было runtime-контролировать 
-	 * корректность используемых полномочий и точно параметризовать методы 
-	 * интерфейса LecmPermissionService вместо многозначного String. 
+	 * Выделен отдельный класс, чтобы можно было runtime-контролировать
+	 * корректность используемых полномочий и точно параметризовать методы
+	 * интерфейса LecmPermissionService вместо многозначного String.
 	 * Создание объектов этого типа см. LecmPermissionService.getPermGroups()
 	 */
 	class LecmPermissionImpl
@@ -669,10 +670,10 @@ public class LecmPermissionServiceImpl
 	{
 
 		/**
-		 * @param fullLecmPermName полное название lecm-полномочия (включая префикс PFX_LECM_PERMISSION = "_lecmPerm_"), 
+		 * @param fullLecmPermName полное название lecm-полномочия (включая префикс PFX_LECM_PERMISSION = "_lecmPerm_"),
 		 * название соот-щего permissionSet Альфреско будет точно таким же.
 		 * Например, "_lecmPerm_SetRate", "_lecmPerm_CreateTag"
-		 * @throws InvalidNameException 
+		 * @throws InvalidNameException
 		 */
 		public LecmPermissionImpl(String fullLecmPermName) {
 			super( LecmPermission.PFX_LECM_PERMISSION, fullLecmPermName);
@@ -692,7 +693,7 @@ public class LecmPermissionServiceImpl
 		/**
 		 * @param prefix префикс в названии
 		 * @param fullName полное название (включая префикс)
-		 * // @throws InvalidNameException 
+		 * // @throws InvalidNameException
 		 */
 		protected PrefixedNameKeeper(String prefix, String fullName) {
 			super();
@@ -725,7 +726,7 @@ public class LecmPermissionServiceImpl
 		 * @return короткое наименование, всегда не NULL.
 		 */
 		public String getShortName() {
-			return (fullName.toUpperCase().startsWith( prefix.toUpperCase())) 
+			return (fullName.toUpperCase().startsWith( prefix.toUpperCase()))
 					? fullName.substring(prefix.length())
 							: fullName;
 		}
@@ -771,7 +772,7 @@ public class LecmPermissionServiceImpl
 	 * @param nodeRef
 	 * @param authority
 	 * @param destBuf для формирования журнальных сообщений, м.б. Null
-	 * @throws AuthenticationException 
+	 * @throws AuthenticationException
 	 */
 
 	void setACE(
@@ -779,7 +780,7 @@ public class LecmPermissionServiceImpl
 			, final String authority
 			, final LecmPermissionGroup permGrp
 			, final StringBuilder destBuf
-			) throws AuthenticationException 
+			) throws AuthenticationException
 			{
 		// удаление прежней auth-записи ...
 		permissionService.clearPermission(nodeRef, authority);
@@ -801,11 +802,11 @@ public class LecmPermissionServiceImpl
 		else { // DENY
 			/*
 			 * (2013.03.01, RuSA, EERofeev) если явно прописать запрет чтения то
-			 * у пользователя входящего и в группу с DENY и в другие группы 
-			 * (которым чтение разрешено), потеряется право чтения, т.е. тогда 
+			 * у пользователя входящего и в группу с DENY и в другие группы
+			 * (которым чтение разрешено), потеряется право чтения, т.е. тогда
 			 * надо будет "разводить" слои доступа c индексами.
 			 * Сейчас не станем усложнять и просто не пропишем ничего (clear уже было выполнено).
-			 *  
+			 *
 			permissionService.setPermission(nodeRef, authority, "Read", false); // явный запрет
 			 */
 		}
@@ -823,7 +824,7 @@ public class LecmPermissionServiceImpl
 			}
 
 	/**
-	 * Вернуть название полномочия Альфреско, которое будет соот-ть группе полномочий 
+	 * Вернуть название полномочия Альфреско, которое будет соот-ть группе полномочий
 	 * @param permissionGroup группа полномочий
 	 * @return Сейчас воз-ет полное имя группы permissionGroup, т.к. она уже
 	 * является достаточной для Альфреско и дробить до атомарных полномочий не требуется.
@@ -863,7 +864,7 @@ public class LecmPermissionServiceImpl
 	 */
 	@Override
 	public StringBuilder trackAllLecmPermissions(String info, NodeRef nodeRef,
-			String ... userLogins) 
+			String ... userLogins)
 	{
 		final StringBuilder sb = new StringBuilder();
 		if (userLogins == null) return sb;
@@ -900,4 +901,29 @@ public class LecmPermissionServiceImpl
 	public boolean isAdmin(String login) {
 		return authorityService.isAdminAuthority(login);
 	}
+
+	private String getEmployeeLogin(final NodeRef employee) {
+		if (employee == null || !isEmployee(employee)) {
+			return null;
+		}
+
+		NodeRef person = null;
+		List<AssociationRef> persons = nodeService.getTargetAssocs(employee, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
+        if (persons.size() > 0) {
+            person = persons.get(0).getTargetRef();
+        }
+
+		if (person == null) {
+			logger.warn("Employee {} is not linked to system user", employee.toString());
+			return null;
+		}
+		return (String) nodeService.getProperty(person, ContentModel.PROP_USERNAME);
+	}
+
+    private boolean isEmployee(final NodeRef nodeRef) {
+		if (nodeRef != null) {
+			return OrgstructureBean.TYPE_EMPLOYEE.isMatch(nodeService.getType(nodeRef));
+		}
+		return false;
+    }
 }

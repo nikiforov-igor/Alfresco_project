@@ -821,7 +821,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 				NodeRef member = documentMembersService.addMemberWithoutCheckPermission(node, employeeNodeRef, REVIEWER_PERMISSION_GROUP);
 				if (member == null) {
 					LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(REVIEWER_PERMISSION_GROUP);
-					lecmPermissionService.grantAccess(pgGranting, node, employeeNodeRef.getId());
+					lecmPermissionService.grantAccess(pgGranting, node, employeeNodeRef);
 				}
 			}
 		}
@@ -832,7 +832,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		for (NodeRef node : packageContents) {
 			if (dictionaryServiceAlfresco.isSubClass(nodeService.getType(node), DocumentService.TYPE_BASE_DOCUMENT)) {
 					LecmPermissionService.LecmPermissionGroup pgRevoking = lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Reviewer");
-					lecmPermissionService.revokeAccess(pgRevoking, node, employeeNodeRef.getId());
+					lecmPermissionService.revokeAccess(pgRevoking, node, employeeNodeRef);
 
 			}
 		}

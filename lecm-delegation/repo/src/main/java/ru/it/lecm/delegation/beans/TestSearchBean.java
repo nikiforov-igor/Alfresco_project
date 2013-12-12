@@ -771,7 +771,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 				case 6: result = doCreateNestedSGTest(); break;
 				case 7: result = doOrgStrucNotifyTest(); break;
 				case 8: result = doCheckACLTest(); break;
-				case 9: result = doIntegroTest(); break; 
+				case 9: result = doIntegroTest(); break;
 				case 10: result = doWorkFlowTest(); break;
 				case 11: result = doGetUserNodeAccess(); break;
 				default:
@@ -801,7 +801,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	 */
 	String echoGetArg( String argName, String argDefault, JSONObject echoObj
 		) throws JSONException {
-		return echoGetArg( this.args, argName, argDefault, echoObj); 
+		return echoGetArg( this.args, argName, argDefault, echoObj);
 	}
 	static String echoGetArg( JSONObject args, String argName, String argDefault, JSONObject echoObj
 				) throws JSONException {
@@ -846,7 +846,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 	 * @throws JSONException
 	 */
 	static NodeRef echoGetNodeRef( JSONObject args, String argDefault, JSONObject echoObj
-			) throws JSONException 
+			) throws JSONException
 	{
 		String found = null;
 		for (String name: ARGNODEREFNAME) {
@@ -1287,9 +1287,9 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 			final NodeRef node = echoGetNodeRef( args, null, result);
 			final LecmPermissionGroup permissionGroup = lecmServ.findPermissionGroup( echoGetArg( "permGroup", null, result));
 			if (grant)
-				lecmServ.grantAccess( permissionGroup, node, employeeId);
+				lecmServ.grantAccess( permissionGroup, node, new NodeRef("workspace", "SpacesStore", employeeId));
 			else
-				lecmServ.revokeAccess( permissionGroup, node, employeeId);
+				lecmServ.revokeAccess( permissionGroup, node, new NodeRef("workspace", "SpacesStore", employeeId));
 			logger.info( String.format("%s called", oper));
 			result.put("return", "void");
 		}
@@ -1508,7 +1508,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 	/**
 	 * Метод получения списка задач Activity, связанных с данным узлом.
-	 * Входной аргумент - узел для инспектирования: 
+	 * Входной аргумент - узел для инспектирования:
 	 * 		"nodeRef":"workspace://SpacesStore/2bab80c5-8e43-41a8-ac53-1e4d337c9869"
 	 * @return (wf_count:count, wf_list[id:desc])
 	 * @throws JSONException
@@ -1520,7 +1520,7 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 		final Map<String, String> workflowList = new HashMap<String, String>();
 		if (nodeRef != null) {
 			final List<WorkflowInstance> wfInstances = workflowService.getWorkflowsForContent(nodeRef, true);
-			if (wfInstances != null) { 
+			if (wfInstances != null) {
 				for (WorkflowInstance wfInstance : wfInstances) {
 					workflowList.put( wfInstance.getId(), wfInstance.getDescription());
 				}
@@ -1533,9 +1533,9 @@ public class TestSearchBean extends AbstractLifecycleBean implements ITestSearch
 
 	/**
 	 * Метод получения таблицы доступа пользователя к документу по отдельным правам
-	 * JSON args: 1) "nodeRef" | "node" | "nodeId" 2) "user" | "login" 
+	 * JSON args: 1) "nodeRef" | "node" | "nodeId" 2) "user" | "login"
 	 * @return
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
 	private JSONObject doGetUserNodeAccess() throws JSONException {
 		final JSONObject result = new JSONObject();

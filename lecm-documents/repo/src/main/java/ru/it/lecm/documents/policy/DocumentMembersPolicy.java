@@ -149,7 +149,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         try {
             // Выдача прав новому участнику
             LecmPermissionService.LecmPermissionGroup pgGranting = documentMembersService.getMemberPermissionGroup(member);
-            lecmPermissionService.grantAccess(pgGranting, docRef, employee.getId());
+            lecmPermissionService.grantAccess(pgGranting, docRef, employee);
             nodeService.setProperty(member, DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
         } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
             logger.error("Не удалось выдать права новому участнику!", ex);
@@ -207,7 +207,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             if (pgRevoking == null) {
                 pgRevoking = lecmPermissionService.findPermissionGroup(this.getGrantAccess());
             }
-            lecmPermissionService.revokeAccess(pgRevoking, docRef, employee.getId());
+            lecmPermissionService.revokeAccess(pgRevoking, docRef, employee);
         } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
             logger.error(String.format("Exception inside document policy handler for doc {%s}:\n\t%s", docRef, ex.getMessage()), ex);
         }

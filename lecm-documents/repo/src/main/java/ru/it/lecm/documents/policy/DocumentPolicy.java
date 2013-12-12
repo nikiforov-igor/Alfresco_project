@@ -176,7 +176,7 @@ public class DocumentPolicy extends BaseBean
             // удаляем из участников документа
             documentMembersService.deleteMember(documentRef, beforeAuthor);
         } else {
-            lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), documentRef, beforeAuthor.getId());
+            lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), documentRef, beforeAuthor);
         }
 
 	    List<String> objects = new ArrayList<String>(1);

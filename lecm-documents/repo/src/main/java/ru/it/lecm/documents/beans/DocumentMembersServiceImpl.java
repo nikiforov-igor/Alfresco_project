@@ -99,7 +99,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
                     nodeService.createAssociation(newMemberRef, employeeRef, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
 
 	                LecmPermissionService.LecmPermissionGroup pgGranting = getMemberPermissionGroup(newMemberRef);
-	                lecmPermissionService.grantAccess(pgGranting, document, employeeRef.getId());
+	                lecmPermissionService.grantAccess(pgGranting, document, employeeRef);
                     return newMemberRef;
                 }
             });

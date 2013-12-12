@@ -10,17 +10,17 @@ import java.util.Map;
 /**
  * Служба работы с lecm-правами:
  *   1) получение списка всех доп lecm-полномочий на уровне Альфреско
- *   2) проверка наличия указанного lecm-полномочия Сотрудника в рамках узла 
- *   3) Индивидуальные роли: выдача/отбор полномочий на узлы (папки и документы) для Сотрудников 
+ *   2) проверка наличия указанного lecm-полномочия Сотрудника в рамках узла
+ *   3) Индивидуальные роли: выдача/отбор полномочий на узлы (папки и документы) для Сотрудников
  *   4) Динамические роли: выдача/отбор на узел
  *   5) перестройка нарезок Статических Ролей и Динамичских Ролей для узлов (соот-но, папок и документов)
- *   
+ *
  * Предполагаемая схема использования Статическиз и Динамических бизнес-ролей:
  *   1) Статический доступ организуется нарезкой прав на статус-папки - метод rebuildStaticACL;
- *   2) Динамический доступ реализуется в два этапа - выдать динамическую роль 
- * пользователю на документ (grantDynamicRole) и пересчитать права в документе 
+ *   2) Динамический доступ реализуется в два этапа - выдать динамическую роль
+ * пользователю на документ (grantDynamicRole) и пересчитать права в документе
  * на все выданные динамически БР (rebuildACL).
- *     2.1) в нужный момент, внешним кодом должен быть вызван метод grantDynamicRole 
+ *     2.1) в нужный момент, внешним кодом должен быть вызван метод grantDynamicRole
  * для явной выдачи пользователю Динамической Роли в рамках конкретного документа,
  *     2.2) при сменах статуса документа внешний код должен явно вызвать rebuildACL,
  * чтобы выполнилась перенарезка прав на ВСЕ ВЫДАННЫЕ на этот момент Динамические
@@ -66,17 +66,17 @@ public interface LecmPermissionService {
     /**
 	 * Получить обозначение группы полномочий по имени, среди зарегистрированных групп.
 	 * @param lecmPermissionGroupName название группы, например, "LECM_BASIC_PG_Editor".
-	 * Регистр на входе не важен - в любом случае, возвращаемое значение будет 
-	 * содержать точное название уже с учётом регистра. 
+	 * Регистр на входе не важен - в любом случае, возвращаемое значение будет
+	 * содержать точное название уже с учётом регистра.
 	 * @return
 	 */
 	LecmPermissionGroup findPermissionGroup( String lecmPermissionGroupName );
 
 	/**
-	 * Найти полномочие по имени среди фактически зарегистрированных 
+	 * Найти полномочие по имени среди фактически зарегистрированных
 	 * @param lecmPermissionName полное Альфреско-имя полномочия (например, "_lecmPermCreateTag", "_lecmPermViewTag").
-	 * Регистр не важен, в любом возвращаемое значение будет содержать точное 
-	 * название с учётом регистра. 
+	 * Регистр не важен, в любом возвращаемое значение будет содержать точное
+	 * название с учётом регистра.
 	 * @return существующее полномочие или Null, если такого полномочия не зарегистрировано
 	 */
 	LecmPermission findPermission( String lecmPermissionName );
@@ -84,7 +84,7 @@ public interface LecmPermissionService {
 
 	/**
 	 * Получение списка PermissionGroup - названий групп привилегий Альфреско
-	 * (используются для выбора в UI при настройке машины состояний и выдачи 
+	 * (используются для выбора в UI при настройке машины состояний и выдачи
 	 * привилегий участникам ЖЦ)
 	 * @return RO-список названий групп привилегий Альфреско, например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
 	 */
@@ -101,7 +101,7 @@ public interface LecmPermissionService {
 	 * @param permissionOrGroup группа ("LECM_BASIC_PG_Initiator") или атомарная привилегия (например, "_lecmPerm_ViewTag")
 	 * @param node проверяемый узел
 	 * @param userLogin login  Пользователя Альфреско
-	 * @return true, если указанная привилегия permission имеется у пользователя 
+	 * @return true, если указанная привилегия permission имеется у пользователя
 	 * userName для объекта node, иначе false.
 	 */
 	// TODO: (?) ввести исопльзование employeeId вместо userLogin
@@ -113,7 +113,7 @@ public interface LecmPermissionService {
 	 * @param permission  Привелегия
 	 * @param node Ссылка на узел
 	 * @return true, если указанная привилегия permission имеется у текущего пользователя
-	 * <br/> Пример: 
+	 * <br/> Пример:
 	 * <b><br/>if (!permissionBean.hasPermission( "_lecmPerm_MemberList", docId)) throw new SecurityException("No access");</b>
 	 */
 	boolean hasPermission(String permission, NodeRef node);
@@ -143,20 +143,20 @@ public interface LecmPermissionService {
 	public void checkPermission(final String permission, final NodeRef node);
 
 	/**
-	 * Добавление участника к узлу с заданной группой привилегий 
+	 * Добавление участника к узлу с заданной группой привилегий
 	 * @param permissionGroup группа привилегий, например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
 	 * @param node узел, доступ к которому надо обеспечить
-	 * @param employeeId id Сотрудника
+	 * @param employeeRef nodeRef Сотрудника
 	 */
-	void grantAccess(LecmPermissionGroup permissionGroup, NodeRef node, String employeeId);
+	void grantAccess(LecmPermissionGroup permissionGroup, NodeRef node, NodeRef employeeRef);
 
 	/**
 	 * Исключить Сотрудника из группы привилегий данного узла (документа, папки)
 	 * @param permissionGroup название группы привилегий, например, "LECM_BASIC_PG_Initiator", "LECM_BASIC_PG_Reader"
 	 * @param node узел, доступ к которому надо ограничить
-	 * @param employeeId id Сотрудника
+	 * @param employeeRef nodeRef Сотрудника
 	 */
-	void revokeAccess(LecmPermissionGroup permissionGroup, NodeRef node, String employeeId);
+	void revokeAccess(LecmPermissionGroup permissionGroup, NodeRef node, NodeRef employeeRef);
 
 	/**
 	 * Добавить для объекта (указанному позицией) право доступа к узлу (документу/папке)
@@ -195,7 +195,7 @@ public interface LecmPermissionService {
 	/**
 	 * Перепрописать Статические Роли на папку (документ).
 	 * @param nodeRef id статусной-папки
-	 * @param accessMap карта нарезки прав: 
+	 * @param accessMap карта нарезки прав:
 	 *    здесь ключ - это код Статической Бизнес Роли,
 	 *    значение - группа полномочий (прав) доступа на узел (документ или папку) для этой Статической БР.
 	 * Например, { key="Initiator", value="LECM_BASIC_PG_Editor" }
@@ -206,7 +206,7 @@ public interface LecmPermissionService {
 	 * Перестроить ACL-список Динамических прав для указанного документа/папки
 	 * согласно указанным правам доступа для бизнес-ролей
 	 * @param nodeRef ref-документа или папки
-	 * @param accessMap карта нарезки прав: здесь ключ - это код Динамической 
+	 * @param accessMap карта нарезки прав: здесь ключ - это код Динамической
 	 * Бизнес Роли (динамической групповой, например, "Инициаторы" или "Читатели"),
 	 * значение - права доступа на документ для этой Динамической БР.
 	 * Например, { key="Initiator", value="LECM_BASIC_PG_Editor" }
@@ -226,11 +226,11 @@ public interface LecmPermissionService {
 	 * [3]	...
 	 * ------------------------------------------------------------
 	 * (TRUE с большой буквы, false наоборот)
-	 * 
+	 *
 	 * @param info
 	 * @param nodeRef
 	 * @param userLogins список имён пользователей, относительно которых надо проверить доступ
-	 * @return SB со сформированным списком 
+	 * @return SB со сформированным списком
 	 */
 	StringBuilder trackAllLecmPermissions( String info, NodeRef nodeRef,
 			String ... userLogins);
