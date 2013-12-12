@@ -9,6 +9,8 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage>
-	<@region id="create-content-mgr" scope="template" />
-	<@region id="create-content" scope="template" />
+	<div class="share-form">
+		<@region id="create-content-mgr" scope="template" />
+		<@region id="create-content" scope="template" />
+	</div>
 </@bpage.basePage>
