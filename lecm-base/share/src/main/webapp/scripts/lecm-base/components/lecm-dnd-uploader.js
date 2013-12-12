@@ -57,7 +57,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			onDragEnter: function (e) {
 
-				if (this.config.multipleMode || e.dataTransfer.items.length == 1) {
+				if (this.config.multipleMode || (e.dataTransfer.files != undefined && e.dataTransfer.files != null && e.dataTransfer.files.length == 1)) {
 
 					// Firefox is a bit buggy with it's enter/leave event matching
 					this.dragEventRefCount = Math.min(++this.dragEventRefCount, 2);
