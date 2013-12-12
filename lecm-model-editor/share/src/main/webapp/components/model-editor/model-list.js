@@ -88,6 +88,7 @@ IT.component = IT.component || {};
          var columnDefinitions = [{key: "displayName", label: "Модель документа", sortable: false, formatter:this._formatActions, width: 250, maxAutoWidth: 250},
                                   {key: "active", label: "Активна", sortable: false, formatter:this._formatActive, width: 100, maxAutoWidth: 100},
                                   {key: "delete", label: "", sortable: false, formatter:this._formatDelete, width: 15, maxAutoWidth: 15},//, {key: "nodeRef", label: "Ссылка", sortable: false}];
+                                  {key: "edit-model", label: "", sortable: false, formatter:this._formatEditModel, width: 15, maxAutoWidth: 15},//, {key: "nodeRef", label: "Ссылка", sortable: false}];
                                   {key: "edit-form", label: "", sortable: false, formatter:this._formatEditForm, width: 15, maxAutoWidth: 15}];//, {key: "nodeRef", label: "Ссылка", sortable: false}];
 
          // DataTable definition
@@ -128,6 +129,13 @@ IT.component = IT.component || {};
 				deleteLink.innerHTML = "&nbsp;";
 				el.appendChild(deleteLink);
 			//}
+      },
+	   _formatEditModel: function (el, oRecord, oColumn, oData, oDataTable) {
+			var editModelLink = document.createElement("a");
+			Dom.addClass(editModelLink, "edit-model");
+		    editModelLink.innerHTML = "&nbsp;";
+		    editModelLink.href =  Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef="+oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
+			el.appendChild(editModelLink);
       },
 	   _formatEditForm: function (el, oRecord, oColumn, oData, oDataTable) {
 			var editFormLink = document.createElement("a");

@@ -4,12 +4,17 @@
    cursor: pointer;
    padding-right: 15px;
 }
+.models .yui-dt-liner a.edit-model
+{
+   background: transparent url(../images/edit-16.png) no-repeat scroll center center;
+   cursor: pointer;
+}
 .models .yui-dt-liner a.edit-form
 {
    background: transparent url(../images/edit-16.png) no-repeat scroll center center;
    cursor: pointer;
 }
-.models td.yui-dt-last .yui-dt-liner a
+.models .yui-dt-liner a
 {
    background-position: 0 center;
    background-repeat: no-repeat;
