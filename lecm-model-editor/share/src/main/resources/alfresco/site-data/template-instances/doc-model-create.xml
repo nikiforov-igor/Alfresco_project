@@ -12,6 +12,12 @@
 			</properties>
 		</component>
 
+		<!-- Menu -->
+		<component>
+			<region-id>menu</region-id>
+			<url>/lecm/documentmodel/menu</url>
+		</component>
+
 		<!-- Create Content Form Manager -->
 		<component>
 			<region-id>create-content-mgr</region-id>

@@ -11,6 +11,12 @@
 			</properties>
 		</component>
 
+		<!-- Menu -->
+		<component>
+			<region-id>menu</region-id>
+			<url>/lecm/documentmodel/menu</url>
+		</component>
+
 		<!-- Edit Metadata Form Manager -->
 		<component>
 			<region-id>edit-metadata-mgr</region-id>

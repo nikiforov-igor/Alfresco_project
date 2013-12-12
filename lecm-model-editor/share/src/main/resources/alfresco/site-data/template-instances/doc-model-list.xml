@@ -10,14 +10,10 @@
 			</properties>
 		</component>
 
-		<!--Toolbar -->
-
 		<!--Datagrid -->
 		<component>
 			<region-id>datagrid</region-id>
 			<url>/lecm/documentmodel/data-lists/datagrid</url>
 		</component>
-		<!-- Menu -->
-
 	</components>
 </template-instance>
