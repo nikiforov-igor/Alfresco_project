@@ -23,41 +23,13 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 	LogicECM.module.ModelEditor.ModelList = function (fieldHtmlId) {
 		LogicECM.module.ModelEditor.ModelList.superclass.constructor.call(this, "LogicECM.module.ModelEditor.ModelList", fieldHtmlId, ["button", "dom", "datasource", "datatable", "paginator", "event", "element"]);
-		this.widgets = {};
-		this.currentFilter = {};
-		this.tagId = {
-			id: 0,
-			tags: {}
-		};
 
 		return this;
 	};
 
 	YAHOO.extend(LogicECM.module.ModelEditor.ModelList, Alfresco.component.Base, {
-		options: {
-			siteId: "",
-			containerId: "blog",
-			initialFilter: {},
-			pageSize: 10,
-			simpleView: false,
-			maxContentLength: 512
-		},
-
-		currentFilter: null,
-		widgets: null,
-		modules: null,
-		tagId: null,
-		busy: false,
-		showPublishingActions: false,
-		recordOffset: 0,
-		totalRecords: 0,
-
 		onReady: function () {
-			var uriDocListList = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/documentlibrary/data/doclist/all/node/alfresco/company/home/?libraryRoot=/app:company_home/app:dictionary/app:models",
-				{
-					site: this.options.siteId,
-					container: this.options.containerId
-				});
+			var uriDocListList = YAHOO.lang.substitute(Alfresco.constants.PROXY_URI + "lecm/docmodels/list");
 			this.widgets.dataSource = new YAHOO.util.DataSource(uriDocListList,
 				{
 					responseType: YAHOO.util.DataSource.TYPE_JSON,
@@ -65,8 +37,6 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					responseSchema: {
 						resultsList: "items",
 						metaFields: {
-							recordOffset: "startIndex",
-							totalRecords: "total",
 							metadata: "metadata"
 						}
 					}
@@ -74,21 +44,19 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 			// DataTable column defintions
 			var columnDefinitions = [
-				{key: "displayName", label: "Модель документа", sortable: false, formatter: this._formatActions, width: 250, maxAutoWidth: 250},
+				{key: "title", label: "Модель документа", sortable: false, formatter: this._formatTitle, width: 250, maxAutoWidth: 250},
 				{key: "active", label: "Активна", sortable: false, formatter: this._formatActive, width: 100, maxAutoWidth: 100},
 				{key: "delete", label: "", sortable: false, formatter: this._formatDelete, width: 15, maxAutoWidth: 15},
 				{key: "edit-model", label: "", sortable: false, formatter: this._formatEditModel, width: 15, maxAutoWidth: 15},
-				{key: "edit-form", label: "", sortable: false, formatter: this._formatEditForm, width: 15, maxAutoWidth: 15}
-			];//, {key: "nodeRef", label: "Ссылка", sortable: false}];
+				{key: "edit-form", label: "", sortable: false, formatter: this._formatEditForm, width: 15, maxAutoWidth: 15},
+				{key: "edit-statemachine", label: "", sortable: false, formatter: this._formatEditStatemachine, width: 15, maxAutoWidth: 15}
+			];
 
 			// DataTable definition
-			this.widgets.dataTable = new YAHOO.widget.DataTable(this.id + "-body", columnDefinitions, this.widgets.dataSource, {
-				//initialLoad: false,
-				//dynamicData: true,
-			});
+			this.widgets.dataTable = new YAHOO.widget.DataTable(this.id + "-body", columnDefinitions, this.widgets.dataSource);
 			this.widgets.dataTable.subscribe('cellClickEvent', this._deleteRow);
-			this.widgets.dataTable.subscribe("dataReturnEvent", function (oArgs) {
-				this.destination = oArgs.response.meta.metadata.parent.nodeRef;
+			this.widgets.dataTable.subscribe("dataReturnEvent", function(oArgs) {
+				this.destination = oArgs.response.meta.metadata.parent;
 			}, this);
 
 			this.widgets.simpleView = Alfresco.util.createYUIButton(this, "button", function () {
@@ -99,46 +67,58 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 		},
 
-		_formatActions: function formaterRenderActions(el, oRecord, oColumn, oData, oDataTable) {
-			var oDT = oDataTable || this;
-			var editLink = document.createElement("a");
-			editLink.innerHTML = (oRecord.getData("node").properties["cm:modelDescription"] || oData);
-			editLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
-			el.appendChild(editLink);
+		_formatTitle: function formaterRenderActions(el, oRecord, oColumn, oData, oDataTable) {
+			if (oRecord.getData("nodeRef") != null) {
+				var editLink = document.createElement("a");
+				editLink.innerHTML = (oRecord.getData("title") || oData);
+			    editLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
+				el.appendChild(editLink);
+			} else {
+				el.innerHTML = (oRecord.getData("title") || oData);
+			}
 		},
 
 		_formatActive: function formaterRenderActive(el, oRecord, oColumn, oData, oDataTable) {
-			var oDT = oDataTable || this;
 			var activeElement = document.createElement("span");
-			activeElement.innerHTML = (oRecord.getData("node").properties["cm:modelActive"] ? "Да" : "Нет");
+			activeElement.innerHTML = (oRecord.getData("isActive") ? "Да" : "Нет");
 			el.appendChild(activeElement);
 		},
 
 		_formatDelete: function formaterRenderActive(el, oRecord, oColumn, oData, oDataTable) {
-			var oDT = oDataTable || this;
-			//if(!oRecord.getData("node").properties["cm:modelActive"]) {
-			var deleteLink = document.createElement("a");
-			Dom.addClass(deleteLink, "delete");
-			deleteLink.innerHTML = "&nbsp;";
-			el.appendChild(deleteLink);
+			if (oRecord.getData("nodeRef") != null) {
+				var deleteLink = document.createElement("a");
+				Dom.addClass(deleteLink, "delete");
+				deleteLink.innerHTML = "&nbsp;";
+				el.appendChild(deleteLink);
+			}
 			//}
 		},
 
 		_formatEditModel: function (el, oRecord, oColumn, oData, oDataTable) {
-			var editModelLink = document.createElement("a");
-			Dom.addClass(editModelLink, "edit-model");
-			editModelLink.innerHTML = "&nbsp;";
-			editModelLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
-			el.appendChild(editModelLink);
+			if (oRecord.getData("nodeRef") != null) {
+				var editModelLink = document.createElement("a");
+				Dom.addClass(editModelLink, "edit-model");
+				editModelLink.innerHTML = "&nbsp;";
+				editModelLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
+				el.appendChild(editModelLink);
+			}
 		},
 
 		_formatEditForm: function (el, oRecord, oColumn, oData, oDataTable) {
+			if (oRecord.getData("nodeRef") != null) {
+				var editFormLink = document.createElement("a");
+				Dom.addClass(editFormLink, "edit-form");
+				editFormLink.innerHTML = "&nbsp;";
+				editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-forms-list?doctype=" + oRecord.getData("id").replace("_", ":");
+				el.appendChild(editFormLink);
+			}
+		},
+
+		_formatEditStatemachine: function (el, oRecord, oColumn, oData, oDataTable) {
 			var editFormLink = document.createElement("a");
-			Dom.addClass(editFormLink, "edit-form");
+			Dom.addClass(editFormLink, "edit-statemachine");
 			editFormLink.innerHTML = "&nbsp;";
-			var modelName = oRecord.getData("fileName");
-			modelName = modelName + "NS:" + modelName;
-			editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-forms-list?doctype=" + modelName;
+			editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "statemachine?statemachineId=" + oRecord.getData("id");
 			el.appendChild(editFormLink);
 		},
 
@@ -147,7 +127,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var column = this.getColumn(target);
 			var oRecord = this.getRecord(target);
 			if (column.key == 'delete') {
-				if (oRecord.getData("node").properties["cm:modelActive"]) {
+				if (oRecord.getData("isActive")) {
 					mySimpleDialog = new YAHOO.widget.SimpleDialog("dlg-" + oRecord.getId(), {
 						width: "20em",
 						fixedcenter: true,

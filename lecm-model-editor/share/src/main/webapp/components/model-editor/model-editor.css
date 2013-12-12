@@ -14,6 +14,11 @@
    background: transparent url(../images/edit-16.png) no-repeat scroll center center;
    cursor: pointer;
 }
+.models .yui-dt-liner a.edit-statemachine
+{
+   background: transparent url(../images/edit-16.png) no-repeat scroll center center;
+   cursor: pointer;
+}
 .models .yui-dt-liner a
 {
    background-position: 0 center;
