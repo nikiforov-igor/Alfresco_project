@@ -20,6 +20,7 @@ import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.dictionary.beans.XMLImportBean;
 import ru.it.lecm.dictionary.beans.XMLImporterInfo;
 
+import javax.activation.MimeType;
 import javax.transaction.UserTransaction;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -125,7 +126,8 @@ public class Import extends AbstractWebScript {
 		    wf.put("text", response.toString());
 
 		    compositions.put(wf);
-		    res.setContentEncoding("utf-8");
+		    res.setContentType("text/plain");
+		    res.setContentEncoding("UTF-8");
 		    res.getWriter().write(compositions.toString());
 	    } catch (JSONException e) {
 		    logger.error(e.getMessage(), e);
