@@ -23,14 +23,6 @@
                 <newRowDialogTitle>label.create-report.title</newRowDialogTitle>
             </properties>
         </component>
-        <!-- Menu -->
-        <component>
-            <region-id>menu</region-id>
-            <url>/lecm/reports-editor/menu</url>
-            <properties>
-                <selected>reportsList</selected>
-            </properties>
-        </component>
         <component>
             <region-id>content</region-id>
             <url>/lecm/reports-editor/main</url>

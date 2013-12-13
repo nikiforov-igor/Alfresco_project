@@ -3,7 +3,7 @@
 
 <div class="yui-t1" id="report-editor-sourcesList">
 <div id="yui-main">
-    <div class="yui-b" id="alf-content">
+    <div class="yui-b" id="alf-content-2">
     <#assign columns_id = "columnsList-toolbar">
         <div id="${columns_id}">
             <script type="text/javascript">//<![CDATA[
@@ -31,7 +31,7 @@
         <div id="${columns_id}">
             <!-- DataGrid -->
             <div id="yui-main-2">
-                <div id="${columns_id}-alf-content">
+                <div id="${columns_id}-alf-content-2">
                     <@grid.datagrid id=columns_id showViewForm=false showArchiveCheckBox=false>
                     <script type="text/javascript">//<![CDATA[
                     LogicECM.module.ReportsEditor.ColumnsGrid = function (containerId) {
@@ -94,7 +94,9 @@
 
                         var resizer = new LogicECM.module.Base.Resizer('ReportsEditorResizer');
                         resizer.setOptions({
-                            initialWidth: 500
+                            initialWidth: 350,
+                            divLeft: "alf-filters-2",
+                            divRight: "alf-content-2"
                         });
                     }
 
@@ -106,7 +108,7 @@
         </div>
     </div>
 </div>
-<div id="alf-filters">
+<div id="alf-filters-2">
     <#assign sources_id = "sourcesList-toolbar">
     <div id="${sources_id}">
     <!-- Toolbar-->
@@ -135,7 +137,7 @@
     <div id="${sources_id}">
 <!-- DataGrid -->
         <div id="yui-main-3">
-            <div id="${sources_id}-alf-content">
+            <div id="${sources_id}-alf-content2">
                 <@grid.datagrid id=sources_id showViewForm=false showArchiveCheckBox=false>
         <script type="text/javascript">//<![CDATA[
             LogicECM.module.ReportsEditor.SourcesGrid = function (containerId) {

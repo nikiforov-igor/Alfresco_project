@@ -1,12 +1,4 @@
 <alfresco-config>
-    <config>
-        <forms>
-            <dependencies>
-                <js src="/scripts/lecm-reports-editor/reports-editor-const.js"/>
-            </dependencies>
-        </forms>
-    </config>
-
     <config evaluator="node-type" condition="lecm-rpeditor:reportDescriptor">
         <forms>
             <form>
@@ -18,7 +10,6 @@
                     <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
                     <show id="lecm-rpeditor:reportQuery"/>
                     <show id="lecm-rpeditor:reportQuerySort"/>
-                    <show id="lecm-rpeditor:reportExtFlags"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
@@ -74,7 +65,6 @@
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
                     <show id="lecm-rpeditor:reportQuery"/>
                     <show id="lecm-rpeditor:reportQuerySort"/>
-                    <show id="lecm-rpeditor:reportExtFlags"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
@@ -638,9 +628,8 @@
             </form>
             <form id="short-datagrid">
                 <field-visibility>
-                    <show id="lecm-rpeditor:dataColumnCode"/>
-                    <show id="lecm-rpeditor:columnTypeAssoc"/>
                     <show id="cm:name"/>
+                    <show id="lecm-rpeditor:dataColumnCode"/>
                     <show id="lecm-rpeditor:dataColumnExpression"/>
                 </field-visibility>
                 <appearance>
@@ -695,10 +684,10 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
+                    <show id="cm:name"/>
                     <show id="lecm-rpeditor:dataColumnCode"/>
                     <show id="lecm-rpeditor:columnTypeAssoc"/>
-                    <show id="cm:name"/>
-                    <show id="lecm-rpeditor:dataColumnExpression"/>
+                    <!--<show id="lecm-rpeditor:dataColumnExpression"/>-->
                     <show id="lecm-rpeditor:columnParameterTypeAssoc"/>
                 </field-visibility>
                 <appearance>
@@ -712,7 +701,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-rpeditor:reportExtFlags" for-mode="edit"/>
+                    <!--<show id="lecm-rpeditor:reportExtFlags" for-mode="edit"/>-->
                 </field-visibility>
                 <appearance>
                     <field id="lecm-rpeditor:reportExtFlags">
@@ -722,7 +711,7 @@
             </form>
             <form id="subReport">
                 <field-visibility>
-                    <show id="lecm-rpeditor:reportExtFlags" for-mode="edit"/>
+                    <!--<show id="lecm-rpeditor:reportExtFlags" for-mode="edit"/>-->
                 </field-visibility>
                 <appearance>
                     <field id="lecm-rpeditor:reportExtFlags">

@@ -2,10 +2,10 @@
 
     var Dom = YAHOO.util.Dom;
 
-    LogicECM.module.ReportsEditor.EditSourceEditor = function (htmlId) {
-        LogicECM.module.ReportsEditor.EditSourceEditor.superclass.constructor.call(
+    LogicECM.module.ReportsEditor.EditSourceToolbar = function (htmlId) {
+        LogicECM.module.ReportsEditor.EditSourceToolbar.superclass.constructor.call(
             this,
-            "LogicECM.module.ReportsEditor.EditSourceEditor",
+            "LogicECM.module.ReportsEditor.EditSourceToolbar",
             htmlId,
             ["button", "container", "connection"]);
 
@@ -19,7 +19,7 @@
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.ReportsEditor.EditSourceEditor, Alfresco.component.Base, {
+    YAHOO.extend(LogicECM.module.ReportsEditor.EditSourceToolbar, Alfresco.component.Base, {
 
         dataSourceId: null,
 
@@ -318,6 +318,7 @@
                     }
                 }).show();
         },
+
         _formAddElemet: function(form, tag, nameId, value) {
             input = document.createElement(tag);
             input.setAttribute("id", this.id + "-createDetails-form-" + nameId);
@@ -326,12 +327,14 @@
             input.setAttribute("value", value);
             form.appendChild(input);
         },
+
         _setInputValue: function(name, value) {
             var htmlItem = Dom.get(this.id + name);
             if (htmlItem) {
                 htmlItem.setAttribute("value", value);
             }
         },
+
         _onUpdateSourceColumns: function () {
             YAHOO.Bubbling.fire("activeGridChanged", {
                 datagridMeta: {

@@ -157,4 +157,14 @@
         </property>
     </bean>
 
+    <bean id="webscript.ru.it.lecm.reports-editor.editor.menu.get"
+          class="ru.it.lecm.reports.editor.scripts.GetEditorMenuScript"
+          parent="webscript">
+        <property name="nodeService" ref="nodeService" />
+        <property name="namespaceService" ref="namespaceService" />
+        <property name="preferenceService" ref="preferenceService"/>
+        <property name="reportsEditorService" ref="reportsEditorService"/>
+        <!--<property name="authService" ref="authenticationService"/>-->
+    </bean>
+
 </beans>

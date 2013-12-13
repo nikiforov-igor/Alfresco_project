@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-	<template-type>ru/it/lecm/reports-editor/report-edit</template-type>
+	<template-type>ru/it/lecm/reports-editor/reports-editor</template-type>
     <components>
         <!-- Title -->
         <component>
@@ -12,7 +12,7 @@
         </component>
         <!-- Toolbar -->
         <component>
-            <region-id>reports-editor-toolbar</region-id>
+            <region-id>toolbar</region-id>
             <url>/lecm/reports-editor/toolbar</url>
             <properties>
                 <itemType>lecm-rpeditor:reportDescriptor</itemType>
@@ -22,27 +22,6 @@
                 <createFormId>subReport</createFormId>
                 <newRowLabel>label.new-subreport.btn</newRowLabel>
                 <newRowDialogTitle>label.create-subreport.title</newRowDialogTitle>
-            </properties>
-        </component>
-        <!-- Menu -->
-        <component>
-            <region-id>menu</region-id>
-            <url>/lecm/reports-editor/menu</url>
-            <properties>
-                <selected>subReports</selected>
-            </properties>
-        </component>
-        <!-- Report Editor Toolbar -->
-        <component>
-            <region-id>navigation-toolbar</region-id>
-            <url>/lecm/reports-editor-toolbar</url>
-            <properties>
-                <!-- Доступность кнопки -->
-                <previousButton>true</previousButton>
-                <nextButton>true</nextButton>
-                <!-- Настройки перехода на страницу-->
-                <previousPage>report-source-edit</previousPage>
-                <nextPage>report-template-edit</nextPage>
             </properties>
         </component>
         <component>

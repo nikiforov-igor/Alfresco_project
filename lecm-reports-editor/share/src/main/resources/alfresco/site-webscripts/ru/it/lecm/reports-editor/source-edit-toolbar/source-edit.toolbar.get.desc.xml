@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Reports Editor Source Edit Toolbar</shortname>
+    <description>Reports Editor Source Edit  Toolbar</description>
+    <url>/lecm/reports-editor/source-edit-toolbar</url>
+    <authentication>user</authentication>
+</webscript>

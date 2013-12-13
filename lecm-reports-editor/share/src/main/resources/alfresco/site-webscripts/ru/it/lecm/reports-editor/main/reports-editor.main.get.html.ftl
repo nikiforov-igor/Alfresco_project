@@ -25,15 +25,6 @@
 
                 splashScreen: null,
 
-                onActionEdit: function (item) {
-                    var baseUrl = window.location.protocol + "//" + window.location.host;
-                    var template = "report-settings?reportId={reportId}";
-                    var url = YAHOO.lang.substitute(baseUrl + Alfresco.constants.URL_PAGECONTEXT + template, {
-                        reportId: item.nodeRef
-                    });
-                    window.location.href = url
-                },
-
                 onActionUnDeploy: function (item) {
                     var me = this;
                     Alfresco.util.PopupManager.displayPrompt({
@@ -286,14 +277,7 @@
                             usePagination: true,
                             useDynamicPagination: true,
                             showExtendSearchBlock: false,
-                            attributeForShow: "cm:name",
                             actions: [
-                                {
-                                    type: "datagrid-action-link-reports",
-                                    id: "onActionEdit",
-                                    permission: "edit",
-                                    label: "${msg("actions.edit")}"
-                                },
                                 {
                                     type: "datagrid-action-link-reports",
                                     id: "onActionDeploy",

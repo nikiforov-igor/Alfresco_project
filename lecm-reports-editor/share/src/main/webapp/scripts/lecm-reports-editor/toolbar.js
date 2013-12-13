@@ -49,7 +49,7 @@
                     );
 
                     Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
-                    this.doubleClickLock = false;
+                    me.doubleClickLock = false;
                 };
 
                 var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
@@ -80,6 +80,12 @@
                                         nodeRef: response.json.persistedObject,
                                         bubblingLabel: this.options.bubblingLabel
                                     });
+                                if ("lecm-rpeditor:reportDescriptor" == meta.itemType){
+                                    YAHOO.Bubbling.fire("newReportCreated",
+                                        {
+                                            reportId: response.json.persistedObject
+                                        });
+                                }
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
                                         text: this.msg(successMessage ? successMessage : "message.save.success")

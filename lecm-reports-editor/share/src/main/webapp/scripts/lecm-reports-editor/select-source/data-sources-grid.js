@@ -180,6 +180,7 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
                     },
                     failureCallback: {
                         fn: function DataGrid_onDataItemCreated_refreshFailure(response) {
+                            alert(response.json.message);
                             Alfresco.util.PopupManager.displayMessage(
                                 {
                                     text: this.msg("message.create.refresh.failure")

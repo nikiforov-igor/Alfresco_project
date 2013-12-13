@@ -148,3 +148,15 @@ div[id*="report-settings"] .yui-skin-lecmTheme .yui-panel div.form-field textare
 #bd #lecm-content-main div[id*="report-settings"] div[id*="reportForm"]{
     margin:0 5px;
 }
+
+#no_menu_page #bd #lecm-page {
+    margin-left: 5px;
+}
+
+#bd #lecm-content-main #editor-with-tree {
+     margin: 5px;
+ }
+
+#bd #lecm-content-main #reports-editor-tree {
+    margin: 0 5px;
+}

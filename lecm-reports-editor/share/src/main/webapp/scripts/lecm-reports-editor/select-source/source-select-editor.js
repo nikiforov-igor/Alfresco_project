@@ -56,7 +56,8 @@
                             scope: this
                         },
                         failureCallback: {
-                            fn: function () {
+                            fn: function (response) {
+                                alert(response.json.message);
                                 Alfresco.util.PopupManager.displayMessage({
                                     text: "Не удалось получить список столбцов для текущего набора данных"
                                 });
@@ -129,7 +130,8 @@
                         scope: this
                     },
                     failureCallback: {
-                        fn: function () {
+                        fn: function (response) {
+                            alert(response.json.message);
                             Alfresco.util.PopupManager.displayMessage({
                                 text: "Не удалось скопировать шаблон"
                             });
@@ -170,7 +172,8 @@
                         scope: this
                     },
                     failureCallback: {
-                        fn: function () {
+                        fn: function (response) {
+                            alert(response.json.message);
                             Alfresco.util.PopupManager.displayMessage({
                                 text: "Не удалось скопировать шаблон"
                             });
@@ -228,7 +231,8 @@
                                 scope: this
                             },
                             failureCallback: {
-                                fn: function () {
+                                fn: function (response) {
+                                    alert(response.json.message);
                                     Alfresco.util.PopupManager.displayMessage({
                                         text: "Не удалось получить список столбцов для набора данных"
                                     }, Dom.get("selectSourcePanel"));

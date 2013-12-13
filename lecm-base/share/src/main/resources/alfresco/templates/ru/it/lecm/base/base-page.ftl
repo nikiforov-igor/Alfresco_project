@@ -6,7 +6,7 @@ showHeader - рисовать блок header
 showTitle - рисовать блок title
 По умолчанию - все блоки рисуются
 -->
-<#macro basePage showHeader=true showTitle=true showToolbar=true>
+<#macro basePage showHeader=true showTitle=true showToolbar=true showMenu=true>
 	<@aft.templateBody>
 	<div id="alf-hd">
 		<#if showHeader>
@@ -16,10 +16,12 @@ showTitle - рисовать блок title
 		    <@region id="title" scope="template"/>
 		</#if>
 	</div>
-	<div id="bd" class="yui-skin-lecmTheme">
-        <div class="yui-b flat-button" id="lecm-menu">
-            <@region id="menu" scope="template"/>
-        </div>
+    <div id="bd" class="yui-skin-lecmTheme">
+        <#if showMenu>
+            <div class="yui-b flat-button" id="lecm-menu">
+                <@region id="menu" scope="template"/>
+            </div>
+        </#if>
         <div class="yui-t1" id="lecm-page">
 			<div id="yui-main">
 				<div class="" id="lecm-content">

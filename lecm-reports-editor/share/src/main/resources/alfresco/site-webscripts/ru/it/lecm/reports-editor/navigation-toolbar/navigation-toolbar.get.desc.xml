@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Reports Editor Paginator</shortname>
-    <description>Reports Editor Paginator</description>
-    <url>/lecm/reports-editor-toolbar</url>
-    <authentication>user</authentication>
-</webscript>

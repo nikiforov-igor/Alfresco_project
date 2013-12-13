@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/reports-editor/report-edit</template-type>
+    <template-type>ru/it/lecm/reports-editor/reports-editor</template-type>
     <components>
         <!-- Title -->
         <component>
@@ -15,25 +15,10 @@
             <region-id>content</region-id>
             <url>/lecm/reports-editor/template-edit-main</url>
         </component>
-        <!-- Menu -->
+        <!-- Toolbar -->
         <component>
-            <region-id>menu</region-id>
-            <url>/lecm/reports-editor/menu</url>
-            <properties>
-                <selected>editTemplate</selected>
-            </properties>
-        </component>
-        <!-- Report Editor Navigation Toolbar -->
-        <component>
-            <region-id>navigation-toolbar</region-id>
-            <url>/lecm/reports-editor-toolbar</url>
-            <properties>
-                <!-- Доступность кнопки -->
-                <previousButton>true</previousButton>
-                <nextButton>false</nextButton>
-                <!-- Настройки перехода на страницу-->
-                <previousPage>report-subreports</previousPage>
-            </properties>
+            <region-id>toolbar</region-id>
+            <url>/lecm/reports-editor/template-edit-toolbar</url>
         </component>
     </components>
 </template-instance>

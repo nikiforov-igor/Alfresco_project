@@ -15,13 +15,5 @@
             <region-id>content</region-id>
             <url>/lecm/reports-editor/sources</url>
         </component>
-        <!-- Menu -->
-        <component>
-            <region-id>menu</region-id>
-            <url>/lecm/reports-editor/menu</url>
-            <properties>
-                <selected>sourcesList</selected>
-            </properties>
-        </component>
     </components>
 </template-instance>

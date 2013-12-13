@@ -15,26 +15,10 @@
             <region-id>content</region-id>
             <url>/lecm/reports-editor/source-edit</url>
         </component>
-        <!-- Menu -->
+        <!-- Toolbar -->
         <component>
-            <region-id>menu</region-id>
-            <url>/lecm/reports-editor/menu</url>
-            <properties>
-                <selected>editDataSource</selected>
-            </properties>
-        </component>
-        <!-- Report Editor Toolbar -->
-        <component>
-            <region-id>navigation-toolbar</region-id>
-            <url>/lecm/reports-editor-toolbar</url>
-            <properties>
-                <!-- Доступность кнопки -->
-                <previousButton>true</previousButton>
-                <nextButton>true</nextButton>
-                <!-- Настройки перехода на страницу-->
-                <previousPage>report-settings</previousPage>
-                <nextPage>report-subreports</nextPage>
-            </properties>
+            <region-id>toolbar</region-id>
+            <url>/lecm/reports-editor/source-edit-toolbar</url>
         </component>
     </components>
 </template-instance>
