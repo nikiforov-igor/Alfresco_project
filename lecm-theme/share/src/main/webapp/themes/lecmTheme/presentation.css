@@ -2612,3 +2612,7 @@ div.form-field table.formFieldControlParamsTable {
 	padding-left: 160px;
 	width: 520px;
 }
+
+.yui-panel-container .html-upload input[type="file"] {
+	width: 100%;
+}
