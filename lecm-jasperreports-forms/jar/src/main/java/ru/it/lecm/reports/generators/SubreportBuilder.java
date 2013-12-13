@@ -325,7 +325,7 @@ public class SubreportBuilder {
 
             List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
             for (MultiplySortObject multiplySortObject : treeMap.keySet()) {
-                list.addAll(treeMap.get(multiplySortObject));
+                list.addAll(treeMap.get(multiplySortObject) != null ? treeMap.get(multiplySortObject) : new ArrayList<Map<String, Object>>());
             }
             sortedSubs = list;
         } else {

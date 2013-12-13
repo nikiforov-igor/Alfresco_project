@@ -1,9 +1,14 @@
 package ru.it.lecm.reports.beans;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MultiplySortObject implements Comparable {
+    private static final Logger logger = LoggerFactory.getLogger(MultiplySortObject.class);
+
     private List<Comparable> columnValues = new ArrayList<Comparable>(5);
     private List<Boolean> sortDirs = new ArrayList<Boolean>(5);
 
@@ -36,7 +41,13 @@ public class MultiplySortObject implements Comparable {
                 return 1;
             }
 
-            int comp =  value1.compareTo(value2);
+            int comp;
+            try {
+                comp = value1.compareTo(value2);
+            } catch (ClassCastException cEx) {
+                logger.error(cEx.getMessage(), cEx);
+                comp = -1; //TODO
+            }
 
             if (comp == 0) { // первые значения равны - переходим к следующим
                 continue;
