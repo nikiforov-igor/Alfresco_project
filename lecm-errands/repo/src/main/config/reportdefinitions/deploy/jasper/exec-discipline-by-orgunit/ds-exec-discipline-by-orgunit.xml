@@ -204,16 +204,6 @@
                 <item key="RU_RU" value="Среднее время исполнения поручения"/>
             </l18>
         </field>
-
-        <field alfrescoType="d:text"
-            displayName="Единицы измерения среднего времени исполнения"
-            javaValueClass="java.lang.String"
-            jrFldName="Col_Avg_Execution.Units" order="12" queryFldName="{{Col_Avg_Execution.Units}}">
-            <l18>
-                <item key="RU_RU" value="Единицы измерения среднего времени исполнения"/>
-            </l18>
-        </field>
-
     </fields>
 
 </ds.config>

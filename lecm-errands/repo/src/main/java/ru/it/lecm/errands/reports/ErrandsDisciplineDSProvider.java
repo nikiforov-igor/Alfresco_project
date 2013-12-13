@@ -167,11 +167,6 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
          * Колонка "Среднее время исполнения поручения"
          */
         final static String COL_AVG_EXECUTION = "Col_Avg_Execution.Value"; // java.lang.Float
-
-        /**
-         * Колонка "Название единицы измерения среднего времени исполнения"
-         */
-        final static String COL_AVG_EXECUTION_UNITS = "Col_Avg_Execution.Units"; // String
     }
 
     /**
@@ -208,7 +203,7 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
         /**
          * Среднее время исполнения, часов
          */
-        final AvgValue avgExecTimeInHours = new AvgValue("Avg exec time, h");
+        final AvgValue avgExecTimeInDays = new AvgValue("Avg exec time, h");
 
         public DisciplineGroupInfo(BasicEmployeeInfo empl) {
             this.employee = empl;
@@ -229,8 +224,8 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
                 // нельзя определить
                 return;
             }
-            final float fact = Utils.getDurationInHours(duration_ms);
-            this.avgExecTimeInHours.adjust(fact);
+            final float fact = Utils.getDurationInDays(duration_ms);
+            this.avgExecTimeInDays.adjust(fact);
         }
     }
 
@@ -276,8 +271,7 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
             }
 
 			/* Среднее время исполнения */
-            result.put(DsDisciplineColumnNames.COL_AVG_EXECUTION, item.avgExecTimeInHours.getAvg());
-            result.put(DsDisciplineColumnNames.COL_AVG_EXECUTION_UNITS, "ч");
+            result.put(DsDisciplineColumnNames.COL_AVG_EXECUTION, item.avgExecTimeInDays.getAvg());
 
 			/* (!) Проценты вычисляются непосредственно в jasper-отчёте */
 

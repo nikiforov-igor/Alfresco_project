@@ -421,6 +421,17 @@ public class Utils {
         return ((float) duration_ms) / MILLIS_PER_HOUR;
     }
 
+    /**
+     * Вернуть длительность в днях
+     *
+     * @param duration_ms длительность в миллисекундах
+     * @return float
+     */
+    public static float getDurationInDays(long duration_ms) {
+        return ((float) duration_ms) / MILLIS_PER_DAY;
+    }
+
+
     @SuppressWarnings("unchecked")
     public static <T> T clone(T source) {
         if (source == null) {
