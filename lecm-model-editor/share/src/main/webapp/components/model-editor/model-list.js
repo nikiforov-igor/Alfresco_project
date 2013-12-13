@@ -27,7 +27,9 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.module.ModelEditor.ModelList, Alfresco.component.Base, {
+	YAHOO.lang.extend(LogicECM.module.ModelEditor.ModelList, Alfresco.component.Base);
+
+	YAHOO.lang.augmentObject(LogicECM.module.ModelEditor.ModelList.prototype, {
 		onReady: function () {
 			var uriDocListList = YAHOO.lang.substitute(Alfresco.constants.PROXY_URI + "lecm/docmodels/list");
 			this.widgets.dataSource = new YAHOO.util.DataSource(uriDocListList,
@@ -46,10 +48,10 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var columnDefinitions = [
 				{key: "title", label: "Модель документа", sortable: false, formatter: this._formatTitle, width: 250, maxAutoWidth: 250},
 				{key: "active", label: "Активна", sortable: false, formatter: this._formatActive, width: 100, maxAutoWidth: 100},
-				{key: "delete", label: "", sortable: false, formatter: this._formatDelete, width: 15, maxAutoWidth: 15},
-				{key: "edit-model", label: "", sortable: false, formatter: this._formatEditModel, width: 15, maxAutoWidth: 15},
-				{key: "edit-form", label: "", sortable: false, formatter: this._formatEditForm, width: 15, maxAutoWidth: 15},
-				{key: "edit-statemachine", label: "", sortable: false, formatter: this._formatEditStatemachine, width: 15, maxAutoWidth: 15}
+				{key: "edit-model", label: "", sortable: false, formatter: this._formatEditModel(), width: 15, maxAutoWidth: 15},
+				{key: "edit-form", label: "", sortable: false, formatter: this._formatEditForm(), width: 15, maxAutoWidth: 15},
+				{key: "edit-statemachine", label: "", sortable: false, formatter: this._formatEditStatemachine(), width: 15, maxAutoWidth: 15},
+				{key: "delete", label: "", sortable: false, formatter: this._formatDelete(), width: 15, maxAutoWidth: 15}
 			];
 
 			// DataTable definition
@@ -68,14 +70,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		},
 
 		_formatTitle: function formaterRenderActions(el, oRecord, oColumn, oData, oDataTable) {
-			if (oRecord.getData("nodeRef") != null) {
-				var editLink = document.createElement("a");
-				editLink.innerHTML = (oRecord.getData("title") || oData);
-			    editLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
-				el.appendChild(editLink);
-			} else {
-				el.innerHTML = (oRecord.getData("title") || oData);
-			}
+			el.innerHTML = (oRecord.getData("title") || oData);
 		},
 
 		_formatActive: function formaterRenderActive(el, oRecord, oColumn, oData, oDataTable) {
@@ -84,42 +79,59 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			el.appendChild(activeElement);
 		},
 
-		_formatDelete: function formaterRenderActive(el, oRecord, oColumn, oData, oDataTable) {
-			if (oRecord.getData("nodeRef") != null) {
-				var deleteLink = document.createElement("a");
-				Dom.addClass(deleteLink, "delete");
-				deleteLink.innerHTML = "&nbsp;";
-				el.appendChild(deleteLink);
-			}
-			//}
+		_formatDelete: function () {
+			var scope = this;
+
+			return function (el, oRecord, oColumn, oData, oDataTable) {
+				if (oRecord.getData("nodeRef") != null) {
+					var deleteLink = document.createElement("a");
+					deleteLink.title = scope.msg("title.model.delete");
+					Dom.addClass(deleteLink, "delete");
+					deleteLink.innerHTML = "&nbsp;";
+					el.appendChild(deleteLink);
+				}
+			};
 		},
 
-		_formatEditModel: function (el, oRecord, oColumn, oData, oDataTable) {
-			if (oRecord.getData("nodeRef") != null) {
-				var editModelLink = document.createElement("a");
-				Dom.addClass(editModelLink, "edit-model");
-				editModelLink.innerHTML = "&nbsp;";
-				editModelLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
-				el.appendChild(editModelLink);
-			}
+		_formatEditModel: function () {
+			var scope = this;
+
+			return function (el, oRecord, oColumn, oData, oDataTable) {
+				if (oRecord.getData("nodeRef") != null) {
+					var editModelLink = document.createElement("a");
+					editModelLink.title = scope.msg("title.model.edit");
+					Dom.addClass(editModelLink, "edit-model");
+					editModelLink.innerHTML = "&nbsp;";
+					editModelLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
+					el.appendChild(editModelLink);
+				}
+			};
 		},
 
-		_formatEditForm: function (el, oRecord, oColumn, oData, oDataTable) {
-			if (oRecord.getData("nodeRef") != null) {
+		_formatEditForm: function () {
+			var scope = this;
+
+			return function (el, oRecord, oColumn, oData, oDataTable) {
 				var editFormLink = document.createElement("a");
+				editFormLink.title = scope.msg("title.forms.edit");
 				Dom.addClass(editFormLink, "edit-form");
 				editFormLink.innerHTML = "&nbsp;";
 				editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-forms-list?doctype=" + oRecord.getData("id").replace("_", ":");
 				el.appendChild(editFormLink);
-			}
+			};
 		},
 
-		_formatEditStatemachine: function (el, oRecord, oColumn, oData, oDataTable) {
-			var editFormLink = document.createElement("a");
-			Dom.addClass(editFormLink, "edit-statemachine");
-			editFormLink.innerHTML = "&nbsp;";
-			editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "statemachine?statemachineId=" + oRecord.getData("id");
-			el.appendChild(editFormLink);
+		_formatEditStatemachine: function () {
+			var scope = this;
+
+			return function (el, oRecord, oColumn, oData, oDataTable) {
+				var editStatemachineLink = document.createElement("a");
+				editStatemachineLink.title = scope.msg("title.statemachine.edit");
+				Dom.addClass(editStatemachineLink, "edit-statemachine");
+				editStatemachineLink.innerHTML = "&nbsp;";
+				editStatemachineLink.href = Alfresco.constants.URL_PAGECONTEXT + "statemachine?statemachineId=" + oRecord.getData("id");
+				el.appendChild(editStatemachineLink);
+			};
 		},
 
 		_deleteRow: function (oArgs) {

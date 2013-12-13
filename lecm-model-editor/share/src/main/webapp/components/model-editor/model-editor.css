@@ -1,22 +1,22 @@
 .models .yui-dt-liner a.delete
 {
-   background: transparent url(../images/delete-16.png) no-repeat scroll center center;
+   background: transparent url(/share/res/components/images/delete-16.png) no-repeat scroll center center;
    cursor: pointer;
    padding-right: 15px;
 }
 .models .yui-dt-liner a.edit-model
 {
-   background: transparent url(../images/edit-16.png) no-repeat scroll center center;
+   background: transparent url(/share/res/images/lecm-model-list/model_edit.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models .yui-dt-liner a.edit-form
 {
-   background: transparent url(../images/edit-16.png) no-repeat scroll center center;
+   background: transparent url(/share/res/images/lecm-model-list/form_edit.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models .yui-dt-liner a.edit-statemachine
 {
-   background: transparent url(../images/edit-16.png) no-repeat scroll center center;
+   background: transparent url(/share/res/images/lecm-model-list/statemachine_edit.png) no-repeat scroll center center;
    cursor: pointer;
 }
 .models .yui-dt-liner a
