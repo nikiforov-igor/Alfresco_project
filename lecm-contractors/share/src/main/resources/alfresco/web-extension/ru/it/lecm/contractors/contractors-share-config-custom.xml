@@ -435,6 +435,19 @@
                     </field>
                 </appearance>
             </form>
+	        <form id="versions">
+		        <show id="lecm-representative:surname"/>                                                            <!-- Фамилия -->
+		        <show id="lecm-representative:firstname"/>                                                          <!-- Имя -->
+		        <show id="lecm-representative:middlename"/>                                                         <!-- Отчество -->
+		        <show id="lecm-representative:rank"/>                                                               <!-- Должность -->
+		        <show id="lecm-representative:commments"/>                                                          <!-- Комментарии -->
+		        <show id="lecm-representative:work-phone"/>                                                         <!-- Рабочий телефон -->
+		        <show id="lecm-representative:mobile-phone"/>                                                       <!-- Мобильный телефон -->
+		        <show id="lecm-representative:location"/>                                                           <!-- Местоположение -->
+		        <show id="lecm-representative:fax"/>                                                                <!-- Факс -->
+		        <show id="lecm-representative:email"/>                                                              <!-- E-mail -->
+		        <show id="lecm-representative:contacts"/>
+	        </form>
         </forms>
     </config>
 
