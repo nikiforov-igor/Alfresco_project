@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport 
-			xmlns="http://jasperreports.sourceforge.net/jasperreports" 
-			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-			xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports 
-			http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
-			name="exec-prod-by-executor" 
-			pageWidth="842" pageHeight="595" orientation="Landscape" 
-			whenNoDataType="AllSectionsNoDetail" 
-			columnWidth="802"
-			leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" 
-			isFloatColumnFooter="true" 
-			whenResourceMissingType="Key" 
-			uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="exec-prod-by-orgunit" pageWidth="840" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="800" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" whenResourceMissingType="Key" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -22,98 +10,89 @@
 			<style backcolor="#DCDCDC"/>
 		</conditionalStyle>
 	</style>
-
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["ds-exec-prod-by-executor.xml"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["ds-exec-prod-by-orgunit.xml"]]></defaultValueExpression>
 	</parameter>
-
-	<queryString> <![CDATA[]]> </queryString>
-
-	<!-- В зависимости от типа группировки, здесь будет либо Исполнитель, либо Подразделение -->
+	<parameter name="daysCount" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[7]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Col_Period_lo" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Date(new Date().getTime() - $P{daysCount}*86400000)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Col_Period_hi" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
 	<field name="Col_NameTag" class="java.lang.String">
-		<fieldDescription><![CDATA[Исполнитель]]></fieldDescription>
+		<fieldDescription><![CDATA[Подразделение]]></fieldDescription>
 	</field>
-
 	<field name="Col_DateTime" class="java.sql.Timestamp">
 		<fieldDescription><![CDATA[Время]]></fieldDescription>
 	</field>
-
 	<field name="Col_Avg_Execution.Value" class="java.lang.Float">
 		<fieldDescription><![CDATA[Ср время исполнения]]></fieldDescription>
 	</field>
-
 	<field name="Col_Avg_Execution.Units" class="java.lang.String">
 		<fieldDescription><![CDATA[Ед измерения значения ср времени]]></fieldDescription>
 	</field>
-	
-	
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-
 	<title>
-		<band height="24" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="801" height="24"/>
+				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="800" height="30"/>
 				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans" size="20" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="20" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Продуктивность Исполнителей]]></text>
 			</staticText>
 		</band>
 	</title>
-
 	<pageHeader>
-		<band height="16" splitType="Prevent">
+		<band height="30">
 			<textField>
-				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="0" y="0" width="120" height="15">
-						<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Left">
-					<font fontName="DejaVu Serif" pdfEncoding="Cp1251"/>
+				<reportElement uuid="33196de4-3ba5-4199-88a4-697929c868ec" x="0" y="0" width="800" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfEncoding="Cp1251"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Стр "+$V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["за период c " +
+($P{Col_Period_lo} != null ?
+    new SimpleDateFormat("dd.MM.yyyy").format($P{Col_Period_lo}) :
+    new SimpleDateFormat("dd.MM.yyyy").format(
+        ($P{Col_Period_hi} != null ?
+        new Date($P{Col_Period_hi}.getTime() - $P{daysCount} * 86400000) :
+        new Date(new Date().getTime() - $P{daysCount} * 86400000))
+    )
+)
++ " по " +
+($P{Col_Period_hi} != null ?
+    new SimpleDateFormat("dd.MM.yyyy").format($P{Col_Period_hi}) :
+    new SimpleDateFormat("dd.MM.yyyy").format(new Date())
+)]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
-
-	<columnHeader>
-		<band height="1" splitType="Stretch"/>
-	</columnHeader>
-<!--
-	<detail>
-		<band height="1" splitType="Stretch"/>
-	</detail>
-
-	<columnFooter>
-		<band height="1" splitType="Stretch"/>
-	</columnFooter>
-
-	<pageFooter>
-		<band height="1" splitType="Stretch"/>
-	</pageFooter>
-  -->
 	<summary>
 		<band height="470" splitType="Prevent">
 			<textField>
-				<reportElement uuid="0a743bbe-639f-4ba8-a41d-dd0f2a1c4949" x="20" y="40" width="750" height="25" forecolor="#FF0000">
-						<printWhenExpression><![CDATA[$V{REPORT_COUNT} < 1]]></printWhenExpression>
+				<reportElement uuid="0a743bbe-639f-4ba8-a41d-dd0f2a1c4949" x="0" y="195" width="800" height="25" forecolor="#FF0000">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT} < 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans" size="14" isBold="true" pdfEncoding="Cp1251"/>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfEncoding="Cp1251"/>
 				</textElement>
-				<textFieldExpression><![CDATA[ "Нет данных, удовлетворяющих выборке" ]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Нет данных, удовлетворяющих выборке"]]></textFieldExpression>
 			</textField>
 			<timeSeriesChart>
 				<chart isShowLegend="true" evaluationTime="Report">
-					<reportElement uuid="636e3559-83d4-4bf1-80b8-ce330e9f2dc8" x="35" y="0" width="745" height="450">
+					<reportElement uuid="636e3559-83d4-4bf1-80b8-ce330e9f2dc8" x="0" y="0" width="800" height="470">
 						<printWhenExpression><![CDATA[$V{REPORT_COUNT} > 0]]></printWhenExpression>
 					</reportElement>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend position="Top"/>
 				</chart>
-				<timeSeriesDataset timePeriod="Day">
+				<timeSeriesDataset>
 					<timeSeries>
 						<seriesExpression><![CDATA[$F{Col_NameTag}]]></seriesExpression>
 						<timePeriodExpression><![CDATA[$F{Col_DateTime}]]></timePeriodExpression>
@@ -124,9 +103,9 @@
 					<plot/>
 					<timeAxisLabelExpression><![CDATA["Дата закрытия"]]></timeAxisLabelExpression>
 					<timeAxisFormat>
-						<axisFormat tickLabelMask="dd/MM/yyyy hh:mm" verticalTickLabels="false"/>
+						<axisFormat tickLabelMask="dd/MM/yyyy" verticalTickLabels="false"/>
 					</timeAxisFormat>
-					<valueAxisLabelExpression><![CDATA["Ср время исполнения поручений, ч"]]></valueAxisLabelExpression>
+					<valueAxisLabelExpression><![CDATA["Среднее время исполнения поручений, ч"]]></valueAxisLabelExpression>
 					<valueAxisFormat>
 						<axisFormat tickLabelMask="#,##0.00"/>
 					</valueAxisFormat>

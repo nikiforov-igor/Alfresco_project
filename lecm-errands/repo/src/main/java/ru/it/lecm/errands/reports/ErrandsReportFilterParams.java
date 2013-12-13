@@ -76,10 +76,7 @@ public class ErrandsReportFilterParams {
 
     Set<String> enabledStatuses, disabledStatuses;
 
-    public ErrandsReportFilterParams(String colnamePeriod
-            , String colnameGroupBy
-            , String valPrefixGroupByOU
-            , String colnameOrgUnits) {
+    public ErrandsReportFilterParams(String colnamePeriod, String colnameGroupBy, String valPrefixGroupByOU, String colnameOrgUnits) {
         super();
         this.colnamePeriod = colnamePeriod;
         this.colnameGroupBy = colnameGroupBy;
@@ -154,9 +151,7 @@ public class ErrandsReportFilterParams {
         @Override
         public int hashCode() {
             final int prime = 31;
-            int result = 1;
-            result = prime * result + ((grpName == null) ? 0 : grpName.hashCode());
-            return result;
+            return prime  + ((grpName == null) ? 0 : grpName.hashCode());
         }
 
         @Override

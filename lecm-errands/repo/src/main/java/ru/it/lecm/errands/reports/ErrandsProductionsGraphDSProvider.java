@@ -117,41 +117,10 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
         boolean hasData = !builder.isEmpty();
 
 		/*
-         * Критерий двойной:
-		 * 		Время Начала
-		 * 		или Время Окончания заданы внутри указанного интервала
-		 * Формируется в виде
-		 * 		"AND ( start_inside OR end_inside )"
+         * Критерий : Время Окончания заданы внутри указанного интервала
 		 */
         final DataSourceDescriptor ds = getReportDescriptor().getDsDescriptor();
 
-        applyPeriodParams(ds);
-
-        //final String condStart =
-        //        Utils.emmitDateIntervalCheck(Utils.luceneEncode(LocalQNamesHelper.QNFLD_START_DATE.toPrefixString(namespaceService)), periodStart, periodEnd, false);
-        final String condEnd =
-                Utils.emmitDateIntervalCheck(Utils.luceneEncode(LocalQNamesHelper.QNFLD_END_DATE.toPrefixString(namespaceService)), periodStart, periodEnd, false);
-
-        //final boolean hasStart = !Utils.isStringEmpty(condStart);
-        final boolean hasEnd = !Utils.isStringEmpty(condEnd);
-
-        if (hasEnd) {
-            final String condBoth = String.format("\n\t(%s)\n\t", condEnd);
-            builder.emmit(hasData ? " AND " : "").emmit(condBoth);
-        }
-
-        result.setLuceneQueryText(builder.toString());
-        return result;
-    }
-
-
-    /**
-     * Вычисление не пустых начала и конца в this.periodStart/periodEnd.
-     * (!) periodStart номируется на начало суток, periodEnd на конец.
-     *
-     * @param ds набор данных
-     */
-    private void applyPeriodParams(final DataSourceDescriptor ds) {
         this.periodEnd = paramsFilter.getParamPeriodEnd(ds);
         if (periodEnd == null) {
             // если не указан конец -  берём текущий момент ...
@@ -165,8 +134,20 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
             // если не указано начало - одно-недельный период от конца ...
             periodStart = new Date(periodEnd.getTime() - REPORT_DEFAULT_PERIOD * Utils.MILLIS_PER_DAY);
         }
+
         // выравнивание periodStart на начало суток ...
         periodStart = Utils.adjustDayTime(periodStart, 0, 0, 0, 0); // начало суток
+
+        final String condEnd =
+                Utils.emmitDateIntervalCheck(Utils.luceneEncode(LocalQNamesHelper.QNFLD_END_DATE.toPrefixString(namespaceService)), periodStart, periodEnd, false);
+
+        if (!Utils.isStringEmpty(condEnd)) {
+            final String condBoth = String.format("\n\t(%s)\n\t", condEnd);
+            builder.emmit(hasData ? " AND " : "").emmit(condBoth);
+        }
+
+        result.setLuceneQueryText(builder.toString());
+        return result;
     }
 
     /**
@@ -440,8 +421,8 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
                     }
 
                     // Исполнители
-                    final List<AssociationRef> employees = nodeSrv.getTargetAssocs(errandId, qnames().QN_ASSOC_REF);
-                    if (employees == null || employees.isEmpty()) {// (!?) с Поручением не связан никакой Сотрудник-Исполнитель ...
+                    final List<AssociationRef> executors = nodeSrv.getTargetAssocs(errandId, qnames().QN_ASSOC_REF);
+                    if (executors == null || executors.isEmpty()) {// (!?) с Поручением не связан никакой Сотрудник-Исполнитель ...
                         logger.warn(String.format("No execution employee found for errand item %s", errandId));
                         continue;
                     }
@@ -449,8 +430,8 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
                     // прогружаем атрибуты Поручения и корректируем данные ...
                     final Map<QName, Serializable> props = nodeSrv.getProperties(errandId);
 
-                    for (AssociationRef employee : employees) {
-                        final NodeRef executorId = employee.getTargetRef(); // id Сотрудника-Исполнителя
+                    for (AssociationRef execEmployeeAssoc : executors) {
+                        final NodeRef executorId = execEmployeeAssoc.getTargetRef(); // id Сотрудника-Исполнителя
 
                         final BasicEmployeeInfo execEmployee = new BasicEmployeeInfo(executorId);
 
@@ -473,11 +454,6 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
                         } else { // создание нового Сотрудника-Исполнителя
                             executor = new ProductGroupInfo(execEmployee, maxDaysCounter);
                             series.put(keyId, executor);
-                        }
-
-                        if (!qnames().isErrandClosed(props)) {
-                            // поручение ещё в работе ...
-                            continue;
                         }
 
                         // точка X: "дата завершения" отчёта ...
